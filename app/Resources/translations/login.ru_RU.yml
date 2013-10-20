@@ -1,0 +1,19 @@
+#login.ru_RU.yml
+#login form
+Autorization: Авторизация
+Login to your account: Войти в свой аккаунт
+Username: Пользователь
+User name: Имя пользователя
+Password: Пароль
+Remember me: Запомнить меня
+Login: Войти
+Forgot your password ?: Забыли свой пароль ?
+no worries, click <a href="javascript:;"  id="forget-password">here</a> to reset your password.: Не беспокойтесь, нажмите <a href="javascript:;"  id="forget-password">здесь</a> чтобы восстановить пароль.
+Username is required1.: Имя пользователя обязательно
+Password is required2.: Пароль обязательно
+Impel Griffin logotype: Логотип Импел Гриффин
+Enter valid username and password.: Введите правильные Имя пользователя и Пароль
+Forget Password ?: Забыли пароль? 
+Enter your e-mail address below to reset your password.: Введите Ваш e-mail для сброса пароля.
+Back: Назад
+Submit: Подтвердить
