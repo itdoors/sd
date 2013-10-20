@@ -1,3 +1,7 @@
+sd_user:
+    resource: "@SDUserBundle/Resources/config/routing.yml"
+    prefix:   /
+
 lists_city:
     resource: "@ListsCityBundle/Resources/config/routing.yml"
     prefix:   /

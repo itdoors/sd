@@ -9,6 +9,7 @@ Lists\OrganizationBundle\Entity\Organization:
         mpk:
             type: string
             length: 20
+            nullable: true
         name:
             type: string
             length: 255
@@ -18,3 +19,4 @@ Lists\OrganizationBundle\Entity\Organization:
         contacts:
             type: string
             length: 255
+            nullable: true

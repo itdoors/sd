@@ -1,0 +1,7 @@
+parameters:
+#    sd_user.example.class: SD\Bundle\UserBundle\Example
+
+services:
+#    sd_user.example:
+#        class: %sd_user.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
