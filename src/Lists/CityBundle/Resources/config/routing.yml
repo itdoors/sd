@@ -1,0 +1,3 @@
+lists_city_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: ListsCityBundle:Default:index }

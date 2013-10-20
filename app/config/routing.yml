@@ -1,0 +1,8 @@
+lists_city:
+    resource: "@ListsCityBundle/Resources/config/routing.yml"
+    prefix:   /
+
+lists_organization:
+    resource: "@ListsOrganizationBundle/Resources/config/routing.yml"
+    prefix:   /
+

@@ -1,0 +1,11 @@
+Lists\CityBundle\Entity\City:
+    type: entity
+    table: city
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        name:
+            type: string
+            length: 255

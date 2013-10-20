@@ -1,0 +1,7 @@
+parameters:
+#    lists_organization.example.class: Lists\OrganizationBundle\Example
+
+services:
+#    lists_organization.example:
+#        class: %lists_organization.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

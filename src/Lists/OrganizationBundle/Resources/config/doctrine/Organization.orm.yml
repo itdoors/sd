@@ -1,0 +1,20 @@
+Lists\OrganizationBundle\Entity\Organization:
+    type: entity
+    table: organization
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        mpk:
+            type: string
+            length: 20
+        name:
+            type: string
+            length: 255
+        address:
+            type: string
+            length: 255
+        contacts:
+            type: string
+            length: 255
