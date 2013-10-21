@@ -21,6 +21,7 @@ class AppKernel extends Kernel
 
             new FOS\UserBundle\FOSUserBundle(),
             new SD\UserBundle\SDUserBundle(),
+            new SD\DashboardBundle\SDDashboardBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
