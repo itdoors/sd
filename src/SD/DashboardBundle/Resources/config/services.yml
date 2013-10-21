@@ -1,0 +1,7 @@
+parameters:
+#    sd_dashboard.example.class: SD\DashboardBundle\Example
+
+services:
+#    sd_dashboard.example:
+#        class: %sd_dashboard.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
