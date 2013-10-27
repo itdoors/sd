@@ -13,6 +13,35 @@ class User extends BaseUser
   public function __construct()
   {
     parent::__construct();
-    // your own logic
   }
+    /**
+     * @var integer
+     */
+  protected $id;
+
+  /**
+   * @var \Doctrine\Common\Collections\Collection
+   */
+  protected $groups;
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Get groups
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGroups()
+    {
+        return $this->groups;
+    }
 }

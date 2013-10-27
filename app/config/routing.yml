@@ -14,3 +14,6 @@ lists_organization:
     resource: "@ListsOrganizationBundle/Resources/config/routing.yml"
     prefix:   /
 
+fos_user_group:
+    resource: "@FOSUserBundle/Resources/config/routing/group.xml"
+    prefix: /group

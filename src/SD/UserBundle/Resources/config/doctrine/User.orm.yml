@@ -6,3 +6,14 @@ SD\UserBundle\Entity\User:
             type: integer
             generator:
                 strategy: AUTO
+    manyToMany:
+        groups:
+            targetEntity: Group
+            joinTable:
+                name: fos_user_group
+                joinColumns:
+                    user_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    group_id:
+                        referencedColumnName: id
