@@ -1,0 +1,9 @@
+{% if app.user.hasRole('ROLE_CRM') %}
+    <a href="{{ path('lists_organization_index') }}">
+        {% trans %}Organizations list{% endtrans %}
+    </a>
+{% endif %}
+
+{% if app.user.hasGroup('admin') %}
+    user has group admin
+{% endif %}
