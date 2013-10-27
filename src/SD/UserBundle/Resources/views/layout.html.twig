@@ -1,5 +1,9 @@
 {% extends "::base.html.twig" %}
 
+{% block title %}
+    {% trans %}Autorization{% endtrans %}
+{% endblock %}
+
 {% block body %}
     {{ block('fos_user_content') }}
 {% endblock %}

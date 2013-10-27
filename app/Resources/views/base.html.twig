@@ -12,7 +12,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 <!-- BEGIN HEAD -->
 <head>
     <meta charset="utf-8" />
-    <title>{% block title %} {% trans %}Autorization{% endtrans %}{% endblock %}</title>
+    <title>{% block title %}{% endblock %}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta name="MobileOptimized" content="320">
@@ -45,69 +45,9 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
     <img src="assets/img/logo-big.png" alt="{% trans %}Impel Griffin logotype{% endtrans %}" />
 </div>
 <!-- END LOGO -->
-<!-- BEGIN LOGIN -->
 <div class="content">
-    <!-- BEGIN LOGIN FORM -->
-    <form class="login-form" action="{{ path('fos_user_security_login') }}" method="post">
-        <h3 class="form-title">{% trans %}Login to your account{% endtrans %}</h3>
-        <div class="alert alert-error hide">
-            <button class="close" data-dismiss="alert"></button>
-            <span>{% trans %}Enter valid username and password.{% endtrans %}</span>
-        </div>
-        <div class="form-group">
-            <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-            <label class="control-label visible-ie8 visible-ie9">{% trans %}User name{% endtrans %}</label>
-            <div class="input-icon">
-                <i class="icon-user"></i>
-                <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="{% trans %}Username{% endtrans %}" name="username"/>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label visible-ie8 visible-ie9">{% trans %}Password{% endtrans %}</label>
-            <div class="input-icon">
-                <i class="icon-lock"></i>
-                <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="{% trans %}Password{% endtrans %}" name="password"/>
-            </div>
-        </div>
-        <div class="form-actions">
-            <label class="checkbox">
-                <input type="checkbox" name="remember" value="1"/> {% trans %}Remember me{% endtrans %}
-            </label>
-            <button type="submit" class="btn green pull-right">
-                {% trans %}Login{% endtrans %} <i class="m-icon-swapright m-icon-white"></i>
-            </button>
-        </div>
-        <div class="forget-password">
-            <h4>{% trans %}Forgot your password ?{% endtrans %}</h4>
-            <p>
-                {% trans %}no worries, click <a href="javascript:;"  id="forget-password">here</a>
-                to reset your password.{% endtrans %}
-            </p>
-        </div>
-    </form>
-    <!-- END LOGIN FORM -->
-    <!-- BEGIN FORGOT PASSWORD FORM -->
-    <form class="forget-form" action="index.html" method="post">
-        <h3>{% trans %}Forget Password ?{% endtrans %}</h3>
-        <p>{% trans %}Enter your e-mail address below to reset your password.{% endtrans %}</p>
-        <div class="form-group">
-            <div class="input-icon">
-                <i class="icon-envelope"></i>
-                <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Email" name="email" />
-            </div>
-        </div>
-        <div class="form-actions">
-            <button type="button" id="back-btn" class="btn">
-                <i class="m-icon-swapleft"></i> {% trans %}Back{% endtrans %}
-            </button>
-            <button type="submit" class="btn green pull-right">
-                {% trans %}Submit{% endtrans %} <i class="m-icon-swapright m-icon-white"></i>
-            </button>
-        </div>
-    </form>
-    <!-- END FORGOT PASSWORD FORM -->
+    {% block body %}{% endblock %}
 </div>
-<!-- END LOGIN -->
 <!-- BEGIN COPYRIGHT -->
 <div class="copyright">
     2013 &copy; ITDoors <a href="http://www.itdoors.com.ua" target="_blank">www.itdoors.com.ua</a>
