@@ -222,11 +222,6 @@ Up To Medium Devices
     	float: left;
   	}
 
-  	.header .navbar-nav > li > a {
-    	padding-top1: 15px;
-    	padding-bottom1: 15px;
-  	}
-
 	.header .navbar-brand {
   		margin-left: 0px !important;
   		padding-left: 0px !important; 
@@ -503,8 +498,16 @@ The Most Extra Small Devices Landscape Mode Only
 	}
 
 	.header .navbar-nav > li.dropdown .dropdown-toggle {
-  		margin-top:-1px !important;
-  	}	
+  		margin-top:-1px;
+  		padding-left: 8px;
+	  	padding-right: 8px;
+	}
+
+	.header .navbar-nav > li.dropdown.user .dropdown-toggle,
+	.header .navbar-nav > li.dropdown.language .dropdown-toggle {
+		padding-right: 6px;
+		padding-left: 6px;
+	}
 
   	.header .navbar-nav li.dropdown .dropdown-toggle .badge {
   		top: 8px;
@@ -566,11 +569,6 @@ The Most Extra Small Devices Portrait Mode Only
 ***/
 
 @media (max-width: 320px) {
-
-	.header .nav > li.dropdown .dropdown-toggle {
-	  padding-left: 8px !important;
-	  padding-right: 8px !important;
-	}
 
 	/***
 	Hidden phone

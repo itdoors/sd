@@ -1,9 +1,9 @@
 /* Set the defaults for DataTables initialisation */
 $.extend( true, $.fn.dataTable.defaults, {
-	"sDom": "<'row'<'col-md-6'l><'col-md-6'f>r>t<'row'<'col-md-6'i><'col-md-6'p>>",
+	"sDom": "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
 	"sPaginationType": "bootstrap",
 	"oLanguage": {
-		"sLengthMenu": "_MENU_ records per page"
+		"sLengthMenu": "_MENU_ records"
 	}
 } );
 
@@ -53,8 +53,8 @@ $.extend( $.fn.dataTableExt.oPagination, {
 			// pagination with prev, next link icons
 			$(nPaging).append(
 				'<ul class="pagination">'+
-					'<li class="prev disabled"><a href="#" title="'+oLang.sPrevious+'"><i class="icon-angle-left"></i></a></li>'+
-					'<li class="next disabled"><a href="#" title="'+oLang.sNext+'"><i class="icon-angle-right"></i></a></li>'+
+					'<li class="prev disabled"><a href="#" title="'+oLang.sPrevious+'"><i class="fa fa-angle-left"></i></a></li>'+
+					'<li class="next disabled"><a href="#" title="'+oLang.sNext+'"><i class="fa fa-angle-right"></i></a></li>'+
 				'</ul>'
 			);
 

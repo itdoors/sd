@@ -60,7 +60,7 @@
 		if (this.o.rtl){
 			this.picker.addClass('datepicker-rtl');
 			this.picker.find('.prev i, .next i')
-						.toggleClass('icon-angle-left icon-angle-right');
+						.toggleClass('fa-angle-left fa-angle-right');
 		}
 
 
@@ -1331,9 +1331,9 @@
 		},
 		headTemplate: '<thead>'+
 							'<tr>'+
-								'<th class="prev"><i class="icon-angle-left"></i></th>'+
+								'<th class="prev"><i class="fa fa-angle-left"></i></th>'+
 								'<th colspan="5" class="datepicker-switch"></th>'+
-								'<th class="next"><i class="icon-angle-right"></i></th>'+
+								'<th class="next"><i class="fa fa-angle-right"></i></th>'+
 							'</tr>'+
 						'</thead>',
 		contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>',

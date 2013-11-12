@@ -1,6 +1,6 @@
 /*   
 Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.0
-Version: 1.5
+Version: 1.5.3
 Author: KeenThemes
 Website: http://www.keenthemes.com/
 Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keentheme
@@ -36,7 +36,7 @@ Import fonts
 */
 
 /* load Open Sans Font from local */
-/*@import url(../fonts/font2.css);*/
+@import url(../fonts/font.css);
 
 /***
 Reset and overrides  
@@ -80,25 +80,6 @@ you can optionally include the following CSS and JavaScript to work around this 
 and thus doesn't properly apply the media queries in Bootstrap's CSS. To address this, following CSS code applied */
 @-ms-viewport { 
   width: auto !important; 
-}
-
-/* Fix Google Maps canvas
- *
- * Wrap your Google Maps embed in a `.google-map-canvas` to reset Bootstrap's
- * global `box-sizing` changes. You may optionally need to reset the `max-width`
- * on images in case you've applied that anywhere else. (That shouldn't be as
- * necessary with Bootstrap 3 though as that behavior is relegated to the
- * `.img-responsive` class.)
- */
-
-.google-map-canvas,
-.google-map-canvas * { 
-  .box-sizing(content-box); 
-}
-
-/* Optional responsive image override */
-img { 
-  max-width1: none; 
 }
 
 /***
@@ -200,8 +181,8 @@ General backgrounds. Can be applied to any block or panel
 /***
 Font Awesome Icons
 ***/
-[class^="icon-"],
-[class*=" icon-"] {
+[class^="fa-"],
+[class*=" fa-"] {
   display: inline-block;
   margin-top: 1px;
   font-size: 14px;
@@ -212,14 +193,14 @@ Font Awesome Icons
 /***
 Make font awesome icons fixed width(latest version issue)
 ***/
-li [class^="icon-"],
-li [class*=" icon-"] {
+li [class^="fa-"],
+li [class*=" fa-"] {
   display: inline-block;
   width: 1.25em;
   text-align: center;
 }
-li [class^="icon-"].icon-large,
-li [class*=" icon-"].icon-large {
+li [class^="fa-"].icon-large,
+li [class*=" fa-"].icon-large {
   /* increased font size for icon-large */
   width: 1.5625em;
 }
@@ -234,6 +215,8 @@ Close icon used for modal dialog and other UI element close buttons
   width: 9px;
   height: 9px;
   background-repeat: no-repeat !important;
+  text-indent: -10000px;
+  outline: none;
   background-image: url("../img/remove-icon-small.png") !important;
 }
 
@@ -374,6 +357,11 @@ Header and header elements.
 
 .header .navbar-brand img {
   margin-left: 20px;
+}
+
+.header .navbar-brand.text-logo {
+  padding-left: 20px;
+  padding-top: 12px;
 }
 
 .header .navbar-toggle {
@@ -960,7 +948,7 @@ Page content
 
 .ie8 .page-content.no-min-height {
     min-height: auto;
-  }
+}
 
 .page-full-width .page-content {
     margin-left: 0px !important;
@@ -1063,14 +1051,14 @@ Page breadcrumb
   text-transform: uppercase;
 } 
 
-.page-content .page-breadcrumb.breadcrumb .dashboard-date-range > .icon-calendar {
-  text-transform: normal;
+.page-content .page-breadcrumb.breadcrumb .dashboard-date-range > .fa-calendar {
+  text-transform: none;
   color: #fff;
   margin-top: 0px;
   font-size: 14px;
 }
 
-.page-content .page-breadcrumb.breadcrumb .dashboard-date-range > .icon-angle-down {
+.page-content .page-breadcrumb.breadcrumb .dashboard-date-range > .fa-angle-down {
   color:#fff;
   font-size: 16px;
 }
@@ -1293,12 +1281,12 @@ Portlets
   color: #666;
 }
 
-.portlet.blue > .portlet-title > .caption, .portlet-title.blue > .caption, 
-.portlet.green > .portlet-title > .caption, .portlet-title.green > .caption,
-.portlet.yellow > .portlet-title > .caption, .portlet-title.yellow > .caption,
-.portlet.red > .portlet-title > .caption, .portlet-title.red > .caption,
-.portlet.purple > .portlet-title > .caption, .portlet-title.purple > .caption,
-.portlet.grey > .portlet-title > .caption, .portlet-title.dark-grey > .caption, {
+.portlet.blue > .portlet-title > .caption,
+.portlet.green > .portlet-title > .caption, 
+.portlet.yellow > .portlet-title > .caption,
+.portlet.red > .portlet-title > .caption, 
+.portlet.purple > .portlet-title > .caption, 
+.portlet.grey > .portlet-title > .caption {
   color: #fff;
 }
 
@@ -1663,9 +1651,6 @@ Statistic lists
   margin-top: 3px;
 }
 
-.item-list.table .title {
-  padding-top: -5px;
-}
 
 /***
 Chart tooltips
@@ -2679,7 +2664,6 @@ Custom portlet tabs
   margin-right: 0px;
   border-left: 0;    
   border-right: 0;
-  background-color: none !important;
   border-top-color:transparent !important;
 }
 
@@ -2691,7 +2675,6 @@ Custom portlet tabs
   margin-right: 0;
   border-left: 0;    
   border-right: 0;
-  background-color: none !important;
   border-top-color:transparent;
   background-color: #fff;
 }  
@@ -2880,7 +2863,6 @@ Tiles(new in v1.1.1)
   font-size: 12px;
   letter-spacing: 0.02em;
   line-height: 20px;
-  font-smooth: always;
   overflow: hidden;
   border: 4px solid transparent;
   margin: 0 10px 10px 0;
@@ -2939,11 +2921,9 @@ Tiles(new in v1.1.1)
   vertical-align: top;
   padding: 10px 10px;
   overflow: hidden;
-  text-overflow: ellipsis;
   position: relative;
   font-weight: 400;
   font-size: 12px;
-  font-smooth: always;
   color: #000000;
   color: #ffffff;
   margin-bottom: 10px;
@@ -3007,12 +2987,10 @@ Tiles(new in v1.1.1)
 .tile .tile-body p {
   font-weight: 400;
   font-size: 13px;
-  font-smooth: always;
   color: #000000;
   color: #ffffff;
   line-height: 20px;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .tile .tile-body p:hover {
@@ -3060,7 +3038,6 @@ Tiles(new in v1.1.1)
   margin-right: 15px;
   font-weight: 400;
   font-size: 13px;
-  font-smooth: always;
   color: #ffffff;
 }
 
@@ -3083,13 +3060,8 @@ Tiles(new in v1.1.1)
   font-size: 14px;
   letter-spacing: 0.01em;
   line-height: 14px;
-  font-smooth: always;
   margin-bottom: 8px;
   margin-right: 10px;
-}
-
-.tile.image {  
-  border-color1: transparent !important;
 }
 
 .tile.image > .tile-body {
@@ -3314,6 +3286,15 @@ Horezantal Menu(new in v1.2)
     box-shadow: none;
     background: #2d2d2d;
 }
+
+.header .hor-menu .dropdown-submenu > .dropdown-menu {
+  top: 0;
+}
+
+.header .hor-menu .dropdown-submenu > a:after {
+  top: 8px;
+  margin-right: 0px;
+} 
 
 .header .hor-menu .dropdown-menu li > a {
     color: #999;
@@ -4019,59 +4000,62 @@ Disabled Menu Link
 
 
 /***
-Responsive Scrollable Tables
+Responsive & Scrollable Tables
 ***/
-.table-responsive-scrollable {
-    width:100%;
-    border-spacing:0;
-    border-collapse:collapse;
+
+.table-scrollable {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border: 1px solid #dddddd;
+  margin: 10px 0 !important;
 }
 
-.table-responsive-scrollable thead th {
-    white-space:nowrap;
+.table-scrollable > .table {
+  width: 100% !important;
+  margin: 0 !important;
+  margin-bottom: 0;
+  background-color: #fff;
 }
 
-.table-scrollable.has-scroll {
-  border-left: 1px solid #ddd !important; 
-  border-right: 1px solid #ddd !important; 
-  position:relative;
-  overflow:hidden; /* Clips the shadow created with the pseudo-element in the next rule. Not necessary for the actual scrolling. */
+.table-scrollable > .table > thead > tr > th,
+.table-scrollable > .table > tbody > tr > th,
+.table-scrollable > .table > tfoot > tr > th,
+.table-scrollable > .table > thead > tr > td,
+.table-scrollable > .table > tbody > tr > td,
+.table-scrollable > .table > tfoot > tr > td {
+  white-space: nowrap;
 }
 
-.table-scrollable .table-bordered,
-.table-scrollable .table-bordered > thead > tr > th:first-child,
-.table-scrollable .table-bordered > tbody > tr > th:first-child,
-.table-scrollable .table-bordered > tfoot > tr > th:first-child,
-.table-scrollable .table-bordered > thead > tr > td:first-child,
-.table-scrollable .table-bordered > tbody > tr > td:first-child,
-.table-scrollable .table-bordered > tfoot > tr > td:first-child {
-  border-left: 0 !important;
+.table-scrollable > .table-bordered {
+  border: 0;
 }
 
-.table-scrollable .table-bordered,
-.table-scrollable .table-bordered > thead > tr > th:last-child,
-.table-scrollable .table-bordered > tbody > tr > th:last-child,
-.table-scrollable .table-bordered > tfoot > tr > th:last-child,
-.table-scrollable .table-bordered > thead > tr > td:last-child,
-.table-scrollable .table-bordered > tbody > tr > td:last-child,
-.table-scrollable .table-bordered > tfoot > tr > td:last-child {
-  border-right: 0 !important;
+.table-scrollable > .table-bordered > thead > tr > th:first-child,
+.table-scrollable > .table-bordered > tbody > tr > th:first-child,
+.table-scrollable > .table-bordered > tfoot > tr > th:first-child,
+.table-scrollable > .table-bordered > thead > tr > td:first-child,
+.table-scrollable > .table-bordered > tbody > tr > td:first-child,
+.table-scrollable > .table-bordered > tfoot > tr > td:first-child {
+  border-left: 0;
 }
 
-.table-scrollable.has-scroll:after {
-  position:absolute;
-  top:0;
-  left:100%;
-  width:50px;
-  height:100%;
-  border-radius:10px 0 0 10px / 50% 0 0 50%;
-  box-shadow:-5px 0 10px rgba(0, 0, 0, 0.25);
-  content:'';
+.table-scrollable > .table-bordered > thead > tr > th:last-child,
+.table-scrollable > .table-bordered > tbody > tr > th:last-child,
+.table-scrollable > .table-bordered > tfoot > tr > th:last-child,
+.table-scrollable > .table-bordered > thead > tr > td:last-child,
+.table-scrollable > .table-bordered > tbody > tr > td:last-child,
+.table-scrollable > .table-bordered > tfoot > tr > td:last-child {
+  border-right: 0;
 }
 
-/* This is the element whose content will be scrolled if necessary */
-.table-scrollable.has-scroll > div {
-  overflow-x:auto;
+.table-scrollable > .table-bordered > thead > tr:last-child > th,
+.table-scrollable > .table-bordered > tbody > tr:last-child > th,
+.table-scrollable > .table-bordered > tfoot > tr:last-child > th,
+.table-scrollable > .table-bordered > thead > tr:last-child > td,
+.table-scrollable > .table-bordered > tbody > tr:last-child > td,
+.table-scrollable > .table-bordered > tfoot > tr:last-child > td {
+  border-bottom: 0;
 }
 
 /***
@@ -4097,6 +4081,7 @@ Responsive Flip Scroll Tables
     border-right: 1px solid #ddd !important; 
     font-size: 13px !important;
     padding: 5px;
+    width: auto !important;
   }
   
   .flip-scroll table { display: block; position: relative; width: 100%; }
@@ -4111,12 +4096,10 @@ Responsive Flip Scroll Tables
     overflow-x: auto; 
     white-space: nowrap;     
   }
-  .flip-scroll thead tr { display: block; border: !important;  }
+  .flip-scroll thead tr { display: block; }
   .flip-scroll th { display: block; text-align: right; }
   .flip-scroll tbody tr { display: inline-block; vertical-align: top; margin-left: -5px; }
-  .flip-scroll td { display: block; min-height: 1.25em; text-align: left; border-top: 0 !important; border-left: 0 !important; border-right: 0 !important}
-  .flip-scroll td:first-child {}
- 
+  .flip-scroll td { display: block; min-height: 1.25em; text-align: left; border-top: 0 !important; border-left: 0 !important; border-right: 0 !important} 
  
   /* sort out borders */
  
@@ -4125,4 +4108,3 @@ Responsive Flip Scroll Tables
   .flip-scroll tbody tr { border-left: 1px solid #ddd; }
   .flip-scroll th:last-child,
   .flip-scroll td:last-child { border-bottom: 1px solid #ddd; }
-}

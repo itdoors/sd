@@ -84,7 +84,7 @@
 }
 
 /* move datepicker icon to center of add-on button. See https://github.com/vitalets/x-editable/issues/183 */
-.editable-inline .add-on .icon-th {
+.editable-inline .add-on .fa-calendar {
    margin-top: 3px;
    margin-left: 1px; 
 }
