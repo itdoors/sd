@@ -239,7 +239,7 @@ Gritter Notifications
   color: #0b6694;
 }
 /* begin: boxed page */
-@media (min-width: 980px) {
+@media (min-width: 992px) {
   .page-boxed {
     background-color: #575757 !important;
   }
@@ -263,7 +263,7 @@ Gritter Notifications
 /***
 Landscape phone to portrait tablet
 ***/
-@media (max-width: 979px) {
+@media (max-width: 991px) {
   /***
     page sidebar
     ***/

@@ -156,7 +156,7 @@
 		if (this.isRTL){
 			this.picker.addClass('datetimepicker-rtl');
 			this.picker.find('.prev i, .next i')
-						.toggleClass('icon-arrow-left icon-arrow-right');
+						.toggleClass('fa-arrow-left fa-arrow-right');
 		}
 		$(document).on('mousedown', function (e) {
 			// Clicked outside the datetimepicker, hide it
@@ -1514,9 +1514,9 @@
 		},
 		headTemplate: '<thead>'+
 							'<tr>'+
-								'<th class="prev"><i class="icon-angle-left"/></th>'+
+								'<th class="prev"><i class="fa fa-angle-left"/></th>'+
 								'<th colspan="5" class="switch"></th>'+
-								'<th class="next"><i class="icon-angle-right"/></th>'+
+								'<th class="next"><i class="fa fa-angle-right"/></th>'+
 							'</tr>'+
 						'</thead>',
 		contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>',

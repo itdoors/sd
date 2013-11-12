@@ -178,7 +178,7 @@ Created by Keentheme for Metronic theme
 }
 
 
-.tree.tree-plus-minus .tree-folder-header .icon-folder-open:before {
+.tree.tree-plus-minus .tree-folder-header .fa-folder-open:before {
   height: 16px;
   width: 16px;
   line-height: 16px;
@@ -189,7 +189,7 @@ Created by Keentheme for Metronic theme
   content: "";
 }
 
-.tree.tree-plus-minus .tree-folder-header .icon-folder-close:before {
+.tree.tree-plus-minus .tree-folder-header .fa-folder:before {
   height: 16px;
   width: 16px;
   line-height: 16px;
@@ -200,8 +200,8 @@ Created by Keentheme for Metronic theme
   content: "";
 }
 
-.ie .tree.tree-plus-minus .tree-folder-header .icon-folder-close:before,
-.ie .tree.tree-plus-minus .tree-folder-header .icon-folder-open:before {
+.ie .tree.tree-plus-minus .tree-folder-header .fa-folder:before,
+.ie .tree.tree-plus-minus .tree-folder-header .fa-folder-open:before {
   margin-top: -5px;
 }
 
