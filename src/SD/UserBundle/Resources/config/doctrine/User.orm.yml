@@ -54,21 +54,7 @@ SD\UserBundle\Entity\User:
                         referencedColumnName: id
         organizations:
             targetEntity: Lists\OrganizationBundle\Entity\Organization
-            joinTable:
-                name: organization_user
-                joinColumns:
-                    user_id:
-                        referencedColumnName: id
-                inverseJoinColumns:
-                    organization_id:
-                        referencedColumnName: id
+            mappedBy: users
         handlings:
             targetEntity: Lists\HandlingBundle\Entity\Handling
-            joinTable:
-                name: handling_user
-                joinColumns:
-                    user_id:
-                        referencedColumnName: id
-                inverseJoinColumns:
-                    handling_id:
-                        referencedColumnName: id
+            mappedBy: users

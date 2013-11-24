@@ -127,6 +127,7 @@ Lists\HandlingBundle\Entity\Handling:
     manyToMany:
         users:
             targetEntity: SD\UserBundle\Entity\User
+            inversedBy: handlings
             joinTable:
               name: handling_user
               joinColumns:

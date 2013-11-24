@@ -36,6 +36,7 @@ Lists\OrganizationBundle\Entity\Organization:
     manyToMany:
         users:
           targetEntity: SD\UserBundle\Entity\User
+          inversedBy: organizations
           joinTable:
             name: organization_user
             joinColumns:
