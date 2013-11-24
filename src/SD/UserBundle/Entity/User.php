@@ -332,14 +332,4 @@ class User extends BaseUser
     {
         return $this->handlings;
     }
-
-    /**
-     * Get groups
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getGroups()
-    {
-        return $this->groups;
-    }
 }
