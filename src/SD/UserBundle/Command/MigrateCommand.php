@@ -96,8 +96,6 @@ class MigrateCommand extends ContainerAwareCommand
          ) as permission_name
       FROM
         sf_guard_user u
-      WHERE
-        u.id > 0
       ORDER BY
         u.id ASC"
     );
