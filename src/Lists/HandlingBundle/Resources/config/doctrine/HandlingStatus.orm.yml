@@ -1,0 +1,16 @@
+Lists\HandlingBundle\Entity\HandlingStatus:
+    type: entity
+    table: handling_status
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        name:
+            type: string
+            length: 128
+            fixed: false
+            nullable: false
+    lifecycleCallbacks: {  }

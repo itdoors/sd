@@ -22,6 +22,11 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new SD\UserBundle\SDUserBundle(),
             new SD\DashboardBundle\SDDashboardBundle(),
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
+            new Lists\RegionBundle\ListsRegionBundle(),
+            new Lists\LookupBundle\ListsLookupBundle(),
+            new Lists\HandlingBundle\ListsHandlingBundle(),
+            // new SD\ModelBundle\SDModelBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

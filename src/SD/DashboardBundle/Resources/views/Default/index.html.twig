@@ -1,1 +1,9 @@
-Hello {{ name }}!
+{% extends '::base.html.twig' %}
+
+{% block title %}
+    {% trans %}Dashdoard{% endtrans %}
+{% endblock %}
+
+{% block body %}
+    {% include 'SDDashboardBundle:Default:items.html.twig' %}
+{% endblock %}

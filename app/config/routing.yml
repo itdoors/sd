@@ -1,3 +1,19 @@
+#sd_model:
+#    resource: "@SDModelBundle/Resources/config/routing.yml"
+#    prefix:   /
+
+lists_handling:
+    resource: "@ListsHandlingBundle/Resources/config/routing.yml"
+    prefix:   /
+
+lists_lookup:
+    resource: "@ListsLookupBundle/Resources/config/routing.yml"
+    prefix:   /
+
+lists_region:
+    resource: "@ListsRegionBundle/Resources/config/routing.yml"
+    prefix:   /
+
 sd_dashboard:
     resource: "@SDDashboardBundle/Resources/config/routing.yml"
     prefix:   /
@@ -14,3 +30,6 @@ lists_organization:
     resource: "@ListsOrganizationBundle/Resources/config/routing.yml"
     prefix:   /
 
+fos_user_group:
+    resource: "@FOSUserBundle/Resources/config/routing/group.xml"
+    prefix: /group

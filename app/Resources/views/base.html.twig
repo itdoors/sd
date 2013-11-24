@@ -1,13 +1,48 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<!--
+Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.0
+Version: 1.5
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+-->
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}{% endblock %}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta name="MobileOptimized" content="320">
+    {% block stylesheets %}
+
+    {% endblock %}
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <!-- END THEME STYLES -->
+    <link rel="shortcut icon" href="favicon.ico" />
+</head>
+<!-- BEGIN BODY -->
+<body class="login">
+<!-- BEGIN LOGO -->
+<div class="logo">
+    <img src="assets/img/logo-big.png" alt="{% trans %}Impel Griffin logotype{% endtrans %}" />
+</div>
+<!-- END LOGO -->
+<div class="content">
+    {{ include('::menu.html.twig') }}
+    {% block body %}{% endblock %}
+</div>
+<!-- BEGIN COPYRIGHT -->
+<div class="copyright">
+    2013 &copy; ITDoors <a href="http://www.itdoors.com.ua" target="_blank">www.itdoors.com.ua</a>
+</div>
+<!-- END COPYRIGHT -->
+{% block javascripts %}
+
+{% endblock %}
+
+</body>
+<!-- END BODY -->
 </html>

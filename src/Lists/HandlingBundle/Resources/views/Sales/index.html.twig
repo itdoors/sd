@@ -1,0 +1,27 @@
+{% extends "::base.html.twig" %}
+
+{% block body %}
+
+    Size of handlings = {{ pagination.getTotalItemCount }} <br />
+    {% if pagination.getTotalItemCount %}
+        <table>
+            {% for item in pagination %}
+                <tr {% if loop.index is odd %}class="color"{% endif %}>
+                    <td>{{ item.handlingId|e }}</td>
+                    <td>{{ item.organizationName|e }}</td>
+                    <td>{{ item.handlingCreatedatetime|date("d.M.yy, H:m") }}</td>
+                    <td>{{ item.handlingLastHandlingDate|date("d.M.yy, H:m") }}</td>
+                    <td>{{ item.cityName|e }}</td>
+                    <td>{{ item.scopeName|e }}</td>
+                    <td>{{ item.handlingServiceOffered|e }}</td>
+                    <td>{{ item.handlingChance|e }}</td>
+                    <td>{{ item.statusName|e }}</td>
+                    <td>{{ item.fullNames|e }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+{% endblock body %}

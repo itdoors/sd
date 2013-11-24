@@ -23,9 +23,7 @@ Calendar with full calendar
   -webkit-box-shadow: none ;
      -moz-box-shadow: none ;
           box-shadow: none ;
-  -webkit-text-shadow: none ;
-     -moz-text-shadow: none ;
-          text-shadow: none ;
+  text-shadow: none;
   border: 0 ;
   padding: 6px 8px 30px 8px ;
   margin-left:2px;  
@@ -106,10 +104,9 @@ Calendar with full calendar
 
 .portlet.calendar .fc-widget-header {
   background-image: none ;
-  filter:none ;
+  filter:none;
   background-color: #eee ;
   text-transform: uppercase;
-  font-color:#000;
   font-weight: 300;
 }
 
@@ -120,17 +117,16 @@ Calendar with full calendar
 .portlet.calendar .mobile .fc-button {
     padding: 0px 6px 20px 6px ;
     margin-left:2px ;
-    border: none ;    
+    border: 0;    
     background-color: #ddd ;
       background-image: none;
       -webkit-box-shadow: none ;
          -moz-box-shadow: none ;
-            box-shadow: none ;
+              box-shadow: none ;
       -webkit-border-radius: 0 ;
          -moz-border-radius: 0 ;
               border-radius: 0 ;
-      color: #000 ;
-      border: none ;
+      color: #000;
       text-shadow: none ;
       text-align: center;
 }
@@ -228,6 +224,7 @@ Form wizard
 .form-wizard .step .number {
   background-color: #eee;
   display: inline-block;
+  text-align: center !important;
   font-size: 16px;
   font-weight: 300;
   padding: 11px 15px 13px 15px;
@@ -277,12 +274,16 @@ Form wizard
 
 
 @media (min-width: 768px) and (max-width: 1280px) { 
-
   .form-wizard .step .desc {
     margin-top: 10px;
     display: block;
   }
+} 
 
+@media (max-width: 768px) { 
+  .form-wizard .steps > li > a {
+    text-align: left;
+  }
 } 
 
 /***
@@ -365,14 +366,16 @@ jqvmap changes
 /***
 Error state for WYSIWYG Editors
 ***/
+.has-error .md-editor,
 .has-error .wysihtml5-sandbox, 
 .has-error .cke {
-  border: 1px solid #B94A48 ;
+  border: 1px solid #B94A48 !important;
 }
 
+.has-success .md-editor,
 .has-success .wysihtml5-sandbox, 
 .has-success .cke {
-  border: 1px solid #468847 ;
+  border: 1px solid #468847 !important;
 }
 
 /***
@@ -382,10 +385,6 @@ Select2 plugin css changes
 /* enable form validation classes for select2 dropdowns */
 .has-error .select2-container .select2-choice {
   border-color: #B94A48;
-}
-
-.has-error .select2-container .select2-choice > span {
-  color: #B94A48;
 }
 
 .has-error .select2-container.select2-dropdown-open .select2-choice {
@@ -398,10 +397,6 @@ Select2 plugin css changes
 
 .has-success .select2-container .select2-choice {
   border-color: #468847;
-}
-
-.has-success .select2-container .select2-choice > span {
-  color: #468847;
 }
 
 .has-success .select2-container.select2-dropdown-open .select2-choice {
@@ -620,7 +615,7 @@ jQuery UI Sliders(new in v1.1.1)
 Dropzone css changes(new in v1.1.1)
 ***/
 .dropzone {
-  webkit-border-radius: 0px ;
+  -webkit-border-radius: 0px ;
     -moz-border-radius: 0px ;
          border-radius: 0px ;
 }
@@ -718,13 +713,13 @@ Datatables Plugin(in v1.3)
 .dataTable .details td,
 .dataTable .details th {
   padding: 4px;
-  background-color: none ;
+  background: none ;
   border: 0;
 }
 
 .dataTable .details tr:hover td,
 .dataTable .details tr:hover th {
-  background-color: none ;
+  background: none ;
 }
 
 .dataTable .details tr:nth-child(odd) td,
@@ -735,6 +730,42 @@ Datatables Plugin(in v1.3)
 .dataTable .details tr:nth-child(even) td,
 .dataTable .details tr:nth-child(even) th {
   background-color: #eee ;
+}
+
+.dataTable > thead > tr > th.sorting,
+.dataTable > thead > tr > th.sorting_asc,
+.dataTable > thead > tr > th.sorting_desc {
+   padding-right: 18px;
+}
+
+.dataTable .table-checkbox {
+  width: 8px !important;
+}
+
+@media (max-width: 768px) {  
+  .dataTables_wrapper .dataTables_length .form-control,
+  .dataTables_wrapper .dataTables_filter .form-control {
+    display: inline-block;
+  }
+
+  .dataTables_wrapper .dataTables_info {
+    top: 17px;
+  }
+
+  .dataTables_wrapper .dataTables_paginate {
+    margin-top: -15px;
+  }
+}
+
+@media (max-width: 480px) {  
+  .dataTables_wrapper .dataTables_filter .form-control {
+    width: 175px !important;
+  }
+
+  .dataTables_wrapper .dataTables_paginate {
+    float: left;
+    margin-top: 20px;
+  }
 }
 
 /***
@@ -859,11 +890,6 @@ Bootstrap  Datetimepicker
 .datetimepicker table th {
   font-family: 'Open Sans' !important;
   font-weight: 400  !important;
-}
-
-.datetimepicker-inline1 {
-  background: #e5e5e5;
-  padding: 5px;
 }
 
 .datetimepicker.dropdown-menu {
@@ -1019,6 +1045,10 @@ Bootstrap Editable
   border: 0 !important;
 }
 
+.editable-input .combodate select {
+  margin-bottom: 5px;
+}
+
 /***
 FuelUX Spinners
 ***/
@@ -1114,4 +1144,57 @@ Google reCaptcha
   clear: both;
   border: 1px solid #e5e5e5;
   padding: 5px;
+}
+
+/***
+Bootstrap Markdown
+***/
+.md-input {
+  padding: 5px !important;
+  border-bottom: 0 !important;
+}
+
+.md-editor.active {
+  border: 1px solid #999999;
+  -webkit-box-shadow: none !important;
+     -moz-box-shadow: none !important;
+          box-shadow: none !important;
+}
+
+/***
+Bootstrap Datepaginator
+***/
+.datepaginator a {
+  font-family: 'Open Sans';
+  font-size: 13px;
+  font-weight: 300;
+}
+
+.datepicker .today {
+  background-image: none !important;
+  filter: none !important;
+}
+
+.dp-nav .fa1 {
+  display: inline-block;
+  margin-top: -6px !important;
+}
+
+/***
+Font Awesome 4.0 Demo
+***/
+.fa-item {
+  font-size: 14px;
+  padding: 10px 10px 10px 20px;
+}
+
+.fa-item i {
+  font-size: 16px;
+  display: inline-block;
+  width: 20px;
+}
+
+.fa-item:hover {
+  cursor: pointer;
+  background: #eee;
 }

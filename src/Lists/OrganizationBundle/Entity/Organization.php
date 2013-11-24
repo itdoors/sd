@@ -136,4 +136,105 @@ class Organization
     {
         return $this->contacts;
     }
+    /**
+     * @var \Lists\CityBundle\Entity\City
+     */
+    private $city;
+
+
+    /**
+     * Set city
+     *
+     * @param \Lists\CityBundle\Entity\City $city
+     * @return Organization
+     */
+    public function setCity(\Lists\CityBundle\Entity\City $city = null)
+    {
+        $this->city = $city;
+    
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return \Lists\CityBundle\Entity\City 
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+    /**
+     * @var \Lists\LookupBundle\Entity\Lookup
+     */
+    private $scope;
+
+
+    /**
+     * Set scope
+     *
+     * @param \Lists\LookupBundle\Entity\Lookup $scope
+     * @return Organization
+     */
+    public function setScope(\Lists\LookupBundle\Entity\Lookup $scope = null)
+    {
+        $this->scope = $scope;
+    
+        return $this;
+    }
+
+    /**
+     * Get scope
+     *
+     * @return \Lists\LookupBundle\Entity\Lookup 
+     */
+    public function getScope()
+    {
+        return $this->scope;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $users;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add users
+     *
+     * @param \SD\UserBundle\User $users
+     * @return Organization
+     */
+    public function addUser(\SD\UserBundle\User $users)
+    {
+        $this->users[] = $users;
+    
+        return $this;
+    }
+
+    /**
+     * Remove users
+     *
+     * @param \SD\UserBundle\User $users
+     */
+    public function removeUser(\SD\UserBundle\User $users)
+    {
+        $this->users->removeElement($users);
+    }
+
+    /**
+     * Get users
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
 }

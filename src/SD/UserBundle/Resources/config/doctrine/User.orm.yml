@@ -6,3 +6,55 @@ SD\UserBundle\Entity\User:
             type: integer
             generator:
                 strategy: AUTO
+    fields:
+        firstName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: first_name
+        lastName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: last_name
+        middleName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: middle_name
+        position:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        isBlocked:
+            type: boolean
+            nullable: true
+            column: is_blocked
+        isFired:
+            type: boolean
+            nullable: true
+            column: is_fired
+        birthday:
+            type: date
+            nullable: true
+    manyToMany:
+        groups:
+            targetEntity: Group
+            joinTable:
+                name: fos_user_group
+                joinColumns:
+                    user_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    group_id:
+                        referencedColumnName: id
+        organizations:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            mappedBy: users
+        handlings:
+            targetEntity: Lists\HandlingBundle\Entity\Handling
+            mappedBy: users

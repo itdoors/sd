@@ -1,6 +1,0 @@
-Size of organizations = {{ organizations|length }}
-{% if organizations|length > 0 %}
-    {% for organization in organizations %}
-        {{ organization.name|e }} <br />
-    {% endfor %}
-{% endif %}

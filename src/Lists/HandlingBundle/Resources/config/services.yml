@@ -1,0 +1,7 @@
+parameters:
+#    lists_handling.example.class: Lists\HandlingBundle\Example
+
+services:
+#    lists_handling.example:
+#        class: %lists_handling.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

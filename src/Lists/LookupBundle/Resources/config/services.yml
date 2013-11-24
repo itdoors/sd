@@ -1,0 +1,7 @@
+parameters:
+#    lists_lookup.example.class: Lists\LookupBundle\Example
+
+services:
+#    lists_lookup.example:
+#        class: %lists_lookup.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

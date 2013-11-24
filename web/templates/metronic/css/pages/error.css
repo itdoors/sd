@@ -52,8 +52,9 @@ Error Pages
 
 /* 404 page option #2*/
 .page-404-full-page {
-  overflow: hidden;
+  overflow-x: hidden;
   padding: 20px;
+  margin-bottom: 20px;
   background-color: #fafafa !important;
 }
 
@@ -67,7 +68,7 @@ Error Pages
 
 /* 500 page option #2*/
 .page-500-full-page {
-  overflow: hidden;
+  overflow-x: hidden;
   padding: 20px;
   background-color: #fafafa !important;
 }

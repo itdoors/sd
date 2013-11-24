@@ -105,7 +105,7 @@
 				});
 			} else if ($all[0] !== $el[0]) {
 				$all.removeClass('tree-selected')
-					.find('i').removeClass('icon-ok').addClass('tree-dot');
+					.find('i').removeClass('fa fa-check').addClass('tree-dot');
 				data.push($el.data());
 			}
 
@@ -114,10 +114,10 @@
 				if($el.hasClass('tree-selected')) {
 					eventType = 'unselected';
 					$el.removeClass('tree-selected');
-					$el.find('i').removeClass('icon-ok').addClass('tree-dot');
+					$el.find('i').removeClass('fa fa-check').addClass('tree-dot');
 				} else {
 					$el.addClass ('tree-selected');
-					$el.find('i').removeClass('tree-dot').addClass('icon-ok');
+					$el.find('i').removeClass('tree-dot').addClass('fa fa-check');
 					if (this.options.multiSelect) {
 						data.push( $el.data() );
 					}
@@ -144,10 +144,10 @@
 			var $treeFolderContentFirstChild = $treeFolderContent.eq(0);
 
 			var eventType, classToTarget, classToAdd;
-			if ($el.find('.icon-folder-close').length) {
+			if ($el.find('.fa.fa-folder').length) {
 				eventType = 'opened';
-				classToTarget = '.icon-folder-close';
-				classToAdd = 'icon-folder-open';
+				classToTarget = '.fa.fa-folder';
+				classToAdd = 'fa fa-folder-open';
 
 				$treeFolderContentFirstChild.show();
 				if (!$treeFolderContent.children().length) {
@@ -155,8 +155,8 @@
 				}
 			} else {
 				eventType = 'closed';
-				classToTarget = '.icon-folder-open';
-				classToAdd = 'icon-folder-close';
+				classToTarget = '.fa.fa-folder-open';
+				classToAdd = 'fa fa-folder';
 
 				$treeFolderContentFirstChild.hide();
 				if (!this.options.cacheItems) {
@@ -165,7 +165,7 @@
 			}
 
 			$parent.find(classToTarget).eq(0)
-				.removeClass('icon-folder-close icon-folder-open')
+				.removeClass('fa fa-folder fa-folder-open')
 				.addClass(classToAdd);
 
 			this.$element.trigger(eventType, $el.data());
@@ -186,11 +186,11 @@
 			var cacheItems = this.options.cacheItems;
 
 			// find open folders
-			this.$element.find('.icon-folder-open').each(function () {
+			this.$element.find('.fa.fa-folder-open').each(function () {
 				// update icon class
 				var $this = $(this)
-					.removeClass('icon-folder-close icon-folder-open')
-					.addClass('icon-folder-close');
+					.removeClass('fa fa-folder fa-folder-open')
+					.addClass('fa fa-folder');
 
 				// "close" or empty folder contents
 				var $parent = $this.parent().parent();
