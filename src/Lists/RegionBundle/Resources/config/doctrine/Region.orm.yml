@@ -1,0 +1,18 @@
+Lists\RegionBundle\Entity\Region:
+    type: entity
+    table: Region
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        name:
+            type: string(100)
+            nullable: false
+        square:
+            type: float
+        population:
+            type: float
+        flag:
+            type: string
+            length: 255

@@ -17,22 +17,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta name="MobileOptimized" content="320">
     {% block stylesheets %}
-        <link href="{{ asset('/templates/metronic/plugins/font-awesome/css/font-awesome.min.css') }}" type="text/css" rel="stylesheet" />
-        <link href="{{ asset('/templates/metronic/plugins/bootstrap/css/bootstrap.min.css') }}" type="text/css" rel="stylesheet" />
-        <link href="{{ asset('/templates/metronic/plugins/uniform/css/uniform.default.css') }}" type="text/css" rel="stylesheet" />
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'/>
-        <!-- END GLOBAL MANDATORY STYLES -->
-        <!-- BEGIN PAGE LEVEL STYLES -->
-        <link href="{{ asset('/templates/metronic/plugins/select2/select2_metro.css') }}" type="text/css" rel="stylesheet" />
-        <!-- END PAGE LEVEL SCRIPTS -->
-        <!-- BEGIN THEME STYLES -->
-        <link href="{{ asset('/templates/metronic/css/style-metronic.css') }}" type="text/css" rel="stylesheet" />
-        <link href="{{ asset('/templates/metronic/css/style.css') }}" type="text/css" rel="stylesheet" />
-        <link href="{{ asset('/templates/metronic/css/style-responsive.css') }}" type="text/css" rel="stylesheet" />
-        <link href="{{ asset('/templates/metronic/css/plugins.css') }}" type="text/css" rel="stylesheet" />
-        <link href="{{ asset('/templates/metronic/css/themes/default.css') }}" type="text/css" rel="stylesheet" />
-        <link href="{{ asset('/templates/metronic/css/pages/login.css') }}" type="text/css" rel="stylesheet" />
-        <link href="{{ asset('/templates/metronic/css/custom.css') }}" type="text/css" rel="stylesheet" />
+
     {% endblock %}
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <!-- END THEME STYLES -->
@@ -46,6 +31,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 </div>
 <!-- END LOGO -->
 <div class="content">
+    {{ include('::menu.html.twig') }}
     {% block body %}{% endblock %}
 </div>
 <!-- BEGIN COPYRIGHT -->
@@ -54,36 +40,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 </div>
 <!-- END COPYRIGHT -->
 {% block javascripts %}
-    <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
-    <!-- BEGIN CORE PLUGINS -->
-    <!--[if lt IE 9]>
-    <script src="{{ asset('/templates/metronic/plugins/respond.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/templates/metronic/plugins/excanvas.min.js') }}" type="text/javascript"></script>
-    <![endif]-->
-    <script src="{{ asset('/templates/metronic/plugins/jquery-1.10.2.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/templates/metronic/plugins/jquery-migrate-1.2.1.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/templates/metronic/plugins/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/templates/metronic/plugins/bootstrap-hover-dropdown/twitter-bootstrap-hover-dropdown.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/templates/metronic/plugins/jquery-slimscroll/jquery.slimscroll.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/templates/metronic/plugins/jquery.blockui.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/templates/metronic/plugins/jquery.cookie.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/templates/metronic/plugins/uniform/jquery.uniform.min.js') }}" type="text/javascript"></script>
-    <!-- END CORE PLUGINS -->
-    <!-- BEGIN PAGE LEVEL PLUGINS -->
-    <script src="{{ asset('/templates/metronic/plugins/jquery-validation/dist/jquery.validate.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/templates/metronic/plugins/select2/select2.min.js') }}" type="text/javascript"></script>
-    <!-- END PAGE LEVEL PLUGINS -->
-    <!-- BEGIN PAGE LEVEL SCRIPTS -->
-    <script src="{{ asset('/templates/metronic/scripts/app.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/templates/metronic/scripts/login.js') }}" type="text/javascript"></script>
-    <!-- END PAGE LEVEL SCRIPTS -->
-    <script>
-        jQuery(document).ready(function() {
-            App.init();
-            Login.init();
-        });
-    </script>
-    <!-- END JAVASCRIPTS -->
+
 {% endblock %}
 
 </body>

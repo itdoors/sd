@@ -11,7 +11,7 @@ use Symfony\Component\Debug\Debug;
 // Feel free to remove this, extend it, or make something more sophisticated.
 
 $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
-Debug::enable();
+//Debug::enable();
 
 require_once __DIR__.'/../app/AppKernel.php';
 

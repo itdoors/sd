@@ -1,0 +1,3 @@
+lists_region_index:
+    pattern:  /lists/region/index
+    defaults: { _controller: ListsRegionBundle:Default:index }

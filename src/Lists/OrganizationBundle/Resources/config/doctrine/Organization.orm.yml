@@ -1,6 +1,7 @@
 Lists\OrganizationBundle\Entity\Organization:
     type: entity
     table: organization
+    repositoryClass: Lists\OrganizationBundle\Entity\OrganizationRepository
     id:
         id:
             type: integer
@@ -20,3 +21,26 @@ Lists\OrganizationBundle\Entity\Organization:
             type: string
             length: 255
             nullable: true
+    manyToOne:
+        city:
+            targetEntity: Lists\CityBundle\Entity\City
+            inversedBy: organizations
+            joinColumn:
+                name: city_id
+                referencedColumnName: id
+        scope:
+            targetEntity: Lists\LookupBundle\Entity\Lookup
+            joinColumn:
+                name: scope_id
+                referencedColumnName: id
+    manyToMany:
+        users:
+          targetEntity: SD\UserBundle\Entity\User
+          joinTable:
+            name: organization_user
+            joinColumns:
+              organization_id:
+                referencedColumnName: id
+            inverseJoinColumns:
+              user_id:
+                referencedColumnName: id

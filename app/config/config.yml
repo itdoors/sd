@@ -55,7 +55,16 @@ doctrine:
 
     orm:
         auto_generate_proxy_classes: %kernel.debug%
-        auto_mapping: true
+        # auto_mapping: true
+        entity_managers:
+            default:
+                auto_mapping: true
+                dql:
+                    string_functions:
+                        array_to_string: SD\UserBundle\DQL\ArrayToStringDQL
+                        array: SD\UserBundle\DQL\ArrayDQL
+                    # numeric_functions:
+                    # datetime_functions:
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -71,3 +80,14 @@ fos_user:
     user_class: SD\UserBundle\Entity\User
     group:
         group_class: SD\UserBundle\Entity\Group
+
+knp_paginator:
+    page_range: 5                      # default page range used in pagination control
+    default_options:
+        page_name: page                # page query parameter name
+        sort_field_name: sort          # sort field query parameter name
+        sort_direction_name: direction # sort direction query parameter name
+        distinct: false                 # ensure distinct results, useful when ORM queries are using GROUP BY statements
+    template:
+        pagination: KnpPaginatorBundle:Pagination:sliding.html.twig     # sliding pagination controls template
+        sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig # sort link template

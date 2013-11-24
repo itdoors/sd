@@ -1,0 +1,28 @@
+{% extends "::base.html.twig" %}
+
+{% block body %}
+
+    Size of organizations = {{ pagination.getTotalItemCount }} <br />
+    {% if pagination.getTotalItemCount %}
+        <table>
+        {% for item in pagination %}
+            <tr {% if loop.index is odd %}class="color"{% endif %}>
+                <td>{{ item.organizationId|e }}</td>
+                <td>{{ item.organizationName|e }}</td>
+                <td>{{ item.cityName|e }}</td>
+                <td>{{ item.regionName|e }}</td>
+                <td>{{ item.scopeName|e }}</td>
+                <td>{{ item.fullNames|e }}</td>
+                <td>
+                    <a href="{{ path('lists_sales_handling_add_organization_filter', {'organization_id': item.organizationId}) }}">
+                        {{ 'handling.list'|trans({}, 'ListsOrganizationBundle') }}
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% endif %}
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+{% endblock body %}
