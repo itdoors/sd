@@ -23,6 +23,33 @@ My Tenders: Мои тендеры
 My Calendar: Мой календарь
 My Reports: Мои отчеты
 
+#menu role_salesdispatcher
+Sales Dispatcher: Диспетчер продаж
+Team Contacts: Контакты команды
+Team Organizations: Организации команды
+Team Handlings: Обращения команды
+Team Tenders: Тендеры команды
+Team Calendar: Календарь команды
+Team Reports: Отчеты команды
+
+#menu role_salesadmin
+Sales Admin: Администратор продаж
+Manage Teams: Управление командами
+Reports: Отчеты
+Calendar: Календарь
+Tenders: Тендеры
+Handlings: Обращения
+Organizations: Организации
+Contacts: Контакты
+Teams: Команды
+
+#menu role_intranet
+Intranet: Интранет
+My Profile: Мой профиль
+Documents: Документы
+News: Новости
+
+
 
 #CRM
 #contacts 
