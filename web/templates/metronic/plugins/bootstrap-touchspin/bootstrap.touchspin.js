@@ -93,7 +93,7 @@
             {
                 originalinput.data("initvalue", originalinput.val()).val(Number(originalinput.val()).toFixed(settings.decimals));
 
-                var html = '<div class="input-group bootstrap-touchspin '+(settings.inputGroupClass ? settings.inputGroupClass : '')+'" style=""><span class="input-group-btn"><button class="btn '+(settings.spinDownClass ? settings.spinDownClass : 'btn-default')+' bootstrap-touchspin-down" type="button">-</button></span><span class="input-group-addon bootstrap-touchspin-prefix">' + settings.prefix + '</span><span class="input-group-addon bootstrap-touchspin-postfix">' + settings.postfix + '</span><span class="input-group-btn"><button class="btn '+(settings.spinDownClass ? settings.spinDownClass : 'btn-default')+' bootstrap-touchspin-up" type="button">+</button></span></div>';
+                var html = '<div class="input-group bootstrap-touchspin '+(settings.inputGroupClass ? settings.inputGroupClass : '')+'" style=""><span class="input-group-btn"><button class="btn '+(settings.spinDownClass ? settings.spinDownClass : 'btn-default')+' bootstrap-touchspin-down" type="button">-</button></span><span class="input-group-addon bootstrap-touchspin-prefix">' + settings.prefix + '</span><span class="input-group-addon bootstrap-touchspin-postfix">' + settings.postfix + '</span><span class="input-group-btn"><button class="btn '+(settings.spinUpClass ? settings.spinUpClass : 'btn-default')+' bootstrap-touchspin-up" type="button">+</button></span></div>';
 
                 container = $(html).insertBefore(originalinput);
 

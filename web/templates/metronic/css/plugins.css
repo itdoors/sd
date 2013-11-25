@@ -1175,9 +1175,8 @@ Bootstrap Datepaginator
   filter: none !important;
 }
 
-.dp-nav .fa1 {
-  display: inline-block;
-  margin-top: -6px !important;
+#dp-calendar {
+  right: 4px !important;
 }
 
 /***
@@ -1197,4 +1196,19 @@ Font Awesome 4.0 Demo
 .fa-item:hover {
   cursor: pointer;
   background: #eee;
+}
+
+/***
+Bootstrap Modal
+***/
+/* fix: content shifting to the right on modal open */
+.modal-open.page-overflow .page-container,
+.modal-open.page-overflow .page-container .navbar-fixed-top,
+.modal-open.page-overflow .page-container .navbar-fixed-bottom,
+.modal-open.page-overflow .modal-scrollable {
+  overflow-y: auto !important;
+}
+
+.modal-scrollable {
+  overflow: hidden !important;
 }

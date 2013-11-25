@@ -84,7 +84,7 @@ var arrayToLatLng = function(coords, useGeoJSON) {
   var i;
 
   for (i = 0; i < coords.length; i++) {
-    if (coords[i].length > 0 && typeof(coords[i][0]) != "number") {
+    if (coords[i].length > 0 && typeof(coords[i][0]) == "object") {
       coords[i] = arrayToLatLng(coords[i], useGeoJSON);
     }
     else {
@@ -128,6 +128,8 @@ var GMaps = (function(global) {
   var doc = document;
 
   var GMaps = function(options) {
+    if (!this) return new GMaps(options);
+
     options.zoom = options.zoom || 15;
     options.mapType = options.mapType || 'roadmap';
 

@@ -437,6 +437,62 @@ var Charts = function () {
 
         },
 
+        initBarCharts: function () {
+
+            // bar chart:
+            var data1 = GenerateSeries(0);
+     
+            function GenerateSeries(added){
+                var data = [];
+                var start = 100 + added;
+                var end = 200 + added;
+         
+                for(i=1;i<=20;i++){        
+                    var d = Math.floor(Math.random() * (end - start + 1) + start);        
+                    data.push([i, d]);
+                    start++;
+                    end++;
+                }
+         
+                return data;
+            }
+         
+            var options = {
+                    series:{
+                        bars:{show: true}
+                    },
+                    bars:{
+                          barWidth:0.8
+                    },            
+                    grid:{
+                        backgroundColor: { colors: ["#fafafa", "#35aa47"] }
+                    }
+            };
+ 
+            $.plot($("#chart_1_1"), [data1], options);
+
+            // horizontal bar chart:
+
+            var data1 = [
+                [10, 10], [20, 20], [30, 30], [40, 40], [50, 50]
+            ];
+         
+            var options = {
+                    series:{
+                        bars:{show: true}
+                    },
+                    bars:{
+                        horizontal:true,
+                        barWidth:6
+                    },
+                    grid:{
+                        backgroundColor: { colors: ["#fafafa", "#4b8df8"] }
+                    }
+            };
+         
+            $.plot($("#chart_1_2"), [data1], options);  
+        },
+
         initPieCharts: function () {
 
             var data = [];

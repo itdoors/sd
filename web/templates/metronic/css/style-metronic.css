@@ -431,6 +431,7 @@ Popover
   color:#C09853;
 }
 
+
 /***
 Dropdown
 ***/
@@ -475,6 +476,15 @@ Dropdown Menu
   font-size: 14px;
   font-family: "Segoe UI",Helvetica, Arial, sans-serif;
   border: 1px solid #ddd;
+}
+
+/* custom dropdown conetnt */
+.dropdown-content {
+  padding:5px;
+}
+
+.dropdown-content form {
+  margin:0;
 }
 
 .dropdown.inline .dropdown-menu {
@@ -1217,6 +1227,10 @@ Bootstrap modal
   font-weight: 300;
 }
 
+.modal-small {
+  width: 400px !important;
+}
+
 .modal-wide {
   width: 60% !important;
 }
@@ -1251,13 +1265,19 @@ Modal header close button fix
   background-color: #333 !important;
 }
 
-.modal-open .header .container-fluid {
-  padding-right: 37px;
+/* fix: content shifting to the right on modal open due to scrollbar closed */
+.modal {
+  overflow-y: auto !important;
 }
 
-body.modal-open{
- 
+.modal-open {
+  overflow-y: auto !important;
 }
+
+.modal-open-noscroll {
+  overflow-y: hidden !important; 
+}
+
 
 /***
 Image Carousel

@@ -47,7 +47,7 @@
             var size = (options && options.size) ? ' btn-'+options.size : '';
             return "<li>" +
               "<div class='bootstrap-wysihtml5-insert-link-modal modal fade'>" +
-              " <div class='modal-dialog'>" +
+              ($.fn.modalmanager ? "" : "<div class='modal-dialog'>") +
               " <div class='modal-content'>" +
                 "<div class='modal-header'>" +
                   "<a class='close' data-dismiss='modal'></a>" +
@@ -62,7 +62,7 @@
                   "<a href='#' class='btn btn-primary green' data-dismiss='modal'>" + locale.link.insert + "</a>" +
                 "</div>" +
               "</div>" +
-              "</div>" +
+              ($.fn.modalmanager ? "" : "</div>") +
               "</div>" +
               "<a class='btn default" + size + "' data-wysihtml5-command='createLink' title='" + locale.link.insert + "' tabindex='-1'><i class='fa fa-share'></i></a>" +
             "</li>";
@@ -72,7 +72,7 @@
             var size = (options && options.size) ? ' btn-'+options.size : '';
             return "<li>" +
               "<div class='bootstrap-wysihtml5-insert-image-modal modal fade'>" +
-              " <div class='modal-dialog'>" +
+              ($.fn.modalmanager ? "" : "<div class='modal-dialog'>") +
               " <div class='modal-content'>" +
                 "<div class='modal-header'>" +
                   "<a class='close' data-dismiss='modal'></a>" +
@@ -86,7 +86,7 @@
                   "<a href='#' class='btn btn-primary green' data-dismiss='modal'>" + locale.image.insert + "</a>" +
                 "</div>" +
               "</div>" +
-              "</div>" +
+              ($.fn.modalmanager ? "" : "</div>") +
               "</div>" +
               "<a class='btn default" + size + "' data-wysihtml5-command='insertImage' title='" + locale.image.insert + "' tabindex='-1'><i class='fa fa-picture-o'></i></a>" +
             "</li>";

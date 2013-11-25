@@ -260,8 +260,6 @@ Profile Page
   overflow:hidden;
 }
 
-.portfolio-text h4 {
-}
 
 .portfolio-text img {
   float:left;
@@ -275,7 +273,7 @@ Profile Page
 /*portfolio button*/
 .portfolio-btn a {
   display:block;
-  padding:26px 0;
+  padding:25px 0;
   background:#ddd !important;
 }
 
