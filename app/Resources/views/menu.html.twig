@@ -1,3 +1,12 @@
+{% block stylesheets %}
+    {{ parent() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+{% endblock %}
+
+
+
 {% if is_granted('ROLE_SALES') %}
     Role salse
 {% endif %}
