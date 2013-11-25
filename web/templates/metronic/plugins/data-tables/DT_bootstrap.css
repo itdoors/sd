@@ -160,3 +160,16 @@ div.DTFC_LeftFootWrapper table {
 	border-top: none;
 }
 
+.dataTables_processing {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 180px;
+	height: 40px;
+	margin-left: -90px;
+	padding: 10px 0 10px 0;
+	text-align: center;
+	color: #333;
+	font-size: 13px;
+	background-color: #ddd;
+}

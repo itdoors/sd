@@ -2,30 +2,6 @@ var Login = function () {
 
 	var handleLogin = function() {
 
-		// ajax login function to be called right after the form validation success
-		var ajaxLogin = function(form) {
-			form = $(form);
-			$.ajax({
-				type: "POST",
-				url: "index.html",
-				data: form.serialize(),
-				dataType: "json",
-				beforeSend:function(){
-					$('.alert-danger,.alert-success').hide();
-				},
-				error: function(jqXHR, textStatus, errorThrown){
-					alert(errorThrown);
-					$('.alert-danger').show();
-					$('.alert-danger span').html(errorThrown);
-				},
-				success: function(data){
-					alert('Success!!!');
-					$('.alert-success').show();
-					$('.alert-success span').html(data);
-				}
-			});
-		}
-
 		$('.login-form').validate({
 	            errorElement: 'span', //default input error message container
 	            errorClass: 'help-block', // default input error message class
@@ -44,10 +20,10 @@ var Login = function () {
 
 	            messages: {
 	                username: {
-	                    required: "Username is required1."
+	                    required: "Username is required."
 	                },
 	                password: {
-	                    required: "Password is required2."
+	                    required: "Password is required."
 	                }
 	            },
 
@@ -70,14 +46,14 @@ var Login = function () {
 	            },
 
 	            submitHandler: function (form) {
-	                ajaxLogin(form); // form validation success, call ajax form submit
+	                form.submit(); // form validation success, call ajax form submit
 	            }
 	        });
 
 	        $('.login-form input').keypress(function (e) {
 	            if (e.which == 13) {
 	                if ($('.login-form').validate().form()) {
-	                    ajaxLogin($('.login-form')); //form validation success, call ajax form submit
+	                    $('.login-form').submit(); //form validation success, call ajax form submit
 	                }
 	                return false;
 	            }

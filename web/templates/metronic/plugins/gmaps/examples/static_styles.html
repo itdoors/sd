@@ -13,7 +13,23 @@
       var url = GMaps.staticMapURL({
         size: [610, 350],
         lat: -12.043333,
-        lng: -77.028333
+        lng: -77.028333,
+        styles: [{
+          featureType: "all",
+          elementType: "all",
+          stylers: [
+            { hue: '#FF0000' }
+          ]
+        },
+        {
+          featureType: "landscape",
+          elementType: "all",
+          stylers: [
+            { hue: '#0A2D3F'},
+            { saturation: 50 },
+            { lightness: -10 }
+          ]
+        }]
       });
       $('<img/>').attr('src', url).appendTo('#map');
     });
@@ -26,17 +42,31 @@
       <div id="map"></div>
     </div>
     <div class="span6">
-      <p>You can easily make a static map using GMaps.js:</p>
+      <p>You can use the same styles as for a normal styled map to make a static map using GMaps.js:</p>
       <pre>url = GMaps.staticMapURL({
   size: [610, 350],
   lat: -12.043333,
   lng: -77.028333
+  styles: [{
+    featureType: "all",
+    elementType: "all",
+    stylers: [
+      { hue: '#FF0000' }
+    ]
+  },
+  {
+    featureType: "landscape",
+    elementType: "all",
+    stylers: [
+      { hue: '#0A2D3F'},
+      { saturation: 50 },
+      { lightness: -10 }
+    ]
+  }]
 });
 
 $('&lt;img/&gt;').attr('src', url)
   .appendTo('#map');</pre>
-      <p>You must define a <strong>size</strong> and the <strong>latitude</strong> and <strong>longitude</strong> of the map's center.</p>
-      <p><span class="label notice">Note: </span> You also can define <strong>zoom</strong> (by default is 15, unless zoom is set to false, in which case Google will set zoom based on marker positions).</p>
     </div>
   </div>
 </body>

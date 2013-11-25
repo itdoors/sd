@@ -342,7 +342,7 @@ var App = function () {
         }
 
         // handle sidebar show/hide
-        $('.page-sidebar').on('click', '.sidebar-toggler', function (e) {
+        $('.page-sidebar, .header').on('click', '.sidebar-toggler', function (e) {
             var body = $('body');
             var sidebar = $('.page-sidebar');
 
@@ -510,13 +510,16 @@ var App = function () {
         //activate tab if tab id provided in the URL
         if (location.hash) {
             var tabid = location.hash.substr(1);
+            $('a[href="#' + tabid + '"]').parents('.tab-pane:hidden').each(function(){
+                var tabid = $(this).attr("id");
+                $('a[href="#' + tabid + '"]').click();    
+            });            
             $('a[href="#' + tabid + '"]').click();
         }
     }
 
     // Handles Bootstrap Modals.
     var handleModals = function () {
-
         // fix stackable modal issue: when 2 or more modals opened, closing one of modal will remove .modal-open class. 
         $('body').on('hide.bs.modal', function () {
            if ($('.modal:visible').size() > 1 && $('html').hasClass('modal-open') == false) {
@@ -524,6 +527,16 @@ var App = function () {
            } else if ($('.modal:visible').size() <= 1) {
               $('html').removeClass('modal-open');
            }
+        });
+            
+        $('body').on('show.bs.modal', '.modal', function () {
+            if ($(this).hasClass("modal-scroll")) {
+                $('body').addClass("modal-open-noscroll");
+            } 
+        });
+
+        $('body').on('hide.bs.modal', '.modal', function () {
+            $('body').removeClass("modal-open-noscroll");
         });
     }
 

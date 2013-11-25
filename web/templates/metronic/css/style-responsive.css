@@ -263,6 +263,7 @@ Up To Medium Devices
 		z-index: 5;
 	}
 
+	.header .sidebar-toggler,
 	.page-sidebar .sidebar-toggler {
 		display: none;
 	}

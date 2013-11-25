@@ -26,6 +26,63 @@ Page header
   color: #b3b3b3 !important;
 }
 /***
+Hor menu
+***/
+.header .hor-menu ul.nav li a {
+  color: #ccc;
+}
+
+.header .hor-menu ul.nav li.open > a,
+.header .hor-menu ul.nav li > a:hover,
+.header .hor-menu ul.nav li > a:focus {
+  color: #fff;
+  background: #616161;
+}
+
+.header .hor-menu .dropdown-menu li:hover > a,
+.header .hor-menu ul.nav li.active > a,
+.header .hor-menu ul.nav li.active > a:hover {
+  color: #fff;
+  background: #e02222 !important; 
+}
+
+.header .hor-menu .dropdown-menu {  
+    background: #616161;
+}
+.header .hor-menu .dropdown-menu li > a {    
+    color: #ccc;
+}
+
+.header .hor-menu .hor-menu-search-form-toggler.off {
+   background: #616161 url(../../img/hor-menu-search-close-white.png) no-repeat center;
+}
+
+.header .hor-menu .search-form {  
+  background:#616161; 
+}
+
+.header .hor-menu .search-form form input {
+  color: #ccc;
+}
+
+.header .hor-menu .search-form .btn {
+  color: #ccc;
+  background: url(../../img/search-icon-white.png) no-repeat center;
+}
+
+.header .hor-menu .search-form form input::-webkit-input-placeholder { /* WebKit browsers */
+    color: #ccc;
+}
+.header .hor-menu .search-form form input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #ccc;
+}
+.header .hor-menu .search-form form input::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #ccc;
+}
+.header .hor-menu .search-form form input:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: #ccc;
+}
+/***
 Page sidebar
 ***/
 .page-sidebar {
@@ -133,43 +190,6 @@ Sidebar toggler
 /* sub menu bg color on hover menu item */
 .page-sidebar-closed ul.page-sidebar-menu > li:hover .sub-menu {
   background-color: #666666;
-}
-/***
-Horizontal Menu(new in v1.2)
-***/
-/*search*/
-.header .hor-menu .hor-menu-search-form-toggler.hide {
-  background: #000000 url(../../img/hor-menu-search-close.png) no-repeat center;
-}
-.header .hor-menu .search-form {
-  background: #000000;
-}
-.header .hor-menu .search-form .btn {
-  color: #ffffff;
-  background: #1a1a1a url(../../img/search-icon.png) no-repeat center;
-}
-.header .hor-menu .search-form form input {
-  color: #ffffff;
-}
-.header .hor-menu .search-form form input::-webkit-input-placeholder {
-  /* WebKit browsers */
-
-  color: #ffffff;
-}
-.header .hor-menu .search-form form input:-moz-placeholder {
-  /* Mozilla Firefox 4 to 18 */
-
-  color: #ffffff;
-}
-.header .hor-menu .search-form form input::-moz-placeholder {
-  /* Mozilla Firefox 19+ */
-
-  color: #ffffff;
-}
-.header .hor-menu .search-form form input:-ms-input-placeholder {
-  /* Internet Explorer 10+ */
-
-  color: #ffffff;
 }
 /***
 Footer 

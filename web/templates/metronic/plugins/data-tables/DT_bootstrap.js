@@ -1,6 +1,7 @@
 /* Set the defaults for DataTables initialisation */
 $.extend( true, $.fn.dataTable.defaults, {
-	"sDom": "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
+	"sDom": "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", // horizobtal scrollable datatable
+	//"sDom": "<'row'<'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r>t<'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>", // defaukt datatable without  horizobtal scroll
 	"sPaginationType": "bootstrap",
 	"oLanguage": {
 		"sLengthMenu": "_MENU_ records"
@@ -41,15 +42,6 @@ $.extend( $.fn.dataTableExt.oPagination, {
 				}
 			};
 
-			/**
-			// pagination with prev, next link captions
-			$(nPaging).append(
-				'<ul class="pagination">'+
-					'<li class="prev disabled"><a href="#"><i class="icon-angle-left"></i>'+oLang.sPrevious+'</a></li>'+
-					'<li class="next disabled"><a href="#">'+oLang.sNext+'<i class="icon-angle-right"></i></a></li>'+
-				'</ul>'
-			);
-			**/
 			// pagination with prev, next link icons
 			$(nPaging).append(
 				'<ul class="pagination">'+
@@ -82,6 +74,12 @@ $.extend( $.fn.dataTableExt.oPagination, {
 			} else {
 				iStart = oPaging.iPage - iHalf + 1;
 				iEnd = iStart + iListLength - 1;
+			}
+
+			if (oPaging.iTotalPages < 0) {
+				$('.pagination', an[i]).css('visibility', 'hidden');
+			} else {
+				$('.pagination', an[i]).css('visibility', 'visible');
 			}
 
 			for ( i=0, iLen=an.length ; i<iLen ; i++ ) {

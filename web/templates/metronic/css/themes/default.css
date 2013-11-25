@@ -27,6 +27,64 @@ Page header
   color: #8a8a8a !important;
 }
 /***
+Hor menu
+***/
+.header .hor-menu ul.nav li a {
+  color: #999;
+}
+
+.header .hor-menu ul.nav li.open > a,
+.header .hor-menu ul.nav li > a:hover,
+.header .hor-menu ul.nav li > a:focus {
+  color: #fff;
+  background: #383838;
+}
+
+.header .hor-menu .dropdown-menu li:hover > a,
+.header .hor-menu ul.nav li.active > a,
+.header .hor-menu ul.nav li.active > a:hover {
+  color: #fff;
+  background: #e02222 !important; 
+}
+
+.header .hor-menu .dropdown-menu {  
+    background: #383838;
+}
+.header .hor-menu .dropdown-menu li > a {    
+    color: #999;
+}
+
+.header .hor-menu .hor-menu-search-form-toggler.off {
+   background: #383838 url(../../img/hor-menu-search-close.png) no-repeat center;
+}
+
+.header .hor-menu .search-form {  
+  background:#383838; 
+}
+
+.header .hor-menu .search-form form input {
+  color: #999;
+}
+
+.header .hor-menu .search-form .btn {
+  color: #999;
+  background: url(../../img/search-icon.png) no-repeat center;
+}
+
+.header .hor-menu .search-form form input::-webkit-input-placeholder { /* WebKit browsers */
+    color: #999;
+}
+.header .hor-menu .search-form form input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #999;
+}
+.header .hor-menu .search-form form input::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #999;
+}
+.header .hor-menu .search-form form input:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: #999;
+}
+
+/***
 Page sidebar
 ***/
 .page-sidebar {
@@ -134,43 +192,6 @@ Sidebar toggler
 /* sub menu bg color on hover menu item */
 .page-sidebar-closed ul.page-sidebar-menu > li:hover .sub-menu {
   background-color: #3d3d3d;
-}
-/***
-Horizontal Menu(new in v1.2)
-***/
-/*search*/
-.header .hor-menu .hor-menu-search-form-toggler.off {
-  background: #000000 url(../../img/hor-menu-search-close.png) no-repeat center;
-}
-.header .hor-menu .search-form {
-  background: #000000;
-}
-.header .hor-menu .search-form .btn {
-  color: #d6d6d6;
-  background: #000000 url(../../img/search-icon.png) no-repeat center;
-}
-.header .hor-menu .search-form form input {
-  color: #d6d6d6;
-}
-.header .hor-menu .search-form form input::-webkit-input-placeholder {
-  /* WebKit browsers */
-
-  color: #d6d6d6;
-}
-.header .hor-menu .search-form form input:-moz-placeholder {
-  /* Mozilla Firefox 4 to 18 */
-
-  color: #d6d6d6;
-}
-.header .hor-menu .search-form form input::-moz-placeholder {
-  /* Mozilla Firefox 19+ */
-
-  color: #d6d6d6;
-}
-.header .hor-menu .search-form form input:-ms-input-placeholder {
-  /* Internet Explorer 10+ */
-
-  color: #d6d6d6;
 }
 /***
 Footer 

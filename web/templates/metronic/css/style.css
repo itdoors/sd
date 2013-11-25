@@ -1,6 +1,6 @@
 /*   
-Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.0
-Version: 1.5.3
+Template Name: Metronic - Responsive Admin Dashboard Template build with Twitter Bootstrap 3.0.2
+Version: 1.5.4
 Author: KeenThemes
 Website: http://www.keenthemes.com/
 Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keentheme
@@ -756,13 +756,10 @@ Page sidebar
 /***
 Sidebar toggler(show/hide)
 ***/
-
-.page-sidebar .sidebar-toggler {
+.sidebar-toggler {
   cursor: pointer; 
   opacity: 0.5;
   filter: alpha(opacity=50);
-  margin-top: 15px;
-  margin-left: 175px;
   width: 29px;
   height: 29px;
   background-repeat: no-repeat;
@@ -773,7 +770,18 @@ Sidebar toggler(show/hide)
   opacity: 1;
 }
 
-.page-sidebar-closed .sidebar-toggler {  
+.page-sidebar .sidebar-toggler {
+  margin-top: 15px;
+  margin-left: 175px;
+}
+
+.header .sidebar-toggler {
+  display: inline-block;
+  margin-top: 6px;
+  margin-left: -42px;
+}
+
+.page-sidebar-closed .page-sidebar .sidebar-toggler {  
   margin-left: 3px;
 }
 
@@ -838,7 +846,7 @@ Sidebar toggler(show/hide)
   display: none !important;
 }
 
-.page-sidebar-closed .sidebar-toggler {
+.page-sidebar-closed .page-sidebar .sidebar-toggler {
   margin-right: 3px;
 }
 
@@ -3254,11 +3262,6 @@ Horezantal Menu(new in v1.2)
   position: relative;
 }
 
-.header .hor-menu ul.nav li.active > a,
-.header .hor-menu ul.nav li.active > a:hover {
-  background: #e02222 !important; 
-}
-
 .header .hor-menu ul.nav li.active .selected {
   left: 50%;
   bottom:0;
@@ -3274,17 +3277,11 @@ Horezantal Menu(new in v1.2)
   margin-bottom:-6px;
 }
 
-.header .hor-menu ul.nav li a:hover,
-.header .hor-menu ul.nav li a:focus {
-    background: #2d2d2d;
-}
-
 /*drop-down*/
 .header .hor-menu .dropdown-menu {
     margin-top: 0;
     border: none;
     box-shadow: none;
-    background: #2d2d2d;
 }
 
 .header .hor-menu .dropdown-submenu > .dropdown-menu {
@@ -3297,7 +3294,6 @@ Horezantal Menu(new in v1.2)
 } 
 
 .header .hor-menu .dropdown-menu li > a {
-    color: #999;
     padding: 7px 18px !important; 
     margin-bottom:1px;
 }
@@ -3309,9 +3305,7 @@ Horezantal Menu(new in v1.2)
 .header .hor-menu .dropdown-menu li > a:hover,
 .header .hor-menu .dropdown-menu li:hover > a,
 .header .hor-menu .dropdown-menu li.active > a {
-    color: #fff;
     filter:none !important;
-    background: #e02222 !important;
 }
 
 .header .hor-menu .nav > li > .dropdown-menu:after,
@@ -3332,10 +3326,6 @@ Horezantal Menu(new in v1.2)
   filter: alpha(opacity=80);
 }
 
-.header .hor-menu .hor-menu-search-form-toggler.off {
-   background: #101010 url(../img/hor-menu-search-close.png) no-repeat center;
-}
-
 .header .hor-menu a.hor-menu-search-form-toggler-close {
   display: none;
 }
@@ -3347,16 +3337,13 @@ Horezantal Menu(new in v1.2)
   display:none;
   z-index:999; 
   position:absolute; 
-  background:#101010; 
 }
 
 .header .hor-menu .search-form .btn {
-  color: #999;
   padding: 7px 20px; 
   height: 32px;
   width: 10px;
   display: inline-block;
-  background: #2d2d2d url(../img/search-icon.png) no-repeat center;
 }
 
 .header .hor-menu .search-form .btn:hover {
@@ -3371,23 +3358,8 @@ Horezantal Menu(new in v1.2)
 .header .hor-menu .search-form form input {
   background: none;
   width: 200px;
-  color: #999;
   border: none;
 }
-
-.header .hor-menu .search-form form input::-webkit-input-placeholder { /* WebKit browsers */
-    color: #999;
-}
-.header .hor-menu .search-form form input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-    color: #999;
-}
-.header .hor-menu .search-form form input::-moz-placeholder { /* Mozilla Firefox 19+ */
-    color: #999;
-}
-.header .hor-menu .search-form form input:-ms-input-placeholder { /* Internet Explorer 10+ */
-    color: #999;
-}
-
 
 /***
 Top News Blocks(new in v1.2.2)
@@ -4108,3 +4080,5 @@ Responsive Flip Scroll Tables
   .flip-scroll tbody tr { border-left: 1px solid #ddd; }
   .flip-scroll th:last-child,
   .flip-scroll td:last-child { border-bottom: 1px solid #ddd; }
+  
+}
