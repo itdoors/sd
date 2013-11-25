@@ -12,13 +12,44 @@ Lock Screen: Заблокировать
 Log Out: Выход
 
 
-#menu
+#MENU
 Dashboard: Рабочий стол
-My contacts: Мои контакты
-My Organization: Мои организации
+#menu role_sales
+My Sales: Мои продажи
+My Contacts: Мои контакты
+My Organizations: Мои организации
+My Handlings: Мои обращения
+My Tenders: Мои тендеры
+My Calendar: Мой календарь
+My Reports: Мои отчеты
+
+#menu role_salesdispatcher
+Sales Dispatcher: Диспетчер продаж
+Team Contacts: Контакты команды
+Team Organizations: Организации команды
+Team Handlings: Обращения команды
+Team Tenders: Тендеры команды
+Team Calendar: Календарь команды
+Team Reports: Отчеты команды
+
+#menu role_salesadmin
+Sales Admin: Администратор продаж
+Manage Teams: Управление командами
+Reports: Отчеты
 Calendar: Календарь
-My handlings: Мои обращения
-My tenders: Мои тендеры
+Tenders: Тендеры
+Handlings: Обращения
+Organizations: Организации
+Contacts: Контакты
+Teams: Команды
+
+#menu role_intranet
+Intranet: Интранет
+My Profile: Мой профиль
+Documents: Документы
+News: Новости
+
+
 
 #CRM
 #contacts 
@@ -39,16 +70,16 @@ Organization: Организация
 Notice: Отправлять уведомления по Email
 Notice SMS: Отправлять SMS
 
-id | FIO | Position | Mobile | Phone | Email | Birthday | Organization | Creator | Create date| Owner | Owner date | Handler | Handler date| | | | | 
+#id | FIO | Position | Mobile | Phone | Email | Birthday | Organization | Creator | Create date| Owner | Owner date | Handler | Handler date| | | | | 
 
-Birthday - можно вносить только день и месяц
-Email - ссылка с префиксом mailto:email@email.com
-Organization - нужно подумать про историю, люди переходят из одной организации в другую.
-И вообще над историей изменений нужно подумать.
-Mobile - нужны иконочки при нажатии на которые - сразу идет звонок, регулярное выражение для ввода данных страна код номер 
-Phone - нужны иконочки при нажатии на которые - сразу идет звонок / страна код номер внутренний
+#Birthday - можно вносить только день и месяц
+#Email - ссылка с префиксом mailto:email@email.com
+#Organization - нужно подумать про историю, люди переходят из одной организации в другую.
+#И вообще над историей изменений нужно подумать.
+#Mobile - нужны иконочки при нажатии на которые - сразу идет звонок, регулярное выражение для ввода данных страна код номер 
+#Phone - нужны иконочки при нажатии на которые - сразу идет звонок / страна код номер внутренний
 
-Дополнительный справочник с контактами - скайп, доп емайл, доп тел, аська и т.п.
+#Дополнительный справочник с контактами - скайп, доп емайл, доп тел, аська и т.п.
 
 #CRM
 #organization 
