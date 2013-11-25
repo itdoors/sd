@@ -16,8 +16,8 @@ class OrganizationRepository extends EntityRepository
   {
     $sql = $this->createQueryBuilder('o')
       ->select('o.id as organizationId', 'o.name as organizationName')
-      ->addSelect('c.id as cityId', 'c.name as cityName')
-      ->addSelect('r.id as regionId', 'r.name as regionName')
+      ->addSelect('c.name as cityName')
+      ->addSelect('r.name as regionName')
       ->addSelect('scope.name as scopeName')
       ->addSelect("
         array_to_string(
