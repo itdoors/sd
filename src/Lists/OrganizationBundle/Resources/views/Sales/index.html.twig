@@ -5,6 +5,13 @@
 	</h3>
 {% endblock %}
 
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.js') }}"></script>
+{% endblock %}
+
 {% block body %}
 
     Size of organizations = {{ pagination.getTotalItemCount }} <br />

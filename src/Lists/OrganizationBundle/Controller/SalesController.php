@@ -26,11 +26,8 @@ class SalesController extends Controller
       20
     );
 
-    $form = $this->createForm('organizationFilterForm');
-
     return $this->render('ListsOrganizationBundle:Sales:index.html.twig', array(
       'pagination' => $pagination,
-      'form' => $form->createView()
     ));
   }
 }
