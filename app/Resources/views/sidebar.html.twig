@@ -1,111 +1,72 @@
 <!-- BEGIN SIDEBAR -->
-		<div class="page-sidebar navbar-collapse collapse">
-			<!-- BEGIN SIDEBAR MENU -->        
-			<ul class="page-sidebar-menu">
-				<li>
-					<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-					<div class="sidebar-toggler hidden-phone"></div>
-					<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-				</li>
-				<li>
-					<!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
-					<form class="sidebar-search" action="extra_search.html" method="POST">
-						<div class="form-container">
-							<div class="input-box">
-								<a href="javascript:;" class="remove"></a>
-								<input type="text" placeholder="Search..."/>
-								<input type="button" class="submit" value=" "/>
-							</div>
-						</div>
-					</form>
-					<!-- END RESPONSIVE QUICK SEARCH FORM -->
-				</li>
-				<li class="start active ">
-					<a href="index.html">
-					<i class="fa fa-home"></i> 
-					<span class="title">Dashboard</span>
-					<span class="selected"></span>
+<div class="page-sidebar navbar-collapse collapse">
+	<!-- BEGIN SIDEBAR MENU -->        
+	<ul class="page-sidebar-menu">
+		<li>
+			<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+			<div class="sidebar-toggler hidden-phone"></div>
+			<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+		</li>
+		{% include 'sidebar_search.html.twig' %}
+		<li class="start active ">
+			<a href="index.html">
+				<i class="fa fa-home"></i> 
+				<span class="title">{% trans %}Dashboard{% endtrans %}</span>
+				<span class="selected"></span>
+			</a>
+		</li>
+		{% if is_granted('ROLE_SALES') %}
+		<li class="">
+			<a href="javascript:;">
+				<i class="fa fa-sitemap"></i> 
+				<span class="title">{% trans %}My Sales{% endtrans %}</span>
+				<span class="arrow "></span>
+			</a>
+			<ul class="sub-menu">
+				<li >
+					<a href="/contacts/sales/" title="{% trans %}My Contacts{% endtrans %}">
+						<i class="fa fa-group"></i>
+						{% trans %}My Contacts{% endtrans %}
 					</a>
 				</li>
-				<li class="">
+				<li >
+					<a href="/organization/sales/" title="{% trans %}My Organizations{% endtrans %}">
+						<i class="fa fa-building"></i>
+						{% trans %}My Organizations{% endtrans %}
+					</a>
+				</li>				
+				<li >
+					<a href="/handling/sales/" title="{% trans %}My Handlings{% endtrans %}">
+						<i class="fa fa-comments"></i>
+						{% trans %}My Handlings{% endtrans %}
+					</a>
+				</li>
+				<li >
+					<a href="/tender/sales" title="{% trans %}My Tenders{% endtrans %}">
+						<i class="fa fa-gavel"></i>
+						{% trans %}My Tenders{% endtrans %}
+					</a>
+				</li>
+				<li >
+					<a href="/calendar/sales/" title="{% trans %}My Calendar{% endtrans %}">
+					<i class="fa fa-calendar"></i>
+					<span class="badge badge-important">14</span>{% trans %}My Calendar{% endtrans %}</a>
+				</li>
+				<li >
+					<a href="/calendar/sales/" title="{% trans %}My Reports{% endtrans %}">
+					<i class="fa fa-bar-chart"></i>
+					{% trans %}My Reports{% endtrans %}</a>
+				</li>
+			</ul>
+		</li>
+		{% endif %}
+		<li class="">
 					<a href="index_horizontal_menu.html">
 					<i class="fa fa-briefcase"></i> 
 					<span class="title">Dashboard 2</span>
 					</a>
 				</li>
-				<li class="">
-					<a href="javascript:;">
-					<i class="fa fa-cogs"></i> 
-					<span class="title">Layouts</span>
-					<span class="arrow "></span>
-					</a>
-					<ul class="sub-menu">
-						<li >
-							<a href="layout_session_timeout.html">
-							<span class="badge badge-roundless badge-warning">new</span>Session Timeout</a>
-						</li>
-						<li >
-							<a href="layout_idle_timeout.html">
-							<span class="badge badge-roundless badge-important">new</span>User Idle Timeout</a>
-						</li>
-						<li >
-							<a href="layout_language_bar.html">
-							Language Switch Bar</a>
-						</li>
-						<li >
-							<a href="layout_horizontal_sidebar_menu.html">
-							Horizontal & Sidebar Menu</a>
-						</li>
-						<li >
-							<a href="layout_horizontal_menu1.html">
-							Horizontal Menu 1</a>
-						</li>
-						<li >
-							<a href="layout_horizontal_menu2.html">
-							Horizontal Menu 2</a>
-						</li>
-						<li >
-							<a href="layout_sidebar_toggler_on_header.html">
-							<span class="badge badge-roundless badge-warning">new</span>Sidebar Toggler On Header</a>
-						</li>
-						<li >
-							<a href="layout_sidebar_fixed.html">
-							Sidebar Fixed Page</a>
-						</li>
-						<li >
-							<a href="layout_sidebar_closed.html">
-							Sidebar Closed Page</a>
-						</li>
-						<li >
-							<a href="layout_disabled_menu.html">
-							Disabled Menu Links</a>
-						</li>
-						<li >
-							<a href="layout_blank_page.html">
-							Blank Page</a>
-						</li>
-						<li >
-							<a href="layout_boxed_page.html">
-							Boxed Page</a>
-						</li>
-						<li >
-							<a href="layout_boxed_not_responsive.html">
-							Non-Responsive Boxed Layout</a>
-						</li>
-						<li >
-							<a href="layout_promo.html">
-							Promo Page</a>
-						</li>
-						<li >
-							<a href="layout_email.html">
-							Email Templates</a>
-						</li>
-						<li >
-							<a href="layout_ajax.html">
-							Content Loading via Ajax</a>
-						</li>
-					</ul>
-				</li>
+				
 				<li class="tooltips" data-placement="right" data-original-title="Frontend&nbsp;Theme For&nbsp;Metronic&nbsp;Admin">
 					<a href="http://keenthemes.com/preview/index.php?theme=metronic_frontend" target="_blank">
 					<i class="fa fa-gift"></i> 

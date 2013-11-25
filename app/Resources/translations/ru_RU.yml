@@ -12,13 +12,17 @@ Lock Screen: Заблокировать
 Log Out: Выход
 
 
-#menu
+#MENU
 Dashboard: Рабочий стол
-My contacts: Мои контакты
-My Organization: Мои организации
-Calendar: Календарь
-My handlings: Мои обращения
-My tenders: Мои тендеры
+#menu role_sales
+My Sales: Мои продажи
+My Contacts: Мои контакты
+My Organizations: Мои организации
+My Handlings: Мои обращения
+My Tenders: Мои тендеры
+My Calendar: Мой календарь
+My Reports: Мои отчеты
+
 
 #CRM
 #contacts 
