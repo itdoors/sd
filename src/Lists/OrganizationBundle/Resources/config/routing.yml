@@ -1,3 +1,7 @@
 lists_sales_organization_index:
     pattern:  /lists/sales/organization/index
     defaults: { _controller: ListsOrganizationBundle:Sales:index }
+
+lists_sales_organization_ajax_index:
+    pattern:  /lists/sales/organization/ajax/index
+    defaults: { _controller: ListsOrganizationBundle:Sales:ajaxIndex }
