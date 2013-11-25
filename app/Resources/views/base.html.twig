@@ -5,7 +5,7 @@
 <!-- BEGIN HEAD -->
 <head>
 	<meta charset="utf-8" />
-	<title>{% block title %}{% endblock %}</title>
+	<title>{% block title %}Default title{% endblock %}</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
 	<meta content="" name="description" />
@@ -154,12 +154,13 @@
 	<!-- END PAGE LEVEL PLUGINS -->
 	
 	<!-- BEGIN PAGE LEVEL SCRIPTS -->
-	{% block js_page_level_script %}
+	{% block js_page_level_scripts %}
 	<script src="{{ asset('templates/metronic/scripts/app.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('templates/metronic/scripts/index.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('templates/metronic/scripts/tasks.js') }}" type="text/javascript"></script>   	
 	{% endblock %}
 	<!-- END PAGE LEVEL SCRIPTS -->  
+	{% block js_page_init_scripts %}
 	<script>
 		jQuery(document).ready(function() {    
 		   App.init(); // initlayout and core plugins
@@ -174,6 +175,7 @@
 		   Tasks.initDashboardWidget();
 		});
 	</script>
+	{% endblock %}
 	<!-- END JAVASCRIPTS -->
 </body>
 <!-- END BODY -->
