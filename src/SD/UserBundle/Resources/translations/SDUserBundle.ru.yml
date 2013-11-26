@@ -102,7 +102,7 @@ form:
 #
 
 #login form
-Autorization: Авторизация
+#Autorization: "Авторизация"
 Login to your account: Войти в свой аккаунт
 Username: Пользователь
 User name: Имя пользователя
