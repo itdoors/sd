@@ -41,8 +41,8 @@ var TableAjax = function () {
             // begin first table
             $(selector).dataTable(DTparams);
 
-            //jQuery('#sample_1_wrapper .dataTables_filter input').addClass("form-control input-medium"); // modify table search input
-            //jQuery('#sample_1_wrapper .dataTables_length select').addClass("form-control input-small"); // modify table per page dropdown
+            jQuery(selector + '_wrapper .dataTables_filter input').addClass("form-control input-medium"); // modify table search input
+            jQuery(selector + '_wrapper .dataTables_length select').addClass("form-control input-small"); // modify table per page dropdown
 
             // handle record edit/remove
             /*$('body').on('click', '#sample_1_wrapper .btn-editable', function() {

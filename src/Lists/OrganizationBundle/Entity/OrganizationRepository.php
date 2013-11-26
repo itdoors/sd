@@ -36,17 +36,6 @@ class OrganizationRepository extends EntityRepository
       ->leftJoin('o.scope', 'scope')
       ->orderBy('o.name', 'ASC');
 
-    //$count = $this->getAllForSalesCount();
-
-    /*$query = $this->getEntityManager()
-      ->createQuery('
-            SELECT
-              o, c, r FROM
-            ListsOrganizationBundle:Organization o
-            LEFT JOIN o.city c
-            LEFT JOIN c.region r
-            ');*/
-
     $query = $sql->getQuery();
 
     $count = $this->getAllForSalesCount();
