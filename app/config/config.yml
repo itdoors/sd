@@ -61,8 +61,8 @@ doctrine:
                 auto_mapping: true
                 dql:
                     string_functions:
-                        array_to_string: SD\UserBundle\DQL\ArrayToStringDQL
-                        array: SD\UserBundle\DQL\ArrayDQL
+                        array_to_string: SD\CommonBundle\DQL\ArrayToStringDQL
+                        array: SD\CommonBundle\DQL\ArrayDQL
                     # numeric_functions:
                     # datetime_functions:
 

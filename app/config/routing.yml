@@ -1,3 +1,7 @@
+sd_common:
+    resource: "@SDCommonBundle/Resources/config/routing.yml"
+    prefix:   /
+
 #sd_model:
 #    resource: "@SDModelBundle/Resources/config/routing.yml"
 #    prefix:   /
