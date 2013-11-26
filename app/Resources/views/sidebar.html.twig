@@ -9,7 +9,7 @@
 		</li>
 		{% include 'sidebar_search.html.twig' %}
 		<li class="start active ">
-			<a href="index.html">
+			<a href="{{ path('sd_dashboard_homepage') }}">
 				<i class="fa fa-home"></i> 
 				<span class="title">{% trans %}Dashboard{% endtrans %}</span>
 				<span class="selected"></span>
@@ -30,7 +30,7 @@
 					</a>
 				</li>
 				<li >
-					<a href="/organization/sales/" title="{% trans %}My Organizations{% endtrans %}">
+					<a href="{{ path('lists_sales_organization_index') }}" title="{% trans %}My Organizations{% endtrans %}">
 						<i class="fa fa-building"></i>
 						{% trans %}My Organizations{% endtrans %}
 					</a>
