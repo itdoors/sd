@@ -96,5 +96,13 @@ form:
     new_password_confirmation: "Подтвердите пароль:"
 	
 	
+# 
+# Russian translation of user bundle
+# Muzyka Dmytro
+# 25.11.2013
+#
+
+#login form
+"Authorization": "Авторизация"
 
 
