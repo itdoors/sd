@@ -103,7 +103,7 @@ form:
 
 	
 #login form
-"Authorization": "Авторизация"
+"Author": "Авторизация"
 "Login to your account": "Войти в свой аккаунт"
 "Username": "Пользователь"
 "User name": "Имя пользователя"
