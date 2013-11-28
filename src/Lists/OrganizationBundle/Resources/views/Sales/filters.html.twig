@@ -5,3 +5,109 @@
         'attr': {'novalidate': 'novalidate'}
     })
 }}
+<div class="row ">
+	<div class="col-md-12">
+		<div class="portlet box yellow">
+			<div class="portlet-title">
+				<div class="caption"><i class="fa fa-reorder"></i>{% trans %}Filters{% endtrans %}</div>
+				<div class="tools"><a class="collapse" href="" title="{% trans %}Filters{% endtrans %}"></a></div>
+			</div>
+		</div>
+		<div class="portlet-body">
+			<p>Выберите параметры фильтра и нажмите кнопку Фильтр</p>
+			<form class="form-inline" role="form">
+				<!--MPK-->
+				<div class="form-group">					
+					<label class="sr-only" for="exampleInputEmail2">{% trans %}MPK{% endtrans %}</label>
+					<div class="input-icon">
+						<i class="fa fa-envelope"></i>
+						<input id="exampleInputEmail2" class="form-control input-small"  placeholder="Enter email">
+					</div>					
+				</div>
+				<!--city-->
+				<div class="form-group">					
+					<label class="sr-only" for="inputCity">{% trans %}City{% endtrans %}</label>
+					<div class="col-md-4">
+						<select id="inputCity" placeholder="{% trans %}Enter city{% endtrans %}" class="form-control select2" multiple>
+							<optgroup label="NFC EAST">
+								<option>Dallas Cowboys</option>
+								<option>New York Giants</option>
+								<option>Philadelphia Eagles</option>
+								<option>Washington Redskins</option>
+							</optgroup>
+							<optgroup label="NFC NORTH">
+								<option>Chicago Bears</option>
+								<option>Detroit Lions</option>
+								<option>Green Bay Packers</option>
+								<option>Minnesota Vikings</option>
+							</optgroup>
+						</select>
+					</div>					
+				</div>
+				<!--region-->
+				<div class="form-group">					
+					<label class="sr-only" for="inputRegion">{% trans %}Region{% endtrans %}</label>
+					<div class="col-md-4">
+						<select id="inputRegion" placeholder="{% trans %}Enter Region{% endtrans %}" class="form-control select2" multiple>
+							<optgroup label="NFC EAST">
+								<option>Dallas Cowboys</option>
+								<option>New York Giants</option>
+								<option>Philadelphia Eagles</option>
+								<option>Washington Redskins</option>
+							</optgroup>
+							<optgroup label="NFC NORTH">
+								<option>Chicago Bears</option>
+								<option>Detroit Lions</option>
+								<option>Green Bay Packers</option>
+								<option>Minnesota Vikings</option>
+							</optgroup>
+						</select>
+					</div>					
+				</div>					
+				</div>
+				<!--scope-->
+				<div class="form-group">					
+					<label class="sr-only" for="inputScope">{% trans %}Scope{% endtrans %}</label>
+					<div class="col-md-4">
+						<select id="inputScope" placeholder="{% trans %}Enter Scope{% endtrans %}" class="form-control select2" multiple>
+							<optgroup label="NFC EAST">
+								<option>Dallas Cowboys</option>
+								<option>New York Giants</option>
+								<option>Philadelphia Eagles</option>
+								<option>Washington Redskins</option>
+							</optgroup>
+							<optgroup label="NFC NORTH">
+								<option>Chicago Bears</option>
+								<option>Detroit Lions</option>
+								<option>Green Bay Packers</option>
+								<option>Minnesota Vikings</option>
+							</optgroup>
+						</select>
+					</div>
+				</div>
+				<!--manager-->
+				<div class="form-group">					
+					<label class="sr-only" for="inputManager">{% trans %}Manager{% endtrans %}</label>
+					<div class="col-md-4">
+						<select id="inputManager" placeholder="{% trans %}Enter Manager{% endtrans %}" class="form-control select2" multiple>
+							<optgroup label="NFC EAST">
+								<option>Dallas Cowboys</option>
+								<option>New York Giants</option>
+								<option>Philadelphia Eagles</option>
+								<option>Washington Redskins</option>
+							</optgroup>
+							<optgroup label="NFC NORTH">
+								<option>Chicago Bears</option>
+								<option>Detroit Lions</option>
+								<option>Green Bay Packers</option>
+								<option>Minnesota Vikings</option>
+							</optgroup>
+						</select>
+					</div>
+				</div>				
+				<button class="btn green" type="submit"><i class="fa fa-check"></i>{% trans %}Filter{% endtrans %}</button>
+				<button class="btn" type="reset"><i class="fa fa-check"></i>{% trans %}Clear Filter{% endtrans %}</button>
+			</form>
+		</div>
+	</div>
+</div>
