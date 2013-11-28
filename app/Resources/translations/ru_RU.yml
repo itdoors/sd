@@ -10,7 +10,8 @@ My Inbox: Входящие
 My Tasks: Мои задачи
 Full Screen: Полный экран
 Lock Screen: Заблокировать
-Logout: Выход
+Log Out: Выход
+
 
 #MENU
 Dashboard: Рабочий стол
@@ -22,6 +23,7 @@ My Handlings: Мои обращения
 My Tenders: Мои тендеры
 My Calendar: Мой календарь
 My Reports: Мои отчеты
+My Team: Моя команда
 
 #menu role_salesdispatcher
 Sales Dispatcher: Диспетчер продаж

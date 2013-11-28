@@ -1,7 +1,12 @@
 {% extends "::login.html.twig" %}
+{% block js_page_level_scripts %}
+	{{ parent() }}
+    <script src="{{ asset('/templates/metronic/scripts/app.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/templates/metronic/scripts/login2.js') }}" type="text/javascript"></script>
+{% endblock %}
 
 {% block title %}
-    {% trans %}Autorization{% endtrans %}
+   {% trans %}Authorization{% endtrans %} 
 {% endblock %}
 
 {% block body %}
