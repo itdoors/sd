@@ -99,6 +99,7 @@ class SalesController extends BaseController
         if ($filterForm->get('reset')->isClicked())
         {
             $this->clearFilters();
+            $filterForm = $this->createForm($this->filterForm);
         }
 
         return $filterForm;
