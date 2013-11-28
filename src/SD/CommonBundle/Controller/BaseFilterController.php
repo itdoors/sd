@@ -29,6 +29,12 @@ class BaseFilterController extends Controller
 
         $filterForm->bind($this->getFilters());
 
+        if ($filterForm->get('reset')->isClicked())
+        {
+            $this->clearFilters();
+            $filterForm = $this->createForm($this->filterForm);
+        }
+
         return $filterForm;
     }
 
