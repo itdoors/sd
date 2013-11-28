@@ -2,6 +2,18 @@ lists_sales_organization_index:
     pattern:  /lists/sales/organization/index
     defaults: { _controller: ListsOrganizationBundle:Sales:index }
 
+lists_sales_organization_new:
+    pattern:  /lists/sales/organization/new
+    defaults: { _controller: ListsOrganizationBundle:Sales:new }
+
+lists_sales_organization_show:
+    pattern:  /lists/sales/organization/show/{id}
+    defaults: { _controller: ListsOrganizationBundle:Sales:show }
+
+lists_sales_organization_filter:
+    pattern:  /lists/sales/organization/filter
+    defaults: { _controller: ListsOrganizationBundle:Sales:filter }
+
 lists_sales_organization_ajax_index:
     pattern:  /lists/sales/organization/ajax/index
     defaults: { _controller: ListsOrganizationBundle:Sales:ajaxIndex }

@@ -61,8 +61,8 @@ doctrine:
                 auto_mapping: true
                 dql:
                     string_functions:
-                        array_to_string: SD\UserBundle\DQL\ArrayToStringDQL
-                        array: SD\UserBundle\DQL\ArrayDQL
+                        array_to_string: SD\CommonBundle\DQL\ArrayToStringDQL
+                        array: SD\CommonBundle\DQL\ArrayDQL
                     # numeric_functions:
                     # datetime_functions:
 
@@ -89,5 +89,5 @@ knp_paginator:
         sort_direction_name: direction # sort direction query parameter name
         distinct: false                 # ensure distinct results, useful when ORM queries are using GROUP BY statements
     template:
-        pagination: KnpPaginatorBundle:Pagination:sliding.html.twig     # sliding pagination controls template
-        sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig # sort link template
+        pagination: SDCommonBundle:Pagination:sliding.html.twig     # sliding pagination controls template
+        sortable: SDCommonBundle:Pagination:sortable_link.html.twig # sort link template

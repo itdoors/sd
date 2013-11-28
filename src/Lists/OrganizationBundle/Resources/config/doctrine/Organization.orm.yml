@@ -21,6 +21,53 @@ Lists\OrganizationBundle\Entity\Organization:
             type: string
             length: 255
             nullable: true
+        shortname:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        isSmeta:
+            type: boolean
+            nullable: false
+            column: is_smeta
+            default: false
+        mailingAddress:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: mailing_address
+        rs:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        edrpou:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        inn:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        certificate:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        shortDescription:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: short_description
+        site:
+            type: string
+            length: 125
+            fixed: false
+            nullable: true
     manyToOne:
         city:
             targetEntity: Lists\CityBundle\Entity\City
@@ -33,6 +80,15 @@ Lists\OrganizationBundle\Entity\Organization:
             joinColumn:
                 name: scope_id
                 referencedColumnName: id
+        organizationType:
+            targetEntity: OrganizationType
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                organization_type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
     manyToMany:
         users:
           targetEntity: SD\UserBundle\Entity\User

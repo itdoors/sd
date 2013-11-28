@@ -1,0 +1,23 @@
+<script>
+    jQuery(document).ready(function() {
+        TableAjax.init(
+                "#{{ params.id }}",
+                {
+                    "sAjaxSource": "{{ path(params.route) }}"
+                }
+        );
+    });
+</script>
+<table class="table table-striped table-bordered table-hover" id="{{ params.id }}">
+    <thead>
+    <tr>
+        <th>{% trans %}ID{% endtrans %} </th>
+        <th>{% trans %}Name{% endtrans %} </th>
+        <th>{% trans %}City{% endtrans %} </th>
+        <th>{% trans %}Region{% endtrans %} </th>
+        <th>{% trans %}Scope{% endtrans %} </th>
+        <th>{% trans %}Managers{% endtrans %} </th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+</table>

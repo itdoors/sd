@@ -1,0 +1,18 @@
+{% extends "::base.html.twig" %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Organization <small>create organization</small>{% endtrans %}
+    </h3>
+{% endblock %}
+
+{% block body %}
+
+    {{ form(
+        filterForm,
+        {
+            'action': path('lists_sales_organization_new'),
+            'attr': {'novalidate': 'novalidate'}
+        })
+    }}
+
+{% endblock body %}

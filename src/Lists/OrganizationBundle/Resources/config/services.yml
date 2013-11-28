@@ -1,11 +1,17 @@
 parameters:
-#    lists_organization.example.class: Lists\OrganizationBundle\Example
+    lists_organization.filter.form.class: Lists\OrganizationBundle\Form\OrganizationFilterFormType
+    lists_organization.form.sales.class: Lists\OrganizationBundle\Form\OrganizationSalesFormType
 
 services:
-  lists_organization.filter.form:
-        class: Lists\OrganizationBundle\Form\OrganizationFilterFormType
+  lists_organization.form.organizationFilterForm:
+        class: %lists_organization.filter.form.class%
         tags:
-            - { name: filter.form.type, alias: organizationFilterForm }
+            - { name: form.type, alias: organizationFilterForm }
+  lists_organization.form.organizationSalesForm:
+        class: %lists_organization.form.sales.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: organizationSalesForm }
 #    lists_organization.example:
 #        class: %lists_organization.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]

@@ -1,5 +1,9 @@
 <?php
-// src/SD/UserBundle/Entity/User.php
+/**
+ * User model class
+ *
+ * @author Pavel Pecheny ppecheny@gmail.com
+ */
 
 namespace SD\UserBundle\Entity;
 
@@ -331,5 +335,25 @@ class User extends BaseUser
     public function getHandlings()
     {
         return $this->handlings;
+    }
+
+    /**
+     * Returns user full name
+     *
+     * @return string
+     */
+    public function getFullname()
+    {
+      return (string) sprintf('%s %s', $this->getLastName(), $this->getFirstName());
+    }
+
+    /**
+     * ToString magic method
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+      return (string) $this->getFullname();
     }
 }
