@@ -51,7 +51,7 @@
 						{{ form_label(filterForm.users, 'Manager', {'attr': {'class': 'sr-only'}}) }}
 						{{ form_widget(filterForm.users, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Manager', 'multiple': 'multiple'}}) }}																										
 					</div>
-					{{ form_widget(filterForm.save, { 'label': '<i class="fa fa-check"></i> {% trans %}Filter{% endtrans %}' }) }}
+					{{ form_widget(filterForm.save, { 'label': '<i class="fa fa-check"></i> {% trans %}Filter{% endtrans %}', 'class': 'btn green' }) }}
 				{{ form_end(filterForm) }}
 
 <!--				
