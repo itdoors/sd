@@ -2,6 +2,22 @@ lists_sales_handling_index:
     pattern:  /lists/sales/handling/index
     defaults: { _controller: ListsHandlingBundle:Sales:index }
 
+lists_sales_handling_new:
+    pattern:  /lists/sales/handling/new
+    defaults: { _controller: ListsHandlingBundle:Sales:new }
+
+lists_sales_handling_show:
+    pattern:  /lists/sales/handling/show/{id}
+    defaults: { _controller: ListsHandlingBundle:Sales:show }
+
+lists_sales_handling_filter:
+    pattern:  /lists/sales/handling/filter
+    defaults: { _controller: ListsHandlingBundle:Sales:filter }
+
+lists_sales_handling_filter_clear:
+    pattern:  /lists/sales/handling/filter_clear
+    defaults: { _controller: ListsHandlingBundle:Sales:filterClear }
+
 lists_sales_handling_add_organization_filter:
     pattern:  /lists/sales/handling/add_organization_filter/{organization_id}
     defaults: { _controller: ListsHandlingBundle:Sales:addOrganizationFilter }

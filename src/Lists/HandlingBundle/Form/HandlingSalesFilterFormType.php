@@ -1,12 +1,12 @@
 <?php
 
-namespace Lists\OrganizationBundle\Form;
+namespace Lists\HandlingBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class OrganizationSalesFormType extends AbstractType
+class HandlingSalesFilterFormType extends AbstractType
 {
     protected $container;
 
@@ -24,52 +24,46 @@ class OrganizationSalesFormType extends AbstractType
         /** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
         $lr = $this->container->get('lists_lookup.repository');
 
+        /** @var \SD\UserBundle\Entity\UserRepository $ur */
+        $ur = $this->container->get('sd_user.repository');
+
         $builder
-            ->add('name')
-            ->add('address')
-            ->add('mailingAddress')
-            ->add('organizationType', 'entity', array(
-                'class'=>'Lists\OrganizationBundle\Entity\OrganizationType',
-                'property'=>'title'
+            ->add('organization_id', 'entity', array(
+                'class'=>'Lists\OrganizationBundle\Entity\Organization',
+                'property'=>'name'
             ))
             ->add('city', 'entity', array(
                 'class'=>'Lists\CityBundle\Entity\City',
+                'mapped' => false,
                 'property'=>'name'
             ))
             ->add('scope', 'entity', array(
                 'class'=>'Lists\LookupBundle\Entity\Lookup',
-                'property'=>'name'
-            ))
-            ->add('rs')
-            ->add('edrpou')
-            ->add('inn')
-            ->add('certificate')
-            ->add('shortDescription')
-            ->add('site')
-            ->add('city', 'entity', array(
-                'class'=>'Lists\CityBundle\Entity\City',
                 'property'=>'name',
-                //'query_builder' =>
-            ))
-            ->add('scope', 'entity', array(
-                'class'=>'Lists\LookupBundle\Entity\Lookup',
-                'property'=>'name',
+                'mapped' => false,
                 'query_builder' => $lr->getOnlyScopeQuery()
+            ))
+            ->add('user', 'entity', array(
+                'class'=>'SD\UserBundle\Entity\User',
+                'mapped' => false,
+                'property'=>'fullname',
+                'query_builder' => $ur->getOnlyStaff()
             ))
         ;
 
         $builder
-            ->add('create', 'submit');
+            ->add('save', 'submit');
     }
-
+    
     /**
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Lists\OrganizationBundle\Entity\Organization',
-            'validation_groups' => array('new')
+            'data_class' => 'Lists\HandlingBundle\Entity\Handling',
+            'validation_groups' => false,
+            'csrf_protection' => false
         ));
     }
 
@@ -78,6 +72,6 @@ class OrganizationSalesFormType extends AbstractType
      */
     public function getName()
     {
-        return 'organizationSalesForm';
+        return 'handlingSalesFilterForm';
     }
 }

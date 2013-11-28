@@ -205,29 +205,6 @@ class Organization
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setIsSmeta(false);
     }
-    
-    /**
-     * Add users
-     *
-     * @param \SD\UserBundle\User $users
-     * @return Organization
-     */
-    public function addUser(\SD\UserBundle\User $users)
-    {
-        $this->users[] = $users;
-    
-        return $this;
-    }
-
-    /**
-     * Remove users
-     *
-     * @param \SD\UserBundle\User $users
-     */
-    public function removeUser(\SD\UserBundle\User $users)
-    {
-        $this->users->removeElement($users);
-    }
 
     /**
      * Get users
@@ -495,7 +472,6 @@ class Organization
      */
     private $organizationType;
 
-
     /**
      * Set organizationType
      *
@@ -517,5 +493,36 @@ class Organization
     public function getOrganizationType()
     {
         return $this->organizationType;
+    }
+
+    /**
+     * __toString()
+     */
+    public function __toString()
+    {
+        return $this->getName();
+    }
+
+    /**
+     * Add users
+     *
+     * @param \SD\UserBundle\Entity\User $users
+     * @return Organization
+     */
+    public function addUser(\SD\UserBundle\Entity\User $users)
+    {
+        $this->users[] = $users;
+    
+        return $this;
+    }
+
+    /**
+     * Remove users
+     *
+     * @param \SD\UserBundle\Entity\User $users
+     */
+    public function removeUser(\SD\UserBundle\Entity\User $users)
+    {
+        $this->users->removeElement($users);
     }
 }

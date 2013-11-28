@@ -1,6 +1,7 @@
 Lists\LookupBundle\Entity\Lookup:
     type: entity
     table: lookup
+    repositoryClass: Lists\LookupBundle\Entity\LookupRepository
     id:
         id:
             type: integer

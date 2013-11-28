@@ -1,0 +1,12 @@
+{% extends "::base.html.twig" %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Handling <small>view handling</small>{% endtrans %}
+    </h3>
+{% endblock %}
+
+{% block body %}
+
+    {{ handling.createdate|date("d.M.yy, H:m") }}
+
+{% endblock body %}
