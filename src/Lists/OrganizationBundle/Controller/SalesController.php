@@ -86,5 +86,22 @@ class SalesController extends BaseController
             'organization' => $organization
         ));
     }
+
+    /**
+     * Processes filters for view
+     */
+    public function processFilters()
+    {
+        $filterForm = $this->createForm($this->filterForm);
+
+        $filterForm->bind($this->getFilters());
+
+        if ($filterForm->get('reset')->isClicked())
+        {
+            $this->clearFilters();
+        }
+
+        return $filterForm;
+    }
 }
 
