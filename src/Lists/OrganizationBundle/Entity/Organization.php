@@ -518,4 +518,42 @@ class Organization
     {
         return $this->organizationType;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $organizationUser;
+
+
+    /**
+     * Add organizationUser
+     *
+     * @param \Lists\OrganizationBundle\Entity\OrganizationUser $organizationUser
+     * @return Organization
+     */
+    public function addOrganizationUser(\Lists\OrganizationBundle\Entity\OrganizationUser $organizationUser)
+    {
+        $this->organizationUser[] = $organizationUser;
+    
+        return $this;
+    }
+
+    /**
+     * Remove organizationUser
+     *
+     * @param \Lists\OrganizationBundle\Entity\OrganizationUser $organizationUser
+     */
+    public function removeOrganizationUser(\Lists\OrganizationBundle\Entity\OrganizationUser $organizationUser)
+    {
+        $this->organizationUser->removeElement($organizationUser);
+    }
+
+    /**
+     * Get organizationUser
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOrganizationUser()
+    {
+        return $this->organizationUser;
+    }
 }

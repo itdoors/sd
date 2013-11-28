@@ -12,8 +12,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class OrganizationRepository extends EntityRepository
 {
-
-    public function getAllForSalesQuery($filters)
+    public function getAllForSalesQuery($userId, $filters)
     {
         /** @var \Doctrine\ORM\QueryBuilder $sql*/
         $sql = $this->createQueryBuilder('o')
@@ -36,13 +35,16 @@ class OrganizationRepository extends EntityRepository
             ->leftJoin('o.city', 'c')
             ->leftJoin('c.region', 'r')
             ->leftJoin('o.scope', 'scope')
+            ->leftJoin('o.users', 'users')
+            ->where('users.id = :userId')
+            ->setParameter(':userId', $userId)
             ->orderBy('o.name', 'ASC');
 
         $this->processFilters($sql, $filters);
 
         $query = $sql->getQuery();
 
-        $count = $this->getAllForSalesCount();
+        $count = $this->getAllForSalesCount($userId, $filters);
 
         $query->setHint('knp_paginator.count', $count);
 
@@ -86,10 +88,20 @@ class OrganizationRepository extends EntityRepository
         }
     }
 
-    public function getAllForSalesCount()
+    public function getAllForSalesCount($userId, $filters)
     {
         $count = $this->getEntityManager()
-            ->createQuery('SELECT COUNT(o.id) FROM ListsOrganizationBundle:Organization o')
+            ->createQuery('
+                SELECT
+                    COUNT(o.id)
+                FROM
+                    ListsOrganizationBundle:Organization o
+                INNER JOIN
+                    o.organizationUser ou
+                WHERE
+                    ou.user_id = :userId
+                ')
+            ->setParameter(':userId', $userId)
             ->getSingleScalarResult();
 
         return $count;

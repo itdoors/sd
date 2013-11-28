@@ -1,6 +1,7 @@
 SD\UserBundle\Entity\User:
     type:  entity
     table: fos_user
+    repositoryClass: SD\UserBundle\Entity\UserRepository
     id:
         id:
             type: integer
@@ -58,3 +59,7 @@ SD\UserBundle\Entity\User:
         handlings:
             targetEntity: Lists\HandlingBundle\Entity\Handling
             mappedBy: users
+    oneToOne:
+        staff:
+            targetEntity: Staff
+            mappedBy: user
