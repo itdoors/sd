@@ -39,15 +39,15 @@
 					
 					</div>
 					#}
-					<div class="form-group col-md-3">
+					<div class="form-group col-md-2">
 						{#	{{ form_label(filterForm.scope, 'Scope', {'attr': {'class': 'sr-only'}}) }}  #}
 							{{ form_widget(filterForm.scope, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Scope', 'multiple': 'multiple'}}) }}																										
 					</div>
-					<div class="form-group col-md-3">	
+					<div class="form-group col-md-2">	
 						{# {{ form_label(filterForm.users, 'Manager', {'attr': {'class': 'sr-only'}}) }} #}
 						{{ form_widget(filterForm.users, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Manager', 'multiple': 'multiple'}}) }}																										
 					</div>
-					<div class="form-group col-md-1">
+					<div class="form-group col-md-2">
 						{{ form_widget(filterForm.save, { 'label': 'Filter', 'attr': {'class': 'btn green'}} ) }}
 						{{ form_widget(filterForm.reset, { 'label': 'Clear Filter', 'attr': {'class': 'btn'}} ) }}
 					</div>
