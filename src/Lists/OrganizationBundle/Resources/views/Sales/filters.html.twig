@@ -33,11 +33,12 @@
 						{#{{ form_label(filterForm.city, 'Enter City', {'attr': {'class': 'sr-only'}}) }}#}
 						{{ form_widget(filterForm.city, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter City', 'multiple': 'multiple'}}) }}					
 					</div>
-					<div class="form-group col-md-3">	
-					{#	{{ form_label(filterForm.region, 'Region', {'attr': {'class': 'sr-only'}}) }}
+					{# <div class="form-group col-md-3">	
+						{{ form_label(filterForm.region, 'Region', {'attr': {'class': 'sr-only'}}) }}
 						{{ form_widget(filterForm.region, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Region', 'multiple': 'multiple'}}) }}																										
-					#}
+					
 					</div>
+					#}
 					<div class="form-group col-md-3">
 						{#	{{ form_label(filterForm.scope, 'Scope', {'attr': {'class': 'sr-only'}}) }}  #}
 							{{ form_widget(filterForm.scope, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Scope', 'multiple': 'multiple'}}) }}																										
