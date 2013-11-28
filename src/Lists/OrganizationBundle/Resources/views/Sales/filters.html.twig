@@ -5,6 +5,15 @@
         'attr': {'novalidate': 'novalidate'}
     })
 }}
+
+<script>
+    $(document).ready(function(){
+        $('#inputCity').select2({
+            placeholder: "Select a State",
+            allowClear: true
+        });
+    })
+</script>
 <div class="row ">
 	<div class="col-md-12">
 		<div class="portlet box yellow">
@@ -44,67 +53,6 @@
 						</select>
 					</div>					
 				</div>
-				<!--region-->
-				<div class="form-group">					
-					<label class="sr-only" for="inputRegion">{% trans %}Region{% endtrans %}</label>
-					<div class="col-md-4">
-						<select id="inputRegion" placeholder="{% trans %}Enter Region{% endtrans %}" class="form-control select2" multiple>
-							<optgroup label="NFC EAST">
-								<option>Dallas Cowboys</option>
-								<option>New York Giants</option>
-								<option>Philadelphia Eagles</option>
-								<option>Washington Redskins</option>
-							</optgroup>
-							<optgroup label="NFC NORTH">
-								<option>Chicago Bears</option>
-								<option>Detroit Lions</option>
-								<option>Green Bay Packers</option>
-								<option>Minnesota Vikings</option>
-							</optgroup>
-						</select>
-					</div>					
-				</div>					
-				</div>
-				<!--scope-->
-				<div class="form-group">					
-					<label class="sr-only" for="inputScope">{% trans %}Scope{% endtrans %}</label>
-					<div class="col-md-4">
-						<select id="inputScope" placeholder="{% trans %}Enter Scope{% endtrans %}" class="form-control select2" multiple>
-							<optgroup label="NFC EAST">
-								<option>Dallas Cowboys</option>
-								<option>New York Giants</option>
-								<option>Philadelphia Eagles</option>
-								<option>Washington Redskins</option>
-							</optgroup>
-							<optgroup label="NFC NORTH">
-								<option>Chicago Bears</option>
-								<option>Detroit Lions</option>
-								<option>Green Bay Packers</option>
-								<option>Minnesota Vikings</option>
-							</optgroup>
-						</select>
-					</div>
-				</div>
-				<!--manager-->
-				<div class="form-group">					
-					<label class="sr-only" for="inputManager">{% trans %}Manager{% endtrans %}</label>
-					<div class="col-md-4">
-						<select id="inputManager" placeholder="{% trans %}Enter Manager{% endtrans %}" class="form-control select2" multiple>
-							<optgroup label="NFC EAST">
-								<option>Dallas Cowboys</option>
-								<option>New York Giants</option>
-								<option>Philadelphia Eagles</option>
-								<option>Washington Redskins</option>
-							</optgroup>
-							<optgroup label="NFC NORTH">
-								<option>Chicago Bears</option>
-								<option>Detroit Lions</option>
-								<option>Green Bay Packers</option>
-								<option>Minnesota Vikings</option>
-							</optgroup>
-						</select>
-					</div>
-				</div>				
 				<button class="btn green" type="submit"><i class="fa fa-check"></i>{% trans %}Filter{% endtrans %}</button>
 				<button class="btn" type="reset"><i class="fa fa-check"></i>{% trans %}Clear Filter{% endtrans %}</button>
 			</form>
