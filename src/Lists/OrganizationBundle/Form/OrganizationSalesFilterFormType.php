@@ -34,11 +34,15 @@ class OrganizationSalesFilterFormType extends AbstractType
             ->add('contacts')
             ->add('city', 'entity', array(
                 'class'=>'Lists\CityBundle\Entity\City',
+                'multiple' => true,
+                'mapped' => false,
                 'property'=>'name'
             ))
             ->add('scope', 'entity', array(
                 'class'=>'Lists\LookupBundle\Entity\Lookup',
                 'property'=>'name',
+                'mapped' => false,
+                'multiple' => true,
                 'query_builder' => $lr->getOnlyScopeQuery()
             ))
             ->add('users', 'entity', array(
@@ -51,7 +55,8 @@ class OrganizationSalesFilterFormType extends AbstractType
         ;
 
         $builder
-            ->add('save', 'submit');
+            ->add('save', 'submit')
+            ->add('reset', 'submit');
     }
     
     /**
@@ -62,7 +67,8 @@ class OrganizationSalesFilterFormType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'Lists\OrganizationBundle\Entity\Organization',
             'validation_groups' => false,
-            'csrf_protection' => false
+            'csrf_protection' => false,
+            'translation_domain' => 'ListsOrganizationBundle'
         ));
     }
 

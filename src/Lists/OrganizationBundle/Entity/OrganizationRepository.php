@@ -76,6 +76,14 @@ class OrganizationRepository extends EntityRepository
 
                         $sql->setParameter(':organizationName', '%' . $value);
                         break;
+                    case 'scope':
+                        if (isset($value[0]) && !$value[0])
+                        {
+                            break;
+                        }
+                        $sql->andWhere('scope.id in (:scopeIds)');
+                        $sql->setParameter(':scopeIds', implode(',', $value));
+                        break;
                     /*case 'users':
                         if (isset($value[0]) && !$value[0])
                         {

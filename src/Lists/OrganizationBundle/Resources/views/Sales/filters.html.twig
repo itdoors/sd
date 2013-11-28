@@ -1,4 +1,4 @@
-
+{% trans_default_domain 'ListsOrganizationBundle' %}
 
 <script>
     $(document).ready(function(){
@@ -8,20 +8,15 @@
         });
     })
 </script>
-{#
-{{ form(
-					filterForm,
-					{
-						'action': path('lists_sales_organization_filter'),
-						'attr': {'novalidate': 'novalidate', 'class': 'form-inline', 'role': 'form'}
-					})
-				}}
-#}
+
 <div class="row ">
 	<div class="col-md-12">
 		<div class="portlet box yellow">
 			<div class="portlet-title">
-				<div class="caption"><i class="fa fa-reorder"></i>{% trans %}Filters{% endtrans %}</div>
+				<div class="caption">
+                    <i class="fa fa-reorder"></i>
+                    {{ 'Filters'|trans({}, 'ListsOrganizationBundle') }}
+                </div>
 				<div class="tools"><a class="collapse" href="" title="{% trans %}Filters{% endtrans %}"></a></div>
 			</div>
 			<div class="portlet-body">
@@ -35,8 +30,8 @@
 				}}
 					{{ form_errors(filterForm) }}
 					<div class="form-group">	
-						{{ form_label(filterForm.city, '{% trans %}Enter City{% endtrans %}', {'attr': {'class': 'sr-only'}}) }}
-						{{ form_widget(filterForm.city, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': '{% trans %}Enter City{% endtrans %}', 'multiple': 'multiple'}}) }}																										
+						{{ form_label(filterForm.city, 'Enter City', {'attr': {'class': 'sr-only'}}) }}
+						{{ form_widget(filterForm.city, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter City', 'multiple': 'multiple'}}) }}
 					</div>
 					<div class="form-group">	
 					{#	{{ form_label(filterForm.region, 'Region', {'attr': {'class': 'sr-only'}}) }}
@@ -51,10 +46,12 @@
 						{{ form_label(filterForm.users, 'Manager', {'attr': {'class': 'sr-only'}}) }}
 						{{ form_widget(filterForm.users, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Manager', 'multiple': 'multiple'}}) }}																										
 					</div>
-					{{ form_widget(filterForm.save, { 'label': '<i class="fa fa-check"></i> {% trans %}Filter{% endtrans %}', 'class': 'btn green' }) }}
+
+					{{ form_widget(filterForm.save, { 'label': 'Filter', 'attr': {'class': 'btn green'}} ) }}
+					{{ form_widget(filterForm.reset, { 'label': 'Clear Filter', 'attr': {'class': 'btn green'}} ) }}
 				{{ form_end(filterForm) }}
 
-<!--				
+<!--
 									<button class="btn green" type="submit"><i class="fa fa-check"></i> {% trans %}Filter{% endtrans %}</button>
 					<button class="btn" type="reset"><i class="fa fa-check"></i> {% trans %}Clear Filter{% endtrans %}</button>
 -->
