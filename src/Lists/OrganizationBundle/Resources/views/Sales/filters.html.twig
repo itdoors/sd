@@ -8,7 +8,7 @@
 
 <script>
     $(document).ready(function(){
-        $('#organizationSalesFilterForm_users').select2({
+        $('#organizationSalesFilterForm_users, #', '').select2({
             placeholder: "Select a State",
             allowClear: true
         });
@@ -36,22 +36,10 @@
 					<!--organization-->
 					
 					<!--city-->
-					<div class="form-group">					
-						<label class="sr-only" for="organizationSalesFilterForm_city">{% trans %}City{% endtrans %}</label>						
-							<select id="organizationSalesFilterForm_city" placeholder="{% trans %}Enter City{% endtrans %}" class="form-control select2 input-middle" multiple>
-								<optgroup label="NFC EAST">
-									<option>Dallas Cowboys</option>
-									<option>New York Giants</option>
-									<option>Philadelphia Eagles</option>
-									<option>Washington Redskins</option>
-								</optgroup>
-								<optgroup label="NFC NORTH">
-									<option>Chicago Bears</option>
-									<option>Detroit Lions</option>
-									<option>Green Bay Packers</option>
-									<option>Minnesota Vikings</option>
-								</optgroup>
-							</select>										
+					<div class="form-group">	
+						{{ form_label(filterForm.city, '{% trans %}Enter City{% endtrans %}', {'attr': {'class': 'sr-only'}}}}
+						{{ form_widget(filterForm.city, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': '{% trans %}Enter City{% endtrans %}', 'multiple': 'multiple'}} }}									
+																	
 					</div>
 					<!--Region-->
 					<div class="form-group">					
