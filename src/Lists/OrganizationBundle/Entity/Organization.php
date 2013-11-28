@@ -203,6 +203,7 @@ class Organization
     public function __construct()
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->setIsSmeta(false);
     }
     
     /**
@@ -236,5 +237,285 @@ class Organization
     public function getUsers()
     {
         return $this->users;
+    }
+    /**
+     * @var string
+     */
+    private $shortname;
+
+    /**
+     * @var boolean
+     */
+    private $isSmeta;
+
+    /**
+     * @var string
+     */
+    private $mailingAddress;
+
+    /**
+     * @var string
+     */
+    private $rs;
+
+    /**
+     * @var string
+     */
+    private $edrpou;
+
+    /**
+     * @var string
+     */
+    private $inn;
+
+    /**
+     * @var string
+     */
+    private $certificate;
+
+    /**
+     * @var string
+     */
+    private $shortDescription;
+
+    /**
+     * @var string
+     */
+    private $site;
+
+
+    /**
+     * Set shortname
+     *
+     * @param string $shortname
+     * @return Organization
+     */
+    public function setShortname($shortname)
+    {
+        $this->shortname = $shortname;
+    
+        return $this;
+    }
+
+    /**
+     * Get shortname
+     *
+     * @return string 
+     */
+    public function getShortname()
+    {
+        return $this->shortname;
+    }
+
+    /**
+     * Set isSmeta
+     *
+     * @param boolean $isSmeta
+     * @return Organization
+     */
+    public function setIsSmeta($isSmeta)
+    {
+        $this->isSmeta = $isSmeta;
+    
+        return $this;
+    }
+
+    /**
+     * Get isSmeta
+     *
+     * @return boolean 
+     */
+    public function getIsSmeta()
+    {
+        return $this->isSmeta;
+    }
+
+    /**
+     * Set mailingAddress
+     *
+     * @param string $mailingAddress
+     * @return Organization
+     */
+    public function setMailingAddress($mailingAddress)
+    {
+        $this->mailingAddress = $mailingAddress;
+    
+        return $this;
+    }
+
+    /**
+     * Get mailingAddress
+     *
+     * @return string 
+     */
+    public function getMailingAddress()
+    {
+        return $this->mailingAddress;
+    }
+
+    /**
+     * Set rs
+     *
+     * @param string $rs
+     * @return Organization
+     */
+    public function setRs($rs)
+    {
+        $this->rs = $rs;
+    
+        return $this;
+    }
+
+    /**
+     * Get rs
+     *
+     * @return string 
+     */
+    public function getRs()
+    {
+        return $this->rs;
+    }
+
+    /**
+     * Set edrpou
+     *
+     * @param string $edrpou
+     * @return Organization
+     */
+    public function setEdrpou($edrpou)
+    {
+        $this->edrpou = $edrpou;
+    
+        return $this;
+    }
+
+    /**
+     * Get edrpou
+     *
+     * @return string 
+     */
+    public function getEdrpou()
+    {
+        return $this->edrpou;
+    }
+
+    /**
+     * Set inn
+     *
+     * @param string $inn
+     * @return Organization
+     */
+    public function setInn($inn)
+    {
+        $this->inn = $inn;
+    
+        return $this;
+    }
+
+    /**
+     * Get inn
+     *
+     * @return string 
+     */
+    public function getInn()
+    {
+        return $this->inn;
+    }
+
+    /**
+     * Set certificate
+     *
+     * @param string $certificate
+     * @return Organization
+     */
+    public function setCertificate($certificate)
+    {
+        $this->certificate = $certificate;
+    
+        return $this;
+    }
+
+    /**
+     * Get certificate
+     *
+     * @return string 
+     */
+    public function getCertificate()
+    {
+        return $this->certificate;
+    }
+
+    /**
+     * Set shortDescription
+     *
+     * @param string $shortDescription
+     * @return Organization
+     */
+    public function setShortDescription($shortDescription)
+    {
+        $this->shortDescription = $shortDescription;
+    
+        return $this;
+    }
+
+    /**
+     * Get shortDescription
+     *
+     * @return string 
+     */
+    public function getShortDescription()
+    {
+        return $this->shortDescription;
+    }
+
+    /**
+     * Set site
+     *
+     * @param string $site
+     * @return Organization
+     */
+    public function setSite($site)
+    {
+        $this->site = $site;
+    
+        return $this;
+    }
+
+    /**
+     * Get site
+     *
+     * @return string 
+     */
+    public function getSite()
+    {
+        return $this->site;
+    }
+    /**
+     * @var \Lists\OrganizationBundle\Entity\OrganizationType
+     */
+    private $organizationType;
+
+
+    /**
+     * Set organizationType
+     *
+     * @param \Lists\OrganizationBundle\Entity\OrganizationType $organizationType
+     * @return Organization
+     */
+    public function setOrganizationType(\Lists\OrganizationBundle\Entity\OrganizationType $organizationType = null)
+    {
+        $this->organizationType = $organizationType;
+    
+        return $this;
+    }
+
+    /**
+     * Get organizationType
+     *
+     * @return \Lists\OrganizationBundle\Entity\OrganizationType 
+     */
+    public function getOrganizationType()
+    {
+        return $this->organizationType;
     }
 }

@@ -1,7 +1,9 @@
 parameters:
-#    sd_common.example.class: SD\CommonBundle\Example
+    sd_common.ajax_table.class: SD\CommonBundle\Twig\AjaxTableExtension
 
 services:
-#    sd_common.example:
-#        class: %sd_common.example.class%
+    sd_common.ajax_table:
+        class: %sd_common.ajax_table.class%
+        tags:
+            -  { name: twig.extension,  alias: ajax_table }
 #        arguments: [@service_id, "plain_value", %parameter%]

@@ -1,0 +1,6 @@
+Lists\OrganizationBundle\Entity\Organization:
+    properties:
+        name:
+            - NotBlank: { groups: [new] }
+        address:
+            - NotBlank: { groups: [new] }

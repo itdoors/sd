@@ -21,8 +21,11 @@ class OrganizationFilterFormType extends AbstractType
             ->add('contacts')
             ->add('city', 'entity', array('class'=>'Lists\CityBundle\Entity\City', 'property'=>'name'))
             ->add('scope', 'entity', array('class'=>'Lists\LookupBundle\Entity\Lookup', 'property'=>'name'))
-            ->add('users')
+            ->add('users', 'entity', array('class'=>'SD\UserBundle\Entity\User', 'mapped' => false, 'multiple' => true))
         ;
+
+        $builder
+            ->add('save', 'submit');
     }
     
     /**
@@ -31,7 +34,8 @@ class OrganizationFilterFormType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Lists\OrganizationBundle\Entity\Organization'
+            'data_class' => 'Lists\OrganizationBundle\Entity\Organization',
+            'validation_groups' => false
         ));
     }
 
@@ -40,6 +44,6 @@ class OrganizationFilterFormType extends AbstractType
      */
     public function getName()
     {
-        return 'lists_organizationbundle_organization';
+        return 'organizationFilterForm';
     }
 }
