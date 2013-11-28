@@ -2,7 +2,7 @@
 
 <script>
     $(document).ready(function(){
-        $('#organizationSalesFilterForm_users, #', '').select2({
+        $('#organizationSalesFilterForm_users, #organizationSalesFilterForm_city, #organizationSalesFilterForm_scope', '').select2({
             placeholder: "Select a State",
             allowClear: true
         });
@@ -39,78 +39,24 @@
 						{{ form_widget(filterForm.city, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': '{% trans %}Enter City{% endtrans %}', 'multiple': 'multiple'}}) }}																										
 					</div>
 					<div class="form-group">	
+						{{ form_label(filterForm.region, 'Region', {'attr': {'class': 'sr-only'}}) }}
+						{{ form_widget(filterForm.region, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Region', 'multiple': 'multiple'}}) }}																										
+					</div>
+					<div class="form-group">	
 						{{ form_label(filterForm.scope, 'Scope', {'attr': {'class': 'sr-only'}}) }}
 						{{ form_widget(filterForm.scope, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Scope', 'multiple': 'multiple'}}) }}																										
 					</div>
+					<div class="form-group">	
+						{{ form_label(filterForm.users, 'Manager', {'attr': {'class': 'sr-only'}}) }}
+						{{ form_widget(filterForm.users, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Manager', 'multiple': 'multiple'}}) }}																										
+					</div>
+					{{ form_widget(filterForm.save, { 'label': '<i class="fa fa-check"></i> {% trans %}Filter{% endtrans %}' }) }}
 				{{ form_end(filterForm) }}
-				
-				<form class="form-inline" role="form">
-					<!--MPK
-					<div class="form-group">					
-						<label class="sr-only" for="exampleInputEmail2">{% trans %}MPK{% endtrans %}</label>
-						<div class="input-icon">
-							<i class="fa fa-envelope"></i>
-							<input id="exampleInputEmail2" class="form-control input-small"  placeholder="{% trans %}Enter MPK{% endtrans %}">
-						</div>					
-					</div>
-					-->
-					<!--organization-->
-					
-					<!--city-->
-					
-					<!--Region-->
-					<div class="form-group">					
-						<label class="sr-only" for="organizationSalesFilterForm_region">{% trans %}Region{% endtrans %}</label>						
-							<select id="organizationSalesFilterForm_region" placeholder="{% trans %}Enter Region{% endtrans %}" class="form-control select2 input-middle" multiple>
-								<optgroup label="NFC EAST">
-									<option>Dallas Cowboys</option>
-									<option>New York Giants</option>
-									<option>Philadelphia Eagles</option>
-									<option>Washington Redskins</option>
-								</optgroup>
-								<optgroup label="NFC NORTH">
-									<option>Chicago Bears</option>
-									<option>Detroit Lions</option>
-									<option>Green Bay Packers</option>
-									<option>Minnesota Vikings</option>
-								</optgroup>
-							</select>										
-					</div>
-					<!--scope-->
-					<div class="form-group">					
-						<label class="sr-only" for="organizationSalesFilterForm_scope">{% trans %}Scope{% endtrans %}</label>
-						<div class="col-md-4">
-							<select id="organizationSalesFilterForm_scope" placeholder="{% trans %}Enter Scope{% endtrans %}" class="form-control select2 input-middle" multiple>
-								<optgroup label="NFC EAST">
-									<option>Dallas Cowboys</option>
-									<option>New York Giants</option>
-									<option>Philadelphia Eagles</option>
-									<option>Washington Redskins</option>
-								</optgroup>							
-							</select>
-						</div>					
-					</div>
-					<!--managers-->
-					<div class="form-group">					
-						<label class="sr-only" for="organizationSalesFilterForm_users">{% trans %}Manager{% endtrans %}</label>						
-							<select id="organizationSalesFilterForm_users" placeholder="{% trans %}Enter Manager{% endtrans %}" class="form-control select2 input-middle" multiple>
-								<optgroup label="NFC EAST">
-									<option>Dallas Cowboys</option>
-									<option>New York Giants</option>
-									<option>Philadelphia Eagles</option>
-									<option>Washington Redskins</option>
-								</optgroup>
-								<optgroup label="NFC NORTH">
-									<option>Chicago Bears</option>
-									<option>Detroit Lions</option>
-									<option>Green Bay Packers</option>
-									<option>Minnesota Vikings</option>
-								</optgroup>
-							</select>										
-					</div>
-					<button class="btn green" type="submit"><i class="fa fa-check"></i> {% trans %}Filter{% endtrans %}</button>
+
+<!--				
+									<button class="btn green" type="submit"><i class="fa fa-check"></i> {% trans %}Filter{% endtrans %}</button>
 					<button class="btn" type="reset"><i class="fa fa-check"></i> {% trans %}Clear Filter{% endtrans %}</button>
-				</form>
+-->
 			</div>
 		</div>
 	</div>
