@@ -99,15 +99,48 @@ class SalesController extends BaseController
     /**
      * Executes show action
      */
-    public function showAction($id)
+    public function showAction($id, Request $request)
     {
         /** @var \Lists\HandlingBundle\Entity\Handling $object */
-        $object= $this->getDoctrine()
+        $object = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:Handling')
             ->find($id);
 
+        $handlingMessageForm = $this->createForm('handlingMessageForm');
+
+        $handlingMessageForm->handleRequest($request);
+
+        if ($handlingMessageForm->isValid())
+        {
+            /** @var \Lists\HandlingBundle\Entity\HandlingMessage $handlingMessage*/
+            $handlingMessage = $handlingMessageForm->getData();
+
+            $user = $this->getUser();
+            $handlingMessage->setHandling($object);
+            $handlingMessage->setCreatedatetime(new \DateTime());
+            $handlingMessage->setUser($user);
+
+            $handlingMessageForm['filepath']->getData()->move('/var/www/', 'test.jpg');
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($handlingMessage);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('lists_sales_handling_show', array(
+                'id' => $id
+            )));
+        }
+
+        /** @var \Lists\HandlingBundle\Entity\HandlingMessageRepository $messagesRepository */
+        $messagesRepository = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingMessage');
+
+        $messages = $messagesRepository->getMessagesByHandlingId($id);
+
         return $this->render('ListsHandlingBundle:Sales:show.html.twig', array(
-            'handling' => $object
+            'handling' => $object,
+            'messages' => $messages,
+            'handlingMessageForm' => $handlingMessageForm->createView()
         ));
     }
 }

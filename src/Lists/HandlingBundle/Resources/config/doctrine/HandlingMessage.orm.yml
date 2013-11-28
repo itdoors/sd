@@ -1,6 +1,7 @@
 Lists\HandlingBundle\Entity\HandlingMessage:
     type: entity
     table: handling_message
+    repositoryClass: Lists\HandlingBundle\Entity\HandlingMessageRepository
     fields:
         id:
             id: true
@@ -27,6 +28,10 @@ Lists\HandlingBundle\Entity\HandlingMessage:
             length: 128
             fixed: false
             nullable: true
+        handling_id:
+            type: integer
+            nullable: true
+            column: handling_id
     manyToOne:
         handling:
             targetEntity: Handling
@@ -55,4 +60,5 @@ Lists\HandlingBundle\Entity\HandlingMessage:
                 user_id:
                     referencedColumnName: id
             orphanRemoval: false
-    lifecycleCallbacks: {  }
+    lifecycleCallbacks:
+        prePersist: [ doOnPrePersist ]

@@ -40,6 +40,11 @@ class HandlingMessage
     private $filename;
 
     /**
+     * @var integer
+     */
+    private $handling_id;
+
+    /**
      * @var \Lists\HandlingBundle\Entity\Handling
      */
     private $handling;
@@ -181,6 +186,29 @@ class HandlingMessage
     }
 
     /**
+     * Set handling_id
+     *
+     * @param integer $handlingId
+     * @return HandlingMessage
+     */
+    public function setHandlingId($handlingId)
+    {
+        $this->handling_id = $handlingId;
+    
+        return $this;
+    }
+
+    /**
+     * Get handling_id
+     *
+     * @return integer 
+     */
+    public function getHandlingId()
+    {
+        return $this->handling_id;
+    }
+
+    /**
      * Set handling
      *
      * @param \Lists\HandlingBundle\Entity\Handling $handling
@@ -247,5 +275,13 @@ class HandlingMessage
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function doOnPrePersist()
+    {
+        // Add your code here
     }
 }
