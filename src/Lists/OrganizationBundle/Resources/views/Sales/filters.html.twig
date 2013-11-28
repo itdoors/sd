@@ -8,6 +8,15 @@
         });
     })
 </script>
+{{#
+{{ form(
+					filterForm,
+					{
+						'action': path('lists_sales_organization_filter'),
+						'attr': {'novalidate': 'novalidate', 'class': 'form-inline', 'role': 'form'}
+					})
+				}}
+#}}
 <div class="row ">
 	<div class="col-md-12">
 		<div class="portlet box yellow">
@@ -17,13 +26,7 @@
 			</div>
 			<div class="portlet-body">
 				<p>Выберите параметры фильтра и нажмите кнопку Фильтр</p>
-				{{ form(
-					filterForm,
-					{
-						'action': path('lists_sales_organization_filter'),
-						'attr': {'novalidate': 'novalidate', 'class': 'form-inline', 'role': 'form'}
-					})
-				}}
+				
 				{{ form_start(filterForm,
 					{
 						'action': path('lists_sales_organization_filter'),
@@ -34,6 +37,10 @@
 					<div class="form-group">	
 						{{ form_label(filterForm.city, '{% trans %}Enter City{% endtrans %}', {'attr': {'class': 'sr-only'}}) }}
 						{{ form_widget(filterForm.city, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': '{% trans %}Enter City{% endtrans %}', 'multiple': 'multiple'}}) }}																										
+					</div>
+					<div class="form-group">	
+						{{ form_label(filterForm.scope, 'Scope', {'attr': {'class': 'sr-only'}}) }}
+						{{ form_widget(filterForm.scope, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Scope', 'multiple': 'multiple'}}) }}																										
 					</div>
 				{{ form_end(filterForm) }}
 				
