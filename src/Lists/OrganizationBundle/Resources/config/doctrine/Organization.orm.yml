@@ -101,7 +101,3 @@ Lists\OrganizationBundle\Entity\Organization:
             inverseJoinColumns:
               user_id:
                 referencedColumnName: id
-    oneToMany:
-        organizationUser:
-            targetEntity: OrganizationUser
-            mappedBy: organization

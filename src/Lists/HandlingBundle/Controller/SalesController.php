@@ -2,52 +2,113 @@
 
 namespace Lists\HandlingBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use SD\CommonBundle\Controller\BaseFilterController as BaseController;
 
-class SalesController extends Controller
+class SalesController extends BaseController
 {
-  public function indexAction()
-  {
-    // Get organization filter
+    protected $filterNamespace = 'handling.sales.filters';
+    protected $filterForm = 'handlingSalesFilterForm';
+    protected $baseRoute = 'lists_sales_handling_index';
 
-    $organizationId = $this->get('session')->get('handling.filter.organization_id');
-
-    if (!$organizationId)
+    public function indexAction()
     {
-      return $this->redirect($this->generateUrl('lists_sales_organization_index'));
+        // Get organization filter
+
+        $filters = $this->getFilters();
+
+        if (!isset($filters['organization_id']) || !$filters['organization_id'])
+        {
+            return $this->redirect($this->generateUrl('lists_sales_organization_index'));
+        }
+
+        $page = $this->get('request')->query->get('page', 1);
+
+        $filterForm = $this->processFilters();
+
+        /** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
+        $handlingRepository = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling');
+
+        /** @var \Doctrine\ORM\Query $handlingQuery */
+        $handlingQuery = $handlingRepository->getAllForSalesQuery($filters['organization_id']);
+
+        /** @var \Knp\Component\Pager\Paginator $paginator */
+        $paginator  = $this->get('knp_paginator');
+
+        $pagination = $paginator->paginate(
+            $handlingQuery,
+            $page,
+            20
+        );
+
+        return $this->render('ListsHandlingBundle:Sales:index.html.twig', array(
+            'pagination' => $pagination,
+            'filterForm' => $filterForm->createView()
+        ));
     }
 
-    $page = $this->get('request')->query->get('page', 1);
+    /**
+     * Executes new action
+     */
+    public function newAction(Request $request)
+    {
+        $form = $this->createForm('handlingSalesForm');
 
-    /** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
-    $handlingRepository = $this->getDoctrine()
-      ->getRepository('ListsHandlingBundle:Handling');
+        $form->handleRequest($request);
 
-    /** @var \Doctrine\ORM\Query $handlingQuery */
-    $handlingQuery = $handlingRepository->getAllForSalesQuery($organizationId);
+        if ($form->isValid())
+        {
+            /** @var \Lists\HandlingBundle\Entity\Handling $object */
+            $object = $form->getData();
 
-    /** @var \Knp\Component\Pager\Paginator $paginator */
-    $paginator  = $this->get('knp_paginator');
+            $user = $this->getUser();
 
-    $pagination = $paginator->paginate(
-      $handlingQuery,
-      $page,
-      20
-    );
+            $object->setUser($user);
+            $object->setCreatedatetime(new \DateTime());
 
-    return $this->render('ListsHandlingBundle:Sales:index.html.twig', array(
-      'pagination' => $pagination
-    ));
-  }
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($object);
+            $em->flush();
 
+            return $this->redirect($this->generateUrl('lists_sales_handling_show', array(
+                'id' => $object->getId()
+            )));
+        }
 
-  /**
-   * Execute addOrganizationFilter action
-   */
-  public function addOrganizationFilterAction($organization_id)
-  {
-    $this->get('session')->set('handling.filter.organization_id', $organization_id);
+        return $this->render('ListsHandlingBundle:Sales:new.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
 
-    return $this->redirect($this->generateUrl('lists_sales_handling_index'));
-  }
+    /**
+    * Execute addOrganizationFilter action
+    */
+    public function addOrganizationFilterAction($organization_id)
+    {
+        $filters = $this->getFilters();
+
+        $filters['organization_id'] = $organization_id;
+
+        $this->setFilters($filters);
+
+        return $this->redirect($this->generateUrl('lists_sales_handling_index'));
+    }
+
+    /**
+     * Executes show action
+     */
+    public function showAction($id)
+    {
+        /** @var \Lists\HandlingBundle\Entity\Handling $object */
+        $object= $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling')
+            ->find($id);
+
+        return $this->render('ListsHandlingBundle:Sales:show.html.twig', array(
+            'handling' => $object
+        ));
+    }
 }
+

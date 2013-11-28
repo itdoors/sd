@@ -52,4 +52,14 @@ class HandlingStatus
     {
         return $this->name;
     }
+
+    /**
+     * __toStrong
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }

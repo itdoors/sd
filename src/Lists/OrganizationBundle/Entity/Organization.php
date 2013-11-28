@@ -205,29 +205,6 @@ class Organization
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setIsSmeta(false);
     }
-    
-    /**
-     * Add users
-     *
-     * @param \SD\UserBundle\User $users
-     * @return Organization
-     */
-    public function addUser(\SD\UserBundle\User $users)
-    {
-        $this->users[] = $users;
-    
-        return $this;
-    }
-
-    /**
-     * Remove users
-     *
-     * @param \SD\UserBundle\User $users
-     */
-    public function removeUser(\SD\UserBundle\User $users)
-    {
-        $this->users->removeElement($users);
-    }
 
     /**
      * Get users
@@ -495,7 +472,6 @@ class Organization
      */
     private $organizationType;
 
-
     /**
      * Set organizationType
      *
@@ -518,42 +494,35 @@ class Organization
     {
         return $this->organizationType;
     }
+
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * __toString()
      */
-    private $organizationUser;
-
+    public function __toString()
+    {
+        return $this->getName();
+    }
 
     /**
-     * Add organizationUser
+     * Add users
      *
-     * @param \Lists\OrganizationBundle\Entity\OrganizationUser $organizationUser
+     * @param \SD\UserBundle\Entity\User $users
      * @return Organization
      */
-    public function addOrganizationUser(\Lists\OrganizationBundle\Entity\OrganizationUser $organizationUser)
+    public function addUser(\SD\UserBundle\Entity\User $users)
     {
-        $this->organizationUser[] = $organizationUser;
+        $this->users[] = $users;
     
         return $this;
     }
 
     /**
-     * Remove organizationUser
+     * Remove users
      *
-     * @param \Lists\OrganizationBundle\Entity\OrganizationUser $organizationUser
+     * @param \SD\UserBundle\Entity\User $users
      */
-    public function removeOrganizationUser(\Lists\OrganizationBundle\Entity\OrganizationUser $organizationUser)
+    public function removeUser(\SD\UserBundle\Entity\User $users)
     {
-        $this->organizationUser->removeElement($organizationUser);
-    }
-
-    /**
-     * Get organizationUser
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getOrganizationUser()
-    {
-        return $this->organizationUser;
+        $this->users->removeElement($users);
     }
 }
