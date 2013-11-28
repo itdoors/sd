@@ -97,9 +97,9 @@ class OrganizationRepository extends EntityRepository
                 FROM
                     ListsOrganizationBundle:Organization o
                 INNER JOIN
-                    o.organizationUser ou
+                    o.users u
                 WHERE
-                    ou.user_id = :userId
+                    u.id = :userId
                 ')
             ->setParameter(':userId', $userId)
             ->getSingleScalarResult();

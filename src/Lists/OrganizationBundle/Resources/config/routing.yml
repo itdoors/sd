@@ -14,6 +14,10 @@ lists_sales_organization_filter:
     pattern:  /lists/sales/organization/filter
     defaults: { _controller: ListsOrganizationBundle:Sales:filter }
 
+lists_sales_organization_filter_clear:
+    pattern:  /lists/sales/organization/filter_clear
+    defaults: { _controller: ListsOrganizationBundle:Sales:filterClear }
+
 lists_sales_organization_ajax_index:
     pattern:  /lists/sales/organization/ajax/index
     defaults: { _controller: ListsOrganizationBundle:Sales:ajaxIndex }

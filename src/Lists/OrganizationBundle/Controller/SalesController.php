@@ -6,11 +6,13 @@ use Lists\OrganizationBundle\ListsOrganizationBundle;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use SD\CommonBundle\Controller\BaseFilterController as BaseController;
 
-class SalesController extends Controller
+class SalesController extends BaseController
 {
     protected $filterNamespace = 'organization.sales.filters';
     protected $filterForm = 'organizationSalesFilterForm';
+    protected $baseRoute = 'lists_sales_organization_index';
 
     public function indexAction()
     {
@@ -83,41 +85,6 @@ class SalesController extends Controller
         return $this->render('ListsOrganizationBundle:Sales:show.html.twig', array(
             'organization' => $organization
         ));
-    }
-
-    /**
-     * Processes filters for view
-     */
-    public function processFilters()
-    {
-        $filterForm = $this->createForm($this->filterForm);
-
-        $filterForm->bind($this->getFilters());
-
-        return $filterForm;
-    }
-
-    /**
-     * Executes filter action
-     */
-    public function filterAction()
-    {
-        $filters = $this->get('request')->request->get('organizationFilterForm');
-
-        /** @var \Symfony\Component\HttpFoundation\Session\Session $session */
-        $session = $this->get('session');
-
-        $session->set($this->filterNamespace, $filters);
-
-        return $this->redirect($this->generateUrl('lists_sales_organization_index'));
-    }
-
-    public function getFilters()
-    {
-        /** @var \Symfony\Component\HttpFoundation\Session\Session $session */
-        $session = $this->get('session');
-
-        return $session->get($this->filterNamespace);
     }
 }
 

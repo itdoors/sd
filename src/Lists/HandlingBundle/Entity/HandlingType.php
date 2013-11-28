@@ -80,4 +80,14 @@ class HandlingType
     {
         return $this->slug;
     }
+
+    /**
+     * __toStrong
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }
