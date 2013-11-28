@@ -1,10 +1,22 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'ListsOrganizationBundle' %}
+{% block title %}{% trans %}List of Organizations{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+	<ul class="page-breadcrumb breadcrumb">
+		<li>
+			<i class="fa fa-home"></i>
+			<a href="{{ path('sd_dashboard_homepage') }}" titl="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a> 
+			<i class="fa fa-angle-right"></i>
+		</li>
+		<li><a href="{{ path('lists_sales_organization_index') }}" title="{% trans %}My Organizations{% endtrans %}">{% trans %}My Organizations{% endtrans %}</a></li>						
+	</ul>
+{% endblock %}
 {% block page_title %}
 	<h3 class="page-title">
 		{% trans %}Organization <small>list of organization</small>{% endtrans %}  
 	</h3>
 {% endblock %}
+
 
 {% block css_page_level_plugin %}
     {{ parent() }}
@@ -58,6 +70,7 @@
                             href="{{ path('lists_sales_handling_add_organization_filter', {'organization_id': item.organizationId}) }}">
                             {{ 'handling.list'|trans({}, 'ListsOrganizationBundle') }}
                         </a>
+						
                     </td>
                 </tr>
             {% endfor %}
