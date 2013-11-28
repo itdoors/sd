@@ -39,8 +39,9 @@
 						{{ form_widget(filterForm.city, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': '{% trans %}Enter City{% endtrans %}', 'multiple': 'multiple'}}) }}																										
 					</div>
 					<div class="form-group">	
-						{{ form_label(filterForm.region, 'Region', {'attr': {'class': 'sr-only'}}) }}
+					{#	{{ form_label(filterForm.region, 'Region', {'attr': {'class': 'sr-only'}}) }}
 						{{ form_widget(filterForm.region, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Region', 'multiple': 'multiple'}}) }}																										
+					#}
 					</div>
 					<div class="form-group">	
 						{{ form_label(filterForm.scope, 'Scope', {'attr': {'class': 'sr-only'}}) }}
