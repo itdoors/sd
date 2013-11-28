@@ -8,8 +8,8 @@
 
 <script>
     $(document).ready(function(){
-        $('#inputCity').select2({
-            placeholder: "Select a State",
+        $('#organizationSalesFilterForm_users','#organizationSalesFilterForm_city','#organizationSalesFilterForm_scope').select2({
+            //placeholder: "Select a State",
             allowClear: true
         });
     })
@@ -21,41 +21,92 @@
 				<div class="caption"><i class="fa fa-reorder"></i>{% trans %}Filters{% endtrans %}</div>
 				<div class="tools"><a class="collapse" href="" title="{% trans %}Filters{% endtrans %}"></a></div>
 			</div>
-		</div>
-		<div class="portlet-body">
-			<p>Выберите параметры фильтра и нажмите кнопку Фильтр</p>
-			<form class="form-inline" role="form">
-				<!--MPK-->
-				<div class="form-group">					
-					<label class="sr-only" for="exampleInputEmail2">{% trans %}MPK{% endtrans %}</label>
-					<div class="input-icon">
-						<i class="fa fa-envelope"></i>
-						<input id="exampleInputEmail2" class="form-control input-small"  placeholder="Enter email">
-					</div>					
-				</div>
-				<!--city-->
-				<div class="form-group">					
-					<label class="sr-only" for="inputCity">{% trans %}City{% endtrans %}</label>
-					<div class="col-md-4">
-						<select id="inputCity" placeholder="{% trans %}Enter city{% endtrans %}" class="form-control select2" multiple>
-							<optgroup label="NFC EAST">
-								<option>Dallas Cowboys</option>
-								<option>New York Giants</option>
-								<option>Philadelphia Eagles</option>
-								<option>Washington Redskins</option>
-							</optgroup>
-							<optgroup label="NFC NORTH">
-								<option>Chicago Bears</option>
-								<option>Detroit Lions</option>
-								<option>Green Bay Packers</option>
-								<option>Minnesota Vikings</option>
-							</optgroup>
-						</select>
-					</div>					
-				</div>
-				<button class="btn green" type="submit"><i class="fa fa-check"></i>{% trans %}Filter{% endtrans %}</button>
-				<button class="btn" type="reset"><i class="fa fa-check"></i>{% trans %}Clear Filter{% endtrans %}</button>
-			</form>
+			<div class="portlet-body">
+				<p>Выберите параметры фильтра и нажмите кнопку Фильтр</p>
+				<form class="form-inline" role="form">
+					<!--MPK
+					<div class="form-group">					
+						<label class="sr-only" for="exampleInputEmail2">{% trans %}MPK{% endtrans %}</label>
+						<div class="input-icon">
+							<i class="fa fa-envelope"></i>
+							<input id="exampleInputEmail2" class="form-control input-small"  placeholder="Enter MPK">
+						</div>					
+					</div>
+					-->
+					<!--organization-->
+					
+					<!--city-->
+					<div class="form-group">					
+						<label class="sr-only" for="organizationSalesFilterForm_city">{% trans %}City{% endtrans %}</label>						
+							<select id="organizationSalesFilterForm_city" placeholder="{% trans %}Enter City{% endtrans %}" class="form-control select2 input-middle" multiple>
+								<optgroup label="NFC EAST">
+									<option>Dallas Cowboys</option>
+									<option>New York Giants</option>
+									<option>Philadelphia Eagles</option>
+									<option>Washington Redskins</option>
+								</optgroup>
+								<optgroup label="NFC NORTH">
+									<option>Chicago Bears</option>
+									<option>Detroit Lions</option>
+									<option>Green Bay Packers</option>
+									<option>Minnesota Vikings</option>
+								</optgroup>
+							</select>										
+					</div>
+					<!--Region-->
+					<div class="form-group">					
+						<label class="sr-only" for="organizationSalesFilterForm_region">{% trans %}Region{% endtrans %}</label>						
+							<select id="organizationSalesFilterForm_region" placeholder="{% trans %}Enter Region{% endtrans %}" class="form-control select2 input-middle" multiple>
+								<optgroup label="NFC EAST">
+									<option>Dallas Cowboys</option>
+									<option>New York Giants</option>
+									<option>Philadelphia Eagles</option>
+									<option>Washington Redskins</option>
+								</optgroup>
+								<optgroup label="NFC NORTH">
+									<option>Chicago Bears</option>
+									<option>Detroit Lions</option>
+									<option>Green Bay Packers</option>
+									<option>Minnesota Vikings</option>
+								</optgroup>
+							</select>										
+					</div>
+					<!--scope-->
+					<div class="form-group">					
+						<label class="sr-only" for="organizationSalesFilterForm_scope">{% trans %}Scope{% endtrans %}</label>
+						<div class="col-md-4">
+							<select id="organizationSalesFilterForm_scope" placeholder="{% trans %}Enter Scope{% endtrans %}" class="form-control select2 input-middle" multiple>
+								<optgroup label="NFC EAST">
+									<option>Dallas Cowboys</option>
+									<option>New York Giants</option>
+									<option>Philadelphia Eagles</option>
+									<option>Washington Redskins</option>
+								</optgroup>							
+							</select>
+						</div>					
+					</div>
+					<!--managers-->
+					<div class="form-group">					
+						<label class="sr-only" for="organizationSalesFilterForm_users">{% trans %}Manager{% endtrans %}</label>						
+							<select id="organizationSalesFilterForm_users" placeholder="{% trans %}Enter Manager{% endtrans %}" class="form-control select2 input-middle" multiple>
+								<optgroup label="NFC EAST">
+									<option>Dallas Cowboys</option>
+									<option>New York Giants</option>
+									<option>Philadelphia Eagles</option>
+									<option>Washington Redskins</option>
+								</optgroup>
+								<optgroup label="NFC NORTH">
+									<option>Chicago Bears</option>
+									<option>Detroit Lions</option>
+									<option>Green Bay Packers</option>
+									<option>Minnesota Vikings</option>
+								</optgroup>
+							</select>										
+					</div>
+					<button class="btn green" type="submit"><i class="fa fa-check"></i> {% trans %}Filter{% endtrans %}</button>
+					<button class="btn" type="reset"><i class="fa fa-check"></i> {% trans %}Clear Filter{% endtrans %}</button>
+				</form>
+			</div>
 		</div>
 	</div>
 </div>
