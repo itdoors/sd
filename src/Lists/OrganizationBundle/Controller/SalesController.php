@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class SalesController extends Controller
 {
     protected $filterNamespace = 'organization.sales.filters';
+    protected $filterForm = 'organizationSalesFilterForm';
 
     public function indexAction()
     {
@@ -17,12 +18,15 @@ class SalesController extends Controller
 
         $filterForm = $this->processFilters();
 
+        /** @var \SD\UserBundle\Entity\User $user*/
+        $user = $this->getUser();
+
         /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
         $organizationsRepository = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization');
 
         /** @var \Doctrine\ORM\Query */
-        $organizationsQuery = $organizationsRepository->getAllForSalesQuery($this->getFilters());
+        $organizationsQuery = $organizationsRepository->getAllForSalesQuery($user->getId(), $this->getFilters());
 
         /** @var \Knp\Component\Pager\Paginator $paginator */
         $paginator  = $this->get('knp_paginator');
@@ -86,7 +90,7 @@ class SalesController extends Controller
      */
     public function processFilters()
     {
-        $filterForm = $this->createForm('organizationFilterForm');
+        $filterForm = $this->createForm($this->filterForm);
 
         $filterForm->bind($this->getFilters());
 

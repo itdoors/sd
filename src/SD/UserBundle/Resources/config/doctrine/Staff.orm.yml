@@ -1,0 +1,30 @@
+SD\UserBundle\Entity\Staff:
+    type: entity
+    table: stuff
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        mobilephone:
+            type: string
+            length: 12
+            fixed: false
+            nullable: false
+        description:
+            type: text
+            nullable: true
+        stuffclass:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+    oneToOne:
+        user:
+          targetEntity: User
+          inversedBy: staff
+          joinColumn:
+            name: user_id
+            referencedColumnName: id

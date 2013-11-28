@@ -1,7 +1,10 @@
 parameters:
-#    sd_user.example.class: SD\Bundle\UserBundle\Example
+    sd_user.repository.class: SD\UserBundle\Entity\UserRepository
+    sd_user.repository.entity: SD\UserBundle\Entity\User
 
 services:
-#    sd_user.example:
-#        class: %sd_user.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    sd_user.repository:
+        class: %sd_user.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %sd_user.repository.entity% ]

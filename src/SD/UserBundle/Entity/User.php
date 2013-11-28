@@ -356,4 +356,43 @@ class User extends BaseUser
     {
       return (string) $this->getFullname();
     }
+
+    /**
+     * Get groups
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
+    /**
+     * @var \SD\UserBundle\Entity\Staff
+     */
+    private $staff;
+
+
+    /**
+     * Set staff
+     *
+     * @param \SD\UserBundle\Entity\Staff $staff
+     * @return User
+     */
+    public function setStaff(\SD\UserBundle\Entity\Staff $staff = null)
+    {
+        $this->staff = $staff;
+    
+        return $this;
+    }
+
+    /**
+     * Get staff
+     *
+     * @return \SD\UserBundle\Entity\Staff 
+     */
+    public function getStaff()
+    {
+        return $this->staff;
+    }
 }
