@@ -80,4 +80,14 @@ class OrganizationType
     {
         return $this->title;
     }
+
+    /**
+     * __toStrong
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getTitle();
+    }
 }

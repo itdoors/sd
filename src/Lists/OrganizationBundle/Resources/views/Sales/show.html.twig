@@ -8,7 +8,7 @@
 			<a href="{{ path('sd_dashboard_homepage') }}" titl="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a> 
 			<i class="fa fa-angle-right"></i>
 		</li>
-		<li><a href="{{ path('lists_sales_organization_show') }}" title="{% trans %}Show Organization{% endtrans %}">{% trans %}Show Organization{% endtrans %}</a></li>						
+		<li><a href="{{ path('lists_sales_organization_show', { id : organization.id }) }}" title="{% trans %}Show Organization{% endtrans %}">{% trans %}Show Organization{% endtrans %}</a></li>
 	</ul>
 {% endblock %}
 {% block page_title %}
@@ -17,10 +17,31 @@
 	</h3>
 {% endblock %}
 
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+{% endblock %}
+
 {% block body %}
 
-    {{ organization.name }}
-	
+    <script type="text/javascript">
+
+        $(document).ready(function(){
+            $('#organizationType').editable({
+                url: '{{ path('sd_common_ajax_organization_save') }}',
+                source: '{{ path('sd_common_ajax_organization_type') }}'
+            });
+        })
+
+    </script>
+
 	<div class="row">
 		<div class="col-md-12">
 			<div class="tabbable tabbable-custom boxless">
@@ -42,12 +63,12 @@
 									</tr>
 									<tr>
 										<td>{% trans %}Short name{% endtrans %}</td>
-										<td><a href="#" id="shortDescription" data-type="text" data-pk="1"  data-original-title="{% trans %}Enter organization short name{% endtrans %}">shortDescription</a></td>
+										<td><a href="#" id="shortDescription" data-type="text" data-pk="1"  data-url="/post123" data-original-title="{% trans %}Enter organization short name{% endtrans %}">shortDescription</a></td>
 										<td><span class="text-muted">{% trans %}for example{% endtrans %}: Impel Griffin</span></td>
 									</tr>
 									<tr>
 										<td>{% trans %}Organization type{% endtrans %}</td>
-										<td><a href="#" id="organizationType" data-type="select" data-pk="1" data-value="" data-original-title="{% trans %}Select type{% endtrans %}">organizationType</a></td>
+										<td><a href="#" id="organizationType" data-type="select" data-pk="{{ organization.id }}" data-value="" data-original-title="{% trans %}Select type{% endtrans %}">{{ organization.organizationType }}</a></td>
 										<td><span class="text-muted">{% trans %}Select Organization type{% endtrans %}</span></td>
 									</tr>
 									<tr>
