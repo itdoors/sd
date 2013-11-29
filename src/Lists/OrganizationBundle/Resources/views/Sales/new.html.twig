@@ -17,8 +17,28 @@
 	</h3>
 {% endblock %}
 
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
+{% endblock %}
+
 {% block body %}
 {#Для оранизаций нужно фиксировать Создателя и Дату создания  #}
+
+    <script>
+        $(document).ready(function(){
+            $('#organizationSalesForm_organizationType, #organizationSalesForm_scope, #organizationSalesForm_city').select2({
+                placeholder: "Select a State",
+                allowClear: true,
+            });
+        })
+    </script>
+
 	<div class="row">
 		<div class="col-md-12">
 
@@ -51,10 +71,10 @@
 							    has-error
 							{% endif %}">
 								<div class="form-group">
-                                    {{ form_errors(filterForm.name) }}
                                     {{ form_label(filterForm.name, 'Organization name *', {'attr': {'class': 'control-label'}}) }}
 									{{ form_widget(filterForm.name, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter organization name'}}) }}
 									<span class="help-block">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп"</span>
+                                    {{ form_errors(filterForm.name) }}
 								</div>
 							</div>
 							<!--/span-->
@@ -98,14 +118,14 @@
 							</div>
 							<!--/span-->
 							<div class="col-md-6
-                                {% if filterForm.name.vars.errors|length %}
+                                {% if filterForm.address.vars.errors|length %}
                                     has-error
                                 {% endif %}">
 								<div class="form-group">
-                                    {{ form_errors(filterForm.address) }}
 									{{ form_label(filterForm.address, 'Legal Address', {'attr': {'class': 'control-label'}}) }}
 									{{ form_widget(filterForm.address, {'attr': {'class': 'form-control'}}) }}																										
 									<span class="help-block">{% trans %}Enter Legal Address{% endtrans %}</span>
+                                    {{ form_errors(filterForm.address) }}
 								</div>						
 							</div>
 							<!--/span-->
