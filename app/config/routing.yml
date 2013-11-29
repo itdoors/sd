@@ -1,3 +1,7 @@
+lists_team:
+    resource: "@ListsTeamBundle/Resources/config/routing.yml"
+    prefix:   /
+
 sd_common:
     resource: "@SDCommonBundle/Resources/config/routing.yml"
     prefix:   /

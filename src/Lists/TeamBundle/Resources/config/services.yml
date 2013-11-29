@@ -1,0 +1,9 @@
+parameters:
+    lists_team.form.class: Lists\TeamBundle\Form\TeamFormType
+
+services:
+    lists_team.form.teamForm:
+        class: %lists_team.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: teamForm }

@@ -28,6 +28,7 @@ class AppKernel extends Kernel
             new Lists\HandlingBundle\ListsHandlingBundle(),
             // new SD\ModelBundle\SDModelBundle(),
             new SD\CommonBundle\SDCommonBundle(),
+            new Lists\TeamBundle\ListsTeamBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -1,0 +1,18 @@
+{% extends "::base.html.twig" %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Handlings <small>create handling</small>{% endtrans %}
+    </h3>
+{% endblock %}
+
+{% block body %}
+
+    {{ form(
+        form,
+        {
+            'action': path('lists_sales_dispatcher_team_new'),
+            'attr': {'novalidate': 'novalidate'}
+        })
+    }}
+
+{% endblock body %}

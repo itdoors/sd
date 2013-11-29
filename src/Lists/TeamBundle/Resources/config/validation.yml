@@ -1,0 +1,6 @@
+Lists\TeamBundle\Entity\Team:
+    properties:
+        name:
+            - NotBlank: { groups: [new] }
+        description:
+            - NotBlank: { groups: [new] }

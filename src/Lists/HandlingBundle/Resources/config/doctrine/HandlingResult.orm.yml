@@ -18,4 +18,8 @@ Lists\HandlingBundle\Entity\HandlingResult:
             length: 128
             fixed: false
             nullable: true
+    oneToMany:
+        handlings:
+            targetEntity: Lists\HandlingBundle\Entity\Handling
+            mappedBy: result
     lifecycleCallbacks: {  }
