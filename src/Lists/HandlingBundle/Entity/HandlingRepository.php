@@ -12,66 +12,121 @@ use Doctrine\ORM\EntityRepository;
  */
 class HandlingRepository extends EntityRepository
 {
-  public function getAllForSalesQuery($organizationId)
-  {
-    $sql = $this->createQueryBuilder('h')
-      ->select('h.id as handlingId')
-      ->addSelect('o.name as organizationName')
-      ->addSelect('h.createdatetime as handlingCreatedatetime')
-      ->addSelect('h.lastHandlingDate as handlingLastHandlingDate')
-      ->addSelect('city.name as cityName')
-      ->addSelect('scope.name as scopeName')
-      ->addSelect('h.serviceOffered as handlingServiceOffered')
-      ->addSelect('h.chance as handlingChance')
-      ->addSelect('status.name as statusName')
-      ->addSelect("
-        array_to_string(
-           ARRAY(
-              SELECT
-                CONCAT(CONCAT(u.lastName, ' '), u.firstName)
-              FROM
-                SDUserBundle:User u
-              LEFT JOIN u.handlings hu
-              WHERE hu.id = h.id
-           ), ','
-         ) as fullNames
-      ")
-      ->leftJoin('h.organization', 'o')
-      ->leftJoin('o.city', 'city')
-      ->leftJoin('o.scope', 'scope')
-      ->leftJoin('h.status', 'status')
-      ->where('o.id = :organizationId')
-      ->orderBy('h.createdatetime', 'DESC');
+    public function getAllForSalesQuery($userIds, $filters)
+    {
+        if (!is_array($userIds) && $userIds)
+        {
+            $userIds = array($userIds);
+        }
 
-    //$count = $this->getAllForSalesCount();
+        $sql = $this->createQueryBuilder('h')
+            ->select('h.id as handlingId')
+            ->addSelect('o.name as organizationName')
+            ->addSelect('h.createdatetime as handlingCreatedatetime')
+            ->addSelect('h.lastHandlingDate as handlingLastHandlingDate')
+            ->addSelect('city.name as cityName')
+            ->addSelect('scope.name as scopeName')
+            ->addSelect('h.serviceOffered as handlingServiceOffered')
+            ->addSelect('h.chance as handlingChance')
+            ->addSelect('status.name as statusName')
+            ->addSelect("
+                array_to_string(
+                    ARRAY(
+                        SELECT
+                            CONCAT(CONCAT(u.lastName, ' '), u.firstName)
+                        FROM
+                            SDUserBundle:User u
+                        LEFT JOIN u.handlings hu
+                        WHERE hu.id = h.id
+                    ), ','
+                ) as fullNames
+            ")
+            ->leftJoin('h.organization', 'o')
+            ->leftJoin('o.city', 'city')
+            ->leftJoin('o.scope', 'scope')
+            ->leftJoin('h.status', 'status')
+            ->orderBy('h.createdatetime', 'DESC');
 
-    /*$query = $this->getEntityManager()
-      ->createQuery('
-            SELECT
-              o, c, r FROM
-            ListsOrganizationBundle:Organization o
-            LEFT JOIN o.city c
-            LEFT JOIN c.region r
-            ');*/
+        if (sizeof($userIds))
+        {
+            $sql
+                ->leftJoin('o.users', 'users')
+                ->where('users.id in (:userIds)')
+                ->setParameter(':userIds', $userIds);
+        }
 
-    $sql->setParameter(':organizationId', $organizationId);
+        $this->processFilters($sql, $filters);
 
-    $query = $sql->getQuery();
+        $query = $sql->getQuery();
 
-    $count = $this->getAllForSalesCount($organizationId);
+        $count = $this->getAllForSalesCount($filters['organization_id']);
 
-    $query->setHint('knp_paginator.count', $count);
+        $query->setHint('knp_paginator.count', $count);
 
-    return $query;
-  }
+        return $query;
+    }
 
-  public function getAllForSalesCount($organizationId)
-  {
-    $count = $this->getEntityManager()
-      ->createQuery('SELECT COUNT(h.id) FROM ListsHandlingBundle:Handling h WHERE h.organization_id = :organizationId')
-      ->setParameter(':organizationId', $organizationId)
-      ->getSingleScalarResult();
+    public function getAllForSalesCount($organizationId)
+    {
+        $count = $this->getEntityManager()
+            ->createQuery('SELECT COUNT(h.id) FROM ListsHandlingBundle:Handling h WHERE h.organization_id = :organizationId')
+            ->setParameter(':organizationId', $organizationId)
+            ->getSingleScalarResult();
 
-    return $count;
-  }
+        return $count;
+    }
+
+    /**
+     * Processes sql query depending on filters
+     *
+     * @param \Doctrine\ORM\QueryBuilder $sql
+     * @param mixed[] $filters
+     */
+    public function processFilters(\Doctrine\ORM\QueryBuilder $sql, $filters)
+    {
+        if (sizeof($filters))
+        {
+
+            foreach($filters as $key => $value)
+            {
+                if (!$value)
+                {
+                    continue;
+                }
+                switch($key)
+                {
+                    /*case 'name':
+                        $sql
+                            ->andWhere("o.name LIKE :organizationName");
+
+                        $sql->setParameter(':organizationName', '%' . $value);
+                        break;*/
+                    case 'scope':
+                        if (isset($value[0]) && !$value[0])
+                        {
+                            break;
+                        }
+                        $sql->andWhere('scope.id in (:scopeIds)');
+                        $sql->setParameter(':scopeIds', $value);
+                        break;
+                    case 'city':
+                        if (isset($value[0]) && !$value[0])
+                        {
+                            break;
+                        }
+                        $sql->andWhere('c.id in (:cityIds)');
+                        $sql->setParameter(':cityIds', $value);
+                        break;
+                    case 'users':
+                        if (isset($value[0]) && !$value[0])
+                        {
+                            break;
+                        }
+                        $sql->andWhere('users.id in (:userIds)');
+                        $sql->setParameter(':userIds', $value);
+                        break;
+                }
+            }
+        }
+    }
 }

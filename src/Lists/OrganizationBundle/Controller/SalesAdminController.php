@@ -6,7 +6,9 @@ use Lists\OrganizationBundle\Controller\SalesController as BaseController;
 
 class SalesAdminController extends BaseController
 {
-  protected $filterNamespace = 'organization.sales.filters';
-  protected $filterForm = 'organizationSalesFilterForm';
-  protected $baseRoute = 'lists_sales_organization_index';
+    protected $filterNamespace = 'organization.sales.filters';
+    protected $filterForm = 'organizationSalesFilterForm';
+    protected $baseRoute = 'lists_sales_organization_index';
+
+
 }

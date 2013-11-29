@@ -63,4 +63,66 @@ class AjaxController extends Controller
             'name' => $organization->getName()
         );
     }
+
+    public function organizationTypeAction()
+    {
+        $searchText = $this->get('request')->query->get('q');
+
+        $organizationTypes = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:OrganizationType')
+            ->findAll();
+
+        $result = array();
+
+        foreach ($organizationTypes as $organization)
+        {
+            $result[] = $this->serializeOrganizationType($organization);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Serialize object to json. temporary solution
+     *
+     * @param \Lists\OrganizationBundle\Entity\OrganizationType $organizationType
+     *
+     * @return mixed[]
+     */
+    public function serializeOrganizationType($organizationType)
+    {
+        return array(
+            'value' => $organizationType->getId(),
+            'text' => (string) $organizationType
+        );
+    }
+
+    /**
+     * Saves object to db
+     *
+     * @return mixed[]
+     */
+    public function organizationSaveAction()
+    {
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        $organizationType = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:OrganizationType')
+            ->find($value);
+
+        $organization = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization')
+            ->find($pk);
+
+        $organization->setOrganizationType($organizationType);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($organization);
+        $em->flush();
+
+        $return = array('success' => 1);
+
+        return new Response(json_encode($return));
+    }
 }

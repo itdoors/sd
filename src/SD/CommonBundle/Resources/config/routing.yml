@@ -6,6 +6,14 @@ sd_common_ajax_organization:
     pattern:  /ajax/organization
     defaults: { _controller: SDCommonBundle:Ajax:organization }
 
+sd_common_ajax_organization_save:
+    pattern:  /ajax/organization/save
+    defaults: { _controller: SDCommonBundle:Ajax:organizationSave }
+
 sd_common_ajax_organization_by_id:
     pattern:  /ajax/organization_by_id
     defaults: { _controller: SDCommonBundle:Ajax:organizationById }
+
+sd_common_ajax_organization_type:
+    pattern:  /ajax/organization_type
+    defaults: { _controller: SDCommonBundle:Ajax:organizationType }
