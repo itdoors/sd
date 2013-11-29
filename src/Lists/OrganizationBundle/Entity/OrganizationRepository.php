@@ -84,6 +84,22 @@ class OrganizationRepository extends EntityRepository
                         $sql->andWhere('scope.id in (:scopeIds)');
                         $sql->setParameter(':scopeIds', $value);
                         break;
+                    case 'city':
+                        if (isset($value[0]) && !$value[0])
+                        {
+                            break;
+                        }
+                        $sql->andWhere('c.id in (:cityIds)');
+                        $sql->setParameter(':cityIds', $value);
+                        break;
+                    case 'users':
+                        if (isset($value[0]) && !$value[0])
+                        {
+                            break;
+                        }
+                        $sql->andWhere('users.id in (:userIds)');
+                        $sql->setParameter(':userIds', $value);
+                        break;
                     /*case 'users':
                         if (isset($value[0]) && !$value[0])
                         {
@@ -113,5 +129,22 @@ class OrganizationRepository extends EntityRepository
             ->getSingleScalarResult();
 
         return $count;
+    }
+
+    /**
+     * Searches organization by $q
+     *
+     * @param string $q
+     *
+     * @return mixed[]
+     */
+    public function getSearchQuery($q)
+    {
+        $sql = $this->createQueryBuilder('o')
+            ->where('lower(o.name) LIKE :q')
+            ->setParameter(':q', '%'. $q . '%')
+            ->getQuery();
+
+        return $sql->getResult();
     }
 }

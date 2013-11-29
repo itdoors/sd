@@ -90,4 +90,50 @@ class HandlingResult
     {
         return $this->getName();
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $handlings;
+
+
+    /**
+     * Add handlings
+     *
+     * @param \Lists\HandlingBundle\Entity\Handling $handlings
+     * @return HandlingResult
+     */
+    public function addHandling(\Lists\HandlingBundle\Entity\Handling $handlings)
+    {
+        $this->handlings[] = $handlings;
+    
+        return $this;
+    }
+
+    /**
+     * Remove handlings
+     *
+     * @param \Lists\HandlingBundle\Entity\Handling $handlings
+     */
+    public function removeHandling(\Lists\HandlingBundle\Entity\Handling $handlings)
+    {
+        $this->handlings->removeElement($handlings);
+    }
+
+    /**
+     * Get handlings
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getHandlings()
+    {
+        return $this->handlings;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->handlings = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
 }
