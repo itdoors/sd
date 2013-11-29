@@ -1,3 +1,11 @@
 sd_common_homepage:
     pattern:  /hello/{name}
     defaults: { _controller: SDCommonBundle:Default:index }
+
+sd_common_ajax_organization:
+    pattern:  /ajax/organization
+    defaults: { _controller: SDCommonBundle:Ajax:organization }
+
+sd_common_ajax_organization_by_id:
+    pattern:  /ajax/organization_by_id
+    defaults: { _controller: SDCommonBundle:Ajax:organizationById }

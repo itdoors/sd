@@ -32,7 +32,7 @@ class BaseFilterController extends Controller
         if ($filterForm->get('reset')->isClicked())
         {
             $this->clearFilters();
-            $filterForm = $this->createForm($this->filterForm);
+            $this->redirect($this->generateUrl($this->baseRoute));
         }
 
         return $filterForm;

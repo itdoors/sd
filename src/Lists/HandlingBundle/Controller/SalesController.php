@@ -143,5 +143,14 @@ class SalesController extends BaseController
             'handlingMessageForm' => $handlingMessageForm->createView()
         ));
     }
+
+    public function clearFilters()
+    {
+        $filters = $this->getFilters();
+
+        $organizationId = $filters['organization_id'];
+
+        $this->setFilters(array('organization_id' => $organizationId));
+    }
 }
 
