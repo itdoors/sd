@@ -31,8 +31,11 @@ class SalesController extends BaseController
         $handlingRepository = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:Handling');
 
+        /** @var \SD\UserBundle\Entity\User $user */
+        $user = $this->getUser();
+
         /** @var \Doctrine\ORM\Query $handlingQuery */
-        $handlingQuery = $handlingRepository->getAllForSalesQuery($filters['organization_id']);
+        $handlingQuery = $handlingRepository->getAllForSalesQuery($user->getId(), $filters);
 
         /** @var \Knp\Component\Pager\Paginator $paginator */
         $paginator  = $this->get('knp_paginator');

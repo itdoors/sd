@@ -2,12 +2,12 @@
 
 <script>
     $(document).ready(function(){
-        $('#organizationSalesFilterForm_users, #organizationSalesFilterForm_city, #organizationSalesFilterForm_scope', '').select2({
+        $('#organizationSalesDispatcherFilterForm_users, #organizationSalesDispatcherFilterForm_city, #organizationSalesDispatcherFilterForm_scope', '').select2({
             placeholder: "Select a State",
             allowClear: true
         });
 
-        $("#organizationSalesFilterForm_organization").select2({
+        $("#organizationSalesDispatcherFilterForm_organization").select2({
             placeholder: "Search for a movie",
             minimumInputLength: 3,
             ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
@@ -70,12 +70,16 @@
 				
 				{{ form_start(filterForm,
 					{
-						'action': path('lists_sales_organization_filter'),
+						'action': path('lists_sales_dispatcher_organization_filter'),
 						'attr': {'novalidate': 'novalidate', 'class': 'form-inline', 'role': 'form'}
 					}) 
 				}}
 					{{ form_errors(filterForm) }}
-					<div class="form-group col-md-3">
+                    <div class="form-group col-md-3">
+                        {#{{ form_label(filterForm.city, 'Enter City', {'attr': {'class': 'sr-only'}}) }}#}
+                        {{ form_widget(filterForm.organization, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Organization name', 'multiple': 'multiple'}}) }}
+                    </div>
+					<div class="form-group col-md-3">	
 						{#{{ form_label(filterForm.city, 'Enter City', {'attr': {'class': 'sr-only'}}) }}#}
 						{{ form_widget(filterForm.city, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter City', 'multiple': 'multiple'}}) }}					
 					</div>

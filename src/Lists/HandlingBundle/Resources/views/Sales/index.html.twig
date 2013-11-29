@@ -49,7 +49,11 @@
                 </thead>
                 {% for item in pagination %}
                     <tr {% if loop.index is odd %}class="color"{% endif %}>
-                        <td>{{ item.handlingId|e }}</td>
+                        <td>
+                            <a href="{{ path('lists_sales_handling_show', { id: item.handlingId } ) }}">
+                                {{ item.handlingId|e }}
+                            </a>
+                        </td>
                         <td>{{ item.organizationName|e }}</td>
                         <td>{{ item.handlingCreatedatetime|date("d.M.yy, H:m") }}</td>
                         <td>{{ item.handlingLastHandlingDate|date("d.M.yy, H:m") }}</td>

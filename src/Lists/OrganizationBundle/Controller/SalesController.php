@@ -13,6 +13,8 @@ class SalesController extends BaseController
     protected $filterNamespace = 'organization.sales.filters';
     protected $filterForm = 'organizationSalesFilterForm';
     protected $baseRoute = 'lists_sales_organization_index';
+    protected $baseRoutePrefix = 'sales';
+    protected $baseTemplate = 'Sales';
 
     public function indexAction()
     {
@@ -39,9 +41,12 @@ class SalesController extends BaseController
             20
         );
 
-      return $this->render('ListsOrganizationBundle:Sales:index.html.twig', array(
+      return $this->render('ListsOrganizationBundle:' . $this->baseTemplate. ':index.html.twig', array(
           'pagination' => $pagination,
-          'filterForm' => $filterForm->createView()
+          'filterForm' => $filterForm->createView(),
+          'filterFormName' => $this->filterForm,
+          'baseTemplate' => $this->baseTemplate,
+          'baseRoutePrefix' => $this->baseRoutePrefix,
       ));
     }
 
@@ -67,7 +72,7 @@ class SalesController extends BaseController
             )));
         }
 
-        return $this->render('ListsOrganizationBundle:Sales:new.html.twig', array(
+        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate. ':new.html.twig', array(
             'filterForm' => $form->createView()
         ));
     }
@@ -82,7 +87,7 @@ class SalesController extends BaseController
             ->getRepository('ListsOrganizationBundle:Organization')
             ->find($id);
 
-        return $this->render('ListsOrganizationBundle:Sales:show.html.twig', array(
+        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate. ':show.html.twig', array(
             'organization' => $organization
         ));
     }
