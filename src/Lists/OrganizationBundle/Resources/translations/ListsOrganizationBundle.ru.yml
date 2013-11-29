@@ -12,6 +12,43 @@ Name: Наименование
 Shortname: Короткое
 Scope: Деятельность
 Enter Scope: Введите деятельность
+Select Organization scope: Выберите деятельность
+
+Organization name: Название организации
+Full Organization name: Полное наименование
+Enter organization name: Введите название организации
+
+Organization short name: Сокращенное название
+Enter organization short name: Введите короткое название
+
+Organization type: Тип организации
+Enter Organization type: Введите тип организации
+Select Organization type: Выберите тип организации
+
+Legal Address: Юридический адрес
+Enter Legal Address: Введите юридический адрес
+
+Select City: Выберите город
+Mailing Address: Почтовый адрес
+Enter Mailing Address: Введите почтовый адрес
+Enter Physical Address: Введите физический адрес
+Physical Address: Физический адрес
+Enter Phone: Введите телефон
+Phone: Телефон
+Enter INN Certificate: Введите номер свидетельства
+INN Certificate: Номер свидетельства
+Enter INN: Введите Индивидульный Налоговый Номер
+INN: ИНН
+
+
+Enter Organization Site: Введите адрес сайта
+Site: Сайт
+
+Сompany details: Реквизиты компании
+Enter edrpou: Введите код ЄДРПОУ (ЗКПО)
+Edrpou: ЄДРПОУ
+
+
 
 Actions: Действие
 Address: Адрес
@@ -29,6 +66,13 @@ Enter Manager: Введите менеджера
 Filters: Фильтры
 Clear Filter: Очистить
 Filter: Фильтр
+General information: Общая информация
+for example: например
+Сontact details: Контактные данные
 
+You have some form errors. Please check below.: В форме обнаружены ошибки. Пожалуйста, проверьте.
+This field is required.: Это поле обязательно к заполнению
+Save: Сохранить
+Cancel: Отмена
 
 
