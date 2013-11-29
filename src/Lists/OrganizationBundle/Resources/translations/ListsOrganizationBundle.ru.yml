@@ -35,7 +35,7 @@ Enter Physical Address: Введите физический адрес
 Physical Address: Физический адрес
 Enter Phone: Введите телефон
 Phone: Телефон
-Enter INN Certificate: Введите номер свидетельства
+Enter INN Certificate: Введите номер свидетельства НДС
 INN Certificate: Номер свидетельства
 Enter INN: Введите Индивидульный Налоговый Номер
 INN: ИНН
@@ -48,7 +48,10 @@ Site: Сайт
 Enter edrpou: Введите код ЄДРПОУ (ЗКПО)
 Edrpou: ЄДРПОУ
 
-
+Show Organization: Просмотр организации
+Organization <small>show organization</small>: Организация <small>просмотр сведений</small>
+Managers: Менеджеры
+Contracts: Контракты
 
 Actions: Действие
 Address: Адрес
@@ -62,6 +65,21 @@ No matches found: Совпадений ненайдено
 Managers: Менеджеры
 Manager: Менеджер
 Enter Manager: Введите менеджера
+Managers on organization: Список менеджеров, которые имеют доступ к данной организации и могут создавать Обращения. При создании организации, создавший менеджер автоматически добавляется в этот список.
+Contacts on sales organization: Список контактных лиц по данной организации. К которым Вы имеете доступ.
+Contacts on sales dispatcher: Список контактных лиц по данной организации в разрезе команды.
+Contacts on sales admin: Список контактных лиц по данной организации.
+
+FirstName: Имя
+LastName: Фамилия
+SurName: Отчество
+Position: Должность
+Phone: Телефон
+Mobile: Мобильный
+Email: Email
+Birthday: Дата рождения
+Description: Заметки
+Creator: Кто создал
 
 Filters: Фильтры
 Clear Filter: Очистить
@@ -70,9 +88,15 @@ General information: Общая информация
 for example: например
 Сontact details: Контактные данные
 
+FirstName, LastName: Имя, Фамилия
+Mobile: Мобильный
+Email: Email
+
 You have some form errors. Please check below.: В форме обнаружены ошибки. Пожалуйста, проверьте.
 This field is required.: Это поле обязательно к заполнению
 Save: Сохранить
 Cancel: Отмена
+Add New: Добавить
+Delete: Удалить
 
 
