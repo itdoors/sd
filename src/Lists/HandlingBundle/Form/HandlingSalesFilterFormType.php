@@ -52,7 +52,8 @@ class HandlingSalesFilterFormType extends AbstractType
         ;
 
         $builder
-            ->add('save', 'submit');
+            ->add('save', 'submit')
+			->add('reset', 'submit');
     }
     
     /**
