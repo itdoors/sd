@@ -40,7 +40,6 @@ class OrganizationSalesFormType extends AbstractType
                 'class'=>'Lists\LookupBundle\Entity\Lookup',
                 'property'=>'name'
             ))
-            ->add('rs')
             ->add('edrpou')
             ->add('inn')
             ->add('certificate')
@@ -59,7 +58,8 @@ class OrganizationSalesFormType extends AbstractType
         ;
 
         $builder
-            ->add('create', 'submit');
+            ->add('save', 'submit')
+            ->add('cancel', 'submit');
     }
 
     /**

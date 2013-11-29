@@ -13,6 +13,12 @@ class OrganizationSalesFilterFormType extends AbstractType
     public function __construct($container)
     {
         $this->container = $container;
+
+        /** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
+        $this->lr = $this->container->get('lists_lookup.repository');
+
+        /** @var \SD\UserBundle\Entity\UserRepository $ur */
+        $this->ur = $this->container->get('sd_user.repository');
     }
 
     /**
@@ -21,17 +27,7 @@ class OrganizationSalesFilterFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
-        $lr = $this->container->get('lists_lookup.repository');
-
-        /** @var \SD\UserBundle\Entity\UserRepository $ur */
-        $ur = $this->container->get('sd_user.repository');
-
         $builder
-            ->add('mpk')
-            ->add('name')
-            ->add('address')
-            ->add('contacts')
             ->add('city', 'entity', array(
                 'class'=>'Lists\CityBundle\Entity\City',
                 'multiple' => true,
@@ -43,14 +39,14 @@ class OrganizationSalesFilterFormType extends AbstractType
                 'property'=>'name',
                 'mapped' => false,
                 'multiple' => true,
-                'query_builder' => $lr->getOnlyScopeQuery()
+                'query_builder' => $this->lr->getOnlyScopeQuery()
             ))
             ->add('users', 'entity', array(
                 'class'=>'SD\UserBundle\Entity\User',
                 'mapped' => false,
                 'multiple' => true,
                 'property'=>'fullname',
-                'query_builder' => $ur->getOnlyStaff()
+                'query_builder' => $this->ur->getOnlyStaff()
             ))
         ;
 

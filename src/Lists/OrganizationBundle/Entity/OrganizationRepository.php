@@ -12,43 +12,121 @@ use Doctrine\ORM\EntityRepository;
  */
 class OrganizationRepository extends EntityRepository
 {
-    public function getAllForSalesQuery($userId, $filters)
+    public function getAllForSalesQuery($userIds, $filters)
     {
+        if (!is_array($userIds) && $userIds)
+        {
+            $userIds = array($userIds);
+        }
+
         /** @var \Doctrine\ORM\QueryBuilder $sql*/
-        $sql = $this->createQueryBuilder('o')
+        $sql = $this->createQueryBuilder('o');
+
+        /** @var \Doctrine\ORM\QueryBuilder $sqlCount */
+        $sqlCount = $this->createQueryBuilder('o');
+
+        $this->processSelect($sql);
+        $this->processCount($sqlCount);
+
+        $this->processBaseQuery($sql);
+        $this->processBaseQuery($sqlCount);
+
+
+        if (sizeof($userIds))
+        {
+            $this->processUserQuery($sql, $userIds);
+            $this->processUserQuery($sqlCount, $userIds);
+        }
+
+        $this->processFilters($sql, $filters);
+        $this->processFilters($sqlCount, $filters);
+
+        $this->processOrdering($sql);
+
+        $query = $sql->getQuery();
+
+        $count = $sqlCount->getQuery()->getSingleScalarResult();
+
+        $query->setHint('knp_paginator.count', $count);
+
+        return $query;
+    }
+
+    /**
+     * Processes sql query. adding select
+     *
+     * @param \Doctrine\ORM\QueryBuilder $sql
+     */
+    public function processSelect($sql)
+    {
+        $sql
             ->select('o.id as organizationId', 'o.name as organizationName')
             ->addSelect('c.name as cityName')
             ->addSelect('r.name as regionName')
             ->addSelect('scope.name as scopeName')
             ->addSelect("
-            array_to_string(
-               ARRAY(
-                  SELECT
-                    CONCAT(CONCAT(u.lastName, ' '), u.firstName)
-                  FROM
-                    SDUserBundle:User u
-                  LEFT JOIN u.organizations ou
-                  WHERE ou.id = o.id
-               ), ','
-             ) as fullNames
-            ")
+                array_to_string(
+                   ARRAY(
+                      SELECT
+                        CONCAT(CONCAT(u.lastName, ' '), u.firstName)
+                      FROM
+                        SDUserBundle:User u
+                      LEFT JOIN u.organizations ou
+                      WHERE ou.id = o.id
+                   ), ','
+                 ) as fullNames
+                ");
+    }
+
+
+    /**
+     * Processes sql query. adding select
+     *
+     * @param \Doctrine\ORM\QueryBuilder $sql
+     */
+    public function processCount($sql)
+    {
+        $sql
+            ->select('COUNT(o.id) as orgcount');
+
+    }
+
+    /**
+     * Processes sql query. adding base query
+     *
+     * @param \Doctrine\ORM\QueryBuilder $sql
+     */
+    public function processBaseQuery($sql)
+    {
+        $sql
             ->leftJoin('o.city', 'c')
             ->leftJoin('c.region', 'r')
-            ->leftJoin('o.scope', 'scope')
+            ->leftJoin('o.scope', 'scope');
+    }
+
+    /**
+     * Processes sql query. adding users query
+     *
+     * @param \Doctrine\ORM\QueryBuilder $sql
+     * @param int[] $userIds
+     */
+    public function processUserQuery($sql, $userIds)
+    {
+        $sql
             ->leftJoin('o.users', 'users')
-            ->where('users.id = :userId')
-            ->setParameter(':userId', $userId)
+            ->where('users.id in (:userIds)')
+            ->setParameter(':userIds', $userIds);
+    }
+
+    /**
+     * Processes sql query. adding users query
+     *
+     * @param \Doctrine\ORM\QueryBuilder $sql
+     */
+    public function processOrdering($sql)
+    {
+        $sql
             ->orderBy('o.name', 'ASC');
-
-        $this->processFilters($sql, $filters);
-
-        $query = $sql->getQuery();
-
-        $count = $this->getAllForSalesCount($userId, $filters);
-
-        $query->setHint('knp_paginator.count', $count);
-
-        return $query;
     }
 
     /**
@@ -70,11 +148,11 @@ class OrganizationRepository extends EntityRepository
                 }
                 switch($key)
                 {
-                    case 'name':
+                    case 'organization':
                         $sql
-                            ->andWhere("o.name LIKE :organizationName");
+                            ->andWhere("o.id = :organizationId");
 
-                        $sql->setParameter(':organizationName', '%' . $value);
+                        $sql->setParameter(':organizationId', $value);
                         break;
                     case 'scope':
                         if (isset($value[0]) && !$value[0])
@@ -110,25 +188,6 @@ class OrganizationRepository extends EntityRepository
                 }
             }
         }
-    }
-
-    public function getAllForSalesCount($userId, $filters)
-    {
-        $count = $this->getEntityManager()
-            ->createQuery('
-                SELECT
-                    COUNT(o.id)
-                FROM
-                    ListsOrganizationBundle:Organization o
-                INNER JOIN
-                    o.users u
-                WHERE
-                    u.id = :userId
-                ')
-            ->setParameter(':userId', $userId)
-            ->getSingleScalarResult();
-
-        return $count;
     }
 
     /**

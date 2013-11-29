@@ -21,3 +21,11 @@ lists_sales_organization_filter_clear:
 lists_sales_organization_ajax_index:
     pattern:  /lists/sales/organization/ajax/index
     defaults: { _controller: ListsOrganizationBundle:Sales:ajaxIndex }
+
+lists_sales_dispatcher_organization_index:
+    pattern:  /lists/salesdispatcher/organization/index
+    defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:index }
+
+lists_sales_dispatcher_organization_filter:
+    pattern:  /lists/salesdispatcher/organization/filter
+    defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:filter }
