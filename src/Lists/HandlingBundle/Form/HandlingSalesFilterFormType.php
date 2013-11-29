@@ -28,10 +28,7 @@ class HandlingSalesFilterFormType extends AbstractType
         $ur = $this->container->get('sd_user.repository');
 
         $builder
-            ->add('organization_id', 'entity', array(
-                'class'=>'Lists\OrganizationBundle\Entity\Organization',
-                'property'=>'name'
-            ))
+            ->add('organization_id', 'hidden')
             ->add('city', 'entity', array(
                 'class'=>'Lists\CityBundle\Entity\City',
                 'mapped' => false,
@@ -43,9 +40,10 @@ class HandlingSalesFilterFormType extends AbstractType
                 'mapped' => false,
                 'query_builder' => $lr->getOnlyScopeQuery()
             ))
-            ->add('user', 'entity', array(
+            ->add('users', 'entity', array(
                 'class'=>'SD\UserBundle\Entity\User',
                 'mapped' => false,
+                'multiple' => true,
                 'property'=>'fullname',
                 'query_builder' => $ur->getOnlyStaff()
             ))
@@ -53,7 +51,7 @@ class HandlingSalesFilterFormType extends AbstractType
 
         $builder
             ->add('save', 'submit')
-			->add('reset', 'submit');
+			      ->add('reset', 'submit');
     }
     
     /**
