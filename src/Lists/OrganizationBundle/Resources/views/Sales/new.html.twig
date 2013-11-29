@@ -5,7 +5,7 @@
 	<ul class="page-breadcrumb breadcrumb">
 		<li>
 			<i class="fa fa-home"></i>
-			<a href="{{ path('sd_dashboard_homepage') }}" titl="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a> 
+			<a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
 			<i class="fa fa-angle-right"></i>
 		</li>
 		<li><a href="{{ path('lists_sales_organization_new') }}" title="{% trans %}Create Organization{% endtrans %}">{% trans %}Create Organization{% endtrans %}</a></li>						
@@ -21,7 +21,7 @@
 {#Для оранизаций нужно фиксировать Создателя и Дату создания  #}
 	<div class="row">
 		<div class="col-md-12">
-		
+
 		<div class="portlet box blue">
 			<div class="portlet-title">
 				<div class="caption"><i class="fa fa-reorder"></i>{% trans %}Create Organization{% endtrans %}</div>
@@ -31,7 +31,14 @@
 			</div>
 			<div class="portlet-body form">
 			<!-- BEGIN FORM-->
-				<form class="horizontal-form" action="#">
+                {% form_theme filterForm 'SDCommonBundle:Form:form_errors.html.twig' %}
+                {{ form_start(filterForm,
+                    {
+                        'action': path('lists_sales_organization_new'),
+                        'attr': {'novalidate': 'novalidate', 'class' : 'horizontal-form'}
+                    })
+                }}
+                {{ form_errors(filterForm) }}
 					<div class="form-body">
 						<div class="alert alert-danger display-hide">
 							<button class="close" data-close="alert"></button>
@@ -39,19 +46,22 @@
 						</div>
 						<h3 class="form-section">{% trans %}General information{% endtrans %}</h3>
 						<div class="row">
-							<div class="col-md-6 has-error">
+							<div class="col-md-6
+							{% if filterForm.name.vars.errors|length %}
+							    has-error
+							{% endif %}">
 								<div class="form-group">
-									{{ form_label(filterForm.name, 'Organization name <span class="required">*</span>', {'attr': {'class': 'control-label'}}) }}
-									{{ form_widget(filterForm.name, {'attr': {'class': 'control-label', 'data-required': '1', 'placeholder': 'Enter organization name'}}) }}																										
+                                    {{ form_errors(filterForm.name) }}
+                                    {{ form_label(filterForm.name, 'Organization name *', {'attr': {'class': 'control-label'}}) }}
+									{{ form_widget(filterForm.name, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter organization name'}}) }}
 									<span class="help-block">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп"</span>
-									{# if has-error <span class="help-block">{% trans %}This field is required.{% endtrans %}</span> #}
 								</div>
 							</div>
 							<!--/span-->
 							<div class="col-md-6">
 								<div class="form-group">
 									{{ form_label(filterForm.shortDescription, 'Organization short name', {'attr': {'class': 'control-label'}}) }}
-									{{ form_widget(filterForm.shortDescription, {'attr': {'class': 'control-label', 'placeholder': 'Enter organization short name'}}) }}																										
+									{{ form_widget(filterForm.shortDescription, {'attr': {'class': 'form-control', 'placeholder': 'Enter organization short name'}}) }}
 									<span class="help-block">{% trans %}for example{% endtrans %}: Impel Griffin</span>
 								</div>
 							</div>
@@ -87,8 +97,12 @@
 								</div>
 							</div>
 							<!--/span-->
-							<div class="col-md-6">
+							<div class="col-md-6
+                                {% if filterForm.name.vars.errors|length %}
+                                    has-error
+                                {% endif %}">
 								<div class="form-group">
+                                    {{ form_errors(filterForm.address) }}
 									{{ form_label(filterForm.address, 'Legal Address', {'attr': {'class': 'control-label'}}) }}
 									{{ form_widget(filterForm.address, {'attr': {'class': 'form-control'}}) }}																										
 									<span class="help-block">{% trans %}Enter Legal Address{% endtrans %}</span>
@@ -106,23 +120,23 @@
 								</div>						
 							</div>
 							<!--/span-->
-							<div class="col-md-6">
+							{#<div class="col-md-6">
 								<div class="form-group">
 									{{ form_label(filterForm.physicalAddress, 'Physical Address', {'attr': {'class': 'control-label'}}) }}
-									{{ form_widget(filterForm.physicalAddress, {'attr': {'class': 'form-control'}}) }}																										
+									{{ form_widget(filterForm.physicalAddress, {'attr': {'class': 'form-control'}}) }}
 									<span class="help-block">{% trans %}Enter Physical Address{% endtrans %}</span>
 								</div>
-							</div>
+							</div>#}
 							<!--/span-->
 						</div>
 						<!--/row--> 
 						<div class="row">
 							<div class="col-md-6">
-								<div class="form-group">
+                                {#<div class="form-group">
 									{{ form_label(filterForm.phone, 'Phone', {'attr': {'class': 'control-label'}}) }}
-									{{ form_widget(filterForm.phone, {'attr': {'class': 'form-control'}}) }}																										
+									{{ form_widget(filterForm.phone, {'attr': {'class': 'form-control'}}) }}
 									<span class="help-block">{% trans %}Enter Phone{% endtrans %}</span>
-								</div>						
+								</div>#}
 							</div>
 							<!--/span-->
 							<div class="col-md-6">
@@ -178,8 +192,8 @@
 							{{ form_widget(filterForm.save, { 'label': 'Save', 'attr': {'class': 'btn blue'}} ) }}
 							{{ form_widget(filterForm.cancel, { 'label': 'Cancel', 'attr': {'class': 'btn default'}} ) }}								
 						</div>
-					</form>
-					<!-- END FORM--> 
+                    {{ form_end(filterForm) }}
+					<!-- END FORM-->
 				</div>
 			</div>
 		</div>
