@@ -95,11 +95,6 @@ class Handling
     private $createdate;
 
     /**
-     * @var \Lists\HandlingBundle\Entity\Organization
-     */
-    private $organization;
-
-    /**
      * @var \Lists\HandlingBundle\Entity\HandlingResult
      */
     private $result;
@@ -499,29 +494,6 @@ class Handling
     }
 
     /**
-     * Set organization
-     *
-     * @param \Lists\HandlingBundle\Entity\Organization $organization
-     * @return Handling
-     */
-    public function setOrganization(\Lists\HandlingBundle\Entity\Organization $organization = null)
-    {
-        $this->organization = $organization;
-    
-        return $this;
-    }
-
-    /**
-     * Get organization
-     *
-     * @return \Lists\HandlingBundle\Entity\Organization 
-     */
-    public function getOrganization()
-    {
-        return $this->organization;
-    }
-
-    /**
      * Set result
      *
      * @param \Lists\HandlingBundle\Entity\HandlingResult $result
@@ -684,5 +656,33 @@ class Handling
     public function getUsers()
     {
         return $this->users;
+    }
+    /**
+     * @var \Lists\OrganizationBundle\Entity\Organization
+     */
+    private $organization;
+
+
+    /**
+     * Set organization
+     *
+     * @param \Lists\OrganizationBundle\Entity\Organization $organization
+     * @return Handling
+     */
+    public function setOrganization(\Lists\OrganizationBundle\Entity\Organization $organization = null)
+    {
+        $this->organization = $organization;
+    
+        return $this;
+    }
+
+    /**
+     * Get organization
+     *
+     * @return \Lists\OrganizationBundle\Entity\Organization 
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
     }
 }

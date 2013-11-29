@@ -128,4 +128,12 @@ class HandlingResult
     {
         return $this->handlings;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->handlings = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
 }
