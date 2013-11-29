@@ -58,7 +58,12 @@
             <tbody>
             {% for item in pagination %}
                 <tr {% if loop.index is odd %}class="color"{% endif %}>
-                    <td>{{ item.organizationId|e }}</td>
+                    <td>
+                        <a
+                            href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_show', { id: item.organizationId }) }}">
+                            {{ item.organizationId|e }}
+                        </a>
+                    </td>
                     <td>{{ item.organizationName|e }}</td>
                     <td>{{ item.cityName|e }}</td>
                     <td>{{ item.regionName|e }}</td>

@@ -117,6 +117,17 @@ class AjaxController extends Controller
             ->find($pk);
 
         $organization->setOrganizationType($organizationType);
+
+        /*$validator = $this->get('validator');
+        $errors = $validator->validate($organization);
+
+        if (sizeof($errors))
+        {
+            $return = array('msg' => (string) $errors);
+
+            return new Response(json_encode($return));
+        }*/
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($organization);
         $em->flush();
