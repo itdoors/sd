@@ -68,6 +68,18 @@ Lists\OrganizationBundle\Entity\Organization:
             length: 125
             fixed: false
             nullable: true
+        organization_type_id:
+            type: integer
+            nullable: true
+            column: organization_type_id
+        city_id:
+            type: integer
+            nullable: true
+            column: city_id
+        scope_id:
+            type: integer
+            nullable: true
+            column: scope_id
     manyToOne:
         city:
             targetEntity: Lists\CityBundle\Entity\City

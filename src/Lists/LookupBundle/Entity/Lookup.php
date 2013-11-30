@@ -80,4 +80,14 @@ class Lookup
     {
         return $this->lukey;
     }
+
+    /**
+     * __toStrong
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }
