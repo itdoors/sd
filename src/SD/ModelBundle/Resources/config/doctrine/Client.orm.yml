@@ -1,0 +1,81 @@
+SD\ModelBundle\Entity\Client:
+    type: entity
+    table: client
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        phone:
+            type: string
+            length: 12
+            fixed: false
+            nullable: true
+        mobilephone:
+            type: string
+            length: 12
+            fixed: false
+            nullable: false
+        showAddedField:
+            type: boolean
+            nullable: false
+            column: show_added_field
+        isMailed:
+            type: boolean
+            nullable: false
+            column: is_mailed
+    manyToMany:
+        organization:
+            targetEntity: Organization
+            cascade: {  }
+            mappedBy: null
+            inversedBy: client
+            joinTable:
+                name: client_organization
+                joinColumns:
+                    -
+                        name: client_id
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    -
+                        name: organization_id
+                        referencedColumnName: id
+            orderBy: null
+        departments:
+            targetEntity: Departments
+            cascade: {  }
+            mappedBy: null
+            inversedBy: client
+            joinTable:
+                name: client_departments
+                joinColumns:
+                    -
+                        name: client_id
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    -
+                        name: departments_id
+                        referencedColumnName: id
+            orderBy: null
+    manyToOne:
+        organizationColumn:
+            targetEntity: Organization
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                organization_column_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SfGuardUser
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

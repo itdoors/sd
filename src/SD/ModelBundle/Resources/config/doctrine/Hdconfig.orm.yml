@@ -1,0 +1,24 @@
+SD\ModelBundle\Entity\Hdconfig:
+    type: entity
+    table: hdconfig
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        value:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        description:
+            type: text
+            nullable: true
+    lifecycleCallbacks: {  }

@@ -1,0 +1,21 @@
+SD\ModelBundle\Entity\HandlingMessageType:
+    type: entity
+    table: handling_message_type
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        name:
+            type: string
+            length: 128
+            fixed: false
+            nullable: false
+        slug:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+    lifecycleCallbacks: {  }

@@ -1,0 +1,35 @@
+SD\ModelBundle\Entity\District:
+    type: entity
+    table: district
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        population:
+            type: float
+            nullable: true
+        square:
+            type: float
+            nullable: true
+        density:
+            type: float
+            nullable: true
+    manyToOne:
+        region:
+            targetEntity: Region
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                region_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

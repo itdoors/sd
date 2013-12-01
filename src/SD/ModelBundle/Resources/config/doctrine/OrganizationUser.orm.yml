@@ -1,0 +1,30 @@
+SD\ModelBundle\Entity\OrganizationUser:
+    type: entity
+    table: organization_user
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+    manyToOne:
+        organization:
+            targetEntity: Organization
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                organization_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SfGuardUser
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

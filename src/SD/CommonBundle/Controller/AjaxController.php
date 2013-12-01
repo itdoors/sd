@@ -4,6 +4,7 @@ namespace SD\CommonBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class AjaxController extends Controller
@@ -69,6 +70,29 @@ class AjaxController extends Controller
         $repository = $this->container->get('lists_lookup.repository');
 
         $objects = $repository->getOnlyScopeQuery()
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object)
+        {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    public function userAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        /** @var \SD\UserBundle\Entity\UserRepository $repository */
+        $repository = $this->container->get('sd_user.repository');
+
+        $objects = $repository->getOnlyStaff()
+            ->andWhere('lower(u.firstName) LIKE :q OR lower(u.lastName) LIKE :q')
+            ->setParameter(':q', $searchText . '%')
             ->getQuery()
             ->getResult();
 
@@ -201,5 +225,114 @@ class AjaxController extends Controller
         }
 
         return $message;
+    }
+
+    /**
+     * Renders form
+     */
+    public function formAction(Request $request)
+    {
+        $formName = $request->request->get('formName');
+
+        $form = $this->createForm($formName);
+
+        $defaultData = $request->request->get('defaultData');
+        $postFunction = $request->request->get('postFunction');
+        $postTargetId = $request->request->get('postTargetId');
+        $targetId = $request->request->get('targetId');
+
+        if (sizeof($defaultData))
+        {
+            foreach ($defaultData as $key => $default)
+            {
+                $form->add($key, 'hidden', array(
+                    'data' => $default
+                ));
+            }
+        }
+
+        $form->handleRequest($request);
+
+        $result = array(
+            'error' => 1,
+            'html' => ''
+        );
+
+        if ($form->isValid())
+        {
+            $method = $formName . 'Save';
+
+            $this->$method($form);
+
+            unset($result['error']);
+
+            $result['success'] = true;
+            $result['postFunction'] = $postFunction;
+            $result['postTargetId'] = $postTargetId;
+            $result['targetId'] = $targetId;
+        }
+
+
+        $result['html'] = $this->renderView('SDCommonBundle:AjaxForm:' . $formName . '.html.twig', array(
+                'form' => $form->createView(),
+                'formName' => $formName,
+                'postFunction' => $postFunction,
+                'postTargetId' => $postTargetId,
+                'targetId' => $targetId
+            ));
+
+        return new Response(json_encode($result));
+    }
+
+    public function organizationUserFormSave($form)
+    {
+        $data = $form->getData();
+
+        $organization = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization')
+            ->find($data['organizationId']);
+
+        $user = $this->getDoctrine()
+            ->getRepository('SDUserBundle:User')
+            ->find($data['user']);
+
+        $organization->addUser($user);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($organization);
+        $em->flush();
+
+        return true;
+    }
+
+    public function deleteAction()
+    {
+        $params = $this->get('request')->request->get('params');
+
+        $method = $params['model'] . 'Delete';
+
+        $this->$method($params);
+
+        return new Response('');
+    }
+
+    public function OrganizationUserDelete($params)
+    {
+        $organizationId = $params['organizationId'];
+        $userId = $params['userId'];
+
+        $organization = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization')
+            ->find($organizationId);
+
+        $user = $this->getDoctrine()
+            ->getRepository('SDUserBundle:User')
+            ->find($userId);
+
+        $organization->removeUser($user);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($organization);
+        $em->flush();
     }
 }

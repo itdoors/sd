@@ -1,0 +1,21 @@
+SD\ModelBundle\Entity\Lookup:
+    type: entity
+    table: lookup
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        lukey:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+    lifecycleCallbacks: {  }

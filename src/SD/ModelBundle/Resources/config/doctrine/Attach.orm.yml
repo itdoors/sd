@@ -1,0 +1,31 @@
+SD\ModelBundle\Entity\Attach:
+    type: entity
+    table: attach
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        filename:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        filepath:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+    manyToOne:
+        comments:
+            targetEntity: Comments
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                comments_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

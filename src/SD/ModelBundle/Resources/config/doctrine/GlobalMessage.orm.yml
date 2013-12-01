@@ -1,0 +1,32 @@
+SD\ModelBundle\Entity\GlobalMessage:
+    type: entity
+    table: global_message
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        description:
+            type: text
+            nullable: true
+        createdatetime:
+            type: datetime
+            nullable: true
+    manyToOne:
+        user:
+            targetEntity: SfGuardUser
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

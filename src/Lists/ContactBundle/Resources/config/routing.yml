@@ -1,0 +1,3 @@
+lists_sales_contact_index:
+    pattern:  /lists/sales/contact/index
+    defaults: { _controller: ListsContactBundle:Sales:index }

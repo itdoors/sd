@@ -1,3 +1,7 @@
+lists_contact:
+    resource: "@ListsContactBundle/Resources/config/routing.yml"
+    prefix:   /
+
 lists_team:
     resource: "@ListsTeamBundle/Resources/config/routing.yml"
     prefix:   /

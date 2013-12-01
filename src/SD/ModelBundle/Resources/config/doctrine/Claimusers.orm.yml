@@ -1,0 +1,38 @@
+SD\ModelBundle\Entity\Claimusers:
+    type: entity
+    table: claimusers
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        userkey:
+            type: string
+            length: 20
+            fixed: false
+            nullable: false
+        isread:
+            type: boolean
+            nullable: true
+    manyToOne:
+        claim:
+            targetEntity: Claim
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                claim_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SfGuardUser
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

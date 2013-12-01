@@ -1,0 +1,35 @@
+SD\ModelBundle\Entity\Region:
+    type: entity
+    table: region
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        name:
+            type: string
+            length: 100
+            fixed: false
+            nullable: false
+        square:
+            type: float
+            nullable: true
+        population:
+            type: float
+            nullable: true
+        flag:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+    manyToMany:
+        companystructure:
+            targetEntity: Companystructure
+            cascade: {  }
+            mappedBy: region
+            inversedBy: null
+            joinTable: null
+            orderBy: null
+    lifecycleCallbacks: {  }

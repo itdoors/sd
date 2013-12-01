@@ -1,0 +1,17 @@
+SD\ModelBundle\Entity\FosUserGroup:
+    type: entity
+    table: fos_user_group
+    fields:
+        userId:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            column: user_id
+        groupId:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            column: group_id
+    lifecycleCallbacks: {  }

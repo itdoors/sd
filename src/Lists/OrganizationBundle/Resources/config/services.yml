@@ -2,6 +2,7 @@ parameters:
     lists_organization.sales.filter.form.class: Lists\OrganizationBundle\Form\OrganizationSalesFilterFormType
     lists_organization.sales.dispatcher.filter.form.class: Lists\OrganizationBundle\Form\OrganizationSalesDispatcherFilterFormType
     lists_organization.form.sales.class: Lists\OrganizationBundle\Form\OrganizationSalesFormType
+    lists_organization.form.user.class: Lists\OrganizationBundle\Form\OrganizationUserFormType
 
 services:
   lists_organization.form.organizationFilterForm:
@@ -19,6 +20,9 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: organizationSalesForm }
-#    lists_organization.example:
-#        class: %lists_organization.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+
+  lists_organization.form.organizationUserForm:
+        class: %lists_organization.form.user.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: organizationUserForm }

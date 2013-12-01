@@ -1,0 +1,142 @@
+SD\ModelBundle\Entity\SfGuardUser:
+    type: entity
+    table: sf_guard_user
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        firstName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: first_name
+        lastName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: last_name
+        middleName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: middle_name
+        position:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        emailAddress:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: email_address
+        username:
+            type: string
+            length: 128
+            fixed: false
+            nullable: false
+        algorithm:
+            type: string
+            length: 128
+            fixed: false
+            nullable: false
+        salt:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+        password:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+        isActive:
+            type: boolean
+            nullable: true
+            column: is_active
+        isSuperAdmin:
+            type: boolean
+            nullable: true
+            column: is_super_admin
+        lastLogin:
+            type: datetime
+            nullable: true
+            column: last_login
+        createdAt:
+            type: datetime
+            nullable: false
+            column: created_at
+        updatedAt:
+            type: datetime
+            nullable: false
+            column: updated_at
+        photo:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+        about:
+            type: text
+            nullable: true
+        isBlocked:
+            type: boolean
+            nullable: true
+            column: is_blocked
+        isFired:
+            type: boolean
+            nullable: true
+            column: is_fired
+        birthday:
+            type: date
+            nullable: true
+    manyToMany:
+        group:
+            targetEntity: SfGuardGroup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: user
+            joinTable:
+                name: sf_guard_user_group
+                joinColumns:
+                    -
+                        name: user_id
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    -
+                        name: group_id
+                        referencedColumnName: id
+            orderBy: null
+        permission:
+            targetEntity: SfGuardPermission
+            cascade: {  }
+            mappedBy: null
+            inversedBy: user
+            joinTable:
+                name: sf_guard_user_permission
+                joinColumns:
+                    -
+                        name: user_id
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    -
+                        name: permission_id
+                        referencedColumnName: id
+            orderBy: null
+    manyToOne:
+        sex:
+            targetEntity: Lookup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                sex_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

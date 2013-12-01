@@ -1,0 +1,60 @@
+SD\ModelBundle\Entity\DogovorDepartment:
+    type: entity
+    table: dogovor_department
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        isActive:
+            type: boolean
+            nullable: true
+            column: is_active
+        comment:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        createdatetime:
+            type: datetime
+            nullable: true
+    manyToOne:
+        department:
+            targetEntity: Departments
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                department_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        dogovor:
+            targetEntity: Dogovor
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                dogovor_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        dopDogovor:
+            targetEntity: DopDogovor
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                dop_dogovor_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SfGuardUser
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,122 @@
+SD\ModelBundle\Entity\Organization:
+    type: entity
+    table: organization
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        mpk:
+            type: string
+            length: 20
+            fixed: false
+            nullable: true
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        address:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        contacts:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        shortname:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        isSmeta:
+            type: boolean
+            nullable: false
+            column: is_smeta
+        mailingAddress:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: mailing_address
+        rs:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        edrpou:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        inn:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        certificate:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        shortDescription:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: short_description
+        site:
+            type: string
+            length: 125
+            fixed: false
+            nullable: true
+    manyToMany:
+        client:
+            targetEntity: Client
+            cascade: {  }
+            mappedBy: organization
+            inversedBy: null
+            joinTable: null
+            orderBy: null
+    manyToOne:
+        city:
+            targetEntity: City
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                city_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        clientType:
+            targetEntity: Lookup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                client_type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        organizationType:
+            targetEntity: OrganizationType
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                organization_type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        scope:
+            targetEntity: Lookup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                scope_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

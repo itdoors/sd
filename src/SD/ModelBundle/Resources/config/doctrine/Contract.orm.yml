@@ -1,0 +1,45 @@
+SD\ModelBundle\Entity\Contract:
+    type: entity
+    table: contract
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        fileupload:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        createdate:
+            type: date
+            nullable: true
+        closedate:
+            type: date
+            nullable: true
+    manyToMany:
+        works:
+            targetEntity: Works
+            cascade: {  }
+            mappedBy: contract
+            inversedBy: null
+            joinTable: null
+            orderBy: null
+    manyToOne:
+        organization:
+            targetEntity: Organization
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                organization_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }
