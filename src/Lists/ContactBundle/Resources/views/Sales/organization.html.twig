@@ -1,0 +1,55 @@
+    <div class="table-scrollable">
+        <table class="table table-striped table-hover table-bordered" id="sample_editable_1">
+            <thead>
+            <tr>
+                <th>№</th>
+                <th>{% trans %}Organization{% endtrans %}</th>
+                <th>{% trans %}FirstName{% endtrans %}</th>
+                <th>{% trans %}LastName{% endtrans %}</th>
+                <th>{% trans %}SurName{% endtrans %}</th>
+                <th>{% trans %}Position{% endtrans %}</th>
+                <th>{% trans %}Phone{% endtrans %}</th>
+                <th>{% trans %}Mobile{% endtrans %}</th>
+                <th>{% trans %}Email{% endtrans %}</th>
+                <th>{% trans %}Birthday{% endtrans %}</th>
+                <th>{% trans %}Creator{% endtrans %}</th>
+                <th>{% trans %}Action{% endtrans %}</th> {# Поле для действий, возможно для менеджера запретить удалять #}
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in organizationContacts %}
+            <tr >
+                <td>{{ item.0.id }}</td>
+                <td>{{ item.organizationName }}</td>
+                <td>{{ item.0.firstName }}</td>
+                <td>{{ item.0.lastName }}</td>
+                <td>{{ item.0.middleName }}</td>
+                <td>{{ item.0.position }}</td>
+                <td>{{ item.0.phone1 }}</td>
+                <td>{{ item.0.phone2 }}</td>
+                <td>{{ item.0.email }}</td>
+                <td>
+                    {% if item.0.birthday %}
+                        {{ item.0.birthday|date("d.M.yy, H:m") }}
+                    {% endif %}
+                </td>
+                <td>
+                    {{ item.creatorFullName }}
+                    {% if item.0.createdatetime %}
+                        ({{ item.0.createdatetime|date("d.M.y") }})
+                    {% endif %}
+                </td>
+                <td>
+                    <a
+                        class="ajax-delete"
+                        href="javascript:;"
+                        data-params='{"model":"ModelContact","id":{{ item.0.id }}}'
+                    >
+                        {% trans %}Delete{% endtrans %}
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>

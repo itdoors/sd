@@ -92,7 +92,7 @@ class AjaxController extends Controller
 
         $objects = $repository->getOnlyStaff()
             ->andWhere('lower(u.firstName) LIKE :q OR lower(u.lastName) LIKE :q')
-            ->setParameter(':q', $searchText . '%')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
             ->getQuery()
             ->getResult();
 
@@ -262,7 +262,9 @@ class AjaxController extends Controller
         {
             $method = $formName . 'Save';
 
-            $this->$method($form);
+            $user = $this->getUser();
+
+            $this->$method($form, $user);
 
             unset($result['error']);
 
@@ -284,7 +286,7 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
 
-    public function organizationUserFormSave($form)
+    public function organizationUserFormSave($form, $user)
     {
         $data = $form->getData();
 
@@ -333,6 +335,33 @@ class AjaxController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($organization);
+        $em->flush();
+    }
+
+    public function modelContactOrganizationFormSave($form, $user)
+    {
+        $data = $form->getData();
+
+        $data->setUser($user);
+        $data->setCreatedatetime(new \DateTime());
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
+
+    public function ModelContactDelete($params)
+    {
+        $id = $params['id'];
+
+        $object = $this->getDoctrine()
+            ->getRepository('ListsContactBundle:ModelContact')
+            ->find($id);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
         $em->flush();
     }
 }

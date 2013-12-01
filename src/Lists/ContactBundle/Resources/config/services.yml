@@ -1,7 +1,9 @@
 parameters:
-#    lists_contact.example.class: Lists\ContactBundle\Example
+    lists_contact.organization.form.class: Lists\ContactBundle\Form\ModelContactOrganizationFormType
 
 services:
-#    lists_contact.example:
-#        class: %lists_contact.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    lists_contact.form.modelContactOrganizationForm:
+        class: %lists_contact.organization.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: modelContactOrganizationForm }

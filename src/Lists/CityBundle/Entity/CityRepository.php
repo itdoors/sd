@@ -23,7 +23,7 @@ class CityRepository extends EntityRepository
     {
         $sql = $this->createQueryBuilder('c')
             ->where('lower(c.name) LIKE :q')
-            ->setParameter(':q', $q . '%')
+            ->setParameter(':q', mb_strtolower($q, 'UTF-8') . '%')
             ->getQuery();
 
         return $sql->getResult();
