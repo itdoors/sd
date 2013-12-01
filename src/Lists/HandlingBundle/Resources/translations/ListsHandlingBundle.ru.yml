@@ -1,4 +1,33 @@
 Handlings <small>create handling</small>: Обращение <small>создание нового обращения</small>
+Handling <small>show handling</small>: Обращение <small>просмотр обращения</small>
+New Handling: Новое обращение
+Show Handling: Просмотр обращения
+
+Handling ID: № Обращения
+Create Date: Дата создания
+Create User: Кто создал
+Service offered: Предлагаемые услуги
+Contact Type: Тип контакта
+Handling Type: Тип обращения
+Select Contact Type: Выберите тип контакта
+Select Handling Type: Выберите тип обращения
+Notice: Заметки
+Enter Handling Notice: Введите заметки
+Enter Budget: Введите бюджет
+Budget without VAT: Бюджет без НДС
+Chance: Шанс
+Status: Статус
+Enter Status: Введите статус
+Status Description: Описание статуса
+Result: Результат
+Result Description: Описание результата
+Result: Результат
+Enter Square: Введите площадь
+Square: Площадь
+Show History: Показать историю
+History: История
+
+
 
 List of Organizations: Список организаций
 Create Organization: Создание организации
