@@ -1,0 +1,114 @@
+{% trans_default_domain 'ListsHandlingBundle' %}
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+        $.fn.editable.defaults.inputclass = 'form-control';
+        $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
+
+        $('#name, #shortDescription, #address, #mailingAddress, #site, #edrpou, #inn, #certificate').editable({
+            url: '{{ path('sd_common_ajax_organization_save') }}'
+        });
+
+        $('#organizationTypeId').editable({
+            url: '{{ path('sd_common_ajax_organization_save') }}',
+            source: '{{ path('sd_common_ajax_organization_type') }}'
+        });
+
+        $('#scopeId').editable({
+            url: '{{ path('sd_common_ajax_organization_save') }}',
+            source: '{{ path('sd_common_ajax_scope') }}'
+        });
+
+        $('#cityId').editable({
+            url: '{{ path('sd_common_ajax_organization_save') }}',
+            source: '{{ path('sd_common_ajax_city') }}',
+            select2: {
+                placeholder: '{% trans %}Select City{% endtrans %}',
+                minimumInputLength: 2
+            }
+        });
+    })
+
+</script>
+
+<div class="tab-pane active" id="tab_0">
+    <div class="col-md-12">
+        <table id="handling" class="table table-bordered table-striped">
+            <tbody>
+            <tr> {# 1 #}
+                <td style="width:15%">{% trans %}Handling ID{% endtrans %}</td>
+                <td style="width:35%">{{ handling.id }}</td>
+				<td style="width:15%">{% trans %}Status{% endtrans %}</td>
+                <td style="width:35%">
+                    <a href="#" id="status" data-type="text" data-pk="{{ handling.id }}" data-placement="right" data-original-title="{% trans %}Enter Status{% endtrans %}">
+                        {{ handling.status }}
+                    </a>
+                </td>                
+            </tr>
+            <tr> {# 2 #}
+                <td>{% trans %}Organization Name{% endtrans %}</td>
+                <td>{{ organization.name }}</td> {# Название организации #}
+                <td>{% trans %}Status Description{% endtrans %}</td>
+                <td><a href="#" id="statusDescription" data-type="text" data-pk="{{ handling.id }}" data-placement="right" data-original-title="{% trans %}Enter Status{% endtrans %}">
+                        {{ handling.statusDescription }}
+                    </a>
+				</td>                 
+            </tr>
+            <tr> {# 3 #}
+				<td>{% trans %}Create User{% endtrans %}</td>
+                <td>{{ handling.userName }}</td>
+                <td>{% trans %}Result{% endtrans %}</td>
+                <td><a href="#" id="result" data-type="select" data-pk="{{ organization.id }}" data-value="" data-original-title="{% trans %}Select type{% endtrans %}">{{ organization.organizationType }}</a></td>                
+            </tr>
+            <tr>{# 4 #}
+				<td>{% trans %}Handling Type{% endtrans %} *</td> {# Тип : прямой вход, гостендер, ...#}
+                <td>
+                    <a href="#" id="typeId" data-type="select2" data-pk="{{ handling.id }}" data-value="BS" data-original-title="{% trans %}Select Handling Type{% endtrans %}">
+                        {{ handling.type }}
+                    </a>
+                </td>
+				<td>{% trans %}Result Description{% endtrans %}</td>
+				<td><a href="#" id="resultDescription" data-type="text" data-pk="{{ handling.id }}" data-placement="right" data-original-title="{% trans %}Enter Status{% endtrans %}">
+                        {{ handling.reslutDescription }}
+                    </a>
+				</td>                 				                
+            </tr>
+            <tr> {# 5 #}
+                <td>{% trans %}Service offered{% endtrans %}</td>
+                <td><a href="#" id="organizationTypeId" data-type="select" data-pk="{{ organization.id }}" data-value="" data-original-title="{% trans %}Select type{% endtrans %}">{{ handling.serviceoffered }}</a></td>
+                <td>{% trans %}Square{% endtrans %}</td>
+                <td><a href="#" id="square" data-type="select" data-pk="{{ organization.id }}" data-value="" data-original-title="{% trans %}Enter Square{% endtrans %}">{{ handling.square }}</a></td>
+            </tr>
+            <tr>{# 6 #}
+                <td>{% trans %}Notice{% endtrans %}</td>
+                <td>
+                    <a href="#" id="description" data-type="text" data-pk="{{ handling.id }}" data-original-title="{% trans %}Enter Handling Notice{% endtrans %}">
+                        {{ handling.description }}
+                    </a>
+                </td>    
+				<td></td>
+				<td></td>
+            </tr> {# 7 #}
+            <tr>
+                <td>{% trans %}Budget without VAT{% endtrans %}</td>
+                <td>
+                    <a href="#" id="budget" data-type="text" data-pk="{{ handling.id }}" data-original-title="{% trans %}Enter Budget{% endtrans %}">
+                        {{ handling.budget }}
+                    </a>
+                </td>                
+            </tr>
+            <tr> {# 8 #}
+                <td>{% trans %}Chance{% endtrans %}</td>
+                <td><a href="#" id="chance" data-type="text" data-pk="1" data-original-title="{% trans %}Enter Сhance{% endtrans %}">
+					{{ handling.budget }}
+					</a>
+				</td>
+				<td>{% trans %}History{% endtrans %}</td>
+				<td><a href="#" id="history">{% trans %}Show History{% endtrans %}</a></td>                
+            </tr>            
+            </tbody>
+        </table>
+    </div>
+</div>
