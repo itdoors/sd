@@ -66,7 +66,8 @@
 				<div class="tools"><a class="collapse" href="" title="{% trans %}Filters{% endtrans %}"></a></div>
 			</div>
 			<div class="portlet-body">
-				<p>Выберите параметры фильтра и нажмите кнопку Фильтр</p>
+			<div class="row">
+				<p>{% trans %}Enter filter parameters and press Filter button.{% endtrans %}</p>
 				
 				{{ form_start(filterForm,
 					{
@@ -102,7 +103,7 @@
 						{{ form_widget(filterForm.reset, { 'label': 'Clear Filter', 'attr': {'class': 'btn'}} ) }}
 					</div>
 				{{ form_end(filterForm) }}
-
+			</div>
 			</div>
 		</div>
 	</div>
