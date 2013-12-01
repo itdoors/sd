@@ -1,0 +1,37 @@
+SD\ModelBundle\Entity\LogIntranet:
+    type: entity
+    table: log_intranet
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        userId:
+            type: bigint
+            nullable: false
+            column: user_id
+        objId:
+            type: bigint
+            nullable: false
+            column: obj_id
+        createdatetime:
+            type: datetime
+            nullable: true
+        description:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        logkey:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        logtype:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+    lifecycleCallbacks: {  }

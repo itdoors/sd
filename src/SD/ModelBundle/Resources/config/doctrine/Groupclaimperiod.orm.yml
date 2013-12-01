@@ -1,0 +1,39 @@
+SD\ModelBundle\Entity\Groupclaimperiod:
+    type: entity
+    table: groupclaimperiod
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        periodDay:
+            type: string
+            length: 10
+            fixed: false
+            nullable: false
+            column: period_day
+        periodMonth:
+            type: string
+            length: 10
+            fixed: false
+            nullable: false
+            column: period_month
+        periodYear:
+            type: string
+            length: 10
+            fixed: false
+            nullable: false
+            column: period_year
+    manyToOne:
+        groupclaim:
+            targetEntity: Groupclaim
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                groupclaim_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

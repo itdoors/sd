@@ -1,0 +1,16 @@
+SD\ModelBundle\Entity\FcCostsntypes:
+    type: entity
+    table: fc_costsntypes
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        name:
+            type: string
+            length: 150
+            fixed: false
+            nullable: false
+    lifecycleCallbacks: {  }

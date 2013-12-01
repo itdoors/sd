@@ -10,6 +10,10 @@ lists_sales_organization_show:
     pattern:  /lists/sales/organization/show/{id}
     defaults: { _controller: ListsOrganizationBundle:Sales:show }
 
+lists_sales_dispatcher_organization_show:
+    pattern:  /lists/salesdispatcher/organization/show/{id}
+    defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:show }
+
 lists_sales_organization_filter:
     pattern:  /lists/sales/organization/filter
     defaults: { _controller: ListsOrganizationBundle:Sales:filter }
@@ -29,3 +33,7 @@ lists_sales_dispatcher_organization_index:
 lists_sales_dispatcher_organization_filter:
     pattern:  /lists/salesdispatcher/organization/filter
     defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:filter }
+
+lists_sales_organization_ajax_users:
+    pattern:  /lists/sales/organization/ajax/users/{organizationId}
+    defaults: { _controller: ListsOrganizationBundle:Sales:organizationUsers }

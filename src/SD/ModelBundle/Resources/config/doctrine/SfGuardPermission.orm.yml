@@ -1,0 +1,51 @@
+SD\ModelBundle\Entity\SfGuardPermission:
+    type: entity
+    table: sf_guard_permission
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        description:
+            type: string
+            length: 1000
+            fixed: false
+            nullable: true
+        createdAt:
+            type: datetime
+            nullable: false
+            column: created_at
+        updatedAt:
+            type: datetime
+            nullable: false
+            column: updated_at
+    manyToMany:
+        group:
+            targetEntity: SfGuardGroup
+            cascade: {  }
+            mappedBy: permission
+            inversedBy: null
+            joinTable: null
+            orderBy: null
+        user:
+            targetEntity: SfGuardUser
+            cascade: {  }
+            mappedBy: permission
+            inversedBy: null
+            joinTable: null
+            orderBy: null
+        widget:
+            targetEntity: WidgetList
+            cascade: {  }
+            mappedBy: permission
+            inversedBy: null
+            joinTable: null
+            orderBy: null
+    lifecycleCallbacks: {  }

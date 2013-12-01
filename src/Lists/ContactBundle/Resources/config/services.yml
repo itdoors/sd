@@ -1,0 +1,7 @@
+parameters:
+#    lists_contact.example.class: Lists\ContactBundle\Example
+
+services:
+#    lists_contact.example:
+#        class: %lists_contact.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

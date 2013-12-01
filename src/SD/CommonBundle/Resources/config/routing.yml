@@ -6,6 +6,26 @@ sd_common_ajax_organization:
     pattern:  /ajax/organization
     defaults: { _controller: SDCommonBundle:Ajax:organization }
 
+sd_common_ajax_city:
+    pattern:  /ajax/city
+    defaults: { _controller: SDCommonBundle:Ajax:city }
+
+sd_common_ajax_scope:
+    pattern:  /ajax/scope
+    defaults: { _controller: SDCommonBundle:Ajax:scope }
+
+sd_common_ajax_form:
+    pattern:  /ajax/form
+    defaults: { _controller: SDCommonBundle:Ajax:form }
+
+sd_common_ajax_user:
+    pattern:  /ajax/user
+    defaults: { _controller: SDCommonBundle:Ajax:user }
+
+sd_common_ajax_delete:
+    pattern:  /ajax/delete
+    defaults: { _controller: SDCommonBundle:Ajax:delete }
+
 sd_common_ajax_organization_save:
     pattern:  /ajax/organization/save
     defaults: { _controller: SDCommonBundle:Ajax:organizationSave }

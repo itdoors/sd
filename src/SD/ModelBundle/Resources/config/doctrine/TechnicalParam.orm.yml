@@ -1,0 +1,42 @@
+SD\ModelBundle\Entity\TechnicalParam:
+    type: entity
+    table: technical_param
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        sort:
+            type: bigint
+            nullable: true
+        unit:
+            type: string
+            length: 10
+            fixed: false
+            nullable: true
+    manyToMany:
+        department:
+            targetEntity: Departments
+            cascade: {  }
+            mappedBy: param
+            inversedBy: null
+            joinTable: null
+            orderBy: null
+    manyToOne:
+        type:
+            targetEntity: TechnicalParamType
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -87,9 +87,34 @@ class SalesController extends BaseController
             ->getRepository('ListsOrganizationBundle:Organization')
             ->find($id);
 
+        $managerForm = $this->createForm('organizationUserForm');
+
         return $this->render('ListsOrganizationBundle:' . $this->baseTemplate. ':show.html.twig', array(
-            'organization' => $organization
+            'organization' => $organization,
+            'filterFormName' => $this->filterForm,
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix,
+            'managerForm' => $managerForm->createView()
         ));
     }
+
+    /**
+     * Renders organizationUsers list
+     */
+    public function organizationUsersAction($organizationId)
+    {
+        /** @var \SD\UserBundle\Entity\UserRepository $ur*/
+        $ur = $this->container->get('sd_user.repository');
+
+        $organizationUsers = $ur->getOrganizationUsersQuery($organizationId)
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate. ':organizationUsers.html.twig', array(
+                'organizationUsers' => $organizationUsers,
+                'organizationId' => $organizationId
+            ));
+    }
+
 }
 

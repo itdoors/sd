@@ -1,0 +1,84 @@
+SD\ModelBundle\Entity\Grafik:
+    type: entity
+    table: grafik
+    fields:
+        year:
+            id: true
+            type: bigint
+            nullable: false
+        month:
+            id: true
+            type: bigint
+            nullable: false
+        day:
+            id: true
+            type: bigint
+            nullable: false
+        fromTime:
+            type: time
+            nullable: true
+            column: from_time
+        toTime:
+            type: time
+            nullable: true
+            column: to_time
+        total:
+            type: float
+            nullable: true
+        isSick:
+            type: boolean
+            nullable: true
+            column: is_sick
+        isSkip:
+            type: boolean
+            nullable: true
+            column: is_skip
+        isFired:
+            type: boolean
+            nullable: true
+            column: is_fired
+        isVacation:
+            type: boolean
+            nullable: true
+            column: is_vacation
+        totalDay:
+            type: float
+            nullable: true
+            column: total_day
+        totalEvening:
+            type: float
+            nullable: true
+            column: total_evening
+        totalNight:
+            type: float
+            nullable: true
+            column: total_night
+    oneToOne:
+        department:
+            targetEntity: Departments
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                department_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        departmentPeople:
+            targetEntity: DepartmentPeople
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                department_people_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        departmentPeopleReplacement:
+            targetEntity: DepartmentPeople
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                department_people_replacement_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

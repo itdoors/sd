@@ -1,0 +1,53 @@
+SD\ModelBundle\Entity\LogClaim:
+    type: entity
+    table: log_claim
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        description:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        createdatetime:
+            type: datetime
+            nullable: false
+        logClaimType:
+            type: string
+            length: 50
+            fixed: false
+            nullable: true
+            column: log_claim_type
+    manyToOne:
+        claim:
+            targetEntity: Claim
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                claim_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        financeClaim:
+            targetEntity: FinanceClaim
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                finance_claim_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SfGuardUser
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

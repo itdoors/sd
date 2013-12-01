@@ -1,0 +1,34 @@
+SD\ModelBundle\Entity\Status:
+    type: entity
+    table: status
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        stakey:
+            type: string
+            length: 50
+            fixed: false
+            nullable: false
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        timereminder:
+            type: bigint
+            nullable: true
+        color:
+            type: string
+            length: 7
+            fixed: false
+            nullable: true
+        icon:
+            type: string
+            length: 20
+            fixed: false
+            nullable: true
+    lifecycleCallbacks: {  }

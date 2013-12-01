@@ -525,4 +525,88 @@ class Organization
     {
         $this->users->removeElement($users);
     }
+
+    /**
+     * @var integer
+     */
+    private $city_id;
+
+    /**
+     * @var integer
+     */
+    private $scope_id;
+
+    /**
+     * Set city_id
+     *
+     * @param integer $cityId
+     * @return Organization
+     */
+    public function setCityId($cityId)
+    {
+        $this->city_id = $cityId;
+    
+        return $this;
+    }
+
+    /**
+     * Get city_id
+     *
+     * @return integer 
+     */
+    public function getCityId()
+    {
+        return $this->city_id;
+    }
+
+    /**
+     * Set scope_id
+     *
+     * @param integer $scopeId
+     * @return Organization
+     */
+    public function setScopeId($scopeId)
+    {
+        $this->scope_id = $scopeId;
+    
+        return $this;
+    }
+
+    /**
+     * Get scope_id
+     *
+     * @return integer 
+     */
+    public function getScopeId()
+    {
+        return $this->scope_id;
+    }
+    /**
+     * @var integer
+     */
+    private $organization_type_id;
+
+
+    /**
+     * Set organization_type_id
+     *
+     * @param integer $organizationTypeId
+     * @return Organization
+     */
+    public function setOrganizationTypeId($organizationTypeId)
+    {
+        $this->organization_type_id = $organizationTypeId;
+    
+        return $this;
+    }
+
+    /**
+     * Get organization_type_id
+     *
+     * @return integer 
+     */
+    public function getOrganizationTypeId()
+    {
+        return $this->organization_type_id;
+    }
 }

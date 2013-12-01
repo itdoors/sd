@@ -25,4 +25,21 @@ class UserRepository extends EntityRepository
             ->orderBy('u.lastName', 'ASC');
 
     }
+
+    /**
+     * Get users by organization
+     *
+     * @param int $organizationId
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getOrganizationUsersQuery($organizationId)
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u', 'staff')
+            ->innerJoin('u.staff', 'staff')
+            ->innerJoin('u.organizations', 'organizations')
+            ->where('organizations.id = :organizationId')
+            ->setParameter(':organizationId', $organizationId);
+    }
 }

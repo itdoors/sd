@@ -1,0 +1,49 @@
+SD\ModelBundle\Entity\DocDocumentGroup:
+    type: entity
+    table: doc_document_group
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        name:
+            type: string
+            length: 100
+            fixed: false
+            nullable: false
+        description:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        createdatetime:
+            type: datetime
+            nullable: true
+        level:
+            type: bigint
+            nullable: true
+        isdeleted:
+            type: boolean
+            nullable: true
+    manyToOne:
+        parent:
+            targetEntity: DocDocumentGroup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                parent_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SfGuardUser
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,16 @@
+SD\ModelBundle\Entity\Groupclaimwork:
+    type: entity
+    table: groupclaimwork
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+    lifecycleCallbacks: {  }

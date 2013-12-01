@@ -1,0 +1,41 @@
+SD\ModelBundle\Entity\Documents:
+    type: entity
+    table: documents
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        name:
+            type: string
+            length: 100
+            fixed: false
+            nullable: false
+        datetime:
+            type: datetime
+            nullable: true
+        createdatetime:
+            type: datetime
+            nullable: true
+        filepath:
+            type: string
+            length: 100
+            fixed: false
+            nullable: false
+        userId:
+            type: bigint
+            nullable: false
+            column: user_id
+    manyToOne:
+        documentstype:
+            targetEntity: Documentstype
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                documentstype_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,6 +1,7 @@
 Lists\CityBundle\Entity\City:
     type: entity
     table: city
+    repositoryClass: Lists\CityBundle\Entity\CityRepository
     id:
         id:
             type: integer
