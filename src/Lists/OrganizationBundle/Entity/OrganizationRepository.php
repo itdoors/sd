@@ -60,7 +60,7 @@ class OrganizationRepository extends EntityRepository
     public function processSelect($sql)
     {
         $sql
-            ->select('o.id as organizationId', 'o.name as organizationName')
+            ->select('DISTINCT(o.id) as organizationId', 'o.name as organizationName')
             ->addSelect('c.name as cityName')
             ->addSelect('r.name as regionName')
             ->addSelect('scope.name as scopeName')
@@ -102,6 +102,7 @@ class OrganizationRepository extends EntityRepository
             ->leftJoin('o.city', 'c')
             ->leftJoin('c.region', 'r')
             ->leftJoin('o.scope', 'scope');
+
     }
 
     /**
