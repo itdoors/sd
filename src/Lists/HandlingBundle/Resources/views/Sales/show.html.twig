@@ -77,15 +77,13 @@
 		</div>
 	</div>
 	<!--row-->
-
-
-
-    {{ handling.0.createdate|date("d.M.yy, H:m") }}
-
-    {% for item in messages %}
-        {{ item.description }} <br />
-    {% endfor %}
-
-    {{ form(handlingMessageForm) }}
+    {{  include(
+        'ListsHandlingBundle:' ~ baseTemplate ~ ':messages.html.twig',
+        {
+            handling: handling,
+        }
+        )
+    }}
+{#    {{ form(handlingMessageForm) }}#}
 
 {% endblock body %}

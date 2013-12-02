@@ -59,7 +59,35 @@ class SalesController extends BaseController
      */
     public function newAction(Request $request)
     {
+        // Get organization filter
+
+        $filters = $this->getFilters();
+
+        if (!isset($filters['organization_id']) || !$filters['organization_id'])
+        {
+            return $this->redirect($this->generateUrl('lists_sales_organization_index'));
+        }
+
+        $organizationId = $filters['organization_id'];
+
+        $organization = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization')
+            ->find($organizationId);
+
+        $user = $this->getUser();
+
         $form = $this->createForm('handlingSalesForm');
+
+        $form
+            ->add('organization', 'text', array(
+                'disabled' => true,
+                'data' => (string) $organization
+            ))
+            ->add('user', 'text', array(
+                'disabled' => true,
+                'data' => (string) $user
+            ))
+        ;
 
         $form->handleRequest($request);
 
@@ -68,10 +96,10 @@ class SalesController extends BaseController
             /** @var \Lists\HandlingBundle\Entity\Handling $object */
             $object = $form->getData();
 
-            $user = $this->getUser();
-
             $object->setUser($user);
             $object->setCreatedatetime(new \DateTime());
+            $object->setOrganization($organization);
+            $object->addUser($user);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($object);
@@ -111,44 +139,27 @@ class SalesController extends BaseController
             ->getRepository('ListsHandlingBundle:Handling')
             ->getHandlingShow($id);
 
-        $handlingMessageForm = $this->createForm('handlingMessageForm');
+        return $this->render('ListsHandlingBundle:Sales:show.html.twig', array(
+            'handling' => $object,
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix,
+        ));
+    }
 
-        $handlingMessageForm->handleRequest($request);
-
-        if ($handlingMessageForm->isValid())
-        {
-            /** @var \Lists\HandlingBundle\Entity\HandlingMessage $handlingMessage*/
-            $handlingMessage = $handlingMessageForm->getData();
-
-            $user = $this->getUser();
-            $handlingMessage->setHandling($object);
-            $handlingMessage->setCreatedatetime(new \DateTime());
-            $handlingMessage->setUser($user);
-
-            $handlingMessageForm['filepath']->getData()->move('/var/www/', 'test.jpg');
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($handlingMessage);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('lists_sales_handling_show', array(
-                'id' => $id
-            )));
-        }
-
+    public function messagesListAction($handlingId)
+    {
         /** @var \Lists\HandlingBundle\Entity\HandlingMessageRepository $messagesRepository */
         $messagesRepository = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingMessage');
 
-        $messages = $messagesRepository->getMessagesByHandlingId($id);
+        $messages = $messagesRepository->getMessagesByHandlingId($handlingId);
 
-        return $this->render('ListsHandlingBundle:Sales:show.html.twig', array(
-            'handling' => $object,
+        return $this->render('ListsHandlingBundle:Sales:messagesList.html.twig', array(
             'messages' => $messages,
-            'handlingMessageForm' => $handlingMessageForm->createView(),
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
         ));
+
     }
 
     public function clearFilters()

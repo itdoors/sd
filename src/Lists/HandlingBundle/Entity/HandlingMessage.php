@@ -3,6 +3,7 @@
 namespace Lists\HandlingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * HandlingMessage
@@ -283,5 +284,88 @@ class HandlingMessage
     public function doOnPrePersist()
     {
         // Add your code here
+    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->filepath
+            ? null
+            : $this->getUploadRootDir().'/'.$this->filepath;
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->filepath
+            ? null
+            : $this->getUploadDir().'/'.$this->filepath;
+    }
+
+    protected function getUploadRootDir()
+    {
+        // the absolute directory path where uploaded
+        // documents should be saved
+        return __DIR__.'/../../../../web/'.$this->getUploadDir();
+    }
+
+    protected function getUploadDir()
+    {
+        // get rid of the __DIR__ so it doesn't screw up
+        // when displaying uploaded doc/image in the view.
+        return 'uploads/handling_message';
+    }
+
+    private $file;
+
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function upload()
+    {
+        // the file property can be empty if the field is not required
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+
+        $fileExtension = $this->getFile()->getClientOriginalExtension();
+
+        $newFileName = md5(microtime());
+
+        $filepath = $newFileName . '.' . $fileExtension;
+
+        $uploadDir = $this->getUploadRootDir() . DIRECTORY_SEPARATOR . $this->getHandlingId();
+
+        $this->getFile()->move(
+            $uploadDir,
+            $filepath
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->filepath = $filepath;
+
+        // clean up the file property as you won't need it anymore
+        $this->file = null;
     }
 }

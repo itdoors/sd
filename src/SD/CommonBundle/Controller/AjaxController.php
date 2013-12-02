@@ -355,6 +355,36 @@ class AjaxController extends Controller
         return true;
     }
 
+    public function handlingMessageFormSave($form, $user)
+    {
+        /** @var \Lists\HandlingBundle\Entity\HandlingMessage $data */
+        $data = $form->getData();
+
+        $handlingId = $data->getHandlingId();
+
+        $handling = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling')
+            ->find($handlingId);
+
+        $user = $this->getUser();
+        $data->setCreatedatetime(new \DateTime());
+        $data->setUser($user);
+        $data->setHandling($handling);
+
+        $file = $form['file']->getData();
+
+        if ($file)
+        {
+            $data->upload();
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
+
     public function handlingUserFormSave($form, $user)
     {
         $data = $form->getData();

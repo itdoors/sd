@@ -17,7 +17,7 @@ Lists\HandlingBundle\Entity\HandlingMessage:
             nullable: true
         createdate:
             type: date
-            nullable: true
+            nullable: false
         filepath:
             type: string
             length: 128
