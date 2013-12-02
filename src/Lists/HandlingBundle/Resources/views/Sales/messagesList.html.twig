@@ -1,0 +1,14 @@
+asd
+{% for item in messages %}
+    {{ item.description }} <br />
+    {% if item.filepath %}
+        <a href="/uploads/handling_message/{{ item.handlingId }}/{{ item.filepath }}" target="_blank">
+            {% if item.filename %}
+                {{ item.filename }}
+            {% else %}
+                {% trans %}File{% endtrans %}
+            {% endif %}
+        </a>
+        <br />
+    {% endif %}
+{% endfor %}

@@ -25,11 +25,15 @@ class HandlingMessageFormType extends AbstractType
         $lr = $this->container->get('lists_lookup.repository');
 
         $builder
-            ->add('createdate')
+            ->add('createdate', 'date', array(
+                'empty_value' => ''
+            ))
             ->add('type')
             ->add('description')
             ->add('filename')
-            ->add('filepath', 'file')
+            ->add('file', 'file', array(
+                'required' => false
+            ))
             ->add('handling_id', 'hidden')
 
         ;
@@ -45,6 +49,7 @@ class HandlingMessageFormType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'Lists\HandlingBundle\Entity\HandlingMessage',
+            'validation_groups' => array('new')
         ));
     }
 

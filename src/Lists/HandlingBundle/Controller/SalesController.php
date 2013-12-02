@@ -111,44 +111,27 @@ class SalesController extends BaseController
             ->getRepository('ListsHandlingBundle:Handling')
             ->getHandlingShow($id);
 
-        $handlingMessageForm = $this->createForm('handlingMessageForm');
+        return $this->render('ListsHandlingBundle:Sales:show.html.twig', array(
+            'handling' => $object,
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix,
+        ));
+    }
 
-        $handlingMessageForm->handleRequest($request);
-
-        if ($handlingMessageForm->isValid())
-        {
-            /** @var \Lists\HandlingBundle\Entity\HandlingMessage $handlingMessage*/
-            $handlingMessage = $handlingMessageForm->getData();
-
-            $user = $this->getUser();
-            $handlingMessage->setHandling($object);
-            $handlingMessage->setCreatedatetime(new \DateTime());
-            $handlingMessage->setUser($user);
-
-            $handlingMessageForm['filepath']->getData()->move('/var/www/', 'test.jpg');
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($handlingMessage);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('lists_sales_handling_show', array(
-                'id' => $id
-            )));
-        }
-
+    public function messagesListAction($handlingId)
+    {
         /** @var \Lists\HandlingBundle\Entity\HandlingMessageRepository $messagesRepository */
         $messagesRepository = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingMessage');
 
-        $messages = $messagesRepository->getMessagesByHandlingId($id);
+        $messages = $messagesRepository->getMessagesByHandlingId($handlingId);
 
-        return $this->render('ListsHandlingBundle:Sales:show.html.twig', array(
-            'handling' => $object,
+        return $this->render('ListsHandlingBundle:Sales:messagesList.html.twig', array(
             'messages' => $messages,
-            'handlingMessageForm' => $handlingMessageForm->createView(),
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
         ));
+
     }
 
     public function clearFilters()

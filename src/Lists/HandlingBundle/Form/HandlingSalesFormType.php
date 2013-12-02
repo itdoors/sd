@@ -25,6 +25,7 @@ class HandlingSalesFormType extends AbstractType
         $lr = $this->container->get('lists_lookup.repository');
 
         $builder
+            ->add('organization_id', 'hidden')
             ->add('createdate')
             ->add('status')
             ->add('type')
