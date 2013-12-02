@@ -30,14 +30,14 @@
         <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
         <label class="control-label visible-ie8 visible-ie9">{% trans %}User name{% endtrans %}</label>
         <div class="input-icon">
-            <i class="icon-user"></i>
+            <i class="fa fa-user"></i>
             <input class="form-control placeholder-no-fix" type="text" id="username" autocomplete="off" placeholder="{% trans %}Username{% endtrans %}" name="_username" value="{{ last_username }}" required="required"/>
         </div>
     </div>
     <div class="form-group">
         <label class="control-label visible-ie8 visible-ie9">{% trans %}Password{% endtrans %}</label>
         <div class="input-icon">
-            <i class="icon-lock"></i>
+            <i class="fa fa-lock"></i>
             <input class="form-control placeholder-no-fix" type="password" id="password" autocomplete="off" placeholder="{% trans %}Password{% endtrans %}" name="_password" required="required"/>
         </div>
     </div>
@@ -53,7 +53,7 @@
     <div class="forget-password">
         <h4>{% trans %}Forgot your password ?{% endtrans %}</h4>
         <p>
-            {% trans %}no worries, click {% endtrans %}<a href="javascript:;"  id="forget-password">{% trans %}here{% endtrans %}</a> {% trans %}to reset your password.{% endtrans %}
+            {% trans %}no worries, click {% endtrans %} <a href="javascript:;"  id="forget-password">{% trans %}here{% endtrans %}</a> {% trans %}to reset your password.{% endtrans %}
         </p>
     </div>
 </form>
