@@ -35,14 +35,13 @@ lists_sales_handling_ajax_messages:
     defaults: { _controller: ListsHandlingBundle:Sales:messagesList }
 	
 lists_sales_tender_index:
-	pattern:  /lists/sales/tender
-	defaults: { _controller: ListsHandlingBundle:Sales:tenderList }
+    pattern:  /lists/sales/tender
+    defaults: { _controller: ListsHandlingBundle:Sales:tenderList }
 	
 lists_sales_dispatcher_tender_index:
-	pattern:  /lists/salesdispatcher/tender
-	defaults: { _controller: ListsHandlingBundle:SalesDispatcher:tenderList }
+    pattern:  /lists/salesdispatcher/tender
+    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:tenderList }
 	
 lists_sales_admin_tender_index:
-	pattern:  /lists/salesadmin/tender
-	defaults: { _controller: ListsHandlingBundle:SalesAdmin:tenderList }
-	
+    pattern:  /lists/salesadmin/tender
+    defaults: { _controller: ListsHandlingBundle:SalesAdmin:tenderList }

@@ -1,11 +1,11 @@
 lists_sales_report_index:
-	pattern:  /lists/sales/report
-	defaults: { _controller: ListsCalendarBundle:Sales:report }
+    pattern:  /lists/sales/report
+    defaults: { _controller: ListsCalendarBundle:Sales:report }
 	
 lists_sales_dispatcher_report_index:
-	pattern:  /lists/salesdispatcher/report
-	defaults: { _controller: ListsCalendarBundle:SalesDispatcher:report }
+    pattern:  /lists/salesdispatcher/report
+    defaults: { _controller: ListsCalendarBundle:SalesDispatcher:report }
 
 lists_sales_admin_report_index:
-	pattern:  /lists/salesadmin/report
-	defaults: { _controller: ListsCalendarBundle:SalesAdmin:report }
+    pattern:  /lists/salesadmin/report
+    defaults: { _controller: ListsCalendarBundle:SalesAdmin:report }
