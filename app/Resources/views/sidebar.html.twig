@@ -58,7 +58,7 @@
 					{% trans %}My Reports{% endtrans %}</a>
 				</li>
 				<li >
-					<a href="/team/sales/" title="{% trans %}My Team{% endtrans %}">
+					<a href="path('lists_sales_team_index')" title="{% trans %}My Team{% endtrans %}">
 					<i class="fa fa-group"></i>
 					{% trans %}My Team{% endtrans %}</a>
 				</li>
@@ -74,6 +74,11 @@
 				<span class="arrow "></span>
 			</a>
 			<ul class="sub-menu">
+				<li >
+					<a href="path('lists_sales_dispatcher_team_index')" title="{% trans %}Teams{% endtrans %}">
+					<i class="fa fa-group"></i>
+					{% trans %}Teams{% endtrans %}</a>
+				</li>
 				<li >
 					<a href="{{ path('lists_sales_contact_index') }}" title="{% trans %}Team Contacts{% endtrans %}">
 						<i class="fa fa-envelope"></i>
@@ -155,13 +160,14 @@
 					{% trans %}Reports{% endtrans %}</a>
 				</li>				
 				<li >
-					<a href="/team/salesadmin/" title="{% trans %}Teams{% endtrans %}">
+					<a href="path('lists_sales_admin_team_index')" title="{% trans %}Teams{% endtrans %}">
 					<i class="fa fa-group"></i>
 					{% trans %}Teams{% endtrans %}</a>
 				</li>
 			</ul>
 		</li>
 		{% endif %}
+		
 		
 		{% if is_granted('ROLE_INTRANET') %}
 		<li class="">
