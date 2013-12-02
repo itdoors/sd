@@ -59,7 +59,35 @@ class SalesController extends BaseController
      */
     public function newAction(Request $request)
     {
+        // Get organization filter
+
+        $filters = $this->getFilters();
+
+        if (!isset($filters['organization_id']) || !$filters['organization_id'])
+        {
+            return $this->redirect($this->generateUrl('lists_sales_organization_index'));
+        }
+
+        $organizationId = $filters['organization_id'];
+
+        $organization = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization')
+            ->find($organizationId);
+
+        $user = $this->getUser();
+
         $form = $this->createForm('handlingSalesForm');
+
+        $form
+            ->add('organization', 'text', array(
+                'disabled' => true,
+                'data' => (string) $organization
+            ))
+            ->add('user', 'text', array(
+                'disabled' => true,
+                'data' => (string) $user
+            ))
+        ;
 
         $form->handleRequest($request);
 
@@ -68,10 +96,10 @@ class SalesController extends BaseController
             /** @var \Lists\HandlingBundle\Entity\Handling $object */
             $object = $form->getData();
 
-            $user = $this->getUser();
-
             $object->setUser($user);
             $object->setCreatedatetime(new \DateTime());
+            $object->setOrganization($organization);
+            $object->addUser($user);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($object);

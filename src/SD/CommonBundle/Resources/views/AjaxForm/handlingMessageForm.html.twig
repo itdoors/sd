@@ -38,12 +38,30 @@
                 }
                 }) }}
                 {{ form_errors(form) }}
-                {#<div class="form-group col-md-3">
-                    {{ form_widget(form.user, {'attr' : {'class' : 'form-control'}}) }}
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        {{ form_widget(form.createdate, {'attr' : {'class' : 'form-control', 'placeholder': 'Create date'}}) }}
+                    </div>
+                    <div class="form-group col-md-2">
+                        {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': 'Handling tye'} } ) }}
+                    </div>
+                    <div class="form-group col-md-2">
+                        {{ form_widget(form.filename, {'attr' : {'class' : 'form-control', 'placeholder': 'Filename'} } ) }}
+                    </div>
+                    <div class="form-group col-md-2">
+                        {{ form_widget(form.file ) }}
+                    </div>
                 </div>
-                <div class="form-group col-md-2">
-                    {{ form_widget(form.add, { 'label': 'Add', 'attr': {'class': 'btn green'} } ) }}
-                </div>#}
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        {{ form_widget(form.description, {'attr' : {'class' : 'form-control', 'placeholder': 'Description'} } ) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        {{ form_widget(form.create, { 'label': 'Create', 'attr': {'class': 'btn green'} } ) }}
+                    </div>
+                </div>
 
                 <input type="hidden" name="formName" value="{{ formName }}">
                 <input type="hidden" name="postFunction" value="{{ postFunction }}">
