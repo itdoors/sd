@@ -7,25 +7,38 @@ Handling ID: № Обращения
 Create Date: Дата создания
 Create User: Кто создал
 Service offered: Предлагаемые услуги
+Enter Service offered: Введите услуги, которые предлагаете
 Contact Type: Тип контакта
 Handling Type: Тип обращения
+Enter Handling Type: Введите тип обращения
 Select Contact Type: Выберите тип контакта
 Select Handling Type: Выберите тип обращения
 Notice: Заметки
+Enter Notice: Введите заметки
 Enter Handling Notice: Введите заметки
 Enter Budget: Введите бюджет
 Budget without VAT: Бюджет без НДС
 Chance: Шанс
+Enter Chance: Введите шанс
 Status: Статус
 Enter Status: Введите статус
 Status Description: Описание статуса
+Enter Status Description: Введите описание статуса
 Result: Результат
 Result Description: Описание результата
+Enter Result Description: Введите описание результата
 Result: Результат
+Enter Result: Введите рузультат
 Enter Square: Введите площадь
 Square: Площадь
+Enter Square: Введите площадь
 Show History: Показать историю
 History: История
+
+Organization Name: Название организации
+
+Enter Handling Create DateTime: Введите дату создания обращения
+Handling Create DateTime: Дата создания обращения
 
 
 
