@@ -8,7 +8,7 @@
 			<a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a> 
 			<i class="fa fa-angle-right"></i>
 		</li>
-		<li><a href="{{ path('lists_sales_dispatcher_team_index') }}" title="{% trans %}Teams{% endtrans %}">{% trans %}Teams{% endtrans %}</a></li>						
+		<li><a href="{{ path(baseRoute) }}" title="{% trans %}Teams{% endtrans %}">{% trans %}Teams{% endtrans %}</a></li>
 	</ul>
 {% endblock %}
 {% block page_title %}
@@ -34,11 +34,17 @@
             <tbody>
             {% for item in myTeams %}
                 <tr {% if loop.index is odd %}class="color"{% endif %}>
-					<td></td>
-                    <td>{{ item.teamId|e }}</td>
-                    <td>{{ item.teamName|e }}</td>
-                    <td>{{ item.managersNameSurname|e }}</td> {# Имя, Фамилия менеджеров #}
-                    <td>{{ item.teamDescription|e }}</td>
+					<td>{{ loop.index }}</td>
+                    <td>
+                        <a href="{{ path('lists_sales_admin_team_edit', {
+                            id: item.0.id
+                        }) }}">
+                            {{ item.0.id|e }}
+                        </a>
+                    </td>
+                    <td>{{ item.0.name|e }}</td>
+                    <td>{{ item.fullNames|e }}</td> {# Имя, Фамилия менеджеров #}
+                    <td>{{ item.0.description|e }}</td>
                 </tr>
             {% endfor %}
             </tbody>
