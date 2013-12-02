@@ -13,20 +13,196 @@
 {% endblock %}
 {% block page_title %}
 	<h3 class="page-title">
-		{% trans %}Handlings <small>create handling</small>{% endtrans %}  
+		{% trans %}Handling <small>create handling</small>{% endtrans %}  
 	</h3>
 {% endblock %}
 
 {% block body %}
 
-    {{ form(
-        form,
-        {
-            'action': path('lists_sales_handling_new'),
-            'attr': {'novalidate': 'novalidate'}
-        })
-    }}
+    <div class="row">
+    <div class="col-md-12">
 
-	
-	
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption"><i class="fa fa-reorder"></i>{% trans %}Create Organization{% endtrans %}</div>
+                <div class="tools">
+                    <a class="collapse" href="javascript:;"></a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                {% form_theme filterForm 'SDCommonBundle:Form:form_errors.html.twig' %}
+                {{ form_start(filterForm,
+                    {
+                        'action': path('lists_sales_organization_new'),
+                        'attr': {'novalidate': 'novalidate', 'class' : 'horizontal-form'}
+                    })
+                }}
+                {{ form_errors(filterForm) }}
+                <div class="form-body">
+                    <div class="alert alert-danger display-hide">
+                        <button class="close" data-close="alert"></button>
+                        {% trans %}You have some form errors. Please check below.{% endtrans %}
+                    </div>
+                    <h3 class="form-section">{% trans %}General information{% endtrans %}</h3>
+                    <div class="row">
+                        <div class="col-md-6
+							{% if filterForm.name.vars.errors|length %}
+							    has-error
+							{% endif %}">
+                            <div class="form-group"> {# Фиксируем также реальную дату и эту выводим по умолчанию сегодняшнее число#}
+                                {{ form_label(filterForm.name, 'Handling Create DateTime *', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.name, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter Handling Create DateTime'}}) }}
+								{% if filterForm.name.vars.errors|length %}
+									{{ form_errors(filterForm.name) }}
+								{% endif %}
+								{% else %}
+									<span class="help-block">{% trans %}Enter Handling Create DateTime{% endtrans %}"</span>
+								{% endelse %}                               
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+                            <div class="form-group">
+								{# Create User - current user - only show#}
+                                {{ form_label(filterForm.shortDescription, 'Create User', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.shortDescription, {'attr': {'class': 'form-control', 'placeholder': 'Enter organization short name'}}) }}                                
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <!--/row-->
+					<div class="row">
+                        <div class="col-md-6
+							{% if filterForm.name.vars.errors|length %}
+							    has-error
+							{% endif %}">
+							{# Тип обращения #}
+                            <div class="form-group">
+                                {{ form_label(filterForm.type, 'Handling Type *', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.type, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter Handling Type'}}) }}
+								{% if filterForm.name.vars.errors|length %}
+									{{ form_errors(filterForm.name) }}
+								{% endif %}
+								{% else %}
+									<span class="help-block">{% trans %}Enter Handling Type{% endtrans %}"</span>
+								{% endelse %}                               
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+                            <div class="form-group">
+								{# Organization only show #}
+                                {{ form_label(filterForm.organizationName, 'Organization Name', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.organizationName, {'attr': {'class': 'form-control', 'placeholder': 'Enter organization short name'}}) }}
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <!--/row-->
+					<div class="row">
+                        <div class="col-md-6>
+							{# Предлагаемые услуги #}
+                            <div class="form-group">
+                                {{ form_label(filterForm.serviceOffered, 'Enter Service', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.serviceOffered, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter Service offered'}}) }}
+								<span class="help-block">{% trans %}Enter Service offered{% endtrans %}"</span>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+                            <div class="form-group">
+								{{ form_label(filterForm.description, 'Notice', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.description, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter Notice'}}) }}
+								<span class="help-block">{% trans %}Enter Notice{% endtrans %}"</span>
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <!--/row-->
+					<div class="row">
+                        <div class="col-md-6>
+							{# Бюджет - сюда нужно money control #}
+                            <div class="form-group">
+                                {{ form_label(filterForm.budget, 'Budget without VAT', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.budget, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Budget without VAT'}}) }}
+								<span class="help-block">{% trans %}Enter Budget without VAT{% endtrans %}"</span>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+                            <div class="form-group">
+								{{ form_label(filterForm.staus, 'Status', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.status, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter Status'}}) }}
+								<span class="help-block">{% trans %}Enter Status{% endtrans %}"</span>
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <!--/row-->
+					<div class="row">
+                        <div class="col-md-6>
+							{# Square - control with numeric validation #}
+                            <div class="form-group">
+                                {{ form_label(filterForm.square, 'Square', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.square, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Square'}}) }}
+								<span class="help-block">{% trans %}Enter Square{% endtrans %}"</span>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+                            <div class="form-group">
+								{{ form_label(filterForm.statusDescription, 'Status Description', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.statusDescription, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Status Description'}}) }}
+								<span class="help-block">{% trans %}Enter Status Description{% endtrans %}"</span>
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <!--/row-->
+					<!--/row-->
+					<div class="row">
+                        <div class="col-md-6>
+							{# Chance - control with numeric validation and procents #}
+                            <div class="form-group">
+                                {{ form_label(filterForm.chance, 'Square', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.chance, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Chance'}}) }}
+								<span class="help-block">{% trans %}Enter Chance{% endtrans %}"</span>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+                            <div class="form-group">
+								{{ form_label(filterForm.result, 'Result', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.result, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Result'}}) }}
+								<span class="help-block">{% trans %}Enter Result{% endtrans %}"</span>
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <!--/row-->
+					<div class="row">
+                        <div class="col-md-6>							
+                            <div class="form-group">
+
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+                            <div class="form-group">
+								{{ form_label(filterForm.resultDescription, 'Result', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.resultDescription, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Result Description'}}) }}
+								<span class="help-block">{% trans %}Enter Result Description{% endtrans %}"</span>
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <!--/row-->
+				</div>
+			</div>
+		</div>
+	</div>	
+	</div>
+    
+
 {% endblock body %}

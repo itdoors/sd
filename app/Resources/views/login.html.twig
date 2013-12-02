@@ -12,7 +12,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 <!-- BEGIN HEAD -->
 <head>
     <meta charset="utf-8" />
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}Authorization{% endblock %}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta name="MobileOptimized" content="320">
@@ -42,7 +42,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 <body class="login">
 <!-- BEGIN LOGO -->
 <div class="logo">
-    <img src="assets/img/logo-big.png" alt="{% trans %}Impel Griffin Logotype{% endtrans %}" />
+    <img src="{{ asset('/templates/core/img/logo-big.png') }}" alt="{% trans %}Impel Griffin Logotype{% endtrans %}" />
 </div>
 <!-- END LOGO -->
 <div class="content">
