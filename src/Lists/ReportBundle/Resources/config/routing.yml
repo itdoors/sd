@@ -1,7 +1,7 @@
 lists_sales_report_index:
     pattern:  /lists/sales/report
     defaults: { _controller: ListsCalendarBundle:Sales:report }
-	
+
 lists_sales_dispatcher_report_index:
     pattern:  /lists/salesdispatcher/report
     defaults: { _controller: ListsCalendarBundle:SalesDispatcher:report }
