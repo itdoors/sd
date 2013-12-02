@@ -1,0 +1,4 @@
+Lists\HandlingBundle\Entity\HandlingMessage:
+    properties:
+        createdate:
+            - NotBlank: { groups: [new] }

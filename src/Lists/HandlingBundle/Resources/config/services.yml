@@ -2,6 +2,8 @@ parameters:
     lists_handling.sales.filter.form.class: Lists\HandlingBundle\Form\HandlingSalesFilterFormType
     lists_handling.sales.form.class: Lists\HandlingBundle\Form\HandlingSalesFormType
     lists_handling.message.form.class: Lists\HandlingBundle\Form\HandlingMessageFormType
+    lists_handling.form.user.class: Lists\HandlingBundle\Form\HandlingUserFormType
+
 
 services:
     lists_handling.form.handlingSalesFilterForm:
@@ -19,3 +21,9 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: handlingMessageForm }
+
+    lists_handling.form.handlingUserForm:
+        class: %lists_handling.form.user.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: handlingUserForm }

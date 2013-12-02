@@ -1,0 +1,79 @@
+Lists\ContactBundle\Entity\ModelContact:
+    type: entity
+    table: model_contact
+    repositoryClass: Lists\ContactBundle\Entity\ModelContactRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        modelName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: model_name
+        modelId:
+            type: bigint
+            nullable: true
+            column: model_id
+        sort:
+            type: bigint
+            nullable: true
+        firstName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: first_name
+        lastName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: last_name
+        middleName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: middle_name
+        phone1:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        phone2:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        position:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        birthday:
+            type: date
+            nullable: true
+        email:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+        createdatetime:
+            type: datetime
+            nullable: true
+    manyToOne:
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -5,6 +5,7 @@ namespace Lists\HandlingBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class HandlingSalesFormType extends AbstractType
 {
@@ -25,7 +26,16 @@ class HandlingSalesFormType extends AbstractType
         $lr = $this->container->get('lists_lookup.repository');
 
         $builder
-            ->add('createdate')
+            ->add('organization', 'text', array(
+                'disabled' => true
+            ))
+            ->add('user', 'text', array(
+                'disabled' => true
+            ))
+            ->add('createdate', 'date', array(
+                'empty_value' => '',
+                'data' => new \DateTime()
+            ))
             ->add('status')
             ->add('type')
             ->add('statusDescription')
@@ -50,7 +60,8 @@ class HandlingSalesFormType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'Lists\HandlingBundle\Entity\Handling',
-            'validation_groups' => array('new')
+            'validation_groups' => array('new'),
+            'translation_domain' => 'ListsHandlingBundle'
         ));
     }
 

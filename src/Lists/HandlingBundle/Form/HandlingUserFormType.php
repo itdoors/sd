@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class HandlingMessageFormType extends AbstractType
+class HandlingUserFormType extends AbstractType
 {
     protected $container;
 
@@ -21,25 +21,11 @@ class HandlingMessageFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
-        $lr = $this->container->get('lists_lookup.repository');
-
         $builder
-            ->add('createdate', 'date', array(
-                'empty_value' => ''
-            ))
-            ->add('type')
-            ->add('description')
-            ->add('filename')
-            ->add('file', 'file', array(
-                'required' => false
-            ))
-            ->add('handling_id', 'hidden')
-
+            ->add('user', 'text')
+            ->add('handlingId', 'hidden')
+            ->add('add', 'submit')
         ;
-
-        $builder
-            ->add('create', 'submit');
     }
 
     /**
@@ -48,8 +34,10 @@ class HandlingMessageFormType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Lists\HandlingBundle\Entity\HandlingMessage',
-            'validation_groups' => array('new')
+            'data_class' => null,
+            'validation_groups' => false,
+            'csrf_protection' => false,
+            'translation_domain' => 'ListsHandlingBundle'
         ));
     }
 
@@ -58,6 +46,6 @@ class HandlingMessageFormType extends AbstractType
      */
     public function getName()
     {
-        return 'handlingMessageForm';
+        return 'handlingUserForm';
     }
 }
