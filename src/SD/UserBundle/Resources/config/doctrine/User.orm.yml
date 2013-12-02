@@ -59,6 +59,9 @@ SD\UserBundle\Entity\User:
         handlings:
             targetEntity: Lists\HandlingBundle\Entity\Handling
             mappedBy: users
+        teams:
+            targetEntity: Lists\TeamBundle\Entity\Team
+            mappedBy: users
     oneToOne:
         staff:
             targetEntity: Staff

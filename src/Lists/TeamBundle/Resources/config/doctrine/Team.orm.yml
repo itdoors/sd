@@ -1,6 +1,7 @@
 Lists\TeamBundle\Entity\Team:
     type: entity
     table: team
+    repositoryClass: Lists\TeamBundle\Entity\TeamRepository
     fields:
         id:
             id: true
@@ -29,7 +30,7 @@ Lists\TeamBundle\Entity\Team:
     manyToMany:
         users:
             targetEntity: SD\UserBundle\Entity\User
-            inversedBy: users
+            inversedBy: teams
             joinTable:
               name: team_user
               joinColumns:

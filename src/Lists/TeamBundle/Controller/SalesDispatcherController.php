@@ -5,10 +5,12 @@ namespace Lists\TeamBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-class SalesDispatcherController extends Controller
+class SalesDispatcherController extends SalesController
 {
     public function indexAction()
     {
+        //$teams =
+
         return $this->render('ListsTeamBundle:SalesDispatcher:index.html.twig');
     }
 

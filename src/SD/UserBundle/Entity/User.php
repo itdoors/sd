@@ -395,4 +395,41 @@ class User extends BaseUser
     {
         return $this->staff;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $teams;
+
+    /**
+     * Add teams
+     *
+     * @param \Lists\TeamBundle\Entity\Team $teams
+     * @return User
+     */
+    public function addTeam(\Lists\TeamBundle\Entity\Team $teams)
+    {
+        $this->teams[] = $teams;
+    
+        return $this;
+    }
+
+    /**
+     * Remove teams
+     *
+     * @param \Lists\TeamBundle\Entity\Team $teams
+     */
+    public function removeTeam(\Lists\TeamBundle\Entity\Team $teams)
+    {
+        $this->teams->removeElement($teams);
+    }
+
+    /**
+     * Get teams
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTeams()
+    {
+        return $this->teams;
+    }
 }
