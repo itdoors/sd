@@ -95,12 +95,12 @@ class HandlingRepository extends EntityRepository
                 }
                 switch($key)
                 {
-                    /*case 'name':
+                    case 'organization_id':
                         $sql
-                            ->andWhere("o.name LIKE :organizationName");
+                            ->andWhere("h.organization_id = :organizationId");
 
-                        $sql->setParameter(':organizationName', '%' . $value);
-                        break;*/
+                        $sql->setParameter(':organizationId', $value);
+                        break;
                     case 'scope':
                         if (isset($value[0]) && !$value[0])
                         {
@@ -128,5 +128,30 @@ class HandlingRepository extends EntityRepository
                 }
             }
         }
+    }
+
+    public function getHandlingShow($id)
+    {
+       return $this->createQueryBuilder('h')
+           ->select('h')
+           ->addSelect('o.name as organizationName')
+           ->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as creatorFullName")
+           ->leftJoin('h.organization', 'o')
+           ->leftJoin('h.user', 'u')
+           ->where('h.id = :id')
+           ->setParameter(':id', $id)
+           ->getQuery()
+           ->getSingleResult();
+    }
+
+    public function getOrganizationByHandlingId($handlingId)
+    {
+        $sql = $this->createQueryBuilder('h')
+            ->where('h.id = :handlingId')
+            ->setParameter(':handlingId', $handlingId)
+            ->getQuery()
+            ->getSingleResult();
+
+        return $sql->getOrganizationId();
     }
 }

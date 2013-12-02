@@ -3,9 +3,6 @@
             <thead>
             <tr>
                 <th>№</th>
-                {% if organizationId is empty %}
-                    <th>{% trans %}Organization{% endtrans %}</th>
-                {% endif %}
                 <th>{% trans %}FirstName{% endtrans %}</th>
                 <th>{% trans %}LastName{% endtrans %}</th>
                 <th>{% trans %}SurName{% endtrans %}</th>
@@ -19,12 +16,9 @@
             </tr>
             </thead>
             <tbody>
-            {% for item in organizationContacts %}
+            {% for item in handlingContacts %}
             <tr >
                 <td>{{ item.0.id }}</td>
-                {% if organizationId is empty %}
-                    <td>{{ item.organizationName }}</td>
-                {% endif %}
                 <td>{{ item.0.firstName }}</td>
                 <td>{{ item.0.lastName }}</td>
                 <td>{{ item.0.middleName }}</td>

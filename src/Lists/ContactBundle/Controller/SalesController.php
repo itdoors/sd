@@ -16,17 +16,33 @@ class SalesController extends Controller
         ));
     }
 
-    public function organizationAction()
+    public function organizationAction($organizationId)
     {
         $user = $this->getUser();
 
         $organizationContacts = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
-            ->getMyOrganizationsContacts($user->getId(), null)
+            ->getMyOrganizationsContacts($user->getId(), $organizationId)
             ->getQuery()
             ->getResult();
 
         return $this->render('ListsContactBundle:Sales:organization.html.twig', array(
             'organizationContacts' => $organizationContacts,
+            'organizationId' => $organizationId,
+        ));
+    }
+
+    public function handlingAction($handlingId)
+    {
+        $user = $this->getUser();
+
+        $handlingContacts = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
+            ->getMyHandlingContacts($user->getId(), $handlingId)
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('ListsContactBundle:Sales:handling.html.twig', array(
+            'handlingContacts' => $handlingContacts,
+            'handlingId' => $handlingId,
         ));
     }
 }

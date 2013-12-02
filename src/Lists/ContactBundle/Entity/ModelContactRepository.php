@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityRepository;
 class ModelContactRepository extends EntityRepository
 {
     const MODEL_ORGANIZATION = 'organization';
+    const MODEL_HANDLING = 'handling';
 
     public function getMyOrganizationsContacts($userIds, $organizationId)
     {
@@ -21,7 +22,7 @@ class ModelContactRepository extends EntityRepository
             $userIds = array($userIds);
         }
 
-        return $this->createQueryBuilder('mc')
+        $sql = $this->createQueryBuilder('mc')
             ->select('mc')
             /*->select('mc.firstName as firstName')
             ->addSelect('mc.lastName as lastName')
@@ -37,5 +38,34 @@ class ModelContactRepository extends EntityRepository
             ->orderBy('o.name')
             ->setParameter(':userIds', $userIds)
             ->setParameter(':modelName', self::MODEL_ORGANIZATION);
+
+        if ($organizationId && $organizationId != 0)
+        {
+            $sql
+                ->andWhere('o.id = :organizationId')
+                ->setParameter(':organizationId', $organizationId);
+        }
+
+        return $sql;
+    }
+
+    public function getMyHandlingContacts($userIds, $handlingId)
+    {
+        $organizationId = $this->getEntityManager()
+            ->getRepository('ListsHandlingBundle:Handling')
+            ->getOrganizationByHandlingId($handlingId);
+
+        $sql = $this->createQueryBuilder('mc')
+            ->select('mc')
+            ->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as creatorFullName")
+            ->leftJoin('mc.user', 'u')
+            ->where('mc.modelName = :modelName')
+            ->andWhere('mc.modelId = :modelId')
+            //->andWhere('mc.user_id in (:userIds)')
+            //->setParameter(':userIds', $userIds)
+            ->setParameter(':modelId', $organizationId)
+            ->setParameter(':modelName', self::MODEL_ORGANIZATION);
+
+        return $sql;
     }
 }

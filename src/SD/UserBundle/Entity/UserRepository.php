@@ -42,4 +42,21 @@ class UserRepository extends EntityRepository
             ->where('organizations.id = :organizationId')
             ->setParameter(':organizationId', $organizationId);
     }
+
+    /**
+     * Get users by handling
+     *
+     * @param int $handlingId
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getHandlingUsersQuery($handlingId)
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u', 'staff')
+            ->innerJoin('u.staff', 'staff')
+            ->innerJoin('u.handlings', 'handlings')
+            ->where('handlings.id = :handlingId')
+            ->setParameter(':handlingId', $handlingId);
+    }
 }

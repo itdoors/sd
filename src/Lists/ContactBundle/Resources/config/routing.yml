@@ -5,3 +5,7 @@ lists_sales_contact_index:
 lists_sales_contact_ajax_organization:
     pattern:  /lists/sales/contact/ajax/organization/{organizationId}
     defaults: { _controller: ListsContactBundle:Sales:organization }
+
+lists_sales_contact_ajax_handling:
+    pattern:  /lists/sales/contact/ajax/handling/{handlingId}
+    defaults: { _controller: ListsContactBundle:Sales:handling }

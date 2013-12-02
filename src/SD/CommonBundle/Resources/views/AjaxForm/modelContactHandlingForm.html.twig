@@ -2,14 +2,14 @@
 
     $(document).ready(function(){
 
-        $('#modelContactOrganizationForm_birthday_year, #modelContactOrganizationForm_birthday_month, #modelContactOrganizationForm_birthday_day').select2({
+        $('#modelContactHandlingForm_birthday_year, #modelContactHandlingForm_birthday_month, #modelContactHandlingForm_birthday_day').select2({
             allowClear: true
         });
 
 
         {% if form.modelId.vars.block_prefixes.1 != 'hidden' %}
 
-            $('#modelContactOrganizationForm_modelId').select2({
+            $('#modelContactHandlingForm_modelId').select2({
                 minimumInputLength: 2,
                 ajax: {
                     url: '{{ path('sd_common_ajax_organization') }}',

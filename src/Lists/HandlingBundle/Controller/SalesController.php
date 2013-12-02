@@ -11,6 +11,8 @@ class SalesController extends BaseController
     protected $filterNamespace = 'handling.sales.filters';
     protected $filterForm = 'handlingSalesFilterForm';
     protected $baseRoute = 'lists_sales_handling_index';
+    protected $baseRoutePrefix = 'sales';
+    protected $baseTemplate = 'Sales';
 
     public function indexAction()
     {
@@ -107,7 +109,7 @@ class SalesController extends BaseController
         /** @var \Lists\HandlingBundle\Entity\Handling $object */
         $object = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:Handling')
-            ->find($id);
+            ->getHandlingShow($id);
 
         $handlingMessageForm = $this->createForm('handlingMessageForm');
 
@@ -143,7 +145,9 @@ class SalesController extends BaseController
         return $this->render('ListsHandlingBundle:Sales:show.html.twig', array(
             'handling' => $object,
             'messages' => $messages,
-            'handlingMessageForm' => $handlingMessageForm->createView()
+            'handlingMessageForm' => $handlingMessageForm->createView(),
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix,
         ));
     }
 
@@ -155,5 +159,24 @@ class SalesController extends BaseController
 
         $this->setFilters(array('organization_id' => $organizationId));
     }
+
+    /**
+     * Renders ohandlingUsers list
+     */
+    public function handlingUsersAction($handlingId)
+    {
+        /** @var \SD\UserBundle\Entity\UserRepository $ur*/
+        $ur = $this->container->get('sd_user.repository');
+
+        $handlingUsers = $ur->getHandlingUsersQuery($handlingId)
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('ListsHandlingBundle:' . $this->baseTemplate. ':handlingUsers.html.twig', array(
+                'handlingUsers' => $handlingUsers,
+                'handlingId' => $handlingId
+            ));
+    }
+
 }
 

@@ -78,6 +78,18 @@ Lists\HandlingBundle\Entity\Handling:
             type: integer
             nullable: true
             column: organization_id
+        result_id:
+            type: integer
+            nullable: true
+            column: result_id
+        status_id:
+            type: integer
+            nullable: true
+            column: status_id
+        type_id:
+            type: integer
+            nullable: true
+            column: type_id
     manyToOne:
         organization:
             targetEntity: Lists\OrganizationBundle\Entity\Organization
