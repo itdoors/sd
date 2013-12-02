@@ -31,13 +31,13 @@ Import fonts
 ***/
 
 /*Load Open Sans Font from google fonts*/
-/*
-@import url(//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
-*/
 
-/* load Open Sans Font from local */
+@import url(//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=latin,cyrillic;
+
+
+/* load Open Sans Font from local 
 @import url(../fonts/font.css);
-
+*/
 /***
 Reset and overrides  
 ***/
