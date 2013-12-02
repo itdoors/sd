@@ -20,7 +20,7 @@ class HandlingRepository extends EntityRepository
         }
 
         $sql = $this->createQueryBuilder('h')
-            ->select('h.id as handlingId')
+            ->select('DISTINCT(h.id) as handlingId')
             ->addSelect('o.name as organizationName')
             ->addSelect('h.createdatetime as handlingCreatedatetime')
             ->addSelect('h.lastHandlingDate as handlingLastHandlingDate')

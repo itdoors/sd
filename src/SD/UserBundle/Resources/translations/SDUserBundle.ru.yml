@@ -1,13 +1,19 @@
 Authorization: Авторизация
 Login to your account: Вход в Ваш аккаунт
 Enter valid username and password.: Введите правильное имя пользователя и пароль.
-User name: Имя пользователя
+Username: Имя пользователя
 Password: Пароль
 Remember me: Запомнить меня
 Forgot your password ?: Забыли пароль?
 no worries, click <a href="javascript:;"  id="forget-password">here</a> to reset your password.: нажмите <a href="javascript:;"  id="forget-password">сюда</a> для восстановления пароля
+no worries, click: нажмите
+here: сюда
+to reset your password.: для сброса пароля.
+
+
 Forget Password ?: Забыли пароль?
 Enter your e-mail address below to reset your password.: Введите Ваш e-mail для восстановления пароля
 Back: Назад
 Submit: ОК
+Login: Вход
 

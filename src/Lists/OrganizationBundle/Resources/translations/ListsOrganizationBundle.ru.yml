@@ -1,3 +1,5 @@
+Dashboard: Рабочий стол
+My Organizations: Мои организации
 Organization <small>list of organization</small>: Организации <small>список доступных пользователю организаций</small>
 List of Organizations: Список организаций
 Create Organization: Создание организации
@@ -9,7 +11,7 @@ Enter City: Введите город
 Region: Область
 Enter Region: Введите область
 Name: Наименование
-Shortname: Короткое
+Short Name: Короткое
 Scope: Деятельность
 Enter Scope: Введите деятельность
 Select Organization scope: Выберите деятельность
@@ -65,10 +67,14 @@ No matches found: Совпадений ненайдено
 Managers: Менеджеры
 Manager: Менеджер
 Enter Manager: Введите менеджера
+Contacts: Контакты
 Managers on organization: Список менеджеров, которые имеют доступ к данной организации и могут создавать Обращения. При создании организации, создавший менеджер автоматически добавляется в этот список.
 Contacts on sales organization: Список контактных лиц по данной организации. К которым Вы имеете доступ.
 Contacts on sales dispatcher: Список контактных лиц по данной организации в разрезе команды.
 Contacts on sales admin: Список контактных лиц по данной организации.
+Action: Действие
+
+FirstName, LastName: Имя, Фамилия
 
 FirstName: Имя
 LastName: Фамилия
