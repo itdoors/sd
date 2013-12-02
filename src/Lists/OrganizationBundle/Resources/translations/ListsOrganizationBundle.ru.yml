@@ -1,5 +1,7 @@
 Dashboard: Рабочий стол
 My Organizations: Мои организации
+Team Organizations: Организации команды
+Organization <small>list of team organization</small>: Организации <small>список организаций команды</small>
 Organization <small>list of organization</small>: Организации <small>список доступных пользователю организаций</small>
 List of Organizations: Список организаций
 Create Organization: Создание организации
