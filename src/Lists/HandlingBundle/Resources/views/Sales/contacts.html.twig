@@ -1,0 +1,18 @@
+<div class="tab-pane" id="tab_2">
+    <div class="col-md-12">
+        <h3>{% trans %}Contacts{% endtrans %}</h3>
+        <p>{% trans %}Contacts on handling{% endtrans %}</p>
+        <div class="table-toolbar">
+        </div>
+        <div id="contact_list"
+             data-url="{{ path('lists_sales_contact_ajax_handling', {
+                handlingId: handling.0.id
+             }) }}"
+             data-params='{"handlingId":{{ handling.0.id }}'
+         >
+            {{ render(controller('ListsContactBundle:' ~ baseTemplate ~ ':Handling', {
+                handlingId: handling.0.id
+            })) }}
+        </div>
+    </div>
+</div>

@@ -25,3 +25,7 @@ lists_sales_handling_add_organization_filter:
 lists_sales_dispatcher_handling_add_organization_filter:
     pattern:  /lists/sales/handling/add_organization_filter/{organization_id}
     defaults: { _controller: ListsHandlingBundle:Sales:addOrganizationFilter }
+
+lists_sales_handling_ajax_users:
+    pattern:  /lists/sales/handling/ajax/users/{handlingId}
+    defaults: { _controller: ListsHandlingBundle:Sales:handlingUsers }

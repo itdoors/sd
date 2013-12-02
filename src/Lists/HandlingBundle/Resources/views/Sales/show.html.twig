@@ -1,13 +1,86 @@
 {% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsHandlingBundle' %}
+{% block title %}{% trans %}Show Handling{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+	<ul class="page-breadcrumb breadcrumb">
+		<li>
+			<i class="fa fa-home"></i>
+			<a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+			<i class="fa fa-angle-right"></i>
+		</li>
+		<li><a href="{{ path('lists_sales_handling_show', { id : handling.0.id }) }}"  title="{% trans %}Show Handling{% endtrans %}">{% trans %}Show Handling{% endtrans %}</a></li>
+	</ul>
+{% endblock %}
 {% block page_title %}
-    <h3 class="page-title">
-        {% trans %}Handling <small>view handling</small>{% endtrans %}
-    </h3>
+	<h3 class="page-title">
+		{% trans %}Handling <small>show handling</small>{% endtrans %}  
+	</h3>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.cs')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.js') }}"></script>
 {% endblock %}
 
 {% block body %}
 
-    {{ handling.createdate|date("d.M.yy, H:m") }}
+	<div class="row">
+		<div class="col-md-12">
+			<div class="tabbable tabbable-custom boxless">
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#tab_0" data-toggle="tab">{% trans %}Handling{% endtrans %}</a></li>
+					<li><a href="#tab_1" data-toggle="tab">{% trans %}Managers{% endtrans %}</a></li>
+					<li><a href="#tab_2" data-toggle="tab">{% trans %}Contacts{% endtrans %}</a></li>										
+				</ul>
+				<div class="tab-content">
+
+                    {{  include(
+                        'ListsHandlingBundle:' ~ baseTemplate ~ ':edit.html.twig',
+                        {
+                            handling: handling
+                        }
+                        )
+                    }}
+					<!--tabpane-->
+                    {{  include(
+                        'ListsHandlingBundle:' ~ baseTemplate ~ ':managers.html.twig',
+                            {
+                                handling: handling,
+                                baseTemplate: baseTemplate
+                            }
+                        )
+                    }}
+					<!--tabpane-->
+                    {{  include(
+                        'ListsHandlingBundle:' ~ baseTemplate ~ ':contacts.html.twig',
+                        {
+                            handling: handling,
+                            baseTemplate: baseTemplate
+                        }
+                        )
+                    }}
+                    <!--tabpane-->
+				</div>
+				<!--tab-content-->
+			</div>
+			<!--tabbale-->
+		</div>
+	</div>
+	<!--row-->
+
+
+
+    {{ handling.0.createdate|date("d.M.yy, H:m") }}
 
     {% for item in messages %}
         {{ item.description }} <br />

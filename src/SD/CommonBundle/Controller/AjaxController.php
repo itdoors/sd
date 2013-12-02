@@ -64,6 +64,54 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
 
+    public function handlingStatusAction()
+    {
+        $objects = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingStatus')
+            ->findAll();
+
+        $result = array();
+
+        foreach ($objects as $object)
+        {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    public function handlingResultAction()
+    {
+        $objects = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingResult')
+            ->findAll();
+
+        $result = array();
+
+        foreach ($objects as $object)
+        {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    public function handlingTypeAction()
+    {
+        $objects = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingType')
+            ->findAll();
+
+        $result = array();
+
+        foreach ($objects as $object)
+        {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
     public function scopeAction()
     {
         /** @var \Lists\LookupBundle\Entity\LookupRepository $repository */
@@ -92,7 +140,7 @@ class AjaxController extends Controller
 
         $objects = $repository->getOnlyStaff()
             ->andWhere('lower(u.firstName) LIKE :q OR lower(u.lastName) LIKE :q')
-            ->setParameter(':q', $searchText . '%')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
             ->getQuery()
             ->getResult();
 
@@ -262,7 +310,9 @@ class AjaxController extends Controller
         {
             $method = $formName . 'Save';
 
-            $this->$method($form);
+            $user = $this->getUser();
+
+            $this->$method($form, $user);
 
             unset($result['error']);
 
@@ -284,7 +334,7 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
 
-    public function organizationUserFormSave($form)
+    public function organizationUserFormSave($form, $user)
     {
         $data = $form->getData();
 
@@ -300,6 +350,27 @@ class AjaxController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($organization);
+        $em->flush();
+
+        return true;
+    }
+
+    public function handlingUserFormSave($form, $user)
+    {
+        $data = $form->getData();
+
+        $object = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling')
+            ->find($data['handlingId']);
+
+        $user = $this->getDoctrine()
+            ->getRepository('SDUserBundle:User')
+            ->find($data['user']);
+
+        $object->addUser($user);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
         $em->flush();
 
         return true;
@@ -334,5 +405,129 @@ class AjaxController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($organization);
         $em->flush();
+    }
+
+    public function HandlingUserDelete($params)
+    {
+        $handlingId = $params['handlingId'];
+        $userId = $params['userId'];
+
+        $object = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling')
+            ->find($handlingId);
+
+        $user = $this->getDoctrine()
+            ->getRepository('SDUserBundle:User')
+            ->find($userId);
+
+        $object->removeUser($user);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+        $em->flush();
+    }
+
+    public function modelContactOrganizationFormSave($form, $user)
+    {
+        $data = $form->getData();
+
+        $data->setUser($user);
+        $data->setCreatedatetime(new \DateTime());
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
+
+    public function modelContactHandlingFormSave($form, $user)
+    {
+        $data = $form->getData();
+
+        $data->setUser($user);
+        $data->setCreatedatetime(new \DateTime());
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
+
+    public function ModelContactDelete($params)
+    {
+        $id = $params['id'];
+
+        $object = $this->getDoctrine()
+            ->getRepository('ListsContactBundle:ModelContact')
+            ->find($id);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+        $em->flush();
+    }
+
+    /**
+     * Saves object to db
+     *
+     * @return mixed[]
+     */
+    public function handlingSaveAction()
+    {
+        $translator = $this->get('translator');
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        $methodSet = 'set' . ucfirst($name);
+
+        $object = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling')
+            ->find($pk);
+
+        if (!$value)
+        {
+            $methodGet = 'get' . ucfirst($name);
+            $type = gettype($object->$methodGet());
+
+            if (in_array($type, array('integer')))
+            {
+                $value = null;
+            }
+        }
+
+        $object->$methodSet($value);
+
+        $validator = $this->get('validator');
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
+        $errors = $validator->validate($object, array('edit'));
+
+        if (sizeof($errors))
+        {
+            $return = $this->getFirstError($errors);
+
+            return new Response($return, 406);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+
+        try
+        {
+            $em->flush();
+        }
+        catch (\ErrorException $e)
+        {
+            $return = array('msg' => $translator->trans('Wrong input data'));
+
+            return new Response(json_encode($return));
+        }
+
+        $return = array('success' => 1);
+
+        return new Response(json_encode($return));
     }
 }

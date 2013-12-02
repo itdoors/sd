@@ -685,4 +685,88 @@ class Handling
     {
         return $this->organization;
     }
+    /**
+     * @var integer
+     */
+    private $result_id;
+
+    /**
+     * @var integer
+     */
+    private $status_id;
+
+    /**
+     * @var integer
+     */
+    private $type_id;
+
+
+    /**
+     * Set result_id
+     *
+     * @param integer $resultId
+     * @return Handling
+     */
+    public function setResultId($resultId)
+    {
+        $this->result_id = $resultId;
+    
+        return $this;
+    }
+
+    /**
+     * Get result_id
+     *
+     * @return integer 
+     */
+    public function getResultId()
+    {
+        return $this->result_id;
+    }
+
+    /**
+     * Set status_id
+     *
+     * @param integer $statusId
+     * @return Handling
+     */
+    public function setStatusId($statusId)
+    {
+        $this->status_id = $statusId;
+    
+        return $this;
+    }
+
+    /**
+     * Get status_id
+     *
+     * @return integer 
+     */
+    public function getStatusId()
+    {
+        return $this->status_id;
+    }
+
+    /**
+     * Set type_id
+     *
+     * @param integer $typeId
+     * @return Handling
+     */
+    public function setTypeId($typeId)
+    {
+        $this->type_id = $typeId;
+    
+        return $this;
+    }
+
+    /**
+     * Get type_id
+     *
+     * @return integer 
+     */
+    public function getTypeId()
+    {
+        return $this->type_id;
+    }
 }

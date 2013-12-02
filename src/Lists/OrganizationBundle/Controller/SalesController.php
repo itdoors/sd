@@ -115,6 +115,5 @@ class SalesController extends BaseController
                 'organizationId' => $organizationId
             ));
     }
-
 }
 
