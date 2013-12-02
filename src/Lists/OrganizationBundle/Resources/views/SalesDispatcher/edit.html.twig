@@ -1,0 +1,148 @@
+{% trans_default_domain 'ListsOrganizationBundle' %}
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+        $.fn.editable.defaults.inputclass = 'form-control';
+        $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
+
+        $('#name, #shortDescription, #address, #mailingAddress, #site, #edrpou, #inn, #certificate').editable({
+            url: '{{ path('sd_common_ajax_organization_save') }}'
+        });
+
+        $('#organizationTypeId').editable({
+            url: '{{ path('sd_common_ajax_organization_save') }}',
+            source: '{{ path('sd_common_ajax_organization_type') }}'
+        });
+
+        $('#scopeId').editable({
+            url: '{{ path('sd_common_ajax_organization_save') }}',
+            source: '{{ path('sd_common_ajax_scope') }}'
+        });
+
+        $('#cityId').editable({
+            url: '{{ path('sd_common_ajax_organization_save') }}',
+            source: '{{ path('sd_common_ajax_city') }}',
+            select2: {
+                placeholder: '{% trans %}Select City{% endtrans %}',
+                minimumInputLength: 2
+            }
+        });
+    })
+
+</script>
+
+<div class="tab-pane active" id="tab_0">
+    <div class="col-md-12">
+        <table id="user" class="table table-bordered table-striped">
+            <tbody>
+            <tr>
+                <td style="width:15%">{% trans %}Organization name{% endtrans %}</td>
+                <td style="width:50%">
+                    <a href="#" id="name" data-type="text" data-pk="{{ organization.id }}" data-placement="right" data-placeholder="Required" data-original-title="{% trans %}Enter Organization name{% endtrans %}">
+                        {{ organization.name }}
+                    </a>
+                </td>
+                <td style="width:35%"><span class="text-muted">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп"</span></td>
+            </tr>
+            <tr>
+                <td>{% trans %}Short Name{% endtrans %}</td>
+                <td>
+                    <a href="#" id="shortDescription" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Enter organization short name{% endtrans %}">
+                        {{ organization.shortDescription }}
+                    </a>
+                </td>
+                <td><span class="text-muted">{% trans %}for example{% endtrans %}: Impel Griffin</span></td>
+            </tr>
+            <tr>
+                <td>{% trans %}Organization type{% endtrans %}</td>
+                <td><a href="#" id="organizationTypeId" data-type="select" data-pk="{{ organization.id }}" data-value="" data-original-title="{% trans %}Select type{% endtrans %}">{{ organization.organizationType }}</a></td>
+                <td><span class="text-muted">{% trans %}Select Organization type{% endtrans %}</span></td>
+            </tr>
+            <tr>
+                <td>{% trans %}Scope{% endtrans %}</td>
+                <td>
+                    <a href="#" id="scopeId" data-type="select" data-pk="{{ organization.id }}" data-value="{{ organization.scopeId }}" data-original-title="{% trans %}Select scope{% endtrans %}">
+                        {{ organization.scope }}
+                    </a>
+                </td>
+                <td><span class="text-muted">{% trans %}Select Organization scope{% endtrans %}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}City{% endtrans %}</td>
+                <td>
+                    <a href="#" id="cityId" data-type="select2" data-pk="{{ organization.id }}" data-value="BS" data-original-title="{% trans %}Select city{% endtrans %}">
+                        {{ organization.city }}
+                    </a>
+                </td>
+                <td><span class="text-muted">{% trans %}Select city{% endtrans %}</span></td>
+            </tr>
+            <tr>
+                <td>{% trans %}Legal Address{% endtrans %}</td>
+                <td>
+                    <a href="#" id="address" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Enter Legal Address{% endtrans %}">
+                        {{ organization.address }}
+                    </a>
+                </td>
+                <td><span class="text-muted">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп"</span></td>
+            </tr>
+            <tr>
+                <td>{% trans %}Mailing Address{% endtrans %}</td>
+                <td>
+                    <a href="#" id="mailingAddress" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Enter Mailing Address{% endtrans %}">
+                        {{ organization.mailingAddress }}
+                    </a>
+                </td>
+                <td><span class="text-muted">{% trans %}Enter Mailing Address{% endtrans %}</span></td>
+            </tr>
+            <tr>
+                <td>{% trans %}Physical Address{% endtrans %}</td>
+                <td><a href="#" id="address" data-type="text" data-pk="1" data-original-title="{% trans %}Enter Physical Address{% endtrans %}">{% trans %}Enter Physical Address{% endtrans %}</a></td>
+                <td><span class="text-muted">{% trans %}Enter Physical Address{% endtrans %}</span></td>
+            </tr>
+            <tr>
+                <td>{% trans %}Phone{% endtrans %}</td>
+                <td><a href="#" id="phone" data-type="text" data-pk="1" data-original-title="{% trans %}Enter Phone{% endtrans %}">phone</a></td>
+                <td><span class="text-muted">{% trans %}Enter Phone{% endtrans %}</span></td>
+            </tr>
+            <tr>
+                <td>{% trans %}Site{% endtrans %}</td>
+                <td>
+                    <a href="#" id="site" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Enter site{% endtrans %}">
+                        {{ organization.site }}
+                    </a>
+                </td>
+                <td><span class="text-muted">{% trans %}Enter Organization Site{% endtrans %}</span></td>
+            </tr>
+            <tr>
+                <td>{% trans %}Edrpou{% endtrans %}</td>
+                <td>
+                    <a href="#" id="edrpou" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Enter edrpou{% endtrans %}">
+                        {{ organization.edrpou }}
+                    </a>
+                </td>
+                <td><span class="text-muted">{% trans %}Enter edrpou{% endtrans %}</span></td>
+            </tr>
+            <tr>
+                <td>{% trans %}INN{% endtrans %}</td>
+                <td>
+                    <a href="#" id="inn" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Enter INN{% endtrans %}">
+                        {{ organization.inn }}
+                    </a>
+                </td>
+                <td><span class="text-muted">{% trans %}Enter INN{% endtrans %}</span></td>
+            </tr>
+            <tr>
+                <td>{% trans %}INN{% endtrans %}</td>
+                <td>
+                    <a href="#" id="certificate" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}INN Certificate:{% endtrans %}">
+                        {{ organization.certificate }}
+                    </a>
+                </td>
+                <td><span class="text-muted">{% trans %}Enter INN Certificate{% endtrans %}</span></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

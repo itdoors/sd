@@ -1,12 +1,87 @@
 {% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsOrganizationBundle' %}
+{% block title %}{% trans %}Show Organization{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+	<ul class="page-breadcrumb breadcrumb">
+		<li>
+			<i class="fa fa-home"></i>
+			<a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+			<i class="fa fa-angle-right"></i>
+		</li>
+		<li><a href="{{ path('lists_sales_organization_show', { id : organization.id }) }}" title="{% trans %}Show Organization{% endtrans %}">{% trans %}Show Organization{% endtrans %}</a></li>
+	</ul>
+{% endblock %}
 {% block page_title %}
-    <h3 class="page-title">
-        {% trans %}Organization <small>create organization</small>{% endtrans %}
-    </h3>
+	<h3 class="page-title">
+		{% trans %}Organization <small>show organization</small>{% endtrans %}  
+	</h3>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.cs')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.js') }}"></script>
 {% endblock %}
 
 {% block body %}
 
-    {{ organization.name }}
+	<div class="row">
+		<div class="col-md-12">
+			<div class="tabbable tabbable-custom boxless">
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#tab_0" data-toggle="tab">{% trans %}Organization{% endtrans %}</a></li>
+					<li><a href="#tab_1" data-toggle="tab">{% trans %}Managers{% endtrans %}</a></li>
+					<li><a href="#tab_2" data-toggle="tab">{% trans %}Contacts{% endtrans %}</a></li>
+					<li><a href="#tab_3" data-toggle="tab">{% trans %}Contracts{% endtrans %}</a></li>
+				</ul>
+				<div class="tab-content">
+
+                    {{  include(
+                        'ListsOrganizationBundle:' ~ baseTemplate ~ ':edit.html.twig',
+                        {
+                            organization: organization
+                        }
+                        )
+                    }}
+					<!--tabpane-->
+                    {{  include(
+                        'ListsOrganizationBundle:' ~ baseTemplate ~ ':managers.html.twig',
+                            {
+                                organization: organization,
+                                managerForm: managerForm,
+                                baseTemplate: baseTemplate
+                            }
+                        )
+                    }}
+					<!--tabpane-->
+                    {{  include(
+                        'ListsOrganizationBundle:' ~ baseTemplate ~ ':contacts.html.twig',
+                            {
+                                organization: organization,
+                                managerForm: managerForm,
+                                baseTemplate: baseTemplate
+                            }
+                        )
+                    }}
+					<!--tabpane-->
+					<div class="tab-pane" id="tab_3">
+					</div>
+					<!--tabpane-->
+				</div>
+				<!--tab-content-->
+			</div>
+			<!--tabbale-->
+		</div>
+	</div>
+	<!--row-->
 
 {% endblock body %}
