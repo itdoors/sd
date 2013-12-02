@@ -176,8 +176,8 @@ class OrganizationRepository extends EntityRepository
                         {
                             break;
                         }
-                        $sql->andWhere('users.id in (:userIds)');
-                        $sql->setParameter(':userIds', $value);
+                        $sql->andWhere('users.id in (:userFilterIds)');
+                        $sql->setParameter(':userFilterIds', $value);
                         break;
                     /*case 'users':
                         if (isset($value[0]) && !$value[0])
