@@ -1,3 +1,11 @@
+lists_sales_team_index:
+    pattern:  /lists/sales/team/index
+    defaults: { _controller: ListsTeamBundle:Sales:index }
+
+lists_sales_admin_team_index:
+    pattern:  /lists/salesadmin/team/index
+    defaults: { _controller: ListsTeamBundle:SalesAdmin:index }
+
 lists_sales_dispatcher_team_index:
     pattern:  /lists/salesdispatcher/team/index
     defaults: { _controller: ListsTeamBundle:SalesDispatcher:index }
@@ -5,3 +13,7 @@ lists_sales_dispatcher_team_index:
 lists_sales_dispatcher_team_new:
     pattern:  /lists/salesdispatcher/team/new
     defaults: { _controller: ListsTeamBundle:SalesDispatcher:new }
+
+lists_sales_admin_team_edit:
+    pattern:  /lists/salesadmin/team/edit/{id}
+    defaults: { _controller: ListsTeamBundle:SalesAdmin:edit }
