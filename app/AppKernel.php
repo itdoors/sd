@@ -30,6 +30,7 @@ class AppKernel extends Kernel
             new SD\CommonBundle\SDCommonBundle(),
             new Lists\TeamBundle\ListsTeamBundle(),
             new Lists\ContactBundle\ListsContactBundle(),
+            new SD\CalendarBundle\SDCalendarBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

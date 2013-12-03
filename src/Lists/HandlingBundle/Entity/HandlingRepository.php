@@ -19,7 +19,46 @@ class HandlingRepository extends EntityRepository
             $userIds = array($userIds);
         }
 
-        $sql = $this->createQueryBuilder('h')
+        /** @var \Doctrine\ORM\QueryBuilder $sql*/
+        $sql = $this->createQueryBuilder('h');
+
+        /** @var \Doctrine\ORM\QueryBuilder $sqlCount */
+        $sqlCount = $this->createQueryBuilder('h');
+
+        $this->processSelect($sql);
+        $this->processCount($sqlCount);
+
+        $this->processBaseQuery($sql);
+        $this->processBaseQuery($sqlCount);
+
+        if (sizeof($userIds))
+        {
+            $this->processUserQuery($sql, $userIds);
+            $this->processUserQuery($sqlCount, $userIds);
+        }
+
+        $this->processFilters($sql, $filters);
+        $this->processFilters($sqlCount, $filters);
+
+        $this->processOrdering($sql);
+
+        $query = $sql->getQuery();
+
+        $count = $sqlCount->getQuery()->getSingleScalarResult();
+
+        $query->setHint('knp_paginator.count', $count);
+
+        return $query;
+    }
+
+    /**
+     * Processes sql query. adding select
+     *
+     * @param \Doctrine\ORM\QueryBuilder $sql
+     */
+    public function processSelect($sql)
+    {
+        $sql
             ->select('DISTINCT(h.id) as handlingId')
             ->addSelect('o.name as organizationName')
             ->addSelect('h.createdatetime as handlingCreatedatetime')
@@ -40,40 +79,60 @@ class HandlingRepository extends EntityRepository
                         WHERE hu.id = h.id
                     ), ','
                 ) as fullNames
-            ")
+            ");
+    }
+
+
+    /**
+     * Processes sql query. adding select
+     *
+     * @param \Doctrine\ORM\QueryBuilder $sql
+     */
+    public function processCount($sql)
+    {
+        $sql
+            ->select('COUNT(h.id) as handlingcount');
+
+    }
+
+    /**
+     * Processes sql query. adding base query
+     *
+     * @param \Doctrine\ORM\QueryBuilder $sql
+     */
+    public function processBaseQuery($sql)
+    {
+        $sql
             ->leftJoin('h.organization', 'o')
             ->leftJoin('o.city', 'city')
             ->leftJoin('o.scope', 'scope')
             ->leftJoin('h.status', 'status')
-            ->orderBy('h.createdatetime', 'DESC');
+            ->leftJoin('h.users', 'users');
 
-        if (sizeof($userIds))
-        {
-            $sql
-                ->leftJoin('o.users', 'users')
-                ->where('users.id in (:userIds)')
-                ->setParameter(':userIds', $userIds);
-        }
-
-        $this->processFilters($sql, $filters);
-
-        $query = $sql->getQuery();
-
-        $count = $this->getAllForSalesCount($filters['organization_id']);
-
-        $query->setHint('knp_paginator.count', $count);
-
-        return $query;
     }
 
-    public function getAllForSalesCount($organizationId)
+    /**
+     * Processes sql query. adding users query
+     *
+     * @param \Doctrine\ORM\QueryBuilder $sql
+     * @param int[] $userIds
+     */
+    public function processUserQuery($sql, $userIds)
     {
-        $count = $this->getEntityManager()
-            ->createQuery('SELECT COUNT(h.id) FROM ListsHandlingBundle:Handling h WHERE h.organization_id = :organizationId')
-            ->setParameter(':organizationId', $organizationId)
-            ->getSingleScalarResult();
+        $sql
+            ->where('users.id in (:userIds)')
+            ->setParameter(':userIds', $userIds);
+    }
 
-        return $count;
+    /**
+     * Processes sql query. adding users query
+     *
+     * @param \Doctrine\ORM\QueryBuilder $sql
+     */
+    public function processOrdering($sql)
+    {
+        $sql
+            ->orderBy('h.createdatetime', 'DESC');
     }
 
     /**
@@ -114,7 +173,7 @@ class HandlingRepository extends EntityRepository
                         {
                             break;
                         }
-                        $sql->andWhere('c.id in (:cityIds)');
+                        $sql->andWhere('city.id in (:cityIds)');
                         $sql->setParameter(':cityIds', $value);
                         break;
                     case 'users':
@@ -122,8 +181,8 @@ class HandlingRepository extends EntityRepository
                         {
                             break;
                         }
-                        $sql->andWhere('users.id in (:userIds)');
-                        $sql->setParameter(':userIds', $value);
+                        $sql->andWhere('users.id in (:userFilterIds)');
+                        $sql->setParameter(':userFilterIds', $value);
                         break;
                 }
             }

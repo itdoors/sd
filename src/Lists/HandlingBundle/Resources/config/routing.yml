@@ -1,3 +1,4 @@
+#SALES ROUTERS
 lists_sales_handling_index:
     pattern:  /lists/sales/handling/index
     defaults: { _controller: ListsHandlingBundle:Sales:index }
@@ -5,6 +6,7 @@ lists_sales_handling_index:
 lists_sales_handling_new:
     pattern:  /lists/sales/handling/new
     defaults: { _controller: ListsHandlingBundle:Sales:new }
+
 
 lists_sales_handling_show:
     pattern:  /lists/sales/handling/show/{id}
@@ -14,15 +16,12 @@ lists_sales_handling_filter:
     pattern:  /lists/sales/handling/filter
     defaults: { _controller: ListsHandlingBundle:Sales:filter }
 
+
 lists_sales_handling_filter_clear:
     pattern:  /lists/sales/handling/filter_clear
     defaults: { _controller: ListsHandlingBundle:Sales:filterClear }
 
 lists_sales_handling_add_organization_filter:
-    pattern:  /lists/sales/handling/add_organization_filter/{organization_id}
-    defaults: { _controller: ListsHandlingBundle:Sales:addOrganizationFilter }
-
-lists_sales_dispatcher_handling_add_organization_filter:
     pattern:  /lists/sales/handling/add_organization_filter/{organization_id}
     defaults: { _controller: ListsHandlingBundle:Sales:addOrganizationFilter }
 
@@ -38,10 +37,112 @@ lists_sales_tender_index:
     pattern:  /lists/sales/tender
     defaults: { _controller: ListsHandlingBundle:Sales:tenderList }
 
+lists_sales_report_index:
+    pattern:  /lists/sales/repost
+    defaults: { _controller: ListsHandlingBundle:Sales:reportList }
+
+#SALES DISPATCHER ROUTES
+
+lists_sales_dispatcher_handling_index:
+    pattern:  /lists/salesdispatcher/handling/index
+    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:index }
+
+lists_sales_dispatcher_handling_new:
+    pattern:  /lists/salesdispatcher/handling/new
+    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:new }
+
+
+lists_sales_dispatcher_handling_show:
+    pattern:  /lists/salesdispatcher/handling/show/{id}
+    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:show }
+
+lists_sales_dispatcher_handling_filter:
+    pattern:  /lists/salesdispatcher/handling/filter
+    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:filter }
+
+
+lists_sales_dispatcher_handling_filter_clear:
+    pattern:  /lists/salesdispatcher/handling/filter_clear
+    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:filterClear }
+
+lists_sales_dispatcher_handling_add_organization_filter:
+    pattern:  /lists/salesdispatcher/handling/add_organization_filter/{organization_id}
+    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:addOrganizationFilter }
+
+lists_sales_dispatcher_handling_ajax_users:
+    pattern:  /lists/salesdispatcher/handling/ajax/users/{handlingId}
+    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:handlingUsers }
+
+lists_sales_dispatcher_handling_ajax_messages:
+    pattern:  /lists/salesdispatcher/handling/ajax/messages/{handlingId}
+    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:messagesList }
+
 lists_sales_dispatcher_tender_index:
     pattern:  /lists/salesdispatcher/tender
     defaults: { _controller: ListsHandlingBundle:SalesDispatcher:tenderList }
 
+
+lists_sales_dispatcher_handling_add_organization_filter:
+    pattern:  /lists/salesdispatcher/handling/add_organization_filter/{organization_id}
+    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:addOrganizationFilter }
+
+lists_sales_dispatcher_tender_index:
+    pattern:  /lists/salesdispatcher/tender
+    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:tenderList }
+
+lists_sales_dispatcher_report_index:
+    pattern:  /lists/salesdispatcher/report
+    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:report }
+
+#SALES ADMIN ROUTES
+
+lists_sales_admin_handling_index:
+    pattern:  /lists/salesadmin/handling/index
+    defaults: { _controller: ListsHandlingBundle:SalesAdmin:index }
+
+lists_sales_admin_handling_new:
+    pattern:  /lists/salesadmin/handling/new
+    defaults: { _controller: ListsHandlingBundle:SalesAdmin:new }
+
+
+lists_sales_admin_handling_show:
+    pattern:  /lists/salesadmin/handling/show/{id}
+    defaults: { _controller: ListsHandlingBundle:SalesAdmin:show }
+
+lists_sales_admin_handling_filter:
+    pattern:  /lists/salesadmin/handling/filter
+    defaults: { _controller: ListsHandlingBundle:SalesAdmin:filter }
+
+
+lists_sales_admin_handling_filter_clear:
+    pattern:  /lists/salesadmin/handling/filter_clear
+    defaults: { _controller: ListsHandlingBundle:SalesAdmin:filterClear }
+
+lists_sales_admin_handling_add_organization_filter:
+    pattern:  /lists/salesadmin/handling/add_organization_filter/{organization_id}
+    defaults: { _controller: ListsHandlingBundle:SalesAdmin:addOrganizationFilter }
+
+lists_sales_admin_handling_ajax_users:
+    pattern:  /lists/salesadmin/handling/ajax/users/{handlingId}
+    defaults: { _controller: ListsHandlingBundle:SalesAdmin:handlingUsers }
+
+lists_sales_admin_handling_ajax_messages:
+    pattern:  /lists/salesadmin/handling/ajax/messages/{handlingId}
+    defaults: { _controller: ListsHandlingBundle:SalesAdmin:messagesList }
+
 lists_sales_admin_tender_index:
     pattern:  /lists/salesadmin/tender
     defaults: { _controller: ListsHandlingBundle:SalesAdmin:tenderList }
+
+
+lists_sales_admin_handling_add_organization_filter:
+    pattern:  /lists/salesadmin/handling/add_organization_filter/{organization_id}
+    defaults: { _controller: ListsHandlingBundle:SalesAdmin:addOrganizationFilter }
+
+lists_sales_admin_tender_index:
+    pattern:  /lists/salesadmin/tender
+    defaults: { _controller: ListsHandlingBundle:SalesAdmin:tenderList }
+
+lists_sales_admin_report_index:
+    pattern:  /lists/salesadmin/report
+    defaults: { _controller: ListsHandlingBundle:SalesAdmin:report }

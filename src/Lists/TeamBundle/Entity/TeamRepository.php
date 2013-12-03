@@ -42,4 +42,28 @@ class TeamRepository extends EntityRepository
 
         return $sql;
     }
+
+
+    /**
+     * Get my teamIds
+     *
+     * @param \SD\UserBundle\Entity\User $user
+     *
+     * @return mixed[]
+     */
+    public function getMyTeamIdsByUser(\SD\UserBundle\Entity\User $user)
+    {
+        $sql = $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select('DISTINCT(user.id) as userId')
+            ->from('SDUserBundle:User', 'user')
+            ->leftJoin('user.teams', 'teams')
+            ->leftJoin('teams.owner', 'owner')
+            ->where('owner.id = :ownerId')
+            ->setParameter(':ownerId', $user->getId())
+            ->getQuery()
+            ->getArrayResult();
+
+        return $sql;
+    }
 }

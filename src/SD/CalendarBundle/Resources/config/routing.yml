@@ -1,0 +1,10 @@
+#SALES ROUTES
+lists_sales_calendar_index:
+    pattern:  /hello
+    defaults: { _controller: SDCalendarBundle:Default:index }
+
+
+#SALES DISPATCHER ROUTES
+lists_sales_dispatcher_calendar_index:
+    pattern:  /hello
+    defaults: { _controller: SDCalendarBundle:Default:index }

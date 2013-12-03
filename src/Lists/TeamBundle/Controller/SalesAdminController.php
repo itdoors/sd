@@ -11,6 +11,7 @@ class SalesAdminController extends SalesController
     protected $baseRoutePrefix = 'sales_admin';
     protected $baseTemplate = 'SalesAdmin';
 
+
     public function editAction($id, Request $request)
     {
         if ($id && $id !=0 )
@@ -41,15 +42,15 @@ class SalesAdminController extends SalesController
             $em->persist($object);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('lists_sales_admin_team_index'));
+            return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_team_index'));
         }
 
         return $this->render('ListsTeamBundle:' . $this->baseTemplate . ':edit.html.twig', array(
-            'form' => $form->createView(),
-            'baseTemplate' => $this->baseTemplate,
-            'baseRoutePrefix' => $this->baseRoutePrefix,
-            'baseRoute' => $this->baseRoute,
-            'id' => $id
-        ));
+                'form' => $form->createView(),
+                'baseTemplate' => $this->baseTemplate,
+                'baseRoutePrefix' => $this->baseRoutePrefix,
+                'baseRoute' => $this->baseRoute,
+                'id' => $id
+            ));
     }
 }

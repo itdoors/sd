@@ -1,0 +1,26 @@
+<div class="row">
+
+    {% for item in messages %}
+    <div class="portlet box yellow">
+        <div class="portlet-title">
+            <div class="caption">
+                {{ item.createdate|date('Y.m.d') }} | {{ item.type }} | {{ item.user }}
+            </div>
+            <div class="tools"><a class="collapse" href="" title="{% trans %}Filters{% endtrans %}"></a></div>
+        </div>
+        <div class="portlet-body">
+            {{ item.description }} <br />
+            {% if item.filepath %}
+                <a href="/uploads/handling_message/{{ item.handlingId }}/{{ item.filepath }}" target="_blank">
+                    {% if item.filename %}
+                        {{ item.filename }}
+                    {% else %}
+                        {% trans %}File{% endtrans %}
+                    {% endif %}
+                </a>
+                <br />
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>

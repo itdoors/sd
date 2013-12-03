@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class BaseFilterController extends Controller
 {
     protected $filterNamespace = 'base.sales.filters';
-    protected $filterForm = 'baseSalesFilterForm';
+    protected $filterFormName = 'baseSalesFilterForm';
     protected $baseRoute = 'lists_sales_base_index';
 
     /**
@@ -25,15 +25,9 @@ class BaseFilterController extends Controller
      */
     public function processFilters()
     {
-        $filterForm = $this->createForm($this->filterForm);
+        $filterForm = $this->createForm($this->filterFormName);
 
         $filterForm->bind($this->getFilters());
-
-        if ($filterForm->get('reset')->isClicked())
-        {
-            $this->clearFilters();
-            $this->redirect($this->generateUrl($this->baseRoute));
-        }
 
         return $filterForm;
     }
@@ -43,9 +37,16 @@ class BaseFilterController extends Controller
      */
     public function filterAction()
     {
-        $filters = $this->get('request')->request->get($this->filterForm);
+        $filters = $this->get('request')->request->get($this->filterFormName);
 
-        $this->setFilters($filters);
+        if (!isset($filters['reset']))
+        {
+            $this->setFilters($filters);
+        }
+        else
+        {
+            $this->clearFilters();
+        }
 
         return $this->redirect($this->generateUrl($this->baseRoute));
     }
