@@ -2,13 +2,13 @@
 
 namespace Lists\OrganizationBundle\Controller;
 
-use Lists\OrganizationBundle\Controller\SalesController as BaseController;
-
-class SalesAdminController extends SalesController
+class SalesAdminController extends SalesDispatcherController
 {
-    protected $filterNamespace = 'organization.sales.filters';
-    protected $filterForm = 'organizationSalesFilterForm';
-    protected $baseRoute = 'lists_sales_organization_index';
+    protected $filterNamespace = 'organization.sales.admin.filters';
+    protected $filterFormName = 'organizationSalesAdminFilterForm';
+    protected $baseRoute = 'lists_sales_admin_organization_index';
+    protected $baseRoutePrefix = 'sales_admin';
+    protected $baseTemplate = 'SalesAdmin';
 
     public function indexAction()
     {
@@ -35,7 +35,7 @@ class SalesAdminController extends SalesController
             20
         );
 
-        return $this->render('ListsOrganizationBundle:Sales:index.html.twig', array(
+        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':index.html.twig', array(
             'pagination' => $pagination,
             'filterForm' => $filterForm->createView(),
             'filterFormName' => $this->filterFormName,

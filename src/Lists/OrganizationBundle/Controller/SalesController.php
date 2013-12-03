@@ -70,7 +70,10 @@ class SalesController extends BaseController
         }
 
         return $this->render('ListsOrganizationBundle:' . $this->baseTemplate. ':new.html.twig', array(
-            'filterForm' => $form->createView()
+            'filterForm' => $form->createView(),
+            'filterFormName' => $this->filterFormName,
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix,
         ));
     }
 

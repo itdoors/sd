@@ -5,10 +5,10 @@
 	<ul class="page-breadcrumb breadcrumb">
 		<li>
 			<i class="fa fa-home"></i>
-			<a href="{{ path('sd_dashboard_homepage') }}" titl="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a> 
+			<a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
 			<i class="fa fa-angle-right"></i>
 		</li>
-		<li><a href="{{ path('lists_sales_dispatcher_organization_index') }}" title="{% trans %}My Organizations{% endtrans %}">{% trans %}My Organizations{% endtrans %}</a></li>
+		<li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_index') }}" title="{% trans %}My Organizations{% endtrans %}">{% trans %}My Organizations{% endtrans %}</a></li>
 	</ul>
 {% endblock %}
 {% block page_title %}
@@ -31,9 +31,10 @@
 {% block body %}
 
     {{  include(
-            'ListsOrganizationBundle:SalesDispatcher:filters.html.twig',
+            'ListsOrganizationBundle:' ~ baseTemplate ~ ':filters.html.twig',
             {
-                filterForm: filterForm
+                filterForm: filterForm,
+                filterFormName: filterFormName
             }
         )
     }}
@@ -58,7 +59,12 @@
             <tbody>
             {% for item in pagination %}
                 <tr {% if loop.index is odd %}class="color"{% endif %}>
-                    <td>{{ item.organizationId|e }}</td>
+                    <td>
+                        <a
+                            href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_show', { id: item.organizationId }) }}">
+                            {{ item.organizationId|e }}
+                        </a>
+                    </td>
                     <td>{{ item.organizationName|e }}</td>
                     <td>{{ item.cityName|e }}</td>
                     <td>{{ item.regionName|e }}</td>
@@ -67,7 +73,7 @@
                     <td>
                         <a
                             class="btn default btn-xs red-stripe"
-                            href="{{ path('lists_sales_handling_add_organization_filter', {'organization_id': item.organizationId}) }}">
+                            href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_add_organization_filter', {'organization_id': item.organizationId}) }}">
                             {{ 'handling.list'|trans({}, 'ListsOrganizationBundle') }}
                         </a>
 						

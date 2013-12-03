@@ -21,9 +21,6 @@ class SalesDispatcherController extends SalesController
 
         $filterForm = $this->processFilters();
 
-        /** @var \SD\UserBundle\Entity\User $user*/
-        $user = $this->getUser();
-
         /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
         $organizationsRepository = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization');

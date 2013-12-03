@@ -8,7 +8,7 @@
             <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
             <i class="fa fa-angle-right"></i>
         </li>
-        <li><a href="{{ path('lists_sales_organization_new') }}" title="{% trans %}Create Organization{% endtrans %}">{% trans %}Create Organization{% endtrans %}</a></li>
+        <li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_new') }}" title="{% trans %}Create Organization{% endtrans %}">{% trans %}Create Organization{% endtrans %}</a></li>
     </ul>
 {% endblock %}
 {% block page_title %}
@@ -54,7 +54,7 @@
                 {% form_theme filterForm 'SDCommonBundle:Form:form_errors.html.twig' %}
                 {{ form_start(filterForm,
                     {
-                        'action': path('lists_sales_organization_new'),
+                        'action': path('lists_' ~ baseRoutePrefix ~ '_organization_new'),
                         'attr': {'novalidate': 'novalidate', 'class' : 'horizontal-form'}
                     })
                 }}
