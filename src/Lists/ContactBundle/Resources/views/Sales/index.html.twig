@@ -8,12 +8,12 @@
             <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
             <i class="fa fa-angle-right"></i>
         </li>
-        <li><a href="{{ path('lists_sales_contact_index') }}" title="{% trans %}Show contacts{% endtrans %}">{% trans %}Show contacts{% endtrans %}</a></li>
+        <li><a href="{{ path('lists_sales_contact_index') }}" title="{% trans %}My Contacts{% endtrans %}">{% trans %}My Contacts{% endtrans %}</a></li>
     </ul>
 {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
-        {% trans %}Contacts <small>show contacts</small>{% endtrans %}
+        {% trans %}My Contacts <small>show contacts</small>{% endtrans %}
     </h3>
 {% endblock %}
 
@@ -33,9 +33,9 @@
 {% endblock %}
 
 {% block body %}
-    <div class="col-md-12">
-        <h3>{% trans %}Contacts{% endtrans %}</h3>
-        <p>{% trans %}Contacts on organization{% endtrans %}</p>
+<div class="row">
+    <div class="col-md-12">        
+        <p>{% trans %}Contacts on contacts{% endtrans %}</p>
         <div class="table-toolbar">
             <div class="btn-group">
                 <button id="managers_list_new" class="btn green ajax-form"
@@ -62,4 +62,5 @@
             })) }}
         </div>
     </div>
+</div>
 {% endblock body %}
