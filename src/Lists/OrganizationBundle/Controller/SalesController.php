@@ -2,16 +2,13 @@
 
 namespace Lists\OrganizationBundle\Controller;
 
-use Lists\OrganizationBundle\ListsOrganizationBundle;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use SD\CommonBundle\Controller\BaseFilterController as BaseController;
 
 class SalesController extends BaseController
 {
     protected $filterNamespace = 'organization.sales.filters';
-    protected $filterForm = 'organizationSalesFilterForm';
+    protected $filterFormName = 'organizationSalesFilterForm';
     protected $baseRoute = 'lists_sales_organization_index';
     protected $baseRoutePrefix = 'sales';
     protected $baseTemplate = 'Sales';
@@ -44,7 +41,7 @@ class SalesController extends BaseController
       return $this->render('ListsOrganizationBundle:' . $this->baseTemplate. ':index.html.twig', array(
           'pagination' => $pagination,
           'filterForm' => $filterForm->createView(),
-          'filterFormName' => $this->filterForm,
+          'filterFormName' => $this->filterFormName,
           'baseTemplate' => $this->baseTemplate,
           'baseRoutePrefix' => $this->baseRoutePrefix,
       ));
@@ -67,7 +64,7 @@ class SalesController extends BaseController
             $em->persist($organization);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('lists_sales_organization_show', array(
+            return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_organization_show', array(
                 'id' => $organization->getId()
             )));
         }
@@ -91,7 +88,7 @@ class SalesController extends BaseController
 
         return $this->render('ListsOrganizationBundle:' . $this->baseTemplate. ':show.html.twig', array(
             'organization' => $organization,
-            'filterFormName' => $this->filterForm,
+            'filterFormName' => $this->filterFormName,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
             'managerForm' => $managerForm->createView()
