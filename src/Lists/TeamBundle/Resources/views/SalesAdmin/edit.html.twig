@@ -8,7 +8,7 @@
             <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
             <i class="fa fa-angle-right"></i>
         </li>
-        <li><a href="{{ path('lists_sales_admin_team_edit', {id: 0}) }}" title="{% trans %}Teams{% endtrans %}">{% trans %}New Team{% endtrans %}</a></li>
+        <li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_team_edit', {id: 0}) }}" title="{% trans %}Teams{% endtrans %}">{% trans %}New Team{% endtrans %}</a></li>
     </ul>
 {% endblock %}
 {% block page_title %}
@@ -68,15 +68,6 @@
 
 
 {% block body %}
-
-    {#{{ form(
-    form,
-        {
-            'action': path('lists_sales_dispatcher_team_edit', { id: id }),
-            'attr': {'novalidate': 'novalidate'}
-        })
-    }}#}
-
     <div class="row">
         <div class="col-md-12">
 
@@ -90,47 +81,47 @@
                 <div class="portlet-body form">
                     <!-- BEGIN FORM-->
                     {{ form_start(form,
-                        {
-                            'action': path('lists_sales_admin_team_edit', { id: id }),
-                            'attr': {'class': 'form-horizontal form-row-seperated'}
-                        })
+                    {
+                    'action': path('lists_' ~ baseRoutePrefix ~ '_team_edit', { id: id }),
+                    'attr': {'class': 'form-horizontal form-row-seperated'}
+                    })
                     }}
-                        <div class="form-body">
-                            <div class="alert alert-danger display-hide">
-                                <button class="close" data-close="alert"></button>
-                                {% trans %}You have some form errors. Please check below.{% endtrans %}
+                    <div class="form-body">
+                        <div class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            {% trans %}You have some form errors. Please check below.{% endtrans %}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">{% trans %}Team Name{% endtrans %}<span class="required">*</span></label>
+                            <div class="col-md-4">
+                                {{ form_widget(form.name, {'attr': {'class' : 'form-control'} }) }}
+                                <span class="help-block"{% trans %}>Enter Team Name{% endtrans %}</span>
                             </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-3">{% trans %}Team Name{% endtrans %}<span class="required">*</span></label>
-                                <div class="col-md-4">
-                                    {{ form_widget(form.name, {'attr': {'class' : 'form-control'} }) }}
-                                    <span class="help-block"{% trans %}>Enter Team Name{% endtrans %}</span>
-                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">{% trans %}Description{% endtrans %}</label>
+                            <div class="col-md-4">
+                                {{ form_widget(form.description, {'attr': {'class' : 'form-control'} }) }}
+                                <span class="help-block"{% trans %}>Enter Description{% endtrans %}</span>
                             </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-3">{% trans %}Description{% endtrans %}</label>
-                                <div class="col-md-4">
-                                    {{ form_widget(form.description, {'attr': {'class' : 'form-control'} }) }}
-                                    <span class="help-block"{% trans %}>Enter Description{% endtrans %}</span>
-                                </div>
+                        </div>
+                        <div class="form-group last">
+                            <label class="control-label col-md-3">{% trans %}Team Members{% endtrans %}</label>
+                            <div class="col-md-9">
+                                {{ form_widget(form.users, { 'attr': {'class':'multi-select'} }) }}
                             </div>
-                            <div class="form-group last">
-                                <label class="control-label col-md-3">{% trans %}Team Members{% endtrans %}</label>
-                                <div class="col-md-9">
-                                    {{ form_widget(form.users, { 'attr': {'class':'multi-select'} }) }}
+                        </div>
+                    </div>
+                    <div class="form-actions fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-offset-3 col-md-9">
+                                    {{ form_widget(form.save, { 'label': 'Submit', 'attr': {'class': 'btn green'}} ) }}
+                                    <a href="{{ path(baseRoute) }}"  class="btn default">Cancel</a>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-actions fluid">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="col-md-offset-3 col-md-9">
-                                        {{ form_widget(form.save, { 'label': 'Submit', 'attr': {'class': 'btn green'}} ) }}
-                                        <a href="{{ path(baseRoute) }}"  class="btn default">Cancel</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    </div>
                     {{ form_end(form) }}
                 </div>
             </div>

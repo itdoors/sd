@@ -1,14 +1,24 @@
+#SALES ROUTES
 lists_sales_team_index:
     pattern:  /team/sales/index
     defaults: { _controller: ListsTeamBundle:Sales:index }
 
-lists_sales_admin_team_index:
-    pattern:  /team/salesadmin/index
-    defaults: { _controller: ListsTeamBundle:SalesAdmin:index }
 
+#SALES DISPATCHER ROUTES
 lists_sales_dispatcher_team_index:
     pattern:  /team/salesdispatcher/index
     defaults: { _controller: ListsTeamBundle:SalesDispatcher:index }
+
+lists_sales_dispatcher_team_edit:
+    pattern:  /team/salesdispatcher/edit/{id}
+    defaults: { _controller: ListsTeamBundle:SalesDispatcher:edit }
+
+
+#SALES ADMIN ROUTES
+
+lists_sales_admin_team_index:
+    pattern:  /team/salesadmin/index
+    defaults: { _controller: ListsTeamBundle:SalesAdmin:index }
 
 lists_sales_admin_team_edit:
     pattern:  /team/salesadmin/edit/{id}

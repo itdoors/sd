@@ -1,0 +1,7 @@
+parameters:
+#    sd_calendar.example.class: SD\CalendarBundle\Example
+
+services:
+#    sd_calendar.example:
+#        class: %sd_calendar.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

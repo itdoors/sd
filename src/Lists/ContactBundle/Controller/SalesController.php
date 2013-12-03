@@ -11,8 +11,9 @@ class SalesController extends Controller
 
     public function indexAction()
     {
-        return $this->render('ListsContactBundle:Sales:index.html.twig', array(
-            'baseTemplate' => $this->baseTemplate
+        return $this->render('ListsContactBundle:' . $this->baseTemplate . ':index.html.twig', array(
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix
         ));
     }
 
@@ -25,9 +26,11 @@ class SalesController extends Controller
             ->getQuery()
             ->getResult();
 
-        return $this->render('ListsContactBundle:Sales:organization.html.twig', array(
+        return $this->render('ListsContactBundle:' . $this->baseTemplate . ':organization.html.twig', array(
             'organizationContacts' => $organizationContacts,
             'organizationId' => $organizationId,
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix
         ));
     }
 
@@ -40,9 +43,11 @@ class SalesController extends Controller
             ->getQuery()
             ->getResult();
 
-        return $this->render('ListsContactBundle:Sales:handling.html.twig', array(
+        return $this->render('ListsContactBundle:' . $this->baseTemplate . ':handling.html.twig', array(
             'handlingContacts' => $handlingContacts,
             'handlingId' => $handlingId,
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix
         ));
     }
 }
