@@ -37,3 +37,8 @@ lists_sales_dispatcher_organization_filter:
 lists_sales_organization_ajax_users:
     pattern:  /lists/sales/organization/ajax/users/{organizationId}
     defaults: { _controller: ListsOrganizationBundle:Sales:organizationUsers }
+
+lists_sales_admin_organization_index:
+    pattern:  /lists/sales/organization/index
+    defaults: { _controller: ListsOrganizationBundle:Sales:index }
+
