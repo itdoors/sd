@@ -35,13 +35,7 @@
             {% for item in myTeams %}
                 <tr {% if loop.index is odd %}class="color"{% endif %}>
 					<td>{{ loop.index }}</td>
-                    <td>
-                        <a href="{{ path('lists_sales_admin_team_edit', {
-                            id: item.0.id
-                        }) }}">
-                            {{ item.0.id|e }}
-                        </a>
-                    </td>
+                    <td>{{ item.0.id|e }}</td>
                     <td>{{ item.0.name|e }}</td>
                     <td>{{ item.fullNames|e }}</td> {# Имя, Фамилия менеджеров #}
                     <td>{{ item.0.description|e }}</td>

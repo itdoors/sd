@@ -8,7 +8,7 @@
             <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
             <i class="fa fa-angle-right"></i>
         </li>
-        <li><a href="{{ path('lists_sales_contact_index') }}" title="{% trans %}My Contacts{% endtrans %}">{% trans %}My Contacts{% endtrans %}</a></li>
+        <li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_contact_index') }}" title="{% trans %}My Contacts{% endtrans %}">{% trans %}My Contacts{% endtrans %}</a></li>
     </ul>
 {% endblock %}
 {% block page_title %}
@@ -52,7 +52,7 @@
             </div>
         </div>
         <div id="contact_list"
-             data-url="{{ path('lists_sales_contact_ajax_organization', {
+             data-url="{{ path('lists_' ~ baseRoutePrefix ~ '_contact_ajax_organization', {
                     organizationId: 0
                  }) }}"
              data-params='{"organizationId":""'

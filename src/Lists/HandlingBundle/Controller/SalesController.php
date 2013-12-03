@@ -9,7 +9,7 @@ use SD\CommonBundle\Controller\BaseFilterController as BaseController;
 class SalesController extends BaseController
 {
     protected $filterNamespace = 'handling.sales.filters';
-    protected $filterForm = 'handlingSalesFilterForm';
+    protected $filterFormName = 'handlingSalesFilterForm';
     protected $baseRoute = 'lists_sales_handling_index';
     protected $baseRoutePrefix = 'sales';
     protected $baseTemplate = 'Sales';
@@ -17,13 +17,7 @@ class SalesController extends BaseController
     public function indexAction()
     {
         // Get organization filter
-
         $filters = $this->getFilters();
-
-        if (!isset($filters['organization_id']) || !$filters['organization_id'])
-        {
-            return $this->redirect($this->generateUrl('lists_sales_organization_index'));
-        }
 
         $page = $this->get('request')->query->get('page', 1);
 
@@ -48,9 +42,12 @@ class SalesController extends BaseController
             20
         );
 
-        return $this->render('ListsHandlingBundle:Sales:index.html.twig', array(
+        return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':index.html.twig', array(
             'pagination' => $pagination,
-            'filterForm' => $filterForm->createView()
+            'filterForm' => $filterForm->createView(),
+            'filterFormName' => $this->filterFormName,
+            'baseRoutePrefix' => $this->baseRoutePrefix,
+            'baseTemplate' => $this->baseTemplate
         ));
     }
 
@@ -65,7 +62,7 @@ class SalesController extends BaseController
 
         if (!isset($filters['organization_id']) || !$filters['organization_id'])
         {
-            return $this->redirect($this->generateUrl('lists_sales_organization_index'));
+            return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_organization_index'));
         }
 
         $organizationId = $filters['organization_id'];
@@ -110,8 +107,11 @@ class SalesController extends BaseController
             )));
         }
 
-        return $this->render('ListsHandlingBundle:Sales:new.html.twig', array(
-            'form' => $form->createView()
+        return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':new.html.twig', array(
+            'form' => $form->createView(),
+            'filterFormName' => $this->filterFormName,
+            'baseRoutePrefix' => $this->baseRoutePrefix,
+            'baseTemplate' => $this->baseTemplate
         ));
     }
 
@@ -126,7 +126,7 @@ class SalesController extends BaseController
 
         $this->setFilters($filters);
 
-        return $this->redirect($this->generateUrl('lists_sales_handling_index'));
+        return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_handling_index'));
     }
 
     /**
@@ -139,7 +139,7 @@ class SalesController extends BaseController
             ->getRepository('ListsHandlingBundle:Handling')
             ->getHandlingShow($id);
 
-        return $this->render('ListsHandlingBundle:Sales:show.html.twig', array(
+        return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':show.html.twig', array(
             'handling' => $object,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
@@ -154,21 +154,12 @@ class SalesController extends BaseController
 
         $messages = $messagesRepository->getMessagesByHandlingId($handlingId);
 
-        return $this->render('ListsHandlingBundle:Sales:messagesList.html.twig', array(
+        return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':messagesList.html.twig', array(
             'messages' => $messages,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
         ));
 
-    }
-
-    public function clearFilters()
-    {
-        $filters = $this->getFilters();
-
-        $organizationId = $filters['organization_id'];
-
-        $this->setFilters(array('organization_id' => $organizationId));
     }
 
     /**
@@ -189,5 +180,13 @@ class SalesController extends BaseController
             ));
     }
 
+    /*public function clearFilters()
+    {
+        $filters = $this->getFilters();
+
+        $organizationId = $filters['organization_id'];
+
+        $this->setFilters(array('organization_id' => $organizationId));
+    }*/
 }
 

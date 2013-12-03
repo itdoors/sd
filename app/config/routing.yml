@@ -1,3 +1,7 @@
+sd_calendar:
+    resource: "@SDCalendarBundle/Resources/config/routing.yml"
+    prefix:   /
+
 lists_contact:
     resource: "@ListsContactBundle/Resources/config/routing.yml"
     prefix:   /
