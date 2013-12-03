@@ -64,6 +64,11 @@ class TeamRepository extends EntityRepository
             ->getQuery()
             ->getArrayResult();
 
+        if (!sizeof($sql))
+        {
+            return array($user->getId());
+        }
+
         return $sql;
     }
 }
