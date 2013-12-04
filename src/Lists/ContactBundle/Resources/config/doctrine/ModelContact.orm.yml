@@ -76,4 +76,14 @@ Lists\ContactBundle\Entity\ModelContact:
                 user_id:
                     referencedColumnName: id
             orphanRemoval: false
-    lifecycleCallbacks: {  }
+        owner:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                owner_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks:
+            prePersist: [ doOnPrePersist ]

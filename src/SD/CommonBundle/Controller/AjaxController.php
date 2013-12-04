@@ -461,14 +461,29 @@ class AjaxController extends Controller
     {
         $data = $form->getData();
 
-        $data->setUser($user);
-        $data->setCreatedatetime(new \DateTime());
+        if (!$data->getId())
+        {
+            $data->setUser($user);
+            $data->setCreatedatetime(new \DateTime());
+
+            $owner = $data->getOwner();
+
+            if (!$owner)
+            {
+                $data->setOwner($user);
+            }
+        }
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
         $em->flush();
 
         return true;
+    }
+
+    public function modelContactOrganizationAdminFormSave($form, $user)
+    {
+        return $this->modelContactOrganizationFormSave($form, $user);
     }
 
     public function modelContactHandlingFormSave($form, $user)

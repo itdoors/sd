@@ -1,9 +1,14 @@
 parameters:
     sd_common.ajax_table.class: SD\CommonBundle\Twig\AjaxTableExtension
+    sd_common.hidden_entity.class: SD\CommonBundle\Form\HiddenEntityType
 
 services:
     sd_common.ajax_table:
         class: %sd_common.ajax_table.class%
         tags:
             -  { name: twig.extension,  alias: ajax_table }
-#        arguments: [@service_id, "plain_value", %parameter%]
+    acme_utility.form_type.hidden_entity:
+        class: %sd_common.hidden_entity.class%
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: form.type, alias: hidden_entity }
