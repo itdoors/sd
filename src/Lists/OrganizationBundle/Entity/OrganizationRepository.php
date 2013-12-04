@@ -207,4 +207,37 @@ class OrganizationRepository extends EntityRepository
 
         return $sql->getResult();
     }
+
+    /**
+     * Searches organization by $q
+     *
+     * @param string $q
+     *
+     * @return mixed[]
+     */
+    public function getSearchContactsQuery($q)
+    {
+        $sql = $this->createQueryBuilder('o')
+            ->select('DISTINCT(o.id) as organizationId')
+            ->addSelect('o.name as organizationName')
+            ->addSelect('o.shortname as organizationShortName')
+            ->addSelect("
+                    array_to_string(
+                       ARRAY(
+                          SELECT
+                            CONCAT(CONCAT(u.lastName, ' '), u.firstName)
+                          FROM
+                            SDUserBundle:User u
+                          LEFT JOIN u.organizations ou
+                          WHERE ou.id = o.id
+                       ), ', '
+                     ) as fullNames
+                    ")
+            ->leftJoin('o.users', 'users')
+            ->where('lower(o.name) LIKE :q OR lower(o.shortname) LIKE :q')
+            ->setParameter(':q', '%'. mb_strtolower($q, 'UTF-8') . '%')
+            ->getQuery();
+
+        return $sql->getResult();
+    }
 }

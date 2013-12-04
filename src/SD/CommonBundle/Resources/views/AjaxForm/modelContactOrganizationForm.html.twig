@@ -52,7 +52,7 @@
             $('#modelContactOrganizationForm_modelId').select2({
                 minimumInputLength: 2,
                 ajax: {
-                    url: '{{ path('sd_common_ajax_organization') }}',
+                    url: '{{ path('sd_common_ajax_organization_for_contacts') }}',
                     dataType: 'json',
                     data: function (term, page) {
                         return {

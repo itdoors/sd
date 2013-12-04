@@ -29,6 +29,28 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
 
+    public function organizationForContactsAction()
+    {
+        $searchText = $this->get('request')->query->get('q');
+
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $organizationsRepository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+        $organizations= $organizationsRepository->getSearchContactsQuery($searchText);
+
+        $result = array();
+
+        foreach ($organizations as $organization)
+        {
+            $this->processOrganizationForJson($organization);
+
+            $result[] = $this->serializeArray($organization, 'organizationId');
+        }
+
+        return new Response(json_encode($result));
+    }
+
     public function cityAction()
     {
         $searchText = $this->get('request')->query->get('query');
@@ -238,7 +260,7 @@ class AjaxController extends Controller
         {
             if ($item[$key])
             {
-                $value .= $item[$key];
+                $value .= ' '. $item[$key];
             }
         }
 
@@ -258,6 +280,36 @@ class AjaxController extends Controller
         }
 
         $item['value'] = $value;
+    }
+
+    /**
+     * Processes model contact item form json output
+     *
+     * @param mixed[] $item
+     *
+     * @return mixed[] $item
+     */
+    public function processOrganizationForJson(&$item)
+    {
+        $value = '';
+
+        if ($item['organizationName'])
+        {
+            $value .= $item['organizationName'];
+        }
+
+        if ($item['organizationShortName'])
+        {
+            $value .= ' | ' . $item['organizationShortName'];
+        }
+
+        if ($item['fullNames'])
+        {
+            $value .= ' | ' . $item['fullNames'];
+        }
+
+        $item['value'] = $value;
+
     }
 
     public function organizationByIdAction()
