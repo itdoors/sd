@@ -66,6 +66,13 @@ Lists\ContactBundle\Entity\ModelContact:
         createdatetime:
             type: datetime
             nullable: true
+        ownerdatetime:
+            type: datetime
+            nullable: true
+        owner_id:
+            type: integer
+            nullable: true
+            column: owner_id
     manyToOne:
         user:
             targetEntity: SD\UserBundle\Entity\User

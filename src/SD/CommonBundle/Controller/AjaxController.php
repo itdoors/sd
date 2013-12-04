@@ -464,7 +464,6 @@ class AjaxController extends Controller
         if (!$data->getId())
         {
             $data->setUser($user);
-            $data->setCreatedatetime(new \DateTime());
 
             $owner = $data->getOwner();
 
@@ -530,6 +529,69 @@ class AjaxController extends Controller
 
         $object = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:Handling')
+            ->find($pk);
+
+        if (!$value)
+        {
+            $methodGet = 'get' . ucfirst($name);
+            $type = gettype($object->$methodGet());
+
+            if (in_array($type, array('integer')))
+            {
+                $value = null;
+            }
+        }
+
+        $object->$methodSet($value);
+
+        $validator = $this->get('validator');
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
+        $errors = $validator->validate($object, array('edit'));
+
+        if (sizeof($errors))
+        {
+            $return = $this->getFirstError($errors);
+
+            return new Response($return, 406);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+
+        try
+        {
+            $em->flush();
+        }
+        catch (\ErrorException $e)
+        {
+            $return = array('msg' => $translator->trans('Wrong input data'));
+
+            return new Response(json_encode($return));
+        }
+
+        $return = array('success' => 1);
+
+        return new Response(json_encode($return));
+    }
+
+    /**
+     * Saves object to db
+     *
+     * @return mixed[]
+     */
+    public function modelContactSaveAction()
+    {
+        $translator = $this->get('translator');
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        $methodSet = 'set' . ucfirst($name);
+
+        $object = $this->getDoctrine()
+            ->getRepository('ListsContactBundle:ModelContact')
             ->find($pk);
 
         if (!$value)
