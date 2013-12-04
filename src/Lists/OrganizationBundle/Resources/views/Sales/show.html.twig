@@ -8,7 +8,7 @@
 			<a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
 			<i class="fa fa-angle-right"></i>
 		</li>
-		<li><a href="{{ path('lists_sales_organization_show', { id : organization.id }) }}" title="{% trans %}Show Organization{% endtrans %}">{% trans %}Show Organization{% endtrans %}</a></li>
+		<li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_show', { id : organization.id }) }}" title="{% trans %}Show Organization{% endtrans %}">{% trans %}Show Organization{% endtrans %}</a></li>
 	</ul>
 {% endblock %}
 {% block page_title %}
@@ -57,8 +57,8 @@
                         'ListsOrganizationBundle:' ~ baseTemplate ~ ':managers.html.twig',
                             {
                                 organization: organization,
-                                managerForm: managerForm,
-                                baseTemplate: baseTemplate
+                                baseTemplate: baseTemplate,
+                                baseRoutePrefix: baseRoutePrefix
                             }
                         )
                     }}
@@ -67,8 +67,8 @@
                         'ListsOrganizationBundle:' ~ baseTemplate ~ ':contacts.html.twig',
                             {
                                 organization: organization,
-                                managerForm: managerForm,
-                                baseTemplate: baseTemplate
+                                baseTemplate: baseTemplate,
+                                baseRoutePrefix: baseRoutePrefix
                             }
                         )
                     }}

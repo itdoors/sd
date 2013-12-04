@@ -20,7 +20,7 @@
             </div>
         </div>
         <div id="managers_list"
-             data-url="{{ path('lists_sales_organization_ajax_users', {
+             data-url="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_ajax_users', {
                 organizationId: organization.id
              }) }}"
              data-params='{"organizationId":{{ organization.id }}'

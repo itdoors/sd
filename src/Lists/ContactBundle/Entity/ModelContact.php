@@ -388,4 +388,40 @@ class ModelContact
     {
         return $this->user;
     }
+    /**
+     * @var \SD\UserBundle\Entity\User
+     */
+    private $owner;
+
+
+    /**
+     * Set owner
+     *
+     * @param \SD\UserBundle\Entity\User $owner
+     * @return ModelContact
+     */
+    public function setOwner(\SD\UserBundle\Entity\User $owner = null)
+    {
+        $this->owner = $owner;
+    
+        return $this;
+    }
+
+    /**
+     * Get owner
+     *
+     * @return \SD\UserBundle\Entity\User 
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function doOnPrePersist()
+    {
+
+    }
 }

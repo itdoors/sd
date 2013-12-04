@@ -8,4 +8,4 @@ lists_sales_dispatcher_calendar_index:
 
 lists_sales_admin_calendar_index:
     pattern:  /lists/salesadmin/calendar
-   defaults: { _controller: ListsCalendarBundle:SalesAdmin:calendar }
+    defaults: { _controller: ListsCalendarBundle:SalesAdmin:calendar }

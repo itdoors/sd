@@ -16,27 +16,27 @@ lists_sales_contact_ajax_handling:
 #SALES DISPATCHER ROUTES
 
 lists_sales_dispatcher_contact_index:
-    pattern:  /lists/sales/contact/index
+    pattern:  /lists/salesdispatcher/contact/index
     defaults: { _controller: ListsContactBundle:SalesDispatcher:index }
 
 lists_sales_dispatcher_contact_ajax_organization:
-    pattern:  /lists/sales/contact/ajax/organization/{organizationId}
+    pattern:  /lists/salesdispatcher/contact/ajax/organization/{organizationId}
     defaults: { _controller: ListsContactBundle:SalesDispatcher:organization }
 
 lists_sales_dispatcher_contact_ajax_handling:
-    pattern:  /lists/sales/contact/ajax/handling/{handlingId}
+    pattern:  /lists/salesdispatcher/contact/ajax/handling/{handlingId}
     defaults: { _controller: ListsContactBundle:SalesDispatcher:handling }
 
 #SALES ADMIN ROUTES
 
 lists_sales_admin_contact_index:
-    pattern:  /lists/sales/contact/index
+    pattern:  /lists/salesadmin/contact/index
     defaults: { _controller: ListsContactBundle:SalesAdmin:index }
 
 lists_sales_admin_contact_ajax_organization:
-    pattern:  /lists/sales/contact/ajax/organization/{organizationId}
+    pattern:  /lists/salesadmin/contact/ajax/organization/{organizationId}
     defaults: { _controller: ListsContactBundle:SalesAdmin:organization }
 
 lists_sales_admin_contact_ajax_handling:
-    pattern:  /lists/sales/contact/ajax/handling/{handlingId}
+    pattern:  /lists/salesadmin/contact/ajax/handling/{handlingId}
     defaults: { _controller: ListsContactBundle:SalesAdmin:handling }

@@ -26,7 +26,10 @@ class ModelContactOrganizationFormType extends AbstractType
             ->add('phone1')
             ->add('phone2')
             ->add('position')
-            ->add('birthday', 'birthday')
+            ->add('birthday', 'birthday', array(
+                'empty_value' => '',
+                'required' => false
+            ))
             ->add('email')
         ;
 

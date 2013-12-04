@@ -1,8 +1,5 @@
     {% trans_default_domain 'ListsContactBundle' %}
 	<div class="table-scrollable">
-        <div class="navigation">
-            {{ knp_pagination_render(pagination) }}
-        </div>
         <table class="table table-striped table-hover table-bordered">
             <thead>
             <tr>
@@ -19,12 +16,13 @@
                 <th>{% trans %}Mobile{% endtrans %}</th>
                 <th>{% trans %}Email{% endtrans %}</th>
                 <th>{% trans %}Birthday{% endtrans %}</th>
+                <th>{% trans %}Owner{% endtrans %}</th>
                 <th>{% trans %}Creator{% endtrans %}</th>
                 <th>{% trans %}Action{% endtrans %}</th> {# Поле для действий, возможно для менеджера запретить удалять #}
             </tr>
             </thead>
             <tbody>
-            {% for item in pagination %}
+            {% for item in organizationContacts %}
             <tr >
                 <td>{{ item.0.id }}</td>
                 {% if organizationId %}
@@ -43,6 +41,7 @@
                         {{ item.0.birthday|date("d.m.y") }}
                     {% endif %}
                 </td>
+                <td>{{ item.0.ownerFullName }}</td>
                 <td>
                     {{ item.creatorFullName }}
                     {% if item.0.createdatetime %}
@@ -62,7 +61,4 @@
             {% endfor %}
             </tbody>
         </table>
-        <div class="navigation">
-            {{ knp_pagination_render(pagination) }}
-        </div>
     </div>
