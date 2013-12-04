@@ -2,11 +2,11 @@
 
     $(document).ready(function(){
 
-        $('#modelContactOrganizationForm_birthday_year, #modelContactOrganizationForm_birthday_month, #modelContactOrganizationForm_birthday_day').select2({
+        $('#modelContactOrganizationAdminForm_birthday_year, #modelContactOrganizationAdminForm_birthday_month, #modelContactOrganizationAdminForm_birthday_day').select2({
             allowClear: true
         });
 
-        $('#modelContactOrganizationForm_phone1').select2({
+        $('#modelContactOrganizationAdminForm_phone1').select2({
             minimumInputLength: 2,
             allowClear: true,
             ajax: {
@@ -15,7 +15,7 @@
                 data: function (term, page) {
                     return {
                         query: term,
-                        organizationId: $('#modelContactOrganizationForm_modelId').val()
+                        organizationId: $('#modelContactOrganizationAdminForm_modelId').val()
                     };
                 },
                 results: function (data, page) {
@@ -26,7 +26,7 @@
             }
         })
 
-        $('#modelContactOrganizationForm_email').select2({
+        $('#modelContactOrganizationAdminForm_email').select2({
             minimumInputLength: 2,
             allowClear: true,
             ajax: {
@@ -35,7 +35,7 @@
                 data: function (term, page) {
                     return {
                         query: term,
-                        organizationId: $('#modelContactOrganizationForm_modelId').val()
+                        organizationId: $('#modelContactOrganizationAdminForm_modelId').val()
                     };
                 },
                 results: function (data, page) {
@@ -49,7 +49,7 @@
 
         {% if form.modelId.vars.block_prefixes.1 != 'hidden' %}
 
-            $('#modelContactOrganizationForm_modelId').select2({
+            $('#modelContactOrganizationAdminForm_modelId').select2({
                 minimumInputLength: 2,
                 ajax: {
                     url: '{{ path('sd_common_ajax_organization_for_contacts') }}',
@@ -68,6 +68,25 @@
             })
 
         {% endif %}
+
+        $('#modelContactOrganizationAdminForm_owner').select2({
+            minimumInputLength: 2,
+            ajax: {
+                url: '{{ path('sd_common_ajax_user') }}',
+                dataType: 'json',
+                quietMillis: 30,
+                data: function (term, page) {
+                    return {
+                        query: term
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        })
     });
 
 </script>
@@ -93,6 +112,10 @@
                         {{ form_widget(form.modelId, {'attr' : {'class' : 'form-control', 'placeholder': "Organization" }}) }}
                     </div>
                 {% endif %}
+
+                <div class="form-group col-md-3">
+                    {{ form_widget(form.owner, {'attr' : {'class' : 'form-control', 'placeholder': "Owner"}}) }}
+                </div>
 
                 <div class="form-group col-md-3">
                     {{ form_widget(form.firstName, {'attr' : {'class' : 'form-control', 'placeholder': "First name"}}) }}

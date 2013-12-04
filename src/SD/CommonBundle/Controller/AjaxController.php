@@ -29,6 +29,28 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
 
+    public function organizationForContactsAction()
+    {
+        $searchText = $this->get('request')->query->get('q');
+
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $organizationsRepository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+        $organizations= $organizationsRepository->getSearchContactsQuery($searchText);
+
+        $result = array();
+
+        foreach ($organizations as $organization)
+        {
+            $this->processOrganizationForJson($organization);
+
+            $result[] = $this->serializeArray($organization, 'organizationId');
+        }
+
+        return new Response(json_encode($result));
+    }
+
     public function cityAction()
     {
         $searchText = $this->get('request')->query->get('query');
@@ -154,6 +176,142 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
 
+    public function contactPhoneAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+        $organizationId = $this->get('request')->query->get('organizationId');
+        //$phoneType = $this->get('request')->query->get('phoneType');
+
+        /** @var \SD\UserBundle\Entity\UserRepository $repository */
+        $repository = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact');
+
+
+        $objects = $repository->getSearchPhoneQuery(trim($searchText), $organizationId)
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        $result[] = array(
+            'id' => $searchText,
+            'value' => $searchText,
+            'name' => $searchText,
+            'text' => $searchText
+        );
+
+        foreach ($objects as $object)
+        {
+            $this->processModelContactForJson($object);
+
+            $result[] = $this->serializeArray($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    public function contactEmailAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+        $organizationId = $this->get('request')->query->get('organizationId');
+        //$phoneType = $this->get('request')->query->get('phoneType');
+
+        /** @var \SD\UserBundle\Entity\UserRepository $repository */
+        $repository = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact');
+
+
+        $objects = $repository->getSearchEmailQuery(trim($searchText), $organizationId)
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        $result[] = array(
+            'id' => $searchText,
+            'value' => $searchText,
+            'name' => $searchText,
+            'text' => $searchText
+        );
+
+        foreach ($objects as $object)
+        {
+            $this->processModelContactForJson($object, array('email'));
+
+            $result[] = $this->serializeArray($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Processes model contact item form json output
+     *
+     * @param mixed[] $item
+     * @param mixed[] $keys
+     *
+     * @return mixed[] $item
+     */
+    public function processModelContactForJson(&$item, $keys = array('phone1', 'phone2'))
+    {
+        $value = '';
+
+        $item['id'] = '';
+
+        foreach ($keys as $key)
+        {
+            if ($item[$key])
+            {
+                $value .= ' '. $item[$key];
+            }
+        }
+
+        if ($item['ownerFullName'])
+        {
+            $value .= ' ' . $item['ownerFullName'];
+        }
+
+        if ($item['creatorFullName'] && !$item['ownerFullName'])
+        {
+            $value .= ' ' . $item['creatorFullName'];
+        }
+
+        if ($item['organizationName'])
+        {
+            $value .= ' ' . $item['organizationName'];
+        }
+
+        $item['value'] = $value;
+    }
+
+    /**
+     * Processes model contact item form json output
+     *
+     * @param mixed[] $item
+     *
+     * @return mixed[] $item
+     */
+    public function processOrganizationForJson(&$item)
+    {
+        $value = '';
+
+        if ($item['organizationName'])
+        {
+            $value .= $item['organizationName'];
+        }
+
+        if ($item['organizationShortName'])
+        {
+            $value .= ' | ' . $item['organizationShortName'];
+        }
+
+        if ($item['fullNames'])
+        {
+            $value .= ' | ' . $item['fullNames'];
+        }
+
+        $item['value'] = $value;
+
+    }
+
     public function organizationByIdAction()
     {
         $id = $this->get('request')->query->get('id');
@@ -180,16 +338,43 @@ class AjaxController extends Controller
      * Serialize object to json. temporary solution
      *
      * @param object $object
+     * @param string $idMethod
+     * @param string $method
      *
      * @return mixed[]
      */
-    public function serializeObject($object)
+    public function serializeObject($object, $idMethod = '', $method = '')
     {
+        $id = $idMethod ? $object->$idMethod() : $object->getId();
+        $string = $method ? $object->$method() : (string) $object;
+
         return array(
-            'id' => $object->getId(),
-            'value' => $object->getId(),
-            'name' => (string) $object,
-            'text' => (string) $object
+            'id' => $id,
+            'value' => $id,
+            'name' => $string,
+            'text' => $string
+        );
+    }
+
+    /**
+     * Serialize array to json. temporary solution
+     *
+     * @param mixed[] $item
+     * @param string $id
+     * @param string $value
+     *
+     * @return mixed[]
+     */
+    public function serializeArray($item, $id = '', $value = '')
+    {
+        $id = $id ? $item[$id] : $item['id'];
+        $string = $value ? $item[$value] : $item['value'];
+
+        return array(
+            'id' => $id,
+            'value' => $id,
+            'name' =>(string) $string,
+            'text' =>(string) $string
         );
     }
 
@@ -461,14 +646,28 @@ class AjaxController extends Controller
     {
         $data = $form->getData();
 
-        $data->setUser($user);
-        $data->setCreatedatetime(new \DateTime());
+        if (!$data->getId())
+        {
+            $data->setUser($user);
+
+            $owner = $data->getOwner();
+
+            if (!$owner)
+            {
+                $data->setOwner($user);
+            }
+        }
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
         $em->flush();
 
         return true;
+    }
+
+    public function modelContactOrganizationAdminFormSave($form, $user)
+    {
+        return $this->modelContactOrganizationFormSave($form, $user);
     }
 
     public function modelContactHandlingFormSave($form, $user)
@@ -515,6 +714,69 @@ class AjaxController extends Controller
 
         $object = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:Handling')
+            ->find($pk);
+
+        if (!$value)
+        {
+            $methodGet = 'get' . ucfirst($name);
+            $type = gettype($object->$methodGet());
+
+            if (in_array($type, array('integer')))
+            {
+                $value = null;
+            }
+        }
+
+        $object->$methodSet($value);
+
+        $validator = $this->get('validator');
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
+        $errors = $validator->validate($object, array('edit'));
+
+        if (sizeof($errors))
+        {
+            $return = $this->getFirstError($errors);
+
+            return new Response($return, 406);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+
+        try
+        {
+            $em->flush();
+        }
+        catch (\ErrorException $e)
+        {
+            $return = array('msg' => $translator->trans('Wrong input data'));
+
+            return new Response(json_encode($return));
+        }
+
+        $return = array('success' => 1);
+
+        return new Response(json_encode($return));
+    }
+
+    /**
+     * Saves object to db
+     *
+     * @return mixed[]
+     */
+    public function modelContactSaveAction()
+    {
+        $translator = $this->get('translator');
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        $methodSet = 'set' . ucfirst($name);
+
+        $object = $this->getDoctrine()
+            ->getRepository('ListsContactBundle:ModelContact')
             ->find($pk);
 
         if (!$value)

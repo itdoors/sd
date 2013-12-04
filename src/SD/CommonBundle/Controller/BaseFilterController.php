@@ -71,4 +71,37 @@ class BaseFilterController extends Controller
     {
         $this->setFilters(array());
     }
+
+    public function addToFilters($key, $value)
+    {
+        $filters = $this->getFilters();
+
+        $filters[$key] = $value;
+
+        $this->setFilters($filters);
+    }
+
+    public function removeFromFilters($key)
+    {
+        $filters = $this->getFilters();
+
+        if (isset($filters[$key]))
+        {
+            unset($filters[$key]);
+        }
+
+        $this->setFilters($filters);
+    }
+
+    public function getFilterValueByKey($key, $default = null)
+    {
+        $filters = $this->getFilters();
+
+        if (isset($filters[$key]))
+        {
+            return $filters[$key];
+        }
+
+        return $default;
+    }
 }

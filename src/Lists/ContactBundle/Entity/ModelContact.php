@@ -388,4 +388,103 @@ class ModelContact
     {
         return $this->user;
     }
+    /**
+     * @var \SD\UserBundle\Entity\User
+     */
+    private $owner;
+
+
+    /**
+     * Set owner
+     *
+     * @param \SD\UserBundle\Entity\User $owner
+     * @return ModelContact
+     */
+    public function setOwner(\SD\UserBundle\Entity\User $owner = null)
+    {
+        $this->owner = $owner;
+
+        $this->setOwnerdatetime(new \DateTime());
+    
+        return $this;
+    }
+
+    /**
+     * Get owner
+     *
+     * @return \SD\UserBundle\Entity\User 
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function doOnPrePersist()
+    {
+        if (!$this->getId())
+        {
+            $this->setCreatedatetime(new \DateTime());
+        }
+    }
+    /**
+     * @var \DateTime
+     */
+    private $ownerdatetime;
+
+
+    /**
+     * Set ownerdatetime
+     *
+     * @param \DateTime $ownerdatetime
+     * @return ModelContact
+     */
+    public function setOwnerdatetime($ownerdatetime)
+    {
+        $this->ownerdatetime = $ownerdatetime;
+    
+        return $this;
+    }
+
+    /**
+     * Get ownerdatetime
+     *
+     * @return \DateTime 
+     */
+    public function getOwnerdatetime()
+    {
+        return $this->ownerdatetime;
+    }
+    /**
+     * @var integer
+     */
+    private $owner_id;
+
+
+    /**
+     * Set owner_id
+     *
+     * @param integer $ownerId
+     * @return ModelContact
+     */
+    public function setOwnerId($ownerId)
+    {
+        $this->owner_id = $ownerId;
+
+        $this->setOwnerdatetime(new \DateTime());
+    
+        return $this;
+    }
+
+    /**
+     * Get owner_id
+     *
+     * @return integer 
+     */
+    public function getOwnerId()
+    {
+        return $this->owner_id;
+    }
 }

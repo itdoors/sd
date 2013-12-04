@@ -2,12 +2,12 @@
 
 <script>
     $(document).ready(function(){
-        $('#organizationSalesFilterForm_users, #organizationSalesFilterForm_city, #organizationSalesFilterForm_scope', '').select2({
+        $('#' + '{{ filterFormName }}' + '_users, #' + '{{ filterFormName }}' + '_city, #' + '{{ filterFormName }}' + '_scope', '').select2({
             placeholder: "Select a State",
             allowClear: true
         });
 
-        $("#organizationSalesFilterForm_organization").select2({
+        $("#" + "{{ filterFormName }}" + "_organization").select2({
             placeholder: "Search for a movie",
             minimumInputLength: 3,
             ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
@@ -73,7 +73,7 @@
 				
 				{{ form_start(filterForm,
 					{
-						'action': path('lists_sales_organization_filter'),
+						'action': path('lists_' ~ baseRoutePrefix ~ '_organization_filter'),
 						'attr': {'novalidate': 'novalidate', 'class': 'form-inline', 'role': 'form'}
 					}) 
 				}}

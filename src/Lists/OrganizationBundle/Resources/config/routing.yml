@@ -1,3 +1,4 @@
+#SALES ROUTES
 lists_sales_organization_index:
     pattern:  /lists/sales/organization/index
     defaults: { _controller: ListsOrganizationBundle:Sales:index }
@@ -9,10 +10,6 @@ lists_sales_organization_new:
 lists_sales_organization_show:
     pattern:  /lists/sales/organization/show/{id}
     defaults: { _controller: ListsOrganizationBundle:Sales:show }
-
-lists_sales_dispatcher_organization_show:
-    pattern:  /lists/salesdispatcher/organization/show/{id}
-    defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:show }
 
 lists_sales_organization_filter:
     pattern:  /lists/sales/organization/filter
@@ -26,14 +23,67 @@ lists_sales_organization_ajax_index:
     pattern:  /lists/sales/organization/ajax/index
     defaults: { _controller: ListsOrganizationBundle:Sales:ajaxIndex }
 
+lists_sales_organization_ajax_users:
+    pattern:  /lists/sales/organization/ajax/users/{organizationId}
+    defaults: { _controller: ListsOrganizationBundle:Sales:organizationUsers }
+
+#SALES DISPATCHER ROUTES
+
 lists_sales_dispatcher_organization_index:
     pattern:  /lists/salesdispatcher/organization/index
     defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:index }
+
+lists_sales_dispatcher_organization_new:
+    pattern:  /lists/salesdispatcher/organization/new
+    defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:new }
+
+lists_sales_dispatcher_organization_show:
+    pattern:  /lists/salesdispatcher/organization/show/{id}
+    defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:show }
 
 lists_sales_dispatcher_organization_filter:
     pattern:  /lists/salesdispatcher/organization/filter
     defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:filter }
 
-lists_sales_organization_ajax_users:
-    pattern:  /lists/sales/organization/ajax/users/{organizationId}
-    defaults: { _controller: ListsOrganizationBundle:Sales:organizationUsers }
+lists_sales_dispatcher_organization_filter_clear:
+    pattern:  /lists/salesdispatcher/organization/filter_clear
+    defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:filterClear }
+
+lists_sales_dispatcher_organization_ajax_index:
+    pattern:  /lists/salesdispatcher/organization/ajax/index
+    defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:ajaxIndex }
+
+lists_sales_dispatcher_organization_ajax_users:
+    pattern:  /lists/salesdispatcher/organization/ajax/users/{organizationId}
+    defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:organizationUsers }
+
+
+#SALES ADMIN ROUTES
+
+lists_sales_admin_organization_index:
+    pattern:  /lists/salesadmin/organization/index
+    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:index }
+
+lists_sales_admin_organization_new:
+    pattern:  /lists/salesadmin/organization/new
+    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:new }
+
+lists_sales_admin_organization_show:
+    pattern:  /lists/salesadmin/organization/show/{id}
+    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:show }
+
+lists_sales_admin_organization_filter:
+    pattern:  /lists/salesadmin/organization/filter
+    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:filter }
+
+lists_sales_admin_organization_filter_clear:
+    pattern:  /lists/salesadmin/organization/filter_clear
+    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:filterClear }
+
+lists_sales_admin_organization_ajax_index:
+    pattern:  /lists/salesadmin/organization/ajax/index
+    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:ajaxIndex }
+
+lists_sales_admin_organization_ajax_users:
+    pattern:  /lists/salesadmin/organization/ajax/users/{organizationId}
+    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:organizationUsers }

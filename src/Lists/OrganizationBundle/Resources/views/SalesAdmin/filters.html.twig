@@ -2,12 +2,12 @@
 
 <script>
     $(document).ready(function(){
-        $('#organizationSalesDispatcherFilterForm_users, #organizationSalesDispatcherFilterForm_city, #organizationSalesDispatcherFilterForm_scope', '').select2({
+        $('#' + '{{ filterFormName }}' + '_users, #' + '{{ filterFormName }}' + '_city, #' + '{{ filterFormName }}' + '_scope', '').select2({
             placeholder: "Select a State",
             allowClear: true
         });
 
-        $("#organizationSalesDispatcherFilterForm_organization").select2({
+        $("#" + "{{ filterFormName }}" + "_organization").select2({
             placeholder: "Search for a movie",
             minimumInputLength: 3,
             ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
@@ -66,12 +66,11 @@
 				<div class="tools"><a class="collapse" href="" title="{% trans %}Filters{% endtrans %}"></a></div>
 			</div>
 			<div class="portlet-body">
+			<p>{% trans %}Enter filter parameters and press Filter button.{% endtrans %}</p>
 			<div class="row">
-				<p>{% trans %}Enter filter parameters and press Filter button.{% endtrans %}</p>
-				
 				{{ form_start(filterForm,
 					{
-						'action': path('lists_sales_dispatcher_organization_filter'),
+						'action': path('lists_' ~ baseRoutePrefix ~ '_organization_filter'),
 						'attr': {'novalidate': 'novalidate', 'class': 'form-inline', 'role': 'form'}
 					}) 
 				}}
@@ -80,7 +79,7 @@
                         {#{{ form_label(filterForm.city, 'Enter City', {'attr': {'class': 'sr-only'}}) }}#}
                         {{ form_widget(filterForm.organization, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Organization name', 'multiple': 'multiple'}}) }}
                     </div>
-					<div class="form-group col-md-3">	
+					<div class="form-group col-md-3">
 						{#{{ form_label(filterForm.city, 'Enter City', {'attr': {'class': 'sr-only'}}) }}#}
 						{{ form_widget(filterForm.city, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter City', 'multiple': 'multiple'}}) }}					
 					</div>
@@ -103,8 +102,9 @@
 						{{ form_widget(filterForm.reset, { 'label': 'Clear Filter', 'attr': {'class': 'btn'}} ) }}
 					</div>
 				{{ form_end(filterForm) }}
+
 			</div>
-			</div>
+		</div>
 		</div>
 	</div>
 </div>
