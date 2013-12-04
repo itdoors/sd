@@ -22,6 +22,10 @@ sd_common_ajax_user:
     pattern:  /ajax/user
     defaults: { _controller: SDCommonBundle:Ajax:user }
 
+sd_common_ajax_contact_phone:
+    pattern:  /ajax/contact/phone
+    defaults: { _controller: SDCommonBundle:Ajax:contactPhone }
+
 sd_common_ajax_delete:
     pattern:  /ajax/delete
     defaults: { _controller: SDCommonBundle:Ajax:delete }

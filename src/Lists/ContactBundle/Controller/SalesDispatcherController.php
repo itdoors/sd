@@ -11,7 +11,7 @@ class SalesDispatcherController extends SalesController
     public function organizationAction($organizationId)
     {
         $this->refreshFiltersIfAjax();
-        $page = $this->getFilterValueByKey('page');
+        $page = $this->getFilterValueByKey('page', 1);
 
         /** @var \Lists\TeamBundle\Entity\TeamRepository $teamRepository */
         $teamRepository = $this->get('lists_team.repository');

@@ -13,7 +13,7 @@ class SalesAdminController extends SalesController
     public function organizationAction($organizationId)
     {
         $this->refreshFiltersIfAjax();
-        $page = $this->getFilterValueByKey('page');
+        $page = $this->getFilterValueByKey('page', 1);
 
         $organizationContacts = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
             ->getMyOrganizationsContacts(null, $organizationId);

@@ -154,6 +154,80 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
 
+    public function contactPhoneAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+        $organizationId = $this->get('request')->query->get('organizationId');
+        //$phoneType = $this->get('request')->query->get('phoneType');
+
+        /** @var \SD\UserBundle\Entity\UserRepository $repository */
+        $repository = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact');
+
+
+        $objects = $repository->getSearchQuery(trim($searchText), $organizationId)
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        $result[] = array(
+            'id' => $searchText,
+            'value' => $searchText,
+            'name' => $searchText,
+            'text' => $searchText
+        );
+
+        foreach ($objects as $object)
+        {
+            $this->processModelContactForJson($object);
+
+            $result[] = $this->serializeArray($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Processes model contact item form json output
+     *
+     * @param mixed[] $item
+     *
+     * @return mixed[] $item
+     */
+    public function processModelContactForJson(&$item)
+    {
+        $value = '';
+
+        $item['id'] = '';
+
+        if ($item['phone1'])
+        {
+            $value .= $item['phone1'];
+        }
+
+        if ($item['phone2'])
+        {
+            $value .= ' ' . $item['phone2'];
+        }
+
+        if ($item['ownerFullName'])
+        {
+            $value .= ' ' . $item['ownerFullName'];
+        }
+
+        if ($item['creatorFullName'] && !$item['ownerFullName'])
+        {
+            $value .= ' ' . $item['creatorFullName'];
+        }
+
+        if ($item['organizationName'])
+        {
+            $value .= ' ' . $item['organizationName'];
+        }
+
+        $item['value'] = $value;
+    }
+
     public function organizationByIdAction()
     {
         $id = $this->get('request')->query->get('id');
@@ -180,16 +254,43 @@ class AjaxController extends Controller
      * Serialize object to json. temporary solution
      *
      * @param object $object
+     * @param string $idMethod
+     * @param string $method
      *
      * @return mixed[]
      */
-    public function serializeObject($object)
+    public function serializeObject($object, $idMethod = '', $method = '')
     {
+        $id = $idMethod ? $object->$idMethod() : $object->getId();
+        $string = $method ? $object->$method() : (string) $object;
+
         return array(
-            'id' => $object->getId(),
-            'value' => $object->getId(),
-            'name' => (string) $object,
-            'text' => (string) $object
+            'id' => $id,
+            'value' => $id,
+            'name' => $string,
+            'text' => $string
+        );
+    }
+
+    /**
+     * Serialize array to json. temporary solution
+     *
+     * @param mixed[] $item
+     * @param string $id
+     * @param string $value
+     *
+     * @return mixed[]
+     */
+    public function serializeArray($item, $id = '', $value = '')
+    {
+        $id = $id ? $item[$id] : $item['id'];
+        $string = $value ? $item[$value] : $item['value'];
+
+        return array(
+            'id' => $id,
+            'value' => $id,
+            'name' =>(string) $string,
+            'text' =>(string) $string
         );
     }
 

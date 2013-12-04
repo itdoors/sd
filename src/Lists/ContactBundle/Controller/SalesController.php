@@ -25,7 +25,7 @@ class SalesController extends BaseController
     public function organizationAction($organizationId)
     {
         $this->refreshFiltersIfAjax();
-        $page = $this->getFilterValueByKey('page');
+        $page = $this->getFilterValueByKey('page', 1);
 
         $user = $this->getUser();
 
