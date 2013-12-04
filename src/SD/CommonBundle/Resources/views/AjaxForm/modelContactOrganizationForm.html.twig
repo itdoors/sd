@@ -26,6 +26,26 @@
             }
         })
 
+        $('#modelContactOrganizationForm_email').select2({
+            minimumInputLength: 2,
+            allowClear: true,
+            ajax: {
+                url: '{{ path('sd_common_ajax_contact_email') }}',
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        query: term,
+                        organizationId: $('#modelContactOrganizationForm_modelId').val()
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        })
+
 
         {% if form.modelId.vars.block_prefixes.1 != 'hidden' %}
 
