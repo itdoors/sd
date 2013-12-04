@@ -1,5 +1,6 @@
 Handlings <small>create handling</small>: Обращение <small>создание нового обращения</small>
 Handling <small>show handling</small>: Обращение <small>просмотр обращения</small>
+Handling <small>list of handlings</small>: Обращение <small>список обращений</small>
 New Handling: Новое обращение
 Show Handling: Просмотр обращения
 
@@ -61,6 +62,20 @@ Address: Адрес
 Users: Пользователи
 
 Organization: Организация
+Enter Organization: Введите организацию
+
+Name: Наименование
+Createdatetime: Дата создания
+LastHandlingDate: Последнее событие
+City: Город
+Scope: Деятельность
+ServiceOffered: Услуги
+Chance: Шанс
+Status: Статут
+Enter Status: Введите статус
+Enter Manager: Введите менеджеров
+Managers: Менеджеры
+Actions: Действия
 
 
 No matches found: Совпадений ненайдено
@@ -72,6 +87,6 @@ Enter Manager: Введите менеджера
 Filters: Фильтры
 Clear Filter: Очистить
 Filter: Фильтр
-
+Enter filter parameters and press Filter button.: Введите параметры для фильтра и нажмите кнопку Фильтр
 
 

@@ -4,15 +4,26 @@ Contacts <small>show team contacts</small>: Контакты <small>список
 My Contacts: Мои контакты
 My Contacts <small>show contacts</small>: Мои контакты <small>список доступных контактов</small>
 Contacts on contacts: Отображаются все доступные Вам контакты. Доступными контактами считаются контакты у которых в полях Создатель и Владелец указано Ваше Имя.
+Show contacts: Просмотреть контакты
+Show Contacts: Просмотреть контакты
+
 FirstName: Имя
+First name: Имя
 LastName: Фамилия
+Last name: Фамилия
 SurName: Отчество
+Middle name: Отчество
 Position: Должность
 Phone: Телефон
+Phone1: Телефон
 Mobile: Мобильный
+Phone2: Мобильный
 Email: Email
 Birthday: Дата рождения
 Creator: Создатель
+Owner: Владелец
+Select Owner: Выберите нового владельца
+Organization: Организация
 Action: Действия
 Delete: Удалить
 
