@@ -1,24 +1,5 @@
 <script type="text/javascript">
 
-   /* $(document).ready(function(){
-        $('#handlingUserForm_user').select2({
-            minimumInputLength: 2,
-            ajax: {
-                url: '{{ path('sd_common_ajax_user') }}',
-                dataType: 'json',
-                data: function (term, page) {
-                    return {
-                        query: term
-                    };
-                },
-                results: function (data, page) {
-                    return {
-                        results: data
-                    };
-                }
-            }
-        })
-    });*/
 
 </script>
 
@@ -45,6 +26,14 @@
                     <div class="form-group col-md-2">
                         {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': 'Handling tye'} } ) }}
                     </div>
+                    <div class="form-group col-md-3">
+                        {{ form_widget(form.nextcreatedate, {'attr' : {'class' : 'form-control', 'placeholder': 'Create date'}}) }}
+                    </div>
+                    <div class="form-group col-md-2">
+                        {{ form_widget(form.nexttype, {'attr' : {'class' : 'form-control', 'placeholder': 'Handling tye'} } ) }}
+                    </div>
+                </div>
+                <div class="row">
                     <div class="form-group col-md-2">
                         {{ form_widget(form.filename, {'attr' : {'class' : 'form-control', 'placeholder': 'Filename'} } ) }}
                     </div>

@@ -16,7 +16,7 @@ Lists\HandlingBundle\Entity\HandlingMessage:
             type: text
             nullable: true
         createdate:
-            type: date
+            type: datetime
             nullable: false
         filepath:
             type: string
