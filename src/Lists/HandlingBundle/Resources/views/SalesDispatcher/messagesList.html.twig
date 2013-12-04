@@ -1,10 +1,13 @@
 <div class="row">
 
     {% for item in messages %}
-    <div class="portlet box yellow">
+    <div class="portlet box {% if item.isFutureMessage %}red{% else %}yellow{% endif %}">
         <div class="portlet-title">
             <div class="caption">
                 {{ item.createdate|date('d.m.Y') }} | {{ item.type }} | {{ item.user }}
+                {% if item.isFutureMessage %}
+                    | {% trans %}Business trip{% endtrans %}
+                {% endif %}
             </div>
             <div class="tools"><a class="collapse" href="" title="{% trans %}Filters{% endtrans %}"></a></div>
         </div>
