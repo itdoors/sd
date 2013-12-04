@@ -1,4 +1,10 @@
     {% trans_default_domain 'ListsContactBundle' %}
+    {% if organizationId %}
+    {% else %}
+        <div class="navigation">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    {% endif %}
 	<div class="table-scrollable">
         <table class="table table-striped table-hover table-bordered">
             <thead>
@@ -22,7 +28,7 @@
             </tr>
             </thead>
             <tbody>
-            {% for item in organizationContacts %}
+            {% for item in pagination %}
             <tr >
                 <td>{{ item.0.id }}</td>
                 {% if organizationId %}
@@ -41,7 +47,12 @@
                         {{ item.0.birthday|date("d.m.y") }}
                     {% endif %}
                 </td>
-                <td>{{ item.0.ownerFullName }}</td>
+                <td>
+                    {{ item.ownerFullName }}
+                    {% if item.0.ownerdatetime %}
+                        ({{ item.0.ownerdatetime|date("d.m.y") }})
+                    {% endif %}
+                </td>
                 <td>
                     {{ item.creatorFullName }}
                     {% if item.0.createdatetime %}
@@ -62,3 +73,9 @@
             </tbody>
         </table>
     </div>
+    {% if organizationId %}
+    {% else %}
+        <div class="navigation">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    {% endif %}

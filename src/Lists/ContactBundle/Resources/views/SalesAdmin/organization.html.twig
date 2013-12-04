@@ -1,7 +1,30 @@
 {% trans_default_domain 'ListsContactBundle' %}
+{% if organizationId %}
+{% else %}
 <div class="navigation">
     {{ knp_pagination_render(pagination) }}
 </div>
+{% endif %}
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+        $.fn.editable.defaults.inputclass = 'form-control';
+        $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
+
+        $('.ownerId').editable({
+            url: '{{ path('sd_common_ajax_model_contact_save') }}',
+            source: '{{ path('sd_common_ajax_user') }}',
+            select2: {
+                placeholder: '{% trans %}Select Owner{% endtrans %}',
+                minimumInputLength: 2
+            }
+        });
+    })
+
+</script>
+
 <div class="table-scrollable">
     <table class="table table-striped table-hover table-bordered">
         <thead>
@@ -19,6 +42,7 @@
             <th>{% trans %}Mobile{% endtrans %}</th>
             <th>{% trans %}Email{% endtrans %}</th>
             <th>{% trans %}Birthday{% endtrans %}</th>
+            <th>{% trans %}Owner{% endtrans %}</th>
             <th>{% trans %}Creator{% endtrans %}</th>
             <th>{% trans %}Action{% endtrans %}</th> {# Поле для действий, возможно для менеджера запретить удалять #}
         </tr>
@@ -44,6 +68,14 @@
                     {% endif %}
                 </td>
                 <td>
+                    <a href="#" class="ownerId" data-type="select2" data-name="ownerId" data-pk="{{ item.0.id }}" data-value="{{ item.ownerId }}" data-original-title="{% trans %}Select Owner{% endtrans %}">
+                        {{ item.ownerFullName }}
+                        {% if item.0.ownerdatetime %}
+                            ({{ item.0.ownerdatetime|date("d.m.y") }})
+                        {% endif %}
+                    </a>
+                </td>
+                <td>
                     {{ item.creatorFullName }}
                     {% if item.0.createdatetime %}
                         ({{ item.0.createdatetime|date("d.m.y") }})
@@ -63,6 +95,9 @@
         </tbody>
     </table>
 </div>
-<div class="navigation">
-    {{ knp_pagination_render(pagination) }}
-</div>
+{% if organizationId %}
+{% else %}
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+{% endif %}

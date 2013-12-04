@@ -71,7 +71,9 @@ class ModelContactRepository extends EntityRepository
         $sql
             ->select('mc')
             ->addSelect('o.name as organizationName')
-            ->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as creatorFullName");
+            ->addSelect("CONCAT(CONCAT(creator.lastName, ' '), creator.firstName) as creatorFullName")
+            ->addSelect("CONCAT(CONCAT(owner.lastName, ' '), owner.firstName) as ownerFullName")
+            ->addSelect("owner.id as ownerId");
     }
 
 
@@ -95,9 +97,10 @@ class ModelContactRepository extends EntityRepository
     public function processBaseQuery($sql)
     {
         $sql
-            ->leftJoin('mc.user', 'u')
+            ->leftJoin('mc.user', 'creator')
+            ->leftJoin('mc.owner', 'owner')
             ->leftJoin('ListsOrganizationBundle:Organization', 'o', 'WITH', 'o.id = mc.modelId')
-            ->leftJoin('o.users', 'users')
+            //->leftJoin('o.users', 'users')
             ->where('mc.modelName = :modelName')
             ->andWhere('o.id = mc.modelId')
             ->setParameter(':modelName', self::MODEL_ORGANIZATION);
@@ -113,7 +116,7 @@ class ModelContactRepository extends EntityRepository
     public function processUserQuery($sql, $userIds)
     {
         $sql
-            ->andWhere('users.id in (:userIds)')
+            ->andWhere('owner.id in (:userIds) AND creator.id in (:userIds)')
             ->setParameter(':userIds', $userIds);
     }
 

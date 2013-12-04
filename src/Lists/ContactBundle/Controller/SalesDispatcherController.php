@@ -9,6 +9,8 @@ class SalesDispatcherController extends SalesController
 
     public function organizationAction($organizationId)
     {
+        $page = $this->get('request')->query->get('page', 1);
+
         /** @var \Lists\TeamBundle\Entity\TeamRepository $teamRepository */
         $teamRepository = $this->get('lists_team.repository');
 
@@ -20,8 +22,24 @@ class SalesDispatcherController extends SalesController
             ->getMyOrganizationsContacts($teamUserIds, $organizationId)
             ->getResult();
 
+        if (!$organizationId)
+        {
+            /** @var \Knp\Component\Pager\Paginator $paginator */
+            $paginator  = $this->get('knp_paginator');
+
+            $pagination = $paginator->paginate(
+                $organizationContacts,
+                $page,
+                20
+            );
+        }
+        else
+        {
+            $pagination = $organizationContacts->getResult();
+        }
+
         return $this->render('ListsContactBundle:' . $this->baseTemplate . ':organization.html.twig', array(
-                'organizationContacts' => $organizationContacts,
+                'pagination' => $pagination,
                 'organizationId' => $organizationId,
                 'baseTemplate' => $this->baseTemplate,
                 'baseRoutePrefix' => $this->baseRoutePrefix
