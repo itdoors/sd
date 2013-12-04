@@ -17,7 +17,7 @@ class ModelContactRepository extends EntityRepository
 
     public function getMyOrganizationsContacts($userIds, $organizationId)
     {
-        if (is_array($userIds) && $userIds)
+        if (!is_array($userIds) && $userIds)
         {
             $userIds = array($userIds);
         }
@@ -184,6 +184,43 @@ class ModelContactRepository extends EntityRepository
             //->setParameter(':userIds', $userIds)
             ->setParameter(':modelId', $organizationId)
             ->setParameter(':modelName', self::MODEL_ORGANIZATION);
+
+        return $sql;
+    }
+
+    /**
+     * Returns searched results
+     *
+     * @param string $searchText
+     * @param int $organizationId
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getSearchQuery($searchText, $organizationId)
+    {
+        $sql = $this->createQueryBuilder('mc')
+            ->select("mc.id as id")
+            ->addSelect("mc.phone1 as phone1")
+            ->addSelect("mc.phone2 as phone2")
+            ->addSelect("o.name as organizationName")
+            //->addSelect("CONCAT(CONCAT(mc.phone1, ' '), mc.phone2) as phone")
+            ->addSelect("CONCAT(CONCAT(creator.lastName, ' '), creator.firstName) as creatorFullName")
+            ->addSelect("CONCAT(CONCAT(owner.lastName, ' '), owner.firstName) as ownerFullName")
+            ->leftJoin('mc.user', 'creator')
+            ->leftJoin('mc.owner', 'owner')
+            ->leftJoin('ListsOrganizationBundle:Organization', 'o', 'WITH', 'o.id = mc.modelId')
+            ->where('mc.phone1 LIKE :searchText OR mc.phone2 LIKE :searchText')
+            //->where('mc.phone1 LIKE :searchText')
+            ->andWhere('mc.modelName = :modelName')
+            ->setParameter(':modelName', self::MODEL_ORGANIZATION)
+            ->setParameter(':searchText', '%' . $searchText . '%');
+
+        if ($organizationId)
+        {
+            $sql
+                ->andWhere('mc.modelId = :modelId')
+                ->setParameter(':modelId', $organizationId);
+        }
 
         return $sql;
     }

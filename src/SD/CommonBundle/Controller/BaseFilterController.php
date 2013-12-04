@@ -93,7 +93,7 @@ class BaseFilterController extends Controller
         $this->setFilters($filters);
     }
 
-    public function getFilterValueByKey($key)
+    public function getFilterValueByKey($key, $default = null)
     {
         $filters = $this->getFilters();
 
@@ -102,6 +102,6 @@ class BaseFilterController extends Controller
             return $filters[$key];
         }
 
-        return null;
+        return $default;
     }
 }
