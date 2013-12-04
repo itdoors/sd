@@ -1,13 +1,21 @@
 <script type="text/javascript">
 
+    $(document).ready(function (){
+        $(".form_datetime").datetimepicker({
+            autoclose: true,
+            isRTL: App.isRTL(),
+            format: "dd.m.yyyy hh:ii",
+            pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left")
+        });
+    })
 
 </script>
-
+{% form_theme form 'SDCommonBundle:Form:form_errors.html.twig' %}
 <div class="row">
     <div class="col-md-12">
         <div class="portlet box yellow">
             <div class="portlet-body">
-
+                {{ form_errors(form) }}
                 {{ form_start(form, {
                     'action' : path('sd_common_ajax_form'),
                     'attr' : {
@@ -18,19 +26,24 @@
                         'data-target_id': targetId
                 }
                 }) }}
-                {{ form_errors(form) }}
                 <div class="row">
-                    <div class="form-group col-md-3">
-                        {{ form_widget(form.createdate, {'attr' : {'class' : 'form-control', 'placeholder': 'Create date'}}) }}
-                    </div>
                     <div class="form-group col-md-2">
+                        {{ form_widget(form.createdate, {'attr' : {'class' : 'form-control form_datetime', 'placeholder': 'Create date'}}) }}
+                    </div>
+                    <div class="form-group col-md-3">
                         {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': 'Handling tye'} } ) }}
                     </div>
+                    <div class="form-group col-md-2">
+                        {{ form_widget(form.nextcreatedate, {'attr' : {'class' : 'form-control form_datetime', 'placeholder': 'Create date'}}) }}
+                    </div>
                     <div class="form-group col-md-3">
-                        {{ form_widget(form.nextcreatedate, {'attr' : {'class' : 'form-control', 'placeholder': 'Create date'}}) }}
+                        {{ form_widget(form.nexttype, {'attr' : {'class' : 'form-control', 'placeholder': 'Handling type'} } ) }}
                     </div>
                     <div class="form-group col-md-2">
-                        {{ form_widget(form.nexttype, {'attr' : {'class' : 'form-control', 'placeholder': 'Handling tye'} } ) }}
+                        <div class="checkbox-list">
+                            {{ form_label(form.next_is_business_trip, 'Is business trip', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.next_is_business_trip, {'attr' : {'class' : 'form-control', 'placeholder': 'Handling type'} } ) }}
+                        </div>
                     </div>
                 </div>
                 <div class="row">

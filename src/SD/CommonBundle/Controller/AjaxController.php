@@ -489,7 +489,10 @@ class AjaxController extends Controller
 
         $result = array(
             'error' => 1,
-            'html' => ''
+            'html' => '',
+            'postFunction' => $postFunction,
+            'postTargetId' => $postTargetId,
+            'targetId' => $targetId
         );
 
         if ($form->isValid())
@@ -503,9 +506,6 @@ class AjaxController extends Controller
             unset($result['error']);
 
             $result['success'] = true;
-            $result['postFunction'] = $postFunction;
-            $result['postTargetId'] = $postTargetId;
-            $result['targetId'] = $targetId;
         }
 
 
@@ -575,18 +575,7 @@ class AjaxController extends Controller
             ->getRepository('ListsHandlingBundle:HandlingMessageType')
             ->find($formData['nexttype']);
 
-        $nextDatetime = new \DateTime();
-
-        $nextDatetime->setDate(
-            $formData['nextcreatedate']['date']['year'],
-            $formData['nextcreatedate']['date']['month'],
-            $formData['nextcreatedate']['date']['day']
-        );
-
-        $nextDatetime->setTime(
-            $formData['nextcreatedate']['time']['hour'],
-            $formData['nextcreatedate']['time']['minute']
-        );
+        $nextDatetime = new \DateTime($formData['nextcreatedate']);
 
         $handlingMessage = new HandlingMessage();
         $handlingMessage->setCreatedate($nextDatetime);
@@ -594,6 +583,8 @@ class AjaxController extends Controller
         $handlingMessage->setUser($user);
         $handlingMessage->setHandling($handling);
         $handlingMessage->setType($type);
+        $handlingMessage->setIsBusinessTrip(isset($formData['next_is_business_trip']) ? true : false);
+        $handlingMessage->setAdditionalType(HandlingMessage::ADDITIONAL_TYPE_FUTURE_MESSAGE);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($handlingMessage);
