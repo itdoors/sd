@@ -4,12 +4,14 @@ namespace Lists\ContactBundle\Controller;
 
 class SalesDispatcherController extends SalesController
 {
+    protected $filterNamespace = 'contacts.sales.dispatcher.filters';
     protected $baseRoutePrefix = 'sales_dispatcher';
     protected $baseTemplate = 'SalesDispatcher';
 
     public function organizationAction($organizationId)
     {
-        $page = $this->get('request')->query->get('page', 1);
+        $this->refreshFiltersIfAjax();
+        $page = $this->getFilterValueByKey('page');
 
         /** @var \Lists\TeamBundle\Entity\TeamRepository $teamRepository */
         $teamRepository = $this->get('lists_team.repository');

@@ -6,12 +6,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class SalesAdminController extends SalesController
 {
+    protected $filterNamespace = 'contacts.sales.admin.filters';
     protected $baseRoutePrefix = 'sales_admin';
     protected $baseTemplate = 'SalesAdmin';
 
     public function organizationAction($organizationId)
     {
-        $page = $this->get('request')->query->get('page', 1);
+        $this->refreshFiltersIfAjax();
+        $page = $this->getFilterValueByKey('page');
 
         $organizationContacts = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
             ->getMyOrganizationsContacts(null, $organizationId);

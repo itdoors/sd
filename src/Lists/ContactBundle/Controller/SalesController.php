@@ -3,15 +3,19 @@
 namespace Lists\ContactBundle\Controller;
 
 use SD\CommonBundle\Controller\BaseFilterController as BaseController;
-use Symfony\Component\HttpFoundation\Request;
 
 class SalesController extends BaseController
 {
+    protected $filterNamespace = 'contacts.sales.filters';
     protected $baseRoutePrefix = 'sales';
     protected $baseTemplate = 'Sales';
 
     public function indexAction()
     {
+        $page = $this->get('request')->query->get('page', 1);
+
+        $this->addToFilters('page', $page);
+
         return $this->render('ListsContactBundle:' . $this->baseTemplate . ':index.html.twig', array(
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix
@@ -20,7 +24,8 @@ class SalesController extends BaseController
 
     public function organizationAction($organizationId)
     {
-        $page = $this->get('request')->query->get('page', 1);
+        $this->refreshFiltersIfAjax();
+        $page = $this->getFilterValueByKey('page');
 
         $user = $this->getUser();
 
@@ -66,5 +71,21 @@ class SalesController extends BaseController
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix
         ));
+    }
+
+    /**
+     * If ajax request we need to remove $page var from filters
+     */
+    public function refreshFiltersIfAjax()
+    {
+        /** @var \Symfony\Component\HttpFoundation\Request $request */
+        $request = $this->get('request');
+
+        $isAjax = $request->isXmlHttpRequest();
+
+        if ($isAjax)
+        {
+            $this->removeFromFilters('page');
+        }
     }
 }
