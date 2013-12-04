@@ -164,7 +164,7 @@ class AjaxController extends Controller
         $repository = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact');
 
 
-        $objects = $repository->getSearchQuery(trim($searchText), $organizationId)
+        $objects = $repository->getSearchPhoneQuery(trim($searchText), $organizationId)
             ->getQuery()
             ->getResult();
 
@@ -187,27 +187,59 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
 
+    public function contactEmailAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+        $organizationId = $this->get('request')->query->get('organizationId');
+        //$phoneType = $this->get('request')->query->get('phoneType');
+
+        /** @var \SD\UserBundle\Entity\UserRepository $repository */
+        $repository = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact');
+
+
+        $objects = $repository->getSearchEmailQuery(trim($searchText), $organizationId)
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        $result[] = array(
+            'id' => $searchText,
+            'value' => $searchText,
+            'name' => $searchText,
+            'text' => $searchText
+        );
+
+        foreach ($objects as $object)
+        {
+            $this->processModelContactForJson($object, array('email'));
+
+            $result[] = $this->serializeArray($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
     /**
      * Processes model contact item form json output
      *
      * @param mixed[] $item
+     * @param mixed[] $keys
      *
      * @return mixed[] $item
      */
-    public function processModelContactForJson(&$item)
+    public function processModelContactForJson(&$item, $keys = array('phone1', 'phone2'))
     {
         $value = '';
 
         $item['id'] = '';
 
-        if ($item['phone1'])
+        foreach ($keys as $key)
         {
-            $value .= $item['phone1'];
-        }
-
-        if ($item['phone2'])
-        {
-            $value .= ' ' . $item['phone2'];
+            if ($item[$key])
+            {
+                $value .= $item[$key];
+            }
         }
 
         if ($item['ownerFullName'])

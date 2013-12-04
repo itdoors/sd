@@ -189,19 +189,15 @@ class ModelContactRepository extends EntityRepository
     }
 
     /**
-     * Returns searched results
-     *
-     * @param string $searchText
-     * @param int $organizationId
-     *
-     * @return \Doctrine\ORM\Query
+     * Processes search base query
      */
-    public function getSearchQuery($searchText, $organizationId)
+    public function processSearchBaseQuery($sql, $organizationId)
     {
-        $sql = $this->createQueryBuilder('mc')
+        $sql
             ->select("mc.id as id")
             ->addSelect("mc.phone1 as phone1")
             ->addSelect("mc.phone2 as phone2")
+            ->addSelect("mc.email as email")
             ->addSelect("o.name as organizationName")
             //->addSelect("CONCAT(CONCAT(mc.phone1, ' '), mc.phone2) as phone")
             ->addSelect("CONCAT(CONCAT(creator.lastName, ' '), creator.firstName) as creatorFullName")
@@ -209,11 +205,9 @@ class ModelContactRepository extends EntityRepository
             ->leftJoin('mc.user', 'creator')
             ->leftJoin('mc.owner', 'owner')
             ->leftJoin('ListsOrganizationBundle:Organization', 'o', 'WITH', 'o.id = mc.modelId')
-            ->where('mc.phone1 LIKE :searchText OR mc.phone2 LIKE :searchText')
-            //->where('mc.phone1 LIKE :searchText')
-            ->andWhere('mc.modelName = :modelName')
-            ->setParameter(':modelName', self::MODEL_ORGANIZATION)
-            ->setParameter(':searchText', '%' . $searchText . '%');
+            ->where('mc.modelName = :modelName')
+            ->setParameter(':modelName', self::MODEL_ORGANIZATION);
+
 
         if ($organizationId)
         {
@@ -221,6 +215,46 @@ class ModelContactRepository extends EntityRepository
                 ->andWhere('mc.modelId = :modelId')
                 ->setParameter(':modelId', $organizationId);
         }
+    }
+
+    /**
+     * Returns searched results
+     *
+     * @param string $searchText
+     * @param int $organizationId
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getSearchPhoneQuery($searchText, $organizationId)
+    {
+        $sql = $this->createQueryBuilder('mc');
+
+        $this->processSearchBaseQuery($sql, $organizationId);
+
+        $sql
+            ->andWhere('mc.phone1 LIKE :searchText OR mc.phone2 LIKE :searchText')
+            ->setParameter(':searchText', '%' . $searchText . '%');
+
+        return $sql;
+    }
+
+    /**
+     * Returns searched results
+     *
+     * @param string $searchText
+     * @param int $organizationId
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getSearchEmailQuery($searchText, $organizationId)
+    {
+        $sql = $this->createQueryBuilder('mc');
+
+        $this->processSearchBaseQuery($sql, $organizationId);
+
+        $sql
+            ->andWhere('mc.email LIKE :searchText')
+            ->setParameter(':searchText', '%' . $searchText . '%');
 
         return $sql;
     }
