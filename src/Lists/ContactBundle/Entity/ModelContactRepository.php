@@ -116,7 +116,7 @@ class ModelContactRepository extends EntityRepository
     public function processUserQuery($sql, $userIds)
     {
         $sql
-            ->andWhere('owner.id in (:userIds) AND creator.id in (:userIds)')
+            ->andWhere('owner.id in (:userIds) OR creator.id in (:userIds)')
             ->setParameter(':userIds', $userIds);
     }
 
