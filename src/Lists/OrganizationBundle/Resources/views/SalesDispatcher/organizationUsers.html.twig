@@ -4,7 +4,6 @@
         <th>{% trans %}FirstName, LastName{% endtrans %}</th>
         <th>{% trans %}Mobile{% endtrans %}</th>
         <th>{% trans %}Email{% endtrans %}</th>
-        <th>{% trans %}Action{% endtrans %}</th> {# Поле для действий #}
     </tr>
     </thead>
     <tbody>
@@ -18,15 +17,6 @@
             </td>
             <td>
                 {{ item.email }}
-            </td>
-            <td>
-                <a
-                    class="ajax-delete"
-                    href="javascript:;"
-                    data-params='{"model":"OrganizationUser","organizationId":{{ organizationId }},"userId":{{ item.id }}}'
-                >
-                    {% trans %}Delete{% endtrans %}
-                </a>
             </td>
         </tr>
     {% endfor %}
