@@ -90,4 +90,88 @@ class HandlingStatus
     {
         return $this->sortorder;
     }
+    /**
+     * @var string
+     */
+    private $slug;
+
+    /**
+     * @var string
+     */
+    private $percentageString;
+
+    /**
+     * @var integer
+     */
+    private $progress;
+
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return HandlingStatus
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string 
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * Set percentageString
+     *
+     * @param string $percentageString
+     * @return HandlingStatus
+     */
+    public function setPercentageString($percentageString)
+    {
+        $this->percentageString = $percentageString;
+    
+        return $this;
+    }
+
+    /**
+     * Get percentageString
+     *
+     * @return string 
+     */
+    public function getPercentageString()
+    {
+        return $this->percentageString;
+    }
+
+    /**
+     * Set progress
+     *
+     * @param integer $progress
+     * @return HandlingStatus
+     */
+    public function setProgress($progress)
+    {
+        $this->progress = $progress;
+    
+        return $this;
+    }
+
+    /**
+     * Get progress
+     *
+     * @return integer 
+     */
+    public function getProgress()
+    {
+        return $this->progress;
+    }
 }

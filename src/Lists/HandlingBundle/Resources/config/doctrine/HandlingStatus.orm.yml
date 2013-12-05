@@ -17,4 +17,15 @@ Lists\HandlingBundle\Entity\HandlingStatus:
         sortorder:
             type: integer
             nullable: true
+        slug:
+            type: string
+            length: 10
+            nullable: true
+        percentageString:
+            type: string
+            length: 20
+            nullable: true
+        progress:
+            type: integer
+            nullable: true
     lifecycleCallbacks: {  }
