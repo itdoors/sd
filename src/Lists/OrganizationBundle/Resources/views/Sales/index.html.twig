@@ -91,7 +91,7 @@
                         <a
                             class="btn default btn-xs red-stripe"
                             href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_add_organization_filter', {'organization_id': item.organizationId}) }}">
-                            {{ 'handling.list'|trans({}, 'ListsOrganizationBundle') }}
+                            {% trans %}Handling list link{% endtrans %}
                         </a>
 						
                     </td>
