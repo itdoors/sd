@@ -49,5 +49,15 @@ class SalesAdminController extends SalesController
                 'canAddNew' => $canAddNew
             ));
     }
+
+    public function indexServicesAction()
+    {
+        /** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
+        $handlingServices = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingService')
+            ->findAll();
+
+        //$handlingServiceRepository =
+    }
 }
 

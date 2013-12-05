@@ -147,4 +147,15 @@ Lists\HandlingBundle\Entity\Handling:
               inverseJoinColumns:
                 user_id:
                   referencedColumnName: id
+        handlingServices:
+            targetEntity: HandlingService
+            inversedBy: handlings
+            joinTable:
+              name: handling_handling_service
+              joinColumns:
+                handling_id:
+                  referencedColumnName: id
+              inverseJoinColumns:
+                service_id:
+                  referencedColumnName: id
     lifecycleCallbacks: {  }

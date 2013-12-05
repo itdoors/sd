@@ -62,4 +62,32 @@ class HandlingStatus
     {
         return $this->getName();
     }
+    /**
+     * @var integer
+     */
+    private $sortorder;
+
+
+    /**
+     * Set sortorder
+     *
+     * @param integer $sortorder
+     * @return HandlingStatus
+     */
+    public function setSortorder($sortorder)
+    {
+        $this->sortorder = $sortorder;
+    
+        return $this;
+    }
+
+    /**
+     * Get sortorder
+     *
+     * @return integer 
+     */
+    public function getSortorder()
+    {
+        return $this->sortorder;
+    }
 }

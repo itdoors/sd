@@ -1,0 +1,30 @@
+handlingservice:
+    pattern:  /
+    defaults: { _controller: "ListsHandlingBundle:HandlingService:index" }
+
+handlingservice_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "ListsHandlingBundle:HandlingService:show" }
+
+handlingservice_new:
+    pattern:  /new
+    defaults: { _controller: "ListsHandlingBundle:HandlingService:new" }
+
+handlingservice_create:
+    pattern:  /create
+    defaults: { _controller: "ListsHandlingBundle:HandlingService:create" }
+    requirements: { _method: post }
+
+handlingservice_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "ListsHandlingBundle:HandlingService:edit" }
+
+handlingservice_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "ListsHandlingBundle:HandlingService:update" }
+    requirements: { _method: post|put }
+
+handlingservice_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "ListsHandlingBundle:HandlingService:delete" }
+    requirements: { _method: post|delete }

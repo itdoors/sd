@@ -769,4 +769,52 @@ class Handling
     {
         return $this->type_id;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $handlingServices;
+
+
+    /**
+     * Add handlingServices
+     *
+     * @param \Lists\HandlingBundle\Entity\HandlingService $handlingServices
+     * @return Handling
+     */
+    public function addHandlingService(\Lists\HandlingBundle\Entity\HandlingService $handlingServices)
+    {
+        $this->handlingServices[] = $handlingServices;
+    
+        return $this;
+    }
+
+    /**
+     * Remove handlingServices
+     *
+     * @param \Lists\HandlingBundle\Entity\HandlingService $handlingServices
+     */
+    public function removeHandlingService(\Lists\HandlingBundle\Entity\HandlingService $handlingServices)
+    {
+        $this->handlingServices->removeElement($handlingServices);
+    }
+
+    /**
+     * Get handlingServices
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getHandlingServices()
+    {
+        return $this->handlingServices;
+    }
+
+    /**
+     * __toStrong
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getId();
+    }
 }

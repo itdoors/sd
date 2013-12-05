@@ -36,15 +36,49 @@ class HandlingSalesFormType extends AbstractType
                 'empty_value' => '',
                 'data' => new \DateTime()
             ))
-            ->add('status')
-            ->add('type')
+            ->add('status', 'entity', array(
+                'class' => 'ListsHandlingBundle:HandlingStatus',
+                'empty_value' => '',
+                'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingStatusRepository $repository)
+                    {
+                        return $repository->createQueryBuilder('s')
+                            ->orderBy('s.sortorder', 'ASC');
+                    }
+            ))
+            ->add('type', 'entity', array(
+                'class' => 'ListsHandlingBundle:HandlingType',
+                'empty_value' => '',
+                'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingTypeRepository $repository)
+                    {
+                        return $repository->createQueryBuilder('s')
+                            ->orderBy('s.sortorder', 'ASC');
+                    }
+            ))
             ->add('statusDescription')
+            ->add('handlingServices', 'entity', array(
+                'class' => 'ListsHandlingBundle:HandlingService',
+                'empty_value' => '',
+                'multiple' => true,
+                'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingServiceRepository $repository)
+                    {
+                        return $repository->createQueryBuilder('s')
+                            ->orderBy('s.sortorder', 'ASC');
+                    }
+            ))
             ->add('serviceOffered')
             ->add('budget')
             ->add('square')
             ->add('chance')
             ->add('description')
-            ->add('result')
+            ->add('result', 'entity', array(
+                'class' => 'ListsHandlingBundle:HandlingResult',
+                'empty_value' => '',
+                'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingResultRepository $repository)
+                    {
+                        return $repository->createQueryBuilder('s')
+                            ->orderBy('s.sortorder', 'ASC');
+                    }
+            ))
             ->add('resultString')
 
         ;

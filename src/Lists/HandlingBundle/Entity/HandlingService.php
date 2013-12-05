@@ -5,9 +5,9 @@ namespace Lists\HandlingBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * HandlingType
+ * HandlingService
  */
-class HandlingType
+class HandlingService
 {
     /**
      * @var integer
@@ -24,7 +24,24 @@ class HandlingType
      */
     private $slug;
 
+    /**
+     * @var integer
+     */
+    private $sortorder;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $handlings;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->handlings = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -39,7 +56,7 @@ class HandlingType
      * Set name
      *
      * @param string $name
-     * @return HandlingType
+     * @return HandlingService
      */
     public function setName($name)
     {
@@ -62,7 +79,7 @@ class HandlingType
      * Set slug
      *
      * @param string $slug
-     * @return HandlingType
+     * @return HandlingService
      */
     public function setSlug($slug)
     {
@@ -82,25 +99,10 @@ class HandlingType
     }
 
     /**
-     * __toStrong
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getName();
-    }
-    /**
-     * @var integer
-     */
-    private $sortorder;
-
-
-    /**
      * Set sortorder
      *
      * @param integer $sortorder
-     * @return HandlingType
+     * @return HandlingService
      */
     public function setSortorder($sortorder)
     {
@@ -117,5 +119,48 @@ class HandlingType
     public function getSortorder()
     {
         return $this->sortorder;
+    }
+
+    /**
+     * Add handlings
+     *
+     * @param \Lists\HandlingBundle\Entity\Handling $handlings
+     * @return HandlingService
+     */
+    public function addHandling(\Lists\HandlingBundle\Entity\Handling $handlings)
+    {
+        $this->handlings[] = $handlings;
+    
+        return $this;
+    }
+
+    /**
+     * Remove handlings
+     *
+     * @param \Lists\HandlingBundle\Entity\Handling $handlings
+     */
+    public function removeHandling(\Lists\HandlingBundle\Entity\Handling $handlings)
+    {
+        $this->handlings->removeElement($handlings);
+    }
+
+    /**
+     * Get handlings
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getHandlings()
+    {
+        return $this->handlings;
+    }
+
+    /**
+     * __toStrong
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getName();
     }
 }

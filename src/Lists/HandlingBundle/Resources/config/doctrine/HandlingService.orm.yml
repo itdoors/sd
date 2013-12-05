@@ -1,7 +1,7 @@
-Lists\HandlingBundle\Entity\HandlingResult:
+Lists\HandlingBundle\Entity\HandlingService:
     type: entity
-    table: handling_result
-    repositoryClass: Lists\HandlingBundle\Entity\HandlingResultRepository
+    table: handling_service
+    repositoryClass: Lists\HandlingBundle\Entity\HandlingServiceRepository
     fields:
         id:
             id: true
@@ -22,8 +22,8 @@ Lists\HandlingBundle\Entity\HandlingResult:
         sortorder:
             type: integer
             nullable: true
-    oneToMany:
-        handlings:
-            targetEntity: Lists\HandlingBundle\Entity\Handling
-            mappedBy: result
+    manyToMany:
+      handlings:
+        targetEntity: Lists\HandlingBundle\Entity\Handling
+        mappedBy: handlingServices
     lifecycleCallbacks: {  }

@@ -90,4 +90,60 @@ class HandlingMessageType
     {
         return $this->getName();
     }
+    /**
+     * @var integer
+     */
+    private $stayActionTime;
+
+    /**
+     * @var integer
+     */
+    private $sortorder;
+
+
+    /**
+     * Set stayActionTime
+     *
+     * @param integer $stayActionTime
+     * @return HandlingMessageType
+     */
+    public function setStayActionTime($stayActionTime)
+    {
+        $this->stayActionTime = $stayActionTime;
+    
+        return $this;
+    }
+
+    /**
+     * Get stayActionTime
+     *
+     * @return integer 
+     */
+    public function getStayActionTime()
+    {
+        return $this->stayActionTime;
+    }
+
+    /**
+     * Set sortorder
+     *
+     * @param integer $sortorder
+     * @return HandlingMessageType
+     */
+    public function setSortorder($sortorder)
+    {
+        $this->sortorder = $sortorder;
+    
+        return $this;
+    }
+
+    /**
+     * Get sortorder
+     *
+     * @return integer 
+     */
+    public function getSortorder()
+    {
+        return $this->sortorder;
+    }
 }

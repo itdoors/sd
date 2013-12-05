@@ -146,3 +146,8 @@ lists_sales_admin_tender_index:
 lists_sales_admin_report_index:
     pattern:  /lists/salesadmin/report
     defaults: { _controller: ListsHandlingBundle:SalesAdmin:report }
+
+handling_service:
+    resource: "@ListsHandlingBundle/Resources/config/routing/handlingservice.yml"
+    prefix:   /lists/salesadmin/handlingservice/
+

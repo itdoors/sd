@@ -1,6 +1,7 @@
 Lists\HandlingBundle\Entity\HandlingStatus:
     type: entity
     table: handling_status
+    repositoryClass: Lists\HandlingBundle\Entity\HandlingStatusRepository
     fields:
         id:
             id: true
@@ -13,4 +14,7 @@ Lists\HandlingBundle\Entity\HandlingStatus:
             length: 128
             fixed: false
             nullable: false
+        sortorder:
+            type: integer
+            nullable: true
     lifecycleCallbacks: {  }

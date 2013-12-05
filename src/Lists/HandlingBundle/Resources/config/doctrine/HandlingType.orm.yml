@@ -1,6 +1,7 @@
 Lists\HandlingBundle\Entity\HandlingType:
     type: entity
     table: handling_type
+    repositoryClass: Lists\HandlingBundle\Entity\HandlingTypeRepository
     fields:
         id:
             id: true
@@ -17,5 +18,8 @@ Lists\HandlingBundle\Entity\HandlingType:
             type: string
             length: 128
             fixed: false
+            nullable: true
+        sortorder:
+            type: integer
             nullable: true
     lifecycleCallbacks: {  }

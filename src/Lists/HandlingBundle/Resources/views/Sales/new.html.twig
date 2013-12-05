@@ -16,6 +16,53 @@
 		{% trans %}Handling <small>create handling</small>{% endtrans %}  
 	</h3>
 {% endblock %}
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/jquery-multi-select/css/multi-select.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/jquery-multi-select/js/jquery.multi-select.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/jquery-multi-select/js/jquery.quicksearch.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#handlingSalesForm_handlingServices').multiSelect({
+                selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+                selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+                afterInit: function (ms) {
+                    var that = this,
+                            $selectableSearch = that.$selectableUl.prev(),
+                            $selectionSearch = that.$selectionUl.prev(),
+                            selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+                            selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+                    that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                            .on('keydown', function (e) {
+                                if (e.which === 40) {
+                                    that.$selectableUl.focus();
+                                    return false;
+                                }
+                            });
+                    that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                            .on('keydown', function (e) {
+                                if (e.which == 40) {
+                                    that.$selectionUl.focus();
+                                    return false;
+                                }
+                            });
+                },
+                afterSelect: function () {
+                    this.qs1.cache();
+                    this.qs2.cache();
+                },
+                afterDeselect: function () {
+                    this.qs1.cache();
+                    this.qs2.cache();
+                }
+            });
+        });
+    </script>
+{% endblock %}
 
 {% block body %}
 <div class="row">
@@ -179,7 +226,9 @@
 					<div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-
+                                {{ form_label(form.handlingServices, 'Services', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.handlingServices, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Result Description'}}) }}
+                                <span class="help-block">{% trans %}Enter Services{% endtrans %}"</span>
                             </div>
                         </div>
                         <!--/span-->
