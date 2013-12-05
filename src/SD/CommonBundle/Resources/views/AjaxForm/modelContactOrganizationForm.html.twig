@@ -72,10 +72,11 @@
         $('.date-picker').datepicker({
             rtl: App.isRTL(),
             autoclose: true,
-            format: "dd.m.yyyy",
+            format: "dd.mm.yyyy",
             pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
             language: 'ru',
             startView: 'decade',
+            endDate: new Date(),
             weekStart: 1
         });
     });
@@ -141,7 +142,6 @@
                             <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
                             </span>
                         </div>
-                        <span class="help-block">{% trans %}Enter Contact Birthday{% endtrans %}"</span>
                     </div>
                 </div>
 
