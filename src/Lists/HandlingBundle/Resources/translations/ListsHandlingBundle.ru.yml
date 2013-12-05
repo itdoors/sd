@@ -91,15 +91,17 @@ Chance: Шанс
 Status: Статут
 Enter Status: Введите статус
 Enter Manager: Введите менеджеров
-Managers: Менеджеры
 Actions: Действия
-
-
+Action: Действие
+FirstName, LastName: Имя Фамилия
+Mobile: Мобильный
 No matches found: Совпадений ненайдено
+Contacts on handling: Контактные лица в обращении
 
 Managers: Менеджеры
 Manager: Менеджер
 Enter Manager: Введите менеджера
+Managers on handling: Менеджеры, имеющие доступ к обращению
 
 Filters: Фильтры
 Clear Filter: Очистить
