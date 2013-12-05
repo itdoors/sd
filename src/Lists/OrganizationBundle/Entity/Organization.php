@@ -609,4 +609,71 @@ class Organization
     {
         return $this->organization_type_id;
     }
+    /**
+     * @var \DateTime
+     */
+    private $createdatetime;
+
+    /**
+     * @var \SD\UserBundle\Entity\User
+     */
+    private $creator;
+
+
+    /**
+     * Set createdatetime
+     *
+     * @param \DateTime $createdatetime
+     * @return Organization
+     */
+    public function setCreatedatetime($createdatetime)
+    {
+        $this->createdatetime = $createdatetime;
+    
+        return $this;
+    }
+
+    /**
+     * Get createdatetime
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedatetime()
+    {
+        return $this->createdatetime;
+    }
+
+    /**
+     * Set creator
+     *
+     * @param \SD\UserBundle\Entity\User $creator
+     * @return Organization
+     */
+    public function setCreator(\SD\UserBundle\Entity\User $creator = null)
+    {
+        $this->creator = $creator;
+    
+        return $this;
+    }
+
+    /**
+     * Get creator
+     *
+     * @return \SD\UserBundle\Entity\User 
+     */
+    public function getCreator()
+    {
+        return $this->creator;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function doOnPrePersist()
+    {
+        if (!$this->getId())
+        {
+            $this->setCreatedatetime(new \DateTime());
+        }
+    }
 }
