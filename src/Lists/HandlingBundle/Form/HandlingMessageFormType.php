@@ -92,6 +92,41 @@ class HandlingMessageFormType extends AbstractType
                     $form->addError(new FormError($msg));
                 }
             });
+
+        $builder->addEventListener(
+            FormEvents::PRE_SUBMIT,
+            function(FormEvent $event) use ($container)
+            {
+                $data = $event->getData();
+
+                $form = $event->getForm();
+
+                $currentDatetime = new \DateTime($data['createdate']);
+
+                if (isset($data['handling_id']) && $data['handling_id'])
+                {
+                    $handlingId = $data['handling_id'];
+
+                    /** @var \Lists\HandlingBundle\Entity\Handling $handling */
+                    $handling = $container->get('doctrine.orm.entity_manager')
+                        ->getRepository('ListsHandlingBundle:Handling')
+                        ->find($handlingId);
+
+                    if ($handling)
+                    {
+                        if ($handling->getCreatedate() > $currentDatetime)
+                        {
+                            $translator = $container->get('translator');
+
+                            $msg = $translator->trans('Current event date can\'t be less then handling creation date (%date%)', array(
+                                '%date%' => $handling->getCreatedate()->format('d.m.y')
+                            ));
+
+                            $form->addError(new FormError($msg));
+                        }
+                    }
+                }
+            });
     }
 
     /**

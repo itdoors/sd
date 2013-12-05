@@ -76,8 +76,12 @@
                             </a>
                         </td>
                         <td>{{ item.organizationName|e }}</td>
-                        <td>{{ item.handlingCreatedatetime|date("d.M.y, H:m") }}</td>
-                        <td>{{ item.handlingLastHandlingDate|date("d.M.y, H:m") }}</td>
+                        <td>{{ item.handlingCreatedatetime|date("d.m.y, H:i") }}</td>
+                        <td>
+                            {% if item.handlingLastHandlingDate %}
+                                {{ item.handlingLastHandlingDate|date("d.m.y, H:i") }}
+                            {% endif %}
+                        </td>
                         <td>{{ item.cityName|e }}</td>
                         <td>{{ item.scopeName|e }}</td>
                         <td>{{ item.handlingServiceOffered|e }}</td>

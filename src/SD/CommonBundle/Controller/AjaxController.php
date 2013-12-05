@@ -631,7 +631,7 @@ class AjaxController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
-        $em->flush();
+        // $em->flush();
 
         // Insert future
         $type = $this->getDoctrine()
@@ -651,6 +651,11 @@ class AjaxController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($handlingMessage);
+        // $em->flush();
+
+        $handling->setLastHandlingDate($data->getCreatedate());
+        $em->persist($handling);
+
         $em->flush();
 
         return true;

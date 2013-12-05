@@ -68,7 +68,7 @@ Lists\HandlingBundle\Entity\Handling:
             nullable: true
             column: budget_client
         lastHandlingDate:
-            type: date
+            type: datetime
             nullable: true
             column: last_handling_date
         createdate:
