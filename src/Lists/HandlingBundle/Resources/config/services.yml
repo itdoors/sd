@@ -6,6 +6,8 @@ parameters:
     lists_handling.message.form.class: Lists\HandlingBundle\Form\HandlingMessageFormType
     lists_handling.form.user.class: Lists\HandlingBundle\Form\HandlingUserFormType
 
+    lists_handling.createdate_range.validator.class: Lists\HandlingBundle\Validator\CreatedateRangeValidator
+
 
 services:
     lists_handling.form.handlingSalesFilterForm:
@@ -42,3 +44,13 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: handlingUserForm }
+
+    createdate_range_validator:
+        class: %lists_handling.createdate_range.validator.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+        tags:
+            -
+                name: validator.constraint_validator
+                alias: createdate_range
+

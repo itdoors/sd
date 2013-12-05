@@ -6,6 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormError;
 
 class HandlingSalesFormType extends AbstractType
 {
@@ -22,8 +25,10 @@ class HandlingSalesFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $container = $this->container;
+
         /** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
-        $lr = $this->container->get('lists_lookup.repository');
+        $lr = $container->get('lists_lookup.repository');
 
         $builder
             ->add('organization', 'text', array(
@@ -33,8 +38,9 @@ class HandlingSalesFormType extends AbstractType
                 'disabled' => true
             ))
             ->add('createdate', 'date', array(
-                'empty_value' => '',
-                'data' => new \DateTime()
+                'data' => new \DateTime(),
+                'widget' => 'single_text',
+                'format' => 'dd.M.yyyy'
             ))
             ->add('status', 'entity', array(
                 'class' => 'ListsHandlingBundle:HandlingStatus',

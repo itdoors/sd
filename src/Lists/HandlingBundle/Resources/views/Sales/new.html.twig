@@ -16,10 +16,12 @@
 		{% trans %}Handling <small>create handling</small>{% endtrans %}  
 	</h3>
 {% endblock %}
+
 {% block css_page_level_plugin %}
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/jquery-multi-select/css/multi-select.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/jquery-tags-input/jquery.tagsinput.css')}} "  />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
 {% endblock %}
 
 {% block js_page_level_plugins %}
@@ -27,6 +29,8 @@
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/jquery-multi-select/js/jquery.multi-select.js') }}"></script>
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/jquery-multi-select/js/jquery.quicksearch.js') }}"></script>
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/jquery-tags-input/jquery.tagsinput.min.js')}}" ></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
     <script type="text/javascript">
         $(document).ready(function(){
             $('#handlingSalesForm_handlingServices').multiSelect({
@@ -63,6 +67,19 @@
                 }
             });
         });
+
+        $(document).ready(function (){
+
+            $('.date-picker').datepicker({
+                rtl: App.isRTL(),
+                //autoclose: true,
+                format: "dd.m.yyyy",
+                pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
+                language: 'ru',
+                minDate: new Date()
+            });
+        })
+
     </script>
 {% endblock %}
 
@@ -97,14 +114,24 @@
 							{% if form.createdate.vars.errors|length %}
 							    has-error
 							{% endif %}">
-                            <div class="form-group"> {# Фиксируем также реальную дату и эту выводим по умолчанию сегодняшнее число#}
+                            <div class="form-group">
                                 {{ form_label(form.createdate, 'Handling Create DateTime *', {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(form.createdate, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter Handling Create DateTime'}}) }}
-								{% if form.createdate.vars.errors|length %}
-									{{ form_errors(form.createdate) }}
-								{% else %}
-									<span class="help-block">{% trans %}Enter Handling Create DateTime{% endtrans %}"</span>
-								{% endif %}
+                                <div class="input-group input-medium date date-picker">
+                                    {{ form_widget(form.createdate, {'attr': {
+                                        'class': 'form-control',
+                                        'data-required': '1',
+                                        'placeholder': 'Enter Handling Create DateTime',
+                                        'readonly': 'readonly'
+                                    }}) }}
+                                    <span class="input-group-btn">
+                                    <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+                                    </span>
+                                </div>
+                                {% if form.createdate.vars.errors|length %}
+                                    {{ form_errors(form.createdate) }}
+                                {% else %}
+                                    <span class="help-block">{% trans %}Enter Handling Create DateTime{% endtrans %}"</span>
+                                {% endif %}
                             </div>
                         </div>
                         <!--/span-->
