@@ -19,9 +19,9 @@ class CreatedateRangeValidator extends ConstraintValidator
     {
         if ($value)
         {
-            if ($value < new \DateTime())
+            if ($value > new \DateTime())
             {
-                $this->context->addViolation('Creation date can\'t be less then current date ', array());
+                $this->context->addViolation('Creation date can\'t be greater then current date ', array());
             }
         }
     }

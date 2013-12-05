@@ -59,9 +59,9 @@ class HandlingRepository extends EntityRepository
     public function processSelect($sql)
     {
         $sql
-            ->select('DISTINCT(h.id) as handlingId')
+            ->select('h.id as handlingId')
             ->addSelect('o.name as organizationName')
-            ->addSelect('h.createdatetime as handlingCreatedatetime')
+            ->addSelect('h.createdate as handlingCreatedate')
             ->addSelect('h.lastHandlingDate as handlingLastHandlingDate')
             ->addSelect('city.name as cityName')
             ->addSelect('scope.name as scopeName')

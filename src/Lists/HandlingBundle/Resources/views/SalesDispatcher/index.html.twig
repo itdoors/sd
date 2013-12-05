@@ -76,7 +76,7 @@
                             </a>
                         </td>
                         <td>{{ item.organizationName|e }}</td>
-                        <td>{{ item.handlingCreatedatetime|date("d.m.y, H:i") }}</td>
+                        <td>{{ item.handlingCreatedate|date("d.m.y") }}</td>
                         <td>
                             {% if item.handlingLastHandlingDate %}
                                 {{ item.handlingLastHandlingDate|date("d.m.y, H:i") }}

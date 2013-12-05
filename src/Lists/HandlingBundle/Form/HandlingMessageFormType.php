@@ -37,7 +37,7 @@ class HandlingMessageFormType extends AbstractType
             ->add('createdate', 'datetime', array(
                 'data' => new \DateTime(),
                 'widget' => 'single_text',
-                'format' => 'dd.M.yyyy hh:mm'
+                'format' => 'dd.M.yyyy HH:mm'
             ))
             ->add('type', null, array(
                 'empty_value' => '',
@@ -47,7 +47,7 @@ class HandlingMessageFormType extends AbstractType
                 'required' => true,
                 'mapped' => false,
                 'widget' => 'single_text',
-                'format' => 'dd.M.yyyy hh:mm'
+                'format' => 'dd.M.yyyy HH:mm'
               //  'empty_value' => ''
             ))
             ->add('nexttype', 'entity', array(

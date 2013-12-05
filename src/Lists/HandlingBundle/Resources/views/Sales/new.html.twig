@@ -76,11 +76,11 @@
 
             $('.date-picker').datepicker({
                 rtl: App.isRTL(),
-                //autoclose: true,
+                autoclose: true,
                 format: "dd.m.yyyy",
                 pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
                 language: 'ru',
-                startDate: new Date(),
+                endDate: new Date(),
                 weekStart: 1
             });
         })

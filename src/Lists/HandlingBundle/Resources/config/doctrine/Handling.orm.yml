@@ -74,6 +74,7 @@ Lists\HandlingBundle\Entity\Handling:
         createdate:
             type: date
             nullable: false
+            column: createdate
         organization_id:
             type: integer
             nullable: true
