@@ -69,7 +69,7 @@
                 <td>{% trans %}Organization Name{% endtrans %}</td>
                 <td>{{ handling.organizationName }}</td>
                 <td>{% trans %}Status Description{% endtrans %}</td>
-                <td><a href="#" id="statusDescription" data-type="textarea" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.statusDescription }}" data-placement="right" data-original-title="{% trans %}Enter Status{% endtrans %}">{{ handling.0.statusDescription }}</a>
+                <td><a href="#" id="statusDescription" data-type="textarea" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.statusDescription }}" data-placement="right" data-original-title="{% trans %}Enter Status Description{% endtrans %}">{{ handling.0.statusDescription }}</a>
 				</td>                 
             </tr>
             <tr> {# 3 #}
@@ -77,7 +77,7 @@
                 <td>{{ handling.creatorFullName }}</td>
                 <td>{% trans %}Result{% endtrans %}</td>
                 <td>
-                    <a href="#" id="resultId" data-type="select" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.resultId }}" data-original-title="{% trans %}Select type{% endtrans %}">
+                    <a href="#" id="resultId" data-type="select" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.resultId }}" data-original-title="{% trans %}Select Result Type{% endtrans %}">
                         {{ handling.0.result }}
                     </a>
                 </td>
@@ -90,7 +90,7 @@
                     </a>
                 </td>
 				<td>{% trans %}Result Description{% endtrans %}</td>
-				<td><a href="#" id="resultString" data-type="textarea" data-pk="{{ handling.0.id }}" data-placement="right" data-original-title="{% trans %}Enter Status{% endtrans %}">{{ handling.0.resultString }}</a>
+				<td><a href="#" id="resultString" data-type="textarea" data-pk="{{ handling.0.id }}" data-placement="right" data-original-title="{% trans %}Enter Result Description{% endtrans %}">{{ handling.0.resultString }}</a>
 				</td>                 				                
             </tr>
             <tr> {# 5 #}

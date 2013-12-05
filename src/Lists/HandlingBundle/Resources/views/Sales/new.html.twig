@@ -8,6 +8,10 @@
 			<a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
 			<i class="fa fa-angle-right"></i>
 		</li>
+		<li>			
+			<a href="{{ path('lists_sales_handling_list') }}" title="{% trans %}My Handlings{% endtrans %}">{% trans %}My Handlings{% endtrans %}</a>
+			<i class="fa fa-angle-right"></i>
+		</li>
 		<li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_new') }}" title="{% trans %}Create Handling{% endtrans %}">{% trans %}Create Handling{% endtrans %}</a></li>
 	</ul>
 {% endblock %}

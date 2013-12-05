@@ -6,6 +6,7 @@ Show Handling: Просмотр обращения
 Dashboard: Рабочий стол
 Handling: Обращение
 Handlings: Обращения
+Team Handlings: Обращения команды
 Contacts: Контакты
 List of Handlings: Список обращений
 
@@ -33,6 +34,7 @@ Enter Chance: Введите шанс
 Status: Статус
 Enter Status: Введите статус
 Status Description: Описание статуса
+Select Result Type: Выберите тип результата
 Enter Status Description: Введите описание статуса
 Result: Результат
 Result Description: Описание результата
@@ -50,11 +52,11 @@ Enter Organiztion: Введите организацию
 
 Enter Handling Create DateTime: Введите дату создания обращения
 Handling Create DateTime: Дата создания обращения
-
+Is business trip: Командировка
 
 
 Event next date can't be greater then current event date: Дата следующего события не должна быть меньше текущего.
-Is business trip: Командировка
+
 Filename: Имя файла
 Description: Описание
 Messages: Сообщения
@@ -88,7 +90,7 @@ City: Город
 Scope: Деятельность
 ServiceOffered: Услуги
 Chance: Шанс
-Status: Статут
+Status: Статус
 Enter Status: Введите статус
 Enter Manager: Введите менеджеров
 Actions: Действия
@@ -110,5 +112,7 @@ Enter filter parameters and press Filter button.: Введите парамет�
 Create: Создать
 Add New: Добавить
 Handling list link: Обращения
+Enter value: Ведите значение
+
 
 
