@@ -1,6 +1,5 @@
-<div class="row">
-
-    {% for item in messages %}
+    {% trans_default_domain 'ListsHandlingBundle' %}
+	{% for item in messages %}
     <div class="portlet box {% if item.isFutureMessage %}red{% else %}yellow{% endif %}">
         <div class="portlet-title">
             <div class="caption">
@@ -26,4 +25,3 @@
         </div>
     </div>
     {% endfor %}
-</div>

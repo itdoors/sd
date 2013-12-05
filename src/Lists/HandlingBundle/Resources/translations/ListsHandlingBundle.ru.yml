@@ -3,11 +3,20 @@ Handling <small>show handling</small>: Обращение <small>просмот�
 Handling <small>list of handlings</small>: Обращение <small>список обращений</small>
 New Handling: Новое обращение
 Show Handling: Просмотр обращения
+Dashboard: Рабочий стол
+Handling: Обращение
+Handlings: Обращения
+Contacts: Контакты
+List of Handlings: Список обращений
+
 
 Handling ID: № Обращения
 Create Date: Дата создания
+Createdatetime: Дата создания
+LastHandlingDate: Последнее
 Create User: Кто создал
 Service offered: Предлагаемые услуги
+ServiceOffered: Предлагаемые услуги
 Enter Service offered: Введите услуги, которые предлагаете
 Contact Type: Тип контакта
 Handling Type: Тип обращения
@@ -37,11 +46,19 @@ Show History: Показать историю
 History: История
 
 Organization Name: Название организации
+Enter Organiztion: Введите организацию
 
 Enter Handling Create DateTime: Введите дату создания обращения
 Handling Create DateTime: Дата создания обращения
 
 
+
+Event next date can't be greater then current event date: Дата следующего события не должна быть меньше текущего.
+Is business trip: Командировка
+Filename: Имя файла
+Description: Описание
+Messages: Сообщения
+Messages list: Список сообщений по данному образению
 
 List of Organizations: Список организаций
 Create Organization: Создание организации
@@ -74,19 +91,24 @@ Chance: Шанс
 Status: Статут
 Enter Status: Введите статус
 Enter Manager: Введите менеджеров
-Managers: Менеджеры
 Actions: Действия
-
-
+Action: Действие
+FirstName, LastName: Имя Фамилия
+Mobile: Мобильный
 No matches found: Совпадений ненайдено
+Contacts on handling: Контактные лица в обращении
 
 Managers: Менеджеры
 Manager: Менеджер
 Enter Manager: Введите менеджера
+Managers on handling: Менеджеры, имеющие доступ к обращению
 
 Filters: Фильтры
 Clear Filter: Очистить
 Filter: Фильтр
 Enter filter parameters and press Filter button.: Введите параметры для фильтра и нажмите кнопку Фильтр
+Create: Создать
+Add New: Добавить
+Handling list link: Обращения
 
 

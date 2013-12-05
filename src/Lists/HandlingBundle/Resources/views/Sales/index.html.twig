@@ -1,8 +1,20 @@
 {% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsHandlingBundle' %}
+{% block title %}{% trans %}List of Handlings{% endtrans %} {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
-        {% trans %}Handlings <small>list of handlings</small>{% endtrans %}
+        {% trans %}Handling <small>list of handlings</small>{% endtrans %}
     </h3>
+{% endblock %}
+{% block page_breadcrumbs %}
+	<ul class="page-breadcrumb breadcrumb">
+		<li>
+			<i class="fa fa-home"></i>
+			<a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+			<i class="fa fa-angle-right"></i>
+		</li>
+		<li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_index') }}" title="{% trans %}Handlings{% endtrans %}">{% trans %}Handlings{% endtrans %}</a></li>
+	</ul>
 {% endblock %}
 
 {% block css_page_level_plugin %}

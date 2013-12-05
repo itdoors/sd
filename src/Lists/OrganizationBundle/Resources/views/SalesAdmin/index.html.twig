@@ -38,7 +38,24 @@
             }
         )
     }}
-
+	<div class="table-toolbar">
+		<div class="btn-group">
+			<a class="btn green" id="add_organization" href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_new') }}">
+				{% trans %}Add New{% endtrans %} <i class="fa fa-plus"></i>
+			</a>
+		</div>
+		{#
+		<div class="btn-group pull-right">
+			<button data-toggle="dropdown" class="btn dropdown-toggle">{% trans %}Tools{% endtrans %} <i class="fa fa-angle-down"></i>
+			</button>
+			<ul class="dropdown-menu pull-right">
+				<li><a href="#">{% trans %}Print{% endtrans %}</a></li>
+				<li><a href="#">{% trans %}Save as PDF{% endtrans %}</a></li>
+				<li><a href="#">{% trans %}Export to Excel{% endtrans %}</a></li>
+			</ul>
+		</div>
+		#}
+	</div>
     <div class="table-responsive">
         <div class="navigation">
             {{ knp_pagination_render(pagination) }}
@@ -74,7 +91,7 @@
                         <a
                             class="btn default btn-xs red-stripe"
                             href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_add_organization_filter', {'organization_id': item.organizationId}) }}">
-                            {{ 'handling.list'|trans({}, 'ListsOrganizationBundle') }}
+                            {% trans %}Handling list link{% endtrans %}
                         </a>
 						
                     </td>
