@@ -114,7 +114,7 @@ class HandlingMessageFormType extends AbstractType
 
                     if ($handling)
                     {
-                        if ($handling->getCreatedate() > $currentDatetime)
+                        if ($handling->getCreatedate() > $currentDatetime || $handling->getCreatedatetime() > $currentDatetime)
                         {
                             $translator = $container->get('translator');
 
