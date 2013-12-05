@@ -751,6 +751,17 @@ class AjaxController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
+
+
+        $organizationId = $data->getModelId();
+
+        $organization = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization')
+            ->find($organizationId);
+
+        $organization->addUser($user);
+        $em->persist($organization);
+
         $em->flush();
 
         return true;
