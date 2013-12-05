@@ -34,7 +34,8 @@ class ModelContactOrganizationFormType extends AbstractType
         ;
 
         $builder
-            ->add('add', 'submit');
+            ->add('add', 'submit')
+            ->add('cancel', 'button');
     }
     
     /**

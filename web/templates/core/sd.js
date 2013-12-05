@@ -4,6 +4,7 @@ var SD = (function() {
         ajaxFormClass: 'ajax-form',
         ajaxDeleteClass: 'ajax-delete',
         ajaxFormEntityClass: 'ajax-form-entity',
+        ajaxFormCancelBtnClass: 'sd-cancel-btn',
         ajaxFormUrl: '',
         ajaxDeleteUrl: ''
     };
@@ -133,6 +134,32 @@ var SD = (function() {
                     }
                 }
             });
+        });
+
+        $('.' + self.params.ajaxFormCancelBtnClass).live('click', function(e){
+
+            e.preventDefault();
+
+            var targetHolder = $(this).parents('form').find('input[name="targetId"]');
+
+            var targetId;
+
+            if (targetHolder.length)
+            {
+                targetId = targetHolder.val();
+            }
+
+            if (!targetId)
+            {
+                return;
+            }
+
+            var target = $('#' + targetId);
+
+            if (target)
+            {
+                target.html('');
+            }
         })
 
     };
