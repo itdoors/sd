@@ -38,33 +38,8 @@
                 allowClear: true
             });
         })
-
-        $(document).ready(function(){
-
-            $('#organizationSalesForm_name, #organizationSalesForm_shortname').select2({
-                minimumInputLength: 2,
-                allowClear: true,
-                initSelection : function (element, callback) {
-                    var data = {id: element.val(), text: element.val()};
-                    callback(data);
-                },
-                ajax: {
-                    url: '{{ path('sd_common_ajax_organization_for_creation') }}',
-                    dataType: 'json',
-                    data: function (term, page) {
-                        return {
-                            q: term
-                        };
-                    },
-                    results: function (data, page) {
-                        return {
-                            results: data
-                        };
-                    }
-                }
-            })
-        });
     </script>
+
     <div class="row">
     <div class="col-md-12">
 
@@ -106,8 +81,8 @@
                         <!--/span-->
                         <div class="col-md-6">
                             <div class="form-group">
-                                {{ form_label(filterForm.shortname, 'Organization short name', {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(filterForm.shortname, {'attr': {'class': 'form-control', 'placeholder': 'Enter organization short name'}}) }}
+                                {{ form_label(filterForm.shortDescription, 'Organization short name', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.shortDescription, {'attr': {'class': 'form-control', 'placeholder': 'Enter organization short name'}}) }}
                                 <span class="help-block">{% trans %}for example{% endtrans %}: Impel Griffin</span>
                             </div>
                         </div>
@@ -166,23 +141,23 @@
                             </div>
                         </div>
                         <!--/span-->
-                        <div class="col-md-6">
+                        {#<div class="col-md-6">
                             <div class="form-group">
                                 {{ form_label(filterForm.physicalAddress, 'Physical Address', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.physicalAddress, {'attr': {'class': 'form-control'}}) }}
                                 <span class="help-block">{% trans %}Enter Physical Address{% endtrans %}</span>
                             </div>
-                        </div>
+                        </div>#}
                         <!--/span-->
                     </div>
                     <!--/row-->
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group">
+                            {#<div class="form-group">
                                 {{ form_label(filterForm.phone, 'Phone', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.phone, {'attr': {'class': 'form-control'}}) }}
                                 <span class="help-block">{% trans %}Enter Phone{% endtrans %}</span>
-                            </div>
+                            </div>#}
                         </div>
                         <!--/span-->
                         <div class="col-md-6">
@@ -196,17 +171,13 @@
                     </div>
                     <!--/row-->
 
-                    <h3 class="form-section">{% trans %}Сontact details{% endtrans %}</h3>
+                    <h3 class="form-section">{% trans %}Organization details{% endtrans %}</h3>
                     <div class="row">
-                        <div class="col-md-6
-                            {% if filterForm.edrpou.vars.errors|length %}
-							    has-error
-							{% endif %}">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 {{ form_label(filterForm.edrpou, 'Edrpou', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.edrpou, {'attr': {'class': 'form-control'}}) }}
                                 <span class="help-block">{% trans %}Enter edrpou{% endtrans %}</span>
-                                {{ form_errors(filterForm.edrpou) }}
                             </div>
                         </div>
                         <!--/span-->
