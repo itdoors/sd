@@ -118,8 +118,10 @@ class HandlingMessageFormType extends AbstractType
                         {
                             $translator = $container->get('translator');
 
+                            $creationDate = $handling->getCreatedate()  ? $handling->getCreatedate() : $handling->getCreatedatetime();
+
                             $msg = $translator->trans('Current event date can\'t be less then handling creation date (%date%)', array(
-                                '%date%' => $handling->getCreatedate()->format('d.m.y')
+                                '%date%' => $creationDate->format('d.m.y')
                             ));
 
                             $form->addError(new FormError($msg));
