@@ -13,7 +13,6 @@
                 <th>{% trans %}Email{% endtrans %}</th>
                 <th>{% trans %}Birthday{% endtrans %}</th>
                 <th>{% trans %}Creator{% endtrans %}</th>
-                <th>{% trans %}Action{% endtrans %}</th> {# Поле для действий, возможно для менеджера запретить удалять #}
             </tr>
             </thead>
             <tbody>
@@ -37,15 +36,6 @@
                     {% if item.0.createdatetime %}
                         ({{ item.0.createdatetime|date("d.M.y") }})
                     {% endif %}
-                </td>
-                <td>
-                    <a
-                        class="ajax-delete"
-                        href="javascript:;"
-                        data-params='{"model":"ModelContact","id":{{ item.0.id }}}'
-                    >
-                        {% trans %}Delete{% endtrans %}
-                    </a>
                 </td>
             </tr>
             {% endfor %}
