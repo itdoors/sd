@@ -42,12 +42,15 @@ class SalesController extends BaseController
             20
         );
 
+        $canAddNew = $this->getFilterValueByKey('organization_id') ? true : false;
+
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':index.html.twig', array(
             'pagination' => $pagination,
             'filterForm' => $filterForm->createView(),
             'filterFormName' => $this->filterFormName,
             'baseRoutePrefix' => $this->baseRoutePrefix,
-            'baseTemplate' => $this->baseTemplate
+            'baseTemplate' => $this->baseTemplate,
+            'canAddNew' => $canAddNew
         ));
     }
 

@@ -36,7 +36,15 @@
         }
         )
     }}
-
+    {% if canAddNew %}
+        <div class="table-toolbar">
+            <div class="btn-group">
+                <a class="btn green" id="add_handling" href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_new') }}">
+                    {% trans %}Add New{% endtrans %} <i class="fa fa-plus"></i>
+                </a>
+            </div>
+        </div>
+    {% endif %}
     <div class="table-responsive">
         <div class="navigation">
             {{ knp_pagination_render(pagination) }}
