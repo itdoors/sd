@@ -3,6 +3,10 @@ Handling <small>show handling</small>: Обращение <small>просмот�
 Handling <small>list of handlings</small>: Обращение <small>список обращений</small>
 New Handling: Новое обращение
 Show Handling: Просмотр обращения
+Dashboard: Рабочий стол
+Handling: Обращение
+Contacts: Контакты
+
 
 Handling ID: № Обращения
 Create Date: Дата создания
@@ -44,6 +48,13 @@ Enter Handling Create DateTime: Введите дату создания обр�
 Handling Create DateTime: Дата создания обращения
 
 
+
+Event next date can't be greater then current event date: Дата следующего события не должна быть меньше текущего.
+Is business trip: Командировка
+Filename: Имя файла
+Description: Описание
+Messages: Сообщения
+Messages list: Список сообщений по данному образению
 
 List of Organizations: Список организаций
 Create Organization: Создание организации
@@ -90,5 +101,7 @@ Filters: Фильтры
 Clear Filter: Очистить
 Filter: Фильтр
 Enter filter parameters and press Filter button.: Введите параметры для фильтра и нажмите кнопку Фильтр
+Create: Создать
+Add New: Добавить
 
 
