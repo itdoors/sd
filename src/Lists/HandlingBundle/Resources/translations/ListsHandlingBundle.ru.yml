@@ -5,7 +5,9 @@ New Handling: Новое обращение
 Show Handling: Просмотр обращения
 Dashboard: Рабочий стол
 Handling: Обращение
+Handlings: Обращения
 Contacts: Контакты
+List of Handlings: Список обращений
 
 
 Handling ID: № Обращения
@@ -14,6 +16,7 @@ Createdatetime: Дата создания
 LastHandlingDate: Последнее
 Create User: Кто создал
 Service offered: Предлагаемые услуги
+ServiceOffered: Предлагаемые услуги
 Enter Service offered: Введите услуги, которые предлагаете
 Contact Type: Тип контакта
 Handling Type: Тип обращения
