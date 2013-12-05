@@ -83,6 +83,18 @@ Lists\OrganizationBundle\Entity\Organization:
         createdatetime:
             type: datetime
             nullable: true
+        physicalAddress:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: physical_address
+        phone:
+            type: string
+            length: 50
+            fixed: false
+            nullable: true
+            column: phone
     manyToOne:
         city:
             targetEntity: Lists\CityBundle\Entity\City

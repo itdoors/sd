@@ -676,4 +676,60 @@ class Organization
             $this->setCreatedatetime(new \DateTime());
         }
     }
+    /**
+     * @var string
+     */
+    private $physicalAddress;
+
+    /**
+     * @var string
+     */
+    private $phone;
+
+
+    /**
+     * Set physicalAddress
+     *
+     * @param string $physicalAddress
+     * @return Organization
+     */
+    public function setPhysicalAddress($physicalAddress)
+    {
+        $this->physicalAddress = $physicalAddress;
+    
+        return $this;
+    }
+
+    /**
+     * Get physicalAddress
+     *
+     * @return string 
+     */
+    public function getPhysicalAddress()
+    {
+        return $this->physicalAddress;
+    }
+
+    /**
+     * Set phone
+     *
+     * @param string $phone
+     * @return Organization
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+    
+        return $this;
+    }
+
+    /**
+     * Get phone
+     *
+     * @return string 
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
 }

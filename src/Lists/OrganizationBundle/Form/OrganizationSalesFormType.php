@@ -56,6 +56,8 @@ class OrganizationSalesFormType extends AbstractType
                 'property'=>'name',
                 'query_builder' => $lr->getOnlyScopeQuery()
             ))
+            ->add('phone')
+            ->add('physicalAddress')
         ;
 
         $builder
