@@ -91,7 +91,10 @@ class AjaxController extends Controller
     {
         $objects = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingStatus')
-            ->findAll();
+            ->createQueryBuilder('s')
+            ->orderBy('s.sortorder')
+            ->getQuery()
+            ->getResult();
 
         $result = array();
 
@@ -107,7 +110,10 @@ class AjaxController extends Controller
     {
         $objects = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingResult')
-            ->findAll();
+            ->createQueryBuilder('s')
+            ->orderBy('s.sortorder')
+            ->getQuery()
+            ->getResult();
 
         $result = array();
 
@@ -123,7 +129,10 @@ class AjaxController extends Controller
     {
         $objects = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingType')
-            ->findAll();
+            ->createQueryBuilder('s')
+            ->orderBy('s.sortorder')
+            ->getQuery()
+            ->getResult();
 
         $result = array();
 
