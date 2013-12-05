@@ -1,11 +1,13 @@
 <script type="text/javascript">
 
     $(document).ready(function (){
+
         $(".form_datetime").datetimepicker({
             autoclose: true,
             isRTL: App.isRTL(),
             format: "dd.m.yyyy hh:ii",
-            pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left")
+            pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
+            language: 'ru'
         });
     })
 
