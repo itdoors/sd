@@ -16,7 +16,7 @@ Lists\HandlingBundle\Entity\HandlingMessage:
             type: text
             nullable: true
         createdate:
-            type: date
+            type: datetime
             nullable: false
         filepath:
             type: string
@@ -32,6 +32,17 @@ Lists\HandlingBundle\Entity\HandlingMessage:
             type: integer
             nullable: true
             column: handling_id
+        isBusinessTrip:
+            type: boolean
+            nullable: true
+            column: is_business_trip
+            default: false
+        additionalType:
+            type: string
+            length: 3
+            fixed: false
+            nullable: true
+            column: additional_type
     manyToOne:
         handling:
             targetEntity: Handling

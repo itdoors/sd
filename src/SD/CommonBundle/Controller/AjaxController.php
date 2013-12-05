@@ -2,6 +2,7 @@
 
 namespace SD\CommonBundle\Controller;
 
+use Lists\HandlingBundle\Entity\HandlingMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,6 +25,28 @@ class AjaxController extends Controller
         foreach ($organizations as $organization)
         {
             $result[] = $this->serializeObject($organization);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    public function organizationForContactsAction()
+    {
+        $searchText = $this->get('request')->query->get('q');
+
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $organizationsRepository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+        $organizations= $organizationsRepository->getSearchContactsQuery($searchText);
+
+        $result = array();
+
+        foreach ($organizations as $organization)
+        {
+            $this->processOrganizationForJson($organization);
+
+            $result[] = $this->serializeArray($organization, 'organizationId');
         }
 
         return new Response(json_encode($result));
@@ -238,7 +261,7 @@ class AjaxController extends Controller
         {
             if ($item[$key])
             {
-                $value .= $item[$key];
+                $value .= ' '. $item[$key];
             }
         }
 
@@ -258,6 +281,36 @@ class AjaxController extends Controller
         }
 
         $item['value'] = $value;
+    }
+
+    /**
+     * Processes model contact item form json output
+     *
+     * @param mixed[] $item
+     *
+     * @return mixed[] $item
+     */
+    public function processOrganizationForJson(&$item)
+    {
+        $value = '';
+
+        if ($item['organizationName'])
+        {
+            $value .= $item['organizationName'];
+        }
+
+        if ($item['organizationShortName'])
+        {
+            $value .= ' | ' . $item['organizationShortName'];
+        }
+
+        if ($item['fullNames'])
+        {
+            $value .= ' | ' . $item['fullNames'];
+        }
+
+        $item['value'] = $value;
+
     }
 
     public function organizationByIdAction()
@@ -436,7 +489,10 @@ class AjaxController extends Controller
 
         $result = array(
             'error' => 1,
-            'html' => ''
+            'html' => '',
+            'postFunction' => $postFunction,
+            'postTargetId' => $postTargetId,
+            'targetId' => $targetId
         );
 
         if ($form->isValid())
@@ -445,14 +501,11 @@ class AjaxController extends Controller
 
             $user = $this->getUser();
 
-            $this->$method($form, $user);
+            $this->$method($form, $user, $request);
 
             unset($result['error']);
 
             $result['success'] = true;
-            $result['postFunction'] = $postFunction;
-            $result['postTargetId'] = $postTargetId;
-            $result['targetId'] = $targetId;
         }
 
 
@@ -467,7 +520,7 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
 
-    public function organizationUserFormSave($form, $user)
+    public function organizationUserFormSave($form, $user, $request)
     {
         $data = $form->getData();
 
@@ -488,10 +541,12 @@ class AjaxController extends Controller
         return true;
     }
 
-    public function handlingMessageFormSave($form, $user)
+    public function handlingMessageFormSave(\Symfony\Component\Form\Form $form, $user, $request)
     {
         /** @var \Lists\HandlingBundle\Entity\HandlingMessage $data */
         $data = $form->getData();
+
+        $formData = $request->request->get($form->getName());
 
         $handlingId = $data->getHandlingId();
 
@@ -515,10 +570,30 @@ class AjaxController extends Controller
         $em->persist($data);
         $em->flush();
 
+        // Insert future
+        $type = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingMessageType')
+            ->find($formData['nexttype']);
+
+        $nextDatetime = new \DateTime($formData['nextcreatedate']);
+
+        $handlingMessage = new HandlingMessage();
+        $handlingMessage->setCreatedate($nextDatetime);
+        $handlingMessage->setCreatedatetime(new \DateTime());
+        $handlingMessage->setUser($user);
+        $handlingMessage->setHandling($handling);
+        $handlingMessage->setType($type);
+        $handlingMessage->setIsBusinessTrip(isset($formData['next_is_business_trip']) ? true : false);
+        $handlingMessage->setAdditionalType(HandlingMessage::ADDITIONAL_TYPE_FUTURE_MESSAGE);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($handlingMessage);
+        $em->flush();
+
         return true;
     }
 
-    public function handlingUserFormSave($form, $user)
+    public function handlingUserFormSave($form, $user, $request)
     {
         $data = $form->getData();
 
@@ -590,7 +665,7 @@ class AjaxController extends Controller
         $em->flush();
     }
 
-    public function modelContactOrganizationFormSave($form, $user)
+    public function modelContactOrganizationFormSave($form, $user, $request)
     {
         $data = $form->getData();
 
@@ -613,12 +688,12 @@ class AjaxController extends Controller
         return true;
     }
 
-    public function modelContactOrganizationAdminFormSave($form, $user)
+    public function modelContactOrganizationAdminFormSave($form, $user, $request)
     {
-        return $this->modelContactOrganizationFormSave($form, $user);
+        return $this->modelContactOrganizationFormSave($form, $user, $request);
     }
 
-    public function modelContactHandlingFormSave($form, $user)
+    public function modelContactHandlingFormSave($form, $user, $request)
     {
         $data = $form->getData();
 

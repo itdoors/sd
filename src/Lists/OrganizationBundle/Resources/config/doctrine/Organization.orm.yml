@@ -80,6 +80,9 @@ Lists\OrganizationBundle\Entity\Organization:
             type: integer
             nullable: true
             column: scope_id
+        createdatetime:
+            type: datetime
+            nullable: true
     manyToOne:
         city:
             targetEntity: Lists\CityBundle\Entity\City
@@ -101,15 +104,26 @@ Lists\OrganizationBundle\Entity\Organization:
                 organization_type_id:
                     referencedColumnName: id
             orphanRemoval: false
+        creator:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                creator_id:
+                    referencedColumnName: id
+            orphanRemoval: false
     manyToMany:
         users:
-          targetEntity: SD\UserBundle\Entity\User
-          inversedBy: organizations
-          joinTable:
-            name: organization_user
-            joinColumns:
-              organization_id:
-                referencedColumnName: id
-            inverseJoinColumns:
-              user_id:
-                referencedColumnName: id
+            targetEntity: SD\UserBundle\Entity\User
+            inversedBy: organizations
+            joinTable:
+              name: organization_user
+              joinColumns:
+                organization_id:
+                  referencedColumnName: id
+              inverseJoinColumns:
+                user_id:
+                  referencedColumnName: id
+    lifecycleCallbacks:
+            prePersist: [ doOnPrePersist ]

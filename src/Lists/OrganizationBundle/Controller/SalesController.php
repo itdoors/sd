@@ -60,6 +60,12 @@ class SalesController extends BaseController
         {
             /** @var \Lists\OrganizationBundle\Entity\Organization $organization */
             $organization = $form->getData();
+
+            $user = $this->getUser();
+
+            $organization->addUser($user);
+            $organization->setCreator($user);
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($organization);
             $em->flush();

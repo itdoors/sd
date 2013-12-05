@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class HandlingMessage
 {
+    CONST ADDITIONAL_TYPE_FUTURE_MESSAGE = 'fm';
+
     /**
      * @var integer
      */
@@ -367,5 +369,69 @@ class HandlingMessage
 
         // clean up the file property as you won't need it anymore
         $this->file = null;
+    }
+
+    /**
+     * @var string
+     */
+    private $additionalType;
+
+    /**
+     * Set additionalType
+     *
+     * @param string $additionalType
+     * @return HandlingMessage
+     */
+    public function setAdditionalType($additionalType)
+    {
+        $this->additionalType = $additionalType;
+    
+        return $this;
+    }
+
+    /**
+     * Get additionalType
+     *
+     * @return string 
+     */
+    public function getAdditionalType()
+    {
+        return $this->additionalType;
+    }
+    /**
+     * @var boolean
+     */
+    private $isBusinessTrip;
+
+
+    /**
+     * Set isBusinessTrip
+     *
+     * @param boolean $isBusinessTrip
+     * @return HandlingMessage
+     */
+    public function setIsBusinessTrip($isBusinessTrip)
+    {
+        $this->isBusinessTrip = $isBusinessTrip;
+    
+        return $this;
+    }
+
+    /**
+     * Get isBusinessTrip
+     *
+     * @return boolean 
+     */
+    public function getIsBusinessTrip()
+    {
+        return $this->isBusinessTrip;
+    }
+
+    /**
+     * Is future message
+     */
+    public function isFutureMessage()
+    {
+        return $this->getAdditionalType() == self::ADDITIONAL_TYPE_FUTURE_MESSAGE;
     }
 }

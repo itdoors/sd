@@ -112,11 +112,13 @@ var SD = (function() {
 
                     var target = $('#' + response.targetId);
 
-                    self.css('opacity', '0.5');
+                    self.css('opacity', '1');
 
                     if (response.error)
                     {
                         target.html(response.html);
+
+                        return;
                     }
                     if (response.success)
                     {
