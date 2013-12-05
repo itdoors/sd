@@ -52,6 +52,60 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
 
+    public function organizationForCreationAction()
+    {
+        $searchText = $this->get('request')->query->get('q');
+
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $organizationsRepository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+        $organizations= $organizationsRepository->getSearchContactsQuery($searchText);
+
+        $result = array();
+
+        $result[] = array(
+            'id' => $searchText,
+            'value' => $searchText,
+            'name' => $searchText,
+            'text' => $searchText
+        );
+
+        foreach ($organizations as $organization)
+        {
+            $this->processOrganizationForJson($organization);
+
+            $organization['id'] = '';
+
+            $result[] = $this->serializeArray($organization);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    public function handlingServiceAction()
+    {
+        $searchText = $this->get('request')->query->get('term');
+
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $objects= $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingService')
+            ->createQueryBuilder('hs')
+            ->where('hs.name like :term')
+            ->setParameter(':term', '%' . $searchText . '%')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object)
+        {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
     public function cityAction()
     {
         $searchText = $this->get('request')->query->get('query');
