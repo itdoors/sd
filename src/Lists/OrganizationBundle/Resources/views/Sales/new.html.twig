@@ -173,11 +173,15 @@
 
                     <h3 class="form-section">{% trans %}Сontact details{% endtrans %}</h3>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-6
+                            {% if filterForm.edrpou.vars.errors|length %}
+							    has-error
+							{% endif %}">
                             <div class="form-group">
                                 {{ form_label(filterForm.edrpou, 'Edrpou', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.edrpou, {'attr': {'class': 'form-control'}}) }}
                                 <span class="help-block">{% trans %}Enter edrpou{% endtrans %}</span>
+                                {{ form_errors(filterForm.edrpou) }}
                             </div>
                         </div>
                         <!--/span-->

@@ -5,6 +5,8 @@ parameters:
     lists_organization.form.sales.class: Lists\OrganizationBundle\Form\OrganizationSalesFormType
     lists_organization.form.user.class: Lists\OrganizationBundle\Form\OrganizationUserFormType
 
+    lists_organization.edrpou.validator.class: Lists\OrganizationBundle\Validator\UniqueEdrpouValidator
+
 services:
   lists_organization.form.organizationFilterForm:
         class: %lists_organization.sales.filter.form.class%
@@ -34,3 +36,12 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: organizationUserForm }
+
+  unique_event_date_validator:
+      class: %lists_organization.edrpou.validator.class%
+      arguments:
+          - "@doctrine.orm.entity_manager"
+      tags:
+          -
+              name: validator.constraint_validator
+              alias: unique_edrpou

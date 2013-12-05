@@ -240,4 +240,13 @@ class OrganizationRepository extends EntityRepository
 
         return $sql->getResult();
     }
+
+    public function findByEdrpou($edrpou)
+    {
+        return $this->createQueryBuilder('o')
+            ->where('o.edrpou = :edrpou')
+            ->setParameter(':edrpou', $edrpou)
+            ->getQuery()
+            ->getResult();
+    }
 }
