@@ -43,7 +43,8 @@ class OrganizationSalesFormType extends AbstractType
             ->add('edrpou')
             ->add('inn')
             ->add('certificate')
-            ->add('shortDescription')
+            //->add('shortDescription')
+            ->add('shortname')
             ->add('site')
             ->add('city', 'entity', array(
                 'class'=>'Lists\CityBundle\Entity\City',

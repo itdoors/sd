@@ -7,7 +7,7 @@
         $.fn.editable.defaults.inputclass = 'form-control';
         $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
 
-        $('#name, #shortDescription, #address, #mailingAddress, #site, #edrpou, #inn, #certificate').editable({
+        $('#name, #shortname, #address, #mailingAddress, #site, #edrpou, #inn, #certificate').editable({
             url: '{{ path('sd_common_ajax_organization_save') }}'
         });
 
@@ -49,8 +49,8 @@
             <tr>
                 <td>{% trans %}Short Name{% endtrans %}</td>
                 <td>
-                    <a href="#" id="shortDescription" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Enter organization short name{% endtrans %}">
-                        {{ organization.shortDescription }}
+                    <a href="#" id="shortname" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Enter organization short name{% endtrans %}">
+                        {{ organization.shortname }}
                     </a>
                 </td>
                 <td><span class="text-muted">{% trans %}for example{% endtrans %}: Impel Griffin</span></td>
