@@ -87,6 +87,16 @@
                 }
             }
         })
+
+        $('.date-picker').datepicker({
+            rtl: App.isRTL(),
+            autoclose: true,
+            format: "dd.m.yyyy",
+            pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
+            language: 'ru',
+            startView: 'decade',
+            weekStart: 1
+        });
     });
 
 </script>
@@ -142,7 +152,20 @@
                 </div>
 
                 <div class="form-group col-md-3">
-                    {{ form_widget(form.birthday, {'attr' : {} }) }}
+                    <div class="form-group">
+                        <div class="input-group input-medium date date-picker">
+                            {{ form_widget(form.birthday, {'attr': {
+                            'class': 'form-control',
+                            'data-required': '1',
+                            'placeholder': 'Enter Contact Birthday',
+                            'readonly': 'readonly'
+                            }}) }}
+                            <span class="input-group-btn">
+                            <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                        <span class="help-block">{% trans %}Enter Contact Birthday{% endtrans %}"</span>
+                    </div>
                 </div>
 
                 <div class="form-group col-md-3">
