@@ -13,6 +13,10 @@ CREATE TABLE fos_user_group (user_id INT NOT NULL, group_id INT NOT NULL, PRIMAR
 CREATE INDEX IDX_583D1F3EA76ED395 ON fos_user_group (user_id);
 CREATE INDEX IDX_583D1F3EFE54D947 ON fos_user_group (group_id);
 
+# app/console sd:group:role-add SALES SALES
+# app/console sd:group:role-add SALESADMIN SALESADMIN
+# app/console sd:group:role-add SALESDISPATCHER SALESDISPATCHER
+# app/console sd:user:migrate
 
 
 CREATE TABLE handling_service (id BIGINT NOT NULL, name VARCHAR(128) NOT NULL, slug VARCHAR(128) DEFAULT NULL, sortorder INT DEFAULT NULL, PRIMARY KEY(id));
@@ -63,7 +67,6 @@ ALTER TABLE handling ADD CONSTRAINT FK_BFF9657A76ED395 FOREIGN KEY (user_id) REF
 
 ALTER TABLE handling_user ADD CONSTRAINT FK_9FC2E6D75AB3F1F FOREIGN KEY (handling_id) REFERENCES handling (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE handling_user ADD CONSTRAINT FK_9FC2E6D7A76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE handling_user ADD PRIMARY KEY (handling_id, user_id);
 ALTER TABLE handling_type ADD sortorder INT DEFAULT NULL;
 
 
@@ -84,9 +87,30 @@ ALTER TABLE handling_message ADD CONSTRAINT FK_821AF206C54C8C93 FOREIGN KEY (typ
 ALTER TABLE handling_message ADD CONSTRAINT FK_821AF206A76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 
+ALTER TABLE model_contact ADD user_id INT DEFAULT NULL;
+ALTER TABLE model_contact ADD owner_id INT DEFAULT NULL;
+
 ALTER TABLE model_contact ADD createdatetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL;
 ALTER TABLE model_contact ADD ownerdatetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL;
-ALTER TABLE model_contact ALTER id DROP DEFAULT;
 ALTER TABLE model_contact ADD CONSTRAINT FK_2CF18FC97E3C61F9 FOREIGN KEY (owner_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 CREATE INDEX IDX_2CF18FC9A76ED395 ON model_contact (user_id);
-CREATE INDEX IDX_2CF18FC97E3C61F9 ON model_contact (owner_id)
+CREATE INDEX IDX_2CF18FC97E3C61F9 ON model_contact (owner_id);
+
+
+update
+	model_contact
+set
+	user_id = (select ou.user_id from organization_user ou where ou.organization_id = model_contact.model_id limit 1)
+where
+	user_id is null AND
+	owner_id is null AND
+	model_name = 'organization';
+
+update
+	model_contact
+set
+	owner_id = user_id
+where
+	owner_id is null AND
+	model_name = 'organization';
+

@@ -11,7 +11,8 @@
             <thead>
             <tr>
                 <th>#</th>
-                {% if organizationId is empty %}
+                {% if organizationId %}
+                {% else %}
                     <th>{% trans %}Organization{% endtrans %}</th>
                 {% endif %}
                 <th>{% trans %}FirstName{% endtrans %}</th>
