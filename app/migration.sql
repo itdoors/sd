@@ -114,3 +114,12 @@ where
 	owner_id is null AND
 	model_name = 'organization';
 
+update
+	organization
+set
+	creator_id = (select ou.user_id from organization_user ou where ou.organization_id = organization.id limit 1)
+where
+	creator_id is null;
+
+
+
