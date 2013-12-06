@@ -358,16 +358,6 @@ class User extends BaseUser
     }
 
     /**
-     * Get groups
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getGroups()
-    {
-        return $this->groups;
-    }
-
-    /**
      * @var \SD\UserBundle\Entity\Staff
      */
     private $staff;
