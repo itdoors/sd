@@ -101,7 +101,8 @@ class OrganizationRepository extends EntityRepository
         $sql
             ->leftJoin('o.city', 'c')
             ->leftJoin('c.region', 'r')
-            ->leftJoin('o.scope', 'scope');
+            ->leftJoin('o.scope', 'scope')
+            ->leftJoin('o.users', 'users');
 
     }
 
@@ -114,7 +115,6 @@ class OrganizationRepository extends EntityRepository
     public function processUserQuery($sql, $userIds)
     {
         $sql
-            ->leftJoin('o.users', 'users')
             ->where('users.id in (:userIds)')
             ->setParameter(':userIds', $userIds);
     }

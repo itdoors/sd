@@ -88,6 +88,8 @@ class SalesController extends BaseController
      */
     public function showAction($id)
     {
+        $this->get('sd.security_access')->hasAccessToOrganizationAndThrowException($id);
+
         /** @var \Lists\OrganizationBundle\Entity\Organization $organization */
         $organization= $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization')

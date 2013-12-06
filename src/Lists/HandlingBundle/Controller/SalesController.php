@@ -60,7 +60,6 @@ class SalesController extends BaseController
     public function newAction(Request $request)
     {
         // Get organization filter
-
         $filters = $this->getFilters();
 
         if (!isset($filters['organization_id']) || !$filters['organization_id'])
@@ -69,6 +68,8 @@ class SalesController extends BaseController
         }
 
         $organizationId = $filters['organization_id'];
+
+        $this->get('sd.security_access')->hasAccessToOrganizationAndThrowException($organizationId);
 
         $organization = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization')
@@ -137,6 +138,8 @@ class SalesController extends BaseController
      */
     public function showAction($id, Request $request)
     {
+        $this->get('sd.security_access')->hasAccessToHandlingAndThrowException($id);
+
         /** @var \Lists\HandlingBundle\Entity\Handling $object */
         $object = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:Handling')
