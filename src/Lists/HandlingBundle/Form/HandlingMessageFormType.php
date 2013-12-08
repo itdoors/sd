@@ -66,7 +66,9 @@ class HandlingMessageFormType extends AbstractType
                 'required' => false
             ))
             ->add('handling_id', 'hidden')
-
+            ->add('mindate', 'hidden', array(
+                'mapped' => false
+            ))
         ;
 
         $builder
