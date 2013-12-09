@@ -62,7 +62,8 @@ class HandlingSalesFilterFormType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'Lists\HandlingBundle\Entity\Handling',
             'validation_groups' => false,
-            'csrf_protection' => false
+            'csrf_protection' => false,
+            'translation_domain' => 'ListsHandlingBundle'
         ));
     }
 

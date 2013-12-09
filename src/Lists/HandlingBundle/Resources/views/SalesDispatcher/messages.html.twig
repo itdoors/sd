@@ -20,7 +20,7 @@
                 <button id="managers_list_new" class="btn green ajax-form"
                         data-target="messageFormTpl"
                         data-form_name="handlingMessageForm"
-                        data-default='{"handling_id":{{ handling.0.id }}}'
+                        data-default='{"handling_id":{{ handling.0.id }},"mindate":"{{ handling.0.createdate|date('U') }}"}'
                         data-post_function="updateList"
                         data-post_target_id="messages_list"
                         >

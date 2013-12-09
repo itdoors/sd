@@ -66,7 +66,9 @@ class HandlingMessageFormType extends AbstractType
                 'required' => false
             ))
             ->add('handling_id', 'hidden')
-
+            ->add('mindate', 'hidden', array(
+                'mapped' => false
+            ))
         ;
 
         $builder
@@ -87,7 +89,7 @@ class HandlingMessageFormType extends AbstractType
                 {
                     $translator = $container->get('translator');
 
-                    $msg = $translator->trans('Event next date can\'t be greater then current event date');
+                    $msg = $translator->trans("Event next date can't be greater then current event date", array(), 'ListsHandlingBundle');
 
                     $form->addError(new FormError($msg));
                 }
@@ -120,9 +122,9 @@ class HandlingMessageFormType extends AbstractType
 
                             $creationDate = $handling->getCreatedate()  ? $handling->getCreatedate() : $handling->getCreatedatetime();
 
-                            $msg = $translator->trans('Current event date can\'t be less then handling creation date (%date%)', array(
+                            $msg = $translator->trans("Current event date can't be less then handling creation date (%date%)", array(
                                 '%date%' => $creationDate->format('d.m.y')
-                            ));
+                            ), 'ListsHandlingBundle');
 
                             $form->addError(new FormError($msg));
                         }
@@ -139,6 +141,7 @@ class HandlingMessageFormType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'Lists\HandlingBundle\Entity\HandlingMessage',
             'validation_groups' => array('new'),
+            'translation_domain' => 'ListsHandlingBundle'
         ));
     }
 

@@ -72,7 +72,8 @@ class OrganizationSalesFormType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'Lists\OrganizationBundle\Entity\Organization',
-            'validation_groups' => array('new')
+            'validation_groups' => array('new'),
+            'translation_domain' => 'ListsOrganizationBundle'
         ));
     }
 
