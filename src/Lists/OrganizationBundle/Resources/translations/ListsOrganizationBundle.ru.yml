@@ -42,6 +42,11 @@ Physical Address: Физический адрес
 Enter Phone: Введите телефон
 Phone: Телефон
 
+Organization Croup: Группа влияния
+Select Organization Group: Выберите группу влияния
+Select Organization GroupSelect a control group that owns the organization: Выберите группу влияния к которой принадлежит данная организация
+Enter Organization Description: Введите заметки по орнанизации
+Organization Description: Заметки
 Organization details: Реквизиты
 Enter INN Certificate: Введите номер свидетельства НДС
 INN Certificate: Номер свидетельства НДС
