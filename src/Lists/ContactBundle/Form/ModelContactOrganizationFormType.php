@@ -31,6 +31,7 @@ class ModelContactOrganizationFormType extends AbstractType
                 'format' => 'dd.M.yyyy'
             ))
             ->add('email')
+            ->add('type')
         ;
 
         $builder

@@ -21,6 +21,7 @@
                 <th>{% trans %}Phone{% endtrans %}</th>
                 <th>{% trans %}Mobile{% endtrans %}</th>
                 <th>{% trans %}Email{% endtrans %}</th>
+                <th>{% trans %}Contact type{% endtrans %}</th>
                 <th>{% trans %}Birthday{% endtrans %}</th>
                 <th>{% trans %}Owner{% endtrans %}</th>
                 <th>{% trans %}Creator{% endtrans %}</th>
@@ -41,6 +42,7 @@
                 <td>{{ item.0.phone1 }}</td>
                 <td>{{ item.0.phone2 }}</td>
                 <td>{{ item.0.email }}</td>
+                <td>{{ item.0.type }}</td>
                 <td>
                     {% if item.0.birthday %}
                         {{ item.0.birthday|date("d.m.y") }}

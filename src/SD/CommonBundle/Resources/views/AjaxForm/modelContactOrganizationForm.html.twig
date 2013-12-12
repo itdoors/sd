@@ -6,6 +6,10 @@
             allowClear: true
         });
 
+        $('#modelContactOrganizationForm_type').select2({
+            allowClear: true
+        });
+
         $('#modelContactOrganizationForm_phone1, #modelContactOrganizationForm_phone2').select2({
             minimumInputLength: 2,
             allowClear: true,
@@ -147,6 +151,10 @@
 
                 <div class="form-group col-md-3">
                     {{ form_widget(form.email, {'attr' : {'class' : 'form-control', 'placeholder': "Email"}}) }}
+                </div>
+
+                <div class="form-group col-md-3">
+                    {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': "Contact type"}}) }}
                 </div>
 
                 <div class="form-group col-md-1">

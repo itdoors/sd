@@ -1,0 +1,19 @@
+Lists\ContactBundle\Entity\ModelContactType:
+    type: entity
+    table: model_contact_type
+    repositoryClass: Lists\ContactBundle\Entity\ModelContactTypeRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        name:
+            type: string
+            length: 255
+            nullable: false
+        slug:
+            type: string
+            length: 16
+            nullable: false
