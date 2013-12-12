@@ -26,6 +26,11 @@
             source: '{{ path('sd_common_ajax_handling_type') }}'
         });
 
+        $('#handlingServices').editable({
+            url: '{{ path('sd_common_ajax_handling_service_save') }}',
+            source: '{{ path('sd_common_ajax_handling_service') }}'
+        });
+
 
         //*********************************
 
@@ -98,20 +103,23 @@
                 <td>
                     <a href="#" id="serviceOffered" data-type="textarea" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.serviceOffered }}" data-original-title="{% trans %}Select type{% endtrans %}">{{ handling.0.serviceoffered }}</a>
                 </td>
+                <td>{% trans %}Service offered{% endtrans %}</td>
+                <td>
+                    <a href="#" id="handlingServices" data-type="checklist" data-pk="{{ handling.0.id }}" data-placement="right" data-value="{{ handling.serviceIds }}" data-original-title="{% trans %}Enter Result Description{% endtrans %}">{{ handling.serviceList }}</a>
+                </td>
+
+            </tr>
+            <tr>{# 6 #}
+                <td>{% trans %}Notice{% endtrans %}</td>
+                <td>
+                    <a href="#" id="description" data-type="textarea" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.description }}" data-original-title="{% trans %}Enter Handling Notice{% endtrans %}">{{ handling.0.description }}</a>
+                </td>
                 <td>{% trans %}Square{% endtrans %}</td>
                 <td>
                     <a href="#" id="square" data-type="text" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.square }}" data-original-title="{% trans %}Enter Square{% endtrans %}">
                         {{ handling.0.square }}
                     </a>
                 </td>
-            </tr>
-            <tr>{# 6 #}
-                <td>{% trans %}Notice{% endtrans %}</td>
-                <td>
-                    <a href="#" id="description" data-type="textarea" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.description }}" data-original-title="{% trans %}Enter Handling Notice{% endtrans %}">{{ handling.0.description }}</a>
-                </td>    
-				<td></td>
-				<td></td>
             </tr> {# 7 #}
             <tr>
                 <td>{% trans %}Budget without VAT{% endtrans %}</td>
