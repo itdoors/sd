@@ -55,7 +55,7 @@ Handling Create DateTime: Дата создания проета
 Is business trip: Командировка
 
 
-Event next date can't be greater then current event date: Дата следующего события не должна быть меньше текущего.
+Event next date can't be greater then current event date: Дата следующего события не должна быть раньше текущего.
 Current event date can't be less then handling creation date: Дата текущего обращения не может быть раньше даты содания проекта
 Filename: Имя файла
 Description: Описание
