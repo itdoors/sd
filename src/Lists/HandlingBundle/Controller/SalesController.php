@@ -145,10 +145,22 @@ class SalesController extends BaseController
             ->getRepository('ListsHandlingBundle:Handling')
             ->getHandlingShow($id);
 
+        $handlingServiceObjects = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingService')
+            ->findAll();
+
+        $handlingServices = array();
+
+        foreach($handlingServiceObjects as $hs)
+        {
+            $handlingServices[] = $this->serializeObject($hs);
+        }
+
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':show.html.twig', array(
             'handling' => $object,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
+            'handlingServices' => $handlingServices
         ));
     }
 
@@ -186,13 +198,26 @@ class SalesController extends BaseController
             ));
     }
 
-    /*public function clearFilters()
+    /**
+     * Serialize object to json. temporary solution
+     *
+     * @param object $object
+     * @param string $idMethod
+     * @param string $method
+     *
+     * @return mixed[]
+     */
+    public function serializeObject($object, $idMethod = '', $method = '')
     {
-        $filters = $this->getFilters();
+        $id = $idMethod ? $object->$idMethod() : $object->getId();
+        $string = $method ? $object->$method() : (string) $object;
 
-        $organizationId = $filters['organization_id'];
-
-        $this->setFilters(array('organization_id' => $organizationId));
-    }*/
+        return array(
+            'id' => $id,
+            'value' => $id,
+            'name' => $string,
+            'text' => $string
+        );
+    }
 }
 
