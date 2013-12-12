@@ -190,6 +190,13 @@ class AjaxController extends Controller
 
         $result = array();
 
+        $result[] = array(
+            'id' => '',
+            'value' => '',
+            'name' => '',
+            'text' => ''
+        );
+
         foreach ($objects as $object)
         {
             $result[] = $this->serializeObject($object);

@@ -487,4 +487,32 @@ class ModelContact
     {
         return $this->owner_id;
     }
+    /**
+     * @var \Lists\ContactBundle\Entity\ModelContactType
+     */
+    private $type;
+
+
+    /**
+     * Set type
+     *
+     * @param \Lists\ContactBundle\Entity\ModelContactType $type
+     * @return ModelContact
+     */
+    public function setType(\Lists\ContactBundle\Entity\ModelContactType $type = null)
+    {
+        $this->type = $type;
+    
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return \Lists\ContactBundle\Entity\ModelContactType 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 }

@@ -74,6 +74,12 @@ Lists\ContactBundle\Entity\ModelContact:
             nullable: true
             column: owner_id
     manyToOne:
+        type:
+            targetEntity: ModelContactType
+            inversedBy: contacts
+            joinColumn:
+                name: type_id
+                referencedColumnName: id
         user:
             targetEntity: SD\UserBundle\Entity\User
             cascade: {  }
