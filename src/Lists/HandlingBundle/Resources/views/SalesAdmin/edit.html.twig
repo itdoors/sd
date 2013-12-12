@@ -30,7 +30,8 @@
             url: '{{ path('sd_common_ajax_handling_service_save') }}',
             source: {{ handlingServices|json_encode|raw }},
             select2: {
-                multiple: true
+                multiple: true,
+                width: '250px'
             }
         });
 
