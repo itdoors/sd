@@ -1,17 +1,17 @@
-Handlings <small>create handling</small>: Обращение <small>создание нового обращения</small>
-Handling <small>show handling</small>: Обращение <small>просмотр обращения</small>
-Handling <small>list of handlings</small>: Обращение <small>список обращений</small>
-New Handling: Новое обращение
+Handlings <small>create handling</small>: Проект <small>создание нового проекта</small>
+Handling <small>show handling</small>: Проект <small>просмотр проектов</small>
+Handling <small>list of handlings</small>: Проект <small>список проектов</small>
+New Handling: Новый Проект
 Show Handling: Просмотр обращения
 Dashboard: Рабочий стол
-Handling: Обращение
-Handlings: Обращения
-Team Handlings: Обращения команды
+Handling: Проект
+Handlings: Проекты
+Team Handlings: Проекты команды
 Contacts: Контакты
-List of Handlings: Список обращений
+List of Handlings: Список проектов
+My Handlings: Мои проекты
 
-
-Handling ID: № Обращения
+Handling ID: № проекта
 Create Date: Дата создания
 Createdatetime: Дата создания
 LastHandlingDate: Последнее
@@ -20,10 +20,10 @@ Service offered: Предлагаемые услуги
 ServiceOffered: Предлагаемые услуги
 Enter Service offered: Введите услуги, которые предлагаете
 Contact Type: Тип контакта
-Handling Type: Тип обращения
-Enter Handling Type: Введите тип обращения
+Handling Type: Тип проекта
+Enter Handling Type: Введите тип проекта
 Select Contact Type: Выберите тип контакта
-Select Handling Type: Выберите тип обращения
+Select Handling Type: Выберите тип проекта
 Notice: Заметки
 Enter Notice: Введите заметки
 Enter Handling Notice: Введите заметки
@@ -41,7 +41,6 @@ Result Description: Описание результата
 Enter Result Description: Введите описание результата
 Result: Результат
 Enter Result: Введите рузультат
-Enter Square: Введите площадь
 Square: Площадь
 Enter Square: Введите площадь
 Show History: Показать историю
@@ -50,8 +49,9 @@ History: История
 Organization Name: Название организации
 Enter Organiztion: Введите организацию
 
-Enter Handling Create DateTime: Введите дату создания обращения
-Handling Create DateTime: Дата создания обращения
+Enter Handling Create DateTime: Введите дату создания проекта
+Enter Handling Create DateTime hint: Дата создания не может быть
+Handling Create DateTime: Дата создания проета
 Is business trip: Командировка
 
 
@@ -83,6 +83,7 @@ Users: Пользователи
 Organization: Организация
 Enter Organization: Введите организацию
 
+
 Name: Наименование
 Createdatetime: Дата создания
 LastHandlingDate: Последнее событие
@@ -97,22 +98,24 @@ Actions: Действия
 Action: Действие
 FirstName, LastName: Имя Фамилия
 Mobile: Мобильный
-No matches found: Совпадений ненайдено
-Contacts on handling: Контактные лица в обращении
+No matches found: Совпадений не  найдено
+Contacts on handling: Контактные лица в проекте
 
 Managers: Менеджеры
 Manager: Менеджер
 Enter Manager: Введите менеджера
-Managers on handling: Менеджеры, имеющие доступ к обращению
+Managers on handling: Менеджеры, имеющие доступ к проекту
 
 Filters: Фильтры
 Clear Filter: Очистить
 Filter: Фильтр
-Enter filter parameters and press Filter button.: Введите параметры для фильтра и нажмите кнопку Фильтр
+Enter filter parameters and press Filter button.: Введите параметры для фильтра и нажмите кнопку Поиск
 Create: Создать
 Add New: Добавить
-Handling list link: Обращения
+Handling list link: Проекты
 Enter value: Ведите значение
+Search: Поиск
+Delete: Удалить
 
 
 

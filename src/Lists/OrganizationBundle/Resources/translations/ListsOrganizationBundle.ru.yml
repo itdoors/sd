@@ -44,7 +44,7 @@ Phone: Телефон
 
 Organization details: Реквизиты
 Enter INN Certificate: Введите номер свидетельства НДС
-INN Certificate: Номер свидетельства
+INN Certificate: Номер свидетельства НДС
 Enter INN: Введите Индивидульный Налоговый Номер
 INN: ИНН
 
@@ -93,6 +93,7 @@ Email: Email
 Birthday: Дата рождения
 Description: Заметки
 Creator: Кто создал
+Create Date Time: Дата создания
 
 Filters: Фильтры
 Clear Filter: Очистить

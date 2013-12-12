@@ -2,12 +2,12 @@
 <script>
     $(document).ready(function(){
         $('#' + '{{ filterFormName }}' + '_city, #' + '{{ filterFormName }}' + '_scope, #' + '{{ filterFormName }}' + '_users').select2({
-            placeholder: "Select a State",
+            placeholder: "Select City",
             allowClear: true
         });
 
         $("#" + "{{ filterFormName }}" + "_organization_id").select2({
-            placeholder: "Search for a movie",
+            placeholder: "Select Organization",
             minimumInputLength: 3,
             ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
                 url: "{{ path('sd_common_ajax_organization') }}",
@@ -87,7 +87,7 @@
                     {{ form_widget(filterForm.users, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Manager', 'multiple': 'multiple'}}) }}
                 </div>
                 <div class="form-group col-md-2">
-                    {{ form_widget(filterForm.save, { 'label': 'Filter', 'attr': {'class': 'btn green'}} ) }}
+                    {{ form_widget(filterForm.save, { 'label': 'Search', 'attr': {'class': 'btn green'}} ) }}
                     {{ form_widget(filterForm.reset, { 'label': 'Clear Filter', 'attr': {'class': 'btn'}} ) }}
                 </div>
                 {{ form_end(filterForm) }}
