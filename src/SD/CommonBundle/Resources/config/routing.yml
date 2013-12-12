@@ -54,6 +54,10 @@ sd_common_ajax_handling_save:
     pattern:  /ajax/handling/save
     defaults: { _controller: SDCommonBundle:Ajax:handlingSave }
 
+sd_common_ajax_handling_service_save:
+    pattern:  /ajax/handling/service/save
+    defaults: { _controller: SDCommonBundle:Ajax:handlingServiceSave }
+
 sd_common_ajax_organization_by_id:
     pattern:  /ajax/organization_by_id
     defaults: { _controller: SDCommonBundle:Ajax:organizationById }

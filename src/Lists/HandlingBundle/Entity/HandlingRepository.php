@@ -195,6 +195,30 @@ class HandlingRepository extends EntityRepository
            ->select('h')
            ->addSelect('o.name as organizationName')
            ->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as creatorFullName")
+           ->addSelect("
+                  array_to_string(
+                     ARRAY(
+                        SELECT
+                          hsi.id
+                        FROM
+                          ListsHandlingBundle:HandlingService hsi
+                        LEFT JOIN hsi.handlings handlingsi
+                        WHERE h.id = handlingsi.id
+                     ), ','
+                   ) as serviceIds
+           ")
+           ->addSelect("
+                  array_to_string(
+                     ARRAY(
+                        SELECT
+                          hs.name
+                        FROM
+                          ListsHandlingBundle:HandlingService hs
+                        LEFT JOIN hs.handlings handlings
+                        WHERE h.id = handlings.id
+                     ), ','
+                   ) as serviceList
+           ")
            ->leftJoin('h.organization', 'o')
            ->leftJoin('h.user', 'u')
            ->where('h.id = :id')
