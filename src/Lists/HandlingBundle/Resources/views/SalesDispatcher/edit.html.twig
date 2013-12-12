@@ -28,9 +28,11 @@
 
         $('#handlingServices').editable({
             url: '{{ path('sd_common_ajax_handling_service_save') }}',
-            source: '{{ path('sd_common_ajax_handling_service') }}'
+            source: {{ handlingServices|json_encode|raw }},
+            select2: {
+                multiple: true
+            }
         });
-
 
         //*********************************
 
@@ -105,7 +107,7 @@
                 </td>
                 <td>{% trans %}Service offered{% endtrans %}</td>
                 <td>
-                    <a href="#" id="handlingServices" data-type="checklist" data-pk="{{ handling.0.id }}" data-placement="right" data-value="{{ handling.serviceIds }}" data-original-title="{% trans %}Enter Result Description{% endtrans %}">{{ handling.serviceList }}</a>
+                    <a href="#" id="handlingServices" data-type="select2" data-pk="{{ handling.0.id }}" data-placement="right" data-value="{{ handling.serviceIds }}" data-placeholder="{% trans %}Enter services{% endtrans %}">{{ handling.serviceList }}</a>
                 </td>
 
             </tr>
