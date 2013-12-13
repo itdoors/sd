@@ -17,6 +17,9 @@ Lists\HandlingBundle\Entity\Handling:
         createdatetime:
             type: datetime
             nullable: false
+        closedatetime:
+            type: datetime
+            nullable: true
         statusDescription:
             type: text
             nullable: true
@@ -138,6 +141,15 @@ Lists\HandlingBundle\Entity\Handling:
             inversedBy: null
             joinColumns:
                 user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        closer:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                closer_id:
                     referencedColumnName: id
             orphanRemoval: false
     manyToMany:

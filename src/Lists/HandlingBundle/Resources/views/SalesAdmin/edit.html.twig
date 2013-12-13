@@ -7,55 +7,36 @@
         $.fn.editable.defaults.inputclass = 'form-control';
         $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
 
-        $('#serviceOffered, #resultString, #statusDescription, #square, #description, #chance, #budget').editable({
-            url: '{{ path('sd_common_ajax_handling_save') }}'
-        });
+        {% if canEdit %}
 
-        $('#statusId').editable({
-            url: '{{ path('sd_common_ajax_handling_save') }}',
-            source: '{{ path('sd_common_ajax_handling_status') }}'
-        });
+            $('#serviceOffered, #resultString, #statusDescription, #square, #description, #chance, #budget').editable({
+                url: '{{ path('sd_common_ajax_handling_save') }}'
+            });
 
-        $('#resultId').editable({
-            url: '{{ path('sd_common_ajax_handling_save') }}',
-            source: '{{ path('sd_common_ajax_handling_result') }}'
-        });
+            $('#statusId').editable({
+                url: '{{ path('sd_common_ajax_handling_save') }}',
+                source: '{{ path('sd_common_ajax_handling_status') }}'
+            });
 
-        $('#typeId').editable({
-            url: '{{ path('sd_common_ajax_handling_save') }}',
-            source: '{{ path('sd_common_ajax_handling_type') }}'
-        });
+            $('#resultId').editable({
+                url: '{{ path('sd_common_ajax_handling_save') }}',
+                source: '{{ path('sd_common_ajax_handling_result') }}'
+            });
 
-        $('#handlingServices').editable({
-            url: '{{ path('sd_common_ajax_handling_service_save') }}',
-            source: {{ handlingServices|json_encode|raw }},
-            select2: {
-                multiple: true,
-                width: '250px'
-            }
-        });
+            $('#typeId').editable({
+                url: '{{ path('sd_common_ajax_handling_save') }}',
+                source: '{{ path('sd_common_ajax_handling_type') }}'
+            });
 
-
-        //*********************************
-
-
-        $('#serviceOffered, #shortDescription, #address, #mailingAddress, #site, #edrpou, #inn, #certificate').editable({
-            url: '{{ path('sd_common_ajax_organization_save') }}'
-        });
-
-        $('#scopeId').editable({
-            url: '{{ path('sd_common_ajax_organization_save') }}',
-            source: '{{ path('sd_common_ajax_scope') }}'
-        });
-
-        $('#cityId').editable({
-            url: '{{ path('sd_common_ajax_organization_save') }}',
-            source: '{{ path('sd_common_ajax_city') }}',
-            select2: {
-                placeholder: '{% trans %}Select City{% endtrans %}',
-                minimumInputLength: 2
-            }
-        });
+            $('#handlingServices').editable({
+                url: '{{ path('sd_common_ajax_handling_service_save') }}',
+                source: {{ handlingServices|json_encode|raw }},
+                select2: {
+                    multiple: true,
+                    width: '250px'
+                }
+            });
+        {% endif %}
     })
 
 </script>
@@ -93,7 +74,7 @@
             </tr>
             <tr> {# 4 #}
                 <td>{% trans %}Create Date{% endtrans %}</td>
-                <td>reate Date Time (Real Date time)</td> {# Create Date Time (Real Date time) TASK 323 #}
+                <td>{{ handling.0.createdatetime|date("d.m.y, H:i") }}</td> {# Create Date Time (Real Date time) TASK 323 #}
                 <td>{% trans %}Result Description{% endtrans %}</td>
                 <td><a href="#" id="resultString" data-type="textarea" data-pk="{{ handling.0.id }}" data-placement="right" data-original-title="{% trans %}Enter Status{% endtrans %}">{{ handling.0.resultString }}</a></td>
             </tr>
@@ -137,19 +118,33 @@
                 <td>{% trans %}Chance{% endtrans %}</td> {# 306 #}
                 <td>
                     <div class="progress progress-striped" style="margin-bottom:0px;">
-                        <div style="width: 40% {#Здесь выводим целое значение+%#}" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40 {#Здесь выводим целое значение#}" role="progressbar" class="progress-bar progress-bar-success">
-                            <span class="">40%-50%</span> {# Здесь выводим текстовое значение #}
+                        <div style="width: {{ handling.progress }}%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="40 {{ handling.progress }}" role="progressbar" class="progress-bar progress-bar-success">
+                            <span class="">{{ handling.percentageString }}</span> {#Здесь выводим текстовое значение#}
                         </div>
                     </div>
 
                 </td>
                 <td>{% trans %}Closed{% endtrans %}</td>
-                <td> {#Выпадающий список Да/нет, который отмечает canEdit  и фиксируем дату закрытия и кем закрыт, для редактирования только у админа
-                Для всех остальных выводим Да (дата закрытия)
-                Потом добавим все только для чтения после закрытия
-                Задача 400 #}
-
-                </td>                
+                <td>
+                    {% if canEdit %}
+                        {% trans %}No{% endtrans %}
+                    {% else %}
+                        {% trans %}Yes{% endtrans %}
+                    {% endif %}
+                    {{ handling.closerFullname }}
+                    {% if handling.closedatetime %}
+                        {{ handling.closedatetime|date("d.m.y, H:i") }}
+                    {% endif %}
+                    {% if isResultClosed %}
+                        <a href="{{ path('lists_salesadmin_handling_close', { id: handling.0.id} ) }}" class="btn green">
+                            {% if canEdit %}
+                                {% trans %}Close{% endtrans %}
+                            {% else %}
+                                {% trans %}Open{% endtrans %}
+                            {% endif %}
+                        </a>
+                    {% endif %}
+                </td>
             </tr>
             <tr> {# 9 #}
                 <td></td>

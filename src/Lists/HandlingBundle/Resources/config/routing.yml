@@ -147,6 +147,14 @@ lists_sales_admin_report_index:
     pattern:  /lists/salesadmin/report
     defaults: { _controller: ListsHandlingBundle:SalesAdmin:report }
 
+lists_salesadmin_handling_close:
+    pattern:  /lists/salesadmin/handling/close/{id}
+    defaults: { _controller: ListsHandlingBundle:SalesAdmin:close }
+
+lists_salesadmin_handling_open:
+    pattern:  /lists/salesadmin/handling/open/{id}
+    defaults: { _controller: ListsHandlingBundle:SalesAdmin:close }
+
 handling_service:
     resource: "@ListsHandlingBundle/Resources/config/routing/handlingservice.yml"
     prefix:   /lists/salesadmin/handlingservice/
