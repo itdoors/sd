@@ -34,7 +34,11 @@
 
 <div class="row ">
     <div class="col-md-12">
-        <div class="portlet box yellow">
+        <div class="portlet box green">
+            <div class="portlet-title"><div class="caption"><i class="fa fa-edit"></i>
+                    Create New Contact
+                </div>
+            </div>
             <div class="portlet-body">
 
                 {{ form_start(form, {
@@ -50,44 +54,54 @@
 
                 {% if form.modelId.vars.block_prefixes.1 != 'hidden' %}
                     <div class="form-group col-md-3">
+                        {{ form_label(form.modelId, 'Organization name', {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.modelId, {'attr' : {'class' : 'form-control', 'placeholder': "Organization" }}) }}
                     </div>
                 {% endif %}
 
                 <div class="form-group col-md-3">
+                    {{ form_label(form.firstName, 'First name', {'attr': {'class': 'control-label'}}) }}
                     {{ form_widget(form.firstName, {'attr' : {'class' : 'form-control', 'placeholder': "First name"}}) }}
                 </div>
 
                 <div class="form-group col-md-3">
+                    {{ form_label(form.lastName, 'Last name', {'attr': {'class': 'control-label'}}) }}
                     {{ form_widget(form.lastName, {'attr' : {'class' : 'form-control', 'placeholder': "Last name"}}) }}
                 </div>
 
                 <div class="form-group col-md-3">
+                    {{ form_label(form.middleName, 'Middle name', {'attr': {'class': 'control-label'}}) }}
                     {{ form_widget(form.middleName, {'attr' : {'class' : 'form-control', 'placeholder': "Middle name"}}) }}
                 </div>
 
                 <div class="form-group col-md-3">
+                    {{ form_label(form.phone1, 'Phone1', {'attr': {'class': 'control-label'}}) }}
                     {{ form_widget(form.phone1, {'attr' : {'class' : 'form-control', 'placeholder': "Phone 1"}}) }}
                 </div>
 
                 <div class="form-group col-md-3">
+                    {{ form_label(form.phone2, 'Phone2', {'attr': {'class': 'control-label'}}) }}
                     {{ form_widget(form.phone2, {'attr' : {'class' : 'form-control', 'placeholder': "Phone 2"}}) }}
                 </div>
 
                 <div class="form-group col-md-3">
+                    {{ form_label(form.position, 'Position', {'attr': {'class': 'control-label'}}) }}
                     {{ form_widget(form.position, {'attr' : {'class' : 'form-control', 'placeholder': "Position"}}) }}
                 </div>
 
                 <div class="form-group col-md-3">
+                    {{ form_label(form.birthday, 'Birthday', {'attr': {'class': 'control-label'}}) }}
                     {{ form_widget(form.birthday, {'attr' : {} }) }}
                 </div>
 
                 <div class="form-group col-md-3">
+                    {{ form_label(form.email, 'Email', {'attr': {'class': 'control-label'}}) }}
                     {{ form_widget(form.email, {'attr' : {'class' : 'form-control', 'placeholder': "Email"}}) }}
                 </div>
 
-                <div class="form-group col-md-2">
+                <div class="form-group col-md-12">
                     {{ form_widget(form.add, { 'label': 'Add', 'attr': {'class': 'btn green'} } ) }}
+                    {{ form_widget(form.cancel { 'label': 'Cancel', 'attr': {'class': 'btn grey'} } ) }}
                 </div>
 
                 <input type="hidden" name="formName" value="{{ formName }}">
