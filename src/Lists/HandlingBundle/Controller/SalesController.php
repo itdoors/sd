@@ -5,6 +5,7 @@ namespace Lists\HandlingBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use SD\CommonBundle\Controller\BaseFilterController as BaseController;
+use Lists\HandlingBundle\Entity\HandlingResult;
 
 class SalesController extends BaseController
 {
@@ -183,11 +184,17 @@ class SalesController extends BaseController
             $handlingServices[] = $this->serializeObject($hs);
         }
 
+        $canEdit = (Boolean) !$object[0]->getIsClosed();
+
+        $isResultClosed = $object['resultSlug'] == HandlingResult::RESULT_CLOSED;
+
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':show.html.twig', array(
             'handling' => $object,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
-            'handlingServices' => $handlingServices
+            'handlingServices' => $handlingServices,
+            'canEdit' => $canEdit,
+            'isResultClosed' => $isResultClosed
         ));
     }
 

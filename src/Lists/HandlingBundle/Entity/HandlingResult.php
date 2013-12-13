@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class HandlingResult
 {
+    const RESULT_CLOSED = 'closed';
+
     /**
      * @var integer
      */

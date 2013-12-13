@@ -2,6 +2,8 @@
 
 namespace Lists\HandlingBundle\Controller;
 
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
 class SalesAdminController extends SalesController
 {
     protected $filterNamespace = 'handling.sales.admin.filters';
@@ -57,7 +59,43 @@ class SalesAdminController extends SalesController
             ->getRepository('ListsHandlingBundle:HandlingService')
             ->findAll();
 
-        //$handlingServiceRepository =
+    }
+
+    /**
+     * Executes close action
+     */
+    public function closeAction($id)
+    {
+        if (!$id)
+        {
+            return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_handling_index'));
+        }
+
+        $user = $this->getUser();
+
+        if (!$user->hasRole('ROLE_SALESADMIN'))
+        {
+            throw new AccessDeniedException();
+        }
+
+        /** @var \Lists\HandlingBundle\Entity\Handling $handling */
+        $handling = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling')
+            ->find($id);
+
+        $value = (Boolean) $handling->getIsClosed();
+
+        $handling->setIsClosed(!$value);
+        $handling->setClosedatetime(new \DateTime());
+        $handling->setCloser($user);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($handling);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_handling_show', array(
+                'id' => $id
+            )));
     }
 }
 

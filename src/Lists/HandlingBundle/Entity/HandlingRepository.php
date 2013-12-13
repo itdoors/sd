@@ -209,6 +209,7 @@ class HandlingRepository extends EntityRepository
            ->addSelect('o.name as organizationName')
            ->addSelect('o.id as organizationId')
            ->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as creatorFullName")
+           ->addSelect("CONCAT(CONCAT(closer.lastName, ' '), closer.firstName) as closerFullname")
            ->addSelect("
                   array_to_string(
                      ARRAY(
@@ -233,8 +234,16 @@ class HandlingRepository extends EntityRepository
                      ), ','
                    ) as serviceList
            ")
+           ->addSelect('h.closedatetime as closedatetime')
+           ->addSelect('status.percentageString as percentageString')
+           ->addSelect('status.progress as progress')
+           ->addSelect('result.slug as resultSlug')
            ->leftJoin('h.organization', 'o')
+           ->leftJoin('h.type', 'type')
+           ->leftJoin('h.status', 'status')
+           ->leftJoin('h.result', 'result')
            ->leftJoin('h.user', 'u')
+           ->leftJoin('h.closer', 'closer')
            ->where('h.id = :id')
            ->setParameter(':id', $id)
            ->getQuery()

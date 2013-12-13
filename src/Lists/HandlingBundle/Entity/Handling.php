@@ -845,4 +845,60 @@ class Handling
     {
         return $this->nextHandlingDate;
     }
+    /**
+     * @var \DateTime
+     */
+    private $closedatetime;
+
+    /**
+     * @var \SD\UserBundle\Entity\User
+     */
+    private $closer;
+
+
+    /**
+     * Set closedatetime
+     *
+     * @param \DateTime $closedatetime
+     * @return Handling
+     */
+    public function setClosedatetime($closedatetime)
+    {
+        $this->closedatetime = $closedatetime;
+    
+        return $this;
+    }
+
+    /**
+     * Get closedatetime
+     *
+     * @return \DateTime 
+     */
+    public function getClosedatetime()
+    {
+        return $this->closedatetime;
+    }
+
+    /**
+     * Set closer
+     *
+     * @param \SD\UserBundle\Entity\User $closer
+     * @return Handling
+     */
+    public function setCloser(\SD\UserBundle\Entity\User $closer = null)
+    {
+        $this->closer = $closer;
+    
+        return $this;
+    }
+
+    /**
+     * Get closer
+     *
+     * @return \SD\UserBundle\Entity\User 
+     */
+    public function getCloser()
+    {
+        return $this->closer;
+    }
 }

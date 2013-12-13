@@ -138,3 +138,13 @@ update handling set next_handling_date =
 
 where next_handling_date is null;
 
++++++++++++++++++++++++
+
+ALTER TABLE handling ADD closer_id INT DEFAULT NULL;
+ALTER TABLE handling ADD closedatetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL;
+ALTER TABLE handling ALTER is_closed SET  DEFAULT NULL;
+ALTER TABLE handling ADD CONSTRAINT FK_BFF9657FD0FD350 FOREIGN KEY (closer_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_BFF9657FD0FD350 ON handling (closer_id);
+
+
+
