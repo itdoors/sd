@@ -207,6 +207,7 @@ class HandlingRepository extends EntityRepository
        return $this->createQueryBuilder('h')
            ->select('h')
            ->addSelect('o.name as organizationName')
+           ->addSelect('o.id as organizationId')
            ->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as creatorFullName")
            ->addSelect("
                   array_to_string(
