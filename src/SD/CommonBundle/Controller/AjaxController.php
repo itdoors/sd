@@ -52,6 +52,35 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
 
+    public function organizationForWizardAction()
+    {
+        $searchText = $this->get('request')->query->get('q');
+
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $organizationsRepository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+        $organizations= $organizationsRepository->getSearchContactsQuery($searchText);
+
+        $result = array();
+
+        $result[] = array(
+            'id' => '',
+            'value' => $searchText,
+            'name' => $searchText,
+            'text' => $searchText
+        );
+
+        foreach ($organizations as $organization)
+        {
+            $this->processOrganizationForJson($organization);
+
+            $result[] = $this->serializeArray($organization, 'organizationId');
+        }
+
+        return new Response(json_encode($result));
+    }
+
     public function organizationForCreationAction()
     {
         $searchText = $this->get('request')->query->get('q');

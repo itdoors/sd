@@ -10,6 +10,10 @@ sd_common_ajax_organization_for_contacts:
     pattern:  /ajax/organization/for/contacts
     defaults: { _controller: SDCommonBundle:Ajax:organizationForContacts }
 
+sd_common_ajax_organization_for_wizard:
+    pattern:  /ajax/organization/for/wizard
+    defaults: { _controller: SDCommonBundle:Ajax:organizationForWizard }
+
 sd_common_ajax_organization_for_creation:
     pattern:  /ajax/organization/for/creation
     defaults: { _controller: SDCommonBundle:Ajax:organizationForCreation }
