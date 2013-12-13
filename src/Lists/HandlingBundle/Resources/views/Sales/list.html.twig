@@ -1,0 +1,70 @@
+{% trans_default_domain 'ListsHandlingBundle' %}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        /*
+         * Initialize DataTables, with no sorting on the 'details' column
+         */
+        var oTable = $('#dashboard-handling').dataTable( {
+            //"sDom": '<"row"<"col-md-9 col-sm-12" f><"col-md-3 col-sm-12" l>>rt<"bottom"ip><"clear">',
+            "aoColumnDefs": [
+                {"bSortable": false, "aTargets": [ 0 ] }
+            ],
+            "aaSorting": [[1, 'asc']],
+            "aLengthMenu": [
+                [10, 20, 50, -1],
+                [10, 20, 50, "All"] // change per page values here
+            ],
+            // set the initial value
+            "iDisplayLength": 10
+        });
+
+        jQuery('#dashboard-handling_wrapper .dataTables_filter input').addClass("form-control input-small"); // modify table search input
+        jQuery('#dashboard-handling_wrapper .dataTables_length select').addClass("form-control input-small"); // modify table per page dropdown
+        jQuery('#dashboard-handling_wrapper .dataTables_length select').select2(); // modify table per page dropdown
+    })
+</script>
+
+<div class="portlet box green">
+    <div class="portlet-title">
+        <div class="caption"><i class="fa fa-globe"></i>Responsive Table With Expandable details</div>
+        <div class="tools">
+            <a href="javascript:;" class="reload"></a>
+            <a href="javascript:;" class="remove"></a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        {% if pagination|length %}
+            <table class="table table-striped table-bordered table-advance table-hover" id="dashboard-handling">
+                <thead>
+                <tr>
+                    <th>{% trans %}ID{% endtrans %} </th>
+                    <th>{% trans %}Name{% endtrans %} </th>
+                    <th>{% trans %}ServiceOffered{% endtrans %} </th>
+                    <th>{% trans %}Createdatetime{% endtrans %} </th>
+                    <th>{% trans %}LastHandlingDate{% endtrans %} </th>
+                    <th>{% trans %}Chance{% endtrans %} </th>
+                </tr>
+                </thead>
+                {% for item in pagination %}
+                    <tr {% if loop.index is odd %}class="color"{% endif %}>
+                        <td>
+                            <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_show', { id: item.handlingId } ) }}">
+                                {{ item.handlingId|e }}
+                            </a>
+                        </td>
+                        <td>{{ item.organizationName|e }}</td>
+                        <td>{{ item.handlingServiceOffered|e }}</td>
+                        <td>{{ item.handlingCreatedate|date("d.m.y") }}</td>
+                        <td>
+                            {% if item.handlingLastHandlingDate %}
+                                {{ item.handlingLastHandlingDate|date("d.m.y, H:i") }}
+                            {% endif %}
+                        </td>
+                        <td>{{ item.handlingChance|e }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    </div>
+</div>

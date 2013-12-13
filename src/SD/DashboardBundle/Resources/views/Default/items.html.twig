@@ -7,3 +7,5 @@
 {% if app.user.hasGroup('admin') %}
     user has group admin
 {% endif %}
+
+{{ render(controller('ListsHandlingBundle:Sales:List')) }}

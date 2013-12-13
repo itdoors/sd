@@ -79,7 +79,19 @@ class HandlingRepository extends EntityRepository
                         WHERE hu.id = h.id
                     ), ','
                 ) as fullNames
-            ");
+            ")
+            ->addSelect("
+                  array_to_string(
+                     ARRAY(
+                        SELECT
+                          hs.name
+                        FROM
+                          ListsHandlingBundle:HandlingService hs
+                        LEFT JOIN hs.handlings handlings
+                        WHERE h.id = handlings.id
+                     ), ','
+                   ) as serviceList
+           ");
     }
 
 
