@@ -2,6 +2,38 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+        jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+
+            "date-euro-pre": function ( a ) {
+                if ($.trim(a) != '') {
+                    var frDatea = $.trim(a).split(', ');
+
+                    var frTimea = ['00', '00'];
+
+                    if (typeof frDatea[1] != "undefined" )
+                    {
+                        frTimea = frDatea[1].split(':');
+                    }
+
+                    var frDatea2 = frDatea[0].split('.');
+                    var x = (frDatea2[2] + frDatea2[1] + frDatea2[0] + frTimea[0] + frTimea[1]) * 1;
+                } else {
+                    var x = 1; // = l'an 1000 ...
+                }
+
+                return x;
+            },
+
+            "date-euro-asc": function ( a, b ) {
+                return a - b;
+            },
+
+            "date-euro-desc": function ( a, b ) {
+                return b - a;
+            }
+        } );
+
+
         /*
          * Initialize DataTables, with no sorting on the 'details' column
          */
@@ -9,6 +41,15 @@
             //"sDom": '<"row"<"col-md-9 col-sm-12" f><"col-md-3 col-sm-12" l>>rt<"bottom"ip><"clear">',
             "aoColumnDefs": [
                 {"bSortable": false, "aTargets": [ 0 ] }
+            ],
+            "aoColumns": [
+                null,
+                null,
+                null,
+                null,
+                { "sType": "date-euro" },
+                { "sType": "date-euro" },
+                { "sType": "date-euro" }
             ],
             "aaSorting": [[1, 'asc']],
             "aLengthMenu": [
