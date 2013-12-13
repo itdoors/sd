@@ -16,7 +16,28 @@
                 [10, 20, 50, "All"] // change per page values here
             ],
             // set the initial value
-            "iDisplayLength": 10
+            "iDisplayLength": 10,
+            "oLanguage": {
+                "sProcessing":   "Подождите...",
+                "sLengthMenu":   "Показать _MENU_ записей",
+                "sZeroRecords":  "Записи отсутствуют.",
+                "sInfo":         "Записи с _START_ до _END_ из _TOTAL_ записей",
+                "sInfoEmpty":    "Записи с 0 до 0 из 0 записей",
+                "sInfoFiltered": "(отфильтровано из _MAX_ записей)",
+                "sInfoPostFix":  "",
+                "sSearch":       "Поиск:",
+                "sUrl":          "",
+                "oPaginate": {
+                    "sFirst": "Первая",
+                    "sPrevious": "Предыдущая",
+                    "sNext": "Следующая",
+                    "sLast": "Последняя"
+                },
+                "oAria": {
+                    "sSortAscending":  ": активировать для сортировки столбца по возрастанию",
+                    "sSortDescending": ": активировать для сортировки столбцов по убыванию"
+                }
+            }
         });
 
         jQuery('#dashboard-handling_wrapper .dataTables_filter input').addClass("form-control input-small"); // modify table search input
