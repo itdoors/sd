@@ -71,6 +71,10 @@ Lists\HandlingBundle\Entity\Handling:
             type: datetime
             nullable: true
             column: last_handling_date
+        nextHandlingDate:
+            type: datetime
+            nullable: true
+            column: next_handling_date
         createdate:
             type: date
             nullable: false

@@ -121,5 +121,20 @@ set
 where
 	creator_id is null;
 
++++++++++++++++++++++++++++++++++++++++++++
 
+update handling set next_handling_date =
+(
+	select
+		hm.createdate
+	from
+		handling_message hm
+	where
+		hm.handling_id = handling.id
+	order by
+		hm.id
+	limit 1
+)
+
+where next_handling_date is null;
 

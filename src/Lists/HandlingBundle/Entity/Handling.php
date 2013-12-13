@@ -817,4 +817,32 @@ class Handling
     {
         return $this->getId();
     }
+    /**
+     * @var \DateTime
+     */
+    private $nextHandlingDate;
+
+
+    /**
+     * Set nextHandlingDate
+     *
+     * @param \DateTime $nextHandlingDate
+     * @return Handling
+     */
+    public function setNextHandlingDate($nextHandlingDate)
+    {
+        $this->nextHandlingDate = $nextHandlingDate;
+    
+        return $this;
+    }
+
+    /**
+     * Get nextHandlingDate
+     *
+     * @return \DateTime 
+     */
+    public function getNextHandlingDate()
+    {
+        return $this->nextHandlingDate;
+    }
 }

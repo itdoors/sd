@@ -4,6 +4,19 @@
         <h3>{% trans %}Contacts{% endtrans %}</h3>
         <p>{% trans %}Contacts on handling{% endtrans %}</p>
         <div class="table-toolbar">
+            <div class="btn-group">
+                <button id="managers_list_new" class="btn green ajax-form"
+                        data-target="contactsFormTpl"
+                        data-form_name="modelContactOrganizationForm"
+                        data-default='{"modelName":"organization","modelId":{{ handling.organizationId }} }'
+                        data-post_function="updateList"
+                        data-post_target_id="contact_list"
+                        >
+                    {% trans %}Add New{% endtrans %} <i class="fa fa-plus"></i>
+                </button>
+            </div>
+            <div style="display: none" id="contactsFormTpl">
+            </div>
         </div>
         <div id="contact_list"
              data-url="{{ path('lists_' ~ baseRoutePrefix ~ '_contact_ajax_handling', {

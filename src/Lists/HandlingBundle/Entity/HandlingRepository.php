@@ -63,6 +63,7 @@ class HandlingRepository extends EntityRepository
             ->addSelect('o.name as organizationName')
             ->addSelect('h.createdate as handlingCreatedate')
             ->addSelect('h.lastHandlingDate as handlingLastHandlingDate')
+            ->addSelect('h.nextHandlingDate as handlingNextHandlingDate')
             ->addSelect('city.name as cityName')
             ->addSelect('scope.name as scopeName')
             ->addSelect('h.serviceOffered as handlingServiceOffered')
@@ -79,7 +80,19 @@ class HandlingRepository extends EntityRepository
                         WHERE hu.id = h.id
                     ), ','
                 ) as fullNames
-            ");
+            ")
+            ->addSelect("
+                  array_to_string(
+                     ARRAY(
+                        SELECT
+                          hs.name
+                        FROM
+                          ListsHandlingBundle:HandlingService hs
+                        LEFT JOIN hs.handlings handlings
+                        WHERE h.id = handlings.id
+                     ), ','
+                   ) as serviceList
+           ");
     }
 
 
@@ -194,6 +207,7 @@ class HandlingRepository extends EntityRepository
        return $this->createQueryBuilder('h')
            ->select('h')
            ->addSelect('o.name as organizationName')
+           ->addSelect('o.id as organizationId')
            ->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as creatorFullName")
            ->addSelect("
                   array_to_string(
