@@ -38,6 +38,14 @@
         <table id="user" class="table table-bordered table-striped">
             <tbody>
             <tr>
+                <td style="width:15%">{% trans %}Creator{% endtrans %}</td> {# Добавляем создателя и дату создания #}
+                <td style="width:50%">
+                    {{ organization.creator }} ({{ organization.cratedatetime }})
+
+                </td>
+                <td style="width:35%"><span class="text-muted">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп"</span></td>
+            </tr>
+            <tr>
                 <td style="width:15%">{% trans %}Organization name{% endtrans %}</td>
                 <td style="width:50%">
                     <a href="#" id="name" data-type="text" data-pk="{{ organization.id }}" data-placement="right" data-placeholder="Required" data-original-title="{% trans %}Enter Organization name{% endtrans %}">
@@ -70,13 +78,22 @@
                 <td><span class="text-muted">{% trans %}Select Organization scope{% endtrans %}</td>
             </tr>
             <tr>
+                <td>{% trans %}Organization Group{% endtrans %}</td>
+                <td>
+                    <a href="#" id="groupId" data-type="select" data-pk="{{ organization.id }}" data-value="{{ organization.groupId }}" data-original-title="{% trans %}Select Organization Group{% endtrans %}">
+                        {{ organization.group }}
+                    </a>
+                </td>
+                <td><span class="text-muted">{% trans %}Select a control group that owns the organization{% endtrans %}</td>
+            </tr>
+            <tr>
                 <td>{% trans %}City{% endtrans %}</td>
                 <td>
                     <a href="#" id="cityId" data-type="select2" data-pk="{{ organization.id }}" data-value="BS" data-original-title="{% trans %}Select city{% endtrans %}">
                         {{ organization.city }}
                     </a>
                 </td>
-                <td><span class="text-muted">{% trans %}Select city{% endtrans %}</span></td>
+                <td><span class="text-muted">{% trans %}Select City{% endtrans %}</span></td>
             </tr>
             <tr>
                 <td>{% trans %}Legal Address{% endtrans %}</td>
@@ -134,13 +151,22 @@
                 <td><span class="text-muted">{% trans %}Enter INN{% endtrans %}</span></td>
             </tr>
             <tr>
-                <td>{% trans %}INN{% endtrans %}</td>
+                <td>{% trans %}INN Certificate{% endtrans %}</td>
                 <td>
                     <a href="#" id="certificate" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}INN Certificate:{% endtrans %}">
                         {{ organization.certificate }}
                     </a>
                 </td>
                 <td><span class="text-muted">{% trans %}Enter INN Certificate{% endtrans %}</span></td>
+            </tr>
+            <tr>
+                <td>{% trans %}Organization Description{% endtrans %}</td>
+                <td>
+                    <a href="#" id="description" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Organization Description{% endtrans %}">
+                        {{ organization.description }}
+                    </a>
+                </td>
+                <td><span class="text-muted">{% trans %}Enter Organization Description{% endtrans %}</span></td>
             </tr>
             </tbody>
         </table>

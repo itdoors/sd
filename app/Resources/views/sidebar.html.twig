@@ -23,6 +23,12 @@
 				<span class="arrow "></span>
 			</a>
 			<ul class="sub-menu">
+                <li >
+                    <a href="{{ path('lists_sales_handling_index') }}" title="{% trans %}My Handlings{% endtrans %}">
+                        <i class="fa fa-comments"></i>
+                        {% trans %}My Handlings{% endtrans %}
+                    </a>
+                </li>
 				<li >
 					<a href="{{ path('lists_sales_contact_index') }}" title="{% trans %}My Contacts{% endtrans %}">
 						<i class="fa fa-envelope"></i>
@@ -35,22 +41,18 @@
 						{% trans %}My Organizations{% endtrans %}
 					</a>
 				</li>				
-				<li >
-					<a href="{{ path('lists_sales_handling_index') }}" title="{% trans %}My Handlings{% endtrans %}">
-						<i class="fa fa-comments"></i>
-						{% trans %}My Handlings{% endtrans %}
-					</a>
-				</li>
+				{#
 				<li >
 					<a href="{{ path('lists_sales_tender_index') }}" title="{% trans %}My Tenders{% endtrans %}">
 						<i class="fa fa-gavel"></i>
 						{% trans %}My Tenders{% endtrans %}
 					</a>
 				</li>
+                #}
 				<li >
 					<a href="{{ path('lists_sales_calendar_index') }}" title="{% trans %}My Calendar{% endtrans %}">
 					<i class="fa fa-calendar"></i>
-					<span class="badge badge-important">14</span>{% trans %}My Calendar{% endtrans %}</a>
+					{#<span class="badge badge-important">14</span>#}{% trans %}My Calendar{% endtrans %}</a>
 				</li>
 				<li >
 					<a href="{{ path('lists_sales_report_index') }}" title="{% trans %}My Reports{% endtrans %}">
@@ -74,11 +76,12 @@
 				<span class="arrow "></span>
 			</a>
 			<ul class="sub-menu">
-				<li >
-					<a href="{{ path('lists_sales_dispatcher_team_index') }}" title="{% trans %}Teams{% endtrans %}">
-					<i class="fa fa-group"></i>
-					{% trans %}Teams{% endtrans %}</a>
-				</li>
+                <li >
+                    <a href="{{ path('lists_sales_dispatcher_handling_index') }}" title="{% trans %}Team Handlings{% endtrans %}">
+                        <i class="fa fa-comments"></i>
+                        {% trans %}Team Handlings{% endtrans %}
+                    </a>
+                </li>
 				<li >
 					<a href="{{ path('lists_sales_dispatcher_contact_index') }}" title="{% trans %}Team Contacts{% endtrans %}">
 						<i class="fa fa-envelope"></i>
@@ -91,18 +94,14 @@
 						{% trans %}Team Organizations{% endtrans %}
 					</a>
 				</li>				
-				<li >
-					<a href="{{ path('lists_sales_dispatcher_handling_index') }}" title="{% trans %}Team Handlings{% endtrans %}">
-						<i class="fa fa-comments"></i>
-						{% trans %}Team Handlings{% endtrans %}
-					</a>
-				</li>
+				{#
 				<li >
 					<a href="{{ path('lists_sales_dispatcher_tender_index') }}" title="{% trans %}Team Tenders{% endtrans %}">
 						<i class="fa fa-gavel"></i>
 						{% trans %}Team Tenders{% endtrans %}
 					</a>
 				</li>
+				#}
 				<li >
 					<a href="{{ path('lists_sales_dispatcher_calendar_index') }}" title="{% trans %}Team Calendar{% endtrans %}">
 					<i class="fa fa-calendar"></i>
@@ -112,7 +111,12 @@
 					<a href="{{ path('lists_sales_dispatcher_report_index') }}" title="{% trans %}Team Reports{% endtrans %}">
 					<i class="fa fa-bar-chart-o"></i>
 					{% trans %}Team Reports{% endtrans %}</a>
-				</li>				
+				</li>
+                <li >
+                    <a href="{{ path('lists_sales_dispatcher_team_index') }}" title="{% trans %}Teams{% endtrans %}">
+                        <i class="fa fa-group"></i>
+                        {% trans %}Teams{% endtrans %}</a>
+                </li>
 			</ul>
 		</li>
 		{% endif %}
@@ -120,11 +124,17 @@
 		{% if is_granted('ROLE_SALESADMIN') %}
 		<li class="">
 			<a href="javascript:;">
-				<i class="fa fa-sitemap"></i> 
-				<span class="title">{% trans %}Sales Admin{% endtrans %}</span>
+				<i class="fa fa-tachometer"></i>
+				<span class="title">{% trans %}Sales Admin short{% endtrans %}</span>
 				<span class="arrow "></span>
 			</a>
 			<ul class="sub-menu">
+                <li >
+                    <a href="{{ path('lists_sales_admin_handling_index') }}" title="{% trans %}Handlings{% endtrans %}">
+                        <i class="fa fa-comments"></i>
+                        {% trans %}Handlings{% endtrans %}
+                    </a>
+                </li>
 				<li >
 					<a href="{{ path('lists_sales_admin_contact_index') }}" title="{% trans %}Contacts{% endtrans %}">
 						<i class="fa fa-envelope"></i>
@@ -137,12 +147,7 @@
 						{% trans %}Organizations{% endtrans %}
 					</a>
 				</li>				
-				<li >
-					<a href="{{ path('lists_sales_admin_handling_index') }}" title="{% trans %}Handlings{% endtrans %}">
-						<i class="fa fa-comments"></i>
-						{% trans %}Handlings{% endtrans %}
-					</a>
-				</li>
+
 				<li >
 					<a href="{{ path('lists_sales_admin_tender_index') }}" title="{% trans %}Tenders{% endtrans %}">
 						<i class="fa fa-gavel"></i>
