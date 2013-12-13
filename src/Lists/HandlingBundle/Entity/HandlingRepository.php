@@ -63,6 +63,7 @@ class HandlingRepository extends EntityRepository
             ->addSelect('o.name as organizationName')
             ->addSelect('h.createdate as handlingCreatedate')
             ->addSelect('h.lastHandlingDate as handlingLastHandlingDate')
+            ->addSelect('h.nextHandlingDate as handlingNextHandlingDate')
             ->addSelect('city.name as cityName')
             ->addSelect('scope.name as scopeName')
             ->addSelect('h.serviceOffered as handlingServiceOffered')

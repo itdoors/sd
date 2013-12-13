@@ -48,7 +48,7 @@
 
 <div class="portlet box green">
     <div class="portlet-title">
-        <div class="caption"><i class="fa fa-globe"></i>Responsive Table With Expandable details</div>
+        <div class="caption"><i class="fa fa-globe"></i>{% trans %}Handling list{% endtrans %}</div>
         <div class="tools">
             <a href="javascript:;" class="reload"></a>
             <a href="javascript:;" class="remove"></a>
@@ -62,9 +62,10 @@
                     <th>{% trans %}ID{% endtrans %} </th>
                     <th>{% trans %}Name{% endtrans %} </th>
                     <th>{% trans %}ServiceOffered{% endtrans %} </th>
+                    <th>{% trans %}Chance{% endtrans %}</th>
                     <th>{% trans %}Createdatetime{% endtrans %} </th>
                     <th>{% trans %}LastHandlingDate{% endtrans %} </th>
-                    <th>{% trans %}Chance{% endtrans %} </th>
+                    <th>{% trans %}NextHandlingDate{% endtrans %} </th>
                 </tr>
                 </thead>
                 {% for item in pagination %}
@@ -76,13 +77,18 @@
                         </td>
                         <td>{{ item.organizationName|e }}</td>
                         <td>{{ item.handlingServiceOffered|e }}</td>
+                        <td>{{ item.handlingChance|e }}</td>
                         <td>{{ item.handlingCreatedate|date("d.m.y") }}</td>
                         <td>
                             {% if item.handlingLastHandlingDate %}
                                 {{ item.handlingLastHandlingDate|date("d.m.y, H:i") }}
                             {% endif %}
                         </td>
-                        <td>{{ item.handlingChance|e }}</td>
+                        <td>
+                            {% if item.handlingNextHandlingDate %}
+                                {{ item.handlingNextHandlingDate|date("d.m.y, H:i") }}
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             </table>

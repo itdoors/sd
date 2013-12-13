@@ -661,6 +661,7 @@ class AjaxController extends Controller
         // $em->flush();
 
         $handling->setLastHandlingDate($data->getCreatedate());
+        $handling->setNextHandlingDate($nextDatetime);
         $em->persist($handling);
 
         $em->flush();
