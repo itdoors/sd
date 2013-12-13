@@ -1,0 +1,94 @@
+[Mon Dec 09 08:29:27 2013] [error] [client 127.0.0.1] PHP Warning:  require_once(/var/www/sd/web/../app/bootstrap.php.cache): failed to open stream: No such file or directory in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 08:29:27 2013] [error] [client 127.0.0.1] PHP Fatal error:  require_once(): Failed opening required '/var/www/sd/web/../app/bootstrap.php.cache' (include_path='.:/usr/share/php:/usr/share/pear') in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 08:32:09 2013] [error] [client 127.0.0.1] PHP Warning:  require_once(/var/www/sd/web/../app/bootstrap.php.cache): failed to open stream: No such file or directory in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 08:32:09 2013] [error] [client 127.0.0.1] PHP Fatal error:  require_once(): Failed opening required '/var/www/sd/web/../app/bootstrap.php.cache' (include_path='.:/usr/share/php:/usr/share/pear') in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 08:32:14 2013] [error] [client 127.0.0.1] PHP Warning:  require_once(/var/www/sd/web/../app/bootstrap.php.cache): failed to open stream: No such file or directory in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 08:32:14 2013] [error] [client 127.0.0.1] PHP Fatal error:  require_once(): Failed opening required '/var/www/sd/web/../app/bootstrap.php.cache' (include_path='.:/usr/share/php:/usr/share/pear') in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:27 2013] [error] [client 127.0.0.1] PHP Warning:  require_once(/var/www/sd/web/../app/bootstrap.php.cache): failed to open stream: No such file or directory in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:27 2013] [error] [client 127.0.0.1] PHP Fatal error:  require_once(): Failed opening required '/var/www/sd/web/../app/bootstrap.php.cache' (include_path='.:/usr/share/php:/usr/share/pear') in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:31 2013] [error] [client 127.0.0.1] PHP Warning:  require_once(/var/www/sd/web/../app/bootstrap.php.cache): failed to open stream: No such file or directory in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:31 2013] [error] [client 127.0.0.1] PHP Fatal error:  require_once(): Failed opening required '/var/www/sd/web/../app/bootstrap.php.cache' (include_path='.:/usr/share/php:/usr/share/pear') in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:32 2013] [error] [client 127.0.0.1] PHP Warning:  require_once(/var/www/sd/web/../app/bootstrap.php.cache): failed to open stream: No such file or directory in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:32 2013] [error] [client 127.0.0.1] PHP Fatal error:  require_once(): Failed opening required '/var/www/sd/web/../app/bootstrap.php.cache' (include_path='.:/usr/share/php:/usr/share/pear') in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:34 2013] [error] [client 127.0.0.1] PHP Warning:  require_once(/var/www/sd/web/../app/bootstrap.php.cache): failed to open stream: No such file or directory in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:34 2013] [error] [client 127.0.0.1] PHP Fatal error:  require_once(): Failed opening required '/var/www/sd/web/../app/bootstrap.php.cache' (include_path='.:/usr/share/php:/usr/share/pear') in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:34 2013] [error] [client 127.0.0.1] PHP Warning:  require_once(/var/www/sd/web/../app/bootstrap.php.cache): failed to open stream: No such file or directory in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:34 2013] [error] [client 127.0.0.1] PHP Fatal error:  require_once(): Failed opening required '/var/www/sd/web/../app/bootstrap.php.cache' (include_path='.:/usr/share/php:/usr/share/pear') in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:34 2013] [error] [client 127.0.0.1] PHP Warning:  require_once(/var/www/sd/web/../app/bootstrap.php.cache): failed to open stream: No such file or directory in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:34 2013] [error] [client 127.0.0.1] PHP Fatal error:  require_once(): Failed opening required '/var/www/sd/web/../app/bootstrap.php.cache' (include_path='.:/usr/share/php:/usr/share/pear') in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:35 2013] [error] [client 127.0.0.1] PHP Warning:  require_once(/var/www/sd/web/../app/bootstrap.php.cache): failed to open stream: No such file or directory in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:35 2013] [error] [client 127.0.0.1] PHP Fatal error:  require_once(): Failed opening required '/var/www/sd/web/../app/bootstrap.php.cache' (include_path='.:/usr/share/php:/usr/share/pear') in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:35 2013] [error] [client 127.0.0.1] PHP Warning:  require_once(/var/www/sd/web/../app/bootstrap.php.cache): failed to open stream: No such file or directory in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:35 2013] [error] [client 127.0.0.1] PHP Fatal error:  require_once(): Failed opening required '/var/www/sd/web/../app/bootstrap.php.cache' (include_path='.:/usr/share/php:/usr/share/pear') in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:35 2013] [error] [client 127.0.0.1] PHP Warning:  require_once(/var/www/sd/web/../app/bootstrap.php.cache): failed to open stream: No such file or directory in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:35 2013] [error] [client 127.0.0.1] PHP Fatal error:  require_once(): Failed opening required '/var/www/sd/web/../app/bootstrap.php.cache' (include_path='.:/usr/share/php:/usr/share/pear') in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:35 2013] [error] [client 127.0.0.1] PHP Warning:  require_once(/var/www/sd/web/../app/bootstrap.php.cache): failed to open stream: No such file or directory in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:35 2013] [error] [client 127.0.0.1] PHP Fatal error:  require_once(): Failed opening required '/var/www/sd/web/../app/bootstrap.php.cache' (include_path='.:/usr/share/php:/usr/share/pear') in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:36 2013] [error] [client 127.0.0.1] PHP Warning:  require_once(/var/www/sd/web/../app/bootstrap.php.cache): failed to open stream: No such file or directory in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:36 2013] [error] [client 127.0.0.1] PHP Fatal error:  require_once(): Failed opening required '/var/www/sd/web/../app/bootstrap.php.cache' (include_path='.:/usr/share/php:/usr/share/pear') in /var/www/sd/web/app_dev.php on line 20
+[Mon Dec 09 16:25:39 2013] [error] [client 127.0.0.1] PHP Warning:  require_once(/var/www/sd/web/../app/bootstrap.php.cache): failed to open stream: No such file or directory in /var/www/sd/web/app.php on line 6
+[Mon Dec 09 16:25:39 2013] [error] [client 127.0.0.1] PHP Fatal error:  require_once(): Failed opening required '/var/www/sd/web/../app/bootstrap.php.cache' (include_path='.:/usr/share/php:/usr/share/pear') in /var/www/sd/web/app.php on line 6
+[Mon Dec 09 16:25:43 2013] [error] [client 127.0.0.1] PHP Warning:  require_once(/var/www/sd/web/../app/bootstrap.php.cache): failed to open stream: No such file or directory in /var/www/sd/web/app.php on line 6
+[Mon Dec 09 16:25:43 2013] [error] [client 127.0.0.1] PHP Fatal error:  require_once(): Failed opening required '/var/www/sd/web/../app/bootstrap.php.cache' (include_path='.:/usr/share/php:/usr/share/pear') in /var/www/sd/web/app.php on line 6
+[Mon Dec 09 16:30:10 2013] [error] [client 127.0.0.1] PHP Warning:  require_once(/var/www/sd/web/../app/bootstrap.php.cache): failed to open stream: No such file or directory in /var/www/sd/web/app.php on line 6
+[Mon Dec 09 16:30:10 2013] [error] [client 127.0.0.1] PHP Fatal error:  require_once(): Failed opening required '/var/www/sd/web/../app/bootstrap.php.cache' (include_path='.:/usr/share/php:/usr/share/pear') in /var/www/sd/web/app.php on line 6
+[Mon Dec 09 16:30:11 2013] [error] [client 127.0.0.1] PHP Warning:  require_once(/var/www/sd/web/../app/bootstrap.php.cache): failed to open stream: No such file or directory in /var/www/sd/web/app.php on line 6
+[Mon Dec 09 16:30:11 2013] [error] [client 127.0.0.1] PHP Fatal error:  require_once(): Failed opening required '/var/www/sd/web/../app/bootstrap.php.cache' (include_path='.:/usr/share/php:/usr/share/pear') in /var/www/sd/web/app.php on line 6
+[Mon Dec 09 16:33:20 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Mon Dec 09 16:33:21 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Mon Dec 09 16:37:31 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Mon Dec 09 16:37:32 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Mon Dec 09 16:37:44 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Mon Dec 09 16:37:44 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Mon Dec 09 16:38:55 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Mon Dec 09 16:38:55 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Mon Dec 09 16:39:11 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Mon Dec 09 16:39:11 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Mon Dec 09 19:29:38 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app.php/login
+[Mon Dec 09 19:29:38 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app.php/login
+[Mon Dec 09 19:29:57 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app.php/lists/sales/contact/index
+[Mon Dec 09 19:43:38 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app.php/login
+[Mon Dec 09 19:43:38 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app.php/login
+[Mon Dec 09 19:44:21 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app.php/lists/sales/contact/index
+[Thu Dec 12 00:17:52 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app.php/login
+[Thu Dec 12 00:17:56 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app.php/login
+[Thu Dec 12 00:22:29 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app.php/lists/sales/contact/index
+[Thu Dec 12 00:25:18 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/logout
+[Thu Dec 12 00:25:24 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/logout
+[Thu Dec 12 00:25:31 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/login
+[Thu Dec 12 00:28:35 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app.php/lists/sales/contact/index
+[Thu Dec 12 00:28:48 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app.php/login
+[Thu Dec 12 00:28:49 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app.php/login
+[Thu Dec 12 00:29:12 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app.php/lists/sales/contact/index
+[Thu Dec 12 08:31:24 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app.php/login
+[Thu Dec 12 08:31:27 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app.php/login
+[Thu Dec 12 08:35:39 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app.php/lists/salesdispatcher/contact/index
+[Thu Dec 12 08:36:38 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app.php/lists/sales/handling/show/509
+[Thu Dec 12 08:39:30 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app.php/lists/sales/handling/show/509
+[Thu Dec 12 08:39:45 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app.php/lists/sales/handling/show/509
+[Thu Dec 12 08:54:49 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app.php/lists/sales/handling/show/509
+[Thu Dec 12 08:55:08 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app.php/lists/sales/contact/index
+[Thu Dec 12 09:48:16 2013] [error] [client ::1] script '/var/www/sd/web/phpinfo.php' not found or unable to stat
+[Thu Dec 12 09:48:23 2013] [error] [client ::1] File does not exist: /var/www/sd/web/phpinfo.phpukr.net
+[Thu Dec 12 10:27:01 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app.php/lists/sales/contact/index
+[Thu Dec 12 11:40:33 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Thu Dec 12 11:40:40 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Thu Dec 12 12:03:10 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Thu Dec 12 12:03:11 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Thu Dec 12 12:03:32 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Thu Dec 12 12:03:33 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Thu Dec 12 17:16:53 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app_dev.php/lists/sales/organization/show/787
+[Thu Dec 12 18:00:47 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Thu Dec 12 18:00:49 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Thu Dec 12 19:33:10 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app_dev.php/lists/sales/handling/show/538
+[Thu Dec 12 19:43:04 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app_dev.php/lists/sales/handling/show/538
+[Fri Dec 13 11:28:39 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Fri Dec 13 11:28:47 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Fri Dec 13 11:46:17 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app_dev.php/lists/salesadmin/handling/show/538
+[Fri Dec 13 12:00:10 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app_dev.php/lists/salesadmin/handling/show/538
+[Fri Dec 13 12:01:19 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app_dev.php/lists/salesadmin/handling/show/538
+[Fri Dec 13 12:02:09 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app_dev.php/lists/salesadmin/handling/show/538
+[Fri Dec 13 12:16:02 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app_dev.php/lists/salesadmin/handling/show/538
+[Fri Dec 13 12:37:55 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Fri Dec 13 12:37:59 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Fri Dec 13 12:40:27 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app_dev.php/lists/sales/handling/show/510
