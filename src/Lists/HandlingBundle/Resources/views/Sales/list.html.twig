@@ -116,8 +116,12 @@
                                 {{ item.handlingId|e }}
                             </a>
                         </td>
-                        <td>{{ item.organizationName|e }}</td>
-                        <td>{{ item.handlingServiceOffered|e }}</td>
+                        <td>
+                            <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_show', { id: item.handlingId } ) }}">
+                                {{ item.organizationName|e }}
+                            </a>
+                        </td>
+                        <td>{{ item.serviceList|e }}</td>
                         <td>{{ item.handlingChance|e }}</td>
                         <td>{{ item.handlingCreatedate|date("d.m.y") }}</td>
                         <td>
