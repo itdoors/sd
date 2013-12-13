@@ -79,6 +79,7 @@ class HandlingSalesFormType extends AbstractType
             ->add('result', 'entity', array(
                 'class' => 'ListsHandlingBundle:HandlingResult',
                 'empty_value' => '',
+                'required' => false,
                 'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingResultRepository $repository)
                     {
                         return $repository->createQueryBuilder('s')
