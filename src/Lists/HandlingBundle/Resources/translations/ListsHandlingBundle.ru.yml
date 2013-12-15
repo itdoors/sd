@@ -1,6 +1,8 @@
 Handlings <small>create handling</small>: Проект <small>создание нового проекта</small>
 Handling <small>show handling</small>: Проект <small>просмотр проектов</small>
 Handling <small>list of handlings</small>: Проект <small>список проектов</small>
+Handling <small>create handling</small>: Проект <small>создание нового проекта</small>
+
 New Handling: Новый Проект
 Show Handling: Просмотр проекта
 
@@ -13,6 +15,7 @@ List of Handlings: Список проектов
 My Handlings: Мои проекты
 My Handling List: Список моих проектов
 Closed Hanling: Проект закрыт
+Create Handling: Создание проекта
 
 Handling ID: № проекта
 Create Date: Дата создания
@@ -105,7 +108,17 @@ Users: Пользователи
 
 Organization: Организация
 Enter Organization: Введите организацию
-
+Enter organization name: Введите название организации
+Creating Message: Создание обращения
+Form Wizard create handling: Мастер создания нового проекта
+Step: Шаг
+of: из
+Check and create organization: Проверка и создание организации
+Add contact persons: Добавление контактных лиц
+<strong>Note</strong> Select exist organization: <strong>Обратите внимание</strong> Выбрана существующая организация
+<strong>Note</strong> will create a new business: <strong>Обратите внимание</strong> будет создана новая организация
+<strong>Error</strong> no enter field organization: <strong>Ошибка</strong> не введена организация
+Enter Organization Name: Введите название организации
 
 Name: Наименование
 Createdatetime: Дата создания
@@ -149,6 +162,7 @@ Enter value: Введите значение
 Search: Поиск
 Delete: Удалить
 Roll Up: Свернуть
+Continue: Продолжить
 
 
 
