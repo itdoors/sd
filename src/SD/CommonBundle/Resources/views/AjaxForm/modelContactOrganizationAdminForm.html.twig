@@ -109,60 +109,72 @@
 <div class="row ">
     <div class="col-md-12">
         <div class="portlet box yellow">
-            <div class="portlet-body">
-
+            <div class="portlet-title"><div class="caption"><i class="fa fa-edit"></i>
+                    Create New Contact
+                </div>
+            </div>
+            <div class="portlet-body form">
                 {{ form_start(form, {
-                        'action' : path('sd_common_ajax_form'),
-                        'attr' : {
-                        'method' : 'POST',
-                        'class' : 'ajax-form-entity',
-                        'data-post_function': postFunction,
-                        'data-post_target_id': postTargetId,
-                        'data-target_id': targetId
-                    }
+                'action' : path('sd_common_ajax_form'),
+                'attr' : {
+                'method' : 'POST',
+                'class' : 'ajax-form-entity',
+                'data-post_function': postFunction,
+                'data-post_target_id': postTargetId,
+                'data-target_id': targetId
+                }
                 }) }}
+                <div class="form-body row">
 
-                {% if form.modelId.vars.block_prefixes.1 != 'hidden' %}
+                    {% if form.modelId.vars.block_prefixes.1 != 'hidden' %}
+                        <div class="form-group col-md-12">
+                            {{ form_label(form.modelId, 'Organization Name', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.modelId, {'attr' : {'class' : 'form-control', 'placeholder': "Organization" }}) }}
+                        </div>
+                    {% endif %}
+
                     <div class="form-group col-md-3">
-                        {{ form_widget(form.modelId, {'attr' : {'class' : 'form-control', 'placeholder': "Organization" }}) }}
+                        {{  form_label(form.firstName, 'First Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.firstName, {'attr' : {'class' : 'form-control', 'placeholder': "First name"}}) }}
                     </div>
-                {% endif %}
 
-                <div class="form-group col-md-3">
-                    {{ form_widget(form.owner, {'attr' : {'class' : 'form-control', 'placeholder': "Owner"}}) }}
-                </div>
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.lastName, 'Last Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.lastName, {'attr' : {'class' : 'form-control', 'placeholder': "Last name"}}) }}
+                    </div>
 
-                <div class="form-group col-md-3">
-                    {{ form_widget(form.firstName, {'attr' : {'class' : 'form-control', 'placeholder': "First name"}}) }}
-                </div>
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.middleName, 'Middle Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.middleName, {'attr' : {'class' : 'form-control', 'placeholder': "Middle name"}}) }}
+                    </div>
 
-                <div class="form-group col-md-3">
-                    {{ form_widget(form.lastName, {'attr' : {'class' : 'form-control', 'placeholder': "Last name"}}) }}
-                </div>
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.position, 'Position', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.position, {'attr' : {'class' : 'form-control', 'placeholder': "Position"}}) }}
+                    </div>
 
-                <div class="form-group col-md-3">
-                    {{ form_widget(form.middleName, {'attr' : {'class' : 'form-control', 'placeholder': "Middle name"}}) }}
-                </div>
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.phone1, 'Phone 1', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.phone1, {'attr' : {'class' : 'form-control', 'placeholder': "Phone 1"}}) }}
+                    </div>
 
-                <div class="form-group col-md-3">
-                    {{ form_widget(form.phone1, {'attr' : {'class' : 'form-control', 'placeholder': "Phone 1"}}) }}
-                </div>
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.phone2, 'Phone 2', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.phone2, {'attr' : {'class' : 'form-control', 'placeholder': "Phone 2"}}) }}
+                    </div>
 
-                <div class="form-group col-md-3">
-                    {{ form_widget(form.phone2, {'attr' : {'class' : 'form-control', 'placeholder': "Phone 2"}}) }}
-                </div>
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.email, 'Email', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.email, {'attr' : {'class' : 'form-control', 'placeholder': "Email"}}) }}
+                    </div>
 
-                <div class="form-group col-md-3">
-                    {{ form_widget(form.position, {'attr' : {'class' : 'form-control', 'placeholder': "Position"}}) }}
-                </div>
-
-                <div class="form-group col-md-3">
-                    <div class="form-group">
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.birthday, 'Birthday', {'attr': {'class': 'control-label'}}) }}
                         <div class="input-group input-medium date date-picker">
                             {{ form_widget(form.birthday, {'attr': {
                             'class': 'form-control',
                             'data-required': '1',
-                            'placeholder': 'Enter Contact Birthday',
+                            'placeholder': 'Enter Birthday',
                             'readonly': 'readonly'
                             }}) }}
                             <span class="input-group-btn">
@@ -170,28 +182,27 @@
                             </span>
                         </div>
                     </div>
+
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.type, 'Contact type', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': "Contact type"}}) }}
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        {{  form_label(form.owner, 'Owner', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.owner, {'attr' : {'class' : 'form-control', 'placeholder': "Owner"}}) }}
+                    </div>
+
+                    <input type="hidden" name="formName" value="{{ formName }}">
+                    <input type="hidden" name="postFunction" value="{{ postFunction }}">
+                    <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
+                    <input type="hidden" name="targetId" value="{{ targetId }}">
+                </div>
+                <div class="form-actions">
+                    {{ form_widget(form.add, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
+                    {{ form_widget(form.cancel, { 'label': 'Cancel', 'attr': {'class': 'btn default sd-cancel-btn'} } ) }}
                 </div>
 
-                <div class="form-group col-md-3">
-                    {{ form_widget(form.email, {'attr' : {'class' : 'form-control', 'placeholder': "Email"}}) }}
-                </div>
-
-                <div class="form-group col-md-3">
-                    {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': "Contact type"}}) }}
-                </div>
-
-                <div class="form-group col-md-1">
-                    {{ form_widget(form.add, { 'label': 'Add', 'attr': {'class': 'btn green'} } ) }}
-                </div>
-
-                <div class="form-group col-md-2">
-                    {{ form_widget(form.cancel, { 'label': 'Cancel', 'attr': {'class': 'btn sd-cancel-btn'} } ) }}
-                </div>
-
-                <input type="hidden" name="formName" value="{{ formName }}">
-                <input type="hidden" name="postFunction" value="{{ postFunction }}">
-                <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
-                <input type="hidden" name="targetId" value="{{ targetId }}">
                 {{ form_end(form) }}
 
             </div>
