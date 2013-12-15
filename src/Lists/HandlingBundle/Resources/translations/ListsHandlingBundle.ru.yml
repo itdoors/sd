@@ -51,19 +51,34 @@ NextHandlingDate: Следующее
 
 Organization Name: Название организации
 Enter Organiztion: Введите организацию
+Add Manager: Добавить менеджера
 
+Create New Message: Создание нового обращения
+Create Message: Создать обращение
 Enter Handling Create DateTime: Введите дату создания проекта
 Enter Handling Create DateTime hint: Дата создания не может быть
 Handling Create DateTime: Дата создания проета
 Is business trip: Командировка
 
-
 Event next date can't be greater then current event date: Дата следующего события не должна быть раньше текущего.
 Current event date can't be less then handling creation date: Дата текущего обращения не может быть раньше даты содания проекта
+
 Filename: Имя файла
 Description: Описание
-Messages: Сообщения
+Messages: Обращения
 Messages list: Список обращений по данному проекту
+Message Type: Тип обращения
+Current Message Create Date: Дата создания
+Filename: Название файла
+Select File: Выберите файл
+Next Message: Следующее обращение
+Current Message: Текущее обращение
+Next Message Create Date: Дата следующего обращения
+Extra: Дополнительно
+
+Select Contact Person: Выберите контактное лицо
+Contact Person: Контактное лицо
+Project Status: Статус проекта
 
 List of Organizations: Список организаций
 Create Organization: Создание организации
@@ -101,6 +116,10 @@ Actions: Действия
 Action: Действие
 FirstName, LastName: Имя Фамилия
 Mobile: Мобильный
+Closed: Проект закрыт
+No: Нет
+Attached Files: Прикрепленные файлы
+Noname File: Файл без названия
 No matches found: Совпадений не  найдено
 Contacts on handling: Контактные лица в проекте
 
@@ -121,9 +140,10 @@ Add New: Добавить
 Add Contact: Добавить контакт
 Save: Сохранить
 Handling list link: Проекты
-Enter value: Ведите значение
+Enter value: Введите значение
 Search: Поиск
 Delete: Удалить
+Roll Up: Свернуть
 
 
 

@@ -8,19 +8,23 @@
                     | {% trans %}Business trip{% endtrans %}
                 {% endif %}
             </div>
-            <div class="tools"><a class="collapse" href="" title="{% trans %}Filters{% endtrans %}"></a></div>
+            <div class="tools"><a class="collapse" href="" title="{% trans %}Roll Up{% endtrans %}"></a></div>
         </div>
         <div class="portlet-body">
             {{ item.description }} <br />
             {% if item.filepath %}
-                <a href="/uploads/handling_message/{{ item.handlingId }}/{{ item.filepath }}" target="_blank">
-                    {% if item.filename %}
-                        {{ item.filename }}
-                    {% else %}
-                        {% trans %}File{% endtrans %}
-                    {% endif %}
-                </a>
-                <br />
+                <div class="panel panel-default">
+                    <div class="panel-heading">{% trans %}Attached Files{% endtrans %}</div>
+                    <div class="panel-body">
+                        <a href="/uploads/handling_message/{{ item.handlingId }}/{{ item.filepath }}" target="_blank">
+                            {% if item.filename %}
+                                {{ item.filename }}
+                            {% else %}
+                                {% trans %}Noname File{% endtrans %}
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
             {% endif %}
         </div>
     </div>
