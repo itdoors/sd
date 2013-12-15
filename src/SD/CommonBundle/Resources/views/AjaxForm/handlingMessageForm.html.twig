@@ -41,8 +41,8 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">{% trans %}Current Message{% endtrans %}</div>
                             <div class="panel-body">
-                                <div class="form-group">
-                                    {{ form_label(form.createdate, 'Current Message Create Date'.'<span class="required"> * </span>', {'attr': {'class': 'control-label'}}) }}
+                                <div class="form-group"> {#.'<span class="required"> * </span>'#}
+                                    {{ form_label(form.createdate, 'Current Message Create Date', {'attr': {'class': 'control-label'}}) }}
                                     <div class="input-group date form_datetime">
                                         {{ form_widget(form.createdate, {'attr' : {
                                         'class' : 'form-control',

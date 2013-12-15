@@ -89,7 +89,7 @@
 
 <div class="portlet box green">
     <div class="portlet-title">
-        <div class="caption"><i class="fa fa-globe"></i>{% trans %}Handling list{% endtrans %}</div>
+        <div class="caption"><i class="fa fa-globe"></i>{% trans %}My Handling List{% endtrans %}</div>
         <div class="tools">
             <a href="javascript:;" class="reload"></a>
             <a href="javascript:;" class="remove"></a>
@@ -122,7 +122,13 @@
                             </a>
                         </td>
                         <td>{{ item.serviceList|e }}</td>
-                        <td>{{ item.handlingChance|e }}</td>
+                        <td>{{ item.handlingChance|e }}
+                            {#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            <div style="width: {{ item.handlingProgress }}%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="{{ item.handlingProgress }}" role="progressbar" class="progress-bar progress-bar-success">
+                                <span class="">{{ item.handlingPercentageString|e }}</span>
+                            </div>
+                            #}
+                        </td>
                         <td>{{ item.handlingCreatedate|date("d.m.y") }}</td>
                         <td>
                             {% if item.handlingLastHandlingDate %}

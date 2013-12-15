@@ -11,6 +11,7 @@ Team Handlings: Проекты команды
 Contacts: Контакты
 List of Handlings: Список проектов
 My Handlings: Мои проекты
+My Handling List: Список моих проектов
 Closed Hanling: Проект закрыт
 
 Handling ID: № проекта
@@ -21,6 +22,7 @@ Create User: Кто создал
 Service offered: Предлагаемые услуги
 ServiceOffered: Предлагаемые услуги
 Enter Service offered: Введите услуги, которые предлагаете
+Select Service Offered: Выберите услуги
 Contact Type: Тип контакта
 Handling Type: Тип проекта
 Enter Handling Type: Введите тип проекта
@@ -34,6 +36,8 @@ Budget without VAT: Бюджет без НДС
 Chance: Шанс
 Enter Chance: Введите шанс
 Status: Статус
+Handling Status: Статус проекта
+Select Handling Status: Выберите статус проекта
 Enter Status: Введите статус
 Status Description: Описание статуса
 Select Result Type: Выберите тип результата
@@ -43,6 +47,7 @@ Result Description: Описание результата
 Enter Result Description: Введите описание результата
 Result: Результат
 Enter Result: Введите рузультат
+Select Handling Result: Выберите результат проекта
 Square: Площадь
 Enter Square: Введите площадь
 Show History: Показать историю
