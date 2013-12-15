@@ -96,6 +96,8 @@
                 <td>{% trans %}Service offered{% endtrans %}</td>
                 <td>
                     <a href="#" id="handlingServices" data-type="select2" data-pk="{{ handling.0.id }}" data-placement="right" data-value="{{ handling.serviceIds }}" data-placeholder="{% trans %}Select Service Offered{% endtrans %}" data-original-title="{% trans %}Select Service Offered{% endtrans %}">{{ handling.serviceList }}</a>
+                    <span class="help-block">Если предлагаемых услуг нет в списке - обратитесь к администратору.</span>
+
                 </td>
                 <td>{% trans %}Budget without VAT{% endtrans %}</td>
                 <td>

@@ -108,7 +108,7 @@
 
 <div class="row ">
     <div class="col-md-12">
-        <div class="portlet box yellow">
+        <div class="portlet box green">
             <div class="portlet-title"><div class="caption"><i class="fa fa-edit"></i>
                     Create New Contact
                 </div>
@@ -125,7 +125,11 @@
                 }
                 }) }}
                 <div class="form-body row">
-
+                    <div class="alert alert-danger display-hide">
+                        <button class="close" data-close="alert"></button>
+                        {% trans %}You have some form errors. Please check below.{% endtrans %}
+                        {{ form_errors(form) }}
+                    </div>
                     {% if form.modelId.vars.block_prefixes.1 != 'hidden' %}
                         <div class="form-group col-md-12">
                             {{ form_label(form.modelId, 'Organization Name', {'attr': {'class': 'control-label'}}) }}
@@ -134,7 +138,7 @@
                     {% endif %}
 
                     <div class="form-group col-md-3">
-                        {{  form_label(form.firstName, 'First Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_label(form.firstName, 'First Name'~'<span class="required"> * </span>', {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.firstName, {'attr' : {'class' : 'form-control', 'placeholder': "First name"}}) }}
                     </div>
 
@@ -178,7 +182,7 @@
                             'readonly': 'readonly'
                             }}) }}
                             <span class="input-group-btn">
-                            <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+                                <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
                             </span>
                         </div>
                     </div>
