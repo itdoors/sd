@@ -253,5 +253,49 @@ class SalesController extends BaseController
             'text' => $string
         );
     }
+
+    /**
+     * Execute wizard step1 action
+     */
+    public function step1Action()
+    {
+        return $this->render('ListsHandlingBundle:' . $this->baseTemplate. ':step1.html.twig', array(
+                'baseTemplate' => $this->baseTemplate,
+                'baseRoutePrefix' => $this->baseRoutePrefix,
+            ));
+    }
+
+    /**
+     * Execute wizard step2 action
+     */
+    public function step2Action()
+    {
+        return $this->render('ListsHandlingBundle:' . $this->baseTemplate. ':step2.html.twig', array(
+                'baseTemplate' => $this->baseTemplate,
+                'baseRoutePrefix' => $this->baseRoutePrefix,
+            ));
+    }
+
+    /**
+     * Execute wizard step3 action
+     */
+    public function step3Action()
+    {
+        return $this->render('ListsHandlingBundle:' . $this->baseTemplate. ':step3.html.twig', array(
+                'baseTemplate' => $this->baseTemplate,
+                'baseRoutePrefix' => $this->baseRoutePrefix,
+            ));
+    }
+
+    /**
+     * Execute wizard step4 action
+     */
+    public function step4Action()
+    {
+        return $this->render('ListsHandlingBundle:' . $this->baseTemplate. ':step4.html.twig', array(
+                'baseTemplate' => $this->baseTemplate,
+                'baseRoutePrefix' => $this->baseRoutePrefix,
+            ));
+    }
 }
 

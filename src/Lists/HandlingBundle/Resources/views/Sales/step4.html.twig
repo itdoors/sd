@@ -1,0 +1,127 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsHandlingBundle' %}
+{% block title %}{% trans %}Show Handling{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_index') }}" title="{% trans %}My Handlings{% endtrans %}">{% trans %}My Handlings{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+    </ul>
+{% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Handling <small>show handling</small>{% endtrans %}
+    </h3>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.cs')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.cs')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet box blue" id="form_wizard_1">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-reorder"></i> Form Wizard - <span class="step-title">Step 1 of 4</span>
+                    </div>
+                    <div class="tools hidden-xs">
+                        <a href="javascript:;" class="collapse"></a>
+                        <a href="#portlet-config" data-toggle="modal" class="config"></a>
+                        <a href="javascript:;" class="reload"></a>
+                        <a href="javascript:;" class="remove"></a>
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <form action="#" class="form-horizontal" id="submit_form">
+                        <div class="form-wizard">
+                            <div class="form-body">
+                                <ul class="nav nav-pills nav-justified steps">
+                                    <li>
+                                        <a href="{{ path('lists_sales_handling_create_step1') }}" class="step">
+                                            <span class="number">1</span>
+                                            <span class="desc"><i class="fa fa-check"></i> Account Setup</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('lists_sales_handling_create_step2') }}" href="{{ path('lists_sales_handling_create_step1') }}" class="step">
+                                            <span class="number">2</span>
+                                            <span class="desc"><i class="fa fa-check"></i> Profile Setup</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('lists_sales_handling_create_step3') }}" class="step">
+                                            <span class="number">3</span>
+                                            <span class="desc"><i class="fa fa-check"></i> Billing Setup</span>
+                                        </a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="{{ path('lists_sales_handling_create_step4') }}" class="step active">
+                                            <span class="number">4</span>
+                                            <span class="desc"><i class="fa fa-check"></i> Confirm</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div id="bar" class="progress progress-striped" role="progressbar">
+                                    <div class="progress-bar progress-bar-success" style="width: 97%;"></div>
+                                </div>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tab1">
+                                        <h3 class="block">Provide your account details 4</h3>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">Username 4<span class="required">*</span></label>
+                                            <div class="col-md-4">
+                                                <input type="text" class="form-control" name="username"/>
+                                                <span class="help-block">Provide your username</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions fluid">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <a href="javascript:;" class="btn default button-previous">
+                                                <i class="m-icon-swapleft"></i> Back
+                                            </a>
+                                            <a href="javascript:;" class="btn blue button-next">
+                                                Continue <i class="m-icon-swapright m-icon-white"></i>
+                                            </a>
+                                            <a href="javascript:;" class="btn green button-submit">
+                                                Submit <i class="m-icon-swapright m-icon-white"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}
