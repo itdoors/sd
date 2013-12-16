@@ -1,6 +1,6 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'ListsHandlingBundle' %}
-{% block title %}{% trans %}Show Handling{% endtrans %} {% endblock %}
+{% block title %}{% trans %}Create Handling{% endtrans %} {% endblock %}
 {% block page_breadcrumbs %}
     <ul class="page-breadcrumb breadcrumb">
         <li>
@@ -12,11 +12,14 @@
             <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_index') }}" title="{% trans %}My Handlings{% endtrans %}">{% trans %}My Handlings{% endtrans %}</a>
             <i class="fa fa-angle-right"></i>
         </li>
+        <li>
+            <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_create_step1') }}" title="{% trans %}Create Handling{% endtrans %}">{% trans %}Create Handling{% endtrans %}</a>
+        </li>
     </ul>
 {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
-        {% trans %}Handling <small>show handling</small>{% endtrans %}
+        {% trans %}Handling <small>create handling</small>{% endtrans %}
     </h3>
 {% endblock %}
 
@@ -94,13 +97,11 @@
             <div class="portlet box blue" id="form_wizard_1">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-reorder"></i> Form Wizard - <span class="step-title">Step 1 of 4</span>
+                        <i class="fa fa-reorder"></i> {% trans %}Form Wizard create handling{% endtrans %} - <span class="step-title">{% trans %}Step{% endtrans %} 1 {% trans %}of{% endtrans %} 4</span>
                     </div>
                     <div class="tools hidden-xs">
                         <a href="javascript:;" class="collapse"></a>
-                        <a href="#portlet-config" data-toggle="modal" class="config"></a>
                         <a href="javascript:;" class="reload"></a>
-                        <a href="javascript:;" class="remove"></a>
                     </div>
                 </div>
                 <div class="portlet-body form">
@@ -111,25 +112,25 @@
                                     <li class="active">
                                         <a href="{{ path('lists_sales_handling_create_step1') }}" class="step active">
                                             <span class="number">1</span>
-                                            <span class="desc"><i class="fa fa-check"></i> Account Setup</span>
+                                            <span class="desc"><i class="fa fa-check"></i> {% trans %}Check and create organization{% endtrans %}</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ path('lists_sales_handling_create_step2') }}" href="{{ path('lists_sales_handling_create_step1') }}" class="step">
                                             <span class="number">2</span>
-                                            <span class="desc"><i class="fa fa-check"></i> Profile Setup</span>
+                                            <span class="desc"><i class="fa fa-check"></i> {% trans %}Add contact persons{% endtrans %}</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ path('lists_sales_handling_create_step3') }}" class="step">
                                             <span class="number">3</span>
-                                            <span class="desc"><i class="fa fa-check"></i> Billing Setup</span>
+                                            <span class="desc"><i class="fa fa-check"></i> {% trans %}Create Handling{% endtrans %}</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="{{ path('lists_sales_handling_create_step4') }}" class="step">
                                             <span class="number">4</span>
-                                            <span class="desc"><i class="fa fa-check"></i> Confirm</span>
+                                            <span class="desc"><i class="fa fa-check"></i> {% trans %}Creating Message{% endtrans %}</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -140,22 +141,31 @@
 
                                     <div class="alert alert-success display-none" id="inform-exist-organization">
                                         <button class="close" data-dismiss="alert"></button>
-                                        Exist organization %organization%
+                                        <strong>Note</strong> Select exist organization <strong>%organization%</strong>
                                     </div>
                                     <div class="alert alert-success display-none" id="inform-new-organization">
                                         <button class="close" data-dismiss="alert"></button>
-                                        New organization %organization%
+                                        <strong>Note</strong> will create a new business <strong> %organization% </strong>
+                                    </div>
+                                    <div class="alert alert-error display-none" id="inform-no-organization">{#issue 411#}
+                                        <button class="close" data-dismiss="alert"></button>
+                                        <strong>Error</strong> no enter field organization
                                     </div>
 
                                     <div class="tab-pane active" id="tab1">
-                                        <h3 class="block">Provide your account details 1</h3>
+                                        <h3 class="block">{% trans %}Enter Organization Name{% endtrans %}</h3>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3">{% trans %}Organization name{% endtrans %}<span class="required">*</span></label>
-                                            <div class="col-md-4">
+                                            <label class="control-label col-md-3">{% trans %}Organization Name{% endtrans %} <span class="required"> *</span></label>
+                                            <div class="col-md-5">
 
                                                 <input type="hidden" name="organization" id="organization" required="required" />
-
+                                            <span class="help-block"> С целью уменьшения дубликатов организаций подходите к заполнению ответсвенно. В данном поле поиск производится по Полному названию организации и по короткому.
+                                             Также отображается ответсвенный менеджер (или тот, который добавил) организации. </span>
                                             </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-3"></div>
+                                            <div class="col-md-4 offset-md-4">sdfsdfsdfsdf dsf dsf</div>
                                         </div>
                                     </div>
                                 </div>

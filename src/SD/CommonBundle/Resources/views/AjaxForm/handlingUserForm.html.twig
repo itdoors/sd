@@ -1,3 +1,4 @@
+{% trans_default_domain 'ListsHandlingBundle' %}
 <script type="text/javascript">
 
     $(document).ready(function(){
@@ -24,7 +25,10 @@
 
 <div class="row ">
     <div class="col-md-12">
-        <div class="portlet box yellow">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption"><i class="fa fa-edit"></i>Add manager</div>
+            </div>
             <div class="portlet-body">
 
                 {{ form_start(form, {
@@ -37,17 +41,29 @@
                         'data-target_id': targetId
                     }
                 }) }}
-                <div class="form-group col-md-3">
-                    {{ form_widget(form.user, {'attr' : {'class' : 'form-control'}}) }}
+                <div class="form-body row">
+                    {# issue 415 #}
+                    <div class="alert alert-danger display-hide">
+                        <button class="close" data-close="alert"></button>
+                        {% trans %}You have some form errors. Please check below.{% endtrans %}
+                        {{ form_errors(form) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.user, 'Manager', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.user, {'attr' : {'class' : 'form-control', 'placeholder': "Manager" }}) }}
+                        <span class="help-block">После добавления пользователя, он получт доступ к проекту, контактам.</span>
+                    </div>
+                    <input type="hidden" name="formName" value="{{ formName }}">
+                    <input type="hidden" name="postFunction" value="{{ postFunction }}">
+                    <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
+                    <input type="hidden" name="targetId" value="{{ targetId }}">
                 </div>
-                <div class="form-group col-md-2">
-                    {{ form_widget(form.add, { 'label': 'Add', 'attr': {'class': 'btn green'} } ) }}
+                <div class="form-actions">
+                    {{ form_widget(form.add, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
+                    {# Issue 413#}
+                    {# {{ form_widget(form.cancel, { 'label': 'Cancel', 'attr': {'class': 'btn default sd-cancel-btn'} } ) }} #}
                 </div>
 
-                <input type="hidden" name="formName" value="{{ formName }}">
-                <input type="hidden" name="postFunction" value="{{ postFunction }}">
-                <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
-                <input type="hidden" name="targetId" value="{{ targetId }}">
                 {{ form_end(form) }}
 
             </div>

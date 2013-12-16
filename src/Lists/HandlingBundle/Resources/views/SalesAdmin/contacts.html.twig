@@ -4,7 +4,7 @@
         <h3>{% trans %}Contacts{% endtrans %}</h3>
         <p>{% trans %}Contacts on handling{% endtrans %}</p>
         <div class="table-toolbar">
-            <div class="btn-group">
+            <div class="btn-group" style="margin-bottom: 10px;">
                 <button id="managers_list_new" class="btn green ajax-form"
                         data-target="contactsFormTpl"
                         data-form_name="modelContactOrganizationAdminForm"
@@ -12,7 +12,7 @@
                         data-post_function="updateList"
                         data-post_target_id="contact_list"
                         >
-                    {% trans %}Add New{% endtrans %} <i class="fa fa-plus"></i>
+                    {% trans %}Add Contact{% endtrans %} <i class="fa fa-plus"></i>
                 </button>
             </div>
             <div style="display: none" id="contactsFormTpl">

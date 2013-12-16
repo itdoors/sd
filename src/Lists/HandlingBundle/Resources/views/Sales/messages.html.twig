@@ -16,7 +16,7 @@
         </div>
         {% if canEdit %}
             <div class="table-toolbar">
-                <div class="btn-group">
+                <div class="btn-group" style="margin-bottom:10px;">
                     <button id="managers_list_new" class="btn green ajax-form"
                             data-target="messageFormTpl"
                             data-form_name="handlingMessageForm"
@@ -24,7 +24,7 @@
                             data-post_function="updateList"
                             data-post_target_id="messages_list"
                             >
-                        {% trans %}Add New{% endtrans %} <i class="fa fa-plus"></i>
+                        {% trans %}Create Message{% endtrans %} <i class="fa fa-plus"></i>
                     </button>
                 </div>
                 <div style="display: none" id="messageFormTpl">

@@ -78,11 +78,13 @@
                         'attr': {'class' : 'horizontal-form'}
                     })
                 }}
-                {{ form_errors(form) }}
+
+
                 <div class="form-body">
                     <div class="alert alert-danger display-hide">
                         <button class="close" data-close="alert"></button>
                         {% trans %}You have some form errors. Please check below.{% endtrans %}
+                        {{ form_errors(form) }}
                     </div>
                     <h3 class="form-section">{% trans %}General information{% endtrans %}</h3>
                     <div class="row">
@@ -91,7 +93,8 @@
 							    has-error
 							{% endif %}">
                             <div class="form-group">
-                                {{ form_label(form.createdate, 'Handling Create DateTime *', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_label(form.createdate, 'Handling Create DateTime', {'attr': {'class': 'control-label'}}) }}
+
                                 <div class="input-group input-medium date date-picker">
                                     {{ form_widget(form.createdate, {'attr': {
                                         'class': 'form-control',

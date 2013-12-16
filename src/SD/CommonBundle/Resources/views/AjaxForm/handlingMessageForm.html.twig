@@ -1,3 +1,5 @@
+{% trans_default_domain 'ListsHandlingBundle' %}
+
 <script type="text/javascript">
 
     $(document).ready(function (){
@@ -5,7 +7,7 @@
         $(".form_datetime").datetimepicker({
             autoclose: true,
             isRTL: App.isRTL(),
-            format: "dd.m.yyyy hh:ii",
+            format: "dd.mm.yyyy hh:ii",
             pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
             language: 'ru',
             weekStart: 1,
@@ -16,14 +18,14 @@
 {% form_theme form 'SDCommonBundle:Form:form_errors.html.twig' %}
 <div class="row">
     <div class="col-md-12">
-        <div class="portlet box yellow">
-            <div class="portlet box yellow">
-                <div class="portlet-title"><div class="caption"><i class="fa fa-cogs"></i>
-                        Create New Message
-                    </div>
-                </div>
+        <div class="portlet box green">
+            <div class="portlet-title"><div class="caption"><i class="fa fa-cogs"></i>{% trans %}Create New Message{% endtrans %}</div></div>
             <div class="portlet-body">
-                {{ form_errors(form) }}
+                <div class="alert alert-danger display-hide">
+                    <button class="close" data-close="alert"></button>
+                    {{ form_errors(form) }}
+                </div>
+
                 {{ form_start(form, {
                     'action' : path('sd_common_ajax_form'),
                     'attr' : {
@@ -35,66 +37,122 @@
                 }
                 }) }}
                 <div class="row">
-                    <div class="form-group col-md-3">
-                        <div class="input-group date form_datetime">
-                            {{ form_widget(form.createdate, {'attr' : {
-                                'class' : 'form-control',
-                                'placeholder': 'Create date',
-                                'readonly': 'readonly'
-                            }}) }}
-                            <span class="input-group-btn">
-                                <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-                            </span>
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">{% trans %}Current Message{% endtrans %}</div>
+                            <div class="panel-body">
+                                <div class="form-group"> {#.'<span class="required"> * </span>'#}
+                                    {{ form_label(form.createdate, 'Current Message Create Date', {'attr': {'class': 'control-label'}}) }}
+                                    <div class="input-group date form_datetime">
+                                        {{ form_widget(form.createdate, {'attr' : {
+                                        'class' : 'form-control',
+                                        'placeholder': 'Create date',
+                                        'readonly': 'readonly'
+                                        }}) }}
+                                        <span class="input-group-btn">
+                                            <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.type, 'Message Type', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': 'Message Type'} } ) }}
+                                </div>
+                                <div class="form-group">
+                                    {# Контактное лицо - с кем уже  контактировали.
+                                    #}
+                                    {{ form_label(form.nexttype, 'Contact Person', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.nexttype, {'attr' : {'class' : 'form-control', 'placeholder': 'Select Contact Person'} } ) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.description, 'Description', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.description, {'attr' : {'class' : 'form-control', 'placeholder': 'Description'} } ) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.filename, 'Filename', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.filename, {'attr' : {'class' : 'form-control', 'placeholder': 'Filename'} } ) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.file, 'Select File', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.file ) }}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group col-md-2">
-                        {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': 'Handling tye'} } ) }}
-                    </div>
-                    <div class="form-group col-md-3">
-                        <div class="input-group date form_datetime">
-                            {{ form_widget(form.nextcreatedate, {'attr' : {
-                                'class' : 'form-control',
-                                'placeholder': 'Create date',
-                                'readonly': 'readonly'
-                            }}) }}
-                            <span class="input-group-btn">
-                                <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
-                            </span>
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">{% trans %}Next Message{% endtrans %}</div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    {{ form_label(form.createdate, 'Next Message Create Date', {'attr': {'class': 'control-label'}}) }}
+                                    <div class="input-group date form_datetime">
+                                        {{ form_widget(form.nextcreatedate, {'attr' : {
+                                        'class' : 'form-control',
+                                        'placeholder': 'Create Date',
+                                        'readonly': 'readonly'
+                                        }}) }}
+                                        <span class="input-group-btn">
+                                            <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.nexttype, 'Message Type', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.nexttype, {'attr' : {'class' : 'form-control', 'placeholder': 'Message Type'} } ) }}
+                                </div>
+                                <div class="form-group">
+                                    {# Контактное лицо - с кем будем контактировать.
+                                    #}
+                                    {{ form_label(form.nexttype, 'Contact Person', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.nexttype, {'attr' : {'class' : 'form-control', 'placeholder': 'Select Contact Person'} } ) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.description, 'Description', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.description, {'attr' : {'class' : 'form-control', 'placeholder': 'Description'} } ) }}
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group col-md-2">
-                        {{ form_widget(form.nexttype, {'attr' : {'class' : 'form-control', 'placeholder': 'Handling type'} } ) }}
-                    </div>
-                    <div class="form-group col-md-2">
-                        <div class="checkbox-list">
-                            {{ form_label(form.next_is_business_trip, 'Is business trip', {'attr': {'class': 'control-label'}}) }}
-                            {{ form_widget(form.next_is_business_trip, {'attr' : {'class' : 'form-control', 'placeholder': 'Handling type'} } ) }}
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-12">
-                        {{ form_widget(form.description, {'attr' : {'class' : 'form-control', 'placeholder': 'Description'} } ) }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-2">
-                        {{ form_widget(form.filename, {'attr' : {'class' : 'form-control', 'placeholder': 'Filename'} } ) }}
-                    </div>
-                    <div class="form-group col-md-2">
-                        {{ form_widget(form.file ) }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-12">
-                        {{ form_widget(form.create, { 'label': 'Create', 'attr': {'class': 'btn green'} } ) }}
-                    </div>
-                </div>
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">{% trans %}Extra{% endtrans %}</div>
+                            <div class="panel-body">
+                                <div class="form-group">
 
+                                    <div class="checkbox-list">
+                                        <label class="checkbox-inline">
+                                            <div id="uniform-inlineCheckbox21" class="checker">
+                                                <span>
+                                                    {{ form_widget(form.next_is_business_trip, {'attr' : {'class' : 'form-control', 'placeholder': 'Is business trip'} } ) }}
+                                                </span>
+                                            </div>
+                                            Is business trip
+                                        </label>
+                                    </div>
+
+                                </div>
+                                <div class="form-group">
+                                    {# Статус проекта - должны заполнять при создании сообщения
+                                       По умолчанию подтягивается текущий статус проекта.
+                                       Поле обяязательно к заполнению.
+                                    #}
+                                    {{ form_label(form.nexttype, 'Project Status', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.nexttype, {'attr' : {'class' : 'form-control', 'placeholder': 'Project Status'} } ) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <input type="hidden" name="formName" value="{{ formName }}">
                 <input type="hidden" name="postFunction" value="{{ postFunction }}">
                 <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
                 <input type="hidden" name="targetId" value="{{ targetId }}">
+
+                <div class="form-actions">
+                    {{ form_widget(form.create, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
+                    {# Добавить кнопку отмена #}
+                    {#{{ form_widget(form.cancel, { 'label': 'Cancel', 'attr': {'class': 'btn default sd-cancel-btn'} } ) }}#}
+                </div>
                 {{ form_end(form) }}
             </div>
         </div>
