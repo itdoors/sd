@@ -52,8 +52,11 @@
                 <td style="width:35%">
                     <a href="#" id="statusId" data-type="select" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.statusId }}" data-placement="right" data-original-title="{% trans %}Select Handling Status{% endtrans %}">
                         {{ handling.0.status }}
+                        {% if handling.0.statusChangeDate %}
+                            {{ handling.0.statusChangeDate|date("d.m.y, H:i") }}
+                        {% endif %}
                     </a>
-                </td>
+                </td>e
             </tr>
             <tr> {# 2 #}
                 <td>{% trans %}Organization Name{% endtrans %}</td>

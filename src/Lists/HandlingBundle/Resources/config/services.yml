@@ -3,7 +3,9 @@ parameters:
     lists_handling.sales.dispatcher.filter.form.class: Lists\HandlingBundle\Form\HandlingSalesDispatcherFilterFormType
     lists_handling.sales.admin.filter.form.class: Lists\HandlingBundle\Form\HandlingSalesAdminFilterFormType
     lists_handling.sales.form.class: Lists\HandlingBundle\Form\HandlingSalesFormType
+    lists_handling.sales.wizard.form.class: Lists\HandlingBundle\Form\HandlingSalesWizardForm
     lists_handling.message.form.class: Lists\HandlingBundle\Form\HandlingMessageFormType
+    lists_handling.message.wizard.form.class: Lists\HandlingBundle\Form\HandlingMessageWizardForm
     lists_handling.form.user.class: Lists\HandlingBundle\Form\HandlingUserFormType
 
     lists_handling.createdate_range.validator.class: Lists\HandlingBundle\Validator\CreatedateRangeValidator
@@ -33,11 +35,24 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: handlingSalesForm }
+
+    lists_handling.form.handlingSalesWizardForm:
+        class: %lists_handling.sales.wizard.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: handlingSalesWizardForm }
+
     lists_handling.form.handlingMessageForm:
         class: %lists_handling.message.form.class%
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: handlingMessageForm }
+
+    lists_handling.form.handlingMessageWizardForm:
+        class: %lists_handling.message.wizard.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: handlingMessageWizardForm }
 
     lists_handling.form.handlingUserForm:
         class: %lists_handling.form.user.class%

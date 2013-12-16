@@ -21,10 +21,13 @@
         <div class="portlet box green">
             <div class="portlet-title"><div class="caption"><i class="fa fa-cogs"></i>{% trans %}Create New Message{% endtrans %}</div></div>
             <div class="portlet-body">
-                <div class="alert alert-danger display-hide">
+                {% if form.vars.valid %}
+                {% else %}
+                <div class="alert alert-danger">
                     <button class="close" data-close="alert"></button>
                     {{ form_errors(form) }}
                 </div>
+                {% endif %}
 
                 {{ form_start(form, {
                     'action' : path('sd_common_ajax_form'),
@@ -61,8 +64,8 @@
                                 <div class="form-group">
                                     {# Контактное лицо - с кем уже  контактировали.
                                     #}
-                                    {{ form_label(form.nexttype, 'Contact Person', {'attr': {'class': 'control-label'}}) }}
-                                    {{ form_widget(form.nexttype, {'attr' : {'class' : 'form-control', 'placeholder': 'Select Contact Person'} } ) }}
+                                    {{ form_label(form.contact, 'Contact Person', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.contact, {'attr' : {'class' : 'form-control', 'placeholder': 'Select Contact Person'} } ) }}
                                 </div>
                                 <div class="form-group">
                                     {{ form_label(form.description, 'Description', {'attr': {'class': 'control-label'}}) }}
@@ -103,12 +106,12 @@
                                 <div class="form-group">
                                     {# Контактное лицо - с кем будем контактировать.
                                     #}
-                                    {{ form_label(form.nexttype, 'Contact Person', {'attr': {'class': 'control-label'}}) }}
-                                    {{ form_widget(form.nexttype, {'attr' : {'class' : 'form-control', 'placeholder': 'Select Contact Person'} } ) }}
+                                    {{ form_label(form.contactnext, 'Contact Person', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.contactnext, {'attr' : {'class' : 'form-control', 'placeholder': 'Select Contact Person'} } ) }}
                                 </div>
                                 <div class="form-group">
-                                    {{ form_label(form.description, 'Description', {'attr': {'class': 'control-label'}}) }}
-                                    {{ form_widget(form.description, {'attr' : {'class' : 'form-control', 'placeholder': 'Description'} } ) }}
+                                    {{ form_label(form.descriptionnext, 'Description', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.descriptionnext, {'attr' : {'class' : 'form-control', 'placeholder': 'Description'} } ) }}
                                 </div>
                             </div>
                         </div>
@@ -136,8 +139,8 @@
                                        По умолчанию подтягивается текущий статус проекта.
                                        Поле обяязательно к заполнению.
                                     #}
-                                    {{ form_label(form.nexttype, 'Project Status', {'attr': {'class': 'control-label'}}) }}
-                                    {{ form_widget(form.nexttype, {'attr' : {'class' : 'form-control', 'placeholder': 'Project Status'} } ) }}
+                                    {{ form_label(form.status, 'Project Status', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.status, {'attr' : {'class' : 'form-control', 'placeholder': 'Project Status'} } ) }}
                                 </div>
                             </div>
                         </div>
@@ -147,6 +150,7 @@
                 <input type="hidden" name="postFunction" value="{{ postFunction }}">
                 <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
                 <input type="hidden" name="targetId" value="{{ targetId }}">
+                <input type="hidden" name="defaultData" value='{{ defaultData|json_encode|raw }}'>
 
                 <div class="form-actions">
                     {{ form_widget(form.create, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}

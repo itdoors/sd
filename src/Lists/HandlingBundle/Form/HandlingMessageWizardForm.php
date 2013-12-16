@@ -13,7 +13,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 
 
-class HandlingMessageFormType extends AbstractType
+class HandlingMessageWizardForm extends AbstractType
 {
     protected $container;
 
@@ -109,30 +109,19 @@ class HandlingMessageFormType extends AbstractType
 
                 $currentDatetime = new \DateTime($data['createdate']);
 
-                if (isset($data['handling_id']) && $data['handling_id'])
+                $handlingCreatedate = new \DateTime('yesterday');
+
+                if ($handlingCreatedate > $currentDatetime)
                 {
-                    $handlingId = $data['handling_id'];
+                    $translator = $container->get('translator');
 
-                    /** @var \Lists\HandlingBundle\Entity\Handling $handling */
-                    $handling = $container->get('doctrine.orm.entity_manager')
-                        ->getRepository('ListsHandlingBundle:Handling')
-                        ->find($handlingId);
+                    $creationDate = $handlingCreatedate;
 
-                    if ($handling)
-                    {
-                        if ($handling->getCreatedate() > $currentDatetime || $handling->getCreatedatetime() > $currentDatetime)
-                        {
-                            $translator = $container->get('translator');
+                    $msg = $translator->trans("Current event date can't be less then handling creation date (%date%)", array(
+                        '%date%' => $creationDate->format('d.m.y')
+                    ), 'ListsHandlingBundle');
 
-                            $creationDate = $handling->getCreatedate()  ? $handling->getCreatedate() : $handling->getCreatedatetime();
-
-                            $msg = $translator->trans("Current event date can't be less then handling creation date (%date%)", array(
-                                '%date%' => $creationDate->format('d.m.y')
-                            ), 'ListsHandlingBundle');
-
-                            $form->addError(new FormError($msg));
-                        }
-                    }
+                    $form->addError(new FormError($msg));
                 }
             });
     }
@@ -154,6 +143,6 @@ class HandlingMessageFormType extends AbstractType
      */
     public function getName()
     {
-        return 'handlingMessageForm';
+        return 'handlingMessageWizardForm';
     }
 }

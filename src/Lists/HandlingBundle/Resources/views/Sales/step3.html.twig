@@ -56,70 +56,49 @@
                     </div>
                 </div>
                 <div class="portlet-body form">
-                    <form action="#" class="form-horizontal" id="submit_form">
-                        <div class="form-wizard">
-                            <div class="form-body">
-                                <ul class="nav nav-pills nav-justified steps">
-                                    <li>
-                                        <a href="{{ path('lists_sales_handling_create_step1') }}" class="step">
-                                            <span class="number">1</span>
-                                            <span class="desc"><i class="fa fa-check"></i> Account Setup</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('lists_sales_handling_create_step2') }}" href="{{ path('lists_sales_handling_create_step1') }}" class="step">
-                                            <span class="number">2</span>
-                                            <span class="desc"><i class="fa fa-check"></i> Profile Setup</span>
-                                        </a>
-                                    </li>
-                                    <li class="active">
-                                        <a href="{{ path('lists_sales_handling_create_step3') }}" class="step active">
-                                            <span class="number">3</span>
-                                            <span class="desc"><i class="fa fa-check"></i> Billing Setup</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ path('lists_sales_handling_create_step4') }}" class="step">
-                                            <span class="number">4</span>
-                                            <span class="desc"><i class="fa fa-check"></i> Confirm</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                                <div id="bar" class="progress progress-striped" role="progressbar">
-                                    <div class="progress-bar progress-bar-success" style="width: 75%;"></div>
-                                </div>
-                                <div class="tab-content">
-                                    <div class="tab-pane active" id="tab1">
-                                        <h3 class="block">Provide your account details 3</h3>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3">Username 3<span class="required">*</span></label>
-                                            <div class="col-md-4">
-                                                <input type="text" class="form-control" name="username"/>
-                                                <span class="help-block">Provide your username</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                    <div class="form-wizard">
+                        <div class="form-body">
+                            <ul class="nav nav-pills nav-justified steps">
+                                <li>
+                                    <a href="{{ path('lists_sales_handling_create_step1') }}" class="step">
+                                        <span class="number">1</span>
+                                        <span class="desc"><i class="fa fa-check"></i> Account Setup</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('lists_sales_handling_create_step2') }}" href="{{ path('lists_sales_handling_create_step1') }}" class="step">
+                                        <span class="number">2</span>
+                                        <span class="desc"><i class="fa fa-check"></i> Profile Setup</span>
+                                    </a>
+                                </li>
+                                <li class="active">
+                                    <a href="{{ path('lists_sales_handling_create_step3') }}" class="step active">
+                                        <span class="number">3</span>
+                                        <span class="desc"><i class="fa fa-check"></i> Billing Setup</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('lists_sales_handling_create_step4') }}" class="step">
+                                        <span class="number">4</span>
+                                        <span class="desc"><i class="fa fa-check"></i> Confirm</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div id="bar" class="progress progress-striped" role="progressbar">
+                                <div class="progress-bar progress-bar-success" style="width: 75%;"></div>
                             </div>
-                            <div class="form-actions fluid">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="col-md-offset-3 col-md-9">
-                                            <a href="javascript:;" class="btn default button-previous">
-                                                <i class="m-icon-swapleft"></i> Back
-                                            </a>
-                                            <a href="javascript:;" class="btn blue button-next">
-                                                Continue <i class="m-icon-swapright m-icon-white"></i>
-                                            </a>
-                                            <a href="javascript:;" class="btn green button-submit">
-                                                Submit <i class="m-icon-swapright m-icon-white"></i>
-                                            </a>
-                                        </div>
-                                    </div>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab1">
+                                    <h3 class="block">Provide your account details 3</h3>
+
+                                    {{ include('ListsHandlingBundle:Sales:step3Form.html.twig', {
+                                        form: form
+                                    }) }}
+
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>

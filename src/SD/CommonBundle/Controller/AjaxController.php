@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Lists\ContactBundle\Entity\ModelContactRepository;
 
 class AjaxController extends Controller
 {
@@ -574,6 +575,11 @@ class AjaxController extends Controller
         $postTargetId = $request->request->get('postTargetId');
         $targetId = $request->request->get('targetId');
 
+        if ($defaultData && !is_array($defaultData))
+        {
+            $defaultData = json_decode($defaultData, true);
+        }
+
         if (sizeof($defaultData))
         {
             foreach ($defaultData as $key => $default)
@@ -581,6 +587,13 @@ class AjaxController extends Controller
                 $form->add($key, 'hidden', array(
                     'data' => $default
                 ));
+            }
+
+            $processMethod = $formName . 'ProcessDefaults';
+
+            if (method_exists($this, $processMethod))
+            {
+                $this->$processMethod($form, $defaultData);
             }
         }
 
@@ -591,7 +604,8 @@ class AjaxController extends Controller
             'html' => '',
             'postFunction' => $postFunction,
             'postTargetId' => $postTargetId,
-            'targetId' => $targetId
+            'targetId' => $targetId,
+            'defaultData' => $defaultData
         );
 
         if ($form->isValid())
@@ -613,7 +627,8 @@ class AjaxController extends Controller
                 'formName' => $formName,
                 'postFunction' => $postFunction,
                 'postTargetId' => $postTargetId,
-                'targetId' => $targetId
+                'targetId' => $targetId,
+                'defaultData' => $defaultData
             ));
 
         return new Response(json_encode($result));
@@ -649,6 +664,7 @@ class AjaxController extends Controller
 
         $handlingId = $data->getHandlingId();
 
+        /** @var \Lists\HandlingBundle\Entity\Handling $handling */
         $handling = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:Handling')
             ->find($handlingId);
@@ -675,6 +691,9 @@ class AjaxController extends Controller
             ->find($formData['nexttype']);
 
         $nextDatetime = new \DateTime($formData['nextcreatedate']);
+        $contactNext = $formData['contactnext'];
+        $descriptionNext = $formData['descriptionnext'];
+        $statusId = $formData['status'];
 
         $handlingMessage = new HandlingMessage();
         $handlingMessage->setCreatedate($nextDatetime);
@@ -685,12 +704,28 @@ class AjaxController extends Controller
         $handlingMessage->setIsBusinessTrip(isset($formData['next_is_business_trip']) ? true : false);
         $handlingMessage->setAdditionalType(HandlingMessage::ADDITIONAL_TYPE_FUTURE_MESSAGE);
 
+        $handlingMessage->setDescription($descriptionNext);
+
+        if ((int) $contactNext)
+        {
+            $contact = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
+                ->find((int) $contactNext);
+
+            if ($contact)
+            {
+                $handlingMessage->setContact($contact);
+            }
+        }
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($handlingMessage);
         // $em->flush();
 
         $handling->setLastHandlingDate($data->getCreatedate());
         $handling->setNextHandlingDate($nextDatetime);
+
+        $handling->setStatusId($statusId);
+
         $em->persist($handling);
 
         $em->flush();
@@ -1022,5 +1057,81 @@ class AjaxController extends Controller
         $return = array('success' => 1);
 
         return new Response(json_encode($return));
+    }
+
+    public function handlingMessageFormProcessDefaults($form, $defaultData)
+    {
+        $handlingId = $defaultData['handling_id'];
+
+        /** @var \Lists\HandlingBundle\Entity\Handling $handling */
+        $handling = $this->getDoctrine()->getRepository('ListsHandlingBundle:Handling')
+            ->find($handlingId);
+
+        $users = $handling->getUsers();
+
+        $userIds = array();
+
+        foreach ($users as $user)
+        {
+            $userIds[$user->getId()] = $user->getId();
+        }
+
+        $organizationId = $handling->getOrganizationId();
+
+        $form
+            ->add('contact', 'entity', array(
+                'class' => 'ListsContactBundle:ModelContact',
+                'empty_value' => '',
+                'required' => false,
+                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds)
+                    {
+                        return $repository->createQueryBuilder('mc')
+                            ->leftJoin('mc.owner', 'owner')
+                            ->where('mc.modelName = :modelName')
+                            ->andWhere('mc.modelId = :modelId')
+                            ->andWhere('owner.id in (:ownerIds)')
+                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                            ->setParameter(':modelId', $organizationId)
+                            ->setParameter(':ownerIds', $userIds);
+                    }
+            ));
+
+        $form
+            ->add('contactnext', 'entity', array(
+                'class' => 'ListsContactBundle:ModelContact',
+                'empty_value' => '',
+                'required' => false,
+                'mapped' => false,
+                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds)
+                    {
+                        return $repository->createQueryBuilder('mc')
+                            ->leftJoin('mc.owner', 'owner')
+                            ->where('mc.modelName = :modelName')
+                            ->andWhere('mc.modelId = :modelId')
+                            ->andWhere('owner.id in (:ownerIds)')
+                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                            ->setParameter(':modelId', $organizationId)
+                            ->setParameter(':ownerIds', $userIds);
+                    }
+            ));
+
+        $form
+            ->add('status', 'entity', array(
+            'class' => 'ListsHandlingBundle:HandlingStatus',
+            'data' => $handling->getStatus(),
+            'empty_value' => '',
+            'mapped' => false,
+            'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingStatusRepository $repository)
+                {
+                    return $repository->createQueryBuilder('s')
+                        ->orderBy('s.sortorder', 'ASC');
+                }
+        ));
+
+        $form
+            ->add('mindate', 'hidden', array(
+                'data' => $defaultData['mindate'],
+                'mapped' => false
+            ));
     }
 }

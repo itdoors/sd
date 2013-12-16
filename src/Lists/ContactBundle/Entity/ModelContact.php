@@ -515,4 +515,17 @@ class ModelContact
     {
         return $this->type;
     }
+
+    public function getFullName()
+    {
+        return $this->getLastName() . ' ' . $this->getFirstName();
+    }
+
+    /**
+     * __toString()
+     */
+    public function __toString()
+    {
+        return $this->getFullName() . ' ' . $this->getPhone1();
+    }
 }

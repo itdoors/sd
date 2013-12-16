@@ -434,4 +434,60 @@ class HandlingMessage
     {
         return $this->getAdditionalType() == self::ADDITIONAL_TYPE_FUTURE_MESSAGE;
     }
+    /**
+     * @var \Lists\ContactBundle\Entity\ModelContact
+     */
+    private $contact;
+
+
+    /**
+     * Set contact
+     *
+     * @param \Lists\ContactBundle\Entity\ModelContact $contact
+     * @return HandlingMessage
+     */
+    public function setContact(\Lists\ContactBundle\Entity\ModelContact $contact = null)
+    {
+        $this->contact = $contact;
+    
+        return $this;
+    }
+
+    /**
+     * Get contact
+     *
+     * @return \Lists\ContactBundle\Entity\ModelContact 
+     */
+    public function getContact()
+    {
+        return $this->contact;
+    }
+    /**
+     * @var integer
+     */
+    private $contact_id;
+
+
+    /**
+     * Set contact_id
+     *
+     * @param integer $contactId
+     * @return HandlingMessage
+     */
+    public function setContactId($contactId)
+    {
+        $this->contact_id = $contactId;
+    
+        return $this;
+    }
+
+    /**
+     * Get contact_id
+     *
+     * @return integer 
+     */
+    public function getContactId()
+    {
+        return $this->contact_id;
+    }
 }

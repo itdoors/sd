@@ -525,6 +525,8 @@ class Handling
     public function setStatus(\Lists\HandlingBundle\Entity\HandlingStatus $status = null)
     {
         $this->status = $status;
+
+        $this->setStatusChangeDate(new \DateTime());
     
         return $this;
     }
@@ -733,6 +735,8 @@ class Handling
     public function setStatusId($statusId)
     {
         $this->status_id = $statusId;
+
+        $this->setStatusChangeDate(new \DateTime());
     
         return $this;
     }

@@ -43,6 +43,10 @@ Lists\HandlingBundle\Entity\HandlingMessage:
             fixed: false
             nullable: true
             column: additional_type
+        contact_id:
+            type: integer
+            nullable: true
+            column: contact_id
     manyToOne:
         handling:
             targetEntity: Handling
@@ -69,6 +73,15 @@ Lists\HandlingBundle\Entity\HandlingMessage:
             inversedBy: null
             joinColumns:
                 user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        contact:
+            targetEntity: Lists\ContactBundle\Entity\ModelContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contact_id:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks:

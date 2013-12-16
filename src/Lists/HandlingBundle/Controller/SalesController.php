@@ -8,6 +8,9 @@ use SD\CommonBundle\Controller\BaseFilterController as BaseController;
 use Lists\HandlingBundle\Entity\HandlingResult;
 use Lists\ContactBundle\Entity\ModelContact;
 use Lists\OrganizationBundle\Entity\Organization;
+use Lists\HandlingBundle\Entity\Handling;
+use Lists\HandlingBundle\Entity\HandlingMessage;
+use Lists\ContactBundle\Entity\ModelContactRepository;
 
 class SalesController extends BaseController
 {
@@ -17,6 +20,7 @@ class SalesController extends BaseController
     protected $baseRoutePrefix = 'sales';
     protected $baseTemplate = 'Sales';
     protected $wizardOrganizationNamespace = 'sales.wizard.organization';
+    protected $wizardHandlingNamespace = 'sales.wizard.handling';
 
     public function indexAction()
     {
@@ -362,6 +366,11 @@ class SalesController extends BaseController
                     $em->flush();
 
                     $organizationId = $organization->getId();
+
+                    $this->setWizardOrganization(array(
+                        'organizationId' => $organization->getId(),
+                        'organizationName' => $this->getWizardOrganizationName()
+                    ));
                 }
                 else
                 {
@@ -484,23 +493,295 @@ class SalesController extends BaseController
     /**
      * Execute wizard step3 action
      */
-    public function step3Action()
+    public function step3Action(Request $request)
     {
+        $organizationId = $this->getWizardOrganizationId();
+
+        if (!$organizationId)
+        {
+            return $this->redirect($this->generateUrl('lists_sales_handling_create_step1'));
+        }
+
+        $organization = $this->getDoctrine()->getRepository('ListsOrganizationBundle:Organization')
+            ->find($organizationId);
+
+        $user = $this->getUser();
+
+        $form = $this->createForm('handlingSalesWizardForm');
+
+        $form
+            ->add('organization', 'text', array(
+                'disabled' => true,
+                'data' => (string) $organization
+            ))
+            ->add('user', 'text', array(
+                'disabled' => true,
+                'data' => (string) $user
+            ))
+        ;
+
+        $form->handleRequest($request);
+
+        if ($form->isValid())
+        {
+            /** @var \Lists\HandlingBundle\Entity\Handling $object */
+            $object = $form->getData();
+
+            $object->setUser($user);
+            $object->setCreatedatetime(new \DateTime());
+            $object->setOrganization($organization);
+            $object->addUser($user);
+
+            $this->setWizardHandling($object);
+
+            return $this->redirect($this->generateUrl('lists_sales_handling_create_step4'));
+
+            /*$em = $this->getDoctrine()->getManager();
+            $em->persist($object);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('lists_sales_handling_show', array(
+                'id' => $object->getId()
+            )));*/
+        }
+
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate. ':step3.html.twig', array(
                 'baseTemplate' => $this->baseTemplate,
                 'baseRoutePrefix' => $this->baseRoutePrefix,
+                'form' => $form->createView()
             ));
     }
 
     /**
      * Execute wizard step4 action
      */
-    public function step4Action()
+    public function step4Action(Request $request)
     {
+        $handling = $this->getWizardHandling();
+
+        if (!$handling)
+        {
+            return $this->redirect($this->generateUrl('lists_sales_handling_create_step3'));
+        }
+
+        $user = $this->getUser();
+
+        $userIds = array($user->getId());
+
+        $form = $this->createForm('handlingMessageWizardForm');
+
+        $formData = $request->request->get($form->getName());
+
+        $organizationId = $this->getWizardOrganizationId();
+
+        $organization = $this->getDoctrine()->getRepository('ListsOrganizationBundle:Organization')
+            ->find($organizationId);
+
+        $form
+            ->add('contact', 'entity', array(
+                'class' => 'ListsContactBundle:ModelContact',
+                'empty_value' => '',
+                'required' => false,
+                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds)
+                    {
+                        return $repository->createQueryBuilder('mc')
+                            ->leftJoin('mc.owner', 'owner')
+                            ->where('mc.modelName = :modelName')
+                            ->andWhere('mc.modelId = :modelId')
+                            ->andWhere('owner.id in (:ownerIds)')
+                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                            ->setParameter(':modelId', $organizationId)
+                            ->setParameter(':ownerIds', $userIds);
+                    }
+            ));
+
+        $form
+            ->add('contactnext', 'entity', array(
+                'class' => 'ListsContactBundle:ModelContact',
+                'empty_value' => '',
+                'required' => false,
+                'mapped' => false,
+                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds)
+                    {
+                        return $repository->createQueryBuilder('mc')
+                            ->leftJoin('mc.owner', 'owner')
+                            ->where('mc.modelName = :modelName')
+                            ->andWhere('mc.modelId = :modelId')
+                            ->andWhere('owner.id in (:ownerIds)')
+                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                            ->setParameter(':modelId', $organizationId)
+                            ->setParameter(':ownerIds', $userIds);
+                    }
+            ));
+
+        $form
+            ->add('status', 'entity', array(
+                'class' => 'ListsHandlingBundle:HandlingStatus',
+                'empty_value' => '',
+                'mapped' => false,
+                'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingStatusRepository $repository)
+                    {
+                        return $repository->createQueryBuilder('s')
+                            ->orderBy('s.sortorder', 'ASC');
+                    }
+            ));
+
+        // Bind form
+        $form->handleRequest($request);
+
+        if ($form->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+
+            $em->getConnection()->beginTransaction();
+
+            try
+            {
+
+                $newHandling = new Handling();
+
+                //$newHandling->setStatusId($formData['status']);
+                $newHandling->setOrganization($organization);
+
+                $resultId = $handling->getResult() ? $handling->getResult()->getId() : null;
+                $statusId = $handling->getStatus() ? $handling->getStatus()->getId() : null;
+                $typeId = $handling->getType() ? $handling->getType()->getId() : null;
+
+                $newHandling->setResultId($resultId);
+                $newHandling->setStatusId($statusId);
+                $newHandling->setTypeId($typeId);
+
+                $newHandling->setUser($user);
+                $newHandling->addUser($user);
+                $newHandling->setCreatedatetime(new \DateTime());
+                $newHandling->setCreatedate($handling->getCreatedate());
+
+                $newHandling->setBudget($handling->getBudget());
+                $newHandling->setBudgetClient($handling->getBudgetClient());
+                $newHandling->setChance($handling->getChance());
+                $newHandling->setDescription($handling->getDescription());
+
+                foreach ($handling->getHandlingServices() as $service)
+                {
+                    $newService = $this->getDoctrine()->getRepository('ListsHandlingBundle:HandlingService')
+                        ->find($service->getId());
+
+                    $newHandling->addHandlingService($newService);
+                }
+
+                //$handling->setS($handling->getResult());
+
+                $em->persist($newHandling);
+
+                $em->flush();
+
+                $data = $form->getData();
+
+                $data->setCreatedatetime(new \DateTime());
+                $data->setUser($user);
+                $data->setHandling($newHandling);
+
+                $file = $form['file']->getData();
+
+                if ($file)
+                {
+                    $data->upload();
+                }
+
+                $em->persist($data);
+
+                // Insert future
+                $type = $this->getDoctrine()
+                    ->getRepository('ListsHandlingBundle:HandlingMessageType')
+                    ->find($formData['nexttype']);
+
+                $nextDatetime = new \DateTime($formData['nextcreatedate']);
+                $contactNext = $formData['contactnext'];
+                $descriptionNext = $formData['descriptionnext'];
+                $statusId = $formData['status'];
+
+                $handlingMessage = new HandlingMessage();
+                $handlingMessage->setCreatedate($nextDatetime);
+                $handlingMessage->setCreatedatetime(new \DateTime());
+                $handlingMessage->setUser($user);
+                $handlingMessage->setHandling($newHandling);
+                $handlingMessage->setType($type);
+                $handlingMessage->setIsBusinessTrip(isset($formData['next_is_business_trip']) ? true : false);
+                $handlingMessage->setAdditionalType(HandlingMessage::ADDITIONAL_TYPE_FUTURE_MESSAGE);
+
+                $handlingMessage->setDescription($descriptionNext);
+
+                if ((int) $contactNext)
+                {
+                    $contact = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
+                        ->find((int) $contactNext);
+
+                    if ($contact)
+                    {
+                        $handlingMessage->setContact($contact);
+                    }
+                }
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($handlingMessage);
+                // $em->flush();
+
+                $handling->setLastHandlingDate($data->getCreatedate());
+                $handling->setNextHandlingDate($nextDatetime);
+
+                $newHandling->setStatusId($statusId);
+
+                $em->persist($newHandling);
+
+                $em->flush();
+
+                $em->getConnection()->commit();
+
+                $this->setWizardHandling(null);
+                $this->setWizardOrganization(array());
+
+                return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix. '_handling_show', array(
+                        'id' => $newHandling->getId()
+                    )));
+
+            } catch (\Exception $e) {
+                $em->getConnection()->rollback();
+                $em->close();
+                throw $e;
+            }
+        }
+
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate. ':step4.html.twig', array(
                 'baseTemplate' => $this->baseTemplate,
                 'baseRoutePrefix' => $this->baseRoutePrefix,
+                'form' => $form->createView()
             ));
+    }
+
+    /**
+     * Sets wizard handling information to session
+     *
+     * @param Handling $handling
+     */
+    public function setWizardHandling($handling)
+    {
+        $session = $this->get('session');
+
+        $session->set($this->wizardHandlingNamespace, $handling);
+    }
+
+    /**
+     * Get wizard handling information to session
+     *
+     * @return Handling $handling
+     */
+    public function getWizardHandling()
+    {
+        $session = $this->get('session');
+
+        $handling = $session->get($this->wizardHandlingNamespace);
+
+        return $handling ? $handling : null;
     }
 }
 
