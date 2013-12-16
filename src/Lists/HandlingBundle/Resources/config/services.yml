@@ -7,6 +7,7 @@ parameters:
     lists_handling.message.form.class: Lists\HandlingBundle\Form\HandlingMessageFormType
     lists_handling.message.wizard.form.class: Lists\HandlingBundle\Form\HandlingMessageWizardForm
     lists_handling.form.user.class: Lists\HandlingBundle\Form\HandlingUserFormType
+    lists_handling.sales.form.report.class: Lists\HandlingBundle\Form\HandlingReportDateRangeForm
 
     lists_handling.createdate_range.validator.class: Lists\HandlingBundle\Validator\CreatedateRangeValidator
 
@@ -59,6 +60,12 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: handlingUserForm }
+
+    lists_handling.form.report.date:
+        class: %lists_handling.sales.form.report.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: handlingReportDateRangeForm }
 
     createdate_range_validator:
         class: %lists_handling.createdate_range.validator.class%

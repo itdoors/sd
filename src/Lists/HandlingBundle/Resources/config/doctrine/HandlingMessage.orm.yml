@@ -32,6 +32,14 @@ Lists\HandlingBundle\Entity\HandlingMessage:
             type: integer
             nullable: true
             column: handling_id
+        user_id:
+            type: integer
+            nullable: true
+            column: user_id
+        type_id:
+            type: integer
+            nullable: true
+            column: type_id
         isBusinessTrip:
             type: boolean
             nullable: true

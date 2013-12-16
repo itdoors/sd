@@ -2,7 +2,9 @@
 
 namespace Lists\HandlingBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class SalesAdminController extends SalesController
 {
@@ -114,6 +116,45 @@ class SalesAdminController extends SalesController
                 'baseRoutePrefix' => $this->baseRoutePrefix,
                 'baseTemplate' => $this->baseTemplate
             ));
+    }
+
+    public function reportAdvancedRangeAction()
+    {
+        $form = $this->createForm('handlingReportDateRangeForm');
+
+        return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':reportAdvancedRange.html.twig', array(
+                'form' => $form->createView(),
+                'baseRoutePrefix' => $this->baseRoutePrefix,
+                'baseTemplate' => $this->baseTemplate
+            ));
+    }
+
+    public function reportAdvancedDoneAction(Request $request)
+    {
+        $form = $this->createForm('handlingReportDateRangeForm');
+
+        $data = $request->request->get($form->getName());
+
+        $from = new \DateTime($data['from']);
+        $to = new \DateTime($data['to']);
+
+        /** @var \Lists\HandlingBundle\Entity\HandlingMessageRepository $handlingRepository */
+        $handlingMessageRepository = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingMessage');
+
+        /** @var \Doctrine\ORM\Query $handlingQuery */
+        $results = $handlingMessageRepository->getAdvancedResult($from, $to);
+
+        $types = $this->getDoctrine()->getRepository('ListsHandlingBundle:HandlingMessageType')
+            ->getList();
+
+        return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':reportAdvancedDone.html.twig', array(
+                'baseRoutePrefix' => $this->baseRoutePrefix,
+                'baseTemplate' => $this->baseTemplate,
+                'results' => $results,
+                'types' => $types
+            ));
+
     }
 }
 

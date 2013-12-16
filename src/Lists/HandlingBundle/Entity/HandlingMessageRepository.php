@@ -42,4 +42,46 @@ class HandlingMessageRepository extends EntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function getAdvancedResult($from, $to)
+    {
+        $q = $this->createQueryBuilder('hm')
+            ->where('hm.createdate >= :createdateFrom')
+            ->andWhere('hm.createdate <= :createdateTo')
+            ->leftJoin('hm.user', 'user')
+            ->setParameter(':createdateFrom', $from, \Doctrine\DBAL\Types\Type::DATETIME)
+            ->setParameter(':createdateTo', $to, \Doctrine\DBAL\Types\Type::DATETIME)
+            ->getQuery()
+            ->getResult();
+
+        if (!sizeof($q))
+        {
+            return array();
+        }
+
+        $types = $this->getEntityManager()->getRepository('ListsHandlingBundle:HandlingMessageType')
+            ->getList();
+
+        $result = array();
+
+        foreach ($q as $handlingMessage)
+        {
+            if (!isset ( $result[$handlingMessage->getUserId()] ))
+            {
+                $result[$handlingMessage->getUserId()] = array();
+                $result[$handlingMessage->getUserId()]['user'] = $handlingMessage->getUser();
+            }
+
+            $current = 0;
+
+            if (isset( $result[$handlingMessage->getUserId()][$handlingMessage->getTypeId()] ))
+            {
+                $current = $result[$handlingMessage->getUserId()][$handlingMessage->getTypeId()];
+            }
+
+            $result[$handlingMessage->getUserId()][$handlingMessage->getTypeId()] = $current + 1;
+        }
+
+        return $result;
+    }
 }

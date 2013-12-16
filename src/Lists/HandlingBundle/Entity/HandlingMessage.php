@@ -490,4 +490,60 @@ class HandlingMessage
     {
         return $this->contact_id;
     }
+    /**
+     * @var integer
+     */
+    private $user_id;
+
+
+    /**
+     * Set user_id
+     *
+     * @param integer $userId
+     * @return HandlingMessage
+     */
+    public function setUserId($userId)
+    {
+        $this->user_id = $userId;
+    
+        return $this;
+    }
+
+    /**
+     * Get user_id
+     *
+     * @return integer 
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
+    /**
+     * @var integer
+     */
+    private $type_id;
+
+
+    /**
+     * Set type_id
+     *
+     * @param integer $typeId
+     * @return HandlingMessage
+     */
+    public function setTypeId($typeId)
+    {
+        $this->type_id = $typeId;
+    
+        return $this;
+    }
+
+    /**
+     * Get type_id
+     *
+     * @return integer 
+     */
+    public function getTypeId()
+    {
+        return $this->type_id;
+    }
 }
