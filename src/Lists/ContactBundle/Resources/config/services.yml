@@ -1,6 +1,7 @@
 parameters:
     lists_contact.organization.form.class: Lists\ContactBundle\Form\ModelContactOrganizationFormType
     lists_contact.organization.admin.form.class: Lists\ContactBundle\Form\ModelContactOrganizationAdminFormType
+    lists_contact.organization.wizard.form.class: Lists\ContactBundle\Form\ModelContactOrganizationWizardForm
     lists_contact.handling.form.class: Lists\ContactBundle\Form\ModelContactHandlingFormType
 
 services:
@@ -15,6 +16,12 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: modelContactOrganizationAdminForm }
+
+    lists_contact.form.modelContactOrganizationWizardForm:
+        class: %lists_contact.organization.wizard.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: modelContactOrganizationWizardForm }
 
     lists_contact.form.modelContactHandlingForm:
         class: %lists_contact.handling.form.class%

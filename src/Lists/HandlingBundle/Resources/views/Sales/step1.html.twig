@@ -47,7 +47,7 @@
 
     <script type="text/javascript">
         $(document).ready(function(){
-            $('#organization').select2({
+            $('#organizationId').select2({
                 minimumInputLength: 2,
                 placeholder: '{% trans %}Enter organization name{% endtrans %}',
                 width: '400px',
@@ -65,9 +65,18 @@
                         };
                     }
                 }
+                {% if initSelection|length %}
+                ,
+                initSelection: function (element, callback) {
+
+                    var data = {{ initSelection|json_encode|raw }};
+
+                    callback(data);
+                }
+                {% endif %}
             });
 
-            $('#organization').on("select2-selecting", function(e) {
+            $('#organizationId').on("select2-selecting", function(e) {
 
                 $('#inform-exist-organization').addClass('display-none');
                 $('#inform-new-organization').addClass('display-none');
@@ -88,6 +97,8 @@
                 target.removeClass('display-none');
 
                 target.html(target.html().replace('%organization%', organizationName));
+
+                $('#organizationName').val(organizationName);
             });
         })
     </script>
@@ -158,7 +169,12 @@
                                             <label class="control-label col-md-3">{% trans %}Organization Name{% endtrans %} <span class="required"> *</span></label>
                                             <div class="col-md-5">
 
-                                                <input type="hidden" name="organization" id="organization" required="required" />
+                                                <input type="hidden" name="organizationId" id="organizationId" required="required"
+                                                       {% if initSelection|length %}
+                                                            value="{{ initSelection.text }}"
+                                                       {% endif %}
+                                                />
+                                                <input type="hidden" name="organizationName" id="organizationName" />
                                             <span class="help-block"> С целью уменьшения дубликатов организаций подходите к заполнению ответсвенно. В данном поле поиск производится по Полному названию организации и по короткому.
                                              Также отображается ответсвенный менеджер (или тот, который добавил) организации. </span>
                                             </div>

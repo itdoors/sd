@@ -6,6 +6,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use SD\CommonBundle\Controller\BaseFilterController as BaseController;
 use Lists\HandlingBundle\Entity\HandlingResult;
+use Lists\ContactBundle\Entity\ModelContact;
+use Lists\OrganizationBundle\Entity\Organization;
 
 class SalesController extends BaseController
 {
@@ -14,6 +16,7 @@ class SalesController extends BaseController
     protected $baseRoute = 'lists_sales_handling_index';
     protected $baseRoutePrefix = 'sales';
     protected $baseTemplate = 'Sales';
+    protected $wizardOrganizationNamespace = 'sales.wizard.organization';
 
     public function indexAction()
     {
@@ -257,23 +260,225 @@ class SalesController extends BaseController
     /**
      * Execute wizard step1 action
      */
-    public function step1Action()
+    public function step1Action(Request $request)
     {
+        $isPost = $request->getMethod() == 'POST';
+
+        $initSelection = array();
+
+        if ($isPost)
+        {
+            $organization = array();
+
+            $organization['organizationId'] = $request->request->get('organizationId');
+            $organization['organizationName'] = $request->request->get('organizationName');
+
+            $this->setWizardOrganization($organization);
+
+            if ($this->isValidWizardOrganization())
+            {
+                return $this->redirect($this->generateUrl('lists_sales_handling_create_step2'));
+            }
+        }
+
+        if ($this->isValidWizardOrganization())
+        {
+            $initSelection = array(
+                'id' => $this->getWizardOrganizationId(),
+                'text' => $this->getWizardOrganizationName()
+            );
+        }
+
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate. ':step1.html.twig', array(
                 'baseTemplate' => $this->baseTemplate,
                 'baseRoutePrefix' => $this->baseRoutePrefix,
+                'initSelection' => $initSelection
             ));
+    }
+
+    /**
+     * Sets wizard organization information to session
+     *
+     * @param mixed[] $organization
+     */
+    public function setWizardOrganization($organization)
+    {
+        $session = $this->get('session');
+
+        $session->set($this->wizardOrganizationNamespace, $organization);
+    }
+
+    /**
+     * Get wizard organization information to session
+     *
+     * @return mixed[] $organization
+     */
+    public function getWizardOrganization()
+    {
+        $session = $this->get('session');
+
+        $organization = $session->get($this->wizardOrganizationNamespace);
+
+        return $organization;
     }
 
     /**
      * Execute wizard step2 action
      */
-    public function step2Action()
+    public function step2Action(Request $request)
     {
+        if (!$this->isValidWizardOrganization())
+        {
+            return $this->redirect($this->generateUrl('lists_sales_handling_create_step1'));
+        }
+
+        $form = $this->createForm('modelContactOrganizationWizardForm');
+
+        $form->handleRequest($request);
+
+        if ($form->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+
+            $em->getConnection()->beginTransaction();
+
+            $user = $this->getUser();
+
+            /** @var ModelContact $contact */
+            $contact = $form->getData();
+
+            try
+            {
+                if ($this->isNewWizardOrganization())
+                {
+                    $organization = new Organization();
+                    $organization->setCreator($user);
+                    $organization->setCreatedatetime(new \DateTime());
+                    $organization->setName($this->getWizardOrganizationName());
+                    $organization->setShortname($this->getWizardOrganizationName());
+                    $organization->setAddress($this->getWizardOrganizationName());
+
+                    $em->persist($organization);
+                    $em->flush();
+
+                    $organizationId = $organization->getId();
+                }
+                else
+                {
+                    $organizationId = $this->getWizardOrganizationId();
+
+                    $organization = $this->getDoctrine()->getRepository('ListsOrganizationBundle:Organization')
+                        ->find($organizationId);
+                }
+
+                $contact->setModelId($organizationId);
+
+                $contact->setUser($user);
+
+                $owner = $contact->getOwner();
+
+                if (!$owner)
+                {
+                    $contact->setOwner($user);
+                }
+
+                $em->persist($contact);
+                $em->flush();
+
+                $organizationUsers = $organization->getUsers();
+
+                $userExist = false;
+
+                foreach ($organizationUsers as $organizationUser)
+                {
+                    if ($organizationUser->getId() == $user->getId())
+                    {
+                        $userExist = true;
+                    }
+                }
+
+                if (!$userExist)
+                {
+                    $organization->addUser($user);
+
+                    $em->persist($organization);
+                    $em->flush();
+                }
+
+                $em->getConnection()->commit();
+
+            } catch (\Exception $e) {
+                $em->getConnection()->rollback();
+                $em->close();
+                throw $e;
+            }
+
+            return $this->redirect($this->generateUrl('lists_sales_handling_create_step3'));
+        }
+
+        $form
+            ->add('organization', 'text', array(
+                'disabled' => true,
+                'data' => (string) $this->getWizardOrganizationName()
+            ));
+
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate. ':step2.html.twig', array(
                 'baseTemplate' => $this->baseTemplate,
                 'baseRoutePrefix' => $this->baseRoutePrefix,
+                'form' => $form->createView()
             ));
+    }
+
+    /**
+     * Checks if valid organization data in session
+     *
+     * @return boolean
+     */
+    public function isValidWizardOrganization()
+    {
+        $organization = $this->getWizardOrganization();
+
+        if (!isset($organization['organizationId']) || !isset($organization['organizationName']))
+        {
+            return false;
+        }
+
+        if (!$organization['organizationId'] && !$organization['organizationName'])
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if organization is new
+     */
+    public function isNewWizardOrganization()
+    {
+        $organization = $this->getWizardOrganization();
+
+        return $organization['organizationId'] ? false : true;
+    }
+
+    /**
+     * get wizard organizationId
+     */
+    public function getWizardOrganizationId()
+    {
+        $organization = $this->getWizardOrganization();
+
+        return isset($organization['organizationId']) ? $organization['organizationId'] : null;
+    }
+
+    /**
+     * get wizard organizationName
+     */
+    public function getWizardOrganizationName()
+    {
+        $organization = $this->getWizardOrganization();
+
+        return isset($organization['organizationName']) ? $organization['organizationName'] : null;
     }
 
     /**
