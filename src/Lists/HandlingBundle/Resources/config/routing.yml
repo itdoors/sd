@@ -162,6 +162,10 @@ lists_sales_admin_report_index:
     pattern:  /lists/salesadmin/report
     defaults: { _controller: ListsHandlingBundle:SalesAdmin:report }
 
+lists_sales_admin_report_simple:
+    pattern:  /lists/salesadmin/report/simple
+    defaults: { _controller: ListsHandlingBundle:SalesAdmin:reportSimple }
+
 lists_salesadmin_handling_close:
     pattern:  /lists/salesadmin/handling/close/{id}
     defaults: { _controller: ListsHandlingBundle:SalesAdmin:close }

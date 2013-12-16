@@ -97,5 +97,23 @@ class SalesAdminController extends SalesController
                 'id' => $id
             )));
     }
+
+    public function reportSimpleAction()
+    {
+        /** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
+        $handlingRepository = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling');
+
+        /** @var \Doctrine\ORM\Query $handlingQuery */
+        $handlingQuery = $handlingRepository->getAllForSalesQuery(null, array());
+
+        $results = $handlingQuery->getResult();
+
+        return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':reportSimple.html.twig', array(
+                'results' => $results,
+                'baseRoutePrefix' => $this->baseRoutePrefix,
+                'baseTemplate' => $this->baseTemplate
+            ));
+    }
 }
 
