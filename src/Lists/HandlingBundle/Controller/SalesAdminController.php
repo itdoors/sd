@@ -135,6 +135,11 @@ class SalesAdminController extends SalesController
 
         $data = $request->request->get($form->getName());
 
+        if (!sizeof($data))
+        {
+            return $this->redirect($this->generateUrl('lists_sales_admin_report_advanced_range'));
+        }
+
         $from = new \DateTime($data['from']);
         $to = new \DateTime($data['to']);
 
