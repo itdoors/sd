@@ -1,0 +1,57 @@
+SD\CalendarBundle\Entity\CalendarEvent:
+    type:  entity
+    table: calendar_event
+    repositoryClass: SD\CalendarBundle\Entity\CalendarEventRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: SEQUENCE
+    fields:
+        eventName:
+            type: string
+            length: 128
+            nullable: false
+        description:
+            type: text
+            nullable: true
+        fromdatetime:
+            type: datetime
+            nullable: false
+        todatetime:
+            type: datetime
+            nullable: false
+        isNotifi:
+            type: boolean
+            nullable: true
+            default: false
+        notificationTime:
+            type: integer
+            nullable: true
+        isFullDay:
+            type: boolean
+            nullable: true
+            default: false
+        additionalData:
+            type: string
+            length: 128
+            nullable: true
+    manyToOne:
+            type:
+                targetEntity: CalendarEventType
+                cascade: {  }
+                mappedBy: null
+                inversedBy: null
+                joinColumns:
+                    event_type_id:
+                        referencedColumnName: id
+                orphanRemoval: false
+            user:
+                targetEntity: SD\UserBundle\Entity\User
+                cascade: {  }
+                mappedBy: null
+                inversedBy: null
+                joinColumns:
+                    user_id:
+                        referencedColumnName: id
+                orphanRemoval: false

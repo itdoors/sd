@@ -33,7 +33,7 @@ var SD = (function() {
 
             var selfAjaxFormClassObject = $(this);
 
-            var targetId = $(this).data('target');
+            var targetId = $(this).data('target_holder');
             var formName = $(this).data('form_name');
             var defaultData = $(this).data('default');
             var postFunction = $(this).data('post_function');

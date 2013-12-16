@@ -1,0 +1,86 @@
+{% extends "::base.html.twig" %}
+
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link href="{{ asset('templates/metronic/plugins/fullcalendar/fullcalendar/fullcalendar.css')}} " rel="stylesheet" />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript"  src="{{ asset('templates/metronic/plugins/fullcalendar/fullcalendar/fullcalendar.min.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+
+    <div class="table-toolbar">
+        <div class="btn-group">
+            <a id="managers_list_new" class="btn green ajax-form"
+                    data-toggle="modal"
+                    href="#form_modal4"
+                    data-target_holder="calendarEventFormTpl"
+                    data-form_name="calendarEventForm"
+                    data-post_function="updateList"
+                    data-post_target_id="calendar"
+                    >
+                {% trans %}Add New{% endtrans %} <i class="fa fa-plus"></i>
+            </a>
+        </div>
+
+            <div id="form_modal4" class="modal fade" tabindex="-1" role="basic" aria-hidden="true">>
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <h4 class="modal-title">Modal Title</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="calendarEventFormTpl"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn blue">Save changes</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+            </div>
+
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#calendar').fullCalendar({
+                header: {
+                    left:   'title',
+                    center: '',
+                    right:  'today month prev,next'
+                },
+                editable: true,
+                droppable: true,
+                dayClick: function(date, allDay, jsEvent, view) {
+
+                    //openFormInModal
+
+                    /*if (allDay) {
+                        alert('Clicked on the entire day: ' + date);
+                    }else{
+                        alert('Clicked on the slot: ' + date);
+                    }
+
+                    alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+
+                    alert('Current view: ' + view.name);
+
+                    // change the day's background color just for fun
+                    $(this).css('background-color', 'red');*/
+
+                }
+            });
+        })
+    </script>
+
+    <div class="col-md-9 col-sm-9">
+        <div id="calendar" class="has-toolbar"></div>
+    </div>
+{% endblock body %}
