@@ -732,4 +732,60 @@ class Organization
     {
         return $this->phone;
     }
+    /**
+     * @var \Lists\OrganizationBundle\Entity\OrganizationGroup
+     */
+    private $group;
+
+
+    /**
+     * Set group
+     *
+     * @param \Lists\OrganizationBundle\Entity\OrganizationGroup $group
+     * @return Organization
+     */
+    public function setGroup(\Lists\OrganizationBundle\Entity\OrganizationGroup $group = null)
+    {
+        $this->group = $group;
+    
+        return $this;
+    }
+
+    /**
+     * Get group
+     *
+     * @return \Lists\OrganizationBundle\Entity\OrganizationGroup 
+     */
+    public function getGroup()
+    {
+        return $this->group;
+    }
+    /**
+     * @var integer
+     */
+    private $group_id;
+
+
+    /**
+     * Set group_id
+     *
+     * @param integer $groupId
+     * @return Organization
+     */
+    public function setGroupId($groupId)
+    {
+        $this->group_id = $groupId;
+    
+        return $this;
+    }
+
+    /**
+     * Get group_id
+     *
+     * @return integer 
+     */
+    public function getGroupId()
+    {
+        return $this->group_id;
+    }
 }

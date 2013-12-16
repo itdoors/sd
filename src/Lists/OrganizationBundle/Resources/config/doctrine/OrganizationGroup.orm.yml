@@ -1,0 +1,27 @@
+Lists\OrganizationBundle\Entity\OrganizationGroup:
+    type: entity
+    table: organization_group
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        slug:
+            type: string
+            length: 20
+            fixed: false
+            nullable: true
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        description:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: description
+    lifecycleCallbacks: {  }

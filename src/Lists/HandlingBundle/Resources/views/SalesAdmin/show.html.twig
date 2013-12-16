@@ -48,7 +48,8 @@
 				<ul class="nav nav-tabs">
 					<li class="active"><a href="#tab_0" data-toggle="tab">{% trans %}Handling{% endtrans %}</a></li>
 					<li><a href="#tab_1" data-toggle="tab">{% trans %}Managers{% endtrans %}</a></li>
-					<li><a href="#tab_2" data-toggle="tab">{% trans %}Contacts{% endtrans %}</a></li>										
+					<li><a href="#tab_2" data-toggle="tab">{% trans %}Contacts{% endtrans %}</a></li>
+                    <li><a href="#tab_3" data-toggle="tab">{% trans %}Organization{% endtrans %}</a></li>
 				</ul>
 				<div class="tab-content">
 
@@ -80,6 +81,16 @@
                         }
                         )
                     }}
+                    <!--tabpane-->
+                    <div class="tab-pane" id="tab_3">
+                        {{  include(
+                            'ListsOrganizationBundle:' ~ baseTemplate ~ ':edit.html.twig',
+                                {
+                                    organization: organization
+                                }
+                            )
+                        }}
+                    </div>
                     <!--tabpane-->
 				</div>
 				<!--tab-content-->

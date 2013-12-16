@@ -171,6 +171,22 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
 
+    public function organizationGroupAction()
+    {
+        $organizationTypes = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:OrganizationGroup')
+            ->findAll();
+
+        $result = array();
+
+        foreach ($organizationTypes as $organization)
+        {
+            $result[] = $this->serializeObject($organization);
+        }
+
+        return new Response(json_encode($result));
+    }
+
     public function handlingStatusAction()
     {
         $objects = $this->getDoctrine()

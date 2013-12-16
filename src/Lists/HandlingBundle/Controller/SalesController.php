@@ -180,6 +180,11 @@ class SalesController extends BaseController
             ->getRepository('ListsHandlingBundle:Handling')
             ->getHandlingShow($id);
 
+        /** @var \Lists\OrganizationBundle\Entity\Organization $organization */
+        $organization = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization')
+            ->find($object[0]->getOrganizationId());
+
         $handlingServiceObjects = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingService')
             ->findAll();
@@ -201,7 +206,8 @@ class SalesController extends BaseController
             'baseRoutePrefix' => $this->baseRoutePrefix,
             'handlingServices' => $handlingServices,
             'canEdit' => $canEdit,
-            'isResultClosed' => $isResultClosed
+            'isResultClosed' => $isResultClosed,
+            'organization' => $organization
         ));
     }
 

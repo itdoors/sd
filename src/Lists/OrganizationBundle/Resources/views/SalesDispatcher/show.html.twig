@@ -48,14 +48,15 @@
 					<li><a href="#tab_3" data-toggle="tab">{% trans %}Contracts{% endtrans %}</a></li>
 				</ul>
 				<div class="tab-content">
-
-                    {{  include(
-                        'ListsOrganizationBundle:' ~ baseTemplate ~ ':edit.html.twig',
-                        {
-                            organization: organization
-                        }
-                        )
-                    }}
+                    <div class="tab-pane active" id="tab_0">
+                        {{  include(
+                            'ListsOrganizationBundle:' ~ baseTemplate ~ ':edit.html.twig',
+                            {
+                                organization: organization
+                            }
+                            )
+                        }}
+                    </div>
 					<!--tabpane-->
                     {{  include(
                         'ListsOrganizationBundle:' ~ baseTemplate ~ ':managers.html.twig',

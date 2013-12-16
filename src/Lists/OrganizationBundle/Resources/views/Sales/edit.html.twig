@@ -7,13 +7,18 @@
         $.fn.editable.defaults.inputclass = 'form-control';
         $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
 
-        $('#name, #shortname, #address, #mailingAddress, #site, #edrpou, #inn, #certificate').editable({
+        $('#name, #shortname, #address, #mailingAddress, #site, #edrpou, #inn, #certificate, #shortDescription').editable({
             url: '{{ path('sd_common_ajax_organization_save') }}'
         });
 
         $('#organizationTypeId').editable({
             url: '{{ path('sd_common_ajax_organization_save') }}',
             source: '{{ path('sd_common_ajax_organization_type') }}'
+        });
+
+        $('#groupId').editable({
+            url: '{{ path('sd_common_ajax_organization_save') }}',
+            source: '{{ path('sd_common_ajax_organization_group') }}'
         });
 
         $('#scopeId').editable({
@@ -33,15 +38,13 @@
 
 </script>
 
-<div class="tab-pane active" id="tab_0">
     <div class="col-md-12">
         <table id="user" class="table table-bordered table-striped">
             <tbody>
             <tr>
                 <td style="width:15%">{% trans %}Creator{% endtrans %}</td> {# Добавляем создателя и дату создания #}
                 <td style="width:50%">
-                    {{ organization.creator }} ({{ organization.createdatetime }})
-
+                    {{ organization.creator }} ({{ organization.createdatetime|date('d.m.Y, H:i') }})
                 </td>
                 <td style="width:35%"><span class="text-muted">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп"</span></td>
             </tr>
@@ -171,8 +174,8 @@
             <tr>
                 <td>{% trans %}Organization Description{% endtrans %}</td>
                 <td>
-                    <a href="#" id="description" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Organization Description{% endtrans %}">
-                        {{ organization.description }}
+                    <a href="#" id="shortDescription" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Organization Description{% endtrans %}">
+                        {{ organization.shortDescription }}
                     </a>
                 </td>
                 <td><span class="text-muted">{% trans %}Enter Organization Description{% endtrans %}</span></td>
@@ -180,4 +183,3 @@
             </tbody>
         </table>
     </div>
-</div>

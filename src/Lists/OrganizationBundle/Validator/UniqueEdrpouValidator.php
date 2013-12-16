@@ -19,6 +19,8 @@ class UniqueEdrpouValidator extends ConstraintValidator
     {
         if ($value)
         {
+            $root = $this->context->getRoot();
+
             $conflicts = $this->em
                 ->getRepository('ListsOrganizationBundle:Organization')
                 ->findByEdrpou($value);
@@ -27,12 +29,18 @@ class UniqueEdrpouValidator extends ConstraintValidator
             {
                 $organization = $conflicts[0];
 
-                $this->context->addViolation('Organization with edrpou = %edrpou% already exists. %OrganizationName% %OrganizationShortName%',
-                    array(
-                        '%edrpou%' => $value,
-                        '%OrganizationName%' => $organization->getName(),
-                        '%OrganizationShortName%' => $organization->getShortname(),
-                    ));
+                if ($root)
+                {
+                    if ($root->getId() != $organization->getId())
+                    {
+                        $this->context->addViolation('Organization with edrpou = %edrpou% already exists. %OrganizationName% %OrganizationShortName%',
+                            array(
+                                '%edrpou%' => $value,
+                                '%OrganizationName%' => $organization->getName(),
+                                '%OrganizationShortName%' => $organization->getShortname(),
+                            ));
+                    }
+                }
             }
         }
     }

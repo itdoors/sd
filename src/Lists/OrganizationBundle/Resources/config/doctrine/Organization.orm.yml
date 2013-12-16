@@ -95,6 +95,10 @@ Lists\OrganizationBundle\Entity\Organization:
             fixed: false
             nullable: true
             column: phone
+        group_id:
+            type: integer
+            nullable: true
+            column: group_id
     manyToOne:
         city:
             targetEntity: Lists\CityBundle\Entity\City
@@ -114,6 +118,14 @@ Lists\OrganizationBundle\Entity\Organization:
             inversedBy: null
             joinColumns:
                 organization_type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        group:
+            targetEntity: OrganizationGroup
+            cascade: {  }
+            inversedBy: organizations
+            joinColumns:
+                group_id:
                     referencedColumnName: id
             orphanRemoval: false
         creator:
