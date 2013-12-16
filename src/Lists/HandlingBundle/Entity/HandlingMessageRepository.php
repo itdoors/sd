@@ -3,6 +3,7 @@
 namespace Lists\HandlingBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * HandlingMessageRepository
@@ -21,6 +22,23 @@ class HandlingMessageRepository extends EntityRepository
         return $this->createQueryBuilder('hm')
             ->where('hm.handling_id = :handlingId')
             ->setParameter(':handlingId', $handlingId)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * get Future messages
+     *
+     */
+    public function getFutureMessages($userIds)
+    {
+        return $this->createQueryBuilder('hm')
+            ->leftJoin('hm.user', 'user')
+            ->leftJoin('hm.type', 'type')
+            ->where('hm.createdate >= :createdate')
+            ->andWhere('user.id in (:userIds)')
+            ->setParameter(':createdate', new \DateTime(), \Doctrine\DBAL\Types\Type::DATETIME)
+            ->setParameter(':userIds', $userIds)
             ->getQuery()
             ->getResult();
     }

@@ -1,0 +1,27 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#calendar').fullCalendar({
+            header: {
+                left:   'title',
+                center: '',
+                right:  'today month prev,next'
+            },
+            events : {{ events|json_encode|raw }},
+            eventClick: function(event) {
+                if (event.url) {
+                    window.open(event.url);
+                    return false;
+                }
+            },
+            editable: true,
+            droppable: true,
+            dayClick: function(date, allDay, jsEvent, view) {
+
+            }
+        });
+    })
+</script>
+
+<div class="col-md-9 col-sm-9">
+    <div id="calendar" class="has-toolbar"></div>
+</div>

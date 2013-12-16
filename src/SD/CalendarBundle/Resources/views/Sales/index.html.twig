@@ -47,40 +47,5 @@
             </div>
 
     </div>
-
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('#calendar').fullCalendar({
-                header: {
-                    left:   'title',
-                    center: '',
-                    right:  'today month prev,next'
-                },
-                editable: true,
-                droppable: true,
-                dayClick: function(date, allDay, jsEvent, view) {
-
-                    //openFormInModal
-
-                    /*if (allDay) {
-                        alert('Clicked on the entire day: ' + date);
-                    }else{
-                        alert('Clicked on the slot: ' + date);
-                    }
-
-                    alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-
-                    alert('Current view: ' + view.name);
-
-                    // change the day's background color just for fun
-                    $(this).css('background-color', 'red');*/
-
-                }
-            });
-        })
-    </script>
-
-    <div class="col-md-9 col-sm-9">
-        <div id="calendar" class="has-toolbar"></div>
-    </div>
+    {{ render(controller('SDCalendarBundle:Sales:HandlingMessage')) }}
 {% endblock body %}
