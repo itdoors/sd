@@ -6,6 +6,7 @@
                 center: '',
                 right:  'today month prev,next'
             },
+            firstDay: 1,
             events : {{ events|json_encode|raw }},
             eventClick: function(event) {
                 if (event.url) {
