@@ -20,12 +20,15 @@
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/core/plugins/table-tools/media/css/TableTools.css')}} " />
 {% endblock %}
 
 {% block js_page_level_plugins %}
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/jquery.dataTables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/core/plugins/table-tools/media/js/ZeroClipboard.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/core/plugins/table-tools/media/js/TableTools.js') }}"></script>
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.js') }}"></script>
 {% endblock %}
 
@@ -71,10 +74,13 @@
              * Initialize DataTables, with no sorting on the 'details' column
              */
             var oTable = $('#report-handling').dataTable( {
-                //"sDom": '<"row"<"col-md-9 col-sm-12" f><"col-md-3 col-sm-12" l>>rt<"bottom"ip><"clear">',
+                "sDom": "<'row'<'col-md-12 col-sm-12'T><'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
                 "aoColumnDefs": [
                     {"bSortable": false, "aTargets": [ 0 ] }
                 ],
+                "oTableTools": {
+                    "sSwfPath": "{{ asset('templates/core/plugins/table-tools/media/swf/copy_csv_xls_pdf.swf') }}"
+                },
                 "aoColumns": [
                     null,
                     null,

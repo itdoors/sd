@@ -85,7 +85,11 @@
                         <td>{{ item.cityName|e }}</td>
                         <td>{{ item.scopeName|e }}</td>
                         <td>{{ item.handlingServiceOffered|e }}</td>
-                        <td>{{ item.handlingChance|e }}</td>
+                        <td>
+                            <div style="width: {{ item.progress }}%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="{{ item.progress }}" role="progressbar" class="progress-bar progress-bar-success">
+                                <span class="">{{ item.percentageString|e }}</span>
+                            </div>
+                        </td>
                         <td>{{ item.statusName|e }}</td>
                         <td>{{ item.fullNames|e }}</td>
                         <td></td>
