@@ -69,6 +69,8 @@ class HandlingRepository extends EntityRepository
             ->addSelect('h.serviceOffered as handlingServiceOffered')
             ->addSelect('h.chance as handlingChance')
             ->addSelect('status.name as statusName')
+            ->addSelect('status.percentageString as percentageString')
+            ->addSelect('status.progress as progress')
             ->addSelect("
                 array_to_string(
                     ARRAY(
