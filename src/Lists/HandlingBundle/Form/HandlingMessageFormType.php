@@ -76,7 +76,8 @@ class HandlingMessageFormType extends AbstractType
         ;
 
         $builder
-            ->add('create', 'submit');
+            ->add('create', 'submit')
+            ->add('cancel', 'button');
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,

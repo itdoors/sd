@@ -1,7 +1,13 @@
 parameters:
 #    sd_calendar.example.class: SD\CalendarBundle\Example
+    sd_calendar.form.class: SD\CalendarBundle\Form\CalendarEventForm
 
 services:
 #    sd_calendar.example:
 #        class: %sd_calendar.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
+    sd_calendar.form.calendarEventForm:
+        class: %sd_calendar.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: calendarEventForm }

@@ -2,7 +2,9 @@
 
 namespace Lists\HandlingBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 class SalesAdminController extends SalesController
 {
@@ -96,6 +98,68 @@ class SalesAdminController extends SalesController
         return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_handling_show', array(
                 'id' => $id
             )));
+    }
+
+    public function reportSimpleAction()
+    {
+        /** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
+        $handlingRepository = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling');
+
+        /** @var \Doctrine\ORM\Query $handlingQuery */
+        $handlingQuery = $handlingRepository->getAllForSalesQuery(null, array());
+
+        $results = $handlingQuery->getResult();
+
+        return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':reportSimple.html.twig', array(
+                'results' => $results,
+                'baseRoutePrefix' => $this->baseRoutePrefix,
+                'baseTemplate' => $this->baseTemplate
+            ));
+    }
+
+    public function reportAdvancedRangeAction()
+    {
+        $form = $this->createForm('handlingReportDateRangeForm');
+
+        return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':reportAdvancedRange.html.twig', array(
+                'form' => $form->createView(),
+                'baseRoutePrefix' => $this->baseRoutePrefix,
+                'baseTemplate' => $this->baseTemplate
+            ));
+    }
+
+    public function reportAdvancedDoneAction(Request $request)
+    {
+        $form = $this->createForm('handlingReportDateRangeForm');
+
+        $data = $request->request->get($form->getName());
+
+        if (!sizeof($data))
+        {
+            return $this->redirect($this->generateUrl('lists_sales_admin_report_advanced_range'));
+        }
+
+        $from = new \DateTime($data['from']);
+        $to = new \DateTime($data['to']);
+
+        /** @var \Lists\HandlingBundle\Entity\HandlingMessageRepository $handlingRepository */
+        $handlingMessageRepository = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingMessage');
+
+        /** @var \Doctrine\ORM\Query $handlingQuery */
+        $results = $handlingMessageRepository->getAdvancedResult($from, $to);
+
+        $types = $this->getDoctrine()->getRepository('ListsHandlingBundle:HandlingMessageType')
+            ->getList();
+
+        return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':reportAdvancedDone.html.twig', array(
+                'baseRoutePrefix' => $this->baseRoutePrefix,
+                'baseTemplate' => $this->baseTemplate,
+                'results' => $results,
+                'types' => $types
+            ));
+
     }
 }
 
