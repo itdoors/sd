@@ -24,14 +24,17 @@ class SalesController extends Controller
 
         foreach ($handlingMessages as $handlingMessage)
         {
-           $start = $handlingMessage->getCreatedate();
+            $start = $handlingMessage->getCreatedate();
+
+            $className = $handlingMessage->getType() ? 'calendar-event-' . $handlingMessage->getType()->getSlug() : '';
 
             $events[] = array(
-                'title' => (string) $handlingMessage->getType(),
-                'start' => $start->format('Y-m-d'),
+                'title' => (string) $handlingMessage->getType() . ' (' . $start->format('H:i').')',
+                'start' => $start->format('Y-m-d H:i:s'),
                 'url' => $this->generateUrl('lists_sales_handling_show', array(
                         'id' => $handlingMessage->getHandlingId()
-                    ))
+                    )),
+                'className' => $className
            );
         }
 
