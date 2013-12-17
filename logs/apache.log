@@ -117,3 +117,12 @@
 [Sun Dec 15 19:23:12 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app_dev.php/lists/sales/handling/show/57
 [Sun Dec 15 22:31:04 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app_dev.php/lists/sales/handling/show/57
 [Sun Dec 15 22:47:38 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app_dev.php/lists/sales/handling/show/22
+[Tue Dec 17 08:53:47 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app.php/login
+[Tue Dec 17 08:53:49 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app.php/login
+[Tue Dec 17 08:54:55 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Tue Dec 17 08:54:57 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Tue Dec 17 09:17:07 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Tue Dec 17 09:17:09 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/scripts/login2.js, referer: http://sd.dev/app_dev.php/login
+[Tue Dec 17 10:03:06 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app_dev.php/lists/sales/handling/create/step1
+[Tue Dec 17 10:06:02 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app_dev.php/lists/sales/handling/create/step1
+[Tue Dec 17 10:20:06 2013] [error] [client 127.0.0.1] File does not exist: /var/www/sd/web/templates/metronic/plugins/data-tables/DT_bootstrap.cs, referer: http://sd.dev/app_dev.php/lists/sales/handling/create/step2
