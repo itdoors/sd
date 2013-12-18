@@ -645,13 +645,12 @@ class SalesController extends BaseController
             try
             {
 
-                //$newHandling = new Handling();
-                $newHandling = clone $handling;
+                $newHandling = new Handling();
 
                 //$newHandling->setStatusId($formData['status']);
                 $newHandling->setOrganization($organization);
 
-                /*$resultId = $handling->getResult() ? $handling->getResult()->getId() : null;
+                $resultId = $handling->getResult() ? $handling->getResult()->getId() : null;
                 $statusId = $handling->getStatus() ? $handling->getStatus()->getId() : null;
                 $typeId = $handling->getType() ? $handling->getType()->getId() : null;
 
@@ -669,18 +668,19 @@ class SalesController extends BaseController
                 $newHandling->setChance($handling->getChance());
                 $newHandling->setDescription($handling->getDescription());
 
-                foreach ($handling->getHandlingServices() as $service)
+                if ($handling->getHandlingServices())
                 {
-                    $newService = $this->getDoctrine()->getRepository('ListsHandlingBundle:HandlingService')
-                        ->find($service->getId());
+                    foreach ($handling->getHandlingServices() as $service)
+                    {
+                        $newService = $this->getDoctrine()->getRepository('ListsHandlingBundle:HandlingService')
+                            ->find($service->getId());
 
-                    $newHandling->addHandlingService($newService);
-                }*/
-
+                        $newHandling->addHandlingService($newService);
+                    }
+                }
                 //$handling->setS($handling->getResult());
 
-                //$em->persist($newHandling);
-                $em->persist($handling);
+                $em->persist($newHandling);
 
                 $em->flush();
 

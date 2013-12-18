@@ -163,4 +163,11 @@ class HandlingService
     {
         return $this->getName();
     }
+
+    public function __sleep()
+    {
+        return array(
+            'id',
+        );
+    }
 }

@@ -166,4 +166,12 @@ class HandlingResult
     {
         return $this->sortorder;
     }
+
+    public function __sleep()
+    {
+        return array(
+            'id',
+            'name',
+        );
+    }
 }

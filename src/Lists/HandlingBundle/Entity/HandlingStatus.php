@@ -174,4 +174,11 @@ class HandlingStatus
     {
         return $this->progress;
     }
+
+    public function __sleep()
+    {
+        return array(
+            'id',
+        );
+    }
 }

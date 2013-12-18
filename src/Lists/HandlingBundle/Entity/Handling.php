@@ -502,6 +502,11 @@ class Handling
     public function setResult(\Lists\HandlingBundle\Entity\HandlingResult $result = null)
     {
         $this->result = $result;
+
+        if ($result)
+        {
+            $this->setResultId($result->getId());
+        }
     
         return $this;
     }
@@ -525,6 +530,11 @@ class Handling
     public function setStatus(\Lists\HandlingBundle\Entity\HandlingStatus $status = null)
     {
         $this->status = $status;
+
+        if ($status)
+        {
+            $this->setStatusId($status->getId());
+        }
 
         $this->setStatusChangeDate(new \DateTime());
     
@@ -550,6 +560,11 @@ class Handling
     public function setType(\Lists\HandlingBundle\Entity\HandlingType $type = null)
     {
         $this->type = $type;
+
+        if ($type)
+        {
+            $this->setTypeId($type->getId());
+        }
     
         return $this;
     }
@@ -674,6 +689,11 @@ class Handling
     public function setOrganization(\Lists\OrganizationBundle\Entity\Organization $organization = null)
     {
         $this->organization = $organization;
+
+        if ($organization)
+        {
+            $this->setOrganizationId($organization->getId());
+        }
     
         return $this;
     }
@@ -905,4 +925,18 @@ class Handling
     {
         return $this->closer;
     }
+
+    /*public function __sleep()
+    {
+        return array(
+            'id',
+            'handlingServices',
+            'organization',
+            //'result',
+            //'status',
+            //'type',
+            //'user',
+            //'closer'
+        );
+    }*/
 }

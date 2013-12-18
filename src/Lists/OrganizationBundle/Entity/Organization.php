@@ -788,4 +788,12 @@ class Organization
     {
         return $this->group_id;
     }
+
+    public function __sleep()
+    {
+        return array(
+            'id',
+            'name'
+        );
+    }
 }
