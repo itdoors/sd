@@ -12,12 +12,12 @@ class HandlingStatus
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
 
     /**
@@ -65,7 +65,7 @@ class HandlingStatus
     /**
      * @var integer
      */
-    private $sortorder;
+    protected $sortorder;
 
 
     /**
@@ -93,17 +93,17 @@ class HandlingStatus
     /**
      * @var string
      */
-    private $slug;
+    protected $slug;
 
     /**
      * @var string
      */
-    private $percentageString;
+    protected $percentageString;
 
     /**
      * @var integer
      */
-    private $progress;
+    protected $progress;
 
 
     /**

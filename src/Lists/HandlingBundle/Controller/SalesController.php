@@ -551,6 +551,7 @@ class SalesController extends BaseController
             )));*/
         }
 
+
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate. ':step3.html.twig', array(
                 'baseTemplate' => $this->baseTemplate,
                 'baseRoutePrefix' => $this->baseRoutePrefix,
@@ -644,12 +645,13 @@ class SalesController extends BaseController
             try
             {
 
-                $newHandling = new Handling();
+                //$newHandling = new Handling();
+                $newHandling = clone $handling;
 
                 //$newHandling->setStatusId($formData['status']);
                 $newHandling->setOrganization($organization);
 
-                $resultId = $handling->getResult() ? $handling->getResult()->getId() : null;
+                /*$resultId = $handling->getResult() ? $handling->getResult()->getId() : null;
                 $statusId = $handling->getStatus() ? $handling->getStatus()->getId() : null;
                 $typeId = $handling->getType() ? $handling->getType()->getId() : null;
 
@@ -673,11 +675,12 @@ class SalesController extends BaseController
                         ->find($service->getId());
 
                     $newHandling->addHandlingService($newService);
-                }
+                }*/
 
                 //$handling->setS($handling->getResult());
 
-                $em->persist($newHandling);
+                //$em->persist($newHandling);
+                $em->persist($handling);
 
                 $em->flush();
 

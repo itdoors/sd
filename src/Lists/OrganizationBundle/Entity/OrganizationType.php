@@ -12,7 +12,7 @@ class OrganizationType
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string

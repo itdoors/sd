@@ -31,11 +31,14 @@
     }}
 <div class="portlet-body form">
     <div class="form-body">
-        <div class="alert alert-danger display-hide">
-            <button class="close" data-close="alert"></button>
-            {% trans %}You have some form errors. Please check below.{% endtrans %}
-            {{ form_errors(form) }}
-        </div>
+        {% form_theme form 'SDCommonBundle:Form:form_errors.html.twig' %}
+        {% if form.vars.valid is sameas(false) %}
+            <div class="alert alert-danger">
+                <button class="close" data-close="alert"></button>
+                {% trans %}You have some form errors. Please check below.{% endtrans %}
+                {{ form_errors(form) }}
+            </div>
+        {% endif %}
         <h3 class="form-section">{% trans %}General information{% endtrans %}</h3>
         <div class="row">
             <div class="col-md-6
@@ -142,9 +145,15 @@
         </div>
         <!--/row-->
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6
+                    {% if form.square.vars.errors|length %}
+					    has-error
+					{% endif %}">
                 {# Square - control with numeric validation #}
                 <div class="form-group">
+                    {% if form.square.vars.errors|length %}
+                        {{ form_errors(form.square) }}
+                    {% endif %}
                     {{ form_label(form.square, 'Square', {'attr': {'class': 'control-label'}}) }}
                     {{ form_widget(form.square, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Square'}}) }}
                     <span class="help-block">{% trans %}Enter Square{% endtrans %}"</span>

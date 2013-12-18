@@ -20,6 +20,8 @@ framework:
     session:         ~
     fragments:       ~
     http_method_override: true
+    serializer:
+        enabled: true
 
 # Twig Configuration
 twig:
@@ -91,3 +93,9 @@ knp_paginator:
     template:
         pagination: SDCommonBundle:Pagination:sliding.html.twig     # sliding pagination controls template
         sortable: SDCommonBundle:Pagination:sortable_link.html.twig # sort link template
+
+services:
+   get_set_method_normalizer:
+      class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
+      tags:
+         - { name: serializer.normalizer }

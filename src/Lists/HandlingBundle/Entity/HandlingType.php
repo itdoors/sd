@@ -12,17 +12,17 @@ class HandlingType
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      */
-    private $slug;
+    protected $slug;
 
 
     /**
@@ -93,7 +93,7 @@ class HandlingType
     /**
      * @var integer
      */
-    private $sortorder;
+    protected $sortorder;
 
 
     /**
