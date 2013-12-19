@@ -77,6 +77,11 @@ Lists\ContactBundle\Entity\ModelContact:
             type: integer
             nullable: true
             column: type_id
+        isShared:
+            type: boolean
+            nullable: true
+            default: false
+            column: is_shared
     manyToOne:
         type:
             targetEntity: ModelContactType

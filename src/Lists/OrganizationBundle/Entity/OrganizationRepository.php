@@ -249,4 +249,27 @@ class OrganizationRepository extends EntityRepository
             ->getQuery()
             ->getResult();
     }
+
+	/**
+	 * Returns organization ids with in one organization group
+	 */
+	public function getIdsInGroup($organizationId)
+	{
+		$organization = $this->getEntityManager()->getRepository('ListsOrganizationBundle:Organization')
+			->find($organizationId);
+
+		if (!$organization || !$organization->getGroupId())
+		{
+			return array();
+		}
+
+		$sql = $this->createQueryBuilder('o')
+			->select('o.id as id')
+			->where('o.group_id = :groupId')
+			->setParameter(':groupId', $organization->getGroupId())
+			->getQuery()
+			->getResult();
+
+		return $sql;
+	}
 }

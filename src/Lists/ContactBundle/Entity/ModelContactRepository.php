@@ -51,9 +51,8 @@ class ModelContactRepository extends EntityRepository
 
 			if ($organizationId && $organizationId != 0)
 			{
-				$sql
-					->andWhere('o.id = :organizationId')
-					->setParameter(':organizationId', $organizationId);
+				$this->processOrganizationQuery($sql, $organizationId);
+				$this->processOrganizationQuery($sqlCount, $organizationId);
 			}
 		}
 
@@ -127,6 +126,28 @@ class ModelContactRepository extends EntityRepository
         $sql
             ->andWhere('owner.id in (:userIds) OR creator.id in (:userIds)')
             ->setParameter(':userIds', $userIds);
+    }
+
+	/**
+     * Processes sql query. adding organization query
+     *
+     * @param \Doctrine\ORM\QueryBuilder $sql
+     * @param int $organizationId
+     */
+    public function processOrganizationQuery($sql, $organizationId)
+    {
+		$sql
+			->andWhere('o.id = :organizationId')
+			->setParameter(':organizationId', $organizationId);
+
+		$orgIds = $this->getIdsInGroup($organizationId);
+
+		if (sizeof($orgIds))
+		{
+			$sql
+				->orWhere('mc.modelId in (:organizationIds) AND mc.isShared = true')
+				->setParameter(':organizationIds', $orgIds);
+		}
     }
 
 	/**
@@ -225,6 +246,7 @@ class ModelContactRepository extends EntityRepository
             //->addSelect("CONCAT(CONCAT(mc.phone1, ' '), mc.phone2) as phone")
             ->addSelect("CONCAT(CONCAT(creator.lastName, ' '), creator.firstName) as creatorFullName")
             ->addSelect("CONCAT(CONCAT(owner.lastName, ' '), owner.firstName) as ownerFullName")
+            ->addSelect("owner.id as ownerId")
             ->leftJoin('mc.user', 'creator')
             ->leftJoin('mc.owner', 'owner')
             ->leftJoin('ListsOrganizationBundle:Organization', 'o', 'WITH', 'o.id = mc.modelId')
@@ -281,4 +303,15 @@ class ModelContactRepository extends EntityRepository
 
         return $sql;
     }
+
+	/**
+	 * Returns organization ids with in one organization group
+	 */
+	public function getIdsInGroup($organizationId)
+	{
+		return $this->getEntityManager()
+			->getRepository('ListsOrganizationBundle:Organization')
+			->getIdsInGroup($organizationId);
+	}
+
 }

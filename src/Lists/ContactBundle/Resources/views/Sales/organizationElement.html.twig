@@ -1,4 +1,6 @@
+{% set canEdit = app.user.id == item.ownerId %}
 <td>
+    {% if canEdit %}
     <a id="managers_list_new" class="btn green ajax-form"
        data-toggle="modal"
        href="#form_modal_contact"
@@ -11,6 +13,9 @@
             >
         {{ item.0.id }}
     </a>
+    {% else %}
+        {{ item.0.id }}
+    {% endif %}
 </td>
 {% if organizationId %}
 {% else %}

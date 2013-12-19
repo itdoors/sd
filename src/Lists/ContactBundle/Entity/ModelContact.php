@@ -577,4 +577,32 @@ class ModelContact
             $this->setBirthday(new \DateTime($birthdayString));
         }
     }
+    /**
+     * @var boolean
+     */
+    private $isShared;
+
+
+    /**
+     * Set isShared
+     *
+     * @param boolean $isShared
+     * @return ModelContact
+     */
+    public function setIsShared($isShared)
+    {
+        $this->isShared = $isShared;
+    
+        return $this;
+    }
+
+    /**
+     * Get isShared
+     *
+     * @return boolean 
+     */
+    public function getIsShared()
+    {
+        return $this->isShared;
+    }
 }

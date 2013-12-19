@@ -56,7 +56,6 @@
             }
         })
 
-
         $('.date-picker').datepicker({
             rtl: App.isRTL(),
             autoclose: true,
@@ -67,6 +66,8 @@
             endDate: new Date(),
             weekStart: 1
         });
+
+        $('.make-switch input').bootstrapSwitch('setSizeClass', '');
     });
 
 </script>
@@ -123,7 +124,12 @@
 
                     <div class="form-group col-md-6">
                         {{ form_label(form.phone2, 'Phone 2', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.phone2, {'attr' : {'class' : 'form-control', 'placeholder': "Phone 2"}}) }}
+                        {{ form_widget(form.phone2, {'attr' : {
+                            'class' : 'form-control',
+                            'placeholder': "Phone 2",
+                            'data-text':  form.vars.value.phone2,
+                            'data-id':  form.vars.value.phone2
+                        }}) }}
                     </div>
 
                     <div class="form-group col-md-6">
@@ -150,6 +156,16 @@
                         {{ form_label(form.type, 'Contact type', {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': "Contact type"}}) }}
                     </div>
+
+                    {% if form.isShared is defined %}
+                    <div class="form-group col-md-6">
+                        {{ form_label(form.isShared, 'Shared', {'attr': {'class': 'control-label'}}) }}
+                        <div class="make-switch" data-on-label="Yes" data-off-label="No">
+                            {{ form_widget(form.isShared, {'attr' : {'placeholder': "Shared"}}) }}
+                        </div>
+
+                    </div>
+                    {% endif %}
 
                     <input type="hidden" name="formName" value="{{ formName }}">
                     <input type="hidden" name="postFunction" value="{{ postFunction }}">
