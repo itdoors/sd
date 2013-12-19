@@ -56,6 +56,21 @@ class SalesController extends BaseController
         ));
     }
 
+	public function organizationElementAction($id)
+	{
+		$organizationContactQuery = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
+			->getMyOrganizationsContacts(array(), null, $id);
+
+		$organizationContact = $organizationContactQuery->getSingleResult();
+
+		return $this->render('ListsContactBundle:' . $this->baseTemplate . ':organizationElement.html.twig', array(
+				'item' => $organizationContact,
+				'organizationId' => 0,
+				'baseTemplate' => $this->baseTemplate,
+				'baseRoutePrefix' => $this->baseRoutePrefix
+			));
+	}
+
     public function handlingAction($handlingId)
     {
         $user = $this->getUser();

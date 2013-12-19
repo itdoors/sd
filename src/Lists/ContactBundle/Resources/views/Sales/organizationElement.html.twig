@@ -1,0 +1,143 @@
+<td>
+    <a id="managers_list_new" class="btn green ajax-form"
+       data-toggle="modal"
+       href="#form_modal_contact"
+       data-target_holder="modelContactFormTpl"
+       data-form_name="modelContactOrganizationEditForm"
+       data-post_function="updateList"
+       data-post_target_id="ModelContact{{ item.0.id }}"
+       data-model="ModelContact"
+       data-model-id="{{ item.0.id }}"
+            >
+        {{ item.0.id }}
+    </a>
+</td>
+{% if organizationId %}
+{% else %}
+    <td>{{ item.organizationName }}</td>
+{% endif %}
+<td>
+    <a href="#" class="sd-contact-editable-text editable-click {% if item.0.firstName is empty%} editable-empty {% endif %}" data-name="firstName" data-type="text" data-pk="{{ item.0.id }}" data-value="{{ item.0.firstName }}" data-original-title="{% trans %}Edit{% endtrans %}">
+        {{ item.0.firstName }}
+        {% if item.0.firstName is empty%}
+            {% trans %}Enter value{% endtrans %}
+        {% endif %}
+    </a>
+</td>
+<td>
+    <a href="#" class="sd-contact-editable-text editable-click {% if item.0.lastName is empty %} editable-empty {% endif %}" data-name="lastName" data-type="text" data-pk="{{ item.0.id }}" data-value="{{ item.0.lastName }}" data-original-title="{% trans %}Edit{% endtrans %}">
+        {{ item.0.lastName }}
+        {% if item.0.lastName is empty%}
+            {% trans %}Enter value{% endtrans %}
+        {% endif %}
+    </a>
+</td>
+<td>
+    <a href="#" class="sd-contact-editable-text editable-click {% if item.0.middleName is empty %} editable-empty {% endif %}" data-name="middleName" data-type="text" data-pk="{{ item.0.id }}" data-value="{{ item.0.middleName }}" data-original-title="{% trans %}Edit{% endtrans %}">
+        {{ item.0.middleName }}
+        {% if item.0.middleName is empty%}
+            {% trans %}Enter value{% endtrans %}
+        {% endif %}
+    </a>
+</td>
+<td>
+    <a href="#" class="sd-contact-editable-text editable-click {% if item.0.position is empty%} editable-empty {% endif %}" data-name="position" data-type="text" data-pk="{{ item.0.id }}" data-value="{{ item.0.position }}" data-original-title="{% trans %}Edit{% endtrans %}">
+        {{ item.0.position }}
+        {% if item.0.position is empty%}
+            {% trans %}Enter value{% endtrans %}
+        {% endif %}
+    </a>
+</td>
+<td>
+    <a href="#" class="sd-contact-editable-phone editable-click {% if item.0.phone1 is empty %} editable-empty {% endif %}"
+       data-name="phone1" data-type="select2"
+       data-pk="{{ item.0.id }}"
+       data-value="{{ item.0.phone1 }}"
+       data-id="{{ item.0.phone1 }}"
+       data-text="{{ item.0.phone1 }}"
+       data-original-title="{% trans %}Edit{% endtrans %}"
+            {% if item.organizationId %}
+                data-organization-id="{{ item.organizationId }}"
+            {% endif %}
+            >
+        {{ item.0.phone1 }}
+        {% if item.0.phone1 is empty%}
+            {% trans %}Enter value{% endtrans %}
+        {% endif %}
+    </a>
+</td>
+<td>
+    <a href="#" class="sd-contact-editable-phone editable-click {% if item.0.phone2 is empty %} editable-empty {% endif %}"
+       data-name="phone2" data-type="select2"
+       data-pk="{{ item.0.id }}"
+       data-value="{{ item.0.phone2 }}"
+       data-id="{{ item.0.phone2 }}"
+       data-text="{{ item.0.phone2 }}"
+       data-original-title="{% trans %}Edit{% endtrans %}"
+            {% if item.organizationId %}
+                data-organization-id="{{ item.organizationId }}"
+            {% endif %}
+            >
+        {{ item.0.phone2 }}
+        {% if item.0.phone2 is empty%}
+            {% trans %}Enter value{% endtrans %}
+        {% endif %}
+    </a>
+</td>
+<td>
+    <a href="#" class="sd-contact-editable-text editable-click {% if item.0.email is empty %} editable-empty {% endif %}" data-name="email" data-type="text" data-pk="{{ item.0.id }}" data-value="{{ item.0.email }}" data-original-title="{% trans %}Edit{% endtrans %}">
+        {{ item.0.email }}
+        {% if item.0.email is empty%}
+            {% trans %}Enter value{% endtrans %}
+        {% endif %}
+    </a>
+</td>
+<td>
+    <a href="#"
+       class="sd-contact-editable-text sd-contact-birthday editable-click {% if item.0.birthday is empty %} editable-empty {% endif %}"
+       data-name="birthdayString"
+       data-type="text"
+       data-pk="{{ item.0.id }}"
+            {% if item.0.birthday %}
+                data-value="{{ item.0.birthday|date("d.m.Y") }}"
+            {% endif %}
+       data-original-title="{% trans %}Edit{% endtrans %}"
+            >
+        {% if item.0.birthday %}
+            {{ item.0.birthday|date("d.m.Y") }}
+        {% endif %}
+        {% if item.0.birthday is empty%}
+            {% trans %}Enter value{% endtrans %}
+        {% endif %}
+    </a>
+</td>
+<td>
+    <a href="#"
+       class="sd-contact-editable-text editable-click {% if item.0.type is empty %} editable-empty {% endif %}"
+       data-source="{{ path('sd_common_ajax_model_contact_type') }}"
+       data-name="typeId"
+       data-type="select"
+       data-pk="{{ item.0.id }}"
+            {% if item.0.type %}
+                data-value="{{ item.0.type.id }}"
+            {% endif %}
+       data-original-title="{% trans %}Edit{% endtrans %}"
+            >
+        {{ item.0.type }}
+        {% if item.0.type is empty%}
+            {% trans %}Enter value{% endtrans %}
+        {% endif %}
+    </a>
+</td>
+<td>
+    {{ item.ownerFullName }}
+    {% if item.0.ownerdatetime %}
+        ({{ item.0.ownerdatetime|date("d.m.y") }})
+    {% endif %}
+</td>
+<td>
+    {{ item.creatorFullName }}
+    {% if item.0.createdatetime %}
+        ({{ item.0.createdatetime|date("d.m.y") }})
+    {% endif %}
+</td>
