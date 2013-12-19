@@ -14,17 +14,17 @@ class HandlingResult
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      */
-    private $slug;
+    protected $slug;
 
 
     /**
@@ -95,7 +95,7 @@ class HandlingResult
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $handlings;
+    protected $handlings;
 
 
     /**
@@ -141,7 +141,7 @@ class HandlingResult
     /**
      * @var integer
      */
-    private $sortorder;
+    protected $sortorder;
 
 
     /**
@@ -165,5 +165,13 @@ class HandlingResult
     public function getSortorder()
     {
         return $this->sortorder;
+    }
+
+    public function __sleep()
+    {
+        return array(
+            'id',
+            'name',
+        );
     }
 }

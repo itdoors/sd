@@ -12,7 +12,7 @@ class Organization
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -787,5 +787,13 @@ class Organization
     public function getGroupId()
     {
         return $this->group_id;
+    }
+
+    public function __sleep()
+    {
+        return array(
+            'id',
+            'name'
+        );
     }
 }

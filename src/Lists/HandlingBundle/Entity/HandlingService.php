@@ -12,27 +12,27 @@ class HandlingService
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      */
-    private $slug;
+    protected $slug;
 
     /**
      * @var integer
      */
-    private $sortorder;
+    protected $sortorder;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $handlings;
+    protected $handlings;
 
     /**
      * Constructor
@@ -162,5 +162,12 @@ class HandlingService
     public function __toString()
     {
         return $this->getName();
+    }
+
+    public function __sleep()
+    {
+        return array(
+            'id',
+        );
     }
 }

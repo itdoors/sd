@@ -12,7 +12,7 @@ class OrganizationGroup
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string

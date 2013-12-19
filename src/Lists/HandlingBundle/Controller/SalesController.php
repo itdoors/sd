@@ -551,6 +551,7 @@ class SalesController extends BaseController
             )));*/
         }
 
+
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate. ':step3.html.twig', array(
                 'baseTemplate' => $this->baseTemplate,
                 'baseRoutePrefix' => $this->baseRoutePrefix,
@@ -667,14 +668,16 @@ class SalesController extends BaseController
                 $newHandling->setChance($handling->getChance());
                 $newHandling->setDescription($handling->getDescription());
 
-                foreach ($handling->getHandlingServices() as $service)
+                if ($handling->getHandlingServices())
                 {
-                    $newService = $this->getDoctrine()->getRepository('ListsHandlingBundle:HandlingService')
-                        ->find($service->getId());
+                    foreach ($handling->getHandlingServices() as $service)
+                    {
+                        $newService = $this->getDoctrine()->getRepository('ListsHandlingBundle:HandlingService')
+                            ->find($service->getId());
 
-                    $newHandling->addHandlingService($newService);
+                        $newHandling->addHandlingService($newService);
+                    }
                 }
-
                 //$handling->setS($handling->getResult());
 
                 $em->persist($newHandling);

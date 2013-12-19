@@ -1,4 +1,72 @@
     {% trans_default_domain 'ListsContactBundle' %}
+
+    <script type="text/javascript">
+        $(document).ready(function()
+        {
+            $.fn.editable.defaults.inputclass = 'form-control';
+            $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
+
+            $('.sd-contact-editable-text').editable({
+                url: '{{ path('sd_common_ajax_model_contact_save') }}',
+            });
+
+            $('.sd-contact-editable-phone').each(function() {
+
+                var self = $(this);
+
+                self.editable({
+                    url: '{{ path('sd_common_ajax_model_contact_save') }}',
+                    select2: {
+                        minimumInputLength: 2,
+                        allowClear: true,
+                        ajax: {
+                            url: '{{ path('sd_common_ajax_contact_phone') }}',
+                            dataType: 'json',
+                            data: function (term, page) {
+
+                                var queryData = {
+                                    query: term
+                                };
+
+                                if (self.data('organization-id'))
+                                {
+                                    queryData.organizationId = self.data('organization-id')
+                                }
+
+                                return queryData;
+                            },
+                            results: function (data, page) {
+                                return {
+                                    results: data
+                                };
+                            }
+                        }
+                    }
+                })
+
+            });
+
+            $('.sd-contact-birthday').on('shown', function(e, editable) {
+
+                var input = editable.input.$input;
+
+                input.attr('readonly', 'readonly');
+
+                input.datepicker({
+                    rtl: App.isRTL(),
+                    autoclose: true,
+                    format: "dd.mm.yyyy",
+                    pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
+                    language: 'ru',
+                    startView: 'decade',
+                    endDate: new Date(),
+                    weekStart: 1
+                });
+            });
+
+        });
+    </script>
+
     {% if organizationId %}
     {% else %}
         <div class="navigation">
@@ -36,18 +104,87 @@
                 {% else %}
                     <td>{{ item.organizationName }}</td>
                 {% endif %}
-                <td>{{ item.0.firstName }}</td>
-                <td>{{ item.0.lastName }}</td>
-                <td>{{ item.0.middleName }}</td>
-                <td>{{ item.0.position }}</td>
-                <td>{{ item.0.phone1 }}</td>
-                <td>{{ item.0.phone2 }}</td>
-                <td>{{ item.0.email }}</td>
-                <td>{{ item.0.type }}</td>
                 <td>
-                    {% if item.0.birthday %}
-                        {{ item.0.birthday|date("d.m.y") }}
-                    {% endif %}
+                    <a href="#" class="sd-contact-editable-text" data-name="firstName" data-type="text" data-pk="{{ item.0.id }}" data-value="{{ item.0.firstName }}" data-original-title="{% trans %}Edit{% endtrans %}">
+                        {{ item.0.firstName }}
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="sd-contact-editable-text" data-name="lastName" data-type="text" data-pk="{{ item.0.id }}" data-value="{{ item.0.lastName }}" data-original-title="{% trans %}Edit{% endtrans %}">
+                        {{ item.0.lastName }}
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="sd-contact-editable-text" data-name="middleName" data-type="text" data-pk="{{ item.0.id }}" data-value="{{ item.0.middleName }}" data-original-title="{% trans %}Edit{% endtrans %}">
+                        {{ item.0.middleName }}
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="sd-contact-editable-text" data-name="position" data-type="text" data-pk="{{ item.0.id }}" data-value="{{ item.0.position }}" data-original-title="{% trans %}Edit{% endtrans %}">
+                        {{ item.0.position }}
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="sd-contact-editable-phone"
+                        data-name="phone1" data-type="select2"
+                        data-pk="{{ item.0.id }}"
+                        data-value="{{ item.0.phone1 }}"
+                        data-original-title="{% trans %}Edit{% endtrans %}"
+                        {% if item.organizationId %}
+                            data-organization-id="{{ item.organizationId }}"
+                        {% endif %}
+                    >
+                        {{ item.0.phone1 }}
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="sd-contact-editable-phone"
+                       data-name="phone2" data-type="select2"
+                       data-pk="{{ item.0.id }}"
+                       data-value="{{ item.0.phone2 }}"
+                       data-original-title="{% trans %}Edit{% endtrans %}"
+                            {% if item.organizationId %}
+                                data-organization-id="{{ item.organizationId }}"
+                            {% endif %}
+                    >
+                        {{ item.0.phone2 }}
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="sd-contact-editable-text" data-name="email" data-type="text" data-pk="{{ item.0.id }}" data-value="{{ item.0.email }}" data-original-title="{% trans %}Edit{% endtrans %}">
+                        {{ item.0.email }}
+                    </a>
+                </td>
+                <td>
+                    <a href="#"
+                        class="sd-contact-editable-text sd-contact-birthday"
+                        data-name="birthdayString"
+                        data-type="text"
+                        data-pk="{{ item.0.id }}"
+                        {% if item.0.birthday %}
+                            data-value="{{ item.0.birthday|date("d.m.Y") }}"
+                        {% endif %}
+                        data-original-title="{% trans %}Edit{% endtrans %}"
+                    >
+                        {% if item.0.birthday %}
+                            {{ item.0.birthday|date("d.m.Y") }}
+                        {% endif %}
+                    </a>
+                </td>
+                <td>
+                    <a href="#"
+                        class="sd-contact-editable-text"
+                        data-source="{{ path('sd_common_ajax_model_contact_type') }}"
+                        data-name="typeId"
+                        data-type="select"
+                        data-pk="{{ item.0.id }}"
+                        {% if item.0.type %}
+                            data-value="{{ item.0.type.id }}"
+                        {% endif %}
+                        data-original-title="{% trans %}Edit{% endtrans %}"
+                    >
+                        {{ item.0.type }}
+                    </a>
                 </td>
                 <td>
                     {{ item.ownerFullName }}

@@ -86,6 +86,10 @@ sd_common_ajax_handling_type:
     pattern:  /ajax/handling_type
     defaults: { _controller: SDCommonBundle:Ajax:handlingType }
 
+sd_common_ajax_model_contact_type:
+    pattern:  /ajax/model_contact_type
+    defaults: { _controller: SDCommonBundle:Ajax:modelContactType }
+
 sd_common_ajax_model_contact_save:
     pattern:  /ajax/model_contact/save
     defaults: { _controller: SDCommonBundle:Ajax:modelContactSave }

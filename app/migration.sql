@@ -30,6 +30,11 @@ CREATE INDEX IDX_5C7222325AB3F1F ON team_user (handling_id);
 CREATE INDEX IDX_5C722232A76ED395 ON team_user (user_id);
 
 
+sha1
+067f9c5e718c84cf425b381589155fb3
+aeb5dd988fb28afc8383576de15e800762bf8df0
+
+
 ALTER TABLE fos_user_group ADD CONSTRAINT FK_583D1F3EA76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE fos_user_group ADD CONSTRAINT FK_583D1F3EFE54D947 FOREIGN KEY (group_id) REFERENCES fos_group (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE handling_handling_service ADD CONSTRAINT FK_AC5EC5345AB3F1F FOREIGN KEY (handling_id) REFERENCES handling (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
@@ -157,4 +162,27 @@ CREATE SEQUENCE organization_group_id_seq INCREMENT BY 1 MINVALUE 1 START 1;
 CREATE TABLE organization_group (id BIGINT NOT NULL, slug VARCHAR(20) DEFAULT NULL, name VARCHAR(255) NOT NULL, description VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id));
 ALTER TABLE organization ADD group_id BIGINT DEFAULT NULL;
 ALTER TABLE organization ADD CONSTRAINT FK_C1EE637CFE54D947 FOREIGN KEY (group_id) REFERENCES organization_group (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+++++++++++
+
+/*CREATE LANGUAGE plpgsql;*/
+
+CREATE OR REPLACE FUNCTION sf_guard_user_to_fos_user()
+  RETURNS trigger AS
+$BODY$
+BEGIN
+    INSERT INTO fos_user(id,username,username_canonical,email,email_canonical,first_name,last_name,middle_name,password,salt,birthday,enabled,locked,expired,roles,credentials_expired)
+    values (NEW.id,NEW.username,NEW.username,NEW.email_address,NEW.email_address,NEW.first_name,NEW.last_name,NEW.middle_name,NEW.password,NEW.salt,NEW.birthday,true,NEW.is_blocked,false,'a:0:{}',false);
+    return NEW;
+END;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+
+DROP TRIGGER IF EXISTS sf_to_fos_trigger ON sf_guard_user;
+
+CREATE TRIGGER sf_to_fos_trigger
+AFTER INSERT ON sf_guard_user FOR EACH ROW EXECUTE PROCEDURE sf_guard_user_to_fos_user();
+
+
 

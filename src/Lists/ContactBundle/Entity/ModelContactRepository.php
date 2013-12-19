@@ -70,6 +70,7 @@ class ModelContactRepository extends EntityRepository
     {
         $sql
             ->select('mc')
+            ->addSelect('o.id as organizationId')
             ->addSelect('o.name as organizationName')
             ->addSelect("CONCAT(CONCAT(creator.lastName, ' '), creator.firstName) as creatorFullName")
             ->addSelect("CONCAT(CONCAT(owner.lastName, ' '), owner.firstName) as ownerFullName")

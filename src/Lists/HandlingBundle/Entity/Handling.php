@@ -12,107 +12,107 @@ class Handling
     /**
      * @var integer
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
      */
-    private $number;
+    protected $number;
 
     /**
      * @var \DateTime
      */
-    private $createdatetime;
+    protected $createdatetime;
 
     /**
      * @var string
      */
-    private $statusDescription;
+    protected $statusDescription;
 
     /**
      * @var \DateTime
      */
-    private $statusChangeDate;
+    protected $statusChangeDate;
 
     /**
      * @var string
      */
-    private $serviceOffered;
+    protected $serviceOffered;
 
     /**
      * @var string
      */
-    private $budget;
+    protected $budget;
 
     /**
      * @var float
      */
-    private $square;
+    protected $square;
 
     /**
      * @var string
      */
-    private $chance;
+    protected $chance;
 
     /**
      * @var string
      */
-    private $worktimeWithclient;
+    protected $worktimeWithclient;
 
     /**
      * @var string
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      */
-    private $resultString;
+    protected $resultString;
 
     /**
      * @var boolean
      */
-    private $statusAdmin;
+    protected $statusAdmin;
 
     /**
      * @var boolean
      */
-    private $isClosed;
+    protected $isClosed;
 
     /**
      * @var string
      */
-    private $budgetClient;
+    protected $budgetClient;
 
     /**
      * @var \DateTime
      */
-    private $lastHandlingDate;
+    protected $lastHandlingDate;
 
     /**
      * @var \DateTime
      */
-    private $createdate;
+    protected $createdate;
 
     /**
      * @var \Lists\HandlingBundle\Entity\HandlingResult
      */
-    private $result;
+    protected $result;
 
     /**
      * @var \Lists\HandlingBundle\Entity\HandlingStatus
      */
-    private $status;
+    protected $status;
 
     /**
      * @var \Lists\HandlingBundle\Entity\HandlingType
      */
-    private $type;
+    protected $type;
 
     /**
      * @var \SD\UserBundle\Entity\User
      */
-    private $user;
+    protected $user;
 
 
     /**
@@ -502,6 +502,11 @@ class Handling
     public function setResult(\Lists\HandlingBundle\Entity\HandlingResult $result = null)
     {
         $this->result = $result;
+
+        if ($result)
+        {
+            $this->setResultId($result->getId());
+        }
     
         return $this;
     }
@@ -525,6 +530,11 @@ class Handling
     public function setStatus(\Lists\HandlingBundle\Entity\HandlingStatus $status = null)
     {
         $this->status = $status;
+
+        if ($status)
+        {
+            $this->setStatusId($status->getId());
+        }
 
         $this->setStatusChangeDate(new \DateTime());
     
@@ -550,6 +560,11 @@ class Handling
     public function setType(\Lists\HandlingBundle\Entity\HandlingType $type = null)
     {
         $this->type = $type;
+
+        if ($type)
+        {
+            $this->setTypeId($type->getId());
+        }
     
         return $this;
     }
@@ -589,7 +604,7 @@ class Handling
     /**
      * @var integer
      */
-    private $organization_id;
+    protected $organization_id;
 
 
     /**
@@ -617,7 +632,7 @@ class Handling
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $users;
+    protected $users;
 
     /**
      * Constructor
@@ -662,7 +677,7 @@ class Handling
     /**
      * @var \Lists\OrganizationBundle\Entity\Organization
      */
-    private $organization;
+    protected $organization;
 
 
     /**
@@ -674,6 +689,11 @@ class Handling
     public function setOrganization(\Lists\OrganizationBundle\Entity\Organization $organization = null)
     {
         $this->organization = $organization;
+
+        if ($organization)
+        {
+            $this->setOrganizationId($organization->getId());
+        }
     
         return $this;
     }
@@ -690,17 +710,17 @@ class Handling
     /**
      * @var integer
      */
-    private $result_id;
+    protected $result_id;
 
     /**
      * @var integer
      */
-    private $status_id;
+    protected $status_id;
 
     /**
      * @var integer
      */
-    private $type_id;
+    protected $type_id;
 
 
     /**
@@ -776,7 +796,7 @@ class Handling
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $handlingServices;
+    protected $handlingServices;
 
 
     /**
@@ -824,7 +844,7 @@ class Handling
     /**
      * @var \DateTime
      */
-    private $nextHandlingDate;
+    protected $nextHandlingDate;
 
 
     /**
@@ -852,12 +872,12 @@ class Handling
     /**
      * @var \DateTime
      */
-    private $closedatetime;
+    protected $closedatetime;
 
     /**
      * @var \SD\UserBundle\Entity\User
      */
-    private $closer;
+    protected $closer;
 
 
     /**
@@ -905,4 +925,18 @@ class Handling
     {
         return $this->closer;
     }
+
+    /*public function __sleep()
+    {
+        return array(
+            'id',
+            'handlingServices',
+            'organization',
+            //'result',
+            //'status',
+            //'type',
+            //'user',
+            //'closer'
+        );
+    }*/
 }
