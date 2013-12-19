@@ -3,9 +3,11 @@
     <script type="text/javascript">
         $(document).ready(function()
         {
+            $.fn.editable.defaults.inputclass = 'form-control';
+            $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
+
             $('.sd-contact-editable-text').editable({
                 url: '{{ path('sd_common_ajax_model_contact_save') }}',
-                inputclass: 'form-control'
             });
 
             $('.sd-contact-editable-phone').each(function() {
