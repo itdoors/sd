@@ -9,16 +9,18 @@ Show Contacts: Просмотреть контакты
 
 FirstName: Имя
 First name: Имя
+First Name: Имя
 LastName: Фамилия
 Last name: Фамилия
+Last Name: Фамилия
 SurName: Отчество
 Middle name: Отчество
+Middle Name: Отчество
 Position: Должность
 Phone: Телефон
 Phone1: Телефон
 Phone 1: Телефон
 Mobile: Мобильный
-
 Phone2: Мобильный
 Phone 2: Мобильный
 Email: Email
@@ -27,10 +29,11 @@ Creator: Создатель
 Owner: Владелец
 Select Owner: Выберите нового владельца
 Organization: Организация
+Contact type: Тип контакта
+Organization Name: Название организации
+
 Action: Действия
 Delete: Удалить
-
-
 Add New: Добавить новый
-Delete: Удалить
+
 
