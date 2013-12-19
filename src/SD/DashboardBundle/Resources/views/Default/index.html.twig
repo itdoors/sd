@@ -1,7 +1,18 @@
 {% extends '::base.html.twig' %}
-
-{% block title %}
-    {% trans %}Dashdoard{% endtrans %}
+{% trans_default_domain 'ListsHandlingBundle' %}
+{% block title %}{% trans %}Dashdoard{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        </li>
+    </ul>
+{% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Dashdoard <small>my work</small>{% endtrans %}
+    </h3>
 {% endblock %}
 
 {% block css_page_level_plugin %}
