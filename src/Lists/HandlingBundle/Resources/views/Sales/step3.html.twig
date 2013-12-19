@@ -1,22 +1,25 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'ListsHandlingBundle' %}
-{% block title %}{% trans %}Show Handling{% endtrans %} {% endblock %}
+{% block title %}{% trans %}Create Handling{% endtrans %} {% endblock %}
 {% block page_breadcrumbs %}
-    <ul class="page-breadcrumb breadcrumb">
-        <li>
-            <i class="fa fa-home"></i>
-            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
-            <i class="fa fa-angle-right"></i>
-        </li>
-        <li>
-            <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_index') }}" title="{% trans %}My Handlings{% endtrans %}">{% trans %}My Handlings{% endtrans %}</a>
-            <i class="fa fa-angle-right"></i>
-        </li>
-    </ul>
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <i class="fa fa-home"></i>
+        <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        <i class="fa fa-angle-right"></i>
+    </li>
+    <li>
+        <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_index') }}" title="{% trans %}My Handlings{% endtrans %}">{% trans %}My Handlings{% endtrans %}</a>
+        <i class="fa fa-angle-right"></i>
+    </li>
+    <li>
+        <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_create_step1') }}" title="{% trans %}Create Handling{% endtrans %}">{% trans %}Create Handling{% endtrans %}</a>
+    </li>
+</ul>
 {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
-        {% trans %}Handling <small>show handling</small>{% endtrans %}
+        {% trans %}Handling <small>create handling</small>{% endtrans %}
     </h3>
 {% endblock %}
 
@@ -46,7 +49,7 @@
             <div class="portlet box blue" id="form_wizard_1">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-reorder"></i> Form Wizard - <span class="step-title">Step 1 of 4</span>
+                        <i class="fa fa-reorder"></i>{% trans %}Form Wizard create handling{% endtrans %} - <span class="step-title">{% trans %}Step{% endtrans %} 3 {% trans %}of{% endtrans %} 4</span>
                     </div>
                     <div class="tools hidden-xs">
                         <a href="javascript:;" class="collapse"></a>
@@ -62,25 +65,25 @@
                                 <li>
                                     <a href="{{ path('lists_sales_handling_create_step1') }}" class="step">
                                         <span class="number">1</span>
-                                        <span class="desc"><i class="fa fa-check"></i> Account Setup</span>
+                                        <span class="desc"><i class="fa fa-check"></i> {% trans %}Check and create organization{% endtrans %}</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ path('lists_sales_handling_create_step2') }}" href="{{ path('lists_sales_handling_create_step1') }}" class="step">
+                                    <a href="{{ path('lists_sales_handling_create_step2') }}" href="{{ path('lists_sales_handling_create_step1') }}" class="step active">
                                         <span class="number">2</span>
-                                        <span class="desc"><i class="fa fa-check"></i> Profile Setup</span>
+                                        <span class="desc"><i class="fa fa-check"></i> {% trans %}Add contact persons{% endtrans %}</span>
                                     </a>
                                 </li>
                                 <li class="active">
-                                    <a href="{{ path('lists_sales_handling_create_step3') }}" class="step active">
+                                    <a href="{{ path('lists_sales_handling_create_step3') }}" class="step">
                                         <span class="number">3</span>
-                                        <span class="desc"><i class="fa fa-check"></i> Billing Setup</span>
+                                        <span class="desc"><i class="fa fa-check"></i> {% trans %}Create Handling{% endtrans %}</span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="{{ path('lists_sales_handling_create_step4') }}" class="step">
                                         <span class="number">4</span>
-                                        <span class="desc"><i class="fa fa-check"></i> Confirm</span>
+                                        <span class="desc"><i class="fa fa-check"></i> {% trans %}Creating Message{% endtrans %}</span>
                                     </a>
                                 </li>
                             </ul>
@@ -89,7 +92,7 @@
                             </div>
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab1">
-                                    <h3 class="block">Provide your account details 3</h3>
+                                    <h3 class="block">{% trans %}Creating Handling{% endtrans %}</h3>
 
                                     {{ include('ListsHandlingBundle:Sales:step3Form.html.twig', {
                                         form: form
