@@ -163,3 +163,26 @@ CREATE TABLE organization_group (id BIGINT NOT NULL, slug VARCHAR(20) DEFAULT NU
 ALTER TABLE organization ADD group_id BIGINT DEFAULT NULL;
 ALTER TABLE organization ADD CONSTRAINT FK_C1EE637CFE54D947 FOREIGN KEY (group_id) REFERENCES organization_group (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 
+++++++++++
+
+/*CREATE LANGUAGE plpgsql;*/
+
+CREATE OR REPLACE FUNCTION sf_guard_user_to_fos_user()
+  RETURNS trigger AS
+$BODY$
+BEGIN
+    INSERT INTO fos_user(id,username,username_canonical,email,email_canonical,first_name,last_name,middle_name,password,salt,birthday,enabled,locked,expired,roles,credentials_expired)
+    values (NEW.id,NEW.username,NEW.username,NEW.email_address,NEW.email_address,NEW.first_name,NEW.last_name,NEW.middle_name,NEW.password,NEW.salt,NEW.birthday,true,NEW.is_blocked,false,'a:0:{}',false);
+    return NEW;
+END;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+
+DROP TRIGGER IF EXISTS sf_to_fos_trigger ON sf_guard_user;
+
+CREATE TRIGGER sf_to_fos_trigger
+AFTER INSERT ON sf_guard_user FOR EACH ROW EXECUTE PROCEDURE sf_guard_user_to_fos_user();
+
+
+

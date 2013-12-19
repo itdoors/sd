@@ -528,4 +528,45 @@ class ModelContact
     {
         return $this->getFullName() . ' ' . $this->getPhone1();
     }
+    /**
+     * @var integer
+     */
+    private $type_id;
+
+
+    /**
+     * Set type_id
+     *
+     * @param integer $typeId
+     * @return ModelContact
+     */
+    public function setTypeId($typeId)
+    {
+        $this->type_id = $typeId;
+    
+        return $this;
+    }
+
+    /**
+     * Get type_id
+     *
+     * @return integer 
+     */
+    public function getTypeId()
+    {
+        return $this->type_id;
+    }
+
+    /**
+     * Sets birthday from birthdayString
+     *
+     * @param string $birthdayString
+     */
+    public function setBirthdayString($birthdayString)
+    {
+        if ($birthdayString)
+        {
+            $this->setBirthday(new \DateTime($birthdayString));
+        }
+    }
 }

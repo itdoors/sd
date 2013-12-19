@@ -251,6 +251,31 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
 
+    public function modelContactTypeAction()
+    {
+        $objects = $this->getDoctrine()
+            ->getRepository('ListsContactBundle:ModelContactType')
+            ->createQueryBuilder('mct')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        $result[] = array(
+            'id' => '',
+            'value' => '',
+            'name' => '',
+            'text' => ''
+        );
+
+        foreach ($objects as $object)
+        {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
     public function scopeAction()
     {
         /** @var \Lists\LookupBundle\Entity\LookupRepository $repository */

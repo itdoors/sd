@@ -73,6 +73,10 @@ Lists\ContactBundle\Entity\ModelContact:
             type: integer
             nullable: true
             column: owner_id
+        type_id:
+            type: integer
+            nullable: true
+            column: type_id
     manyToOne:
         type:
             targetEntity: ModelContactType
