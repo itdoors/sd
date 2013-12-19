@@ -95,7 +95,7 @@
         </div>
         <!--/row-->
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-6{% if form.handlingServices.vars.errors|length %} has-error{% endif %}">
                 <div class="form-group">
                     {{ form_label(form.handlingServices, 'Service offered', {'attr': {'class': 'control-label'}}) }}
                     {{ form_widget(form.handlingServices, {'attr': {
@@ -174,7 +174,7 @@
                 </div>
             </div>
             <!--/span-->
-            <div class="col-md-6">
+            <div class="col-md-6{% if form.square.vars.errors|length %} has-error{% endif %}">
                 <div class="form-group">
                     {% if form.square.vars.errors|length %}
                         {{ form_errors(form.square) }}

@@ -32,15 +32,24 @@ class HandlingMessageRepository extends EntityRepository
      */
     public function getFutureMessages($userIds)
     {
-        return $this->createQueryBuilder('hm')
-            ->leftJoin('hm.user', 'user')
-            ->leftJoin('hm.type', 'type')
-            ->where('hm.createdate >= :createdate')
-            ->andWhere('user.id in (:userIds)')
-            ->setParameter(':createdate', new \DateTime(), \Doctrine\DBAL\Types\Type::DATETIME)
-            ->setParameter(':userIds', $userIds)
-            ->getQuery()
-            ->getResult();
+        $sql = $this->createQueryBuilder('hm')
+			->leftJoin('hm.user', 'user')
+			->leftJoin('hm.type', 'type')
+			->where('hm.createdate >= :createdate');
+
+		$sql
+			->setParameter(':createdate', new \DateTime(), \Doctrine\DBAL\Types\Type::DATETIME);
+
+		if ($userIds && sizeof($userIds))
+		{
+			$sql
+				->andWhere('user.id in (:userIds)')
+				->setParameter(':userIds', $userIds);
+		}
+
+		return $sql
+			->getQuery()
+			->getResult();
     }
 
     public function getAdvancedResult($from, $to)

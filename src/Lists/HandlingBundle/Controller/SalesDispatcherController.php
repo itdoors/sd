@@ -54,5 +54,37 @@ class SalesDispatcherController extends SalesController
             'canAddNew' => $canAddNew
         ));
     }
+
+	/**
+	 * Executes list action for dashboard
+	 */
+	public function listAction()
+	{
+		/** @var \Lists\TeamBundle\Entity\TeamRepository $teamRepository */
+		$teamRepository = $this->get('lists_team.repository');
+
+		// Get organization filter
+		/** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
+		$handlingRepository = $this->getDoctrine()
+			->getRepository('ListsHandlingBundle:Handling');
+
+		/** @var \SD\UserBundle\Entity\User $user */
+		$user = $this->getUser();
+
+		$teamUserIds = $teamRepository->getMyTeamIdsByUser($user);
+
+		/** @var \Doctrine\ORM\Query $handlingQuery */
+		$handlingQuery = $handlingRepository->getAllForSalesQuery($teamUserIds, array());
+
+		$pagination = $handlingQuery->getResult();
+
+		/** @var \Knp\Component\Pager\Paginator $paginator */
+
+		return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':list.html.twig', array(
+				'pagination' => $pagination,
+				'baseRoutePrefix' => $this->baseRoutePrefix,
+				'baseTemplate' => $this->baseTemplate,
+			));
+	}
 }
 

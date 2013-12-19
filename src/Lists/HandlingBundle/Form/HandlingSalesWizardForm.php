@@ -93,6 +93,24 @@ class HandlingSalesWizardForm extends AbstractType
 
         $builder
             ->add('create', 'submit');
+
+		$builder->addEventListener(
+			FormEvents::POST_SUBMIT,
+			function(FormEvent $event) use ($container)
+			{
+				$data = $event->getData();
+
+				$form = $event->getForm();
+
+				if (!$data->getHandlingServices())
+				{
+					$translator = $container->get('translator');
+
+					$msg = $translator->trans("Services cant be empty", array(), 'ListsHandlingBundle');
+
+					$form->get('handlingServices')->addError(new FormError($msg));
+				}
+			});
     }
 
     /**

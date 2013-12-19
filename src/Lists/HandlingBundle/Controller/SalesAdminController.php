@@ -161,5 +161,32 @@ class SalesAdminController extends SalesController
             ));
 
     }
+
+	/**
+	 * Executes list action for dashboard
+	 */
+	public function listAction()
+	{
+		// Get organization filter
+		/** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
+		$handlingRepository = $this->getDoctrine()
+			->getRepository('ListsHandlingBundle:Handling');
+
+		/** @var \SD\UserBundle\Entity\User $user */
+		$user = $this->getUser();
+
+		/** @var \Doctrine\ORM\Query $handlingQuery */
+		$handlingQuery = $handlingRepository->getAllForSalesQuery(null, array());
+
+		$pagination = $handlingQuery->getResult();
+
+		/** @var \Knp\Component\Pager\Paginator $paginator */
+
+		return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':list.html.twig', array(
+				'pagination' => $pagination,
+				'baseRoutePrefix' => $this->baseRoutePrefix,
+				'baseTemplate' => $this->baseTemplate,
+			));
+	}
 }
 
