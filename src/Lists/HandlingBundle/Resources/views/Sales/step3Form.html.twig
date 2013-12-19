@@ -39,13 +39,10 @@
                 {{ form_errors(form) }}
             </div>
         {% endif %}
-        <h3 class="form-section">{% trans %}General information{% endtrans %}</h3>
+        <h4 class="form-section">{% trans %}General information{% endtrans %}</h4>
         <div class="row">
-            <div class="col-md-6
-                {% if form.createdate.vars.errors|length %}
-                    has-error
-                {% endif %}">
-                <div class="form-group">
+            <div class="col-md-6">
+                <div class="form-group{% if form.type.vars.errors|length %} has-error{% endif %}">
                     {{ form_label(form.createdate, 'Handling Create DateTime', {'attr': {'class': 'control-label'}}) }}
 
                     <div class="input-group input-medium date date-picker">
@@ -62,7 +59,7 @@
                     {% if form.createdate.vars.errors|length %}
                         {{ form_errors(form.createdate) }}
                     {% else %}
-                        <span class="help-block">{% trans %}Enter Handling Create DateTime{% endtrans %}"</span>
+                        <span class="help-block">{% trans %}Enter Handling Create DateTime{% endtrans %}</span>
                     {% endif %}
                 </div>
             </div>
@@ -78,19 +75,12 @@
         </div>
         <!--/row-->
         <div class="row">
-            <div class="col-md-6
-                {% if form.type.vars.errors|length %}
-                    has-error
-                {% endif %}">
+            <div class="col-md-6">
                 {# Тип обращения #}
                 <div class="form-group">
-                    {{ form_label(form.type, 'Handling Type *', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.type, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter Handling Type'}}) }}
-                    {% if form.type.vars.errors|length %}
-                        {{ form_errors(form.name) }}
-                    {% else %}
-                        <span class="help-block">{% trans %}Enter Handling Type{% endtrans %}"</span>
-                    {% endif %}
+                    {{ form_label(form.type, 'Handling Type', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.type, {'attr': {'class': 'form-control', 'data-required': '0', 'placeholder': 'Enter Handling Type'}}) }}
+                    <span class="help-block">{% trans %}Enter Handling Type{% endtrans %}</span>
                 </div>
             </div>
             <!--/span-->
@@ -106,50 +96,85 @@
         <!--/row-->
         <div class="row">
             <div class="col-md-6">
-                {# Предлагаемые услуги #}
                 <div class="form-group">
-                    {{ form_label(form.serviceOffered, 'Enter Service', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.serviceOffered, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter Service offered'}}) }}
-                    <span class="help-block">{% trans %}Enter Service offered{% endtrans %}"</span>
+                    {{ form_label(form.handlingServices, 'Service offered', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.handlingServices, {'attr': {
+                    'class': 'form-control select2',
+                    'data-required': '1',
+                    'placeholder': 'Service offered',
+                    'multiple': 'multiple'
+                    }}) }}
+                    {% if form.handlingServices.vars.errors|length %}
+                        {{ form_errors(form.handlingServices) }}
+                    {% else %}
+                        <span class="help-block">{% trans %}Select offered services{% endtrans %}</span>
+                    {% endif %}
                 </div>
             </div>
             <!--/span-->
             <div class="col-md-6">
                 <div class="form-group">
-                    {{ form_label(form.description, 'Notice', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.description, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter Notice'}}) }}
-                    <span class="help-block">{% trans %}Enter Notice{% endtrans %}"</span>
+                    {{ form_label(form.result, 'Result', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.result, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Result'}}) }}
+                    <span class="help-block">{% trans %}Select project result, if has{% endtrans %}</span>
                 </div>
             </div>
             <!--/span-->
         </div>
         <!--/row-->
         <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form_label(form.description, 'Notice', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter Notice'}}) }}
+                </div>
+
+            </div>
+            <!--/span-->
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form_label(form.resultString, 'Result description', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.resultString, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Result Description'}}) }}
+                </div>
+            </div>
+            <!--/span-->
+        </div>
+        <!--/row-->
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="form-group{% if form.type.vars.errors|length %} has-error{% endif %}">
+                    {{ form_label(form.status, 'Status', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.status, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter Status'}}) }}
+                    {% if form.createdate.vars.errors|length %}
+                        {{ form_errors(form.createdate) }}
+                    {% else %}
+                        <span class="help-block">{% trans %}Select project status{% endtrans %}</span>
+                    {% endif %}
+
+                </div>
+            </div>
+            <!--/span-->
             <div class="col-md-6">
                 {# Бюджет - сюда нужно money control #}
                 <div class="form-group">
                     {{ form_label(form.budget, 'Budget without VAT', {'attr': {'class': 'control-label'}}) }}
                     {{ form_widget(form.budget, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Budget without VAT'}}) }}
-                    <span class="help-block">{% trans %}Enter Budget without VAT{% endtrans %}"</span>
-                </div>
-            </div>
-            <!--/span-->
-            <div class="col-md-6">
-                <div class="form-group">
-                    {{ form_label(form.status, 'Status', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.status, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter Status'}}) }}
-                    <span class="help-block">{% trans %}Enter Status{% endtrans %}"</span>
+                    <span class="help-block">{% trans %}Enter Budget without VAT{% endtrans %}</span>
                 </div>
             </div>
             <!--/span-->
         </div>
         <!--/row-->
         <div class="row">
-            <div class="col-md-6
-                    {% if form.square.vars.errors|length %}
-					    has-error
-					{% endif %}">
-                {# Square - control with numeric validation #}
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form_label(form.statusDescription, 'Status Description', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.statusDescription, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Status Description'}}) }}
+                </div>
+            </div>
+            <!--/span-->
+            <div class="col-md-6">
                 <div class="form-group">
                     {% if form.square.vars.errors|length %}
                         {{ form_errors(form.square) }}
@@ -160,56 +185,15 @@
                 </div>
             </div>
             <!--/span-->
-            <div class="col-md-6">
-                <div class="form-group">
-                    {{ form_label(form.statusDescription, 'Status Description', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.statusDescription, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Status Description'}}) }}
-                    <span class="help-block">{% trans %}Enter Status Description{% endtrans %}"</span>
-                </div>
-            </div>
-            <!--/span-->
         </div>
         <!--/row-->
         <div class="row">
             <div class="col-md-6">
-                {# Chance - control with numeric validation and procents #}
-                <div class="form-group">
-                    {{ form_label(form.chance, 'Chance', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.chance, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Chance'}}) }}
-                    <span class="help-block">{% trans %}Enter Chance{% endtrans %}"</span>
-                </div>
+
             </div>
             <!--/span-->
             <div class="col-md-6">
-                <div class="form-group">
-                    {{ form_label(form.result, 'Result', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.result, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Result'}}) }}
-                    <span class="help-block">{% trans %}Enter Result{% endtrans %}"</span>
-                </div>
-            </div>
-            <!--/span-->
-        </div>
-        <!--/row-->
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    {{ form_label(form.handlingServices, 'Services', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.handlingServices, {'attr': {
-                        'class': 'form-control select2',
-                        'data-required': '1',
-                        'placeholder': 'Result Description',
-                        'multiple': 'multiple'
-                    }}) }}
-                    <span class="help-block">{% trans %}Enter Services{% endtrans %}"</span>
-                </div>
-            </div>
-            <!--/span-->
-            <div class="col-md-6">
-                <div class="form-group">
-                    {{ form_label(form.resultString, 'Result', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.resultString, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Result Description'}}) }}
-                    <span class="help-block">{% trans %}Enter Result Description{% endtrans %}"</span>
-                </div>
+
             </div>
             <!--/span-->
         </div>

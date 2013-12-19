@@ -45,6 +45,7 @@ class HandlingSalesWizardForm extends AbstractType
             ->add('status', 'entity', array(
                 'class' => 'ListsHandlingBundle:HandlingStatus',
                 'empty_value' => '',
+                'required' => true,
                 'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingStatusRepository $repository)
                     {
                         return $repository->createQueryBuilder('s')
@@ -54,6 +55,7 @@ class HandlingSalesWizardForm extends AbstractType
             ->add('type', 'entity', array(
                 'class' => 'ListsHandlingBundle:HandlingType',
                 'empty_value' => '',
+                'required' => false,
                 'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingTypeRepository $repository)
                     {
                         return $repository->createQueryBuilder('s')
@@ -64,6 +66,7 @@ class HandlingSalesWizardForm extends AbstractType
             ->add('handlingServices', 'entity', array(
                 'class' => 'ListsHandlingBundle:HandlingService',
                 'empty_value' => '',
+                'required' => true,
                 'multiple' => true,
                 'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingServiceRepository $repository)
                     {
@@ -71,10 +74,8 @@ class HandlingSalesWizardForm extends AbstractType
                             ->orderBy('s.sortorder', 'ASC');
                     }
             ))
-            ->add('serviceOffered')
             ->add('budget')
             ->add('square')
-            ->add('chance')
             ->add('description')
             ->add('result', 'entity', array(
                 'class' => 'ListsHandlingBundle:HandlingResult',

@@ -26,6 +26,7 @@ Service offered: Предлагаемые услуги
 ServiceOffered: Предлагаемые услуги
 Enter Service offered: Введите услуги, которые предлагаете
 Select Service Offered: Выберите услуги
+Select offered services: Выберите предлагаемые услуги
 Contact Type: Тип контакта
 Handling Type: Тип проекта
 Enter Handling Type: Введите тип проекта
@@ -36,17 +37,23 @@ Enter Notice: Введите заметки
 Enter Handling Notice: Введите заметки
 Enter Budget: Введите бюджет
 Budget without VAT: Бюджет без НДС
+Enter Budget without VAT: Введите бюджет без НДС
 Chance: Шанс
 Enter Chance: Введите шанс
 Status: Статус
 Handling Status: Статус проекта
 Select Handling Status: Выберите статус проекта
+Select project status: Выберите статус проекта
 Enter Status: Введите статус
 Status Description: Описание статуса
 Select Result Type: Выберите тип результата
+Select project result: Выберите результат проекта
+Select project result, if has: Выберите результат проекта, если есть
 Enter Status Description: Введите описание статуса
 Result: Результат
 Result Description: Описание результата
+Result description: Описание результата
+
 Enter Result Description: Введите описание результата
 Result: Результат
 Enter Result: Введите рузультат
@@ -65,7 +72,7 @@ Create New Message: Создание нового обращения
 Create Message: Создать обращение
 Enter Handling Create DateTime: Введите дату создания проекта
 Enter Handling Create DateTime hint: Дата создания не может быть
-Handling Create DateTime: Дата создания проета
+Handling Create DateTime: Дата создания проекта
 Is business trip: Командировка
 
 Event next date can't be greater then current event date: Дата следующего события не должна быть раньше текущего.
@@ -152,7 +159,9 @@ Managers on handling: Менеджеры, имеющие доступ к про�
 
 Create New Message: Создание нового обращения
 
+Creating Handling: Создание обращения
 
+General information: Основная информация
 
 
 
