@@ -61,7 +61,8 @@
              data-params='{"organizationId":0'
         >
             {{ render(controller('ListsContactBundle:' ~ baseTemplate ~ ':Organization', {
-                organizationId: 0
+                organizationId: 0,
+                baseRoutePrefix: baseRoutePrefix
             })) }}
         </div>
     </div>

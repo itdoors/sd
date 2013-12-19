@@ -15,7 +15,7 @@ class ModelContactRepository extends EntityRepository
     const MODEL_ORGANIZATION = 'organization';
     const MODEL_HANDLING = 'handling';
 
-    public function getMyOrganizationsContacts($userIds, $organizationId)
+    public function getMyOrganizationsContacts($userIds, $organizationId, $id = null)
     {
         if (!is_array($userIds) && $userIds)
         {
@@ -34,23 +34,30 @@ class ModelContactRepository extends EntityRepository
         $this->processBaseQuery($sql);
         $this->processBaseQuery($sqlCount);
 
-        if (sizeof($userIds))
-        {
-            $this->processUserQuery($sql, $userIds);
-            $this->processUserQuery($sqlCount, $userIds);
-        }
 
-        /*$this->processFilters($sql, $filters);
-        $this->processFilters($sqlCount, $filters);*/
+
+		if ($id)
+		{
+			$this->processIdQuery($sql, $id);
+			$this->processIdQuery($sqlCount, $id);
+		}
+		else
+		{
+			if (sizeof($userIds))
+			{
+				$this->processUserQuery($sql, $userIds);
+				$this->processUserQuery($sqlCount, $userIds);
+			}
+
+			if ($organizationId && $organizationId != 0)
+			{
+				$sql
+					->andWhere('o.id = :organizationId')
+					->setParameter(':organizationId', $organizationId);
+			}
+		}
 
         $this->processOrdering($sql);
-
-        if ($organizationId && $organizationId != 0)
-        {
-            $sql
-                ->andWhere('o.id = :organizationId')
-                ->setParameter(':organizationId', $organizationId);
-        }
 
         $query = $sql->getQuery();
 
@@ -122,6 +129,19 @@ class ModelContactRepository extends EntityRepository
             ->setParameter(':userIds', $userIds);
     }
 
+	/**
+	 * Processes sql query. adding id query
+	 *
+	 * @param \Doctrine\ORM\QueryBuilder $sql
+	 * @param int $id
+	 */
+	public function processIdQuery($sql, $id)
+	{
+		$sql
+			->andWhere('mc.id = :id')
+			->setParameter(':id', $id);
+	}
+
     /**
      * Processes sql query. adding users query
      *
@@ -130,7 +150,8 @@ class ModelContactRepository extends EntityRepository
     public function processOrdering($sql)
     {
         $sql
-            ->orderBy('o.name', 'ASC');
+            //->orderBy('o.name', 'ASC');
+            ->orderBy('mc.id', 'DESC');
     }
 
     /**

@@ -38,6 +38,8 @@ var SD = (function() {
             var defaultData = $(this).data('default');
             var postFunction = $(this).data('post_function');
             var postTargetId = $(this).data('post_target_id');
+            var model = $(this).data('model');
+            var modelId = $(this).data('model-id');
 
             if (!formName)
             {
@@ -61,6 +63,8 @@ var SD = (function() {
 
             target.css('display', 'block');
 
+            target.html(target.data('text'));
+
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
@@ -70,7 +74,9 @@ var SD = (function() {
                     defaultData: defaultData,
                     targetId: targetId,
                     postFunction: postFunction,
-                    postTargetId: postTargetId
+                    postTargetId: postTargetId,
+                    model: model,
+                    modelId: modelId
                 },
                 beforeSend: function ()
                 {
@@ -124,6 +130,13 @@ var SD = (function() {
                     if (response.success)
                     {
                         target.html('');
+
+                        var dialogCloseBtn = $('div.modal button.close');
+
+                        if (dialogCloseBtn.length)
+                        {
+                            dialogCloseBtn.trigger('click');
+                        }
 
                         if (response.postFunction)
                         {

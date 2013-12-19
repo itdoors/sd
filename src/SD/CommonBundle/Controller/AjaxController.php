@@ -8,9 +8,14 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Lists\ContactBundle\Entity\ModelContactRepository;
+use Lists\ContactBundle\Entity\ModelContact;
 
 class AjaxController extends Controller
 {
+    protected $modelRepositoryDependence = array(
+        'ModelContact' => 'ListsContactBundle:ModelContact'
+    );
+
     public function organizationAction()
     {
         $searchText = $this->get('request')->query->get('q');
@@ -609,12 +614,29 @@ class AjaxController extends Controller
     {
         $formName = $request->request->get('formName');
 
-        $form = $this->createForm($formName);
-
         $defaultData = $request->request->get('defaultData');
         $postFunction = $request->request->get('postFunction');
         $postTargetId = $request->request->get('postTargetId');
         $targetId = $request->request->get('targetId');
+        $model = $request->request->get('model');
+        $modelId = $request->request->get('modelId');
+
+        if ($model && $modelId)
+        {
+            if (isset($this->modelRepositoryDependence[$model]))
+            {
+                $repository = $this->modelRepositoryDependence[$model];
+
+                $object = $this->getDoctrine()->getRepository($repository)
+                    ->find($modelId);
+
+				$form = $this->createForm($formName, $object);
+            }
+        }
+		else
+		{
+			$form = $this->createForm($formName);
+		}
 
         if ($defaultData && !is_array($defaultData))
         {
@@ -646,6 +668,8 @@ class AjaxController extends Controller
             'postFunction' => $postFunction,
             'postTargetId' => $postTargetId,
             'targetId' => $targetId,
+            'model' => $model,
+            'modelId' => $modelId,
             'defaultData' => $defaultData
         );
 
@@ -669,7 +693,9 @@ class AjaxController extends Controller
                 'postFunction' => $postFunction,
                 'postTargetId' => $postTargetId,
                 'targetId' => $targetId,
-                'defaultData' => $defaultData
+                'defaultData' => $defaultData,
+				'model' => $model,
+				'modelId' => $modelId,
             ));
 
         return new Response(json_encode($result));
@@ -879,6 +905,21 @@ class AjaxController extends Controller
 
         return true;
     }
+
+	public function modelContactOrganizationEditFormSave($form, $user, $request)
+	{
+		$data = $form->getData();
+
+		$em = $this->getDoctrine()->getManager();
+
+		$em->persist($data);
+
+		$em->flush();
+
+		$em->refresh($data);
+
+		return true;
+	}
 
     public function modelContactOrganizationAdminFormSave($form, $user, $request)
     {
