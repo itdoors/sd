@@ -1,17 +1,17 @@
 {% extends '::base.html.twig' %}
 {% trans_default_domain 'ListsHandlingBundle' %}
-{% block title %}{% trans %}Dashdoard{% endtrans %} {% endblock %}
+{% block title %}{% trans from 'SDDashboardBundle' %}Dashdoard{% endtrans %} {% endblock %}
 {% block page_breadcrumbs %}
     <ul class="page-breadcrumb breadcrumb">
         <li>
             <i class="fa fa-home"></i>
-            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans from 'SDDashboardBundle' %}Dashboard{% endtrans %}">{% trans from 'SDDashboardBundle' %}Dashboard{% endtrans %}</a>
         </li>
     </ul>
 {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
-        {% trans %}Dashdoard <small>my work</small>{% endtrans %}
+        {% trans from 'SDDashboardBundle' %}Dashdoard <small>my work</small>{% endtrans %}
     </h3>
 {% endblock %}
 
@@ -20,6 +20,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.css')}} " />
     <link href="{{ asset('templates/metronic/plugins/fullcalendar/fullcalendar/fullcalendar.css')}} " rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datepicker/css/datepicker.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
 {% endblock %}
 
 
@@ -29,6 +31,8 @@
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/jquery.dataTables.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.js') }}"></script>
     <script type="text/javascript"  src="{{ asset('templates/metronic/plugins/fullcalendar/fullcalendar/fullcalendar.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
 {% endblock %}
 
 {% block body %}

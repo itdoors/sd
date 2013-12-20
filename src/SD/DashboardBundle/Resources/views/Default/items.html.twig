@@ -1,3 +1,5 @@
+{% trans_default_domain 'SDDashboardBundle' %}
+
 {% set masterRole = 'Sales' %}
 
 {% if app.user.hasRole('ROLE_SALESDISPATCHER') %}
@@ -25,7 +27,44 @@
         <a class="collapse" href="javascript:;"></a>
         <a class="reload" href="javascript:;"></a>
     </div>
-    <div class="portlet-body"><a class="btn btn-lg blue" href="{{ path('lists_sales_handling_create_step1') }}">{% trans %}Create project{% endtrans %} <i class="fa fa-comments"></i></a></div>
+    <div class="portlet-body">
+        <a class="btn btn-lg blue" href="{{ path('lists_sales_handling_create_step1') }}">
+            {% trans %}Create project{% endtrans %} <i class="fa fa-comments"></i>
+        </a>
+
+        <a id="managers_list_new" class="btn green ajax-form"
+           data-toggle="modal"
+           href="#form_modal_contact"
+           data-target_holder="modelContactFormTpl"
+           data-form_name="modelContactOrganizationEditForm"
+           data-post_function=""
+           data-post_target_id=""
+                >
+            {% trans %}Create contact{% endtrans %} <i class="fa fa-comments"></i>
+        </a>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+    });
+</script>
+
+<div id="form_modal_contact" class="modal fade" role="basic" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">{% trans %}Contact edit{% endtrans %}</h4>
+            </div>
+            <div class="modal-body">
+                <div id="modelContactFormTpl" data-text="{% trans %}Loading data. Please wait{% endtrans %}">
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
 </div>
 {{ render(controller('ListsHandlingBundle:' ~ masterRole ~ ':List')) }}
 {{ render(controller('SDCalendarBundle:' ~ masterRole ~ ':HandlingMessage')) }}

@@ -910,6 +910,11 @@ class AjaxController extends Controller
 	{
 		$data = $form->getData();
 
+		if (!$data->getId())
+		{
+			return $this->modelContactOrganizationFormSave($form, $user, $request);
+		}
+
 		$em = $this->getDoctrine()->getManager();
 
 		$em->persist($data);

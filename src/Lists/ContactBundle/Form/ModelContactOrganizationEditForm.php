@@ -46,10 +46,24 @@ class ModelContactOrganizationEditForm extends ModelContactOrganizationFormType
 
 				$form = $event->getForm();
 
-				if ($data->getOwnerId() == $user->getId() || $user->hasRole('ROLE_SALESADMIN'))
+				if ($data)
 				{
+					if ($data->getOwnerId() == $user->getId() || $user->hasRole('ROLE_SALESADMIN'))
+					{
+						$form->add('isShared');
+					}
+				}
+				else
+				{
+					$form->add('isNew', 'hidden', array(
+						'mapped' => false
+					));
+
 					$form->add('isShared');
 				}
+
+
+
 			});
 	}
 
