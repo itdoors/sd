@@ -47,8 +47,8 @@ class HandlingMessageWizardForm extends AbstractType
                 'required' => true,
                 'mapped' => false,
                 'widget' => 'single_text',
-                'format' => 'dd.M.yyyy HH:mm'
-              //  'empty_value' => ''
+                'format' => 'dd.M.yyyy HH:mm',
+                'empty_value' => ''
             ))
             ->add('nexttype', 'entity', array(
                 'class' => 'ListsHandlingBundle:HandlingMessageType',
@@ -98,6 +98,24 @@ class HandlingMessageWizardForm extends AbstractType
                     $form->addError(new FormError($msg));
                 }
             });
+
+		$builder->addEventListener(
+			FormEvents::PRE_SUBMIT,
+			function(FormEvent $event) use ($container)
+			{
+				$data = $event->getData();
+
+				$form = $event->getForm();
+
+				if (!$data['nextcreatedate'])
+				{
+					$translator = $container->get('translator');
+
+					$msg = $translator->trans("Event next date can't be empty", array(), 'ListsHandlingBundle');
+
+					$form->addError(new FormError($msg));
+				}
+			});
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,

@@ -184,5 +184,9 @@ Delete: Удалить
 Roll Up: Свернуть
 Continue: Продолжить
 
+You have some form errors. Please check below.: При заполнении формы допущены ошибки. Пожалуйста, перепроверьте данные.
+Services cant be empty: Список предлагаемых услуг не может быть пустым.
+Event next date can't be empty: Дата следующего обращения не может быть пустой.
+
 
 
