@@ -178,9 +178,15 @@ class AjaxController extends Controller
 
     public function organizationGroupAction()
     {
-        $organizationTypes = $this->getDoctrine()
+		$searchText = $this->get('request')->query->get('query');
+
+		$organizationTypes = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:OrganizationGroup')
-            ->findAll();
+			->createQueryBuilder('og')
+			->where('lower(og.name) LIKE :q')
+			->setParameter(':q', '%'. mb_strtolower($searchText, 'UTF-8') . '%')
+			->getQuery()
+            ->getResult();
 
         $result = array();
 

@@ -18,7 +18,13 @@
 
         $('#groupId').editable({
             url: '{{ path('sd_common_ajax_organization_save') }}',
-            source: '{{ path('sd_common_ajax_organization_group') }}'
+            source: '{{ path('sd_common_ajax_organization_group') }}',
+            select2: {
+                placeholder: '{% trans %}Select Group{% endtrans %}',
+                minimumInputLength: 2,
+                width: 250,
+                allowClear: true
+            }
         });
 
         $('#scopeId').editable({
@@ -31,7 +37,8 @@
             source: '{{ path('sd_common_ajax_city') }}',
             select2: {
                 placeholder: '{% trans %}Select City{% endtrans %}',
-                minimumInputLength: 2
+                minimumInputLength: 2,
+                width: 250
             }
         });
     })
