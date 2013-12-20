@@ -9,8 +9,8 @@ lists_sales_contact_ajax_organization:
     defaults: { _controller: ListsContactBundle:Sales:organization }
 
 lists_sales_contact_ajax_organization_element:
-    pattern:  /lists/sales/contact/ajax/organization_element/{id}
-    defaults: { _controller: ListsContactBundle:Sales:organizationElement }
+    pattern:  /lists/sales/contact/ajax/organization_element/{id}/{organizationId}
+    defaults: { _controller: ListsContactBundle:Sales:organizationElement, organizationId: 0 }
 
 lists_sales_contact_ajax_handling:
     pattern:  /lists/sales/contact/ajax/handling/{handlingId}
@@ -28,8 +28,8 @@ lists_sales_dispatcher_contact_ajax_organization:
     defaults: { _controller: ListsContactBundle:SalesDispatcher:organization }
 
 lists_sales_dispatcher_contact_ajax_organization_element:
-    pattern:  /lists/salesdispatcher/contact/ajax/organization_element/{id}
-    defaults: { _controller: ListsContactBundle:SalesDispatcher:organizationElement }
+    pattern:  /lists/salesdispatcher/contact/ajax/organization_element/{id}/{organizationId}
+    defaults: { _controller: ListsContactBundle:SalesDispatcher:organizationElement, organizationId: 0 }
 
 lists_sales_dispatcher_contact_ajax_handling:
     pattern:  /lists/salesdispatcher/contact/ajax/handling/{handlingId}
@@ -46,8 +46,8 @@ lists_sales_admin_contact_ajax_organization:
     defaults: { _controller: ListsContactBundle:SalesAdmin:organization }
 
 lists_sales_admin_contact_ajax_organization_element:
-    pattern:  /lists/salesadmin/contact/ajax/organization_element/{id}
-    defaults: { _controller: ListsContactBundle:SalesAdmin:organizationElement }
+    pattern:  /lists/salesadmin/contact/ajax/organization_element/{id}/{organizationId}
+    defaults: { _controller: ListsContactBundle:SalesAdmin:organizationElement, organizationId: 0 }
 
 lists_sales_admin_contact_ajax_handling:
     pattern:  /lists/salesadmin/contact/ajax/handling/{handlingId}

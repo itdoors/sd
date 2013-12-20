@@ -67,9 +67,10 @@
             weekStart: 1
         });
 
-        $('.make-switch input').bootstrapSwitch('setSizeClass', '');
-    });
+        $.fn.modal.Constructor.prototype.enforceFocus = function() {};
 
+        //$('.make-switch input').bootstrapSwitch('setSizeClass', '');
+    });
 </script>
 
 <div class="row ">

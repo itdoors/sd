@@ -1,73 +1,8 @@
     {% trans_default_domain 'ListsContactBundle' %}
 
     <script type="text/javascript">
-        $(document).ready(function()
-        {
-            $.fn.editable.defaults.inputclass = 'form-control';
-            $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
-
-            $('#organization-contact-list').editable({
-                url: '{{ path('sd_common_ajax_model_contact_save') }}',
-                selector: '.sd-contact-editable-text'
-            });
-
-            $('#organization-contact-list').editable({
-                url: '{{ path('sd_common_ajax_model_contact_save') }}',
-                selector: '.sd-contact-editable-phone',
-                select2: {
-                    width: '200px',
-                    minimumInputLength: 2,
-                    allowClear: true,
-                    ajax: {
-                        url: '{{ path('sd_common_ajax_contact_phone') }}',
-                        dataType: 'json',
-                        data: function (term, page) {
-
-                            var queryData = {
-                                query: term
-                            };
-
-                            /*if (self.data('organization-id'))
-                            {
-                                queryData.organizationId = self.data('organization-id')
-                            }*/
-
-                            return queryData;
-                        },
-                        results: function (data, page) {
-                            return {
-                                results: data
-                            };
-                        }
-                    }
-                }
-
-            });
-
+        $(document).ready(function(){
             $.fn.modal.Constructor.prototype.enforceFocus = function() {};
-
-            $('.sd-contact-birthday').live('mouseover', function(e){
-
-                e.preventDefault();
-
-                $(this).on('shown', function(e, editable) {
-
-                    var input = editable.input.$input;
-
-                    input.attr('readonly', 'readonly');
-
-                    input.datepicker({
-                        rtl: App.isRTL(),
-                        autoclose: true,
-                        format: "dd.mm.yyyy",
-                        pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
-                        language: 'ru',
-                        startView: 'decade',
-                        endDate: new Date(),
-                        weekStart: 1
-                    });
-                });
-            })
         });
     </script>
 
@@ -113,14 +48,18 @@
                 <th>{% trans %}Birthday{% endtrans %}</th>
                 <th>{% trans %}Contact type{% endtrans %}</th>
                 <th>{% trans %}Owner{% endtrans %}</th>
-                <th>{% trans %}Creator{% endtrans %}</th>
+                {% if organizationId %}
+                {% else %}
+                    <th>{% trans %}Creator{% endtrans %}</th>
+                {% endif %}
             </tr>
             </thead>
             <tbody>
             {% for item in pagination %}
             <tr id="ModelContact{{ item.0.id }}"
                 data-url="{{ path('lists_' ~ baseRoutePrefix ~ '_contact_ajax_organization_element', {
-                    id: item.0.id
+                    id: item.0.id,
+                    organizationId: organizationId
                 }) }}"
             >
                 {{  include(

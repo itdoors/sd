@@ -220,14 +220,22 @@ class ModelContactRepository extends EntityRepository
 
         $sql = $this->createQueryBuilder('mc')
             ->select('mc')
-            ->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as creatorFullName")
+			->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as creatorFullName")
+			->addSelect("CONCAT(CONCAT(owner.lastName, ' '), owner.firstName) as ownerFullName")
+			->addSelect("owner.id as ownerId")
+			->addSelect('o.id as organizationId')
+			->addSelect('o.name as organizationName')
             ->leftJoin('mc.user', 'u')
+			->leftJoin('mc.owner', 'owner')
+			->leftJoin('ListsOrganizationBundle:Organization', 'o', 'WITH', 'o.id = mc.modelId')
             ->where('mc.modelName = :modelName')
             ->andWhere('mc.modelId = :modelId')
             //->andWhere('mc.user_id in (:userIds)')
             //->setParameter(':userIds', $userIds)
             ->setParameter(':modelId', $organizationId)
             ->setParameter(':modelName', self::MODEL_ORGANIZATION);
+
+		$this->processOrganizationQuery($sql, $organizationId);
 
         return $sql;
     }

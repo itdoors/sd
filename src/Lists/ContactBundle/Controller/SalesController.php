@@ -56,16 +56,17 @@ class SalesController extends BaseController
         ));
     }
 
-	public function organizationElementAction($id)
+	public function organizationElementAction($id, $organizationId)
 	{
-		$organizationContactQuery = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
+		$organizationContactQuery = $this->getDoctrine()
+			->getRepository('ListsContactBundle:ModelContact')
 			->getMyOrganizationsContacts(array(), null, $id);
 
 		$organizationContact = $organizationContactQuery->getSingleResult();
 
 		return $this->render('ListsContactBundle:' . $this->baseTemplate . ':organizationElement.html.twig', array(
 				'item' => $organizationContact,
-				'organizationId' => 0,
+				'organizationId' => $organizationId,
 				'baseTemplate' => $this->baseTemplate,
 				'baseRoutePrefix' => $this->baseRoutePrefix
 			));
@@ -75,14 +76,19 @@ class SalesController extends BaseController
     {
         $user = $this->getUser();
 
+		$organizationId = $this->getDoctrine()->getManager()
+			->getRepository('ListsHandlingBundle:Handling')
+			->getOrganizationByHandlingId($handlingId);
+
         $handlingContacts = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
             ->getMyHandlingContacts($user->getId(), $handlingId)
             ->getQuery()
             ->getResult();
 
-        return $this->render('ListsContactBundle:' . $this->baseTemplate . ':handling.html.twig', array(
-            'handlingContacts' => $handlingContacts,
+        return $this->render('ListsContactBundle:' . $this->baseTemplate . ':organization.html.twig', array(
+            'pagination' => $handlingContacts,
             'handlingId' => $handlingId,
+            'organizationId' => $organizationId,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix
         ));
