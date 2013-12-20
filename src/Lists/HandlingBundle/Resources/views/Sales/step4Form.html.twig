@@ -13,6 +13,8 @@
             weekStart: 1,
             startDate: new Date()
         });
+
+        $('#handlingMessageWizardForm_next_is_business_trip').uniform();
     })
 </script>
 {% form_theme form 'SDCommonBundle:Form:form_errors.html.twig' %}
@@ -116,12 +118,8 @@
 
                         <div class="checkbox-list">
                             <label class="checkbox-inline">
-                                <div id="uniform-inlineCheckbox21" class="checker">
-                                    <span>
-                                        {{ form_widget(form.next_is_business_trip, {'attr' : {'class' : 'form-control', 'placeholder': 'Is business trip'} } ) }}
-                                    </span>
-                                </div>
-                                Is business trip
+                                {{ form_widget(form.next_is_business_trip, {'attr' : {'class' : 'form-control', 'placeholder': 'Is business trip'} } ) }}
+                                {% trans %}Is business trip{% endtrans %}
                             </label>
                         </div>
 

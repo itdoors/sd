@@ -13,6 +13,8 @@
             weekStart: 1,
             startDate: new Date(1000*{{ form.mindate.vars.value }})
         });
+
+        $('#handlingMessageForm_next_is_business_trip').uniform();
     })
 </script>
 {% form_theme form 'SDCommonBundle:Form:form_errors.html.twig' %}
@@ -121,18 +123,12 @@
                             <div class="panel-heading">{% trans %}Extra{% endtrans %}</div>
                             <div class="panel-body">
                                 <div class="form-group">
-
                                     <div class="checkbox-list">
                                         <label class="checkbox-inline">
-                                            <div id="uniform-inlineCheckbox21" class="checker">
-                                                <span>
-                                                    {{ form_widget(form.next_is_business_trip, {'attr' : {'class' : 'form-control', 'placeholder': 'Is business trip'} } ) }}
-                                                </span>
-                                            </div>
-                                            Is business trip
+                                            {{ form_widget(form.next_is_business_trip, {'attr' : { 'placeholder': 'Is business trip'} } ) }}
+                                            {% trans %}Is business trip{% endtrans %}
                                         </label>
                                     </div>
-
                                 </div>
                                 <div class="form-group">
                                     {# Статус проекта - должны заполнять при создании сообщения

@@ -91,6 +91,8 @@
 
         $.fn.modal.Constructor.prototype.enforceFocus = function() {};
 
+        $('.make-switch input').uniform();
+
         //$('.make-switch input').bootstrapSwitch('setSizeClass', '');
     });
 </script>
@@ -99,7 +101,12 @@
     <div class="col-md-12">
         <div class="portlet box yellow">
             <div class="portlet-title"><div class="caption"><i class="fa fa-edit"></i>
-                    {% trans %}Edit Contact{% endtrans %}
+                    {% if form.isNew is defined %}
+                        {% trans  from 'ListsContactBundle' %}New Contact{% endtrans %}
+                    {% else %}
+                        {% trans  from 'ListsContactBundle' %}Edit Contact{% endtrans %}
+                    {% endif %}
+
                 </div>
             </div>
             <div class="portlet-body">

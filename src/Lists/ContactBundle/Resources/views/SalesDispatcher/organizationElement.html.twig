@@ -1,56 +1,58 @@
 {% set canEdit = (app.user.id == item.ownerId or app.user.hasRole('ROLE_SALESADMIN')) %}
-<td>
+<td {% if item.0.isShared %} style="background-color: #9BC4FA"{% endif %}>
     {% if canEdit %}
-    <a id="managers_list_new" class="btn green ajax-form"
-       data-toggle="modal"
-       href="#form_modal_contact"
-       data-target_holder="modelContactFormTpl"
-       data-form_name="modelContactOrganizationEditForm"
-       data-post_function="updateList"
-       data-post_target_id="ModelContact{{ item.0.id }}"
-       data-model="ModelContact"
-       data-model-id="{{ item.0.id }}"
-            >
-        {{ item.0.id }}
-    </a>
+        <a id="managers_list_new" class="btn green ajax-form"
+           data-toggle="modal"
+           href="#form_modal_contact"
+           data-target_holder="modelContactFormTpl"
+           data-form_name="modelContactOrganizationEditForm"
+           data-post_function="updateList"
+           data-post_target_id="ModelContact{{ item.0.id }}"
+           data-model="ModelContact"
+           data-model-id="{{ item.0.id }}"
+                >
+            {{ item.0.id }}
+        </a>
     {% else %}
         {{ item.0.id }}
     {% endif %}
 </td>
 {% if organizationId %}
 {% else %}
-    <td>{{ item.organizationName }}</td>
+    <td {% if item.0.isShared %} style="background-color: #9BC4FA"{% endif %}>
+        {{ item.organizationName }}
+    </td>
 {% endif %}
-<td>
+<td {% if item.0.isShared %} style="background-color: #9BC4FA"{% endif %}>
     {{ item.0.firstName }}
 </td>
-<td>
+<td {% if item.0.isShared %} style="background-color: #9BC4FA"{% endif %}>
     {{ item.0.lastName }}
 </td>
-<td>
+<td {% if item.0.isShared %} style="background-color: #9BC4FA"{% endif %}>
     {{ item.0.middleName }}
 </td>
-<td>
+<td {% if item.0.isShared %} style="background-color: #9BC4FA"{% endif %}>
     {{ item.0.position }}
 </td>
-<td>
+<td {% if item.0.isShared %} style="background-color: #9BC4FA"{% endif %}>
     {{ item.0.phone1 }}
 </td>
-<td>
+<td {% if item.0.isShared %} style="background-color: #9BC4FA"{% endif %}>
     {{ item.0.phone2 }}
 </td>
-<td>
+<td {% if item.0.isShared %} style="background-color: #9BC4FA"{% endif %}>
     {{ item.0.email }}
 </td>
-<td>
+<td {% if item.0.isShared %} style="background-color: #9BC4FA"{% endif %}>
     {% if item.0.birthday %}
         {{ item.0.birthday|date("d.m.Y") }}
     {% endif %}
 </td>
-<td>
+<td {% if item.0.isShared %} style="background-color: #9BC4FA"{% endif %}>
     {{ item.0.type }}
 </td>
-<td>
+<td {% if item.0.isShared %} style="background-color: #9BC4FA"{% endif %}>
     {{ item.ownerFullName }}
     {% if item.0.ownerdatetime %}
         ({{ item.0.ownerdatetime|date("d.m.y") }})
@@ -58,7 +60,7 @@
 </td>
 {% if organizationId %}
 {% else %}
-    <td>
+    <td {% if item.0.isShared %} style="background-color: #9BC4FA"{% endif %}>
         {{ item.creatorFullName }}
         {% if item.0.createdatetime %}
             ({{ item.0.createdatetime|date("d.m.y") }})
