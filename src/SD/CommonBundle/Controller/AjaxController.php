@@ -898,7 +898,26 @@ class AjaxController extends Controller
             ->getRepository('ListsOrganizationBundle:Organization')
             ->find($organizationId);
 
-        $organization->addUser($user);
+		$users = $organization->getUsers();
+
+		$userExist = false;
+
+		if ($users)
+		{
+			foreach ($users as $orgUser)
+			{
+				if ($orgUser->getId() == $user->getId())
+				{
+					$userExist = true;
+				}
+			}
+		}
+
+		if (!$userExist)
+		{
+			$organization->addUser($user);
+		}
+
         $em->persist($organization);
 
         $em->flush();
