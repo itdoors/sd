@@ -7,6 +7,10 @@ parameters:
 
     lists_organization.edrpou.validator.class: Lists\OrganizationBundle\Validator\UniqueEdrpouValidator
 
+    lists_organization.repository.class: Lists\OrganizationBundle\Entity\OrganizationRepository
+    lists_organization.repository.entity: Lists\OrganizationBundle\Entity\Organization
+
+
 services:
   lists_organization.form.organizationFilterForm:
         class: %lists_organization.sales.filter.form.class%
@@ -45,3 +49,9 @@ services:
           -
               name: validator.constraint_validator
               alias: unique_edrpou
+
+  lists_organization.repository:
+      class: %lists_organization.repository.class%
+      factory_service: doctrine # this is an instance of Registry
+      factory_method: getRepository
+      arguments: [ %lists_organization.repository.entity% ]

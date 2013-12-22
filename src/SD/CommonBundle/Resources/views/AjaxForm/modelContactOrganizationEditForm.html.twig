@@ -89,6 +89,45 @@
 
         {% endif %}
 
+        {% if form.owner is defined %}
+
+        $('#modelContactOrganizationEditForm_owner').select2({
+            minimumInputLength: 2,
+            initSelection: function (element, callback) {
+                // the input tag has a value attribute preloaded that points to a preselected movie's id
+                // this function resolves that id attribute to an object that select2 can render
+                // using its formatResult renderer - that way the movie name is shown preselected
+                var id = $(element).val();
+                if (id !== "") {
+                    $.ajax("{{ path('sd_common_ajax_user_by_id') }}", {
+                        data: {
+                            id: id
+                        },
+                        dataType: "json"
+                    }).done(function (data) {
+                                callback(data)
+                            });
+                }
+            },
+            ajax: {
+                url: '{{ path('sd_common_ajax_user') }}',
+                dataType: 'json',
+                quietMillis: 30,
+                data: function (term, page) {
+                    return {
+                        query: term
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        })
+
+        {% endif %}
+
         $.fn.modal.Constructor.prototype.enforceFocus = function() {};
 
         $('.make-switch input').uniform();
@@ -110,7 +149,14 @@
                 </div>
             </div>
             <div class="portlet-body">
-
+                {% form_theme form 'SDCommonBundle:Form:form_errors.html.twig' %}
+                {% if form.vars.valid is sameas(false) %}
+                    <div class="alert alert-danger">
+                        <button class="close" data-close="alert"></button>
+                        {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                        {{ form_errors(form) }}
+                    </div>
+                {% endif %}
                 {{ form_start(form, {
                         'action' : path('sd_common_ajax_form'),
                         'attr' : {
@@ -122,11 +168,44 @@
                     }
                 }) }}
                 <div class="form-body row">
-
                     {% if form.isNew is defined %}
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-12{% if form.modelId.vars.errors|length %} has-error{% endif %}">
                             {{ form_label(form.modelId, 'Organization Name', {'attr': {'class': 'control-label'}}) }}
-                            {{ form_widget(form.modelId, {'attr' : {'class' : 'form-control', 'placeholder': "Organization" }}) }}
+                            {{ form_widget(form.modelId, {'attr' : {
+                                'class' : 'form-control',
+                                'placeholder': "Organization"
+                            }}) }}
+                            {% if form.modelId.vars.errors|length %}
+                                {{ form_errors(form.modelId) }}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if form.creatorDisabled is defined %}
+                        <div class="form-group col-md-6">
+                            {{  form_label(form.creatorDisabled, 'Creator', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.creatorDisabled, {'attr' : {'class' : 'form-control', 'placeholder': "Creator"}}) }}
+                        </div>
+                    {% endif %}
+
+                    {% if form.createdatetimeDisable is defined %}
+                        <div class="form-group col-md-6">
+                            {{  form_label(form.createdatetimeDisable, 'Createdatetime', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.createdatetimeDisable, {'attr' : {'class' : 'form-control', 'placeholder': "Createdatetime"}}) }}
+                        </div>
+                    {% endif %}
+
+                    {% if form.ownerDisable is defined %}
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.ownerDisable, 'Owner', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.ownerDisable, {'attr' : {'class' : 'form-control', 'placeholder': "Owner"}}) }}
+                        </div>
+                    {% endif %}
+
+                    {% if form.owner is defined %}
+                        <div class="form-group col-md-6">
+                            {{  form_label(form.owner, 'Owner', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.owner, {'attr' : {'class' : 'form-control', 'placeholder': "Owner"}}) }}
                         </div>
                     {% endif %}
 
@@ -150,7 +229,7 @@
                         {{ form_widget(form.position, {'attr' : {'class' : 'form-control', 'placeholder': "Position"}}) }}
                     </div>
 
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-6{% if form.phone1.vars.errors|length %} has-error{% endif %}">
 
                         {% if form.vars.value.phone1 is defined %}
                             {% set phone1 = form.vars.value.phone1 %}
@@ -158,7 +237,11 @@
                             {% set phone1 = '' %}
                         {% endif %}
 
-                        {{ form_label(form.phone1, 'Phone 1', {'attr': {'class': 'control-label'}}) }}
+                        {% if form.phone1.vars.errors|length %}
+                            {{ form_errors(form.phone1) }}
+                        {% else %}
+                            {{ form_label(form.phone1, 'Phone 1', {'attr': {'class': 'control-label'}}) }}
+                        {% endif %}
                         {{ form_widget(form.phone1, {'attr' : {
                             'class' : 'form-control',
                             'placeholder': "Phone 1",

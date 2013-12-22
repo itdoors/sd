@@ -487,6 +487,28 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
 
+	public function userByIdAction()
+	{
+		$id = $this->get('request')->query->get('id');
+
+		/** @var \SD\UserBundle\Entity\UserRepository $repository */
+		$repository = $this->getDoctrine()
+			->getRepository('SDUserBundle:User');
+
+		/** @var \SD\UserBundle\Entity\User $object */
+		$object = $repository
+			->find($id);
+
+		$result = array();
+
+		if ($object)
+		{
+			$result = $this->serializeObject($object);
+		}
+
+		return new Response(json_encode($result));
+	}
+
     /**
      * Serialize object to json. temporary solution
      *
