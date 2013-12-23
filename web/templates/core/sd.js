@@ -5,6 +5,7 @@ var SD = (function() {
         ajaxDeleteClass: 'ajax-delete',
         ajaxFormEntityClass: 'ajax-form-entity',
         ajaxFormCancelBtnClass: 'sd-cancel-btn',
+        ajaxMoreInfoClass: 'more-info',
         ajaxFormUrl: '',
         ajaxDeleteUrl: ''
     };
@@ -20,6 +21,8 @@ var SD = (function() {
         this.initAjaxForm();
 
         this.initAjaxDelete();
+
+        this.initMoreInfo();
     }
 
     SD.prototype.initAjaxForm = function()
@@ -148,6 +151,52 @@ var SD = (function() {
                 }
             });
         });
+
+        SD.prototype.initMoreInfo = function()
+        {
+            var self = this;
+
+            $('.' + self.params.ajaxMoreInfoClass).live('click', function(e){
+                e.preventDefault();
+
+                var selfAjaxMoreInfoObject = $(this);
+
+                var targetId = $(this).data('target_holder');
+
+                var target = $('#' + targetId);
+
+                var params = $(this).data('params');
+                var urlMoreInfo = $(this).data('url-more-info');
+
+                target.css('display', 'block');
+
+                target.html(target.data('text'));
+
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: urlMoreInfo,
+                    data: params,
+                    beforeSend: function ()
+                    {
+                        selfAjaxMoreInfoObject.css('opacity', '0.5');
+                    },
+                    success: function(response) {
+
+                        selfAjaxMoreInfoObject.css('opacity', '1');
+
+                        /*if (response.error)
+                         {
+                         target.html(response.html);
+                         }*/
+                        if (response.success)
+                        {
+                            target.html(response.html);
+                        }
+                    }
+                })
+            })
+        };
 
         $('.' + self.params.ajaxFormCancelBtnClass).live('click', function(e){
 

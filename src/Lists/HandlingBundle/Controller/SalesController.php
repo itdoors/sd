@@ -200,6 +200,8 @@ class SalesController extends BaseController
 
         $isResultClosed = $object['resultSlug'] == HandlingResult::RESULT_CLOSED;
 
+		$showMoreInfoIds = array(5,6);
+
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':show.html.twig', array(
             'handling' => $object,
             'baseTemplate' => $this->baseTemplate,
@@ -207,7 +209,8 @@ class SalesController extends BaseController
             'handlingServices' => $handlingServices,
             'canEdit' => $canEdit,
             'isResultClosed' => $isResultClosed,
-            'organization' => $organization
+            'organization' => $organization,
+			'showMoreInfoIds' => $showMoreInfoIds
         ));
     }
 

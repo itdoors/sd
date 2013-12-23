@@ -108,4 +108,60 @@ class HandlingMoreInfo
     {
         return $this->handlingMoreInfoType;
     }
+    /**
+     * @var integer
+     */
+    private $handlingId;
+
+    /**
+     * @var integer
+     */
+    private $handlingMoreInfoTypeId;
+
+
+    /**
+     * Set handlingId
+     *
+     * @param integer $handlingId
+     * @return HandlingMoreInfo
+     */
+    public function setHandlingId($handlingId)
+    {
+        $this->handlingId = $handlingId;
+    
+        return $this;
+    }
+
+    /**
+     * Get handlingId
+     *
+     * @return integer 
+     */
+    public function getHandlingId()
+    {
+        return $this->handlingId;
+    }
+
+    /**
+     * Set handlingMoreInfoTypeId
+     *
+     * @param integer $handlingMoreInfoTypeId
+     * @return HandlingMoreInfo
+     */
+    public function setHandlingMoreInfoTypeId($handlingMoreInfoTypeId)
+    {
+        $this->handlingMoreInfoTypeId = $handlingMoreInfoTypeId;
+    
+        return $this;
+    }
+
+    /**
+     * Get handlingMoreInfoTypeId
+     *
+     * @return integer 
+     */
+    public function getHandlingMoreInfoTypeId()
+    {
+        return $this->handlingMoreInfoTypeId;
+    }
 }

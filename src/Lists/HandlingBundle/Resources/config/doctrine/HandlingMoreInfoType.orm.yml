@@ -25,6 +25,10 @@ Lists\HandlingBundle\Entity\HandlingMoreInfoType:
             fixed: false
             nullable: true
             column: enum_choices
+        handlingResultId:
+            type: integer
+            nullable: true
+            column: handling_result_id
     manyToOne:
         handlingResult:
             targetEntity: HandlingResult

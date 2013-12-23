@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Lists\ContactBundle\Entity\ModelContactRepository;
 use Lists\ContactBundle\Entity\ModelContact;
+use Lists\HandlingBundle\Entity\HandlingMoreInfo;
 
 class AjaxController extends Controller
 {
@@ -1068,6 +1069,80 @@ class AjaxController extends Controller
         return new Response(json_encode($return));
     }
 
+	/**
+	 * Saves object to db
+	 *
+	 * @return mixed[]
+	 */
+	public function handlingMoreInfoSaveAction()
+	{
+		$translator = $this->get('translator');
+
+		$pks = $this->get('request')->request->get('pk');
+		$name = $this->get('request')->request->get('name');
+		$value = $this->get('request')->request->get('value');
+
+		$handlingId = $pks['handlingId'];
+		$typeId = $pks['typeId'];
+
+		$query = $this->getDoctrine()
+			->getRepository('ListsHandlingBundle:HandlingMoreInfo')
+			->createQueryBuilder('hmi')
+			->where('hmi.handlingId = :handlingId')
+			->andWhere('hmi.handlingMoreInfoTypeId = :handlingMoreInfoTypeId')
+			->setParameter(':handlingId', $handlingId)
+			->setParameter(':handlingMoreInfoTypeId', $typeId)
+			->getQuery();
+
+		try
+		{
+			$object = $query->getSingleResult();
+		} catch (\Doctrine\Orm\NoResultException $e)
+		{
+			$object = null;
+		}
+
+		if ($object)
+		{
+			$object->setValue($value);
+		}
+		else
+		{
+			$object = new HandlingMoreInfo();
+
+			$handling = $this->getDoctrine()
+				->getRepository('ListsHandlingBundle:Handling')
+				->find($handlingId);
+
+			$type = $this->getDoctrine()
+				->getRepository('ListsHandlingBundle:HandlingMoreInfoType')
+				->find($typeId);
+
+			$object->setHandling($handling);
+			$object->setHandlingMoreInfoType($type);
+		}
+
+		$object->setValue($value);
+
+		$em = $this->getDoctrine()->getManager();
+		$em->persist($object);
+
+		try
+		{
+			$em->flush();
+		}
+		catch (\ErrorException $e)
+		{
+			$return = array('msg' => $translator->trans('Wrong input data'));
+
+			return new Response(json_encode($return));
+		}
+
+		$return = array('success' => 1);
+
+		return new Response(json_encode($return));
+	}
+
     /**
      * Saves object to db
      *
@@ -1268,4 +1343,59 @@ class AjaxController extends Controller
                 'mapped' => false
             ));
     }
+
+	public function handlingMoreInfoAction(Request $request)
+	{
+		$handlingId = $request->request->get('handlingId');
+		$resultId = $request->request->get('resultId');
+
+		$types = $this->getDoctrine()
+			->getRepository('ListsHandlingBundle:HandlingMoreInfoType')
+			->createQueryBuilder('hmit')
+			->where('hmit.handlingResultId = :resultId')
+			->setParameter(':resultId', $resultId)
+			->getQuery()
+			->getREsult();
+
+		$moreInfoObjects = $this->getDoctrine()
+			->getRepository('ListsHandlingBundle:HandlingMoreInfo')
+			->createQueryBuilder('hmi')
+			->where('hmi.handlingId = :handlingId')
+			->setParameter(':handlingId', $handlingId)
+			->getQuery()
+			->getREsult();
+
+		$moreInfoArray = $this->processHandlingMoreInfo($moreInfoObjects);
+
+		$result = array(
+			'success' => 1,
+		);
+
+		$html = $this->renderView('SDCommonBundle:Ajax:moreInfo.html.twig', array(
+			'types' => $types,
+			'moreInfo' => $moreInfoArray,
+			'handlingId' => $handlingId
+		));
+
+		$result['html'] = $html;
+
+		return new Response(json_encode($result));
+	}
+
+	public function processHandlingMoreInfo($moreInfoObjects)
+	{
+		$result = array();
+
+		foreach ($moreInfoObjects as $object)
+		{
+			$typeId = $object->getHandlingMoreInfoTypeId();
+
+			if ($typeId)
+			{
+				$result[$typeId] = $object;
+			}
+		}
+
+		return $result;
+	}
 }

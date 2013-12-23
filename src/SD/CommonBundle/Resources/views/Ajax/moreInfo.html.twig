@@ -1,0 +1,57 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $('.more-info-editable').editable({
+            url: '{{ path('sd_common_ajax_handling_more_info_save') }}'
+        });
+
+        $('.date-picker-more-info').live('mouseover', function(e){
+
+            e.preventDefault();
+
+            $(this).on('shown', function(e, editable) {
+
+                var input = editable.input.$input;
+
+                input.attr('readonly', 'readonly');
+
+                input.datepicker({
+                    rtl: App.isRTL(),
+                    autoclose: true,
+                    format: "dd.mm.yyyy",
+                    pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
+                    language: 'ru',
+                    weekStart: 1
+                });
+            });
+        })
+    })
+
+</script>
+<table class="table table-bordered table-striped">
+    <tbody>
+    {% for type in types %}
+    <tr>
+        <td style="width:50%">{{ type.name }}</td>
+        <td style="width:50%">
+            {% set value = '' %}
+            {% if moreInfo[type.id] is defined %}
+                {% set value = moreInfo[type.id].value %}
+            {% endif %}
+            <a  href="#"
+                class="more-info-editable {% if type.dataType == 'date'%}date-picker-more-info{% endif %}"
+                data-name="value"
+                data-type="text"
+                data-pk='{"handlingId":{{ handlingId }},"typeId":{{ type.id }}}'
+                data-value="{{ value }}"
+                data-original-title="{% trans %}Enter Value{% endtrans %}"
+            >
+                {{ value }}
+            </a>
+
+
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>

@@ -13,6 +13,14 @@ Lists\HandlingBundle\Entity\HandlingMoreInfo:
             length: 255
             fixed: false
             nullable: false
+        handlingId:
+            type: integer
+            nullable: false
+            column: handling_id
+        handlingMoreInfoTypeId:
+            type: integer
+            nullable: false
+            column: handling_more_info_type_id
     manyToOne:
         handling:
             targetEntity: Handling
