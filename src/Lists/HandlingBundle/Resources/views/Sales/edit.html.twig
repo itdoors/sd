@@ -23,6 +23,29 @@
                 source: '{{ path('sd_common_ajax_handling_result') }}'
             });
 
+            $('#resultId').on('save', function(e, params) {
+
+                var showMoreInfoIds = $(this).data('show-more-info-ids');
+
+                var moreInfoHref = $(this).parent().find('a.more-info');
+
+                if ($.inArray(params.newValue, showMoreInfoIds))
+                {
+                    moreInfoHref.show();
+                }
+                else
+                {
+                    moreInfoHref.hide();
+                }
+
+                var moreInfoHrefParams = {
+                    handlingId: $(this).data('pk'),
+                    resultId: params.newValue
+                }
+
+                moreInfoHref.data('params', moreInfoHrefParams);
+            });
+
             $('#typeId').editable({
                 url: '{{ path('sd_common_ajax_handling_save') }}',
                 source: '{{ path('sd_common_ajax_handling_type') }}'
@@ -40,6 +63,22 @@
     })
 
 </script>
+
+<div id="form_modal_more_info" class="modal fade" role="basic" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">{% trans  from 'ListsHandlingBundle' %}More info{% endtrans %}</h4>
+            </div>
+            <div class="modal-body">
+                <div id="moreInfoTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
 
 <div class="tab-pane active" id="tab_0">
     <div class="col-md-12">
@@ -70,8 +109,28 @@
                 <td>{{ handling.creatorFullName }}</td>
                 <td>{% trans %}Result{% endtrans %}</td>
                 <td>
-                    <a href="#" id="resultId" data-type="select" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.resultId }}" data-original-title="{% trans %}Select Handling Result{% endtrans %}">
+                    <a  href="#"
+                        id="resultId"
+                        data-type="select"
+                        data-pk="{{ handling.0.id }}"
+                        data-value="{{ handling.0.resultId }}"
+                        data-original-title="{% trans %}Select type{% endtrans %}"
+                        data-show-more-info-ids="{{ showMoreInfoIds|json_encode|raw }}"
+
+                            >
                         {{ handling.0.result }}
+                    </a>
+                    <a  class="more-info btn"
+                            {% if handling.0.resultId not in showMoreInfoIds %}
+                                style="display: none"
+                            {% endif %}
+                        data-toggle="modal"
+                        href="#form_modal_more_info"
+                        data-target_holder="moreInfoTpl"
+                        data-params='{"handlingId":{{ handling.0.id }},"resultId":{{ handling.0.resultId }}}'
+                        data-url-more-info="{{ path('sd_common_ajax_handling_more_info') }}"
+                            >
+                        {% trans from 'ListsHandlingBundle' %}Show more info{% endtrans %}
                     </a>
                 </td>
             </tr>
