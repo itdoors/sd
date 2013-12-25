@@ -1,0 +1,95 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#organizationChildForm_organizationChildId').select2({
+            minimumInputLength: 2,
+            initSelection: function (element, callback) {
+                var id = $(element).val();
+                if (id !== "") {
+                    $.ajax("{{ path('sd_common_ajax_organization_by_id') }}", {
+                        data: {
+                            id: id
+                        },
+                        dataType: "json"
+                    }).done(function (data) {
+                                callback(data)
+                            });
+                    }
+            },
+            ajax: {
+                url: '{{ path('sd_common_ajax_organization_for_contacts') }}',
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        q: term
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        })
+    });
+</script>
+
+<div class="row ">
+    <div class="col-md-12">
+        <div class="portlet box yellow">
+            <div class="portlet-title">
+                <div class="caption"><i class="fa fa-edit"></i>
+                    {% trans from 'ListsOrganizationBundle' %}Set child organization{% endtrans %}
+                </div>
+            </div>
+            <div class="portlet-body">
+                {% form_theme form 'SDCommonBundle:Form:form_errors.html.twig' %}
+                {% if form.vars.valid is sameas(false) %}
+                    <div class="alert alert-danger">
+                        <button class="close" data-close="alert"></button>
+                        {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                        {{ form_errors(form) }}
+                    </div>
+                {% endif %}
+                {{ form_start(form, {
+                    'action' : path('sd_common_ajax_form'),
+                    'attr' : {
+                    'method' : 'POST',
+                    'class' : 'ajax-form-entity',
+                    'data-post_function': postFunction,
+                    'data-post_target_id': postTargetId,
+                    'data-target_id': targetId
+                }
+                }) }}
+                <div class="form-body row">
+                    <div class="form-group col-md-12{% if form.organizationChildId.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.organizationChildId, 'Organization Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.organizationChildId, {'attr' : {
+                                'class' : 'form-control',
+                                'placeholder': "Organization child"
+                            }})
+                        }}
+                        {% if form.organizationChildId.vars.errors|length %}
+                            {{ form_errors(form.organizationChildId) }}
+                        {% endif %}
+                    </div>
+
+                    <input type="hidden" name="formName" value="{{ formName }}">
+                    <input type="hidden" name="postFunction" value="{{ postFunction }}">
+                    <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
+                    <input type="hidden" name="targetId" value="{{ targetId }}">
+                </div>
+                <div class="form-actions">
+                    {{ form_widget(form.add, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
+                    {{ form_widget(form.cancel, { 'label': 'Cancel', 'attr':
+                        {
+                            'class': 'btn default sd-cancel-btn',
+                            'data-dismiss': "modal"
+                        }
+                    } ) }}
+                </div>
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+    </div>
+</div>

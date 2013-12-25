@@ -10,6 +10,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Lists\ContactBundle\Entity\ModelContactRepository;
 use Lists\ContactBundle\Entity\ModelContact;
 use Lists\HandlingBundle\Entity\HandlingMoreInfo;
+use Symfony\Component\Form\Form;
+use SD\UserBundle\Entity\User;
+use Lists\OrganizationBundle\Entity\Organization;
+use Doctrine\DBAL\Connection;
 
 class AjaxController extends Controller
 {
@@ -1398,4 +1402,194 @@ class AjaxController extends Controller
 
 		return $result;
 	}
+
+    /**
+     * Saves organizationChildForm
+     *
+     * processes setting child organization
+     */
+    public function organizationChildFormSave(Form $form, User $user, Request $request)
+    {
+        $data = $form->getData();
+
+        $organizationId = $data['organizationId'];
+
+        $organizationChildId = $data['organizationChildId'];
+
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var Connection $connection */
+        $connection = $em->getConnection();
+
+        $connection->beginTransaction();
+
+        try
+        {
+            /** @var Organization $organizationChild */
+            $organizationChild = $em->getRepository('ListsOrganizationBundle:Organization')
+                ->find($organizationChildId);
+
+            $organizationChild->setParentId($organizationId);
+
+            $em->persist($organizationChild);
+            $em->flush();
+
+            // Client Update
+            $sql = "UPDATE client set organization_id = :organizationId where organization_id = :organizationChildId";
+            $statement = $connection->prepare($sql);
+            $statement->execute(array(
+                ':organizationId' => $organizationId,
+                ':organizationChildId' => $organizationChildId
+            ));
+
+            // Client Organization Update
+            $sql = "
+            UPDATE
+                client_organization
+            SET
+                organization_id = :organizationId
+            WHERE
+                organization_id = :organizationChildId AND
+            NOT EXISTS (
+                SELECT
+                  *
+                FROM
+                  client_organization temp_table
+                WHERE
+                  temp_table.organization_id = :organizationId AND
+                  temp_table.client_id = client_organization.client_id
+            )";
+            $statement = $connection->prepare($sql);
+            $statement->execute(array(
+                ':organizationId' => $organizationId,
+                ':organizationChildId' => $organizationChildId
+            ));
+
+            // Contract Update
+            $sql = "UPDATE contract set organization_id = :organizationId where organization_id = :organizationChildId";
+            $statement = $connection->prepare($sql);
+            $statement->execute(array(
+                ':organizationId' => $organizationId,
+                ':organizationChildId' => $organizationChildId
+            ));
+
+            // Contract Importance Update
+            $sql = "
+            UPDATE
+                contract_importance
+            SET
+                organization_id = :organizationId
+            WHERE
+                organization_id = :organizationChildId AND
+            NOT EXISTS (
+                SELECT
+                  *
+                FROM
+                  contract_importance temp_table
+                WHERE
+                  temp_table.organization_id = :organizationId AND
+                  temp_table.importance_id = contract_importance.importance_id
+            )";
+            $statement = $connection->prepare($sql);
+            $statement->execute(array(
+                ':organizationId' => $organizationId,
+                ':organizationChildId' => $organizationChildId
+            ));
+
+            // Departments Update
+            $sql = "UPDATE departments set organization_id = :organizationId where organization_id = :organizationChildId";
+            $statement = $connection->prepare($sql);
+            $statement->execute(array(
+                ':organizationId' => $organizationId,
+                ':organizationChildId' => $organizationChildId
+            ));
+
+            // Dogovor Update
+            $sql = "UPDATE dogovor set organization_id = :organizationId where organization_id = :organizationChildId";
+            $statement = $connection->prepare($sql);
+            $statement->execute(array(
+                ':organizationId' => $organizationId,
+                ':organizationChildId' => $organizationChildId
+            ));
+
+            // Handling Update
+            $sql = "UPDATE handling set organization_id = :organizationId where organization_id = :organizationChildId";
+            $statement = $connection->prepare($sql);
+            $statement->execute(array(
+                ':organizationId' => $organizationId,
+                ':organizationChildId' => $organizationChildId
+            ));
+
+            // Organization Importance Update
+            $sql = "
+            UPDATE
+                organization_importance
+            SET
+                organization_id = :organizationId
+            WHERE
+                organization_id = :organizationChildId AND
+            NOT EXISTS (
+                SELECT
+                  *
+                FROM
+                  organization_importance temp_table
+                WHERE
+                  temp_table.organization_id = :organizationId AND
+                  temp_table.importance_id = organization_importance.importance_id
+            )";
+            $statement = $connection->prepare($sql);
+            $statement->execute(array(
+                ':organizationId' => $organizationId,
+                ':organizationChildId' => $organizationChildId
+            ));
+
+            // Organization User Update
+            $sql = "
+            UPDATE
+                organization_user
+            SET
+                organization_id = :organizationId
+            WHERE
+                organization_id = :organizationChildId AND
+            NOT EXISTS (
+                SELECT
+                  *
+                FROM
+                  organization_user ou
+                WHERE
+                  ou.organization_id = :organizationId AND
+                  ou.user_id = organization_user.user_id
+            )";
+            $statement = $connection->prepare($sql);
+            $statement->execute(array(
+                ':organizationId' => $organizationId,
+                ':organizationChildId' => $organizationChildId
+            ));
+
+            // Model Contact Update
+            $sql = "
+            UPDATE
+                model_contact
+            SET
+                model_id = :organizationId
+            WHERE
+                model_id = :organizationChildId AND
+                model_name = :modelName";
+            $statement = $connection->prepare($sql);
+            $statement->execute(array(
+                ':organizationId' => $organizationId,
+                ':organizationChildId' => $organizationChildId,
+                ':modelName' => 'organization'
+            ));
+
+            $connection->commit();
+
+        } catch (\Exception $e) {
+            $connection->rollback();
+            $em->close();
+            throw $e;
+        }
+
+        return true;
+    }
 }

@@ -99,6 +99,10 @@ Lists\OrganizationBundle\Entity\Organization:
             type: integer
             nullable: true
             column: group_id
+        parent_id:
+            type: integer
+            nullable: true
+            column: parent_id
     manyToOne:
         city:
             targetEntity: Lists\CityBundle\Entity\City
@@ -137,6 +141,13 @@ Lists\OrganizationBundle\Entity\Organization:
                 creator_id:
                     referencedColumnName: id
             orphanRemoval: false
+        parent:
+            targetEntity: Organization
+            inversedBy: children
+    oneToMany:
+        children:
+            targetEntity: Organization
+            mappedBy: parent
     manyToMany:
         users:
             targetEntity: SD\UserBundle\Entity\User

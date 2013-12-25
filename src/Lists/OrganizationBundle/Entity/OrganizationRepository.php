@@ -102,7 +102,8 @@ class OrganizationRepository extends EntityRepository
             ->leftJoin('o.city', 'c')
             ->leftJoin('c.region', 'r')
             ->leftJoin('o.scope', 'scope')
-            ->leftJoin('o.users', 'users');
+            ->leftJoin('o.users', 'users')
+            ->andWhere('o.parent_id is null');
 
     }
 
@@ -115,7 +116,7 @@ class OrganizationRepository extends EntityRepository
     public function processUserQuery($sql, $userIds)
     {
         $sql
-            ->where('users.id in (:userIds)')
+            ->andWhere('users.id in (:userIds)')
             ->setParameter(':userIds', $userIds);
     }
 
@@ -202,6 +203,7 @@ class OrganizationRepository extends EntityRepository
     {
         $sql = $this->createQueryBuilder('o')
             ->where('lower(o.name) LIKE :q')
+            ->andWhere('o.parent_id is null')
             ->setParameter(':q', '%'. mb_strtolower($q, 'UTF-8') . '%')
             ->getQuery();
 
@@ -235,6 +237,7 @@ class OrganizationRepository extends EntityRepository
                     ")
             ->leftJoin('o.users', 'users')
             ->where('lower(o.name) LIKE :q OR lower(o.shortname) LIKE :q')
+            ->andWhere('o.parent_id is null')
             ->setParameter(':q', '%'. mb_strtolower($q, 'UTF-8') . '%')
             ->getQuery();
 
@@ -245,6 +248,7 @@ class OrganizationRepository extends EntityRepository
     {
         return $this->createQueryBuilder('o')
             ->where('o.edrpou = :edrpou')
+            ->andWhere('o.parent_id is null')
             ->setParameter(':edrpou', $edrpou)
             ->getQuery()
             ->getResult();
@@ -266,6 +270,7 @@ class OrganizationRepository extends EntityRepository
 		$sql = $this->createQueryBuilder('o')
 			->select('o.id as id')
 			->where('o.group_id = :groupId')
+            ->andWhere('o.parent_id is null')
 			->setParameter(':groupId', $organization->getGroupId())
 			->getQuery()
 			->getResult();

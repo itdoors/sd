@@ -184,5 +184,10 @@ DROP TRIGGER IF EXISTS sf_to_fos_trigger ON sf_guard_user;
 CREATE TRIGGER sf_to_fos_trigger
 AFTER INSERT ON sf_guard_user FOR EACH ROW EXECUTE PROCEDURE sf_guard_user_to_fos_user();
 
++++++++++++++++++++++++
 
+ALTER TABLE organization ADD parent_id INT DEFAULT NULL;
+ALTER TABLE organization ADD CONSTRAINT FK_C1EE637C727ACA70 FOREIGN KEY (parent_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_C1EE637C727ACA70 ON organization (parent_id);
+select table_name from information_schema.columns where column_name = 'organization_id';
 

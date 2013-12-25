@@ -796,4 +796,98 @@ class Organization
             'name'
         );
     }
+    /**
+     * @var integer
+     */
+    private $parent_id;
+
+    /**
+     * @var \Lists\OrganizationBundle\Entity\Organization
+     */
+    private $parent;
+
+
+    /**
+     * Set parent_id
+     *
+     * @param integer $parentId
+     * @return Organization
+     */
+    public function setParentId($parentId)
+    {
+        $this->parent_id = $parentId;
+    
+        return $this;
+    }
+
+    /**
+     * Get parent_id
+     *
+     * @return integer 
+     */
+    public function getParentId()
+    {
+        return $this->parent_id;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \Lists\OrganizationBundle\Entity\Organization $parent
+     * @return Organization
+     */
+    public function setParent(\Lists\OrganizationBundle\Entity\Organization $parent = null)
+    {
+        $this->parent = $parent;
+    
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Lists\OrganizationBundle\Entity\Organization 
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $children;
+
+
+    /**
+     * Add children
+     *
+     * @param \Lists\OrganizationBundle\Entity\Organization $children
+     * @return Organization
+     */
+    public function addChildren(\Lists\OrganizationBundle\Entity\Organization $children)
+    {
+        $this->children[] = $children;
+    
+        return $this;
+    }
+
+    /**
+     * Remove children
+     *
+     * @param \Lists\OrganizationBundle\Entity\Organization $children
+     */
+    public function removeChildren(\Lists\OrganizationBundle\Entity\Organization $children)
+    {
+        $this->children->removeElement($children);
+    }
+
+    /**
+     * Get children
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
 }

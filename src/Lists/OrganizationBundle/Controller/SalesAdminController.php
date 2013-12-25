@@ -2,6 +2,8 @@
 
 namespace Lists\OrganizationBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
+
 class SalesAdminController extends SalesDispatcherController
 {
     protected $filterNamespace = 'organization.sales.admin.filters';
@@ -23,7 +25,7 @@ class SalesAdminController extends SalesDispatcherController
         $organizationsRepository = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization');
 
-        /** @var \Doctrine\ORM\Query */
+        /** @var \Doctrine\ORM\Query $organizationsQuery */
         $organizationsQuery = $organizationsRepository->getAllForSalesQuery(null, $this->getFilters());
 
         /** @var \Knp\Component\Pager\Paginator $paginator */

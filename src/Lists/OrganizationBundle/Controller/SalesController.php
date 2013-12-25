@@ -95,6 +95,13 @@ class SalesController extends BaseController
             ->getRepository('ListsOrganizationBundle:Organization')
             ->find($id);
 
+        if ($organization->getParent())
+        {
+            return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_organization_show', array(
+                    'id' => $organization->getParentId()
+                )));
+        }
+
         $managerForm = $this->createForm('organizationUserForm');
 
         return $this->render('ListsOrganizationBundle:' . $this->baseTemplate. ':show.html.twig', array(
