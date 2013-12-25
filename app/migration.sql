@@ -191,3 +191,40 @@ ALTER TABLE organization ADD CONSTRAINT FK_C1EE637C727ACA70 FOREIGN KEY (parent_
 CREATE INDEX IDX_C1EE637C727ACA70 ON organization (parent_id);
 select table_name from information_schema.columns where column_name = 'organization_id';
 
+
+DROP FUNCTION IF EXISTS show_users_data_to_delete(user_id int);
+CREATE OR REPLACE FUNCTION show_users_data_to_delete(user_id int) RETURNS varchar[] AS $$
+DECLARE
+    table_record   record;
+    nbrow varchar[];
+    queryResult record;
+BEGIN
+    FOR table_record IN (select table_name from information_schema.columns where column_name = 'user_id') LOOP
+        FOR queryResult IN EXECUTE 'SELECT r::text FROM ' || table_record.table_name || ' as r where r.user_id = ' || user_id LOOP
+		IF queryResult IS NOT NULL THEN
+			nbrow = array_append(nbrow, (table_record.table_name || ' ' || queryResult)::varchar);
+		END IF;
+        END LOOP;
+    END LOOP;
+    RETURN nbrow;
+END$$ LANGUAGE 'plpgsql';
+
+DROP FUNCTION IF EXISTS show_stuff_data_to_delete(stuff_id int);
+CREATE OR REPLACE FUNCTION show_stuff_data_to_delete(stuff_id int) RETURNS varchar[] AS $$
+DECLARE
+    table_record   record;
+    nbrow varchar[];
+    queryResult record;
+BEGIN
+    FOR table_record IN (select table_name from information_schema.columns where column_name = 'stuff_id') LOOP
+        FOR queryResult IN EXECUTE 'SELECT r::text FROM ' || table_record.table_name || ' as r where r.stuff_id = ' || stuff_id LOOP
+		IF queryResult IS NOT NULL THEN
+			nbrow = array_append(nbrow, (table_record.table_name || ' ' || queryResult)::varchar);
+		END IF;
+        END LOOP;
+    END LOOP;
+    RETURN nbrow;
+END$$ LANGUAGE 'plpgsql';
+
+select unnest(show_users_data_to_delete(312))
+select unnest(show_stuff_data_to_delete(117))
