@@ -1,3 +1,11 @@
+sd_user_index:
+    pattern:  /user/index
+    defaults: { _controller: SDUserBundle:User:index }
+
+sd_user_show:
+    pattern:  /user/show/{id}
+    defaults: { _controller: SDUserBundle:User:show }
+
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
 

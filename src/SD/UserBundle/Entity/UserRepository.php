@@ -21,6 +21,8 @@ class UserRepository extends EntityRepository
     {
         return $this->createQueryBuilder('u')
             ->select('u', 'staff')
+            ->where('u.isFired = FALSE OR u.isFired IS NULL')
+            //->setParameter(':isFired', false)
             ->innerJoin('u.staff', 'staff')
             ->orderBy('u.lastName', 'ASC');
 
