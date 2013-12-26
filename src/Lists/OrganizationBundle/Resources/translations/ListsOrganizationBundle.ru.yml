@@ -20,6 +20,7 @@ Select Organization scope: Выберите деятельность
 Organization List: Организации
 
 Organization name: Название организации
+Organization Name: Название организации
 "Organization name": "Название организации"
 Full Organization name: Полное наименование
 Enter organization name: Введите название организации
@@ -119,4 +120,8 @@ Add New: Добавить
 Delete: Удалить
 Enter filter parameters and press Filter button.: Выберите параметры фильтра и нажмите кнопку Фильтр
 Handling list link: Обращения
-
+Child organization: Дочерняя организация
+Organization child: Дочерняя организация
+Set child organization: Установить дочернюю организацию
+Child organization cant be empty: Дочерняя организация не может быть пустой
+You've picked the same organization: Организация не может быть дочерней относительно самой себя. Перепроверьте выбранные данные.

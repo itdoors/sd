@@ -228,3 +228,5 @@ END$$ LANGUAGE 'plpgsql';
 
 select unnest(show_users_data_to_delete(312))
 select unnest(show_stuff_data_to_delete(117))
+
+++++++++++++

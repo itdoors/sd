@@ -220,6 +220,11 @@ class HandlingMessage
     public function setHandling(\Lists\HandlingBundle\Entity\Handling $handling = null)
     {
         $this->handling = $handling;
+
+        if ($handling)
+        {
+            $this->setHandlingId($handling->getId());
+        }
     
         return $this;
     }
