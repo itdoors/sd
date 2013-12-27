@@ -29,7 +29,7 @@ class ChangePasswordForm extends AbstractType
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
 
-        if ($user->hasRole('ROLE_HRADMIN'))
+        if (!$user->hasRole('ROLE_HRADMIN'))
         {
             $constraint = new UserPassword();
 
