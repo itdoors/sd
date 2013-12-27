@@ -1,6 +1,8 @@
 parameters:
     sd_user.repository.class: SD\UserBundle\Entity\UserRepository
     sd_user.repository.entity: SD\UserBundle\Entity\User
+    sd_user.form.class: SD\UserBundle\Form\ChangePasswordForm
+    sd_user.form.new.class: SD\UserBundle\Form\UserNewForm
 
 services:
     sd_user.repository:
@@ -8,3 +10,15 @@ services:
         factory_service: doctrine # this is an instance of Registry
         factory_method: getRepository
         arguments: [ %sd_user.repository.entity% ]
+
+    sd_user.form.changePasswordForm:
+        class: %sd_user.form.class%
+        arguments: [%sd_user.repository.entity%, @service_container]
+        tags:
+            - { name: form.type, alias: changePasswordForm }
+
+    sd_user.form.userNewForm:
+        class: %sd_user.form.new.class%
+        arguments: [%sd_user.repository.entity%, @service_container]
+        tags:
+            - { name: form.type, alias: userNewForm }

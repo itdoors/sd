@@ -32,4 +32,11 @@
 
 {% block body %}
     user profile body for {{ item.fullName }}
+    {% if isCurrentUser or isAdmin %}
+        {{ include('SDUserBundle:' ~ baseTemplate ~ ':changePassword.html.twig', {
+            item: item
+        }) }}
+    {% endif %}
+
+
 {% endblock body %}

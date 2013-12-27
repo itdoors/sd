@@ -171,8 +171,10 @@ CREATE OR REPLACE FUNCTION sf_guard_user_to_fos_user()
   RETURNS trigger AS
 $BODY$
 BEGIN
-    INSERT INTO fos_user(id,username,username_canonical,email,email_canonical,first_name,last_name,middle_name,password,salt,birthday,enabled,locked,expired,roles,credentials_expired)
-    values (NEW.id,NEW.username,NEW.username,NEW.email_address,NEW.email_address,NEW.first_name,NEW.last_name,NEW.middle_name,NEW.password,NEW.salt,NEW.birthday,true,NEW.is_blocked,false,'a:0:{}',false);
+    IF NOT EXISTS (select id from fos_user where id = NEW.id) THEN
+        INSERT INTO fos_user(id,username,username_canonical,email,email_canonical,first_name,last_name,middle_name,password,salt,birthday,enabled,locked,expired,roles,credentials_expired)
+        values (NEW.id,NEW.username,NEW.username,NEW.email_address,NEW.email_address,NEW.first_name,NEW.last_name,NEW.middle_name,NEW.password,NEW.salt,NEW.birthday,true,NEW.is_blocked,false,'a:0:{}',false);
+    END IF;
     return NEW;
 END;
 $BODY$
@@ -230,3 +232,46 @@ select unnest(show_users_data_to_delete(312))
 select unnest(show_stuff_data_to_delete(117))
 
 ++++++++++++
+
+SELECT MAX(id) FROM fos_user;
+SELECT nextval('fos_user_id_seq');
+SELECT setval('fos_user_id_seq', (SELECT MAX(id) FROM fos_user));
+
+
+CREATE OR REPLACE FUNCTION fos_user_to_sf_guard_user()
+  RETURNS trigger AS
+$BODY$
+BEGIN
+    IF NOT EXISTS (select id from sf_guard_user where id = NEW.id) THEN
+        INSERT INTO sf_guard_user(id,username,email_address,first_name,last_name,middle_name,password,salt,birthday,is_active, created_at, updated_at)
+        values (NEW.id,NEW.username,NEW.email,NEW.first_name,NEW.last_name,NEW.middle_name,NEW.password,NEW.salt,NEW.birthday,true, now(), now());
+    END IF;
+    return NEW;
+END;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+
+DROP TRIGGER IF EXISTS fos_to_sf_trigger ON fos_user;
+
+CREATE TRIGGER fos_to_sf_trigger
+AFTER INSERT ON fos_user FOR EACH ROW EXECUTE PROCEDURE fos_user_to_sf_guard_user();
+
+CREATE OR REPLACE FUNCTION sf_guard_user_to_fos_user()
+  RETURNS trigger AS
+$BODY$
+BEGIN
+    IF NOT EXISTS (select id from fos_user where id = NEW.id) THEN
+        INSERT INTO fos_user(id,username,username_canonical,email,email_canonical,first_name,last_name,middle_name,password,salt,birthday,enabled,locked,expired,roles,credentials_expired)
+        values (NEW.id,NEW.username,NEW.username,NEW.email_address,NEW.email_address,NEW.first_name,NEW.last_name,NEW.middle_name,NEW.password,NEW.salt,NEW.birthday,true,NEW.is_blocked,false,'a:0:{}',false);
+    END IF;
+    return NEW;
+END;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+
+DROP TRIGGER IF EXISTS sf_to_fos_trigger ON sf_guard_user;
+
+CREATE TRIGGER sf_to_fos_trigger
+AFTER INSERT ON sf_guard_user FOR EACH ROW EXECUTE PROCEDURE sf_guard_user_to_fos_user();

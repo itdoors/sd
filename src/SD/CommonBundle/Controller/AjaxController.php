@@ -18,7 +18,8 @@ use Doctrine\DBAL\Connection;
 class AjaxController extends Controller
 {
     protected $modelRepositoryDependence = array(
-        'ModelContact' => 'ListsContactBundle:ModelContact'
+        'ModelContact' => 'ListsContactBundle:ModelContact',
+        'User' => 'SDUserBundle:User'
     );
 
     public function organizationAction()
@@ -645,14 +646,14 @@ class AjaxController extends Controller
      */
     public function formAction(Request $request)
     {
-        $formName = $request->request->get('formName');
+        $formName = $request->get('formName');
 
-        $defaultData = $request->request->get('defaultData');
-        $postFunction = $request->request->get('postFunction');
-        $postTargetId = $request->request->get('postTargetId');
-        $targetId = $request->request->get('targetId');
-        $model = $request->request->get('model');
-        $modelId = $request->request->get('modelId');
+        $defaultData = $request->get('defaultData');
+        $postFunction = $request->get('postFunction');
+        $postTargetId = $request->get('postTargetId');
+        $targetId = $request->get('targetId');
+        $model = $request->get('model');
+        $modelId = $request->get('modelId');
 
         if ($model && $modelId)
         {
@@ -1589,6 +1590,23 @@ class AjaxController extends Controller
             $em->close();
             throw $e;
         }
+
+        return true;
+    }
+
+    public function changePasswordFormSave($form, $user, $request)
+    {
+        $data = $form->getData();
+
+        /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
+        $userManager = $this->container->get('fos_user.user_manager');
+        $userManager->updateUser($data);
+
+        $this->get('session')->set(
+            'noticePassword',
+            'Password changed successfully!'
+        );
+
 
         return true;
     }
