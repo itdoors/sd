@@ -39,6 +39,12 @@
         $('#modelContactOrganizationEditForm_email').select2({
             minimumInputLength: 2,
             allowClear: true,
+            initSelection: function (element, callback) {
+
+                var data = {id: element.data('id'), text: element.data('text')};
+
+                callback(data);
+            },
             ajax: {
                 url: '{{ path('sd_common_ajax_contact_email') }}',
                 dataType: 'json',
@@ -268,8 +274,20 @@
                     </div>
 
                     <div class="form-group col-md-6">
+
+                        {% if form.vars.value.email is defined %}
+                            {% set email = form.vars.value.email %}
+                        {% else %}
+                            {% set email = '' %}
+                        {% endif %}
+
                         {{ form_label(form.email, 'Email', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.email, {'attr' : {'class' : 'form-control', 'placeholder': "Email"}}) }}
+                        {{ form_widget(form.email, {'attr' : {
+                            'class' : 'form-control',
+                            'placeholder': "Email",
+                            'data-text':  email,
+                            'data-id':  email
+                        }}) }}
                     </div>
 
                     <div class="form-group col-md-6">

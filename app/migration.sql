@@ -275,3 +275,24 @@ DROP TRIGGER IF EXISTS sf_to_fos_trigger ON sf_guard_user;
 
 CREATE TRIGGER sf_to_fos_trigger
 AFTER INSERT ON sf_guard_user FOR EACH ROW EXECUTE PROCEDURE sf_guard_user_to_fos_user();
+
+++++++++++++++++++
+
+CREATE OR REPLACE FUNCTION sf_guard_user_change_pass()
+  RETURNS trigger AS
+$BODY$
+BEGIN
+	UPDATE fos_user set password = NEW.password, salt = NEW.salt WHERE id = NEW.id;
+	return NEW;
+END;
+$BODY$
+LANGUAGE plpgsql VOLATILE
+  COST 100;
+
+  DROP TRIGGER IF EXISTS sf_change_pass_trigger ON sf_guard_user;
+
+CREATE TRIGGER sf_change_pass_trigger
+BEFORE UPDATE ON sf_guard_user FOR EACH ROW EXECUTE PROCEDURE sf_guard_user_change_pass();
++++++++++++++++++++++++++++++++++++++++
+
+
