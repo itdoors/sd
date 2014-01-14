@@ -1,13 +1,22 @@
 {% trans_default_domain 'SDDashboardBundle' %}
 
 {% set masterRole = 'Sales' %}
+{% set isCrm = false %}
+
+
+{% if app.user.hasRole('ROLE_SALES') %}
+    {% set isCrm = true %}
+{%  endif %}
+
 
 {% if app.user.hasRole('ROLE_SALESDISPATCHER') %}
     {% set masterRole = 'SalesDispatcher' %}
+    {% set isCrm = true %}
 {%  endif %}
 
 {% if app.user.hasRole('ROLE_SALESADMIN') %}
     {% set masterRole = 'SalesAdmin' %}
+    {% set isCrm = true %}
 {%  endif %}
 
 {% if app.user.hasRole('ROLE_CRM') %}
@@ -28,7 +37,7 @@
         <a class="reload" href="javascript:;"></a>
     </div>
     <div class="portlet-body">
-        {% if app.user.hasRole('ROLE_SALES') %}
+        {% if isCrm %}
             <a class="btn btn-lg blue" href="{{ path('lists_sales_handling_create_step1') }}">
                 {% trans %}Create project{% endtrans %} <i class="fa fa-comments"></i>
             </a>
@@ -53,7 +62,7 @@
     });
 </script>
 
-{% if app.user.hasRole('ROLE_SALES') %}
+{% if isCrm %}
     <div id="form_modal_contact" class="modal fade" role="basic" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
