@@ -1281,9 +1281,13 @@ class AjaxController extends Controller
         $handling = $this->getDoctrine()->getRepository('ListsHandlingBundle:Handling')
             ->find($handlingId);
 
-        $users = $handling->getUsers();
+        $creator = $handling->getUser();
 
         $userIds = array();
+
+        $userIds[$creator->getId()] = $creator->getId();
+
+        $users = $handling->getUsers();
 
         foreach ($users as $user)
         {
