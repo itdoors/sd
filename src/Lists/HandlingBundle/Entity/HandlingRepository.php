@@ -59,7 +59,8 @@ class HandlingRepository extends EntityRepository
     public function processSelect($sql)
     {
         $sql
-            ->select('h.id as handlingId')
+            ->select('DISTINCT (h.id)')
+            ->addSelect('h.id as handlingId')
             ->addSelect('o.name as organizationName')
             ->addSelect('h.createdate as handlingCreatedate')
             ->addSelect('h.lastHandlingDate as handlingLastHandlingDate')
@@ -147,7 +148,8 @@ class HandlingRepository extends EntityRepository
     public function processOrdering($sql)
     {
         $sql
-            ->orderBy('h.createdatetime', 'DESC');
+            //->orderBy('h.createdatetime', 'DESC');
+            ->addOrderBy('h.id', 'DESC');
     }
 
     /**

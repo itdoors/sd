@@ -1611,7 +1611,6 @@ class AjaxController extends Controller
             'Password changed successfully!'
         );
 
-
         return true;
     }
 }
