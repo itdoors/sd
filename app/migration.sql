@@ -295,4 +295,16 @@ CREATE TRIGGER sf_change_pass_trigger
 BEFORE UPDATE ON sf_guard_user FOR EACH ROW EXECUTE PROCEDURE sf_guard_user_change_pass();
 +++++++++++++++++++++++++++++++++++++++
 
+DROP FUNCTION IF EXISTS replace_manager(from_id int, to_id int);
+CREATE OR REPLACE FUNCTION replace_manager(from_id int, to_id int) RETURNS void AS $$
+BEGIN
+    UPDATE model_contact SET owner_id = to_id WHERE owner_id = from_id;
+    DELETE FROM organization_user WHERE user_id = from_id AND EXISTS (SELECT ou.user_id from organization_user ou WHERE user_id = to_id AND ou.organization_id = organization_user.organization_id);
+    UPDATE organization_user SET user_id = to_id WHERE user_id = from_id;
+    DELETE FROM handling_user WHERE user_id = from_id AND EXISTS (SELECT hu.user_id from handling_user hu WHERE user_id = to_id AND hu.handling_id = handling_user.handling_id);
+    UPDATE handling_user SET user_id = to_id WHERE user_id = from_id;
+END$$ LANGUAGE 'plpgsql';
+
+select replace_manager(324, 327);
++++++++++++++++++
 

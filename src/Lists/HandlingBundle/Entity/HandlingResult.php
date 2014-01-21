@@ -174,4 +174,60 @@ class HandlingResult
             'name',
         );
     }
+    /**
+     * @var string
+     */
+    private $percentageString;
+
+    /**
+     * @var integer
+     */
+    private $progress;
+
+
+    /**
+     * Set percentageString
+     *
+     * @param string $percentageString
+     * @return HandlingResult
+     */
+    public function setPercentageString($percentageString)
+    {
+        $this->percentageString = $percentageString;
+    
+        return $this;
+    }
+
+    /**
+     * Get percentageString
+     *
+     * @return string 
+     */
+    public function getPercentageString()
+    {
+        return $this->percentageString;
+    }
+
+    /**
+     * Set progress
+     *
+     * @param integer $progress
+     * @return HandlingResult
+     */
+    public function setProgress($progress)
+    {
+        $this->progress = $progress;
+    
+        return $this;
+    }
+
+    /**
+     * Get progress
+     *
+     * @return integer 
+     */
+    public function getProgress()
+    {
+        return $this->progress;
+    }
 }

@@ -72,6 +72,8 @@ class HandlingRepository extends EntityRepository
             ->addSelect('status.name as statusName')
             ->addSelect('status.percentageString as percentageString')
             ->addSelect('status.progress as progress')
+            ->addSelect('result.percentageString as resultPercentageString')
+            ->addSelect('result.progress as resultProgress')
             ->addSelect("
                 array_to_string(
                     ARRAY(
@@ -123,6 +125,7 @@ class HandlingRepository extends EntityRepository
             ->leftJoin('o.city', 'city')
             ->leftJoin('o.scope', 'scope')
             ->leftJoin('h.status', 'status')
+            ->leftJoin('h.result', 'result')
             ->leftJoin('h.users', 'users');
 
     }
