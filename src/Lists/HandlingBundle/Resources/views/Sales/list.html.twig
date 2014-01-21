@@ -54,11 +54,11 @@
          */
         var oTable = $('#dashboard-handling').dataTable( {
             //"sDom": '<"row"<"col-md-9 col-sm-12" f><"col-md-3 col-sm-12" l>>rt<"bottom"ip><"clear">',
-            "aoColumnDefs": [
+            /*"aoColumnDefs": [
                 {"bSortable": false, "aTargets": [ 0 ] }
-            ],
+            ],*/
             "aoColumns": [
-                null,
+                { "sType": "data-value" },
                 null,
                 null,
                 { "sType": "data-value" },
@@ -66,7 +66,7 @@
                 { "sType": "date-euro" },
                 { "sType": "date-euro" }
             ],
-            "aaSorting": [[1, 'asc']],
+            "aaSorting": [[0, 'desc']],
             "aLengthMenu": [
                 [10, 20, 50, -1],
                 [10, 20, 50, "All"] // change per page values here
@@ -127,7 +127,7 @@
                 {% for item in pagination %}
                     <tr {% if loop.index is odd %}class="color"{% endif %}>
                         <td>
-                            <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_show', { id: item.handlingId } ) }}">
+                            <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_show', { id: item.handlingId } ) }}"  data-value="{{ item.handlingId|e }}">
                                 {{ item.handlingId|e }}
                             </a>
                         </td>
