@@ -33,6 +33,20 @@
             }
         } );
 
+        jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+            "data-value-pre": function ( a ) {
+                var x = $(a).data('value');
+                return parseFloat( x );
+            },
+
+            "data-value-asc": function ( a, b ) {
+                return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+            },
+
+            "data-value-desc": function ( a, b ) {
+                return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+            }
+        } );
 
         /*
          * Initialize DataTables, with no sorting on the 'details' column
@@ -46,11 +60,11 @@
                 null,
                 null,
                 null,
-                null,
+                { "sType": "data-value" },
                 { "sType": "date-euro" },
                 { "sType": "date-euro" },
                 { "sType": "date-euro" },
-                null,
+                null
             ],
             "aaSorting": [[1, 'asc']],
             "aLengthMenu": [
@@ -127,7 +141,7 @@
                         {% set progress = (item.resultProgress is not null) ? item.resultProgress : item.progress %}
                         {% set percentageString = item.resultPercentageString ? item.resultPercentageString : item.percentageString %}
                         <td>
-                            <div style="width: {{ progress }}%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="{{ progress }}" role="progressbar" class="progress-bar progress-bar-success">
+                            <div style="width: {{ progress }}%" aria-valuemax="100" aria-valuemin="0" data-value="{{ progress ? progress : 0 }}" aria-valuenow="{{ progress }}" role="progressbar" class="progress-bar progress-bar-success">
                                 <span class="">{{ percentageString|e }}</span>
                             </div>
                         </td>
