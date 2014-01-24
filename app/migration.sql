@@ -170,10 +170,21 @@ ALTER TABLE organization ADD CONSTRAINT FK_C1EE637CFE54D947 FOREIGN KEY (group_i
 CREATE OR REPLACE FUNCTION sf_guard_user_to_fos_user()
   RETURNS trigger AS
 $BODY$
+DECLARE
+    tempSalt varchar(128);
+    tempPassword varchar(128);
 BEGIN
+	tempSalt = '777';
+	tempPassword = '000';
+	IF NEW.salt is not null THEN
+		tempSalt = NEW.salt;
+	END IF;
+	IF NEW.password is not null THEN
+		tempPassword = NEW.password;
+	END IF;
     IF NOT EXISTS (select id from fos_user where id = NEW.id) THEN
         INSERT INTO fos_user(id,username,username_canonical,email,email_canonical,first_name,last_name,middle_name,password,salt,birthday,enabled,locked,expired,roles,credentials_expired)
-        values (NEW.id,NEW.username,NEW.username,NEW.email_address,NEW.email_address,NEW.first_name,NEW.last_name,NEW.middle_name,NEW.password,NEW.salt,NEW.birthday,true,NEW.is_blocked,false,'a:0:{}',false);
+        values (NEW.id,NEW.username,NEW.username,NEW.email_address,NEW.email_address,NEW.first_name,NEW.last_name,NEW.middle_name,tempPassword,tempSalt,NEW.birthday,true,NEW.is_blocked,false,'a:0:{}',false);
     END IF;
     return NEW;
 END;

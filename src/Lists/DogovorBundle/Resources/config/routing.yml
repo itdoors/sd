@@ -1,0 +1,8 @@
+#DOGOVOR ROUTE
+lists_dogovor_dogovor_index:
+    pattern:  /lists/dogovor/dogovor/index
+    defaults: { _controller: ListsDogovorBundle:Dogovor:index }
+
+lists_dogovor_dogovor_new:
+    pattern:  /lists/dogovor/dogovor/new
+    defaults: { _controller: ListsDogovorBundle:Dogovor:new }
