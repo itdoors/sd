@@ -19,7 +19,7 @@ Lists\DogovorBundle\Entity\DogovorHandling:
                     referencedColumnName: id
             orphanRemoval: false
         handling:
-            targetEntity: Handling
+            targetEntity: Lists\HandlingBundle\Entity\Handling
             cascade: {  }
             mappedBy: null
             inversedBy: null

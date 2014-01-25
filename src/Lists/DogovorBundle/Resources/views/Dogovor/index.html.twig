@@ -19,15 +19,65 @@
 
 {% block css_page_level_plugin %}
     {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
 {% endblock %}
 
 {% block js_page_level_plugins %}
     {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
 {% endblock %}
 {% block body %}
     <div class="row">
         <div class="col-md-12">
             <p>{% trans %}Dogovor list{% endtrans %}</p>
+        </div>
+    </div>
+
+    {{  include(
+        'ListsDogovorBundle:' ~ baseTemplate ~ ':filters.html.twig',
+            {
+                filterForm: filterForm,
+                filterFormName: filterFormName
+            }
+        )
+    }}
+
+    <div class="table-responsive">
+        <div class="navigation">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+
+        <table class="table table-striped table-bordered table-advance table-hover">
+            <thead>
+            <tr>
+                <th>{% trans %}ID{% endtrans %} </th>
+                <th>{% trans %}Name{% endtrans %} </th>
+                <th>{% trans %}Organization name{% endtrans %} </th>
+                <th>{% trans %}Number{% endtrans %} </th>
+                <th>{% trans %}Startdatetime{% endtrans %} </th>
+                <th>{% trans %}Stopdatetime{% endtrans %} </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in pagination %}
+                <tr {% if loop.index is odd %}class="color"{% endif %}>
+                    <td>
+                        <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_dogovor_show', { id: item.dogovorId }) }}">
+                            {{ item.dogovorId|e }}
+                        </a>
+                    </td>
+                    <td>{{ item.dogovorName|e }}</td>
+                    <td>{{ item.organizationName|e }}</td>
+                    <td>{{ item.dogovorNumber|e }}</td>
+                    <td>{{ item.dogovorStartdatetime|date('d.m.Y') }}</td>
+                    <td>{{ item.dogovorStopdatetime|date('d.m.Y') }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="navigation">
+            {{ knp_pagination_render(pagination) }}
         </div>
     </div>
 {% endblock body %}

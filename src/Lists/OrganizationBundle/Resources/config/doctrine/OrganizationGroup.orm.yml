@@ -24,4 +24,8 @@ Lists\OrganizationBundle\Entity\OrganizationGroup:
             fixed: false
             nullable: true
             column: description
+    oneToMany:
+        organizations:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            mappedBy: group
     lifecycleCallbacks: {  }

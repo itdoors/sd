@@ -6,3 +6,11 @@ lists_dogovor_dogovor_index:
 lists_dogovor_dogovor_new:
     pattern:  /lists/dogovor/dogovor/new
     defaults: { _controller: ListsDogovorBundle:Dogovor:new }
+
+lists_dogovor_dogovor_show:
+    pattern:  /lists/dogovor/dogovor/show/{id}
+    defaults: { _controller: ListsDogovorBundle:Dogovor:show }
+
+lists_dogovor_dogovor_filter:
+    pattern:  /lists/dogovor/dogovor/filter
+    defaults: { _controller: ListsDogovorBundle:Dogovor:filter }

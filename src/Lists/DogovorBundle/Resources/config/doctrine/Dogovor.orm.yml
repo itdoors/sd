@@ -1,6 +1,7 @@
 Lists\DogovorBundle\Entity\Dogovor:
     type: entity
     table: dogovor
+    repositoryClass: Lists\DogovorBundle\Entity\DogovorRepository
     fields:
         id:
             id: true
@@ -87,7 +88,7 @@ Lists\DogovorBundle\Entity\Dogovor:
             column: planned_pf1_percent
     manyToOne:
         city:
-            targetEntity: City
+            targetEntity: Lists\CityBundle\Entity\City
             cascade: {  }
             mappedBy: null
             inversedBy: null
@@ -96,7 +97,7 @@ Lists\DogovorBundle\Entity\Dogovor:
                     referencedColumnName: id
             orphanRemoval: false
         companyRole:
-            targetEntity: Lookup
+            targetEntity: Lists\LookupBundle\Entity\Lookup
             cascade: {  }
             mappedBy: null
             inversedBy: null
@@ -105,7 +106,7 @@ Lists\DogovorBundle\Entity\Dogovor:
                     referencedColumnName: id
             orphanRemoval: false
         companystructure:
-            targetEntity: Companystructure
+            targetEntity: Lists\CompanystructureBundle\Entity\Companystructure
             cascade: {  }
             mappedBy: null
             inversedBy: null
@@ -114,7 +115,7 @@ Lists\DogovorBundle\Entity\Dogovor:
                     referencedColumnName: id
             orphanRemoval: false
         dogovorType:
-            targetEntity: Lookup
+            targetEntity: Lists\LookupBundle\Entity\Lookup
             cascade: {  }
             mappedBy: null
             inversedBy: null
@@ -123,7 +124,7 @@ Lists\DogovorBundle\Entity\Dogovor:
                     referencedColumnName: id
             orphanRemoval: false
         organization:
-            targetEntity: Organization
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
             cascade: {  }
             mappedBy: null
             inversedBy: null
@@ -132,7 +133,7 @@ Lists\DogovorBundle\Entity\Dogovor:
                     referencedColumnName: id
             orphanRemoval: false
         stuff:
-            targetEntity: Stuff
+            targetEntity: SD\UserBundle\Entity\Staff
             cascade: {  }
             mappedBy: null
             inversedBy: null
@@ -141,7 +142,7 @@ Lists\DogovorBundle\Entity\Dogovor:
                     referencedColumnName: id
             orphanRemoval: false
         user:
-            targetEntity: SfGuardUser
+            targetEntity: SD\UserBundle\Entity\User
             cascade: {  }
             mappedBy: null
             inversedBy: null

@@ -1,0 +1,240 @@
+<?php
+
+namespace Lists\CompanystructureBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Companystructure
+ */
+class Companystructure
+{
+    /**
+     * @var integer
+     */
+    private $id;
+
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var string
+     */
+    private $mpk;
+
+    /**
+     * @var string
+     */
+    private $address;
+
+    /**
+     * @var string
+     */
+    private $phone;
+
+    /**
+     * @var integer
+     */
+    private $stuffId;
+
+    /**
+     * @var \SD\UserBundle\Entity\Staff
+     */
+    private $parentColumn;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $region;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->region = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Companystructure
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set mpk
+     *
+     * @param string $mpk
+     * @return Companystructure
+     */
+    public function setMpk($mpk)
+    {
+        $this->mpk = $mpk;
+    
+        return $this;
+    }
+
+    /**
+     * Get mpk
+     *
+     * @return string 
+     */
+    public function getMpk()
+    {
+        return $this->mpk;
+    }
+
+    /**
+     * Set address
+     *
+     * @param string $address
+     * @return Companystructure
+     */
+    public function setAddress($address)
+    {
+        $this->address = $address;
+    
+        return $this;
+    }
+
+    /**
+     * Get address
+     *
+     * @return string 
+     */
+    public function getAddress()
+    {
+        return $this->address;
+    }
+
+    /**
+     * Set phone
+     *
+     * @param string $phone
+     * @return Companystructure
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+    
+        return $this;
+    }
+
+    /**
+     * Get phone
+     *
+     * @return string 
+     */
+    public function getPhone()
+    {
+        return $this->phone;
+    }
+
+    /**
+     * Set stuffId
+     *
+     * @param integer $stuffId
+     * @return Companystructure
+     */
+    public function setStuffId($stuffId)
+    {
+        $this->stuffId = $stuffId;
+    
+        return $this;
+    }
+
+    /**
+     * Get stuffId
+     *
+     * @return integer 
+     */
+    public function getStuffId()
+    {
+        return $this->stuffId;
+    }
+
+    /**
+     * Set parentColumn
+     *
+     * @param \SD\UserBundle\Entity\Staff $parentColumn
+     * @return Companystructure
+     */
+    public function setParentColumn(\SD\UserBundle\Entity\Staff $parentColumn = null)
+    {
+        $this->parentColumn = $parentColumn;
+    
+        return $this;
+    }
+
+    /**
+     * Get parentColumn
+     *
+     * @return \SD\UserBundle\Entity\Staff 
+     */
+    public function getParentColumn()
+    {
+        return $this->parentColumn;
+    }
+
+    /**
+     * Add region
+     *
+     * @param \Lists\RegionBundle\Entity\Region $region
+     * @return Companystructure
+     */
+    public function addRegion(\Lists\RegionBundle\Entity\Region $region)
+    {
+        $this->region[] = $region;
+    
+        return $this;
+    }
+
+    /**
+     * Remove region
+     *
+     * @param \Lists\RegionBundle\Entity\Region $region
+     */
+    public function removeRegion(\Lists\RegionBundle\Entity\Region $region)
+    {
+        $this->region->removeElement($region);
+    }
+
+    /**
+     * Get region
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRegion()
+    {
+        return $this->region;
+    }
+}

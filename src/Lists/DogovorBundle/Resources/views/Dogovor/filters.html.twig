@@ -1,0 +1,73 @@
+{% trans_default_domain 'ListsOrganizationBundle' %}
+
+<script>
+    $(document).ready(function(){
+        $('#' + '{{ filterFormName }}' + '_organization').select2({
+            minimumInputLength: 2,
+            ajax: {
+                url: '{{ path('sd_common_ajax_organization_for_contacts') }}',
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        q: term
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            },
+            initSelection: function (element, callback) {
+                var id = $(element).val();
+                if (id !== "") {
+                    $.ajax("{{ path('sd_common_ajax_organization_by_id') }}", {
+                        data: {
+                            id: id
+                        },
+                        dataType: "json"
+                    }).done(function (data) {
+                                callback(data)
+                            });
+                }
+            }
+        })
+    });
+</script>
+
+<div class="row ">
+	<div class="col-md-12">
+		<div class="portlet box yellow">
+			<div class="portlet-title">
+				<div class="caption">
+                    <i class="fa fa-reorder"></i>
+                    {{ 'Filters'|trans({}, 'ListsDogovorBundle') }}
+                </div>
+				<div class="tools"><a class="collapse" href="" title="{% trans %}Filters{% endtrans %}"></a></div>
+			</div>
+			<div class="portlet-body">
+			<p>{% trans %}Enter filter parameters and press Filter button.{% endtrans %}</p>
+			<div class="row">
+
+				{{ form_start(filterForm,
+					{
+						'action': path('lists_' ~ baseRoutePrefix ~ '_dogovor_filter'),
+						'attr': {'novalidate': 'novalidate', 'class': 'form-inline', 'role': 'form'}
+					}) 
+				}}
+					{{ form_errors(filterForm) }}
+					<div class="form-group col-md-3">
+						{#{{ form_label(filterForm.city, 'Enter City', {'attr': {'class': 'sr-only'}}) }}#}
+						{{ form_widget(filterForm.organization, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Organization', 'multiple': 'multiple'}}) }}
+					</div>
+					<div class="form-group col-md-2">
+						{{ form_widget(filterForm.save, { 'label': 'Filter', 'attr': {'class': 'btn green'}} ) }}
+						{{ form_widget(filterForm.reset, { 'label': 'Clear Filter', 'attr': {'class': 'btn'}} ) }}
+					</div>
+				{{ form_end(filterForm) }}
+
+			</div>
+		</div>
+		</div>
+	</div>
+</div>

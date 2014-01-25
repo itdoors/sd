@@ -17,3 +17,7 @@ Lists\ContactBundle\Entity\ModelContactType:
             type: string
             length: 16
             nullable: false
+    oneToMany:
+        contacts:
+            targetEntity: Lists\ContactBundle\Entity\ModelContact
+            mappedBy: type

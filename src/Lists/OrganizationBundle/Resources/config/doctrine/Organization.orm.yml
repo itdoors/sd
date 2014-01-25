@@ -2,11 +2,13 @@ Lists\OrganizationBundle\Entity\Organization:
     type: entity
     table: organization
     repositoryClass: Lists\OrganizationBundle\Entity\OrganizationRepository
-    id:
-        id:
-            type: integer
-            generator: { strategy: AUTO }
     fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
         mpk:
             type: string
             length: 20

@@ -53,7 +53,7 @@ Lists\DogovorBundle\Entity\DopDogovor:
                     referencedColumnName: id
             orphanRemoval: false
         stuff:
-            targetEntity: Stuff
+            targetEntity: SD\UserBundle\Entity\Staff
             cascade: {  }
             mappedBy: null
             inversedBy: null
@@ -62,7 +62,7 @@ Lists\DogovorBundle\Entity\DopDogovor:
                     referencedColumnName: id
             orphanRemoval: false
         user:
-            targetEntity: SfGuardUser
+            targetEntity: SD\UserBundle\Entity\User
             cascade: {  }
             mappedBy: null
             inversedBy: null

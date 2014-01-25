@@ -1,7 +1,16 @@
 parameters:
-#    lists_dogovor.example.class: Lists\DogovorBundle\Example
+    lists_dogovor.dogovor.filter.form.class: Lists\DogovorBundle\Form\DogovorFilterForm
+    lists_dogovor.dogovor.form.class: Lists\DogovorBundle\Form\DogovorForm
 
 services:
-#    lists_dogovor.example:
-#        class: %lists_dogovor.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    lists_dogovor.form.dogovorFilterForm:
+        class: %lists_dogovor.dogovor.filter.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: dogovorFilterForm }
+
+    lists_dogovor.form.dogovorForm:
+        class: %lists_dogovor.dogovor.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: dogovorForm }

@@ -30,5 +30,54 @@
             <p>{% trans %}New dogovor{% endtrans %}</p>
         </div>
     </div>
+
+    <div class="portlet-body form">
+        <!-- BEGIN FORM-->
+        {% form_theme form 'SDCommonBundle:Form:form_errors.html.twig' %}
+        {{ form_start(form,
+            {
+                'action': path('lists_' ~ baseRoutePrefix ~ '_dogovor_new'),
+                'attr': {'class' : 'horizontal-form'}
+            })
+        }}
+
+
+        <div class="form-body">
+            <div class="alert alert-danger display-hide">
+                <button class="close" data-close="alert"></button>
+                {% trans %}You have some form errors. Please check below.{% endtrans %}
+                {{ form_errors(form) }}
+            </div>
+            <h3 class="form-section">{% trans %}General information{% endtrans %}</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {# Create User - current user - only show#}
+                        {{ form_label(form.name, 'Dogovor Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Enter Dogovor Name'}}) }}
+                    </div>
+                </div>
+                <!--/span-->
+                {#<div class="col-md-6">
+                    <div class="form-group">
+                        &#123;&#35; Create User - current user - only show&#35;&#125;
+                        {{ form_label(form.user, 'Create User', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.user, {'attr': {'class': 'form-control', 'placeholder': 'Enter organization short name'}}) }}
+                    </div>
+                </div>#}
+                <!--/span-->
+            </div>
+            <!--/row-->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form_widget(form.create, { 'label': 'Create', 'attr': {'class': 'btn green'}} ) }}
+                    </div>
+                </div>
+            </div>
+            {{ form_end(form) }}
+            <!--/row-->
+        </div>
+    </div>
 {% endblock body %}
 

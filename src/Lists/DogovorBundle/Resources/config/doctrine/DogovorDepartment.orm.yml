@@ -22,7 +22,7 @@ Lists\DogovorBundle\Entity\DogovorDepartment:
             nullable: true
     manyToOne:
         department:
-            targetEntity: Departments
+            targetEntity: Lists\DepartmentBundle\Entity\Departments
             cascade: {  }
             mappedBy: null
             inversedBy: null
@@ -49,7 +49,7 @@ Lists\DogovorBundle\Entity\DogovorDepartment:
                     referencedColumnName: id
             orphanRemoval: false
         user:
-            targetEntity: SfGuardUser
+            targetEntity: SD\UserBundle\Entity\User
             cascade: {  }
             mappedBy: null
             inversedBy: null

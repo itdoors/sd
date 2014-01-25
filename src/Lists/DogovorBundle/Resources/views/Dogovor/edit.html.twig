@@ -1,0 +1,26 @@
+<div class="col-md-12">
+    <table id="dogovor" class="table table-bordered table-striped">
+        <tbody>
+        <tr> {# 1 #}
+            <td style="width:15%">{% trans %}Dogovor ID{% endtrans %}</td>
+            <td style="width:35%">{{ dogovor.id }}</td>
+            <td style="width:15%">{% trans %}Dogovor Name{% endtrans %}</td>
+            <td style="width:35%">{{ dogovor.name }}
+                {#<a href="#" id="statusId" data-type="select" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.statusId }}" data-placement="right" data-original-title="{% trans %}Select Handling Status{% endtrans %}">
+                    {{ handling.0.status }}
+                    {% if handling.0.statusChangeDate %}
+                        {{ handling.0.statusChangeDate|date("d.m.y, H:i") }}
+                    {% endif %}
+                </a>#}
+            </td>
+        </tr>
+        {#<tr> &#123;&#35; 2 &#35;&#125;
+            <td>{% trans %}Organization Name{% endtrans %}</td>
+            <td>{{ handling.organizationName }}</td>
+            <td>{% trans %}Status Description{% endtrans %}</td>
+            <td><a href="#" id="statusDescription" data-type="textarea" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.statusDescription }}" data-placement="right" data-original-title="{% trans %}Enter Status{% endtrans %}">{{ handling.0.statusDescription }}</a>
+            </td>
+        </tr>#}
+        </tbody>
+    </table>
+</div>

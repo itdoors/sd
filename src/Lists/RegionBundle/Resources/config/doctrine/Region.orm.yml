@@ -16,3 +16,7 @@ Lists\RegionBundle\Entity\Region:
         flag:
             type: string
             length: 255
+    manyToMany:
+        companystructure:
+            targetEntity: Lists\CompanystructureBundle\Entity\Companystructure
+            mappedBy: region

@@ -1,0 +1,7 @@
+parameters:
+#    lists_companystructure.example.class: Lists\CompanystructureBundle\Example
+
+services:
+#    lists_companystructure.example:
+#        class: %lists_companystructure.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
