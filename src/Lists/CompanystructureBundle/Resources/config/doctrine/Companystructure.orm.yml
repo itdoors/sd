@@ -1,6 +1,7 @@
 Lists\CompanystructureBundle\Entity\Companystructure:
     type: entity
     table: companystructure
+    repositoryClass:  Lists\CompanystructureBundle\Entity\CompanystructureRepository
     fields:
         id:
             id: true
@@ -28,7 +29,7 @@ Lists\CompanystructureBundle\Entity\Companystructure:
             length: 12
             fixed: false
             nullable: true
-        stuffId:
+        staffId:
             type: bigint
             nullable: true
             column: stuff_id
@@ -45,13 +46,18 @@ Lists\CompanystructureBundle\Entity\Companystructure:
                     region_id:
                         referencedColumnName: id
     manyToOne:
-        parentColumn:
+        staff:
             targetEntity: SD\UserBundle\Entity\Staff
             cascade: {  }
             mappedBy: null
             inversedBy: null
             joinColumns:
-                parent_column_id:
+                stuff_id:
                     referencedColumnName: id
             orphanRemoval: false
+        parent:
+            targetEntity: Companystructure
+            joinColumns:
+                parent_id:
+                    referencedColumnName: id
     lifecycleCallbacks: {  }

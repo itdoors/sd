@@ -1,0 +1,20 @@
+Lists\DogovorBundle\Entity\Dogovor:
+    properties:
+        customer:
+            - NotBlank: { groups: [new, edit] }
+        performer:
+            - NotBlank: { groups: [new, edit] }
+        subject:
+            - NotBlank: { groups: [new, edit] }
+        number:
+            - NotBlank: { groups: [new, edit] }
+        startdatetime:
+            - NotBlank: { groups: [new, edit] }
+        stopdatetime:
+            - NotBlank: { groups: [new, edit] }
+        prolongationTerm:
+            - Type:
+                type: integer
+                message: The value {{ value }} is not a valid {{ type }}.
+            - GreaterThan:
+                value: 0

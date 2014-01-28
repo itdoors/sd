@@ -33,7 +33,8 @@ class HiddenEntityType extends AbstractType
     {
         $resolver->setDefaults(array(
             'invalid_message' => 'Invalid object',
-            'entity' => null
+            'entity' => null,
+            'error_bubbling' => false
         ));
     }
 

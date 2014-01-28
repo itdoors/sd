@@ -70,6 +70,10 @@ Lists\DogovorBundle\Entity\Dogovor:
             fixed: false
             nullable: true
             column: prolongation_term
+        prolongationDate:
+            type: datetime
+            nullable: true
+            column: prolongation_date
         launchDate:
             type: date
             nullable: true
@@ -87,6 +91,24 @@ Lists\DogovorBundle\Entity\Dogovor:
             nullable: true
             column: planned_pf1_percent
     manyToOne:
+        customer:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                customer_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        performer:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                performer_id:
+                    referencedColumnName: id
+            orphanRemoval: false
         city:
             targetEntity: Lists\CityBundle\Entity\City
             cascade: {  }
@@ -148,6 +170,12 @@ Lists\DogovorBundle\Entity\Dogovor:
             inversedBy: null
             joinColumns:
                 user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        saller:
+            targetEntity: SD\UserBundle\Entity\User
+            joinColumns:
+                saller_id:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

@@ -6,6 +6,11 @@
             <td style="width:35%">{{ dogovor.id }}</td>
             <td style="width:15%">{% trans %}Dogovor Name{% endtrans %}</td>
             <td style="width:35%">{{ dogovor.name }}
+                {% if dogovor.filepath %}
+                    <a href="/uploads/dogovor/{{ dogovor.filepath }}" target="_blank">
+                        {% trans %}File{% endtrans %}
+                    </a>
+                {% endif %}
                 {#<a href="#" id="statusId" data-type="select" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.statusId }}" data-placement="right" data-original-title="{% trans %}Select Handling Status{% endtrans %}">
                     {{ handling.0.status }}
                     {% if handling.0.statusChangeDate %}

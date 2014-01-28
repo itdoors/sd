@@ -166,6 +166,43 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
 
+    public function cityByIdAction()
+    {
+        $id = $this->get('request')->query->get('id');
+
+        $city = $this->getDoctrine()
+            ->getRepository('ListsCityBundle:City')
+            ->find($id);
+
+        $result = array();
+
+        if ($city)
+        {
+            $result = $this->serializeObject($city);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    public function companystructureAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsCompanystructureBundle:Companystructure');
+
+        $objects= $repository->getSearchQuery($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object)
+        {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
     public function organizationTypeAction()
     {
         $organizationTypes = $this->getDoctrine()

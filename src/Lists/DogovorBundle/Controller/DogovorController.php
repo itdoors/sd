@@ -55,16 +55,27 @@ class DogovorController extends BaseController
 
         if ($form->isValid())
         {
-            /** @var \Lists\HandlingBundle\Entity\Handling $object */
-            /*$object = $form->getData();
+            $user = $this->getUser();
+
+            /** @var \Lists\DogovorBundle\Entity\Dogovor $object */
+            $object = $form->getData();
+
+            $file = $form['file']->getData();
+
+            if ($file)
+            {
+                $object->upload();
+            }
+
+            $object->setUser($user);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($object);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('lists_sales_handling_show', array(
+            return $this->redirect($this->generateUrl('lists_dogovor_dogovor_show', array(
                 'id' => $object->getId()
-            )));*/
+            )));
         }
 
         return $this->render('ListsDogovorBundle:' . $this->baseTemplate . ':new.html.twig', array(

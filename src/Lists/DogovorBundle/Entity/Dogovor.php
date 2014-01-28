@@ -3,6 +3,7 @@
 namespace Lists\DogovorBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Dogovor
@@ -723,5 +724,200 @@ class Dogovor
     public function getUser()
     {
         return $this->user;
+    }
+    /**
+     * @var \DateTime
+     */
+    private $prolongationDate;
+
+    /**
+     * @var \Lists\OrganizationBundle\Entity\Organization
+     */
+    private $customer;
+
+    /**
+     * @var \Lists\OrganizationBundle\Entity\Organization
+     */
+    private $performer;
+
+
+    /**
+     * Set prolongationDate
+     *
+     * @param \DateTime $prolongationDate
+     * @return Dogovor
+     */
+    public function setProlongationDate($prolongationDate)
+    {
+        $this->prolongationDate = $prolongationDate;
+    
+        return $this;
+    }
+
+    /**
+     * Get prolongationDate
+     *
+     * @return \DateTime 
+     */
+    public function getProlongationDate()
+    {
+        return $this->prolongationDate;
+    }
+
+    /**
+     * Set customer
+     *
+     * @param \Lists\OrganizationBundle\Entity\Organization $customer
+     * @return Dogovor
+     */
+    public function setCustomer(\Lists\OrganizationBundle\Entity\Organization $customer = null)
+    {
+        $this->customer = $customer;
+    
+        return $this;
+    }
+
+    /**
+     * Get customer
+     *
+     * @return \Lists\OrganizationBundle\Entity\Organization 
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * Set performer
+     *
+     * @param \Lists\OrganizationBundle\Entity\Organization $performer
+     * @return Dogovor
+     */
+    public function setPerformer(\Lists\OrganizationBundle\Entity\Organization $performer = null)
+    {
+        $this->performer = $performer;
+    
+        return $this;
+    }
+
+    /**
+     * Get performer
+     *
+     * @return \Lists\OrganizationBundle\Entity\Organization 
+     */
+    public function getPerformer()
+    {
+        return $this->performer;
+    }
+    /**
+     * @var \SD\UserBundle\Entity\User
+     */
+    private $saller;
+
+
+    /**
+     * Set saller
+     *
+     * @param \SD\UserBundle\Entity\User $saller
+     * @return Dogovor
+     */
+    public function setSaller(\SD\UserBundle\Entity\User $saller = null)
+    {
+        $this->saller = $saller;
+    
+        return $this;
+    }
+
+    /**
+     * Get saller
+     *
+     * @return \SD\UserBundle\Entity\User 
+     */
+    public function getSaller()
+    {
+        return $this->saller;
+    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->filepath
+            ? null
+            : $this->getUploadRootDir().'/'.$this->filepath;
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->filepath
+            ? null
+            : $this->getUploadDir().'/'.$this->filepath;
+    }
+
+    protected function getUploadRootDir()
+    {
+        // the absolute directory path where uploaded
+        // documents should be saved
+        return __DIR__.'/../../../../web/'.$this->getUploadDir();
+    }
+
+    protected function getUploadDir()
+    {
+        // get rid of the __DIR__ so it doesn't screw up
+        // when displaying uploaded doc/image in the view.
+        return 'uploads/dogovor';
+    }
+
+    private $file;
+
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function upload()
+    {
+        // the file property can be empty if the field is not required
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+
+        $fileExtension = $this->getFile()->getClientOriginalExtension();
+
+        $newFileName = md5(microtime());
+
+        $filepath = $newFileName . '.' . $fileExtension;
+
+        $uploadDir = $this->getUploadRootDir();
+
+        $this->getFile()->move(
+            $uploadDir,
+            $filepath
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->filepath = $filepath;
+
+        // clean up the file property as you won't need it anymore
+        $this->file = null;
     }
 }

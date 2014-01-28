@@ -319,3 +319,16 @@ END$$ LANGUAGE 'plpgsql';
 select replace_manager(324, 327);
 +++++++++++++++++
 
+ALTER TABLE dogovor ADD customer_id BIGINT DEFAULT NULL;
+ALTER TABLE dogovor ADD performer_id BIGINT DEFAULT NULL;
+ALTER TABLE dogovor ADD prolongation_date TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL;
+ALTER TABLE dogovor ALTER organization_id DROP NOT NULL;
+
+++++
+
+ALTER TABLE dogovor ADD saller_id INT DEFAULT NULL;
+ALTER TABLE dogovor ADD CONSTRAINT FK_5F7235959A22E23 FOREIGN KEY (saller_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_5F7235959A22E23 ON dogovor (saller_id);
+
++++++++++++++++
+

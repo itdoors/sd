@@ -42,7 +42,7 @@ class Companystructure
     /**
      * @var \SD\UserBundle\Entity\Staff
      */
-    private $parentColumn;
+    private $staff;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -183,26 +183,26 @@ class Companystructure
     }
 
     /**
-     * Set parentColumn
+     * Set staff
      *
-     * @param \SD\UserBundle\Entity\Staff $parentColumn
+     * @param \SD\UserBundle\Entity\Staff $staff
      * @return Companystructure
      */
-    public function setParentColumn(\SD\UserBundle\Entity\Staff $parentColumn = null)
+    public function setStaff(\SD\UserBundle\Entity\Staff $staff = null)
     {
-        $this->parentColumn = $parentColumn;
+        $this->staff = $staff;
     
         return $this;
     }
 
     /**
-     * Get parentColumn
+     * Get staff
      *
      * @return \SD\UserBundle\Entity\Staff 
      */
-    public function getParentColumn()
+    public function getStaff()
     {
-        return $this->parentColumn;
+        return $this->staff;
     }
 
     /**
@@ -236,5 +236,69 @@ class Companystructure
     public function getRegion()
     {
         return $this->region;
+    }
+
+    /**
+     * __toString()
+     */
+    public function __toString()
+    {
+        return $this->getName();
+    }
+    /**
+     * @var integer
+     */
+    private $staffId;
+
+
+    /**
+     * Set staffId
+     *
+     * @param integer $staffId
+     * @return Companystructure
+     */
+    public function setStaffId($staffId)
+    {
+        $this->staffId = $staffId;
+    
+        return $this;
+    }
+
+    /**
+     * Get staffId
+     *
+     * @return integer 
+     */
+    public function getStaffId()
+    {
+        return $this->staffId;
+    }
+    /**
+     * @var \Lists\CompanystructureBundle\Entity\Companystructure
+     */
+    private $parent;
+
+
+    /**
+     * Set parent
+     *
+     * @param \Lists\CompanystructureBundle\Entity\Companystructure $parent
+     * @return Companystructure
+     */
+    public function setParent(\Lists\CompanystructureBundle\Entity\Companystructure $parent = null)
+    {
+        $this->parent = $parent;
+    
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Lists\CompanystructureBundle\Entity\Companystructure 
+     */
+    public function getParent()
+    {
+        return $this->parent;
     }
 }

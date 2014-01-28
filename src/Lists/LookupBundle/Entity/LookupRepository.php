@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityRepository;
 class LookupRepository extends EntityRepository
 {
     const KEY__SCOPE = 'scope';
+    const KEY__DOGOVOR = 'dogovor';
 
     /**
      * Returns choices for scope
@@ -20,6 +21,14 @@ class LookupRepository extends EntityRepository
     public function getOnlyScopeQuery()
     {
         return $this->getLookupByLukeyQuery(self::KEY__SCOPE);
+    }
+
+    /**
+     * Returns choices for dogovor_type
+     */
+    public function getOnlyDogovorTypeQuery()
+    {
+        return $this->getLookupByLukeyQuery(self::KEY__DOGOVOR);
     }
 
     /**
