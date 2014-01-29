@@ -62,6 +62,10 @@ sd_common_ajax_handling_save:
     pattern:  /ajax/handling/save
     defaults: { _controller: SDCommonBundle:Ajax:handlingSave }
 
+sd_common_ajax_dogovor_save:
+    pattern:  /ajax/dogovor/save
+    defaults: { _controller: SDCommonBundle:Ajax:dogovorSave }
+
 sd_common_ajax_handling_more_info_save:
     pattern:  /ajax/handling/more/info/save
     defaults: { _controller: SDCommonBundle:Ajax:handlingMoreInfoSave }

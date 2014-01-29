@@ -1,3 +1,16 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $.fn.editable.defaults.inputclass = 'form-control';
+        $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
+
+        $('.sd-editable').editable({
+            url: '{{ path('sd_common_ajax_dogovor_save') }}'
+        });
+
+    });
+</script>
+
 <div class="col-md-12">
     <table id="dogovor" class="table table-bordered table-striped">
         <tbody>
@@ -19,13 +32,20 @@
                 </a>#}
             </td>
         </tr>
-        {#<tr> &#123;&#35; 2 &#35;&#125;
-            <td>{% trans %}Organization Name{% endtrans %}</td>
-            <td>{{ handling.organizationName }}</td>
-            <td>{% trans %}Status Description{% endtrans %}</td>
-            <td><a href="#" id="statusDescription" data-type="textarea" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.statusDescription }}" data-placement="right" data-original-title="{% trans %}Enter Status{% endtrans %}">{{ handling.0.statusDescription }}</a>
+        <tr> {# 2 #}
+            <td>{% trans %}Dogovor number{% endtrans %}</td>
+            <td>
+                <a href="#" id="number" class="sd-editable" data-type="text" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.number }}" data-placement="right" data-original-title="{% trans %}Enter Number{% endtrans %}">
+                    {{ dogovor.number }}
+                </a>
             </td>
-        </tr>#}
+            <td>{% trans %}Subject{% endtrans %}</td>
+            <td>
+                <a href="#" id="subject" class="sd-editable" data-type="text" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.subject }}" data-placement="right" data-original-title="{% trans %}Enter Subject{% endtrans %}">
+                    {{ dogovor.subject }}
+                </a>
+            </td>
+        </tr>
         </tbody>
     </table>
 </div>
