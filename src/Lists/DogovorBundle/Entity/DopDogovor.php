@@ -3,6 +3,7 @@
 namespace Lists\DogovorBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * DopDogovor
@@ -58,11 +59,6 @@ class DopDogovor
      * @var \Lists\DogovorBundle\Entity\Dogovor
      */
     private $dogovor;
-
-    /**
-     * @var \SD\UserBundle\Entity\Staff
-     */
-    private $stuff;
 
     /**
      * @var \SD\UserBundle\Entity\User
@@ -288,29 +284,6 @@ class DopDogovor
     }
 
     /**
-     * Set stuff
-     *
-     * @param \SD\UserBundle\Entity\Staff $stuff
-     * @return DopDogovor
-     */
-    public function setStuff(\SD\UserBundle\Entity\Staff $stuff = null)
-    {
-        $this->stuff = $stuff;
-    
-        return $this;
-    }
-
-    /**
-     * Get stuff
-     *
-     * @return \SD\UserBundle\Entity\Staff 
-     */
-    public function getStuff()
-    {
-        return $this->stuff;
-    }
-
-    /**
      * Set user
      *
      * @param \SD\UserBundle\Entity\User $user
@@ -331,5 +304,144 @@ class DopDogovor
     public function getUser()
     {
         return $this->user;
+    }
+    /**
+     * @var integer
+     */
+    private $dogovorId;
+
+
+    /**
+     * Set dogovorId
+     *
+     * @param integer $dogovorId
+     * @return DopDogovor
+     */
+    public function setDogovorId($dogovorId)
+    {
+        $this->dogovorId = $dogovorId;
+    
+        return $this;
+    }
+
+    /**
+     * Get dogovorId
+     *
+     * @return integer 
+     */
+    public function getDogovorId()
+    {
+        return $this->dogovorId;
+    }
+    /**
+     * @var \SD\UserBundle\Entity\User
+     */
+    private $saller;
+
+
+    /**
+     * Set saller
+     *
+     * @param \SD\UserBundle\Entity\User $saller
+     * @return DopDogovor
+     */
+    public function setSaller(\SD\UserBundle\Entity\User $saller = null)
+    {
+        $this->saller = $saller;
+    
+        return $this;
+    }
+
+    /**
+     * Get saller
+     *
+     * @return \SD\UserBundle\Entity\User 
+     */
+    public function getSaller()
+    {
+        return $this->saller;
+    }
+
+    public function getAbsolutePath()
+    {
+        return null === $this->filepath
+            ? null
+            : $this->getUploadRootDir().'/'.$this->filepath;
+    }
+
+    public function getWebPath()
+    {
+        return null === $this->filepath
+            ? null
+            : $this->getUploadDir().'/'.$this->filepath;
+    }
+
+    protected function getUploadRootDir()
+    {
+        // the absolute directory path where uploaded
+        // documents should be saved
+        return __DIR__.'/../../../../web/'.$this->getUploadDir();
+    }
+
+    protected function getUploadDir()
+    {
+        // get rid of the __DIR__ so it doesn't screw up
+        // when displaying uploaded doc/image in the view.
+        return 'uploads/dogovor';
+    }
+
+    private $file;
+
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function upload()
+    {
+        // the file property can be empty if the field is not required
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+
+        // move takes the target directory and then the
+        // target filename to move to
+
+        $fileExtension = $this->getFile()->getClientOriginalExtension();
+
+        $newFileName = md5(microtime());
+
+        $filepath = $newFileName . '.' . $fileExtension;
+
+        $uploadDir = $this->getUploadRootDir();
+
+        $this->getFile()->move(
+            $uploadDir,
+            $filepath
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->filepath = $filepath;
+
+        // clean up the file property as you won't need it anymore
+        $this->file = null;
     }
 }

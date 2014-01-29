@@ -14,3 +14,9 @@ lists_dogovor_dogovor_show:
 lists_dogovor_dogovor_filter:
     pattern:  /lists/dogovor/dogovor/filter
     defaults: { _controller: ListsDogovorBundle:Dogovor:filter }
+
+#DOP DOGOVOR ROUTE
+
+lists_dogovor_dopdogovor_list:
+    pattern:  /lists/dogovor/dopdogovor/list/{dogovorId}
+    defaults: { _controller: ListsDogovorBundle:DopDogovor:list }

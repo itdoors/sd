@@ -1,6 +1,7 @@
 Lists\DogovorBundle\Entity\DopDogovor:
     type: entity
     table: dop_dogovor
+    repositoryClass: Lists\DogovorBundle\Entity\DopDogovorRepository
     fields:
         id:
             id: true
@@ -42,6 +43,9 @@ Lists\DogovorBundle\Entity\DopDogovor:
         total:
             type: float
             nullable: true
+        dogovorId:
+            type: integer
+            column: dogovor_id
     manyToOne:
         dogovor:
             targetEntity: Dogovor
@@ -52,13 +56,13 @@ Lists\DogovorBundle\Entity\DopDogovor:
                 dogovor_id:
                     referencedColumnName: id
             orphanRemoval: false
-        stuff:
-            targetEntity: SD\UserBundle\Entity\Staff
+        saller:
+            targetEntity: SD\UserBundle\Entity\User
             cascade: {  }
             mappedBy: null
             inversedBy: null
             joinColumns:
-                stuff_id:
+                saller_id:
                     referencedColumnName: id
             orphanRemoval: false
         user:

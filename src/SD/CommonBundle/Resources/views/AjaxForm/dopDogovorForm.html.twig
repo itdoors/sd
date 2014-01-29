@@ -1,0 +1,131 @@
+<script>
+    $(document).ready(function(){
+
+        SD.select2('#' + '{{ form.vars.name }}' + '_saller');
+
+        $('.date-picker').datepicker({
+            rtl: App.isRTL(),
+            autoclose: true,
+            format: "dd.mm.yyyy",
+            pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
+            language: 'ru',
+            startView: 'decade',
+            weekStart: 1
+        });
+    });
+</script>
+
+<div class="row ">
+    <div class="col-md-12">
+        <div class="portlet box yellow">
+            <div class="portlet-title"><div class="caption"><i class="fa fa-edit"></i>
+                {% trans  from 'ListsDogovorBundle' %}New Dogovor{% endtrans %}
+            </div>
+            </div>
+            <div class="portlet-body">
+                {% form_theme form 'SDCommonBundle:Form:form_errors.html.twig' %}
+                {% if form.vars.valid is sameas(false) %}
+                <div class="alert alert-danger">
+                    <button class="close" data-close="alert"></button>
+                    {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                    {{ form_errors(form) }}
+                </div>
+                {% endif %}
+                {{ form_start(form, {
+                        'action' : path('sd_common_ajax_form'),
+                        'attr' : {
+                        'method' : 'POST',
+                        'class' : 'ajax-form-entity',
+                        'data-post_function': postFunction,
+                        'data-post_target_id': postTargetId,
+                        'data-target_id': targetId,
+                        'enctype': 'multipart/form-data'
+                    }
+                }) }}
+                <div class="form-body row">
+                    <div class="form-group col-md-6">
+                        {{  form_label(form.number, 'Dop Dogovor Number', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.number, {'attr' : {'class' : 'form-control', 'placeholder': "Dop Dogovor Number"}}) }}
+                    </div>
+                    <div class="form-group col-md-6">
+                        {{  form_label(form.subject, 'Subject', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.subject, {'attr' : {'class' : 'form-control', 'placeholder': "Subject"}}) }}
+                    </div>
+                </div>
+                <div class="form-body row">
+                    <div class="form-group col-md-6">
+                        {{  form_label(form.startdatetime, 'Startdatetime', {'attr': {'class': 'control-label'}}) }}
+                        <div class="input-group input-medium date date-picker">
+                            {{ form_widget(form.startdatetime, {'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Enter Start Date',
+                                'readonly': 'readonly'
+                            }}) }}
+                                <span class="input-group-btn">
+                                    <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+                                </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        {{  form_label(form.activedatetime, 'Activedatetime', {'attr': {'class': 'control-label'}}) }}
+                        <div class="input-group input-medium date date-picker">
+                            {{ form_widget(form.activedatetime, {'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Enter Activate Date',
+                                'readonly': 'readonly'
+                            }}) }}
+                                <span class="input-group-btn">
+                                    <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+                                </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-body row">
+                    <div class="form-group col-md-4">
+                        {{  form_label(form.total, 'Total', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.total, {'attr' : {'class' : 'form-control', 'placeholder': "Total"}}) }}
+                    </div>
+                    <div class="form-group col-md-4">
+                        {{ form_label(form.dopDogovorType, 'Dop Dogovor Type', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.dopDogovorType, {'attr' : {'class' : 'form-control', 'placeholder': "Dop Dogovor Type"}}) }}
+                    </div>
+                    <div class="form-group col-md-4">
+                        {{  form_label(form.isActive, 'Is Active', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.isActive, {'attr' : {'class' : 'form-control', 'placeholder': "Is Active"}}) }}
+                    </div>
+                </div>
+                <div class="form-body row">
+                    <div class="form-group col-md-6">
+                        {{  form_label(form.saller, 'Saller', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.saller, {'attr' : {
+                            'class' : 'form-control',
+                            'placeholder': "Saller",
+                            'data-url': path('sd_common_ajax_user'),
+                            'data-url-by-id': path('sd_common_ajax_user_by_id'),
+                        }}) }}
+                    </div>
+                    <div class="form-group col-md-6">
+                        {{  form_label(form.file, 'File ', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.file, {'attr' : {'placeholder': "File"}}) }}
+                    </div>
+                </div>
+                <div class="form-actions">
+                    {{ form_widget(form.add, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
+                    {{ form_widget(form.cancel, { 'label': 'Cancel', 'attr':
+                        {
+                            'class': 'btn default sd-cancel-btn',
+                            'data-dismiss': "modal"
+                        }
+                    } ) }}
+                </div>
+                <input type="hidden" name="formName" value="{{ formName }}">
+                <input type="hidden" name="postFunction" value="{{ postFunction }}">
+                <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
+                <input type="hidden" name="targetId" value="{{ targetId }}">
+                <input type="hidden" name="model" value="{{ model }}">
+                <input type="hidden" name="modelId" value="{{ modelId }}">
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>

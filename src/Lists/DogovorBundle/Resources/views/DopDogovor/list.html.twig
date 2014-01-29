@@ -1,0 +1,13 @@
+{% if items|length %}
+    {% for item in items %}
+        {{ item.id }}
+        {{ item.number }}
+        {{ item.subject }}
+        {% if item.filepath %}
+            <a href="/uploads/dogovor/{{ item.filepath }}" target="_blank">
+                {% trans %}File{% endtrans %}
+            </a>
+        {% endif %}
+        <br />
+    {% endfor %}
+{% endif %}

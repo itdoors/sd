@@ -1,6 +1,7 @@
 parameters:
     lists_dogovor.dogovor.filter.form.class: Lists\DogovorBundle\Form\DogovorFilterForm
     lists_dogovor.dogovor.form.class: Lists\DogovorBundle\Form\DogovorForm
+    lists_dogovor.dopdogovor.form.class: Lists\DogovorBundle\Form\DopDogovorForm
 
 services:
     lists_dogovor.form.dogovorFilterForm:
@@ -14,3 +15,9 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: dogovorForm }
+
+    lists_dogovor.form.dopDogovorForm:
+        class: %lists_dogovor.dopdogovor.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: dopDogovorForm }

@@ -1,1 +1,48 @@
-dop dogovor list
+<script type="text/javascript">
+    $(document).ready(function(){
+        $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+    });
+</script>
+
+<div class="table-toolbar">
+    <div class="btn-group">
+        <a id="managers_list_new" class="btn green ajax-form"
+           data-toggle="modal"
+           href="#form_modal_dop_dogovor"
+           data-target_holder="dopDogovorFormTpl"
+           data-form_name="dopDogovorForm"
+           data-post_function="updateList"
+           data-post_target_id="dop-dogovor-list"
+           data-default='{"dogovorId":{{ dogovor.id }} }'
+        >
+            {% trans %}Add New{% endtrans %} <i class="fa fa-plus"></i>
+        </a>
+    </div>
+</div>
+
+<div id="form_modal_dop_dogovor" class="modal fade" role="basic" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">{% trans from 'ListsDogovorBundle' %}New dogovor{% endtrans %}</h4>
+            </div>
+            <div class="modal-body">
+                <div id="dopDogovorFormTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+
+<div id="dop-dogovor-list"
+     data-url="{{ path('lists_dogovor_dopdogovor_list', {
+            dogovorId: dogovor.id
+        }) }}"
+     data-params='{"dogovorId":{{ dogovor.id }}}'
+>
+    {{ render(controller('ListsDogovorBundle:DopDogovor:List', {
+        dogovorId: dogovor.id,
+    })) }}
+</div>

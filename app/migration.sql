@@ -332,3 +332,15 @@ CREATE INDEX IDX_5F7235959A22E23 ON dogovor (saller_id);
 
 +++++++++++++++
 
+ALTER TABLE dop_dogovor ADD COLUMN saller_id integer;
+ALTER TABLE dop_dogovor ADD CONSTRAINT FK_15DDC3FF1CEE4D62 FOREIGN KEY (saller_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE dop_dogovor ADD CONSTRAINT FK_15DDC3FFA76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+UPDATE
+  dop_dogovor
+SET
+  saller_id = (select user_id from stuff where id = dop_dogovor.stuff_id limit 1)
+WHERE
+  stuff_id IS NOT NULL;
+
++++++++++++++++++
+

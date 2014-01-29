@@ -1713,4 +1713,38 @@ class AjaxController extends Controller
 
         return true;
     }
+
+    /**
+     * Saves dop dogovor ajax form
+     */
+    public function dopDogovorFormSave($form, $user, $request)
+    {
+        $data = $form->getData();
+
+        if (!$data->getId())
+        {
+            $data->setUser($user);
+        }
+
+        $file = $form['file']->getData();
+
+        if ($file)
+        {
+            $data->upload();
+        }
+
+        $dogovorId = $data->getDogovorId();
+
+        $dogovor = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:Dogovor')
+            ->find($dogovorId);
+
+        $data->setDogovor($dogovor);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
 }
