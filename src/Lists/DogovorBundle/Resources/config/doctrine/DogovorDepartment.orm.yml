@@ -1,6 +1,7 @@
 Lists\DogovorBundle\Entity\DogovorDepartment:
     type: entity
     table: dogovor_department
+    repositoryClass: Lists\DogovorBundle\Entity\DogovorDepartmentRepository
     fields:
         id:
             id: true
@@ -20,6 +21,15 @@ Lists\DogovorBundle\Entity\DogovorDepartment:
         createdatetime:
             type: datetime
             nullable: true
+        dogovorId:
+            type: integer
+            column: dogovor_id
+        dopDogovorId:
+            type: integer
+            column: dop_dogovor_id
+        departmentId:
+            type: integer
+            column: department_id
     manyToOne:
         department:
             targetEntity: Lists\DepartmentBundle\Entity\Departments

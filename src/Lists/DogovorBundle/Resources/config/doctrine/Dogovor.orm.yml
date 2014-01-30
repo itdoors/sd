@@ -90,6 +90,15 @@ Lists\DogovorBundle\Entity\Dogovor:
             type: float
             nullable: true
             column: planned_pf1_percent
+        customerId:
+            type: integer
+            column: customer_id
+        performerId:
+            type: integer
+            column: performer_id
+        organizationId:
+            type: integer
+            column: organization_id
     manyToOne:
         customer:
             targetEntity: Lists\OrganizationBundle\Entity\Organization

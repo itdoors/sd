@@ -1,0 +1,8 @@
+{% if items|length %}
+    {% for item in items %}
+        {{ item.id }}
+        {{ item.dopDogovor }}
+        {{ item.department }}
+        <br />
+    {% endfor %}
+{% endif %}

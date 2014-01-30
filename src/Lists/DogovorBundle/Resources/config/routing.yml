@@ -16,7 +16,11 @@ lists_dogovor_dogovor_filter:
     defaults: { _controller: ListsDogovorBundle:Dogovor:filter }
 
 #DOP DOGOVOR ROUTE
-
 lists_dogovor_dopdogovor_list:
     pattern:  /lists/dogovor/dopdogovor/list/{dogovorId}
     defaults: { _controller: ListsDogovorBundle:DopDogovor:list }
+
+#DOGOVOR DEPARTMENT
+lists_dogovor_department_list:
+    pattern:  /lists/dogovor/department/list/{dogovorId}
+    defaults: { _controller: ListsDogovorBundle:DogovorDepartment:list }

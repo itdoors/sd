@@ -220,4 +220,88 @@ class DogovorDepartment
     {
         return $this->user;
     }
+    /**
+     * @var integer
+     */
+    private $dogovorId;
+
+
+    /**
+     * Set dogovorId
+     *
+     * @param integer $dogovorId
+     * @return DogovorDepartment
+     */
+    public function setDogovorId($dogovorId)
+    {
+        $this->dogovorId = $dogovorId;
+    
+        return $this;
+    }
+
+    /**
+     * Get dogovorId
+     *
+     * @return integer 
+     */
+    public function getDogovorId()
+    {
+        return $this->dogovorId;
+    }
+    /**
+     * @var integer
+     */
+    private $dopDogovorId;
+
+
+    /**
+     * Set dopDogovorId
+     *
+     * @param integer $dopDogovorId
+     * @return DogovorDepartment
+     */
+    public function setDopDogovorId($dopDogovorId)
+    {
+        $this->dopDogovorId = $dopDogovorId;
+    
+        return $this;
+    }
+
+    /**
+     * Get dopDogovorId
+     *
+     * @return integer 
+     */
+    public function getDopDogovorId()
+    {
+        return $this->dopDogovorId;
+    }
+    /**
+     * @var integer
+     */
+    private $departmentId;
+
+
+    /**
+     * Set departmentId
+     *
+     * @param integer $departmentId
+     * @return DogovorDepartment
+     */
+    public function setDepartmentId($departmentId)
+    {
+        $this->departmentId = $departmentId;
+    
+        return $this;
+    }
+
+    /**
+     * Get departmentId
+     *
+     * @return integer 
+     */
+    public function getDepartmentId()
+    {
+        return $this->departmentId;
+    }
 }

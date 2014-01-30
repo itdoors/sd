@@ -28,6 +28,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic//plugins/jquery-multi-select/css/multi-select.css')}} " />
 {% endblock %}
 
 {% block js_page_level_plugins %}
@@ -39,6 +40,8 @@
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/jquery-multi-select/js/jquery.multi-select.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/jquery-multi-select/js/jquery.quicksearch.js')}}"></script>
 {% endblock %}
 
 {% block body %}
@@ -49,6 +52,7 @@
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#tab_0" data-toggle="tab">{% trans %}General info{% endtrans %}</a></li>
                     <li><a href="#tab_1" data-toggle="tab">{% trans %}Dop dogovor{% endtrans %}</a></li>
+                    <li><a href="#tab_2" data-toggle="tab">{% trans %}Departments{% endtrans %}</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_0">
@@ -64,6 +68,16 @@
                     <div class="tab-pane" id="tab_1">
                         {{  include(
                             'ListsDogovorBundle:' ~ baseTemplate ~ ':dopdogovor.html.twig',
+                                {
+                                    dogovor: dogovor
+                                }
+                            )
+                        }}
+                    </div>
+                    <!--tabpane-->
+                    <div class="tab-pane" id="tab_2">
+                        {{  include(
+                            'ListsDogovorBundle:' ~ baseTemplate ~ ':departments.html.twig',
                                 {
                                     dogovor: dogovor
                                 }

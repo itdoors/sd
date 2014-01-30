@@ -416,4 +416,42 @@ class Departments
     {
         return $this->status;
     }
+    /**
+     * @var integer
+     */
+    private $organizationId;
+
+
+    /**
+     * Set organizationId
+     *
+     * @param integer $organizationId
+     * @return Departments
+     */
+    public function setOrganizationId($organizationId)
+    {
+        $this->organizationId = $organizationId;
+    
+        return $this;
+    }
+
+    /**
+     * Get organizationId
+     *
+     * @return integer 
+     */
+    public function getOrganizationId()
+    {
+        return $this->organizationId;
+    }
+
+    /**
+     * __toString()
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getCity()->getName() . ' | ' . $this->getAddress();
+    }
 }

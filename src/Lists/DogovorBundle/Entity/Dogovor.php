@@ -920,4 +920,88 @@ class Dogovor
         // clean up the file property as you won't need it anymore
         $this->file = null;
     }
+    /**
+     * @var integer
+     */
+    private $customerId;
+
+    /**
+     * @var integer
+     */
+    private $performerId;
+
+
+    /**
+     * Set customerId
+     *
+     * @param integer $customerId
+     * @return Dogovor
+     */
+    public function setCustomerId($customerId)
+    {
+        $this->customerId = $customerId;
+    
+        return $this;
+    }
+
+    /**
+     * Get customerId
+     *
+     * @return integer 
+     */
+    public function getCustomerId()
+    {
+        return $this->customerId;
+    }
+
+    /**
+     * Set performerId
+     *
+     * @param integer $performerId
+     * @return Dogovor
+     */
+    public function setPerformerId($performerId)
+    {
+        $this->performerId = $performerId;
+    
+        return $this;
+    }
+
+    /**
+     * Get performerId
+     *
+     * @return integer 
+     */
+    public function getPerformerId()
+    {
+        return $this->performerId;
+    }
+    /**
+     * @var integer
+     */
+    private $organizationId;
+
+
+    /**
+     * Set organizationId
+     *
+     * @param integer $organizationId
+     * @return Dogovor
+     */
+    public function setOrganizationId($organizationId)
+    {
+        $this->organizationId = $organizationId;
+    
+        return $this;
+    }
+
+    /**
+     * Get organizationId
+     *
+     * @return integer 
+     */
+    public function getOrganizationId()
+    {
+        return $this->organizationId;
+    }
 }

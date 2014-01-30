@@ -1,6 +1,7 @@
 Lists\DepartmentBundle\Entity\Departments:
     type: entity
     table: departments
+    repositoryClass: Lists\DepartmentBundle\Entity\DepartmentsRepository
     fields:
         id:
             id: true
@@ -52,6 +53,9 @@ Lists\DepartmentBundle\Entity\Departments:
             length: 255
             fixed: false
             nullable: true
+        organizationId:
+            type: integer
+            column: organization_id
     manyToOne:
         city:
             targetEntity: Lists\CityBundle\Entity\City

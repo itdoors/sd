@@ -5,17 +5,24 @@ namespace Lists\DogovorBundle\Controller;
 use SD\CommonBundle\Controller\BaseFilterController as BaseController;
 use Symfony\Component\HttpFoundation\Request;
 
-class DopDogovorController extends BaseController
+class DogovorDepartmentController extends BaseController
 {
-    protected $filterNamespace = 'base.dopdogovor.filters';
-    protected $baseRoutePrefix = 'dopdogovor';
-    protected $baseTemplate = 'DopDogovor';
+    protected $filterNamespace = 'base.dogovor.department.filters';
+    protected $baseRoutePrefix = 'dogovor.department';
+    protected $baseTemplate = 'DogovorDepartment';
 
+    /**
+     * Returns department list
+     *
+     * @param int $dogovorId
+     *
+     * @return string
+     */
     public function listAction($dogovorId)
     {
-        /** @var \Lists\DogovorBundle\Entity\DopDogovorRepository $repository */
+        /** @var \Lists\DogovorBundle\Entity\DogovorDepartmentRepository $repository */
         $repository = $this->getDoctrine()
-            ->getRepository('ListsDogovorBundle:DopDogovor');
+            ->getRepository('ListsDogovorBundle:DogovorDepartment');
 
         /** @var \Doctrine\ORM\Query $query */
         $query = $repository->getAllByDogovorIdQuery($dogovorId);

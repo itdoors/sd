@@ -1,7 +1,10 @@
 parameters:
-#    lists_department.example.class: Lists\DepartmentBundle\Example
+    lists_department.repository.class: Lists\DepartmentBundle\Entity\DepartmentsRepository
+    lists_department.repository.entity: Lists\DepartmentBundle\Entity\Departments
 
 services:
-#    lists_department.example:
-#        class: %lists_department.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    lists_department.repository:
+        class: %lists_department.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_department.repository.entity% ]

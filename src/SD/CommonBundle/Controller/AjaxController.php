@@ -2,9 +2,14 @@
 
 namespace SD\CommonBundle\Controller;
 
+use Lists\DepartmentBundle\Entity\DepartmentsRepository;
+use Lists\DogovorBundle\Entity\DogovorDepartment;
+use Lists\DogovorBundle\Entity\DogovorDepartmentRepository;
+use Lists\DogovorBundle\Entity\DopDogovorRepository;
 use Lists\HandlingBundle\Entity\HandlingMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Lists\ContactBundle\Entity\ModelContactRepository;
@@ -1744,6 +1749,112 @@ class AjaxController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
         $em->flush();
+
+        return true;
+    }
+
+    /**
+     * Process default to Dogovor Department form
+     *
+     * @param Form $form
+     * @param mixed[] $defaultData
+     */
+    public function dogovorDepartmentFormProcessDefaults(Form $form, $defaultData)
+    {
+        $dogovorId = $defaultData['dogovorId'];
+
+        $organizationIds = array();
+
+        $dogovor = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:Dogovor')
+            ->find($dogovorId);
+
+        $form
+            ->add('dopDogovor', 'entity', array(
+                'class' => 'ListsDogovorBundle:DopDogovor',
+                'empty_value' => '',
+                'required' => false,
+                'query_builder' => function (DopDogovorRepository $repository) use ($dogovorId)
+                    {
+                        return $repository->createQueryBuilder('dd')
+                            ->where('dd.dogovorId = :dogovorId')
+                            ->setParameter(':dogovorId', $dogovorId);
+                    }
+            ));
+
+        /** @var DepartmentsRepository $dr */
+        $dr = $this->get('lists_department.repository');
+
+        $form
+            ->add('departments', 'entity', array(
+                'class' => 'ListsDepartmentBundle:Departments',
+                'empty_value' => '',
+                'required' => true,
+                'mapped' => false,
+                'multiple' => true,
+                'query_builder' => $dr->getDepartmentsForDogovor($dogovorId)
+            ));
+    }
+
+    /**
+     * Saves dogovor department ajax form
+     *
+     * @param Form $form
+     * @param User $user
+     * @param Request $request
+     *
+     * @return bool
+     */
+    public function dogovorDepartmentFormSave($form, $user, $request)
+    {
+        /** @var DogovorDepartment $data */
+        $data = $form->getData();
+
+        $data->setUser($this->getUser());
+
+        $requestData = $request->request->get($form->getName());
+
+        $departmentIds = $requestData['departments'];
+
+        $insert = false;
+
+        $dogovorId = $data->getDogovorId();
+
+        $dogovor = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:Dogovor')
+            ->find($dogovorId);
+
+        $data->setDogovor($dogovor);
+
+        /** @var DogovorDepartmentRepository $ddr */
+        $ddr = $this->get('lists_dogovor.department.repository');
+
+        $dr = $this->get('lists_department.repository');
+
+        $dopDogovorId = $data->getDopDogovor() ? $data->getDopDogovor()->getId() : null;
+
+        $em = $this->getDoctrine()->getManager();
+
+        foreach ($departmentIds as $departmentId)
+        {
+            if (!$ddr->isExists($data->getDogovorId(), $dopDogovorId, $departmentId))
+            {
+                $newData = clone $data;
+
+                $department = $dr->find($departmentId);
+
+                $newData->setDepartment($department);
+
+                $em->persist($newData);
+
+                $insert = true;
+            }
+        }
+
+        if ($insert)
+        {
+            $em->flush();
+        }
 
         return true;
     }
