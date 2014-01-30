@@ -3,7 +3,7 @@
 //add your server aliases here
 $servers = array(
     "185.14.184.234" => "mcfly.bensmann.no",
-    "185.14.184.xxx" => "another.server.com",
+    "91.223.223.238" => "another.server.com",
 );
 
 //this script is triggered by this command from the terminal or cron:
@@ -32,15 +32,15 @@ if(isset( $_POST['time'], $_POST['df'] )){
 }
 
 function save_to_stats($stats){
-    $data = json_decode( file_get_contents("stats.json"), true );
+    $data = json_decode( file_get_contents("uploads/stats.json"), true );
     $data[  $stats['ip'] ] = $stats;
-    file_put_contents("stats.json", json_encode($data), LOCK_EX);
+    file_put_contents("uploads/stats.json", json_encode($data), LOCK_EX);
 }
 
 function output_stats_table(){
     global $servers;
     //display data
-    $data = json_decode( file_get_contents("stats.json"), true );
+    $data = json_decode( file_get_contents("uploads/stats.json"), true );
 
     ?>
     <table id="projects">
