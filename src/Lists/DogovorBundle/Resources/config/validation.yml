@@ -18,3 +18,14 @@ Lists\DogovorBundle\Entity\Dogovor:
                 message: The value {{ value }} is not a valid {{ type }}.
             - GreaterThan:
                 value: 0
+
+Lists\DogovorBundle\Entity\DopDogovor:
+    properties:
+        number:
+            - NotBlank: ~
+        subject:
+            - NotBlank: ~
+        startdatetime:
+            - NotBlank: ~
+        activedatetime:
+            - NotBlank: ~
