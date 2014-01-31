@@ -1,13 +1,52 @@
-{% if items|length %}
+<table class="table table-striped table-bordered table-advance table-hover">
+    <thead>
+        <tr>
+            <th>{% trans %}ID{% endtrans %} </th>
+            <th>{% trans %}Dop Dogovor Type{% endtrans %} </th>
+            <th>{% trans %}Number{% endtrans %} </th>
+            <th>{% trans %}Startdatetime{% endtrans %} </th>
+            <th>{% trans %}Activedatetime{% endtrans %} </th>
+            <th>{% trans %}Subject{% endtrans %} </th>
+            <th>{% trans %}Status{% endtrans %} </th>
+            <th>{% trans %}Creator{% endtrans %} </th>
+            <th>{% trans %}Saller{% endtrans %} </th>
+            <th>{% trans %}Total summ{% endtrans %} </th>
+            <th>{% trans %}File{% endtrans %} </th>
+            <th>{% trans %}Actions{% endtrans %} </th>
+        </tr>
+    </thead>
+    <tbody>
     {% for item in items %}
-        {{ item.id }}
-        {{ item.number }}
-        {{ item.subject }}
-        {% if item.filepath %}
-            <a href="/uploads/dogovor/{{ item.filepath }}" target="_blank">
-                {% trans %}File{% endtrans %}
-            </a>
-        {% endif %}
-        <br />
+        <tr>
+            <td>{{ item.id }}</td>
+            <td></td>
+            <td>{{ item.number }}</td>
+            <td>{{ item.startdatetime|date('d.m.Y') }}</td>
+            <td>{{ item.activedatetime|date('d.m.Y') }}</td>
+            <td>{{ item.subject }}</td>
+            <td>
+                {% if item.dopDogovorIsActive %}
+                    {% trans from 'messages'%}Active{% endtrans %}
+                {% else %}
+                    {% trans from 'messages'%}Not Active{% endtrans %}
+                {% endif %}
+            </td>
+            <td>{{ item.creatorFullName }}</td>
+            <td>{{ item.sallerFullName }}</td>
+            <td>{{ item.total }}</td>
+            <td>
+                {% if item.filepath %}
+                    <a href="/uploads/dogovor/{{ item.filepath }}" target="_blank">
+                        {% trans %}File{% endtrans %}
+                    </a>
+                {% endif %}
+            </td>
+            <td></td>
+
+        </tr>
     {% endfor %}
+    </tbody>
+</table>
+    {% if items|length %}
+
 {% endif %}

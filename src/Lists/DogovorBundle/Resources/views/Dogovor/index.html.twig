@@ -51,11 +51,16 @@
             <thead>
             <tr>
                 <th>{% trans %}ID{% endtrans %} </th>
-                <th>{% trans %}Name{% endtrans %} </th>
-                <th>{% trans %}Organization name{% endtrans %} </th>
                 <th>{% trans %}Number{% endtrans %} </th>
+                <th>{% trans %}Organization name{% endtrans %} </th>
+                <th>{% trans %}Customer name{% endtrans %} </th>
+                <th>{% trans %}Performer name{% endtrans %} </th>
                 <th>{% trans %}Startdatetime{% endtrans %} </th>
                 <th>{% trans %}Stopdatetime{% endtrans %} </th>
+                <th>{% trans %}Prolongation{% endtrans %} </th>
+                <th>{% trans %}Status{% endtrans %} </th>
+                <th>{% trans %}Subject{% endtrans %} </th>
+                <th>{% trans %}Type{% endtrans %} </th>
             </tr>
             </thead>
             <tbody>
@@ -66,11 +71,28 @@
                             {{ item.dogovorId|e }}
                         </a>
                     </td>
-                    <td>{{ item.dogovorName|e }}</td>
-                    <td>{{ item.organizationName|e }}</td>
                     <td>{{ item.dogovorNumber|e }}</td>
+                    <td>{{ item.organizationName|e }}</td>
+                    <td>{{ item.customerName|e }}</td>
+                    <td>{{ item.performerName|e }}</td>
                     <td>{{ item.dogovorStartdatetime|date('d.m.Y') }}</td>
                     <td>{{ item.dogovorStopdatetime|date('d.m.Y') }}</td>
+                    <td>
+                        {% if item.dogovorProlongation %}
+                            {% trans from 'messages'%}Yes{% endtrans %}
+                        {% else %}
+                            {% trans from 'messages'%}No{% endtrans %}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if item.dogovorIsActive %}
+                            {% trans from 'messages'%}Active{% endtrans %}
+                        {% else %}
+                            {% trans from 'messages'%}Not Active{% endtrans %}
+                        {% endif %}
+                    </td>
+                    <td>{{ item.dogovorSubject|e }}</td>
+                    <td>{{ item.dogovorType|e }}</td>
                 </tr>
             {% endfor %}
             </tbody>

@@ -52,11 +52,16 @@ class DogovorRepository extends EntityRepository
     {
         $sql
             ->select('d.id as dogovorId')
-            ->addSelect('d.name as dogovorName')
             ->addSelect('d.number as dogovorNumber')
             ->addSelect('d.startdatetime as dogovorStartdatetime')
             ->addSelect('d.stopdatetime as dogovorStopdatetime')
+            ->addSelect('d.prolongation as dogovorProlongation')
             ->addSelect('o.name as organizationName')
+            ->addSelect('customer.name as customerName')
+            ->addSelect('performer.name as performerName')
+            ->addSelect('d.isActive as dogovorIsActive')
+            ->addSelect('d.subject as dogovorSubject')
+            ->addSelect('type.name as dogovorType')
         ;
     }
 
@@ -80,7 +85,11 @@ class DogovorRepository extends EntityRepository
     public function processBaseQuery($sql)
     {
         $sql
-            ->leftJoin('d.organization', 'o');
+            ->leftJoin('d.organization', 'o')
+            ->leftJoin('d.customer', 'customer')
+            ->leftJoin('d.performer', 'performer')
+            ->leftJoin('d.dogovorType', 'type')
+        ;
             /*->leftJoin('o.city', 'c')
             ->leftJoin('c.region', 'r');*/
     }

@@ -344,3 +344,36 @@ WHERE
 
 +++++++++++++++++
 
+UPDATE
+	dogovor
+SET
+	customer_id = organization_id,
+	performer_id = 23
+WHERE
+	company_role_id in (20,21,23);
+
+UPDATE
+	dogovor
+SET
+	customer_id = 23,
+	performer_id = organization_id
+WHERE
+	company_role_id = 22;
+
+UPDATE
+	dogovor
+SET
+	customer_id = organization_id,
+	performer_id = 23
+WHERE
+	company_role_id is null AND
+	dogovor_type_id in (13, 14);
+
+UPDATE
+	dogovor
+SET
+	prolongation_date = stopdatetime
+WHERE
+	prolongation_date IS NULL;
+
+++++++++++
