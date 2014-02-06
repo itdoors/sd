@@ -186,16 +186,16 @@
         <tr> {# 7 #}
             <td>{% trans %}Is Active{% endtrans %}</td>
             <td>
-                {% set isActive  = dogovor.isActive = 'Yes' : 'No' %}
+                {#{% set isActive  = dogovor.isActive = 'Yes' : 'No' %}
                 <a href="#" id="isActive" data-type="select" data-pk="{{ dogovor.id }}" data-value="{{ isActive|trans }}" data-placement="right" data-original-title="{% trans %}Is Active{% endtrans %}">
                     {{ isActive|trans }}
-                </a>
+                </a>#}
             </td>
             <td>{% trans %}Dogovot type{% endtrans %}</td>
             <td>
-                <a href="#" id="dogovorTypeId" data-type="select2" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.type }}" data-placement="right" data-original-title="{% trans %}Enter Dogovor Type{% endtrans %}">
+               {# <a href="#" id="dogovorTypeId" data-type="select2" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.type }}" data-placement="right" data-original-title="{% trans %}Enter Dogovor Type{% endtrans %}">
                     {{ dogovor.type }}
-                </a>
+                </a>#}
             </td>
         </tr>
         </tbody>
