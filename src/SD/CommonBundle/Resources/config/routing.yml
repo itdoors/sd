@@ -90,6 +90,10 @@ sd_common_ajax_organization_type:
     pattern:  /ajax/organization_type
     defaults: { _controller: SDCommonBundle:Ajax:organizationType }
 
+sd_common_ajax_dogovor_type:
+    pattern:  /ajax/dogovor_type
+    defaults: { _controller: SDCommonBundle:Ajax:dogovorType }
+
 sd_common_ajax_organization_group:
     pattern:  /ajax/organization_group
     defaults: { _controller: SDCommonBundle:Ajax:organizationGroup }

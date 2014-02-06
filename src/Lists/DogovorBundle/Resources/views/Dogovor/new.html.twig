@@ -352,6 +352,12 @@
                         {{ form_widget(form.file) }}
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form_label(form.isActive, 'Is Active', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.isActive, {'attr': {'class': 'form-control', 'placeholder': 'Is Active'}}) }}
+                    </div>
+                </div>
                 <!--/span-->
             </div>
             <!--/row-->

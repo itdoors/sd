@@ -1004,4 +1004,86 @@ class Dogovor
     {
         return $this->organizationId;
     }
+
+    /**
+     * Sets startdatetime from startdatetimeString
+     *
+     * @param string $startdatetimeString
+     */
+    public function setStartdatetimeString($startdatetimeString)
+    {
+        if ($startdatetimeString)
+        {
+            $this->setStartdatetime(new \DateTime($startdatetimeString));
+        }
+    }
+
+    /**
+     * Sets stopdatetime from stopdatetimeString
+     *
+     * @param string $stopdatetimeString
+     */
+    public function setStopdatetimeString($stopdatetimeString)
+    {
+        if ($stopdatetimeString)
+        {
+            $this->setStopdatetime(new \DateTime($stopdatetimeString));
+        }
+    }
+    /**
+     * @var integer
+     */
+    private $cityId;
+
+
+    /**
+     * Set cityId
+     *
+     * @param integer $cityId
+     * @return Dogovor
+     */
+    public function setCityId($cityId)
+    {
+        $this->cityId = $cityId;
+    
+        return $this;
+    }
+
+    /**
+     * Get cityId
+     *
+     * @return integer 
+     */
+    public function getCityId()
+    {
+        return $this->cityId;
+    }
+    /**
+     * @var integer
+     */
+    private $dogovorTypeId;
+
+
+    /**
+     * Set dogovorTypeId
+     *
+     * @param integer $dogovorTypeId
+     * @return Dogovor
+     */
+    public function setDogovorTypeId($dogovorTypeId)
+    {
+        $this->dogovorTypeId = $dogovorTypeId;
+    
+        return $this;
+    }
+
+    /**
+     * Get dogovorTypeId
+     *
+     * @return integer 
+     */
+    public function getDogovorTypeId()
+    {
+        return $this->dogovorTypeId;
+    }
 }

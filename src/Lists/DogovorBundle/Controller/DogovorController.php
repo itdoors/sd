@@ -94,7 +94,9 @@ class DogovorController extends BaseController
         /** @var \Lists\DogovorBundle\Entity\Dogovor $object */
         $object = $this->getDoctrine()
             ->getRepository('ListsDogovorBundle:Dogovor')
-            ->find($id);
+            ->getDogovorById($id);
+
+        //$object['isActive'] = '';
 
         return $this->render('ListsDogovorBundle:' . $this->baseTemplate . ':show.html.twig', array(
             'dogovor' => $object,

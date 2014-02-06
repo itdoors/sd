@@ -23,9 +23,19 @@ class DogovorDepartmentRepository extends EntityRepository
     public function getAllByDogovorIdQuery($dogovorId)
     {
         $query = $this->createQueryBuilder('dd')
+            ->select('dd.id as id')
+            ->addSelect('dd.createdatetime as createdatetime')
+            ->addSelect('dogovor.number as dogovorNumber')
+            ->addSelect("CONCAT(CONCAT(dopDogovor.id, ' '), dopDogovor.number) as dopDogovorString")
+            ->addSelect("CONCAT(CONCAT(city.name, '|'), d.address) as department")
+            ->addSelect("CONCAT(CONCAT(user.lastName, ' '), user.firstName) as creatorFullName")
+            ->addSelect('dd.comment as comment')
+            ->leftJoin('dd.dogovor', 'dogovor')
+            ->leftJoin('dd.dopDogovor', 'dopDogovor')
+            ->leftJoin('dd.department', 'd')
+            ->leftJoin('d.city', 'city')
+            ->leftJoin('dd.user', 'user')
             ->where('dd.dogovorId = :dogovorId')
-            /*->leftJoin('dd.department', 'd')
-            ->leftJoin('d.city', 'city')*/
             ->setParameter(':dogovorId', $dogovorId)
             ->getQuery();
 

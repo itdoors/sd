@@ -34,6 +34,14 @@ class DopDogovorRepository extends EntityRepository
             ->addSelect('dd.total as total')
             ->addSelect("CONCAT(CONCAT(creator.lastName, ' '), creator.firstName) as creatorFullName")
             ->addSelect("CONCAT(CONCAT(saller.lastName, ' '), saller.firstName) as sallerFullName")
+            ->addSelect('(
+                SELECT
+                    COUNT(ddd.id) as countId
+                FROM
+                    ListsDogovorBundle:DogovorDepartment ddd
+                WHERE
+                    ddd.dopDogovorId = dd.id
+                ) as departmentCount')
             ->leftJoin('dd.user', 'creator')
             ->leftJoin('dd.saller', 'saller')
             ->where('dd.dogovorId = :dogovorId')

@@ -134,4 +134,41 @@ class DogovorRepository extends EntityRepository
             }
         }
     }
+
+    /**
+     * Return dogovor show info by id
+     *
+     * @param int $id
+     *
+     * @return mixed[]
+     */
+    public function getDogovorById($id)
+    {
+        return $this->createQueryBuilder('d')
+            ->select('d.id as id')
+            ->addSelect('d.number as number')
+            ->addSelect('d.subject as subject')
+            ->addSelect('d.filepath as filepath')
+            ->addSelect('d.prolongation as prolongation')
+            ->addSelect('d.startdatetime as startdatetime')
+            ->addSelect('d.stopdatetime as stopdatetime')
+            ->addSelect('dogovorType.name as type')
+            ->addSelect('customer.id as customerId')
+            ->addSelect('performer.id as performerId')
+            ->addSelect('organization.id as organizationId')
+            ->addSelect('city.id as cityId')
+            ->addSelect('customer.name as customerName')
+            ->addSelect('performer.name as performerName')
+            ->addSelect('organization.name as organizationName')
+            ->addSelect('city.name as cityName')
+            ->leftJoin('d.customer', 'customer')
+            ->leftJoin('d.performer', 'performer')
+            ->leftJoin('d.organization', 'organization')
+            ->leftJoin('d.city', 'city')
+            ->leftJoin('d.dogovorType', 'dogovorType')
+            ->where('d.id = :id')
+            ->setParameter(':id', $id)
+            ->getQuery()
+            ->getSingleResult();
+    }
 }

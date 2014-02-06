@@ -19,7 +19,7 @@
     {% for item in items %}
         <tr>
             <td>{{ item.id }}</td>
-            <td></td>
+            <td>{{ item.dopDogovorType }}</td>
             <td>{{ item.number }}</td>
             <td>{{ item.startdatetime|date('d.m.Y') }}</td>
             <td>{{ item.activedatetime|date('d.m.Y') }}</td>
@@ -41,8 +41,17 @@
                     </a>
                 {% endif %}
             </td>
-            <td></td>
-
+            <td>
+                {% if not item.departmentCount %}
+                    <a
+                        class="ajax-delete"
+                        href="javascript:;"
+                        data-params='{"model":"DopDogovor","id":{{ item.id }}}'
+                    >
+                        {% trans %}Delete{% endtrans %}
+                    </a>
+                {% endif %}
+            </td>
         </tr>
     {% endfor %}
     </tbody>

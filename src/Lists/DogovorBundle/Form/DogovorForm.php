@@ -88,20 +88,9 @@ class DogovorForm extends AbstractType
                 ),
                 'empty_value' => false
             ))
-            /*
-
-            ->add('isActive')
-
-            ->add('maturity')
-            ->add('completionNotice')
-            ->add('launchDate')
-            ->add('summMonthVat')
-            ->add('plannedPf1')
-            ->add('plannedPf1Percent')
-            ->add('city')
-            ->add('companyRole')
-            ->add('stuff')
-            ->add('user')*/
+            ->add('isActive', null, array(
+                'data' => true
+            ))
         ;
 
         $builder
