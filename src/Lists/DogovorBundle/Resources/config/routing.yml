@@ -15,6 +15,10 @@ lists_dogovor_dogovor_filter:
     pattern:  /lists/dogovor/dogovor/filter
     defaults: { _controller: ListsDogovorBundle:Dogovor:filter }
 
+lists_dogovor_ajax_element:
+    pattern:  /lists/dogovor/ajax/element/{id}
+    defaults: { _controller: ListsDogovorBundle:Dogovor:element }
+
 #DOP DOGOVOR ROUTE
 lists_dogovor_dopdogovor_list:
     pattern:  /lists/dogovor/dopdogovor/list/{dogovorId}

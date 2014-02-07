@@ -67,4 +67,19 @@ class DogovorDepartmentRepository extends EntityRepository
 
         return sizeof($elements) ? true: false;
     }
+
+    /**
+     * Returns Query for form select depending on dogovorId
+     *
+     * @param int $dogovorId
+     *
+     * @return Query $query
+     */
+    public function getDopDogovorQueryByDogovorId($dogovorId)
+    {
+        return  $repository->createQueryBuilder('dd')
+                    ->where('dd.dogovorId = :dogovorId')
+                    ->setParameter(':dogovorId', $dogovorId);
+
+    }
 }

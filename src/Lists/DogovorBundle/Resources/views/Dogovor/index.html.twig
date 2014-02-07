@@ -20,12 +20,18 @@
 {% block css_page_level_plugin %}
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}} " />
 {% endblock %}
 
 {% block js_page_level_plugins %}
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
 {% endblock %}
+
 {% block body %}
     <div class="row">
         <div class="col-md-12">
@@ -41,6 +47,28 @@
             }
         )
     }}
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+        });
+    </script>
+
+    <div id="form_dogovor_history" class="modal fade" role="basic" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">{% trans from 'ListsDogovorBundle' %}Proplongation{% endtrans %}</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="dogovorHistoryFormTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+    </div>
 
     <div class="table-responsive">
         <div class="navigation">
@@ -58,41 +86,29 @@
                 <th>{% trans %}Startdatetime{% endtrans %} </th>
                 <th>{% trans %}Stopdatetime{% endtrans %} </th>
                 <th>{% trans %}Prolongation{% endtrans %} </th>
+                <th>{% trans %}Prolongation Date{% endtrans %} </th>
                 <th>{% trans %}Status{% endtrans %} </th>
                 <th>{% trans %}Subject{% endtrans %} </th>
                 <th>{% trans %}Type{% endtrans %} </th>
+                <th>{% trans %}Actions{% endtrans %} </th>
             </tr>
             </thead>
             <tbody>
             {% for item in pagination %}
-                <tr {% if loop.index is odd %}class="color"{% endif %}>
-                    <td>
-                        <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_dogovor_show', { id: item.dogovorId }) }}">
-                            {{ item.dogovorId|e }}
-                        </a>
-                    </td>
-                    <td>{{ item.dogovorNumber|e }}</td>
-                    <td>{{ item.organizationName|e }}</td>
-                    <td>{{ item.customerName|e }}</td>
-                    <td>{{ item.performerName|e }}</td>
-                    <td>{{ item.dogovorStartdatetime|date('d.m.Y') }}</td>
-                    <td>{{ item.dogovorStopdatetime|date('d.m.Y') }}</td>
-                    <td>
-                        {% if item.dogovorProlongation %}
-                            {% trans from 'messages'%}Yes{% endtrans %}
-                        {% else %}
-                            {% trans from 'messages'%}No{% endtrans %}
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if item.dogovorIsActive %}
-                            {% trans from 'messages'%}Active{% endtrans %}
-                        {% else %}
-                            {% trans from 'messages'%}Not Active{% endtrans %}
-                        {% endif %}
-                    </td>
-                    <td>{{ item.dogovorSubject|e }}</td>
-                    <td>{{ item.dogovorType|e }}</td>
+                <tr {% if loop.index is odd %}class="color"{% endif %}
+                    id="dogovorItem{{ item.dogovorId|e }}"
+                    data-url="{{ path('lists_' ~ baseRoutePrefix ~ '_ajax_element', {
+                        id: item.dogovorId,
+                    }) }}"
+                >
+                    {{  include(
+                        'ListsDogovorBundle:' ~ baseTemplate ~ ':element.html.twig',
+                            {
+                                item: item,
+                                baseRoutePrefix: baseRoutePrefix,
+                            }
+                        )
+                    }}
                 </tr>
             {% endfor %}
             </tbody>

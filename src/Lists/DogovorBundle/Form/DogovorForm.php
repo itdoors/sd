@@ -3,6 +3,7 @@
 namespace Lists\DogovorBundle\Form;
 
 use Lists\DogovorBundle\Entity\Dogovor;
+use Lists\DogovorBundle\Entity\DogovorRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
@@ -32,6 +33,9 @@ class DogovorForm extends AbstractType
 
         /** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
         $lr = $this->container->get('lists_lookup.repository');
+
+        /** @var DogovorRepository $dr */
+        $dr = $this->container->get('lists_dogovor.repository');
 
         $builder
             ->add('customer', 'hidden_entity', array(
@@ -82,10 +86,7 @@ class DogovorForm extends AbstractType
                 'required' => false
             ))
             ->add('mashtab','choice', array(
-                'choices'   => array(
-                    'm_local' => 'Local',
-                    'm_global' => 'Global'
-                ),
+                'choices'   => $dr->getMashtabChoices(),
                 'empty_value' => false
             ))
             ->add('isActive', null, array(

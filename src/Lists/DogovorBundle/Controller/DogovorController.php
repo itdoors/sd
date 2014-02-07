@@ -2,6 +2,8 @@
 
 namespace Lists\DogovorBundle\Controller;
 
+use Lists\DogovorBundle\Entity\DogovorHistoryRepository;
+use Lists\DogovorBundle\Entity\DogovorRepository;
 use SD\CommonBundle\Controller\BaseFilterController as BaseController;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -91,17 +93,44 @@ class DogovorController extends BaseController
      */
     public function showAction($id)
     {
+        /** @var DogovorRepository $dogovorRepository */
+        $dogovorRepository = $this->get('lists_dogovor.repository');
+
         /** @var \Lists\DogovorBundle\Entity\Dogovor $object */
-        $object = $this->getDoctrine()
-            ->getRepository('ListsDogovorBundle:Dogovor')
+        $object = $dogovorRepository
             ->getDogovorById($id);
 
-        //$object['isActive'] = '';
+        $object['isActiveChoices'] = $dogovorRepository->getIsActiveChoices();
+        $object['prolongationChoices'] = $dogovorRepository->getProlongationChoices();
+        $object['mashtabChoices'] = $dogovorRepository->getMashtabChoices();
 
         return $this->render('ListsDogovorBundle:' . $this->baseTemplate . ':show.html.twig', array(
             'dogovor' => $object,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
+        ));
+    }
+
+    /**
+     * Renders single element of dogovor list
+     *
+     * @param int $id
+     *
+     * @return string
+     */
+    public function elementAction($id)
+    {
+        /** @var DogovorRepository $dr */
+        $dr = $this->get('lists_dogovor.repository');
+
+        $itemQuery = $dr->getAllForDogovorQuery(array(), $id);
+
+        $item = $itemQuery->getSingleResult();
+
+        return $this->render('ListsDogovorBundle:' . $this->baseTemplate . ':element.html.twig', array(
+            'item' => $item,
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix
         ));
     }
 }

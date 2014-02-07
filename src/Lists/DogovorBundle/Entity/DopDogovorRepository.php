@@ -50,4 +50,19 @@ class DopDogovorRepository extends EntityRepository
 
         return $query;
     }
+
+    /**
+     * Returns Query for form select depending on dogovorId
+     *
+     * @param int $dogovorId
+     *
+     * @return Query $query
+     */
+    public function getDopDogovorQueryByDogovorId($dogovorId)
+    {
+        return  $this->createQueryBuilder('dd')
+            ->where('dd.dogovorId = :dogovorId')
+            ->setParameter(':dogovorId', $dogovorId);
+
+    }
 }

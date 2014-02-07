@@ -3,11 +3,41 @@ parameters:
     lists_dogovor.dogovor.form.class: Lists\DogovorBundle\Form\DogovorForm
     lists_dogovor.dogovor.department.form.class: Lists\DogovorBundle\Form\DogovorDepartmentForm
     lists_dogovor.dopdogovor.form.class: Lists\DogovorBundle\Form\DopDogovorForm
+    lists_dogovor.dogovor.history.form.class: Lists\DogovorBundle\Form\DogovorHistoryForm
+
+    lists_dogovor.repository.class: Lists\DogovorBundle\Entity\DogovorRepository
+    lists_dogovor.repository.entity: Lists\DogovorBundle\Entity\Dogovor
+
+    lists_dogovor.dopdogovor.repository.class: Lists\DogovorBundle\Entity\DopDogovorRepository
+    lists_dogovor.dopdogovor.repository.entity: Lists\DogovorBundle\Entity\DopDogovor
+
+    lists_dogovor.history.repository.class: Lists\DogovorBundle\Entity\DogovorHistoryRepository
+    lists_dogovor.history.repository.entity: Lists\DogovorBundle\Entity\DogovorHistory
 
     lists_dogovor.department.repository.class: Lists\DogovorBundle\Entity\DogovorDepartmentRepository
     lists_dogovor.department.repository.entity: Lists\DogovorBundle\Entity\DogovorDepartment
 
 services:
+
+    lists_dogovor.repository:
+        class: %lists_dogovor.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_dogovor.repository.entity% ]
+        calls:
+            - [setTranslator, ["@translator"]]
+
+    lists_dogovor.dopdogovor.repository:
+        class: %lists_dogovor.dopdogovor.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_dogovor.dopdogovor.repository.entity% ]
+
+    lists_dogovor.history.repository:
+        class: %lists_dogovor.history.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_dogovor.history.repository.entity% ]
 
     lists_dogovor.department.repository:
         class: %lists_dogovor.department.repository.class%
@@ -38,3 +68,9 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: dopDogovorForm }
+
+    lists_dogovor.form.dogovorHistoryForm:
+        class: %lists_dogovor.dogovor.history.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: dogovorHistoryForm }

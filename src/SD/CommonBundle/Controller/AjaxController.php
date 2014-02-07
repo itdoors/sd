@@ -3,8 +3,10 @@
 namespace SD\CommonBundle\Controller;
 
 use Lists\DepartmentBundle\Entity\DepartmentsRepository;
+use Lists\DogovorBundle\Entity\Dogovor;
 use Lists\DogovorBundle\Entity\DogovorDepartment;
 use Lists\DogovorBundle\Entity\DogovorDepartmentRepository;
+use Lists\DogovorBundle\Entity\DogovorHistory;
 use Lists\DogovorBundle\Entity\DopDogovor;
 use Lists\DogovorBundle\Entity\DopDogovorRepository;
 use Lists\HandlingBundle\Entity\HandlingMessage;
@@ -17,6 +19,8 @@ use Symfony\Component\Form\Form;
 use SD\UserBundle\Entity\User;
 use Lists\OrganizationBundle\Entity\Organization;
 use Doctrine\DBAL\Connection;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationList;
 
 /**
  * AjaxController class.
@@ -32,7 +36,8 @@ class AjaxController extends Controller
 {
     protected $modelRepositoryDependence = array(
         'ModelContact' => 'ListsContactBundle:ModelContact',
-        'User' => 'SDUserBundle:User'
+        'User' => 'SDUserBundle:User',
+        'Dogovor' => 'ListsDogovorBundle:Dogovor'
     );
 
     /**
@@ -784,6 +789,29 @@ class AjaxController extends Controller
     }
 
     /**
+     * Get first error message
+     *
+     * @param \Symfony\Component\Validator\ConstraintViolationList $errors
+     * @param string $field
+     *
+     * @return string
+     */
+    public function getErrorByField(\Symfony\Component\Validator\ConstraintViolationList $errors, $field)
+    {
+        $message = '';
+
+        /** @var ConstraintViolation[] $errors */
+        foreach ($errors as $error) {
+            if ($error->getPropertyPath() == $field)
+            {
+                $message = $error->getMessage();
+            }
+        }
+
+        return $message;
+    }
+
+    /**
      * Renders/validates ajax form
      *
      * @param Request $request
@@ -896,6 +924,76 @@ class AjaxController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($organization);
+        $em->flush();
+
+        return true;
+    }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function dogovorHistoryFormSave($form, $user, $request)
+    {
+        /** @var Dogovor $dogovor */
+        $dogovor = $form->getData();
+
+        $requestParams = $request->request->get($form->getName());
+
+        $user = $this->getUser();
+
+        $dogovorHistory = new DogovorHistory();
+
+        $dogovorHistory->setDogovor($dogovor);
+        $dogovorHistory->setUser($user);
+        $dogovorHistory->setCreatedatetime(new \DateTime());
+
+        $prolongationDateFrom = new \DateTime();
+
+        $prolongationDateTo = new \DateTime($requestParams['prolongationDateTo']);
+
+        $dogovor->setProlongationDate($prolongationDateTo);
+
+        if ($dogovor->getProlongation())
+        {
+            // set stop date to prolongation date
+            // set prolongation date to $request['prolongationDateTo']
+
+            // Set prolongation date to
+            if ($dogovor->getProlongationDate())
+            {
+                $prolongationDateFrom = $dogovor->getProlongationDate();
+            }
+            elseif ($dogovor->getStopdatetime())
+            {
+                $prolongationDateFrom = $dogovor->getStopdatetime();
+            }
+            elseif ($dogovor->getStartdatetime())
+            {
+                $prolongationDateFrom = $dogovor->getStartdatetime();
+            }
+        }
+        else
+        {
+            /** @var DopDogovorRepository $ddr */
+            $ddr = $this->get('lists_dogovor.dopdogovor.repository');
+
+            $dopDogovor = $ddr->find($requestParams['dopDogovor']);
+
+            $dogovorHistory->setDopDogovor($dopDogovor);
+        }
+
+        $dogovorHistory->setProlongationDateFrom($prolongationDateFrom);
+        $dogovorHistory->setProlongationDateTo($prolongationDateTo);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($dogovor);
+        $em->persist($dogovorHistory);
         $em->flush();
 
         return true;
@@ -1361,9 +1459,12 @@ class AjaxController extends Controller
         $errors = $validator->validate($object, array('edit'));
 
         if (sizeof($errors)) {
-            $return = $this->getFirstError($errors);
+            $return = $this->getErrorByField($errors, $name);
 
-            return new Response($return, 406);
+            if ($return)
+            {
+                return new Response($return, 406);
+            }
         }
 
         $em = $this->getDoctrine()->getManager();

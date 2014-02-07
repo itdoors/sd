@@ -1,0 +1,42 @@
+<td>
+    <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_dogovor_show', { id: item.dogovorId }) }}">
+        {{ item.dogovorId|e }}
+    </a>
+</td>
+<td>{{ item.dogovorNumber|e }}</td>
+<td>{{ item.organizationName|e }}</td>
+<td>{{ item.customerName|e }}</td>
+<td>{{ item.performerName|e }}</td>
+<td>{{ item.dogovorStartdatetime|date('d.m.Y') }}</td>
+<td>{{ item.dogovorStopdatetime|date('d.m.Y') }}</td>
+<td>
+    {% if item.dogovorProlongation %}
+        {% trans from 'messages'%}Yes{% endtrans %}
+    {% else %}
+        {% trans from 'messages'%}No{% endtrans %}
+    {% endif %}
+</td>
+<td>{{ item.dogovorProlongationDate|date('d.m.Y') }}</td>
+<td>
+    {% if item.dogovorIsActive %}
+        {% trans from 'messages'%}Active{% endtrans %}
+    {% else %}
+        {% trans from 'messages'%}Not Active{% endtrans %}
+    {% endif %}
+</td>
+<td>{{ item.dogovorSubject|e }}</td>
+<td>{{ item.dogovorType|e }}</td>
+<td>
+    <a class="btn green ajax-form"
+       data-toggle="modal"
+       href="#form_dogovor_history"
+       data-target_holder="dogovorHistoryFormTpl"
+       data-form_name="dogovorHistoryForm"
+       data-post_function="updateList"
+       data-post_target_id="dogovorItem{{ item.dogovorId }}"
+       data-model="Dogovor"
+       data-model-id="{{ item.dogovorId }}"
+    >
+        {% trans %}Prolongate{% endtrans %}
+    </a>
+</td>
