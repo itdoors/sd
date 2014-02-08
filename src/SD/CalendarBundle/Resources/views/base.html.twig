@@ -9,8 +9,14 @@
             firstDay: 1,
             events: '{{ url }}',
             loading: function(isLoading){
-                var opacity = isLoading ? '0.2' : '1';
-                $('div.calendar').css('opacity', opacity);
+                if (isLoading)
+                {
+                    SD.blockUI($('div.calendar'));
+                }
+                else
+                {
+                    SD.unblockUI($('div.calendar'));
+                }
             },
             editable: true,
             droppable: true,

@@ -7,7 +7,9 @@ var SD = (function() {
         ajaxFormCancelBtnClass: 'sd-cancel-btn',
         ajaxMoreInfoClass: 'more-info',
         ajaxFormUrl: '',
-        ajaxDeleteUrl: ''
+        ajaxDeleteUrl: '',
+        assetsDir: '',
+        loadingImgPath: ''
     };
 
     function SD(){
@@ -18,6 +20,8 @@ var SD = (function() {
     {
         this.params = $.extend(defaults, options);
 
+        this.params.loadingImgPath = this.params.assetsDir + 'templates/metronic/img/ajax-loading.gif';
+
         this.initAjaxForm();
 
         this.initAjaxDelete();
@@ -27,11 +31,11 @@ var SD = (function() {
 
     SD.prototype.initAjaxForm = function()
     {
-        var self = this;
+        var selfSD = this;
 
         var target;
 
-        $('.' + self.params.ajaxFormClass).live('click', function(e){
+        $('.' + selfSD.params.ajaxFormClass).live('click', function(e){
             e.preventDefault();
 
             var selfAjaxFormClassObject = $(this);
@@ -53,7 +57,7 @@ var SD = (function() {
 
             if (!targetId)
             {
-                targetId = 'targerform' + self.random();
+                targetId = 'targerform' + selfSD.random();
 
                 target = $('<div></div>').attr('id', targetId).css('display', 'none');
 
@@ -71,7 +75,7 @@ var SD = (function() {
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
-                url: self.params.ajaxFormUrl,
+                url: selfSD.params.ajaxFormUrl,
                 data: {
                     formName: formName,
                     defaultData: defaultData,
@@ -83,11 +87,11 @@ var SD = (function() {
                 },
                 beforeSend: function ()
                 {
-                    selfAjaxFormClassObject.css('opacity', '0.5');
+                    selfSD.blockUI(selfAjaxFormClassObject);
                 },
-                success: function(response) {
-
-                    selfAjaxFormClassObject.css('opacity', '1');
+                success: function(response)
+                {
+                    selfSD.unblockUI(selfAjaxFormClassObject);
 
                     if (response.error)
                     {
@@ -106,7 +110,7 @@ var SD = (function() {
             })
         })
 
-        $('.' + self.params.ajaxFormEntityClass).live('submit', function(e){
+        $('.' + selfSD.params.ajaxFormEntityClass).live('submit', function(e){
 
             e.preventDefault();
 
@@ -116,13 +120,13 @@ var SD = (function() {
                 dataType: 'json',
                 beforeSend: function () {
 
-                    self.css('opacity', '0.5');
+                    selfSD.blockUI(self);
                 },
                 success: function(response) {
 
                     var target = $('#' + response.targetId);
 
-                    self.css('opacity', '1');
+                    selfSD.unblockUI(self);
 
                     if (response.error)
                     {
@@ -154,9 +158,9 @@ var SD = (function() {
 
         SD.prototype.initMoreInfo = function()
         {
-            var self = this;
+            var selfSD = this;
 
-            $('.' + self.params.ajaxMoreInfoClass).live('click', function(e){
+            $('.' + selfSD.params.ajaxMoreInfoClass).live('click', function(e){
                 e.preventDefault();
 
                 var selfAjaxMoreInfoObject = $(this);
@@ -179,16 +183,11 @@ var SD = (function() {
                     data: params,
                     beforeSend: function ()
                     {
-                        selfAjaxMoreInfoObject.css('opacity', '0.5');
+                        selfSD.blockUI(selfAjaxMoreInfoObject);
                     },
                     success: function(response) {
 
-                        selfAjaxMoreInfoObject.css('opacity', '1');
-
-                        /*if (response.error)
-                         {
-                         target.html(response.html);
-                         }*/
+                        selfSD.unblockUI(selfAjaxMoreInfoObject);
                         if (response.success)
                         {
                             target.html(response.html);
@@ -198,7 +197,7 @@ var SD = (function() {
             })
         };
 
-        $('.' + self.params.ajaxFormCancelBtnClass).live('click', function(e){
+        $('.' + selfSD.params.ajaxFormCancelBtnClass).live('click', function(e){
 
             e.preventDefault();
 
@@ -236,6 +235,8 @@ var SD = (function() {
 
     SD.prototype.updateList = function(targetId)
     {
+        var selfSD = this;
+
         var target = $('#' + targetId);
 
         var url = target.data('url');
@@ -246,11 +247,11 @@ var SD = (function() {
             url: url,
             data: params,
             beforeSend: function () {
-                target.css('opacity', '0.5');
+                selfSD.blockUI(target);
             },
             success: function (response) {
                 target.html(response);
-                target.css('opacity', '1');
+                selfSD.unblockUI(target);
             }
         });
     }
@@ -272,9 +273,8 @@ var SD = (function() {
 
             parentElement.css('opacity', '0.5');
 
-
             $.ajax({
-                url: selfSD.params.ajaxDeleteUrl,
+                url: selfSD.params.ajaxDeleteUrelativerl,
                 type: 'POST',
                 data: {
                     params: params
@@ -286,6 +286,36 @@ var SD = (function() {
             });
         })
     }
+
+    SD.prototype.blockUI = function (el, centerY) {
+        var selfSD = this;
+
+        if (el.height() <= 400) {
+            centerY = true;
+        }
+        el.block({
+            message: '<img src="' + selfSD.params.loadingImgPath + '" align="">',
+            centerY: centerY != undefined ? centerY : true,
+            css: {
+                top: '10%',
+                border: 'none',
+                padding: '2px',
+                backgroundColor: 'none'
+            },
+            overlayCSS: {
+                backgroundColor: '#FFF',
+                opacity: 0.5,
+                cursor: 'wait'
+            }
+        });
+    };
+
+    // wrapper function to  un-block element(finish loading)
+    SD.prototype.unblockUI = function (el, clean) {
+        el.css('position', '');
+        el.css('zoom', '');
+        el.unblock();
+    };
 
     return new SD();
 })();
