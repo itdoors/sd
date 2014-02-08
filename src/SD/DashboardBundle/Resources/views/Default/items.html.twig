@@ -3,11 +3,9 @@
 {% set masterRole = 'Sales' %}
 {% set isCrm = false %}
 
-
 {% if app.user.hasRole('ROLE_SALES') %}
     {% set isCrm = true %}
 {%  endif %}
-
 
 {% if app.user.hasRole('ROLE_SALESDISPATCHER') %}
     {% set masterRole = 'SalesDispatcher' %}
@@ -18,6 +16,8 @@
     {% set masterRole = 'SalesAdmin' %}
     {% set isCrm = true %}
 {%  endif %}
+
+{% set masterRoleRoute = masterRole|lower %}
 
 {% if app.user.hasRole('ROLE_CRM') %}
     <a href="{{ path('lists_organization_index') }}">
@@ -79,5 +79,7 @@
         </div>
     </div>
     {{ render(controller('ListsHandlingBundle:' ~ masterRole ~ ':List')) }}
-    {{ render(controller('SDCalendarBundle:' ~ masterRole ~ ':HandlingMessage')) }}
+    {{ include('SDCalendarBundle::base.html.twig', {
+        url: path('sd_calendar_' ~ masterRoleRoute ~ '_handling_message')
+    }) }}
 {% endif %}

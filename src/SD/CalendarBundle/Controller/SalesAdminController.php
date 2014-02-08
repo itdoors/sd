@@ -1,22 +1,30 @@
 <?php
 
 namespace SD\CalendarBundle\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Profiler\Profiler;
 
+/**
+ * Class SalesAdminController
+ */
 class SalesAdminController extends SalesDispatcherController
 {
 	protected $baseRoutePrefix = 'sales_admin';
 	protected $baseTemplate = 'SalesAdmin';
 
-	public function handlingMessageAction()
+	/**
+	 * Renders calendar for handlingMessage
+     */
+    public function handlingMessageAction(Request $request)
 	{
-		$user = $this->getUser();
+        $startTimestamp = $request->query->get('start');
+        $endTimestamp = $request->query->get('end');
 
-		$userIds = array($user->getId());
+        $events = $this->getEventsByUserIds(null, $startTimestamp, $endTimestamp);
 
-		$events = $this->getEventsByUserIds(null);
+        $response = new JsonResponse($events);
 
-		return $this->render('SDCalendarBundle::base.html.twig', array(
-			'events' => $events
-		));
+        return $response;
 	}
 }

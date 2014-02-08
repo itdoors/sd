@@ -11,8 +11,16 @@ parameters:
 
     lists_handling.createdate_range.validator.class: Lists\HandlingBundle\Validator\CreatedateRangeValidator
 
+    lists_handling.message.repository.class: Lists\HandlingBundle\Entity\HandlingMessageRepository
+    lists_handling.message.repository.entity: Lists\HandlingBundle\Entity\HandlingMessage
 
 services:
+    lists_handling.message.repository:
+        class: %lists_handling.message.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_handling.message.repository.entity% ]
+
     lists_handling.form.handlingSalesFilterForm:
         class: %lists_handling.sales.filter.form.class%
         arguments: [@service_container]

@@ -7,12 +7,10 @@
                 right:  'today month prev,next'
             },
             firstDay: 1,
-            events : {{ events|json_encode|raw }},
-            eventClick: function(event) {
-                if (event.url) {
-                    window.open(event.url);
-                    return false;
-                }
+            events: '{{ url }}',
+            loading: function(isLoading){
+                var opacity = isLoading ? '0.2' : '1';
+                $('div.calendar').css('opacity', opacity);
             },
             editable: true,
             droppable: true,

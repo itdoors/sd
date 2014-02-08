@@ -3,17 +3,26 @@
 namespace SD\CalendarBundle\Controller;
 
 use Lists\HandlingBundle\Entity\HandlingMessage;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class SalesAdminController
+ */
 class SalesDispatcherController extends SalesController
 {
 	protected $baseRoutePrefix = 'sales_dispatcher';
 	protected $baseTemplate = 'SalesDispatcher';
 
-	public function handlingMessageAction()
+    /**
+     * Renders calendar for handlingMessage for dispatcher
+     */
+    public function handlingMessageAction(Request $request)
 	{
-		$user = $this->getUser();
+        $startTimestamp = $request->query->get('start');
+        $endTimestamp = $request->query->get('end');
 
-		/** @var \Lists\TeamBundle\Entity\TeamRepository $teamRepository */
+        /** @var \Lists\TeamBundle\Entity\TeamRepository $teamRepository */
 		$teamRepository = $this->get('lists_team.repository');
 
 		/** @var \SD\UserBundle\Entity\User $user */
@@ -21,11 +30,9 @@ class SalesDispatcherController extends SalesController
 
 		$teamUserIds = $teamRepository->getMyTeamIdsByUser($user);
 
-		$events = $this->getEventsByUserIds($teamUserIds);
+		$events = $this->getEventsByUserIds($teamUserIds, $startTimestamp, $endTimestamp);
 
-		return $this->render('SDCalendarBundle::base.html.twig', array(
-			'events' => $events
-		));
+        return new Response(json_encode($events));
 	}
 
 	/**
@@ -39,8 +46,8 @@ class SalesDispatcherController extends SalesController
 	{
 		$start = $this->getEventStart($handlingMessage);
 
-		return (string)$handlingMessage->getUser()
-				. ' | '. (string) $handlingMessage->getType()
+		return (string)$handlingMessage['userFullName']
+				. ' | '. (string) $handlingMessage['typeName']
 				. ' (' . $start->format('H:i').')';
 	}
 }

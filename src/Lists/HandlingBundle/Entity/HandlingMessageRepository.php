@@ -2,8 +2,8 @@
 
 namespace Lists\HandlingBundle\Entity;
 
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * HandlingMessageRepository
@@ -50,6 +50,51 @@ class HandlingMessageRepository extends EntityRepository
 		return $sql
 			->getQuery()
 			->getResult();
+    }
+
+    /**
+     * get All messages
+     *
+     * @param int[] $userIds
+     * @param string $startTimestamp
+     * @param string $endTimestamp
+     *
+     * @return mixed[]
+     */
+    public function getAllMessages($userIds, $startTimestamp, $endTimestamp)
+    {
+        $sql = $this->createQueryBuilder('hm')
+            ->select('hm.id as id')
+            ->addSelect('hm.handling_id as handlingId')
+            ->addSelect('hm.createdate as createdate')
+            ->addSelect('type.name as typeName')
+            ->addSelect('type.slug as typeSlug')
+            ->addSelect("CONCAT(CONCAT(user.lastName, ' '), user.firstName) as userFullName")
+            ->leftJoin('hm.user', 'user')
+            ->leftJoin('hm.type', 'type')
+            ->where('hm.createdate >= :startTimestamp')
+            ->andWhere('hm.createdate <= :endTimestamp');
+
+        /*$sql
+            ->setParameter(':startTimestamp', new \DateTime(), \Doctrine\DBAL\Types\Type::DATETIME);*/
+
+        $dateTimeFrom = new \DateTime();
+        $dateTimeTo = new \DateTime();
+
+        $sql
+            ->setParameter(':startTimestamp', $dateTimeFrom->setTimestamp($startTimestamp), Type::DATETIME)
+            ->setParameter(':endTimestamp', $dateTimeTo->setTimestamp($endTimestamp), Type::DATETIME);
+
+        if ($userIds && sizeof($userIds))
+        {
+            $sql
+                ->andWhere('user.id in (:userIds)')
+                ->setParameter(':userIds', $userIds);
+        }
+
+        return $sql
+            ->getQuery()
+            ->getResult();
     }
 
     public function getAdvancedResult($from, $to)

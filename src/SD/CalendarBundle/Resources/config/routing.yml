@@ -1,10 +1,15 @@
 #SALES ROUTES
-lists_sales_calendar_index:
-    pattern:  /sales/calendar
-    defaults: { _controller: SDCalendarBundle:Sales:index }
+sd_calendar_sales_handlind_message:
+    pattern:  sd/calendar/ajax/sales/handlind_message
+    defaults: { _controller: SDCalendarBundle:Sales:HandlingMessage }
 
 
 #SALES DISPATCHER ROUTES
-lists_sales_dispatcher_calendar_index:
-    pattern:  /salesdispatcher/calendar
-    defaults: { _controller: SDCalendarBundle:Default:index }
+sd_calendar_salesdispatcher_handlind_message:
+    pattern:  sd/calendar/ajax/salesdispatcher/handlind_message
+    defaults: { _controller: SDCalendarBundle:SalesDispatcher:HandlingMessage }
+
+#SALES ADMIN ROUTES
+sd_calendar_salesadmin_handling_message:
+    pattern:  sd/calendar/ajax/salesadmin/handlind_message
+    defaults: { _controller: SDCalendarBundle:SalesAdmin:HandlingMessage }

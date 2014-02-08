@@ -2,45 +2,66 @@
 
 namespace SD\CalendarBundle\Controller;
 
+use Lists\HandlingBundle\Entity\HandlingMessageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Lists\HandlingBundle\Entity\HandlingMessage;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class SalesController
+ */
 class SalesController extends Controller
 {
 	protected $baseRoutePrefix = 'sales';
 	protected $baseTemplate = 'Sales';
 
+    /**
+     * Renders template holder for calendar
+     */
     public function indexAction()
     {
         return $this->render('SDCalendarBundle:' . $this->baseTemplate . ':index.html.twig');
     }
 
-    public function handlingMessageAction()
+    /**
+     * Returms base calendar template for handlingMessage for Sales
+     */
+    public function handlingMessageAction(Request $request)
     {
+        $startTimestamp = $request->query->get('start');
+        $endTimestamp = $request->query->get('end');
+
         $user = $this->getUser();
 
         $userIds = array($user->getId());
 
-		$events = $this->getEventsByUserIds($userIds);
+		$events = $this->getEventsByUserIds($userIds, $startTimestamp, $endTimestamp);
 
-        return $this->render('SDCalendarBundle::base.html.twig', array(
-            'events' => $events
-        ));
+        return new Response(json_encode($events));
     }
 
 	/**
 	 * Returns events depending on userIds and userRoles
 	 *
 	 * @param int[] $userIds
+     * @param string $startTimestamp
+     * @param string $endTimestamp
 	 *
 	 * @return mixed[]
 	 */
-	public function getEventsByUserIds($userIds)
+	public function getEventsByUserIds($userIds, $startTimestamp, $endTimestamp)
 	{
 		$events = array();
 
-		$handlingMessages = $this->getDoctrine()->getRepository('ListsHandlingBundle:HandlingMessage')
-			->getFutureMessages($userIds);
+        /** @var HandlingMessageRepository $handlingMessagesRepository */
+        $handlingMessagesRepository = $this->get('lists_handling.message.repository');
+
+        /*$handlingMessages = $handlingMessagesRepository
+            ->getFutureMessages($userIds);*/
+
+        $handlingMessages = $handlingMessagesRepository
+            ->getAllMessages($userIds, $startTimestamp, $endTimestamp);
 
 		foreach ($handlingMessages as $handlingMessage)
 		{
@@ -66,7 +87,7 @@ class SalesController extends Controller
 	{
 		$start = $this->getEventStart($handlingMessage);
 
-		return (string) $handlingMessage->getType() . ' (' . $start->format('H:i').')';
+		return (string) $handlingMessage['typeName'] . ' (' . $start->format('H:i').')';
 	}
 
 	/**
@@ -78,7 +99,7 @@ class SalesController extends Controller
 	 */
 	public function getEventStart($handlingMessage)
 	{
-		return $handlingMessage->getCreatedate();
+		return $handlingMessage['createdate'];
 	}
 
 	/**
@@ -91,7 +112,7 @@ class SalesController extends Controller
 	public function getEventUrl($handlingMessage)
 	{
 		return $this->generateUrl('lists_' .$this->baseRoutePrefix . '_handling_show', array(
-			'id' => $handlingMessage->getHandlingId()
+			'id' => $handlingMessage['handlingId']
 		));
 	}
 
@@ -104,7 +125,18 @@ class SalesController extends Controller
 	 */
 	public function getEventCssClass($handlingMessage)
 	{
-		return $handlingMessage->getType() ? 'calendar-event-' . $handlingMessage->getType()->getSlug() : '';
+		$cssClass = $handlingMessage['typeName'] ? 'calendar-event-' . $handlingMessage['typeSlug'] : '';
+
+        if ($handlingMessage['createdate'] < new \DateTime())
+        {
+            $cssClass .= ' sd-event-prev';
+        }
+        else
+        {
+            $cssClass .= ' sd-event-next';
+        }
+
+        return $cssClass;
 	}
 
 
