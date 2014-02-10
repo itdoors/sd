@@ -2,6 +2,7 @@
 
 namespace Lists\DogovorBundle\Entity;
 
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 
