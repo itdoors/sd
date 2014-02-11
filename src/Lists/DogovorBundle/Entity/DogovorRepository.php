@@ -154,7 +154,6 @@ class DogovorRepository extends EntityRepository
     {
         if (sizeof($filters))
         {
-
             foreach($filters as $key => $value)
             {
                 if (!$value)
@@ -165,9 +164,41 @@ class DogovorRepository extends EntityRepository
                 {
                     case 'organization':
                         $sql
-                            ->andWhere("o.id = :organizationId");
+                            ->andWhere("o.id IN (:organizationIds)");
 
-                        $sql->setParameter(':organizationId', $value);
+                        $ids = explode(',', $value);
+
+                        $sql->setParameter(':organizationIds', $ids);
+                        break;
+                    case 'customer':
+                        $sql
+                            ->andWhere("customer.id IN (:customerIds)");
+
+                        $ids = explode(',', $value);
+
+                        $sql->setParameter(':customerIds', $ids);
+                        break;
+                    case 'performer':
+                        $sql
+                            ->andWhere("performer.id IN (:performerIds)");
+
+                        $ids = explode(',', $value);
+
+                        $sql->setParameter(':performerIds', $ids);
+                        break;
+                    case 'prolongation':
+                        $valueBool = $value == 'Yes' ? 'TRUE': 'FALSE';
+
+                        $sql
+                            ->andWhere("d.prolongation = {$valueBool}");
+
+                        break;
+                    case 'dogovorType':
+
+                        $sql
+                            ->andWhere("d.dogovorTypeId = :dogovorTypeId")
+                            ->setParameter(':dogovorTypeId', $value);
+
                         break;
                 }
             }

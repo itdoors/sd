@@ -114,7 +114,7 @@ class DogovorHistoryForm extends AbstractType
 
                 $prolongationDateTo = new \DateTime($data['prolongationDateTo']);
 
-                if ($dogovor->getStopdatetime() > $prolongationDateTo)
+                if ($dogovor->getProlongationDate() > $prolongationDateTo)
                 {
                     $msg = $translator->trans("Stopdate can't greater then prolongation date", array(), 'ListsDogovorBundle');
 
@@ -133,8 +133,6 @@ class DogovorHistoryForm extends AbstractType
                         $form->addError(new FormError($msg));
                     }
                 }
-
-                //$form->is
             }
         );
     }
@@ -146,7 +144,8 @@ class DogovorHistoryForm extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'Lists\DogovorBundle\Entity\Dogovor',
-            'validation_groups' => false
+            'validation_groups' => false,
+            'translation_domain' => 'ListsDogovorBundle'
         ));
     }
 

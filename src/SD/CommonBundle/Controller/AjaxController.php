@@ -37,7 +37,8 @@ class AjaxController extends Controller
     protected $modelRepositoryDependence = array(
         'ModelContact' => 'ListsContactBundle:ModelContact',
         'User' => 'SDUserBundle:User',
-        'Dogovor' => 'ListsDogovorBundle:Dogovor'
+        'Dogovor' => 'ListsDogovorBundle:Dogovor',
+        'DopDogovor' => 'ListsDogovorBundle:DopDogovor'
     );
 
     /**
@@ -644,6 +645,37 @@ class AjaxController extends Controller
     }
 
     /**
+     * Returns json organization object by requested id
+     *
+     * @return string
+     */
+    public function organizationByIdSAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $organizationsRepository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+        /** @var Organization[] $organizations */
+        $organizations = $organizationsRepository
+            ->createQueryBuilder('o')
+            ->where('o.id in (:ids)')
+            ->setParameter(':ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($organizations as $organization)
+        {
+            $result[] = $this->serializeObject($organization);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
      * Returns json user object by requested id
      *
      * @return string
@@ -957,8 +989,6 @@ class AjaxController extends Controller
 
         $prolongationDateTo = new \DateTime($requestParams['prolongationDateTo']);
 
-        $dogovor->setProlongationDate($prolongationDateTo);
-
         if ($dogovor->getProlongation())
         {
             // set stop date to prolongation date
@@ -987,6 +1017,8 @@ class AjaxController extends Controller
 
             $dogovorHistory->setDopDogovor($dopDogovor);
         }
+
+        $dogovor->setProlongationDate($prolongationDateTo);
 
         $dogovorHistory->setProlongationDateFrom($prolongationDateFrom);
         $dogovorHistory->setProlongationDateTo($prolongationDateTo);

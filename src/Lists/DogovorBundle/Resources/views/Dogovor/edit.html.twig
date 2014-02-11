@@ -1,8 +1,9 @@
+{% trans_default_domain 'ListsDogovorBundle' %}
 <script type="text/javascript">
     $(document).ready(function(){
 
         $.fn.editable.defaults.inputclass = 'form-control';
-        $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
+        $.fn.editable.defaults.emptytext = '{% trans from 'messages' %}Enter value{% endtrans %}';
 
         $('.sd-editable').editable({
             url: '{{ path('sd_common_ajax_dogovor_save') }}'
@@ -33,7 +34,7 @@
             source: '{{ path('sd_common_ajax_dogovor_type') }}',
             select2: {
                 placeholder: '{% trans %}Select Dogovor Type{% endtrans %}',
-                minimumInputLength: 2,
+                minimumInputLength: 0,
                 width: 250
             }
         });
@@ -63,6 +64,11 @@
             });
         })
 
+        $('#prolongationTerm').editable({
+            url: '{{ path('sd_common_ajax_dogovor_save') }}',
+            emptytext: '{% trans %}Enter Prolongation Term{% endtrans %}'
+        })
+
         $('#isActive').editable({
             url: '{{ path('sd_common_ajax_dogovor_save') }}',
             source: {{  dogovor.isActiveChoices|json_encode|raw }}
@@ -84,7 +90,7 @@
     <table id="dogovor" class="table table-bordered table-striped">
         <tbody>
         <tr> {# 1 #}
-            <td style="width:15%">{% trans %}Dogovor ID{% endtrans %}</td>
+            <td style="width:15%">{% trans %}ID{% endtrans %}</td>
             <td style="width:35%">{{ dogovor.id }}</td>
             <td style="width:15%">{% trans %}Prolongation{% endtrans %}</td>
             <td style="width:35%">
@@ -94,16 +100,16 @@
                     {% set prolongation ='No' %}
                 {% endif %}
                 <a href="#" id="prolongation" data-type="select" data-pk="{{ dogovor.id }}" data-value="{{ prolongation }}" data-placement="right" data-original-title="{% trans %}Prolongation{% endtrans %}">
-                    {{ prolongation|trans }}
+                    {{ prolongation|trans({}, 'messages')  }}
                 </a>
 
-                (<a href="#" id="prolongationTerm" class="sd-editable" data-type="text" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.prolongationTerm }}" data-placement="right" data-original-title="{% trans %}Enter Prolongation Term{% endtrans %}">
+                (<a href="#" id="prolongationTerm" data-type="text" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.prolongationTerm }}" data-placement="right" data-original-title="{% trans %}Enter Prolongation Term In Days{% endtrans %}">
                     {{ dogovor.prolongationTerm }}
                 </a>)
             </td>
         </tr>
         <tr> {# 2 #}
-            <td>{% trans %}Dogovor number{% endtrans %}</td>
+            <td>{% trans %}Dogovor Number{% endtrans %}</td>
             <td>
                 <a href="#" id="number" class="sd-editable" data-type="text" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.number }}" data-placement="right" data-original-title="{% trans %}Enter Number{% endtrans %}">
                     {{ dogovor.number }}
@@ -146,7 +152,7 @@
                     {% if dogovor.startdatetime %}
                         {{ dogovor.startdatetime|date("d.m.Y") }}
                     {% else %}
-                        {% trans %}Enter value{% endtrans %}
+                        {% trans from 'messages' %}Enter value{% endtrans %}
                     {% endif %}
                 </a>
             </td>
@@ -165,20 +171,20 @@
                     {% if dogovor.stopdatetime %}
                         {{ dogovor.stopdatetime|date("d.m.Y") }}
                     {% else %}
-                        {% trans %}Enter value{% endtrans %}
+                        {% trans from 'messages' %}Enter value{% endtrans %}
                     {% endif %}
                 </a>
             </td>
         </tr>
         <tr> {# 5 #}
-            <td>{% trans %}City{% endtrans %}</td>
+            <td>{% trans from 'messages' %}City{% endtrans %}</td>
             <td>
                 <a href="#" id="cityId"
                    data-type="select2"
                    data-pk="{{ dogovor.id }}"
                    data-value="{{ dogovor.cityName }}"
                    data-placement="right"
-                   data-original-title="{% trans %}Enter City{% endtrans %}">
+                   data-original-title="{% trans from 'messages' %}Enter City{% endtrans %}">
                     {{ dogovor.cityName }}
                 </a>
             </td>
@@ -190,7 +196,7 @@
             </td>
         </tr>
         <tr> {# 6 #}
-            <td>{% trans %}File{% endtrans %}</td>
+            <td>{% trans from 'messages' %}File{% endtrans %}</td>
             <td>
                 {% if dogovor.filepath %}
                     <a href="/uploads/dogovor/{{ dogovor.filepath }}" target="_blank">
@@ -198,7 +204,7 @@
                     </a>
                 {% endif %}
             </td>
-            <td>{% trans %}Dogovot type{% endtrans %}</td>
+            <td>{% trans %}Dogovor Type{% endtrans %}</td>
             <td>
                 <a href="#" id="dogovorTypeId" data-type="select2" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.type }}" data-placement="right" data-original-title="{% trans %}Enter Dogovor Type{% endtrans %}">
                     {{ dogovor.type }}
@@ -214,7 +220,7 @@
                     {% set isActive ='No' %}
                 {% endif %}
                 <a href="#" id="isActive" data-type="select" data-pk="{{ dogovor.id }}" data-value="{{ isActive }}" data-placement="right" data-original-title="{% trans %}Is Active{% endtrans %}">
-                    {{ isActive|trans }}
+                    {{ isActive|trans({}, 'messages') }}
                 </a>
             </td>
             <td>{% trans %}Mashtab{% endtrans %}</td>

@@ -34,7 +34,8 @@ class DogovorDepartmentForm extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Lists\DogovorBundle\Entity\DogovorDepartment'
+            'data_class' => 'Lists\DogovorBundle\Entity\DogovorDepartment',
+            'translation_domain' => 'ListsDogovorBundle'
         ));
     }
 

@@ -246,7 +246,7 @@
 			</ul>
 		</li>
 		{% endif %}
-        {#{% if is_granted('ROLE_DOGOVOR') %}#}
+        {% if is_granted('ROLE_DOGOVORADMIN') %}
             <li class="">
                 <a href="javascript:;">
                     <i class="fa fa-money"></i>
@@ -255,7 +255,7 @@
                 </a>
                 <ul class="sub-menu">
                     <li >
-                        <a href="{{ path('lists_dogovor_dogovor_index') }}" title="{% trans %}My Dogovor{% endtrans %}">
+                        <a href="{{ path('lists_dogovor_dogovor_index') }}" title="{% trans %}Dogovor List{% endtrans %}">
                             <i class="fa fa-comments"></i>
                             {% trans %}My Dogovor{% endtrans %}
                         </a>
@@ -268,7 +268,7 @@
                     </li>
                 </ul>
             </li>
-        {#{% endif %}#}
+        {% endif %}
 	</ul>
 	<!-- END SIDEBAR MENU -->
 </div>

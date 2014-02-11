@@ -5,7 +5,7 @@
     <ul class="page-breadcrumb breadcrumb">
         <li>
             <i class="fa fa-home"></i>
-            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans from 'messages' %}Dashboard{% endtrans %}">{% trans from 'messages' %}Dashboard{% endtrans %}</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_dogovor_new') }}" title="{% trans %}Dogovor new{% endtrans %}">{% trans %}Dogovor new{% endtrans %}</a></li>
@@ -13,7 +13,7 @@
 {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
-        {% trans %}Dogovor new <small>dogovor new</small>{% endtrans %}
+        {% trans %}Dogovor<small>dogovor new</small>{% endtrans %}
     </h3>
 {% endblock %}
 
@@ -40,6 +40,12 @@
             SD.select2('#' + '{{ form.vars.name }}' + '_performer');
             SD.select2('#' + '{{ form.vars.name }}' + '_companystructure');
             SD.select2('#' + '{{ form.vars.name }}' + '_saller');
+            SD.select2('#' + '{{ form.vars.name }}' + '_dogovorType', {
+                minimumInputLength: 0
+            });
+            SD.select2('#' + '{{ form.vars.name }}' + '_mashtab', {
+                minimumInputLength: 0
+            });
 
             $('.date-picker').datepicker({
                 rtl: App.isRTL(),
@@ -75,7 +81,7 @@
             {% if form.vars.valid == false %}
                 <div class="alert alert-danger">
                     <button class="close" data-close="alert"></button>
-                    {% trans %}You have some form errors. Please check below.{% endtrans %}
+                    {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
                     {{ form_errors(form) }}
                 </div>
             {% endif %}
@@ -86,10 +92,10 @@
                             has-error
                         {% endif %}">
                     <div class="form-group">
-                        {{ form_label(form.customer, 'Customer Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_label(form.customer, 'Customer', {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.customer, {'attr': {
                             'class': 'form-control',
-                            'placeholder': 'Enter Customer Name',
+                            'placeholder': 'Enter Customer',
                             'data-url': path('sd_common_ajax_organization_for_contacts'),
                             'data-url-by-id': path('sd_common_ajax_organization_by_id'),
                             'required': 'required'
@@ -105,10 +111,10 @@
                         has-error
                     {% endif %}">
                     <div class="form-group">
-                        {{ form_label(form.performer, 'Performer Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_label(form.performer, 'Performer', {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.performer, {'attr': {
                             'class': 'form-control',
-                            'placeholder': 'Enter Performer Name',
+                            'placeholder': 'Enter Performer',
                             'data-url': path('sd_common_ajax_organization_for_contacts'),
                             'data-url-by-id': path('sd_common_ajax_organization_by_id')
                         }}) }}
@@ -126,8 +132,8 @@
                         has-error
                     {% endif %}">
                     <div class="form-group">
-                        {{ form_label(form.number, 'Dogovor Number', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.number, {'attr': {'class': 'form-control', 'placeholder': 'Enter Dogovor Number'}}) }}
+                        {{ form_label(form.number, 'Number', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.number, {'attr': {'class': 'form-control', 'placeholder': 'Enter Number'}}) }}
                         {% if form.number.vars.errors|length %}
                             {{ form_errors(form.number) }}
                         {% endif %}
@@ -215,8 +221,8 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        {{ form_label(form.prolongation, 'With prolongation', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.prolongation, {'attr': {'class': 'form-control', 'placeholder': 'With Prolongation'}}) }}
+                        {{ form_label(form.prolongation, 'Prolongation', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.prolongation, {'attr': {'class': 'form-control', 'placeholder': 'Prolongation'}}) }}
                     </div>
                 </div>
                 <!--/span-->
@@ -226,7 +232,7 @@
                     {% endif %}">
                     <div class="form-group">
                         {{ form_label(form.prolongationTerm, 'Prolongation Term', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.prolongationTerm, {'attr': {'class': 'form-control', 'placeholder': 'Enter Prolongation Term'}}) }}
+                        {{ form_widget(form.prolongationTerm, {'attr': {'class': 'form-control', 'placeholder': 'Enter Prolongation Term In Days'}}) }}
                         {% if form.prolongationTerm.vars.errors|length %}
                             {{ form_errors(form.prolongationTerm) }}
                         {% endif %}
@@ -262,10 +268,10 @@
                 <!--/span-->
                 <div class="col-md-4">
                     <div class="form-group">
-                        {{ form_label(form.city, 'City', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_label(form.city, 'City'|trans({}, 'messages'), {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.city, {'attr': {
                             'class': 'form-control',
-                            'placeholder': 'Enter City',
+                            'placeholder': 'Enter City'|trans({}, 'messages'),
                             'data-url': path('sd_common_ajax_city'),
                             'data-url-by-id': path('sd_common_ajax_city_by_id'),
                         }}) }}
@@ -292,10 +298,10 @@
                 <!--/span-->
                 <div class="col-md-6">
                     <div class="form-group">
-                        {{ form_label(form.saller, 'Saller', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_label(form.saller, 'Saller'|trans({}, 'messages'), {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.saller, {'attr': {
                             'class': 'form-control',
-                            'placeholder': 'Enter Saller',
+                            'placeholder': 'Enter Saller'|trans({}, 'messages'),
                             'data-url': path('sd_common_ajax_user'),
                             'data-url-by-id': path('sd_common_ajax_user_by_id'),
                         }}) }}
@@ -308,8 +314,8 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        {{ form_label(form.total, 'Summ', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.total, {'attr': {'class': 'form-control', 'placeholder': 'Enter Summ'}}) }}
+                        {{ form_label(form.total, 'Total summ', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.total, {'attr': {'class': 'form-control', 'placeholder': 'Enter Total summ'}}) }}
                     </div>
                 </div>
                 <!--/span-->
@@ -349,7 +355,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        {{ form_label(form.file, 'File', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_label(form.file, 'File'|trans({}, 'messages'), {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.file) }}
                     </div>
                 </div>
@@ -365,7 +371,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        {{ form_widget(form.create, { 'label': 'Create', 'attr': {'class': 'btn green'}} ) }}
+                        {{ form_widget(form.create, { 'label': 'Create'|trans({}, 'messages'), 'attr': {'class': 'btn green'}} ) }}
                     </div>
                 </div>
             </div>

@@ -1,14 +1,15 @@
+{% trans_default_domain 'ListsDogovorBundle' %}
 <table class="table table-striped table-bordered table-advance table-hover">
     <thead>
     <tr>
         <th>{% trans %}ID{% endtrans %} </th>
-        <th>{% trans %}Createdatetime{% endtrans %} </th>
+        <th>{% trans from 'messages' %}Createdatetime{% endtrans %} </th>
         <th>{% trans %}Dogovor{% endtrans %} </th>
         <th>{% trans %}Dop Dogovor{% endtrans %} </th>
         <th>{% trans %}Department{% endtrans %} </th>
-        <th>{% trans %}Creator{% endtrans %} </th>
+        <th>{% trans from 'messages' %}Creator{% endtrans %} </th>
         <th>{% trans %}Comments{% endtrans %} </th>
-        <th>{% trans %}Actions{% endtrans %} </th>
+        <th>{% trans from 'messages' %}Actions{% endtrans %} </th>
     </tr>
     </thead>
     <tbody>
@@ -23,11 +24,11 @@
             <td>{{ item.comment }}</td>
             <td>
                 <a
-                        class="ajax-delete"
+                        class="ajax-delete btn red"
                         href="javascript:;"
                         data-params='{"model":"DogovorDepartment","id":{{ item.id }}}'
                         >
-                    {% trans %}Delete{% endtrans %}
+                    {% trans from 'messages' %}Delete{% endtrans %}
                 </a>
             </td>
         </tr>

@@ -5,7 +5,7 @@
     <ul class="page-breadcrumb breadcrumb">
         <li>
             <i class="fa fa-home"></i>
-            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans from 'messages' %}Dashboard{% endtrans %}">{% trans from 'messages' %}Dashboard{% endtrans %}</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_dogovor_index') }}" title="{% trans %}Dogovor list{% endtrans %}">{% trans %}Dogovor list{% endtrans %}</a></li>
@@ -33,12 +33,6 @@
 {% endblock %}
 
 {% block body %}
-    <div class="row">
-        <div class="col-md-12">
-            <p>{% trans %}Dogovor list{% endtrans %}</p>
-        </div>
-    </div>
-
     {{  include(
         'ListsDogovorBundle:' ~ baseTemplate ~ ':filters.html.twig',
             {
@@ -59,10 +53,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">{% trans from 'ListsDogovorBundle' %}Proplongation{% endtrans %}</h4>
+                    <h4 class="modal-title">{% trans from 'ListsDogovorBundle' %}Prolongation{% endtrans %}</h4>
                 </div>
                 <div class="modal-body">
-                    <div id="dogovorHistoryFormTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
+                    <div id="dogovorHistoryFormTpl" data-text="{% trans from 'messages' %}Loading data. Please wait{% endtrans %}">
                     </div>
                 </div>
             </div>
@@ -80,16 +74,16 @@
             <tr>
                 <th>{% trans %}ID{% endtrans %} </th>
                 <th>{% trans %}Number{% endtrans %} </th>
-                <th>{% trans %}Organization name{% endtrans %} </th>
-                <th>{% trans %}Customer name{% endtrans %} </th>
-                <th>{% trans %}Performer name{% endtrans %} </th>
+                <th>{% trans %}Organization{% endtrans %} </th>
+                <th>{% trans %}Customer{% endtrans %} </th>
+                <th>{% trans %}Performer{% endtrans %} </th>
                 <th>{% trans %}Startdatetime{% endtrans %} </th>
                 <th>{% trans %}Stopdatetime{% endtrans %} </th>
                 <th>{% trans %}Prolongation{% endtrans %} </th>
                 <th>{% trans %}Prolongation Date{% endtrans %} </th>
                 <th>{% trans %}Status{% endtrans %} </th>
                 <th>{% trans %}Subject{% endtrans %} </th>
-                <th>{% trans %}Type{% endtrans %} </th>
+                <th>{% trans %}Dogovor Type{% endtrans %} </th>
                 <th>{% trans %}Actions{% endtrans %} </th>
             </tr>
             </thead>

@@ -287,9 +287,14 @@ var SD = (function() {
         })
     }
 
-    SD.prototype.select2 = function (selector){
+    SD.prototype.select2 = function (selector, defaultParams){
 
         var $selector = $(selector);
+
+        if (!defaultParams)
+        {
+            defaultParams = {};
+        }
 
         if (!$selector.length)
         {
@@ -304,9 +309,10 @@ var SD = (function() {
         var url = $selector.data('url');
         var urlById = $selector.data('url-by-id');
 
-        var params = {
-            minimumInputLength: 2
-        };
+        var params = $.extend({
+            minimumInputLength: 2,
+            allowClear: true
+        }, defaultParams);
 
         if (url)
         {

@@ -1,3 +1,4 @@
+{% trans_default_domain 'ListsDogovorBundle' %}
 <script>
     $(document).ready(function(){
 
@@ -47,7 +48,7 @@
     <div class="col-md-12">
         <div class="portlet box yellow">
             <div class="portlet-title"><div class="caption"><i class="fa fa-edit"></i>
-                    {% trans  from 'ListsDogovorBundle' %}Add department{% endtrans %}
+                    {% trans  from 'ListsDogovorBundle' %}Add departments{% endtrans %}
                 </div>
             </div>
             <div class="portlet-body">
@@ -97,8 +98,8 @@
                     </div>
                 </div>
                 <div class="form-actions">
-                    {{ form_widget(form.add, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
-                    {{ form_widget(form.cancel, { 'label': 'Cancel', 'attr':
+                    {{ form_widget(form.add, { 'label': 'Save'|trans({}, 'messages'), 'attr': {'class': 'btn blue'} } ) }}
+                    {{ form_widget(form.cancel, { 'label': 'Cancel'|trans({}, 'messages'), 'attr':
                         {
                             'class': 'btn default sd-cancel-btn',
                             'data-dismiss': "modal"

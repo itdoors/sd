@@ -1,3 +1,4 @@
+{% trans_default_domain 'ListsDogovorBundle' %}
 <script>
     $(document).ready(function(){
 
@@ -19,7 +20,7 @@
     <div class="col-md-12">
         <div class="portlet box yellow">
             <div class="portlet-title"><div class="caption"><i class="fa fa-edit"></i>
-                {% trans  from 'ListsDogovorBundle' %}New Dogovor{% endtrans %}
+                {% trans  from 'ListsDogovorBundle' %}New Dop Dogovor{% endtrans %}
             </div>
             </div>
             <div class="portlet-body">
@@ -63,7 +64,7 @@
                         <div class="input-group input-medium date date-picker">
                             {{ form_widget(form.startdatetime, {'attr': {
                                 'class': 'form-control',
-                                'placeholder': 'Enter Start Date',
+                                'placeholder': 'Enter Startdatetime',
                                 'readonly': 'readonly'
                             }}) }}
                                 <span class="input-group-btn">
@@ -80,7 +81,7 @@
                         <div class="input-group input-medium date date-picker">
                             {{ form_widget(form.activedatetime, {'attr': {
                                 'class': 'form-control',
-                                'placeholder': 'Enter Activate Date',
+                                'placeholder': 'Enter Activedatetime',
                                 'readonly': 'readonly'
                             }}) }}
                                 <span class="input-group-btn">
@@ -92,8 +93,8 @@
                 </div>
                 <div class="form-body row">
                     <div class="form-group col-md-4">
-                        {{  form_label(form.total, 'Total', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.total, {'attr' : {'class' : 'form-control', 'placeholder': "Total"}}) }}
+                        {{  form_label(form.total, 'Total summ', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.total, {'attr' : {'class' : 'form-control', 'placeholder': "Total summ"}}) }}
                     </div>
                     <div class="form-group col-md-4">
                         {{ form_label(form.dopDogovorType, 'Dop Dogovor Type', {'attr': {'class': 'control-label'}}) }}
@@ -106,22 +107,22 @@
                 </div>
                 <div class="form-body row">
                     <div class="form-group col-md-6">
-                        {{  form_label(form.saller, 'Saller', {'attr': {'class': 'control-label'}}) }}
+                        {{  form_label(form.saller, 'Saller'|trans({}, 'messages'), {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.saller, {'attr' : {
                             'class' : 'form-control',
-                            'placeholder': "Saller",
+                            'placeholder': 'Saller'|trans({}, 'messages'),
                             'data-url': path('sd_common_ajax_user'),
                             'data-url-by-id': path('sd_common_ajax_user_by_id'),
                         }}) }}
                     </div>
                     <div class="form-group col-md-6">
-                        {{  form_label(form.file, 'File ', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.file, {'attr' : {'placeholder': "File"}}) }}
+                        {{  form_label(form.file, 'File'|trans({}, 'messages'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.file, {'attr' : {'placeholder': "File"|trans({}, 'messages')}}) }}
                     </div>
                 </div>
                 <div class="form-actions">
-                    {{ form_widget(form.add, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
-                    {{ form_widget(form.cancel, { 'label': 'Cancel', 'attr':
+                    {{ form_widget(form.add, { 'label': 'Save'|trans({}, 'messages'), 'attr': {'class': 'btn blue'} } ) }}
+                    {{ form_widget(form.cancel, { 'label': 'Cancel'|trans({}, 'messages'), 'attr':
                         {
                             'class': 'btn default sd-cancel-btn',
                             'data-dismiss': "modal"

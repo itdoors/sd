@@ -1,3 +1,4 @@
+{% trans_default_domain 'ListsDogovorBundle' %}
 <script type="text/javascript">
     $(document).ready(function(){
         $.fn.modal.Constructor.prototype.enforceFocus = function() {};
@@ -6,7 +7,7 @@
 
 <div class="table-toolbar">
     <div class="btn-group">
-        <a id="managers_list_new" class="btn green ajax-form"
+        <a id="dogovor_list_new" class="btn green ajax-form"
            data-toggle="modal"
            href="#form_modal_dop_dogovor"
            data-target_holder="dopDogovorFormTpl"
@@ -15,7 +16,7 @@
            data-post_target_id="dop-dogovor-list"
            data-default='{"dogovorId":{{ dogovor.id }} }'
         >
-            {% trans %}Add New{% endtrans %} <i class="fa fa-plus"></i>
+            {% trans%}Add New Dop Dogovor{% endtrans %} <i class="fa fa-plus"></i>
         </a>
     </div>
 </div>
@@ -25,7 +26,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title">{% trans from 'ListsDogovorBundle' %}New dogovor{% endtrans %}</h4>
+                <h4 class="modal-title">{% trans from 'ListsDogovorBundle' %}Dop Dogovor{% endtrans %}</h4>
             </div>
             <div class="modal-body">
                 <div id="dopDogovorFormTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">

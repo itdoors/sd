@@ -17,15 +17,17 @@ class DopDogovorRepository extends EntityRepository
      * Return all dop dogovor depending on dogovor id
      *
      * @param int $dogovorId
+     * @param int $id
      *
      * @return Query
      */
-    public function getAllByDogovorIdQuery($dogovorId)
+    public function getAllByDogovorIdQuery($dogovorId, $id = null)
     {
         $query = $this->createQueryBuilder('dd')
             ->select('dd.id as id')
             ->addSelect('dd.number as number')
             ->addSelect('dd.subject as subject')
+            ->addSelect('dd.dogovorId as dogovorId')
             ->addSelect('dd.dopDogovorType as dopDogovorType')
             ->addSelect('dd.startdatetime as startdatetime')
             ->addSelect('dd.activedatetime as activedatetime')
@@ -43,12 +45,23 @@ class DopDogovorRepository extends EntityRepository
                     ddd.dopDogovorId = dd.id
                 ) as departmentCount')
             ->leftJoin('dd.user', 'creator')
-            ->leftJoin('dd.saller', 'saller')
-            ->where('dd.dogovorId = :dogovorId')
-            ->setParameter(':dogovorId', $dogovorId)
-            ->getQuery();
+            ->leftJoin('dd.saller', 'saller');
 
-        return $query;
+        if ($dogovorId)
+        {
+            $query
+                ->where('dd.dogovorId = :dogovorId')
+                ->setParameter(':dogovorId', $dogovorId);
+        }
+
+        if ($id)
+        {
+            $query
+                ->andWhere('dd.id = :id')
+                ->setParameter(':id', $id);
+        }
+
+        return $query->getQuery();
     }
 
     /**

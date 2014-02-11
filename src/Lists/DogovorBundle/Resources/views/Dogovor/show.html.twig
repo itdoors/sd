@@ -1,11 +1,11 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'ListsDogovorBundle' %}
-{% block title %}{% trans %}Show Handling{% endtrans %} {% endblock %}
+{% block title %}{% trans %}Show Dogovor{% endtrans %} {% endblock %}
 {% block page_breadcrumbs %}
     <ul class="page-breadcrumb breadcrumb">
         <li>
             <i class="fa fa-home"></i>
-            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans from 'messages' %}Dashboard{% endtrans %}">{% trans from 'messages' %}Dashboard{% endtrans %}</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
