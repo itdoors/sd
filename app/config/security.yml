@@ -30,6 +30,7 @@ security:
         - { path: ^/lists/salesadmin, role: ROLE_SALESADMIN }
         - { path: ^/lists/salesdispatcher, role: ROLE_SALESDISPATCHER }
         - { path: ^/lists/sales, role: ROLE_SALES }
+        - { path: ^/lists/dogovor, role: ROLE_DOGOVORADMIN }
         - { path: ^/$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
