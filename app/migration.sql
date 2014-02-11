@@ -170,10 +170,21 @@ ALTER TABLE organization ADD CONSTRAINT FK_C1EE637CFE54D947 FOREIGN KEY (group_i
 CREATE OR REPLACE FUNCTION sf_guard_user_to_fos_user()
   RETURNS trigger AS
 $BODY$
+DECLARE
+    tempSalt varchar(128);
+    tempPassword varchar(128);
 BEGIN
+	tempSalt = '777';
+	tempPassword = '000';
+	IF NEW.salt is not null THEN
+		tempSalt = NEW.salt;
+	END IF;
+	IF NEW.password is not null THEN
+		tempPassword = NEW.password;
+	END IF;
     IF NOT EXISTS (select id from fos_user where id = NEW.id) THEN
         INSERT INTO fos_user(id,username,username_canonical,email,email_canonical,first_name,last_name,middle_name,password,salt,birthday,enabled,locked,expired,roles,credentials_expired)
-        values (NEW.id,NEW.username,NEW.username,NEW.email_address,NEW.email_address,NEW.first_name,NEW.last_name,NEW.middle_name,NEW.password,NEW.salt,NEW.birthday,true,NEW.is_blocked,false,'a:0:{}',false);
+        values (NEW.id,NEW.username,NEW.username,NEW.email_address,NEW.email_address,NEW.first_name,NEW.last_name,NEW.middle_name,tempPassword,tempSalt,NEW.birthday,true,NEW.is_blocked,false,'a:0:{}',false);
     END IF;
     return NEW;
 END;
@@ -308,3 +319,73 @@ END$$ LANGUAGE 'plpgsql';
 select replace_manager(324, 327);
 +++++++++++++++++
 
+ALTER TABLE dogovor ADD customer_id BIGINT DEFAULT NULL;
+ALTER TABLE dogovor ADD performer_id BIGINT DEFAULT NULL;
+ALTER TABLE dogovor ADD prolongation_date TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL;
+ALTER TABLE dogovor ALTER organization_id DROP NOT NULL;
+
+++++
+
+ALTER TABLE dogovor ADD saller_id INT DEFAULT NULL;
+ALTER TABLE dogovor ADD CONSTRAINT FK_5F7235959A22E23 FOREIGN KEY (saller_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_5F7235959A22E23 ON dogovor (saller_id);
+
++++++++++++++++
+
+ALTER TABLE dop_dogovor ADD COLUMN saller_id integer;
+ALTER TABLE dop_dogovor ADD CONSTRAINT FK_15DDC3FF1CEE4D62 FOREIGN KEY (saller_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE dop_dogovor ADD CONSTRAINT FK_15DDC3FFA76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+UPDATE
+  dop_dogovor
+SET
+  saller_id = (select user_id from stuff where id = dop_dogovor.stuff_id limit 1)
+WHERE
+  stuff_id IS NOT NULL;
+
++++++++++++++++++
+
+UPDATE
+	dogovor
+SET
+	customer_id = organization_id,
+	performer_id = 23
+WHERE
+	company_role_id in (20,21,23);
+
+UPDATE
+	dogovor
+SET
+	customer_id = 23,
+	performer_id = organization_id
+WHERE
+	company_role_id = 22;
+
+UPDATE
+	dogovor
+SET
+	customer_id = organization_id,
+	performer_id = 23
+WHERE
+	company_role_id is null AND
+	dogovor_type_id in (13, 14);
+
+UPDATE
+	dogovor
+SET
+	prolongation_date = stopdatetime
+WHERE
+	prolongation_date IS NULL;
+
+++++++++++
+
+
+CREATE SEQUENCE dogovor_history_id_seq INCREMENT BY 1 MINVALUE 1 START 1;
+CREATE TABLE dogovor_history (id BIGINT NOT NULL, dogovor_id INT NOT NULL, dop_dogovor_id INT NOT NULL, user_id INT DEFAULT NULL, createdatetime TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, prolongation_term VARCHAR(255) DEFAULT NULL, prolongation_date TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_3260558681A36DD2 ON dogovor_history (dogovor_id);
+CREATE INDEX IDX_32605586C06CDB2C ON dogovor_history (dop_dogovor_id);
+CREATE INDEX IDX_32605586A76ED395 ON dogovor_history (user_id);
+ALTER TABLE dogovor_history ADD CONSTRAINT FK_3260558681A36DD2 FOREIGN KEY (dogovor_id) REFERENCES dogovor (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE dogovor_history ADD CONSTRAINT FK_32605586C06CDB2C FOREIGN KEY (dop_dogovor_id) REFERENCES dop_dogovor (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE dogovor_history ADD CONSTRAINT FK_32605586A76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+
++++++++++++

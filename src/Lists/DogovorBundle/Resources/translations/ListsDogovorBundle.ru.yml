@@ -1,0 +1,91 @@
+Dogovor list: Список договоров
+Dogovor list <small>dogovor list</small>: Договора <small>список договоров</small>
+
+# Filter
+Enter Organization: Введите организацию
+Enter Customer: Введите Заказчика
+Enter Performer: Введите Исполнителя
+Prolongation: Пролонгация
+Dogovor Type: Тип Договора
+Filter: Фильтр
+Clear Filter: Очистить
+
+
+# Table
+Number: Номер
+Enter Number: Введите Номер Договора
+Dogovor Number: Номер
+Prolongation Term: Срок пролонгации
+Enter Prolongation Term: Срок пролонгации
+Enter Prolongation Term In Days: Введите срок пролонгации (в днях)
+Enter Subject: Укажите предмет договора
+Enter Dogovor Type: Введите Тип договора
+Enter Dogovor Mashtab: Укажите Маштаб
+Edit: Редактировать
+Organization: Организация
+Customer: Заказчик
+Performer: Исполнитель
+Startdatetime: Дата заключения
+Enter Startdatetime: Введите дату заключения
+Stopdatetime: Дата окончания
+Enter Stopdatetime: Введите дату окончания
+Launch Date: Дата запуска
+Enter Launch Date: Введите дату запуска
+Prolongation: Пролонгация
+Prolongation Date: Дата Пролонгации
+Enter Prolongation Date: Укажите дату пролонгации
+Status: Статус
+Subject: Предмет
+Actions: Действия
+Prolongate: Пролонгировать
+Show Dogovor: Просмотр Договора
+Dogovor <small>show dogovor</small>: Договор <small>просмотр договора</small>
+General info: Основное
+Dop dogovor: Доп. соглашения
+Departments: Отделения
+History: История
+Is Active: Активный
+Mashtab: Маштаб
+Local: Локальный
+Global: Глобальный
+Activedatetime: Дата активации
+Enter Activedatetime: Введите дату активации
+Dop Dogovor Type: Тип доп. соглашения
+Dop Dogovor Number: Номер доп. соглашения
+Add New Dop Dogovor: Новое доп. соглашение
+Total summ: Общая сумма
+Enter Total summ: введите общую сумма
+Dop Dogovor: Доп. соглашение
+New Dop Dogovor: Новое доп. соглашение
+Start date can't be greater then activate date: Дата заключения не может быть больше даты активации
+Add New Departments: Добавить отделения
+Dogovor: Договор
+Dop Dogovor: Доп. соглашение
+Department: Отделение
+Departments: Отделения
+Comment: Комментарий
+Comments: Комментарии
+Add departments: Добавить отделения
+You must pick dop dogovor for plonongation: Выберите доп. соглашение для пролонгации
+Stopdate can't greater then prolongation date: Дата пролонгации не может быть меньше даты окончания
+From: До действия
+To: После действия
+Dogovor new: Новый Договор
+Dogovor<small>dogovor new</small>: Договор<small>новый договор</small>
+Create Dogovor: Создание договора
+General information: Основная информация
+Start date information: Даты
+Company Structure: Структура компании
+Company structure: Структура компании
+Summ with VAT: Сумма в месяц с НДС
+Enter Summ with VAT: Введите сумму в месяц с НДС
+Payment Deferment: Отсрочка платежа
+Enter Payment Deferment: Введите отсрочку платежа
+Planned Pf1: Плановый ПФ1
+Enter Planned Pf1: Введите Плановый ПФ1
+Planned Pf1 Percent: Плановый ПФ1, %
+Enter Planned Pf1 Percent: Введите Плановый ПФ1, %
+Start date can't be greater then stop date: Дата заключения не может быть больше даты окончания
+Launch date can't be less then start or greater then stop date: Дата запуска не может быть больше даты заключения/даты окончания
+
+

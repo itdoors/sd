@@ -113,4 +113,49 @@ class OrganizationGroup
     {
         return $this->getName();
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $organizations;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->organizations = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add organizations
+     *
+     * @param \Lists\OrganizationBundle\Entity\Organization $organizations
+     * @return OrganizationGroup
+     */
+    public function addOrganization(\Lists\OrganizationBundle\Entity\Organization $organizations)
+    {
+        $this->organizations[] = $organizations;
+    
+        return $this;
+    }
+
+    /**
+     * Remove organizations
+     *
+     * @param \Lists\OrganizationBundle\Entity\Organization $organizations
+     */
+    public function removeOrganization(\Lists\OrganizationBundle\Entity\Organization $organizations)
+    {
+        $this->organizations->removeElement($organizations);
+    }
+
+    /**
+     * Get organizations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOrganizations()
+    {
+        return $this->organizations;
+    }
 }

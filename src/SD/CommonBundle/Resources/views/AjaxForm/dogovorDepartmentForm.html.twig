@@ -1,0 +1,120 @@
+{% trans_default_domain 'ListsDogovorBundle' %}
+<script>
+    $(document).ready(function(){
+
+        $('#' + '{{ form.vars.name }}' + '_departments').multiSelect({
+            numberDisplayed: 10,
+            maxHeight: 800,
+            selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+            selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+            afterInit: function (ms) {
+                var that = this,
+                        $selectableSearch = that.$selectableUl.prev(),
+                        $selectionSearch = that.$selectionUl.prev(),
+                        selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+                        selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+
+                that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                        .on('keydown', function (e) {
+                            if (e.which === 40) {
+                                that.$selectableUl.focus();
+                                return false;
+                            }
+                        });
+
+                that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                        .on('keydown', function (e) {
+                            if (e.which == 40) {
+                                that.$selectionUl.focus();
+                                return false;
+                            }
+                        });
+            },
+            afterSelect: function () {
+                this.qs1.cache();
+                this.qs2.cache();
+            },
+            afterDeselect: function () {
+                this.qs1.cache();
+                this.qs2.cache();
+            }
+        });
+
+        $('#' + '{{ form.vars.name }}' + '_departments .ui-multiselect').css('width', '100px');
+    });
+</script>
+
+<div class="row ">
+    <div class="col-md-12">
+        <div class="portlet box yellow">
+            <div class="portlet-title"><div class="caption"><i class="fa fa-edit"></i>
+                    {% trans  from 'ListsDogovorBundle' %}Add departments{% endtrans %}
+                </div>
+            </div>
+            <div class="portlet-body">
+                {% form_theme form 'SDCommonBundle:Form:form_errors.html.twig' %}
+                {% if form.vars.valid is sameas(false) %}
+                    <div class="alert alert-danger">
+                        <button class="close" data-close="alert"></button>
+                        {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                        {{ form_errors(form) }}
+                    </div>
+                {% endif %}
+                {{ form_start(form, {
+                        'action' : path('sd_common_ajax_form'),
+                        'attr' : {
+                        'method' : 'POST',
+                        'class' : 'ajax-form-entity',
+                        'data-post_function': postFunction,
+                        'data-post_target_id': postTargetId,
+                        'data-target_id': targetId,
+                        'enctype': 'multipart/form-data'
+                    }
+                }) }}
+                <div class="form-body row">
+                    <div class="form-group col-md-6">
+                        {{ form_label(form.dopDogovor, 'Dop Dogovor Number', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.dopDogovor, {'attr' : {'class' : 'form-control', 'placeholder': "Dop Dogovor Number"}}) }}
+                        {{ form_errors(form.dopDogovor) }}
+                    </div>
+                    <div class="form-group col-md-6">
+                        {{ form_label(form.comment, 'Comment', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.comment, {'attr' : {'class' : 'form-control', 'placeholder': "Comment"}}) }}
+                        {{ form_errors(form.comment) }}
+                    </div>
+                </div>
+                <div class="form-body row">
+                    <div class="form-group col-md-6">
+                        {{ form_label(form.isActive, 'Is Active', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.isActive, {'attr' : {'class' : 'form-control', 'placeholder': "Is Active"}}) }}
+                        {{ form_errors(form.isActive) }}
+                    </div>
+                </div>
+                <div class="form-body row">
+                    <div class="form-group col-md-12">
+                        {{ form_label(form.departments, 'Departments', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.departments, {'attr' : {'class' : 'form-control', 'placeholder': "Departments"}}) }}
+                        {{ form_errors(form.departments) }}
+                    </div>
+                </div>
+                <div class="form-actions">
+                    {{ form_widget(form.add, { 'label': 'Save'|trans({}, 'messages'), 'attr': {'class': 'btn blue'} } ) }}
+                    {{ form_widget(form.cancel, { 'label': 'Cancel'|trans({}, 'messages'), 'attr':
+                        {
+                            'class': 'btn default sd-cancel-btn',
+                            'data-dismiss': "modal"
+                        }
+                    } ) }}
+                </div>
+                <input type="hidden" name="formName" value="{{ formName }}">
+                <input type="hidden" name="postFunction" value="{{ postFunction }}">
+                <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
+                <input type="hidden" name="targetId" value="{{ targetId }}">
+                <input type="hidden" name="model" value="{{ model }}">
+                <input type="hidden" name="modelId" value="{{ modelId }}">
+                <input type="hidden" name="defaultData" value='{{ defaultData|json_encode|raw }}'>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>

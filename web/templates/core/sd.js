@@ -317,5 +317,71 @@ var SD = (function() {
         el.unblock();
     };
 
+    SD.prototype.select2 = function (selector, defaultParams){
+
+        var $selector = $(selector);
+
+        if (!defaultParams)
+        {
+            defaultParams = {};
+        }
+
+        if (!$selector.length)
+        {
+            return false;
+        }
+
+        if (!$.isFunction($.fn.select2))
+        {
+            return false;
+        }
+
+        var url = $selector.data('url');
+        var urlById = $selector.data('url-by-id');
+
+        var params = $.extend({
+            minimumInputLength: 2,
+            allowClear: true
+        }, defaultParams);
+
+        if (url)
+        {
+            params.ajax = {
+                url: url,
+                    dataType: 'json',
+                    data: function (term, page) {
+                    return {
+                        query: term,
+                        q: term
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        }
+
+        if (urlById)
+        {
+            params.initSelection = function (element, callback) {
+                var id = $(element).val();
+                if (id !== "") {
+                    $.ajax(urlById, {
+                        data: {
+                            id: id
+                        },
+                        dataType: "json"
+                    }).done(function (data) {
+                            callback(data)
+                        });
+                }
+            }
+        }
+
+        $selector.select2(params);
+    }
+
     return new SD();
 })();

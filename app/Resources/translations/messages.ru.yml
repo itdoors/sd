@@ -55,6 +55,13 @@ My Profile: Мой профиль
 Documents: Документы
 News: Новости
 
+# Menu Dogovor
+My Dogovor: Мои договора
+Dogovor List: Список договоров
+New Dogovor: Новый договор
+
+
+
 
 
 #CRM
@@ -97,3 +104,21 @@ Clear Filter: Очистить
 Filter: Фильтр
 
 You have some form errors. Please check below.: При заполнении формы допущены ошибки. Пожалуйста, перепроверьте данные.
+Dashboard: Рабочий стол
+Loading data. Please wait: Данные загружаются. Пожалуйста подождите...
+No: Нет
+Yes: Да
+Active: Активный
+Not Active: Не Активный
+Enter value: Введите значение
+City: Город
+File: Файл
+Creator: Кто создал
+Saller: Кто продал
+Enter Saller: Укажите менеджера
+Actions: Действия
+Create: Cоздать
+Save: Сохранить
+Cancel: Отменить
+Createdatetime: Дата создания
+Delete: Удалить

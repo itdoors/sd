@@ -2,29 +2,56 @@
 
 namespace SD\CommonBundle\Controller;
 
+use Lists\DepartmentBundle\Entity\DepartmentsRepository;
+use Lists\DogovorBundle\Entity\Dogovor;
+use Lists\DogovorBundle\Entity\DogovorDepartment;
+use Lists\DogovorBundle\Entity\DogovorDepartmentRepository;
+use Lists\DogovorBundle\Entity\DogovorHistory;
+use Lists\DogovorBundle\Entity\DopDogovor;
+use Lists\DogovorBundle\Entity\DopDogovorRepository;
 use Lists\HandlingBundle\Entity\HandlingMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Lists\ContactBundle\Entity\ModelContactRepository;
-use Lists\ContactBundle\Entity\ModelContact;
 use Lists\HandlingBundle\Entity\HandlingMoreInfo;
 use Symfony\Component\Form\Form;
 use SD\UserBundle\Entity\User;
 use Lists\OrganizationBundle\Entity\Organization;
 use Doctrine\DBAL\Connection;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationList;
 
+/**
+ * AjaxController class.
+ *
+ * This class for different ajax procedures (render/valid forms, get lists of objects, etc.)
+ *
+ * @package    SD2
+ * @subpackage Ajax
+ * @author     Pavel Pecheny <ppecheny@gmail.com>
+ * @version    "Release: 1.0"
+ */
 class AjaxController extends Controller
 {
     protected $modelRepositoryDependence = array(
         'ModelContact' => 'ListsContactBundle:ModelContact',
-        'User' => 'SDUserBundle:User'
+        'User' => 'SDUserBundle:User',
+        'Dogovor' => 'ListsDogovorBundle:Dogovor',
+        'DopDogovor' => 'ListsDogovorBundle:DopDogovor'
     );
 
+    /**
+     * Returns list of organizations in json
+     *
+     * @return string
+     */
     public function organizationAction()
     {
-        $searchText = $this->get('request')->query->get('q');
+        $searchTextQ = $this->get('request')->query->get('q');
+        $searchTextQuery = $this->get('request')->query->get('query');
+
+        $searchText = $searchTextQ ? $searchTextQ : $searchTextQuery;
 
         /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
         $organizationsRepository = $this->getDoctrine()
@@ -34,17 +61,24 @@ class AjaxController extends Controller
 
         $result = array();
 
-        foreach ($organizations as $organization)
-        {
+        foreach ($organizations as $organization) {
             $result[] = $this->serializeObject($organization);
         }
 
         return new Response(json_encode($result));
     }
 
+    /**
+     * Returns json organization list for contacts query
+     *
+     * @return string
+     */
     public function organizationForContactsAction()
     {
-        $searchText = $this->get('request')->query->get('q');
+        $searchTextQ = $this->get('request')->query->get('q');
+        $searchTextQuery = $this->get('request')->query->get('query');
+
+        $searchText = $searchTextQ ? $searchTextQ : $searchTextQuery;
 
         /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
         $organizationsRepository = $this->getDoctrine()
@@ -54,8 +88,7 @@ class AjaxController extends Controller
 
         $result = array();
 
-        foreach ($organizations as $organization)
-        {
+        foreach ($organizations as $organization) {
             $this->processOrganizationForJson($organization);
 
             $result[] = $this->serializeArray($organization, 'organizationId');
@@ -64,6 +97,11 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
 
+    /**
+     * Returns json organization list for wizard
+     *
+     * @return string
+     */
     public function organizationForWizardAction()
     {
         $searchText = $this->get('request')->query->get('q');
@@ -83,8 +121,7 @@ class AjaxController extends Controller
             'text' => $searchText
         );
 
-        foreach ($organizations as $organization)
-        {
+        foreach ($organizations as $organization) {
             $this->processOrganizationForJson($organization);
 
             $result[] = $this->serializeArray($organization, 'organizationId');
@@ -93,6 +130,11 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
 
+    /**
+     * Returns json organization list for creation page
+     *
+     * @return string
+     */
     public function organizationForCreationAction()
     {
         $searchText = $this->get('request')->query->get('q');
@@ -112,8 +154,7 @@ class AjaxController extends Controller
             'text' => $searchText
         );
 
-        foreach ($organizations as $organization)
-        {
+        foreach ($organizations as $organization) {
             $this->processOrganizationForJson($organization);
 
             $organization['id'] = '';
@@ -124,6 +165,11 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
 
+    /**
+     * Returns json handling service list
+     *
+     * @return string
+     */
     public function handlingServiceAction()
     {
         $searchText = $this->get('request')->query->get('term');
@@ -139,14 +185,18 @@ class AjaxController extends Controller
 
         $result = array();
 
-        foreach ($objects as $object)
-        {
+        foreach ($objects as $object) {
             $result[] = $this->serializeObject($object);
         }
 
         return new Response(json_encode($result));
     }
 
+    /**
+     * Returns json city list depending search query
+     *
+     * @return string
+     */
     public function cityAction()
     {
         $searchText = $this->get('request')->query->get('query');
@@ -158,14 +208,63 @@ class AjaxController extends Controller
 
         $result = array();
 
-        foreach ($objects as $object)
-        {
+        foreach ($objects as $object) {
             $result[] = $this->serializeObject($object);
         }
 
         return new Response(json_encode($result));
     }
 
+    /**
+     * Returns json city object by id
+     *
+     * @return string
+     */
+    public function cityByIdAction()
+    {
+        $id = $this->get('request')->query->get('id');
+
+        $city = $this->getDoctrine()
+            ->getRepository('ListsCityBundle:City')
+            ->find($id);
+
+        $result = array();
+
+        if ($city) {
+            $result = $this->serializeObject($city);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json companystructure list
+     *
+     * @return string
+     */
+    public function companystructureAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsCompanystructureBundle:Companystructure');
+
+        $objects= $repository->getSearchQuery($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json organization type list
+     *
+     * @return string
+     */
     public function organizationTypeAction()
     {
         $organizationTypes = $this->getDoctrine()
@@ -174,36 +273,67 @@ class AjaxController extends Controller
 
         $result = array();
 
-        foreach ($organizationTypes as $organization)
-        {
+        foreach ($organizationTypes as $organization) {
             $result[] = $this->serializeObject($organization);
         }
 
         return new Response(json_encode($result));
     }
 
-    public function organizationGroupAction()
+    /**
+     * Returns json dogovor type list
+     *
+     * @return string
+     */
+    public function dogovorTypeAction()
     {
-		$searchText = $this->get('request')->query->get('query');
+        /** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
+        $lr = $this->container->get('lists_lookup.repository');
 
-		$organizationTypes = $this->getDoctrine()
-            ->getRepository('ListsOrganizationBundle:OrganizationGroup')
-			->createQueryBuilder('og')
-			->where('lower(og.name) LIKE :q')
-			->setParameter(':q', '%'. mb_strtolower($searchText, 'UTF-8') . '%')
-			->getQuery()
+        $dogovorTypes = $lr->getOnlyDogovorTypeQuery()
+            ->getQuery()
             ->getResult();
 
         $result = array();
 
-        foreach ($organizationTypes as $organization)
-        {
+        foreach ($dogovorTypes as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json organization group list
+     *
+     * @return string
+     */
+    public function organizationGroupAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $organizationTypes = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:OrganizationGroup')
+            ->createQueryBuilder('og')
+            ->where('lower(og.name) LIKE :q')
+            ->setParameter(':q', '%'. mb_strtolower($searchText, 'UTF-8') . '%')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($organizationTypes as $organization) {
             $result[] = $this->serializeObject($organization);
         }
 
         return new Response(json_encode($result));
     }
 
+    /**
+     * Returns json organization list for contacts query
+     *
+     * @return string
+     */
     public function handlingStatusAction()
     {
         $objects = $this->getDoctrine()
@@ -215,14 +345,18 @@ class AjaxController extends Controller
 
         $result = array();
 
-        foreach ($objects as $object)
-        {
+        foreach ($objects as $object) {
             $result[] = $this->serializeObject($object);
         }
 
         return new Response(json_encode($result));
     }
 
+    /**
+     * Returns json handling result list
+     *
+     * @return string
+     */
     public function handlingResultAction()
     {
         $objects = $this->getDoctrine()
@@ -234,14 +368,18 @@ class AjaxController extends Controller
 
         $result = array();
 
-        foreach ($objects as $object)
-        {
+        foreach ($objects as $object) {
             $result[] = $this->serializeObject($object);
         }
 
         return new Response(json_encode($result));
     }
 
+    /**
+     * Returns json handling type list
+     *
+     * @return string
+     */
     public function handlingTypeAction()
     {
         $objects = $this->getDoctrine()
@@ -260,14 +398,18 @@ class AjaxController extends Controller
             'text' => ''
         );
 
-        foreach ($objects as $object)
-        {
+        foreach ($objects as $object) {
             $result[] = $this->serializeObject($object);
         }
 
         return new Response(json_encode($result));
     }
 
+    /**
+     * Returns json model contact type list
+     *
+     * @return string
+     */
     public function modelContactTypeAction()
     {
         $objects = $this->getDoctrine()
@@ -285,14 +427,18 @@ class AjaxController extends Controller
             'text' => ''
         );
 
-        foreach ($objects as $object)
-        {
+        foreach ($objects as $object) {
             $result[] = $this->serializeObject($object);
         }
 
         return new Response(json_encode($result));
     }
 
+    /**
+     * Returns json scope list (from lookup table)
+     *
+     * @return string
+     */
     public function scopeAction()
     {
         /** @var \Lists\LookupBundle\Entity\LookupRepository $repository */
@@ -304,14 +450,18 @@ class AjaxController extends Controller
 
         $result = array();
 
-        foreach ($objects as $object)
-        {
+        foreach ($objects as $object) {
             $result[] = $this->serializeObject($object);
         }
 
         return new Response(json_encode($result));
     }
 
+    /**
+     * Returns json users list
+     *
+     * @return string
+     */
     public function userAction()
     {
         $searchText = $this->get('request')->query->get('query');
@@ -327,14 +477,18 @@ class AjaxController extends Controller
 
         $result = array();
 
-        foreach ($objects as $object)
-        {
+        foreach ($objects as $object) {
             $result[] = $this->serializeObject($object);
         }
 
         return new Response(json_encode($result));
     }
 
+    /**
+     * Returns json contact phones list already user in other contacts
+     *
+     * @return string
+     */
     public function contactPhoneAction()
     {
         $searchText = $this->get('request')->query->get('query');
@@ -343,7 +497,6 @@ class AjaxController extends Controller
 
         /** @var \SD\UserBundle\Entity\UserRepository $repository */
         $repository = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact');
-
 
         $objects = $repository->getSearchPhoneQuery(trim($searchText), $organizationId)
             ->getQuery()
@@ -358,8 +511,7 @@ class AjaxController extends Controller
             'text' => $searchText
         );
 
-        foreach ($objects as $object)
-        {
+        foreach ($objects as $object) {
             $this->processModelContactForJson($object);
 
             $result[] = $this->serializeArray($object);
@@ -368,6 +520,11 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
 
+    /**
+     * Returns json contact emails list already user in other contacts
+     *
+     * @return string
+     */
     public function contactEmailAction()
     {
         $searchText = $this->get('request')->query->get('query');
@@ -376,7 +533,6 @@ class AjaxController extends Controller
 
         /** @var \SD\UserBundle\Entity\UserRepository $repository */
         $repository = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact');
-
 
         $objects = $repository->getSearchEmailQuery(trim($searchText), $organizationId)
             ->getQuery()
@@ -391,8 +547,7 @@ class AjaxController extends Controller
             'text' => $searchText
         );
 
-        foreach ($objects as $object)
-        {
+        foreach ($objects as $object) {
             $this->processModelContactForJson($object, array('email'));
 
             $result[] = $this->serializeArray($object);
@@ -404,7 +559,7 @@ class AjaxController extends Controller
     /**
      * Processes model contact item form json output
      *
-     * @param mixed[] $item
+     * @param mixed[] &$item
      * @param mixed[] $keys
      *
      * @return mixed[] $item
@@ -415,26 +570,21 @@ class AjaxController extends Controller
 
         $item['id'] = '';
 
-        foreach ($keys as $key)
-        {
-            if ($item[$key])
-            {
+        foreach ($keys as $key) {
+            if ($item[$key]) {
                 $value .= ' '. $item[$key];
             }
         }
 
-        if ($item['ownerFullName'])
-        {
+        if ($item['ownerFullName']) {
             $value .= ' ' . $item['ownerFullName'];
         }
 
-        if ($item['creatorFullName'] && !$item['ownerFullName'])
-        {
+        if ($item['creatorFullName'] && !$item['ownerFullName']) {
             $value .= ' ' . $item['creatorFullName'];
         }
 
-        if ($item['organizationName'])
-        {
+        if ($item['organizationName']) {
             $value .= ' ' . $item['organizationName'];
         }
 
@@ -444,7 +594,7 @@ class AjaxController extends Controller
     /**
      * Processes model contact item form json output
      *
-     * @param mixed[] $item
+     * @param mixed[] &$item
      *
      * @return mixed[] $item
      */
@@ -452,18 +602,15 @@ class AjaxController extends Controller
     {
         $value = '';
 
-        if ($item['organizationName'])
-        {
+        if ($item['organizationName']) {
             $value .= $item['organizationName'];
         }
 
-        if ($item['organizationShortName'])
-        {
+        if ($item['organizationShortName']) {
             $value .= ' | ' . $item['organizationShortName'];
         }
 
-        if ($item['fullNames'])
-        {
+        if ($item['fullNames']) {
             $value .= ' | ' . $item['fullNames'];
         }
 
@@ -471,6 +618,11 @@ class AjaxController extends Controller
 
     }
 
+    /**
+     * Returns json organization object by requested id
+     *
+     * @return string
+     */
     public function organizationByIdAction()
     {
         $id = $this->get('request')->query->get('id');
@@ -485,35 +637,69 @@ class AjaxController extends Controller
 
         $result = array();
 
-        if ($organization)
-        {
+        if ($organization) {
             $result = $this->serializeObject($organization);
         }
 
         return new Response(json_encode($result));
     }
 
-	public function userByIdAction()
-	{
-		$id = $this->get('request')->query->get('id');
+    /**
+     * Returns json organization object by requested id
+     *
+     * @return string
+     */
+    public function organizationByIdSAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
 
-		/** @var \SD\UserBundle\Entity\UserRepository $repository */
-		$repository = $this->getDoctrine()
-			->getRepository('SDUserBundle:User');
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $organizationsRepository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
 
-		/** @var \SD\UserBundle\Entity\User $object */
-		$object = $repository
-			->find($id);
+        /** @var Organization[] $organizations */
+        $organizations = $organizationsRepository
+            ->createQueryBuilder('o')
+            ->where('o.id in (:ids)')
+            ->setParameter(':ids', $ids)
+            ->getQuery()
+            ->getResult();
 
-		$result = array();
+        $result = array();
 
-		if ($object)
-		{
-			$result = $this->serializeObject($object);
-		}
+        foreach ($organizations as $organization)
+        {
+            $result[] = $this->serializeObject($organization);
+        }
 
-		return new Response(json_encode($result));
-	}
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json user object by requested id
+     *
+     * @return string
+     */
+    public function userByIdAction()
+    {
+        $id = $this->get('request')->query->get('id');
+
+        /** @var \SD\UserBundle\Entity\UserRepository $repository */
+        $repository = $this->getDoctrine()
+            ->getRepository('SDUserBundle:User');
+
+        /** @var \SD\UserBundle\Entity\User $object */
+        $object = $repository
+            ->find($id);
+
+        $result = array();
+
+        if ($object) {
+            $result = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
 
     /**
      * Serialize object to json. temporary solution
@@ -541,8 +727,8 @@ class AjaxController extends Controller
      * Serialize array to json. temporary solution
      *
      * @param mixed[] $item
-     * @param string $id
-     * @param string $value
+     * @param string  $id
+     * @param string  $value
      *
      * @return mixed[]
      */
@@ -578,13 +764,11 @@ class AjaxController extends Controller
             ->getRepository('ListsOrganizationBundle:Organization')
             ->find($pk);
 
-        if (!$value)
-        {
+        if (!$value) {
             $methodGet = 'get' . ucfirst($name);
             $type = gettype($organization->$methodGet());
 
-            if (in_array($type, array('integer')))
-            {
+            if (in_array($type, array('integer'))) {
                 $value = null;
             }
         }
@@ -596,8 +780,7 @@ class AjaxController extends Controller
         /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
         $errors = $validator->validate($organization, array('edit'));
 
-        if (sizeof($errors))
-        {
+        if (sizeof($errors)) {
             $return = $this->getFirstError($errors);
 
             return new Response($return, 406);
@@ -606,12 +789,9 @@ class AjaxController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($organization);
 
-        try
-        {
+        try {
             $em->flush();
-        }
-        catch (\ErrorException $e)
-        {
+        } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -633,8 +813,7 @@ class AjaxController extends Controller
     {
         $message = '';
 
-        foreach ($errors as $error)
-        {
+        foreach ($errors as $error) {
             $message = $error->getMessage();
         }
 
@@ -642,7 +821,34 @@ class AjaxController extends Controller
     }
 
     /**
-     * Renders form
+     * Get first error message
+     *
+     * @param \Symfony\Component\Validator\ConstraintViolationList $errors
+     * @param string $field
+     *
+     * @return string
+     */
+    public function getErrorByField(\Symfony\Component\Validator\ConstraintViolationList $errors, $field)
+    {
+        $message = '';
+
+        /** @var ConstraintViolation[] $errors */
+        foreach ($errors as $error) {
+            if ($error->getPropertyPath() == $field)
+            {
+                $message = $error->getMessage();
+            }
+        }
+
+        return $message;
+    }
+
+    /**
+     * Renders/validates ajax form
+     *
+     * @param Request $request
+     *
+     * @return string (json)
      */
     public function formAction(Request $request)
     {
@@ -655,32 +861,25 @@ class AjaxController extends Controller
         $model = $request->get('model');
         $modelId = $request->get('modelId');
 
-        if ($model && $modelId)
-        {
-            if (isset($this->modelRepositoryDependence[$model]))
-            {
+        if ($model && $modelId) {
+            if (isset($this->modelRepositoryDependence[$model])) {
                 $repository = $this->modelRepositoryDependence[$model];
 
                 $object = $this->getDoctrine()->getRepository($repository)
                     ->find($modelId);
 
-				$form = $this->createForm($formName, $object);
+                $form = $this->createForm($formName, $object);
             }
+        } else {
+            $form = $this->createForm($formName);
         }
-		else
-		{
-			$form = $this->createForm($formName);
-		}
 
-        if ($defaultData && !is_array($defaultData))
-        {
+        if ($defaultData && !is_array($defaultData)) {
             $defaultData = json_decode($defaultData, true);
         }
 
-        if (sizeof($defaultData))
-        {
-            foreach ($defaultData as $key => $default)
-            {
+        if (sizeof($defaultData)) {
+            foreach ($defaultData as $key => $default) {
                 $form->add($key, 'hidden', array(
                     'data' => $default
                 ));
@@ -688,8 +887,7 @@ class AjaxController extends Controller
 
             $processMethod = $formName . 'ProcessDefaults';
 
-            if (method_exists($this, $processMethod))
-            {
+            if (method_exists($this, $processMethod)) {
                 $this->$processMethod($form, $defaultData);
             }
         }
@@ -707,8 +905,7 @@ class AjaxController extends Controller
             'defaultData' => $defaultData
         );
 
-        if ($form->isValid())
-        {
+        if ($form->isValid()) {
             $method = $formName . 'Save';
 
             $user = $this->getUser();
@@ -720,7 +917,6 @@ class AjaxController extends Controller
             $result['success'] = true;
         }
 
-
         $result['html'] = $this->renderView('SDCommonBundle:AjaxForm:' . $formName . '.html.twig', array(
                 'form' => $form->createView(),
                 'formName' => $formName,
@@ -728,13 +924,22 @@ class AjaxController extends Controller
                 'postTargetId' => $postTargetId,
                 'targetId' => $targetId,
                 'defaultData' => $defaultData,
-				'model' => $model,
-				'modelId' => $modelId,
+                'model' => $model,
+                'modelId' => $modelId,
             ));
 
         return new Response(json_encode($result));
     }
 
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
     public function organizationUserFormSave($form, $user, $request)
     {
         $data = $form->getData();
@@ -756,7 +961,86 @@ class AjaxController extends Controller
         return true;
     }
 
-    public function handlingMessageFormSave(\Symfony\Component\Form\Form $form, $user, $request)
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function dogovorHistoryFormSave($form, $user, $request)
+    {
+        /** @var Dogovor $dogovor */
+        $dogovor = $form->getData();
+
+        $requestParams = $request->request->get($form->getName());
+
+        $user = $this->getUser();
+
+        $dogovorHistory = new DogovorHistory();
+
+        $dogovorHistory->setDogovor($dogovor);
+        $dogovorHistory->setUser($user);
+        $dogovorHistory->setCreatedatetime(new \DateTime());
+
+        $prolongationDateFrom = new \DateTime();
+
+        $prolongationDateTo = new \DateTime($requestParams['prolongationDateTo']);
+
+        if ($dogovor->getProlongation())
+        {
+            // set stop date to prolongation date
+            // set prolongation date to $request['prolongationDateTo']
+
+            // Set prolongation date to
+            if ($dogovor->getProlongationDate())
+            {
+                $prolongationDateFrom = $dogovor->getProlongationDate();
+            }
+            elseif ($dogovor->getStopdatetime())
+            {
+                $prolongationDateFrom = $dogovor->getStopdatetime();
+            }
+            elseif ($dogovor->getStartdatetime())
+            {
+                $prolongationDateFrom = $dogovor->getStartdatetime();
+            }
+        }
+        else
+        {
+            /** @var DopDogovorRepository $ddr */
+            $ddr = $this->get('lists_dogovor.dopdogovor.repository');
+
+            $dopDogovor = $ddr->find($requestParams['dopDogovor']);
+
+            $dogovorHistory->setDopDogovor($dopDogovor);
+        }
+
+        $dogovor->setProlongationDate($prolongationDateTo);
+
+        $dogovorHistory->setProlongationDateFrom($prolongationDateFrom);
+        $dogovorHistory->setProlongationDateTo($prolongationDateTo);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($dogovor);
+        $em->persist($dogovorHistory);
+        $em->flush();
+
+        return true;
+    }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function handlingMessageFormSave(Form $form, $user, $request)
     {
         /** @var \Lists\HandlingBundle\Entity\HandlingMessage $data */
         $data = $form->getData();
@@ -777,8 +1061,7 @@ class AjaxController extends Controller
 
         $file = $form['file']->getData();
 
-        if ($file)
-        {
+        if ($file) {
             $data->upload();
         }
 
@@ -807,13 +1090,11 @@ class AjaxController extends Controller
 
         $handlingMessage->setDescription($descriptionNext);
 
-        if ((int) $contactNext)
-        {
+        if ((int) $contactNext) {
             $contact = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
                 ->find((int) $contactNext);
 
-            if ($contact)
-            {
+            if ($contact) {
                 $handlingMessage->setContact($contact);
             }
         }
@@ -834,6 +1115,15 @@ class AjaxController extends Controller
         return true;
     }
 
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
     public function handlingUserFormSave($form, $user, $request)
     {
         $data = $form->getData();
@@ -855,6 +1145,132 @@ class AjaxController extends Controller
         return true;
     }
 
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function modelContactOrganizationFormSave($form, $user, $request)
+    {
+        $data = $form->getData();
+
+        if (!$data->getId()) {
+            $data->setUser($user);
+
+            $owner = $data->getOwner();
+
+            if (!$owner) {
+                $data->setOwner($user);
+            }
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+
+        $organizationId = $data->getModelId();
+
+        $organization = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization')
+            ->find($organizationId);
+
+        $users = $organization->getUsers();
+
+        $userExist = false;
+
+        if ($users) {
+            foreach ($users as $orgUser) {
+                if ($orgUser->getId() == $user->getId()) {
+                    $userExist = true;
+                }
+            }
+        }
+
+        if (!$userExist) {
+            $organization->addUser($user);
+        }
+
+        $em->persist($organization);
+
+        $em->flush();
+
+        return true;
+    }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function modelContactOrganizationEditFormSave($form, $user, $request)
+    {
+        $data = $form->getData();
+
+        if (!$data->getId()) {
+            return $this->modelContactOrganizationFormSave($form, $user, $request);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        $em->persist($data);
+
+        $em->flush();
+
+        $em->refresh($data);
+
+        return true;
+    }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function modelContactOrganizationAdminFormSave($form, $user, $request)
+    {
+        return $this->modelContactOrganizationFormSave($form, $user, $request);
+    }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function modelContactHandlingFormSave($form, $user, $request)
+    {
+        $data = $form->getData();
+
+        $data->setUser($user);
+        $data->setCreatedatetime(new \DateTime());
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
+
+    /**
+     * Deletes instance depending on request params
+     * Run custom function for specific class
+     *
+     * @return string
+     */
     public function deleteAction()
     {
         $params = $this->get('request')->request->get('params');
@@ -866,6 +1282,13 @@ class AjaxController extends Controller
         return new Response('');
     }
 
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
     public function OrganizationUserDelete($params)
     {
         $organizationId = $params['organizationId'];
@@ -886,6 +1309,13 @@ class AjaxController extends Controller
         $em->flush();
     }
 
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
     public function HandlingUserDelete($params)
     {
         $handlingId = $params['handlingId'];
@@ -906,98 +1336,55 @@ class AjaxController extends Controller
         $em->flush();
     }
 
-    public function modelContactOrganizationFormSave($form, $user, $request)
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function DopDogovorDelete($params)
     {
-        $data = $form->getData();
+        $id = $params['id'];
 
-        if (!$data->getId())
-        {
-            $data->setUser($user);
-
-            $owner = $data->getOwner();
-
-            if (!$owner)
-            {
-                $data->setOwner($user);
-            }
-        }
+        /** @var DopDogovor $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:DopDogovor')
+            ->find($id);
 
         $em = $this->getDoctrine()->getManager();
-        $em->persist($data);
-
-
-        $organizationId = $data->getModelId();
-
-        $organization = $this->getDoctrine()
-            ->getRepository('ListsOrganizationBundle:Organization')
-            ->find($organizationId);
-
-		$users = $organization->getUsers();
-
-		$userExist = false;
-
-		if ($users)
-		{
-			foreach ($users as $orgUser)
-			{
-				if ($orgUser->getId() == $user->getId())
-				{
-					$userExist = true;
-				}
-			}
-		}
-
-		if (!$userExist)
-		{
-			$organization->addUser($user);
-		}
-
-        $em->persist($organization);
-
+        $em->remove($object);
         $em->flush();
-
-        return true;
     }
 
-	public function modelContactOrganizationEditFormSave($form, $user, $request)
-	{
-		$data = $form->getData();
-
-		if (!$data->getId())
-		{
-			return $this->modelContactOrganizationFormSave($form, $user, $request);
-		}
-
-		$em = $this->getDoctrine()->getManager();
-
-		$em->persist($data);
-
-		$em->flush();
-
-		$em->refresh($data);
-
-		return true;
-	}
-
-    public function modelContactOrganizationAdminFormSave($form, $user, $request)
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function DogovorDepartmentDelete($params)
     {
-        return $this->modelContactOrganizationFormSave($form, $user, $request);
-    }
+        $id = $params['id'];
 
-    public function modelContactHandlingFormSave($form, $user, $request)
-    {
-        $data = $form->getData();
-
-        $data->setUser($user);
-        $data->setCreatedatetime(new \DateTime());
+        /** @var DogovorDepartment $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:DogovorDepartment')
+            ->find($id);
 
         $em = $this->getDoctrine()->getManager();
-        $em->persist($data);
+        $em->remove($object);
         $em->flush();
-
-        return true;
     }
 
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
     public function ModelContactDelete($params)
     {
         $id = $params['id'];
@@ -1030,13 +1417,11 @@ class AjaxController extends Controller
             ->getRepository('ListsHandlingBundle:Handling')
             ->find($pk);
 
-        if (!$value)
-        {
+        if (!$value) {
             $methodGet = 'get' . ucfirst($name);
             $type = gettype($object->$methodGet());
 
-            if (in_array($type, array('integer')))
-            {
+            if (in_array($type, array('integer'))) {
                 $value = null;
             }
         }
@@ -1048,8 +1433,7 @@ class AjaxController extends Controller
         /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
         $errors = $validator->validate($object, array('edit'));
 
-        if (sizeof($errors))
-        {
+        if (sizeof($errors)) {
             $return = $this->getFirstError($errors);
 
             return new Response($return, 406);
@@ -1058,12 +1442,9 @@ class AjaxController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($object);
 
-        try
-        {
+        try {
             $em->flush();
-        }
-        catch (\ErrorException $e)
-        {
+        } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1074,79 +1455,131 @@ class AjaxController extends Controller
         return new Response(json_encode($return));
     }
 
-	/**
-	 * Saves object to db
-	 *
-	 * @return mixed[]
-	 */
-	public function handlingMoreInfoSaveAction()
-	{
-		$translator = $this->get('translator');
+    /**
+     * Saves object to db
+     *
+     * @return mixed[]
+     */
+    public function dogovorSaveAction()
+    {
+        $translator = $this->get('translator');
 
-		$pks = $this->get('request')->request->get('pk');
-		$name = $this->get('request')->request->get('name');
-		$value = $this->get('request')->request->get('value');
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
 
-		$handlingId = $pks['handlingId'];
-		$typeId = $pks['typeId'];
+        $methodSet = 'set' . ucfirst($name);
 
-		$query = $this->getDoctrine()
-			->getRepository('ListsHandlingBundle:HandlingMoreInfo')
-			->createQueryBuilder('hmi')
-			->where('hmi.handlingId = :handlingId')
-			->andWhere('hmi.handlingMoreInfoTypeId = :handlingMoreInfoTypeId')
-			->setParameter(':handlingId', $handlingId)
-			->setParameter(':handlingMoreInfoTypeId', $typeId)
-			->getQuery();
+        $object = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:Dogovor')
+            ->find($pk);
 
-		try
-		{
-			$object = $query->getSingleResult();
-		} catch (\Doctrine\Orm\NoResultException $e)
-		{
-			$object = null;
-		}
+        if (!$value) {
+            $methodGet = 'get' . ucfirst($name);
+            $type = gettype($object->$methodGet());
 
-		if ($object)
-		{
-			$object->setValue($value);
-		}
-		else
-		{
-			$object = new HandlingMoreInfo();
+            if (in_array($type, array('integer'))) {
+                $value = null;
+            }
+        }
 
-			$handling = $this->getDoctrine()
-				->getRepository('ListsHandlingBundle:Handling')
-				->find($handlingId);
+        $object->$methodSet($value);
 
-			$type = $this->getDoctrine()
-				->getRepository('ListsHandlingBundle:HandlingMoreInfoType')
-				->find($typeId);
+        $validator = $this->get('validator');
 
-			$object->setHandling($handling);
-			$object->setHandlingMoreInfoType($type);
-		}
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
+        $errors = $validator->validate($object, array('edit'));
 
-		$object->setValue($value);
+        if (sizeof($errors)) {
+            $return = $this->getErrorByField($errors, $name);
 
-		$em = $this->getDoctrine()->getManager();
-		$em->persist($object);
+            if ($return)
+            {
+                return new Response($return, 406);
+            }
+        }
 
-		try
-		{
-			$em->flush();
-		}
-		catch (\ErrorException $e)
-		{
-			$return = array('msg' => $translator->trans('Wrong input data'));
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
 
-			return new Response(json_encode($return));
-		}
+        try {
+            $em->flush();
+        } catch (\ErrorException $e) {
+            $return = array('msg' => $translator->trans('Wrong input data'));
 
-		$return = array('success' => 1);
+            return new Response(json_encode($return));
+        }
 
-		return new Response(json_encode($return));
-	}
+        $return = array('success' => 1);
+
+        return new Response(json_encode($return));
+    }
+
+    /**
+     * Saves object to db
+     *
+     * @return mixed[]
+     */
+    public function handlingMoreInfoSaveAction()
+    {
+        $translator = $this->get('translator');
+
+        $pks = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        $handlingId = $pks['handlingId'];
+        $typeId = $pks['typeId'];
+
+        $query = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingMoreInfo')
+            ->createQueryBuilder('hmi')
+            ->where('hmi.handlingId = :handlingId')
+            ->andWhere('hmi.handlingMoreInfoTypeId = :handlingMoreInfoTypeId')
+            ->setParameter(':handlingId', $handlingId)
+            ->setParameter(':handlingMoreInfoTypeId', $typeId)
+            ->getQuery();
+
+        try {
+            $object = $query->getSingleResult();
+        } catch (\Doctrine\Orm\NoResultException $e) {
+            $object = null;
+        }
+
+        if ($object) {
+            $object->setValue($value);
+        } else {
+            $object = new HandlingMoreInfo();
+
+            $handling = $this->getDoctrine()
+                ->getRepository('ListsHandlingBundle:Handling')
+                ->find($handlingId);
+
+            $type = $this->getDoctrine()
+                ->getRepository('ListsHandlingBundle:HandlingMoreInfoType')
+                ->find($typeId);
+
+            $object->setHandling($handling);
+            $object->setHandlingMoreInfoType($type);
+        }
+
+        $object->setValue($value);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+
+        try {
+            $em->flush();
+        } catch (\ErrorException $e) {
+            $return = array('msg' => $translator->trans('Wrong input data'));
+
+            return new Response(json_encode($return));
+        }
+
+        $return = array('success' => 1);
+
+        return new Response(json_encode($return));
+    }
 
     /**
      * Saves object to db
@@ -1169,12 +1602,10 @@ class AjaxController extends Controller
             ->getRepository('ListsHandlingBundle:HandlingService')
             ->findAll();
 
-        foreach ($handlingServices as $hs)
-        {
+        foreach ($handlingServices as $hs) {
             $object->removeHandlingService($hs);
 
-            if (in_array($hs->getId(), $value))
-            {
+            if (in_array($hs->getId(), $value)) {
                 $object->addHandlingService($hs);
             }
         }
@@ -1184,8 +1615,7 @@ class AjaxController extends Controller
         /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
         $errors = $validator->validate($object, array('edit'));
 
-        if (sizeof($errors))
-        {
+        if (sizeof($errors)) {
             $return = $this->getFirstError($errors);
 
             return new Response($return, 406);
@@ -1194,12 +1624,9 @@ class AjaxController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($object);
 
-        try
-        {
+        try {
             $em->flush();
-        }
-        catch (\ErrorException $e)
-        {
+        } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1229,13 +1656,11 @@ class AjaxController extends Controller
             ->getRepository('ListsContactBundle:ModelContact')
             ->find($pk);
 
-        if (!$value)
-        {
+        if (!$value) {
             $methodGet = 'get' . ucfirst($name);
             $type = gettype($object->$methodGet());
 
-            if (in_array($type, array('integer')))
-            {
+            if (in_array($type, array('integer'))) {
                 $value = null;
             }
         }
@@ -1247,8 +1672,7 @@ class AjaxController extends Controller
         /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
         $errors = $validator->validate($object, array('edit'));
 
-        if (sizeof($errors))
-        {
+        if (sizeof($errors)) {
             $return = $this->getFirstError($errors);
 
             return new Response($return, 406);
@@ -1257,12 +1681,9 @@ class AjaxController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($object);
 
-        try
-        {
+        try {
             $em->flush();
-        }
-        catch (\ErrorException $e)
-        {
+        } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1273,6 +1694,12 @@ class AjaxController extends Controller
         return new Response(json_encode($return));
     }
 
+    /**
+     * Adds children to {formName}ProcessDefaults depending on defaults in request
+     *
+     * @param Form $form
+     * @param mixed[] $defaultData
+     */
     public function handlingMessageFormProcessDefaults($form, $defaultData)
     {
         $handlingId = $defaultData['handling_id'];
@@ -1289,8 +1716,7 @@ class AjaxController extends Controller
 
         $users = $handling->getUsers();
 
-        foreach ($users as $user)
-        {
+        foreach ($users as $user) {
             $userIds[$user->getId()] = $user->getId();
         }
 
@@ -1301,8 +1727,7 @@ class AjaxController extends Controller
                 'class' => 'ListsContactBundle:ModelContact',
                 'empty_value' => '',
                 'required' => false,
-                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds)
-                    {
+                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
                         return $repository->createQueryBuilder('mc')
                             ->leftJoin('mc.owner', 'owner')
                             ->where('mc.modelName = :modelName')
@@ -1320,8 +1745,7 @@ class AjaxController extends Controller
                 'empty_value' => '',
                 'required' => false,
                 'mapped' => false,
-                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds)
-                    {
+                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
                         return $repository->createQueryBuilder('mc')
                             ->leftJoin('mc.owner', 'owner')
                             ->where('mc.modelName = :modelName')
@@ -1339,8 +1763,7 @@ class AjaxController extends Controller
             'data' => $handling->getStatus(),
             'empty_value' => '',
             'mapped' => false,
-            'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingStatusRepository $repository)
-                {
+            'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingStatusRepository $repository) {
                     return $repository->createQueryBuilder('s')
                         ->orderBy('s.sortorder', 'ASC');
                 }
@@ -1353,60 +1776,65 @@ class AjaxController extends Controller
             ));
     }
 
-	public function handlingMoreInfoAction(Request $request)
-	{
-		$handlingId = $request->request->get('handlingId');
-		$resultId = $request->request->get('resultId');
+    /**
+     * Renders handling more information
+     *
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function handlingMoreInfoAction(Request $request)
+    {
+        $handlingId = $request->request->get('handlingId');
+        $resultId = $request->request->get('resultId');
 
-		$types = $this->getDoctrine()
-			->getRepository('ListsHandlingBundle:HandlingMoreInfoType')
-			->createQueryBuilder('hmit')
-			->where('hmit.handlingResultId = :resultId')
-			->setParameter(':resultId', $resultId)
-			->getQuery()
-			->getREsult();
+        $types = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingMoreInfoType')
+            ->createQueryBuilder('hmit')
+            ->where('hmit.handlingResultId = :resultId')
+            ->setParameter(':resultId', $resultId)
+            ->getQuery()
+            ->getREsult();
 
-		$moreInfoObjects = $this->getDoctrine()
-			->getRepository('ListsHandlingBundle:HandlingMoreInfo')
-			->createQueryBuilder('hmi')
-			->where('hmi.handlingId = :handlingId')
-			->setParameter(':handlingId', $handlingId)
-			->getQuery()
-			->getREsult();
+        $moreInfoObjects = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingMoreInfo')
+            ->createQueryBuilder('hmi')
+            ->where('hmi.handlingId = :handlingId')
+            ->setParameter(':handlingId', $handlingId)
+            ->getQuery()
+            ->getREsult();
 
-		$moreInfoArray = $this->processHandlingMoreInfo($moreInfoObjects);
+        $moreInfoArray = $this->processHandlingMoreInfo($moreInfoObjects);
 
-		$result = array(
-			'success' => 1,
-		);
+        $result = array(
+            'success' => 1,
+        );
 
-		$html = $this->renderView('SDCommonBundle:Ajax:moreInfo.html.twig', array(
-			'types' => $types,
-			'moreInfo' => $moreInfoArray,
-			'handlingId' => $handlingId
-		));
+        $html = $this->renderView('SDCommonBundle:Ajax:moreInfo.html.twig', array(
+            'types' => $types,
+            'moreInfo' => $moreInfoArray,
+            'handlingId' => $handlingId
+        ));
 
-		$result['html'] = $html;
+        $result['html'] = $html;
 
-		return new Response(json_encode($result));
-	}
+        return new Response(json_encode($result));
+    }
 
-	public function processHandlingMoreInfo($moreInfoObjects)
-	{
-		$result = array();
+    public function processHandlingMoreInfo($moreInfoObjects)
+    {
+        $result = array();
 
-		foreach ($moreInfoObjects as $object)
-		{
-			$typeId = $object->getHandlingMoreInfoTypeId();
+        foreach ($moreInfoObjects as $object) {
+            $typeId = $object->getHandlingMoreInfoTypeId();
 
-			if ($typeId)
-			{
-				$result[$typeId] = $object;
-			}
-		}
+            if ($typeId) {
+                $result[$typeId] = $object;
+            }
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 
     /**
      * Saves organizationChildForm
@@ -1428,8 +1856,7 @@ class AjaxController extends Controller
 
         $connection->beginTransaction();
 
-        try
-        {
+        try {
             /** @var Organization $organizationChild */
             $organizationChild = $em->getRepository('ListsOrganizationBundle:Organization')
                 ->find($organizationChildId);
@@ -1610,6 +2037,140 @@ class AjaxController extends Controller
             'noticePassword',
             'Password changed successfully!'
         );
+
+        return true;
+    }
+
+    /**
+     * Saves dop dogovor ajax form
+     */
+    public function dopDogovorFormSave($form, $user, $request)
+    {
+        $data = $form->getData();
+
+        if (!$data->getId()) {
+            $data->setUser($user);
+        }
+
+        $file = $form['file']->getData();
+
+        if ($file) {
+            $data->upload();
+        }
+
+        $dogovorId = $data->getDogovorId();
+
+        $dogovor = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:Dogovor')
+            ->find($dogovorId);
+
+        $data->setDogovor($dogovor);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
+
+    /**
+     * Process default to Dogovor Department form
+     *
+     * @param Form    $form
+     * @param mixed[] $defaultData
+     */
+    public function dogovorDepartmentFormProcessDefaults(Form $form, $defaultData)
+    {
+        $dogovorId = $defaultData['dogovorId'];
+
+        $organizationIds = array();
+
+        $dogovor = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:Dogovor')
+            ->find($dogovorId);
+
+        $form
+            ->add('dopDogovor', 'entity', array(
+                'class' => 'ListsDogovorBundle:DopDogovor',
+                'empty_value' => '',
+                'required' => false,
+                'query_builder' => function (DopDogovorRepository $repository) use ($dogovorId) {
+                        return $repository->createQueryBuilder('dd')
+                            ->where('dd.dogovorId = :dogovorId')
+                            ->setParameter(':dogovorId', $dogovorId);
+                    }
+            ));
+
+        /** @var DepartmentsRepository $dr */
+        $dr = $this->get('lists_department.repository');
+
+        $form
+            ->add('departments', 'entity', array(
+                'class' => 'ListsDepartmentBundle:Departments',
+                'empty_value' => '',
+                'required' => true,
+                'mapped' => false,
+                'multiple' => true,
+                'query_builder' => $dr->getDepartmentsForDogovor($dogovorId)
+            ));
+    }
+
+    /**
+     * Saves dogovor department ajax form
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return bool
+     */
+    public function dogovorDepartmentFormSave($form, $user, $request)
+    {
+        /** @var DogovorDepartment $data */
+        $data = $form->getData();
+
+        $data->setUser($this->getUser());
+
+        $requestData = $request->request->get($form->getName());
+
+        $departmentIds = $requestData['departments'];
+
+        $insert = false;
+
+        $dogovorId = $data->getDogovorId();
+
+        $dogovor = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:Dogovor')
+            ->find($dogovorId);
+
+        $data->setDogovor($dogovor);
+
+        /** @var DogovorDepartmentRepository $ddr */
+        $ddr = $this->get('lists_dogovor.department.repository');
+
+        $dr = $this->get('lists_department.repository');
+
+        $dopDogovorId = $data->getDopDogovor() ? $data->getDopDogovor()->getId() : null;
+
+        $em = $this->getDoctrine()->getManager();
+
+        foreach ($departmentIds as $departmentId) {
+            if (!$ddr->isExists($data->getDogovorId(), $dopDogovorId, $departmentId)) {
+                $newData = clone $data;
+
+                $department = $dr->find($departmentId);
+
+                $newData->setDepartment($department);
+
+                $em->persist($newData);
+
+                $insert = true;
+            }
+        }
+
+        if ($insert) {
+            $em->flush();
+        }
 
         return true;
     }

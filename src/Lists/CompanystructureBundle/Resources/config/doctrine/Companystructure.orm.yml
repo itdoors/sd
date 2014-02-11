@@ -1,0 +1,63 @@
+Lists\CompanystructureBundle\Entity\Companystructure:
+    type: entity
+    table: companystructure
+    repositoryClass:  Lists\CompanystructureBundle\Entity\CompanystructureRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        mpk:
+            type: string
+            length: 10
+            fixed: false
+            nullable: false
+        address:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        phone:
+            type: string
+            length: 12
+            fixed: false
+            nullable: true
+        staffId:
+            type: bigint
+            nullable: true
+            column: stuff_id
+    manyToMany:
+        region:
+            targetEntity: Lists\RegionBundle\Entity\Region
+            inversedBy: companystructure
+            joinTable:
+                name: companystructure_region
+                joinColumns:
+                  companystructure_id:
+                    referencedColumnName: id
+                inverseJoinColumns:
+                    region_id:
+                        referencedColumnName: id
+    manyToOne:
+        staff:
+            targetEntity: SD\UserBundle\Entity\Staff
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                stuff_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        parent:
+            targetEntity: Companystructure
+            joinColumns:
+                parent_id:
+                    referencedColumnName: id
+    lifecycleCallbacks: {  }

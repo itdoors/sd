@@ -34,8 +34,6 @@ class ModelContactRepository extends EntityRepository
         $this->processBaseQuery($sql);
         $this->processBaseQuery($sqlCount);
 
-
-
 		if ($id)
 		{
 			$this->processIdQuery($sql, $id);

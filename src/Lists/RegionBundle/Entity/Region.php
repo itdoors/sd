@@ -181,4 +181,45 @@ class Region
     {
         return $this->cities;
     }
+
+
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $companystructure;
+
+
+    /**
+     * Add companystructure
+     *
+     * @param \Lists\CompanystructureBundle\Entity\Companystructure $companystructure
+     * @return Region
+     */
+    public function addCompanystructure(\Lists\CompanystructureBundle\Entity\Companystructure $companystructure)
+    {
+        $this->companystructure[] = $companystructure;
+    
+        return $this;
+    }
+
+    /**
+     * Remove companystructure
+     *
+     * @param \Lists\CompanystructureBundle\Entity\Companystructure $companystructure
+     */
+    public function removeCompanystructure(\Lists\CompanystructureBundle\Entity\Companystructure $companystructure)
+    {
+        $this->companystructure->removeElement($companystructure);
+    }
+
+    /**
+     * Get companystructure
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCompanystructure()
+    {
+        return $this->companystructure;
+    }
 }

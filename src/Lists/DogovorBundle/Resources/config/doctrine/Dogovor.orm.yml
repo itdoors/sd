@@ -1,0 +1,196 @@
+Lists\DogovorBundle\Entity\Dogovor:
+    type: entity
+    table: dogovor
+    repositoryClass: Lists\DogovorBundle\Entity\DogovorRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        startdatetime:
+            type: datetime
+            nullable: false
+        stopdatetime:
+            type: datetime
+            nullable: true
+        subject:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        filepath:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        isActive:
+            type: boolean
+            nullable: true
+            column: is_active
+        mashtab:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        prolongation:
+            type: boolean
+            nullable: true
+        number:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        total:
+            type: float
+            nullable: true
+        maturity:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        completionNotice:
+            type: boolean
+            nullable: true
+            column: completion_notice
+        paymentDeferment:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: payment_deferment
+        prolongationTerm:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: prolongation_term
+        prolongationDate:
+            type: datetime
+            nullable: true
+            column: prolongation_date
+        launchDate:
+            type: date
+            nullable: true
+            column: launch_date
+        summMonthVat:
+            type: float
+            nullable: true
+            column: summ_month_vat
+        plannedPf1:
+            type: float
+            nullable: true
+            column: planned_pf1
+        plannedPf1Percent:
+            type: float
+            nullable: true
+            column: planned_pf1_percent
+        customerId:
+            type: integer
+            column: customer_id
+        performerId:
+            type: integer
+            column: performer_id
+        organizationId:
+            type: integer
+            column: organization_id
+        cityId:
+            type: integer
+            column: city_id
+        dogovorTypeId:
+            type: integer
+            column: dogovor_type_id
+    manyToOne:
+        customer:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                customer_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        performer:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                performer_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        city:
+            targetEntity: Lists\CityBundle\Entity\City
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                city_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        companyRole:
+            targetEntity: Lists\LookupBundle\Entity\Lookup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                company_role_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        companystructure:
+            targetEntity: Lists\CompanystructureBundle\Entity\Companystructure
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                companystructure_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        dogovorType:
+            targetEntity: Lists\LookupBundle\Entity\Lookup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                dogovor_type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        organization:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                organization_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        stuff:
+            targetEntity: SD\UserBundle\Entity\Staff
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                stuff_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        saller:
+            targetEntity: SD\UserBundle\Entity\User
+            joinColumns:
+                saller_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

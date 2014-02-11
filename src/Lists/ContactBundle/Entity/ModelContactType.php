@@ -90,4 +90,49 @@ class ModelContactType
     {
         return $this->getName();
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $contacts;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->contacts = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add contacts
+     *
+     * @param \Lists\ContactBundle\Entity\ModelContact $contacts
+     * @return ModelContactType
+     */
+    public function addContact(\Lists\ContactBundle\Entity\ModelContact $contacts)
+    {
+        $this->contacts[] = $contacts;
+    
+        return $this;
+    }
+
+    /**
+     * Remove contacts
+     *
+     * @param \Lists\ContactBundle\Entity\ModelContact $contacts
+     */
+    public function removeContact(\Lists\ContactBundle\Entity\ModelContact $contacts)
+    {
+        $this->contacts->removeElement($contacts);
+    }
+
+    /**
+     * Get contacts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getContacts()
+    {
+        return $this->contacts;
+    }
 }

@@ -1,0 +1,34 @@
+#DOGOVOR ROUTE
+lists_dogovor_dogovor_index:
+    pattern:  /lists/dogovor/dogovor/index
+    defaults: { _controller: ListsDogovorBundle:Dogovor:index }
+
+lists_dogovor_dogovor_new:
+    pattern:  /lists/dogovor/dogovor/new
+    defaults: { _controller: ListsDogovorBundle:Dogovor:new }
+
+lists_dogovor_dogovor_show:
+    pattern:  /lists/dogovor/dogovor/show/{id}
+    defaults: { _controller: ListsDogovorBundle:Dogovor:show }
+
+lists_dogovor_dogovor_filter:
+    pattern:  /lists/dogovor/dogovor/filter
+    defaults: { _controller: ListsDogovorBundle:Dogovor:filter }
+
+lists_dogovor_ajax_element:
+    pattern:  /lists/dogovor/ajax/element/{id}
+    defaults: { _controller: ListsDogovorBundle:Dogovor:element }
+
+#DOP DOGOVOR ROUTE
+lists_dogovor_dopdogovor_list:
+    pattern:  /lists/dogovor/dopdogovor/list/{dogovorId}
+    defaults: { _controller: ListsDogovorBundle:DopDogovor:list }
+
+lists_dopdogovor_ajax_element:
+    pattern:  /lists/dogovor/dopdogovor/ajax/element/{id}
+    defaults: { _controller: ListsDogovorBundle:DopDogovor:element }
+
+#DOGOVOR DEPARTMENT
+lists_dogovor_department_list:
+    pattern:  /lists/dogovor/department/list/{dogovorId}
+    defaults: { _controller: ListsDogovorBundle:DogovorDepartment:list }

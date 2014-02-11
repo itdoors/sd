@@ -1,0 +1,26 @@
+Lists\DepartmentBundle\Entity\DepartmentsType:
+    type: entity
+    table: departments_type
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        slug:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        description:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+    lifecycleCallbacks: {  }

@@ -1,0 +1,105 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsDogovorBundle' %}
+{% block title %}{% trans %}Show Dogovor{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans from 'messages' %}Dashboard{% endtrans %}">{% trans from 'messages' %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_dogovor_index') }}" title="{% trans %}Dogovor list{% endtrans %}">{% trans %}Dogovor list{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_dogovor_show', { id : dogovor.id }) }}"  title="{% trans %}Show Dogovor{% endtrans %}">{% trans %}Show Dogovor{% endtrans %}</a></li>
+    </ul>
+{% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Dogovor <small>show dogovor</small>{% endtrans %}
+    </h3>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic//plugins/jquery-multi-select/css/multi-select.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/jquery-multi-select/js/jquery.multi-select.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/jquery-multi-select/js/jquery.quicksearch.js')}}"></script>
+{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tabbable tabbable-custom boxless">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#tab_0" data-toggle="tab">{% trans %}General info{% endtrans %}</a></li>
+                    <li><a href="#tab_1" data-toggle="tab">{% trans %}Dop dogovor{% endtrans %}</a></li>
+                    <li><a href="#tab_2" data-toggle="tab">{% trans %}Departments{% endtrans %}</a></li>
+                    <li><a href="#tab_3" data-toggle="tab">{% trans %}History{% endtrans %}</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_0">
+                        {{  include(
+                            'ListsDogovorBundle:' ~ baseTemplate ~ ':edit.html.twig',
+                                {
+                                    dogovor: dogovor
+                                }
+                            )
+                        }}
+                    </div>
+                    <!--tabpane-->
+                    <div class="tab-pane" id="tab_1">
+                        {{  include(
+                            'ListsDogovorBundle:' ~ baseTemplate ~ ':dopdogovor.html.twig',
+                                {
+                                    dogovor: dogovor
+                                }
+                            )
+                        }}
+                    </div>
+                    <!--tabpane-->
+                    <div class="tab-pane" id="tab_2">
+                        {{  include(
+                            'ListsDogovorBundle:' ~ baseTemplate ~ ':departments.html.twig',
+                                {
+                                    dogovor: dogovor
+                                }
+                            )
+                        }}
+                    </div>
+                    <!--tabpane-->
+                    <div class="tab-pane" id="tab_3">
+                        {{  include(
+                            'ListsDogovorBundle:' ~ baseTemplate ~ ':prolongationHistory.html.twig',
+                                {
+                                    dogovor: dogovor
+                                }
+                            )
+                        }}
+                    </div>
+                    <!--tabpane-->
+                </div>
+                <!--tab-content-->
+            </div>
+            <!--tabbale-->
+        </div>
+    </div>
+    <!--row-->
+{% endblock body %}

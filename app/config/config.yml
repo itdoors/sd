@@ -2,6 +2,12 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
 
+parameters:
+    security.encoder.digest.class: SD\UserBundle\Security\MessageDigestPasswordEncoder
+    # Dogovor Params
+    dogovor.prolongation.limit: 5184000 # in seconds
+
+
 framework:
     #esi:             ~
     translator:      { fallback: ru }
@@ -27,6 +33,9 @@ framework:
 twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
+    globals:
+        prolongation_limit : %dogovor.prolongation.limit%
+
 
 # Assetic Configuration
 assetic:

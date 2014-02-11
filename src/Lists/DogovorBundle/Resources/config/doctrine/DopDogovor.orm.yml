@@ -1,0 +1,77 @@
+Lists\DogovorBundle\Entity\DopDogovor:
+    type: entity
+    table: dop_dogovor
+    repositoryClass: Lists\DogovorBundle\Entity\DopDogovorRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        dopDogovorType:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: dop_dogovor_type
+        number:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        startdatetime:
+            type: datetime
+            nullable: false
+        activedatetime:
+            type: datetime
+            nullable: true
+        subject:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        isActive:
+            type: boolean
+            nullable: true
+            column: is_active
+        filepath:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        total:
+            type: float
+            nullable: true
+        dogovorId:
+            type: integer
+            column: dogovor_id
+    manyToOne:
+        dogovor:
+            targetEntity: Dogovor
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                dogovor_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        saller:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                saller_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

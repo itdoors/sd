@@ -1,0 +1,27 @@
+{% trans_default_domain 'ListsDogovorBundle' %}
+<table class="table table-striped table-bordered table-advance table-hover">
+    <thead>
+    <tr>
+        <th>{% trans %}ID{% endtrans %} </th>
+        <th>{% trans from 'messages' %}Createdatetime{% endtrans %} </th>
+        <th>{% trans from 'messages' %}Creator{% endtrans %} </th>
+        <th>{% trans %}Dogovor{% endtrans %} </th>
+        <th>{% trans %}Dop Dogovor{% endtrans %} </th>
+        <th>{% trans %}From{% endtrans %} </th>
+        <th>{% trans %}To{% endtrans %} </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in items %}
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.createdatetime|date('d.m.Y') }}</td>
+            <td>{{ item.userFullName }}</td>
+            <td>{{ item.dogovorNumber }}</td>
+            <td>{{ item.dopDogovorString }}</td>
+            <td>{{ item.prolongationDateFrom|date('d.m.Y') }}</td>
+            <td>{{ item.prolongationDateTo|date('d.m.Y') }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
