@@ -68,7 +68,7 @@ class DopDogovorForm extends AbstractType
 
                 $translator = $container->get('translator');
 
-                if ($data->getStartdatetime() >= $data->getActivedatetime())
+                if ($data->getStartdatetime() > $data->getActivedatetime())
                 {
                     $msg = $translator->trans("Start date can't be greater then activate date", array(), 'ListsDogovorBundle');
 

@@ -117,8 +117,8 @@ class DogovorForm extends AbstractType
 
                 if ($data->getLaunchDate())
                 {
-                    if ($data->getLaunchDate() <= $data->getStartdatetime() ||
-                        $data->getLaunchDate() >= $data->getStopdatetime())
+                    if ($data->getLaunchDate() < $data->getStartdatetime() ||
+                        $data->getLaunchDate() > $data->getStopdatetime())
                     {
                         $msg = $translator->trans("Launch date can't be less then start or greater then stop date", array(), 'ListsDogovorBundle');
 
