@@ -31,8 +31,14 @@ class SDAccess
         /** @var User $user */
         $user = $this->container->get('security.context')->getToken()->getUser();
 
-        // Form SaLES ADMIN
+        // FOR SALES ADMIN
         if ($user->hasRole('ROLE_SALESADMIN'))
+        {
+            return true;
+        }
+
+        // FOR DOGOVOR ADMIN
+        if ($user->hasRole('ROLE_DOGOVORADMIN'))
         {
             return true;
         }

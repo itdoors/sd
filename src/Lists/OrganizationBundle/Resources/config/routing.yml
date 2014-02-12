@@ -87,3 +87,33 @@ lists_sales_admin_organization_ajax_index:
 lists_sales_admin_organization_ajax_users:
     pattern:  /lists/salesadmin/organization/ajax/users/{organizationId}
     defaults: { _controller: ListsOrganizationBundle:SalesAdmin:organizationUsers }
+
+
+# Dogovor Admin route
+lists_dogovor_admin_organization_index:
+    pattern:  /lists/dogovor/admin/organization/index
+    defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:index }
+
+lists_dogovor_admin_organization_new:
+    pattern:  /lists/dogovor/admin/organization/new
+    defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:new }
+
+lists_dogovor_admin_organization_show:
+    pattern:  /lists/dogovor/admin/organization/show/{id}
+    defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:show }
+
+lists_dogovor_admin_organization_filter:
+    pattern:  /lists/dogovor/admin/organization/filter
+    defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:filter }
+
+lists_dogovor_admin_organization_filter_clear:
+    pattern:  /lists/dogovor/admin/organization/filter_clear
+    defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:filterClear }
+
+lists_dogovor_admin_organization_ajax_index:
+    pattern:  /lists/dogovor/admin/organization/ajax/index
+    defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:ajaxIndex }
+
+lists_dogovor_admin_organization_ajax_users:
+    pattern:  /lists/dogovor/admin/organization/ajax/users/{organizationId}
+    defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:organizationUsers }

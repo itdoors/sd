@@ -186,3 +186,7 @@ handling_service:
     resource: "@ListsHandlingBundle/Resources/config/routing/handlingservice.yml"
     prefix:   /lists/salesadmin/handlingservice/
 
+# Dogovor Admin Route
+lists_dogovor_admin_handling_add_organization_filter:
+    pattern:  /lists/sales/handling/add_organization_filter/{organization_id}
+    defaults: { _controller: ListsHandlingBundle:Sales:addOrganizationFilter }
