@@ -3,6 +3,7 @@
 namespace Lists\HandlingBundle\Form;
 
 use Lists\HandlingBundle\Entity\HandlingMessage;
+use SD\UserBundle\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
@@ -74,6 +75,25 @@ class HandlingMessageFormType extends AbstractType
                 'mapped' => false
             ))
         ;
+
+        /** @var User $user */
+        $user = $container->get('security.context')->getToken()->getUser();
+
+        if ($user->hasRole('ROLE_SALESADMIN'))
+        {
+            $builder
+                ->add('user', 'hidden_entity', array(
+                    'entity' => 'SDUserBundle:User',
+                    'data_class' => null,
+                    'data' => $user
+                ))
+                ->add('userNext', 'hidden_entity', array(
+                    'entity' => 'SDUserBundle:User',
+                    'data_class' => null,
+                    'data' => $user,
+                    'mapped' => false
+                ));
+        }
 
         $builder
             ->add('create', 'submit')

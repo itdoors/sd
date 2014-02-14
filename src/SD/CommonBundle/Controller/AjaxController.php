@@ -10,6 +10,7 @@ use Lists\DogovorBundle\Entity\DogovorHistory;
 use Lists\DogovorBundle\Entity\DopDogovor;
 use Lists\DogovorBundle\Entity\DopDogovorRepository;
 use Lists\HandlingBundle\Entity\HandlingMessage;
+use SD\UserBundle\Entity\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -1054,9 +1055,16 @@ class AjaxController extends Controller
             ->getRepository('ListsHandlingBundle:Handling')
             ->find($handlingId);
 
-        $user = $this->getUser();
+
         $data->setCreatedatetime(new \DateTime());
-        $data->setUser($user);
+
+        $user = $this->getUser();
+
+        if (!$data->getUser())
+        {
+            $data->setUser($user);
+        }
+
         $data->setHandling($handling);
 
         $file = $form['file']->getData();
@@ -1078,11 +1086,29 @@ class AjaxController extends Controller
         $contactNext = $formData['contactnext'];
         $descriptionNext = $formData['descriptionnext'];
         $statusId = $formData['status'];
+        //$nextUser
 
         $handlingMessage = new HandlingMessage();
         $handlingMessage->setCreatedate($nextDatetime);
         $handlingMessage->setCreatedatetime(new \DateTime());
-        $handlingMessage->setUser($user);
+
+        if (isset($formData['userNext']) && $formData['userNext'])
+        {
+            /** @var UserRepository $ur */
+            $ur = $this->get('sd_user.repository');
+
+            $userNext = $ur->find($formData['userNext']);
+
+            if ($userNext)
+            {
+                $handlingMessage->setUser($userNext);
+            }
+        }
+        else
+        {
+            $handlingMessage->setUser($user);
+        }
+
         $handlingMessage->setHandling($handling);
         $handlingMessage->setType($type);
         $handlingMessage->setIsBusinessTrip(isset($formData['next_is_business_trip']) ? true : false);
