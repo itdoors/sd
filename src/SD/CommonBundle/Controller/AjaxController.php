@@ -1055,7 +1055,6 @@ class AjaxController extends Controller
             ->getRepository('ListsHandlingBundle:Handling')
             ->find($handlingId);
 
-
         $data->setCreatedatetime(new \DateTime());
 
         $user = $this->getUser();
