@@ -204,6 +204,20 @@ class HandlingRepository extends EntityRepository
                         $sql->andWhere('users.id in (:userFilterIds)');
                         $sql->setParameter(':userFilterIds', $value);
                         break;
+                    case 'usersString':
+                        $value = explode(',', $value);
+                        $sql->andWhere('users.id in (:userFilterIds)');
+                        $sql->setParameter(':userFilterIds', $value);
+                        break;
+
+                    case 'progress':
+                        $sql->andWhere('result.progress = :resultProgress');
+                        $sql->setParameter(':resultProgress', $value);
+                        break;
+
+                    case 'isClosed':
+                        $sql->andWhere('h.isClosed <> true or h.isClosed is null');
+                        break;
                 }
             }
         }

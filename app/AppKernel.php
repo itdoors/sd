@@ -34,6 +34,7 @@ class AppKernel extends Kernel
             new Lists\DogovorBundle\ListsDogovorBundle(),
             new Lists\CompanystructureBundle\ListsCompanystructureBundle(),
             new Lists\DepartmentBundle\ListsDepartmentBundle(),
+            new Lists\ReportBundle\ListsReportBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

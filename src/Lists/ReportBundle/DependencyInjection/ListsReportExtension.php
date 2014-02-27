@@ -1,6 +1,6 @@
 <?php
 
-namespace Lists\CityBundle\DependencyInjection;
+namespace Lists\ReportBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class ListsCityExtension extends Extension
+class ListsReportExtension extends Extension
 {
     /**
      * {@inheritDoc}

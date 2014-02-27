@@ -1,11 +1,11 @@
-lists_sales_report_index:
-    pattern:  /lists/sales/report
-    defaults: { _controller: ListsCalendarBundle:Sales:report }
+lists_sales_admin_report_handling_status_filter:
+    pattern:  /lists/salesadmin/report/handling/tatus/filter
+    defaults: { _controller: ListsReportBundle:SalesAdmin:filter }
 
-lists_sales_dispatcher_report_index:
-    pattern:  /lists/salesdispatcher/report
-    defaults: { _controller: ListsCalendarBundle:SalesDispatcher:report }
+lists_sales_admin_report_handling_status_filter_clear:
+    pattern:  /lists/salesadmin/report/handlingstatus/filter_clear
+    defaults: { _controller: ListsHandlingBundle:Sales:filterClear }
 
-lists_sales_admin_report_index:
-    pattern:  /lists/salesadmin/report
-    defaults: { _controller: ListsCalendarBundle:SalesAdmin:report }
+lists_report_sales_admin_handling_status:
+    pattern:  /lists/salesadmin/report/handling/status
+    defaults: { _controller: ListsReportBundle:SalesAdmin:reportHandlingStatus }

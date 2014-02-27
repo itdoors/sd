@@ -14,7 +14,19 @@ parameters:
     lists_handling.message.repository.class: Lists\HandlingBundle\Entity\HandlingMessageRepository
     lists_handling.message.repository.entity: Lists\HandlingBundle\Entity\HandlingMessage
 
+    lists_handling.repository.class: Lists\HandlingBundle\Entity\HandlingRepository
+    lists_handling.repository.entity: Lists\HandlingBundle\Entity\Handling
+
 services:
+    lists_handling.repository:
+        class: %lists_handling.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_handling.repository.entity% ]
+
+    handling.repository:
+        alias: lists_handling.repository
+
     lists_handling.message.repository:
         class: %lists_handling.message.repository.class%
         factory_service: doctrine # this is an instance of Registry

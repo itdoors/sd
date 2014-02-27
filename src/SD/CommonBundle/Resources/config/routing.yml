@@ -86,6 +86,10 @@ sd_common_ajax_user_by_id:
     pattern:  /ajax/user_by_id
     defaults: { _controller: SDCommonBundle:Ajax:userById }
 
+sd_common_ajax_user_by_ids:
+    pattern:  /ajax/user_by_ids
+    defaults: { _controller: SDCommonBundle:Ajax:userByIds }
+
 sd_common_ajax_city_by_id:
     pattern:  /ajax/city_by_id
     defaults: { _controller: SDCommonBundle:Ajax:cityById }

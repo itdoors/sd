@@ -1,3 +1,7 @@
+lists_report:
+    resource: "@ListsReportBundle/Resources/config/routing.yml"
+    prefix:   /
+
 lists_department:
     resource: "@ListsDepartmentBundle/Resources/config/routing.yml"
     prefix:   /
