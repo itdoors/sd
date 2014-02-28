@@ -259,6 +259,8 @@ class HandlingRepository extends EntityRepository
            ->addSelect('status.percentageString as percentageString')
            ->addSelect('status.progress as progress')
            ->addSelect('result.slug as resultSlug')
+           ->addSelect('result.percentageString as resultPercentageString')
+           ->addSelect('result.progress as resultProgress')
            ->leftJoin('h.organization', 'o')
            ->leftJoin('h.type', 'type')
            ->leftJoin('h.status', 'status')

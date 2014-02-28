@@ -369,11 +369,28 @@ class AjaxController extends Controller
 
         $result = array();
 
+        $result[] = $this->getEmptyResult();
+
         foreach ($objects as $object) {
             $result[] = $this->serializeObject($object);
         }
 
         return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns empty result array
+     *
+     * @return mixed
+     */
+    protected function getEmptyResult()
+    {
+        return array(
+            'id' => '',
+            'value' => '',
+            'name' => '',
+            'text' => ''
+        );
     }
 
     /**
@@ -392,12 +409,7 @@ class AjaxController extends Controller
 
         $result = array();
 
-        $result[] = array(
-            'id' => '',
-            'value' => '',
-            'name' => '',
-            'text' => ''
-        );
+        $result[] = $this->getEmptyResult();
 
         foreach ($objects as $object) {
             $result[] = $this->serializeObject($object);

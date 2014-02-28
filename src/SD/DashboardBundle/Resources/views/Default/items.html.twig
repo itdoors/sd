@@ -78,7 +78,7 @@
             <!-- /.modal-content -->
         </div>
     </div>
-    {#{{ render(controller('ListsHandlingBundle:' ~ masterRole ~ ':List')) }}#}
+    {{ render(controller('ListsHandlingBundle:' ~ masterRole ~ ':List')) }}
     {{ include('SDCalendarBundle::base.html.twig', {
         url: path('sd_calendar_' ~ masterRoleRoute ~ '_handling_message')
     }) }}
