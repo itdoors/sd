@@ -35,6 +35,7 @@ class AppKernel extends Kernel
             new Lists\CompanystructureBundle\ListsCompanystructureBundle(),
             new Lists\DepartmentBundle\ListsDepartmentBundle(),
             new Lists\ReportBundle\ListsReportBundle(),
+            new ITDoors\AjaxBundle\ITDoorsAjaxBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

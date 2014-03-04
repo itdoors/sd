@@ -2,8 +2,10 @@
 
 namespace Lists\HandlingBundle\Entity;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
+use SD\CalendarBundle\Services\CalendarService;
 
 /**
  * HandlingMessageRepository
@@ -58,11 +60,13 @@ class HandlingMessageRepository extends EntityRepository
      * @param int[] $userIds
      * @param string $startTimestamp
      * @param string $endTimestamp
+     * @param mixed[] $filters
      *
      * @return mixed[]
      */
-    public function getAllMessages($userIds, $startTimestamp, $endTimestamp)
+    public function getAllMessages($userIds, $startTimestamp, $endTimestamp, $filters = array())
     {
+        /** @var QueryBuilder $sql */
         $sql = $this->createQueryBuilder('hm')
             ->select('hm.id as id')
             ->addSelect('hm.handling_id as handlingId')
@@ -75,8 +79,39 @@ class HandlingMessageRepository extends EntityRepository
             ->where('hm.createdate >= :startTimestamp')
             ->andWhere('hm.createdate <= :endTimestamp');
 
-        /*$sql
-            ->setParameter(':startTimestamp', new \DateTime(), \Doctrine\DBAL\Types\Type::DATETIME);*/
+        $onlyLastMessages = true;
+
+        if (isset($filters['eventType']))
+        {
+            if ($filters['eventType'] == CalendarService::EVENT_TYPE_CHOICE_ALL)
+            {
+                $onlyLastMessages = false;
+            }
+        }
+
+        if (isset($filters['userIds']) && $filters['userIds'])
+        {
+            $userIds = explode(',', $filters['userIds']);
+        }
+
+        // Set handling future messages
+        if ($onlyLastMessages)
+        {
+            $sql
+                ->andWhere('hm.additionalType = :additionalType')
+                ->setParameter(':additionalType', HandlingMessage::ADDITIONAL_TYPE_FUTURE_MESSAGE);
+
+            $sql
+                ->andWhere('hm.id =
+                (
+                    SELECT
+                        MAX(hm1.id)
+                    FROM
+                        ListsHandlingBundle:HandlingMessage hm1
+                    WHERE
+                        hm1.handling_id = hm.handling_id
+                )');
+        }
 
         $dateTimeFrom = new \DateTime();
         $dateTimeTo = new \DateTime();

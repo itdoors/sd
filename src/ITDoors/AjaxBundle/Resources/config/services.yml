@@ -1,0 +1,9 @@
+parameters:
+    it_doors_ajax.twig.ajax_filter_extension.class: ITDoors\AjaxBundle\Twig\AjaxFilterExtention
+
+services:
+    it_doors_ajax.twig.ajax_filter_extension:
+        class: %it_doors_ajax.twig.ajax_filter_extension.class%
+        arguments: [@service_container]
+        tags:
+            - { name: twig.extension }

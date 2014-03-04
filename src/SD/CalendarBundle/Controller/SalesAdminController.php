@@ -21,7 +21,9 @@ class SalesAdminController extends SalesDispatcherController
         $startTimestamp = $request->query->get('start');
         $endTimestamp = $request->query->get('end');
 
-        $events = $this->getEventsByUserIds(null, $startTimestamp, $endTimestamp);
+        $filters = $this->getFilters($this->container->getParameter('ajax.filter.namespace.dashboard.calendar'));
+
+        $events = $this->getEventsByUserIds(null, $startTimestamp, $endTimestamp, $filters);
 
         $response = new JsonResponse($events);
 

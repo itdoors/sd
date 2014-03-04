@@ -3,6 +3,7 @@
 namespace SD\CalendarBundle\Controller;
 
 use Lists\HandlingBundle\Entity\HandlingMessageRepository;
+use SD\CommonBundle\Controller\BaseFilterController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Lists\HandlingBundle\Entity\HandlingMessage;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class SalesController
  */
-class SalesController extends Controller
+class SalesController extends BaseFilterController
 {
 	protected $baseRoutePrefix = 'sales';
 	protected $baseTemplate = 'Sales';
@@ -57,11 +58,10 @@ class SalesController extends Controller
         /** @var HandlingMessageRepository $handlingMessagesRepository */
         $handlingMessagesRepository = $this->get('lists_handling.message.repository');
 
-        /*$handlingMessages = $handlingMessagesRepository
-            ->getFutureMessages($userIds);*/
+        $filters = $this->getFilters($this->container->getParameter('ajax.filter.namespace.dashboard.calendar'));
 
         $handlingMessages = $handlingMessagesRepository
-            ->getAllMessages($userIds, $startTimestamp, $endTimestamp);
+            ->getAllMessages($userIds, $startTimestamp, $endTimestamp, $filters);
 
 		foreach ($handlingMessages as $handlingMessage)
 		{

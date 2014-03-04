@@ -51,20 +51,24 @@ class BaseFilterController extends Controller
         return $this->redirect($this->generateUrl($this->baseRoute));
     }
 
-    public function setFilters($filters)
+    public function setFilters($filters, $filterNamespace = '')
     {
         /** @var \Symfony\Component\HttpFoundation\Session\Session $session */
         $session = $this->get('session');
 
-        $session->set($this->filterNamespace, $filters);
+        $filterNamespace = $filterNamespace ? $filterNamespace : $this->filterNamespace;
+
+        $session->set($filterNamespace, $filters);
     }
 
-    public function getFilters()
+    public function getFilters($filterNamespace = '')
     {
         /** @var \Symfony\Component\HttpFoundation\Session\Session $session */
         $session = $this->get('session');
 
-        return $session->get($this->filterNamespace);
+        $filterNamespace = $filterNamespace ? $filterNamespace : $this->filterNamespace;
+
+        return $session->get($filterNamespace);
     }
 
     public function clearFilters()

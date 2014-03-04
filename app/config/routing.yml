@@ -1,3 +1,7 @@
+it_doors_ajax:
+    resource: "@ITDoorsAjaxBundle/Resources/config/routing.yml"
+    prefix:   /
+
 lists_report:
     resource: "@ListsReportBundle/Resources/config/routing.yml"
     prefix:   /

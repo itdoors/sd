@@ -30,7 +30,9 @@ class SalesDispatcherController extends SalesController
 
 		$teamUserIds = $teamRepository->getMyTeamIdsByUser($user);
 
-		$events = $this->getEventsByUserIds($teamUserIds, $startTimestamp, $endTimestamp);
+        $filters = $this->getFilters($this->container->getParameter('ajax.filter.namespace.dashboard.calendar'));
+
+		$events = $this->getEventsByUserIds($teamUserIds, $startTimestamp, $endTimestamp, $filters);
 
         return new Response(json_encode($events));
 	}

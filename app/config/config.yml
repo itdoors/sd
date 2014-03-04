@@ -6,6 +6,7 @@ parameters:
     security.encoder.digest.class: SD\UserBundle\Security\MessageDigestPasswordEncoder
     # Dogovor Params
     dogovor.prolongation.limit: 5184000 # in seconds
+    ajax.filter.namespace.dashboard.calendar: "dashboard.calendar"
 
 
 framework:
@@ -35,6 +36,7 @@ twig:
     strict_variables: %kernel.debug%
     globals:
         prolongation_limit : %dogovor.prolongation.limit%
+        ajax_filter_namespace_dashboard_calendar: %ajax.filter.namespace.dashboard.calendar%
 
 
 # Assetic Configuration

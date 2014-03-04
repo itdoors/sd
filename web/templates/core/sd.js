@@ -4,6 +4,7 @@ var SD = (function() {
         ajaxFormClass: 'ajax-form',
         ajaxDeleteClass: 'ajax-delete',
         ajaxFormEntityClass: 'ajax-form-entity',
+        ajaxFilterFormClass: 'ajax-filter-form',
         ajaxFormCancelBtnClass: 'sd-cancel-btn',
         ajaxMoreInfoClass: 'more-info',
         ajaxFormUrl: '',
@@ -24,9 +25,22 @@ var SD = (function() {
 
         this.initAjaxForm();
 
+        this.initAjaxFilterForm();
+
         this.initAjaxDelete();
 
         this.initMoreInfo();
+
+        this.initSelect2();
+    }
+
+    SD.prototype.initSelect2 = function()
+    {
+        var selfSD = this;
+
+        $('.sd-select2').each(function(index) {
+            selfSD.select2($(this));
+        });
     }
 
     SD.prototype.initAjaxForm = function()
@@ -339,10 +353,14 @@ var SD = (function() {
         var url = $selector.data('url');
         var urlById = $selector.data('url-by-id');
 
+        var selectorParams = $selector.data('params');
+
         var params = $.extend({
             minimumInputLength: 2,
             allowClear: true
-        }, defaultParams);
+        }, selectorParams);
+
+        params = $.extend(params, defaultParams);
 
         if (url)
         {
@@ -382,6 +400,74 @@ var SD = (function() {
 
         $selector.select2(params);
     }
+
+    SD.prototype.initAjaxFilterForm = function()
+    {
+        var selfSD = this;
+
+        var $form = $('.' + selfSD.params.ajaxFilterFormClass)
+
+        $('.' + selfSD.params.ajaxFilterFormClass + ' .sd-filter-cancel-btn').live('click', function(e){
+            e.preventDefault();
+
+            var resetField = $form.find('.ajax-form-reset-field');
+
+            resetField.val(1);
+
+            $form.submit();
+        });
+
+        $form.live('submit', function(e){
+
+            e.preventDefault();
+
+            var self = $(this);
+
+            $(this).ajaxSubmit({
+                dataType: 'json',
+                beforeSend: function () {
+
+                    selfSD.blockUI(self);
+                },
+                success: function(response) {
+
+                    selfSD.unblockUI(self);
+
+                    //self.replaceWith($(response.html).find('form'));
+
+                    if (response.error)
+                    {
+                        return;
+                    }
+
+                    if (response.success)
+                    {
+                        if (response.successFunctions)
+                        {
+                            var successFunctions = JSON.parse(response.successFunctions);
+
+                            for (key in successFunctions)
+                            {
+                                if (typeof window["SD"][successFunctions[key]] === 'function'){
+                                    formok = window["SD"][successFunctions[key]](key);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    };
+
+    SD.prototype.updateCalendar = function(targetId)
+    {
+        var selfSD = this;
+
+        var target = $(targetId);
+
+        $(targetId).fullCalendar('refetchEvents');
+    }
+
 
     return new SD();
 })();

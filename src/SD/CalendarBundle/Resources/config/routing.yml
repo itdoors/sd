@@ -9,6 +9,7 @@ sd_calendar_salesdispatcher_handling_message:
     defaults: { _controller: SDCalendarBundle:SalesDispatcher:HandlingMessage }
 
 #SALES ADMIN ROUTES
+
 sd_calendar_salesadmin_handling_message:
     pattern:  sd/calendar/ajax/salesadmin/handlind_message
     defaults: { _controller: SDCalendarBundle:SalesAdmin:HandlingMessage }

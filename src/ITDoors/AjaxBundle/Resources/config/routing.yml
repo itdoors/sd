@@ -1,0 +1,3 @@
+it_doors_ajax_filter:
+    pattern:  itdoors/ajax/filter
+    defaults: { _controller: ITDoorsAjaxBundle:Filter:index }
