@@ -431,6 +431,8 @@ var SD = (function() {
             resetField.val(1);
 
             $form.submit();
+
+            resetField.val(0);
         });
 
         $form.live('submit', function(e){
