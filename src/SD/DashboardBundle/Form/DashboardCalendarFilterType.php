@@ -47,13 +47,14 @@ class DashboardCalendarFilterType extends AbstractType
         $builder
             ->add('eventType', 'choice', array(
                 'choices' => $cs->getDashboardEventChoices(),
+                'empty_value' => '',
                 'attr' => array(
                     'class' => 'sd-select2 can-be-reseted',
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 0,
                         'width' => '200px'
                     )),
-                    'placeholder' => 'Enter event type'
+                    'placeholder' => 'Last Events'
                 ),
 
             ));
