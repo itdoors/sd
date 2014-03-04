@@ -49,7 +49,7 @@ class DashboardCalendarFilterType extends AbstractType
                 'choices' => $cs->getDashboardEventChoices(),
                 'empty_value' => '',
                 'attr' => array(
-                    'class' => 'sd-select2',
+                    'class' => 'sd-select2 can-be-reseted',
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 0,
                         'width' => '200px'
@@ -64,7 +64,7 @@ class DashboardCalendarFilterType extends AbstractType
             $builder
                 ->add('userIds', 'hidden', array(
                     'attr' => array(
-                        'class' => 'sd-select2',
+                        'class' => 'sd-select2 can-be-reseted',
                         'data-url'  => $router->generate('sd_common_ajax_user'),
                         'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
                         'data-params' => json_encode(array(

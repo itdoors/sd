@@ -7,6 +7,8 @@ var SD = (function() {
         ajaxFilterFormClass: 'ajax-filter-form',
         ajaxFormCancelBtnClass: 'sd-cancel-btn',
         ajaxMoreInfoClass: 'more-info',
+        canBeResetedClass: 'can-be-reseted',
+        select2Class: 'sd-select2',
         ajaxFormUrl: '',
         ajaxDeleteUrl: '',
         assetsDir: '',
@@ -38,7 +40,7 @@ var SD = (function() {
     {
         var selfSD = this;
 
-        $('.sd-select2').each(function(index) {
+        $('.' + selfSD.params.select2Class).each(function(index) {
             selfSD.select2($(this));
         });
     }
@@ -401,6 +403,18 @@ var SD = (function() {
         $selector.select2(params);
     }
 
+    SD.prototype.resetForm = function(form)
+    {
+        var selfSD = this;
+
+        form.find('.' + selfSD.params.canBeResetedClass).each(function(index){
+            if ($(this).hasClass(selfSD.params.select2Class))
+            {
+                $(this).select2('data', null);
+            }
+        });
+    }
+
     SD.prototype.initAjaxFilterForm = function()
     {
         var selfSD = this;
@@ -411,6 +425,8 @@ var SD = (function() {
             e.preventDefault();
 
             var resetField = $form.find('.ajax-form-reset-field');
+
+            selfSD.resetForm($form);
 
             resetField.val(1);
 
@@ -432,8 +448,6 @@ var SD = (function() {
                 success: function(response) {
 
                     selfSD.unblockUI(self);
-
-                    //self.replaceWith($(response.html).find('form'));
 
                     if (response.error)
                     {
