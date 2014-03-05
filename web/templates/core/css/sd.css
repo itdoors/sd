@@ -20,3 +20,6 @@
 .portlet.calendar .fc-event.sd-event-red {
     background-color: #E02222;
 }
+.portlet.calendar .fc-event.sd-event-grey {
+    background-color: #999999;
+}

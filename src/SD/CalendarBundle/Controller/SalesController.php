@@ -152,6 +152,35 @@ class SalesController extends BaseFilterController
     }
 
     /**
+     * Return addtional type of handling message
+     *
+     * @param HandlingMessage $handlingMessage
+     *
+     * @return string
+     */
+    public function getAdditionType($handlingMessage)
+    {
+        return $handlingMessage['additionalType'];
+    }
+
+    /**
+     * Is future messge
+     *
+     * @param HandlingMessage $handlingMessage
+     *
+     * @return bool
+     */
+    public function isFutureMessage($handlingMessage)
+    {
+        if ($this->getAdditionType($handlingMessage) == HandlingMessage::ADDITIONAL_TYPE_FUTURE_MESSAGE)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Return event color class name depending on handling type stay action
      *
      * @param HandlingMessage $handlingMessage
@@ -160,6 +189,11 @@ class SalesController extends BaseFilterController
      */
      public function getEventColorClassName($handlingMessage)
      {
+         if (!$this->isFutureMessage($handlingMessage))
+         {
+             return HandlingMessageService::$eventColors['grey'];
+         }
+
          $stayActiontime = $handlingMessage['typeStayactiontime'];
 
          /** @var \DateTime $nextCreatedate */

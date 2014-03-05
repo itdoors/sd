@@ -52,7 +52,8 @@ BEGIN
 	    handling_message hm2
 	WHERE
 	    hm2.handling_id = hId AND
-	    hm2.id > hmId
+	    hm2.id > hmId AND
+	    hm2.additional_type <> 'fm'
 	ORDER BY
 	    hm2.id ASC
 	limit 1;
