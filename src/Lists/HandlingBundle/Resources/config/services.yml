@@ -14,6 +14,9 @@ parameters:
     lists_handling.message.repository.class: Lists\HandlingBundle\Entity\HandlingMessageRepository
     lists_handling.message.repository.entity: Lists\HandlingBundle\Entity\HandlingMessage
 
+    lists_handling.message.view.repository.class: Lists\HandlingBundle\Entity\HandlingMessageViewRepository
+    lists_handling.message.view.repository.entity: Lists\HandlingBundle\Entity\HandlingMessageView
+
     lists_handling.repository.class: Lists\HandlingBundle\Entity\HandlingRepository
     lists_handling.repository.entity: Lists\HandlingBundle\Entity\Handling
 
@@ -32,6 +35,12 @@ services:
         factory_service: doctrine # this is an instance of Registry
         factory_method: getRepository
         arguments: [ %lists_handling.message.repository.entity% ]
+
+    lists_handling.message.view.repository:
+        class: %lists_handling.message.view.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_handling.message.view.repository.entity% ]
 
     lists_handling.form.handlingSalesFilterForm:
         class: %lists_handling.sales.filter.form.class%

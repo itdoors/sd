@@ -76,6 +76,7 @@ doctrine:
                     string_functions:
                         array_to_string: SD\CommonBundle\DQL\ArrayToStringDQL
                         array: SD\CommonBundle\DQL\ArrayDQL
+                        select_next_handling_message_date: SD\CommonBundle\DQL\SelectNextHandlingMessageDateDQL
                     # numeric_functions:
                     # datetime_functions:
 

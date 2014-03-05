@@ -1,11 +1,22 @@
 .portlet.calendar .fc-event.sd-event-next {
-    background-color: #35AA47;
     border: 0 none;
     color: #FFFFFF;
 }
 
 .portlet.calendar .fc-event.sd-event-prev {
-    background-color: #69A4E0;
     border: 0 none;
     color: #FFFFFF;
+}
+
+.portlet.calendar .fc-event.sd-event-green {
+    background-color: #35AA47;
+}
+.portlet.calendar .fc-event.sd-event-blue {
+    background-color: #69A4E0;
+}
+.portlet.calendar .fc-event.sd-event-yellow {
+    background-color: #FFB848;
+}
+.portlet.calendar .fc-event.sd-event-red {
+    background-color: #E02222;
 }

@@ -78,7 +78,7 @@
             <!-- /.modal-content -->
         </div>
     </div>
-    {{ render(controller('ListsHandlingBundle:' ~ masterRole ~ ':List')) }}
+   {# {{ render(controller('ListsHandlingBundle:' ~ masterRole ~ ':List')) }}#}
 
     {{ ajax_filter_render('dashboardCalendarFilterType', ajax_filter_namespace_dashboard_calendar, {
         '#calendar': 'updateCalendar'

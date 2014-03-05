@@ -2,13 +2,18 @@ Lists\HandlingBundle\Entity\HandlingMessage:
     type: entity
     table: handling_message
     repositoryClass: Lists\HandlingBundle\Entity\HandlingMessageRepository
+    indexes:
+        handling_message_createdate_index:
+          columns: [ createdate ]
+        handling_message_additionalType_index:
+          columns: [ additional_type ]
     fields:
         id:
             id: true
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         createdatetime:
             type: datetime
             nullable: true

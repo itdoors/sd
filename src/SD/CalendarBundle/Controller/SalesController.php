@@ -2,9 +2,9 @@
 
 namespace SD\CalendarBundle\Controller;
 
-use Lists\HandlingBundle\Entity\HandlingMessageRepository;
+use Lists\HandlingBundle\Entity\HandlingMessageViewRepository;
+use Lists\HandlingBundle\Services\HandlingMessageService;
 use SD\CommonBundle\Controller\BaseFilterController;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Lists\HandlingBundle\Entity\HandlingMessage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -55,12 +55,12 @@ class SalesController extends BaseFilterController
 	{
 		$events = array();
 
-        /** @var HandlingMessageRepository $handlingMessagesRepository */
-        $handlingMessagesRepository = $this->get('lists_handling.message.repository');
+        /** @var HandlingMessageViewRepository $handlingMessagesViewRepository */
+        $handlingMessagesViewRepository = $this->get('lists_handling.message.view.repository');
 
         $filters = $this->getFilters($this->container->getParameter('ajax.filter.namespace.dashboard.calendar'));
 
-        $handlingMessages = $handlingMessagesRepository
+        $handlingMessages = $handlingMessagesViewRepository
             ->getAllMessages($userIds, $startTimestamp, $endTimestamp, $filters);
 
 		foreach ($handlingMessages as $handlingMessage)
@@ -136,8 +136,67 @@ class SalesController extends BaseFilterController
             $cssClass .= ' sd-event-next';
         }
 
-        return $cssClass;
+        return $cssClass . ' ' . $this->getEventColorClassName($handlingMessage);
 	}
 
+    /**
+     * Return next message createdate
+     *
+     * @param HandlingMessage $handlingMessage
+     *
+     * @return string
+     */
+    public function getNextMessageCreatedate($handlingMessage)
+    {
+        return $handlingMessage['nextCreatedate'];
+    }
 
+    /**
+     * Return event color class name depending on handling type stay action
+     *
+     * @param HandlingMessage $handlingMessage
+     *
+     * @return string
+     */
+     public function getEventColorClassName($handlingMessage)
+     {
+         $stayActiontime = $handlingMessage['typeStayactiontime'];
+
+         /** @var \DateTime $nextCreatedate */
+         $nextCreatedate = $this->getNextMessageCreatedate($handlingMessage);
+
+         /** @var \DateTime $creatdate */
+         $creatdate = $this->getEventStart($handlingMessage);
+
+         $now = new \DateTime();
+
+         // Future events
+
+         if ($creatdate > $now)
+         {
+             return HandlingMessageService::$eventColors['green'];
+         }
+
+         $nextCreatedateU = $nextCreatedate ? $nextCreatedate->format('U') : $now->format('U');
+
+         $creatdateU = $creatdate->format('U');
+
+         $eventDateDiff = ($nextCreatedateU - $creatdateU) / 60;
+
+         if (($eventDateDiff - $stayActiontime) < 0)
+         {
+             return $nextCreatedate ?
+                    HandlingMessageService::$eventColors['blue'] :
+                    HandlingMessageService::$eventColors['green'];
+         }
+
+         if (($eventDateDiff - $stayActiontime) > 0)
+         {
+             return $nextCreatedate ?
+                 HandlingMessageService::$eventColors['yellow'] :
+                 HandlingMessageService::$eventColors['red'];
+         }
+
+         return HandlingMessageService::$eventColors['red'];
+     }
 }
