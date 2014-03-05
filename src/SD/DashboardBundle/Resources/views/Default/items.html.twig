@@ -78,15 +78,15 @@
             <!-- /.modal-content -->
         </div>
     </div>
-    {#{{ render(controller('ListsHandlingBundle:' ~ masterRole ~ ':List')) }}
+    {{ render(controller('ListsHandlingBundle:' ~ masterRole ~ ':List')) }}
 
     {{ ajax_filter_render('dashboardCalendarFilterType', ajax_filter_namespace_dashboard_calendar, {
         '#calendar': 'updateCalendar'
-    }) }}#}
+    }) }}
 
     {{ include('SDCalendarBundle:Dashboard:filterColors.html.twig') }}
 
-    {#{{ include('SDCalendarBundle::base.html.twig', {
+    {{ include('SDCalendarBundle::base.html.twig', {
         url: path('sd_calendar_' ~ masterRoleRoute ~ '_handling_message')
-    }) }}#}
+    }) }}
 {% endif %}
