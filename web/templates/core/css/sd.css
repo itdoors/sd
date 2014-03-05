@@ -11,15 +11,40 @@
 .portlet.calendar .fc-event.sd-event-green {
     background-color: #35AA47;
 }
+.sd-event-green {
+    background-color: #35AA47;
+}
 .portlet.calendar .fc-event.sd-event-blue {
+    background-color: #69A4E0;
+}
+.sd-event-blue {
     background-color: #69A4E0;
 }
 .portlet.calendar .fc-event.sd-event-yellow {
     background-color: #FFB848;
 }
+.sd-event-yellow {
+    background-color: #FFB848;
+}
 .portlet.calendar .fc-event.sd-event-red {
+    background-color: #E02222;
+}
+.sd-event-red {
     background-color: #E02222;
 }
 .portlet.calendar .fc-event.sd-event-grey {
     background-color: #999999;
+}
+.sd-event-grey {
+    background-color: #999999;
+}
+
+.sd-event-text-div{
+    display: block;
+    height: 26px;
+    font-size: 14px;
+    font-weight: bold;
+    float: left;
+    color: #FFFFFF;
+    padding: 4px;
 }

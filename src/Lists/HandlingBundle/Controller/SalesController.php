@@ -647,7 +647,6 @@ class SalesController extends BaseController
 
             try
             {
-
                 $newHandling = new Handling();
 
                 //$newHandling->setStatusId($formData['status']);
@@ -657,9 +656,33 @@ class SalesController extends BaseController
                 $statusId = $handling->getStatus() ? $handling->getStatus()->getId() : null;
                 $typeId = $handling->getType() ? $handling->getType()->getId() : null;
 
-                $newHandling->setResultId($resultId);
-                $newHandling->setStatusId($statusId);
-                $newHandling->setTypeId($typeId);
+                if ($resultId)
+                {
+                    $result = $this->getDoctrine()->getManager()
+                        ->getRepository('ListsHandlingBundle:HandlingResult')
+                        ->find($resultId);
+
+                    $newHandling->setResult($result);
+                }
+
+                if ($statusId)
+                {
+                    $status = $this->getDoctrine()->getManager()
+                        ->getRepository('ListsHandlingBundle:HandlingStatus')
+                        ->find($statusId);
+
+                    $newHandling->setStatus($status);
+                }
+
+                if ($typeId)
+                {
+                    $type = $this->getDoctrine()->getManager()
+                        ->getRepository('ListsHandlingBundle:HandlingType')
+                        ->find($typeId);
+
+
+                    $newHandling->setType($type);
+                }
 
                 $newHandling->setUser($user);
                 $newHandling->addUser($user);
