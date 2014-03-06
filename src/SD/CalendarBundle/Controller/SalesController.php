@@ -189,6 +189,7 @@ class SalesController extends BaseFilterController
      */
      public function getEventColorClassName($handlingMessage)
      {
+         // Old messages (not used now( )
          if (!$this->isFutureMessage($handlingMessage))
          {
              return HandlingMessageService::$eventColors['grey'];
@@ -227,7 +228,7 @@ class SalesController extends BaseFilterController
          if (($eventDateDiff - $stayActiontime) > 0)
          {
              return $nextCreatedate ?
-                 HandlingMessageService::$eventColors['yellow'] :
+                 HandlingMessageService::$eventColors['red'] :
                  HandlingMessageService::$eventColors['red'];
          }
 

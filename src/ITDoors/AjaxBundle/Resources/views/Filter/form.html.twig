@@ -24,13 +24,14 @@
                         'novalidate': 'novalidate'
                     }
                 }) }}
-                <div class="row">
+                <div class="form-group col-md-3 row">
                 {% for child in form %}
                     {% if child.vars.block_prefixes.1 != 'submit' %}
                         {{ form_row(child) }}
                     {% endif %}
                 {% endfor %}
                 </div>
+                <div class="clear" style="clear: both"></div>
                 <div>
                     <div class="form-actions">
                         {{ form_widget(form.submit, { 'label': 'Filter'|trans({}, 'messages'), 'attr': {'class': 'btn blue'} } ) }}
