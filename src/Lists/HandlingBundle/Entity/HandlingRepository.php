@@ -215,6 +215,11 @@ class HandlingRepository extends EntityRepository
                         $sql->setParameter(':resultProgress', $value);
                         break;
 
+                    case 'progressNOT':
+                        $sql->andWhere('result.progress <> :resultProgress OR result.progress IS NULL');
+                        $sql->setParameter(':resultProgress', $value);
+                        break;
+
                     case 'isClosed':
                         $sql->andWhere('h.isClosed <> true or h.isClosed is null');
                         break;

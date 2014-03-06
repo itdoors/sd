@@ -29,7 +29,7 @@ class SalesAdminController extends BaseFilterController
 
         $filters = $this->getFilters();
 
-        $filters['progress'] = 100;
+        $filters['progressNOT'] = 100;
         $filters['isClosed'] = 'FALSE';
 
         /** @var Query $handlingQuery */
