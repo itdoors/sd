@@ -148,7 +148,8 @@ class SalesController extends BaseFilterController
      */
     public function getNextMessageCreatedate($handlingMessage)
     {
-        return $handlingMessage['nextCreatedate'];
+        //return $handlingMessage['nextCreatedate'];
+        return new \DateTime();
     }
 
     /**
@@ -220,16 +221,12 @@ class SalesController extends BaseFilterController
 
          if (($eventDateDiff - $stayActiontime) < 0)
          {
-             return $nextCreatedate ?
-                    HandlingMessageService::$eventColors['blue'] :
-                    HandlingMessageService::$eventColors['green'];
+             return HandlingMessageService::$eventColors['yellow'];
          }
 
          if (($eventDateDiff - $stayActiontime) > 0)
          {
-             return $nextCreatedate ?
-                 HandlingMessageService::$eventColors['red'] :
-                 HandlingMessageService::$eventColors['red'];
+             return HandlingMessageService::$eventColors['red'];
          }
 
          return HandlingMessageService::$eventColors['red'];

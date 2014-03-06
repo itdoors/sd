@@ -54,11 +54,6 @@ class HandlingMessageView
      */
     private $userFullName;
 
-    /**
-     * @var \DateTime
-     */
-    private $nextCreatedate;
-
 
     /**
      * Get id
@@ -252,28 +247,5 @@ class HandlingMessageView
     public function getUserFullName()
     {
         return $this->userFullName;
-    }
-
-    /**
-     * Set nextCreatedate
-     *
-     * @param \DateTime $nextCreatedate
-     * @return HandlingMessageView
-     */
-    public function setNextCreatedate($nextCreatedate)
-    {
-        $this->nextCreatedate = $nextCreatedate;
-    
-        return $this;
-    }
-
-    /**
-     * Get nextCreatedate
-     *
-     * @return \DateTime 
-     */
-    public function getNextCreatedate()
-    {
-        return $this->nextCreatedate;
     }
 }

@@ -45,7 +45,3 @@ Lists\HandlingBundle\Entity\HandlingMessageView:
             length: 128
             column: user_full_name
             nullable: true
-        nextCreatedate:
-            type: datetime
-            nullable: true
-            column: next_createdate

@@ -37,8 +37,8 @@ class HandlingMessageViewRepository extends EntityRepository
             ->addSelect('hmv.typeStayactiontime as typeStayactiontime')
             ->addSelect("hmv.userFullName as userFullName")
             ->addSelect("hmv.userId as userId")
-            ->addSelect("hmv.additionalType as additionalType")
-            ->addSelect("hmv.nextCreatedate as nextCreatedate");
+            ->addSelect("hmv.additionalType as additionalType");
+            //->addSelect("hmv.nextCreatedate as nextCreatedate");
 
         // Time range
         $sql
