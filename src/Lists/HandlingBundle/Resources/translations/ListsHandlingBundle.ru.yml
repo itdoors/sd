@@ -81,6 +81,7 @@ Current event date can't be less then handling creation date: Дата теку�
 Filename: Имя файла
 Description: Описание
 Messages: Обращения
+Message: Обращение
 Messages list: Список обращений по данному проекту
 Message Type: Тип обращения
 Current Message Create Date: Дата создания
