@@ -9,3 +9,11 @@ lists_sales_admin_report_handling_status_filter_clear:
 lists_report_sales_admin_handling_status:
     pattern:  /lists/salesadmin/report/handling/status
     defaults: { _controller: ListsReportBundle:SalesAdmin:reportHandlingStatus }
+
+lists_report_sales_admin_last_messages:
+    pattern:  /lists/salesadmin/report/last/messages
+    defaults: { _controller: ListsReportBundle:SalesAdmin:reportLastMessages }
+
+lists_report_sales_admin_last_messages_table:
+    pattern:  /lists/salesadmin/report/last/messages/table
+    defaults: { _controller: ListsReportBundle:SalesAdmin:reportLastMessagesTable }

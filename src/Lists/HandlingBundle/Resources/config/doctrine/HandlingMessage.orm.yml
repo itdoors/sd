@@ -64,8 +64,7 @@ Lists\HandlingBundle\Entity\HandlingMessage:
         handling:
             targetEntity: Handling
             cascade: {  }
-            mappedBy: null
-            inversedBy: null
+            inversedBy: HandlingMessages
             joinColumns:
                 handling_id:
                     referencedColumnName: id

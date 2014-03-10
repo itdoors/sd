@@ -1,0 +1,48 @@
+{% trans_default_domain 'ListsHandlingBundle' %}
+{% if results|length %}
+    <table class="table table-striped table-bordered table-advance table-hover">
+        <thead>
+        <tr>
+            <th colspan="2">{% trans %}Organization{% endtrans %} </th>
+            <th colspan="4">{% trans %}Handling{% endtrans %} </th>
+            <th colspan="4">{% trans %}Future Message{% endtrans %} </th>
+        </tr>
+        <tr>
+            <th>{% trans %}ID{% endtrans %} </th>
+            <th>{% trans %}Handling{% endtrans %} </th>
+            <th>{% trans %}Create Date{% endtrans %} </th>
+            <th>{% trans %}Contact Type{% endtrans %} </th>
+            <th>{% trans %}Contact Person{% endtrans %} </th>
+            <th>{% trans %}Description{% endtrans %} </th>
+            <th>{% trans %}Create Date{% endtrans %} </th>
+            <th>{% trans %}Contact Type{% endtrans %} </th>
+            <th>{% trans %}Contact Person{% endtrans %} </th>
+            <th>{% trans %}Description{% endtrans %} </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in results %}
+            <tr {% if loop.index is odd %}class="color"{% endif %}>
+                <td>
+                    <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_show', { id: item.handlingId } ) }}">
+                        {{ item.handlingId|e }}
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_show', { id: item.handlingId } ) }}">
+                        {{ item.organizationName|e }}
+                    </a>
+                </td>
+                <td>{{ item.handlingMessageCreatedate|date('d.m.Y H:i') }}</td>
+                <td>{{ item.handlingMessageTypeName|e }}</td>
+                <td>{{ item.handlingMessageContact|e }}</td>
+                <td>{{ item.handlingMessageDescription|e }}</td>
+                <td>{{ item.handlingMessageCreatedate1|date('d.m.Y H:i') }}</td>
+                <td>{{ item.handlingMessageTypeName1|e }}</td>
+                <td>{{ item.handlingMessageContact1|e }}</td>
+                <td>{{ item.handlingMessageDescription1|e }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}

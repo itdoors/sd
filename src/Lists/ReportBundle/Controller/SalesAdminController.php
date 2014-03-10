@@ -44,4 +44,36 @@ class SalesAdminController extends BaseFilterController
             'filterForm' => $filterForm->createView()
         ));
     }
+
+    /**
+     * Manager last messages report
+     */
+    public function reportLastMessagesAction()
+    {
+        return $this->render('ListsReportBundle:' . $this->baseTemplate . ':reportLastMessages.html.twig', array(
+            'baseRoutePrefix' => $this->baseRoutePrefix,
+            'baseTemplate' => $this->baseTemplate,
+        ));
+    }
+
+    /**
+     * Manager last messages report table
+     */
+    public function reportLastMessagesTableAction()
+    {
+        /** @var HandlingRepository $handlingRepository */
+        $handlingRepository = $this->get('handling.repository');
+
+        $filterNamespace = $this->container->getParameter('ajax.filter.namespace.report.last.messages');
+
+        $filters = $this->getFilters($filterNamespace);
+
+        $results = $handlingRepository->getReportLastMessages($filters);
+
+        return $this->render('ListsReportBundle:' . $this->baseTemplate . ':reportLastMessagesTable.html.twig', array(
+            'results' => $results,
+            'baseRoutePrefix' => $this->baseRoutePrefix,
+            'baseTemplate' => $this->baseTemplate,
+        ));
+    }
 }

@@ -1,0 +1,42 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsHandlingBundle' %}
+{% block title %}{% trans %}Last messages{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Last messages <small>list of last messages</small>{% endtrans %}
+    </h3>
+{% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_index') }}" title="{% trans %}Handlings{% endtrans %}">{% trans %}Handlings{% endtrans %}</a></li>
+    </ul>
+{% endblock %}
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/core/plugins/table-tools/media/css/TableTools.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/jquery.dataTables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/core/plugins/table-tools/media/js/ZeroClipboard.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/core/plugins/table-tools/media/js/TableTools.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    {{ ajax_filter_render('reportLastMessagesType', ajax_filter_namespace_report_last_messages, {
+        'last-messages-holder': 'updateList'
+    }) }}
+    <div class="table-responsive" id="last-messages-holder" data-url="{{ path('lists_report_' ~ baseRoutePrefix ~ '_last_messages_table') }}">
+        {{ render(controller('ListsReportBundle:' ~ baseTemplate ~ ':ReportLastMessagesTable')) }}
+    </div>
+{% endblock body %}

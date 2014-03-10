@@ -939,4 +939,42 @@ class Handling
             //'closer'
         );
     }*/
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $HandlingMessages;
+
+
+    /**
+     * Add HandlingMessages
+     *
+     * @param \Lists\HandlingBundle\Entity\HandlingMessage $handlingMessages
+     * @return Handling
+     */
+    public function addHandlingMessage(\Lists\HandlingBundle\Entity\HandlingMessage $handlingMessages)
+    {
+        $this->HandlingMessages[] = $handlingMessages;
+    
+        return $this;
+    }
+
+    /**
+     * Remove HandlingMessages
+     *
+     * @param \Lists\HandlingBundle\Entity\HandlingMessage $handlingMessages
+     */
+    public function removeHandlingMessage(\Lists\HandlingBundle\Entity\HandlingMessage $handlingMessages)
+    {
+        $this->HandlingMessages->removeElement($handlingMessages);
+    }
+
+    /**
+     * Get HandlingMessages
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getHandlingMessages()
+    {
+        return $this->HandlingMessages;
+    }
 }

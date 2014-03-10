@@ -98,6 +98,10 @@ Lists\HandlingBundle\Entity\Handling:
             type: integer
             nullable: true
             column: type_id
+    oneToMany:
+        HandlingMessages:
+          targetEntity: HandlingMessage
+          mappedBy: handling
     manyToOne:
         organization:
             targetEntity: Lists\OrganizationBundle\Entity\Organization

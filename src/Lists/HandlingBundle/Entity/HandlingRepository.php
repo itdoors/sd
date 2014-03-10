@@ -3,6 +3,7 @@
 namespace Lists\HandlingBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 
 /**
  * HandlingRepository
@@ -287,5 +288,88 @@ class HandlingRepository extends EntityRepository
             ->getSingleResult();
 
         return $sql->getOrganizationId();
+    }
+
+    /**
+     * Returns query of last manager messages
+     *
+     * @param $filters
+     *
+     * @return Query
+     */
+    public function getReportLastMessages($filters = array())
+    {
+        if (!isset($filters['userId']) || !$filters['userId'])
+        {
+            return array();
+        }
+
+        $userId = $filters['userId'];
+
+        $sql = $this->getEntityManager()
+            ->createQuery("
+        SELECT
+            h.id as handlingId,
+            o.name as organizationName,
+            ht.name as handlingMessageTypeName,
+            hm.createdate as handlingMessageCreatedate,
+            hm.description as handlingMessageDescription,
+            hm.user_id as handlingMessageUserId,
+            CONCAT(CONCAT(CONCAT(CONCAT(contact.lastName, ' '), contact.firstName), ' '), contact.phone1)  as handlingMessageContact,
+            ht1.name as handlingMessageTypeName1,
+            hm1.createdate as handlingMessageCreatedate1,
+            hm1.description as handlingMessageDescription1,
+            hm1.user_id as handlingMessageUserId1,
+            CONCAT(CONCAT(CONCAT(CONCAT(contact1.lastName, ' '), contact1.firstName), ' '), contact1.phone1)  as handlingMessageContact1
+        FROM
+            ListsHandlingBundle:Handling h
+            LEFT JOIN h.organization o
+            LEFT JOIN h.HandlingMessages hm
+            LEFT JOIN hm.type ht
+            LEFT JOIN hm.contact contact
+            LEFT JOIN h.HandlingMessages hm1
+            LEFT JOIN hm1.type ht1
+            LEFT JOIN hm1.contact contact1
+
+        WHERE
+            hm.id = (SELECT
+                    MAX(hm2.id)
+                FROM
+                    ListsHandlingBundle:HandlingMessage hm2
+                WHERE
+                    hm2.handling_id = h.id AND
+                    (hm2.additionalType <> :futureMessageParam OR hm2.additionalType IS NULL) AND
+                    hm2.user_id = :userId AND
+                    hm2.id < (
+                        SELECT
+                            MAX(hm4.id)
+                        FROM
+                            ListsHandlingBundle:HandlingMessage hm4
+                        WHERE
+                            hm4.handling_id = h.id AND
+                            hm4.additionalType = :futureMessageParam AND
+                            hm4.user_id = :userId
+                    )
+                ) AND
+            hm1.id = (
+                SELECT
+                    MAX(hm3.id)
+                FROM
+                    ListsHandlingBundle:HandlingMessage hm3
+                WHERE
+                    hm3.handling_id = h.id AND
+                    hm3.additionalType = :futureMessageParam AND
+                    hm3.user_id = :userId
+
+                )
+        ORDER BY hm1.createdate DESC
+            ");
+
+        $sql
+            ->setParameter(':futureMessageParam', HandlingMessage::ADDITIONAL_TYPE_FUTURE_MESSAGE)
+            ->setParameter(':userId', $userId);
+
+        return $sql
+            ->getResult();
     }
 }
