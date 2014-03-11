@@ -21,6 +21,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('templates/core/plugins/table-tools/media/css/TableTools.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}} " />
 {% endblock %}
 
 {% block js_page_level_plugins %}
@@ -30,12 +32,41 @@
     <script type="text/javascript" src="{{ asset('templates/core/plugins/table-tools/media/js/ZeroClipboard.js') }}"></script>
     <script type="text/javascript" src="{{ asset('templates/core/plugins/table-tools/media/js/TableTools.js') }}"></script>
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-daterangepicker/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
 {% endblock %}
 
 {% block body %}
     {{ ajax_filter_render('reportLastMessagesType', ajax_filter_namespace_report_last_messages, {
         'last-messages-holder': 'updateList'
     }) }}
+    <script type="text/javascript">
+
+        var targetDaterange = $('#reportLastMessagesType_daterange');
+
+        var targerCheckbox = $('#reportLastMessagesType_withDaterange');
+
+        $(document).ready(function(){
+            if (targerCheckbox.is(':checked'))
+            {
+                targetDaterange.removeClass('hidden');
+            }
+        })
+
+        targerCheckbox.on('change', function(e){
+
+            if ($(this).is(':checked'))
+            {
+                targetDaterange.removeClass('hidden');
+            }
+            else
+            {
+                targetDaterange.addClass('hidden');
+            }
+
+        })
+    </script>
+
     <div class="table-responsive" id="last-messages-holder" data-url="{{ path('lists_report_' ~ baseRoutePrefix ~ '_last_messages_table') }}">
         {{ render(controller('ListsReportBundle:' ~ baseTemplate ~ ':ReportLastMessagesTable')) }}
     </div>

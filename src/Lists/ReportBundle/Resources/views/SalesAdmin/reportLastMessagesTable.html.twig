@@ -22,6 +22,15 @@
         </thead>
         <tbody>
         {% for item in results %}
+
+            {% set indexCurrent = 1 %}
+            {% set indexFuture = 2 %}
+
+            {% if item.handlingMessageCreatedate4 is defined and item.handlingMessageCreatedate4 > item.handlingMessageCreatedate2 %}
+                {% set indexCurrent = 3 %}
+                {% set indexFuture = 4 %}
+            {% endif %}
+
             <tr {% if loop.index is odd %}class="color"{% endif %}>
                 <td>
                     <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_show', { id: item.handlingId } ) }}">
@@ -33,14 +42,14 @@
                         {{ item.organizationName|e }}
                     </a>
                 </td>
-                <td>{{ item.handlingMessageCreatedate|date('d.m.Y H:i') }}</td>
-                <td>{{ item.handlingMessageTypeName|e }}</td>
-                <td>{{ item.handlingMessageContact|e }}</td>
-                <td>{{ item.handlingMessageDescription|e }}</td>
-                <td>{{ item.handlingMessageCreatedate1|date('d.m.Y H:i') }}</td>
-                <td>{{ item.handlingMessageTypeName1|e }}</td>
-                <td>{{ item.handlingMessageContact1|e }}</td>
-                <td>{{ item.handlingMessageDescription1|e }}</td>
+                <td>{{ item['handlingMessageCreatedate' ~ indexCurrent]|date('d.m.Y H:i') }}</td>
+                <td>{{ item['handlingMessageTypeName' ~ indexCurrent]|e }}</td>
+                <td>{{ item['handlingMessageContact' ~ indexCurrent]|e }}</td>
+                <td>{{ item['handlingMessageDescription' ~ indexCurrent]|e }}</td>
+                <td>{{ item['handlingMessageCreatedate' ~ indexFuture]|date('d.m.Y H:i') }}</td>
+                <td>{{ item['handlingMessageTypeName' ~ indexFuture]|e }}</td>
+                <td>{{ item['handlingMessageContact' ~ indexFuture]|e }}</td>
+                <td>{{ item['handlingMessageDescription' ~ indexFuture]|e }}</td>
             </tr>
         {% endfor %}
         </tbody>

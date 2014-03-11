@@ -1,25 +1,51 @@
 -- PREV MESSAGES
 
 SELECT
-	h.id,
-	o.name,
-	h.user_id,
-	ht.name,
-	hm.createdate,
-	hm.description,
-	hm.user_id,
-	ht1.name,
-	hm1.createdate,
-	hm1.description,
-	hm1.user_id
+	h.id as handlingId,
+            o.name as organizationName,
+            ht.name as handlingMessageTypeName,
+            hm.createdate as handlingMessageCreatedate,
+            hm.description as handlingMessageDescription,
+            hm.user_id as handlingMessageUserId,
+            CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(contact.lastName, ' '), contact.firstName), ' | '), contact.phone1), ' | '), contact.phone2)  as handlingMessageContact,
+            ht1.name as handlingMessageTypeName1,
+            hm1.createdate as handlingMessageCreatedate1,
+            hm1.description as handlingMessageDescription1,
+            hm1.user_id as handlingMessageUserId1,
+            CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(contact1.lastName, ' '), contact1.firstName), ' | '), contact1.phone1), ' | '), contact1.phone2)  as handlingMessageContact1,
+
+            ht_next.name as handlingMessageTypeNextName,
+            hm_next.createdate as handlingMessageCreatedateNext,
+            hm_next.description as handlingMessageDescriptionNext,
+            hm_next.user_id as handlingMessageUserId1,
+            CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(contact_next.lastName, ' '), contact_next.firstName), ' | '), contact_next.phone1), ' | '), contact_next.phone2)  as handlingMessageContact2,
+
+            ht_next1.name as handlingMessageTypeNameNext1,
+            hm_next1.createdate as handlingMessageCreatedateNext1,
+            hm_next1.description as handlingMessageDescriptionNext1,
+            hm_next1.user_id as handlingMessageUserId1,
+            CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(contact1.lastName, ' '), contact1.firstName), ' | '), contact1.phone1), ' | '), contact1.phone2)  as handlingMessageContact2
 FROM
 	handling h
 	LEFT JOIN organization o ON o.id = h.organization_id
+
 	LEFT JOIN handling_message hm ON hm.handling_id = h.id
 	LEFT JOIN handling_type ht on ht.id = hm.type_id
+	LEFT JOIN model_contact contact on contact.id = hm.id
+
+
 	LEFT JOIN handling_message hm1 ON hm1.handling_id = h.id
 	LEFT JOIN handling_type ht1 on ht1.id = hm1.type_id
-	
+	LEFT JOIN model_contact contact1 on contact1.id = hm1.id
+
+	LEFT JOIN handling_message hm_next ON hm_next.handling_id = h.id
+	LEFT JOIN handling_type ht_next on ht_next.id = hm_next.type_id
+	LEFT JOIN model_contact contact_next on contact_next.id = hm_next.id
+
+
+	LEFT JOIN handling_message hm_next1 ON hm_next1.handling_id = h.id
+	LEFT JOIN handling_type ht_next1 on ht_next1.id = hm_next1.type_id
+	LEFT JOIN model_contact contact_next1 on contact_next1.id = hm_next1.id
 WHERE
 	hm.id = (SELECT 
 			MAX(hm2.id) 

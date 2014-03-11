@@ -27,13 +27,18 @@ class FilterController extends Controller
 
         $requestData = $request->request->get($formAlias);
 
-        //$form = $this->createForm($formAlias, $requestData);
+        $form = $this->createForm($formAlias);
 
         if ($request->request->get('reset')) {
             $this->clearFilters($requestData['filterNamespace']);
         }
         else {
-            $this->setFilters($requestData['filterNamespace'], $requestData);
+
+            $form->handleRequest($request);
+
+            $data = $form->getData();
+
+            $this->setFilters($requestData['filterNamespace'], $data);
         }
 
         $result = array(

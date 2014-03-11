@@ -291,6 +291,30 @@ class HandlingRepository extends EntityRepository
     }
 
     /**
+     * Is interval filter
+     *
+     * @param mixed[] $filters
+     *
+     * @return bool
+     */
+    protected function isIntervalFilter($filters = array())
+    {
+        if (isset($filters['withDaterange']) &&
+            isset($filters['daterange']['start']) &&
+            isset($filters['daterange']['end']))
+        {
+            if ($filters['daterange']['start'] &&
+                $filters['daterange']['end'] &&
+                $filters['withDaterange'])
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Returns query of last manager messages
      *
      * @param $filters
@@ -304,72 +328,209 @@ class HandlingRepository extends EntityRepository
             return array();
         }
 
+        $isInterval = $this->isIntervalFilter($filters);
+
         $userId = $filters['userId'];
 
+        $query = $isInterval ? $this->getReportIntervalMessagesQuery(): $this->getReportLastMessagesQuery();
+
         $sql = $this->getEntityManager()
-            ->createQuery("
-        SELECT
-            h.id as handlingId,
-            o.name as organizationName,
-            ht.name as handlingMessageTypeName,
-            hm.createdate as handlingMessageCreatedate,
-            hm.description as handlingMessageDescription,
-            hm.user_id as handlingMessageUserId,
-            CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(contact.lastName, ' '), contact.firstName), ' | '), contact.phone1), ' | '), contact.phone2)  as handlingMessageContact,
-            ht1.name as handlingMessageTypeName1,
-            hm1.createdate as handlingMessageCreatedate1,
-            hm1.description as handlingMessageDescription1,
-            hm1.user_id as handlingMessageUserId1,
-            CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(contact1.lastName, ' '), contact1.firstName), ' | '), contact1.phone1), ' | '), contact1.phone2)  as handlingMessageContact1
-        FROM
-            ListsHandlingBundle:Handling h
-            LEFT JOIN h.organization o
-            LEFT JOIN h.HandlingMessages hm
-            LEFT JOIN hm.type ht
-            LEFT JOIN hm.contact contact
-            LEFT JOIN h.HandlingMessages hm1
-            LEFT JOIN hm1.type ht1
-            LEFT JOIN hm1.contact contact1
-
-        WHERE
-            hm.id = (SELECT
-                    MAX(hm2.id)
-                FROM
-                    ListsHandlingBundle:HandlingMessage hm2
-                WHERE
-                    hm2.handling_id = h.id AND
-                    (hm2.additionalType <> :futureMessageParam OR hm2.additionalType IS NULL) AND
-                    hm2.user_id = :userId AND
-                    hm2.id < (
-                        SELECT
-                            MAX(hm4.id)
-                        FROM
-                            ListsHandlingBundle:HandlingMessage hm4
-                        WHERE
-                            hm4.handling_id = h.id AND
-                            hm4.additionalType = :futureMessageParam AND
-                            hm4.user_id = :userId
-                    )
-                ) AND
-            hm1.id = (
-                SELECT
-                    MAX(hm3.id)
-                FROM
-                    ListsHandlingBundle:HandlingMessage hm3
-                WHERE
-                    hm3.handling_id = h.id AND
-                    hm3.additionalType = :futureMessageParam AND
-                    hm3.user_id = :userId
-
-                )
-        ORDER BY hm1.createdate DESC
-            ");
+            ->createQuery($query);
 
         $sql
             ->setParameter(':futureMessageParam', HandlingMessage::ADDITIONAL_TYPE_FUTURE_MESSAGE)
             ->setParameter(':userId', $userId);
 
+        if ($isInterval)
+        {
+            $sql
+                ->setParameter(':startdate', $filters['daterange']['start'])
+                ->setParameter(':enddate', $filters['daterange']['end']);
+        }
+
         return $sql
             ->getResult();
+    }
+
+    /**
+     * Returns query for last messages
+     */
+    protected function getReportLastMessagesQuery()
+    {
+        return "
+        SELECT
+            h.id as handlingId,
+            o.name as organizationName,
+            ht1.name as handlingMessageTypeName1,
+            hm1.createdate as handlingMessageCreatedate1,
+            hm1.description as handlingMessageDescription1,
+            hm1.user_id as handlingMessageUserId1,
+            CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(contact1.lastName, ' '), contact1.firstName), ' | '), contact1.phone1), ' | '), contact1.phone2)  as handlingMessageContact1,
+            ht2.name as handlingMessageTypeName2,
+            hm2.createdate as handlingMessageCreatedate2,
+            hm2.description as handlingMessageDescription2,
+            hm2.user_id as handlingMessageUserId2,
+            CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(contact2.lastName, ' '), contact2.firstName), ' | '), contact2.phone1), ' | '), contact2.phone2)  as handlingMessageContact2
+        FROM
+            ListsHandlingBundle:Handling h
+            LEFT JOIN h.organization o
+            LEFT JOIN h.HandlingMessages hm1
+            LEFT JOIN hm1.type ht1
+            LEFT JOIN hm1.contact contact1
+            LEFT JOIN h.HandlingMessages hm2
+            LEFT JOIN hm2.type ht2
+            LEFT JOIN hm2.contact contact2
+
+        WHERE
+            hm1.id = (SELECT
+                    MAX(hm_sub1.id)
+                FROM
+                    ListsHandlingBundle:HandlingMessage hm_sub1
+                WHERE
+                    hm_sub1.handling_id = h.id AND
+                    (hm_sub1.additionalType <> :futureMessageParam OR hm_sub1.additionalType IS NULL) AND
+                    hm_sub1.user_id = :userId AND
+                    hm_sub1.id < (
+                        SELECT
+                            MAX(hm_sub11.id)
+                        FROM
+                            ListsHandlingBundle:HandlingMessage hm_sub11
+                        WHERE
+                            hm_sub11.handling_id = h.id AND
+                            hm_sub11.additionalType = :futureMessageParam AND
+                            hm_sub11.user_id = :userId
+                    )
+                ) AND
+            hm2.id = (
+                SELECT
+                    MAX(hm_sub2.id)
+                FROM
+                    ListsHandlingBundle:HandlingMessage hm_sub2
+                WHERE
+                    hm_sub2.handling_id = h.id AND
+                    hm_sub2.additionalType = :futureMessageParam AND
+                    hm_sub2.user_id = :userId
+                )
+        ORDER BY hm2.createdate DESC
+            ";
+    }
+
+    /**
+     * Returns query for interval messages
+     */
+    protected function getReportIntervalMessagesQuery()
+    {
+        return "
+        SELECT
+            h.id as handlingId,
+            o.name as organizationName,
+            ht1.name as handlingMessageTypeName1,
+            hm1.createdate as handlingMessageCreatedate1,
+            hm1.description as handlingMessageDescription1,
+            hm1.user_id as handlingMessageUserId1,
+            CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(contact1.lastName, ' '), contact1.firstName), ' | '), contact1.phone1), ' | '), contact1.phone2)  as handlingMessageContact1,
+            ht2.name as handlingMessageTypeName2,
+            hm2.createdate as handlingMessageCreatedate2,
+            hm2.description as handlingMessageDescription2,
+            hm2.user_id as handlingMessageUserId2,
+            CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(contact2.lastName, ' '), contact2.firstName), ' | '), contact2.phone1), ' | '), contact2.phone2)  as handlingMessageContact2,
+
+            ht3.name as handlingMessageTypeName3,
+            hm3.createdate as handlingMessageCreatedate3,
+            hm3.description as handlingMessageDescription3,
+            hm3.user_id as handlingMessageUserId3,
+            CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(contact3.lastName, ' '), contact3.firstName), ' | '), contact3.phone1), ' | '), contact3.phone2)  as handlingMessageContact3,
+            ht4.name as handlingMessageTypeName4,
+            hm4.createdate as handlingMessageCreatedate4,
+            hm4.description as handlingMessageDescription4,
+            hm4.user_id as handlingMessageUserId4,
+            CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(contact4.lastName, ' '), contact4.firstName), ' | '), contact4.phone1), ' | '), contact4.phone2)  as handlingMessageContact4
+        FROM
+            ListsHandlingBundle:Handling h
+            LEFT JOIN h.organization o
+            LEFT JOIN h.HandlingMessages hm1
+            LEFT JOIN hm1.type ht1
+            LEFT JOIN hm1.contact contact1
+            LEFT JOIN h.HandlingMessages hm2
+            LEFT JOIN hm2.type ht2
+            LEFT JOIN hm2.contact contact2
+
+            LEFT JOIN h.HandlingMessages hm3
+            LEFT JOIN hm3.type ht3
+            LEFT JOIN hm3.contact contact3
+            LEFT JOIN h.HandlingMessages hm4
+            LEFT JOIN hm4.type ht4
+            LEFT JOIN hm4.contact contact4
+
+        WHERE
+            hm1.id = (SELECT
+                    MAX(hm_sub1.id)
+                FROM
+                    ListsHandlingBundle:HandlingMessage hm_sub1
+                WHERE
+                    hm_sub1.handling_id = h.id AND
+                    (hm_sub1.additionalType <> :futureMessageParam OR hm_sub1.additionalType IS NULL) AND
+                    hm_sub1.user_id = :userId AND
+                    hm_sub1.createdate >= :startdate AND
+                    hm_sub1.createdate <= :enddate
+                ) AND
+            hm2.id = (
+                SELECT
+                    MIN(hm_sub2.id)
+                FROM
+                    ListsHandlingBundle:HandlingMessage hm_sub2
+                WHERE
+                    hm_sub2.handling_id = h.id AND
+                    hm_sub2.additionalType = :futureMessageParam AND
+                    hm_sub2.user_id = :userId AND
+                    hm_sub2.id > (
+                        SELECT
+                            MAX(hm_sub21.id)
+                        FROM
+                            ListsHandlingBundle:HandlingMessage hm_sub21
+                        WHERE
+                            hm_sub21.handling_id = h.id AND
+                            (hm_sub21.additionalType <> :futureMessageParam OR hm_sub21.additionalType IS NULL) AND
+                            hm_sub21.user_id = :userId AND
+                            hm_sub21.createdate >= :startdate AND
+                            hm_sub21.createdate <= :enddate
+                    )
+                ) AND
+            hm3.id = (
+                SELECT
+                  MAX(hm_sub3.id)
+                FROM
+                    ListsHandlingBundle:HandlingMessage hm_sub3
+                WHERE
+                    hm_sub3.handling_id = h.id AND
+                    (hm_sub3.additionalType <> :futureMessageParam OR hm_sub3.additionalType IS NULL) AND
+                    hm_sub3.user_id = :userId AND
+                    hm_sub3.id < (
+                        SELECT
+                            MAX(hm_sub31.id)
+                        FROM
+                            ListsHandlingBundle:HandlingMessage hm_sub31
+                        WHERE
+                            hm_sub31.handling_id = h.id AND
+                            hm_sub31.additionalType = :futureMessageParam AND
+                            hm_sub31.user_id = :userId AND
+                            hm_sub31.createdate >= :startdate AND
+                            hm_sub31.createdate <= :enddate
+                    )
+                ) AND
+            hm4.id = (
+                SELECT
+                    MAX(hm_sub41.id)
+                FROM
+                    ListsHandlingBundle:HandlingMessage hm_sub41
+                WHERE
+                    hm_sub41.handling_id = h.id AND
+                    hm_sub41.additionalType = :futureMessageParam AND
+                    hm_sub41.user_id = :userId AND
+                    hm_sub41.createdate >= :startdate AND
+                    hm_sub41.createdate <= :enddate
+                )
+        ORDER BY hm2.createdate DESC
+            ";
     }
 }

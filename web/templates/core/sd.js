@@ -9,6 +9,10 @@ var SD = (function() {
         ajaxMoreInfoClass: 'more-info',
         canBeResetedClass: 'can-be-reseted',
         select2Class: 'sd-select2',
+        daterangeClass: 'sd-daterange',
+        daterangeTextClass: 'sd-daterange-text',
+        daterangeStartClass: 'sd-daterange-start',
+        daterangeEndClass: 'sd-daterange-end',
         ajaxFormUrl: '',
         ajaxDeleteUrl: '',
         assetsDir: '',
@@ -34,6 +38,8 @@ var SD = (function() {
         this.initMoreInfo();
 
         this.initSelect2();
+
+        this.initDateRange();
     }
 
     SD.prototype.initSelect2 = function()
@@ -42,6 +48,46 @@ var SD = (function() {
 
         $('.' + selfSD.params.select2Class).each(function(index) {
             selfSD.select2($(this));
+        });
+    }
+
+    SD.prototype.initDateRange = function()
+    {
+        var selfSD = this;
+
+        if (!jQuery().daterangepicker) {
+            return;
+        }
+
+        $('.' + selfSD.params.daterangeClass).each(function(index) {
+            var self = $(this);
+
+            var btn =
+                '<span class="input-group-btn">' +
+                '<button class="btn default date-range-toggle" type="button">' +
+                '   <i class="fa fa-calendar"></i>' +
+                '</button>'
+                '</span>';
+
+            self.append($(btn));
+
+            $(this).daterangepicker({
+                    opens: (App.isRTL() ? 'left' : 'right'),
+                    format: 'DD.MM.YYYY',
+                    separator: ' to ',
+                    startDate: moment().subtract('days', 29),
+                    endDate: moment()
+                },
+                function (start, end) {
+                    var daterangeStart = self.parent().find('.' + selfSD.params.daterangeStartClass);
+                    var daterangeEnd = self.parent().find('.' + selfSD.params.daterangeEndClass);
+
+                    daterangeStart.val(start.format('DD.MM.YYYY'));
+                    daterangeEnd.val(end.format('DD.MM.YYYY'));
+
+                    self.find('input').val(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
+                }
+            );
         });
     }
 
@@ -368,8 +414,8 @@ var SD = (function() {
         {
             params.ajax = {
                 url: url,
-                    dataType: 'json',
-                    data: function (term, page) {
+                dataType: 'json',
+                data: function (term, page) {
                     return {
                         query: term,
                         q: term
@@ -411,6 +457,21 @@ var SD = (function() {
             if ($(this).hasClass(selfSD.params.select2Class))
             {
                 $(this).select2('data', null);
+            }
+
+            if ($(this).hasClass(selfSD.params.daterangeStartClass) ||
+                $(this).hasClass(selfSD.params.daterangeEndClass) ||
+                $(this).hasClass(selfSD.params.daterangeTextClass))
+            {
+                $(this).val('');
+            }
+
+            if ($(this).attr('type') == 'checkbox')
+            {
+                if ($(this).is(':checked'))
+                {
+                    $(this).trigger('click');
+                }
             }
         });
     }

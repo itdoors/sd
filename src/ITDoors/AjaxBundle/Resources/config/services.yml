@@ -1,5 +1,6 @@
 parameters:
     it_doors_ajax.twig.ajax_filter_extension.class: ITDoors\AjaxBundle\Twig\AjaxFilterExtention
+    it_doors_ajax.form_type.daterange.class: ITDoors\AjaxBundle\Form\DaterangeType
 
 services:
     it_doors_ajax.twig.ajax_filter_extension:
@@ -7,3 +8,8 @@ services:
         arguments: [@service_container]
         tags:
             - { name: twig.extension }
+
+    it_doors_ajax.form_type.daterange:
+        class: %it_doors_ajax.form_type.daterange.class%
+        tags:
+            - { name: form.type, alias: daterange }
