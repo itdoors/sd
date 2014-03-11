@@ -315,12 +315,12 @@ class HandlingRepository extends EntityRepository
             hm.createdate as handlingMessageCreatedate,
             hm.description as handlingMessageDescription,
             hm.user_id as handlingMessageUserId,
-            CONCAT(CONCAT(CONCAT(CONCAT(contact.lastName, ' '), contact.firstName), ' '), contact.phone1)  as handlingMessageContact,
+            CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(contact.lastName, ' '), contact.firstName), ' | '), contact.phone1), ' | '), contact.phone2)  as handlingMessageContact,
             ht1.name as handlingMessageTypeName1,
             hm1.createdate as handlingMessageCreatedate1,
             hm1.description as handlingMessageDescription1,
             hm1.user_id as handlingMessageUserId1,
-            CONCAT(CONCAT(CONCAT(CONCAT(contact1.lastName, ' '), contact1.firstName), ' '), contact1.phone1)  as handlingMessageContact1
+            CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(contact1.lastName, ' '), contact1.firstName), ' | '), contact1.phone1), ' | '), contact1.phone2)  as handlingMessageContact1
         FROM
             ListsHandlingBundle:Handling h
             LEFT JOIN h.organization o
