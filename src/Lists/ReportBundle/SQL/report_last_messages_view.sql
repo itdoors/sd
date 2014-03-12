@@ -283,3 +283,111 @@ SELECT
                     hm3.handling_id = h.id AND
                     hm3.additionalType = 'fm'
                 )
+
+----------------------------
+
+SELECT
+  h0_.id AS id0,
+  o1_.name AS name1,
+  h2_.name AS name2,
+  h3_.createdate AS createdate3,
+  h3_.description AS description4,
+  h3_.user_id AS user_id5,
+  m4_.last_name || ' ' || m4_.first_name || ' | ' || m4_.phone1 || ' | ' || m4_.phone2 AS sclr6,
+  h5_.name AS name7,
+  h6_.createdate AS createdate8,
+  h6_.description AS description9,
+  h6_.user_id AS user_id10,
+  m7_.last_name || ' ' || m7_.first_name || ' | ' || m7_.phone1 || ' | ' || m7_.phone2 AS sclr11,
+  h8_.name AS name12,
+  h9_.createdate AS createdate13,
+  h9_.description AS description14,
+  h9_.user_id AS user_id15,
+  m10_.last_name || ' ' || m10_.first_name || ' | ' || m10_.phone1 || ' | ' || m10_.phone2 AS sclr16,
+  h11_.name AS name17,
+  h12_.createdate AS createdate18,
+  h12_.description AS description19,
+  h12_.user_id AS user_id20,
+  m13_.last_name || ' ' || m13_.first_name || ' | ' || m13_.phone1 || ' | ' || m13_.phone2 AS sclr21
+FROM
+  handling h0_
+  LEFT JOIN organization o1_ ON h0_.organization_id = o1_.id
+  LEFT JOIN handling_message h3_ ON h0_.id = h3_.handling_id
+  LEFT JOIN handling_message_type h2_ ON h3_.type_id = h2_.id
+  LEFT JOIN model_contact m4_ ON h3_.contact_id = m4_.id
+  LEFT JOIN handling_message h6_ ON h0_.id = h6_.handling_id
+  LEFT JOIN handling_message_type h5_ ON h6_.type_id = h5_.id
+  LEFT JOIN model_contact m7_ ON h6_.contact_id = m7_.id
+  LEFT JOIN handling_message h9_ ON h0_.id = h9_.handling_id
+  LEFT JOIN handling_message_type h8_ ON h9_.type_id = h8_.id
+  LEFT JOIN model_contact m10_ ON h9_.contact_id = m10_.id
+  LEFT JOIN handling_message h12_ ON h0_.id = h12_.handling_id
+  LEFT JOIN handling_message_type h11_ ON h12_.type_id = h11_.id
+  LEFT JOIN model_contact m13_ ON h12_.contact_id = m13_.id
+WHERE
+  h3_.id = (
+    SELECT
+      MAX(h14_.id) AS dctrn__1
+    FROM
+      handling_message h14_
+    WHERE h14_.handling_id = h0_.id AND
+      (h14_.additional_type <> 'fm' OR h14_.additional_type IS NULL) AND
+      h14_.user_id = 303 AND
+      h14_.createdate >= '2014-02-01 00:00:00' AND
+      h14_.createdate <= '2014-02-04 00:00:00'
+  ) AND
+  h6_.id = (
+    SELECT
+      MIN(h15_.id) AS dctrn__2
+    FROM
+      handling_message h15_
+    WHERE
+      h15_.handling_id = h0_.id AND
+      h15_.additional_type = 'fm' AND
+      h15_.user_id = 303 AND
+      h15_.id > (
+        SELECT
+          MAX(h16_.id) AS dctrn__3
+        FROM
+          handling_message h16_
+        WHERE h16_.handling_id = h0_.id AND
+         (h16_.additional_type <> 'fm' OR h16_.additional_type IS NULL) AND
+          h16_.user_id = 303 AND
+          h16_.createdate >= '2014-02-01 00:00:00' AND
+          h16_.createdate <= '2014-02-04 00:00:00'
+      )
+  ) AND
+  h9_.id = (
+    SELECT
+      MAX(h17_.id) AS dctrn__4
+    FROM
+      handling_message h17_
+    WHERE h17_.handling_id = h0_.id AND
+      (h17_.additional_type <> 'fm' OR h17_.additional_type IS NULL) AND
+      h17_.user_id = 303 AND
+      h17_.id < (
+        SELECT
+          MAX(h18_.id) AS dctrn__5
+        FROM
+          handling_message h18_
+        WHERE
+          h18_.handling_id = h0_.id AND
+          h18_.additional_type = 'fm' AND
+          h18_.user_id = 303 AND
+          h18_.createdate >= '2014-02-01 00:00:00' AND
+          h18_.createdate <= '2014-02-04 00:00:00'
+      )
+  ) AND
+  h12_.id = (
+    SELECT
+      MAX(h19_.id) AS dctrn__6
+    FROM
+      handling_message h19_
+    WHERE
+      h19_.handling_id = h0_.id AND
+      h19_.additional_type = 'fm' AND
+      h19_.user_id = 303 AND
+      h19_.createdate >= '2014-02-01 00:00:00' AND
+      h19_.createdate <= '2014-02-04 00:00:00'
+  )
+ORDER BY h6_.createdate DESC
