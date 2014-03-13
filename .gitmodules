@@ -1,3 +1,0 @@
-[submodule "src/ITDoors/AjaxBundle"]
-	path = src/ITDoors/AjaxBundle
-	url = git@github.com:itdoors/AjaxBundle.git
