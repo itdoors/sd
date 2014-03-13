@@ -31,64 +31,9 @@ var SD = (function() {
 
         this.initAjaxForm();
 
-        this.initAjaxFilterForm();
-
         this.initAjaxDelete();
 
         this.initMoreInfo();
-
-        this.initSelect2();
-
-        this.initDateRange();
-    }
-
-    SD.prototype.initSelect2 = function()
-    {
-        var selfSD = this;
-
-        $('.' + selfSD.params.select2Class).each(function(index) {
-            selfSD.select2($(this));
-        });
-    }
-
-    SD.prototype.initDateRange = function()
-    {
-        var selfSD = this;
-
-        if (!jQuery().daterangepicker) {
-            return;
-        }
-
-        $('.' + selfSD.params.daterangeClass).each(function(index) {
-            var self = $(this);
-
-            var btn =
-                '<span class="input-group-btn">' +
-                '<button class="btn default date-range-toggle" type="button">' +
-                '   <i class="fa fa-calendar"></i>' +
-                '</button>'
-                '</span>';
-
-            self.append($(btn));
-
-            $(this).daterangepicker({
-                    opens: (App.isRTL() ? 'left' : 'right'),
-                    format: 'DD.MM.YYYY',
-                    separator: ' to ',
-                    startDate: moment().subtract('days', 29),
-                    endDate: moment()
-                },
-                function (start, end) {
-                    var daterangeStart = self.parent().find('.' + selfSD.params.daterangeStartClass);
-                    var daterangeEnd = self.parent().find('.' + selfSD.params.daterangeEndClass);
-
-                    daterangeStart.val(start.format('DD.MM.YYYY'));
-                    daterangeEnd.val(end.format('DD.MM.YYYY'));
-
-                    self.find('input').val(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
-                }
-            );
-        });
     }
 
     SD.prototype.initAjaxForm = function()
@@ -448,93 +393,6 @@ var SD = (function() {
 
         $selector.select2(params);
     }
-
-    SD.prototype.resetForm = function(form)
-    {
-        var selfSD = this;
-
-        form.find('.' + selfSD.params.canBeResetedClass).each(function(index){
-            if ($(this).hasClass(selfSD.params.select2Class))
-            {
-                $(this).select2('data', null);
-            }
-
-            if ($(this).hasClass(selfSD.params.daterangeStartClass) ||
-                $(this).hasClass(selfSD.params.daterangeEndClass) ||
-                $(this).hasClass(selfSD.params.daterangeTextClass))
-            {
-                $(this).val('');
-            }
-
-            if ($(this).attr('type') == 'checkbox')
-            {
-                if ($(this).is(':checked'))
-                {
-                    $(this).trigger('click');
-                }
-            }
-        });
-    }
-
-    SD.prototype.initAjaxFilterForm = function()
-    {
-        var selfSD = this;
-
-        var $form = $('.' + selfSD.params.ajaxFilterFormClass)
-
-        $('.' + selfSD.params.ajaxFilterFormClass + ' .sd-filter-cancel-btn').live('click', function(e){
-            e.preventDefault();
-
-            var resetField = $form.find('.ajax-form-reset-field');
-
-            selfSD.resetForm($form);
-
-            resetField.val(1);
-
-            $form.submit();
-
-            resetField.val(0);
-        });
-
-        $form.live('submit', function(e){
-
-            e.preventDefault();
-
-            var self = $(this);
-
-            $(this).ajaxSubmit({
-                dataType: 'json',
-                beforeSend: function () {
-
-                    selfSD.blockUI(self);
-                },
-                success: function(response) {
-
-                    selfSD.unblockUI(self);
-
-                    if (response.error)
-                    {
-                        return;
-                    }
-
-                    if (response.success)
-                    {
-                        if (response.successFunctions)
-                        {
-                            var successFunctions = JSON.parse(response.successFunctions);
-
-                            for (key in successFunctions)
-                            {
-                                if (typeof window["SD"][successFunctions[key]] === 'function'){
-                                    formok = window["SD"][successFunctions[key]](key);
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        });
-    };
 
     SD.prototype.updateCalendar = function(targetId)
     {
