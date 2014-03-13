@@ -1,0 +1,30 @@
+{
+    "name" : "itdoors/ajaxbundle",
+    "description" : "Ajax bundle",
+    "type" : "symfony-bundle",
+    "authors" : [{
+        "name" : "ppecheny",
+        "email" : "pp@itdoors.com.ua"
+    }],
+    "keywords" : [
+        "ajax bundle"
+    ],
+    "license" : [
+        "MIT"
+    ],
+    "require" : {
+    },
+    "autoload" : {
+        "psr-0" : {
+            "ITDoors\\AjaxBundle" : ""
+        }
+    },
+    "target-dir" : "ITDoors/AjaxBundle",
+    "repositories" : [
+    ],
+    "extra" : {
+        "branch-alias" : {
+            "dev-master" : "2.2-dev"
+        }
+    }
+}
