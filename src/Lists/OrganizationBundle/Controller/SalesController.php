@@ -3,7 +3,7 @@
 namespace Lists\OrganizationBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use SD\CommonBundle\Controller\BaseFilterController as BaseController;
+use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
 
 class SalesController extends BaseController
 {

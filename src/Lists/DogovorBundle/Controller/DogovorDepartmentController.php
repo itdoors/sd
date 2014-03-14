@@ -2,7 +2,7 @@
 
 namespace Lists\DogovorBundle\Controller;
 
-use SD\CommonBundle\Controller\BaseFilterController as BaseController;
+use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
 use Symfony\Component\HttpFoundation\Request;
 
 class DogovorDepartmentController extends BaseController

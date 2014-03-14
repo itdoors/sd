@@ -4,7 +4,7 @@ namespace Lists\DogovorBundle\Controller;
 
 use Lists\DogovorBundle\Entity\DogovorHistoryRepository;
 use Lists\DogovorBundle\Entity\DogovorRepository;
-use SD\CommonBundle\Controller\BaseFilterController as BaseController;
+use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
 use Symfony\Component\HttpFoundation\Request;
 
 class DogovorController extends BaseController

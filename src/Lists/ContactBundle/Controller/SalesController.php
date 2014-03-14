@@ -2,7 +2,7 @@
 
 namespace Lists\ContactBundle\Controller;
 
-use SD\CommonBundle\Controller\BaseFilterController as BaseController;
+use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
 
 class SalesController extends BaseController
 {
