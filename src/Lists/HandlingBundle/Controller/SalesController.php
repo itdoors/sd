@@ -4,7 +4,7 @@ namespace Lists\HandlingBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use SD\CommonBundle\Controller\BaseFilterController as BaseController;
+use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
 use Lists\HandlingBundle\Entity\HandlingResult;
 use Lists\ContactBundle\Entity\ModelContact;
 use Lists\OrganizationBundle\Entity\Organization;

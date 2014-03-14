@@ -4,7 +4,7 @@ namespace SD\CalendarBundle\Controller;
 
 use Lists\HandlingBundle\Entity\HandlingMessageViewRepository;
 use Lists\HandlingBundle\Services\HandlingMessageService;
-use SD\CommonBundle\Controller\BaseFilterController;
+use ITDoors\CommonBundle\Controller\BaseFilterController;
 use Lists\HandlingBundle\Entity\HandlingMessage;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

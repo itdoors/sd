@@ -4,7 +4,7 @@ namespace Lists\ReportBundle\Controller;
 
 use Doctrine\ORM\Query;
 use Lists\HandlingBundle\Entity\HandlingRepository;
-use SD\CommonBundle\Controller\BaseFilterController;
+use ITDoors\CommonBundle\Controller\BaseFilterController;
 
 /**
  * SalesAdminController

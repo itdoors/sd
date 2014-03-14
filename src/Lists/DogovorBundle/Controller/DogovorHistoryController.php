@@ -3,7 +3,7 @@
 namespace Lists\DogovorBundle\Controller;
 
 use Lists\DogovorBundle\Entity\DogovorHistoryRepository;
-use SD\CommonBundle\Controller\BaseFilterController as BaseController;
+use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
 
 class DogovorHistoryController extends BaseController
 {
