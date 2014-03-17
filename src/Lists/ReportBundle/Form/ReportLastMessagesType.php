@@ -39,7 +39,7 @@ class ReportLastMessagesType extends AbstractType
         $builder
             ->add('userId', 'hidden', array(
                 'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted',
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
                     'data-url'  => $router->generate('sd_common_ajax_user'),
                     'data-url-by-id' => $router->generate('sd_common_ajax_user_by_id'),
                     'data-params' => json_encode(array(
@@ -50,6 +50,9 @@ class ReportLastMessagesType extends AbstractType
                     'placeholder' => 'Enter Manager'
                 )
             ));
+
+        $builder
+            ->add('daterangecustom', 'daterangecustom');
 
         $builder
             ->add('withDaterange', 'checkbox', array(
