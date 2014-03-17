@@ -37,7 +37,7 @@
 {% endblock %}
 
 {% block body %}
-    {{ ajax_filter_render_short('reportLastMessagesType', ajax_filter_namespace_report_last_messages, {
+    {{ ajax_filter_render('reportLastMessagesType', ajax_filter_namespace_report_last_messages, {
         'last-messages-holder': 'ITDoorsAjax.updateList'
     }) }}
     <script type="text/javascript">

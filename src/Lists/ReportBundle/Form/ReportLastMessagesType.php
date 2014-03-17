@@ -52,9 +52,6 @@ class ReportLastMessagesType extends AbstractType
             ));
 
         $builder
-            ->add('daterangecustom', 'daterangecustom');
-
-        $builder
             ->add('withDaterange', 'checkbox', array(
                 'label' => 'Interval',
                 'attr' => array(
