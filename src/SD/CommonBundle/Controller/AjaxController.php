@@ -9,6 +9,7 @@ use Lists\DogovorBundle\Entity\DogovorDepartmentRepository;
 use Lists\DogovorBundle\Entity\DogovorHistory;
 use Lists\DogovorBundle\Entity\DopDogovor;
 use Lists\DogovorBundle\Entity\DopDogovorRepository;
+use Lists\HandlingBundle\Entity\Handling;
 use Lists\HandlingBundle\Entity\HandlingMessage;
 use SD\UserBundle\Entity\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -1481,6 +1482,7 @@ class AjaxController extends Controller
 
         $methodSet = 'set' . ucfirst($name);
 
+        /** @var Handling $object */
         $object = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:Handling')
             ->find($pk);
@@ -1512,13 +1514,40 @@ class AjaxController extends Controller
 
         try {
             $em->flush();
+
+            $em->refresh($object);
+
         } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
         }
 
-        $return = array('success' => 1);
+        $return = array(
+            'success' => 1,
+            'handling' => array(
+                'id' => $object->getId()
+            )
+        );
+
+        $result = $object->getResult();
+        $status = $object->getStatus();
+
+        if ($result && $result->getProgress())
+        {
+            $return['handling']['progress'] = $result->getProgress();
+            $return['handling']['progressString'] = $result->getPercentageString();
+        }
+        elseif ($status && $status->getProgress())
+        {
+            $return['handling']['progress'] = $status->getProgress();
+            $return['handling']['progressString'] = $status->getPercentageString();
+        }
+        else
+        {
+            $return['handling']['progress'] = null;
+            $return['handling']['progressString'] = null;
+        }
 
         return new Response(json_encode($return));
     }

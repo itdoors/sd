@@ -9,6 +9,18 @@
 
         {% if canEdit %}
 
+            setProgress = function(response)
+            {
+                if (response.handling.progress)
+                {
+                    var targetProcess = $('.progress-bar.progress-bar-success');
+                    targetProcess.attr('aria-valuenow', response.handling.progress);
+                    targetProcess.css('width', response.handling.progress + '%');
+                    targetProcess.find('span').html(response.handling.progressString);
+                }
+
+            }
+
             $('#serviceOffered, #resultString, #statusDescription, #square, #description, #chance, #budget').editable({
                 url: '{{ path('sd_common_ajax_handling_save') }}'
             });
@@ -21,6 +33,14 @@
             $('#resultId').editable({
                 url: '{{ path('sd_common_ajax_handling_save') }}',
                 source: '{{ path('sd_common_ajax_handling_result') }}'
+            });
+
+            $('#statusId').on('save', function(e, params) {
+
+                // Progress
+                var response = JSON.parse(params.response);
+
+                setProgress(response);
             });
 
             $('#resultId').on('save', function(e, params) {
@@ -44,6 +64,11 @@
                 }
 
                 moreInfoHref.data('params', moreInfoHrefParams);
+
+                // Progress
+                var response = JSON.parse(params.response);
+
+                setProgress(response);
             });
 
             $('#typeId').editable({
