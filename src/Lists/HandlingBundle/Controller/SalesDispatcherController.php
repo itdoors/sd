@@ -71,10 +71,14 @@ class SalesDispatcherController extends SalesController
 		/** @var \SD\UserBundle\Entity\User $user */
 		$user = $this->getUser();
 
+        $filters['progressNOT'] = 100;
+        $filters['chanceNOT'] = array(0, 100);
+        $filters['isClosed'] = 'FALSE';
+
 		$teamUserIds = $teamRepository->getMyTeamIdsByUser($user);
 
 		/** @var \Doctrine\ORM\Query $handlingQuery */
-		$handlingQuery = $handlingRepository->getAllForSalesQuery($teamUserIds, array());
+		$handlingQuery = $handlingRepository->getAllForSalesQuery($teamUserIds, $filters);
 
 		$pagination = $handlingQuery->getResult();
 
