@@ -75,8 +75,12 @@ class SalesController extends BaseController
         /** @var \SD\UserBundle\Entity\User $user */
         $user = $this->getUser();
 
+        $filters['progressNOT'] = 100;
+        $filters['chanceNOT'] = array(0, 100);
+        $filters['isClosed'] = 'FALSE';
+
         /** @var \Doctrine\ORM\Query $handlingQuery */
-        $handlingQuery = $handlingRepository->getAllForSalesQuery($user->getId(), array());
+        $handlingQuery = $handlingRepository->getAllForSalesQuery($user->getId(), $filters);
 
         $pagination = $handlingQuery->getResult();
 

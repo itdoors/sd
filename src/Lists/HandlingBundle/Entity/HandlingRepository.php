@@ -221,6 +221,11 @@ class HandlingRepository extends EntityRepository
                         $sql->setParameter(':resultProgress', $value);
                         break;
 
+                    case 'chanceNOT':
+                        $sql->andWhere('status.progress NOT IN (:chances) AND h.status_id IS NOT NULL');
+                        $sql->setParameter(':chances', $value);
+                        break;
+
                     case 'isClosed':
                         $sql->andWhere('h.isClosed <> true or h.isClosed is null');
                         break;
