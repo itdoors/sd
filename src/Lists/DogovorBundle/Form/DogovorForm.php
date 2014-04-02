@@ -18,6 +18,9 @@ class DogovorForm extends AbstractType
      */
     protected $container;
 
+    /**
+     * __construct()
+     */
     public function __construct($container)
     {
         $this->container = $container;
@@ -115,7 +118,8 @@ class DogovorForm extends AbstractType
                     $form->addError(new FormError($msg));
                 }
 
-                if ($data->getLaunchDate())
+                // Maybe it will be needed in future
+                /*if ($data->getLaunchDate())
                 {
                     if ($data->getLaunchDate() < $data->getStartdatetime() ||
                         $data->getLaunchDate() > $data->getStopdatetime())
@@ -124,7 +128,7 @@ class DogovorForm extends AbstractType
 
                         $form->addError(new FormError($msg));
                     }
-                }
+                }*/
             });
     }
     

@@ -34,6 +34,7 @@ class DogovorFilterForm extends AbstractType
         $translator = $this->container->get('translator');
 
         $builder
+            ->add('number')
             ->add('organization', 'hidden')
             ->add('customer', 'hidden')
             ->add('performer', 'hidden')

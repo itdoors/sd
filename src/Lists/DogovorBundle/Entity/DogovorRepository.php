@@ -188,17 +188,21 @@ class DogovorRepository extends EntityRepository
                         break;
                     case 'prolongation':
                         $valueBool = $value == 'Yes' ? 'TRUE': 'FALSE';
-
                         $sql
                             ->andWhere("d.prolongation = {$valueBool}");
 
                         break;
                     case 'dogovorType':
-
                         $sql
                             ->andWhere("d.dogovorTypeId = :dogovorTypeId")
                             ->setParameter(':dogovorTypeId', $value);
+                        break;
+                    case 'number':
+                        $value = trim($value);
 
+                        $sql
+                            ->andWhere("d.number LIKE :number")
+                            ->setParameter(':number', "{$value}%");
                         break;
                 }
             }
