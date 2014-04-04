@@ -281,7 +281,7 @@ var SD = (function() {
             parentElement.css('opacity', '0.5');
 
             $.ajax({
-                url: selfSD.params.ajaxDeleteUrelativerl,
+                url: selfSD.params.ajaxDeleteUrl,
                 type: 'POST',
                 data: {
                     params: params
