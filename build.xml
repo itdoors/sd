@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SD" default="build">
+
+    <property file="${project.basedir}/build.properties" />
+
+    <property name="path.bin" value="/usr/local/bin" />
+    <property name="phpcs.standard" value="Symfony2" />
+
+    <property name="dir.build" value="build" />
+    <property name="dir.cache" value="app/cache" />
+    <property name="dir.logs" value="app/logs" />
+    <property name="dir.src" value="src" />
+    <property name="dir.web" value="web" />
+    <property name="dir.uploads" value="${dir.web}/uploads" />
+
+    <property name="path.build" value="${project.basedir}/${dir.build}" />
+    <property name="path.src" value="${project.basedir}/${dir.src}" />
+    <property name="path.phpcs.src" value="${project.basedir}/${dir.src}" />
+
+    <property name="bin.phpunit" value="phpunit" />
+    <property name="bin.phpcs" value="${path.bin}/phpcs" />
+
+    <target name="build" depends="build:phpcs">
+        <echo msg="Building project ${phing.project.name}" />
+    </target>
+
+    <target name="build:phpcs" description="Find coding standard violations using PHP_CodeSniffer">
+        <exec executable="${bin.phpcs}" passthru="true" checkreturn="true">
+            <arg value="--standard=${phpcs.standard}" />
+            <arg path="${path.phpcs.src}" />
+        </exec>
+        <echo msg="PHP CodeStyle is OK" />
+    </target>
+
+    <target name="build:test" description="Run tests with PHPUnit">
+        <exec command="${bin.phpunit} -c app" dir="${project.basedir}" passthru="true" checkreturn="true" />
+    </target>
+
+    <target name="download-tools" description="Download build tools">
+
+        <echo msg="Downloading PHP_CodeSniffer..." />
+        <exec command="git clone git://github.com/squizlabs/PHP_CodeSniffer.git" dir="${path.bin}" />
+        <symlink link="${bin.phpcs}" target="${path.bin}/PHP_CodeSniffer/scripts/phpcs" overwrite="true" />
+        <chmod file="${bin.phpcs}" mode="0755" />
+
+        <echo msg="All done." />
+    </target>
+
+</project>
