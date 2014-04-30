@@ -8,6 +8,7 @@ parameters:
     dogovor.prolongation.limit: 5184000 # in seconds
     ajax.filter.namespace.dashboard.calendar: "dashboard.calendar"
     ajax.filter.namespace.report.last.messages: "report.last.messages"
+    ajax.filter.namespace.oper.department.table: "oper.department.table"
 
 
 framework:
@@ -39,7 +40,7 @@ twig:
         prolongation_limit : %dogovor.prolongation.limit%
         ajax_filter_namespace_dashboard_calendar: %ajax.filter.namespace.dashboard.calendar%
         ajax_filter_namespace_report_last_messages: %ajax.filter.namespace.report.last.messages%
-
+        ajax_filter_namespace_oper_department_table: %ajax.filter.namespace.oper.department.table%
 
 # Assetic Configuration
 assetic:

@@ -1,0 +1,6 @@
+it_doors_oper_homepage:
+    pattern:  /oper/all
+    defaults: { _controller: ITDoorsOperBundle:OperInfo:index }
+it_doors_oper_department_table:
+    pattern:  /oper/table/department
+    defaults: { _controller: ITDoorsOperBundle:OperInfo:departmentTable }

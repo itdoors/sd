@@ -108,4 +108,16 @@ class DepartmentsStatus
     {
         return $this->description;
     }
+
+    /**
+     * Get name as string
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->name;
+    }
+
+
 }

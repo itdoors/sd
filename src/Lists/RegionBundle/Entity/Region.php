@@ -222,4 +222,14 @@ class Region
     {
         return $this->companystructure;
     }
+
+    /**
+     * toString method
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->name;
+    }
 }
