@@ -46,6 +46,10 @@ ITDoors\ControllingBundle\Entity\Invoice:
             type: string
             length: 255
             column: city_name
+        regionName:
+            type: string
+            length: 255
+            column: region_name
         organizationName:
             type: string
             length: 255

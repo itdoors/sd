@@ -16,18 +16,6 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
-     * @return mixed[]
-     */
-    public function findAllOrderedByName()
-    {
-        return $this->getEntityManager()
-                ->createQuery('SELECT i FROM ITDoorsControllingBundle:Invoice i ORDER BY i.date_end ASC')
-                ->getResult();
-    }
-
-    /**
-     * Returns results for interval future invoice
-     *
      * @param int $periodmin Description
      * 
      * @param int $periodmax 0 - no restrictions
@@ -36,19 +24,19 @@ class InvoiceRepository extends EntityRepository
      */
     public function getInvoicePeriod($periodmin, $periodmax)
     {
-        $query = "
-            SELECT
-                i
-            FROM
-                ITDoorsControllingBundle:Invoice i
-            WHERE '" . date('Y-m-d') . "' -   i.dateEnd >= '$periodmin'";
+        $date = date('Y-m-d');
+        $res = $this->createQueryBuilder('i')
+            ->select('i')
+            ->where(":date -  i.dateEnd >= :periodmin");
         if ($periodmax != 0) {
-            $query .= "AND  '" . date('Y-m-d') . "' -   i.dateEnd <= '$periodmax'";
+            $res->andWhere(':date -  i.dateEnd <= :periodmax')
+                ->setParameter(':periodmax', $periodmax);
         }
-        $query .=" AND ( i.court is NULL OR   i.court = '0' ) ORDER BY i.dateEnd DESC";
 
-        return $this->getEntityManager()
-                ->createQuery($query)
+        return $res->setParameter(':periodmin', $periodmin)
+                ->setParameter(':date', $date)
+                ->andWhere("(i.court is NULL OR i.court = '0')")
+                ->getQuery()
                 ->getResult();
     }
 
@@ -59,16 +47,14 @@ class InvoiceRepository extends EntityRepository
      */
     public function getInvoiceCourt()
     {
-        $query = "
-            SELECT
-                i
-            FROM
-                ITDoorsControllingBundle:Invoice i
-            WHERE i.court = '1' ORDER BY i.dateEnd DESC";
+        $id = 1;
 
-        return $this->getEntityManager()
-                ->createQuery($query)
+        return $this->createQueryBuilder('i')
+                ->select('i')
+                ->where("i.court = :id")
+                ->orderBy('i.dateEnd', 'DESC')
+                ->setParameter(':id', $id)
+                ->getQuery()
                 ->getResult();
     }
-
 }

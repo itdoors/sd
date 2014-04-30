@@ -8,4 +8,6 @@ it_doors_controlling_invoice:
     
 it_doors_controlling_invoice_show:
     pattern:  /controlling/show/{period}
-    defaults: { _controller: ITDoorsControllingBundle:Invoice:show }
+    defaults: { _controller: ITDoorsControllingBundle:Invoice:show, period:30 }
+    requirements:
+        period: 0|30|60|120|180|181

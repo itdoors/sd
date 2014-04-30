@@ -547,4 +547,62 @@ class Invoice
         return $this->dogovor;
     }
 
+    /**
+     * @var string
+     */
+    private $regionName;
+
+    /**
+     * @var \Lists\DogovorBundle\Entity\Region
+     */
+    private $region;
+
+
+    /**
+     * Set regionName
+     *
+     * @param string $regionName
+     * 
+     * @return Invoice
+     */
+    public function setRegionName($regionName)
+    {
+        $this->regionName = $regionName;
+
+        return $this;
+    }
+
+    /**
+     * Get regionName
+     *
+     * @return string 
+     */
+    public function getRegionName()
+    {
+        return $this->regionName;
+    }
+
+    /**
+     * Set region
+     *
+     * @param \Lists\DogovorBundle\Entity\Region $region
+     * 
+     * @return Invoice
+     */
+    public function setRegion(\Lists\DogovorBundle\Entity\Region $region = null)
+    {
+        $this->region = $region;
+
+        return $this;
+    }
+
+    /**
+     * Get region
+     *
+     * @return \Lists\DogovorBundle\Entity\Region 
+     */
+    public function getRegion()
+    {
+        return $this->region;
+    }
 }

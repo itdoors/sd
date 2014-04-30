@@ -1086,4 +1086,14 @@ class Dogovor
     {
         return $this->dogovorTypeId;
     }
+    
+    /**
+     * __toString()
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getNumber();
+    }
 }

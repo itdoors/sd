@@ -18,12 +18,12 @@
         <tbody>
             {% for entity in entities %}
             <tr>
-                <td>{{ entity.id }}</td>
+                <td>{{ entity.organization }}</td>
                 <td>{{ entity.sum }}</td>
-                <td>{{ entity.invoiceid }} {{ entity.date|date("d.m.y") }}</td>
+                <td>{{ entity.invoiceId }} {{ entity.date|date("d.m.y") }}</td>
                 <td>{{ entity.dogovoractname }} {{ entity.dogovoractdate|date("d.m.y") }}</td>
-                <td>{{ entity.organizationname }}</td>
-                <td>{#{ entity.dogovor }#} {{ entity.dogovordate|date("d.m.y") }}</td>
+                <td>{{ entity.organization.id }}</td>
+                <td>{{ entity.dogovor }} {{ entity.dogovor.startdatetime|date("d.m.y") }}</td>
                 <td>{{ entity.postponement }}</td>
                 <td>{% if entity.dogovoractoriginal is not empty %}есть{% else %}нет{% endif %}</td>
                 <td>{{ entity.description }}</</td>
