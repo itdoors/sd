@@ -37,10 +37,6 @@
     </target>
 
     <target name="download-tools" description="Download build tools">
-        <echo msg="Downloading phing..." />
-        <exec command="curl -O http://www.phing.info/get/phing-latest.phar" dir="${path.bin}" />
-        <symlink link="${path.bin}/phing" target="${path.bin}/phing-latest.phar" overwrite="true" />
-        <chmod file="${path.bin}/phing" mode="0755" />
 
         <echo msg="Downloading PHP_CodeSniffer..." />
         <exec command="git clone git://github.com/squizlabs/PHP_CodeSniffer.git" dir="${path.bin}" />
