@@ -1,0 +1,16 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ITDoorsControllingBundle' %}
+{% block title %}{% trans %}List of Controlling{% endtrans %} {% endblock %}
+{% block page_title %}
+<h3 class="page-title">
+        {% trans %}Controlling <small>list of invoice</small>{% endtrans %}
+</h3>
+{% endblock %}
+{% block page_breadcrumbs %}
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <i class="fa fa-home"></i>
+        <a href="{{ path('it_doors_controlling_homepage') }}" title="{% trans %}Controlling{% endtrans %}">{% trans %}Controlling{% endtrans %}</a>
+    </li>
+</ul>
+{% endblock %}

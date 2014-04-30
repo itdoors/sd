@@ -1,0 +1,7 @@
+it_doors_controlling_homepage:
+    pattern:  /controlling
+    defaults: { _controller: ITDoorsControllingBundle:Default:index }
+    
+it_doors_controlling_invoice:
+    pattern:  /controlling/invoice
+    defaults: { _controller: ITDoorsControllingBundle:Invoice:index }

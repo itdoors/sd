@@ -12,3 +12,4 @@ logs/
 /.idea
 /composer.phar
 /*~
+/nbproject/private/

@@ -1,0 +1,98 @@
+{% trans_default_domain 'ITDoorsControllingBundle' %}
+<script>
+    $(document).ready(function(){
+        $('#' + '{{ filterFormName }}' + '_city, #' + '{{ filterFormName }}' + '_scope, #' + '{{ filterFormName }}' + '_users').select2({
+            placeholder: "Select City",
+            allowClear: true
+        });
+
+        $("#" + "{{ filterFormName }}" + "_organization_id").select2({
+            placeholder: "Select Organization",
+            minimumInputLength: 3,
+            ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+                url: "{{ path('sd_common_ajax_organization') }}",
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        q: term, // search term
+                        page_limit: 10,
+                        apikey: "ju6z9mjyajq2djue3gbvv26t" // please do not use so this example keeps working
+                    };
+                },
+                results: function (data, page) { // parse the results into the format expected by Select2.
+                    // since we are using custom formatting functions we do not need to alter remote JSON data
+                    return {
+                        results: data
+                    };
+                }
+            },
+            initSelection: function (element, callback) {
+                // the input tag has a value attribute preloaded that points to a preselected movie's id
+                // this function resolves that id attribute to an object that select2 can render
+                // using its formatResult renderer - that way the movie name is shown preselected
+                var id = $(element).val();
+                if (id !== "") {
+                    $.ajax("{{ path('sd_common_ajax_organization_by_id') }}", {
+                        data: {
+                            id: id
+                        },
+                        dataType: "json"
+                    }).done(function (data) {
+                                callback(data)
+                            });
+                }
+            },
+            formatResult: function (data)
+            {
+                return data.name;
+            }, // omitted for brevity, see the source of this page
+            formatSelection: function (data)
+            {
+                return data.name;
+            } // omitted for brevity, see the source of this page
+        });
+    })
+</script>
+<div class="row ">
+    <div class="col-md-12">
+        <div class="portlet box yellow">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-reorder"></i>
+                    {{ 'Filters'|trans({}, 'ListsOrganizationBundle') }}
+                </div>
+                <div class="tools"><a class="collapse" href="" title="{% trans %}Filters{% endtrans %}"></a></div>
+            </div>
+            <div class="portlet-body">
+			<p>{% trans %}Enter filter parameters and press Filter button.{% endtrans %}</p>
+                <div class="row">
+                {{ form_start(filterForm,
+                        {
+                            'action': path('it_doors_' ~ baseRoutePrefix ~ '_invoice_filter'),
+                            'attr': {'novalidate': 'novalidate', 'class': 'form-inline', 'role': 'form'}
+                        }
+                    )
+                }}
+                {{ form_errors(filterForm) }}
+                <div class="form-group col-md-3">
+                    {{ form_widget(filterForm.organization_id, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Organization', 'multiple': 'multiple'}}) }}
+                </div>
+                <div class="form-group col-md-3">
+                    {{ form_widget(filterForm.city, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter City', 'multiple': 'multiple'}}) }}
+                </div>
+                <div class="form-group col-md-2">
+                    {{ form_widget(filterForm.scope, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Scope', 'multiple': 'multiple'}}) }}
+                </div>
+                <div class="form-group col-md-2">
+                    {{ form_widget(filterForm.users, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Manager', 'multiple': 'multiple'}}) }}
+                </div>
+                <div class="form-group col-md-2">
+                    {{ form_widget(filterForm.save, { 'label': 'Search', 'attr': {'class': 'btn green'}} ) }}
+                    {{ form_widget(filterForm.reset, { 'label': 'Clear Filter', 'attr': {'class': 'btn'}} ) }}
+                </div>
+                {{ form_end(filterForm) }}
+			</div>
+            </div>
+        </div>
+    </div>
+</div>

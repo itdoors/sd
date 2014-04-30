@@ -1,0 +1,62 @@
+# src/ITDoors/ControllingBundle/Resources/config/doctrine/Invoice.orm.yml
+ITDoors\ControllingBundle\Entity\Invoice:
+    type: entity
+    table: invoice
+    repositoryClass: ITDoors\ControllingBundle\Entity\InvoiceRepository
+    id:
+        id:
+            type: integer
+            generator: { strategy: IDENTITY }
+    fields:
+        invoice_id:
+            type: string
+            length: 255
+        sum:
+            type: float
+            length: 10
+        date:
+            type: date
+        postponement:
+            type: boolean
+        date_end:
+            type: date
+        date_fact:
+            type: date
+        dogovor_name:
+            type: string
+            length: 255
+        dogovor_date:
+            type: date
+        dogovor_act_name:
+            type: string
+            length: 255
+        dogovor_act_date:
+            type: date
+        dogovor_act_original:
+            type: boolean
+        city_name:
+            type: string
+            length: 255
+        organization_name:
+            type: string
+            length: 255
+        organization_edrpou:
+            type: string
+            length: 255
+        description:
+            type: text
+        court:
+            type: boolean
+    manyToOne:
+        organization:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            inversedBy: invoice
+            joinColumn:
+                name: organization_id
+                referencedColumnName: id
+        dogovor:
+            targetEntity: Lists\DogovorBundle\Entity\Dogovor
+            inversedBy: invoice
+            joinColumn:
+                name: dogovor_id
+                referencedColumnName: id

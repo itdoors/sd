@@ -1,0 +1,7 @@
+parameters:
+#    it_doors_controlling.example.class: ITDoors\ControllingBundle\Example
+
+services:
+#    it_doors_controlling.example:
+#        class: %it_doors_controlling.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
