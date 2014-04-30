@@ -12,7 +12,11 @@ use Doctrine\ORM\EntityRepository;
  */
 class InvoiceRepository extends EntityRepository
 {
-
+/**
+ * Returns results for interval future invoice
+ *
+ * @return mixed[]
+ */
     public function findAllOrderedByName()
     {
         return $this->getEntityManager()
@@ -23,34 +27,34 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
-     * @param mixed[] $params
+     * @param int $periodmin Description
+     * 
+     * @param int $periodmax 0 - no restrictions
      *
      * @return mixed[]
      */
-    public function getInvoicePeriod($param1, $param2)
+    public function getInvoicePeriod($periodmin, $periodmax)
     {
-//        
-//    $this->createQueryBuilder('hm')
-//        ->where('hm.handling_id = :handlingId')
-//        ->setParameter(':handlingId', $handlingId)
-//        ->getQuery()
-//        ->getResult();
-//        
         $query = "
             SELECT
                 i
             FROM
                 ITDoorsControllingBundle:Invoice i
-            WHERE '" . date('Y-m-d') . "' -   i.date_end >= '$param1'";
-        if ($param2 != 0)
-            $query .= "AND  '" . date('Y-m-d') . "' -   i.date_end <= '$param2'";
-        $query .=" AND ( i.court is NULL OR   i.court = '0' ) ORDER BY i.date_end DESC";
+            WHERE '" . date('Y-m-d') . "' -   i.dateEnd >= '$periodmin'";
+        if ($periodmax != 0) {
+            $query .= "AND  '" . date('Y-m-d') . "' -   i.dateEnd <= '$periodmax'";
+        }
+        $query .=" AND ( i.court is NULL OR   i.court = '0' ) ORDER BY i.dateEnd DESC";
 
         return $this->getEntityManager()
                 ->createQuery($query)
                 ->getResult();
     }
-
+/**
+ * Returns results for interval future invoice
+ *
+ * @return mixed[]
+ */
     public function getInvoiceCourt()
     {
         $query = "
@@ -58,7 +62,7 @@ class InvoiceRepository extends EntityRepository
                 i
             FROM
                 ITDoorsControllingBundle:Invoice i
-            WHERE i.court = '1' ORDER BY i.date_end DESC";
+            WHERE i.court = '1' ORDER BY i.dateEnd DESC";
 
         return $this->getEntityManager()
                 ->createQuery($query)

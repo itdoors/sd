@@ -27,7 +27,7 @@
                                             <td>{{ entity.postponement }}</td>
                                             <td>{% if entity.dogovoractoriginal is not empty %}есть{% else %}нет{% endif %}</td>
                                             <td>{{ entity.description }}</</td>
-                                            <td>{{ entity.dateend|date("d.m.y") }}</td>
+                                            <td>{{ entity.dateEnd|date("d.m.y") }}</td>
                                             <td>{{ entity.datefact|date("d.m.y") }}</td>
                                         </tr>
                                     {% endfor %}

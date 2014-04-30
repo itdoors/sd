@@ -8,9 +8,10 @@ ITDoors\ControllingBundle\Entity\Invoice:
             type: integer
             generator: { strategy: IDENTITY }
     fields:
-        invoice_id:
+        invoiceId:
             type: string
             length: 255
+            column: invoice_id
         sum:
             type: float
             length: 10
@@ -18,31 +19,41 @@ ITDoors\ControllingBundle\Entity\Invoice:
             type: date
         postponement:
             type: boolean
-        date_end:
+        dateEnd:
             type: date
-        date_fact:
+            column: date_end
+        dateFact:
             type: date
-        dogovor_name:
+            column: date_fact
+        dogovorName:
             type: string
             length: 255
-        dogovor_date:
+            column: dogovor_name
+        dogovorDate:
             type: date
-        dogovor_act_name:
+            column: dogovor_date
+        dogovorActName:
             type: string
             length: 255
-        dogovor_act_date:
+            column: dogovor_act_name
+        dogovorActDate:
             type: date
-        dogovor_act_original:
+            column: dogovor_act_date
+        dogovorActOriginal:
             type: boolean
-        city_name:
+            column: dogovor_act_original
+        cityName:
             type: string
             length: 255
-        organization_name:
+            column: city_name
+        organizationName:
             type: string
             length: 255
-        organization_edrpou:
+            column: organization_name
+        organizationEdrpou:
             type: string
             length: 255
+            column: organization_edrpou
         description:
             type: text
         court:

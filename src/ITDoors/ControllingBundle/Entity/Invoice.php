@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Invoice
 {
+
     /**
      * @var integer
      */
@@ -17,7 +18,7 @@ class Invoice
     /**
      * @var string
      */
-    private $invoice_id;
+    private $invoiceId;
 
     /**
      * @var float
@@ -37,57 +38,62 @@ class Invoice
     /**
      * @var \DateTime
      */
-    private $date_end;
+    private $dateEnd;
 
     /**
      * @var \DateTime
      */
-    private $date_fact;
+    private $dateFact;
 
     /**
      * @var string
      */
-    private $dogovor_name;
+    private $dogovorName;
 
     /**
      * @var \DateTime
      */
-    private $dogovor_date;
+    private $dogovorDate;
 
     /**
      * @var string
      */
-    private $dogovor_act_name;
+    private $dogovorActName;
 
     /**
      * @var \DateTime
      */
-    private $dogovor_act_date;
+    private $dogovorActDate;
 
     /**
      * @var boolean
      */
-    private $dogovor_act_original;
+    private $dogovorActOriginal;
 
     /**
      * @var string
      */
-    private $city_name;
+    private $cityName;
 
     /**
      * @var string
      */
-    private $organization_name;
+    private $organizationName;
 
     /**
      * @var string
      */
-    private $organization_edrpou;
+    private $organizationEdrpou;
 
     /**
      * @var string
      */
     private $description;
+
+    /**
+     * @var boolean
+     */
+    private $court;
 
     /**
      * @var \Lists\OrganizationBundle\Entity\Organization
@@ -98,7 +104,6 @@ class Invoice
      * @var \Lists\DogovorBundle\Entity\Dogovor
      */
     private $dogovor;
-
 
     /**
      * Get id
@@ -111,38 +116,40 @@ class Invoice
     }
 
     /**
-     * Set invoice_id
+     * Set invoiceId
      *
      * @param string $invoiceId
+     * 
      * @return Invoice
      */
     public function setInvoiceId($invoiceId)
     {
-        $this->invoice_id = $invoiceId;
-    
+        $this->invoiceId = $invoiceId;
+
         return $this;
     }
 
     /**
-     * Get invoice_id
+     * Get invoiceId
      *
-     * @return string 
+     * @return string
      */
     public function getInvoiceId()
     {
-        return $this->invoice_id;
+        return $this->invoiceId;
     }
 
     /**
      * Set sum
      *
      * @param float $sum
+     * 
      * @return Invoice
      */
     public function setSum($sum)
     {
         $this->sum = $sum;
-    
+
         return $this;
     }
 
@@ -160,12 +167,13 @@ class Invoice
      * Set date
      *
      * @param \DateTime $date
+     * 
      * @return Invoice
      */
     public function setDate($date)
     {
         $this->date = $date;
-    
+
         return $this;
     }
 
@@ -183,12 +191,13 @@ class Invoice
      * Set postponement
      *
      * @param boolean $postponement
+     * 
      * @return Invoice
      */
     public function setPostponement($postponement)
     {
         $this->postponement = $postponement;
-    
+
         return $this;
     }
 
@@ -203,245 +212,256 @@ class Invoice
     }
 
     /**
-     * Set date_end
+     * Set dateEnd
      *
      * @param \DateTime $dateEnd
+     * 
      * @return Invoice
      */
     public function setDateEnd($dateEnd)
     {
-        $this->date_end = $dateEnd;
-    
+        $this->dateEnd = $dateEnd;
+
         return $this;
     }
 
     /**
-     * Get date_end
+     * Get dateEnd
      *
      * @return \DateTime 
      */
     public function getDateEnd()
     {
-        return $this->date_end;
+        return $this->dateEnd;
     }
 
     /**
-     * Set date_fact
+     * Set dateFact
      *
      * @param \DateTime $dateFact
+     * 
      * @return Invoice
      */
     public function setDateFact($dateFact)
     {
-        $this->date_fact = $dateFact;
-    
+        $this->dateFact = $dateFact;
+
         return $this;
     }
 
     /**
-     * Get date_fact
+     * Get dateFact
      *
      * @return \DateTime 
      */
     public function getDateFact()
     {
-        return $this->date_fact;
+        return $this->dateFact;
     }
 
     /**
-     * Set dogovor_name
+     * Set dogovorName
      *
      * @param string $dogovorName
+     * 
      * @return Invoice
      */
     public function setDogovorName($dogovorName)
     {
-        $this->dogovor_name = $dogovorName;
-    
+        $this->dogovorName = $dogovorName;
+
         return $this;
     }
 
     /**
-     * Get dogovor_name
+     * Get dogovorName
      *
      * @return string 
      */
     public function getDogovorName()
     {
-        return $this->dogovor_name;
+        return $this->dogovorName;
     }
 
     /**
-     * Set dogovor_date
+     * Set dogovorDate
      *
      * @param \DateTime $dogovorDate
+     * 
      * @return Invoice
      */
     public function setDogovorDate($dogovorDate)
     {
-        $this->dogovor_date = $dogovorDate;
-    
+        $this->dogovorDate = $dogovorDate;
+
         return $this;
     }
 
     /**
-     * Get dogovor_date
+     * Get dogovorDate
      *
      * @return \DateTime 
      */
     public function getDogovorDate()
     {
-        return $this->dogovor_date;
+        return $this->dogovorDate;
     }
 
     /**
-     * Set dogovor_act_name
+     * Set dogovorActName
      *
      * @param string $dogovorActName
+     * 
      * @return Invoice
      */
     public function setDogovorActName($dogovorActName)
     {
-        $this->dogovor_act_name = $dogovorActName;
-    
+        $this->dogovorActName = $dogovorActName;
+
         return $this;
     }
 
     /**
-     * Get dogovor_act_name
+     * Get dogovorActName
      *
      * @return string 
      */
     public function getDogovorActName()
     {
-        return $this->dogovor_act_name;
+        return $this->dogovorActName;
     }
 
     /**
-     * Set dogovor_act_date
+     * Set dogovorActDate
      *
      * @param \DateTime $dogovorActDate
+     * 
      * @return Invoice
      */
     public function setDogovorActDate($dogovorActDate)
     {
-        $this->dogovor_act_date = $dogovorActDate;
-    
+        $this->dogovorActDate = $dogovorActDate;
+
         return $this;
     }
 
     /**
-     * Get dogovor_act_date
+     * Get dogovorActDate
      *
      * @return \DateTime 
      */
     public function getDogovorActDate()
     {
-        return $this->dogovor_act_date;
+        return $this->dogovorActDate;
     }
 
     /**
-     * Set dogovor_act_original
+     * Set dogovorActOriginal
      *
      * @param boolean $dogovorActOriginal
+     * 
      * @return Invoice
      */
     public function setDogovorActOriginal($dogovorActOriginal)
     {
-        $this->dogovor_act_original = $dogovorActOriginal;
-    
+        $this->dogovorActOriginal = $dogovorActOriginal;
+
         return $this;
     }
 
     /**
-     * Get dogovor_act_original
+     * Get dogovorActOriginal
      *
      * @return boolean 
      */
     public function getDogovorActOriginal()
     {
-        return $this->dogovor_act_original;
+        return $this->dogovorActOriginal;
     }
 
     /**
-     * Set city_name
+     * Set cityName
      *
      * @param string $cityName
+     * 
      * @return Invoice
      */
     public function setCityName($cityName)
     {
-        $this->city_name = $cityName;
-    
+        $this->cityName = $cityName;
+
         return $this;
     }
 
     /**
-     * Get city_name
+     * Get cityName
      *
      * @return string 
      */
     public function getCityName()
     {
-        return $this->city_name;
+        return $this->cityName;
     }
 
     /**
-     * Set organization_name
+     * Set organizationName
      *
      * @param string $organizationName
+     * 
      * @return Invoice
      */
     public function setOrganizationName($organizationName)
     {
-        $this->organization_name = $organizationName;
-    
+        $this->organizationName = $organizationName;
+
         return $this;
     }
 
     /**
-     * Get organization_name
+     * Get organizationName
      *
      * @return string 
      */
     public function getOrganizationName()
     {
-        return $this->organization_name;
+        return $this->organizationName;
     }
 
     /**
-     * Set organization_edrpou
+     * Set organizationEdrpou
      *
      * @param string $organizationEdrpou
+     * 
      * @return Invoice
      */
     public function setOrganizationEdrpou($organizationEdrpou)
     {
-        $this->organization_edrpou = $organizationEdrpou;
-    
+        $this->organizationEdrpou = $organizationEdrpou;
+
         return $this;
     }
 
     /**
-     * Get organization_edrpou
+     * Get organizationEdrpou
      *
      * @return string 
      */
     public function getOrganizationEdrpou()
     {
-        return $this->organization_edrpou;
+        return $this->organizationEdrpou;
     }
 
     /**
      * Set description
      *
      * @param string $description
+     * 
      * @return Invoice
      */
     public function setDescription($description)
     {
         $this->description = $description;
-    
+
         return $this;
     }
 
@@ -456,15 +476,40 @@ class Invoice
     }
 
     /**
+     * Set court
+     *
+     * @param boolean $court
+     * 
+     * @return Invoice
+     */
+    public function setCourt($court)
+    {
+        $this->court = $court;
+
+        return $this;
+    }
+
+    /**
+     * Get court
+     *
+     * @return boolean 
+     */
+    public function getCourt()
+    {
+        return $this->court;
+    }
+
+    /**
      * Set organization
      *
      * @param \Lists\OrganizationBundle\Entity\Organization $organization
+     * 
      * @return Invoice
      */
     public function setOrganization(\Lists\OrganizationBundle\Entity\Organization $organization = null)
     {
         $this->organization = $organization;
-    
+
         return $this;
     }
 
@@ -482,12 +527,13 @@ class Invoice
      * Set dogovor
      *
      * @param \Lists\DogovorBundle\Entity\Dogovor $dogovor
+     * 
      * @return Invoice
      */
     public function setDogovor(\Lists\DogovorBundle\Entity\Dogovor $dogovor = null)
     {
         $this->dogovor = $dogovor;
-    
+
         return $this;
     }
 
@@ -500,32 +546,5 @@ class Invoice
     {
         return $this->dogovor;
     }
-    /**
-     * @var boolean
-     */
-    private $court;
 
-
-    /**
-     * Set court
-     *
-     * @param boolean $court
-     * @return Invoice
-     */
-    public function setCourt($court)
-    {
-        $this->court = $court;
-    
-        return $this;
-    }
-
-    /**
-     * Get court
-     *
-     * @return boolean 
-     */
-    public function getCourt()
-    {
-        return $this->court;
-    }
 }
