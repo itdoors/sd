@@ -1,36 +1,36 @@
-<div class="tab-pane{% if  classactive is defined %} {{classactive}} {% endif %}" id="tab_{{ number }}">
-                            <table class="records_list">
-                                    <thead>
-                                        <tr>
-                                            <th>Заказчик</th>
-                                            <th>Сума рахунку</th>
-                                            <th>№ і дата рахунку</th>
-                                            <th>№ і дата АВР/ВН</th>
-                                            <th>Представництво</th>
-                                            <th>№ і дата договору</th>
-                                            <th>Відстрочка</th>
-                                            <th>Орігінал АВР/ВН</th>
-                                            <th>Примітки</th>
-                                            <th>Очікувана дата оплати</th>
-                                            <th>Фактична дата оплати</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for entity in entities %}
-                                        <tr>
-                                            <td>{{ entity.id }}</td>
-                                            <td>{{ entity.sum }}</td>
-                                            <td>{{ entity.invoiceid }} {{ entity.date|date("d.m.y") }}</td>
-                                            <td>{{ entity.dogovoractname }} {{ entity.dogovoractdate|date("d.m.y") }}</td>
-                                            <td>{{ entity.organizationname }}</td>
-                                            <td>{#{ entity.dogovor }#} {{ entity.dogovordate|date("d.m.y") }}</td>
-                                            <td>{{ entity.postponement }}</td>
-                                            <td>{% if entity.dogovoractoriginal is not empty %}есть{% else %}нет{% endif %}</td>
-                                            <td>{{ entity.description }}</</td>
-                                            <td>{{ entity.dateEnd|date("d.m.y") }}</td>
-                                            <td>{{ entity.datefact|date("d.m.y") }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                        </div>
+<div class="tab-pane active">
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Заказчик</th>
+                <th>Сума рахунку</th>
+                <th>№ і дата рахунку</th>
+                <th>№ і дата АВР/ВН</th>
+                <th>Представництво</th>
+                <th>№ і дата договору</th>
+                <th>Відстрочка</th>
+                <th>Орігінал АВР/ВН</th>
+                <th>Примітки</th>
+                <th>Очікувана дата оплати</th>
+                <th>Фактична дата оплати</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entity in entities %}
+            <tr>
+                <td>{{ entity.id }}</td>
+                <td>{{ entity.sum }}</td>
+                <td>{{ entity.invoiceid }} {{ entity.date|date("d.m.y") }}</td>
+                <td>{{ entity.dogovoractname }} {{ entity.dogovoractdate|date("d.m.y") }}</td>
+                <td>{{ entity.organizationname }}</td>
+                <td>{#{ entity.dogovor }#} {{ entity.dogovordate|date("d.m.y") }}</td>
+                <td>{{ entity.postponement }}</td>
+                <td>{% if entity.dogovoractoriginal is not empty %}есть{% else %}нет{% endif %}</td>
+                <td>{{ entity.description }}</</td>
+                <td>{{ entity.dateEnd|date("d.m.y") }}</td>
+                <td>{{ entity.datefact|date("d.m.y") }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

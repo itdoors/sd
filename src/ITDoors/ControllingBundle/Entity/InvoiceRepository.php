@@ -12,11 +12,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class InvoiceRepository extends EntityRepository
 {
-/**
- * Returns results for interval future invoice
- *
- * @return mixed[]
- */
+
+    /**
+     * Returns results for interval future invoice
+     *
+     * @return mixed[]
+     */
     public function findAllOrderedByName()
     {
         return $this->getEntityManager()
@@ -50,11 +51,12 @@ class InvoiceRepository extends EntityRepository
                 ->createQuery($query)
                 ->getResult();
     }
-/**
- * Returns results for interval future invoice
- *
- * @return mixed[]
- */
+
+    /**
+     * Returns results for interval future invoice
+     *
+     * @return mixed[]
+     */
     public function getInvoiceCourt()
     {
         $query = "

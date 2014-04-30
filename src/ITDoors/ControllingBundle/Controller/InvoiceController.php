@@ -12,13 +12,9 @@ use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
 class InvoiceController extends BaseController
 {
 
-    protected $filterNamespace = 'handling.sales.filters';
-    protected $filterFormName = 'handlingSalesFilterForm';
     protected $baseRoute = 'invoice';
     protected $baseRoutePrefix = 'controlling';
     protected $baseTemplate = 'Invoice';
-    protected $wizardOrganizationNamespace = 'sales.wizard.organization';
-    protected $wizardHandlingNamespace = 'sales.wizard.handling';
 
     /**
      *  indexAction
@@ -27,23 +23,78 @@ class InvoiceController extends BaseController
      */
     public function indexAction()
     {
+        $session = $this->get('session');
+        $period = $session->get('invoicePeriod', 30);
+
         $em = $this->getDoctrine()->getEntityManager();
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
-        $entities30 = $invoice->getInvoicePeriod(1, 30);
-        $entities60 = $invoice->getInvoicePeriod(31, 60);
-        $entities120 = $invoice->getInvoicePeriod(61, 120);
-        $entities180 = $invoice->getInvoicePeriod(121, 180);
-        $entities181 = $invoice->getInvoicePeriod(181, 0);
-        $entitiescourt = $invoice->getInvoiceCourt();
+
+        switch ($period) {
+            case 30:
+                $entities = $invoice->getInvoicePeriod(1, 30);
+                break;
+            case 60:
+                $entities = $invoice->getInvoicePeriod(31, 60);
+                break;
+            case 120:
+                $entities = $invoice->getInvoicePeriod(61, 120);
+                break;
+            case 180:
+                $entities = $invoice->getInvoicePeriod(121, 180);
+                break;
+            case 181:
+                $entities = $invoice->getInvoicePeriod(181, 0);
+                break;
+            case 0:
+                $entities = $invoice->getInvoiceCourt();
+                break;
+        }
 
         return $this->render('ITDoorsControllingBundle:Invoice:index.html.twig', array(
-                'entities30' => $entities30,
-                'entities60' => $entities60,
-                'entities120' => $entities120,
-                'entities180' => $entities180,
-                'entities181' => $entities181,
-                'entitiescourt' => $entitiescourt,
-                'entities' => array(),
+                'entities' => $entities,
+                'period' => $period
+        ));
+    }
+
+    /**
+     *  showAction
+     * 
+     * @param int $period 0,30,60,120,180,181,0
+     * 
+     * @return html Description
+     */
+    public function showAction($period)
+    {
+
+        $session = $this->get('session');
+        $session->set('invoicePeriod', $period);
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
+
+        switch ($period) {
+            case 30:
+                $entities = $invoice->getInvoicePeriod(1, 30);
+                break;
+            case 60:
+                $entities = $invoice->getInvoicePeriod(31, 60);
+                break;
+            case 120:
+                $entities = $invoice->getInvoicePeriod(61, 120);
+                break;
+            case 180:
+                $entities = $invoice->getInvoicePeriod(121, 180);
+                break;
+            case 181:
+                $entities = $invoice->getInvoicePeriod(181, 0);
+                break;
+            case 0:
+                $entities = $invoice->getInvoiceCourt();
+                break;
+        }
+
+        return $this->render('ITDoorsControllingBundle:Invoice:show.html.twig', array(
+                'entities' => $entities
         ));
     }
 
