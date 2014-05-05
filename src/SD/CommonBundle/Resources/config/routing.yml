@@ -125,3 +125,43 @@ sd_common_ajax_model_contact_type:
 sd_common_ajax_model_contact_save:
     pattern:  /ajax/model_contact/save
     defaults: { _controller: SDCommonBundle:Ajax:modelContactSave }
+
+sd_common_ajax_mpk:
+    pattern: /ajax/mpk
+    defaults: { _controller: SDCommonBundle:Ajax:mpk }
+
+sd_common_ajax_mpk_by_id:
+    pattern: /ajax/mpk/by/id
+    defaults: { _controller: SDCommonBundle:Ajax:mpkById }
+
+sd_common_ajax_department_type:
+    pattern: /ajax/department/type
+    defaults: { _controller: SDCommonBundle:Ajax:departmentType }
+
+sd_common_ajax_department_type_by_id:
+    pattern: /ajax/department/type/by/id
+    defaults: { _controller: SDCommonBundle:Ajax:departmentTypeById }
+
+sd_common_ajax_region:
+    pattern: /ajax/region
+    defaults: { _controller: SDCommonBundle:Ajax:region }
+
+sd_common_ajax_region_by_id:
+    pattern: /ajax/region/by/id
+    defaults: { _controller: SDCommonBundle:Ajax:regionById }
+
+sd_common_ajax_department_status:
+    pattern: /ajax/department/status
+    defaults: { _controller: SDCommonBundle:Ajax:departmentStatus }
+
+sd_common_ajax_department_status_by_id:
+    pattern: /ajax/department/status/by/id
+    defaults: { _controller: SDCommonBundle:Ajax:departmentStatusById }
+
+sd_common_ajax_company_structure:
+    pattern: /ajax/company/structure
+    defaults: { _controller: SDCommonBundle:Ajax:companyStructure }
+
+sd_common_ajax_company_structure_by_id:
+    pattern: /ajax/company/structure/by/id
+    defaults: { _controller: SDCommonBundle:Ajax:companyStructureById }

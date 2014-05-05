@@ -23,6 +23,8 @@ use Lists\OrganizationBundle\Entity\Organization;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Lists\DepartmentBundle\Entity\DepartmentsTypeRepository;
+use Lists\MpkBundle\Entity\MpkRepository;
 
 /**
  * AjaxController class.
@@ -2271,4 +2273,209 @@ class AjaxController extends Controller
 
         return true;
     }
-}
+
+    /**
+     * ajax php function to get department's mpk
+     * return json of all mpk that was found
+     *
+     * @return string
+     */
+
+    public function mpkAction() {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsMpkBundle:Mpk');
+
+        $objects= $repository->getSearchQueryMpk($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json mpk by id
+     *
+     * @return string
+     */
+    public function departmentMpkByIdAction()
+    {
+        $id = $this->get('request')->query->get('id');
+
+        $mpk = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:Departments')
+            ->find($id);
+
+        $result = array();
+
+        if ($mpk) {
+            $result = $this->serializeObject($mpk, null, 'getMpk');
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * ajax php function to get department's type
+     * return json of all department type that was found
+     *
+     * @return string
+     */
+
+    public function departmentTypeAction() {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentsType');
+
+        $objects= $repository->getSearchQueryType($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json type of department by id
+     *
+     * @return string
+     */
+    public function departmentTypeByIdAction()
+    {
+        $id = $this->get('request')->query->get('id');
+
+        $departmentType = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentsType')
+            ->find($id);
+
+        $result = array();
+
+        if ($departmentType) {
+            $result = $this->serializeObject($departmentType);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * ajax php function to get regions
+     * return json of all regions that was found
+     *
+     * @return string
+     */
+
+    public function regionAction() {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsRegionBundle:Region');
+
+        $objects= $repository->getSearchQueryRegion($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json region name by id
+     *
+     * @return string
+     */
+    public function regionByIdAction()
+    {
+        $id = $this->get('request')->query->get('id');
+
+        $region = $this->getDoctrine()
+            ->getRepository('ListsRegionBundle:Region')
+            ->find($id);
+
+        $result = array();
+
+        if ($region) {
+            $result = $this->serializeObject($region);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * ajax php function to get department status
+     * return json of all regions that was found
+     *
+     * @return string
+     */
+    public function departmentStatusAction() {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentsStatus');
+
+        $objects= $repository->getSearchQueryStatus($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json department status by id
+     *
+     * @return string
+     */
+    public function departmentStatusByIdAction()
+    {
+        $id = $this->get('request')->query->get('id');
+
+        $departmentStatus = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentsStatus')
+            ->find($id);
+
+        $result = array();
+
+        if ($departmentStatus) {
+            $result = $this->serializeObject($departmentStatus);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+
+    /**
+     * Returns json company structure by id
+     *
+     * @return string
+     */
+    public function companyStructureByIdAction()
+    {
+        $id = $this->get('request')->query->get('id');
+
+        $region = $this->getDoctrine()
+            ->getRepository('ListsCompanystructureBundle:Companystructure')
+            ->find($id);
+
+        $result = array();
+
+        if ($region) {
+            $result = $this->serializeObject($region);
+        }
+
+        return new Response(json_encode($result));
+    }}

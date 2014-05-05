@@ -1,6 +1,7 @@
 Lists\RegionBundle\Entity\Region:
     type: entity
     table: Region
+    repositoryClass: Lists\RegionBundle\Entity\RegionRepository
     id:
         id:
             type: integer

@@ -1,5 +1,5 @@
 <td>
-    <a id="managers_list_new" class="btn green ajax-form button_wide" href="#">
+    <a class="btn green button_wide" href="#">
         {{ item.id }}
     </a>
 </td>
@@ -9,8 +9,9 @@
 <td>
     {{ item.organization }}
 </td>
+{#
 <td>
-    {{ item.city.getRegion }}
+    {{ item.r }}
 </td>
 <td>
     {{ item.city }}
@@ -30,7 +31,10 @@
 <td>
     {{ item.description }}
 </td>
-
+<td>
+    {{ item.opermanager }}
+</td>
+#}
 
 
 

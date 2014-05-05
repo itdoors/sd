@@ -40,6 +40,69 @@ class DepartmentFilterFormType extends AbstractType
         $router = $this->container->get('router');
 
         $builder
+            ->add('mpk', 'hidden', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url'  => $router->generate('sd_common_ajax_mpk'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_mpk_by_id'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 2,
+                        'allowClear' => true,
+                        'width' => '200px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter mpk',
+                )
+            ));
+
+        $builder
+            ->add('organization', 'hidden', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url'  => $router->generate('sd_common_ajax_organization'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_organization_by_id'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 2,
+                        'allowClear' => true,
+                        'width' => '200px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter organization',
+                )
+            ));
+
+        $builder
+            ->add('CompanyStructure', 'hidden', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url'  => $router->generate('sd_common_ajax_company_structure'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_company_structure_by_id'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 0,
+                        'allowClear' => true,
+                        'width' => '200px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter company structure',
+                )
+            ));
+        $builder
+            ->add('region', 'hidden', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url'  => $router->generate('sd_common_ajax_region'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_region_by_id'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 0,
+                        'allowClear' => true,
+                        'width' => '200px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter region',
+                )
+            ));
+
+        $builder
             ->add('city', 'hidden', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
@@ -56,49 +119,60 @@ class DepartmentFilterFormType extends AbstractType
             ));
 
         $builder
-            ->add('city', 'hidden', array(
+            ->add('status', 'hidden', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url'  => $router->generate('sd_common_ajax_city'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_city_by_id'),
+                    'data-url'  => $router->generate('sd_common_ajax_department_status'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_department_status_by_id'),
                     'data-params' => json_encode(array(
-                        'minimumInputLength' => 2,
+                        'minimumInputLength' => 0,
                         'allowClear' => true,
                         'width' => '200px',
                         'multiple' => 'multiple'
                     )),
-                    'placeholder' => 'Enter Manager',
+                    'placeholder' => 'Enter status',
                 )
             ));
 
-
-        /*$builder
-            ->add('organization', 'entity', array(
-                    'class'=>'Lists\DepartmentBundle\Entity\Departments',
-                    'mapped' => false,
-                    'property'=>'organization',
-                    'attr' => array(
-                        'class' => 'itdoors-select2 can-be-reseted submit-field',
-                        'placeholder' => 'Enter organization',
-                        'multiple' => 'multiple'
-                    )
-                )
-
-            );
         $builder
-            ->add('city', 'entity', array(
-                'class'=>'Lists\CityBundle\Entity\City',
-                'mapped' => false,
-                'property'=>'name',
+            ->add('DepartmentType', 'hidden', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'placeholder' => 'Enter city',
-                    'multiple' => 'multiple'
+                    'data-url'  => $router->generate('sd_common_ajax_department_type'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_department_type_by_id'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 0,
+                        'allowClear' => true,
+                        'width' => '200px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter department type',
                 )
-            )
-        );*/
+            ));
 
+        $builder
+            ->add('address', 'text', array(
+                'attr' => array(
+                    'class' => '',
+                    'placeholder' => 'Enter address',
+                )
+            ));
 
+        $builder
+            ->add('Opermanager', 'hidden', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url'  => $router->generate('sd_common_ajax_user'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_id'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 1,
+                        'allowClear' => true,
+                        'width' => '200px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter opermanager',
+                )
+            ));
     }
 
     /**
@@ -109,7 +183,7 @@ class DepartmentFilterFormType extends AbstractType
         $resolver->setDefaults(array(
             'validation_groups' => false,
             'csrf_protection' => false,
-            'translation_domain' => 'ListsHandlingBundle'
+            'translation_domain' => 'ITDoorsOperBundle'
         ));
     }
 

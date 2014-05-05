@@ -65,11 +65,6 @@ class Departments
     private $coordinates;
 
     /**
-     * @var integer
-     */
-    private $organizationId;
-
-    /**
      * @var \Lists\CityBundle\Entity\City
      */
     private $city;
@@ -88,11 +83,6 @@ class Departments
      * @var \Lists\DepartmentBundle\Entity\DepartmentsStatus
      */
     private $status;
-
-    /**
-     * @var \SD\UserBundle\Entity\User
-     */
-    private $opermanager;
 
 
     /**
@@ -336,29 +326,6 @@ class Departments
     }
 
     /**
-     * Set organizationId
-     *
-     * @param integer $organizationId
-     * @return Departments
-     */
-    public function setOrganizationId($organizationId)
-    {
-        $this->organizationId = $organizationId;
-    
-        return $this;
-    }
-
-    /**
-     * Get organizationId
-     *
-     * @return integer 
-     */
-    public function getOrganizationId()
-    {
-        return $this->organizationId;
-    }
-
-    /**
      * Set city
      *
      * @param \Lists\CityBundle\Entity\City $city
@@ -449,14 +416,57 @@ class Departments
     {
         return $this->status;
     }
+    /**
+     * @var integer
+     */
+    private $organizationId;
+
+
+    /**
+     * Set organizationId
+     *
+     * @param integer $organizationId
+     * @return Departments
+     */
+    public function setOrganizationId($organizationId)
+    {
+        $this->organizationId = $organizationId;
+    
+        return $this;
+    }
+
+    /**
+     * Get organizationId
+     *
+     * @return integer 
+     */
+    public function getOrganizationId()
+    {
+        return $this->organizationId;
+    }
+
+    /**
+     * __toString()
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getCity()->getName() . ' | ' . $this->getAddress();
+    }
+    /**
+     * @var \Lists\DepartmentBundle\Entity\sf_guard_user
+     */
+    private $opermanager;
+
 
     /**
      * Set opermanager
      *
-     * @param \SD\UserBundle\Entity\User $opermanager
+     * @param \Lists\DepartmentBundle\Entity\sf_guard_user $opermanager
      * @return Departments
      */
-    public function setOpermanager(\SD\UserBundle\Entity\User $opermanager = null)
+    public function setOpermanager(\Lists\DepartmentBundle\Entity\sf_guard_user $opermanager = null)
     {
         $this->opermanager = $opermanager;
     
@@ -466,7 +476,7 @@ class Departments
     /**
      * Get opermanager
      *
-     * @return \SD\UserBundle\Entity\User 
+     * @return \Lists\DepartmentBundle\Entity\sf_guard_user 
      */
     public function getOpermanager()
     {

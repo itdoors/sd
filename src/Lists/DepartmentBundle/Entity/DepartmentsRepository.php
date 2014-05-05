@@ -42,4 +42,30 @@ class DepartmentsRepository extends EntityRepository
 
         return $query;
     }
+    /**
+     * Searches mpk by $q
+     *
+     * @param string $q
+     *
+     * @return mixed[]
+     */
+    public function getSearchQueryMpk($q) {
+        $sql = $this->createQueryBuilder('c')
+            ->where('lower(c.mpk) LIKE :q')
+            ->setParameter(':q', mb_strtolower($q, 'UTF-8') . '%')
+            ->getQuery();
+
+        return $sql->getResult();
+    }
+
+    /**
+     * Searches departments through filters
+     *
+     * @param array $filters
+     *
+     * @return mixed[]
+     */
+    public function getFilteredDepartments($filters) {
+
+    }
 }

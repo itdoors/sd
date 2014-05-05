@@ -1,0 +1,9 @@
+parameters:
+    lists_mpk.repository.class: Lists\MpkBundle\Entity\MpkRepository
+    lists_mpk.repository.entity: Lists\MpkBundle\Entity\Mpk
+services:
+    lists_mpk.repository:
+        class: %lists_mpk.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_mpk.repository.entity% ]
