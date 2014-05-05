@@ -11,7 +11,7 @@
 /.idea
 /composer.phar
 /logs
-build.properties
+/build.properties
 /*~
 /nbproject
 nbproject/*
