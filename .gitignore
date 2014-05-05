@@ -4,8 +4,8 @@
 /app/config/parameters.yml
 /app/logs/*
 logs/
-!app/cache/.gitkeep
-!app/logs/.gitkeep
+#!app/cache/.gitkeep
+#!app/logs/.gitkeep
 /build/
 /vendor/
 /bin/
@@ -13,4 +13,4 @@ logs/
 /composer.phar
 build.properties
 /*~
-/nbproject/private/
+nbproject/*
