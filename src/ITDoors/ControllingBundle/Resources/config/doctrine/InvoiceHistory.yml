@@ -1,0 +1,36 @@
+# src/ITDoors/ControllingBundle/Resources/config/doctrine/InvoiceHistory.orm.yml
+ITDoors\ControllingBundle\Entity\InvoiceHistory:
+    type: entity
+    table: invoice_history
+    repositoryClass: ITDoors\ControllingBundle\Entity\InvoiceHistoryRepository
+    id:
+        id:
+            type: integer
+            generator: { strategy: IDENTITY }
+    fields:
+        invoiceId:
+            type: integer
+            length: 10
+            column: invoice_id
+        userId:
+            type: integer
+            length: 10
+            column: user_id
+        note:
+            type: string
+            length: 255
+        date:
+            type: date
+    manyToOne:
+        invoice:
+            targetEntity: ITDoors\ControllingBundle\Entity\Invoice
+            inversedBy: invoice_history
+            joinColumn:
+                name: invoice_id
+                referencedColumnName: id
+        dogovor:
+            targetEntity: Lists\DogovorBundle\Entity\Dogovor
+            inversedBy: invoice
+            joinColumn:
+                name: dogovor_id
+                referencedColumnName: id
