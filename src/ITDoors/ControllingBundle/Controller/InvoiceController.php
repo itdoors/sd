@@ -2,6 +2,8 @@
 
 namespace ITDoors\ControllingBundle\Controller;
 
+use ITDoors\ControllingBundle\Entity\Invoice;
+use ITDoors\ControllingBundle\Entity\InvoiceRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
@@ -71,6 +73,7 @@ class InvoiceController extends BaseController
         $session->set('invoicePeriod', $period);
 
         $em = $this->getDoctrine()->getEntityManager();
+        /** @var InvoiceRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
 
         switch ($period) {
