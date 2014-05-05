@@ -605,4 +605,50 @@ class Invoice
     {
         return $this->region;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $histories;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->histories = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add histories
+     *
+     * @param \ITDoors\ControllingBundle\Entity\InvoiceHistory $histories
+     * 
+     * @return Invoice
+     */
+    public function addHistorie(\ITDoors\ControllingBundle\Entity\InvoiceHistory $histories)
+    {
+        $this->histories[] = $histories;
+
+        return $this;
+    }
+
+    /**
+     * Remove histories
+     *
+     * @param \ITDoors\ControllingBundle\Entity\InvoiceHistory $histories
+     */
+    public function removeHistorie(\ITDoors\ControllingBundle\Entity\InvoiceHistory $histories)
+    {
+        $this->histories->removeElement($histories);
+    }
+
+    /**
+     * Get histories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getHistories()
+    {
+        return $this->histories;
+    }
 }

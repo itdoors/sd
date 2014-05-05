@@ -24,13 +24,13 @@ ITDoors\ControllingBundle\Entity\InvoiceHistory:
     manyToOne:
         invoice:
             targetEntity: ITDoors\ControllingBundle\Entity\Invoice
-            inversedBy: invoice_history
+            inversedBy: histories
             joinColumn:
                 name: invoice_id
                 referencedColumnName: id
-        dogovor:
-            targetEntity: Lists\DogovorBundle\Entity\Dogovor
-            inversedBy: invoice
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            inversedBy: null
             joinColumn:
-                name: dogovor_id
+                name: user_id
                 referencedColumnName: id

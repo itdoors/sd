@@ -58,20 +58,22 @@ ITDoors\ControllingBundle\Entity\Invoice:
             type: string
             length: 255
             column: organization_edrpou
-        description:
-            type: text
         court:
             type: boolean
     manyToOne:
         organization:
             targetEntity: Lists\OrganizationBundle\Entity\Organization
-            inversedBy: invoice
+            inversedBy: null
             joinColumn:
                 name: organization_id
                 referencedColumnName: id
         dogovor:
             targetEntity: Lists\DogovorBundle\Entity\Dogovor
-            inversedBy: invoice
+            inversedBy: null
             joinColumn:
                 name: dogovor_id
                 referencedColumnName: id
+    oneToMany:
+        histories:
+            targetEntity: ITDoors\ControllingBundle\Entity\InvoiceHistory
+            mappedBy: invoice

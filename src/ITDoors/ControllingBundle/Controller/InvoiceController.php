@@ -28,7 +28,7 @@ class InvoiceController extends BaseController
         $session = $this->get('session');
         $period = $session->get('invoicePeriod', 30);
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         /** @var InvoiceRepository */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
 
@@ -72,7 +72,7 @@ class InvoiceController extends BaseController
         $session = $this->get('session');
         $session->set('invoicePeriod', $period);
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         /** @var InvoiceRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
 
