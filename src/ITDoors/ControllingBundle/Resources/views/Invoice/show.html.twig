@@ -1,5 +1,5 @@
-<div class="tab-pane active">
-    <table class="records_list">
+<div class="table-scrollable">
+    <table class="table table-striped table-bordered table-hover table-full-width dataTable">
         <thead>
             <tr>
                 <th>Заказчик</th>
@@ -22,7 +22,7 @@
                 <td>{{ entity.sum }}</td>
                 <td>{{ entity.invoiceId }} {{ entity.date|date("d.m.y") }}</td>
                 <td>{{ entity.dogovoractname }} {{ entity.dogovoractdate|date("d.m.y") }}</td>
-                <td>{{ entity.organization.id }}</td>
+                <td>{{ entity.organization.city.region }}</td>
                 <td>{{ entity.dogovor }} {{ entity.dogovor.startdatetime|date("d.m.y") }}</td>
                 <td>{{ entity.postponement }}</td>
                 <td>{% if entity.dogovoractoriginal is not empty %}есть{% else %}нет{% endif %}</td>

@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Region
 {
+
     /**
      * @var integer
      */
@@ -46,7 +47,7 @@ class Region
     {
         $this->cities = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
@@ -66,7 +67,7 @@ class Region
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
@@ -89,7 +90,7 @@ class Region
     public function setSquare($square)
     {
         $this->square = $square;
-    
+
         return $this;
     }
 
@@ -112,7 +113,7 @@ class Region
     public function setPopulation($population)
     {
         $this->population = $population;
-    
+
         return $this;
     }
 
@@ -135,7 +136,7 @@ class Region
     public function setFlag($flag)
     {
         $this->flag = $flag;
-    
+
         return $this;
     }
 
@@ -158,7 +159,7 @@ class Region
     public function addCitie(\Lists\CityBundle\Entity\City $cities)
     {
         $this->cities[] = $cities;
-    
+
         return $this;
     }
 
@@ -182,13 +183,10 @@ class Region
         return $this->cities;
     }
 
-
-
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $companystructure;
-
 
     /**
      * Add companystructure
@@ -199,7 +197,7 @@ class Region
     public function addCompanystructure(\Lists\CompanystructureBundle\Entity\Companystructure $companystructure)
     {
         $this->companystructure[] = $companystructure;
-    
+
         return $this;
     }
 
@@ -222,4 +220,15 @@ class Region
     {
         return $this->companystructure;
     }
+
+    /**
+     * __toStrong
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getName();
+    }
+
 }
