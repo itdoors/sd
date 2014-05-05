@@ -12,7 +12,6 @@ use Doctrine\ORM\EntityRepository;
  */
 class InvoiceRepository extends EntityRepository
 {
-
     /**
      * Returns results for interval future invoice
      *
@@ -26,7 +25,24 @@ class InvoiceRepository extends EntityRepository
     {
         $date = date('Y-m-d');
         $res = $this->createQueryBuilder('i')
-            ->select('i')
+            ->select('i.sum')
+             ->addSelect('i.invoiceId')
+             ->addSelect('i.date ')
+             ->addSelect('i.dogovorActName')
+             ->addSelect('i.dogovorActDate')
+             ->addSelect('i.postponement')
+             ->addSelect('i.dogovorActOriginal')
+             ->addSelect('i.description')
+             ->addSelect('i.dateEnd')
+             ->addSelect('i.dateFact')
+             ->addSelect('o.name as organizationName')
+             ->addSelect('r.name as regionName')
+             ->addSelect('d.number as dogovorNumber')
+             ->addSelect('d.startdatetime as dogovorStartDatetime')
+            ->leftJoin('i.organization', 'o')
+            ->leftJoin('i.dogovor', 'd')
+            ->leftJoin('o.city', 'c')
+            ->leftJoin('c.region', 'r')
             ->where(":date -  i.dateEnd >= :periodmin");
         if ($periodmax != 0) {
             $res->andWhere(':date -  i.dateEnd <= :periodmax')

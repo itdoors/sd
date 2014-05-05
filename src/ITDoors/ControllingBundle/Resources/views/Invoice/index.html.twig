@@ -10,10 +10,10 @@
 <ul class="page-breadcrumb breadcrumb">
     <li>
         <i class="fa fa-home"></i>
-        <a href="{{ path('it_doors_controlling_homepage') }}" title="{% trans %}Controlling{% endtrans %}">{% trans %}Controlling{% endtrans %}</a>
+        <a href="{{ path('it_doors_controlling_invoice') }}" title="{% trans %}Controlling{% endtrans %}">{% trans %}Controlling{% endtrans %}</a>
         <i class="fa fa-angle-right"></i>
     </li>
-    <li><a href="{{ path('it_doors_controlling_invoice') }}" title="{% trans %}invoice{% endtrans %}">{% trans %}invoice{% endtrans %}</a></li>
+    <li><a href="{{ path('it_doors_controlling_invoice') }}" title="{% trans %}debtors{% endtrans %}">{% trans %}debtors{% endtrans %}</a></li>
 </ul>
 {% endblock %}
 
@@ -32,12 +32,12 @@
     <div class="col-md-12">
         <div class="tabbable tabbable-custom boxless">
             <ul class="nav nav-tabs">
-                <li{% if period == 30 %} class="active"<{% endif %}><a href="#tab_0" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_show', { period: 30 }) }}">{% trans %}1-30{% endtrans %}</a></li>
-                <li{% if period == 60 %} class="active"<{% endif %}><a href="#tab_1" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_show', { period: 60 }) }}">{% trans %}31-60{% endtrans %}</a></li>
-                <li{% if period == 120 %} class="active"<{% endif %}><a href="#tab_2" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_show', { period: 120 }) }}">{% trans %}61-120{% endtrans %}</a></li>										
-                <li{% if period == 180 %} class="active"<{% endif %}><a href="#tab_3" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_show', { period: 180 }) }}">{% trans %}121-180{% endtrans %}</a></li>
-                <li{% if period == 181 %} class="active"<{% endif %}><a href="#tab_4" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_show', { period: 181 }) }}">{% trans %}181{% endtrans %}</a></li>
-                <li{% if period == 0 %} class="active"<{% endif %}><a href="#tab_5" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_show', { period: 0 }) }}">{% trans %}Суды{% endtrans %}</a></li>
+                <li{% if period == 30 %} class="active"<{% endif %}><a href="#tab_0" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_show', { period: 30 }) }}">{% trans %}from{% endtrans %} 1 {% trans %}to{% endtrans %} 30 {% trans %}day{% endtrans %}</a></li>
+                <li{% if period == 60 %} class="active"<{% endif %}><a href="#tab_1" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_show', { period: 60 }) }}">{% trans %}from{% endtrans %} 31 {% trans %}to{% endtrans %} 60 {% trans %}days{% endtrans %}</a></li>
+                <li{% if period == 120 %} class="active"<{% endif %}><a href="#tab_2" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_show', { period: 120 }) }}">{% trans %}from{% endtrans %} 61 {% trans %}to{% endtrans %} 120 {% trans %}days{% endtrans %}</a></li>										
+                <li{% if period == 180 %} class="active"<{% endif %}><a href="#tab_3" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_show', { period: 180 }) }}">{% trans %}from{% endtrans %} 121 {% trans %}to{% endtrans %} 180 {% trans %}days{% endtrans %}</a></li>
+                <li{% if period == 181 %} class="active"<{% endif %}><a href="#tab_4" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_show', { period: 181 }) }}">{% trans %}from{% endtrans %} 181 {% trans %}day{% endtrans %}</a></li>
+                <li{% if period == 0 %} class="active"<{% endif %}><a href="#tab_5" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_show', { period: 0 }) }}">{% trans %}court{% endtrans %}</a></li>
             </ul>
             <div class="tab-content" id="block-ajax">
                     {{  include('ITDoorsControllingBundle:Invoice:show.html.twig',      {   entities: entities,}  ) }}

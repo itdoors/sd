@@ -55,6 +55,10 @@ My Profile: Мой профиль
 Documents: Документы
 News: Новости
 
+#menu role_controlling
+Controlling: Управление
+debtors: Дебиторы
+
 # Menu Dogovor
 My Dogovor: Мои договора
 Dogovor List: Список договоров

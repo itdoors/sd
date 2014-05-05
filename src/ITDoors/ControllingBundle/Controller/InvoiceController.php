@@ -27,6 +27,7 @@ class InvoiceController extends BaseController
         $period = $session->get('invoicePeriod', 30);
 
         $em = $this->getDoctrine()->getEntityManager();
+        /** @var InvoiceRepository */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
 
         switch ($period) {

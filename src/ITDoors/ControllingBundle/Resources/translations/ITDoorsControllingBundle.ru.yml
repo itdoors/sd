@@ -1,0 +1,24 @@
+Customer: Заказчик
+Invoice amount: Сумма счета
+№ and date invoice: № и дата счета
+№ and date ABP/BH: № и дата АВР/ВН
+Agency: Представительство
+№ and date contract: № и дата договора
+Deferment: Отстрочка
+Original ABP/BH: Оригинал АВР/ВН
+Notes: Примечания
+Expected date of payment:  Ожидаемая дата оплаты
+The actual date of payment: Фактическая дата оплаты
+on: есть
+off: нет
+
+Controlling: Управление
+debtors: дебиторы
+
+List of debtors: Список дебиторов
+Invoice <small>list of debtors</small>:  Счета <small>список дебиторов</small>
+from: от 
+to: до
+court: Суды
+day: День
+days: Дней
