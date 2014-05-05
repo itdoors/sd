@@ -10,5 +10,8 @@
 /bin/
 /.idea
 /composer.phar
+/logs
 build.properties
 /*~
+/nbproject
+nbproject*
