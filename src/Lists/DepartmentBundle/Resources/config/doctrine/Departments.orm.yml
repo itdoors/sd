@@ -92,4 +92,13 @@ Lists\DepartmentBundle\Entity\Departments:
                 status_id:
                     referencedColumnName: id
             orphanRemoval: false
+        opermanager:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                opermanager_id:
+                    referencedColumnName: id
+            orphanRemoval: false
     lifecycleCallbacks: {  }

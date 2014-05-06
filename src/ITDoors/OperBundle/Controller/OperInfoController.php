@@ -19,14 +19,12 @@ class OperInfoController extends BaseFilterController
      *
      * @return mixed[]
      */
-
     public function indexAction()
     {
-
         $page = $this->get('request')->query->get('page', 1);
         $this->addToFilters('page', $page);
 
-        return $this->render('ITDoorsOperBundle:Default:index.html.twig', array(
+        return $this->render('ITDoorsOperBundle:Patterns:index.html.twig', array(
 
         ));
     }
@@ -36,10 +34,8 @@ class OperInfoController extends BaseFilterController
      *
      * @return mixed[]
      */
-
     public function departmentAction()
     {
-
         //$this->refreshFiltersIfAjax();
         $page = $this->getFilterValueByKey('page', 1);
 
@@ -55,7 +51,10 @@ class OperInfoController extends BaseFilterController
             ->getRepository('ListsDepartmentBundle:Departments');
 
         $query = $repository->createQueryBuilder('p')
-            ->leftJoin('p.city', 'region')
+            ->select('p.id as id')
+            ->addSelect('p.mpk as mpk')
+            ->addSelect('p.organization as org')
+            ->leftJoin('org', 'organization')
             ->getQuery();
 
         $departments = $query->getResult();
@@ -77,7 +76,6 @@ class OperInfoController extends BaseFilterController
      *
      * @return mixed[]
      */
-
     public function departmentTableAction()
     {
         $filterNamespace = $this->container->getParameter('ajax.filter.namespace.oper.department.table');
@@ -88,7 +86,7 @@ class OperInfoController extends BaseFilterController
 
         $departments = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments')
-            ->findById(1);
+            ->getFilteredDepartments($filters);
 
         $paginator  = $this->get('knp_paginator');
         $pagination = $paginator->paginate(

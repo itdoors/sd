@@ -1,7 +1,10 @@
 parameters:
-#    lists_region.example.class: Lists\RegionBundle\Example
+    lists_region.repository.class: Lists\RegionBundle\Entity\RegionRepository
+    lists_region.repository.entity: Lists\RegionBundle\Entity\Region
 
 services:
-#    lists_region.example:
-#        class: %lists_region.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    lists_department.repository:
+        class: %lists_region.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_region.repository.entity% ]

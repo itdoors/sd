@@ -9,7 +9,7 @@ Filter Settings: Настройки фильтра
 Mpk: МПК
 Name: Название
 FullName: Полное название
-Address: Адресс
+Address: Адрес
 Square: Площадь
 AddedField: Доп. поле
 StatusDate: Дата статуса
@@ -20,6 +20,17 @@ Type: Тип
 Organization: Организация
 Status: Статус
 Region: Область
+OperManager: Опер Менеджер
+Enter mpk: Введите МПК
+Enter organization: Введите организацию
+Enter company structure: Введите структуру компании
+Enter region: Введите область
+Enter city: Введите город
+Enter status: Введите статус
+Enter department type: Введите тип объекта
+Enter address: Введите адрес
+Enter opermanager: Введите опер менеджера
+
 
 
 

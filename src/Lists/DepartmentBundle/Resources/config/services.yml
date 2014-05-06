@@ -1,10 +1,23 @@
 parameters:
     lists_department.repository.class: Lists\DepartmentBundle\Entity\DepartmentsRepository
     lists_department.repository.entity: Lists\DepartmentBundle\Entity\Departments
-
+    lists_departmentType.repository.class: Lists\DepartmentBundle\Entity\DepartmentsTypeRepository
+    lists_departmentType.repository.entity: Lists\DepartmentBundle\Entity\DepartmentsType
+    lists_departmentStatus.repository.class: Lists\DepartmentBundle\Entity\DepartmentsStatusRepository
+    lists_departmentStatus.repository.entity: Lists\DepartmentBundle\Entity\DepartmentsStatus
 services:
     lists_department.repository:
         class: %lists_department.repository.class%
         factory_service: doctrine # this is an instance of Registry
         factory_method: getRepository
         arguments: [ %lists_department.repository.entity% ]
+    lists_departmentType.repository:
+            class: %lists_departmentType.repository.class%
+            factory_service: doctrine # this is an instance of Registry
+            factory_method: getRepository
+            arguments: [ %lists_departmentType.repository.entity% ]
+    lists_departmentStatus.repository:
+                class: %lists_departmentStatus.repository.class%
+                factory_service: doctrine # this is an instance of Registry
+                factory_method: getRepository
+                arguments: [ %lists_departmentStatus.repository.entity% ]

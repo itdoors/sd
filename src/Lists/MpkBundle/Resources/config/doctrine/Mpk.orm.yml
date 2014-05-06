@@ -1,0 +1,27 @@
+Lists\MpkBundle\Entity\Mpk:
+    type: entity
+    table: mpk
+    repositoryClass: Lists\MpkBundle\Entity\MpkRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 50
+            fixed: false
+            nullable: false
+            unique: true
+    manyToOne:
+        department:
+            targetEntity: Lists\DepartmentBundle\Entity\Departments
+            cascade: {  }
+            inversedBy: mpk
+            joinColumns:
+                department_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }
