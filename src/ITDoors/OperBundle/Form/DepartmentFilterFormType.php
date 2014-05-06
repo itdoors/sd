@@ -153,7 +153,7 @@ class DepartmentFilterFormType extends AbstractType
         $builder
             ->add('address', 'text', array(
                 'attr' => array(
-                    'class' => '',
+                    'class' => 'form-control form-filter input-sm',
                     'placeholder' => 'Enter address',
                 )
             ));

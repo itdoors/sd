@@ -2275,7 +2275,7 @@ class AjaxController extends Controller
     }
 
     /**
-     * ajax php function to get department's mpk
+     * ajax php function to get  mpk
      * return json of all mpk that was found
      *
      * @return string
@@ -2303,18 +2303,18 @@ class AjaxController extends Controller
      *
      * @return string
      */
-    public function departmentMpkByIdAction()
+    public function MpkByIdAction()
     {
         $id = $this->get('request')->query->get('id');
 
         $mpk = $this->getDoctrine()
-            ->getRepository('ListsDepartmentBundle:Departments')
+            ->getRepository('ListsMpkBundle:Mpk')
             ->find($id);
 
         $result = array();
 
         if ($mpk) {
-            $result = $this->serializeObject($mpk, null, 'getMpk');
+            $result = $this->serializeObject($mpk);
         }
 
         return new Response(json_encode($result));

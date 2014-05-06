@@ -59,6 +59,51 @@ class DepartmentsRepository extends EntityRepository
     }
 
     /**
+     * creates query to find all departments
+     *
+     * @return string
+     */
+    public function getAllDepartmentsQuery() {
+        $query = $this->createQueryBuilder('d')
+            ->select('d.id as id')
+            ->addSelect('d.mpk as mpk')
+            ->addSelect('d.address as address')
+            ->addSelect('o.name as organizationName')
+            ->addSelect('r.name as regionName')
+            ->addSelect('c.name as cityName')
+            ->addSelect('s.name as statusName')
+            ->addSelect('t.name as typeName')
+            ->addSelect('d.statusDate')
+            ->addSelect('d.description')
+            ->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as opermanagerName")
+            ->leftJoin('d.status', 's')
+            ->leftJoin('d.organization', 'o')
+            ->leftJoin('d.city', 'c')
+            ->leftJoin('c.region', 'r')
+            ->leftJoin('d.type', 't')
+            ->leftJoin('d.opermanager', 'u')
+            ->getQuery();
+
+        return $query;
+    }
+
+    /**
+     * creates count query to find the number of all departments
+     *
+     * @return integer
+     */
+    public function countAllDepartments() {
+        $countQuery = $this->createQueryBuilder('p')
+            ->select('COUNT(p.id) as id')
+            ->leftJoin('p.organization', 'o')
+            ->leftJoin('p.city', 'c')
+            ->leftJoin('c.region', 'r')
+            ->getQuery();
+
+        return $countQuery->getSingleScalarResult();
+    }
+
+    /**
      * Searches departments through filters
      *
      * @param array $filters
@@ -66,6 +111,60 @@ class DepartmentsRepository extends EntityRepository
      * @return mixed[]
      */
     public function getFilteredDepartments($filters) {
+        $sql = $this->getAllDepartmentsQuery();
 
+/*        if (sizeof($filters))
+        {
+
+            foreach($filters as $key => $value)
+            {
+                if (!$value)
+                {
+                    continue;
+                }
+                switch($key)
+                {
+                    case 'organization':
+                        $sql
+                            ->andWhere("o.id = :organizationId");
+
+                        $sql->setParameter(':organizationId', $value);
+                        break;
+/*                    case 'scope':
+                        if (isset($value[0]) && !$value[0])
+                        {
+                            break;
+                        }
+                        $sql->andWhere('scope.id in (:scopeIds)');
+                        $sql->setParameter(':scopeIds', $value);
+                        break;
+                    case 'city':
+                        if (isset($value[0]) && !$value[0])
+                        {
+                            break;
+                        }
+                        $sql->andWhere('c.id in (:cityIds)');
+                        $sql->setParameter(':cityIds', $value);
+                        break;
+                    case 'users':
+                        if (isset($value[0]) && !$value[0])
+                        {
+                            break;
+                        }
+                        $sql->andWhere('users.id in (:userFilterIds)');
+                        $sql->setParameter(':userFilterIds', $value);
+                        break;
+                    /*case 'users':
+                        if (isset($value[0]) && !$value[0])
+                        {
+                            break;
+                        }
+                        $query->andWhereIn('ou.user_id', $value);
+                        break;
+                }
+            }
+        }*/
+        $departments = $sql->getResult();
+        return $departments;
     }
 }

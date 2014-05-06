@@ -50,17 +50,13 @@ class OperInfoController extends BaseFilterController
         $repository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments');
 
-        $query = $repository->createQueryBuilder('p')
-            ->select('p.id as id')
-            ->addSelect('p.mpk as mpk')
-            ->addSelect('p.organization as org')
-            ->leftJoin('org', 'organization')
-            ->getQuery();
+        $query = $repository->getAllDepartmentsQuery();
 
-        $departments = $query->getResult();
+        $countDepartments = $repository->countAllDepartments();
 
+        $query->setHint('knp_paginator.count', $countDepartments);
         $pagination = $paginator->paginate(
-            $departments,
+            $query,
             $page,
             20
         );
