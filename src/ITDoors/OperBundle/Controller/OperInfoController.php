@@ -88,8 +88,6 @@ class OperInfoController extends BaseFilterController
 
         $page = $this->getFilterValueByKey($paginationNamespace, 1);
 
-        var_dump($page);
-
         $departmentsRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments');
 
