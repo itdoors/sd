@@ -1,37 +1,51 @@
 {% trans_default_domain 'ITDoorsControllingBundle' %}
 <div class="table-scrollable">
-    <table class="table table-striped table-bordered table-hover table-full-width dataTable">
+    <table class="table table-striped table-bordered table-hover dataTable" id="datatable_ajax" aria-describedby="datatable_ajax_info">
         <thead>
-            <tr>
-                <th>{% trans %}Customer{% endtrans %}</th>
-                <th>{% trans %}Invoice amount{% endtrans %}</th>
-                <th>{% trans %}№ and date invoice{% endtrans %}</th>
-                <th>{% trans %}№ and date ABP/BH{% endtrans %}</th>
-                <th>{% trans %}Agency{% endtrans %}</th>
-                <th>{% trans %}№ and date contract{% endtrans %}</th>
-                <th>{% trans %}Deferment{% endtrans %}</th>
-                <th>{% trans %}Original ABP/BH{% endtrans %}</th>
-                <th>{% trans %}Notes{% endtrans %}</th>
-                <th>{% trans %}Expected date of payment{% endtrans %}</th>
-                <th>{% trans %}The actual date of payment{% endtrans %}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for entity in entities %}
-            <tr>
-                <td>{{ entity.organizationName }}</td>
-                <td>{{ entity.sum }}</td>
-                <td>{{ entity.invoiceId }} {{ entity.date|date("d.m.y") }}</td>
-                <td>{{ entity.dogovorActName }} {{ entity.dogovorActDate|date("d.m.y") }}</td>
-                <td>{{ entity.regionName }}</td>
-                <td>{{ entity.dogovorNumber }} {{ entity.dogovorStartDatetime|date("d.m.y") }}</td>
-                <td>{{ entity.postponement }}</td>
-                <td>{% if entity.dogovorActOriginal is not empty %}{% trans %}on{% endtrans %}{% else %}{% trans %}off{% endtrans %}{% endif %}</td>
-                <td>{{ entity.description }}</</td>
-                <td>{{ entity.dateEnd|date("d.m.y") }}</td>
-                <td>{{ entity.dateFact|date("d.m.y") }}</td>
-            </tr>
+            <tr role="row" class="heading"><th width="5%" class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">
+       {% trans %}Customer{% endtrans %}
+    </th><th width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+    {% trans %}Invoice amount{% endtrans %}
+</th><th width="5%" class="sorting_desc" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+    {% trans %}№ and date invoice{% endtrans %}
+</th><th width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+    {% trans %}№ and date ABP/BH{% endtrans %}
+</th><th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+    {% trans %}Agency{% endtrans %}
+</th><th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+    {% trans %}№ and date contract{% endtrans %}
+</th><th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+    {% trans %}Deferment{% endtrans %}
+</th><th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+    {% trans %}Original ABP/BH{% endtrans %}
+</th><th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+    {% trans %}Notes{% endtrans %}
+</th><th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+    {% trans %}Expected date of payment{% endtrans %}
+</th><th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+   {% trans %}The actual date of payment{% endtrans %}
+</th></tr>
+</thead>
+
+<tbody role="alert" aria-live="polite" aria-relevant="all">
+    {% for entity in entities %}
+        <tr class="{{ cycle(['odd', 'even'], entity.invoiceId) }}">
+            <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.organizationName }}</a></td>
+            <td class="">{{ entity.sum|number_format(2, ',', ',')  }}</td>
+            <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceId }}</a> {{ entity.date|date("d.m.y") }}</td>
+            <td class="">{{ entity.dogovorActName }} {{ entity.dogovorActDate|date("d.m.y") }}</td>
+            <td class="">{{ entity.regionName }}</td>
+            <td class="">{{ entity.dogovorNumber }} {{ entity.dogovorStartDatetime|date("d.m.y") }}</td>
+            <td class="">{{ entity.delayDate|date("d.m.y")  }} ({{ entity.delayDays }} {{ entity.delayDaysType }})</td>
+            <td class="">{% if entity.dogovorActOriginal is not empty %}{% trans %}on{% endtrans %}{% else %}{% trans %}off{% endtrans %}{% endif %}</td>
+            <td class="">{{ entity.description }}</td>
+            <td class="">{{ entity.dateEnd|date("d.m.y") }}</td>
+            <td class="">{{ entity.dateFact|date("d.m.y") }}</td>
+        </tr>
             {% endfor %}
-        </tbody>
-    </table>
+  
+</tbody></table>
+</div>
+<div class="navigation">
+    {#{ knp_pagination_render(pagination) }#}
 </div>

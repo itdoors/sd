@@ -1,14 +1,15 @@
 Customer: Заказчик
 Invoice amount: Сумма счета
 № and date invoice: № и дата счета
-№ and date ABP/BH: № и дата АВР/ВН
+№ and date ABP/BH: № и дата<br>АВР/РП
 Agency: Представительство
-№ and date contract: № и дата договора
+№ and date contract: № и дата<br> договора
 Deferment: Отстрочка
-Original ABP/BH: Оригинал АВР/ВН
+Original ABP/BH: Оригинал<br> АВР/РП
 Notes: Примечания
-Expected date of payment:  Ожидаемая дата оплаты
-The actual date of payment: Фактическая дата оплаты
+Expected date of payment:  Ожидаемая<br> дата оплаты
+The actual date of payment: Фактическая<br> дата оплаты
+pay: Оплаченые
 on: есть
 off: нет
 
@@ -22,3 +23,22 @@ to: до
 court: Суды
 day: День
 days: Дней
+
+Organization: Организация
+Responsible: Отвественный
+Dogovor: Договор
+Contacts client: Контакты клиента
+History: Исторя
+
+invoice: счет
+Invoice: Счет
+
+Number: Номер
+Summa: Сумма
+Date: Дата
+Date_end: Ожидаемая дата оплаты
+Date_fact: Фактическая дата оплаты
+Status: Статус
+In coutr: В суде
+Pay: Оплачен
+Not pay: Не оплачен

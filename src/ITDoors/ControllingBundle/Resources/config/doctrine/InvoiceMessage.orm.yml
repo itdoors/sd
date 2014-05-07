@@ -1,8 +1,8 @@
-# src/ITDoors/ControllingBundle/Resources/config/doctrine/InvoiceHistory.orm.yml
-ITDoors\ControllingBundle\Entity\InvoiceHistory:
+# src/ITDoors/ControllingBundle/Resources/config/doctrine/InvoiceMessage.orm.yml
+ITDoors\ControllingBundle\Entity\InvoiceMessage:
     type: entity
-    table: invoice_history
-    repositoryClass: ITDoors\ControllingBundle\Entity\InvoiceHistoryRepository
+    table: invoice_message
+    repositoryClass: ITDoors\ControllingBundle\Entity\InvoiceMessageRepository
     id:
         id:
             type: integer
@@ -24,7 +24,7 @@ ITDoors\ControllingBundle\Entity\InvoiceHistory:
     manyToOne:
         invoice:
             targetEntity: ITDoors\ControllingBundle\Entity\Invoice
-            inversedBy: histories
+            inversedBy: messages
             joinColumn:
                 name: invoice_id
                 referencedColumnName: id

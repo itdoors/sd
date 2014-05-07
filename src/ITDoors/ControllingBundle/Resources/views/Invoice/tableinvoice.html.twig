@@ -1,0 +1,40 @@
+{% trans_default_domain 'ITDoorsControllingBundle' %}
+<div class="col-md-12">
+        <table id="handling" class="table table-bordered table-striped">
+            <tbody>
+            <tr>
+                <td style="width:40%">{% trans %}Number{% endtrans %}</td>
+                <td style="width:40%">{{ entitie.invoiceId}}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Summa{% endtrans %}</td>
+                <td>{{ entitie.sum|number_format(2, ',', ' ')}}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Date{% endtrans %}</td>
+                <td>{{ invoice.date|date('d.m.y')}}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Date_end{% endtrans %}</td>
+                <td>{{ invoice.dateEnd|date('d.m.y')}}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Date_fact{% endtrans %}</td>
+                <td>{{ invoice.dateFact|date('d.m.y')}}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Status{% endtrans %}</td>
+                <td>
+                        {% if invoice.court ==  true %}
+                            {% trans %}In coutr{% endtrans %}
+                        {% elseif invoice.dateFact is not null %}
+                            {% trans %}Pay{% endtrans %}
+                        {% else%}
+                            {% trans %}Not pay{% endtrans %}
+                        {% endif%}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    </div>

@@ -1,6 +1,7 @@
 var ITDoorsInvoice = (function() {
     var _this = this;
     _this.changeBlockAjax = (function() {
+//        ITDoorsAjax.updateList('block-ajax', $(this).attr('data-url'));
         var obj = this;
         $.ajax({
             type: 'POST',
@@ -15,7 +16,7 @@ var ITDoorsInvoice = (function() {
         });
     }),
     _this.init = (function() {
-        $('.nav.nav-tabs>li>a').on('click', _this.changeBlockAjax);
+        $('.nav.nav-tabs>li>a').on('click',  _this.changeBlockAjax);
     })
 });
 $(document).ready(function() {

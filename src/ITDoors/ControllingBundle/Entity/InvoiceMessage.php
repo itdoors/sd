@@ -5,9 +5,9 @@ namespace ITDoors\ControllingBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * InvoiceHistory
+ * InvoiceMessage
  */
-class InvoiceHistory
+class InvoiceMessage
 {
     /**
      * @var integer
@@ -40,10 +40,9 @@ class InvoiceHistory
     private $invoice;
 
     /**
-     * @var \SD\UserBundle\Entity\user
+     * @var \SD\UserBundle\Entity\User
      */
     private $user;
-
 
     /**
      * Get id
@@ -60,7 +59,7 @@ class InvoiceHistory
      *
      * @param integer $invoiceId
      * 
-     * @return InvoiceHistory
+     * @return InvoiceMessage
      */
     public function setInvoiceId($invoiceId)
     {
@@ -84,7 +83,7 @@ class InvoiceHistory
      *
      * @param integer $userId
      * 
-     * @return InvoiceHistory
+     * @return InvoiceMessage
      */
     public function setUserId($userId)
     {
@@ -108,7 +107,7 @@ class InvoiceHistory
      *
      * @param string $note
      * 
-     * @return InvoiceHistory
+     * @return InvoiceMessage
      */
     public function setNote($note)
     {
@@ -132,7 +131,7 @@ class InvoiceHistory
      *
      * @param \DateTime $date
      * 
-     * @return InvoiceHistory
+     * @return InvoiceMessage
      */
     public function setDate($date)
     {
@@ -156,7 +155,7 @@ class InvoiceHistory
      *
      * @param \ITDoors\ControllingBundle\Entity\Invoice $invoice
      * 
-     * @return InvoiceHistory
+     * @return InvoiceMessage
      */
     public function setInvoice(\ITDoors\ControllingBundle\Entity\Invoice $invoice = null)
     {
@@ -178,11 +177,11 @@ class InvoiceHistory
     /**
      * Set user
      *
-     * @param \SD\UserBundle\Entity\user $user
+     * @param \SD\UserBundle\Entity\User $user
      * 
-     * @return InvoiceHistory
+     * @return InvoiceMessage
      */
-    public function setUser(\SD\UserBundle\Entity\user $user = null)
+    public function setUser(\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
 
@@ -192,7 +191,7 @@ class InvoiceHistory
     /**
      * Get user
      *
-     * @return \SD\UserBundle\Entity\user 
+     * @return \SD\UserBundle\Entity\User 
      */
     public function getUser()
     {

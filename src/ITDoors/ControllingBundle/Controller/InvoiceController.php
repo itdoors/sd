@@ -14,10 +14,6 @@ use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
 class InvoiceController extends BaseController
 {
 
-    protected $baseRoute = 'invoice';
-    protected $baseRoutePrefix = 'controlling';
-    protected $baseTemplate = 'Invoice';
-
     /**
      *  indexAction
      * 
@@ -28,33 +24,7 @@ class InvoiceController extends BaseController
         $session = $this->get('session');
         $period = $session->get('invoicePeriod', 30);
 
-        $em = $this->getDoctrine()->getManager();
-        /** @var InvoiceRepository */
-        $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
-
-        switch ($period) {
-            case 30:
-                $entities = $invoice->getInvoicePeriod(1, 30);
-                break;
-            case 60:
-                $entities = $invoice->getInvoicePeriod(31, 60);
-                break;
-            case 120:
-                $entities = $invoice->getInvoicePeriod(61, 120);
-                break;
-            case 180:
-                $entities = $invoice->getInvoicePeriod(121, 180);
-                break;
-            case 181:
-                $entities = $invoice->getInvoicePeriod(181, 0);
-                break;
-            case 0:
-                $entities = $invoice->getInvoiceCourt();
-                break;
-        }
-
         return $this->render('ITDoorsControllingBundle:Invoice:index.html.twig', array(
-                'entities' => $entities,
                 'period' => $period
         ));
     }
@@ -62,7 +32,7 @@ class InvoiceController extends BaseController
     /**
      *  showAction
      * 
-     * @param int $period 0,30,60,120,180,181,0
+     * @param int,string $period 30,60,120,180,181,court,pay
      * 
      * @return html Description
      */
@@ -92,13 +62,91 @@ class InvoiceController extends BaseController
             case 181:
                 $entities = $invoice->getInvoicePeriod(181, 0);
                 break;
-            case 0:
+            case 'court':
                 $entities = $invoice->getInvoiceCourt();
+                break;
+            case 'pay':
+                $entities = $invoice->getInvoicePay();
                 break;
         }
 
         return $this->render('ITDoorsControllingBundle:Invoice:show.html.twig', array(
                 'entities' => $entities
+        ));
+    }
+
+    /**
+     *  invoiceAction
+     * 
+     * @param int $invoiceid
+     * 
+     * @return html Description
+     */
+    public function invoiceAction($invoiceid)
+    {
+        $session = $this->get('session');
+        $block = $session->get('invoiceBlock', 'invoice');
+        $session->set('invoiceid', $invoiceid);
+
+         $invoiceObj =  $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice')
+            ->find($invoiceid);
+
+        return $this->render('ITDoorsControllingBundle:Invoice:invoice.html.twig', array(
+                'invoiceid' => $invoiceid,
+                'block' => $block,
+                'invoice' =>$invoiceObj
+        ));
+    }
+
+     /**
+     *  invoiceshowAction
+     * 
+     * @param int $block
+     * 
+     * @return html Description
+     */
+    public function invoiceshowAction($block)
+    {
+        $session = $this->get('session');
+        $session->set('invoiceBlock', $block);
+        $invoiceid = $session->get('invoiceid');
+        $em = $this->getDoctrine()->getManager();
+        /** @var InvoiceRepository $invoice */
+        $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
+        $invoiceObj =  $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice')
+            ->find($invoiceid);
+        $entitie = '';
+        switch ($block){
+            case 'invoice':
+                $entitie = $invoiceObj;
+                break;
+            case 'organization':
+                $entitie =   $this->getDoctrine()
+                        ->getRepository('ListsOrganizationBundle:Organization')
+                        ->find($invoiceObj->getOrganization());
+                break;
+            case 'responsible':
+                $entitie ='' ;
+                break;
+            case 'dogovor':
+                $entitie = $this->getDoctrine()
+                        ->getRepository('ListsDogovorBundle:Dogovor')
+                        ->find($invoiceObj->getDogovor());;
+                break;
+            case 'contacts':
+                $entitie = '';
+                break;
+            case 'history':
+                $entitie = '';
+                break;
+        }
+
+        return $this->render('ITDoorsControllingBundle:Invoice:table' . $block . '.html.twig', array(
+                'entitie' => $entitie,
+                'block' => $block,
+                'invoice' =>$invoiceObj
         ));
     }
 

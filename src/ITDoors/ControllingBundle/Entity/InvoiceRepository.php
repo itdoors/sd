@@ -27,11 +27,14 @@ class InvoiceRepository extends EntityRepository
         $date = date('Y-m-d');
         $res = $this->createQueryBuilder('i')
             ->select('i.sum')
+            ->addSelect('i.id')
             ->addSelect('i.invoiceId')
             ->addSelect('i.date ')
             ->addSelect('i.dogovorActName')
             ->addSelect('i.dogovorActDate')
-            ->addSelect('i.postponement')
+            ->addSelect('i.delayDate')
+            ->addSelect('i.delayDays')
+            ->addSelect('i.delayDaysType')
             ->addSelect('i.dogovorActOriginal')
             ->addSelect('i.dateEnd')
             ->addSelect('i.dateFact')
@@ -44,19 +47,21 @@ class InvoiceRepository extends EntityRepository
             ->leftJoin('i.dogovor', 'd')
             ->leftJoin('o.city', 'c')
             ->leftJoin('c.region', 'r')
-            ->leftJoin('i.histories', 'h')
-            ->andWhere('h.id = (SELECT max(h2.id) FROM ITDoorsControllingBundle:InvoiceHistory AS h2 WHERE h2.invoiceId = i.id)')
-            ->andWhere(":date -  i.dateEnd >= :periodmin");
+            ->leftJoin('i.messages', 'h')
+            ->andWhere('h.id = (SELECT max(h2.id) FROM ITDoorsControllingBundle:InvoiceMessage AS h2 WHERE h2.invoiceId = i.id)')
+            ->andWhere(":date -  i.delayDate >= :periodmin");
         if ($periodmax != 0) {
-            $res->andWhere(':date -  i.dateEnd <= :periodmax')
+            $res->andWhere(':date -  i.delayDate <= :periodmax')
                 ->setParameter(':periodmax', $periodmax);
         }
 
-        return $res->setParameter(':periodmin', $periodmin)
-                ->setParameter(':date', $date)
-                ->andWhere("(i.court is NULL OR i.court = '0')")
-                ->getQuery()
-                ->getResult();
+        $res = $res->setParameter(':periodmin', $periodmin)
+            ->setParameter(':date', $date)
+            ->andWhere("(i.court is NULL OR i.court = '0')");
+
+        $query = $res->getQuery();
+
+        return $query->getResult();
     }
 
     /**
@@ -68,32 +73,75 @@ class InvoiceRepository extends EntityRepository
     {
         $id = 1;
 
-        return $this->createQueryBuilder('i')
-                ->select('i.sum')
-                ->addSelect('i.invoiceId')
-                ->addSelect('i.date ')
-                ->addSelect('i.dogovorActName')
-                ->addSelect('i.dogovorActDate')
-                ->addSelect('i.postponement')
-                ->addSelect('i.dogovorActOriginal')
-                ->addSelect('i.dateEnd')
-                ->addSelect('i.dateFact')
-                ->addSelect('o.name as organizationName')
-                ->addSelect('r.name as regionName')
-                ->addSelect('d.number as dogovorNumber')
-                ->addSelect('d.startdatetime as dogovorStartDatetime')
-                ->addSelect('h.note as description')
-                ->leftJoin('i.organization', 'o')
-                ->leftJoin('i.dogovor', 'd')
-                ->leftJoin('o.city', 'c')
-                ->leftJoin('c.region', 'r')
-                ->leftJoin('i.histories', 'h')
-                ->andWhere('h.id = (SELECT max(h2.id) FROM ITDoorsControllingBundle:InvoiceHistory AS h2 WHERE h2.invoiceId = i.id) OR h.id is NULL')
-                ->andWhere("i.court = :id")
-                ->orderBy('i.dateEnd', 'DESC')
-                ->setParameter(':id', $id)
-                ->getQuery()
-                ->getResult();
+        $res = $this->createQueryBuilder('i')
+            ->select('i.sum')
+            ->addSelect('i.id')
+            ->addSelect('i.invoiceId')
+            ->addSelect('i.date ')
+            ->addSelect('i.dogovorActName')
+            ->addSelect('i.dogovorActDate')
+            ->addSelect('i.delayDate')
+            ->addSelect('i.delayDays')
+            ->addSelect('i.delayDaysType')
+            ->addSelect('i.dogovorActOriginal')
+            ->addSelect('i.dateEnd')
+            ->addSelect('i.dateFact')
+            ->addSelect('o.name as organizationName')
+            ->addSelect('r.name as regionName')
+            ->addSelect('d.number as dogovorNumber')
+            ->addSelect('d.startdatetime as dogovorStartDatetime')
+            ->addSelect('h.note as description')
+            ->leftJoin('i.organization', 'o')
+            ->leftJoin('i.dogovor', 'd')
+            ->leftJoin('o.city', 'c')
+            ->leftJoin('c.region', 'r')
+            ->leftJoin('i.messages', 'h')
+            ->andWhere('h.id = (SELECT max(h2.id) FROM ITDoorsControllingBundle:InvoiceMessage AS h2 WHERE h2.invoiceId = i.id) OR h.id is NULL')
+            ->andWhere("i.court = :id")
+            ->orderBy('i.delayDate', 'DESC')
+            ->setParameter(':id', $id);
+
+        $query = $res->getQuery();
+
+        return $query->getResult();
     }
 
+    /**
+     * Returns results for interval future invoice
+     *
+     * @return mixed[]
+     */
+    public function getInvoicePay()
+    {
+        $res = $this->createQueryBuilder('i')
+            ->select('i.sum')
+            ->addSelect('i.id')
+            ->addSelect('i.invoiceId')
+            ->addSelect('i.date ')
+            ->addSelect('i.dogovorActName')
+            ->addSelect('i.dogovorActDate')
+            ->addSelect('i.delayDate')
+            ->addSelect('i.delayDays')
+            ->addSelect('i.delayDaysType')
+            ->addSelect('i.dogovorActOriginal')
+            ->addSelect('i.dateEnd')
+            ->addSelect('i.dateFact')
+            ->addSelect('o.name as organizationName')
+            ->addSelect('r.name as regionName')
+            ->addSelect('d.number as dogovorNumber')
+            ->addSelect('d.startdatetime as dogovorStartDatetime')
+            ->addSelect('h.note as description')
+            ->leftJoin('i.organization', 'o')
+            ->leftJoin('i.dogovor', 'd')
+            ->leftJoin('o.city', 'c')
+            ->leftJoin('c.region', 'r')
+            ->leftJoin('i.messages', 'h')
+            ->andWhere('h.id = (SELECT max(h2.id) FROM ITDoorsControllingBundle:InvoiceMessage AS h2 WHERE h2.invoiceId = i.id) OR h.id is NULL')
+            ->andWhere("i.dateFact is not NULL")
+            ->orderBy('i.dateEnd', 'DESC');
+
+        $query = $res->getQuery();
+
+        return $query->getResult();
+    }
 }

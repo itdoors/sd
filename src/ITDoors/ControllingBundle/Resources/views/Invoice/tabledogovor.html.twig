@@ -1,0 +1,67 @@
+{% trans_default_domain 'ListsDogovorBundle' %}
+<div class="col-md-12">
+    <table id="handling" class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <td>{% trans %}ID{% endtrans %} </td>
+                <td>{{ entitie.id }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Number{% endtrans %}</td>
+                <td>{{ entitie.number }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Organization{% endtrans %}</td>
+                <td>{{ entitie.organization }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Customer{% endtrans %}</td>
+                <td>{{ entitie.customer }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Performer{% endtrans %}</td>
+                <td>{{ entitie.performer }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Startdatetime{% endtrans %}</td>
+                <td>{{ entitie.startdatetime|date('d.m.Y') }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Stopdatetime{% endtrans %}</td>
+                <td>{{ entitie.stopdatetime|date('d.m.Y') }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Prolongation{% endtrans %}</td>
+                <td>
+                    {% if entitie.prolongation %}
+                        {% trans from 'messages'%}Yes{% endtrans %}
+                    {% else %}
+                        {% trans from 'messages'%}No{% endtrans %}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>{% trans %}Prolongation Date{% endtrans %} </td>
+                <td>{{ entitie.prolongationDate|date('d.m.Y') }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Status{% endtrans %} </td>
+                <td>
+                    {% if entitie.isActive %}
+                        {% trans from 'messages'%}Active{% endtrans %}
+                    {% else %}
+                        {% trans from 'messages'%}Not Active{% endtrans %}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>{% trans %}Subject{% endtrans %} </td>
+                <td>{{ entitie.Subject }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Dogovor Type{% endtrans %} </td>
+                <td>{{ entitie.dogovortypeid }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -651,4 +651,275 @@ class Invoice
     {
         return $this->histories;
     }
+    /**
+     * @var \DateTime
+     */
+    private $delayDate;
+
+    /**
+     * @var integer
+     */
+    private $delayDays;
+
+    /**
+     * @var string
+     */
+    private $delayDaysType;
+
+
+    /**
+     * Set delayDate
+     *
+     * @param \DateTime $delayDate
+     * 
+     * @return Invoice
+     */
+    public function setDelayDate($delayDate)
+    {
+        $this->delayDate = $delayDate;
+
+        return $this;
+    }
+
+    /**
+     * Get delayDate
+     *
+     * @return \DateTime 
+     */
+    public function getDelayDate()
+    {
+        return $this->delayDate;
+    }
+
+    /**
+     * Set delayDays
+     *
+     * @param integer $delayDays
+     * 
+     * @return Invoice
+     */
+    public function setDelayDays($delayDays)
+    {
+        $this->delayDays = $delayDays;
+
+        return $this;
+    }
+
+    /**
+     * Get delayDays
+     *
+     * @return integer 
+     */
+    public function getDelayDays()
+    {
+        return $this->delayDays;
+    }
+
+    /**
+     * Set delayDaysType
+     *
+     * @param string $delayDaysType
+     * 
+     * @return Invoice
+     */
+    public function setDelayDaysType($delayDaysType)
+    {
+        $this->delayDaysType = $delayDaysType;
+
+        return $this;
+    }
+
+    /**
+     * Get delayDaysType
+     *
+     * @return string 
+     */
+    public function getDelayDaysType()
+    {
+        return $this->delayDaysType;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $messages;
+
+
+    /**
+     * Add messages
+     *
+     * @param \ITDoors\ControllingBundle\Entity\InvoiceMessage $messages
+     * 
+     * @return Invoice
+     */
+    public function addMessage(\ITDoors\ControllingBundle\Entity\InvoiceMessage $messages)
+    {
+        $this->messages[] = $messages;
+
+        return $this;
+    }
+
+    /**
+     * Remove messages
+     *
+     * @param \ITDoors\ControllingBundle\Entity\InvoiceMessage $messages
+     */
+    public function removeMessage(\ITDoors\ControllingBundle\Entity\InvoiceMessage $messages)
+    {
+        $this->messages->removeElement($messages);
+    }
+
+    /**
+     * Get messages
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMessages()
+    {
+        return $this->messages;
+    }
+    /**
+     * @var integer
+     */
+    private $dogovorId;
+
+    /**
+     * @var integer
+     */
+    private $dogovorUUIE;
+
+    /**
+     * @var string
+     */
+    private $dogovorNumber;
+
+    /**
+     * @var string
+     */
+    private $organizationEdrpouResponsible;
+
+
+    /**
+     * Set dogovorId
+     *
+     * @param integer $dogovorId
+     * 
+     * @return Invoice
+     */
+    public function setDogovorId($dogovorId)
+    {
+        $this->dogovorId = $dogovorId;
+
+        return $this;
+    }
+
+    /**
+     * Get dogovorId
+     *
+     * @return integer 
+     */
+    public function getDogovorId()
+    {
+        return $this->dogovorId;
+    }
+
+    /**
+     * Set dogovorUUIE
+     *
+     * @param integer $dogovorUUIE
+     * 
+     * @return Invoice
+     */
+    public function setDogovorUUIE($dogovorUUIE)
+    {
+        $this->dogovorUUIE = $dogovorUUIE;
+
+        return $this;
+    }
+
+    /**
+     * Get dogovorUUIE
+     *
+     * @return integer 
+     */
+    public function getDogovorUUIE()
+    {
+        return $this->dogovorUUIE;
+    }
+
+    /**
+     * Set dogovorNumber
+     *
+     * @param string $dogovorNumber
+     * 
+     * @return Invoice
+     */
+    public function setDogovorNumber($dogovorNumber)
+    {
+        $this->dogovorNumber = $dogovorNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get dogovorNumber
+     *
+     * @return string 
+     */
+    public function getDogovorNumber()
+    {
+        return $this->dogovorNumber;
+    }
+
+    /**
+     * Set organizationEdrpouResponsible
+     *
+     * @param string $organizationEdrpouResponsible
+     * 
+     * @return Invoice
+     */
+    public function setOrganizationEdrpouResponsible($organizationEdrpouResponsible)
+    {
+        $this->organizationEdrpouResponsible = $organizationEdrpouResponsible;
+
+        return $this;
+    }
+
+    /**
+     * Get organizationEdrpouResponsible
+     *
+     * @return string 
+     */
+    public function getOrganizationEdrpouResponsible()
+    {
+        return $this->organizationEdrpouResponsible;
+    }
+    /**
+     * @var string
+     */
+    private $organizationEdrpouDoer;
+
+
+    /**
+     * Set organizationEdrpouDoer
+     *
+     * @param string $organizationEdrpouDoer
+     * 
+     * @return Invoice
+     */
+    public function setOrganizationEdrpouDoer($organizationEdrpouDoer)
+    {
+        $this->organizationEdrpouDoer = $organizationEdrpouDoer;
+
+        return $this;
+    }
+
+    /**
+     * Get organizationEdrpouDoer
+     *
+     * @return string 
+     */
+    public function getOrganizationEdrpouDoer()
+    {
+        return $this->organizationEdrpouDoer;
+    }
 }

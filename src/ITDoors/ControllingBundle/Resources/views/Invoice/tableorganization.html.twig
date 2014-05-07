@@ -1,0 +1,76 @@
+{% trans_default_domain 'ITDoorsControllingBundle' %}
+{% trans_default_domain 'ListsOrganizationBundle' %}
+<div class="col-md-12">
+    {% set organization = entitie %}
+    <table id="handling" class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <td style="width:50%">{% trans %}Creator{% endtrans %}</td> 
+                <td style="width:50%">
+                    {{ organization.creator }} ({{ organization.createdatetime|date('d.m.Y, H:i') }})
+                </td>
+            </tr>
+            <tr>
+                <td>{% trans %}Organization name{% endtrans %}</td>
+                <td> {{ organization.name }} </td>
+            </tr>
+            <tr>
+                <td>{% trans %}Short Name{% endtrans %}</td>
+                <td> {{ organization.shortname }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Organization type{% endtrans %}</td>
+                <td>{{ organization.organizationType }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Scope{% endtrans %}</td>
+                <td>{{ organization.scope }} </td>
+            </tr>
+            <tr>
+                <td>{% trans %}Organization Group{% endtrans %}</td>
+                <td>  {{ organization.group }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}City{% endtrans %}</td>
+                <td>  {{ organization.city }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Legal Address{% endtrans %}</td>
+                <td>  {{ organization.address }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Mailing Address{% endtrans %}</td>
+                <td> {{ organization.mailingAddress }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Physical Address{% endtrans %}</td>
+                <td>{{organization.physicalAddress}}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Phone{% endtrans %}</td>
+                <td>{{organization.phone}}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Site{% endtrans %}</td>
+                <td>{{ organization.site }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Edrpou{% endtrans %}</td>
+                <td> {{ organization.edrpou }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}INN{% endtrans %}</td>
+                <td> {{ organization.inn }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}INN{% endtrans %}</td>
+                <td> {{ organization.certificate }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Organization Description{% endtrans %}</td>
+                <td> {{ organization.shortDescription }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
