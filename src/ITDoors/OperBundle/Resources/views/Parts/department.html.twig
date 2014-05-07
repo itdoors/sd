@@ -1,10 +1,14 @@
 {% trans_default_domain 'ListsContactBundle' %}
 
-    <div class="navigation right_float">
-        {{ knp_pagination_render(pagination) }}
-    </div>
 
-<div class="table-scrollable" id="organization-contact-list">
+
+    {{ ajax_paginator_render(
+        pagination, ajax_paginator_namespace_oper_department_table, {
+                'department_list': 'ITDoorsAjax.updateList'
+            }
+        )
+    }}
+<div class="table-scrollable" id="department-table">
     <table class="table table-striped table-hover table-bordered">
         <thead>
         <tr>

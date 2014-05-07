@@ -9,11 +9,6 @@ Lists\DepartmentBundle\Entity\Departments:
             nullable: false
             generator:
                 strategy: SEQUENCE
-        mpk:
-            type: string
-            length: 20
-            fixed: false
-            nullable: false
         name:
             type: string
             length: 255
@@ -57,6 +52,15 @@ Lists\DepartmentBundle\Entity\Departments:
             type: integer
             column: organization_id
     manyToOne:
+        mpk:
+            targetEntity: Lists\MpkBundle\Entity\Mpk
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                id:
+                    referencedColumnName: department_id
+            orphanRemoval: false
         city:
             targetEntity: Lists\CityBundle\Entity\City
             cascade: {  }

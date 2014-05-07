@@ -59,13 +59,181 @@ class DepartmentsRepository extends EntityRepository
     }
 
     /**
+     * creates builder query to find all departments
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function getAllDepartmentsBuilder() {
+        $query = $this->createQueryBuilder('d')
+            ->select('d.id as id')
+            ->addSelect('m.name as mpk')
+            ->addSelect('d.address as address')
+            ->addSelect('o.name as organizationName')
+            ->addSelect('r.name as regionName')
+            ->addSelect('c.name as cityName')
+            ->addSelect('s.name as statusName')
+            ->addSelect('t.name as typeName')
+            ->addSelect('d.statusDate')
+            ->addSelect('d.description')
+            ->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as opermanagerName")
+            ->leftJoin('d.status', 's')
+            ->leftJoin('d.organization', 'o')
+            ->leftJoin('d.city', 'c')
+            ->leftJoin('c.region', 'r')
+            ->leftJoin('d.type', 't')
+            ->leftJoin('d.opermanager', 'u')
+            ->leftJoin('d.mpk', 'm')
+            ->leftJoin('r.companystructure', 'companyStructure');
+        return $query;
+    }
+
+    /**
+     * creates query to find all departments
+     *
+     * @return Query
+     */
+    public function getAllDepartmentsQuery() {
+        $query = $this->getAllDepartmentsBuilder()->getQuery();
+        return $query;
+    }
+
+
+    /**
+     * creates count query to find the number of all departments
+     *
+     * @return integer
+     */
+    public function countAllDepartments() {
+        $countQuery = $this->countAllDepartmentsBuilder()->getQuery();
+
+        return $countQuery->getSingleScalarResult();
+    }
+
+    /**
+     * creates QueryBuilder to find the number of all departments
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function countAllDepartmentsBuilder() {
+        $countQuery = $this->createQueryBuilder('d')
+            ->select('COUNT(d.id) as id')
+            ->leftJoin('d.status', 's')
+            ->leftJoin('d.organization', 'o')
+            ->leftJoin('d.city', 'c')
+            ->leftJoin('c.region', 'r')
+            ->leftJoin('d.type', 't')
+            ->leftJoin('d.opermanager', 'u')
+            ->leftJoin('d.mpk', 'm')
+            ->leftJoin('r.companystructure', 'companyStructure');
+
+        return $countQuery;
+    }
+
+
+
+
+    /**
      * Searches departments through filters
      *
      * @param array $filters
      *
      * @return mixed[]
      */
-    public function getFilteredDepartments($filters) {
+    public function getFilteredDepartments($filters, $type='data') {
+        if ($type == 'data') {
+            $sql = $this->getAllDepartmentsBuilder();
+        }
+        elseif ($type == 'count') {
+            $sql = $this->countAllDepartmentsBuilder();
+        }
 
+        if (sizeof($filters))
+        {
+
+            foreach($filters as $key => $value)
+            {
+                if (!$value)
+                {
+                    continue;
+                }
+                switch($key)
+                {
+                    case 'organization':
+                        if (isset($value[0]) && !$value[0])
+                        {
+                            break;
+                        }
+                        $sql->andWhere('o.id in (:idsOrganization)');
+                        $sql->setParameter(':idsOrganization', explode(',', $value));
+                        break;
+                    case 'city':
+                        if (isset($value[0]) && !$value[0])
+                        {
+                            break;
+                        }
+                        $sql->andWhere('c.id in (:cityIds)');
+                        $sql->setParameter(':cityIds', explode(',', $value));
+                        break;
+                    case 'mpk':
+                        if (isset($value[0]) && !$value[0])
+                        {
+                            break;
+                        }
+                        $sql->andWhere('m.id in (:idsMpk)');
+                        $sql->setParameter(':idsMpk', explode(',', $value));
+                        break;
+                    case 'companyStructure':
+                        if (isset($value[0]) && !$value[0])
+                        {
+                            break;
+                        }
+                        $sql->andWhere('companyStructure.id in (:idsCompanyStructure)');
+                        $sql->setParameter(':idsCompanyStructure', explode(',', $value));
+                        break;
+                    case 'region':
+                        if (isset($value[0]) && !$value[0])
+                        {
+                            break;
+                        }
+                        $sql->andWhere('r.id in (:idsRegion)');
+                        $sql->setParameter(':idsRegion', explode(',', $value));
+                        break;
+                    case 'status':
+                        if (isset($value[0]) && !$value[0])
+                        {
+                            break;
+                        }
+                        $sql->andWhere('s.id in (:idsStatus)');
+                        $sql->setParameter(':idsStatus', explode(',', $value));
+                        break;
+                    case 'departmentType':
+                        if (isset($value[0]) && !$value[0])
+                        {
+                            break;
+                        }
+                        $sql->andWhere('t.id in (:idsDepartmentType)');
+                        $sql->setParameter(':idsDepartmentType', explode(',', $value));
+                        break;
+                    case 'address':
+                        if (isset($value[0]) && !$value[0])
+                        {
+                            break;
+                        }
+                        $sql->andWhere('lower(d.address) LIKE :address');
+                        $sql->setParameter(':address', '%'.mb_strtolower($value, 'UTF-8').'%');
+                        break;
+                    case 'opermanager':
+                        if (isset($value[0]) && !$value[0])
+                        {
+                            break;
+                        }
+                        $sql->andWhere('u.id in (:idsUser)');
+                        $sql->setParameter(':idsUser', explode(',', $value));
+                        break;
+                }
+            }
+        }
+
+        return $sql->getQuery();
     }
 }
