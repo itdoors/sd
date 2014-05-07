@@ -226,16 +226,16 @@ class AjaxController extends Controller
      */
     public function cityByIdAction()
     {
-        $id = $this->get('request')->query->get('id');
+        $ids = explode (',',$this->get('request')->query->get('id'));
 
-        $city = $this->getDoctrine()
+        $cityList = $this->getDoctrine()
             ->getRepository('ListsCityBundle:City')
-            ->find($id);
+            ->findBy(array('id'=>$ids));
 
         $result = array();
 
-        if ($city) {
-            $result = $this->serializeObject($city);
+        foreach ($cityList as $city) {
+            $result[] = $this->serializeObject($city);
         }
 
         return new Response(json_encode($result));
@@ -2305,16 +2305,16 @@ class AjaxController extends Controller
      */
     public function MpkByIdAction()
     {
-        $id = $this->get('request')->query->get('id');
+        $ids = explode(',',$this->get('request')->query->get('id'));
 
-        $mpk = $this->getDoctrine()
+        $mpkList = $this->getDoctrine()
             ->getRepository('ListsMpkBundle:Mpk')
-            ->find($id);
+            ->findBy(array('id'=>$ids));
 
         $result = array();
 
-        if ($mpk) {
-            $result = $this->serializeObject($mpk);
+        foreach($mpkList as $mpk) {
+            $result[] = $this->serializeObject($mpk);
         }
 
         return new Response(json_encode($result));
@@ -2351,16 +2351,16 @@ class AjaxController extends Controller
      */
     public function departmentTypeByIdAction()
     {
-        $id = $this->get('request')->query->get('id');
+        $ids = explode(',',$this->get('request')->query->get('id'));
 
-        $departmentType = $this->getDoctrine()
+        $departmentTypeList = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentsType')
-            ->find($id);
+            ->findBy(array('id'=>$ids));
 
         $result = array();
 
-        if ($departmentType) {
-            $result = $this->serializeObject($departmentType);
+        foreach ($departmentTypeList as $departmentType) {
+            $result[] = $this->serializeObject($departmentType);
         }
 
         return new Response(json_encode($result));
@@ -2397,16 +2397,16 @@ class AjaxController extends Controller
      */
     public function regionByIdAction()
     {
-        $id = $this->get('request')->query->get('id');
+        $ids = explode(',',$this->get('request')->query->get('id'));
 
-        $region = $this->getDoctrine()
+        $regionList = $this->getDoctrine()
             ->getRepository('ListsRegionBundle:Region')
-            ->find($id);
+            ->findBy(array('id' => $ids));
 
         $result = array();
 
-        if ($region) {
-            $result = $this->serializeObject($region);
+        foreach ($regionList as $region) {
+            $result[] = $this->serializeObject($region);
         }
 
         return new Response(json_encode($result));
@@ -2442,16 +2442,16 @@ class AjaxController extends Controller
      */
     public function departmentStatusByIdAction()
     {
-        $id = $this->get('request')->query->get('id');
+        $ids = explode(',', $this->get('request')->query->get('id'));
 
-        $departmentStatus = $this->getDoctrine()
+        $departmentStatusList = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentsStatus')
-            ->find($id);
+            ->findBy(array('id' => $ids));
 
         $result = array();
 
-        if ($departmentStatus) {
-            $result = $this->serializeObject($departmentStatus);
+        foreach ($departmentStatusList as $departmentStatus) {
+            $result[] = $this->serializeObject($departmentStatus);
         }
 
         return new Response(json_encode($result));
@@ -2465,16 +2465,16 @@ class AjaxController extends Controller
      */
     public function companyStructureByIdAction()
     {
-        $id = $this->get('request')->query->get('id');
+        $ids = explode(',', $this->get('request')->query->get('id'));
 
-        $region = $this->getDoctrine()
+        $regionList = $this->getDoctrine()
             ->getRepository('ListsCompanystructureBundle:Companystructure')
-            ->find($id);
+            ->findBy(array('id'=>$ids));
 
         $result = array();
 
-        if ($region) {
-            $result = $this->serializeObject($region);
+        foreach ($regionList as $region) {
+            $result[] = $this->serializeObject($region);
         }
 
         return new Response(json_encode($result));

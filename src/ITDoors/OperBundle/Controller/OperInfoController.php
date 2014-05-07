@@ -36,6 +36,11 @@ class OperInfoController extends BaseFilterController
      */
     public function departmentAction()
     {
+        $page = $this->container->getParameter('ajax.paginator.namespace.oper.department.table');
+        if (!$page) {
+            $page = 1;
+        }
+
         //$this->refreshFiltersIfAjax();
         $page = $this->getFilterValueByKey('page', 1);
 
@@ -63,7 +68,7 @@ class OperInfoController extends BaseFilterController
 
 
         return $this->render('ITDoorsOperBundle:Parts:department.html.twig', array(
-            'pagination' => $pagination
+            'pagination' => $pagination,
         ));
     }
 
@@ -74,19 +79,31 @@ class OperInfoController extends BaseFilterController
      */
     public function departmentTableAction()
     {
+
+        $paginationNamespace = $this->container->getParameter('ajax.paginator.namespace.oper.department.table');
+
         $filterNamespace = $this->container->getParameter('ajax.filter.namespace.oper.department.table');
 
         $filters = $this->getFilters($filterNamespace);
 
-        $page = $this->getFilterValueByKey('page', 1);
+        $page = $this->getFilterValueByKey($paginationNamespace, 1);
 
-        $departments = $this->getDoctrine()
-            ->getRepository('ListsDepartmentBundle:Departments')
-            ->getFilteredDepartments($filters);
+        var_dump($page);
+
+        $departmentsRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:Departments');
+
+
+        $query = $departmentsRepository->getFilteredDepartments($filters);
 
         $paginator  = $this->get('knp_paginator');
+
+        $countDepartments = $departmentsRepository->getFilteredDepartments($filters, "count")->getSingleScalarResult();
+
+        $query->setHint('knp_paginator.count', $countDepartments);
+
         $pagination = $paginator->paginate(
-            $departments,
+            $query,
             $page,
             20
         );

@@ -60,7 +60,7 @@ class DepartmentFilterFormType extends AbstractType
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
                     'data-url'  => $router->generate('sd_common_ajax_organization'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_organization_by_id'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_organization_by_ids'),
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 2,
                         'allowClear' => true,
@@ -72,7 +72,7 @@ class DepartmentFilterFormType extends AbstractType
             ));
 
         $builder
-            ->add('CompanyStructure', 'hidden', array(
+            ->add('companyStructure', 'hidden', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
                     'data-url'  => $router->generate('sd_common_ajax_company_structure'),
@@ -135,7 +135,7 @@ class DepartmentFilterFormType extends AbstractType
             ));
 
         $builder
-            ->add('DepartmentType', 'hidden', array(
+            ->add('departmentType', 'hidden', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
                     'data-url'  => $router->generate('sd_common_ajax_department_type'),
@@ -159,11 +159,11 @@ class DepartmentFilterFormType extends AbstractType
             ));
 
         $builder
-            ->add('Opermanager', 'hidden', array(
+            ->add('opermanager', 'hidden', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
                     'data-url'  => $router->generate('sd_common_ajax_user'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_id'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 1,
                         'allowClear' => true,
