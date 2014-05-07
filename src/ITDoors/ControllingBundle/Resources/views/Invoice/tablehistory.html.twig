@@ -1,18 +1,11 @@
 {% trans_default_domain 'ITDoorsControllingBundle' %}
 <div class="col-md-12">
-        <table id="handling" class="table table-bordered table-striped">
-            <tbody>
-
-            <tr> {# 1 #}
-                <td style="width:15%">{% trans %}Handling ID{% endtrans %}</td>
-                <td style="width:35%"></td>
-				<td style="width:15%">{% trans %}Status{% endtrans %}</td>
-                <td style="width:35%">
-                    <a href="#" id="statusId" data-type="select" data-pk="{#{ handling.0.id }}" data-value="{{ handling.0.statusId }#}" data-placement="right" data-original-title="{% trans %}Enter Status{% endtrans %}">
-                    </a>
-                </td>                
+    <table id="handling" class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <td style="width:15%">История произшествий</td>          
             </tr>
         </tbody>
     </table>
 
-    </div>
+</div>

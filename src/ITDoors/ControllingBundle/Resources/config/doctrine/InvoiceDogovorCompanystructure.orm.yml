@@ -1,0 +1,15 @@
+# src/ITDoors/ControllingBundle/Resources/config/doctrine/InvoiceDogovorCompanystructure.orm.yml
+ITDoors\ControllingBundle\Entity\InvoiceDogovorCompanystructure:
+    type: entity
+    table: invoice_dogovor_companystructure
+    repositoryClass: ITDoors\ControllingBundle\Entity\InvoiceDogovorCompanystructureRepository
+    id:
+        invoiceId:
+            type: integer
+            column: invoice_id
+        dogovorId:
+            type: integer
+            column: dogovor_id
+        companystructureId:
+            type: integer
+            column: companystructure_id
