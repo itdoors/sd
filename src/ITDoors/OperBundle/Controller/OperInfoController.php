@@ -79,14 +79,11 @@ class OperInfoController extends BaseFilterController
      */
     public function departmentTableAction()
     {
-
-        $paginationNamespace = $this->container->getParameter('ajax.paginator.namespace.oper.department.table');
-
         $filterNamespace = $this->container->getParameter('ajax.filter.namespace.oper.department.table');
-
         $filters = $this->getFilters($filterNamespace);
 
-        $page = $this->getFilterValueByKey($paginationNamespace, 1);
+        $paginationNamespace = $this->container->getParameter('ajax.paginator.namespace.oper.department.table');
+        $page = $this->getFilters($paginationNamespace);
 
         $departmentsRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments');
