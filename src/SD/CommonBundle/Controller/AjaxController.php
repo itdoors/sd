@@ -1268,6 +1268,20 @@ class AjaxController extends Controller
 
         return true;
     }
+    
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function modelContactOrganizationUserFormSave($form, $user, $request)
+    {
+        return $this->modelContactOrganizationFormSave($form, $user, $request);
+    }
 
     /**
      * Saves {formName}Save after valid ajax validation

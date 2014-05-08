@@ -31,7 +31,7 @@
     {% for entity in entities %}
         <tr class="{{ cycle(['odd', 'even'], entity.invoiceId) }}">
             <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.organizationName }}</a></td>
-            <td class="">{{ entity.sum|number_format(2, ',', ',')  }}</td>
+            <td class="">{{ entity.sum|number_format(2, ',', ' ')  }}</td>
             <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceId }}</a> {{ entity.date is empty ? '' : entity.date|date("d.m.y") }}</td>
             <td class="">{{ entity.dogovorActName }} {{ entity.dogovorActDate is empty ? '' : entity.dogovorActDate|date("d.m.y") }}</td>
             <td class="">{{ entity.regionName }}</td>
