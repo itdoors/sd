@@ -5,6 +5,7 @@ namespace Lists\DepartmentBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Lists\DogovorBundle\Entity\Dogovor;
+use ITDoors\AjaxBundle\Controller\BaseFilterController;
 
 /**
  * DepartmentsRepository

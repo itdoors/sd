@@ -2,7 +2,7 @@
 
 namespace ITDoors\OperBundle\Controller;
 
-use ITDoors\CommonBundle\Controller\BaseFilterController;
+use ITDoors\AjaxBundle\Controller\BaseFilterController;
 
 /**
  * OperInfoController class
@@ -11,8 +11,8 @@ use ITDoors\CommonBundle\Controller\BaseFilterController;
  */
 class OperInfoController extends BaseFilterController
 {
-    protected $filterNamespace = 'report.sales.admin.filters';
-    protected $filterFormName = 'reportSalesAdminFilterForm';
+
+    protected $filterNamespace = 'ajax.filter.namespace.oper.department.table';
 
     /**
      * indexAction
@@ -21,8 +21,6 @@ class OperInfoController extends BaseFilterController
      */
     public function indexAction()
     {
-        $page = $this->get('request')->query->get('page', 1);
-        $this->addToFilters('page', $page);
 
         return $this->render('ITDoorsOperBundle:Patterns:index.html.twig', array(
 
@@ -36,22 +34,15 @@ class OperInfoController extends BaseFilterController
      */
     public function departmentAction()
     {
-        $page = $this->container->getParameter('ajax.paginator.namespace.oper.department.table');
-        if (!$page) {
-            $page = 1;
-        }
 
-        //$this->refreshFiltersIfAjax();
-        $page = $this->getFilterValueByKey('page', 1);
+        $filterNamespace = $this->container->getParameter($this->getNamespace());
 
+        $this->clearFilters($filterNamespace, self::PAGINATOR_KEY);
+
+        $page = 1;
         /** @var \Knp\Component\Pager\Paginator $paginator */
         $paginator  = $this->get('knp_paginator');
 
-        /*
-          $departments = $this->getDoctrine()
-            ->getRepository('ListsDepartmentBundle:Departments')
-            ->findAll();
-        */
         $repository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments');
 
@@ -79,15 +70,16 @@ class OperInfoController extends BaseFilterController
      */
     public function departmentTableAction()
     {
-        $filterNamespace = $this->container->getParameter('ajax.filter.namespace.oper.department.table');
+        $filterNamespace = $this->container->getParameter($this->getNamespace());
         $filters = $this->getFilters($filterNamespace);
 
-        $paginationNamespace = $this->container->getParameter('ajax.paginator.namespace.oper.department.table');
-        $page = $this->getFilters($paginationNamespace);
+        $page = $this->getPaginator($filterNamespace);
+        if (!$page) {
+            $page=1;
+        }
 
         $departmentsRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments');
-
 
         $query = $departmentsRepository->getFilteredDepartments($filters);
 
