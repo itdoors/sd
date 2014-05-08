@@ -48,7 +48,7 @@ class InvoiceRepository extends EntityRepository
             ->leftJoin('o.city', 'c')
             ->leftJoin('c.region', 'r')
             ->leftJoin('i.messages', 'h')
-            ->andWhere('h.id = (SELECT max(h2.id) FROM ITDoorsControllingBundle:InvoiceMessage AS h2 WHERE h2.invoiceId = i.id)')
+            ->andWhere('h.id = (SELECT max(h2.id) FROM ITDoorsControllingBundle:InvoiceMessage AS h2 WHERE h2.invoiceId = i.id)  OR h.id is NULL')
             ->andWhere(":date -  i.delayDate >= :periodmin");
         if ($periodmax != 0) {
             $res->andWhere(':date -  i.delayDate <= :periodmax')
@@ -57,6 +57,7 @@ class InvoiceRepository extends EntityRepository
 
         $res = $res->setParameter(':periodmin', $periodmin)
             ->setParameter(':date', $date)
+            ->andWhere("i.dateFact is NULL")
             ->andWhere("(i.court is NULL OR i.court = '0')");
 
         $query = $res->getQuery();
@@ -98,6 +99,7 @@ class InvoiceRepository extends EntityRepository
             ->leftJoin('i.messages', 'h')
             ->andWhere('h.id = (SELECT max(h2.id) FROM ITDoorsControllingBundle:InvoiceMessage AS h2 WHERE h2.invoiceId = i.id) OR h.id is NULL')
             ->andWhere("i.court = :id")
+            ->andWhere("i.dateFact is NULL")
             ->orderBy('i.delayDate', 'DESC')
             ->setParameter(':id', $id);
 

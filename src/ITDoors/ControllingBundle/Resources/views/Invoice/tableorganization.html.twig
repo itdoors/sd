@@ -1,5 +1,4 @@
 {% trans_default_domain 'ITDoorsControllingBundle' %}
-{% trans_default_domain 'ListsOrganizationBundle' %}
 <div class="col-md-12">
     {% set organization = entitie %}
     <table id="handling" class="table table-bordered table-striped">
@@ -7,7 +6,7 @@
             <tr>
                 <td style="width:50%">{% trans %}Creator{% endtrans %}</td> 
                 <td style="width:50%">
-                    {{ organization.creator }} ({{ organization.createdatetime|date('d.m.Y, H:i') }})
+                    {{ organization.creator }} ({{ organization.createdatetime is empty ? '' : organization.createdatetime|date('d.m.Y, H:i')}})
                 </td>
             </tr>
             <tr>
@@ -63,7 +62,7 @@
                 <td> {{ organization.inn }}</td>
             </tr>
             <tr>
-                <td>{% trans %}INN{% endtrans %}</td>
+                <td>{% trans %}INN Certificate{% endtrans %}</td>
                 <td> {{ organization.certificate }}</td>
             </tr>
             <tr>

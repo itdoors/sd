@@ -29,12 +29,13 @@ class InvoiceDogovorCompanystructure
      * Set invoiceId
      *
      * @param integer $invoiceId
+     * 
      * @return InvoiceDogovorCompanystructure
      */
     public function setInvoiceId($invoiceId)
     {
         $this->invoiceId = $invoiceId;
-    
+
         return $this;
     }
 
@@ -52,12 +53,13 @@ class InvoiceDogovorCompanystructure
      * Set dogovorId
      *
      * @param integer $dogovorId
+     * 
      * @return InvoiceDogovorCompanystructure
      */
     public function setDogovorId($dogovorId)
     {
         $this->dogovorId = $dogovorId;
-    
+
         return $this;
     }
 
@@ -75,12 +77,13 @@ class InvoiceDogovorCompanystructure
      * Set companystructureId
      *
      * @param integer $companystructureId
+     * 
      * @return InvoiceDogovorCompanystructure
      */
     public function setCompanystructureId($companystructureId)
     {
         $this->companystructureId = $companystructureId;
-    
+
         return $this;
     }
 

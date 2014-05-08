@@ -36,8 +36,8 @@ ITDoors\ControllingBundle\Entity\Invoice:
             column: date_end
         dateFact:
             type: date
-            nullable: true
             column: date_fact
+            nullable: true
         dogovorId:
             type: integer
             nullable: true

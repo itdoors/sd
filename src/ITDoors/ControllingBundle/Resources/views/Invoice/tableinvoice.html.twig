@@ -3,7 +3,11 @@
         <table id="handling" class="table table-bordered table-striped">
             <tbody>
             <tr>
-                <td style="width:40%">{% trans %}Number{% endtrans %}</td>
+                <td style="width:40%">{% trans %}Organization name{% endtrans %}</td>
+                <td style="width:40%">{{ entitie.organization}}</td>
+            </tr>
+            <tr>
+                <td style="width:40%">{% trans %}Number invoice{% endtrans %}</td>
                 <td style="width:40%">{{ entitie.invoiceId}}</td>
             </tr>
             <tr>
@@ -12,15 +16,15 @@
             </tr>
             <tr>
                 <td>{% trans %}Date{% endtrans %}</td>
-                <td>{{ invoice.date|date('d.m.y')}}</td>
+                <td>{{ invoice.date is empty ? '' : invoice.date|date('d.m.y')}}</td>
             </tr>
             <tr>
                 <td>{% trans %}Date_end{% endtrans %}</td>
-                <td>{{ invoice.dateEnd|date('d.m.y')}}</td>
+                <td>{{ invoice.dateEnd is empty ? '' : invoice.dateEnd|date('d.m.y')}}</td>
             </tr>
             <tr>
                 <td>{% trans %}Date_fact{% endtrans %}</td>
-                <td>{{ invoice.dateFact|date('d.m.y')}}</td>
+                <td>{{ invoice.dateFact is empty ?  '' : invoice.dateFact|date('d.m.y')}}</td>
             </tr>
             <tr>
                 <td>{% trans %}Status{% endtrans %}</td>

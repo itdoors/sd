@@ -24,16 +24,34 @@ court: Суды
 day: День
 days: Дней
 
-Organization: Организация
+Number evidence: Номер свидетельства
+Organization: Заказчик
 Responsible: Отвественный
 Dogovor: Договор
 Contacts client: Контакты клиента
 History: Исторя
 
+Creator: Кто создал
+Short Name: Короткое
+Organization type: Тип организации
+Scope: Деятельность
+Organization Group: Группа влияния
+City: Город
+Legal Address: Юридический адрес
+Mailing Address: Почтовый адрес
+Physical Address: Физический адрес
+Phone: Телефон
+Site: Сайт
+Edrpou: ЄДРПОУ
+INN: ИНН
+INN Certificate: Номер свидетельства НДС
+Organization Description: Заметки
+
 invoice: счет
 Invoice: Счет
 
-Number: Номер
+Organization name: Название организации
+Number invoice: Номер счета
 Summa: Сумма
 Date: Дата
 Date_end: Ожидаемая дата оплаты
@@ -42,3 +60,29 @@ Status: Статус
 In coutr: В суде
 Pay: Оплачен
 Not pay: Не оплачен
+
+
+FirstName: Имя
+LastName: Фамилия
+SurName: Отчество
+Position: Должность
+Phone: Телефон
+Phone1: Мобильный
+Phone 1: Мобильный
+Mobile: Мобильный
+Phone2: Телефон
+Phone 2: Телефон
+Email: Email
+Birthday: Дата рождения
+Enter Birthday: Введите дату рождения
+Creator: Создатель
+Createdatetime: Дата создания
+Owner: Владелец
+Select Owner: Выберите нового владельца
+Organization: Организация
+Contact type: Тип контакта
+Organization Name: Название организации
+Shared: Контакт виден для всех организаций группы
+
+
+Add Contact: Добавить контакт

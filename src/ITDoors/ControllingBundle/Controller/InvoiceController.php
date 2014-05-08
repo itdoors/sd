@@ -88,18 +88,18 @@ class InvoiceController extends BaseController
         $block = $session->get('invoiceBlock', 'invoice');
         $session->set('invoiceid', $invoiceid);
 
-         $invoiceObj =  $this->getDoctrine()
+        $invoiceObj = $this->getDoctrine()
             ->getRepository('ITDoorsControllingBundle:Invoice')
             ->find($invoiceid);
 
         return $this->render('ITDoorsControllingBundle:Invoice:invoice.html.twig', array(
                 'invoiceid' => $invoiceid,
                 'block' => $block,
-                'invoice' =>$invoiceObj
+                'invoice' => $invoiceObj
         ));
     }
 
-     /**
+    /**
      *  invoiceshowAction
      * 
      * @param int $block
@@ -114,29 +114,42 @@ class InvoiceController extends BaseController
         $em = $this->getDoctrine()->getManager();
         /** @var InvoiceRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
-        $invoiceObj =  $this->getDoctrine()
+        $invoiceObj = $this->getDoctrine()
             ->getRepository('ITDoorsControllingBundle:Invoice')
             ->find($invoiceid);
         $entitie = '';
-        switch ($block){
+        $organizationId = '';
+        switch ($block) {
             case 'invoice':
                 $entitie = $invoiceObj;
                 break;
             case 'organization':
-                $entitie =   $this->getDoctrine()
-                        ->getRepository('ListsOrganizationBundle:Organization')
-                        ->find($invoiceObj->getOrganization());
+                $dogovor = $this->getDoctrine()
+                    ->getRepository('ListsDogovorBundle:Dogovor')
+                    ->find($invoiceObj->getDogovor());
+                $organizationId = $dogovor->getCustomerId() ? $dogovor->getCustomerId() : ($dogovor->getOrganization() ? $dogovor->getOrganization()->getId() : $invoiceObj->getOrganization()->getId());
+                $entitie = $this->getDoctrine()
+                    ->getRepository('ListsOrganizationBundle:Organization')
+                    ->find($organizationId);
                 break;
             case 'responsible':
-                $entitie ='' ;
+                $entitie = '';
                 break;
             case 'dogovor':
                 $entitie = $this->getDoctrine()
-                        ->getRepository('ListsDogovorBundle:Dogovor')
-                        ->find($invoiceObj->getDogovor());;
+                    ->getRepository('ListsDogovorBundle:Dogovor')
+                    ->find($invoiceObj->getDogovor());
+                ;
                 break;
             case 'contacts':
-                $entitie = '';
+                $entitie = $this->getDoctrine()
+                    ->getRepository('ListsContactBundle:ModelContact')
+                    ->findBy(array('modelName' => 'organization', 'modelId' => $invoiceObj->getOrganization()->getId(), 'owner' => $this->getUser()->getId()));
+                $dogovor = $this->getDoctrine()
+                    ->getRepository('ListsDogovorBundle:Dogovor')
+                    ->find($invoiceObj->getDogovor());
+
+                $organizationId = $dogovor->getCustomerId() ? $dogovor->getCustomerId() : ($dogovor->getOrganization() ? $dogovor->getOrganization()->getId() : $invoiceObj->getOrganization()->getId());
                 break;
             case 'history':
                 $entitie = '';
@@ -146,7 +159,8 @@ class InvoiceController extends BaseController
         return $this->render('ITDoorsControllingBundle:Invoice:table' . $block . '.html.twig', array(
                 'entitie' => $entitie,
                 'block' => $block,
-                'invoice' =>$invoiceObj
+                'organizationId' => $organizationId,
+                'invoice' => $invoiceObj
         ));
     }
 

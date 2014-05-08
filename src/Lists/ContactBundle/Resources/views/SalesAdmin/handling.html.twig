@@ -1,7 +1,7 @@
-    {% trans_default_domain 'ListsContactBundle' %}
-	<div class="table-scrollable">
-        <table class="table table-striped table-hover table-bordered">
-            <thead>
+{% trans_default_domain 'ListsContactBundle' %}
+<div class="table-scrollable">
+    <table class="table table-striped table-hover table-bordered">
+        <thead>
             <tr>
                 <th>№</th>
                 <th>{% trans %}FirstName{% endtrans %}</th>
@@ -14,8 +14,8 @@
                 <th>{% trans %}Birthday{% endtrans %}</th>
                 <th>{% trans %}Creator{% endtrans %}</th>
             </tr>
-            </thead>
-            <tbody>
+        </thead>
+        <tbody>
             {% for item in handlingContacts %}
             <tr >
                 <td>{{ item.0.id }}</td>
@@ -34,11 +34,11 @@
                 <td>
                     {{ item.creatorFullName }}
                     {% if item.0.createdatetime %}
-                        ({{ item.0.createdatetime|date("d.M.y") }})
+                    ({{ item.0.createdatetime|date("d.M.y") }})
                     {% endif %}
                 </td>
             </tr>
             {% endfor %}
-            </tbody>
-        </table>
-    </div>
+        </tbody>
+    </table>
+</div>

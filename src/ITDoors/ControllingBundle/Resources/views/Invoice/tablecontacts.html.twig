@@ -1,10 +1,57 @@
 {% trans_default_domain 'ITDoorsControllingBundle' %}
 <div class="col-md-12">
-    <table id="handling" class="table table-bordered table-striped">
-        <tbody>
-            <tr>
-                <td style="width:15%">Контакты клиента</td>          
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-toolbar">
+        <div class="btn-group" style="margin-bottom: 10px;">
+
+            <button id="managers_list_new" class="btn green ajax-form"
+                    data-target_holder="contactsFormTpl"
+                    data-form_name="modelContactOrganizationForm"
+                    data-default='{"modelName":"organization","modelId":{{ organizationId}} }'
+                    data-post_function="updateList"
+                    data-post_target_id="contact_list"
+                    >
+                    {% trans %}Add Contact{% endtrans %} <i class="fa fa-plus"></i>
+            </button>
+
+        </div>
+        <div style="display: none" id="contactsFormTpl">
+        </div>
+    </div>
+
+    <div id="contact_list">
+        <table id="handling" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th>{% trans %}FirstName{% endtrans %}</th>
+                    <th>{% trans %}LastName{% endtrans %}</th>
+                    <th>{% trans %}SurName{% endtrans %}</th>
+                    <th>{% trans %}Position{% endtrans %}</th>
+                    <th>{% trans %}Phone{% endtrans %}</th>
+                    <th>{% trans %}Mobile{% endtrans %}</th>
+                    <th>{% trans %}Email{% endtrans %}</th>
+                    <th>{% trans %}Birthday{% endtrans %}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for item in  entitie %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.firstName }}</td>
+                    <td>{{ item.lastName }}</td>
+                    <td>{{ item.middleName }}</td>
+                    <td>{{ item.position }}</td>
+                    <td>{{ item.phone1 }}</td>
+                    <td>{{ item.phone2 }}</td>
+                    <td>{{ item.email }}</td>
+                    <td>
+                    {% if item.birthday %}
+                        {{ item.birthday|date("d.M.y") }}
+                    {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>

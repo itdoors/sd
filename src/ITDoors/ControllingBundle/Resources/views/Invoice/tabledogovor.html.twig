@@ -11,10 +11,6 @@
                 <td>{{ entitie.number }}</td>
             </tr>
             <tr>
-                <td>{% trans %}Organization{% endtrans %}</td>
-                <td>{{ entitie.organization }}</td>
-            </tr>
-            <tr>
                 <td>{% trans %}Customer{% endtrans %}</td>
                 <td>{{ entitie.customer }}</td>
             </tr>
@@ -24,11 +20,11 @@
             </tr>
             <tr>
                 <td>{% trans %}Startdatetime{% endtrans %}</td>
-                <td>{{ entitie.startdatetime|date('d.m.Y') }}</td>
+                <td>{{  entitie.startdatetime is empty ? '' : entitie.startdatetime|date('d.m.Y') }}</td>
             </tr>
             <tr>
                 <td>{% trans %}Stopdatetime{% endtrans %}</td>
-                <td>{{ entitie.stopdatetime|date('d.m.Y') }}</td>
+                <td>{{ entitie.stopdatetime is empty ? '' : entitie.stopdatetime|date('d.m.Y') }}</td>
             </tr>
             <tr>
                 <td>{% trans %}Prolongation{% endtrans %}</td>
@@ -42,7 +38,7 @@
             </tr>
             <tr>
                 <td>{% trans %}Prolongation Date{% endtrans %} </td>
-                <td>{{ entitie.prolongationDate|date('d.m.Y') }}</td>
+                <td>{{ entitie.prolongationDate is empty ? '' : entitie.prolongationDate|date('d.m.Y') }}</td>
             </tr>
             <tr>
                 <td>{% trans %}Status{% endtrans %} </td>

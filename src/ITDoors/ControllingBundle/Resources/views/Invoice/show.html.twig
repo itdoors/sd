@@ -32,15 +32,15 @@
         <tr class="{{ cycle(['odd', 'even'], entity.invoiceId) }}">
             <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.organizationName }}</a></td>
             <td class="">{{ entity.sum|number_format(2, ',', ',')  }}</td>
-            <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceId }}</a> {{ entity.date|date("d.m.y") }}</td>
-            <td class="">{{ entity.dogovorActName }} {{ entity.dogovorActDate|date("d.m.y") }}</td>
+            <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceId }}</a> {{ entity.date is empty ? '' : entity.date|date("d.m.y") }}</td>
+            <td class="">{{ entity.dogovorActName }} {{ entity.dogovorActDate is empty ? '' : entity.dogovorActDate|date("d.m.y") }}</td>
             <td class="">{{ entity.regionName }}</td>
-            <td class="">{{ entity.dogovorNumber }} {{ entity.dogovorStartDatetime|date("d.m.y") }}</td>
-            <td class="">{{ entity.delayDate|date("d.m.y")  }} ({{ entity.delayDays }} {{ entity.delayDaysType }})</td>
+            <td class="">{{ entity.dogovorNumber }} {{ entity.dogovorStartDatetime is empty ? '' :  entity.dogovorStartDatetime|date("d.m.y") }}</td>
+            <td class="">{{ entity.delayDate is empty ? '' :  entity.delayDate|date("d.m.y")  }} ({{ entity.delayDays }} {{ entity.delayDaysType }})</td>
             <td class="">{% if entity.dogovorActOriginal is not empty %}{% trans %}on{% endtrans %}{% else %}{% trans %}off{% endtrans %}{% endif %}</td>
             <td class="">{{ entity.description }}</td>
-            <td class="">{{ entity.dateEnd|date("d.m.y") }}</td>
-            <td class="">{{ entity.dateFact|date("d.m.y") }}</td>
+            <td class="">{{ entity.dateEnd is empty ? '' : entity.dateEnd|date("d.m.y") }}</td>
+            <td class="">{{ entity.dateFact is empty ? '' : entity.dateFact|date("d.m.y") }}</td>
         </tr>
             {% endfor %}
   
