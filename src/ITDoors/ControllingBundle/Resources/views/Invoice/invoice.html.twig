@@ -49,10 +49,10 @@
         <div class="tabbable tabbable-custom boxless">
                 <ul class="nav nav-tabs">
                     <li{% if block == 'invoice' %} class="active"<{% endif %}><a href="#tab_0" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'invoice'}) }}">{% trans %}Invoice{% endtrans %}</a></li>
-                    <li{% if block == 'contacts' %} class="active"<{% endif %}><a href="#tab_1" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'contacts' }) }}">{% trans %}Contacts client{% endtrans %}</a></li>
+                    <li{% if block == 'contacts' %} class="active"<{% endif %}><a href="#tab_1" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'contacts' }) }}">{% trans %}Customer{% endtrans %}</a></li>
                     <li{% if block == 'dogovor' %} class="active"<{% endif %}><a href="#tab_2" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_invoice_show', { block: 'dogovor' }) }}">{% trans %}Dogovor{% endtrans %}</a></li>										
                     <li{% if block == 'responsible' %} class="active"<{% endif %}><a href="#tab_3" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'responsible' }) }}">{% trans %}Responsible{% endtrans %}</a></li>
-                    <li{% if block == 'organization' %} class="active"<{% endif %}><a href="#tab_4" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'organization'}) }}">{% trans %}Organization{% endtrans %}</a></li>
+                    <li{% if block == 'organization' %} class="active"<{% endif %}><a href="#tab_4" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'organization'}) }}">{% trans %}Customer{% endtrans %}</a></li>
                     <li{% if block == 'history' %} class="active"<{% endif %}><a href="#tab_5" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'history' }) }}">{% trans %}History{% endtrans %}</a></li>
                 </ul>
             <div class="tab-content">                

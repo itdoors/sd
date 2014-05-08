@@ -1,4 +1,5 @@
 Customer: Заказчик
+Performer: Исполнитель
 Invoice amount: Сумма счета
 № and date invoice: № и дата счета
 № and date ABP/BH: № и дата<br>АВР/РП
@@ -25,7 +26,6 @@ day: День
 days: Дней
 
 Number evidence: Номер свидетельства
-Organization: Заказчик
 Responsible: Отвественный
 Dogovor: Договор
 Contacts client: Контакты клиента

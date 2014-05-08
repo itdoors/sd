@@ -119,8 +119,16 @@ class InvoiceController extends BaseController
             ->find($invoiceid);
         $entitie = '';
         $organizationId = '';
+        $dogovor = '';
         switch ($block) {
             case 'invoice':
+                $dogovor = $this->getDoctrine()
+                    ->getRepository('ListsDogovorBundle:Dogovor')
+                    ->find($invoiceObj->getDogovor());
+                $organizationId = $dogovor->getCustomerId() ? $dogovor->getCustomerId() : ($dogovor->getOrganization() ? $dogovor->getOrganization()->getId() : $invoiceObj->getOrganization()->getId());
+                $organization = $this->getDoctrine()
+                    ->getRepository('ListsOrganizationBundle:Organization')
+                    ->find($organizationId);
                 $entitie = $invoiceObj;
                 break;
             case 'organization':
@@ -142,9 +150,13 @@ class InvoiceController extends BaseController
                 ;
                 break;
             case 'contacts':
+                 $dogovor = $this->getDoctrine()
+                    ->getRepository('ListsDogovorBundle:Dogovor')
+                    ->find($invoiceObj->getDogovor());
+                $organizationId = $dogovor->getCustomerId() ? $dogovor->getCustomerId() : ($dogovor->getOrganization() ? $dogovor->getOrganization()->getId() : $invoiceObj->getOrganization()->getId());
                 $entitie = $this->getDoctrine()
                     ->getRepository('ListsContactBundle:ModelContact')
-                    ->findBy(array('modelName' => 'organization', 'modelId' => $invoiceObj->getOrganization()->getId(), 'owner' => $this->getUser()->getId()));
+                    ->findBy(array('modelName' => 'organization', 'modelId' => $organizationId, 'owner' => $this->getUser()->getId()));
                 $dogovor = $this->getDoctrine()
                     ->getRepository('ListsDogovorBundle:Dogovor')
                     ->find($invoiceObj->getDogovor());
@@ -160,6 +172,7 @@ class InvoiceController extends BaseController
                 'entitie' => $entitie,
                 'block' => $block,
                 'organizationId' => $organizationId,
+                'dogovor' => $dogovor,
                 'invoice' => $invoiceObj
         ));
     }

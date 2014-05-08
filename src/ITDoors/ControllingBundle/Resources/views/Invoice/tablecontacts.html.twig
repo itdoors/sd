@@ -1,8 +1,8 @@
+    <div id="contact_list" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'contacts' }) }}">
 {% trans_default_domain 'ITDoorsControllingBundle' %}
 <div class="col-md-12">
     <div class="table-toolbar">
         <div class="btn-group" style="margin-bottom: 10px;">
-
             <button id="managers_list_new" class="btn green ajax-form"
                     data-target_holder="contactsFormTpl"
                     data-form_name="modelContactOrganizationForm"
@@ -12,13 +12,10 @@
                     >
                     {% trans %}Add Contact{% endtrans %} <i class="fa fa-plus"></i>
             </button>
-
         </div>
         <div style="display: none" id="contactsFormTpl">
         </div>
     </div>
-
-    <div id="contact_list">
         <table id="handling" class="table table-bordered table-striped">
             <thead>
                 <tr>

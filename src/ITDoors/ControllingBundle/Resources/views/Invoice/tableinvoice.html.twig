@@ -3,8 +3,12 @@
         <table id="handling" class="table table-bordered table-striped">
             <tbody>
             <tr>
-                <td style="width:40%">{% trans %}Organization name{% endtrans %}</td>
-                <td style="width:40%">{{ entitie.organization}}</td>
+                <td style="width:40%">{% trans %}Customer{% endtrans %}</td>
+                <td style="width:40%">{{ dogovor.customer}}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Performer{% endtrans %}</td>
+                <td>{{ dogovor.performer }}</td>
             </tr>
             <tr>
                 <td style="width:40%">{% trans %}Number invoice{% endtrans %}</td>
