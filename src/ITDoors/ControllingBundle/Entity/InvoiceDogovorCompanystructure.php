@@ -96,4 +96,32 @@ class InvoiceDogovorCompanystructure
     {
         return $this->companystructureId;
     }
+    /**
+     * @var \ITDoors\ControllingBundle\Entity\Invoice
+     */
+    private $invoice;
+
+
+    /**
+     * Set invoice
+     *
+     * @param \ITDoors\ControllingBundle\Entity\Invoice $invoice
+     * @return InvoiceDogovorCompanystructure
+     */
+    public function setInvoice(\ITDoors\ControllingBundle\Entity\Invoice $invoice = null)
+    {
+        $this->invoice = $invoice;
+    
+        return $this;
+    }
+
+    /**
+     * Get invoice
+     *
+     * @return \ITDoors\ControllingBundle\Entity\Invoice 
+     */
+    public function getInvoice()
+    {
+        return $this->invoice;
+    }
 }

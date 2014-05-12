@@ -1,9 +1,9 @@
 <?php
 
-namespace Lists\HandlingBundle\Form;
+namespace ITDoors\ControllingBundle\Form;
 
-use Lists\HandlingBundle\Entity\HandlingMessage;
-use SD\UserBundle\Entity\User;
+use ITDoors\ControllingBundle\Entity\Invoice;
+use ITDoors\ControllingBundle\Entity\InvoiceMessage;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
@@ -13,8 +13,7 @@ use Symfony\Component\Validator\ExecutionContextInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 
-
-class HandlingMessageFormType extends AbstractType
+class InvoiceMessageFormType extends AbstractType
 {
     protected $container;
 
@@ -40,47 +39,18 @@ class HandlingMessageFormType extends AbstractType
                 'widget' => 'single_text',
                 'format' => 'dd.M.yyyy HH:mm'
             ))
-            ->add('type', null, array(
-                'empty_value' => '',
-                'required' => true,
-            ))
-            ->add('nextcreatedate', 'datetime', array(
-                'required' => true,
-                'mapped' => false,
-                'widget' => 'single_text',
-                'format' => 'dd.M.yyyy HH:mm'
-              //  'empty_value' => ''
-            ))
-            ->add('nexttype', 'entity', array(
-                'class' => 'ListsHandlingBundle:HandlingMessageType',
-                'required' => true,
-                'empty_value' => '',
-                'mapped' => false
-            ))
-            ->add('next_is_business_trip', 'checkbox', array(
-                'mapped' => false,
-                'required' => false
-            ))
-            ->add('description')
-            ->add('descriptionnext', 'text', array(
+            ->add('note', 'text', array(
                 'required' => false,
                 'mapped' => false
             ))
-            ->add('filename')
-            ->add('file', 'file', array(
-                'required' => false
-            ))
-            ->add('handling_id', 'hidden')
-            ->add('mindate', 'hidden', array(
-                'mapped' => false
-            ))
+            ->add('invoice_id', 'hidden')
         ;
 
         /** @var User $user */
         $user = $container->get('security.context')->getToken()->getUser();
-
-        if ($user->hasRole('ROLE_SALESADMIN'))
-        {
+//
+//        if ($user->hasRole('ROLE_SALESADMIN'))
+//        {
             $builder
                 ->add('user', 'hidden_entity', array(
                     'entity' => 'SDUserBundle:User',
@@ -93,8 +63,7 @@ class HandlingMessageFormType extends AbstractType
                     'data' => $user,
                     'mapped' => false
                 ));
-        }
-
+//        }
         $builder
             ->add('create', 'submit')
             ->add('cancel', 'button');
@@ -106,18 +75,6 @@ class HandlingMessageFormType extends AbstractType
                 $data = $event->getData();
 
                 $form = $event->getForm();
-
-                $currentDatetime = new \DateTime($data['createdate']);
-                $nextDatetime = new \DateTime($data['nextcreatedate']);
-
-                if ($currentDatetime > $nextDatetime)
-                {
-                    $translator = $container->get('translator');
-
-                    $msg = $translator->trans("Event next date can't be greater then current event date", array(), 'ListsHandlingBundle');
-
-                    $form->addError(new FormError($msg));
-                }
             });
 
 		$builder->addEventListener(
@@ -127,15 +84,6 @@ class HandlingMessageFormType extends AbstractType
 				$data = $event->getData();
 
 				$form = $event->getForm();
-
-				if (!$data['nextcreatedate'])
-				{
-					$translator = $container->get('translator');
-
-					$msg = $translator->trans("Event next date can't be empty", array(), 'ListsHandlingBundle');
-
-					$form->addError(new FormError($msg));
-				}
 			});
 
         $builder->addEventListener(
@@ -148,30 +96,22 @@ class HandlingMessageFormType extends AbstractType
 
                 $currentDatetime = new \DateTime($data['createdate']);
 
-                if (isset($data['handling_id']) && $data['handling_id'])
+                if (isset($data['invoice_id']) && $data['invoice_id'])
                 {
-                    $handlingId = $data['handling_id'];
+                    $invoiceId = $data['invoice_id'];
 
                     /** @var \Lists\HandlingBundle\Entity\Handling $handling */
                     $handling = $container->get('doctrine.orm.entity_manager')
-                        ->getRepository('ListsHandlingBundle:Handling')
-                        ->find($handlingId);
+                        ->getRepository('ITDoorsControllingBundle:Invoice')
+                        ->find($invoiceId);
 
-                    if ($handling)
-                    {
-                        if ($handling->getCreatedate() > $currentDatetime || $handling->getCreatedatetime() > $currentDatetime)
-                        {
-                            $translator = $container->get('translator');
-
-                            $creationDate = $handling->getCreatedate()  ? $handling->getCreatedate() : $handling->getCreatedatetime();
-
-                            $msg = $translator->trans("Current event date can't be less then handling creation date (%date%)", array(
-                                '%date%' => $creationDate->format('d.m.y')
-                            ), 'ListsHandlingBundle');
-
-                            $form->addError(new FormError($msg));
-                        }
-                    }
+//                    if ($handling)
+//                    {
+//                        if ($handling->getDate() > $currentDatetime || $handling->getCreatedatetime() > $currentDatetime)
+//                        {
+//                            $form->addError(new FormError($msg));
+//                        }
+//                    }
                 }
             });
     }
@@ -193,6 +133,6 @@ class HandlingMessageFormType extends AbstractType
      */
     public function getName()
     {
-        return 'handlingMessageForm';
+        return 'invoiceMessageForm';
     }
 }

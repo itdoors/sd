@@ -16,11 +16,15 @@ ITDoors\ControllingBundle\Entity\InvoiceMessage:
             type: integer
             length: 10
             column: user_id
+        contactId:
+            type: integer
+            length: 10
+            column: model_contact_id
         note:
             type: string
             length: 255
-        date:
-            type: date
+        createdate:
+            type: datetime
     manyToOne:
         invoice:
             targetEntity: ITDoors\ControllingBundle\Entity\Invoice
@@ -33,4 +37,10 @@ ITDoors\ControllingBundle\Entity\InvoiceMessage:
             inversedBy: null
             joinColumn:
                 name: user_id
+                referencedColumnName: id
+        contact:
+            targetEntity: Lists\ContactBundle\Entity\ModelContact
+            inversedBy: null
+            joinColumn:
+                name: model_contact_id
                 referencedColumnName: id

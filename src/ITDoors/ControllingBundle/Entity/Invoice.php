@@ -922,4 +922,43 @@ class Invoice
     {
         return $this->organizationEdrpouDoer;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $responsibles;
+
+
+    /**
+     * Add responsibles
+     *
+     * @param \ITDoors\ControllingBundle\Entity\InvoiceDogovorCompanystructure $responsibles
+     * 
+     * @return Invoice
+     */
+    public function addResponsible(\ITDoors\ControllingBundle\Entity\InvoiceDogovorCompanystructure $responsibles)
+    {
+        $this->responsibles[] = $responsibles;
+
+        return $this;
+    }
+
+    /**
+     * Remove responsibles
+     *
+     * @param \ITDoors\ControllingBundle\Entity\InvoiceDogovorCompanystructure $responsibles
+     */
+    public function removeResponsible(\ITDoors\ControllingBundle\Entity\InvoiceDogovorCompanystructure $responsibles)
+    {
+        $this->responsibles->removeElement($responsibles);
+    }
+
+    /**
+     * Get responsibles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getResponsibles()
+    {
+        return $this->responsibles;
+    }
 }

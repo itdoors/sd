@@ -19,3 +19,7 @@ it_doors_controlling_invoice_invoice_show:
     defaults: { _controller: ITDoorsControllingBundle:Invoice:invoiceshow, block:invoice}
     requirements:
         block: invoice|organization|responsible|dogovor|contacts|history
+        
+it_doors_controlling_invoice_invoice_lastaction:
+    pattern:  /controlling/invoice/lastaction
+    defaults: { _controller: ITDoorsControllingBundle:Invoice:lastaction}

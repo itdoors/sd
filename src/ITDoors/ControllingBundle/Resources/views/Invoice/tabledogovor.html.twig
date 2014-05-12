@@ -58,6 +58,14 @@
                 <td>{% trans %}Dogovor Type{% endtrans %} </td>
                 <td>{{ entitie.dogovortype }}</td>
             </tr>
+            <tr>
+                <td> {% trans %}File{% endtrans %}</td>
+                <td>
+                    {% if entitie.filepath %}
+                    <a href="/uploads/dogovor/{{ entitie.filepath }}" target="_blank">{% trans %}File{% endtrans %}</a>
+                    {% endif %}
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>

@@ -43,7 +43,7 @@ class InvoiceController extends BaseController
         $session->set('invoicePeriod', $period);
 
         $em = $this->getDoctrine()->getManager();
-        /** @var InvoiceRepository $invoice */
+        /** @var ITDoors/ControllingBundle/Entity/InvoiceRepository */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
 
         switch ($period) {
@@ -156,7 +156,7 @@ class InvoiceController extends BaseController
                 $organizationId = $dogovor->getCustomerId() ? $dogovor->getCustomerId() : ($dogovor->getOrganization() ? $dogovor->getOrganization()->getId() : $invoiceObj->getOrganization()->getId());
                 $entitie = $this->getDoctrine()
                     ->getRepository('ListsContactBundle:ModelContact')
-                    ->findBy(array('modelName' => 'organization', 'modelId' => $organizationId, 'owner' => $this->getUser()->getId()));
+                    ->findBy(array('modelName' => 'organization', 'modelId' => $organizationId));
                 $dogovor = $this->getDoctrine()
                     ->getRepository('ListsDogovorBundle:Dogovor')
                     ->find($invoiceObj->getDogovor());
@@ -174,6 +174,28 @@ class InvoiceController extends BaseController
                 'organizationId' => $organizationId,
                 'dogovor' => $dogovor,
                 'invoice' => $invoiceObj
+        ));
+    }
+
+    /**
+     *  lastactionAction
+     * 
+     * @return html Description
+     */
+    public function lastactionAction()
+    {
+        $session = $this->get('session');
+        $invoiceid = $session->get('invoiceid', FALSE);
+        if(!$invoiceid){
+            throw $this->createNotFoundException('Param "invoiceid" not found in session.');
+        }
+        $messages = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:InvoiceMessage')
+            ->getInvoiceMessages((int)$invoiceid);
+
+        return $this->render('ITDoorsControllingBundle:Invoice:lastaction.html.twig', array(
+                'messages' => $messages,
+                'invoiceid' => $invoiceid
         ));
     }
 

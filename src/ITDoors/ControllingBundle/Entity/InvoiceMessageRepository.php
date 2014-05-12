@@ -12,4 +12,27 @@ use Doctrine\ORM\EntityRepository;
  */
 class InvoiceMessageRepository extends EntityRepository
 {
+        /**
+     * Returns results for interval future invoice
+     *
+     * @param int $invoiceid Description
+     *
+     * @return mixed[]
+     */
+    public function getInvoiceMessages($invoiceid)
+    {
+        $res = $this->createQueryBuilder('i_m')
+            ->select('i_m.note')
+            ->addSelect('i_m.id')
+            ->addSelect('i_m.createdate')
+            ->addSelect('u.firstName')
+            ->addSelect('u.lastName')
+            ->innerJoin('i_m.user', 'u')
+            ->andWhere("i_m.invoiceId = :invoiceId")
+            ->setParameter(':invoiceId', $invoiceid)
+            ->orderBy('i_m.createdate', 'DESC')
+            ->getQuery();
+
+        return $res->getResult();
+    }
 }

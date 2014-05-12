@@ -1,65 +1,12 @@
-{% extends "::base.html.twig" %}
 {% trans_default_domain 'ITDoorsControllingBundle' %}
-{% block title %}{% trans %}List of debtors{% endtrans %} {% endblock %}
-{% block page_title %}
-<h3 class="page-title">
-        {% trans %}Invoice <small>list of debtors</small>{% endtrans %}
-</h3>
-{% endblock %}
-{% block page_breadcrumbs %}
-<ul class="page-breadcrumb breadcrumb">
-    <li>
-        <i class="fa fa-home"></i>
-        <a href="{{ path('it_doors_controlling_invoice') }}" title="{% trans %}Controlling{% endtrans %}">{% trans %}Controlling{% endtrans %}</a>
-        <i class="fa fa-angle-right"></i>
-    </li>
-    <li>
-        <a href="{{ path('it_doors_controlling_invoice') }}" title="{% trans %}debtors{% endtrans %}">{% trans %}debtors{% endtrans %}</a>
-        <i class="fa fa-angle-right"></i>
-    </li>
-    <li>
-        <a href="{{ path('it_doors_controlling_invoice_invoice',{invoiceid:invoiceid}) }}" title="{% trans %}invoice{% endtrans %}">{% trans %}invoice{% endtrans %} {{ invoice.invoiceId}} ({{  invoice.date is empty ? '' : invoice.date|date('d.m.y') }})</a>
-    </li>
-</ul>
-{% endblock %}
-
-{% block css_page_level_plugin %}
-    {{ parent() }}
- <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
-    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
-    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.cs')}} " />
-    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}} " />
-{% endblock %}
-
-{% block js_page_level_plugins %}
-    {{ parent() }}
-<script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/jquery.dataTables.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
-    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
-    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
-    <script type="text/javascript" src="{{ asset('bundles/itdoorscontrolling/js/invoice.js') }}"></script>
-{% endblock %}
-
-{% block body %}
-<div class="row">
-    <div class="col-md-12">
-        <div class="tabbable tabbable-custom boxless">
-                <ul class="nav nav-tabs">
-                    <li{% if block == 'invoice' %} class="active"<{% endif %}><a href="#tab_0" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'invoice'}) }}">{% trans %}Invoice{% endtrans %}</a></li>
-                    <li{% if block == 'contacts' %} class="active"<{% endif %}><a href="#tab_1" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'contacts' }) }}">{% trans %}Customer{% endtrans %}</a></li>
-                    <li{% if block == 'dogovor' %} class="active"<{% endif %}><a href="#tab_2" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_invoice_show', { block: 'dogovor' }) }}">{% trans %}Dogovor{% endtrans %}</a></li>										
-                    <li{% if block == 'responsible' %} class="active"<{% endif %}><a href="#tab_3" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'responsible' }) }}">{% trans %}Responsible{% endtrans %}</a></li>
-                    <li{% if block == 'organization' %} class="active"<{% endif %}><a href="#tab_4" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'organization'}) }}">{% trans %}Customer{% endtrans %}</a></li>
-                    <li{% if block == 'history' %} class="active"<{% endif %}><a href="#tab_5" data-toggle="tab" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'history' }) }}">{% trans %}History{% endtrans %}</a></li>
-                </ul>
-            <div class="tab-content">                
-                <div class="tab-content" id="block-ajax">
-                 {{ render(controller('ITDoorsControllingBundle:Invoice:invoiceshow', {  block:block})) }}
+{% for messag in messages %}
+    <div class="portlet box yellow">
+        <div class="portlet-title">
+            <div class="caption">
+                #{{messag.id}} | {{messag.createdate|date('d.m.y H:i')}} | {{messag.lastName}} {{messag.firstName}}
             </div>
-            </div>
+            <div class="tools"><a class="collapse" href="" title="Фильтры"></a></div>
         </div>
+        <div class="portlet-body">{{messag.note}} </div>
     </div>
-{% endblock body %}
+{% endfor%}
