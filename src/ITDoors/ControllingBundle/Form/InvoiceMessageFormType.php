@@ -31,7 +31,7 @@ class InvoiceMessageFormType extends AbstractType
         $container = $this->container;
 
         /** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
-        $lr = $container->get('lists_lookup.repository');
+        $lr = $container->get('it_doors_controlling.repository');
 
         $builder
             ->add('createdate', 'datetime', array(
@@ -122,7 +122,7 @@ class InvoiceMessageFormType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Lists\HandlingBundle\Entity\HandlingMessage',
+            'data_class' => 'ITDoors\ControllingBundle\Entity\InvoiceMessage',
             'validation_groups' => array('new'),
             'translation_domain' => 'ListsHandlingBundle'
         ));

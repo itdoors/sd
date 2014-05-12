@@ -150,7 +150,7 @@ class InvoiceController extends BaseController
                 ;
                 break;
             case 'contacts':
-                 $dogovor = $this->getDoctrine()
+                $dogovor = $this->getDoctrine()
                     ->getRepository('ListsDogovorBundle:Dogovor')
                     ->find($invoiceObj->getDogovor());
                 $organizationId = $dogovor->getCustomerId() ? $dogovor->getCustomerId() : ($dogovor->getOrganization() ? $dogovor->getOrganization()->getId() : $invoiceObj->getOrganization()->getId());
@@ -186,12 +186,12 @@ class InvoiceController extends BaseController
     {
         $session = $this->get('session');
         $invoiceid = $session->get('invoiceid', FALSE);
-        if(!$invoiceid){
+        if (!$invoiceid) {
             throw $this->createNotFoundException('Param "invoiceid" not found in session.');
         }
         $messages = $this->getDoctrine()
             ->getRepository('ITDoorsControllingBundle:InvoiceMessage')
-            ->getInvoiceMessages((int)$invoiceid);
+            ->getInvoiceMessages((int) $invoiceid);
 
         return $this->render('ITDoorsControllingBundle:Invoice:lastaction.html.twig', array(
                 'messages' => $messages,

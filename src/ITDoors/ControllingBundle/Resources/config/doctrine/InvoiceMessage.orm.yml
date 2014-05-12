@@ -12,14 +12,17 @@ ITDoors\ControllingBundle\Entity\InvoiceMessage:
             type: integer
             length: 10
             column: invoice_id
+            nullable: true
         userId:
             type: integer
             length: 10
             column: user_id
+            nullable: true
         contactId:
             type: integer
             length: 10
             column: model_contact_id
+            nullable: true
         note:
             type: string
             length: 255
@@ -32,15 +35,6 @@ ITDoors\ControllingBundle\Entity\InvoiceMessage:
             joinColumn:
                 name: invoice_id
                 referencedColumnName: id
-        user:
-            targetEntity: SD\UserBundle\Entity\User
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                user_id:
-                    referencedColumnName: id
-            orphanRemoval: false
         user:
             targetEntity: SD\UserBundle\Entity\User
             cascade: {  }

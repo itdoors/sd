@@ -89,7 +89,7 @@
                         <div style="display: none" id="invoiceMessageFormTpl">
                         </div>
                     </div>
-                    <div id="messages_list" data-url="/app_dev.php/lists/sales/handling/ajax/messages/1116" data-params="{&quot;handlingId&quot;:1116">
+                    <div id="messages_list" data-url="{{ url('it_doors_controlling_invoice_invoice_lastaction') }}">
                         {{ render(controller('ITDoorsControllingBundle:Invoice:lastaction')) }}
                     </div>
                 </div>

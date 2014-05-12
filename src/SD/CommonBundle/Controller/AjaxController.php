@@ -23,6 +23,7 @@ use Lists\OrganizationBundle\Entity\Organization;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
+use ITDoors\ControllingBundle\Entity\InvoiceMessage;
 
 /**
  * AjaxController class.
@@ -36,6 +37,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
  */
 class AjaxController extends Controller
 {
+
     protected $modelRepositoryDependence = array(
         'ModelContact' => 'ListsContactBundle:ModelContact',
         'User' => 'SDUserBundle:User',
@@ -59,7 +61,7 @@ class AjaxController extends Controller
         $organizationsRepository = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization');
 
-        $organizations= $organizationsRepository->getSearchQuery($searchText);
+        $organizations = $organizationsRepository->getSearchQuery($searchText);
 
         $result = array();
 
@@ -86,7 +88,7 @@ class AjaxController extends Controller
         $organizationsRepository = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization');
 
-        $organizations= $organizationsRepository->getSearchContactsQuery($searchText);
+        $organizations = $organizationsRepository->getSearchContactsQuery($searchText);
 
         $result = array();
 
@@ -112,7 +114,7 @@ class AjaxController extends Controller
         $organizationsRepository = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization');
 
-        $organizations= $organizationsRepository->getSearchContactsQuery($searchText);
+        $organizations = $organizationsRepository->getSearchContactsQuery($searchText);
 
         $result = array();
 
@@ -145,7 +147,7 @@ class AjaxController extends Controller
         $organizationsRepository = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization');
 
-        $organizations= $organizationsRepository->getSearchContactsQuery($searchText);
+        $organizations = $organizationsRepository->getSearchContactsQuery($searchText);
 
         $result = array();
 
@@ -177,7 +179,7 @@ class AjaxController extends Controller
         $searchText = $this->get('request')->query->get('term');
 
         /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
-        $objects= $this->getDoctrine()
+        $objects = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingService')
             ->createQueryBuilder('hs')
             ->where('hs.name like :term')
@@ -206,7 +208,7 @@ class AjaxController extends Controller
         $repository = $this->getDoctrine()
             ->getRepository('ListsCityBundle:City');
 
-        $objects= $repository->getSearchQuery($searchText);
+        $objects = $repository->getSearchQuery($searchText);
 
         $result = array();
 
@@ -251,7 +253,7 @@ class AjaxController extends Controller
         $repository = $this->getDoctrine()
             ->getRepository('ListsCompanystructureBundle:Companystructure');
 
-        $objects= $repository->getSearchQuery($searchText);
+        $objects = $repository->getSearchQuery($searchText);
 
         $result = array();
 
@@ -318,7 +320,7 @@ class AjaxController extends Controller
             ->getRepository('ListsOrganizationBundle:OrganizationGroup')
             ->createQueryBuilder('og')
             ->where('lower(og.name) LIKE :q')
-            ->setParameter(':q', '%'. mb_strtolower($searchText, 'UTF-8') . '%')
+            ->setParameter(':q', '%' . mb_strtolower($searchText, 'UTF-8') . '%')
             ->getQuery()
             ->getResult();
 
@@ -586,7 +588,7 @@ class AjaxController extends Controller
 
         foreach ($keys as $key) {
             if ($item[$key]) {
-                $value .= ' '. $item[$key];
+                $value .= ' ' . $item[$key];
             }
         }
 
@@ -629,7 +631,6 @@ class AjaxController extends Controller
         }
 
         $item['value'] = $value;
-
     }
 
     /**
@@ -681,8 +682,7 @@ class AjaxController extends Controller
 
         $result = array();
 
-        foreach ($organizations as $organization)
-        {
+        foreach ($organizations as $organization) {
             $result[] = $this->serializeObject($organization);
         }
 
@@ -738,8 +738,7 @@ class AjaxController extends Controller
 
         $result = array();
 
-        foreach ($objects as $object)
-        {
+        foreach ($objects as $object) {
             $result[] = $this->serializeObject($object);
         }
 
@@ -785,8 +784,8 @@ class AjaxController extends Controller
         return array(
             'id' => $id,
             'value' => $id,
-            'name' =>(string) $string,
-            'text' =>(string) $string
+            'name' => (string) $string,
+            'text' => (string) $string
         );
     }
 
@@ -822,7 +821,7 @@ class AjaxController extends Controller
 
         $validator = $this->get('validator');
 
-        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
         $errors = $validator->validate($organization, array('edit'));
 
         if (sizeof($errors)) {
@@ -836,7 +835,7 @@ class AjaxController extends Controller
 
         try {
             $em->flush();
-        } catch (\ErrorException $e) {
+        }catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -879,8 +878,7 @@ class AjaxController extends Controller
 
         /** @var ConstraintViolation[] $errors */
         foreach ($errors as $error) {
-            if ($error->getPropertyPath() == $field)
-            {
+            if ($error->getPropertyPath() == $field) {
                 $message = $error->getMessage();
             }
         }
@@ -924,7 +922,7 @@ class AjaxController extends Controller
         }
 
         if (sizeof($defaultData)) {
-            
+
             foreach ($defaultData as $key => $default) {
                 $form->add($key, 'hidden', array(
                     'data' => $default
@@ -964,15 +962,15 @@ class AjaxController extends Controller
         }
 
         $result['html'] = $this->renderView('SDCommonBundle:AjaxForm:' . $formName . '.html.twig', array(
-                'form' => $form->createView(),
-                'formName' => $formName,
-                'postFunction' => $postFunction,
-                'postTargetId' => $postTargetId,
-                'targetId' => $targetId,
-                'defaultData' => $defaultData,
-                'model' => $model,
-                'modelId' => $modelId,
-            ));
+            'form' => $form->createView(),
+            'formName' => $formName,
+            'postFunction' => $postFunction,
+            'postTargetId' => $postTargetId,
+            'targetId' => $targetId,
+            'defaultData' => $defaultData,
+            'model' => $model,
+            'modelId' => $modelId,
+        ));
 
         return new Response(json_encode($result));
     }
@@ -1035,27 +1033,18 @@ class AjaxController extends Controller
 
         $prolongationDateTo = new \DateTime($requestParams['prolongationDateTo']);
 
-        if ($dogovor->getProlongation())
-        {
+        if ($dogovor->getProlongation()) {
             // set stop date to prolongation date
             // set prolongation date to $request['prolongationDateTo']
-
             // Set prolongation date to
-            if ($dogovor->getProlongationDate())
-            {
+            if ($dogovor->getProlongationDate()) {
                 $prolongationDateFrom = $dogovor->getProlongationDate();
-            }
-            elseif ($dogovor->getStopdatetime())
-            {
+            } elseif ($dogovor->getStopdatetime()) {
                 $prolongationDateFrom = $dogovor->getStopdatetime();
-            }
-            elseif ($dogovor->getStartdatetime())
-            {
+            } elseif ($dogovor->getStartdatetime()) {
                 $prolongationDateFrom = $dogovor->getStartdatetime();
             }
-        }
-        else
-        {
+        } else {
             /** @var DopDogovorRepository $ddr */
             $ddr = $this->get('lists_dogovor.dopdogovor.repository');
 
@@ -1104,8 +1093,7 @@ class AjaxController extends Controller
 
         $user = $this->getUser();
 
-        if (!$data->getUser())
-        {
+        if (!$data->getUser()) {
             $data->setUser($user);
         }
 
@@ -1120,7 +1108,6 @@ class AjaxController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
         // $em->flush();
-
         // Insert future
         $type = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingMessageType')
@@ -1136,20 +1123,16 @@ class AjaxController extends Controller
         $handlingMessage->setCreatedate($nextDatetime);
         $handlingMessage->setCreatedatetime(new \DateTime());
 
-        if (isset($formData['userNext']) && $formData['userNext'])
-        {
+        if (isset($formData['userNext']) && $formData['userNext']) {
             /** @var UserRepository $ur */
             $ur = $this->get('sd_user.repository');
 
             $userNext = $ur->find($formData['userNext']);
 
-            if ($userNext)
-            {
+            if ($userNext) {
                 $handlingMessage->setUser($userNext);
             }
-        }
-        else
-        {
+        } else {
             $handlingMessage->setUser($user);
         }
 
@@ -1180,6 +1163,50 @@ class AjaxController extends Controller
 
         $em->persist($handling);
 
+        $em->flush();
+
+        return true;
+    }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function invoiceMessageFormSave(Form $form, $user, $request)
+    {
+        /** @var \ITDoors\ControllingBundle\Entity\InvoiceMessage $data */
+        $data = $form->getData();
+
+        $formData = $request->request->get($form->getName());
+
+        $invoiceId = $data->getInvoiceId();
+
+        /** @var \ITDoors\ControllingBundle\Entity\Invoice $invoice */
+        $invoice = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice')
+            ->find($invoiceId);
+
+        $contactid = $formData['contactid'];
+
+        /** @var \Lists\ContactBundle\Entity\ModelContact $contact */
+        $contact = $this->getDoctrine()
+            ->getRepository('ListsContactBundle:ModelContact')
+            ->find($contactid);
+
+        $data->setUser($this->getUser());
+
+        $data->setContact($contact);
+        $data->setNote($formData['note']);
+
+        $data->setInvoice($invoice);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
         $em->flush();
 
         return true;
@@ -1269,7 +1296,7 @@ class AjaxController extends Controller
 
         return true;
     }
-    
+
     /**
      * Saves {formName}Save after valid ajax validation
      *
@@ -1515,7 +1542,7 @@ class AjaxController extends Controller
 
         $validator = $this->get('validator');
 
-        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
         $errors = $validator->validate($object, array('edit'));
 
         if (sizeof($errors)) {
@@ -1531,8 +1558,7 @@ class AjaxController extends Controller
             $em->flush();
 
             $em->refresh($object);
-
-        } catch (\ErrorException $e) {
+        }catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1548,18 +1574,13 @@ class AjaxController extends Controller
         $result = $object->getResult();
         $status = $object->getStatus();
 
-        if ($result && $result->getProgress())
-        {
+        if ($result && $result->getProgress()) {
             $return['handling']['progress'] = $result->getProgress();
             $return['handling']['progressString'] = $result->getPercentageString();
-        }
-        elseif ($status && $status->getProgress())
-        {
+        } elseif ($status && $status->getProgress()) {
             $return['handling']['progress'] = $status->getProgress();
             $return['handling']['progressString'] = $status->getPercentageString();
-        }
-        else
-        {
+        } else {
             $return['handling']['progress'] = null;
             $return['handling']['progressString'] = null;
         }
@@ -1599,14 +1620,13 @@ class AjaxController extends Controller
 
         $validator = $this->get('validator');
 
-        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
         $errors = $validator->validate($object, array('edit'));
 
         if (sizeof($errors)) {
             $return = $this->getErrorByField($errors, $name);
 
-            if ($return)
-            {
+            if ($return) {
                 return new Response($return, 406);
             }
         }
@@ -1616,7 +1636,7 @@ class AjaxController extends Controller
 
         try {
             $em->flush();
-        } catch (\ErrorException $e) {
+        }catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1654,7 +1674,7 @@ class AjaxController extends Controller
 
         try {
             $object = $query->getSingleResult();
-        } catch (\Doctrine\Orm\NoResultException $e) {
+        }catch (\Doctrine\Orm\NoResultException $e) {
             $object = null;
         }
 
@@ -1682,7 +1702,7 @@ class AjaxController extends Controller
 
         try {
             $em->flush();
-        } catch (\ErrorException $e) {
+        }catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1710,7 +1730,7 @@ class AjaxController extends Controller
             ->getRepository('ListsHandlingBundle:Handling')
             ->find($pk);
 
-        $handlingServices= $this->getDoctrine()
+        $handlingServices = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingService')
             ->findAll();
 
@@ -1724,7 +1744,7 @@ class AjaxController extends Controller
 
         $validator = $this->get('validator');
 
-        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
         $errors = $validator->validate($object, array('edit'));
 
         if (sizeof($errors)) {
@@ -1738,7 +1758,7 @@ class AjaxController extends Controller
 
         try {
             $em->flush();
-        } catch (\ErrorException $e) {
+        }catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1781,7 +1801,7 @@ class AjaxController extends Controller
 
         $validator = $this->get('validator');
 
-        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
         $errors = $validator->validate($object, array('edit'));
 
         if (sizeof($errors)) {
@@ -1795,7 +1815,7 @@ class AjaxController extends Controller
 
         try {
             $em->flush();
-        } catch (\ErrorException $e) {
+        }catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1840,16 +1860,16 @@ class AjaxController extends Controller
                 'empty_value' => '',
                 'required' => false,
                 'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
-                        return $repository->createQueryBuilder('mc')
-                            ->leftJoin('mc.owner', 'owner')
-                            ->where('mc.modelName = :modelName')
-                            ->andWhere('mc.modelId = :modelId')
-                            ->andWhere('owner.id in (:ownerIds)')
-                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
-                            ->setParameter(':modelId', $organizationId)
-                            ->setParameter(':ownerIds', $userIds);
-                    }
-            ));
+                return $repository->createQueryBuilder('mc')
+                    ->leftJoin('mc.owner', 'owner')
+                    ->where('mc.modelName = :modelName')
+                    ->andWhere('mc.modelId = :modelId')
+                    ->andWhere('owner.id in (:ownerIds)')
+                    ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                    ->setParameter(':modelId', $organizationId)
+                    ->setParameter(':ownerIds', $userIds);
+            }
+        ));
 
         $form
             ->add('contactnext', 'entity', array(
@@ -1858,34 +1878,34 @@ class AjaxController extends Controller
                 'required' => false,
                 'mapped' => false,
                 'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
-                        return $repository->createQueryBuilder('mc')
-                            ->leftJoin('mc.owner', 'owner')
-                            ->where('mc.modelName = :modelName')
-                            ->andWhere('mc.modelId = :modelId')
-                            ->andWhere('owner.id in (:ownerIds)')
-                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
-                            ->setParameter(':modelId', $organizationId)
-                            ->setParameter(':ownerIds', $userIds);
-                    }
-            ));
+                return $repository->createQueryBuilder('mc')
+                    ->leftJoin('mc.owner', 'owner')
+                    ->where('mc.modelName = :modelName')
+                    ->andWhere('mc.modelId = :modelId')
+                    ->andWhere('owner.id in (:ownerIds)')
+                    ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                    ->setParameter(':modelId', $organizationId)
+                    ->setParameter(':ownerIds', $userIds);
+            }
+        ));
 
         $form
             ->add('status', 'entity', array(
-            'class' => 'ListsHandlingBundle:HandlingStatus',
-            'data' => $handling->getStatus(),
-            'empty_value' => '',
-            'mapped' => false,
-            'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingStatusRepository $repository) {
-                    return $repository->createQueryBuilder('s')
-                        ->orderBy('s.sortorder', 'ASC');
-                }
+                'class' => 'ListsHandlingBundle:HandlingStatus',
+                'data' => $handling->getStatus(),
+                'empty_value' => '',
+                'mapped' => false,
+                'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingStatusRepository $repository) {
+                return $repository->createQueryBuilder('s')
+                    ->orderBy('s.sortorder', 'ASC');
+            }
         ));
 
         $form
             ->add('mindate', 'hidden', array(
                 'data' => $defaultData['mindate'],
                 'mapped' => false
-            ));
+        ));
     }
 
     /**
@@ -1897,59 +1917,29 @@ class AjaxController extends Controller
     public function invoiceMessageFormProcessDefaults($form, $defaultData)
     {
         $invoiceId = $defaultData['invoice_id'];
-
-        /** @var \ITDoors\ControllingBundle\Entity\InvoiceMessage $invoice */
-        $message = $this->getDoctrine()->getRepository('ITDoorsControllingBundle:InvoiceMessage')
-            ->findOneBy(array('invoiceId' => $invoiceId));
-
-//        $creator = $message->getUser();
-
-        $userIds = array();
-
-//        $userIds[$creator->getId()] = $creator->getId();
-
-//        $users = $message->getUsers();
-//
-//        foreach ($users as $user) {
-//            $userIds[$user->getId()] = $user->getId();
-//        }
-
-        $organizationId = 50;
+        $invoiceObj = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice')
+            ->find($invoiceId);
+        $dogovor = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:Dogovor')
+            ->find($invoiceObj->getDogovor());
+        $organizationId = $dogovor->getCustomerId() ? $dogovor->getCustomerId() : ($dogovor->getOrganization() ? $dogovor->getOrganization()->getId() : $invoiceObj->getOrganization()->getId());
 
         $form
-            ->add('contact', 'entity', array(
-                'class' => 'ListsContactBundle:ModelContact',
-                'empty_value' => '',
-                'required' => false,
-                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
-                        return $repository->createQueryBuilder('mc')
-                            ->leftJoin('mc.owner', 'owner')
-                            ->where('mc.modelName = :modelName')
-                            ->andWhere('mc.modelId = :modelId')
-                            ->andWhere('owner.id in (:ownerIds)')
-                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
-                            ->setParameter(':modelId', $organizationId)
-                            ->setParameter(':ownerIds', $userIds);
-                    }
-            ));
-
-        $form
-            ->add('contactnext', 'entity', array(
+            ->add('contactid', 'entity', array(
                 'class' => 'ListsContactBundle:ModelContact',
                 'empty_value' => '',
                 'required' => false,
                 'mapped' => false,
-                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
-                        return $repository->createQueryBuilder('mc')
-                            ->leftJoin('mc.owner', 'owner')
-                            ->where('mc.modelName = :modelName')
-                            ->andWhere('mc.modelId = :modelId')
-                            ->andWhere('owner.id in (:ownerIds)')
-                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
-                            ->setParameter(':modelId', $organizationId)
-                            ->setParameter(':ownerIds', $userIds);
-                    }
-            ));
+                'query_builder' => function (ModelContactRepository $repository) use ($organizationId) {
+                return $repository->createQueryBuilder('mc')
+                    ->leftJoin('mc.owner', 'owner')
+                    ->where('mc.modelName = :modelName')
+                    ->andWhere('mc.modelId = :modelId')
+                    ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                    ->setParameter(':modelId', $organizationId);
+            }
+        ));
     }
 
     /**
@@ -2191,8 +2181,7 @@ class AjaxController extends Controller
             ));
 
             $connection->commit();
-
-        } catch (\Exception $e) {
+        }catch (\Exception $e) {
             $connection->rollback();
             $em->close();
             throw $e;
@@ -2210,8 +2199,7 @@ class AjaxController extends Controller
         $userManager->updateUser($data);
 
         $this->get('session')->set(
-            'noticePassword',
-            'Password changed successfully!'
+            'noticePassword', 'Password changed successfully!'
         );
 
         return true;
@@ -2271,11 +2259,11 @@ class AjaxController extends Controller
                 'empty_value' => '',
                 'required' => false,
                 'query_builder' => function (DopDogovorRepository $repository) use ($dogovorId) {
-                        return $repository->createQueryBuilder('dd')
-                            ->where('dd.dogovorId = :dogovorId')
-                            ->setParameter(':dogovorId', $dogovorId);
-                    }
-            ));
+                return $repository->createQueryBuilder('dd')
+                    ->where('dd.dogovorId = :dogovorId')
+                    ->setParameter(':dogovorId', $dogovorId);
+            }
+        ));
 
         /** @var DepartmentsRepository $dr */
         $dr = $this->get('lists_department.repository');
@@ -2288,7 +2276,7 @@ class AjaxController extends Controller
                 'mapped' => false,
                 'multiple' => true,
                 'query_builder' => $dr->getDepartmentsForDogovor($dogovorId)
-            ));
+        ));
     }
 
     /**
@@ -2350,4 +2338,5 @@ class AjaxController extends Controller
 
         return true;
     }
+
 }

@@ -14,7 +14,7 @@
             startDate: new Date(1000*{{ form.createdate.vars.value }})
         });
 
-        $('#handlingMessageForm_next_is_business_trip').uniform();
+        $('#invoiceMessageForm_next_is_business_trip').uniform();
     })
 
     SD.select2('#' + '{{ form.vars.name }}' + '_user', {
@@ -55,7 +55,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">{% trans %}Current Message{% endtrans %}</div>
                             <div class="panel-body">
-                                <div class="form-group"> {#.'<span class="required"> * </span>'#}
+                                <div class="form-group">
                                     {{ form_label(form.createdate, 'Current Message Create Date', {'attr': {'class': 'control-label'}}) }}
                                     <div class="input-group date form_datetime">
                                         {{ form_widget(form.createdate, {'attr' : {
@@ -68,19 +68,13 @@
                                         </span>
                                     </div>
                                 </div>
-
-                                <div class="form-group">
-                                    {#{ form_label(form.type, 'Message Type', {'attr': {'class': 'control-label'}}) }}
-                                    {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': 'Message Type'} } ) }#}
-                                </div>
-           
                                 <div class="form-group">
                                     {{ form_label(form.note, 'Description', {'attr': {'class': 'control-label'}}) }}
                                     {{ form_widget(form.note, {'attr' : {'class' : 'form-control', 'placeholder': 'Description'} } ) }}
                                 </div>
                                 <div class="form-group">
-                                    {#{ form_label(form.contactnext, 'Contact Person', {'attr': {'class': 'control-label'}}) }#}
-                                    {#{ form_widget(form.contactnext, {'attr' : {'class' : 'form-control', 'placeholder': 'Select Contact Person'} } ) }#}
+                                    {{ form_label(form.contactid, 'Contact Person', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.contactid, {'attr' : {'class' : 'form-control', 'placeholder': 'Select Contact Person'} } ) }}
                                 </div>
         
                             </div>

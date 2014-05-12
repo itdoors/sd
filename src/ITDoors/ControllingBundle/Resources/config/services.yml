@@ -1,7 +1,10 @@
 parameters:
-#    it_doors_controlling.example.class: ITDoors\ControllingBundle\Example
+    it_doors_controlling.repository.class: ITDoors\ControllingBundle\Entity\InvoiceMessageRepository
+    it_doors_controlling.repository.entity: ITDoors\ControllingBundle\Entity\InvoiceMessage
 
 services:
-#    it_doors_controlling.example:
-#        class: %it_doors_controlling.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    it_doors_controlling.repository:
+        class: %it_doors_controlling.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %it_doors_controlling.repository.entity% ]
