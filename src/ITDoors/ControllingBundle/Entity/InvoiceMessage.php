@@ -25,6 +25,11 @@ class InvoiceMessage
     private $userId;
 
     /**
+     * @var integer
+     */
+    private $contactId;
+
+    /**
      * @var string
      */
     private $note;
@@ -32,7 +37,7 @@ class InvoiceMessage
     /**
      * @var \DateTime
      */
-    private $date;
+    private $createdate;
 
     /**
      * @var \ITDoors\ControllingBundle\Entity\Invoice
@@ -43,6 +48,12 @@ class InvoiceMessage
      * @var \SD\UserBundle\Entity\User
      */
     private $user;
+
+    /**
+     * @var \Lists\ContactBundle\Entity\ModelContact
+     */
+    private $contact;
+
 
     /**
      * Get id
@@ -58,13 +69,12 @@ class InvoiceMessage
      * Set invoiceId
      *
      * @param integer $invoiceId
-     * 
      * @return InvoiceMessage
      */
     public function setInvoiceId($invoiceId)
     {
         $this->invoiceId = $invoiceId;
-
+    
         return $this;
     }
 
@@ -82,13 +92,12 @@ class InvoiceMessage
      * Set userId
      *
      * @param integer $userId
-     * 
      * @return InvoiceMessage
      */
     public function setUserId($userId)
     {
         $this->userId = $userId;
-
+    
         return $this;
     }
 
@@ -103,16 +112,38 @@ class InvoiceMessage
     }
 
     /**
+     * Set contactId
+     *
+     * @param integer $contactId
+     * @return InvoiceMessage
+     */
+    public function setContactId($contactId)
+    {
+        $this->contactId = $contactId;
+    
+        return $this;
+    }
+
+    /**
+     * Get contactId
+     *
+     * @return integer 
+     */
+    public function getContactId()
+    {
+        return $this->contactId;
+    }
+
+    /**
      * Set note
      *
      * @param string $note
-     * 
      * @return InvoiceMessage
      */
     public function setNote($note)
     {
         $this->note = $note;
-
+    
         return $this;
     }
 
@@ -127,40 +158,38 @@ class InvoiceMessage
     }
 
     /**
-     * Set date
+     * Set createdate
      *
-     * @param \DateTime $date
-     * 
+     * @param \DateTime $createdate
      * @return InvoiceMessage
      */
-    public function setDate($date)
+    public function setCreatedate($createdate)
     {
-        $this->date = $date;
-
+        $this->createdate = $createdate;
+    
         return $this;
     }
 
     /**
-     * Get date
+     * Get createdate
      *
      * @return \DateTime 
      */
-    public function getDate()
+    public function getCreatedate()
     {
-        return $this->date;
+        return $this->createdate;
     }
 
     /**
      * Set invoice
      *
      * @param \ITDoors\ControllingBundle\Entity\Invoice $invoice
-     * 
      * @return InvoiceMessage
      */
     public function setInvoice(\ITDoors\ControllingBundle\Entity\Invoice $invoice = null)
     {
         $this->invoice = $invoice;
-
+    
         return $this;
     }
 
@@ -178,13 +207,12 @@ class InvoiceMessage
      * Set user
      *
      * @param \SD\UserBundle\Entity\User $user
-     * 
      * @return InvoiceMessage
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-
+    
         return $this;
     }
 
@@ -196,5 +224,28 @@ class InvoiceMessage
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set contact
+     *
+     * @param \Lists\ContactBundle\Entity\ModelContact $contact
+     * @return InvoiceMessage
+     */
+    public function setContact(\Lists\ContactBundle\Entity\ModelContact $contact = null)
+    {
+        $this->contact = $contact;
+    
+        return $this;
+    }
+
+    /**
+     * Get contact
+     *
+     * @return \Lists\ContactBundle\Entity\ModelContact 
+     */
+    public function getContact()
+    {
+        return $this->contact;
     }
 }
