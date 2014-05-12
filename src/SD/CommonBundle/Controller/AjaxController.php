@@ -924,6 +924,7 @@ class AjaxController extends Controller
         }
 
         if (sizeof($defaultData)) {
+            
             foreach ($defaultData as $key => $default) {
                 $form->add($key, 'hidden', array(
                     'data' => $default
@@ -1884,6 +1885,70 @@ class AjaxController extends Controller
             ->add('mindate', 'hidden', array(
                 'data' => $defaultData['mindate'],
                 'mapped' => false
+            ));
+    }
+
+    /**
+     * Adds children to {formName}ProcessDefaults depending on defaults in request
+     *
+     * @param Form $form
+     * @param mixed[] $defaultData
+     */
+    public function invoiceMessageFormProcessDefaults($form, $defaultData)
+    {
+        $invoiceId = $defaultData['invoice_id'];
+
+        /** @var \ITDoors\ControllingBundle\Entity\InvoiceMessage $invoice */
+        $message = $this->getDoctrine()->getRepository('ITDoorsControllingBundle:InvoiceMessage')
+            ->findOneBy(array('invoiceId' => $invoiceId));
+
+//        $creator = $message->getUser();
+
+        $userIds = array();
+
+//        $userIds[$creator->getId()] = $creator->getId();
+
+//        $users = $message->getUsers();
+//
+//        foreach ($users as $user) {
+//            $userIds[$user->getId()] = $user->getId();
+//        }
+
+        $organizationId = 50;
+
+        $form
+            ->add('contact', 'entity', array(
+                'class' => 'ListsContactBundle:ModelContact',
+                'empty_value' => '',
+                'required' => false,
+                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
+                        return $repository->createQueryBuilder('mc')
+                            ->leftJoin('mc.owner', 'owner')
+                            ->where('mc.modelName = :modelName')
+                            ->andWhere('mc.modelId = :modelId')
+                            ->andWhere('owner.id in (:ownerIds)')
+                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                            ->setParameter(':modelId', $organizationId)
+                            ->setParameter(':ownerIds', $userIds);
+                    }
+            ));
+
+        $form
+            ->add('contactnext', 'entity', array(
+                'class' => 'ListsContactBundle:ModelContact',
+                'empty_value' => '',
+                'required' => false,
+                'mapped' => false,
+                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
+                        return $repository->createQueryBuilder('mc')
+                            ->leftJoin('mc.owner', 'owner')
+                            ->where('mc.modelName = :modelName')
+                            ->andWhere('mc.modelId = :modelId')
+                            ->andWhere('owner.id in (:ownerIds)')
+                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                            ->setParameter(':modelId', $organizationId)
+                            ->setParameter(':ownerIds', $userIds);
+                    }
             ));
     }
 
