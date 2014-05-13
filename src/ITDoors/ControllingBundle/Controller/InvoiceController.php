@@ -6,13 +6,14 @@ use ITDoors\ControllingBundle\Entity\Invoice;
 use ITDoors\ControllingBundle\Entity\InvoiceRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
+ use ITDoors\AjaxBundle\Controller\BaseFilterController;
 
 /**
  * InvoiceController
  */
-class InvoiceController extends BaseController
+class InvoiceController extends BaseFilterController
 {
+    protected $filterNamespace = 'ajax.filter.namespace.report.invoice';
 
     /**
      *  indexAction
@@ -39,6 +40,7 @@ class InvoiceController extends BaseController
     public function showAction($period)
     {
 
+     
         $session = $this->get('session');
         $session->set('invoicePeriod', $period);
 
@@ -69,9 +71,40 @@ class InvoiceController extends BaseController
                 $entities = $invoice->getInvoicePay();
                 break;
         }
+        $count = $entities;
+        $count = count($count);
+        
+        
+         $filterNamespace = $this->container->getParameter($this->getNamespace());
+//        $filters = $this->getFilters($filterNamespace);
+
+        $page = $this->getPaginator($filterNamespace);
+        $page = $this->getSessionValues($filterNamespace, self::PAGINATOR_KEY);
+        echo '<br>';
+        echo '<br>';
+        echo '<br>';
+        var_dump($page);
+        echo '<br>';
+        echo '<br>';
+        var_dump($filterNamespace);
+        if (!$page) {
+            $page=1;
+        }
+        
+        /** @var \Knp\Component\Pager\Paginator $paginator */
+        $paginator  = $this->get('knp_paginator');
+
+
+        $entities->setHint('knp_paginator.count', 3);
+        $pagination = $paginator->paginate(
+            $entities,
+            $page,
+            1
+        );
+
 
         return $this->render('ITDoorsControllingBundle:Invoice:show.html.twig', array(
-                'entities' => $entities
+                'entities' => $pagination
         ));
     }
 

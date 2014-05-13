@@ -62,9 +62,8 @@ class InvoiceRepository extends EntityRepository
             ->andWhere("i.dateFact is NULL")
             ->andWhere("(i.court is NULL OR i.court = '0')");
 
-        $query = $res->getQuery();
 
-        return $query->getResult();
+        return $res->getQuery();
     }
 
     /**
@@ -107,9 +106,7 @@ class InvoiceRepository extends EntityRepository
             ->orderBy('i.delayDate', 'DESC')
             ->setParameter(':id', $id);
 
-        $query = $res->getQuery();
-
-        return $query->getResult();
+        return $res->getQuery();
     }
 
     /**
@@ -148,8 +145,6 @@ class InvoiceRepository extends EntityRepository
             ->andWhere("i.dateFact is not NULL")
             ->orderBy('i.dateEnd', 'DESC');
 
-        $query = $res->getQuery();
-
-        return $query->getResult();
+        return $res->getQuery();
     }
 }
