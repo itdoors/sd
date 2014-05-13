@@ -106,12 +106,13 @@ class InvoiceDogovorCompanystructure
      * Set invoice
      *
      * @param \ITDoors\ControllingBundle\Entity\Invoice $invoice
+     * 
      * @return InvoiceDogovorCompanystructure
      */
     public function setInvoice(\ITDoors\ControllingBundle\Entity\Invoice $invoice = null)
     {
         $this->invoice = $invoice;
-    
+
         return $this;
     }
 
@@ -123,5 +124,44 @@ class InvoiceDogovorCompanystructure
     public function getInvoice()
     {
         return $this->invoice;
+    }
+
+    /**
+     * __toString()
+     * 
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->invoice();
+    }
+    /**
+     * @var \Lists\CompanystructureBundle\Entity\Companystructure
+     */
+    private $company;
+
+
+    /**
+     * Set company
+     *
+     * @param \Lists\CompanystructureBundle\Entity\Companystructure $company
+     * 
+     * @return InvoiceDogovorCompanystructure
+     */
+    public function setCompany(\Lists\CompanystructureBundle\Entity\Companystructure $company = null)
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    /**
+     * Get company
+     *
+     * @return \Lists\CompanystructureBundle\Entity\Companystructure 
+     */
+    public function getCompany()
+    {
+        return $this->company;
     }
 }

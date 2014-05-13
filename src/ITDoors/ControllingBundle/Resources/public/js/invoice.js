@@ -1,19 +1,7 @@
 var ITDoorsInvoice = (function() {
     var _this = this;
     _this.changeBlockAjax = (function() {
-//        ITDoorsAjax.updateList('block-ajax', $(this).attr('data-url'));
-        var obj = this;
-        $.ajax({
-            type: 'POST',
-            url: $(obj).attr('data-url'),
-            beforeSend: function() {
-                ITDoorsAjax.blockUI($('#block-ajax'));
-            },
-            success: function(response) {
-                $('#block-ajax').empty().append(response);
-                ITDoorsAjax.unblockUI($('#block-ajax'));
-            }
-        });
+        ITDoorsAjax.updateList($(this).data('block-id'), $(this).data('url'));
     }),
     _this.init = (function() {
         $('.nav.nav-tabs>li>a').on('click',  _this.changeBlockAjax);

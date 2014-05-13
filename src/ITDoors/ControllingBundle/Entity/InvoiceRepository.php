@@ -16,6 +16,8 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
+     * @param query $res Description
+     * 
      * @return mixed[]
      */
     public function selectInvoicePeriod($res)
@@ -46,6 +48,8 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
+     * @param query $res Description
+     * 
      * @return mixed[]
      */
     public function selectInvoicePeriodCount($res)
@@ -58,6 +62,8 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      * 
+     * @param query $res Description
+     * 
      * @return mixed[]
      */
     public function joinInvoicePeriod($res)
@@ -67,8 +73,8 @@ class InvoiceRepository extends EntityRepository
             ->leftJoin('i.dogovor', 'd')
             ->leftJoin('d.performer', 'performer')
             ->leftJoin('o.city', 'c')
-            ->leftJoin('c.region', 'r')
-            ->leftJoin('i.messages', 'h');
+            ->leftJoin('c.region', 'r')->leftJoin('i.messages', 'h')
+            ->andWhere('h.id = (SELECT max(h2.id) FROM ITDoorsControllingBundle:InvoiceMessage AS h2 WHERE h2.invoiceId = i.id)  OR h.id is NULL');
 
         return $res;
     }
@@ -76,11 +82,9 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      * 
-     * @param querys $res Description
-     * 
-     * @param int $periodmin Description
-     * 
-     * @param int $periodmax 0 - no restrictions
+     * @param query   $res              desc
+     * @param integer $periodmin  desc
+     * @param integer $periodmax desc
      * 
      * @return mixed[]
      */
@@ -88,7 +92,6 @@ class InvoiceRepository extends EntityRepository
     {
         $date = date('Y-m-d');
         $res
-            ->andWhere('h.id = (SELECT max(h2.id) FROM ITDoorsControllingBundle:InvoiceMessage AS h2 WHERE h2.invoiceId = i.id)  OR h.id is NULL')
             ->andWhere(":date -  i.delayDate >= :periodmin");
         if ($periodmax != 0) {
             $res->andWhere(':date -  i.delayDate <= :periodmax')
@@ -114,7 +117,7 @@ class InvoiceRepository extends EntityRepository
      */
     public function getInvoicePeriod($periodmin, $periodmax)
     {
-        
+
         $res = $this->createQueryBuilder('i');
 
         /** select */
@@ -126,6 +129,7 @@ class InvoiceRepository extends EntityRepository
 
         return $res->getQuery();
     }
+
     /**
      * Returns results for interval future invoice
      *
@@ -137,19 +141,17 @@ class InvoiceRepository extends EntityRepository
      */
     public function getInvoicePeriodCount($periodmin, $periodmax)
     {
-        
+
         $rescount = $this->createQueryBuilder('i');
 
         /** select */
         $this->selectInvoicePeriodCount($rescount);
-        /** join */
-        $this->joinInvoicePeriod($rescount);
         /** where */
-        $this->whereInvoicePeriod($rescount,$periodmin, $periodmax);
+        $this->whereInvoicePeriod($rescount, $periodmin, $periodmax);
 
         return $rescount->getQuery()->getSingleScalarResult();
     }
-    
+
     /**
      * Returns results for interval future invoice
      *
@@ -165,14 +167,13 @@ class InvoiceRepository extends EntityRepository
         /** join */
         $this->joinInvoicePeriod($res);
 
-        return $res->Where('h.id = (SELECT max(h2.id) FROM ITDoorsControllingBundle:InvoiceMessage AS h2 WHERE h2.invoiceId = i.id) OR h.id is NULL')
-            ->andWhere("i.court = :id")
-            ->andWhere("i.dateFact is NULL")
-            ->orderBy('i.delayDate', 'DESC')
-            ->setParameter(':id', $id)->getQuery();
-
+        return $res
+                ->andWhere("i.court = :id")
+                ->andWhere("i.dateFact is NULL")
+                ->orderBy('i.delayDate', 'DESC')
+                ->setParameter(':id', $id)->getQuery();
     }
-    
+
     /**
      * Returns results for interval future invoice
      *
@@ -185,15 +186,13 @@ class InvoiceRepository extends EntityRepository
         $rescount = $this->createQueryBuilder('i');
         /** select */
         $this->selectInvoicePeriodCount($rescount);
-        /** join */
-        $this->joinInvoicePeriod($rescount);
 
-        return $rescount->andWhere('h.id = (SELECT max(h2.id) FROM ITDoorsControllingBundle:InvoiceMessage AS h2 WHERE h2.invoiceId = i.id) OR h.id is NULL')
-            ->andWhere("i.court = :id")
-            ->andWhere("i.dateFact is NULL")
-            ->setParameter(':id', $id)
-            ->getQuery()
-            ->getSingleScalarResult();
+        return $rescount
+                ->andWhere("i.court = :id")
+                ->andWhere("i.dateFact is NULL")
+                ->setParameter(':id', $id)
+                ->getQuery()
+                ->getSingleScalarResult();
     }
 
     /**
@@ -209,8 +208,7 @@ class InvoiceRepository extends EntityRepository
         /** join */
         $this->joinInvoicePeriod($res);
         /** where */
-        $res = $res->Where('h.id = (SELECT max(h2.id) FROM ITDoorsControllingBundle:InvoiceMessage AS h2 WHERE h2.invoiceId = i.id) OR h.id is NULL')
-            ->andWhere("i.dateFact is not NULL")
+        $res = $res->andWhere("i.dateFact is not NULL")
             ->orderBy('i.dateEnd', 'DESC');
 
         return $res->getQuery();
@@ -223,15 +221,12 @@ class InvoiceRepository extends EntityRepository
      */
     public function getInvoicePayCount()
     {
-         $rescount = $this->createQueryBuilder('i');
+        $rescount = $this->createQueryBuilder('i');
 
         /** select */
         $this->selectInvoicePeriodCount($rescount);
-        /** join */
-        $this->joinInvoicePeriod($rescount);
         /** where */
-        $rescount = $rescount->andWhere('h.id = (SELECT max(h2.id) FROM ITDoorsControllingBundle:InvoiceMessage AS h2 WHERE h2.invoiceId = i.id) OR h.id is NULL')
-            ->andWhere("i.dateFact is not NULL");
+        $rescount = $rescount->andWhere("i.dateFact is not NULL");
 
         return $rescount->getQuery()->getSingleScalarResult();
     }

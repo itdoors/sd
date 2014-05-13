@@ -6,13 +6,14 @@ use ITDoors\ControllingBundle\Entity\Invoice;
 use ITDoors\ControllingBundle\Entity\InvoiceRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
- use ITDoors\AjaxBundle\Controller\BaseFilterController;
+use ITDoors\AjaxBundle\Controller\BaseFilterController;
 
 /**
  * InvoiceController
  */
 class InvoiceController extends BaseFilterController
 {
+
     protected $filterNamespace = 'ajax.filter.namespace.report.invoice';
 
     /**
@@ -41,9 +42,9 @@ class InvoiceController extends BaseFilterController
     {
 
         $filterNamespace = $this->container->getParameter($this->getNamespace());
-     
+
         $session = $this->get('session');
-        if($period != $session->get('invoicePeriod')){
+        if ($period != $session->get('invoicePeriod')) {
             $session->set('invoicePeriod', $period);
             $this->clearPaginator($filterNamespace);
         }
@@ -51,7 +52,7 @@ class InvoiceController extends BaseFilterController
         $em = $this->getDoctrine()->getManager();
         /** @var ITDoors/ControllingBundle/Entity/InvoiceRepository */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
-        
+
         switch ($period) {
             case 30:
                 $entities = $invoice->getInvoicePeriod(1, 30);
@@ -82,26 +83,32 @@ class InvoiceController extends BaseFilterController
                 $count = $invoice->getInvoicePayCount();
                 break;
         }
-        
-        
+
+
         $page = $this->getPaginator($filterNamespace);
-        if(!$page){
+        if (!$page) {
             $page = 1;
         }
 
-         /** @var \Knp\Component\Pager\Paginator $paginator */
+        /** @var \Knp\Component\Pager\Paginator $paginator */
         $paginator = $this->get('knp_paginator');
-        
+
         $entities->setHint('knp_paginator.count', $count);
         $pagination = $paginator->paginate(
-            $entities,
-            $page,
-            20
+            $entities, $page, 20
         );
-       
+        $responsibles = array();
+        foreach ($pagination as $val) {
+            /** @var ITDoors/ControllingBundle/Entity/InvoiceDogovorCompanystructure  $companys */
+            $company = $em->getRepository('ITDoorsControllingBundle:InvoiceDogovorCompanystructure')
+                ->findBy(array('invoiceId' => $val['id']));
+            $responsibles[$val['id']] = $company;
+        }
+
         return $this->render('ITDoorsControllingBundle:Invoice:show.html.twig', array(
                 'period' => $period,
-                'entities' => $pagination
+                'entities' => $pagination,
+                'responsibles' => $responsibles,
         ));
     }
 
@@ -152,13 +159,12 @@ class InvoiceController extends BaseFilterController
         $dogovor = '';
         switch ($block) {
             case 'invoice':
-                $dogovor = $this->getDoctrine()
-                    ->getRepository('ListsDogovorBundle:Dogovor')
-                    ->find($invoiceObj->getDogovor());
-                $organizationId = $dogovor->getCustomerId() ? $dogovor->getCustomerId() : ($dogovor->getOrganization() ? $dogovor->getOrganization()->getId() : $invoiceObj->getOrganization()->getId());
-                $organization = $this->getDoctrine()
-                    ->getRepository('ListsOrganizationBundle:Organization')
-                    ->find($organizationId);
+                $dogovor = $invoiceObj->getDogovor();
+                $organization = $dogovor->getOrganization();
+                if (empty($organization)) {
+                    $organization = $invoiceObj->getOrganization();
+                }
+                $organizationId = $organization->getId();
                 $entitie = $invoiceObj;
                 break;
             case 'organization':
@@ -215,7 +221,7 @@ class InvoiceController extends BaseFilterController
     public function lastactionAction()
     {
         $session = $this->get('session');
-        $invoiceid = $session->get('invoiceid', FALSE);
+        $invoiceid = $session->get('invoiceid', false);
         if (!$invoiceid) {
             throw $this->createNotFoundException('Param "invoiceid" not found in session.');
         }

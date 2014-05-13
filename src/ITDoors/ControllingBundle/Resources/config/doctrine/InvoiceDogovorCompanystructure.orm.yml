@@ -13,3 +13,10 @@ ITDoors\ControllingBundle\Entity\InvoiceDogovorCompanystructure:
         companystructureId:
             type: integer
             column: companystructure_id
+    oneToOne:
+        company:
+                targetEntity: Lists\CompanystructureBundle\Entity\Companystructure
+                inversedBy: null
+                joinColumn:
+                    name: companystructure_id
+                    referencedColumnName: id

@@ -30,7 +30,7 @@ class InvoiceMessageRepository extends EntityRepository
             ->addSelect('c.firstName as cfirstName')
             ->addSelect('c.lastName as clastName')
             ->innerJoin('i_m.user', 'u')
-            ->innerJoin('i_m.contact', 'c')
+            ->leftJoin('i_m.contact', 'c')
             ->andWhere("i_m.invoiceId = :invoiceId")
             ->setParameter(':invoiceId', $invoiceid)
             ->orderBy('i_m.createdate', 'DESC')

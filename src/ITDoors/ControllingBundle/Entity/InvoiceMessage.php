@@ -69,12 +69,13 @@ class InvoiceMessage
      * Set invoiceId
      *
      * @param integer $invoiceId
+     * 
      * @return InvoiceMessage
      */
     public function setInvoiceId($invoiceId)
     {
         $this->invoiceId = $invoiceId;
-    
+
         return $this;
     }
 
@@ -92,12 +93,13 @@ class InvoiceMessage
      * Set userId
      *
      * @param integer $userId
+     * 
      * @return InvoiceMessage
      */
     public function setUserId($userId)
     {
         $this->userId = $userId;
-    
+
         return $this;
     }
 
@@ -115,12 +117,13 @@ class InvoiceMessage
      * Set contactId
      *
      * @param integer $contactId
+     * 
      * @return InvoiceMessage
      */
     public function setContactId($contactId)
     {
         $this->contactId = $contactId;
-    
+
         return $this;
     }
 
@@ -138,12 +141,13 @@ class InvoiceMessage
      * Set note
      *
      * @param string $note
+     * 
      * @return InvoiceMessage
      */
     public function setNote($note)
     {
         $this->note = $note;
-    
+
         return $this;
     }
 
@@ -161,12 +165,13 @@ class InvoiceMessage
      * Set createdate
      *
      * @param \DateTime $createdate
+     * 
      * @return InvoiceMessage
      */
     public function setCreatedate($createdate)
     {
         $this->createdate = $createdate;
-    
+
         return $this;
     }
 
@@ -184,12 +189,13 @@ class InvoiceMessage
      * Set invoice
      *
      * @param \ITDoors\ControllingBundle\Entity\Invoice $invoice
+     * 
      * @return InvoiceMessage
      */
     public function setInvoice(\ITDoors\ControllingBundle\Entity\Invoice $invoice = null)
     {
         $this->invoice = $invoice;
-    
+
         return $this;
     }
 
@@ -207,12 +213,13 @@ class InvoiceMessage
      * Set user
      *
      * @param \SD\UserBundle\Entity\User $user
+     * 
      * @return InvoiceMessage
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 
@@ -230,12 +237,13 @@ class InvoiceMessage
      * Set contact
      *
      * @param \Lists\ContactBundle\Entity\ModelContact $contact
+     * 
      * @return InvoiceMessage
      */
     public function setContact(\Lists\ContactBundle\Entity\ModelContact $contact = null)
     {
         $this->contact = $contact;
-    
+
         return $this;
     }
 

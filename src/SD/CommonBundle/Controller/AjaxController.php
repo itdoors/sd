@@ -1190,20 +1190,21 @@ class AjaxController extends Controller
         $invoice = $this->getDoctrine()
             ->getRepository('ITDoorsControllingBundle:Invoice')
             ->find($invoiceId);
+        $data->setInvoice($invoice);
 
         $contactid = $formData['contactid'];
 
-        /** @var \Lists\ContactBundle\Entity\ModelContact $contact */
-        $contact = $this->getDoctrine()
-            ->getRepository('ListsContactBundle:ModelContact')
-            ->find($contactid);
+        if (is_numeric($contactid)) {
+            /** @var \Lists\ContactBundle\Entity\ModelContact $contact */
+            $contact = $this->getDoctrine()
+                ->getRepository('ListsContactBundle:ModelContact')
+                ->find($contactid);
+            $data->setContact($contact);
+        }
 
         $data->setUser($this->getUser());
 
-        $data->setContact($contact);
         $data->setNote($formData['note']);
-
-        $data->setInvoice($invoice);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);

@@ -13,18 +13,27 @@ use Symfony\Component\Validator\ExecutionContextInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 
+/**
+ * InvoiceMessageFormType
+ */
 class InvoiceMessageFormType extends AbstractType
 {
+
     protected $container;
 
+    /**
+     *  __construct
+     * 
+     * @param obj $container Description
+     */
     public function __construct($container)
     {
         $this->container = $container;
     }
 
     /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param object $builder desc
+     * @param array  $options desc
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -39,65 +48,57 @@ class InvoiceMessageFormType extends AbstractType
                 'widget' => 'single_text',
                 'format' => 'dd.M.yyyy HH:mm'
             ))
-            ->add('note', 'text', array(
+            ->add('note', 'textarea', array(
                 'required' => false,
                 'mapped' => false
             ))
-            ->add('invoice_id', 'hidden')
-        ;
+            ->add('invoice_id', 'hidden');
 
         /** @var User $user */
         $user = $container->get('security.context')->getToken()->getUser();
 //
 //        if ($user->hasRole('ROLE_SALESADMIN'))
 //        {
-            $builder
-                ->add('user', 'hidden_entity', array(
-                    'entity' => 'SDUserBundle:User',
-                    'data_class' => null,
-                    'data' => $user
-                ))
-                ->add('userNext', 'hidden_entity', array(
-                    'entity' => 'SDUserBundle:User',
-                    'data_class' => null,
-                    'data' => $user,
-                    'mapped' => false
-                ));
+        $builder
+            ->add('user', 'hidden_entity', array(
+                'entity' => 'SDUserBundle:User',
+                'data_class' => null,
+                'data' => $user
+            ))
+            ->add('userNext', 'hidden_entity', array(
+                'entity' => 'SDUserBundle:User',
+                'data_class' => null,
+                'data' => $user,
+                'mapped' => false
+        ));
 //        }
         $builder
             ->add('create', 'submit')
             ->add('cancel', 'button');
 
         $builder->addEventListener(
-            FormEvents::PRE_SUBMIT,
-            function(FormEvent $event) use ($container)
-            {
+            FormEvents::PRE_SUBMIT, function(FormEvent $event) use ($container) {
                 $data = $event->getData();
 
                 $form = $event->getForm();
             });
 
-		$builder->addEventListener(
-			FormEvents::PRE_SUBMIT,
-			function(FormEvent $event) use ($container)
-			{
-				$data = $event->getData();
+        $builder->addEventListener(
+            FormEvents::PRE_SUBMIT, function(FormEvent $event) use ($container) {
+                $data = $event->getData();
 
-				$form = $event->getForm();
-			});
+                $form = $event->getForm();
+            });
 
         $builder->addEventListener(
-            FormEvents::PRE_SUBMIT,
-            function(FormEvent $event) use ($container)
-            {
+            FormEvents::PRE_SUBMIT, function(FormEvent $event) use ($container) {
                 $data = $event->getData();
 
                 $form = $event->getForm();
 
                 $currentDatetime = new \DateTime($data['createdate']);
 
-                if (isset($data['invoice_id']) && $data['invoice_id'])
-                {
+                if (isset($data['invoice_id']) && $data['invoice_id']) {
                     $invoiceId = $data['invoice_id'];
 
                     /** @var \Lists\HandlingBundle\Entity\Handling $handling */
@@ -105,13 +106,13 @@ class InvoiceMessageFormType extends AbstractType
                         ->getRepository('ITDoorsControllingBundle:Invoice')
                         ->find($invoiceId);
 
-//                    if ($handling)
-//                    {
-//                        if ($handling->getDate() > $currentDatetime || $handling->getCreatedatetime() > $currentDatetime)
-//                        {
-//                            $form->addError(new FormError($msg));
-//                        }
-//                    }
+                    //                    if ($handling)
+                    //                    {
+                    //                        if ($handling->getDate() > $currentDatetime || $handling->getCreatedatetime() > $currentDatetime)
+                    //                        {
+                    //                            $form->addError(new FormError($msg));
+                    //                        }
+                    //                    }
                 }
             });
     }
@@ -135,4 +136,5 @@ class InvoiceMessageFormType extends AbstractType
     {
         return 'invoiceMessageForm';
     }
+
 }

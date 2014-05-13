@@ -2,7 +2,7 @@
 
 <script type="text/javascript">
 
-    $(document).ready(function (){
+    $(document).ready(function() {
 
         $(".form_datetime").datetimepicker({
             autoclose: true,
@@ -11,15 +11,11 @@
             pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
             language: 'ru',
             weekStart: 1,
-            startDate: new Date(1000*{{ form.createdate.vars.value }})
+            startDate: new Date(1000 *{{ form.createdate.vars.value }})
         });
-
-   
     });
-
-  
-
 </script>
+
 {% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
 <div class="row">
     <div class="col-md-12">
@@ -44,7 +40,7 @@
                         'data-target_id': targetId
                 }
                 }) }}
-                
+
                 <div class="row">
                     <div class="col-md-12">
                         <div class="panel panel-default">
@@ -65,12 +61,13 @@
                                 <div class="form-group">
                                     {{ form_label(form.note, 'Description', {'attr': {'class': 'control-label'}}) }}
                                     {{ form_widget(form.note, {'attr' : {'class' : 'form-control', 'placeholder': 'Description'} } ) }}
+                                    
                                 </div>
                                 <div class="form-group">
                                     {{ form_label(form.contactid, 'Contact Person', {'attr': {'class': 'control-label'}}) }}
                                     {{ form_widget(form.contactid, {'attr' : {'class' : 'form-control', 'placeholder': 'Select Contact Person'} } ) }}
                                 </div>
-        
+
                             </div>
                         </div>
                     </div>

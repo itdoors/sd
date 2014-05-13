@@ -1,5 +1,13 @@
 {% trans_default_domain 'ITDoorsControllingBundle' %}
 <div class="table-scrollable" id="invoice_list" data-url="{{ url('it_doors_controlling_invoice_show', { period: period }) }}">
+    <div class="navigation">
+        {{ ajax_paginator_render(
+            entities, ajax_filter_namespace_report_invoice, {
+                    'invoice_list': 'ITDoorsAjax.updateList'
+                }
+            )
+        }}
+    </div>
     <table class="table table-striped table-bordered table-hover dataTable" id="datatable_ajax" aria-describedby="datatable_ajax_info">
         <thead>
             <tr role="row" class="heading">
@@ -39,7 +47,11 @@
                 <td class="">{{ entity.sum|number_format(2, ',', ' ')  }}</td>
                 <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceId }}</a> {{ entity.date is empty ? '' : entity.date|date("d.m.y") }}</td>
                 <td class="">{{ entity.dogovorActName }} {{ entity.dogovorActDate is empty ? '' : entity.dogovorActDate|date("d.m.y") }}</td>
-                <td class="">{{ entity.id }}</td>
+                <td class="">
+                    {% for responsible in responsibles[entity.id] %}
+                        {{ responsible.company.name }}<br>
+                    {% endfor %}
+                </td>
                 <td class="">{{ entity.dogovorNumber }} {{ entity.dogovorStartDatetime is empty ? '' :  entity.dogovorStartDatetime|date("d.m.y") }}</td>
                 <td class="">{{ entity.delayDate is empty ? '' :  entity.delayDate|date("d.m.y")  }} ({{ entity.delayDays }} {{ entity.delayDaysType }})</td>
                 <td class="">{% if entity.dogovorActOriginal is not empty %}{% trans %}on{% endtrans %}{% else %}{% trans %}off{% endtrans %}{% endif %}</td>
