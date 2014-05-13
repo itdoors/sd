@@ -40,70 +40,67 @@ class InvoiceController extends BaseFilterController
     public function showAction($period)
     {
 
+        $filterNamespace = $this->container->getParameter($this->getNamespace());
      
         $session = $this->get('session');
-        $session->set('invoicePeriod', $period);
+        if($period != $session->get('invoicePeriod')){
+            $session->set('invoicePeriod', $period);
+            $this->clearPaginator($filterNamespace);
+        }
 
         $em = $this->getDoctrine()->getManager();
         /** @var ITDoors/ControllingBundle/Entity/InvoiceRepository */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
-
+        
         switch ($period) {
             case 30:
                 $entities = $invoice->getInvoicePeriod(1, 30);
+                $count = $invoice->getInvoicePeriodCount(1, 30);
                 break;
             case 60:
                 $entities = $invoice->getInvoicePeriod(31, 60);
+                $count = $invoice->getInvoicePeriodCount(31, 60);
                 break;
             case 120:
                 $entities = $invoice->getInvoicePeriod(61, 120);
+                $count = $invoice->getInvoicePeriodCount(61, 120);
                 break;
             case 180:
                 $entities = $invoice->getInvoicePeriod(121, 180);
+                $count = $invoice->getInvoicePeriodCount(121, 180);
                 break;
             case 181:
                 $entities = $invoice->getInvoicePeriod(181, 0);
+                $count = $invoice->getInvoicePeriodCount(181, 0);
                 break;
             case 'court':
                 $entities = $invoice->getInvoiceCourt();
+                $count = $invoice->getInvoiceCourtCount();
                 break;
             case 'pay':
                 $entities = $invoice->getInvoicePay();
+                $count = $invoice->getInvoicePayCount();
                 break;
         }
-        $count = $entities;
-        $count = count($count);
         
         
-         $filterNamespace = $this->container->getParameter($this->getNamespace());
-//        $filters = $this->getFilters($filterNamespace);
-
         $page = $this->getPaginator($filterNamespace);
-        $page = $this->getSessionValues($filterNamespace, self::PAGINATOR_KEY);
-        echo '<br>';
-        echo '<br>';
-        echo '<br>';
-        var_dump($page);
-        echo '<br>';
-        echo '<br>';
-        var_dump($filterNamespace);
-        if (!$page) {
-            $page=1;
+        if(!$page){
+            $page = 1;
         }
+
+         /** @var \Knp\Component\Pager\Paginator $paginator */
+        $paginator = $this->get('knp_paginator');
         
-        /** @var \Knp\Component\Pager\Paginator $paginator */
-        $paginator  = $this->get('knp_paginator');
-
-
-        $entities->setHint('knp_paginator.count', 3);
+        $entities->setHint('knp_paginator.count', $count);
         $pagination = $paginator->paginate(
             $entities,
             $page,
-            1
+            20
         );
-
-
+       
         return $this->render('ITDoorsControllingBundle:Invoice:show.html.twig', array(
+                'period' => $period,
                 'entities' => $pagination
         ));
     }
