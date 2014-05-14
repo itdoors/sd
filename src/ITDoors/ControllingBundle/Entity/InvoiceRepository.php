@@ -82,9 +82,11 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      * 
-     * @param query   $res              desc
-     * @param integer $periodmin  desc
-     * @param integer $periodmax desc
+     * @param query   $res
+     * 
+     * @param integer $periodmin
+     * 
+     * @param integer $periodmax
      * 
      * @return mixed[]
      */
