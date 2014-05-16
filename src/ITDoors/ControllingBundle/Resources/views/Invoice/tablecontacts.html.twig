@@ -1,4 +1,4 @@
-    <div id="contact_list" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'contacts' }) }}">
+<div id="contact_list" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'contacts' }) }}">
 {% trans_default_domain 'ITDoorsControllingBundle' %}
 <div class="col-md-12">
     <div class="table-toolbar">
@@ -31,23 +31,23 @@
                 </tr>
             </thead>
             <tbody>
-            {% for item in  entitie %}
-                <tr>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.firstName }}</td>
-                    <td>{{ item.lastName }}</td>
-                    <td>{{ item.middleName }}</td>
-                    <td>{{ item.position }}</td>
-                    <td>{{ item.phone1 }}</td>
-                    <td>{{ item.phone2 }}</td>
-                    <td>{{ item.email }}</td>
-                    <td>
-                    {% if item.birthday %}
-                        {{ item.birthday|date("d.M.y") }}
-                    {% endif %}
-                    </td>
-                </tr>
-            {% endfor %}
+                {% for item in  entitie %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.firstName }}</td>
+                        <td>{{ item.lastName }}</td>
+                        <td>{{ item.middleName }}</td>
+                        <td>{{ item.position }}</td>
+                        <td>{{ item.phone1 }}</td>
+                        <td>{{ item.phone2 }}</td>
+                        <td>{{ item.email }}</td>
+                        <td>
+                            {% if item.birthday %}
+                                {{ item.birthday|date("d.M.y") }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>

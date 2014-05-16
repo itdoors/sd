@@ -301,4 +301,80 @@ class Companystructure
     {
         return $this->parent;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $invoicedogovorcompany;
+
+
+    /**
+     * Add invoicedogovorcompany
+     *
+     * @param \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicedogovorcompany
+     * @return Companystructure
+     */
+    public function addInvoicedogovorcompany(\ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicedogovorcompany)
+    {
+        $this->invoicedogovorcompany[] = $invoicedogovorcompany;
+    
+        return $this;
+    }
+
+    /**
+     * Remove invoicedogovorcompany
+     *
+     * @param \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicedogovorcompany
+     */
+    public function removeInvoicedogovorcompany(\ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicedogovorcompany)
+    {
+        $this->invoicedogovorcompany->removeElement($invoicedogovorcompany);
+    }
+
+    /**
+     * Get invoicedogovorcompany
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInvoicedogovorcompany()
+    {
+        return $this->invoicedogovorcompany;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $invoicecompanystructure;
+
+
+    /**
+     * Add invoicecompanystructure
+     *
+     * @param \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicecompanystructure
+     * @return Companystructure
+     */
+    public function addInvoicecompanystructure(\ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicecompanystructure)
+    {
+        $this->invoicecompanystructure[] = $invoicecompanystructure;
+    
+        return $this;
+    }
+
+    /**
+     * Remove invoicecompanystructure
+     *
+     * @param \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicecompanystructure
+     */
+    public function removeInvoicecompanystructure(\ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicecompanystructure)
+    {
+        $this->invoicecompanystructure->removeElement($invoicecompanystructure);
+    }
+
+    /**
+     * Get invoicecompanystructure
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInvoicecompanystructure()
+    {
+        return $this->invoicecompanystructure;
+    }
 }

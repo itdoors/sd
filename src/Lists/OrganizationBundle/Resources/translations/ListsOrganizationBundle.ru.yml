@@ -100,6 +100,7 @@ Birthday: Дата рождения
 Description: Заметки
 Creator: Кто создал
 Create Date Time: Дата создания
+Create New Contact: Создать контакт
 
 Filters: Фильтры
 Clear Filter: Очистить
@@ -115,7 +116,7 @@ Email: Email
 You have some form errors. Please check below.: В форме обнаружены ошибки. Пожалуйста, проверьте.
 This field is required.: Это поле обязательно к заполнению
 Save: Сохранить
-Cancel: Отмена
+Cancel: Отменить
 Add New: Добавить
 Delete: Удалить
 Enter filter parameters and press Filter button.: Выберите параметры фильтра и нажмите кнопку Фильтр

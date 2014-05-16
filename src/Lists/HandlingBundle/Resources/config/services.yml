@@ -6,6 +6,7 @@ parameters:
     lists_handling.sales.wizard.form.class: Lists\HandlingBundle\Form\HandlingSalesWizardForm
     lists_handling.message.form.class: Lists\HandlingBundle\Form\HandlingMessageFormType
     itdoors_controlling.message.form.class: ITDoors\ControllingBundle\Form\InvoiceMessageFormType
+    itdoors_controlling.company.form.class: ITDoors\ControllingBundle\Form\invoiceCompanystructureFormType
     lists_handling.message.wizard.form.class: Lists\HandlingBundle\Form\HandlingMessageWizardForm
     lists_handling.form.user.class: Lists\HandlingBundle\Form\HandlingUserFormType
     lists_handling.sales.form.report.class: Lists\HandlingBundle\Form\HandlingReportDateRangeForm
@@ -85,11 +86,23 @@ services:
         tags:
             - { name: form.type, alias: invoiceMessageForm }
             
+    itdoors_controlling.form.invoiceCompanystructureForm:
+        class: %itdoors_controlling.company.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: invoiceCompanystructureForm }
+            
     itdoors_controlling.form.invoiceMessageForm:
         class: %itdoors_controlling.message.form.class%
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: invoiceMessageForm }
+            
+    itdoors_controlling.form.invoiceCompanystructureForm:
+        class: %itdoors_controlling.company.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: invoiceCompanystructureForm }
 
     lists_handling.form.handlingMessageWizardForm:
         class: %lists_handling.message.wizard.form.class%

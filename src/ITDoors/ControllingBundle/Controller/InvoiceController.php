@@ -3,6 +3,7 @@
 namespace ITDoors\ControllingBundle\Controller;
 
 use ITDoors\ControllingBundle\Entity\Invoice;
+use ITDoors\ControllingBundle\Entity\InvoiceCompanystructure;
 use ITDoors\ControllingBundle\Entity\InvoiceRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -26,6 +27,7 @@ class InvoiceController extends BaseFilterController
         $session = $this->get('session');
         $period = $session->get('invoicePeriod', 30);
 
+
         return $this->render('ITDoorsControllingBundle:Invoice:index.html.twig', array(
                 'period' => $period
         ));
@@ -40,17 +42,17 @@ class InvoiceController extends BaseFilterController
      */
     public function showAction($period)
     {
+        $session = $this->get('session');
 
         $filterNamespace = $this->container->getParameter($this->getNamespace());
 
-        $session = $this->get('session');
         if ($period != $session->get('invoicePeriod')) {
-            $session->set('invoicePeriod', $period);
             $this->clearPaginator($filterNamespace);
+            $session->set('invoicePeriod', $period);
         }
 
         $em = $this->getDoctrine()->getManager();
-        /** @var ITDoors/ControllingBundle/Entity/InvoiceRepository */
+        /** @var ITDoors/ControllingBundle/Entity/InvoiceRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
 
         switch ($period) {
@@ -84,7 +86,6 @@ class InvoiceController extends BaseFilterController
                 break;
         }
 
-
         $page = $this->getPaginator($filterNamespace);
         if (!$page) {
             $page = 1;
@@ -98,11 +99,12 @@ class InvoiceController extends BaseFilterController
             $entities, $page, 20
         );
         $responsibles = array();
+
         foreach ($pagination as $val) {
-            /** @var ITDoors/ControllingBundle/Entity/InvoiceDogovorCompanystructure  $companys */
-            $company = $em->getRepository('ITDoorsControllingBundle:InvoiceDogovorCompanystructure')
+            /** @var ITDoors/ControllingBundle/Entity/InvoiceCompanystructure */
+            $responsibles[$val['id']] = $em
+                ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
                 ->findBy(array('invoiceId' => $val['id']));
-            $responsibles[$val['id']] = $company;
         }
 
         return $this->render('ITDoorsControllingBundle:Invoice:show.html.twig', array(
@@ -115,14 +117,15 @@ class InvoiceController extends BaseFilterController
     /**
      *  invoiceAction
      * 
-     * @param int $invoiceid
+     * @param int       $invoiceid
+     * @param string    $block
      * 
      * @return html Description
      */
-    public function invoiceAction($invoiceid)
+    public function invoiceAction($invoiceid, $block)
     {
         $session = $this->get('session');
-        $block = $session->get('invoiceBlock', 'invoice');
+        $session->set('invoiceBlock', $block);
         $session->set('invoiceid', $invoiceid);
 
         $invoiceObj = $this->getDoctrine()
@@ -177,7 +180,8 @@ class InvoiceController extends BaseFilterController
                     ->find($organizationId);
                 break;
             case 'responsible':
-                $entitie = '';
+                $entitie = $em->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
+                    ->findBy(array('invoiceId' => $invoiceid));
                 break;
             case 'dogovor':
                 $entitie = $this->getDoctrine()

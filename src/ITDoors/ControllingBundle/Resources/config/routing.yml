@@ -9,10 +9,11 @@ it_doors_controlling_invoice_show:
         period: 30|60|120|180|181|pay|court
         
 it_doors_controlling_invoice_invoice:
-    pattern:  /controlling/invoice/{invoiceid}
-    defaults: { _controller: ITDoorsControllingBundle:Invoice:invoice }
+    pattern:  /controlling/invoice/{invoiceid}/{block}
+    defaults: { _controller: ITDoorsControllingBundle:Invoice:invoice, block:invoice}
     requirements:
         invoiceid: \d+
+        block: invoice|organization|responsible|dogovor|contacts|history
 
 it_doors_controlling_invoice_invoice_show:
     pattern:  /controlling/invoice/show/{block}

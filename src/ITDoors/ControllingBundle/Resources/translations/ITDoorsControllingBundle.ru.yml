@@ -1,5 +1,6 @@
 Customer: Заказчик
 Performer: Исполнитель
+Add rerformer: Добавить отвественого
 Invoice amount: Сумма счета
 № and date invoice: № и дата счета
 № and date ABP/BH: № и дата<br>АВР/РП
@@ -14,7 +15,9 @@ The actual date of payment: Фактическая<br> дата оплаты
 pay: Оплаченые
 on: есть
 off: нет
-
+Delete: Удалить
+Add note: Добавить примечание
+Select data: Выберите дату
 Controlling: Управление
 debtors: дебиторы
 
@@ -28,6 +31,9 @@ days: Дней
 
 Number evidence: Номер свидетельства
 Responsible: Отвественный
+Add responsible: Добавить отвественого
+Select responsible:  Выберите отвественого
+Create New Contact: Создать контакт
 Dogovor: Договор
 Contacts client: Контакты клиента
 History: Исторя
@@ -62,7 +68,10 @@ In coutr: В суде
 Pay: Оплачен
 Not pay: Не оплачен
 
-
+Save: Сохранить
+Cancel: Отменить
+Create New Message: Создать примечание
+Current Message: Новое примечание
 FirstName: Имя
 LastName: Фамилия
 SurName: Отчество
@@ -84,6 +93,7 @@ Organization: Организация
 Contact type: Тип контакта
 Organization Name: Название организации
 Shared: Контакт виден для всех организаций группы
-
+Name: Название
+MPK: МПК
 
 Add Contact: Добавить контакт

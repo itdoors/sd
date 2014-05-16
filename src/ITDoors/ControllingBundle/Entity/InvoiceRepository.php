@@ -40,7 +40,8 @@ class InvoiceRepository extends EntityRepository
             ->addSelect('d.number as dogovorNumber')
             ->addSelect('d.startdatetime as dogovorStartDatetime')
             ->addSelect('performer.name as performerName')
-            ->addSelect('h.note as description');
+            ->addSelect('h.note as description')
+            ->addSelect('h.createdate as descriptiondate');
 
         return $res;
     }
@@ -73,7 +74,8 @@ class InvoiceRepository extends EntityRepository
             ->leftJoin('i.dogovor', 'd')
             ->leftJoin('d.performer', 'performer')
             ->leftJoin('o.city', 'c')
-            ->leftJoin('c.region', 'r')->leftJoin('i.messages', 'h')
+            ->leftJoin('c.region', 'r')
+            ->leftJoin('i.messages', 'h')
             ->andWhere('h.id = (SELECT max(h2.id) FROM ITDoorsControllingBundle:InvoiceMessage AS h2 WHERE h2.invoiceId = i.id)  OR h.id is NULL');
 
         return $res;
@@ -129,7 +131,8 @@ class InvoiceRepository extends EntityRepository
         /** where */
         $this->whereInvoicePeriod($res, $periodmin, $periodmax);
 
-        return $res->getQuery();
+        return $res
+            ->orderBy('i.delayDate', 'DESC')->getQuery();
     }
 
     /**
@@ -151,7 +154,8 @@ class InvoiceRepository extends EntityRepository
         /** where */
         $this->whereInvoicePeriod($rescount, $periodmin, $periodmax);
 
-        return $rescount->getQuery()->getSingleScalarResult();
+        return $rescount
+            ->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -172,7 +176,6 @@ class InvoiceRepository extends EntityRepository
         return $res
                 ->andWhere("i.court = :id")
                 ->andWhere("i.dateFact is NULL")
-                ->orderBy('i.delayDate', 'DESC')
                 ->setParameter(':id', $id)->getQuery();
     }
 

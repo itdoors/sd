@@ -125,3 +125,7 @@ sd_common_ajax_model_contact_type:
 sd_common_ajax_model_contact_save:
     pattern:  /ajax/model_contact/save
     defaults: { _controller: SDCommonBundle:Ajax:modelContactSave }
+
+sd_common_ajax_invoice_save:
+    pattern:  /ajax/invoice/save
+    defaults: { _controller: SDCommonBundle:Ajax:invoiceSave }

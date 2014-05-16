@@ -11,19 +11,20 @@ use Lists\DogovorBundle\Entity\DopDogovor;
 use Lists\DogovorBundle\Entity\DopDogovorRepository;
 use Lists\HandlingBundle\Entity\Handling;
 use Lists\HandlingBundle\Entity\HandlingMessage;
+use Lists\ContactBundle\Entity\ModelContactRepository;
+use Lists\OrganizationBundle\Entity\Organization;
+use Lists\HandlingBundle\Entity\HandlingMoreInfo;
 use SD\UserBundle\Entity\UserRepository;
+use SD\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Lists\ContactBundle\Entity\ModelContactRepository;
-use Lists\HandlingBundle\Entity\HandlingMoreInfo;
 use Symfony\Component\Form\Form;
-use SD\UserBundle\Entity\User;
-use Lists\OrganizationBundle\Entity\Organization;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use ITDoors\ControllingBundle\Entity\InvoiceMessage;
+use ITDoors\ControllingBundle\Entity\InvoiceCompanystructure;
 
 /**
  * AjaxController class.
@@ -835,7 +836,7 @@ class AjaxController extends Controller
 
         try {
             $em->flush();
-        }catch (\ErrorException $e) {
+        } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1028,7 +1029,7 @@ class AjaxController extends Controller
         $dogovorHistory->setDogovor($dogovor);
         $dogovorHistory->setUser($user);
         $dogovorHistory->setCreatedatetime(new \DateTime());
-
+        
         $prolongationDateFrom = new \DateTime();
 
         $prolongationDateTo = new \DateTime($requestParams['prolongationDateTo']);
@@ -1171,8 +1172,8 @@ class AjaxController extends Controller
     /**
      * Saves {formName}Save after valid ajax validation
      *
-     * @param Form    $form
-     * @param User    $user
+     * @param Form     $form
+     * @param User      $user
      * @param Request $request
      *
      * @return boolean
@@ -1205,6 +1206,44 @@ class AjaxController extends Controller
         $data->setUser($this->getUser());
 
         $data->setNote($formData['note']);
+        
+        $data->setCreatedate(new \DateTime());                
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form     $form
+     * @param User      $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function invoiceCompanystructureFormSave(Form $form, $user, $request)
+    {
+
+        /** @var \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $data */
+        $data = $form->getData();
+        
+        $formData = $request->request->get($form->getName());
+        
+        /** @var \Lists\ContactBundle\Entity\ModelContact $contact */
+        $company = $this->getDoctrine()
+            ->getRepository('ListsCompanystructureBundle:Companystructure')
+            ->find($formData['companystructure']);
+        $data->setCompanystructure($company);
+        
+        /** @var \ITDoors\ControllingBundle\Entity\Invoice $invoice */
+        $invoice = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice')
+            ->find($data->getInvoiceID());
+        $data->setInvoice($invoice);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
@@ -1393,6 +1432,28 @@ class AjaxController extends Controller
 
         return new Response('');
     }
+    
+    
+        /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function InvoiceCompanystructureDelete($params)
+    {
+        $id = $params['id'];
+
+        /** @var InvoiceCompanystructure $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
+            ->find($id);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
 
     /**
      * Deletes {entityName}Delete instance
@@ -1559,7 +1620,7 @@ class AjaxController extends Controller
             $em->flush();
 
             $em->refresh($object);
-        }catch (\ErrorException $e) {
+        } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1637,7 +1698,7 @@ class AjaxController extends Controller
 
         try {
             $em->flush();
-        }catch (\ErrorException $e) {
+        } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1675,7 +1736,7 @@ class AjaxController extends Controller
 
         try {
             $object = $query->getSingleResult();
-        }catch (\Doctrine\Orm\NoResultException $e) {
+        } catch (\Doctrine\Orm\NoResultException $e) {
             $object = null;
         }
 
@@ -1703,7 +1764,7 @@ class AjaxController extends Controller
 
         try {
             $em->flush();
-        }catch (\ErrorException $e) {
+        } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1759,7 +1820,7 @@ class AjaxController extends Controller
 
         try {
             $em->flush();
-        }catch (\ErrorException $e) {
+        } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1816,7 +1877,59 @@ class AjaxController extends Controller
 
         try {
             $em->flush();
-        }catch (\ErrorException $e) {
+        } catch (\ErrorException $e) {
+            $return = array('msg' => $translator->trans('Wrong input data'));
+
+            return new Response(json_encode($return));
+        }
+
+        $return = array('success' => 1);
+
+        return new Response(json_encode($return));
+    }
+
+    /**
+     * Saves object to db
+     *
+     * @return mixed[]
+     */
+    public function invoiceSaveAction()
+    {
+        $translator = $this->get('translator');
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        if($name == 'DateEnd'){
+            $value = new \DateTime($this->get('request')->request->get('value'));            
+        }else{
+            $value = $this->get('request')->request->get('value');            
+        }
+
+        $methodSet = 'set' . ucfirst($name);
+
+        $object = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice')
+            ->find($pk);
+
+        $object->$methodSet($value);
+
+        $validator = $this->get('validator');
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
+        $errors = $validator->validate($object, array('edit'));
+
+        if (sizeof($errors)) {
+            $return = $this->getFirstError($errors);
+
+            return new Response($return, 406);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+
+        try {
+            $em->flush();
+        } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1939,6 +2052,32 @@ class AjaxController extends Controller
                     ->andWhere('mc.modelId = :modelId')
                     ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
                     ->setParameter(':modelId', $organizationId);
+            }
+        ));
+    }
+
+    /**
+     * Adds children to {formName}ProcessDefaults depending on defaults in request
+     *
+     * @param Form $form
+     * @param mixed[] $defaultData
+     */
+    public function invoiceCompanystructureFormProcessDefaults($form, $defaultData)
+    {
+        $invoiceId = $defaultData['invoiceId'];
+
+        $form
+            ->add('companystructure', 'entity', array(
+                'class' => 'ListsCompanystructureBundle:Companystructure',
+                'empty_value' => '',
+                'required' => false,
+                'mapped' => false,
+                'query_builder' => function ($repository) use ($invoiceId) {
+                $repository = $this->getDoctrine()->getRepository('ListsCompanystructureBundle:Companystructure');
+                return $repository->createQueryBuilder('c')
+                    ->leftJoin('c.invoicecompanystructure', 'idc')
+                    ->where('(idc.invoiceId is NULL OR idc.invoiceId <> :invoiceId)')
+                    ->setParameter(':invoiceId', $invoiceId);
             }
         ));
     }
@@ -2182,7 +2321,7 @@ class AjaxController extends Controller
             ));
 
             $connection->commit();
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $connection->rollback();
             $em->close();
             throw $e;

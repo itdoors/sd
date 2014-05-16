@@ -3,7 +3,7 @@
 namespace ITDoors\ControllingBundle\Form;
 
 use ITDoors\ControllingBundle\Entity\Invoice;
-use ITDoors\ControllingBundle\Entity\InvoiceMessage;
+use ITDoors\ControllingBundle\Entity\InvoiceCompanystructure;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
@@ -14,9 +14,9 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 
 /**
- * InvoiceMessageFormType
+ * invoiceCompanystructureFormType
  */
-class InvoiceMessageFormType extends AbstractType
+class invoiceCompanystructureFormType extends AbstractType
 {
 
     protected $container;
@@ -39,28 +39,9 @@ class InvoiceMessageFormType extends AbstractType
     {
         $container = $this->container;
 
-        /** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
+        /** @var \ITDoors\ControllingBundle\Entity\InvoiceRepository $lr */
         $lr = $container->get('it_doors_controlling.repository');
 
-        $builder
-            ->add('note', 'textarea', array(
-                'required' => false,
-                'mapped' => false
-            ));
-
-        /** @var User $user */
-        $user = $container->get('security.context')->getToken()->getUser();
-//
-//        if ($user->hasRole('ROLE_SALESADMIN'))
-//        {
-        $builder
-            ->add('user', 'hidden_entity', array(
-                'entity' => 'SDUserBundle:User',
-                'data_class' => null,
-                'data' => $user
-            ))
-            ->add('createdate', 'hidden');
-//        }
         $builder
             ->add('create', 'submit')
             ->add('cancel', 'button');
@@ -84,25 +65,6 @@ class InvoiceMessageFormType extends AbstractType
                 $data = $event->getData();
 
                 $form = $event->getForm();
-
-                $currentDatetime = new \DateTime($data['createdate']);
-
-                if (isset($data['invoice_id']) && $data['invoice_id']) {
-                    $invoiceId = $data['invoice_id'];
-
-                    /** @var \ITDoors\ControllingBundle\Entity\Invoice $invoice */
-//                    $invoice = $container->get('doctrine.orm.entity_manager')
-//                        ->getRepository('ITDoorsControllingBundle:Invoice')
-//                        ->find($invoiceId);
-
-                    //                    if ($handling)
-                    //                    {
-                    //                        if ($handling->getDate() > $currentDatetime || $handling->getCreatedatetime() > $currentDatetime)
-                    //                        {
-                    //                            $form->addError(new FormError($msg));
-                    //                        }
-                    //                    }
-                }
             });
     }
 
@@ -112,7 +74,7 @@ class InvoiceMessageFormType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'ITDoors\ControllingBundle\Entity\InvoiceMessage',
+            'data_class' => 'ITDoors\ControllingBundle\Entity\InvoiceCompanystructure',
             'validation_groups' => array('new'),
             'translation_domain' => 'ListsHandlingBundle'
         ));
@@ -123,7 +85,7 @@ class InvoiceMessageFormType extends AbstractType
      */
     public function getName()
     {
-        return 'invoiceMessageForm';
+        return 'invoiceCompanystructureForm';
     }
 
 }

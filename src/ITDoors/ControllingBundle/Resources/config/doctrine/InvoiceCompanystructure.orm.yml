@@ -1,0 +1,36 @@
+# src/ITDoors/ControllingBundle/Resources/config/doctrine/InvoiceCompanystructure.orm.yml
+ITDoors\ControllingBundle\Entity\InvoiceCompanystructure:
+    type: entity
+    table: invoice_companystructure
+    repositoryClass: ITDoors\ControllingBundle\Entity\InvoiceCompanystructureRepository
+    id:
+        id:
+            type: integer
+            length: 10
+            generator: 
+                strategy: AUTO
+    fields:
+        invoiceId:
+            type: integer
+            length: 10
+            column: invoice_id
+            nullable: false
+        companystructureId:
+            type: integer
+            length: 10
+            column: companystructure_id
+            nullable: false
+    manyToOne:
+        invoice:
+            targetEntity: ITDoors\ControllingBundle\Entity\Invoice
+            inversedBy: null
+            joinColumn:
+                name: invoice_id
+                referencedColumnName: id
+        companystructure:
+            targetEntity: Lists\CompanystructureBundle\Entity\Companystructure
+            inversedBy: invoicecompanystructure
+            joinColumns:
+                companystructure_id:
+                    referencedColumnName: id
+            orphanRemoval: false

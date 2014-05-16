@@ -1,4 +1,28 @@
 {% trans_default_domain 'ITDoorsControllingBundle' %}
+
+<script>
+
+    $(document).ready(function() {
+
+                $('.datesave').editable({
+                    type: 'date',
+                    name: 'DateEnd',
+                    url: '{{ path('sd_common_ajax_invoice_save') }}',
+                    emptytext: '{% trans from 'messages' %}Enter value{% endtrans %}',
+                    datepicker: {
+                            rtl: App.isRTL(),
+                            autoclose: true,
+                            format: "dd.mm.yyyy",
+                            pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
+                            language: "ru",
+                            startView: 'month',
+                            //endDate: new Date(),
+                            weekStart: 1
+                        }
+                });
+            })
+</script>
+
 <div class="table-scrollable" id="invoice_list" data-url="{{ url('it_doors_controlling_invoice_show', { period: period }) }}">
     <div class="navigation">
         {{ ajax_paginator_render(
@@ -42,22 +66,58 @@
         <tbody role="alert" aria-live="polite" aria-relevant="all">
             {% for entity in entities %}
             <tr class="{{ cycle(['odd', 'even'], entity.invoiceId) }}">
-                <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.organizationName }}</a></td>
-                <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.performerName }}</a></td>
+                <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id, block:'organization'}) }}">{{ entity.organizationName }}</a></td>
+                <td class="">{{ entity.performerName }}</td>
                 <td class="">{{ entity.sum|number_format(2, ',', ' ')  }}</td>
-                <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceId }}</a> {{ entity.date is empty ? '' : entity.date|date("d.m.y") }}</td>
+                <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id, block:'invoice'}) }}">{{ entity.invoiceId }}</a> {{ entity.date is empty ? '' : entity.date|date("d.m.y") }}</td>
                 <td class="">{{ entity.dogovorActName }} {{ entity.dogovorActDate is empty ? '' : entity.dogovorActDate|date("d.m.y") }}</td>
                 <td class="">
+                    <a id="managers_list_new" class="fa ajax-form fa-plus" title="{% trans %}Add note{% endtrans %}"
+                       data-toggle="modal"
+                       href="#form_modal"
+                       data-target_holder="invoiceMessageFormTpl"
+                       data-default='{"invoiceId":"{{ entity.id }}"}'
+                       data-form_name="invoiceCompanystructureForm"
+                       data-post_function="updateList"
+                       data-post_target_id="invoice_list"
+                       ></a><br>
                     {% for responsible in responsibles[entity.id] %}
-                        {{ responsible.company.name }}<br>
+                    <a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id, block:'responsible'}) }}">
+                            {{ responsible.companystructure.name }}
+                    </a>
+                    <br>
                     {% endfor %}
                 </td>
-                <td class="">{{ entity.dogovorNumber }} {{ entity.dogovorStartDatetime is empty ? '' :  entity.dogovorStartDatetime|date("d.m.y") }}</td>
+                <td class="">
+                    <a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id, block:'dogovor'}) }}">
+                        {{ entity.dogovorNumber }}
+                    </a>
+                    {{ entity.dogovorStartDatetime is empty ? '' :  entity.dogovorStartDatetime|date("d.m.y") }}
+                </td>
                 <td class="">{{ entity.delayDate is empty ? '' :  entity.delayDate|date("d.m.y")  }} ({{ entity.delayDays }} {{ entity.delayDaysType }})</td>
                 <td class="">{% if entity.dogovorActOriginal is not empty %}{% trans %}on{% endtrans %}{% else %}{% trans %}off{% endtrans %}{% endif %}</td>
-                <td class="">{{ entity.description }}</td>
-                <td class="">{{ entity.dateEnd is empty ? '' : entity.dateEnd|date("d.m.y") }}</td>
-                <td class="">{{ entity.dateFact is empty ? '' : entity.dateFact|date("d.m.y") }}</td>
+                <td class="">
+                    <a id="managers_list_new" class="fa ajax-form fa-plus" title="{% trans %}Add note{% endtrans %}"
+                       data-toggle="modal"
+                       href="#form_modal"
+                       data-target_holder="invoiceMessageFormTpl"
+                       data-default='{"invoice_id":"{{ entity.id }}"}'
+                       data-form_name="invoiceMessageForm"
+                       data-post_function="updateList"
+                       data-post_target_id="invoice_list"
+                       ></a>
+                    ({{entity.descriptiondate|date('d.m.y H:i')}}) {{ entity.description }}
+                </td>
+                <td class="">
+                    <a href="#" 
+                       class="datesave fa fa-plus" data-pk="{{ entity.id }}"
+                       data-original-title="{% trans %}Select data{% endtrans %}"
+                       data-date="{{entity.dateEnd|date("d.m.Y")}}"
+                       data-format="dd.mm.yyyy"> 
+                        {{ entity.dateEnd is empty ? '' : entity.dateEnd|date("d.m.Y") }}
+                    </a>
+                </td>
+                <td class="">{{ entity.dateFact is empty ? '' : entity.dateFact|date("d.m.Y") }}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -69,5 +129,20 @@
                 }
             )
         }}
+    </div>
+    {# modal window #}
+    <div id="form_modal" class="modal fade" role="basic" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="invoiceMessageFormTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
     </div>
 </div>
