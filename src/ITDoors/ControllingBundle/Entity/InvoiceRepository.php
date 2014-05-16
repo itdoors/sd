@@ -20,6 +20,20 @@ class InvoiceRepository extends EntityRepository
      * 
      * @return mixed[]
      */
+    public function selectInvoiceSum($res)
+    {
+        $res
+            ->select('Sum(i.sum) as summa');
+
+        return $res;
+    }
+    /**
+     * Returns results for interval future invoice
+     *
+     * @param query $res Description
+     * 
+     * @return mixed[]
+     */
     public function selectInvoicePeriod($res)
     {
         $res
@@ -161,6 +175,28 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
+     * @param int $periodmin Description
+     * 
+     * @param int $periodmax 0 - no restrictions
+     *
+     * @return int count
+     */
+    public function getInvoicePeriodSum($periodmin, $periodmax)
+    {
+
+        $res = $this->createQueryBuilder('i');
+
+        /** select */
+        $this->selectInvoiceSum($res);
+        /** where */
+        $this->whereInvoicePeriod($res, $periodmin, $periodmax);
+
+        return $res->getQuery()->getResult();
+    }
+
+    /**
+     * Returns results for interval future invoice
+     *
      * @return mixed[]
      */
     public function getInvoiceCourt()
@@ -177,6 +213,26 @@ class InvoiceRepository extends EntityRepository
                 ->andWhere("i.court = :id")
                 ->andWhere("i.dateFact is NULL")
                 ->setParameter(':id', $id)->getQuery();
+    }
+    /**
+     * Returns results for interval future invoice
+     *
+     * @return mixed[]
+     */
+    public function getInvoiceCourtSum()
+    {
+        $id = 1;
+
+        $res = $this->createQueryBuilder('i');
+        /** select */
+        $this->selectInvoiceSum($res);
+        /** join */
+        $this->joinInvoicePeriod($res);
+
+        return $res
+                ->andWhere("i.court = :id")
+                ->andWhere("i.dateFact is NULL")
+                ->setParameter(':id', $id)->getQuery()->getResult();
     }
 
     /**
@@ -217,6 +273,23 @@ class InvoiceRepository extends EntityRepository
             ->orderBy('i.dateEnd', 'DESC');
 
         return $res->getQuery();
+    }
+    /**
+     * Returns results for interval future invoice
+     *
+     * @return mixed[]
+     */
+    public function getInvoicePaySum()
+    {
+        $res = $this->createQueryBuilder('i');
+        /** select */
+        $this->selectInvoiceSum($res);
+        /** join */
+        $this->joinInvoicePeriod($res);
+        /** where */
+        $res = $res->andWhere("i.dateFact is not NULL");
+
+        return $res->getQuery()->getResult();
     }
 
     /**

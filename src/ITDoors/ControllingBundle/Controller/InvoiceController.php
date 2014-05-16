@@ -59,30 +59,37 @@ class InvoiceController extends BaseFilterController
             case 30:
                 $entities = $invoice->getInvoicePeriod(1, 30);
                 $count = $invoice->getInvoicePeriodCount(1, 30);
+                $sum = $invoice->getInvoicePeriodSum(1, 30);
                 break;
             case 60:
                 $entities = $invoice->getInvoicePeriod(31, 60);
                 $count = $invoice->getInvoicePeriodCount(31, 60);
+                $sum = $invoice->getInvoicePeriodSum(31, 60);
                 break;
             case 120:
                 $entities = $invoice->getInvoicePeriod(61, 120);
                 $count = $invoice->getInvoicePeriodCount(61, 120);
+                $sum = $invoice->getInvoicePeriodSum(61, 120);
                 break;
             case 180:
                 $entities = $invoice->getInvoicePeriod(121, 180);
                 $count = $invoice->getInvoicePeriodCount(121, 180);
+                $sum = $invoice->getInvoicePeriodSum(121, 180);
                 break;
             case 181:
                 $entities = $invoice->getInvoicePeriod(181, 0);
                 $count = $invoice->getInvoicePeriodCount(181, 0);
+                $sum = $invoice->getInvoicePeriodSum(181, 0);
                 break;
             case 'court':
                 $entities = $invoice->getInvoiceCourt();
                 $count = $invoice->getInvoiceCourtCount();
+                $sum = $invoice->getInvoiceCourtSum();
                 break;
             case 'pay':
                 $entities = $invoice->getInvoicePay();
                 $count = $invoice->getInvoicePayCount();
+                $sum = $invoice->getInvoicePaySum();
                 break;
         }
 
@@ -111,6 +118,7 @@ class InvoiceController extends BaseFilterController
                 'period' => $period,
                 'entities' => $pagination,
                 'responsibles' => $responsibles,
+                'sum' => $sum
         ));
     }
 

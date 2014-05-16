@@ -29,6 +29,7 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
 <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.css')}} " />
 <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}} " />
+<link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
 {% endblock %}
 
 {% block js_page_level_plugins %}
@@ -40,13 +41,15 @@
 <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
 <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
 <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
+<script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+<script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.js') }}"></script>
 <script type="text/javascript" src="{{ asset('bundles/itdoorscontrolling/js/invoice.js') }}"></script>
 {% endblock %}
 
 {% block body %}
 <div class="row">
     <div class="col-md-12">
-        <div class="tabbable tabbable-custom boxless">
+        <div class="tabbable boxless">
             <ul class="nav nav-tabs">
                 <li{% if block == 'invoice' %} class="active"<{% endif %}><a href="#tab_0" data-toggle="tab" data-block-id="block-ajax" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'invoice'}) }}">{% trans %}Invoice{% endtrans %}</a></li>
                 <li{% if block == 'contacts' %} class="active"<{% endif %}><a href="#tab_1" data-toggle="tab"  data-block-id="block-ajax" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'contacts' }) }}">{% trans %}Contacts client{% endtrans %}</a></li>
