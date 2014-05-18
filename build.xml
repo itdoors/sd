@@ -20,8 +20,13 @@
     <property name="bin.phpunit" value="phpunit" />
     <property name="bin.phpcs" value="${path.bin}/phpcs" />
 
-    <target name="build" depends="build:phpcs">
+    <target name="build" depends="build:prepare,build:phpcs">
         <echo msg="Building project ${phing.project.name}" />
+    </target>
+
+    <target name="build:prepare">
+        <echo msg="Coping build custom properties" />
+        <copy file="${project.basedir}/build.properties.dist" tofile="${project.basedir}/build.properties" overwrite="true" />
     </target>
 
     <target name="build:phpcs" description="Find coding standard violations using PHP_CodeSniffer">

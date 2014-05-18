@@ -1,1 +1,1 @@
-path.phpcs.src=src
+path.phpcs.src=src/ITDoors/AjaxBundle/Controller/FormController.php
