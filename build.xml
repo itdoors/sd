@@ -24,7 +24,7 @@
         <echo msg="Building project ${phing.project.name}" />
     </target>
 
-    <target name="build:prepare" depends="build:properties,build:submodules">
+    <target name="build:prepare" depends="build:properties">
         <echo msg="Preparing" />
     </target>
 
