@@ -47,6 +47,12 @@
         <echo msg="PHP CodeStyle is OK" />
     </target>
 
+    <target name="build:deploy" description="Deploying to server">
+        <exec executable="cap deploy" passthru="true" checkreturn="true">
+        </exec>
+        <echo msg="PHP CodeStyle is OK" />
+    </target>
+
     <target name="build:test" description="Run tests with PHPUnit">
         <exec command="${bin.phpunit} -c app" dir="${project.basedir}" passthru="true" checkreturn="true" />
     </target>
