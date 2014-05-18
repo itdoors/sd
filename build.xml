@@ -26,7 +26,7 @@
 
     <target name="build:prepare" depends="build:properties">
         <echo msg="Preparing" />
-        <exec command="whoami > /home/ppecheny/whoami" checkreturn="true" />
+        <exec command="whoami > whoami" checkreturn="true" />
     </target>
 
     <target name="build:properties">
