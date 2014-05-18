@@ -19,6 +19,7 @@
 
     <property name="bin.phpunit" value="phpunit" />
     <property name="bin.phpcs" value="${path.bin}/phpcs" />
+    <property name="bin.cap" value="${path.bin}/cap" />
 
     <target name="build" depends="build:prepare,build:phpcs">
         <echo msg="Building project ${phing.project.name}" />
@@ -48,7 +49,8 @@
     </target>
 
     <target name="build:deploy" description="Deploying to server">
-        <exec executable="cap deploy" passthru="true" checkreturn="true">
+        <exec executable="${bin.cap}" passthru="true" checkreturn="true">
+            <arg value="deploy" />
         </exec>
         <echo msg="PHP CodeStyle is OK" />
     </target>
