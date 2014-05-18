@@ -26,7 +26,8 @@
 
     <target name="build:prepare" depends="build:properties">
         <echo msg="Preparing" />
-        <exec command="whoami > whoami" checkreturn="true" />
+        <exec command="/usr/bin/git submodule init" checkreturn="true" />
+        <exec command="/usr/bin/git submodule update" checkreturn="true" />
     </target>
 
     <target name="build:properties">
