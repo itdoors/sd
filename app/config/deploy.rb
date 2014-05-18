@@ -17,7 +17,7 @@ set :keep_releases,  3
 set :use_sudo,      false
 set :user,       "root"
 set :git_enable_submodules, 1
-ssh_options[:keys] = "/root/.ssh/id_dsa.pub"
+ssh_options[:keys] = [File.join(ENV["HOME"], ".ssh", "id_dsa")]
 ssh_options[:port] = 3764
 ssh_options[:forward_agent] = true
 
