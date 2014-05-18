@@ -4,7 +4,7 @@
     <property file="${project.basedir}/build.properties" />
 
     <property name="path.bin" value="/usr/local/bin" />
-    <property name="phpcs.standard" value="Symfony2" />
+    <property name="phpcs.standard" value="PSR2" />
 
     <property name="dir.build" value="build" />
     <property name="dir.cache" value="app/cache" />
