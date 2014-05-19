@@ -28,11 +28,15 @@ set :shared_children,     [app_path + "/logs", web_path + "/uploads"]
 
 set :cache_warmup,        false
 set :use_composer,        true
+set :webserver_user,      "nginx"
 
 after "deploy:update_code" do
   capifony_pretty_print "--> Ensuring cache directory permissions"
-  run "setfacl -R -m u:\"nginx\":rwX -m u:`whoami`:rwX #{latest_release}/#{cache_path}"
-  run "setfacl -dR -m u:\"nginx\":rwX -m u:`whoami`:rwX #{latest_release}/#{cache_path}"
+  run "chmod 777 -R #{latest_release}/#{cache_path}"
+  run "setfacl -R -m u:nginx:rwX -m u:`whoami`:rwX #{latest_release}/#{cache_path}"
+  run "setfacl -dR -m u:nginx:rwX -m u:`whoami`:rwX #{latest_release}/#{cache_path}"
+  capifony_puts_ok
+  symfony.cache.warmup
   capifony_puts_ok
 end
 
