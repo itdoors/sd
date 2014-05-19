@@ -31,9 +31,8 @@ set :use_composer,        true
 
 after "deploy:update_code" do
   capifony_pretty_print "--> Ensuring cache directory permissions"
-  run "HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`"
-  run "setfacl -R -m u:\"$HTTPDUSER\":rwX -m u:`whoami`:rwX #{latest_release}/#{cache_path}"
-  run "setfacl -dR -m u:\"$HTTPDUSER\":rwX -m u:`whoami`:rwX #{latest_release}/#{cache_path}"
+  run "setfacl -R -m u:\"nginx\":rwX -m u:`whoami`:rwX #{latest_release}/#{cache_path}"
+  run "setfacl -dR -m u:\"nginx\":rwX -m u:`whoami`:rwX #{latest_release}/#{cache_path}"
   capifony_puts_ok
 end
 
