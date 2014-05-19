@@ -7,6 +7,7 @@
     <div>{{ error|trans }}</div>
 {% endif %}
     <div>
+        23423
     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
         {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
         <a href="{{ path('fos_user_security_logout') }}">
