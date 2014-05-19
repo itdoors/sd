@@ -7,6 +7,10 @@ set :repository,  "git@github.com:itdoors/sd.git"
 set :scm,         :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `subversion`, `mercurial`, `perforce`, or `none`
 
+#git
+set :branch, "dev-master"
+set :git_enable_submodules, 1
+
 set :model_manager, "doctrine"
 # Or: `propel`
 
@@ -16,7 +20,7 @@ role :app,        domain, :primary => true       # This may be the same as your 
 set :keep_releases,  3
 set :use_sudo,      false
 set :user,       "root"
-set :git_enable_submodules, 1
+
 ssh_options[:keys] = [File.join(ENV["HOME"], ".ssh", "id_dsa")]
 ssh_options[:port] = 3764
 ssh_options[:forward_agent] = true
@@ -24,10 +28,13 @@ ssh_options[:forward_agent] = true
 default_run_options[:pty] = true
 
 set :shared_files,        ["app/config/parameters.yml"]
-set :shared_children,     [app_path + "/logs", web_path + "/uploads"]
+set :shared_children,     [app_path + "/logs", web_path + "/uploads", "vendor"]
+
+#composer
+set :use_composer,        true
+set :update_vendors,      true
 
 set :cache_warmup,        false
-set :use_composer,        true
 set :webserver_user,      "nginx"
 
 after "deploy:update_code" do
@@ -40,5 +47,6 @@ after "deploy:update_code" do
   capifony_puts_ok
 end
 
+after "deploy", "deploy:cleanup"
 # Be more verbose by uncommenting the following line
 # logger.level = Logger::MAX_LEVEL
