@@ -263,6 +263,7 @@ class InvoiceRepository extends EntityRepository
      */
     public function getInvoicePay()
     {
+         $date = date('Y-m-d', time()- 2592000);
         $res = $this->createQueryBuilder('i');
         /** select */
         $this->selectInvoicePeriod($res);
@@ -270,6 +271,7 @@ class InvoiceRepository extends EntityRepository
         $this->joinInvoicePeriod($res);
         /** where */
         $res = $res->andWhere("i.dateFact is not NULL")
+            ->andWhere("i.dateFact >= :date")->setParameter(':date', $date)
             ->orderBy('i.dateEnd', 'DESC');
 
         return $res->getQuery();
@@ -281,13 +283,14 @@ class InvoiceRepository extends EntityRepository
      */
     public function getInvoicePaySum()
     {
+         $date = date('Y-m-d', time()-2592000);
         $res = $this->createQueryBuilder('i');
         /** select */
         $this->selectInvoiceSum($res);
         /** join */
         $this->joinInvoicePeriod($res);
         /** where */
-        $res = $res->andWhere("i.dateFact is not NULL");
+        $res = $res->andWhere("i.dateFact is not NULL")->andWhere("i.dateFact >= :date")->setParameter(':date', $date);
 
         return $res->getQuery()->getResult();
     }
@@ -299,12 +302,13 @@ class InvoiceRepository extends EntityRepository
      */
     public function getInvoicePayCount()
     {
+        $date = date('Y-m-d', time()-2592000);
         $rescount = $this->createQueryBuilder('i');
 
         /** select */
         $this->selectInvoicePeriodCount($rescount);
         /** where */
-        $rescount = $rescount->andWhere("i.dateFact is not NULL");
+        $rescount = $rescount->andWhere("i.dateFact is not NULL")->andWhere("i.dateFact >= :date")->setParameter(':date', $date);
 
         return $rescount->getQuery()->getSingleScalarResult();
     }

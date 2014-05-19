@@ -3,13 +3,13 @@
 <script>
 
     $(document).ready(function() {
-                $('.datesave').editable({
-                    type: 'date',
-                    name: 'DateEnd',
-                    url: '{{ path('sd_common_ajax_invoice_save') }}',
-                    emptytext: '{% trans from 'messages' %}Enter value{% endtrans %}',
-                    clear: '{% trans from 'ITDoorsControllingBundle' %}clear{% endtrans %}<i class="icon-remove fa fa-times" style="font-size:12px"></i>',
-                    datepicker: {
+        $('.datesave').editable({
+            type: 'date',
+            name: 'DateEnd',
+            url: '{{ path('sd_common_ajax_invoice_save') }}',
+            emptytext: '{% trans from 'messages' %}Enter value{% endtrans %}',
+                        clear: '{% trans from 'ITDoorsControllingBundle' %}clear{% endtrans %}<i class="icon-remove fa fa-times" style="font-size:12px"></i>',
+                        datepicker: {
                             rtl: App.isRTL(),
                             autoclose: true,
                             format: "dd.mm.yyyy",
@@ -18,8 +18,9 @@
                             startView: 'month',
                             weekStart: 1
                         }
+                    });
                 });
-            })
+                
 </script>
 
 <div class="table-scrollable" id="invoice_list" data-url="{{ url('it_doors_controlling_invoice_show', { period: period }) }}">
@@ -93,7 +94,7 @@
                     </a>
                     {{ entity.dogovorStartDatetime is empty ? '' :  entity.dogovorStartDatetime|date("d.m.y") }}
                 </td>
-                <td class="">{{ entity.delayDate is empty ? '' :  entity.delayDate|date("d.m.y")  }} ({{ entity.delayDays }} {{ entity.delayDaysType }})</td>
+                <td class="">{{ entity.delayDate is empty ? '' :  entity.delayDate|date("d.m.y")  }} {% if entity.delayDays is not empty %} ({{ entity.delayDays}} {{ entity.delayDaysType }}) {% endif %}</td>
                 <td class="">{% if entity.dogovorActOriginal is not empty %}{% trans %}on{% endtrans %}{% else %}{% trans %}off{% endtrans %}{% endif %}</td>
                 <td class="">
                     <a id="managers_list_new" class="fa ajax-form fa-plus" title="{% trans %}Add note{% endtrans %}"
@@ -105,7 +106,7 @@
                        data-post_function="updateList"
                        data-post_target_id="invoice_list"
                        ></a>
-                    ({{ entity.descriptiondate is empty ? '' :  entity.descriptiondate|date("d.m.y")  }}) {{ entity.description }}
+                    {{ entity.descriptiondate is empty ? '' : '('~entity.descriptiondate |date("d.m.y")~')'}} {{ entity.description }}
                 </td>
                 <td class="">
                     <a href="#" 
@@ -122,7 +123,7 @@
             <tr class="">
                 <td colspan="2"></td>
                 <td class="">{{ sum.0.summa|number_format(2, ',', ' ') }}</td>
-                <td colspan="8" class=""></td>
+                <td colspan="9" class=""></td>
             </tr>
         </tbody>
     </table>
