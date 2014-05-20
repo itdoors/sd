@@ -708,4 +708,32 @@ class Invoice
     {
         return $this->dogovor;
     }
+    /**
+     * @var string
+     */
+    private $dogovorId1c;
+
+
+    /**
+     * Set dogovorId1c
+     *
+     * @param string $dogovorId1c
+     * @return Invoice
+     */
+    public function setDogovorId1c($dogovorId1c)
+    {
+        $this->dogovorId1c = $dogovorId1c;
+    
+        return $this;
+    }
+
+    /**
+     * Get dogovorId1c
+     *
+     * @return string 
+     */
+    public function getDogovorId1c()
+    {
+        return $this->dogovorId1c;
+    }
 }

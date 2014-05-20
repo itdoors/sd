@@ -3,11 +3,13 @@
 namespace ITDoors\ControllingBundle\Controller;
 
 use ITDoors\ControllingBundle\Entity\Invoice;
+use Lists\DogovorBundle\Entity\Dogovor;
 use ITDoors\ControllingBundle\Entity\InvoiceCompanystructure;
 use ITDoors\ControllingBundle\Entity\InvoiceRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use ITDoors\AjaxBundle\Controller\BaseFilterController;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * InvoiceController
@@ -102,9 +104,7 @@ class InvoiceController extends BaseFilterController
         $paginator = $this->get('knp_paginator');
 
         $entities->setHint('knp_paginator.count', $count);
-        $pagination = $paginator->paginate(
-            $entities, $page, 20
-        );
+        $pagination = $paginator->paginate($entities, $page, 20);
         $responsibles = array();
 
         foreach ($pagination as $val) {
@@ -182,7 +182,7 @@ class InvoiceController extends BaseFilterController
                 $dogovor = $this->getDoctrine()
                     ->getRepository('ListsDogovorBundle:Dogovor')
                     ->find($invoiceObj->getDogovor());
-                $organizationId = $dogovor->getCustomerId() ? $dogovor->getCustomerId() : ($dogovor->getOrganization() ? $dogovor->getOrganization()->getId() : $invoiceObj->getOrganization()->getId());
+                $organizationId = $dogovor->getCustomerId();
                 $entitie = $this->getDoctrine()
                     ->getRepository('ListsOrganizationBundle:Organization')
                     ->find($organizationId);
@@ -201,7 +201,7 @@ class InvoiceController extends BaseFilterController
                 $dogovor = $this->getDoctrine()
                     ->getRepository('ListsDogovorBundle:Dogovor')
                     ->find($invoiceObj->getDogovor());
-                $organizationId = $dogovor->getCustomerId() ? $dogovor->getCustomerId() : ($dogovor->getOrganization() ? $dogovor->getOrganization()->getId() : $invoiceObj->getOrganization()->getId());
+                $organizationId = $dogovor->getCustomerId();
                 $entitie = $this->getDoctrine()
                     ->getRepository('ListsContactBundle:ModelContact')
                     ->findBy(array('modelName' => 'organization', 'modelId' => $organizationId));
@@ -209,7 +209,7 @@ class InvoiceController extends BaseFilterController
                     ->getRepository('ListsDogovorBundle:Dogovor')
                     ->find($invoiceObj->getDogovor());
 
-                $organizationId = $dogovor->getCustomerId() ? $dogovor->getCustomerId() : ($dogovor->getOrganization() ? $dogovor->getOrganization()->getId() : $invoiceObj->getOrganization()->getId());
+                $organizationId = $dogovor->getCustomerId();
                 break;
             case 'history':
                 $entitie = '';
@@ -247,4 +247,236 @@ class InvoiceController extends BaseFilterController
         ));
     }
 
+    /**
+     *  cronAction
+     * 
+     * @return html Description
+     */
+    public function cronAction()
+    {
+        $logger = $this->get('logger');
+        // directory
+        $directory = '../app/share/1c/debt/';
+        // name file
+        $file = '544384351.json';
+
+        if (is_file($directory . $file)) {
+            $json = json_decode(file_get_contents($directory . $file));
+            switch (json_last_error()) {
+                case JSON_ERROR_NONE:
+                    $this->savejson($json->invoice);
+                    break;
+                case JSON_ERROR_DEPTH:
+                    echo ' - Достигнута максимальная глубина стека';
+                    $logger->err('Достигнута максимальная глубина стека');
+                    break;
+                case JSON_ERROR_STATE_MISMATCH:
+                    $logger->err('Некорректные разряды');
+                    break;
+                case JSON_ERROR_CTRL_CHAR:
+                    echo ' - Некорректный управляющий символ';
+                    $logger->err('Некорректный управляющий символ');
+                    break;
+                case JSON_ERROR_SYNTAX:
+                    $logger->err('error format JSON');
+                    break;
+                case JSON_ERROR_UTF8:
+                    $logger->err('error UTF-8');
+                    break;
+                default:
+                    $logger->err('error not found');
+                    break;
+            }
+        } else {
+            $logger->err('ITDoors\ControllingBundle\Controller\Invoice:cronAction file not found');
+        }
+
+        return new Response('<html><body> Hello cron!</body></html>');
+    }
+
+    /**
+     *  savejson
+     *
+     * @param json $json Description
+     * 
+     * @return boolen
+     */
+    private function savejson($json)
+    {
+
+        $status = array();
+
+        foreach ($json as $invoice) {
+            $status[$invoice->invoice_id] = array();
+            $status[$invoice->invoice_id]['errors'] = array();
+            // поиск в базе
+            $em = $this->getDoctrine()->getManager();
+            $invoiceObj = $em->getRepository('ITDoorsControllingBundle:Invoice')
+                ->findOneBy(array('invoiceId' => $invoice->invoice_id));
+
+            // Не найден счет
+            if (!$invoiceObj) {
+                $status[$invoice->invoice_id]['status'] = 'creat';
+
+                // добавления invoice
+                $invoiceNew = new Invoice();
+                $invoiceNew->setInvoiceId($invoice->invoice_id);
+                $invoiceNew->setDogovorId1c($invoice->dogovor_id_1c);
+                $invoiceNew->setSum($invoice->sum);
+                if (!empty($invoice->date)) {
+                    $invoiceNew->setDate(new \DateTime($invoice->date));
+                } else {
+                    $status[$invoice->invoice_id]['errors']['date'] = $invoice->date;
+                }
+                if (!empty($invoice->delay_date)) {
+                    $invoiceNew->setDelayDate(new \DateTime($invoice->delay_date));
+                } else {
+                    $status[$invoice->invoice_id]['errors']['delay_date'] = $invoice->delay_date;
+                }
+                if (is_numeric($invoice->delay_days)) {
+                    $invoiceNew->setDelayDays((int) $invoice->delay_days);
+                } else {
+                    $status[$invoice->invoice_id]['errors']['delay_days'] = $invoice->delay_days;
+                }
+                if (in_array($invoice->delay_days_type, array('Б', 'К'))) {
+                    $invoiceNew->setDelayDaysType($invoice->delay_days_type);
+                } else {
+                    $status[$invoice->invoice_id]['errors']['delay_days_type'] = $invoice->delay_days_type;
+                }
+                if (!empty($invoice->date_fact)) {
+                    $invoiceNew->setDateFact(new \DateTime($invoice->date_fact));
+                }
+                $invoiceNew->setDogovorId1c($invoice->dogovor_id_1c);
+                $invoiceNew->setDogovorNumber($invoice->dogovor_number);
+                $invoiceNew->setDogovorName($invoice->dogovor_name);
+                if (!empty($invoice->dogovor_date)) {
+                    $invoiceNew->setDogovorDate(new \DateTime($invoice->dogovor_date));
+                } else {
+                    $status[$invoice->invoice_id]['errors']['dogovor_date'] = $invoice->dogovor_date;
+                }
+                $invoiceNew->setDogovorUUIE($invoice->dogovor_uuie);
+                $invoiceNew->setDogovorActName($invoice->dogovor_act_name);
+                if (!empty($invoice->dogovor_act_date)) {
+                    $invoiceNew->setDogovorActDate(new \DateTime($invoice->dogovor_act_date));
+                } else {
+                    $status[$invoice->invoice_id]['errors']['dogovor_act_date'] = $invoice->dogovor_act_date;
+                }
+                $invoiceNew->setDogovorActOriginal($invoice->dogovor_act_original);
+                $invoiceNew->setOrganizationName($invoice->organization_name);
+                $invoiceNew->setOrganizationEdrpou($invoice->organization_edrpou);
+                $invoiceNew->setOrganizationEdrpouDoer($invoice->organization_edrpou_doer);
+                $invoiceNew->setCourt($invoice->court);
+
+                // get  dogovor id 1C
+                $dogovorfind = $em->getRepository('ListsDogovorBundle:Dogovor')
+                    ->findOneBy(array('dogovorId1c' => $invoice->dogovor_id_1c));
+                // договор не найден
+                if (!$dogovorfind) {
+                    //customer заказчика ищем
+                    $customerfind = $em->getRepository('ListsOrganizationBundle:Organization')
+                        ->findOneBy(array('edrpou' => $invoice->organization_edrpou));
+                    //performer исполнителья ищем
+                    $performerfind = $em->getRepository('ListsOrganizationBundle:Organization')
+                        ->findOneBy(array('edrpou' => $invoice->organization_edrpou_doer));
+
+                    // если заказчик и исполнитель найден
+                    if ($customerfind && $performerfind) {
+                        // ищем договор на 4 полям
+                        $dogovoradd = $em->getRepository('ListsDogovorBundle:Dogovor')
+                            ->findOneBy(array(
+                            'number' => $invoice->dogovor_number,
+                            'startdatetime' => $invoice->dogovor_date,
+                            'customer_id' => $customerfind->getId(),
+                            'performer_id' => $performerfind->getId(),
+                        ));
+                        if (!$dogovoradd) {
+                            // добавить договор
+                            $dogovorNew = new Dogovor();
+                            $dogovorNew->setNumber($invoice->dogovor_number);
+                            $dogovorNew->setName($invoice->dogovor_name);
+                            $dogovorNew->setStartdatetime(new \DateTime($invoice->dogovor_date));
+                            $dogovorNew->setCustomerId($customerfind->getId());
+                            $dogovorNew->setPerformerId($performerfind->getId());
+
+                            $status[$invoice->invoice_id]['dogovor'] = 'add new';
+//                            $em->persist($dogovorNew);
+//                            $em->flush();
+                        } else {
+                            // подтвердить связь и 1С
+                            $dogovoradd->setDogovorId1c($invoice->dogovor_id_1c);
+
+                            $status[$invoice->invoice_id]['dogovor'] = 'update ' . $dogovoradd->getId();
+//                            $em->persist($dogovoradd);
+//                            $em->flush();
+
+                            $invoiceNew->setDogovorId($dogovoradd->getId);
+                        }
+                        // если не найден заказчик\исполнитель
+                    } else {
+                        // не найден заказчик
+                        if (!$customerfind) {
+                            $status[$invoice->invoice_id]['errors']['organization_edrpou'] = 'customer not fount';
+                        }
+                        // не найден исполнитель
+                        if (!$performerfind) {
+                            $status[$invoice->invoice_id]['errors']['organization_edrpou_doer'] = 'performer not fount';
+                        }
+                    }
+                    // договор найден по id 1C
+                } else {
+                    $invoiceNew->setDogovorId($dogovorfind->getId());
+                }
+
+                // save invoice
+                $em->persist($invoiceNew);
+                $em->flush();
+
+                // отвественых по договору =отвественных по счету
+                if (!empty($invoiceNew->getDogovorId())) {
+                    $companystructs = $em->getRepository('ListsDogovorBundle:DogovorCompanystructure')
+                        ->findBy(array('dogovorId' => $invoiceNew->getDogovorId()));
+                    foreach ($companystructs as $company) {
+                        // add invoice_companystructure
+                        $invoicecompany = new InvoiceCompanystructure();
+                        $invoicecompany->setInvoiceId($invoiceNew->getId());
+                        $invoicecompany->setCompanystructureId($company->getCompanystructureId());
+
+                        $em->persist($invoicecompany);
+                        $em->flush();
+                    }
+                }
+
+                $status[$invoice->invoice_id]['result'] = 'create';
+
+
+                // Найден  счет
+            } else {
+                $status[$invoice->invoice_id]['status'] = 'update';
+//                $status[] = $invoice->invoice_id . ' found (need update:
+//                 date_fact, court,dogovor_act_oroginal,
+//                  delay_days,delay_days_type) ';
+                // обновить данные, (Дата оплаты,
+                //  статус в суде,
+                //  наличие оригинала акта, отсрочка)
+
+                if (!empty($invoice->date_fact)) {
+                    $invoiceObj->setDateFact(new \DateTime($invoice->date_fact));
+//                } else {
+//                    $status[$invoice->invoice_id]['errors']['date_fact'] = $invoice->date_fact;
+                }
+                $invoiceObj->setCourt($invoice->court);
+                $invoiceObj->setDogovorActOriginal($invoice->dogovor_act_original);
+                if (is_numeric($invoice->delay_days)) {
+                    $invoiceObj->setDelayDays((int) $invoice->delay_days);
+                } else {
+                    $status[$invoice->invoice_id]['errors']['delay_days'] = $invoice->delay_days;
+                }
+                $invoiceObj->setDelayDaysType($invoice->delay_days_type);
+                $em->flush();
+
+                $status[$invoice->invoice_id]['result'] = 'update';
+            }
+        }
+        echo json_encode($status);
+    }
 }

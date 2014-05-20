@@ -6,7 +6,7 @@ parameters:
     lists_handling.sales.wizard.form.class: Lists\HandlingBundle\Form\HandlingSalesWizardForm
     lists_handling.message.form.class: Lists\HandlingBundle\Form\HandlingMessageFormType
     itdoors_controlling.message.form.class: ITDoors\ControllingBundle\Form\InvoiceMessageFormType
-    itdoors_controlling.company.form.class: ITDoors\ControllingBundle\Form\invoiceCompanystructureFormType
+    itdoors_controlling.company.form.class: ITDoors\ControllingBundle\Form\InvoiceCompanystructureFormType
     lists_handling.message.wizard.form.class: Lists\HandlingBundle\Form\HandlingMessageWizardForm
     lists_handling.form.user.class: Lists\HandlingBundle\Form\HandlingUserFormType
     lists_handling.sales.form.report.class: Lists\HandlingBundle\Form\HandlingReportDateRangeForm

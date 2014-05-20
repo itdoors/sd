@@ -1,0 +1,46 @@
+{
+  "invoice": [
+    {
+      "invoice_id": 1254,
+      "sum": 100.20,
+      "date": "2014-12-30",
+      "delay_date": "2014-12-30",
+      "delay_days": 30,
+      "delay_days_type": "Б",
+      "date_fact": null,
+      "dogovor_id_1c": "5es8DW",
+      "dogovor_number": "6854996",
+      "dogovor_name": "\"OOO\" Название договора",
+      "dogovor_date": "2014-12-30 10:10:00",
+      "dogovor_uuie": "5465455",
+      "dogovor_act_name": "Имя акта",
+      "dogovor_act_date": "2014-12-30",
+      "dogovor_act_original": false,
+      "organization_name": "Имя заказчика",
+      "organization_edrpou": "edrpou заказчика",
+      "organization_edrpou_doer": "edrpou исполнителя",
+      "court": 0
+    },
+    {
+      "invoice_id": 125,
+      "sum": 100.20,
+      "date": "2014-12-30",
+      "delay_date": "2014-12-30",
+      "delay_days": 30,
+      "delay_days_type": "Б",
+      "date_fact": "2010-12-30",
+      "dogovor_id_1c": "5es8DW",
+      "dogovor_number": "6854996",
+      "dogovor_name": "\"OOO\" Название договора",
+      "dogovor_date": "2014-12-30",
+      "dogovor_uuie": "54654",
+      "dogovor_act_name": "Имя акта",
+      "dogovor_act_date": "2014-12-30",
+      "dogovor_act_original": 0,
+      "organization_name": "Имя заказчика",
+      "organization_edrpou": "edrpou заказчика",
+      "organization_edrpou_doer": "edrpou исполнителя",
+      "court": 0
+    }
+  ]
+}

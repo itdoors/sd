@@ -83,6 +83,9 @@ class InvoiceRepository extends EntityRepository
      */
     public function joinInvoicePeriod($res)
     {
+        $sql = '(SELECT max(h2.id)'
+            . ' FROM ITDoorsControllingBundle:InvoiceMessage AS h2'
+            . ' WHERE h2.invoiceId = i.id)';
         $res
             ->leftJoin('i.organization', 'o')
             ->leftJoin('i.dogovor', 'd')
@@ -90,7 +93,8 @@ class InvoiceRepository extends EntityRepository
             ->leftJoin('o.city', 'c')
             ->leftJoin('c.region', 'r')
             ->leftJoin('i.messages', 'h')
-            ->andWhere('h.id = (SELECT max(h2.id) FROM ITDoorsControllingBundle:InvoiceMessage AS h2 WHERE h2.invoiceId = i.id)  OR h.id is NULL');
+            ->andWhere('h.id = :sql  OR h.id is NULL')
+            ->setParam(':sql', $sql);
 
         return $res;
     }
@@ -308,9 +312,11 @@ class InvoiceRepository extends EntityRepository
         /** select */
         $this->selectInvoicePeriodCount($rescount);
         /** where */
-        $rescount = $rescount->andWhere("i.dateFact is not NULL")->andWhere("i.dateFact >= :date")->setParameter(':date', $date);
+        $rescount = $rescount
+            ->andWhere("i.dateFact is not NULL")
+            ->andWhere("i.dateFact >= :date")
+            ->setParameter(':date', $date);
 
         return $rescount->getQuery()->getSingleScalarResult();
     }
-
 }

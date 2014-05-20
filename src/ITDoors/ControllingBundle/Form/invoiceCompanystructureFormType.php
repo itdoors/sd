@@ -14,9 +14,9 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 
 /**
- * invoiceCompanystructureFormType
+ * InvoiceCompanystructureFormType
  */
-class invoiceCompanystructureFormType extends AbstractType
+class InvoiceCompanystructureFormType extends AbstractType
 {
 
     protected $container;
@@ -47,25 +47,31 @@ class invoiceCompanystructureFormType extends AbstractType
             ->add('cancel', 'button');
 
         $builder->addEventListener(
-            FormEvents::PRE_SUBMIT, function(FormEvent $event) use ($container) {
+            FormEvents::PRE_SUBMIT,
+            function (FormEvent $event) use ($container) {
                 $data = $event->getData();
 
                 $form = $event->getForm();
-            });
+            }
+        );
 
         $builder->addEventListener(
-            FormEvents::PRE_SUBMIT, function(FormEvent $event) use ($container) {
+            FormEvents::PRE_SUBMIT,
+            function (FormEvent $event) use ($container) {
                 $data = $event->getData();
 
                 $form = $event->getForm();
-            });
+            }
+        );
 
         $builder->addEventListener(
-            FormEvents::PRE_SUBMIT, function(FormEvent $event) use ($container) {
+            FormEvents::PRE_SUBMIT,
+            function (FormEvent $event) use ($container) {
                 $data = $event->getData();
 
                 $form = $event->getForm();
-            });
+            }
+        );
     }
 
     /**
@@ -87,5 +93,4 @@ class invoiceCompanystructureFormType extends AbstractType
     {
         return 'invoiceCompanystructureForm';
     }
-
 }

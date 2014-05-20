@@ -1096,4 +1096,32 @@ class Dogovor
     {
         return $this->getNumber();
     }
+    /**
+     * @var integer
+     */
+    private $dogovorId1c;
+
+
+    /**
+     * Set dogovorId1c
+     *
+     * @param integer $dogovorId1c
+     * @return Dogovor
+     */
+    public function setDogovorId1c($dogovorId1c)
+    {
+        $this->dogovorId1c = $dogovorId1c;
+    
+        return $this;
+    }
+
+    /**
+     * Get dogovorId1c
+     *
+     * @return integer 
+     */
+    public function getDogovorId1c()
+    {
+        return $this->dogovorId1c;
+    }
 }

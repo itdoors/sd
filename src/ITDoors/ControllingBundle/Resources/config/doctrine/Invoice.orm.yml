@@ -43,6 +43,11 @@ ITDoors\ControllingBundle\Entity\Invoice:
             nullable: true
             length: 10
             column: dogovor_id
+        dogovorId1c:
+            type: string
+            nullable: false
+            length: 255
+            column: dogovor_id_1c
         dogovorUUIE:
             type: integer
             nullable: true
@@ -58,7 +63,8 @@ ITDoors\ControllingBundle\Entity\Invoice:
             nullable: true
             column: dogovor_number
         dogovorDate:
-            type: date
+            type: datetime
+            nullable: false
             column: dogovor_date
         dogovorActName:
             type: string

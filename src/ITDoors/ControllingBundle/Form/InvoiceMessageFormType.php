@@ -66,21 +66,25 @@ class InvoiceMessageFormType extends AbstractType
             ->add('cancel', 'button');
 
         $builder->addEventListener(
-            FormEvents::PRE_SUBMIT, function(FormEvent $event) use ($container) {
+            FormEvents::PRE_SUBMIT,
+            function (FormEvent $event) use ($container) {
+                $data = $event->getData();
+                $form = $event->getForm();
+            }
+        );
+
+        $builder->addEventListener(
+            FormEvents::PRE_SUBMIT,
+            function (FormEvent $event) use ($container) {
                 $data = $event->getData();
 
                 $form = $event->getForm();
-            });
+            }
+        );
 
         $builder->addEventListener(
-            FormEvents::PRE_SUBMIT, function(FormEvent $event) use ($container) {
-                $data = $event->getData();
-
-                $form = $event->getForm();
-            });
-
-        $builder->addEventListener(
-            FormEvents::PRE_SUBMIT, function(FormEvent $event) use ($container) {
+            FormEvents::PRE_SUBMIT,
+            function (FormEvent $event) use ($container) {
                 $data = $event->getData();
 
                 $form = $event->getForm();
@@ -89,21 +93,9 @@ class InvoiceMessageFormType extends AbstractType
 
                 if (isset($data['invoice_id']) && $data['invoice_id']) {
                     $invoiceId = $data['invoice_id'];
-
-                    /** @var \ITDoors\ControllingBundle\Entity\Invoice $invoice */
-//                    $invoice = $container->get('doctrine.orm.entity_manager')
-//                        ->getRepository('ITDoorsControllingBundle:Invoice')
-//                        ->find($invoiceId);
-
-                    //                    if ($handling)
-                    //                    {
-                    //                        if ($handling->getDate() > $currentDatetime || $handling->getCreatedatetime() > $currentDatetime)
-                    //                        {
-                    //                            $form->addError(new FormError($msg));
-                    //                        }
-                    //                    }
                 }
-            });
+            }
+        );
     }
 
     /**
@@ -125,5 +117,4 @@ class InvoiceMessageFormType extends AbstractType
     {
         return 'invoiceMessageForm';
     }
-
 }

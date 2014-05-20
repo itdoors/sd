@@ -1,0 +1,35 @@
+# src/ITDoors/ControllingBundle/Resources/config/doctrine/Invoice.orm.yml
+ITDoors\ControllingBundle\Entity\Invoicecron:
+    type: entity
+    table: invoicecron
+    repositoryClass: ITDoors\ControllingBundle\Entity\InvoicecronRepository
+    id:
+        id:
+            type: integer
+            generator: { strategy: IDENTITY }
+    fields:
+        invoiceId:
+            type: integer
+            length: 10
+            column: invoice_id
+        data:
+            type: text
+        date:
+            type: datetime
+    manyToOne:
+        organization:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            inversedBy: null
+            joinColumn:
+                name: organization_id
+                referencedColumnName: id
+        dogovor:
+            targetEntity: Lists\DogovorBundle\Entity\Dogovor
+            inversedBy: null
+            joinColumn:
+                name: dogovor_id
+                referencedColumnName: id
+    oneToMany:
+        messages:
+            targetEntity: ITDoors\ControllingBundle\Entity\InvoiceMessage
+            mappedBy: invoice
