@@ -1,10 +1,7 @@
 var ITDoorsInvoice = (function() {
     var _this = this;
-    _this.changeBlockAjax = (function() {
-        ITDoorsAjax.updateList($(this).data('block-id'), $(this).data('url'));
-    }),
     _this.init = (function() {
-        $('.nav.nav-tabs>li>a').on('click',  _this.changeBlockAjax);
+        $('.nav.nav-tabs>li>a').live('click',  ITDoorsAjax.updateTab(this));
     })
 });
 $(document).ready(function() {

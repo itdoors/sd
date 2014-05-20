@@ -83,9 +83,7 @@ class InvoiceRepository extends EntityRepository
      */
     public function joinInvoicePeriod($res)
     {
-        $sql = '(SELECT max(h2.id)'
-            . ' FROM ITDoorsControllingBundle:InvoiceMessage AS h2'
-            . ' WHERE h2.invoiceId = i.id)';
+
         $res
             ->leftJoin('i.organization', 'o')
             ->leftJoin('i.dogovor', 'd')
@@ -93,8 +91,7 @@ class InvoiceRepository extends EntityRepository
             ->leftJoin('o.city', 'c')
             ->leftJoin('c.region', 'r')
             ->leftJoin('i.messages', 'h')
-            ->andWhere('h.id = :sql  OR h.id is NULL')
-            ->setParam(':sql', $sql);
+            ->andWhere('h.id = (SELECT max(h2.id) FROM ITDoorsControllingBundle:InvoiceMessage AS h2 WHERE h2.invoiceId = i.id)  OR h.id is NULL');
 
         return $res;
     }
