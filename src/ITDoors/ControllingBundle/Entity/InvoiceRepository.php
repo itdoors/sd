@@ -49,11 +49,11 @@ class InvoiceRepository extends EntityRepository
             ->addSelect('i.dogovorActOriginal')
             ->addSelect('i.dateEnd')
             ->addSelect('i.dateFact')
-            ->addSelect('o.name as organizationName')
+            ->addSelect('customer.name as customerName')
+            ->addSelect('performer.name as performerName')
             ->addSelect('r.name as regionName')
             ->addSelect('d.number as dogovorNumber')
             ->addSelect('d.startdatetime as dogovorStartDatetime')
-            ->addSelect('performer.name as performerName')
             ->addSelect('h.note as description')
             ->addSelect('h.createdate as descriptiondate');
 
@@ -85,13 +85,18 @@ class InvoiceRepository extends EntityRepository
     {
 
         $res
-            ->leftJoin('i.organization', 'o')
             ->leftJoin('i.dogovor', 'd')
+            ->leftJoin('d.customer', 'customer')
             ->leftJoin('d.performer', 'performer')
-            ->leftJoin('o.city', 'c')
+            ->leftJoin('performer.city', 'c')
             ->leftJoin('c.region', 'r')
             ->leftJoin('i.messages', 'h')
-            ->andWhere('h.id = (SELECT max(h2.id) FROM ITDoorsControllingBundle:InvoiceMessage AS h2 WHERE h2.invoiceId = i.id)  OR h.id is NULL');
+            ->andWhere('h.id = ('
+                . 'SELECT max(h2.id)'
+                . ' FROM ITDoorsControllingBundle:InvoiceMessage AS h2 '
+                . 'WHERE h2.invoiceId = i.id'
+                . ') '
+                . ' OR h.id is NULL');
 
         return $res;
     }

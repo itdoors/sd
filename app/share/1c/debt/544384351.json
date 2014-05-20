@@ -15,10 +15,11 @@
       "dogovor_uuie": "5465455",
       "dogovor_act_name": "Имя акта",
       "dogovor_act_date": "2014-12-30",
-      "dogovor_act_original": false,
-      "organization_name": "Имя заказчика",
-      "organization_edrpou": "edrpou заказчика",
-      "organization_edrpou_doer": "edrpou исполнителя",
+      "dogovor_act_original": 0,
+      "customer_name": "Имя заказчика",
+      "customer_edrpou": "edrpou заказчика",
+      "performer_name": "Имя исполнителя",
+      "performer_edrpou": "edrpou исполнителя",
       "court": 0
     },
     {
@@ -36,10 +37,11 @@
       "dogovor_uuie": "54654",
       "dogovor_act_name": "Имя акта",
       "dogovor_act_date": "2014-12-30",
-      "dogovor_act_original": 0,
-      "organization_name": "Имя заказчика",
-      "organization_edrpou": "edrpou заказчика",
-      "organization_edrpou_doer": "edrpou исполнителя",
+      "dogovor_act_original": 1,
+      "customer_name": "Имя заказчика",
+      "customer_edrpou": "edrpou заказчика",
+      "performer_name": "Имя исполнителя",
+      "performer_edrpou": "edrpou исполнителя",
       "court": 0
     }
   ]

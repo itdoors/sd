@@ -3,6 +3,7 @@
 namespace ITDoors\ControllingBundle\Controller;
 
 use ITDoors\ControllingBundle\Entity\Invoice;
+use ITDoors\ControllingBundle\Entity\Invoicecron;
 use Lists\DogovorBundle\Entity\Dogovor;
 use ITDoors\ControllingBundle\Entity\InvoiceCompanystructure;
 use ITDoors\ControllingBundle\Entity\InvoiceRepository;
@@ -171,11 +172,7 @@ class InvoiceController extends BaseFilterController
         switch ($block) {
             case 'invoice':
                 $dogovor = $invoiceObj->getDogovor();
-                $organization = $dogovor->getOrganization();
-                if (empty($organization)) {
-                    $organization = $invoiceObj->getOrganization();
-                }
-                $organizationId = $organization->getId();
+                $organizationId = $dogovor->getCustomerId();
                 $entitie = $invoiceObj;
                 break;
             case 'organization':
@@ -205,11 +202,6 @@ class InvoiceController extends BaseFilterController
                 $entitie = $this->getDoctrine()
                     ->getRepository('ListsContactBundle:ModelContact')
                     ->findBy(array('modelName' => 'organization', 'modelId' => $organizationId));
-                $dogovor = $this->getDoctrine()
-                    ->getRepository('ListsDogovorBundle:Dogovor')
-                    ->find($invoiceObj->getDogovor());
-
-                $organizationId = $dogovor->getCustomerId();
                 break;
             case 'history':
                 $entitie = '';
@@ -267,31 +259,71 @@ class InvoiceController extends BaseFilterController
                     $this->savejson($json->invoice);
                     break;
                 case JSON_ERROR_DEPTH:
-                    echo ' - Достигнута максимальная глубина стека';
-                    $logger->err('Достигнута максимальная глубина стека');
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('FATAL ERROR');
+                    $error->setReason('json');
+                    $error->setDescription('Достигнута максимальная глубина стека');
+                    $em->persist($error);
+                    $em->flush();
                     break;
                 case JSON_ERROR_STATE_MISMATCH:
-                    $logger->err('Некорректные разряды');
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('FATAL ERROR');
+                    $error->setReason('json');
+                    $error->setDescription('Некорректные разряды');
+                    $em->persist($error);
+                    $em->flush();
                     break;
                 case JSON_ERROR_CTRL_CHAR:
-                    echo ' - Некорректный управляющий символ';
-                    $logger->err('Некорректный управляющий символ');
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('FATAL ERROR');
+                    $error->setReason('json');
+                    $error->setDescription('Некорректный управляющий символ');
+                    $em->persist($error);
+                    $em->flush();
                     break;
                 case JSON_ERROR_SYNTAX:
-                    $logger->err('error format JSON');
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('FATAL ERROR');
+                    $error->setReason('json');
+                    $error->setDescription('error format JSON');
+                    $em->persist($error);
+                    $em->flush();
                     break;
                 case JSON_ERROR_UTF8:
-                    $logger->err('error UTF-8');
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('FATAL ERROR');
+                    $error->setReason('json');
+                    $error->setDescription('error UTF-8');
+                    $em->persist($error);
+                    $em->flush();
                     break;
                 default:
-                    $logger->err('error not found');
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('FATAL ERROR');
+                    $error->setReason('json');
+                    $error->setDescription('Не известная ошибка');
+                    $em->persist($error);
+                    $em->flush();
                     break;
             }
         } else {
-            $logger->err('ITDoors\ControllingBundle\Controller\Invoice:cronAction file not found');
+            $error = new Invoicecron();
+            $error->setDate(new \DateTime());
+            $error->setStatus('FATAL ERROR');
+            $error->setReason('file not found');
+            $error->setDescription('Файл не найден '.$directory . $file);
+            $em->persist($error);
+            $em->flush();
         }
 
-        return new Response('<html><body> Hello cron!</body></html>');
+        return new Response('<html><body>Cron work!</body></html>');
     }
 
     /**
@@ -304,11 +336,7 @@ class InvoiceController extends BaseFilterController
     private function savejson($json)
     {
 
-        $status = array();
-
         foreach ($json as $invoice) {
-            $status[$invoice->invoice_id] = array();
-            $status[$invoice->invoice_id]['errors'] = array();
             // поиск в базе
             $em = $this->getDoctrine()->getManager();
             $invoiceObj = $em->getRepository('ITDoorsControllingBundle:Invoice')
@@ -316,68 +344,156 @@ class InvoiceController extends BaseFilterController
 
             // Не найден счет
             if (!$invoiceObj) {
-                $status[$invoice->invoice_id]['status'] = 'creat';
-
                 // добавления invoice
                 $invoiceNew = new Invoice();
                 $invoiceNew->setInvoiceId($invoice->invoice_id);
-                $invoiceNew->setDogovorId1c($invoice->dogovor_id_1c);
-                $invoiceNew->setSum($invoice->sum);
                 if (!empty($invoice->date)) {
                     $invoiceNew->setDate(new \DateTime($invoice->date));
                 } else {
-                    $status[$invoice->invoice_id]['errors']['date'] = $invoice->date;
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('error');
+                    $error->setReason('date');
+                    $error->setDescription(json_encode($invoice));
+                    $em->persist($error);
+                    $em->flush();
+                    continue;
                 }
-                if (!empty($invoice->delay_date)) {
-                    $invoiceNew->setDelayDate(new \DateTime($invoice->delay_date));
+                if (gettype($invoice->sum) == "double") {
+                    $invoiceNew->setSum($invoice->sum);
                 } else {
-                    $status[$invoice->invoice_id]['errors']['delay_date'] = $invoice->delay_date;
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('error');
+                    $error->setReason('sum');
+                    $error->setDescription(json_encode($invoice));
+                    $em->persist($error);
+                    $em->flush();
+                    continue;
                 }
-                if (is_numeric($invoice->delay_days)) {
-                    $invoiceNew->setDelayDays((int) $invoice->delay_days);
-                } else {
-                    $status[$invoice->invoice_id]['errors']['delay_days'] = $invoice->delay_days;
-                }
-                if (in_array($invoice->delay_days_type, array('Б', 'К'))) {
-                    $invoiceNew->setDelayDaysType($invoice->delay_days_type);
-                } else {
-                    $status[$invoice->invoice_id]['errors']['delay_days_type'] = $invoice->delay_days_type;
-                }
-                if (!empty($invoice->date_fact)) {
-                    $invoiceNew->setDateFact(new \DateTime($invoice->date_fact));
-                }
+
                 $invoiceNew->setDogovorId1c($invoice->dogovor_id_1c);
                 $invoiceNew->setDogovorNumber($invoice->dogovor_number);
                 $invoiceNew->setDogovorName($invoice->dogovor_name);
                 if (!empty($invoice->dogovor_date)) {
                     $invoiceNew->setDogovorDate(new \DateTime($invoice->dogovor_date));
                 } else {
-                    $status[$invoice->invoice_id]['errors']['dogovor_date'] = $invoice->dogovor_date;
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('error');
+                    $error->setReason('dogovor_date');
+                    $error->setDescription(json_encode($invoice));
+                    $em->persist($error);
+                    $em->flush();
+                    continue;
                 }
-                $invoiceNew->setDogovorUUIE($invoice->dogovor_uuie);
+                if (is_numeric($invoice->dogovor_uuie)) {
+                    $invoiceNew->setDogovorUUIE($invoice->dogovor_uuie);
+                } else {
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('error');
+                    $error->setReason('dogovor_uuie');
+                    $error->setDescription(json_encode($invoice));
+                    $em->persist($error);
+                    $em->flush();
+                    continue;
+                }
                 $invoiceNew->setDogovorActName($invoice->dogovor_act_name);
                 if (!empty($invoice->dogovor_act_date)) {
                     $invoiceNew->setDogovorActDate(new \DateTime($invoice->dogovor_act_date));
                 } else {
-                    $status[$invoice->invoice_id]['errors']['dogovor_act_date'] = $invoice->dogovor_act_date;
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('error');
+                    $error->setReason('dogovor_act_date');
+                    $error->setDescription(json_encode($invoice));
+                    $em->persist($error);
+                    $em->flush();
+                    continue;
                 }
-                $invoiceNew->setDogovorActOriginal($invoice->dogovor_act_original);
-                $invoiceNew->setOrganizationName($invoice->organization_name);
-                $invoiceNew->setOrganizationEdrpou($invoice->organization_edrpou);
-                $invoiceNew->setOrganizationEdrpouDoer($invoice->organization_edrpou_doer);
-                $invoiceNew->setCourt($invoice->court);
+                if (in_array($invoice->dogovor_act_original, array(0,1))) {
+                    $invoiceNew->setDogovorActOriginal($invoice->dogovor_act_original);
+                } else {
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('error');
+                    $error->setReason('dogovor_act_original');
+                    $error->setDescription(json_encode($invoice));
+                    $em->persist($error);
+                    $em->flush();
+                    continue;
+                }
+
+
+                if (!empty($invoice->delay_date)) {
+                    $invoiceNew->setDelayDate(new \DateTime($invoice->delay_date));
+                } else {
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('error');
+                    $error->setReason('dogovor_act_original');
+                    $error->setDescription(json_encode($invoice));
+                    $em->persist($error);
+                    $em->flush();
+                    continue;
+                }
+                if (is_numeric($invoice->delay_days)) {
+                    $invoiceNew->setDelayDays((int) $invoice->delay_days);
+                } else {
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('error');
+                    $error->setReason('delay_days');
+                    $error->setDescription(json_encode($invoice));
+                    $em->persist($error);
+                    $em->flush();
+                    continue;
+                }
+                if (in_array($invoice->delay_days_type, array('Б', 'К'))) {
+                    $invoiceNew->setDelayDaysType($invoice->delay_days_type);
+                } else {
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('error');
+                    $error->setReason('delay_days_type');
+                    $error->setDescription(json_encode($invoice));
+                    $em->persist($error);
+                    $em->flush();
+                    continue;
+                }
+                if (!empty($invoice->date_fact)) {
+                    $invoiceNew->setDateFact(new \DateTime($invoice->date_fact));
+                }
+                if (in_array($invoice->court, array(0,1))) {
+                    $invoiceNew->setCourt($invoice->court);
+                } else {
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('error');
+                    $error->setReason('court');
+                    $error->setDescription(json_encode($invoice));
+                    $em->persist($error);
+                    $em->flush();
+                    continue;
+                }
+                $invoiceNew->setCustomerName($invoice->customer_name);
+                $invoiceNew->setCustomerEdrpou($invoice->customer_edrpou);
+                $invoiceNew->setPerformerName($invoice->performer_name);
+                $invoiceNew->setPerformerEdrpou($invoice->performer_edrpou);
 
                 // get  dogovor id 1C
                 $dogovorfind = $em->getRepository('ListsDogovorBundle:Dogovor')
                     ->findOneBy(array('dogovorId1c' => $invoice->dogovor_id_1c));
                 // договор не найден
                 if (!$dogovorfind) {
+
                     //customer заказчика ищем
                     $customerfind = $em->getRepository('ListsOrganizationBundle:Organization')
-                        ->findOneBy(array('edrpou' => $invoice->organization_edrpou));
+                        ->findOneBy(array('edrpou' => $invoice->customer_edrpou));
                     //performer исполнителья ищем
                     $performerfind = $em->getRepository('ListsOrganizationBundle:Organization')
-                        ->findOneBy(array('edrpou' => $invoice->organization_edrpou_doer));
+                        ->findOneBy(array('edrpou' => $invoice->performer_edrpou));
 
                     // если заказчик и исполнитель найден
                     if ($customerfind && $performerfind) {
@@ -389,47 +505,80 @@ class InvoiceController extends BaseFilterController
                             'customer_id' => $customerfind->getId(),
                             'performer_id' => $performerfind->getId(),
                         ));
-                        if (!$dogovoradd) {
-                            // добавить договор
-                            $dogovorNew = new Dogovor();
-                            $dogovorNew->setNumber($invoice->dogovor_number);
-                            $dogovorNew->setName($invoice->dogovor_name);
-                            $dogovorNew->setStartdatetime(new \DateTime($invoice->dogovor_date));
-                            $dogovorNew->setCustomerId($customerfind->getId());
-                            $dogovorNew->setPerformerId($performerfind->getId());
 
-                            $status[$invoice->invoice_id]['dogovor'] = 'add new';
+                        if (!$dogovoradd) {
+
+                            // добавить договор
+//                            $dogovorNew = new Dogovor();
+//                            $dogovorNew->setNumber($invoice->dogovor_number);
+//                            $dogovorNew->setName($invoice->dogovor_name);
+//                            $dogovorNew->setStartdatetime(new \DateTime($invoice->dogovor_date));
+//                            $dogovorNew->setCustomerId($customerfind->getId());
+//                            $dogovorNew->setPerformerId($performerfind->getId());
+//                            $dogovorNew->setDogovorId1c($invoice->dogovor_id_1c);
 //                            $em->persist($dogovorNew);
 //                            $em->flush();
+//                            $invoiceNew->setDogovor($dogovorNew);
+                            $em->persist($invoiceNew);
+                            $em->flush();
+
+
+                            $error = new Invoicecron();
+                            $error->setDate(new \DateTime());
+                            $error->setInvoiceId($invoiceNew->getId());
+                            $error->setStatus('error');
+                            $error->setReason('dogovor not found');
+                            $error->setDescription(json_encode($invoice));
+                            $em->persist($error);
+                            $em->flush();
+                            continue;
                         } else {
+
                             // подтвердить связь и 1С
                             $dogovoradd->setDogovorId1c($invoice->dogovor_id_1c);
+                            $em->persist($dogovoradd);
+                            $em->flush();
 
-                            $status[$invoice->invoice_id]['dogovor'] = 'update ' . $dogovoradd->getId();
-//                            $em->persist($dogovoradd);
-//                            $em->flush();
+                            $error = new Invoicecron();
+                            $error->setDate(new \DateTime());
+                            $error->setInvoiceId($invoiceNew->getId());
+                            $error->setStatus('error');
+                            $error->setReason('add dogovor_id_1c in dogovor id = ' . $dogovoradd->getId());
+                            $error->setDescription(json_encode($invoice));
+                            $em->persist($error);
+                            $em->flush();
+
 
                             $invoiceNew->setDogovorId($dogovoradd->getId);
                         }
                         // если не найден заказчик\исполнитель
                     } else {
+
+                        $error = new Invoicecron();
+                        $error->setDate(new \DateTime());
+                        $error->setStatus('error');
                         // не найден заказчик
-                        if (!$customerfind) {
-                            $status[$invoice->invoice_id]['errors']['organization_edrpou'] = 'customer not fount';
+                        if (!$customerfind && $performerfind) {
+                            $error->setReason('dogovor not font and customer');
+                            // не найден исполнитель
+                        } elseif (!$performerfind && $customerfind) {
+                            $error->setReason('dogovor not font and performer');
+                        } else {
+                            $error->setReason('dogovor not font and customer and  performer');
                         }
-                        // не найден исполнитель
-                        if (!$performerfind) {
-                            $status[$invoice->invoice_id]['errors']['organization_edrpou_doer'] = 'performer not fount';
-                        }
+                        $error->setDescription(json_encode($invoice));
+                        $em->persist($error);
+                        $error->setInvoiceId($invoiceNew->getId());
+                        $em->flush();
                     }
                     // договор найден по id 1C
                 } else {
                     $invoiceNew->setDogovorId($dogovorfind->getId());
+                    // save invoice
+                    $em->persist($invoiceNew);
+                    $em->flush();
                 }
 
-                // save invoice
-                $em->persist($invoiceNew);
-                $em->flush();
 
                 // отвественых по договору =отвественных по счету
                 if (!empty($invoiceNew->getDogovorId())) {
@@ -446,12 +595,10 @@ class InvoiceController extends BaseFilterController
                     }
                 }
 
-                $status[$invoice->invoice_id]['result'] = 'create';
 
 
                 // Найден  счет
             } else {
-                $status[$invoice->invoice_id]['status'] = 'update';
 //                $status[] = $invoice->invoice_id . ' found (need update:
 //                 date_fact, court,dogovor_act_oroginal,
 //                  delay_days,delay_days_type) ';
@@ -461,22 +608,68 @@ class InvoiceController extends BaseFilterController
 
                 if (!empty($invoice->date_fact)) {
                     $invoiceObj->setDateFact(new \DateTime($invoice->date_fact));
-//                } else {
-//                    $status[$invoice->invoice_id]['errors']['date_fact'] = $invoice->date_fact;
                 }
-                $invoiceObj->setCourt($invoice->court);
-                $invoiceObj->setDogovorActOriginal($invoice->dogovor_act_original);
+                if (in_array($invoice->court, array(0,1))) {
+                    $invoiceObj->setCourt($invoice->court);
+                } else {
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('error');
+                    $error->setReason('court');
+                    $error->setInvoiceId($invoiceObj->getId());
+                    $error->setDescription(json_encode($invoice));
+                    $em->persist($error);
+                    $em->flush();
+                    continue;
+                }
+                if (in_array($invoice->dogovor_act_original, array(0,1))) {
+                    $invoiceObj->setDogovorActOriginal($invoice->dogovor_act_original);
+                } else {
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('error');
+                    $error->setReason('dogovor_act_original');
+                    $error->setInvoiceId($invoiceObj->getId());
+                    $error->setDescription(json_encode($invoice));
+                    $em->persist($error);
+                    $em->flush();
+                    continue;
+                }
                 if (is_numeric($invoice->delay_days)) {
                     $invoiceObj->setDelayDays((int) $invoice->delay_days);
                 } else {
-                    $status[$invoice->invoice_id]['errors']['delay_days'] = $invoice->delay_days;
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setInvoiceId($invoiceObj->getId());
+                    $error->setStatus('error');
+                    $error->setReason('delay_days');
+                    $error->setDescription(json_encode($invoice));
+                    $em->persist($error);
+                    $em->flush();
+                    continue;
                 }
-                $invoiceObj->setDelayDaysType($invoice->delay_days_type);
+                if (in_array($invoice->delay_days_type, array('Б', 'К'))) {
+                    $invoiceObj->setDelayDaysType((int) $invoice->delay_days_type);
+                } else {
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setInvoiceId($invoiceObj->getId());
+                    $error->setStatus('error');
+                    $error->setReason('delay_days_type');
+                    $error->setDescription(json_encode($invoice));
+                    $em->persist($error);
+                    $em->flush();
+                    continue;
+                }
                 $em->flush();
-
-                $status[$invoice->invoice_id]['result'] = 'update';
             }
         }
-        echo json_encode($status);
+        $error = new Invoicecron();
+        $error->setDate(new \DateTime());
+        $error->setStatus('cron work');
+        $error->setReason('ok');
+        $error->setDescription('cron work');
+        $em->persist($error);
+        $em->flush();
     }
 }

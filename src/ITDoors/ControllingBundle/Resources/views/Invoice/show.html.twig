@@ -66,7 +66,7 @@
         <tbody role="alert" aria-live="polite" aria-relevant="all">
             {% for entity in entities %}
             <tr class="{{ cycle(['odd', 'even'], entity.invoiceId) }}">
-                <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id, block:'organization'}) }}">{{ entity.organizationName }}</a></td>
+                <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id, block:'organization'}) }}">{{ entity.customerName }}</a></td>
                 <td class="">{{ entity.performerName }}</td>
                 <td class="">{{ entity.sum|number_format(2, ',', ' ')  }}</td>
                 <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id, block:'invoice'}) }}">{{ entity.invoiceId }}</a> {{ entity.date is empty ? '' : entity.date|date("d.m.y") }}</td>
