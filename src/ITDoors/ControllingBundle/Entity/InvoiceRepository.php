@@ -3,6 +3,8 @@
 namespace ITDoors\ControllingBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * InvoiceRepository
@@ -16,11 +18,11 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
-     * @param query $res Description
+     * @param QueryBuilder $res Description
      * 
      * @return mixed[]
      */
-    public function selectInvoiceSum($res)
+    public function selectInvoiceSum(QueryBuilder $res)
     {
         $res
             ->select('Sum(i.sum) as summa');
@@ -30,11 +32,11 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
-     * @param query $res Description
+     * @param QueryBuilder $res Description
      * 
      * @return mixed[]
      */
-    public function selectInvoicePeriod($res)
+    public function selectInvoicePeriod(QueryBuilder $res)
     {
         $res
             ->select('i.sum')
@@ -49,11 +51,11 @@ class InvoiceRepository extends EntityRepository
             ->addSelect('i.dogovorActOriginal')
             ->addSelect('i.dateEnd')
             ->addSelect('i.dateFact')
-            ->addSelect('customer.name as customerName')
-            ->addSelect('performer.name as performerName')
+            ->addSelect('o.name as organizationName')
             ->addSelect('r.name as regionName')
             ->addSelect('d.number as dogovorNumber')
             ->addSelect('d.startdatetime as dogovorStartDatetime')
+            ->addSelect('performer.name as performerName')
             ->addSelect('h.note as description')
             ->addSelect('h.createdate as descriptiondate');
 
@@ -63,11 +65,11 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
-     * @param query $res Description
+     * @param QueryBuilder $res Description
      * 
      * @return mixed[]
      */
-    public function selectInvoicePeriodCount($res)
+    public function selectInvoicePeriodCount(QueryBuilder $res)
     {
         $res->select('COUNT(i.id)');
 
@@ -77,26 +79,26 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      * 
-     * @param query $res Description
+     * @param QueryBuilder $res Description
      * 
      * @return mixed[]
      */
-    public function joinInvoicePeriod($res)
+    public function joinInvoicePeriod(QueryBuilder $res)
     {
+        $subQuery = '
+          SELECT max(h2.id)
+            FROM
+          ITDoorsControllingBundle:InvoiceMessage AS h2
+            WHERE h2.invoiceId = i.id';
 
         $res
+            ->leftJoin('i.organization', 'o')
             ->leftJoin('i.dogovor', 'd')
-            ->leftJoin('d.customer', 'customer')
             ->leftJoin('d.performer', 'performer')
-            ->leftJoin('performer.city', 'c')
+            ->leftJoin('o.city', 'c')
             ->leftJoin('c.region', 'r')
             ->leftJoin('i.messages', 'h')
-            ->andWhere('h.id = ('
-                . 'SELECT max(h2.id)'
-                . ' FROM ITDoorsControllingBundle:InvoiceMessage AS h2 '
-                . 'WHERE h2.invoiceId = i.id'
-                . ') '
-                . ' OR h.id is NULL');
+            ->andWhere("h.id = ({$subQuery})  OR h.id is NULL");
 
         return $res;
     }
@@ -104,7 +106,7 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      * 
-     * @param query   $res
+     * @param QueryBuilder   $res
      * 
      * @param integer $periodmin
      * 
@@ -112,7 +114,7 @@ class InvoiceRepository extends EntityRepository
      * 
      * @return mixed[]
      */
-    public function whereInvoicePeriod($res, $periodmin, $periodmax)
+    public function whereInvoicePeriod(QueryBuilder $res, $periodmin, $periodmax)
     {
         $date = date('Y-m-d');
         $res
