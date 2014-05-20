@@ -25,6 +25,7 @@ use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Lists\DepartmentBundle\Entity\DepartmentsTypeRepository;
 use Lists\MpkBundle\Entity\MpkRepository;
+use ITDoors\AjaxBundle\Controller\BaseFilterController;
 
 /**
  * AjaxController class.
@@ -36,7 +37,7 @@ use Lists\MpkBundle\Entity\MpkRepository;
  * @author     Pavel Pecheny <ppecheny@gmail.com>
  * @version    "Release: 1.0"
  */
-class AjaxController extends Controller
+class AjaxController extends BaseFilterController
 {
     protected $modelRepositoryDependence = array(
         'ModelContact' => 'ListsContactBundle:ModelContact',
@@ -2478,4 +2479,189 @@ class AjaxController extends Controller
         }
 
         return new Response(json_encode($result));
-    }}
+    }
+
+    /**
+     * Returns json of searchin self Organizations
+     *
+     * @return string
+     */
+    public function selfOrganizationAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+        $objects= $repository->SearchSelfOrganization($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Function to handle the ajax queries from editable elements
+     *
+     * @return mixed[]
+     */
+    public function editableDepartmentAction() {
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        $methodSet = 'set' . ucfirst($name);
+
+
+        /** @var Handling $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:Departments')
+            ->find($pk);
+
+        if ($name == 'status') {
+            if (!$value) {
+                $value = null;
+            }
+            else {
+                $value = $this->getDoctrine()
+                    ->getRepository('ListsDepartmentBundle:DepartmentsStatus')
+                    ->find($value);
+            }
+        }
+        elseif ($name == 'opermanager') {
+            if (!$value) {
+                $value = null;
+            }
+            else {
+                $value = $this->getDoctrine()
+                    ->getRepository('SDUserBundle:User')
+                    ->find($value);
+            }
+        }
+        elseif ($name == 'statusDate') {
+            $value = new \DateTime($value);
+        }
+        elseif ($name == 'type') {
+            if (!$value) {
+                $value = null;
+            }
+            else {
+                $value = $this->getDoctrine()
+                    ->getRepository('ListsDepartmentBundle:DepartmentsType')
+                    ->find($value);
+            }
+        }
+        $object->$methodSet($value);
+
+        $validator = $this->get('validator');
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
+        $errors = $validator->validate($object, array('edit'));
+
+        if (sizeof($errors)) {
+            $return = $this->getFirstError($errors);
+
+            return new Response($return, 406);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+
+        $return = array('error'=>false);
+
+        $return['value'] = $value;
+        $return['method'] = $methodSet;
+        $return['object'] = $object;
+        try {
+            $em->flush();
+
+            $em->refresh($object);
+        } catch(\ErrorException $e) {
+            $return['error'] = $e->getMessage();
+        }
+
+        return new Response(json_encode($return));
+
+    }
+
+    /**
+     * ajax php function to get department status
+     * return json of all regions that was found
+     *
+     * @return string
+     */
+    public function departmentPeopleMpkAction() {
+
+        $id = $this->getSessionValueByKey('idDepartment', null, 'oper.paginator.department.coworkers', 'param');
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsMpkBundle:Mpk');
+
+        $objects= $repository->getDepartmentPeopleQueryMpk($searchText, $id);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * ajax php function to get department people
+     * return json of all regions that was found
+     *
+     * @return string
+     */
+    public function departmentPeopleIndividualAction() {
+        $id = $this->getSessionValueByKey('idDepartment', null, 'oper.paginator.department.coworkers', 'param');
+
+        $filters = $this->getFilters('oper.paginator.department.coworkers');
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
+
+        $objects= $repository->getSearchQueryPeople($searchText, $id, $filters);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object->getIndividual());
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json department status by id
+     *
+     * @return string
+     */
+    public function departmentPeopleIndividualByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $individualList = $this->getDoctrine()
+            ->getRepository('ListsIndividualBundle:Individual')
+            ->findBy(array('id' => $ids));
+
+        $result = array();
+
+        foreach ($individualList as $individual) {
+            $result[] = $this->serializeObject($individual);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+
+}
+

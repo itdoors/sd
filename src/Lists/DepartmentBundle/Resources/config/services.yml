@@ -5,6 +5,8 @@ parameters:
     lists_departmentType.repository.entity: Lists\DepartmentBundle\Entity\DepartmentsType
     lists_departmentStatus.repository.class: Lists\DepartmentBundle\Entity\DepartmentsStatusRepository
     lists_departmentStatus.repository.entity: Lists\DepartmentBundle\Entity\DepartmentsStatus
+    lists_departmentPeople.repository.class: Lists\DepartmentBundle\Entity\DepartmentPeopleRepository
+    lists_departmentPeople.repository.entity: Lists\DepartmentBundle\Entity\DepartmentPeople
 services:
     lists_department.repository:
         class: %lists_department.repository.class%
@@ -12,12 +14,17 @@ services:
         factory_method: getRepository
         arguments: [ %lists_department.repository.entity% ]
     lists_departmentType.repository:
-            class: %lists_departmentType.repository.class%
-            factory_service: doctrine # this is an instance of Registry
-            factory_method: getRepository
-            arguments: [ %lists_departmentType.repository.entity% ]
+        class: %lists_departmentType.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_departmentType.repository.entity% ]
     lists_departmentStatus.repository:
-                class: %lists_departmentStatus.repository.class%
-                factory_service: doctrine # this is an instance of Registry
-                factory_method: getRepository
-                arguments: [ %lists_departmentStatus.repository.entity% ]
+        class: %lists_departmentStatus.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_departmentStatus.repository.entity% ]
+    lists_departmentPeople.repository:
+        class: %lists_departmentPeople.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_departmentPeople.repository.entity% ]

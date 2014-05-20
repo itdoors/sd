@@ -165,3 +165,23 @@ sd_common_ajax_company_structure:
 sd_common_ajax_company_structure_by_id:
     pattern: /ajax/company/structure/by/id
     defaults: { _controller: SDCommonBundle:Ajax:companyStructureById }
+
+sd_common_ajax_self_organization:
+    pattern: /ajax/self/organization
+    defaults: { _controller: SDCommonBundle:Ajax:selfOrganization }
+
+sd_common_ajax_editable_department:
+    pattern: /ajax/editable/department
+    defaults: { _controller: SDCommonBundle:Ajax:editableDepartment }
+
+sd_common_ajax_oper_department_mpk:
+    pattern: /ajax/oper/department/mpk
+    defaults: { _controller: SDCommonBundle:Ajax:departmentPeopleMpk }
+
+sd_common_ajax_oper_department_individual:
+    pattern: /ajax/oper/department/individual
+    defaults: { _controller: SDCommonBundle:Ajax:departmentPeopleIndividual }
+
+sd_common_ajax_oper_department_individual_by_id:
+    pattern: /ajax/oper/department/individual/by/id
+    defaults: { _controller: SDCommonBundle:Ajax:departmentPeopleIndividualById }

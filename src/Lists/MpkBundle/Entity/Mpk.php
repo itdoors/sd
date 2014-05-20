@@ -20,9 +20,29 @@ class Mpk
     private $name;
 
     /**
+     * @var boolean
+     */
+    private $active;
+
+    /**
+     * @var \DateTime
+     */
+    private $startDate;
+
+    /**
+     * @var \DateTime
+     */
+    private $endDate;
+
+    /**
      * @var \Lists\DepartmentBundle\Entity\Departments
      */
     private $department;
+
+    /**
+     * @var \Lists\OrganizationBundle\Entity\Organization
+     */
+    private $organization;
 
 
     /**
@@ -59,6 +79,75 @@ class Mpk
     }
 
     /**
+     * Set active
+     *
+     * @param boolean $active
+     * @return Mpk
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+    
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean 
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * Set startDate
+     *
+     * @param \DateTime $startDate
+     * @return Mpk
+     */
+    public function setStartDate($startDate)
+    {
+        $this->startDate = $startDate;
+    
+        return $this;
+    }
+
+    /**
+     * Get startDate
+     *
+     * @return \DateTime 
+     */
+    public function getStartDate()
+    {
+        return $this->startDate;
+    }
+
+    /**
+     * Set endDate
+     *
+     * @param \DateTime $endDate
+     * @return Mpk
+     */
+    public function setEndDate($endDate)
+    {
+        $this->endDate = $endDate;
+    
+        return $this;
+    }
+
+    /**
+     * Get endDate
+     *
+     * @return \DateTime 
+     */
+    public function getEndDate()
+    {
+        return $this->endDate;
+    }
+
+    /**
      * Set department
      *
      * @param \Lists\DepartmentBundle\Entity\Departments $department
@@ -82,7 +171,30 @@ class Mpk
     }
 
     /**
-     * toString Method
+     * Set organization
+     *
+     * @param \Lists\OrganizationBundle\Entity\Organization $organization
+     * @return Mpk
+     */
+    public function setOrganization(\Lists\OrganizationBundle\Entity\Organization $organization = null)
+    {
+        $this->organization = $organization;
+    
+        return $this;
+    }
+
+    /**
+     * Get organization
+     *
+     * @return \Lists\OrganizationBundle\Entity\Organization 
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
+    }
+
+    /**
+     * __toString method
      *
      * @return string
      */

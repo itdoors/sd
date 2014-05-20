@@ -277,4 +277,24 @@ class OrganizationRepository extends EntityRepository
 
 		return $sql;
 	}
+
+    /**
+     * Searches organization by $q
+     *
+     * @param string $q
+     *
+     * @return mixed[]
+     */
+    public function SearchSelfOrganization($q)
+    {
+        $sql = $this->createQueryBuilder('o')
+            ->leftJoin('o.lookup', 'l')
+            ->where('lower(o.name) LIKE :q')
+            ->setParameter(':q', '%'. mb_strtolower($q, 'UTF-8') . '%')
+            ->andWhere('l.lukey = :key')
+            ->setParameter(':key', 'organization_sign_own')
+            ->getQuery();
+
+        return $sql->getResult();
+    }
 }

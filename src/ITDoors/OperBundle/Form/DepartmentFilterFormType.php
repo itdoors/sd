@@ -6,7 +6,6 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Routing\Router;
 
 /**
@@ -172,6 +171,22 @@ class DepartmentFilterFormType extends AbstractType
                         'multiple' => 'multiple'
                     )),
                     'placeholder' => 'Enter opermanager',
+                )
+            ));
+
+        $builder
+            ->add('performer', 'hidden', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url'  => $router->generate('sd_common_ajax_self_organization'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_organization_by_ids'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 2,
+                        'allowClear' => true,
+                        'width' => '200px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter performer',
                 )
             ));
     }

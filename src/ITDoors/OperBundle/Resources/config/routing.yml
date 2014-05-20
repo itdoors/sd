@@ -1,6 +1,27 @@
 it_doors_oper_homepage:
     pattern:  /oper/all
     defaults: { _controller: ITDoorsOperBundle:OperInfo:index }
+
 it_doors_oper_department_table:
     pattern:  /oper/table/department
     defaults: { _controller: ITDoorsOperBundle:OperInfo:departmentTable }
+
+it_doors_oper_department_info:
+    pattern:  /oper/department/info/{id}
+    defaults: { _controller: ITDoorsOperBundle:OperDepartmentInfo:index }
+
+it_doors_oper_department_info_basic:
+    pattern:  /oper/department/info/basic/{id}
+    defaults: { _controller: ITDoorsOperBundle:OperDepartmentInfo:basic }
+
+it_doors_oper_department_info_coworkers:
+    pattern:  /oper/department/info/coworkers/{id}
+    defaults: { _controller: ITDoorsOperBundle:OperDepartmentInfo:coworkers }
+
+it_doors_oper_department_info_coworkers_table:
+    pattern:  /oper/department/info/coworkers/table/{id}
+    defaults: { _controller: ITDoorsOperBundle:OperDepartmentInfo:coworkersTable }
+
+it_doors_oper_department_info_coworker_table:
+    pattern:  /oper/department/info/coworker/table/{id}
+    defaults: { _controller: ITDoorsOperBundle:OperDepartmentInfo:userInfoTable }

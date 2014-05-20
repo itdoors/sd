@@ -29,4 +29,28 @@ class MpkRepository extends EntityRepository
 
         return $sql->getResult();
     }
+
+    /**
+     * Searches mpk by text and from fixed department
+     *
+     * @param string  $q
+     * @param integer $id
+     *
+     * @return mixed[]
+     */
+    public function getDepartmentPeopleQueryMpk($q, $id) {
+
+        $sql = $this->createQueryBuilder('m')
+            ->where('lower(m.name) LIKE :q')
+            ->setParameter(':q', mb_strtolower($q, 'UTF-8') . '%');
+
+        if ($id) {
+            $sql->andWhere('m.department = :department')
+                ->setParameter(':department', $id);
+        }
+            $sql = $sql->getQuery();
+
+        return $sql->getResult();
+    }
+
 }

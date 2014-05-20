@@ -1,0 +1,82 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
+
+<div id="coworker_content" data-url="{{ path('it_doors_oper_department_info_coworkers_table', {'id': id}) }}">
+    <div class="navigation right_float">
+        {{ ajax_paginator_render(
+        pagination, ajax_paginator_namespace_oper_department_coworkers, {
+        'coworker_content': 'ITDoorsAjax.updateList'
+        }
+        )
+        }}
+    </div>
+
+    <div id="form_modal_more_info" class="modal fade" role="basic" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">{% trans  from 'ListsHandlingBundle' %}More info{% endtrans %}</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="moreInfoTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
+                    </div>
+                    <a class="btn green right_float" data-dismiss="modal" aria-hidden="true">{% trans %}Exit {% endtrans %}</a>
+                    <br>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+    </div>
+
+
+
+
+    {% if pagination|length > 0 %}
+        <div class="table-scrollable" id="department-table">
+            <table class="table table-striped table-hover table-bordered">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>{% trans %}Id{% endtrans %}</th>
+                    <th>{% trans %}Mpk{% endtrans %}</th>
+                    <th>{% trans %}DRFO{% endtrans %}</th>
+                    <th>{% trans %}Passport{% endtrans %}</th>
+                    <th>{% trans %}Surname{% endtrans %}</th>
+                    <th>{% trans %}Name{% endtrans %}</th>
+                    <th>{% trans %}Middle Name{% endtrans %}</th>
+                    <th>{% trans %}Date accepted{% endtrans %}</th>
+                    <th>{% trans %}Date faired{% endtrans %}</th>
+                    <th>{% trans %}Date accepted UU{% endtrans %}</th>
+                    <th>{% trans %}Date faired UU{% endtrans %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in pagination %}
+                    {% set counter = counter + 1 %}
+                    <tr id="ModelContact{{ item.id }}">
+                        {{  include(
+                        'ITDoorsOperBundle:DepartmentInfo:departmentPeopleElement.html.twig',
+                        {
+                        item: item,
+                        counter: counter,
+                        }
+                        )
+                        }}
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p align="center" style="color:red;">{% trans%}No coworkers found{% endtrans %}</p>
+    {% endif %}
+    <div class="navigation right_float">
+        {{ ajax_paginator_render(
+        pagination, ajax_paginator_namespace_oper_department_coworkers, {
+        'coworker_content': 'ITDoorsAjax.updateList'
+        }
+        )
+        }}
+    </div>
+</div>

@@ -17,11 +17,6 @@ class Departments
     /**
      * @var string
      */
-    private $mpk;
-
-    /**
-     * @var string
-     */
     private $name;
 
     /**
@@ -70,6 +65,11 @@ class Departments
     private $organizationId;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $mpks;
+
+    /**
      * @var \Lists\CityBundle\Entity\City
      */
     private $city;
@@ -94,7 +94,14 @@ class Departments
      */
     private $opermanager;
 
-
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->mpks = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -103,29 +110,6 @@ class Departments
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set mpk
-     *
-     * @param string $mpk
-     * @return Departments
-     */
-    public function setMpk($mpk)
-    {
-        $this->mpk = $mpk;
-    
-        return $this;
-    }
-
-    /**
-     * Get mpk
-     *
-     * @return string 
-     */
-    public function getMpk()
-    {
-        return $this->mpk;
     }
 
     /**
@@ -356,6 +340,39 @@ class Departments
     public function getOrganizationId()
     {
         return $this->organizationId;
+    }
+
+    /**
+     * Add mpks
+     *
+     * @param \Lists\MpkBundle\Entity\Mpk $mpks
+     * @return Departments
+     */
+    public function addMpk(\Lists\MpkBundle\Entity\Mpk $mpks)
+    {
+        $this->mpks[] = $mpks;
+    
+        return $this;
+    }
+
+    /**
+     * Remove mpks
+     *
+     * @param \Lists\MpkBundle\Entity\Mpk $mpks
+     */
+    public function removeMpk(\Lists\MpkBundle\Entity\Mpk $mpks)
+    {
+        $this->mpks->removeElement($mpks);
+    }
+
+    /**
+     * Get mpks
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMpks()
+    {
+        return $this->mpks;
     }
 
     /**

@@ -10,6 +10,7 @@ parameters:
     ajax.filter.namespace.report.last.messages: "report.last.messages"
     ajax.filter.namespace.oper.department.table: "oper.department.table"
     ajax.paginator.namespace.oper.department.table: "oper.paginator.department.table"
+    ajax.paginator.namespace.oper.department.coworkers: "oper.paginator.department.coworkers"
 
 
 framework:
@@ -43,6 +44,7 @@ twig:
         ajax_filter_namespace_report_last_messages: %ajax.filter.namespace.report.last.messages%
         ajax_filter_namespace_oper_department_table: %ajax.filter.namespace.oper.department.table%
         ajax_paginator_namespace_oper_department_table: %ajax.paginator.namespace.oper.department.table%
+        ajax_paginator_namespace_oper_department_coworkers: %ajax.paginator.namespace.oper.department.coworkers%
 
 # Assetic Configuration
 assetic:

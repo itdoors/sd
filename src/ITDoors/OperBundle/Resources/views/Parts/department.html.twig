@@ -28,16 +28,16 @@
         </thead>
         <tbody>
         {% for item in pagination %}
-            <tr id="ModelContact{{ item.id }}">
-                {{  include(
-                'ITDoorsOperBundle:Parts:departmentElement.html.twig',
-                {
-                item: item,
-                baseRoutePrefix: 0,
-                }
-                )
-                }}
-            </tr>
+                <tr id="ModelContact{{ item.id }}">
+                    {{  include(
+                    'ITDoorsOperBundle:Parts:departmentElement.html.twig',
+                    {
+                    item: item,
+                    baseRoutePrefix: 0,
+                    }
+                    )
+                    }}
+                </tr>
         {% endfor %}
         </tbody>
     </table>

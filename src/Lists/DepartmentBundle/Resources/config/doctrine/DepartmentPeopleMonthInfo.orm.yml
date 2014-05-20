@@ -1,0 +1,126 @@
+Lists\DepartmentBundle\Entity\DepartmentPeopleMonthInfo:
+    type: entity
+    table: department_people_month_info
+    fields:
+        departmentPeopleId:
+            id: true
+            type: bigint
+            nullable: false
+            column: department_people_id
+        year:
+            id: true
+            type: bigint
+            nullable: false
+        month:
+            id: true
+            type: bigint
+            nullable: false
+        bonus:
+            type: float
+            nullable: true
+        fine:
+            type: float
+            nullable: true
+        salary:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+        typeString:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: type_string
+        isCleanSalary:
+            type: boolean
+            nullable: true
+            column: is_clean_salary
+        normaDays:
+            type: bigint
+            nullable: true
+            column: norma_days
+        realSalary:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            column: real_salary
+        surcharge:
+            type: float
+            nullable: true
+    oneToOne:
+        departmentPeopleReplacement:
+            targetEntity: DepartmentPeople
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                department_people_replacement_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    manyToOne:
+        employmentType:
+            targetEntity: Lists\LookupBundle\Entity\Lookup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                employment_type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        salaryType:
+            targetEntity: Lists\LookupBundle\Entity\Lookup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                salary_type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        type:
+            targetEntity: Lists\LookupBundle\Entity\Lookup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        position:
+            targetEntity: DepartmentPeoplePosition
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                position_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        surchargeType:
+            targetEntity: Lookup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                surcharge_type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        fineType:
+            targetEntity: Lists\LookupBundle\Entity\Lookup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                fine_type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        bonusType:
+            targetEntity: Lists\LookupBundle\Entity\Lookup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                bonus_type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

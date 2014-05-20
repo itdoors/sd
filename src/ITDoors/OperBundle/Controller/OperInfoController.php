@@ -21,7 +21,6 @@ class OperInfoController extends BaseFilterController
      */
     public function indexAction()
     {
-
         return $this->render('ITDoorsOperBundle:Patterns:index.html.twig', array(
 
         ));
@@ -36,8 +35,8 @@ class OperInfoController extends BaseFilterController
     {
 
         $filterNamespace = $this->container->getParameter($this->getNamespace());
-
-        $this->clearFilters($filterNamespace, self::PAGINATOR_KEY);
+        $filters = $this->getFilters($filterNamespace);
+        $this->clearPaginator($filterNamespace);
 
         $page = 1;
         /** @var \Knp\Component\Pager\Paginator $paginator */
@@ -46,9 +45,9 @@ class OperInfoController extends BaseFilterController
         $repository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments');
 
-        $query = $repository->getAllDepartmentsQuery();
+        $query = $repository->getFilteredDepartments($filters);
 
-        $countDepartments = $repository->countAllDepartments();
+        $countDepartments = $repository->getFilteredDepartments($filters, "count")->getSingleScalarResult();
 
         $query->setHint('knp_paginator.count', $countDepartments);
         $pagination = $paginator->paginate(
@@ -57,10 +56,10 @@ class OperInfoController extends BaseFilterController
             20
         );
 
-
         return $this->render('ITDoorsOperBundle:Parts:department.html.twig', array(
             'pagination' => $pagination,
         ));
+
     }
 
     /**

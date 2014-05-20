@@ -67,9 +67,18 @@ class DepartmentsRepository extends EntityRepository
     private function getAllDepartmentsBuilder() {
         $query = $this->createQueryBuilder('d')
             ->select('d.id as id')
+            ->addSelect('d.statusDate as statusDate')
+            ->addSelect('d.coordinates')
             ->addSelect('m.name as mpk')
+            ->addSelect('m.active as mpkActive')
             ->addSelect('d.address as address')
             ->addSelect('o.name as organizationName')
+            ->addSelect('o.rs')
+            ->addSelect('o.edrpou')
+            ->addSelect('o.inn')
+            ->addSelect('o.certificate')
+            ->addSelect('o.address as organizationAddress')
+            ->addSelect('otype.title as organizationType')
             ->addSelect('r.name as regionName')
             ->addSelect('c.name as cityName')
             ->addSelect('s.name as statusName')
@@ -79,12 +88,14 @@ class DepartmentsRepository extends EntityRepository
             ->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as opermanagerName")
             ->leftJoin('d.status', 's')
             ->leftJoin('d.organization', 'o')
+            ->leftJoin('o.organizationType', 'otype')
             ->leftJoin('d.city', 'c')
             ->leftJoin('c.region', 'r')
             ->leftJoin('d.type', 't')
             ->leftJoin('d.opermanager', 'u')
-            ->leftJoin('d.mpk', 'm')
-            ->leftJoin('r.companystructure', 'companyStructure');
+            ->leftJoin('d.mpks', 'm')
+            ->leftJoin('r.companystructure', 'companyStructure')
+            ->andWhere('m.active = true');
         return $query;
     }
 
@@ -124,8 +135,9 @@ class DepartmentsRepository extends EntityRepository
             ->leftJoin('c.region', 'r')
             ->leftJoin('d.type', 't')
             ->leftJoin('d.opermanager', 'u')
-            ->leftJoin('d.mpk', 'm')
-            ->leftJoin('r.companystructure', 'companyStructure');
+            ->leftJoin('d.mpks', 'm')
+            ->leftJoin('r.companystructure', 'companyStructure')
+            ->andWhere('m.active = true');
 
         return $countQuery;
     }
@@ -137,6 +149,7 @@ class DepartmentsRepository extends EntityRepository
      * Searches departments through filters
      *
      * @param array $filters
+     * @param string $type
      *
      * @return mixed[]
      */
@@ -231,10 +244,36 @@ class DepartmentsRepository extends EntityRepository
                         $sql->andWhere('u.id in (:idsUser)');
                         $sql->setParameter(':idsUser', explode(',', $value));
                         break;
+                    case 'performer':
+                        if (isset($value[0]) && !$value[0])
+                        {
+                            break;
+                        }
+                        $sql->andWhere('m.organization in (:idsPerformer)');
+                        $sql->setParameter(':idsPerformer', explode(',', $value));
+
+                        break;
                 }
             }
         }
 
         return $sql->getQuery();
     }
+
+    /**
+     * Searches department by id and returns full info
+     *
+     * @param int $id
+     *
+     * @return mixed[]
+     */
+    public function getDepartmentInfoById($id) {
+        $sql = $this->getAllDepartmentsBuilder();
+        $sql->andWhere('d.id = :id');
+        $sql->setParameter(':id', $id);
+        $query = $sql->getQuery();
+
+        return $query->getResult();
+    }
+
 }

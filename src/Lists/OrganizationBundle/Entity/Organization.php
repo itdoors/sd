@@ -890,4 +890,32 @@ class Organization
     {
         return $this->children;
     }
+    /**
+     * @var \Lists\LookupBundle\Entity\Lookup
+     */
+    private $lookup;
+
+
+    /**
+     * Set lookup
+     *
+     * @param \Lists\LookupBundle\Entity\Lookup $lookup
+     * @return Organization
+     */
+    public function setLookup(\Lists\LookupBundle\Entity\Lookup $lookup = null)
+    {
+        $this->lookup = $lookup;
+    
+        return $this;
+    }
+
+    /**
+     * Get lookup
+     *
+     * @return \Lists\LookupBundle\Entity\Lookup 
+     */
+    public function getLookup()
+    {
+        return $this->lookup;
+    }
 }

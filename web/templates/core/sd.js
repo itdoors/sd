@@ -193,7 +193,7 @@ var SD = (function() {
                         selfSD.blockUI(selfAjaxMoreInfoObject);
                     },
                     success: function(response) {
-
+                        console.log(response);
                         selfSD.unblockUI(selfAjaxMoreInfoObject);
                         if (response.success)
                         {

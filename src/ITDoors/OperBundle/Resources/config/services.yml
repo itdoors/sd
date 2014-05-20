@@ -1,11 +1,16 @@
 parameters:
-    itdoors_oper.info.filter.form.class: ITDoors\OperBundle\Form\DepartmentFilterFormType
+    itdoors_oper.department.filter.form.class: ITDoors\OperBundle\Form\DepartmentFilterFormType
+    itdoors_oper.coworker.filter.form.class: ITDoors\OperBundle\Form\CoworkerFilterFormType
 
 
 services:
-
     itdoors_oper.form.DepartmentFilterFormType:
-        class: %itdoors_oper.info.filter.form.class%
+        class: %itdoors_oper.department.filter.form.class%
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: DepartmentFilterFormType }
+    itdoors_oper.form.CoworkerFilterFormType:
+        class: %itdoors_oper.coworker.filter.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: CoworkerFilterFormType }
