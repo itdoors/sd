@@ -3,6 +3,8 @@
 namespace ITDoors\ControllingBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * InvoiceRepository
@@ -77,12 +79,17 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      * 
-     * @param query $res Description
+     * @param QueryBuilder $res Description
      * 
      * @return mixed[]
      */
-    public function joinInvoicePeriod($res)
+    public function joinInvoicePeriod(QueryBuilder $res)
     {
+        $subQuery = '
+          SELECT max(h2.id)
+            FROM
+          ITDoorsControllingBundle:InvoiceMessage AS h2
+            WHERE h2.invoiceId = i.id';
 
         $res
             ->leftJoin('i.organization', 'o')
@@ -91,7 +98,7 @@ class InvoiceRepository extends EntityRepository
             ->leftJoin('o.city', 'c')
             ->leftJoin('c.region', 'r')
             ->leftJoin('i.messages', 'h')
-            ->andWhere('h.id = (SELECT max(h2.id) FROM ITDoorsControllingBundle:InvoiceMessage AS h2 WHERE h2.invoiceId = i.id)  OR h.id is NULL');
+            ->andWhere("h.id = ({$subQuery})  OR h.id is NULL");
 
         return $res;
     }
