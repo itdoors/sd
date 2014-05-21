@@ -23,11 +23,11 @@
                 
 </script>
 
-<div class="table-scrollable" id="invoice_list" data-url="{{ url('it_doors_controlling_invoice_show', { period: period }) }}">
+<div class="table-scrollable">
     <div class="navigation">
         {{ ajax_paginator_render(
             entities, ajax_filter_namespace_report_invoice, {
-                    'invoice_list': 'ITDoorsAjax.updateList'
+                    'datatable_ajax': 'ITDoorsAjax.updateList'
                 }
             )
         }}
@@ -79,7 +79,7 @@
                        data-default='{"invoiceId":"{{ entity.id }}"}'
                        data-form_name="invoiceCompanystructureForm"
                        data-post_function="updateList"
-                       data-post_target_id="invoice_list"
+                       data-post_target_id="datatable_ajax"
                        ></a><br>
                     {% for responsible in responsibles[entity.id] %}
                     <a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">
@@ -104,7 +104,7 @@
                        data-default='{"invoice_id":"{{ entity.id }}"}'
                        data-form_name="invoiceMessageForm"
                        data-post_function="updateList"
-                       data-post_target_id="invoice_list"
+                       data-post_target_id="datatable_ajax"
                        ></a>
                     {{ entity.descriptiondate is empty ? '' : '('~entity.descriptiondate |date("d.m.y")~')'}} {{ entity.description }}
                 </td>
@@ -130,7 +130,7 @@
     <div class="navigation">
         {{ ajax_paginator_render(
             entities, ajax_filter_namespace_report_invoice, {
-                    'invoice_list': 'ITDoorsAjax.updateList'
+                    'datatable_ajax': 'ITDoorsAjax.updateList'
                 }
             )
         }}
