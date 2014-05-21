@@ -50,44 +50,34 @@
 <div class="row">
     <div class="col-md-12">
         <div class="tabbable boxless">
-            <ul class="nav nav-tabs">
-                <li{% if block == 'invoice' %} class="active"<{% endif %}><a href="#tab_0" data-toggle="tab" data-block-id="block-ajax" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'invoice'}) }}">{% trans %}Invoice{% endtrans %}</a></li>
-                <li{% if block == 'contacts' %} class="active"<{% endif %}><a href="#tab_1" data-toggle="tab"  data-block-id="block-ajax" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'contacts' }) }}">{% trans %}Contacts client{% endtrans %}</a></li>
-                <li{% if block == 'dogovor' %} class="active"<{% endif %}><a href="#tab_2" data-toggle="tab" data-block-id="block-ajax" data-url="{{ url('it_doors_controlling_invoice_invoice_show', { block: 'dogovor' }) }}">{% trans %}Dogovor{% endtrans %}</a></li>										
-                <li{% if block == 'responsible' %} class="active"<{% endif %}><a href="#tab_3" data-toggle="tab" data-block-id="block-ajax" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'responsible' }) }}">{% trans %}Responsible{% endtrans %}</a></li>
-                <li{% if block == 'organization' %} class="active"<{% endif %}><a href="#tab_4" data-toggle="tab" data-block-id="block-ajax" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'organization'}) }}">{% trans %}Customer{% endtrans %}</a></li>
-                <li{% if block == 'history' %} class="active"<{% endif %}><a href="#tab_5" data-toggle="tab" data-block-id="block-ajax" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'history' }) }}">{% trans %}History{% endtrans %}</a></li>
-            </ul>
-            <div class="tab-content">                
-                <div class="tab-content" id="block-ajax">
-                     {{ render(controller('ITDoorsControllingBundle:Invoice:invoiceshow', {  block:block})) }}
-                </div>
-            </div>
-        </div>
-        <div>
-            <div class="tab-pane" id="tab_1">
-                <div class="col-md-12">
-                    <h3>{% trans %} Notes {% endtrans %}</h3>
-                    <div class="table-toolbar">
-                        <div class="btn-group">
-                            <button id="managers_list_new" class="btn green ajax-form"
-                                    data-target_holder="invoiceMessageFormTpl"
-                                    data-form_name="invoiceMessageForm"
-                                    data-default='{"invoice_id":"{{ invoiceid }}"}'
-                                    data-post_function="updateList"
-                                    data-post_target_id="messages_list"
-                                    >
-                                    {% trans %} Add {% endtrans %} <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                        <div style="display: none" id="invoiceMessageFormTpl">
-                        </div>
-                    </div>
-                    <div id="messages_list" data-url="{{ url('it_doors_controlling_invoice_invoice_lastaction') }}">
-                        {{ render(controller('ITDoorsControllingBundle:Invoice:lastaction')) }}
-                    </div>
-                </div>
+            {{ ajax_tab_render( tabs, tab, namespaceTab ) }}               
+            <div class="tab-content ajax-tab-holder"  id="datatable_ajax">
+                     {{ render(controller('ITDoorsControllingBundle:Invoice:invoiceshow')) }}
             </div>
         </div>
     </div>
+    <div class="tab-pane" id="tab_1">
+        <div class="col-md-12">
+            <h3>{% trans %} Notes {% endtrans %}</h3>
+            <div class="table-toolbar">
+                <div class="btn-group">
+                    <button id="managers_list_new" class="btn green ajax-form"
+                            data-target_holder="invoiceMessageFormTpl"
+                            data-form_name="invoiceMessageForm"
+                            data-default='{"invoice_id":"{{ invoiceid }}"}'
+                            data-post_function="updateList"
+                            data-post_target_id="messages_list"
+                            >
+                                    {% trans %} Add {% endtrans %} <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+                <div style="display: none" id="invoiceMessageFormTpl">
+                </div>
+            </div>
+            <div id="messages_list" data-url="{{ url('it_doors_controlling_invoice_invoice_lastaction') }}">
+                        {{ render(controller('ITDoorsControllingBundle:Invoice:lastaction')) }}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock body %}

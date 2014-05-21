@@ -3,23 +3,19 @@ it_doors_controlling_invoice:
     defaults: { _controller: ITDoorsControllingBundle:Invoice:index }
 
 it_doors_controlling_invoice_show:
-    pattern:  /controlling/show/{period}
-    defaults: { _controller: ITDoorsControllingBundle:Invoice:show, period:30 }
-    requirements:
-        period: 30|60|120|180|181|pay|court
+    pattern:  /controlling/show
+    defaults: { _controller: ITDoorsControllingBundle:Invoice:show }
         
 it_doors_controlling_invoice_invoice:
-    pattern:  /controlling/invoice/{invoiceid}/{block}
-    defaults: { _controller: ITDoorsControllingBundle:Invoice:invoice, block:invoice}
+    pattern:  /controlling/invoice/{invoiceid}
+    defaults: { _controller: ITDoorsControllingBundle:Invoice:invoice}
     requirements:
         invoiceid: \d+
-        block: invoice|organization|responsible|dogovor|contacts|history
 
 it_doors_controlling_invoice_invoice_show:
-    pattern:  /controlling/invoice/show/{block}
-    defaults: { _controller: ITDoorsControllingBundle:Invoice:invoiceshow, block:invoice}
-    requirements:
-        block: invoice|organization|responsible|dogovor|contacts|history
+    pattern:  /controlling/invoice/show
+    defaults: { _controller: ITDoorsControllingBundle:Invoice:invoiceshow}
+
         
 it_doors_controlling_invoice_invoice_lastaction:
     pattern:  /controlling/invoice/lastaction

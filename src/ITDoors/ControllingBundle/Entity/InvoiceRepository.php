@@ -29,6 +29,7 @@ class InvoiceRepository extends EntityRepository
 
         return $res;
     }
+
     /**
      * Returns results for interval future invoice
      *
@@ -51,11 +52,11 @@ class InvoiceRepository extends EntityRepository
             ->addSelect('i.dogovorActOriginal')
             ->addSelect('i.dateEnd')
             ->addSelect('i.dateFact')
-            ->addSelect('o.name as organizationName')
+            ->addSelect('customer.name as customerName')
+            ->addSelect('performer.name as performerName')
             ->addSelect('r.name as regionName')
             ->addSelect('d.number as dogovorNumber')
             ->addSelect('d.startdatetime as dogovorStartDatetime')
-            ->addSelect('performer.name as performerName')
             ->addSelect('h.note as description')
             ->addSelect('h.createdate as descriptiondate');
 
@@ -92,10 +93,10 @@ class InvoiceRepository extends EntityRepository
             WHERE h2.invoiceId = i.id';
 
         $res
-            ->leftJoin('i.organization', 'o')
             ->leftJoin('i.dogovor', 'd')
+            ->leftJoin('d.customer', 'customer')
             ->leftJoin('d.performer', 'performer')
-            ->leftJoin('o.city', 'c')
+            ->leftJoin('performer.city', 'c')
             ->leftJoin('c.region', 'r')
             ->leftJoin('i.messages', 'h')
             ->andWhere("h.id = ({$subQuery})  OR h.id is NULL");
@@ -154,7 +155,7 @@ class InvoiceRepository extends EntityRepository
         $this->whereInvoicePeriod($res, $periodmin, $periodmax);
 
         return $res
-            ->orderBy('i.delayDate', 'DESC')->getQuery();
+                ->orderBy('i.delayDate', 'DESC')->getQuery();
     }
 
     /**
@@ -177,7 +178,7 @@ class InvoiceRepository extends EntityRepository
         $this->whereInvoicePeriod($rescount, $periodmin, $periodmax);
 
         return $rescount
-            ->getQuery()->getSingleScalarResult();
+                ->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -222,6 +223,7 @@ class InvoiceRepository extends EntityRepository
                 ->andWhere("i.dateFact is NULL")
                 ->setParameter(':id', $id)->getQuery();
     }
+
     /**
      * Returns results for interval future invoice
      *
@@ -271,7 +273,7 @@ class InvoiceRepository extends EntityRepository
      */
     public function getInvoicePay()
     {
-         $date = date('Y-m-d', time()- 2592000);
+        $date = date('Y-m-d', time() - 2592000);
         $res = $this->createQueryBuilder('i');
         /** select */
         $this->selectInvoicePeriod($res);
@@ -284,6 +286,7 @@ class InvoiceRepository extends EntityRepository
 
         return $res->getQuery();
     }
+
     /**
      * Returns results for interval future invoice
      *
@@ -291,7 +294,7 @@ class InvoiceRepository extends EntityRepository
      */
     public function getInvoicePaySum()
     {
-         $date = date('Y-m-d', time()-2592000);
+        $date = date('Y-m-d', time() - 2592000);
         $res = $this->createQueryBuilder('i');
         /** select */
         $this->selectInvoiceSum($res);
@@ -310,7 +313,7 @@ class InvoiceRepository extends EntityRepository
      */
     public function getInvoicePayCount()
     {
-        $date = date('Y-m-d', time()-2592000);
+        $date = date('Y-m-d', time() - 2592000);
         $rescount = $this->createQueryBuilder('i');
 
         /** select */
@@ -322,5 +325,55 @@ class InvoiceRepository extends EntityRepository
             ->setParameter(':date', $date);
 
         return $rescount->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Returns results for interval future invoice
+     *
+     * @param string $period 30,60,120,160,180,court,pay
+     * 
+     * @return mixed[]
+     */
+    public function getEntittyCountSum($period)
+    {
+        $result = array();
+        switch ($period) {
+            case 30:
+                $result['entities'] = $this->getInvoicePeriod(1, 30);
+                $result['count'] = $this->getInvoicePeriodCount(1, 30);
+                $result['sum'] = $this->getInvoicePeriodSum(1, 30);
+                break;
+            case 60:
+                $result['entities'] = $this->getInvoicePeriod(31, 60);
+                $result['count'] = $this->getInvoicePeriodCount(31, 60);
+                $result['sum'] = $this->getInvoicePeriodSum(31, 60);
+                break;
+            case 120:
+                $result['entities'] = $this->getInvoicePeriod(61, 120);
+                $result['count'] = $this->getInvoicePeriodCount(61, 120);
+                $result['sum'] = $this->getInvoicePeriodSum(61, 120);
+                break;
+            case 180:
+                $result['entities'] = $this->getInvoicePeriod(121, 180);
+                $result['count'] = $this->getInvoicePeriodCount(121, 180);
+                $result['sum'] = $this->getInvoicePeriodSum(121, 180);
+                break;
+            case 181:
+                $result['entities'] = $this->getInvoicePeriod(181, 0);
+                $result['count'] = $this->getInvoicePeriodCount(181, 0);
+                $result['sum'] = $this->getInvoicePeriodSum(181, 0);
+                break;
+            case 'court':
+                $result['entities'] = $this->getInvoiceCourt();
+                $result['count'] = $this->getInvoiceCourtCount();
+                $result['sum'] = $this->getInvoiceCourtSum();
+                break;
+            case 'pay':
+                $result['entities'] = $this->getInvoicePay();
+                $result['count'] = $this->getInvoicePayCount();
+                $result['sum'] = $this->getInvoicePaySum();
+                break;
+        }
+        return $result;
     }
 }

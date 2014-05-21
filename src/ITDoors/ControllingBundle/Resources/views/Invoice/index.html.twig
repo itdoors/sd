@@ -19,34 +19,26 @@
 
 {% block css_page_level_plugin %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datepicker/css/datepicker.css')}} " />
-    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+<link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datepicker/css/datepicker.css')}} " />
+<link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
 {% endblock %}
 
 {% block js_page_level_plugins %}
     {{ parent() }}
-    
+
 <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
 <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
-    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/itdoorscontrolling/js/invoice.js') }}"></script>
+<script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/itdoorscontrolling/js/invoice.js') }}"></script>
 {% endblock %}
 
 {% block body %}
 <div class="row">
     <div class="col-md-12">
         <div class="tabbable tabbable-custom boxless">
-            <ul class="nav nav-tabs">
-                <li{% if period == 30 %} class="active"<{% endif %}><a href="#tab_0" data-toggle="tab" data-block-id="block-ajax" data-url="{{ url('it_doors_controlling_invoice_show', { period: 30 }) }}">{% trans %}from{% endtrans %} 1 {% trans %}to{% endtrans %} 30 {% trans %}day{% endtrans %}</a></li>
-                <li{% if period == 60 %} class="active"<{% endif %}><a href="#tab_1" data-toggle="tab" data-block-id="block-ajax" data-url="{{ url('it_doors_controlling_invoice_show', { period: 60 }) }}">{% trans %}from{% endtrans %} 31 {% trans %}to{% endtrans %} 60 {% trans %}days{% endtrans %}</a></li>
-                <li{% if period == 120 %} class="active"<{% endif %}><a href="#tab_2" data-toggle="tab" data-block-id="block-ajax" data-url="{{ url('it_doors_controlling_invoice_show', { period: 120 }) }}">{% trans %}from{% endtrans %} 61 {% trans %}to{% endtrans %} 120 {% trans %}days{% endtrans %}</a></li>										
-                <li{% if period == 180 %} class="active"<{% endif %}><a href="#tab_3" data-toggle="tab" data-block-id="block-ajax" data-url="{{ url('it_doors_controlling_invoice_show', { period: 180 }) }}">{% trans %}from{% endtrans %} 121 {% trans %}to{% endtrans %} 180 {% trans %}days{% endtrans %}</a></li>
-                <li{% if period == 181 %} class="active"<{% endif %}><a href="#tab_4" data-toggle="tab" data-block-id="block-ajax" data-url="{{ url('it_doors_controlling_invoice_show', { period: 181 }) }}">{% trans %}from{% endtrans %} 181 {% trans %}day{% endtrans %}</a></li>
-                <li{% if period == 'court' %} class="active"<{% endif %}><a href="#tab_5" data-toggle="tab" data-block-id="block-ajax" data-url="{{ url('it_doors_controlling_invoice_show', { period: 'court' }) }}">{% trans %}court{% endtrans %}</a></li>
-                <li{% if period == 'pay' %} class="active"<{% endif %}><a href="#tab_5" data-toggle="tab" data-block-id="block-ajax" data-url="{{ url('it_doors_controlling_invoice_show', { period: 'pay' }) }}">{% trans %}pay{% endtrans %}</a></li>
-            </ul>
-            <div class="tab-content" id="block-ajax">
-                 {{ render(controller('ITDoorsControllingBundle:Invoice:show', {   'period': period })) }}
+             {{ ajax_tab_render( tabs, tab, ajax_filter_namespace_report_invoice) }}
+            <div class="tab-content ajax-tab-holder" id="datatable_ajax">
+                 {{ render(controller('ITDoorsControllingBundle:Invoice:show')) }}
             </div>
         </div>
     </div>
