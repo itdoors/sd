@@ -6,7 +6,7 @@
                 <button id="managers_list_new" class="btn green ajax-form"
                         data-target_holder="invoiceCompanystructureFormTpl"
                         data-form_name="invoiceCompanystructureForm"
-                        data-default='{"invoiceId":"{{invoice.id}}"}'
+                        data-default='{"invoiceId":"{{entitie.0.invoiceId}}"}'
                         data-post_function="updateList"
                         data-post_target_id="responsibles_list"
                         >
@@ -25,15 +25,17 @@
                 <tbody role="alert" aria-live="polite" aria-relevant="all">
                     {% for responsible in entitie %}
                             <tr>
-                                <td> {{ responsible.companystructure.name }}</td>          
-                                <td> {{ responsible.companystructure.mpk }}</td>          
+                                <td> {{ responsible.name }}</td>          
+                                <td> {{ responsible.mpk }}</td>          
                                 <td>
+                                    {% if  responsible.id is not empty %}
                                     <a
                                         class="ajax-delete fa fa-trash-o"
                                         title="{% trans %}Delete{% endtrans %}"
                                         href="javascript:;"
                                         data-params='{"model":"InvoiceCompanystructure","id":{{ responsible.id }}}'
                                     ></a>
+                                    {% endif %}
                                 </td>          
                             </tr>
                     {% endfor %}

@@ -111,3 +111,6 @@ ITDoors\ControllingBundle\Entity\Invoice:
         messages:
             targetEntity: ITDoors\ControllingBundle\Entity\InvoiceMessage
             mappedBy: invoice
+        invoicecompanystructure:
+            targetEntity: ITDoors\ControllingBundle\Entity\InvoiceCompanystructure
+            mappedBy: invoice

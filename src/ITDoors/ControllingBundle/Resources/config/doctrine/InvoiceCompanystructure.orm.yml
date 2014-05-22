@@ -23,7 +23,7 @@ ITDoors\ControllingBundle\Entity\InvoiceCompanystructure:
     manyToOne:
         invoice:
             targetEntity: ITDoors\ControllingBundle\Entity\Invoice
-            inversedBy: null
+            inversedBy: invoicecompanystructure
             joinColumn:
                 name: invoice_id
                 referencedColumnName: id

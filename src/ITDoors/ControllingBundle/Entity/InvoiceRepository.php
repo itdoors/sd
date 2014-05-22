@@ -24,8 +24,7 @@ class InvoiceRepository extends EntityRepository
      */
     public function selectInvoiceSum(QueryBuilder $res)
     {
-        $res
-            ->select('Sum(i.sum) as summa');
+        $res->select('Sum(i.sum) as summa');
 
         return $res;
     }
@@ -375,5 +374,158 @@ class InvoiceRepository extends EntityRepository
                 break;
         }
         return $result;
+    }
+
+    /**
+     * Returns results for interval future invoice
+     *
+     * @param integer   $invoiceid
+     * @patam string    $tab customer||responsible||dogovor||contacts||history
+     * 
+     * @return mixed[]
+     */
+    public function getInfoForTab($invoiceid, $tab)
+    {
+        $entitie = $this->createQueryBuilder('i');
+        switch ($tab) {
+            case 'invoice':
+                $subQueryCase = '
+                    CASE 
+                    when customer.name is not NULL 
+                    then customer.name 
+                    else i.customerName end  as customerName';
+                $subQueryCase2 = '
+                    CASE 
+                    when performer.name is not NULL
+                    then performer.name 
+                    else i.performerName end as performerName';
+                
+                $entitie
+                    ->select('i.sum')
+                    ->addSelect('i.id')
+                    ->addSelect('i.invoiceId')
+                    ->addSelect('i.date ')
+                    ->addSelect('i.dateEnd')
+                    ->addSelect('i.dateFact')
+                    ->addSelect('i.court')
+                    ->addSelect("{$subQueryCase}")
+                    ->addSelect("{$subQueryCase2}")
+                    ->leftJoin('i.dogovor', 'd')
+                    ->leftJoin('d.customer', 'customer')
+                    ->leftJoin('d.performer', 'performer')
+                    ->where('i.id = :invoiceid')
+                    ->setParameter(':invoiceid', (int) $invoiceid);
+                $entitie = $entitie->getQuery()
+                    ->getSingleResult();
+                break;
+            case 'contacts':
+                $subQueryCase =  $entitie->expr()->andx(
+                    $entitie->expr()->eq('mc.modelId', 'customer.id'),
+                    $entitie->expr()->eq('mc.modelName', ':text')
+                );
+                $entitie
+                    ->Select('mc.id as id')
+                    ->addSelect('mc.firstName')
+                    ->addSelect('mc.lastName')
+                    ->addSelect('mc.middleName')
+                    ->addSelect('mc.position')
+                    ->addSelect('mc.phone1')
+                    ->addSelect('mc.phone2')
+                    ->addSelect('mc.email')
+                    ->addSelect('mc.birthday')
+                    ->addSelect('customer.id as customerId')
+                    ->leftJoin('i.dogovor', 'd')
+                    ->leftJoin('d.customer', 'customer')
+                    ->leftJoin('Lists\ContactBundle\Entity\ModelContact', 'mc', 'WITH', $subQueryCase)
+                    ->where('i.id = :invoiceid')
+                    ->setParameter(':invoiceid', (int) $invoiceid)
+                    ->setParameter(':text', 'organization');
+                $entitie = $entitie->getQuery()
+                    ->getResult();
+                break;
+            case 'dogovor':
+                $entitie
+                    ->Select('customer.name as customerName')
+                    ->addSelect('performer.name as performerName')
+                    ->addSelect('d.id')
+                    ->addSelect('d.number')
+                    ->addSelect('d.startdatetime')
+                    ->addSelect('d.stopdatetime')
+                    ->addSelect('d.prolongation')
+                    ->addSelect('d.prolongationDate')
+                    ->addSelect('d.isActive')
+                    ->addSelect('d.subject')
+                    ->addSelect('type.name as dogovorTypeId')
+                    ->addSelect('d.filepath')
+                    ->leftJoin('i.dogovor', 'd')
+                    ->leftJoin('d.customer', 'customer')
+                    ->leftJoin('d.performer', 'performer')
+                    ->leftJoin('d.dogovorType', 'type')
+                    ->where('i.id = :invoiceid')
+                    ->setParameter(':invoiceid', (int) $invoiceid);
+                $entitie = $entitie->getQuery()
+                    ->getSingleResult();
+
+                break;
+            case 'responsible':
+                $entitie
+                    ->Select('c.name')
+                    ->addSelect('c.mpk')
+                    ->addSelect('ic.id')
+                    ->addSelect('i.id as invoiceId')
+                    ->leftJoin('i.invoicecompanystructure', 'ic')
+                    ->leftJoin('ic.companystructure', 'c')
+                    ->where('i.id = :invoiceid')
+                    ->setParameter(':invoiceid', (int) $invoiceid);
+                $entitie = $entitie->getQuery()
+                    ->getResult();
+                break;
+            case 'customer':
+                $subQueryCase = '
+                    CASE 
+                    when customer.name is not NULL 
+                    then customer.name else i.customerName 
+                    end  as customerName';
+                $subQueryCase2 = '
+                    CASE
+                    when customer.edrpou is not NULL
+                    then customer.edrpou else i.customerEdrpou
+                    end as customerEdrpou';
+                $entitie
+                    ->Select('creator.lastName')
+                    ->addSelect('creator.firstName')
+                    ->addSelect('customer.createdatetime')
+                     ->addSelect("{$subQueryCase}")
+                    ->addSelect("{$subQueryCase2}")
+                    ->addSelect('customer.shortname')
+                    ->addSelect('customer.address')
+                    ->addSelect('customer.mailingAddress')
+                    ->addSelect('customer.physicalAddress')
+                    ->addSelect('customer.inn')
+                    ->addSelect('customer.certificate')
+                    ->addSelect('customer.shortDescription')
+                    ->addSelect('customer.phone')
+                    ->addSelect('customer.site')
+                    ->addSelect('lookup.name as scope')
+                    ->addSelect('c_city.name as cityName')
+                    ->addSelect('type.title as customerType')
+                    ->addSelect('c_group.name as groupName')
+                    ->leftJoin('i.dogovor', 'd')
+                    ->leftJoin('d.customer', 'customer')
+                    ->leftJoin('customer.creator', 'creator')
+                    ->leftJoin('customer.scope', 'lookup')
+                    ->leftJoin('customer.organizationType', 'type')
+                    ->leftJoin('customer.city', 'c_city')
+                    ->leftJoin('customer.group', 'c_group')
+                    ->where('i.id = :invoiceid')
+                    ->setParameter(':invoiceid', (int) $invoiceid);
+                $entitie = $entitie->getQuery()
+                    ->getSingleResult();
+                break;
+            case 'history':
+                $entitie = '';
+                break;
+        }
+        return $entitie;
     }
 }

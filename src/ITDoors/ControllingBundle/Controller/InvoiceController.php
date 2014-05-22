@@ -143,45 +143,13 @@ class InvoiceController extends BaseFilterController
         $em = $this->getDoctrine()->getManager();
         /** @var InvoiceRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
-        $invoiceObj = $this->getDoctrine()
-            ->getRepository('ITDoorsControllingBundle:Invoice')
-            ->find($invoiceid);
-        $entitie = array();
-        $organizationId = '';
-        $dogovor = '';
-        switch ($tab) {
-            case 'invoice':
-                $entitie = $invoiceObj;
-                break;
-            case 'organization':
-                $entitie = $invoiceObj;
-                break;
-            case 'responsible':
-                $entitie = $em->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
-                    ->findBy(array('invoiceId' => $invoiceid));
-                break;
-            case 'dogovor':
-                $entitie = $invoiceObj->getDogovor();
-                break;
-            case 'contacts':
-                $organizationId = $invoiceObj->getDogovor()->getCustomerId();
-                $entitie = $this->getDoctrine()
-                    ->getRepository('ListsContactBundle:ModelContact')
-                    ->findBy(array('modelName' => 'organization', 'modelId' => $organizationId));
 
-                break;
-            case 'history':
-                $entitie = '';
-                break;
-        }
+        $entitie = $invoice->getInfoForTab($invoiceid, $tab);
 
         return $this->render('ITDoorsControllingBundle:Invoice:table' . $tab . '.html.twig', array(
+                'namespaceTab' => $namespaceTab,
                 'entitie' => $entitie,
-                'block' => $tab,
-                'organizationId' => $organizationId,
-                'dogovor' => $dogovor,
-                'invoice' => $invoiceObj,
-                'namespaceTab' => $namespaceTab
+                'block' => $tab
         ));
     }
 
@@ -249,7 +217,7 @@ class InvoiceController extends BaseFilterController
                     $error->setDescription('parser file');
                     $em->persist($error);
                     $em->flush();
-                    
+
                     $this->savejson($json->invoice);
 
                     $error = new Invoicecron();
@@ -266,7 +234,7 @@ class InvoiceController extends BaseFilterController
                     $error->setDate(new \DateTime());
                     $error->setStatus('FATAL ERROR');
                     $error->setReason($file);
-                    $error->setDescription($directory.$file. 'Достигнута максимальная глубина стека');
+                    $error->setDescription($directory . $file . ' Max long');
                     $em->persist($error);
                     $em->flush();
                     break;
@@ -275,7 +243,7 @@ class InvoiceController extends BaseFilterController
                     $error->setDate(new \DateTime());
                     $error->setStatus('FATAL ERROR');
                     $error->setReason($file);
-                    $error->setDescription($directory.$file.'Некорректные разряды');
+                    $error->setDescription($directory . $file . 'Некорректные разряды');
                     $em->persist($error);
                     $em->flush();
                     break;
@@ -284,7 +252,7 @@ class InvoiceController extends BaseFilterController
                     $error->setDate(new \DateTime());
                     $error->setStatus('FATAL ERROR');
                     $error->setReason($file);
-                    $error->setDescription($directory.$file.'Некорректный управляющий символ');
+                    $error->setDescription($directory . $file . ' symvol corect');
                     $em->persist($error);
                     $em->flush();
                     break;
@@ -293,7 +261,7 @@ class InvoiceController extends BaseFilterController
                     $error->setDate(new \DateTime());
                     $error->setStatus('FATAL ERROR');
                     $error->setReason($file);
-                    $error->setDescription($directory.$file.'error format JSON');
+                    $error->setDescription($directory . $file . 'error format JSON');
                     $em->persist($error);
                     $em->flush();
                     break;
@@ -302,7 +270,7 @@ class InvoiceController extends BaseFilterController
                     $error->setDate(new \DateTime());
                     $error->setStatus('FATAL ERROR');
                     $error->setReason($file);
-                    $error->setDescription($directory.$file.'error UTF-8');
+                    $error->setDescription($directory . $file . 'error UTF-8');
                     $em->persist($error);
                     $em->flush();
                     break;
@@ -311,7 +279,7 @@ class InvoiceController extends BaseFilterController
                     $error->setDate(new \DateTime());
                     $error->setStatus('FATAL ERROR');
                     $error->setReason($file);
-                    $error->setDescription($directory.$file.'Не известная ошибка');
+                    $error->setDescription($directory . $file . 'Не известная ошибка');
                     $em->persist($error);
                     $em->flush();
                     break;
@@ -319,15 +287,14 @@ class InvoiceController extends BaseFilterController
         } else {
             $error = new Invoicecron();
             $error->setDate(new \DateTime());
-            if($file){
+            if ($file) {
                 $error->setStatus('ERROR failure');
                 $error->setReason('file not found');
                 $error->setDescription('Файл был и пропал )  ' . $directory . $file);
-            }else{
+            } else {
                 $error->setStatus('ok');
                 $error->setReason('file not found');
                 $error->setDescription('Файл не найден ');
-                
             }
             $em->persist($error);
             $em->flush();
@@ -517,8 +484,21 @@ class InvoiceController extends BaseFilterController
                         ));
 
                         if (!$dogovoradd) {
+                            // можно поискать договор по 2 полям
+//                            $dogovoradd = $em->getRepository('ListsDogovorBundle:Dogovor')
+//                            ->findOneBy(array(
+//                                'number' => $invoice->dogovor_number,
+//                                'startdatetime' => $invoice->dogovor_date,
+//                                'customer_id' => null,
+//                                'performer_id' => null,
+//                            ));
+                            if ($dogovoradd) {
+                                
+                            } else {
 
-                            // добавить договор
+
+
+                                // добавить договор
 //                            $dogovorNew = new Dogovor();
 //                            $dogovorNew->setNumber($invoice->dogovor_number);
 //                            $dogovorNew->setName($invoice->dogovor_name);
@@ -529,19 +509,20 @@ class InvoiceController extends BaseFilterController
 //                            $em->persist($dogovorNew);
 //                            $em->flush();
 //                            $invoiceNew->setDogovor($dogovorNew);
-                            $em->persist($invoiceNew);
-                            $em->flush();
+                                $em->persist($invoiceNew);
+                                $em->flush();
 
 
-                            $error = new Invoicecron();
-                            $error->setDate(new \DateTime());
-                            $error->setInvoiceId($invoiceNew->getId());
-                            $error->setStatus('error');
-                            $error->setReason('dogovor not found');
-                            $error->setDescription(json_encode($invoice));
-                            $em->persist($error);
-                            $em->flush();
-                            continue;
+                                $error = new Invoicecron();
+                                $error->setDate(new \DateTime());
+                                $error->setInvoiceId($invoiceNew->getId());
+                                $error->setStatus('error');
+                                $error->setReason('dogovor not found');
+                                $error->setDescription(json_encode($invoice));
+                                $em->persist($error);
+                                $em->flush();
+                                continue;
+                            }
                         } else {
 
                             // подтвердить связь и 1С
@@ -572,9 +553,11 @@ class InvoiceController extends BaseFilterController
                         $error->setStatus('error');
                         // не найден заказчик
                         if (!$customerfind && $performerfind) {
+                            // можно найти довогор по 3 полям
                             $error->setReason('dogovor not found and customer');
                             // не найден исполнитель
                         } elseif (!$performerfind && $customerfind) {
+                            // можно найти довогор по 3 полям
                             $error->setReason('dogovor not found and performer');
                         } else {
                             $error->setReason('dogovor not found and customer and  performer');
@@ -773,7 +756,7 @@ class InvoiceController extends BaseFilterController
         );
         $tabs['organization'] = array(
             'blockupdate' => 'ajax-tab-holder',
-            'tab' => 'organization',
+            'tab' => 'customer',
             'url' => $this->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
             'text' => $translator->trans('Customer')
         );
@@ -785,5 +768,4 @@ class InvoiceController extends BaseFilterController
         );
         return $tabs;
     }
-
 }

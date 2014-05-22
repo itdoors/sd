@@ -6,7 +6,7 @@
             <button id="managers_list_new" class="btn green ajax-form"
                     data-target_holder="contactsFormTpl"
                     data-form_name="modelContactOrganizationUserForm"
-                    data-default='{"modelName":"organization","modelId":{{ organizationId}} }'
+                    data-default='{"modelName":"organization","modelId":{{ entitie[0].customerId}} }'
                     data-post_function="updateList"
                     data-post_target_id="contact_list"
                     >
@@ -41,11 +41,7 @@
                         <td>{{ item.phone1 }}</td>
                         <td>{{ item.phone2 }}</td>
                         <td>{{ item.email }}</td>
-                        <td>
-                            {% if item.birthday %}
-                                {{ item.birthday|date("d.M.y") }}
-                            {% endif %}
-                        </td>
+                        <td>{{item.birthday is empty ? '' : item.birthday|date("d.M.y") }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

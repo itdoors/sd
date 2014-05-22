@@ -723,4 +723,42 @@ class Invoice
     {
         return (string)$this->getInvoiceId();
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $invoicecompanystructure;
+
+
+    /**
+     * Add invoicecompanystructure
+     *
+     * @param \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicecompanystructure
+     * @return Invoice
+     */
+    public function addInvoicecompanystructure(\ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicecompanystructure)
+    {
+        $this->invoicecompanystructure[] = $invoicecompanystructure;
+    
+        return $this;
+    }
+
+    /**
+     * Remove invoicecompanystructure
+     *
+     * @param \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicecompanystructure
+     */
+    public function removeInvoicecompanystructure(\ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicecompanystructure)
+    {
+        $this->invoicecompanystructure->removeElement($invoicecompanystructure);
+    }
+
+    /**
+     * Get invoicecompanystructure
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInvoicecompanystructure()
+    {
+        return $this->invoicecompanystructure;
+    }
 }

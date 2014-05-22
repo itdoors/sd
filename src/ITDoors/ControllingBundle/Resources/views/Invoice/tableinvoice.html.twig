@@ -24,11 +24,11 @@
         <tbody>
             <tr>
                 <td style="width:40%">{% trans %}Customer{% endtrans %}</td>
-                <td style="width:40%">{{ entitie.dogovor.customer}}</td>
+                <td style="width:40%">{{ entitie.customerName}}</td>
             </tr>
             <tr>
                 <td>{% trans %}Performer{% endtrans %}</td>
-                <td>{{ entitie.dogovor.performer }}</td>
+                <td> {{ entitie.performerName}}</td>
             </tr>
             <tr>
                 <td style="width:40%">{% trans %}Number invoice{% endtrans %}</td>
@@ -40,28 +40,28 @@
             </tr>
             <tr>
                 <td>{% trans %}Date{% endtrans %}</td>
-                <td>{{ invoice.date is empty ? '' : invoice.date|date('d.m.y')}}</td>
+                <td>{{ entitie.date is empty ? '' : entitie.date|date('d.m.y')}}</td>
             </tr>
             <tr>
                 <td>{% trans %}Date_end{% endtrans %}</td>
                 <td><a href="#" 
-                       class="datesave fa fa-plus" data-pk="{{ invoice.id }}"
+                       class="datesave fa fa-plus" data-pk="{{ entitie.id }}"
                        data-original-title="{% trans %}Select data{% endtrans %}"
-                       data-date="{{invoice.dateEnd|date("d.m.Y")}}"
+                       data-date="{{entitie.dateEnd|date("d.m.Y")}}"
                        data-format="dd.mm.yyyy"> 
-                        {{ invoice.dateEnd is empty ? '' : invoice.dateEnd|date("d.m.Y") }}
+                        {{ entitie.dateEnd is empty ? '' : entitie.dateEnd|date("d.m.Y") }}
                     </a></td>
             </tr>
             <tr>
                 <td>{% trans %}Date_fact{% endtrans %}</td>
-                <td>{{ invoice.dateFact is empty ?  '' : invoice.dateFact|date('d.m.y')}}</td>
+                <td>{{ entitie.dateFact is empty ?  '' : entitie.dateFact|date('d.m.y')}}</td>
             </tr>
             <tr>
                 <td>{% trans %}Status{% endtrans %}</td>
                 <td>
-                        {% if invoice.court ==  true %}
+                        {% if entitie.court ==  true %}
                             {% trans %}In coutr{% endtrans %}
-                        {% elseif invoice.dateFact is not null %}
+                        {% elseif entitie.dateFact is not null %}
                             {% trans %}Pay{% endtrans %}
                         {% else%}
                             {% trans %}Not pay{% endtrans %}
