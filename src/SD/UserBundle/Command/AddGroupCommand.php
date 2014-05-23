@@ -8,7 +8,6 @@ namespace Sd\UserBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use SD\UserBundle\Entity\User as FOSUser;
@@ -45,8 +44,7 @@ class AddGroupCommand extends ContainerAwareCommand
     /** @var FOSUser $userFOS */
     $userFOS = $um->findUserByUsername($username);
 
-    if (!$userFOS)
-    {
+    if (!$userFOS) {
       $output->writeln("User with username {$username} does not exist");
 
       return;
@@ -55,22 +53,19 @@ class AddGroupCommand extends ContainerAwareCommand
     /** @var FOSGroup $groupFOS */
     $groupFOS = $gm->findGroupByName($groupName);
 
-    if (!$groupFOS)
-    {
+    if (!$groupFOS) {
       $output->writeln("Group {$groupName} does not exist");
 
       return;
     }
 
-    if ($userFOS->hasGroup($groupFOS))
-    {
+    if ($userFOS->hasGroup($groupFOS)) {
       $output->writeln("User {$username} already in {$groupName}");
 
       return;
     }
 
-    if (!$dialog->askConfirmation($output, "Add user {$username} to {$groupName}? (yes/no)", false ))
-    {
+    if (!$dialog->askConfirmation($output, "Add user {$username} to {$groupName}? (yes/no)", false )) {
       return;
     }
 
@@ -90,7 +85,7 @@ class AddGroupCommand extends ContainerAwareCommand
       $username = $this->getHelper('dialog')->askAndValidate(
         $output,
         'Please choose a username: ',
-        function($username) {
+        function ($username) {
           if (empty($username)) {
             throw new \Exception('Username can not be empty ');
           }
@@ -105,7 +100,7 @@ class AddGroupCommand extends ContainerAwareCommand
       $groupName = $this->getHelper('dialog')->askAndValidate(
         $output,
         'Please choose a Group Name: ',
-        function($groupName) {
+        function ($groupName) {
           if (empty($groupName)) {
             throw new \Exception('Group Name can not be empty ');
           }

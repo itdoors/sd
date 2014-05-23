@@ -8,7 +8,6 @@ namespace Sd\UserBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use SD\UserBundle\Entity\Group as FOSGroup;
@@ -43,22 +42,19 @@ class GroupRemoveRoleCommand extends ContainerAwareCommand
 
     $isNew = false;
 
-    if (!$groupFOS)
-    {
+    if (!$groupFOS) {
       $output->writeln("Group {$groupName} does not exist");
 
       return;
     }
 
-    if (!$groupFOS->hasRole($role))
-    {
+    if (!$groupFOS->hasRole($role)) {
       $output->writeln("Group {$groupName} does not have role {$role}");
 
       return;
     }
 
-    if (!$dialog->askConfirmation($output, "Remove {$role} from {$groupName}? (yes/no)", false ))
-    {
+    if (!$dialog->askConfirmation($output, "Remove {$role} from {$groupName}? (yes/no)", false )) {
       return;
     }
 
@@ -78,7 +74,7 @@ class GroupRemoveRoleCommand extends ContainerAwareCommand
       $groupName = $this->getHelper('dialog')->askAndValidate(
         $output,
         'Please choose a Group Name: ',
-        function($groupName) {
+        function ($groupName) {
           if (empty($groupName)) {
             throw new \Exception('Group Name can not be empty ');
           }
@@ -93,7 +89,7 @@ class GroupRemoveRoleCommand extends ContainerAwareCommand
       $groupName = $this->getHelper('dialog')->askAndValidate(
         $output,
         'Please choose a Role: ',
-        function($groupName) {
+        function ($groupName) {
           if (empty($groupName)) {
             throw new \Exception('Role can not be empty ');
           }

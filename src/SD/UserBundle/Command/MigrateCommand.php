@@ -6,9 +6,7 @@
 namespace Sd\UserBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use SD\UserBundle\Entity\User as FOSUser;
@@ -64,8 +62,7 @@ class MigrateCommand extends ContainerAwareCommand
     /** @var \Symfony\Component\Console\Helper\DialogHelper $dialog*/
     $dialog = $this->getHelperSet()->get('dialog');
 
-    if (!$dialog->askConfirmation($output, 'If it first run user with nickname robot must reset id to 0!!! (yes/no)', false ))
-    {
+    if (!$dialog->askConfirmation($output, 'If it first run user with nickname robot must reset id to 0!!! (yes/no)', false )) {
       return;
     }
 
@@ -100,8 +97,7 @@ class MigrateCommand extends ContainerAwareCommand
         u.id ASC"
     );
 
-    foreach ($users as $user)
-    {
+    foreach ($users as $user) {
       //$output->writeln(var_export($user));
       //continue;
 
@@ -146,15 +142,13 @@ class MigrateCommand extends ContainerAwareCommand
     /** @var FOSUser $userFOS */
     $userFOS = $this->um->findUserBy(array('id' => $id));
 
-    if (!$userFOS)
-    {
+    if (!$userFOS) {
       $userFOS = $this->um->findUserByUsername($username);
     }
 
     $isNew = false;
 
-    if (!$userFOS)
-    {
+    if (!$userFOS) {
       $isNew = true;
       $userFOS = $this->um->createUser();
     }
@@ -172,16 +166,14 @@ class MigrateCommand extends ContainerAwareCommand
     $userFOS->setIsFired($isFired);
     $userFOS->setEnabled($isActive);
 
-    if ($birthday)
-    {
+    if ($birthday) {
       $userFOS->setBirthday($birthday);
     }
 
     // addRole
     $guardRoles = $this->processGuardRolesInheritance($user['permission_name']);
 
-    foreach ($guardRoles as $role)
-    {
+    foreach ($guardRoles as $role) {
       $this->addUserToGroup($userFOS, $role, $output);
     }
 
@@ -203,20 +195,15 @@ class MigrateCommand extends ContainerAwareCommand
 
     $result = $rolesArray;
 
-    if (sizeof($rolesArray))
-    {
+    if (sizeof($rolesArray)) {
       $rolesArray = array_combine($rolesArray, $rolesArray);
 
-      foreach ($rolesArray as $key => $role)
-      {
-        if (isset($this->guardRoleInheritance[$role]))
-        {
+      foreach ($rolesArray as $key => $role) {
+        if (isset($this->guardRoleInheritance[$role])) {
           $inheritedRoles = $this->guardRoleInheritance[$role];
 
-          foreach ($inheritedRoles as $inheritedRole)
-          {
-            if (isset($rolesArray[$inheritedRole]))
-            {
+          foreach ($inheritedRoles as $inheritedRole) {
+            if (isset($rolesArray[$inheritedRole])) {
               unset($rolesArray[$inheritedRole]);
             }
           }
@@ -229,7 +216,6 @@ class MigrateCommand extends ContainerAwareCommand
     return $result;
   }
 
-
   /**
    * Adds fos user to group depending on guard permission
    *
@@ -240,20 +226,17 @@ class MigrateCommand extends ContainerAwareCommand
    */
   protected function addUserToGroup(FOSUser $userFOS, $role, OutputInterface $output)
   {
-    if (isset($this->migrationsGroups[$role]))
-    {
+    if (isset($this->migrationsGroups[$role])) {
       $groupName = $this->migrationsGroups[$role]['group'];
       $groupRole = $this->migrationsGroups[$role]['role'];
 
       $groupFOS = $this->gm->findGroupByName($groupName);
 
-      if (!$groupFOS)
-      {
+      if (!$groupFOS) {
         $groupFOS = $this->gm->createGroup($groupName);
       }
 
-      if (!$groupFOS->hasRole($groupRole))
-      {
+      if (!$groupFOS->hasRole($groupRole)) {
         $groupFOS->addRole($groupRole);
 
         $this->gm->updateGroup($groupFOS);

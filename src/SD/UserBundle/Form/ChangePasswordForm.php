@@ -1,6 +1,5 @@
 <?php
 
-
 namespace SD\UserBundle\Form;
 
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,7 +15,7 @@ class ChangePasswordForm extends AbstractType
     protected $container;
 
     /**
-     * @param string $class The User class name
+     * @param string    $class     The User class name
      * @param Container $container The User class name
      */
     public function __construct($class, $container)
@@ -29,8 +28,7 @@ class ChangePasswordForm extends AbstractType
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
 
-        if (!$user->hasRole('ROLE_HRADMIN'))
-        {
+        if (!$user->hasRole('ROLE_HRADMIN')) {
             $constraint = new UserPassword();
 
             $builder->add('current_password', 'password', array(

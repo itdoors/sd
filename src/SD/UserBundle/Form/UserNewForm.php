@@ -1,13 +1,10 @@
 <?php
 
-
 namespace SD\UserBundle\Form;
 
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -19,7 +16,7 @@ class UserNewForm extends AbstractType
     protected $container;
 
     /**
-     * @param string $class The User class name
+     * @param string    $class     The User class name
      * @param Container $container The User class name
      */
     public function __construct($class, $container)

@@ -14,11 +14,10 @@ class Group extends BaseGroup
      */
     protected $id;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {

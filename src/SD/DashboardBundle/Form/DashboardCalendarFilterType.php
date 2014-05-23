@@ -1,6 +1,7 @@
 <?php
 
 namespace SD\DashboardBundle\Form;
+
 use SD\CalendarBundle\Services\CalendarService;
 use SD\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\Container;
@@ -31,7 +32,7 @@ class DashboardCalendarFilterType extends AbstractType
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -44,8 +45,7 @@ class DashboardCalendarFilterType extends AbstractType
         /** @var Router $router */
         $router = $this->container->get('router');
 
-        if ($user->hasRole('ROLE_SALESADMIN'))
-        {
+        if ($user->hasRole('ROLE_SALESADMIN')) {
             $builder
                 ->add('userIds', 'hidden', array(
                     'attr' => array(

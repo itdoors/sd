@@ -8,7 +8,6 @@ namespace Sd\UserBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use SD\UserBundle\Entity\Group as FOSGroup;
@@ -43,10 +42,8 @@ class GroupAddRoleCommand extends ContainerAwareCommand
 
     $isNew = false;
 
-    if (!$groupFOS)
-    {
-      if (!$dialog->askConfirmation($output, "Group does not exist! Do you want to create it with name {$groupName}? (yes/no)", false ))
-      {
+    if (!$groupFOS) {
+      if (!$dialog->askConfirmation($output, "Group does not exist! Do you want to create it with name {$groupName}? (yes/no)", false )) {
         return;
       }
 
@@ -55,8 +52,7 @@ class GroupAddRoleCommand extends ContainerAwareCommand
       $groupFOS = $gm->createGroup($groupName);
     }
 
-    if (!$dialog->askConfirmation($output, "Add {$role} to {$groupName}? (yes/no)", false ))
-    {
+    if (!$dialog->askConfirmation($output, "Add {$role} to {$groupName}? (yes/no)", false )) {
       return;
     }
 
@@ -64,8 +60,7 @@ class GroupAddRoleCommand extends ContainerAwareCommand
 
     $gm->updateGroup($groupFOS);
 
-    if ($isNew)
-    {
+    if ($isNew) {
       $output->writeln("Group {$groupName} created successfully");
     }
 
@@ -81,7 +76,7 @@ class GroupAddRoleCommand extends ContainerAwareCommand
       $groupName = $this->getHelper('dialog')->askAndValidate(
         $output,
         'Please choose a Group Name: ',
-        function($groupName) {
+        function ($groupName) {
           if (empty($groupName)) {
             throw new \Exception('Group Name can not be empty ');
           }
@@ -96,7 +91,7 @@ class GroupAddRoleCommand extends ContainerAwareCommand
       $groupName = $this->getHelper('dialog')->askAndValidate(
         $output,
         'Please choose a Role: ',
-        function($groupName) {
+        function ($groupName) {
           if (empty($groupName)) {
             throw new \Exception('Role can not be empty ');
           }
