@@ -77,7 +77,7 @@ class DashboardCalendarFilterType extends AbstractType
     }
 
     /**
-     * @{@inheritDoc}
+     * {@inheritDoc}
      */
     public function getName()
     {
