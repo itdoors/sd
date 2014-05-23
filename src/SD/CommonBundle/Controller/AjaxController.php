@@ -681,8 +681,7 @@ class AjaxController extends Controller
 
         $result = array();
 
-        foreach ($organizations as $organization)
-        {
+        foreach ($organizations as $organization) {
             $result[] = $this->serializeObject($organization);
         }
 
@@ -738,8 +737,7 @@ class AjaxController extends Controller
 
         $result = array();
 
-        foreach ($objects as $object)
-        {
+        foreach ($objects as $object) {
             $result[] = $this->serializeObject($object);
         }
 
@@ -879,8 +877,7 @@ class AjaxController extends Controller
 
         /** @var ConstraintViolation[] $errors */
         foreach ($errors as $error) {
-            if ($error->getPropertyPath() == $field)
-            {
+            if ($error->getPropertyPath() == $field) {
                 $message = $error->getMessage();
             }
         }
@@ -1034,27 +1031,19 @@ class AjaxController extends Controller
 
         $prolongationDateTo = new \DateTime($requestParams['prolongationDateTo']);
 
-        if ($dogovor->getProlongation())
-        {
+        if ($dogovor->getProlongation()) {
             // set stop date to prolongation date
             // set prolongation date to $request['prolongationDateTo']
 
             // Set prolongation date to
-            if ($dogovor->getProlongationDate())
-            {
+            if ($dogovor->getProlongationDate()) {
                 $prolongationDateFrom = $dogovor->getProlongationDate();
-            }
-            elseif ($dogovor->getStopdatetime())
-            {
+            } elseif ($dogovor->getStopdatetime()) {
                 $prolongationDateFrom = $dogovor->getStopdatetime();
-            }
-            elseif ($dogovor->getStartdatetime())
-            {
+            } elseif ($dogovor->getStartdatetime()) {
                 $prolongationDateFrom = $dogovor->getStartdatetime();
             }
-        }
-        else
-        {
+        } else {
             /** @var DopDogovorRepository $ddr */
             $ddr = $this->get('lists_dogovor.dopdogovor.repository');
 
@@ -1103,8 +1092,7 @@ class AjaxController extends Controller
 
         $user = $this->getUser();
 
-        if (!$data->getUser())
-        {
+        if (!$data->getUser()) {
             $data->setUser($user);
         }
 
@@ -1135,20 +1123,16 @@ class AjaxController extends Controller
         $handlingMessage->setCreatedate($nextDatetime);
         $handlingMessage->setCreatedatetime(new \DateTime());
 
-        if (isset($formData['userNext']) && $formData['userNext'])
-        {
+        if (isset($formData['userNext']) && $formData['userNext']) {
             /** @var UserRepository $ur */
             $ur = $this->get('sd_user.repository');
 
             $userNext = $ur->find($formData['userNext']);
 
-            if ($userNext)
-            {
+            if ($userNext) {
                 $handlingMessage->setUser($userNext);
             }
-        }
-        else
-        {
+        } else {
             $handlingMessage->setUser($user);
         }
 
@@ -1533,18 +1517,13 @@ class AjaxController extends Controller
         $result = $object->getResult();
         $status = $object->getStatus();
 
-        if ($result && $result->getProgress())
-        {
+        if ($result && $result->getProgress()) {
             $return['handling']['progress'] = $result->getProgress();
             $return['handling']['progressString'] = $result->getPercentageString();
-        }
-        elseif ($status && $status->getProgress())
-        {
+        } elseif ($status && $status->getProgress()) {
             $return['handling']['progress'] = $status->getProgress();
             $return['handling']['progressString'] = $status->getPercentageString();
-        }
-        else
-        {
+        } else {
             $return['handling']['progress'] = null;
             $return['handling']['progressString'] = null;
         }
@@ -1590,8 +1569,7 @@ class AjaxController extends Controller
         if (sizeof($errors)) {
             $return = $this->getErrorByField($errors, $name);
 
-            if ($return)
-            {
+            if ($return) {
                 return new Response($return, 406);
             }
         }
