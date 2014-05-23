@@ -11,6 +11,7 @@ use Lists\DogovorBundle\Entity\DopDogovor;
 use Lists\DogovorBundle\Entity\DopDogovorRepository;
 use Lists\HandlingBundle\Entity\Handling;
 use Lists\HandlingBundle\Entity\HandlingMessage;
+use Lists\ContactBundle\Entity\ModelContact;
 use Lists\ContactBundle\Entity\ModelContactRepository;
 use Lists\OrganizationBundle\Entity\Organization;
 use Lists\HandlingBundle\Entity\HandlingMoreInfo;
@@ -23,6 +24,8 @@ use Symfony\Component\Form\Form;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Doctrine\ORM\EntityManager;
+use ITDoors\ControllingBundle\Entity\Invoice;
 use ITDoors\ControllingBundle\Entity\InvoiceMessage;
 use ITDoors\ControllingBundle\Entity\InvoiceCompanystructure;
 
@@ -1172,22 +1175,22 @@ class AjaxController extends Controller
     /**
      * Saves {formName}Save after valid ajax validation
      *
-     * @param Form     $form
-     * @param User      $user
+     * @param Form    $form
+     * @param User    $user
      * @param Request $request
      *
      * @return boolean
      */
     public function invoiceMessageFormSave(Form $form, $user, $request)
     {
-        /** @var \ITDoors\ControllingBundle\Entity\InvoiceMessage $data */
+        /** @var InvoiceMessage $data */
         $data = $form->getData();
 
         $formData = $request->request->get($form->getName());
 
         $invoiceId = $data->getInvoiceId();
 
-        /** @var \ITDoors\ControllingBundle\Entity\Invoice $invoice */
+        /** @var Invoice $invoice */
         $invoice = $this->getDoctrine()
             ->getRepository('ITDoorsControllingBundle:Invoice')
             ->find($invoiceId);
@@ -1196,7 +1199,7 @@ class AjaxController extends Controller
         $contactid = $formData['contactid'];
 
         if (is_numeric($contactid)) {
-            /** @var \Lists\ContactBundle\Entity\ModelContact $contact */
+            /** @var ModelContact $contact */
             $contact = $this->getDoctrine()
                 ->getRepository('ListsContactBundle:ModelContact')
                 ->find($contactid);
@@ -1219,32 +1222,33 @@ class AjaxController extends Controller
     /**
      * Saves {formName}Save after valid ajax validation
      *
-     * @param Form     $form
-     * @param User      $user
+     * @param Form    $form
+     * @param User    $user
      * @param Request $request
      *
      * @return boolean
      */
-    public function invoiceCompanystructureFormSave(Form $form, $user, $request)
+    public function invoiceCompanystructureFormSave(Form $form,User $user,Request $request)
     {
 
-        /** @var \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $data */
+        /** @var InvoiceCompanystructure $data */
         $data = $form->getData();
         
         $formData = $request->request->get($form->getName());
         
-        /** @var \Lists\ContactBundle\Entity\ModelContact $contact */
+        /** @var ModelContact $contact */
         $company = $this->getDoctrine()
             ->getRepository('ListsCompanystructureBundle:Companystructure')
             ->find($formData['companystructure']);
         $data->setCompanystructure($company);
         
-        /** @var \ITDoors\ControllingBundle\Entity\Invoice $invoice */
+        /** @var Invoice $invoice */
         $invoice = $this->getDoctrine()
             ->getRepository('ITDoorsControllingBundle:Invoice')
             ->find($data->getInvoiceID());
         $data->setInvoice($invoice);
 
+        /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
         $em->flush();
@@ -1432,9 +1436,8 @@ class AjaxController extends Controller
 
         return new Response('');
     }
-    
-    
-        /**
+
+    /**
      * Deletes {entityName}Delete instance
      *
      * @param mixed[] $params
@@ -1450,6 +1453,7 @@ class AjaxController extends Controller
             ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
             ->find($id);
 
+        /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $em->remove($object);
         $em->flush();
@@ -1899,14 +1903,18 @@ class AjaxController extends Controller
 
         $pk = $this->get('request')->request->get('pk');
         $name = $this->get('request')->request->get('name');
+        
         if($name == 'DateEnd'){
             $value = new \DateTime($this->get('request')->request->get('value'));            
+        }else if($name == 'court'){
+            $value = (boolean)$this->get('request')->request->get('value');            
         }else{
             $value = $this->get('request')->request->get('value');            
         }
 
         $methodSet = 'set' . ucfirst($name);
 
+        /** @var Invoice $object */
         $object = $this->getDoctrine()
             ->getRepository('ITDoorsControllingBundle:Invoice')
             ->find($pk);
@@ -1924,6 +1932,7 @@ class AjaxController extends Controller
             return new Response($return, 406);
         }
 
+        /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $em->persist($object);
 
@@ -2031,9 +2040,11 @@ class AjaxController extends Controller
     public function invoiceMessageFormProcessDefaults($form, $defaultData)
     {
         $invoiceId = $defaultData['invoice_id'];
+        /** @var Invoice $invoiceObj */
         $invoiceObj = $this->getDoctrine()
             ->getRepository('ITDoorsControllingBundle:Invoice')
             ->find($invoiceId);
+        /** @var Dogovor $dogovor*/
         $dogovor = $this->getDoctrine()
             ->getRepository('ListsDogovorBundle:Dogovor')
             ->find($invoiceObj->getDogovor());
@@ -2059,10 +2070,10 @@ class AjaxController extends Controller
     /**
      * Adds children to {formName}ProcessDefaults depending on defaults in request
      *
-     * @param Form $form
+     * @param Form    $form
      * @param mixed[] $defaultData
      */
-    public function invoiceCompanystructureFormProcessDefaults($form, $defaultData)
+    public function invoiceCompanystructureFormProcessDefaults(Form $form, $defaultData)
     {
         $invoiceId = $defaultData['invoiceId'];
 

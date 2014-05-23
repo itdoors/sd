@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Invoicecron
 {
+
     /**
      * @var integer
      */
@@ -39,7 +40,6 @@ class Invoicecron
      */
     private $invoices;
 
-
     /**
      * Get id
      *
@@ -54,12 +54,13 @@ class Invoicecron
      * Set invoiceId
      *
      * @param integer $invoiceId
+     * 
      * @return Invoicecron
      */
     public function setInvoiceId($invoiceId)
     {
         $this->invoiceId = $invoiceId;
-    
+
         return $this;
     }
 
@@ -77,12 +78,13 @@ class Invoicecron
      * Set date
      *
      * @param \DateTime $date
+     * 
      * @return Invoicecron
      */
     public function setDate($date)
     {
         $this->date = $date;
-    
+
         return $this;
     }
 
@@ -100,12 +102,13 @@ class Invoicecron
      * Set status
      *
      * @param string $status
+     * 
      * @return Invoicecron
      */
     public function setStatus($status)
     {
         $this->status = $status;
-    
+
         return $this;
     }
 
@@ -123,12 +126,13 @@ class Invoicecron
      * Set description
      *
      * @param string $description
+     * 
      * @return Invoicecron
      */
     public function setDescription($description)
     {
         $this->description = $description;
-    
+
         return $this;
     }
 
@@ -146,12 +150,13 @@ class Invoicecron
      * Set invoices
      *
      * @param \ITDoors\ControllingBundle\Entity\Invoice $invoices
+     * 
      * @return Invoicecron
      */
     public function setInvoices(\ITDoors\ControllingBundle\Entity\Invoice $invoices = null)
     {
         $this->invoices = $invoices;
-    
+
         return $this;
     }
 
@@ -164,22 +169,23 @@ class Invoicecron
     {
         return $this->invoices;
     }
+
     /**
      * @var string
      */
     private $reason;
 
-
     /**
      * Set reason
      *
      * @param string $reason
+     * 
      * @return Invoicecron
      */
     public function setReason($reason)
     {
         $this->reason = $reason;
-    
+
         return $this;
     }
 
@@ -192,22 +198,23 @@ class Invoicecron
     {
         return $this->reason;
     }
+
     /**
      * @var \ITDoors\ControllingBundle\Entity\Invoice
      */
     private $invoice;
 
-
     /**
      * Set invoice
      *
      * @param \ITDoors\ControllingBundle\Entity\Invoice $invoice
+     * 
      * @return Invoicecron
      */
     public function setInvoice(\ITDoors\ControllingBundle\Entity\Invoice $invoice = null)
     {
         $this->invoice = $invoice;
-    
+
         return $this;
     }
 

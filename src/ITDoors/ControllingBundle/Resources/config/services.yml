@@ -1,7 +1,9 @@
 parameters:
     it_doors_controlling.repository.class: ITDoors\ControllingBundle\Entity\InvoiceMessageRepository
     it_doors_controlling.repository.entity: ITDoors\ControllingBundle\Entity\InvoiceMessage
-    it_doors_parser.service.class: ITDoors\ControllingBundle\Services\ParserService
+    it_doors_invoice.service.class: ITDoors\ControllingBundle\Services\InvoiceService
+    itdoors_controlling.message.form.class: ITDoors\ControllingBundle\Form\InvoiceMessageFormType
+    itdoors_controlling.company.form.class: ITDoors\ControllingBundle\Form\InvoiceCompanystructureFormType
 
 services:
     it_doors_controlling.repository:
@@ -10,6 +12,18 @@ services:
         factory_method: getRepository
         arguments: [ %it_doors_controlling.repository.entity% ]
         
-    it_doors_parser.service:
-        class: %it_doors_parser.service.class%
+    it_doors_invoice.service:
+        class: %it_doors_invoice.service.class%
         arguments: [@service_container]
+        
+    itdoors_controlling.form.invoiceMessageForm:
+        class: %itdoors_controlling.message.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: invoiceMessageForm }
+            
+    itdoors_controlling.form.invoiceCompanystructureForm:
+        class: %itdoors_controlling.company.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: invoiceCompanystructureForm }

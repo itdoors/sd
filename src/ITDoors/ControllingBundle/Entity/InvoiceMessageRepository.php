@@ -15,7 +15,7 @@ class InvoiceMessageRepository extends EntityRepository
         /**
      * Returns results for interval future invoice
      *
-     * @param int $invoiceid Description
+     * @param integer $invoiceid
      *
      * @return mixed[]
      */

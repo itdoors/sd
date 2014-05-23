@@ -14,13 +14,12 @@ use Doctrine\ORM\QueryBuilder;
  */
 class InvoiceRepository extends EntityRepository
 {
-
     /**
      * Returns results for interval future invoice
      *
      * @param QueryBuilder $res Description
      * 
-     * @return mixed[]
+     * @return QueryBuilder
      */
     public function selectInvoiceSum(QueryBuilder $res)
     {
@@ -34,12 +33,13 @@ class InvoiceRepository extends EntityRepository
      *
      * @param QueryBuilder $res Description
      * 
-     * @return mixed[]
+     * @return QueryBuilder
      */
     public function selectInvoicePeriod(QueryBuilder $res)
     {
         $res
             ->select('i.sum')
+            ->addSelect('i.court')
             ->addSelect('i.id')
             ->addSelect('i.invoiceId')
             ->addSelect('i.date ')
@@ -67,7 +67,7 @@ class InvoiceRepository extends EntityRepository
      *
      * @param QueryBuilder $res Description
      * 
-     * @return mixed[]
+     * @return QueryBuilder
      */
     public function selectInvoicePeriodCount(QueryBuilder $res)
     {
@@ -81,7 +81,7 @@ class InvoiceRepository extends EntityRepository
      * 
      * @param QueryBuilder $res Description
      * 
-     * @return mixed[]
+     * @return QueryBuilder
      */
     public function joinInvoicePeriod(QueryBuilder $res)
     {
@@ -106,13 +106,11 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      * 
-     * @param QueryBuilder   $res
+     * @param QueryBuilder  $res
+     * @param integer       $periodmin
+     * @param integer       $periodmax
      * 
-     * @param integer $periodmin
-     * 
-     * @param integer $periodmax
-     * 
-     * @return mixed[]
+     * @return QueryBuilder
      */
     public function whereInvoicePeriod(QueryBuilder $res, $periodmin, $periodmax)
     {
@@ -143,7 +141,6 @@ class InvoiceRepository extends EntityRepository
      */
     public function getInvoicePeriod($periodmin, $periodmax)
     {
-
         $res = $this->createQueryBuilder('i');
 
         /** select */
@@ -160,15 +157,14 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
-     * @param int $periodmin Description
+     * @param integer $periodmin Description
      * 
-     * @param int $periodmax 0 - no restrictions
+     * @param integer $periodmax 0 - no restrictions
      *
-     * @return int count
+     * @return integer count
      */
     public function getInvoicePeriodCount($periodmin, $periodmax)
     {
-
         $rescount = $this->createQueryBuilder('i');
 
         /** select */
@@ -183,15 +179,14 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
-     * @param int $periodmin Description
+     * @param integer $periodmin Description
      * 
-     * @param int $periodmax 0 - no restrictions
+     * @param integer $periodmax 0 - no restrictions
      *
-     * @return int count
+     * @return double summa
      */
     public function getInvoicePeriodSum($periodmin, $periodmax)
     {
-
         $res = $this->createQueryBuilder('i');
 
         /** select */
@@ -373,14 +368,16 @@ class InvoiceRepository extends EntityRepository
                 $result['sum'] = $this->getInvoicePaySum();
                 break;
         }
+
         return $result;
     }
 
     /**
      * Returns results for interval future invoice
-     *
-     * @param integer   $invoiceid
-     * @patam string    $tab customer||responsible||dogovor||contacts||history||act
+     * 
+     * @param integer $invoiceid Description
+     * 
+     * @param string  $tab       Description
      * 
      * @return mixed[]
      */
@@ -397,7 +394,7 @@ class InvoiceRepository extends EntityRepository
                     ->addSelect('i.dogovorActOriginal')
                     ->addSelect('i.dogovorActMPK')
                     ->where('i.id = :invoiceid')
-                    ->setParameter(':invoiceid', (int) $invoiceid);
+                    ->setParameter(':invoiceid', $invoiceid);
                 $entitie = $entitie->getQuery()
                     ->getSingleResult();
                 break;
@@ -407,12 +404,12 @@ class InvoiceRepository extends EntityRepository
                     when customer.name is not NULL 
                     then customer.name 
                     else i.customerName end  as customerName';
-                $subQueryCase2 = '
+                $subQueryCaseTwo = '
                     CASE 
                     when performer.name is not NULL
                     then performer.name 
                     else i.performerName end as performerName';
-                
+
                 $entitie
                     ->select('i.sum')
                     ->addSelect('i.id')
@@ -422,7 +419,7 @@ class InvoiceRepository extends EntityRepository
                     ->addSelect('i.dateFact')
                     ->addSelect('i.court')
                     ->addSelect("{$subQueryCase}")
-                    ->addSelect("{$subQueryCase2}")
+                    ->addSelect("{$subQueryCaseTwo}")
                     ->leftJoin('i.dogovor', 'd')
                     ->leftJoin('d.customer', 'customer')
                     ->leftJoin('d.performer', 'performer')
@@ -499,7 +496,7 @@ class InvoiceRepository extends EntityRepository
                     when customer.name is not NULL 
                     then customer.name else i.customerName 
                     end  as customerName';
-                $subQueryCase2 = '
+                $subQueryCaseTwo = '
                     CASE
                     when customer.edrpou is not NULL
                     then customer.edrpou else i.customerEdrpou
@@ -508,8 +505,8 @@ class InvoiceRepository extends EntityRepository
                     ->Select('creator.lastName')
                     ->addSelect('creator.firstName')
                     ->addSelect('customer.createdatetime')
-                     ->addSelect("{$subQueryCase}")
-                    ->addSelect("{$subQueryCase2}")
+                    ->addSelect("{$subQueryCase}")
+                    ->addSelect("{$subQueryCaseTwo}")
                     ->addSelect('customer.shortname')
                     ->addSelect('customer.address')
                     ->addSelect('customer.mailingAddress')
@@ -539,6 +536,7 @@ class InvoiceRepository extends EntityRepository
                 $entitie = '';
                 break;
         }
+
         return $entitie;
     }
 }

@@ -67,6 +67,7 @@ Date_end: Ожидаемая дата оплаты
 Date_fact: Фактическая дата оплаты
 Status: Статус
 In coutr: В суде
+Not in coutr: Не в суде
 Pay: Оплачен
 Not pay: Не оплачен
 

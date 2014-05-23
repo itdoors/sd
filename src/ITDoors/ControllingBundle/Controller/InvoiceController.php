@@ -21,10 +21,10 @@ class InvoiceController extends BaseFilterController
 {
     /** @var Invoice $filterNamespace */
     protected $filterNamespace = 'ajax.filter.namespace.report.invoice';
-    
+
     /** @var InvoiceService $service */
     protected $service = 'it_doors_invoice.service';
-    
+
     /** @var KnpPaginatorBundle $paginator */
     protected $paginator ='knp_paginator';
     /**
@@ -43,10 +43,10 @@ class InvoiceController extends BaseFilterController
             $period = 30;
             $this->setTab($filterNamespace, $period);
         }
-        
+
         $service= $this->container->get($this->service);
         $service->getTabsInvoices();
-        
+
         $tabs = $service->getTabsInvoices();
 
         return $this->render('ITDoorsControllingBundle:Invoice:index.html.twig', array(
@@ -67,10 +67,10 @@ class InvoiceController extends BaseFilterController
         $filterNamespace = $this->container->getParameter($this->getNamespace());
 
         $period = $this->getTab($filterNamespace);
-        
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        
+
         /** @var InvoiceRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
 
@@ -105,11 +105,11 @@ class InvoiceController extends BaseFilterController
     }
 
     /**
-     *  invoiceAction
+     *  invoice Action
+     * 
+     * @param integer $invoiceid id invoice 
      * 
      * @var Container
-     * 
-     * @param integer $invoiceid
      * 
      * @return Response
      */
@@ -117,7 +117,7 @@ class InvoiceController extends BaseFilterController
     {
         $session = $this->get('session');
         $session->set('invoiceid', $invoiceid);
-        
+
         /** @var InvoiceService $service */
         $service= $this->container->get($this->service);
         $service->getTabsInvoices();
@@ -164,7 +164,7 @@ class InvoiceController extends BaseFilterController
 
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        
+
         /** @var InvoiceRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
 
