@@ -34,7 +34,7 @@ class RemoveGroupCommand extends ContainerAwareCommand
 
     /**
      * execute
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      *
      * @return string
@@ -89,7 +89,12 @@ class RemoveGroupCommand extends ContainerAwareCommand
     }
 
     /**
-     * @see Command
+     * interact()
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return string
      */
     protected function interact(InputInterface $input, OutputInterface $output)
     {

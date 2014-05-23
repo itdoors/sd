@@ -45,7 +45,8 @@ class Staff
     /**
      * Set mobilephone
      *
-     * @param  string $mobilephone
+     * @param string $mobilephone
+     *
      * @return Staff
      */
     public function setMobilephone($mobilephone)
@@ -68,7 +69,8 @@ class Staff
     /**
      * Set description
      *
-     * @param  string $description
+     * @param string $description
+     *
      * @return Staff
      */
     public function setDescription($description)
@@ -91,7 +93,8 @@ class Staff
     /**
      * Set stuffclass
      *
-     * @param  string $stuffclass
+     * @param string $stuffclass
+     *
      * @return Staff
      */
     public function setStuffclass($stuffclass)
@@ -114,7 +117,8 @@ class Staff
     /**
      * Set user
      *
-     * @param  \SD\UserBundle\Entity\User $user
+     * @param \SD\UserBundle\Entity\User $user
+     *
      * @return Staff
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)

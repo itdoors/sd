@@ -6,6 +6,9 @@
 
 namespace SD\UserBundle\Util;
 
+/**
+ * UserUtil
+ */
 class UserUtil
 {
     /**

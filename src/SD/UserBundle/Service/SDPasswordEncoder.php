@@ -4,6 +4,9 @@ namespace SD\UserBundle\Service;
 
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 
+/**
+ * SDPasswordEncoder
+ */
 class SDPasswordEncoder implements PasswordEncoderInterface
 {
 
@@ -27,6 +30,9 @@ class SDPasswordEncoder implements PasswordEncoderInterface
         return call_user_func_array($this->algorithm, array($salt . $raw));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isPasswordValid($encoded, $raw, $salt)
     {
         return $encoded === $this->encodePassword($raw, $salt);

@@ -24,9 +24,9 @@ class MessageDigestPasswordEncoder extends BaseMessageDigestPasswordEncoder
     /**
      * Constructor.
      *
-     * @param string $algorithm The digest algorithm to use
+     * @param string  $algorithm          The digest algorithm to use
      * @param Boolean $encodeHashAsBase64 Whether to base64 encode the password hash
-     * @param integer $iterations The number of iterations to use to stretch the password hash
+     * @param integer $iterations         The number of iterations to use to stretch the password hash
      */
     public function __construct($algorithm = 'sha1', $encodeHashAsBase64 = true, $iterations = 5000)
     {

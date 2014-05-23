@@ -70,7 +70,8 @@ class User extends BaseUser
     /**
      * Set id
      *
-     * @param  string $id
+     * @param string $id
+     *
      * @return User
      */
     public function setId($id)
@@ -93,7 +94,8 @@ class User extends BaseUser
     /**
      * Set firstName
      *
-     * @param  string $firstName
+     * @param string $firstName
+     *
      * @return User
      */
     public function setFirstName($firstName)
@@ -116,7 +118,8 @@ class User extends BaseUser
     /**
      * Set lastName
      *
-     * @param  string $lastName
+     * @param string $lastName
+     *
      * @return User
      */
     public function setLastName($lastName)
@@ -139,7 +142,8 @@ class User extends BaseUser
     /**
      * Set middleName
      *
-     * @param  string $middleName
+     * @param string $middleName
+     *
      * @return User
      */
     public function setMiddleName($middleName)
@@ -162,7 +166,8 @@ class User extends BaseUser
     /**
      * Set position
      *
-     * @param  string $position
+     * @param string $position
+     *
      * @return User
      */
     public function setPosition($position)
@@ -185,7 +190,8 @@ class User extends BaseUser
     /**
      * Set isBlocked
      *
-     * @param  boolean $isBlocked
+     * @param boolean $isBlocked
+     *
      * @return User
      */
     public function setIsBlocked($isBlocked)
@@ -208,7 +214,8 @@ class User extends BaseUser
     /**
      * Set isFired
      *
-     * @param  boolean $isFired
+     * @param boolean $isFired
+     *
      * @return User
      */
     public function setIsFired($isFired)
@@ -231,7 +238,8 @@ class User extends BaseUser
     /**
      * Set birthday
      *
-     * @param  \DateTime $birthday
+     * @param \DateTime $birthday
+     *
      * @return User
      */
     public function setBirthday($birthday)
@@ -254,7 +262,8 @@ class User extends BaseUser
     /**
      * Set salt
      *
-     * @param  string $salt
+     * @param string $salt
+     *
      * @return User
      */
     public function setSalt($salt)
@@ -272,7 +281,8 @@ class User extends BaseUser
     /**
      * Add organizations
      *
-     * @param  \Lists\OrganizationBundle\Entity\Organization $organizations
+     * @param \Lists\OrganizationBundle\Entity\Organization $organizations
+     *
      * @return User
      */
     public function addOrganization(\Lists\OrganizationBundle\Entity\Organization $organizations)
@@ -310,7 +320,8 @@ class User extends BaseUser
     /**
      * Add handlings
      *
-     * @param  \Lists\HandlingBundle\Entity\Handling $handlings
+     * @param \Lists\HandlingBundle\Entity\Handling $handlings
+     *
      * @return User
      */
     public function addHandling(\Lists\HandlingBundle\Entity\Handling $handlings)
@@ -347,7 +358,7 @@ class User extends BaseUser
      */
     public function getFullname()
     {
-        return (string)sprintf('%s %s', $this->getLastName(), $this->getFirstName());
+        return (string) sprintf('%s %s', $this->getLastName(), $this->getFirstName());
     }
 
     /**
@@ -357,7 +368,7 @@ class User extends BaseUser
      */
     public function __toString()
     {
-        return (string)$this->getFullname();
+        return (string) $this->getFullname();
     }
 
     /**
@@ -368,7 +379,8 @@ class User extends BaseUser
     /**
      * Set staff
      *
-     * @param  \SD\UserBundle\Entity\Staff $staff
+     * @param \SD\UserBundle\Entity\Staff $staff
+     *
      * @return User
      */
     public function setStaff(\SD\UserBundle\Entity\Staff $staff = null)
@@ -396,7 +408,8 @@ class User extends BaseUser
     /**
      * Add teams
      *
-     * @param  \Lists\TeamBundle\Entity\Team $teams
+     * @param \Lists\TeamBundle\Entity\Team $teams
+     *
      * @return User
      */
     public function addTeam(\Lists\TeamBundle\Entity\Team $teams)

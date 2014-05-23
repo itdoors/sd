@@ -8,12 +8,17 @@ use SD\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\DBAL\Connection;
 
+/**
+ * UserController
+ */
 class UserController extends Controller
 {
     protected $baseTemplate = 'User';
 
     /**
      * Executes index action
+     *
+     * @return string
      */
     public function indexAction()
     {
@@ -29,6 +34,10 @@ class UserController extends Controller
 
     /**
      * Execute show action
+     *
+     * @param int $id
+     *
+     * @return string
      */
     public function showAction($id)
     {
@@ -53,6 +62,10 @@ class UserController extends Controller
 
     /**
      * Renders changePasswordForm
+     *
+     * @param int $id
+     *
+     * @return string
      */
     public function changePasswordFormAction($id)
     {
@@ -81,6 +94,12 @@ class UserController extends Controller
 
     /**
      * Executes new action
+     *
+     * @param Request $request
+     *
+     * @throws \Exception
+     *`
+     * @return string
      */
     public function newAction(Request $request)
     {
