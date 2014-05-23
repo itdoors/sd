@@ -14,7 +14,7 @@ ITDoors\ControllingBundle\Entity\Invoice:
             column: invoice_id
         sum:
             type: float
-            length: 10
+            length: 20
         date:
             type: date
         delayDate:
@@ -71,6 +71,21 @@ ITDoors\ControllingBundle\Entity\Invoice:
             nullable: true
             length: 255
             column: dogovor_act_name
+        dogovorActSumma:
+            type: float
+            length: 20
+            column: dogovor_act_summa
+        dogovorActMPK:
+            type: string
+            length: 255
+            column: dogovor_act_mpk
+        dogovorActCount:
+            type: float
+            length: 10
+            column: dogovor_act_count
+        dogovorActNote:
+            type: text
+            column: dogovor_act_note
         dogovorActDate:
             type: date
             nullable: true

@@ -8,6 +8,7 @@ Agency: Представительство
 № and date contract: № и дата<br> договора
 Deferment: Отстрочка
 Original ABP/BH: Оригинал<br> АВР/РП
+Original ABP/BN: Оригинал АВР/РП
 Notes: Примечания
 Add: Добавить
 Expected date of payment:  Ожидаемая<br> дата оплаты
@@ -28,7 +29,8 @@ to: до
 court: Суды
 day: День
 days: Дней
-
+Count: Количество
+For more information: Дополнительные сведения
 Number evidence: Номер свидетельства
 Responsible: Отвественный
 Add responsible: Добавить отвественого
@@ -97,3 +99,4 @@ Name: Название
 MPK: МПК
 
 Add Contact: Добавить контакт
+Number act: Номер Акта

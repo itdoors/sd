@@ -735,8 +735,9 @@ class Invoice
      * @param \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicecompanystructure
      * @return Invoice
      */
-    public function addInvoicecompanystructure(\ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicecompanystructure)
-    {
+    public function addInvoicecompanystructure (
+        \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicecompanystructure
+    ) {
         $this->invoicecompanystructure[] = $invoicecompanystructure;
     
         return $this;
@@ -747,8 +748,9 @@ class Invoice
      *
      * @param \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicecompanystructure
      */
-    public function removeInvoicecompanystructure(\ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicecompanystructure)
-    {
+    public function removeInvoicecompanystructure(
+        \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicecompanystructure
+    ) {
         $this->invoicecompanystructure->removeElement($invoicecompanystructure);
     }
 
@@ -760,5 +762,117 @@ class Invoice
     public function getInvoicecompanystructure()
     {
         return $this->invoicecompanystructure;
+    }
+    /**
+     * @var float
+     */
+    private $dogovorActSumma;
+
+    /**
+     * @var float
+     */
+    private $dogovorActCount;
+
+    /**
+     * @var string
+     */
+    private $dogovorActNote;
+
+
+    /**
+     * Set dogovorActSumma
+     *
+     * @param float $dogovorActSumma
+     * @return Invoice
+     */
+    public function setDogovorActSumma($dogovorActSumma)
+    {
+        $this->dogovorActSumma = $dogovorActSumma;
+    
+        return $this;
+    }
+
+    /**
+     * Get dogovorActSumma
+     *
+     * @return float 
+     */
+    public function getDogovorActSumma()
+    {
+        return $this->dogovorActSumma;
+    }
+
+    /**
+     * Set dogovorActCount
+     *
+     * @param float $dogovorActCount
+     * @return Invoice
+     */
+    public function setDogovorActCount($dogovorActCount)
+    {
+        $this->dogovorActCount = $dogovorActCount;
+    
+        return $this;
+    }
+
+    /**
+     * Get dogovorActCount
+     *
+     * @return float 
+     */
+    public function getDogovorActCount()
+    {
+        return $this->dogovorActCount;
+    }
+
+    /**
+     * Set dogovorActNote
+     *
+     * @param string $dogovorActNote
+     * @return Invoice
+     */
+    public function setDogovorActNote($dogovorActNote)
+    {
+        $this->dogovorActNote = $dogovorActNote;
+    
+        return $this;
+    }
+
+    /**
+     * Get dogovorActNote
+     *
+     * @return string 
+     */
+    public function getDogovorActNote()
+    {
+        return $this->dogovorActNote;
+    }
+    /**
+     * @var string
+     */
+    private $dogovorActMPK;
+
+
+    /**
+     * Set dogovorActMPK
+     *
+     * @param string $dogovorActMPK
+     * @return Invoice
+     */
+    public function setDogovorActMPK($dogovorActMPK)
+    {
+        $this->dogovorActMPK = $dogovorActMPK;
+    
+        return $this;
+    }
+
+    /**
+     * Get dogovorActMPK
+     *
+     * @return string 
+     */
+    public function getDogovorActMPK()
+    {
+        return $this->dogovorActMPK;
     }
 }

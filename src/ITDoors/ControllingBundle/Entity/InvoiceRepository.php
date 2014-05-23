@@ -380,7 +380,7 @@ class InvoiceRepository extends EntityRepository
      * Returns results for interval future invoice
      *
      * @param integer   $invoiceid
-     * @patam string    $tab customer||responsible||dogovor||contacts||history
+     * @patam string    $tab customer||responsible||dogovor||contacts||history||act
      * 
      * @return mixed[]
      */
@@ -388,6 +388,19 @@ class InvoiceRepository extends EntityRepository
     {
         $entitie = $this->createQueryBuilder('i');
         switch ($tab) {
+            case 'act':
+                $entitie
+                    ->select('i.dogovorActSumma')
+                    ->addSelect('i.dogovorActCount')
+                    ->addSelect('i.dogovorActNote')
+                    ->addSelect('i.dogovorActName')
+                    ->addSelect('i.dogovorActOriginal')
+                    ->addSelect('i.dogovorActMPK')
+                    ->where('i.id = :invoiceid')
+                    ->setParameter(':invoiceid', (int) $invoiceid);
+                $entitie = $entitie->getQuery()
+                    ->getSingleResult();
+                break;
             case 'invoice':
                 $subQueryCase = '
                     CASE 

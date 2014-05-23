@@ -1,6 +1,7 @@
 parameters:
     it_doors_controlling.repository.class: ITDoors\ControllingBundle\Entity\InvoiceMessageRepository
     it_doors_controlling.repository.entity: ITDoors\ControllingBundle\Entity\InvoiceMessage
+    it_doors_parser.service.class: ITDoors\ControllingBundle\Services\ParserService
 
 services:
     it_doors_controlling.repository:
@@ -8,3 +9,7 @@ services:
         factory_service: doctrine # this is an instance of Registry
         factory_method: getRepository
         arguments: [ %it_doors_controlling.repository.entity% ]
+        
+    it_doors_parser.service:
+        class: %it_doors_parser.service.class%
+        arguments: [@service_container]

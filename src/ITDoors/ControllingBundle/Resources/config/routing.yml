@@ -24,3 +24,7 @@ it_doors_controlling_invoice_invoice_lastaction:
 it_doors_controlling_invoice_cron:
     pattern:  /controlling/invoice/cron
     defaults: { _controller: ITDoorsControllingBundle:Invoice:cron}
+    
+it_doors_controlling_invoice_sendmessage:
+    pattern:  /controlling/invoice/sendmessage
+    defaults: { _controller: ITDoorsControllingBundle:Invoice:sendmessage}
