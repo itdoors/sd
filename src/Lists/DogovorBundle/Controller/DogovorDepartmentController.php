@@ -3,7 +3,6 @@
 namespace Lists\DogovorBundle\Controller;
 
 use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
-use Symfony\Component\HttpFoundation\Request;
 
 class DogovorDepartmentController extends BaseController
 {

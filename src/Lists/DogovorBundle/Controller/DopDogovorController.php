@@ -5,7 +5,6 @@ namespace Lists\DogovorBundle\Controller;
 use Doctrine\ORM\Query;
 use Lists\DogovorBundle\Entity\DopDogovorRepository;
 use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
-use Symfony\Component\HttpFoundation\Request;
 
 class DopDogovorController extends BaseController
 {

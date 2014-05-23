@@ -2,7 +2,6 @@
 
 namespace Lists\DogovorBundle\Controller;
 
-use Lists\DogovorBundle\Entity\DogovorHistoryRepository;
 use Lists\DogovorBundle\Entity\DogovorRepository;
 use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,8 +54,7 @@ class DogovorController extends BaseController
 
         $form->handleRequest($request);
 
-        if ($form->isValid())
-        {
+        if ($form->isValid()) {
             $user = $this->getUser();
 
             /** @var \Lists\DogovorBundle\Entity\Dogovor $object */
@@ -64,8 +62,7 @@ class DogovorController extends BaseController
 
             $file = $form['file']->getData();
 
-            if ($file)
-            {
+            if ($file) {
                 $object->upload();
             }
 

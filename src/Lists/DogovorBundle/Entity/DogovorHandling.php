@@ -2,8 +2,6 @@
 
 namespace Lists\DogovorBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * DogovorHandling
  */
@@ -24,11 +22,10 @@ class DogovorHandling
      */
     private $handling;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -38,20 +35,20 @@ class DogovorHandling
     /**
      * Set dogovor
      *
-     * @param \Lists\DogovorBundle\Entity\Dogovor $dogovor
+     * @param  \Lists\DogovorBundle\Entity\Dogovor $dogovor
      * @return DogovorHandling
      */
     public function setDogovor(\Lists\DogovorBundle\Entity\Dogovor $dogovor = null)
     {
         $this->dogovor = $dogovor;
-    
+
         return $this;
     }
 
     /**
      * Get dogovor
      *
-     * @return \Lists\DogovorBundle\Entity\Dogovor 
+     * @return \Lists\DogovorBundle\Entity\Dogovor
      */
     public function getDogovor()
     {
@@ -61,20 +58,20 @@ class DogovorHandling
     /**
      * Set handling
      *
-     * @param \Lists\HandlingBundle\Entity\Handling $handling
+     * @param  \Lists\HandlingBundle\Entity\Handling $handling
      * @return DogovorHandling
      */
     public function setHandling(\Lists\HandlingBundle\Entity\Handling $handling = null)
     {
         $this->handling = $handling;
-    
+
         return $this;
     }
 
     /**
      * Get handling
      *
-     * @return \Lists\HandlingBundle\Entity\Handling 
+     * @return \Lists\HandlingBundle\Entity\Handling
      */
     public function getHandling()
     {

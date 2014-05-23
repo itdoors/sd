@@ -2,8 +2,6 @@
 
 namespace Lists\DogovorBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * DogovorDepartment
  */
@@ -49,11 +47,10 @@ class DogovorDepartment
      */
     private $user;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -63,20 +60,20 @@ class DogovorDepartment
     /**
      * Set isActive
      *
-     * @param boolean $isActive
+     * @param  boolean           $isActive
      * @return DogovorDepartment
      */
     public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
-    
+
         return $this;
     }
 
     /**
      * Get isActive
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsActive()
     {
@@ -86,20 +83,20 @@ class DogovorDepartment
     /**
      * Set comment
      *
-     * @param string $comment
+     * @param  string            $comment
      * @return DogovorDepartment
      */
     public function setComment($comment)
     {
         $this->comment = $comment;
-    
+
         return $this;
     }
 
     /**
      * Get comment
      *
-     * @return string 
+     * @return string
      */
     public function getComment()
     {
@@ -109,20 +106,20 @@ class DogovorDepartment
     /**
      * Set createdatetime
      *
-     * @param \DateTime $createdatetime
+     * @param  \DateTime         $createdatetime
      * @return DogovorDepartment
      */
     public function setCreatedatetime($createdatetime)
     {
         $this->createdatetime = $createdatetime;
-    
+
         return $this;
     }
 
     /**
      * Get createdatetime
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedatetime()
     {
@@ -132,20 +129,20 @@ class DogovorDepartment
     /**
      * Set department
      *
-     * @param \Lists\DepartmentBundle\Entity\Departments $department
+     * @param  \Lists\DepartmentBundle\Entity\Departments $department
      * @return DogovorDepartment
      */
     public function setDepartment(\Lists\DepartmentBundle\Entity\Departments $department = null)
     {
         $this->department = $department;
-    
+
         return $this;
     }
 
     /**
      * Get department
      *
-     * @return \Lists\DepartmentBundle\Entity\Departments 
+     * @return \Lists\DepartmentBundle\Entity\Departments
      */
     public function getDepartment()
     {
@@ -155,20 +152,20 @@ class DogovorDepartment
     /**
      * Set dogovor
      *
-     * @param \Lists\DogovorBundle\Entity\Dogovor $dogovor
+     * @param  \Lists\DogovorBundle\Entity\Dogovor $dogovor
      * @return DogovorDepartment
      */
     public function setDogovor(\Lists\DogovorBundle\Entity\Dogovor $dogovor = null)
     {
         $this->dogovor = $dogovor;
-    
+
         return $this;
     }
 
     /**
      * Get dogovor
      *
-     * @return \Lists\DogovorBundle\Entity\Dogovor 
+     * @return \Lists\DogovorBundle\Entity\Dogovor
      */
     public function getDogovor()
     {
@@ -178,20 +175,20 @@ class DogovorDepartment
     /**
      * Set dopDogovor
      *
-     * @param \Lists\DogovorBundle\Entity\DopDogovor $dopDogovor
+     * @param  \Lists\DogovorBundle\Entity\DopDogovor $dopDogovor
      * @return DogovorDepartment
      */
     public function setDopDogovor(\Lists\DogovorBundle\Entity\DopDogovor $dopDogovor = null)
     {
         $this->dopDogovor = $dopDogovor;
-    
+
         return $this;
     }
 
     /**
      * Get dopDogovor
      *
-     * @return \Lists\DogovorBundle\Entity\DopDogovor 
+     * @return \Lists\DogovorBundle\Entity\DopDogovor
      */
     public function getDopDogovor()
     {
@@ -201,20 +198,20 @@ class DogovorDepartment
     /**
      * Set user
      *
-     * @param \SD\UserBundle\Entity\User $user
+     * @param  \SD\UserBundle\Entity\User $user
      * @return DogovorDepartment
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 
     /**
      * Get user
      *
-     * @return \SD\UserBundle\Entity\User 
+     * @return \SD\UserBundle\Entity\User
      */
     public function getUser()
     {
@@ -225,24 +222,23 @@ class DogovorDepartment
      */
     private $dogovorId;
 
-
     /**
      * Set dogovorId
      *
-     * @param integer $dogovorId
+     * @param  integer           $dogovorId
      * @return DogovorDepartment
      */
     public function setDogovorId($dogovorId)
     {
         $this->dogovorId = $dogovorId;
-    
+
         return $this;
     }
 
     /**
      * Get dogovorId
      *
-     * @return integer 
+     * @return integer
      */
     public function getDogovorId()
     {
@@ -253,24 +249,23 @@ class DogovorDepartment
      */
     private $dopDogovorId;
 
-
     /**
      * Set dopDogovorId
      *
-     * @param integer $dopDogovorId
+     * @param  integer           $dopDogovorId
      * @return DogovorDepartment
      */
     public function setDopDogovorId($dopDogovorId)
     {
         $this->dopDogovorId = $dopDogovorId;
-    
+
         return $this;
     }
 
     /**
      * Get dopDogovorId
      *
-     * @return integer 
+     * @return integer
      */
     public function getDopDogovorId()
     {
@@ -281,24 +276,23 @@ class DogovorDepartment
      */
     private $departmentId;
 
-
     /**
      * Set departmentId
      *
-     * @param integer $departmentId
+     * @param  integer           $departmentId
      * @return DogovorDepartment
      */
     public function setDepartmentId($departmentId)
     {
         $this->departmentId = $departmentId;
-    
+
         return $this;
     }
 
     /**
      * Get departmentId
      *
-     * @return integer 
+     * @return integer
      */
     public function getDepartmentId()
     {

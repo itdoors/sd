@@ -25,15 +25,16 @@ class DogovorHistoryForm extends AbstractType
 
     /**
      * __construct
+     *
+     * @param Container $container
      */
-    public function __construct($container)
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
 
     /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -45,8 +46,7 @@ class DogovorHistoryForm extends AbstractType
 
         $builder->addEventListener(
             FormEvents::POST_SET_DATA,
-            function(FormEvent $event) use ($container)
-            {
+            function (FormEvent $event) use ($container) {
                 /** @var DopDogovorRepository $ddr */
                 $ddr = $container->get('lists_dogovor.dopdogovor.repository');
 
@@ -60,10 +60,8 @@ class DogovorHistoryForm extends AbstractType
                     'mapped' => false
                 ));
 
-                if ($data)
-                {
-                    if (!$data->getProlongation())
-                    {
+                if ($data) {
+                    if (!$data->getProlongation()) {
                         $form->add('dopDogovor', 'entity', array(
                             'class' => 'ListsDogovorBundle:DopDogovor',
                             'empty_value' => '',
@@ -74,14 +72,13 @@ class DogovorHistoryForm extends AbstractType
                     }
 
                     $prolongationDefaultDate =
-                            $data->getProlongationDate()
+                        $data->getProlongationDate()
                             ? $data->getProlongationDate()
                             : $data->getStopdatetime();
 
                     $prolongationTerm = intval($data->getProlongationTerm());
 
-                    if ($prolongationTerm && $data->getProlongation())
-                    {
+                    if ($prolongationTerm && $data->getProlongation()) {
                         $prolongationDefaultDate->add(new \DateInterval("P{$prolongationTerm}D"));
                     }
 
@@ -97,8 +94,7 @@ class DogovorHistoryForm extends AbstractType
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
-            function(FormEvent $event) use ($container)
-            {
+            function (FormEvent $event) use ($container) {
                 /** @var DogovorRepository $dr */
                 $dr = $container->get('lists_dogovor.repository');
 
@@ -114,18 +110,19 @@ class DogovorHistoryForm extends AbstractType
 
                 $prolongationDateTo = new \DateTime($data['prolongationDateTo']);
 
-                if ($dogovor->getProlongationDate() > $prolongationDateTo)
-                {
-                    $msg = $translator->trans("Stopdate can't greater then prolongation date", array(), 'ListsDogovorBundle');
+                if ($dogovor->getProlongationDate() > $prolongationDateTo) {
+
+                    $msgString = "Stopdate can't greater then prolongation date";
+
+                    $msg = $translator->trans($msgString, array(), 'ListsDogovorBundle');
 
                     $form->addError(new FormError($msg));
                 }
 
-                if (!$dogovor->getProlongation())
-                {
-                    if (!isset($data['dopDogovor']) || !$data['dopDogovor'])
-                    {
-                        $msg = $translator->trans("You must pick dop dogovor for plonongation",
+                if (!$dogovor->getProlongation()) {
+                    if (!isset($data['dopDogovor']) || !$data['dopDogovor']) {
+                        $msg = $translator->trans(
+                            "You must pick dop dogovor for plonongation",
                             array(),
                             'ListsDogovorBundle'
                         );
@@ -136,7 +133,7 @@ class DogovorHistoryForm extends AbstractType
             }
         );
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
