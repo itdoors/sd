@@ -2,34 +2,37 @@
 
 namespace ITDoors\ControllingBundle\Controller;
 
+use Container;
 use ITDoors\ControllingBundle\Entity\Invoice;
 use Lists\DogovorBundle\Entity\Dogovor;
 use ITDoors\ControllingBundle\Entity\InvoiceCompanystructure;
 use ITDoors\ControllingBundle\Entity\InvoiceRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use ITDoors\AjaxBundle\Controller\BaseFilterController;
 use Symfony\Component\HttpFoundation\Response;
-use ITDoors\ControllingBundle\Services\ParserService;
+use ITDoors\ControllingBundle\Services\InvoiceService;
+use Knp\Bundle\PaginatorBundle\KnpPaginatorBundle;
+use Doctrine\ORM\EntityManager;
 
 /**
  * InvoiceController
  */
 class InvoiceController extends BaseFilterController
 {
-     /**
-     * @var filterNamespace $filterNamespace
-     */
+    /** @var Invoice $filterNamespace */
     protected $filterNamespace = 'ajax.filter.namespace.report.invoice';
-
-    /**
-     * @var Parser $parser
-     */
-    protected $parser = 'it_doors_parser.service';
+    
+    /** @var InvoiceService $service */
+    protected $service = 'it_doors_invoice.service';
+    
+    /** @var KnpPaginatorBundle $paginator */
+    protected $paginator ='knp_paginator';
     /**
      *  indexAction
      * 
-     * @return html Description
+     * @var Container
+     *
+     * @return Response
      */
     public function indexAction()
     {
@@ -40,7 +43,11 @@ class InvoiceController extends BaseFilterController
             $period = 30;
             $this->setTab($filterNamespace, $period);
         }
-        $tabs = $this->getTabsInvoices();
+        
+        $service= $this->container->get($this->service);
+        $service->getTabsInvoices();
+        
+        $tabs = $service->getTabsInvoices();
 
         return $this->render('ITDoorsControllingBundle:Invoice:index.html.twig', array(
                 'tabs' => $tabs,
@@ -51,18 +58,21 @@ class InvoiceController extends BaseFilterController
     /**
      *  showAction
      * 
-     * @return html Description
+     * @var Container
+     * 
+     * @return Response
      */
     public function showAction()
     {
         $filterNamespace = $this->container->getParameter($this->getNamespace());
 
         $period = $this->getTab($filterNamespace);
-
+        
+        /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        /** @var ITDoors/ControllingBundle/Entity/InvoiceRepository $invoice */
+        
+        /** @var InvoiceRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
-
 
         $result = $invoice->getEntittyCountSum($period);
         $entities = $result['entities'];
@@ -74,15 +84,13 @@ class InvoiceController extends BaseFilterController
             $page = 1;
         }
 
-        /** @var \Knp\Component\Pager\Paginator $paginator */
-        $paginator = $this->get('knp_paginator');
-
-        $entities->setHint('knp_paginator.count', $count);
+        $paginator = $this->container->get($this->paginator);
+        $entities->setHint($this->paginator.'.count', $count);
         $pagination = $paginator->paginate($entities, $page, 20);
 
         $responsibles = array();
         foreach ($pagination as $val) {
-            /** @var ITDoors/ControllingBundle/Entity/InvoiceCompanystructure */
+            /** @var InvoiceCompanystructure */
             $responsibles[$val['id']] = $em
                 ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
                 ->findBy(array('invoiceId' => $val['id']));
@@ -99,14 +107,20 @@ class InvoiceController extends BaseFilterController
     /**
      *  invoiceAction
      * 
-     * @param int       $invoiceid
+     * @var Container
      * 
-     * @return html Description
+     * @param integer $invoiceid
+     * 
+     * @return Response
      */
     public function invoiceAction($invoiceid)
     {
         $session = $this->get('session');
         $session->set('invoiceid', $invoiceid);
+        
+        /** @var InvoiceService $service */
+        $service= $this->container->get($this->service);
+        $service->getTabsInvoices();
 
         $filterNamespace = $this->container->getParameter($this->getNamespace());
         $namespaceTab = $filterNamespace . 'invoiceshow' . $invoiceid;
@@ -116,11 +130,12 @@ class InvoiceController extends BaseFilterController
             $this->setTab($namespaceTab, $tab);
         }
 
+        /** @var InvoiceRepository $invoiceObj*/
         $invoiceObj = $this->getDoctrine()
             ->getRepository('ITDoorsControllingBundle:Invoice')
             ->find($invoiceid);
 
-        $tabs = $this->getTabsInvoice();
+        $tabs = $service->getTabsInvoice();
 
         return $this->render('ITDoorsControllingBundle:Invoice:invoice.html.twig', array(
                 'tabs' => $tabs,
@@ -134,11 +149,12 @@ class InvoiceController extends BaseFilterController
     /**
      *  invoiceshowAction
      * 
-     * @return html Description
+     * @var Container
+     * 
+     * @return Response
      */
     public function invoiceshowAction()
     {
-
         $session = $this->get('session');
         $invoiceid = $session->get('invoiceid');
 
@@ -146,7 +162,9 @@ class InvoiceController extends BaseFilterController
         $namespaceTab = $filterNamespace . 'invoiceshow' . $invoiceid;
         $tab = $this->getTab($namespaceTab);
 
+        /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
+        
         /** @var InvoiceRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
 
@@ -168,9 +186,8 @@ class InvoiceController extends BaseFilterController
     {
         $session = $this->get('session');
         $invoiceid = $session->get('invoiceid', false);
-        if (!$invoiceid) {
-            throw $this->createNotFoundException('Param "invoiceid" not found in session.');
-        }
+
+        /** @var InvoiceMessage $messages */
         $messages = $this->getDoctrine()
             ->getRepository('ITDoorsControllingBundle:InvoiceMessage')
             ->getInvoiceMessages((int) $invoiceid);
@@ -179,152 +196,5 @@ class InvoiceController extends BaseFilterController
                 'messages' => $messages,
                 'invoiceid' => $invoiceid
         ));
-    }
-    
-    /**
-     *  sendmessageAction
-
-     * @return 
-     */
-    public function sendmessageAction()
-    {
-        $message = \Swift_Message::newInstance()
-            ->setSubject('Привет из symfony')
-            ->setFrom('send@mail.ru')
-            ->setTo('senj@mail.ru')
-            ->setBody('текст письма');
-        $this->get('mailer')->send($message);
-
-        return new Response('send message!');
-    }
-
-    /**
-     *  cronAction
-     * 
-     * @return html Description
-     */
-    public function cronAction()
-    {
-        /** @var ParserService $parser*/
-        $parser= $this->container->get($this->parser);
-        
-        // directory
-        $directory = '../app/share/1c/debt/';
-
-        $parser->findFile($directory);
-
-        return new Response('<html><body>Cron work!</body></html>');
-    }
-    /**
-     * Returns results for interval future invoice
-     *
-     * @return tabs[]
-     */
-    private function getTabsInvoices()
-    {
-        $translator = $this->get('translator');
-        $tabs[] = array(
-            'tab' => 30,
-            'blockupdate' => 'ajax-tab-holder',
-            'url' => $this->get('router')->generate('it_doors_controlling_invoice_show'),
-            'text' => $translator->trans('from') . ' 1 ' . $translator->trans('to') . ' 30 ' . $translator->trans('day')
-        );
-        $tabs[] = array(
-            'blockupdate' => 'ajax-tab-holder',
-            'tab' => 60,
-            'url' => $this->get('router')->generate('it_doors_controlling_invoice_show'),
-            'text' => $translator
-                ->trans('from') . ' 31 ' . $translator->trans('to') . ' 60 ' . $translator->trans('days')
-        );
-        $tabs[] = array(
-            'blockupdate' => 'ajax-tab-holder',
-            'tab' => 120,
-            'url' => $this->get('router')->generate('it_doors_controlling_invoice_show'),
-            'text' => $translator
-                ->trans('from') . ' 61 ' . $translator->trans('to') . ' 120 ' . $translator->trans('days')
-        );
-        $tabs[] = array(
-            'blockupdate' => 'ajax-tab-holder',
-            'tab' => 180,
-            'class' => '',
-            'url' => $this->get('router')->generate('it_doors_controlling_invoice_show'),
-            'text' => $translator
-                ->trans('from') . ' 121 ' . $translator->trans('to') . ' 180 ' . $translator->trans('days')
-        );
-        $tabs[] = array(
-            'blockupdate' => 'ajax-tab-holder',
-            'tab' => 181,
-            'url' => $this->get('router')->generate('it_doors_controlling_invoice_show'),
-            'text' => $translator
-                ->trans('from') . ' 181 ' . $translator->trans('days')
-        );
-        $tabs[] = array(
-            'blockupdate' => 'ajax-tab-holder',
-            'tab' => 'court',
-            'url' => $this->get('router')->generate('it_doors_controlling_invoice_show'),
-            'text' => $translator->trans('court')
-        );
-        $tabs[] = array(
-            'blockupdate' => 'ajax-tab-holder',
-            'tab' => 'pay',
-            'url' => $this->get('router')->generate('it_doors_controlling_invoice_show'),
-            'text' => $translator->trans('pay')
-        );
-
-        return $tabs;
-    }
-
-    /**
-     * Returns results for interval future invoice
-     *
-     * @return tabs[]
-     */
-    private function getTabsInvoice()
-    {
-        $translator = $this->get('translator');
-        $tabs = array();
-        $tabs['act'] = array(
-            'blockupdate' => 'ajax-tab-holder',
-            'tab' => 'act',
-            'url' => $this->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
-            'text' => $translator->trans('Act')
-        );
-        $tabs['invoice'] = array(
-            'blockupdate' => 'ajax-tab-holder',
-            'tab' => 'invoice',
-            'url' => $this->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
-            'text' => $translator->trans('Invoice')
-        );
-        $tabs['contacts'] = array(
-            'blockupdate' => 'ajax-tab-holder',
-            'tab' => 'contacts',
-            'url' => $this->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
-            'text' => $translator->trans('Contacts client')
-        );
-        $tabs['dogovor'] = array(
-            'blockupdate' => 'ajax-tab-holder',
-            'tab' => 'dogovor',
-            'url' => $this->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
-            'text' => $translator->trans('Dogovor')
-        );
-        $tabs['responsible'] = array(
-            'blockupdate' => 'ajax-tab-holder',
-            'tab' => 'responsible',
-            'url' => $this->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
-            'text' => $translator->trans('Responsible')
-        );
-        $tabs['organization'] = array(
-            'blockupdate' => 'ajax-tab-holder',
-            'tab' => 'customer',
-            'url' => $this->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
-            'text' => $translator->trans('Customer')
-        );
-        $tabs['history'] = array(
-            'blockupdate' => 'ajax-tab-holder',
-            'tab' => 'history',
-            'url' => $this->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
-            'text' => $translator->trans('History')
-        );
-        return $tabs;
     }
 }
