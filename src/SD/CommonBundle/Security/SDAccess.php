@@ -6,15 +6,23 @@
 
 namespace SD\CommonBundle\Security;
 
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use SD\UserBundle\Entity\User;
 
-
+/**
+ * SDAccess
+ */
 class SDAccess
 {
     protected $container;
 
-    public function __construct($container)
+    /**
+     * __construct()
+     *
+     * @param Container $container
+     */
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
