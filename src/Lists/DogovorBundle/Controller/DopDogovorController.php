@@ -6,6 +6,9 @@ use Doctrine\ORM\Query;
 use Lists\DogovorBundle\Entity\DopDogovorRepository;
 use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
 
+/**
+ * Class DopDogovorController
+ */
 class DopDogovorController extends BaseController
 {
     protected $filterNamespace = 'base.dopdogovor.filters';
@@ -14,6 +17,10 @@ class DopDogovorController extends BaseController
 
     /**
      * Returns list of dop dogovors by dogovorId
+     *
+     * @param int $dogovorId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listAction($dogovorId)
     {

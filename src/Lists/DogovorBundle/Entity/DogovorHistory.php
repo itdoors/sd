@@ -70,7 +70,8 @@ class DogovorHistory
     /**
      * Set createdatetime
      *
-     * @param  \DateTime      $createdatetime
+     * @param \DateTime $createdatetime
+     *
      * @return DogovorHistory
      */
     public function setCreatedatetime($createdatetime)
@@ -93,7 +94,8 @@ class DogovorHistory
     /**
      * Set prolongationTerm
      *
-     * @param  string         $prolongationTerm
+     * @param string $prolongationTerm
+     *
      * @return DogovorHistory
      */
     public function setProlongationTerm($prolongationTerm)
@@ -116,7 +118,8 @@ class DogovorHistory
     /**
      * Set prolongationDateFrom
      *
-     * @param  \DateTime      $prolongationDateFrom
+     * @param \DateTime $prolongationDateFrom
+     *
      * @return DogovorHistory
      */
     public function setProlongationDateFrom($prolongationDateFrom)
@@ -139,7 +142,8 @@ class DogovorHistory
     /**
      * Set prolongationDateTo
      *
-     * @param  \DateTime      $prolongationDateTo
+     * @param \DateTime $prolongationDateTo
+     *
      * @return DogovorHistory
      */
     public function setProlongationDateTo($prolongationDateTo)
@@ -162,7 +166,8 @@ class DogovorHistory
     /**
      * Set dogovorId
      *
-     * @param  integer        $dogovorId
+     * @param integer $dogovorId
+     *
      * @return DogovorHistory
      */
     public function setDogovorId($dogovorId)
@@ -185,7 +190,8 @@ class DogovorHistory
     /**
      * Set dopDogovorId
      *
-     * @param  integer        $dopDogovorId
+     * @param integer $dopDogovorId
+     *
      * @return DogovorHistory
      */
     public function setDopDogovorId($dopDogovorId)
@@ -208,7 +214,8 @@ class DogovorHistory
     /**
      * Set dogovor
      *
-     * @param  \Lists\DogovorBundle\Entity\Dogovor $dogovor
+     * @param \Lists\DogovorBundle\Entity\Dogovor $dogovor
+     *
      * @return DogovorHistory
      */
     public function setDogovor(\Lists\DogovorBundle\Entity\Dogovor $dogovor = null)
@@ -231,7 +238,8 @@ class DogovorHistory
     /**
      * Set dopDogovor
      *
-     * @param  \Lists\DogovorBundle\Entity\DopDogovor $dopDogovor
+     * @param \Lists\DogovorBundle\Entity\DopDogovor $dopDogovor
+     *
      * @return DogovorHistory
      */
     public function setDopDogovor(\Lists\DogovorBundle\Entity\DopDogovor $dopDogovor = null)
@@ -254,7 +262,8 @@ class DogovorHistory
     /**
      * Set user
      *
-     * @param  \SD\UserBundle\Entity\User $user
+     * @param \SD\UserBundle\Entity\User $user
+     *
      * @return DogovorHistory
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)

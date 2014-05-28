@@ -152,7 +152,8 @@ class Dogovor
     /**
      * Set name
      *
-     * @param  string  $name
+     * @param string $name
+     *
      * @return Dogovor
      */
     public function setName($name)
@@ -175,7 +176,8 @@ class Dogovor
     /**
      * Set startdatetime
      *
-     * @param  \DateTime $startdatetime
+     * @param \DateTime $startdatetime
+     *
      * @return Dogovor
      */
     public function setStartdatetime($startdatetime)
@@ -198,7 +200,8 @@ class Dogovor
     /**
      * Set stopdatetime
      *
-     * @param  \DateTime $stopdatetime
+     * @param \DateTime $stopdatetime
+     *
      * @return Dogovor
      */
     public function setStopdatetime($stopdatetime)
@@ -221,7 +224,8 @@ class Dogovor
     /**
      * Set subject
      *
-     * @param  string  $subject
+     * @param string $subject
+     *
      * @return Dogovor
      */
     public function setSubject($subject)
@@ -244,7 +248,8 @@ class Dogovor
     /**
      * Set filepath
      *
-     * @param  string  $filepath
+     * @param string $filepath
+     *
      * @return Dogovor
      */
     public function setFilepath($filepath)
@@ -267,7 +272,8 @@ class Dogovor
     /**
      * Set isActive
      *
-     * @param  boolean $isActive
+     * @param boolean $isActive
+     *
      * @return Dogovor
      */
     public function setIsActive($isActive)
@@ -290,7 +296,8 @@ class Dogovor
     /**
      * Set mashtab
      *
-     * @param  string  $mashtab
+     * @param string $mashtab
+     *
      * @return Dogovor
      */
     public function setMashtab($mashtab)
@@ -313,7 +320,8 @@ class Dogovor
     /**
      * Set prolongation
      *
-     * @param  boolean $prolongation
+     * @param boolean $prolongation
+     *
      * @return Dogovor
      */
     public function setProlongation($prolongation)
@@ -336,7 +344,8 @@ class Dogovor
     /**
      * Set number
      *
-     * @param  string  $number
+     * @param string $number
+     *
      * @return Dogovor
      */
     public function setNumber($number)
@@ -359,7 +368,8 @@ class Dogovor
     /**
      * Set total
      *
-     * @param  float   $total
+     * @param float $total
+     *
      * @return Dogovor
      */
     public function setTotal($total)
@@ -382,7 +392,8 @@ class Dogovor
     /**
      * Set maturity
      *
-     * @param  string  $maturity
+     * @param string $maturity
+     *
      * @return Dogovor
      */
     public function setMaturity($maturity)
@@ -405,7 +416,8 @@ class Dogovor
     /**
      * Set completionNotice
      *
-     * @param  boolean $completionNotice
+     * @param boolean $completionNotice
+     *
      * @return Dogovor
      */
     public function setCompletionNotice($completionNotice)
@@ -428,7 +440,8 @@ class Dogovor
     /**
      * Set paymentDeferment
      *
-     * @param  integer $paymentDeferment
+     * @param integer $paymentDeferment
+     *
      * @return Dogovor
      */
     public function setPaymentDeferment($paymentDeferment)
@@ -451,7 +464,8 @@ class Dogovor
     /**
      * Set prolongationTerm
      *
-     * @param  string  $prolongationTerm
+     * @param string $prolongationTerm
+     *
      * @return Dogovor
      */
     public function setProlongationTerm($prolongationTerm)
@@ -474,7 +488,8 @@ class Dogovor
     /**
      * Set launchDate
      *
-     * @param  \DateTime $launchDate
+     * @param \DateTime $launchDate
+     *
      * @return Dogovor
      */
     public function setLaunchDate($launchDate)
@@ -497,7 +512,8 @@ class Dogovor
     /**
      * Set summMonthVat
      *
-     * @param  float   $summMonthVat
+     * @param float $summMonthVat
+     *
      * @return Dogovor
      */
     public function setSummMonthVat($summMonthVat)
@@ -520,7 +536,8 @@ class Dogovor
     /**
      * Set plannedPf1
      *
-     * @param  float   $plannedPf1
+     * @param float $plannedPf1
+     *
      * @return Dogovor
      */
     public function setPlannedPf1($plannedPf1)
@@ -543,7 +560,8 @@ class Dogovor
     /**
      * Set plannedPf1Percent
      *
-     * @param  float   $plannedPf1Percent
+     * @param float $plannedPf1Percent
+     *
      * @return Dogovor
      */
     public function setPlannedPf1Percent($plannedPf1Percent)
@@ -566,7 +584,8 @@ class Dogovor
     /**
      * Set city
      *
-     * @param  \Lists\CityBundle\Entity\City $city
+     * @param \Lists\CityBundle\Entity\City $city
+     *
      * @return Dogovor
      */
     public function setCity(\Lists\CityBundle\Entity\City $city = null)
@@ -589,7 +608,8 @@ class Dogovor
     /**
      * Set companyRole
      *
-     * @param  \Lists\LookupBundle\Entity\Lookup $companyRole
+     * @param \Lists\LookupBundle\Entity\Lookup $companyRole
+     *
      * @return Dogovor
      */
     public function setCompanyRole(\Lists\LookupBundle\Entity\Lookup $companyRole = null)
@@ -612,7 +632,8 @@ class Dogovor
     /**
      * Set companystructure
      *
-     * @param  \Lists\CompanystructureBundle\Entity\Companystructure $companystructure
+     * @param \Lists\CompanystructureBundle\Entity\Companystructure $companystructure
+     *
      * @return Dogovor
      */
     public function setCompanystructure(\Lists\CompanystructureBundle\Entity\Companystructure $companystructure = null)
@@ -635,7 +656,8 @@ class Dogovor
     /**
      * Set dogovorType
      *
-     * @param  \Lists\LookupBundle\Entity\Lookup $dogovorType
+     * @param \Lists\LookupBundle\Entity\Lookup $dogovorType
+     *
      * @return Dogovor
      */
     public function setDogovorType(\Lists\LookupBundle\Entity\Lookup $dogovorType = null)
@@ -658,7 +680,8 @@ class Dogovor
     /**
      * Set organization
      *
-     * @param  \Lists\OrganizationBundle\Entity\Organization $organization
+     * @param \Lists\OrganizationBundle\Entity\Organization $organization
+     *
      * @return Dogovor
      */
     public function setOrganization(\Lists\OrganizationBundle\Entity\Organization $organization = null)
@@ -681,7 +704,8 @@ class Dogovor
     /**
      * Set stuff
      *
-     * @param  \SD\UserBundle\Entity\Staff $stuff
+     * @param \SD\UserBundle\Entity\Staff $stuff
+     *
      * @return Dogovor
      */
     public function setStuff(\SD\UserBundle\Entity\Staff $stuff = null)
@@ -704,7 +728,8 @@ class Dogovor
     /**
      * Set user
      *
-     * @param  \SD\UserBundle\Entity\User $user
+     * @param \SD\UserBundle\Entity\User $user
+     *
      * @return Dogovor
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
@@ -741,7 +766,8 @@ class Dogovor
     /**
      * Set prolongationDate
      *
-     * @param  \DateTime $prolongationDate
+     * @param \DateTime $prolongationDate
+     *
      * @return Dogovor
      */
     public function setProlongationDate($prolongationDate)
@@ -764,7 +790,8 @@ class Dogovor
     /**
      * Set customer
      *
-     * @param  \Lists\OrganizationBundle\Entity\Organization $customer
+     * @param \Lists\OrganizationBundle\Entity\Organization $customer
+     *
      * @return Dogovor
      */
     public function setCustomer(\Lists\OrganizationBundle\Entity\Organization $customer = null)
@@ -787,7 +814,8 @@ class Dogovor
     /**
      * Set performer
      *
-     * @param  \Lists\OrganizationBundle\Entity\Organization $performer
+     * @param \Lists\OrganizationBundle\Entity\Organization $performer
+     *
      * @return Dogovor
      */
     public function setPerformer(\Lists\OrganizationBundle\Entity\Organization $performer = null)
@@ -814,7 +842,8 @@ class Dogovor
     /**
      * Set saller
      *
-     * @param  \SD\UserBundle\Entity\User $saller
+     * @param \SD\UserBundle\Entity\User $saller
+     *
      * @return Dogovor
      */
     public function setSaller(\SD\UserBundle\Entity\User $saller = null)
@@ -834,6 +863,11 @@ class Dogovor
         return $this->saller;
     }
 
+    /**
+     * getAbsolutePath
+     *
+     * @return null|string
+     */
     public function getAbsolutePath()
     {
         return null === $this->filepath
@@ -841,6 +875,11 @@ class Dogovor
             : $this->getUploadRootDir().'/'.$this->filepath;
     }
 
+    /**
+     * getWebPath
+     *
+     * @return null|string
+     */
     public function getWebPath()
     {
         return null === $this->filepath
@@ -848,6 +887,11 @@ class Dogovor
             : $this->getUploadDir().'/'.$this->filepath;
     }
 
+    /**
+     * getUploadRootDir
+     *
+     * @return string
+     */
     protected function getUploadRootDir()
     {
         // the absolute directory path where uploaded
@@ -855,6 +899,11 @@ class Dogovor
         return __DIR__.'/../../../../web/'.$this->getUploadDir();
     }
 
+    /**
+     * getUploadDir
+     *
+     * @return string
+     */
     protected function getUploadDir()
     {
         // get rid of the __DIR__ so it doesn't screw up
@@ -884,6 +933,9 @@ class Dogovor
         return $this->file;
     }
 
+    /**
+     * upload
+     */
     public function upload()
     {
         // the file property can be empty if the field is not required
@@ -929,7 +981,8 @@ class Dogovor
     /**
      * Set customerId
      *
-     * @param  integer $customerId
+     * @param integer $customerId
+     *
      * @return Dogovor
      */
     public function setCustomerId($customerId)
@@ -952,7 +1005,8 @@ class Dogovor
     /**
      * Set performerId
      *
-     * @param  integer $performerId
+     * @param integer $performerId
+     *
      * @return Dogovor
      */
     public function setPerformerId($performerId)
@@ -979,7 +1033,8 @@ class Dogovor
     /**
      * Set organizationId
      *
-     * @param  integer $organizationId
+     * @param integer $organizationId
+     *
      * @return Dogovor
      */
     public function setOrganizationId($organizationId)
@@ -1030,7 +1085,8 @@ class Dogovor
     /**
      * Set cityId
      *
-     * @param  integer $cityId
+     * @param integer $cityId
+     *
      * @return Dogovor
      */
     public function setCityId($cityId)
@@ -1057,7 +1113,8 @@ class Dogovor
     /**
      * Set dogovorTypeId
      *
-     * @param  integer $dogovorTypeId
+     * @param integer $dogovorTypeId
+     *
      * @return Dogovor
      */
     public function setDogovorTypeId($dogovorTypeId)

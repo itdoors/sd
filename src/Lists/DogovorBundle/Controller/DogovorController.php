@@ -6,6 +6,9 @@ use Lists\DogovorBundle\Entity\DogovorRepository;
 use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class DogovorController
+ */
 class DogovorController extends BaseController
 {
     protected $filterNamespace = 'base.dogovor.filters';
@@ -14,6 +17,11 @@ class DogovorController extends BaseController
     protected $baseRoutePrefix = 'dogovor';
     protected $baseTemplate = 'Dogovor';
 
+    /**
+     * indexAction
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction()
     {
         $page = $this->get('request')->query->get('page', 1);
@@ -47,6 +55,10 @@ class DogovorController extends BaseController
 
     /**
      * Executes new action
+     *
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function newAction(Request $request)
     {
@@ -87,6 +99,10 @@ class DogovorController extends BaseController
 
     /**
      * Executes show action
+     *
+     * @param int $id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function showAction($id)
     {

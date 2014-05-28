@@ -35,7 +35,8 @@ class DogovorHandling
     /**
      * Set dogovor
      *
-     * @param  \Lists\DogovorBundle\Entity\Dogovor $dogovor
+     * @param \Lists\DogovorBundle\Entity\Dogovor $dogovor
+     *
      * @return DogovorHandling
      */
     public function setDogovor(\Lists\DogovorBundle\Entity\Dogovor $dogovor = null)
@@ -58,7 +59,8 @@ class DogovorHandling
     /**
      * Set handling
      *
-     * @param  \Lists\HandlingBundle\Entity\Handling $handling
+     * @param \Lists\HandlingBundle\Entity\Handling $handling
+     *
      * @return DogovorHandling
      */
     public function setHandling(\Lists\HandlingBundle\Entity\Handling $handling = null)

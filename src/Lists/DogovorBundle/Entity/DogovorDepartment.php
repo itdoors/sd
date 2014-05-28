@@ -60,7 +60,8 @@ class DogovorDepartment
     /**
      * Set isActive
      *
-     * @param  boolean           $isActive
+     * @param boolean $isActive
+     *
      * @return DogovorDepartment
      */
     public function setIsActive($isActive)
@@ -83,7 +84,8 @@ class DogovorDepartment
     /**
      * Set comment
      *
-     * @param  string            $comment
+     * @param string $comment
+     *
      * @return DogovorDepartment
      */
     public function setComment($comment)
@@ -106,7 +108,8 @@ class DogovorDepartment
     /**
      * Set createdatetime
      *
-     * @param  \DateTime         $createdatetime
+     * @param \DateTime $createdatetime
+     *
      * @return DogovorDepartment
      */
     public function setCreatedatetime($createdatetime)
@@ -129,7 +132,8 @@ class DogovorDepartment
     /**
      * Set department
      *
-     * @param  \Lists\DepartmentBundle\Entity\Departments $department
+     * @param \Lists\DepartmentBundle\Entity\Departments $department
+     *
      * @return DogovorDepartment
      */
     public function setDepartment(\Lists\DepartmentBundle\Entity\Departments $department = null)
@@ -152,7 +156,8 @@ class DogovorDepartment
     /**
      * Set dogovor
      *
-     * @param  \Lists\DogovorBundle\Entity\Dogovor $dogovor
+     * @param \Lists\DogovorBundle\Entity\Dogovor $dogovor
+     *
      * @return DogovorDepartment
      */
     public function setDogovor(\Lists\DogovorBundle\Entity\Dogovor $dogovor = null)
@@ -175,7 +180,8 @@ class DogovorDepartment
     /**
      * Set dopDogovor
      *
-     * @param  \Lists\DogovorBundle\Entity\DopDogovor $dopDogovor
+     * @param \Lists\DogovorBundle\Entity\DopDogovor $dopDogovor
+     *
      * @return DogovorDepartment
      */
     public function setDopDogovor(\Lists\DogovorBundle\Entity\DopDogovor $dopDogovor = null)
@@ -198,7 +204,8 @@ class DogovorDepartment
     /**
      * Set user
      *
-     * @param  \SD\UserBundle\Entity\User $user
+     * @param \SD\UserBundle\Entity\User $user
+     *
      * @return DogovorDepartment
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
@@ -225,7 +232,8 @@ class DogovorDepartment
     /**
      * Set dogovorId
      *
-     * @param  integer           $dogovorId
+     * @param integer $dogovorId
+     *
      * @return DogovorDepartment
      */
     public function setDogovorId($dogovorId)
@@ -252,7 +260,8 @@ class DogovorDepartment
     /**
      * Set dopDogovorId
      *
-     * @param  integer           $dopDogovorId
+     * @param integer $dopDogovorId
+     *
      * @return DogovorDepartment
      */
     public function setDopDogovorId($dopDogovorId)
@@ -279,7 +288,8 @@ class DogovorDepartment
     /**
      * Set departmentId
      *
-     * @param  integer           $departmentId
+     * @param integer $departmentId
+     *
      * @return DogovorDepartment
      */
     public function setDepartmentId($departmentId)
