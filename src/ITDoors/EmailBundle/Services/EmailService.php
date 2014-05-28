@@ -38,7 +38,7 @@ class EmailService
      * $email = $this->get('it_doors_email.service');
      * $status = $email->send(
      *       array('senj1@mail.ru' => 'ITDoors'),
-     *            '22222',
+     *            'alias',
      *             array(
      *                 'users' => array(
      *                     'senj@mail.ru'  => 'Сергей'
