@@ -207,8 +207,10 @@
 </div>
 <div style="height: 150px; width: 100%; margin-top: 10px; display: none;" id="add_div">
 
-    <input id="test" >
-
+    {% trans %}From{% endtrans %}
+        <input class="timepicker-cool" size="5" id="newFromTime">
+    {% trans %}To{% endtrans %}
+        <input class="timepicker-cool" size="5" id="newToTime">
 {#
     <div id="test"> test</div>
 #}
@@ -263,9 +265,11 @@
                     <td>{{ oneDayTime.totalNight }}</td>
                     <td align="center">
                         <i class="fa fa-edit action_button editButton"></i>
+                        <i class="fa fa-check-circle-o action_button checkButton notDisplayed"></i>
+                        <i class="fa fa-spinner fa-spin spinner notDisplayed"></i>
                         &nbsp;&nbsp;
                         <i class="fa fa-trash-o action_button deleteButton"></i>
-                        <i class="fa fa-cross-o action_button"></i>
+                        <i class="fa fa-times action_button cancelButton notDisplayed"></i>
                     </td>
                 </tr>
             {% elseif oneDayTime.notOfficially == true %}
