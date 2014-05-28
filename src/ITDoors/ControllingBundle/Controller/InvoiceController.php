@@ -28,8 +28,6 @@ class InvoiceController extends BaseFilterController
     /** @var KnpPaginatorBundle $paginator */
     protected $paginator ='knp_paginator';
     /**
-     *  indexAction
-     * 
      * @var Container
      *
      * @return Response
@@ -46,6 +44,8 @@ class InvoiceController extends BaseFilterController
 
         $service= $this->container->get($this->service);
         $service->getTabsInvoices();
+        
+        //$service->sendMail();
 
         $tabs = $service->getTabsInvoices();
 

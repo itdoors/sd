@@ -37,41 +37,41 @@ class InvoiceCompanystructureFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $container = $this->container;
+//        $container = $this->container;
 
         /** @var \ITDoors\ControllingBundle\Entity\InvoiceRepository $lr */
-        $lr = $container->get('it_doors_controlling.repository');
+//        $lr = $container->get('it_doors_controlling.repository');
 
         $builder
             ->add('create', 'submit')
             ->add('cancel', 'button');
 
-        $builder->addEventListener(
-            FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) use ($container) {
-                $data = $event->getData();
-
-                $form = $event->getForm();
-            }
-        );
-
-        $builder->addEventListener(
-            FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) use ($container) {
-                $data = $event->getData();
-
-                $form = $event->getForm();
-            }
-        );
-
-        $builder->addEventListener(
-            FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) use ($container) {
-                $data = $event->getData();
-
-                $form = $event->getForm();
-            }
-        );
+//        $builder->addEventListener(
+//            FormEvents::PRE_SUBMIT,
+//            function (FormEvent $event) use ($container) {
+//                $data = $event->getData();
+//
+//                $form = $event->getForm();
+//            }
+//        );
+//
+//        $builder->addEventListener(
+//            FormEvents::PRE_SUBMIT,
+//            function (FormEvent $event) use ($container) {
+//                $data = $event->getData();
+//
+//                $form = $event->getForm();
+//            }
+//        );
+//
+//        $builder->addEventListener(
+//            FormEvents::PRE_SUBMIT,
+//            function (FormEvent $event) use ($container) {
+//                $data = $event->getData();
+//
+//                $form = $event->getForm();
+//            }
+//        );
     }
 
     /**

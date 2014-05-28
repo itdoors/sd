@@ -38,6 +38,7 @@ class AppKernel extends Kernel
             new ITDoors\AjaxBundle\ITDoorsAjaxBundle(),
             new ITDoors\CommonBundle\ITDoorsCommonBundle(),
             new ITDoors\ControllingBundle\ITDoorsControllingBundle(),
+            new ITDoors\EmailBundle\ITDoorsEmailBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

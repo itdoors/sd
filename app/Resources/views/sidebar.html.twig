@@ -304,6 +304,23 @@
             </ul>
         </li>
             {#% endif %#}
+        {#% if is_granted('ROLE_EMAIL') %#}
+        <li>
+            <a href="javascript:;">
+                <i class="fa fa-tachometer"></i>
+                <span class="title">{% trans %}Email{% endtrans %}</span>
+                <span class="arrow "></span>
+            </a>
+            <ul  class="sub-menu">
+                <li>
+                    <a href="{{ path('it_doors_email_templates') }}" title="{% trans %}Email templates{% endtrans %}">
+                        <i class="fa fa-comments"></i>
+                        {% trans %}Email templates{% endtrans %}
+                    </a>
+                </li>
+            </ul>
+        </li>
+            {#% endif %#}
     </ul>
     <!-- END SIDEBAR MENU -->
 </div>

@@ -28,6 +28,7 @@ use Doctrine\ORM\EntityManager;
 use ITDoors\ControllingBundle\Entity\Invoice;
 use ITDoors\ControllingBundle\Entity\InvoiceMessage;
 use ITDoors\ControllingBundle\Entity\InvoiceCompanystructure;
+use ITDoors\EmailBundle\Entity\Email;
 
 /**
  * AjaxController class.
@@ -46,7 +47,8 @@ class AjaxController extends Controller
         'ModelContact' => 'ListsContactBundle:ModelContact',
         'User' => 'SDUserBundle:User',
         'Dogovor' => 'ListsDogovorBundle:Dogovor',
-        'DopDogovor' => 'ListsDogovorBundle:DopDogovor'
+        'DopDogovor' => 'ListsDogovorBundle:DopDogovor',
+        'Email' => 'ITDoorsEmailBundle:Email'
     );
 
     /**
@@ -839,7 +841,7 @@ class AjaxController extends Controller
 
         try {
             $em->flush();
-        } catch (\ErrorException $e) {
+        }catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1032,7 +1034,7 @@ class AjaxController extends Controller
         $dogovorHistory->setDogovor($dogovor);
         $dogovorHistory->setUser($user);
         $dogovorHistory->setCreatedatetime(new \DateTime());
-        
+
         $prolongationDateFrom = new \DateTime();
 
         $prolongationDateTo = new \DateTime($requestParams['prolongationDateTo']);
@@ -1209,9 +1211,60 @@ class AjaxController extends Controller
         $data->setUser($this->getUser());
 
         $data->setNote($formData['note']);
-        
-        $data->setCreatedate(new \DateTime());                
 
+        $data->setCreatedate(new \DateTime());
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $request
+     * @param Request $user
+     *
+     * @return boolean
+     */
+    public function emailFormSave(Form $form, $user, $request)
+    {
+    
+//        $formData = $request->request->get($form->getName());
+        
+        
+            /** @var Email $data */
+            $data = $form->getData();
+//            
+//        if(array_key_exists('id', $data)){
+//            var_dump($formData);die;
+//            /** @var Email $template */
+//            $data = $this->getDoctrine()
+//                ->getRepository('ITDoorsEmailBundle:Email')
+//                ->find( $formData['emailId']);
+//            $data->setAlias( $formData['alias']);
+//            $data->setSubject( $formData['subject']);
+//            $data->setText( $formData['text']);
+// 
+//        }
+//        $contactid = $formData['contactid'];
+//        if (is_numeric($contactid)) {
+//            /** @var ModelContact $contact */
+//            $contact = $this->getDoctrine()
+//                ->getRepository('ListsContactBundle:ModelContact')
+//                ->find($contactid);
+//            $data->setContact($contact);
+//        }
+//        $data->setUser($this->getUser());
+//
+//        $data->setNote($formData['note']);
+//        
+//        $data->setCreatedate(new \DateTime());                
+
+         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
         $em->flush();
@@ -1228,20 +1281,20 @@ class AjaxController extends Controller
      *
      * @return boolean
      */
-    public function invoiceCompanystructureFormSave(Form $form,User $user,Request $request)
+    public function invoiceCompanystructureFormSave(Form $form, User $user, Request $request)
     {
 
         /** @var InvoiceCompanystructure $data */
         $data = $form->getData();
-        
+
         $formData = $request->request->get($form->getName());
-        
+
         /** @var ModelContact $contact */
         $company = $this->getDoctrine()
             ->getRepository('ListsCompanystructureBundle:Companystructure')
             ->find($formData['companystructure']);
         $data->setCompanystructure($company);
-        
+
         /** @var Invoice $invoice */
         $invoice = $this->getDoctrine()
             ->getRepository('ITDoorsControllingBundle:Invoice')
@@ -1458,6 +1511,27 @@ class AjaxController extends Controller
         $em->remove($object);
         $em->flush();
     }
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function EmailDelete($params)
+    {
+        $id = $params['id'];
+
+        /** @var Email $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ITDoorsEmailBundle:Email')
+            ->find($id);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
 
     /**
      * Deletes {entityName}Delete instance
@@ -1624,7 +1698,7 @@ class AjaxController extends Controller
             $em->flush();
 
             $em->refresh($object);
-        } catch (\ErrorException $e) {
+        }catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1702,7 +1776,7 @@ class AjaxController extends Controller
 
         try {
             $em->flush();
-        } catch (\ErrorException $e) {
+        }catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1740,7 +1814,7 @@ class AjaxController extends Controller
 
         try {
             $object = $query->getSingleResult();
-        } catch (\Doctrine\Orm\NoResultException $e) {
+        }catch (\Doctrine\Orm\NoResultException $e) {
             $object = null;
         }
 
@@ -1768,7 +1842,7 @@ class AjaxController extends Controller
 
         try {
             $em->flush();
-        } catch (\ErrorException $e) {
+        }catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1824,7 +1898,7 @@ class AjaxController extends Controller
 
         try {
             $em->flush();
-        } catch (\ErrorException $e) {
+        }catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1881,7 +1955,7 @@ class AjaxController extends Controller
 
         try {
             $em->flush();
-        } catch (\ErrorException $e) {
+        }catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1903,13 +1977,13 @@ class AjaxController extends Controller
 
         $pk = $this->get('request')->request->get('pk');
         $name = $this->get('request')->request->get('name');
-        
-        if($name == 'DateEnd'){
-            $value = new \DateTime($this->get('request')->request->get('value'));            
-        }else if($name == 'court'){
-            $value = (boolean)$this->get('request')->request->get('value');            
-        }else{
-            $value = $this->get('request')->request->get('value');            
+
+        if ($name == 'DateEnd') {
+            $value = new \DateTime($this->get('request')->request->get('value'));
+        } else if ($name == 'court') {
+            $value = (boolean) $this->get('request')->request->get('value');
+        } else {
+            $value = $this->get('request')->request->get('value');
         }
 
         $methodSet = 'set' . ucfirst($name);
@@ -1938,7 +2012,7 @@ class AjaxController extends Controller
 
         try {
             $em->flush();
-        } catch (\ErrorException $e) {
+        }catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -2044,7 +2118,7 @@ class AjaxController extends Controller
         $invoiceObj = $this->getDoctrine()
             ->getRepository('ITDoorsControllingBundle:Invoice')
             ->find($invoiceId);
-        /** @var Dogovor $dogovor*/
+        /** @var Dogovor $dogovor */
         $dogovor = $this->getDoctrine()
             ->getRepository('ListsDogovorBundle:Dogovor')
             ->find($invoiceObj->getDogovor());
@@ -2065,6 +2139,42 @@ class AjaxController extends Controller
                     ->setParameter(':modelId', $organizationId);
             }
         ));
+    }
+
+    /**
+     * Adds children to {formName}ProcessDefaults depending on defaults in request
+     *
+     * @param Form $form
+     * @param mixed[] $defaultData
+     */
+    public function emailFormProcessDefaults($form, $defaultData)
+    {
+
+//        if (array_key_exists('emailId', $defaultData)) {
+//            $emailId = $defaultData['emailId'];
+//            
+//            /** @var Email $email */
+//            $email = $this->getDoctrine()
+//                ->getRepository('ITDoorsEmailBundle:Email')
+//                ->find($emailId);
+//             $form
+//            ->add('alias', 'text', array('data' => $email->getAlias()))
+//            ->add('subject', 'text', array('data' => $email->getSubject()))
+//            ->add('text', 'textarea', array(
+//                'data' => $email->getText(),
+//                'required' => true,
+//                'mapped' => true
+//            ));
+////        }else{
+////             $form
+////            ->add('alias', 'text')
+////            ->add('subject', 'text')
+////            ->add('text', 'textarea', array(
+////                'required' => true,
+////                'mapped' => true
+////            ));
+//        
+//        }
     }
 
     /**
@@ -2332,7 +2442,7 @@ class AjaxController extends Controller
             ));
 
             $connection->commit();
-        } catch (\Exception $e) {
+        }catch (\Exception $e) {
             $connection->rollback();
             $em->close();
             throw $e;

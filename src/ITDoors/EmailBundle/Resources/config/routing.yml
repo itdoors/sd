@@ -1,0 +1,7 @@
+it_doors_email_templates:
+    pattern:  /email/templates
+    defaults: { _controller: ITDoorsEmailBundle:Templates:index }
+    
+it_doors_email_templates_list:
+    pattern:  /email/templates/list
+    defaults: { _controller: ITDoorsEmailBundle:Templates:list }

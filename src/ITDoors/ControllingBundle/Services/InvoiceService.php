@@ -1,5 +1,4 @@
 <?php
-
 namespace ITDoors\ControllingBundle\Services;
 
 use Symfony\Component\DependencyInjection\Container;
@@ -7,6 +6,9 @@ use Doctrine\ORM\EntityManager;
 use ITDoors\ControllingBundle\Entity\Invoicecron;
 use ITDoors\ControllingBundle\Entity\InvoicecronRepository;
 use ITDoors\ControllingBundle\Entity\Invoice;
+use Symfony\Component\BrowserKit\Response;
+use Symfony\Component\HttpKernel\Fragment\Tests\FragmentRenderer\Renderer;
+
 
 /**
  * Invoice Service class
@@ -28,19 +30,17 @@ class InvoiceService
         $this->container = $container;
     }
 
-    /**
-     * Returns dashboard filter choices of events for calendar
-     * 
+   /**
      * @var Container
      * 
      * @return mixed[]
      */
-    public function findFile ()
+    public function parserFile ()
     {
         $directory = '../app/share/1c/debt/';
         $file = false;
 
-        /** @var EntityManager $em*/
+        /** @var EntityManager $em */
         $em = $this->container->get('doctrine')->getManager();
 
         /** @var InvoicecronRepository $invoicecron*/
@@ -50,7 +50,7 @@ class InvoiceService
             if ($dh = opendir($directory)) {
                 while (($fil = readdir($dh)) !== false) {
                     if (filetype($directory . $fil) == 'file') {
-                        $findfile = $invoicecron ->findBy(array('reason' => $fil));
+                        $findfile = $invoicecron->findBy(array('reason' => $fil));
                         if (!$findfile) {
                             $file = $fil;
                             continue;
@@ -664,4 +664,27 @@ class InvoiceService
 
         return $tabs;
     }
+
+    /**
+     * @return Response
+     */
+    public function sendMail()
+    {
+        /** @var EntityManager $em */
+        $em = $this->container->get('doctrine')->getManager();
+
+        /** @var InvoiceRepository $invoice*/
+        $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
+
+        $message = \Swift_Message::newInstance()
+            ->setSubject('Hello Email')
+            ->setFrom('send@example.com')
+            ->setTo('senj@mail.ru')
+            ->setBody('You should see me from the profiler!');
+
+        $this->container->get('mailer')->send($message);
+
+        return new Response('send');
+    }
+
 }

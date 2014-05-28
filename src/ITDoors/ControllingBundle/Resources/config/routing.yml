@@ -16,7 +16,10 @@ it_doors_controlling_invoice_invoice_show:
     pattern:  /controlling/invoice/show
     defaults: { _controller: ITDoorsControllingBundle:Invoice:invoiceshow}
 
-        
 it_doors_controlling_invoice_invoice_lastaction:
     pattern:  /controlling/invoice/lastaction
     defaults: { _controller: ITDoorsControllingBundle:Invoice:lastaction}
+        
+it_doors_controlling_invoice_email:
+    pattern:  /controlling/invoice/email
+    defaults: { _controller: ITDoorsControllingBundle:Email:index}

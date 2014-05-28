@@ -9,7 +9,9 @@ parameters:
     ajax.filter.namespace.dashboard.calendar: "dashboard.calendar"
     ajax.filter.namespace.report.last.messages: "report.last.messages"
     ajax.filter.namespace.report.invoice: "report.invoice"
-
+    project.dir: '/var/www/vhosts/itdoors.com.ua/subdomains/haccp'
+    project.web.dir: "%project.dir%/web"
+    log.file.path: "%project.dir%/log.txt"
 
 framework:
     #esi:             ~
@@ -90,7 +92,9 @@ swiftmailer:
     host:      %mailer_host%
     username:  %mailer_user%
     password:  %mailer_password%
-    spool:     { type: memory }
+    spool:     
+        type: file
+        path: /var/www/path/to/spool
 
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'

@@ -1,131 +1,19 @@
-# src/ITDoors/ControllingBundle/Resources/config/doctrine/Invoice.orm.yml
-ITDoors\ControllingBundle\Entity\Invoice:
+# src/ITDoors/EmailBundle/Resources/config/doctrine/Email.orm.yml
+ITDoors\EmailBundle\Entity\Email:
     type: entity
-    table: invoice
-    repositoryClass: ITDoors\ControllingBundle\Entity\InvoiceRepository
+    table: email
+    repositoryClass: ITDoors\EmailBundle\Entity\EmailRepository
     id:
         id:
             type: integer
             generator: { strategy: IDENTITY }
     fields:
-        invoiceId:
+        alias:
             type: string
             length: 255
-            column: invoice_id
-        sum:
-            type: float
-            length: 20
-        date:
-            type: date
-        delayDate:
-            nullable: true
-            type: date
-            column: delay_date
-        delayDays:
-            nullable: true
-            type: integer
-            column: delay_days
-        delayDaysType:
-            type: string
-            nullable: true
-            length: 5
-            column: delay_days_type
-        dateEnd:
-            type: date
-            nullable: true
-            column: date_end
-        dateFact:
-            type: date
-            column: date_fact
-            nullable: true
-        dogovorId:
-            type: integer
-            nullable: true
-            length: 10
-            column: dogovor_id
-        dogovorId1c:
-            type: string
-            nullable: false
-            length: 255
-            column: dogovor_id_1c
-        dogovorUUIE:
-            type: integer
-            nullable: true
-            length: 10
-            column: dogovor_uuie
-        dogovorName:
+            unique: true
+        subject:
             type: string
             length: 255
-            column: dogovor_name
-        dogovorNumber:
-            type: string
-            length: 255
-            nullable: true
-            column: dogovor_number
-        dogovorDate:
-            type: datetime
-            nullable: false
-            column: dogovor_date
-        dogovorActName:
-            type: string
-            nullable: true
-            length: 255
-            column: dogovor_act_name
-        dogovorActSumma:
-            type: float
-            length: 20
-            column: dogovor_act_summa
-        dogovorActMPK:
-            type: string
-            length: 255
-            column: dogovor_act_mpk
-        dogovorActCount:
-            type: float
-            length: 10
-            column: dogovor_act_count
-        dogovorActNote:
+        text:
             type: text
-            column: dogovor_act_note
-        dogovorActDate:
-            type: date
-            nullable: true
-            column: dogovor_act_date
-        dogovorActOriginal:
-            type: boolean
-            column: dogovor_act_original
-        customerName:
-            nullable: true
-            type: string
-            length: 255
-            column: customer_name
-        customerEdrpou:
-            nullable: true
-            type: string
-            length: 255
-            column: customer_edrpou
-        performerName:
-            nullable: true
-            type: string
-            length: 255
-            column: performer_name
-        performerEdrpou:
-            nullable: true
-            type: string
-            length: 255
-            column: performer_edrpou
-        court:
-            type: boolean
-    manyToOne:
-        dogovor:
-            targetEntity: Lists\DogovorBundle\Entity\Dogovor
-            inversedBy: null
-            joinColumn:
-                name: dogovor_id
-                referencedColumnName: id
-    oneToMany:
-        messages:
-            targetEntity: ITDoors\ControllingBundle\Entity\InvoiceMessage
-            mappedBy: invoice
-        invoicecompanystructure:
-            targetEntity: ITDoors\ControllingBundle\Entity\InvoiceCompanystructure
-            mappedBy: invoice

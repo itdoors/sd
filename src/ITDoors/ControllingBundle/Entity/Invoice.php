@@ -829,11 +829,9 @@ class Invoice
     }
 
     /**
-     * Set dogovorActCount
+     * @param $dogovorActCount
      *
-     * @param float $dogovorActCount
-     * 
-     * @return Invoice
+     * @return $this
      */
     public function setDogovorActCount($dogovorActCount)
     {

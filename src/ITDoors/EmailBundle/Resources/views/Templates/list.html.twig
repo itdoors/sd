@@ -1,0 +1,50 @@
+<div class="table-scrollable">
+    <table class="table table-striped table-bordered table-hover dataTable" aria-describedby="datatable_ajax_info">
+        <thead>
+            <tr role="row" class="heading">
+                <th width="5%" class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">
+                    {% trans %}ID{% endtrans %}
+                </th>
+                <th width="5%" class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">
+                    {% trans %}Alias{% endtrans %}
+                </th>
+                <th width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}Subject{% endtrans %}
+                </th>
+                <th width="5%" class="sorting_desc" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}Action{% endtrans %}
+                </th>
+            </tr>
+        </thead>
+        <tbody role="alert" aria-live="polite" aria-relevant="all">
+            {% for templat in templates %}
+                <tr class="{{ cycle(['odd', 'even'], templat.id) }}">
+                    <td class="">{{ templat.id }}</td>
+                    <td class="">{{ templat.alias }}</td>
+                    <td class="">{{ templat.subject }}</td>
+                    <td class="">
+                        <a id="managers_list_new" class="fa ajax-form fa-pencil" title="{% trans %}Add note{% endtrans %}"
+                           data-toggle="modal"
+                           href="#form_modal"
+                           data-target_holder="emailFormTpl"
+                           data-default='{}'
+                           data-form_name="emailForm"
+                           data-post_function="updateList"
+                           data-post_target_id="messages_list"
+                           data-model="Email"
+                           data-model-id="{{ templat.id }}"
+       
+                           >
+                        </a>
+                        <a class="ajax-delete fa fa-trash-o"
+                            title="{% trans %}Delete{% endtrans %}"
+                            href="javascript:;"
+                            data-params='{"model":"Email","id":{{ templat.id }}}'
+                        ></a>
+                        
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

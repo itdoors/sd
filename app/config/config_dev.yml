@@ -10,7 +10,7 @@ framework:
 web_profiler:
     toolbar: true
     intercept_redirects: false
-
+    
 monolog:
     handlers:
         main:
@@ -27,5 +27,13 @@ monolog:
 assetic:
     use_controller: true
 
+parameters: 
+    project.dir: '/var/www/sd'
+    project.web.dir: '%project.dir%/web'
+    log.file.path: "%project.dir%/log.txt"
 #swiftmailer:
+#        type: file
+#        path: /var/www/path/to/spool
+#     { type: memory }
 #    delivery_address: me@example.com
+

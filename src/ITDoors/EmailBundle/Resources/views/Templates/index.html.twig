@@ -1,0 +1,69 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ITDoorsEmailBundle' %}
+{% block title %}{% trans %}List of email templates{% endtrans %} {% endblock %}
+{% block page_title %}
+<h3 class="page-title">
+        {% trans %}Email <small>list of templates</small>{% endtrans %}
+</h3>
+{% endblock %}
+{% block page_breadcrumbs %}
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <i class="fa fa-home"></i>
+        <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        <i class="fa fa-angle-right"></i>
+    </li>
+    <li>
+        <a href="{{ path('it_doors_email_templates') }}" title="{% trans %}Email templates{% endtrans %}">{% trans %}Email templates{% endtrans %}</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-summernote/summernote.css') }}">
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-summernote/summernote.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-summernote/lang/summernote-ru-RU.js') }}"></script>
+    
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="btn-group">
+            <a id="managers_list_new" class="fa ajax-form fa-plus" title="{% trans %}Add note{% endtrans %}"
+                       data-toggle="modal"
+                       href="#form_modal"
+                       data-target_holder="emailFormTpl"
+                       data-form_name="emailForm"
+                       data-post_function="updateList"
+                       data-post_target_id="messages_list"
+                       >{% trans %} Add {% endtrans %}
+            </a>
+         {# modal window #}
+            <div id="form_modal" class="modal fade" role="basic" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <h4 class="modal-title">{% trans %}Email Tamplate{% endtrans %}</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div id="emailFormTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         {# end modal window #}
+        </div>
+        <div id="messages_list" data-url="{{ path('it_doors_email_templates_list') }}">        
+            {{ render(controller('ITDoorsEmailBundle:Templates:list')) }}
+        </div>
+    </div>
+</div>
+{% endblock body %}

@@ -39,9 +39,6 @@ class InvoiceMessageFormType extends AbstractType
     {
         $container = $this->container;
 
-        /** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
-        $lr = $container->get('it_doors_controlling.repository');
-
         $builder
             ->add('note', 'textarea', array(
                 'required' => false,

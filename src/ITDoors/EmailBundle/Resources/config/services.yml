@@ -1,0 +1,13 @@
+parameters:
+#    it_doors_email.example.class: ITDoors\EmailBundle\Example
+    it_doors_email.form.class: ITDoors\EmailBundle\Form\EmailFormType
+
+services:
+#    it_doors_email.example:
+#        class: %it_doors_email.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
+    it_doors_email.form.emailForm:
+        class: %it_doors_email.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: emailForm }
