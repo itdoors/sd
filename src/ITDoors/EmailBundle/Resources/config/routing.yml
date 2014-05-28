@@ -5,3 +5,24 @@ it_doors_email_templates:
 it_doors_email_templates_list:
     pattern:  /email/templates/list
     defaults: { _controller: ITDoorsEmailBundle:Templates:list }
+    
+automailer:
+    pattern:  /email/history
+    defaults: { _controller: TSSAutomailerBundle:Automailer:index }
+    
+automailer_show:
+    pattern:  /email/show
+    defaults: { _controller: TSSAutomailerBundle:Automailer:show }
+    
+automailer_edit:
+    pattern:  /email/edit
+    defaults: { _controller: TSSAutomailerBundle:Automailer:edit }
+    
+automailer_new:
+    pattern:  /email/new
+    defaults: { _controller: TSSAutomailerBundle:Automailer:new }
+    
+automailer_create:
+    pattern:  /email/create
+    defaults: { _controller: TSSAutomailerBundle:Automailer:create }
+

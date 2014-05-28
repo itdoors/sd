@@ -19,6 +19,22 @@ class TemplatesController extends BaseFilterController
      */
     public function indexAction()
     {
+        
+        $email = $this->get('it_doors_email.service');
+        $email->send(
+            array('senj1@mail.ru' => 'ITDoors'),
+            '22222',
+            array(
+                'users' => array(
+                    'senj@mail.ru'  => 'Сергей'
+                ),
+                'variables' => array(
+                    '{$name}' => 'Имя пользователя',
+                    '{$famely}' => 'фамилия пользователя'
+                    
+                )
+            ));
+        
         return $this->render('ITDoorsEmailBundle:Templates:index.html.twig');
     }
 
