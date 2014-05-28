@@ -32,8 +32,7 @@ class SalesDispatcherController extends SalesController
             ->getMyOrganizationsContacts($teamUserIds, $organizationId)
             ->getResult();
 
-        if (!$organizationId)
-        {
+        if (!$organizationId) {
             /** @var \Knp\Component\Pager\Paginator $paginator */
             $paginator  = $this->get('knp_paginator');
 
@@ -42,9 +41,7 @@ class SalesDispatcherController extends SalesController
                 $page,
                 20
             );
-        }
-        else
-        {
+        } else {
             $pagination = $organizationContacts->getResult();
         }
 
@@ -56,6 +53,11 @@ class SalesDispatcherController extends SalesController
             ));
     }
 
+    /**
+     * @param int $handlingId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function handlingAction($handlingId)
     {
         /** @var \Lists\TeamBundle\Entity\TeamRepository $teamRepository */

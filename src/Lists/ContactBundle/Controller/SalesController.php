@@ -4,12 +4,18 @@ namespace Lists\ContactBundle\Controller;
 
 use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
 
+/**
+ * Class SalesController
+ */
 class SalesController extends BaseController
 {
     protected $filterNamespace = 'contacts.sales.filters';
     protected $baseRoutePrefix = 'sales';
     protected $baseTemplate = 'Sales';
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction()
     {
         $page = $this->get('request')->query->get('page', 1);
@@ -22,6 +28,11 @@ class SalesController extends BaseController
         ));
     }
 
+    /**
+     * @param int $organizationId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function organizationAction($organizationId)
     {
         $this->refreshFiltersIfAjax();
@@ -32,8 +43,7 @@ class SalesController extends BaseController
         $organizationContacts = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
             ->getMyOrganizationsContacts($user->getId(), $organizationId);
 
-        if (!$organizationId)
-        {
+        if (!$organizationId) {
             /** @var \Knp\Component\Pager\Paginator $paginator */
             $paginator  = $this->get('knp_paginator');
 
@@ -42,9 +52,7 @@ class SalesController extends BaseController
                 $page,
                 20
             );
-        }
-        else
-        {
+        } else {
             $pagination = $organizationContacts->getResult();
         }
 
@@ -56,29 +64,40 @@ class SalesController extends BaseController
         ));
     }
 
-	public function organizationElementAction($id, $organizationId)
-	{
-		$organizationContactQuery = $this->getDoctrine()
-			->getRepository('ListsContactBundle:ModelContact')
-			->getMyOrganizationsContacts(array(), null, $id);
+    /**
+     * @param int $id
+     * @param int $organizationId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function organizationElementAction($id, $organizationId)
+    {
+        $organizationContactQuery = $this->getDoctrine()
+            ->getRepository('ListsContactBundle:ModelContact')
+            ->getMyOrganizationsContacts(array(), null, $id);
 
-		$organizationContact = $organizationContactQuery->getSingleResult();
+        $organizationContact = $organizationContactQuery->getSingleResult();
 
-		return $this->render('ListsContactBundle:' . $this->baseTemplate . ':organizationElement.html.twig', array(
-				'item' => $organizationContact,
-				'organizationId' => $organizationId,
-				'baseTemplate' => $this->baseTemplate,
-				'baseRoutePrefix' => $this->baseRoutePrefix
-			));
-	}
+        return $this->render('ListsContactBundle:' . $this->baseTemplate . ':organizationElement.html.twig', array(
+                'item' => $organizationContact,
+                'organizationId' => $organizationId,
+                'baseTemplate' => $this->baseTemplate,
+                'baseRoutePrefix' => $this->baseRoutePrefix
+            ));
+    }
 
+    /**
+     * @param int $handlingId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function handlingAction($handlingId)
     {
         $user = $this->getUser();
 
-		$organizationId = $this->getDoctrine()->getManager()
-			->getRepository('ListsHandlingBundle:Handling')
-			->getOrganizationByHandlingId($handlingId);
+        $organizationId = $this->getDoctrine()->getManager()
+            ->getRepository('ListsHandlingBundle:Handling')
+            ->getOrganizationByHandlingId($handlingId);
 
         $handlingContacts = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
             ->getMyHandlingContacts($user->getId(), $handlingId)
@@ -104,8 +123,7 @@ class SalesController extends BaseController
 
         $isAjax = $request->isXmlHttpRequest();
 
-        if ($isAjax)
-        {
+        if ($isAjax) {
             $this->removeFromFilters('page');
         }
     }

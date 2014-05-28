@@ -7,11 +7,13 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Lists\ContactBundle\Entity\ModelContactRepository;
 
+/**
+ * Class ModelContactOrganizationFormType
+ */
 class ModelContactOrganizationFormType extends AbstractType
 {
-        /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
+    /**
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -33,14 +35,13 @@ class ModelContactOrganizationFormType extends AbstractType
             ->add('email')
             ->add('type', null, array(
                 'required' => true
-            ))
-        ;
+            ));
 
         $builder
             ->add('add', 'submit')
             ->add('cancel', 'button');
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

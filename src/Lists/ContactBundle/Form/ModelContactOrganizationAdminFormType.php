@@ -2,18 +2,20 @@
 
 namespace Lists\ContactBundle\Form;
 
-use Symfony\Component\Form\AbstractType;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Lists\ContactBundle\Entity\ModelContactRepository;
 
-
-
+/**
+ * Class ModelContactOrganizationAdminFormType
+ */
 class ModelContactOrganizationAdminFormType extends ModelContactOrganizationFormType
 {
     protected $container;
 
-    public function __construct($container)
+    /**
+     * @param Container $container
+     */
+    public function __construct(Container $container)
     {
         $this->container = $container;
 
@@ -23,7 +25,7 @@ class ModelContactOrganizationAdminFormType extends ModelContactOrganizationForm
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

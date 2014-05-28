@@ -2,7 +2,9 @@
 
 namespace Lists\ContactBundle\Entity;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 
 /**
  * ModelContactRepository
@@ -15,10 +17,16 @@ class ModelContactRepository extends EntityRepository
     const MODEL_ORGANIZATION = 'organization';
     const MODEL_HANDLING = 'handling';
 
+    /**
+     * @param int[]    $userIds
+     * @param int      $organizationId
+     * @param int|null $id
+     *
+     * @return \Doctrine\ORM\Query
+     */
     public function getMyOrganizationsContacts($userIds, $organizationId, $id = null)
     {
-        if (!is_array($userIds) && $userIds)
-        {
+        if (!is_array($userIds) && $userIds) {
             $userIds = array($userIds);
         }
 
@@ -34,25 +42,20 @@ class ModelContactRepository extends EntityRepository
         $this->processBaseQuery($sql);
         $this->processBaseQuery($sqlCount);
 
-		if ($id)
-		{
-			$this->processIdQuery($sql, $id);
-			$this->processIdQuery($sqlCount, $id);
-		}
-		else
-		{
-			if (sizeof($userIds))
-			{
-				$this->processUserQuery($sql, $userIds);
-				$this->processUserQuery($sqlCount, $userIds);
-			}
+        if ($id) {
+            $this->processIdQuery($sql, $id);
+            $this->processIdQuery($sqlCount, $id);
+        } else {
+            if (sizeof($userIds)) {
+                $this->processUserQuery($sql, $userIds);
+                $this->processUserQuery($sqlCount, $userIds);
+            }
 
-			if ($organizationId && $organizationId != 0)
-			{
-				$this->processOrganizationQuery($sql, $organizationId);
-				$this->processOrganizationQuery($sqlCount, $organizationId);
-			}
-		}
+            if ($organizationId && $organizationId != 0) {
+                $this->processOrganizationQuery($sql, $organizationId);
+                $this->processOrganizationQuery($sqlCount, $organizationId);
+            }
+        }
 
         $this->processOrdering($sql);
 
@@ -80,7 +83,6 @@ class ModelContactRepository extends EntityRepository
             ->addSelect("CONCAT(CONCAT(owner.lastName, ' '), owner.firstName) as ownerFullName")
             ->addSelect("owner.id as ownerId");
     }
-
 
     /**
      * Processes sql query. adding select
@@ -117,7 +119,7 @@ class ModelContactRepository extends EntityRepository
      * Processes sql query. adding users query
      *
      * @param \Doctrine\ORM\QueryBuilder $sql
-     * @param int[] $userIds
+     * @param int[]                      $userIds
      */
     public function processUserQuery($sql, $userIds)
     {
@@ -126,40 +128,39 @@ class ModelContactRepository extends EntityRepository
             ->setParameter(':userIds', $userIds);
     }
 
-	/**
+    /**
      * Processes sql query. adding organization query
      *
      * @param \Doctrine\ORM\QueryBuilder $sql
-     * @param int $organizationId
+     * @param int                        $organizationId
      */
     public function processOrganizationQuery($sql, $organizationId)
     {
-		$sql
-			->andWhere('o.id = :organizationId')
-			->setParameter(':organizationId', $organizationId);
+        $sql
+            ->andWhere('o.id = :organizationId')
+            ->setParameter(':organizationId', $organizationId);
 
-		$orgIds = $this->getIdsInGroup($organizationId);
+        $orgIds = $this->getIdsInGroup($organizationId);
 
-		if (sizeof($orgIds))
-		{
-			$sql
-				->orWhere('mc.modelId in (:organizationIds) AND mc.isShared = true')
-				->setParameter(':organizationIds', $orgIds);
-		}
+        if (sizeof($orgIds)) {
+            $sql
+                ->orWhere('mc.modelId in (:organizationIds) AND mc.isShared = true')
+                ->setParameter(':organizationIds', $orgIds);
+        }
     }
 
-	/**
-	 * Processes sql query. adding id query
-	 *
-	 * @param \Doctrine\ORM\QueryBuilder $sql
-	 * @param int $id
-	 */
-	public function processIdQuery($sql, $id)
-	{
-		$sql
-			->andWhere('mc.id = :id')
-			->setParameter(':id', $id);
-	}
+    /**
+     * Processes sql query. adding id query
+     *
+     * @param \Doctrine\ORM\QueryBuilder $sql
+     * @param int                        $id
+     */
+    public function processIdQuery($sql, $id)
+    {
+        $sql
+            ->andWhere('mc.id = :id')
+            ->setParameter(':id', $id);
+    }
 
     /**
      * Processes sql query. adding users query
@@ -177,29 +178,24 @@ class ModelContactRepository extends EntityRepository
      * Processes sql query depending on filters
      *
      * @param \Doctrine\ORM\QueryBuilder $sql
-     * @param mixed[] $filters
+     * @param mixed[]                    $filters
      */
     public function processFilters(\Doctrine\ORM\QueryBuilder $sql, $filters)
     {
-        if (sizeof($filters))
-        {
+        if (sizeof($filters)) {
 
-            foreach($filters as $key => $value)
-            {
-                if (!$value)
-                {
+            foreach ($filters as $key => $value) {
+                if (!$value) {
                     continue;
                 }
-                switch($key)
-                {
+                switch ($key) {
                     case 'organization_id':
                         $sql
                             ->andWhere("o.id = :organizationId")
                             ->setParameter(':organizationId', $value);
                         break;
                     case 'users':
-                        if (isset($value[0]) && !$value[0])
-                        {
+                        if (isset($value[0]) && !$value[0]) {
                             break;
                         }
                         $sql->andWhere('users.id in (:userFilterIds)');
@@ -210,6 +206,12 @@ class ModelContactRepository extends EntityRepository
         }
     }
 
+    /**
+     * @param int[] $userIds
+     * @param int   $handlingId
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
     public function getMyHandlingContacts($userIds, $handlingId)
     {
         $organizationId = $this->getEntityManager()
@@ -218,14 +220,14 @@ class ModelContactRepository extends EntityRepository
 
         $sql = $this->createQueryBuilder('mc')
             ->select('mc')
-			->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as creatorFullName")
-			->addSelect("CONCAT(CONCAT(owner.lastName, ' '), owner.firstName) as ownerFullName")
-			->addSelect("owner.id as ownerId")
-			->addSelect('o.id as organizationId')
-			->addSelect('o.name as organizationName')
+            ->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as creatorFullName")
+            ->addSelect("CONCAT(CONCAT(owner.lastName, ' '), owner.firstName) as ownerFullName")
+            ->addSelect("owner.id as ownerId")
+            ->addSelect('o.id as organizationId')
+            ->addSelect('o.name as organizationName')
             ->leftJoin('mc.user', 'u')
-			->leftJoin('mc.owner', 'owner')
-			->leftJoin('ListsOrganizationBundle:Organization', 'o', 'WITH', 'o.id = mc.modelId')
+            ->leftJoin('mc.owner', 'owner')
+            ->leftJoin('ListsOrganizationBundle:Organization', 'o', 'WITH', 'o.id = mc.modelId')
             ->where('mc.modelName = :modelName')
             ->andWhere('mc.modelId = :modelId')
             //->andWhere('mc.user_id in (:userIds)')
@@ -233,13 +235,16 @@ class ModelContactRepository extends EntityRepository
             ->setParameter(':modelId', $organizationId)
             ->setParameter(':modelName', self::MODEL_ORGANIZATION);
 
-		$this->processOrganizationQuery($sql, $organizationId);
+        $this->processOrganizationQuery($sql, $organizationId);
 
         return $sql;
     }
 
     /**
      * Processes search base query
+     *
+     * @param Query $sql
+     * @param int   $organizationId
      */
     public function processSearchBaseQuery($sql, $organizationId)
     {
@@ -259,9 +264,7 @@ class ModelContactRepository extends EntityRepository
             ->where('mc.modelName = :modelName')
             ->setParameter(':modelName', self::MODEL_ORGANIZATION);
 
-
-        if ($organizationId)
-        {
+        if ($organizationId) {
             $sql
                 ->andWhere('mc.modelId = :modelId')
                 ->setParameter(':modelId', $organizationId);
@@ -272,7 +275,7 @@ class ModelContactRepository extends EntityRepository
      * Returns searched results
      *
      * @param string $searchText
-     * @param int $organizationId
+     * @param int    $organizationId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -293,7 +296,7 @@ class ModelContactRepository extends EntityRepository
      * Returns searched results
      *
      * @param string $searchText
-     * @param int $organizationId
+     * @param int    $organizationId
      *
      * @return \Doctrine\ORM\Query
      */
@@ -310,14 +313,17 @@ class ModelContactRepository extends EntityRepository
         return $sql;
     }
 
-	/**
-	 * Returns organization ids with in one organization group
-	 */
-	public function getIdsInGroup($organizationId)
-	{
-		return $this->getEntityManager()
-			->getRepository('ListsOrganizationBundle:Organization')
-			->getIdsInGroup($organizationId);
-	}
-
+    /**
+     * Returns organization ids with in one organization group
+     *
+     * @param int $organizationId
+     *
+     * @return mixed
+     */
+    public function getIdsInGroup($organizationId)
+    {
+        return $this->getEntityManager()
+            ->getRepository('ListsOrganizationBundle:Organization')
+            ->getIdsInGroup($organizationId);
+    }
 }

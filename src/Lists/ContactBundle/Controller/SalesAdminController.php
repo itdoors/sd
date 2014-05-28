@@ -2,14 +2,20 @@
 
 namespace Lists\ContactBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-
+/**
+ * Class SalesAdminController
+ */
 class SalesAdminController extends SalesController
 {
     protected $filterNamespace = 'contacts.sales.admin.filters';
     protected $baseRoutePrefix = 'sales_admin';
     protected $baseTemplate = 'SalesAdmin';
 
+    /**
+     * @param int $organizationId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function organizationAction($organizationId)
     {
         $this->refreshFiltersIfAjax();
@@ -18,8 +24,7 @@ class SalesAdminController extends SalesController
         $organizationContacts = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
             ->getMyOrganizationsContacts(null, $organizationId);
 
-        if (!$organizationId)
-        {
+        if (!$organizationId) {
             /** @var \Knp\Component\Pager\Paginator $paginator */
             $paginator  = $this->get('knp_paginator');
 
@@ -28,9 +33,7 @@ class SalesAdminController extends SalesController
                 $page,
                 20
             );
-        }
-        else
-        {
+        } else {
             $pagination = $organizationContacts->getResult();
         }
 
