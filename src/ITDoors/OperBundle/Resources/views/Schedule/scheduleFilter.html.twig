@@ -1,0 +1,29 @@
+
+{{ ajax_filter_render('ScheduleFilterFormType', ajax_namespace_oper_department_schedule, {
+'schedule_content': 'ITDoorsAjax.updateList'
+}) }}
+
+
+<script src="{{ asset('bundles/itdoorsajax/js/jquery.forms.js') }}" type="text/javascript"></script>
+<script src="{{ asset('bundles/itdoorsajax/js/itdoors.ajax.js?v=1.01') }}" type="text/javascript"></script>
+<!-- END PAGE LEVEL SCRIPTS -->
+<script>
+    jQuery(document).ready(function() {
+        SD.init({
+            ajaxFormUrl: '{{ path('sd_common_ajax_form') }}',
+            ajaxDeleteUrl: '{{ path('sd_common_ajax_delete') }}',
+            assetsDir: '{{ asset('') }}'
+        });
+        ITDoorsAjax.init({
+            assetsDir: '{{ asset('') }}'
+        });
+        //Index.initJQVMAP(); // init index page's custom scripts
+        //Index.initCalendar(); // init index page's custom scripts
+        //Index.initCharts(); // init index page's custom scripts
+        //Index.initChat();
+        //Index.initMiniCharts();
+        //Index.initDashboardDaterange();
+        //Index.initIntro();
+        //Tasks.initDashboardWidget();
+    });
+</script>

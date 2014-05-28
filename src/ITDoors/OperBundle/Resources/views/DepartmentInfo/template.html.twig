@@ -21,17 +21,25 @@
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
-    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.cs')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/itdoorsoper/css/details.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-timepicker/compiled/timepicker.css')}}" />
+
 {% endblock %}
 
 {% block js_page_level_plugins %}
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-timepicker/js/bootstrap-timepicker.js') }}"></script>
+
+{#
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/jquery.dataTables.js') }}"></script>
+#}
+{#
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.js') }}"></script>
+#}
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
     <script src="{{ asset('bundles/itdoorsoper/js/tabs_department_info.js')}}" ></script>
@@ -47,7 +55,7 @@
                     <li class="active"><a href="#tab_0" data-block="tab_content" data-url="{{ url('it_doors_oper_department_info_basic', {'id' : idDepartment}) }}" data-toggle="tab">{% trans %}Basic{% endtrans %}</a></li>
                     <li><a href="#tab_1" data-toggle="tab">{% trans %}Tech parameters{% endtrans %}</a></li>
                     <li><a href="#tab_2" data-toggle="tab">{% trans %}Documents{% endtrans %}</a></li>
-                    <li><a href="#tab_3" data-toggle="tab">{% trans %}Schedule{% endtrans %}</a></li>
+                    <li><a href="#tab_3" data-block="tab_content" data-url="{{ url('it_doors_oper_schedule', {'id' : idDepartment}) }}" data-toggle="tab">{% trans %}Schedule{% endtrans %}</a></li>
                     <li><a href="#tab_3" data-toggle="tab">{% trans %}Audit{% endtrans %}</a></li>
                     <li><a href="#tab_3" data-toggle="tab">{% trans %}Labor protection{% endtrans %}</a></li>
                     <li><a href="#tab_3" data-toggle="tab">{% trans %}Calculation{% endtrans %}</a></li>

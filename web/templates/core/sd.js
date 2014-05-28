@@ -167,6 +167,7 @@ var SD = (function() {
         {
             var selfSD = this;
 
+            $('.' + selfSD.params.ajaxMoreInfoClass).die('click');
             $('.' + selfSD.params.ajaxMoreInfoClass).live('click', function(e){
                 e.preventDefault();
 
@@ -193,7 +194,7 @@ var SD = (function() {
                         selfSD.blockUI(selfAjaxMoreInfoObject);
                     },
                     success: function(response) {
-                        console.log(response);
+                        //console.log(response);
                         selfSD.unblockUI(selfAjaxMoreInfoObject);
                         if (response.success)
                         {
@@ -204,6 +205,7 @@ var SD = (function() {
             })
         };
 
+        $('.' + selfSD.params.ajaxFormCancelBtnClass).die('click');
         $('.' + selfSD.params.ajaxFormCancelBtnClass).live('click', function(e){
 
             e.preventDefault();

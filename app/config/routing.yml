@@ -1,3 +1,7 @@
+lists_grafik:
+    resource: "@ListsGrafikBundle/Resources/config/routing.yml"
+    prefix:   /
+
 lists_individual:
     resource: "@ListsIndividualBundle/Resources/config/routing.yml"
     prefix:   /

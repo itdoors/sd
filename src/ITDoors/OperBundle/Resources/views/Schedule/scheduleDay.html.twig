@@ -1,0 +1,311 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
+{#
+<script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+#}
+
+<script>
+    $(document).ready(function(){
+
+
+            $('.timepiker-cool').timepicker({
+                autoclose: true,
+                minuteStep: 1,
+                showSeconds: false,
+                showMeridian: false
+            });
+            //$('.timepicker-cool12').timepicker();
+
+        $('.editButton').die('click');
+        $('.editButton').live('click', function(e){
+            e.preventDefault();
+
+            var parent = $(this).parent("td").parent("tr");
+            var spanFrom = parent.find('.timeFrom');
+            var spanTo = parent.find('.timeTo');
+            var inputFrom = parent.find('.timeFromInput');
+            var inputTo = parent.find('.timeToInput');
+            var spinClass ="fa fa-spinner fa-spin";
+            var editClass = "fa-edit";
+            var checkClass = "fa-check-circle-o";
+            var deleteButton = parent.find(".deleteButton");
+            var cancelButton = parent.find(".cancelButton");
+            var editButton = parent.find(".editButton");
+            var spinner = parent.find(".spinner");
+            var checkButton = parent.find(".checkButton");
+
+            $(this).addClass('notDisplayed');
+            checkButton.removeClass('notDisplayed');
+
+            spanFrom.addClass('notDisplayed');
+            spanTo.addClass('notDisplayed');
+            inputFrom.removeClass('notDisplayed');
+            inputTo.removeClass('notDisplayed');
+
+            inputFrom.val(spanFrom.html()) ;
+            inputTo.val(spanTo.html());
+            deleteButton.addClass('notDisplayed');
+            cancelButton.removeClass('notDisplayed');
+
+
+        })
+
+        $('.cancelButton').die('click');
+        $('.cancelButton').live('click', function(e){
+            e.preventDefault();
+
+            var parent = $(this).parent("td").parent("tr");
+            var spanFrom = parent.find('.timeFrom');
+            var spanTo = parent.find('.timeTo');
+            var inputFrom = parent.find('.timeFromInput');
+            var inputTo = parent.find('.timeToInput');
+            var spinClass ="fa fa-spinner fa-spin";
+            var editClass = "fa-edit";
+            var checkClass = "fa-check-circle-o";
+            var deleteButton = parent.find(".deleteButton");
+            var cancelButton = parent.find(".cancelButton");
+            var editButton = parent.find(".editButton");
+            var spinner = parent.find(".spinner");
+            var checkButton = parent.find(".checkButton");
+
+            $(this).addClass('notDisplayed');
+            checkButton.addClass('notDisplayed');
+            deleteButton.removeClass('notDisplayed');
+            editButton.removeClass('notDisplayed');
+
+            inputFrom.addClass('notDisplayed');
+            inputTo.addClass('notDisplayed');
+            spanFrom.removeClass('notDisplayed');
+            spanTo.removeClass('notDisplayed');
+        })
+
+        $('.checkButton').die('click');
+        $('.checkButton').live('click', function(e){
+            e.preventDefault();
+
+            var parent = $(this).parent("td").parent("tr");
+            var spanFrom = parent.find('.timeFrom');
+            var spanTo = parent.find('.timeTo');
+            var inputFrom = parent.find('.timeFromInput');
+            var inputTo = parent.find('.timeToInput');
+            var spinClass ="fa fa-spinner fa-spin";
+            var editClass = "fa-edit";
+            var checkClass = "fa-check-circle-o";
+            var deleteButton = parent.find(".deleteButton");
+            var cancelButton = parent.find(".cancelButton");
+            var editButton = parent.find(".editButton");
+            var spinner = parent.find(".spinner");
+            var checkButton = parent.find(".checkButton");
+
+            $(this).addClass('notDisplayed');
+            cancelButton.addClass('notDisplayed');
+            spinner.removeClass('notDisplayed');
+
+            spanFrom.text(inputFrom.val());
+            spanTo.text(inputTo.val());
+
+            spanFrom.removeClass('notDisplayed');
+            spanTo.removeClass('notDisplayed');
+            inputFrom.addClass('notDisplayed');
+            inputTo.addClass('notDisplayed');
+
+            /*
+             $.ajax({
+             type: 'POST',
+             url:,
+             var fd = new FormData();
+             fd.append('idCoworker', $(this).data('idCoworker'));
+             fd.append('idDepartment', $(this).data('idCoworker'));
+             fd.append('idTime', $(this).data('idCoworker'));
+             fd.append('day', $(this).data('idCoworker'));
+             fd.append('month', $(this).data('idCoworker'));
+             fd.append('year', $(this).data('idCoworker'));
+             fd.append('officially', $(this).data('idCoworker'))
+
+
+             beforeSend: function() {
+             ITDoorsAjax.blockUI($('#'+block_id));
+             },
+             success: function(response) {
+             $('#'+block_id).empty().append(response);
+             ITDoorsAjax.unblockUI($('#'+block_id));
+             }
+             })
+             */
+
+
+             })
+
+
+
+
+
+            $('.deleteButton').die('click');
+            $('.deleteButton').live('click', function(e){
+
+                e.preventDefault();
+
+                var message = 'Do you confirm deleting?'
+                if (confirm(message)) {
+                    return true;
+                } else {
+                    return false;
+                }
+                //ajax here
+            })
+
+        // set effect from select menu value
+        $( "#add_button" ).click(function() {
+            var options = {};
+            $( "#add_div" ).toggle( 'blind', options, 500 );
+            return false;
+        });
+
+    })
+</script>
+
+
+<div>
+    <a class="btn purple" id="add_button">{% trans %}Add{% endtrans %}</a>
+<li class="btn-group" style="float: right; ">
+    <a class="btn green" style="margin-right: 10px;">Скопировать график</a>
+    <button type="button" class="btn blue dropdown-toggle " data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true">
+							<span>
+								{% trans %}Actions{% endtrans %}
+							</span>
+        <i class="fa fa-angle-down"></i>
+    </button>
+    <ul class="dropdown-menu pull-right" role="menu">
+        <li>
+            <a href="#">
+                {% trans %}Illness vacation{% endtrans %}
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                {% trans %}Hooky{% endtrans %}
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                {% trans %}Fired{% endtrans %}
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                {% trans %}Vacation{% endtrans %}
+            </a>
+        </li>
+        <li class="divider">
+        </li>
+        <li>
+            <a href="#">
+                {% trans %}Clear{% endtrans %}
+            </a>
+        </li>
+    </ul>
+</li>
+</div>
+<div style="height: 150px; width: 100%; margin-top: 10px; display: none;" id="add_div">
+
+    <input id="test" >
+
+{#
+    <div id="test"> test</div>
+#}
+</div>
+
+<style>
+    .action_button{
+        cursor: pointer;
+    }
+    .action_button:hover{
+        color: red;
+    }
+    .fa-check-circle-o:hover{
+        color: green;
+    }
+
+    .td_not_officialy{
+        color: red;
+    }
+    .notDisplayed{
+        display: none;
+    }
+</style>
+
+<table class="table table-striped table-hover table-bordered" style="margin-top: 20px;">
+    <thead>
+        <tr>
+            <th colspan="2">{% trans %}Range{% endtrans %}</th>
+            <th>{% trans %}Sum{% endtrans %}</th>
+            <th>{% trans %}Day kind{% endtrans %}</th>
+            <th>{% trans %}Evening kind{% endtrans %}</th>
+            <th>{% trans %}Night kind{% endtrans %}</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if coworkerDayTime is defined%}
+        {% for oneDayTime in coworkerDayTime %}
+            {% if oneDayTime.notOfficially != true %}
+                <tr class="tdHolder">
+                    <td>
+                        <span class="timeFrom">{{ oneDayTime.fromTime|date('H:i') }}</span>
+                        <input type="text" class="timeFromInput notDisplayed timepiker-cool" size="5">
+                    </td>
+                    <td>
+                        <span class="timeTo">{{ oneDayTime.toTime|date('H:i') }}</span>
+                        <input type="text" class="timeToInput notDisplayed timepiker-cool" size="5">
+                    </td>
+                    <td>{{ oneDayTime.total }}</td>
+                    <td>{{ oneDayTime.totalDay }}</td>
+                    <td>{{ oneDayTime.totalEvening }}</td>
+                    <td>{{ oneDayTime.totalNight }}</td>
+                    <td align="center">
+                        <i class="fa fa-edit action_button editButton"></i>
+                        &nbsp;&nbsp;
+                        <i class="fa fa-trash-o action_button deleteButton"></i>
+                        <i class="fa fa-cross-o action_button"></i>
+                    </td>
+                </tr>
+            {% elseif oneDayTime.notOfficially == true %}
+                <tr class="tdHolder">
+                    <td>
+                        <span class="timeFrom">{{ oneDayTime.fromTime|date('H:i') }}</span>
+                        <input type="text" class="timeFromInput notDisplayed timepiker-cool" size="5">
+                    </td>
+                    <td>
+                        <span class="timeTo">{{ oneDayTime.toTime|date('H:i') }}</span>
+                        <input type="text" class="timeToInput notDisplayed timepiker-cool" size="5">
+                    </td>
+                    <td class="td_not_officialy">{{ oneDayTime.totalNotOfficially }}</td>
+                    <td class="td_not_officialy">{{ oneDayTime.totalDayNotOfficially }}</td>
+                    <td class="td_not_officialy">{{ oneDayTime.totalEveningNotOfficially }}</td>
+                    <td class="td_not_officialy">{{ oneDayTime.totalNightNotOfficially }}</td>
+                    <td align="center">
+                        <i class="fa fa-edit action_button editButton"></i>
+                        <i class="fa fa-check-circle-o action_button checkButton notDisplayed"></i>
+                        <i class="fa fa-spinner fa-spin spinner notDisplayed"></i>
+                        &nbsp;&nbsp;
+                        <i class="fa fa-trash-o action_button deleteButton"></i>
+                        <i class="fa fa-times action_button cancelButton notDisplayed"></i>
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+
+    {% endif %}
+
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="2">{% trans %}Range{% endtrans %}</th>
+            <th>{% trans %}Sum{% endtrans %}</th>
+            <th>{% trans %}Day kind{% endtrans %}</th>
+            <th>{% trans %}Evening kind{% endtrans %}</th>
+            <th>{% trans %}Night kind{% endtrans %}</th>
+            <th></th>
+        </tr>
+    </tfoot>
+</table>
+

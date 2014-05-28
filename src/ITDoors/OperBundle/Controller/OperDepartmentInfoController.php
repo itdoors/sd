@@ -24,6 +24,8 @@ class OperDepartmentInfoController extends BaseFilterController
      */
     public function indexAction($id)
     {
+        $this->addToSessionValues('idDepartment', $id, 'param', 'oper.bundle.department', 'param');
+
         return $this->render('ITDoorsOperBundle:DepartmentInfo:template.html.twig', array(
             'idDepartment' => $id
         ));
@@ -73,8 +75,7 @@ class OperDepartmentInfoController extends BaseFilterController
 
         $filterNamespace = $this->container->getParameter($this->getNamespace());
 
-        $this->addToSessionValues('idDepartment', $id, 'param', $filterNamespace, 'param');
-        $some= $this->getSessionValues($filterNamespace, 'param');
+
 
         $this->clearPaginator($filterNamespace);
         $filters = $this->getFilters($filterNamespace);

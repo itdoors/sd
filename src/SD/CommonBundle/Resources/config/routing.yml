@@ -185,3 +185,19 @@ sd_common_ajax_oper_department_individual:
 sd_common_ajax_oper_department_individual_by_id:
     pattern: /ajax/oper/department/individual/by/id
     defaults: { _controller: SDCommonBundle:Ajax:departmentPeopleIndividualById }
+
+sd_common_ajax_oper_schedule_month:
+    pattern: /ajax/oper/schedule/month/
+    defaults: { _controller: SDCommonBundle:Ajax:monthsFromDepartment }
+
+sd_common_ajax_oper_schedule_month_by_id:
+    pattern: /ajax/oper/schedule/month/by/id
+    defaults: { _controller: SDCommonBundle:Ajax:monthsFromDepartmentById }
+
+sd_common_ajax_oper_schedule_year:
+    pattern: /ajax/oper/schedule/year/
+    defaults: { _controller: SDCommonBundle:Ajax:yearsFromDepartment }
+
+sd_common_ajax_oper_schedule_year_by_id:
+    pattern: /ajax/oper/schedule/year/by/id
+    defaults: { _controller: SDCommonBundle:Ajax:yearsFromDepartmentById }

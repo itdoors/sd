@@ -40,6 +40,7 @@ class AppKernel extends Kernel
             new ITDoors\OperBundle\ITDoorsOperBundle(),
             new Lists\MpkBundle\ListsMpkBundle(),
             new Lists\IndividualBundle\ListsIndividualBundle(),
+            new Lists\GrafikBundle\ListsGrafikBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

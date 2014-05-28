@@ -2590,8 +2590,8 @@ class AjaxController extends BaseFilterController
     }
 
     /**
-     * ajax php function to get department status
-     * return json of all regions that was found
+     * ajax php function to get department people mpk
+     * return json of all department people mpks that was found
      *
      * @return string
      */
@@ -2616,7 +2616,7 @@ class AjaxController extends BaseFilterController
 
     /**
      * ajax php function to get department people
-     * return json of all regions that was found
+     * return json of all department people that was found
      *
      * @return string
      */
@@ -2641,7 +2641,7 @@ class AjaxController extends BaseFilterController
     }
 
     /**
-     * Returns json department status by id
+     * Returns json department individual by id
      *
      * @return string
      */
@@ -2662,6 +2662,187 @@ class AjaxController extends BaseFilterController
         return new Response(json_encode($result));
     }
 
+    /**
+     * Returns json month from department by id
+     *
+     * @return string
+     */
+    public function monthsFromDepartmentAction()
+    {
+        $idDepartment = $this->getSessionValueByKey('idDepartment', null, 'oper.bundle.department', 'param');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:Grafik');
+
+        $objects= $repository->getMonthsFromDepartment($idDepartment);
+
+        $result = array();
+
+        $translator = $this->get('translator');
+        foreach ($objects as $object) {
+            $numberMonth = $object['month'];
+
+            switch ($numberMonth) {
+                case '1':
+                    $text = $translator->trans('January', array(), 'ITDoorsOperBundle');
+                    break;
+                case '2':
+                    $text = $translator->trans('February', array(), 'ITDoorsOperBundle');
+                    break;
+                case '3':
+                    $text = $translator->trans('March', array(), 'ITDoorsOperBundle');
+                    break;
+                case '4':
+                    $text = $translator->trans('April', array(), 'ITDoorsOperBundle');
+                    break;
+                case '5':
+                    $text = $translator->trans('May', array(), 'ITDoorsOperBundle');
+                    break;
+                case '6':
+                    $text = $translator->trans('June', array(), 'ITDoorsOperBundle');
+                    break;
+                case '7':
+                    $text = $translator->trans('July', array(), 'ITDoorsOperBundle');
+                    break;
+                case '8':
+                    $text = $translator->trans('August', array(), 'ITDoorsOperBundle');
+                    break;
+                case '9':
+                    $text = $translator->trans('September', array(), 'ITDoorsOperBundle');
+                    break;
+                case '10':
+                    $text = $translator->trans('October', array(), 'ITDoorsOperBundle');
+                    break;
+                case '11':
+                    $text = $translator->trans('November', array(), 'ITDoorsOperBundle');
+                    break;
+                case '12':
+                    $text = $translator->trans('December', array(), 'ITDoorsOperBundle');
+                    break;
+            }
+            $result[] = array(
+                'id' => $numberMonth,
+                'value' => $numberMonth,
+                'name' => $text,
+                'text' => $text
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json months by id
+     *
+     * @return string
+     */
+    public function monthsFromDepartmentByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $result = array();
+        $translator = $this->get('translator');
+        foreach ($ids as $idMonth) {
+            switch ($idMonth) {
+                case '1':
+                    $text = $translator->trans('January', array(), 'ITDoorsOperBundle');
+                    break;
+                case '2':
+                    $text = $translator->trans('February', array(), 'ITDoorsOperBundle');
+                    break;
+                case '3':
+                    $text = $translator->trans('March', array(), 'ITDoorsOperBundle');
+                    break;
+                case '4':
+                    $text = $translator->trans('April', array(), 'ITDoorsOperBundle');
+                    break;
+                case '5':
+                    $text = $translator->trans('May', array(), 'ITDoorsOperBundle');
+                    break;
+                case '6':
+                    $text = $translator->trans('June', array(), 'ITDoorsOperBundle');
+                    break;
+                case '7':
+                    $text = $translator->trans('July', array(), 'ITDoorsOperBundle');
+                    break;
+                case '8':
+                    $text = $translator->trans('August', array(), 'ITDoorsOperBundle');
+                    break;
+                case '9':
+                    $text = $translator->trans('September', array(), 'ITDoorsOperBundle');
+                    break;
+                case '10':
+                    $text = $translator->trans('October', array(), 'ITDoorsOperBundle');
+                    break;
+                case '11':
+                    $text = $translator->trans('November', array(), 'ITDoorsOperBundle');
+                    break;
+                case '12':
+                    $text = $translator->trans('December', array(), 'ITDoorsOperBundle');
+                    break;
+            }
+            $result = array(
+                'id' => $idMonth,
+                'value' => $idMonth,
+                'name' => $text,
+                'text' => $text
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+
+
+    /**
+     * Returns json years from department
+     *
+     * @return string
+     */
+    public function yearsFromDepartmentAction()
+    {
+        $idDepartment = $this->getSessionValueByKey('idDepartment', null, 'oper.bundle.department', 'param');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:Grafik');
+
+        $objects= $repository->getYearsFromDepartment($idDepartment);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $year = $object['year'];
+
+            $result[] = array(
+                'id' => $year,
+                'value' => $year,
+                'name' => $year,
+                'text' => $year
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json years from department by id
+     *
+     * @return string
+     */
+    public function yearsFromDepartmentByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+        foreach ($ids as $idYear) {
+
+            $result = array(
+                'id' => $idYear,
+                'value' => $idYear,
+                'name' => $idYear,
+                'text' => $idYear
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
 
 }
 

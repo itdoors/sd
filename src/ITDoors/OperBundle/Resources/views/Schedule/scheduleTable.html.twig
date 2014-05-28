@@ -1,0 +1,141 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
+
+{#
+<script src="{{ asset('/bundles/itdoorsoper/js/data-tables/jquery.dataTables.js')}}"></script>
+<script src="{{ asset('/bundles/itdoorsoper/js/data-tables/dataTables.fixedColumns.js')}}"></script>
+<script src="{{ asset('/bundles/itdoorsoper/js/floatThead/jquery.floatThead.js')}}"></script>
+<script src="{{ asset('/bundles/itdoorsoper/js/multiDatepicker/js/jquery.ui.core.js')}}"></script>
+<script src="{{ asset('/bundles/itdoorsoper/js/multiDatepicker/js/jquery.ui.datepicker.js')}}"></script>
+<script src="{{ asset('/bundles/itdoorsoper/js/multiDatepicker/js/jquery.ui.datepicker-es.js')}}"></script>
+<script src="{{ asset('/bundles/itdoorsoper/js/multiDatepicker/jquery-ui.multidatespicker.js')}}"></script>
+#}
+
+<div id ="schedule_content" data-url="{{ path('it_doors_oper_schedule_table', {'id': idDepartment}) }}" >
+Shown date: {{ dateInfo.0.date }}
+{#
+    <br>
+    <button class="btn green" id="multi">Test multi </button>
+<script>
+    var date = new Date();
+    $('#multi').multiDatesPicker({
+        addDates: [date.setDate(14), date.setDate(19)]
+    });
+</script>
+#}
+
+    <table class="table table-striped table-hover table-bordered" id="graffic_table">
+        <thead>
+            <tr style="background-color: #ffffff">
+                <th>#</th>
+                <th>{% trans %}Fio{% endtrans %}</th>
+                <th>{% trans %}P/z{% endtrans %}</th>
+                <th>{% trans %}Mpk{% endtrans %}</th>
+                {% for dayInfo in dateInfo %}
+                    <th>
+                        {{ dayInfo.day }}
+                        <br>
+                        <span style="color: #ccc; font-size: small;">
+                            {{ dayInfo.dayName|trans }}
+                        </span>
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% set counter = 0 %}
+            {% for coworker in coworkers %}
+                {% set counter = counter + 1 %}
+                {% set idCoworker = coworker.id %}
+                <tr>
+                    <td>
+                        {{ counter }}
+                    </td>
+                    <td>{{ coworker.lastName }} {{ coworker.firstName }} {{ coworker.middleName }}</td>
+                    <td>P</td>
+                    <td>{{ coworker.mpkName }}</td>
+                    {% for dayInfo in dateInfo %}
+                        {% set day = dayInfo.day %}
+                        {% if dayInfo.vacation %}
+                            <td style="background-color: lightgreen;">
+                        {% else %}
+                            <td>
+                        {% endif %}
+                        <a  class="more-info"
+                            data-toggle="modal"
+                            href="#form_modal_more_info"
+                            data-target_holder="moreInfoTpl"
+                            data-params='{"date":"{{ dayInfo.date }}", "idCoworker": {{ idCoworker }}, "idDepartment":{{ idDepartment }}}'
+                            data-url-more-info="{{ url('it_doors_oper_schedule_day_info') }}"
+                                >
+                                    {% set showNothing = true %}
+                                    {% if infoHours[idCoworker][day]['officially'] is defined  and infoHours[idCoworker][day]['officially'] != 0%}
+                                        {{ infoHours[idCoworker][day]['officially']|number_format(2) }} <br>
+                                        {% set showNothing = false %}
+                                    {% endif %}
+
+                                    {% if infoHours[idCoworker][day]['notOfficially'] is defined  and infoHours[idCoworker][day]['notOfficially'] != 0%}
+                                        <span style="color: red">{{ infoHours[idCoworker][day]['notOfficially']|number_format(2) }}</span>
+                                        {% set showNothing = false %}
+                                    {% endif %}
+
+                                    {% if showNothing %}
+                                        -
+                                    {% endif %}
+                                </a>
+                            </td>
+                    {% endfor %}
+                </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+<style>
+    .DTFC_RightWrapper{
+        display: none;
+    }
+    #graffic_table{
+        margin-top: 0px !important;
+    }
+
+</style>
+
+
+<script>
+    $(document).ready(function() {
+
+/*
+        var table = $('#graffic_table').DataTable( {
+
+            scrollY:        "100%",
+
+            scrollX:        true,
+            scrollCollapse: true,
+            paging:         false,
+            searching: false,
+            ordering:  false,
+            info: false
+        } );
+
+        new $.fn.dataTable.FixedColumns( table, {
+            leftColumns: 4
+        } );
+
+
+        $('.date-a').click(function() {
+            collDate = $(this).data('date');
+            alert(collDate);
+        })
+*/
+
+/*
+        $('#graffic_table').floatThead({
+            scrollingTop: 42,
+            useAbsolutePositioning: false
+        });
+*/
+
+    } );
+</script>
+
+
