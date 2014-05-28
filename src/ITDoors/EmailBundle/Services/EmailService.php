@@ -14,6 +14,7 @@ class EmailService
 {
     /**
      * @var Container $container
+     * 
      */
     protected $container;
 
@@ -26,44 +27,64 @@ class EmailService
     {
         $this->container = $container;
     }
-    
+
     /**
+     * send
      * 
-     * @param array  $from
-     * @param string $template
-     * @param array  $to 
+     * @param array  $from     sender
+     * @param string $template alias
+     * @param array  $to       to
+     * 
+     * $email = $this->get('it_doors_email.service');
+     * $status = $email->send(
+     *       array('senj1@mail.ru' => 'ITDoors'),
+     *            '22222',
+     *             array(
+     *                 'users' => array(
+     *                     'senj@mail.ru'  => 'Сергей'
+     *                 ),
+     *                 'variables' => array(
+     *                     '{$name}' => 'Имя пользователя',
+     *                     '{$famely}' => 'фамилия пользователя'
+     *                  ),
+     *                  'files' => array(
+     *                      'http://sait.ru/img.jpg',
+     *                      'http://sait.ru/file.pdf'
+     *                  )
+     *          )
+     *  );
+     * 
+     * @return boolean
      */
     public function send($from, $template, $to)
     {
         /** @var EntityManager $em */
         $em = $this->container->get('doctrine')->getManager();
-       
-        /** Email $templateHTML */
-        $template_email = $em->getRepository('ITDoorsEmailBundle:Email')
+
+        /** Email $templateEmail */
+        $templateEmail = $em->getRepository('ITDoorsEmailBundle:Email')
             ->findOneBy(array('alias' => $template));
-        
+
         /** Swift_Mailer $mailer */
         $mailer = $this->container->get('mailer');
 
         $message = Swift_Message::newInstance()
-            ->setSubject($template_email->getSubject())
+            ->setSubject($templateEmail->getSubject())
             ->setFrom($from)
             ->setTo($to['users']);
-        $body = $template_email->getText();
-        if(array_key_exists('variables', $to)){
-            foreach ($to['variables'] as $key => $variable){
+        $body = $templateEmail->getText();
+        if (array_key_exists('variables', $to)) {
+            foreach ($to['variables'] as $key => $variable) {
                 $body = str_replace($key, $variable, $body);
             }
         }
         $message->setBody($body, 'text/html');
-        if(array_key_exists('files', $to)){
-            foreach ($to['files'] as $file){
+        if (array_key_exists('files', $to)) {
+            foreach ($to['files'] as $file) {
                 $message->attach(Swift_Attachment::fromPath($file));
             }
         }
-        
+
         return $mailer->send($message);
-        
- 
     }
 }
