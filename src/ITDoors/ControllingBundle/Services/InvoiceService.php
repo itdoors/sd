@@ -9,7 +9,6 @@ use ITDoors\ControllingBundle\Entity\Invoice;
 use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\HttpKernel\Fragment\Tests\FragmentRenderer\Renderer;
 
-
 /**
  * Invoice Service class
  */
@@ -686,5 +685,4 @@ class InvoiceService
 
         return new Response('send');
     }
-
 }

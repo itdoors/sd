@@ -829,7 +829,7 @@ class Invoice
     }
 
     /**
-     * @param $dogovorActCount
+     * @param integer $dogovorActCount
      *
      * @return $this
      */

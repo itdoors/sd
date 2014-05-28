@@ -5,10 +5,10 @@ namespace ITDoors\EmailBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-//use Symfony\Component\Form\FormEvents;
 
 /**
  * Class EmailFormType
+ * 
  * @package ITDoors\EmailBundle\Form
  */
 class EmailFormType extends AbstractType

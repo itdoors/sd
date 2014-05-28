@@ -44,7 +44,7 @@ class InvoiceController extends BaseFilterController
 
         $service= $this->container->get($this->service);
         $service->getTabsInvoices();
-        
+
         //$service->sendMail();
 
         $tabs = $service->getTabsInvoices();
