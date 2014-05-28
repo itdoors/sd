@@ -62,11 +62,10 @@ class HandlingMessage
      */
     private $user;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -76,20 +75,20 @@ class HandlingMessage
     /**
      * Set createdatetime
      *
-     * @param \DateTime $createdatetime
+     * @param  \DateTime       $createdatetime
      * @return HandlingMessage
      */
     public function setCreatedatetime($createdatetime)
     {
         $this->createdatetime = $createdatetime;
-    
+
         return $this;
     }
 
     /**
      * Get createdatetime
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedatetime()
     {
@@ -99,20 +98,20 @@ class HandlingMessage
     /**
      * Set description
      *
-     * @param string $description
+     * @param  string          $description
      * @return HandlingMessage
      */
     public function setDescription($description)
     {
         $this->description = $description;
-    
+
         return $this;
     }
 
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -122,20 +121,20 @@ class HandlingMessage
     /**
      * Set createdate
      *
-     * @param \DateTime $createdate
+     * @param  \DateTime       $createdate
      * @return HandlingMessage
      */
     public function setCreatedate($createdate)
     {
         $this->createdate = $createdate;
-    
+
         return $this;
     }
 
     /**
      * Get createdate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedate()
     {
@@ -145,20 +144,20 @@ class HandlingMessage
     /**
      * Set filepath
      *
-     * @param string $filepath
+     * @param  string          $filepath
      * @return HandlingMessage
      */
     public function setFilepath($filepath)
     {
         $this->filepath = $filepath;
-    
+
         return $this;
     }
 
     /**
      * Get filepath
      *
-     * @return string 
+     * @return string
      */
     public function getFilepath()
     {
@@ -168,20 +167,20 @@ class HandlingMessage
     /**
      * Set filename
      *
-     * @param string $filename
+     * @param  string          $filename
      * @return HandlingMessage
      */
     public function setFilename($filename)
     {
         $this->filename = $filename;
-    
+
         return $this;
     }
 
     /**
      * Get filename
      *
-     * @return string 
+     * @return string
      */
     public function getFilename()
     {
@@ -191,20 +190,20 @@ class HandlingMessage
     /**
      * Set handling_id
      *
-     * @param integer $handlingId
+     * @param  integer         $handlingId
      * @return HandlingMessage
      */
     public function setHandlingId($handlingId)
     {
         $this->handling_id = $handlingId;
-    
+
         return $this;
     }
 
     /**
      * Get handling_id
      *
-     * @return integer 
+     * @return integer
      */
     public function getHandlingId()
     {
@@ -214,25 +213,24 @@ class HandlingMessage
     /**
      * Set handling
      *
-     * @param \Lists\HandlingBundle\Entity\Handling $handling
+     * @param  \Lists\HandlingBundle\Entity\Handling $handling
      * @return HandlingMessage
      */
     public function setHandling(\Lists\HandlingBundle\Entity\Handling $handling = null)
     {
         $this->handling = $handling;
 
-        if ($handling)
-        {
+        if ($handling) {
             $this->setHandlingId($handling->getId());
         }
-    
+
         return $this;
     }
 
     /**
      * Get handling
      *
-     * @return \Lists\HandlingBundle\Entity\Handling 
+     * @return \Lists\HandlingBundle\Entity\Handling
      */
     public function getHandling()
     {
@@ -242,20 +240,20 @@ class HandlingMessage
     /**
      * Set type
      *
-     * @param \Lists\HandlingBundle\Entity\HandlingMessageType $type
+     * @param  \Lists\HandlingBundle\Entity\HandlingMessageType $type
      * @return HandlingMessage
      */
     public function setType(\Lists\HandlingBundle\Entity\HandlingMessageType $type = null)
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
     /**
      * Get type
      *
-     * @return \Lists\HandlingBundle\Entity\HandlingMessageType 
+     * @return \Lists\HandlingBundle\Entity\HandlingMessageType
      */
     public function getType()
     {
@@ -265,20 +263,20 @@ class HandlingMessage
     /**
      * Set user
      *
-     * @param \SD\UserBundle\Entity\User $user
+     * @param  \SD\UserBundle\Entity\User $user
      * @return HandlingMessage
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 
     /**
      * Get user
      *
-     * @return \SD\UserBundle\Entity\User 
+     * @return \SD\UserBundle\Entity\User
      */
     public function getUser()
     {
@@ -384,20 +382,20 @@ class HandlingMessage
     /**
      * Set additionalType
      *
-     * @param string $additionalType
+     * @param  string          $additionalType
      * @return HandlingMessage
      */
     public function setAdditionalType($additionalType)
     {
         $this->additionalType = $additionalType;
-    
+
         return $this;
     }
 
     /**
      * Get additionalType
      *
-     * @return string 
+     * @return string
      */
     public function getAdditionalType()
     {
@@ -408,24 +406,23 @@ class HandlingMessage
      */
     private $isBusinessTrip;
 
-
     /**
      * Set isBusinessTrip
      *
-     * @param boolean $isBusinessTrip
+     * @param  boolean         $isBusinessTrip
      * @return HandlingMessage
      */
     public function setIsBusinessTrip($isBusinessTrip)
     {
         $this->isBusinessTrip = $isBusinessTrip;
-    
+
         return $this;
     }
 
     /**
      * Get isBusinessTrip
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsBusinessTrip()
     {
@@ -444,24 +441,23 @@ class HandlingMessage
      */
     private $contact;
 
-
     /**
      * Set contact
      *
-     * @param \Lists\ContactBundle\Entity\ModelContact $contact
+     * @param  \Lists\ContactBundle\Entity\ModelContact $contact
      * @return HandlingMessage
      */
     public function setContact(\Lists\ContactBundle\Entity\ModelContact $contact = null)
     {
         $this->contact = $contact;
-    
+
         return $this;
     }
 
     /**
      * Get contact
      *
-     * @return \Lists\ContactBundle\Entity\ModelContact 
+     * @return \Lists\ContactBundle\Entity\ModelContact
      */
     public function getContact()
     {
@@ -472,24 +468,23 @@ class HandlingMessage
      */
     private $contact_id;
 
-
     /**
      * Set contact_id
      *
-     * @param integer $contactId
+     * @param  integer         $contactId
      * @return HandlingMessage
      */
     public function setContactId($contactId)
     {
         $this->contact_id = $contactId;
-    
+
         return $this;
     }
 
     /**
      * Get contact_id
      *
-     * @return integer 
+     * @return integer
      */
     public function getContactId()
     {
@@ -500,24 +495,23 @@ class HandlingMessage
      */
     private $user_id;
 
-
     /**
      * Set user_id
      *
-     * @param integer $userId
+     * @param  integer         $userId
      * @return HandlingMessage
      */
     public function setUserId($userId)
     {
         $this->user_id = $userId;
-    
+
         return $this;
     }
 
     /**
      * Get user_id
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -528,24 +522,23 @@ class HandlingMessage
      */
     private $type_id;
 
-
     /**
      * Set type_id
      *
-     * @param integer $typeId
+     * @param  integer         $typeId
      * @return HandlingMessage
      */
     public function setTypeId($typeId)
     {
         $this->type_id = $typeId;
-    
+
         return $this;
     }
 
     /**
      * Get type_id
      *
-     * @return integer 
+     * @return integer
      */
     public function getTypeId()
     {

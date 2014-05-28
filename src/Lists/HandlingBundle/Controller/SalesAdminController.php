@@ -68,15 +68,13 @@ class SalesAdminController extends SalesController
      */
     public function closeAction($id)
     {
-        if (!$id)
-        {
+        if (!$id) {
             return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_handling_index'));
         }
 
         $user = $this->getUser();
 
-        if (!$user->hasRole('ROLE_SALESADMIN'))
-        {
+        if (!$user->hasRole('ROLE_SALESADMIN')) {
             throw new AccessDeniedException();
         }
 
@@ -135,8 +133,7 @@ class SalesAdminController extends SalesController
 
         $data = $request->request->get($form->getName());
 
-        if (!sizeof($data))
-        {
+        if (!sizeof($data)) {
             return $this->redirect($this->generateUrl('lists_sales_admin_report_advanced_range'));
         }
 
@@ -162,35 +159,34 @@ class SalesAdminController extends SalesController
 
     }
 
-	/**
-	 * Executes list action for dashboard
-	 */
-	public function listAction()
-	{
-		// Get organization filter
-		/** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
-		$handlingRepository = $this->getDoctrine()
-			->getRepository('ListsHandlingBundle:Handling');
+    /**
+     * Executes list action for dashboard
+     */
+    public function listAction()
+    {
+        // Get organization filter
+        /** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
+        $handlingRepository = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling');
 
-		/** @var \SD\UserBundle\Entity\User $user */
-		$user = $this->getUser();
+        /** @var \SD\UserBundle\Entity\User $user */
+        $user = $this->getUser();
 
         $filters['progressNOT'] = 100;
         $filters['chanceNOT'] = array(0, 100);
         $filters['isClosed'] = 'FALSE';
 
-		/** @var \Doctrine\ORM\Query $handlingQuery */
-		$handlingQuery = $handlingRepository->getAllForSalesQuery(null, $filters);
+        /** @var \Doctrine\ORM\Query $handlingQuery */
+        $handlingQuery = $handlingRepository->getAllForSalesQuery(null, $filters);
 
-		$pagination = $handlingQuery->getResult();
+        $pagination = $handlingQuery->getResult();
 
-		/** @var \Knp\Component\Pager\Paginator $paginator */
+        /** @var \Knp\Component\Pager\Paginator $paginator */
 
-		return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':list.html.twig', array(
-				'pagination' => $pagination,
-				'baseRoutePrefix' => $this->baseRoutePrefix,
-				'baseTemplate' => $this->baseTemplate,
-			));
-	}
+        return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':list.html.twig', array(
+                'pagination' => $pagination,
+                'baseRoutePrefix' => $this->baseRoutePrefix,
+                'baseTemplate' => $this->baseTemplate,
+            ));
+    }
 }
-

@@ -2,22 +2,29 @@
 
 namespace Lists\HandlingBundle\Form;
 
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * Class HandlingSalesFilterFormType
+ */
 class HandlingSalesFilterFormType extends AbstractType
 {
     protected $container;
 
-    public function __construct($container)
+    /**
+     * @param Container $container
+     */
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -30,30 +37,29 @@ class HandlingSalesFilterFormType extends AbstractType
         $builder
             ->add('organization_id', 'hidden')
             ->add('city', 'entity', array(
-                'class'=>'Lists\CityBundle\Entity\City',
+                'class' => 'Lists\CityBundle\Entity\City',
                 'mapped' => false,
-                'property'=>'name'
+                'property' => 'name'
             ))
             ->add('scope', 'entity', array(
-                'class'=>'Lists\LookupBundle\Entity\Lookup',
-                'property'=>'name',
+                'class' => 'Lists\LookupBundle\Entity\Lookup',
+                'property' => 'name',
                 'mapped' => false,
                 'query_builder' => $lr->getOnlyScopeQuery()
             ))
             ->add('users', 'entity', array(
-                'class'=>'SD\UserBundle\Entity\User',
+                'class' => 'SD\UserBundle\Entity\User',
                 'mapped' => false,
                 'multiple' => true,
-                'property'=>'fullname',
+                'property' => 'fullname',
                 'query_builder' => $ur->getOnlyStaff()
-            ))
-        ;
+            ));
 
         $builder
             ->add('save', 'submit')
-			      ->add('reset', 'submit');
+            ->add('reset', 'submit');
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

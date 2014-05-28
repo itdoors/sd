@@ -2,8 +2,6 @@
 
 namespace Lists\HandlingBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * HandlingMessageType
  */
@@ -24,11 +22,10 @@ class HandlingMessageType
      */
     private $slug;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -38,20 +35,20 @@ class HandlingMessageType
     /**
      * Set name
      *
-     * @param string $name
+     * @param  string              $name
      * @return HandlingMessageType
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -61,20 +58,20 @@ class HandlingMessageType
     /**
      * Set slug
      *
-     * @param string $slug
+     * @param  string              $slug
      * @return HandlingMessageType
      */
     public function setSlug($slug)
     {
         $this->slug = $slug;
-    
+
         return $this;
     }
 
     /**
      * Get slug
      *
-     * @return string 
+     * @return string
      */
     public function getSlug()
     {
@@ -100,24 +97,23 @@ class HandlingMessageType
      */
     private $sortorder;
 
-
     /**
      * Set stayActionTime
      *
-     * @param integer $stayActionTime
+     * @param  integer             $stayActionTime
      * @return HandlingMessageType
      */
     public function setStayActionTime($stayActionTime)
     {
         $this->stayActionTime = $stayActionTime;
-    
+
         return $this;
     }
 
     /**
      * Get stayActionTime
      *
-     * @return integer 
+     * @return integer
      */
     public function getStayActionTime()
     {
@@ -127,20 +123,20 @@ class HandlingMessageType
     /**
      * Set sortorder
      *
-     * @param integer $sortorder
+     * @param  integer             $sortorder
      * @return HandlingMessageType
      */
     public function setSortorder($sortorder)
     {
         $this->sortorder = $sortorder;
-    
+
         return $this;
     }
 
     /**
      * Get sortorder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortorder()
     {

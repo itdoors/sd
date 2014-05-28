@@ -120,14 +120,14 @@
                             {{ handling.0.statusChangeDate|date("d.m.y, H:i") }}
                         {% endif %}
                     </a>
-                </td>                
+                </td>
             </tr>
             <tr> {# 2 #}
                 <td>{% trans %}Organization Name{% endtrans %}</td>
                 <td>{{ handling.organizationName }}</td>
                 <td>{% trans %}Status Description{% endtrans %}</td>
                 <td><a href="#" id="statusDescription" data-type="textarea" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.statusDescription }}" data-placement="right" data-original-title="{% trans %}Enter Status{% endtrans %}">{{ handling.0.statusDescription }}</a>
-				</td>                 
+				</td>
             </tr>
             <tr> {# 3 #}
 				<td>{% trans %}Create User{% endtrans %}</td>
@@ -177,7 +177,7 @@
                     <a href="#" id="square" data-type="text" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.square }}" data-original-title="{% trans %}Enter Square{% endtrans %}">
                         {{ handling.0.square }}
                     </a>
-				</td>                 				                
+				</td>
             </tr>
             <tr> {# 6 #}
                 <td>{% trans %}Service offered{% endtrans %}</td>

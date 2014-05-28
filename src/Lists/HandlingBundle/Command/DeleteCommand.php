@@ -8,7 +8,6 @@ namespace Lists\HandlingBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\DBAL\Connection;
 
@@ -44,8 +43,7 @@ class DeleteCommand extends ContainerAwareCommand
 
         $handlingIds = explode(',', $handlingIdsString);
 
-        if (!$dialog->askConfirmation($output, sprintf('Are you sure you want to delete handling with ID = %s(yes/no)', $handlingIdsString), false ))
-        {
+        if (!$dialog->askConfirmation($output, sprintf('Are you sure you want to delete handling with ID = %s(yes/no)', $handlingIdsString), false )) {
             return;
         }
 
@@ -54,8 +52,7 @@ class DeleteCommand extends ContainerAwareCommand
 
         $this->connection = $this->getContainer()->get('database_connection');
 
-        foreach ($handlingIds as $handlingId)
-        {
+        foreach ($handlingIds as $handlingId) {
             $output->writeln('Deleting handling with ID = ' . $handlingIdsString);
             $this->deleteHandling(intval($handlingId), $output);
         }
@@ -72,8 +69,7 @@ class DeleteCommand extends ContainerAwareCommand
     */
     public function deleteHandling($handlingId, OutputInterface $output)
     {
-        if (!$handlingId)
-        {
+        if (!$handlingId) {
             $output->writeln(sprintf('Invalid Handling ID = %d', $handlingId));
 
             return;
@@ -82,8 +78,7 @@ class DeleteCommand extends ContainerAwareCommand
         $handling = $this->em->getRepository('ListsHandlingBundle:Handling')
             ->find($handlingId);
 
-        if (!$handling)
-        {
+        if (!$handling) {
             $output->writeln(sprintf('Handling with ID = %d does not exist', $handlingId));
 
             return;
@@ -91,8 +86,7 @@ class DeleteCommand extends ContainerAwareCommand
 
         $this->connection->beginTransaction();
 
-        try
-        {
+        try {
             // Handling User
             $sql = "DELETE FROM handling_user where handling_id = :handlingId";
             $statement = $this->connection->prepare($sql);
@@ -113,7 +107,6 @@ class DeleteCommand extends ContainerAwareCommand
             $statement->execute(array(
                 ':handlingId' => $handlingId,
             ));
-
 
             // Handling
             $sql = "DELETE FROM handling where id = :handlingId";
@@ -142,7 +135,7 @@ class DeleteCommand extends ContainerAwareCommand
             $handlingId = $this->getHelper('dialog')->askAndValidate(
                 $output,
                 'Please enter Handling IDS (with coma separator (example 314,5,208)): ',
-                function($handlingId) {
+                function ($handlingId) {
                     if (empty($handlingId)) {
                         throw new \Exception('Handling ID is required ');
                     }

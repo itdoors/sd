@@ -2,8 +2,6 @@
 
 namespace Lists\HandlingBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * HandlingMessageView
  */
@@ -54,11 +52,10 @@ class HandlingMessageView
      */
     private $userFullName;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -68,20 +65,20 @@ class HandlingMessageView
     /**
      * Set handlingId
      *
-     * @param integer $handlingId
+     * @param  integer             $handlingId
      * @return HandlingMessageView
      */
     public function setHandlingId($handlingId)
     {
         $this->handlingId = $handlingId;
-    
+
         return $this;
     }
 
     /**
      * Get handlingId
      *
-     * @return integer 
+     * @return integer
      */
     public function getHandlingId()
     {
@@ -91,20 +88,20 @@ class HandlingMessageView
     /**
      * Set createdate
      *
-     * @param \DateTime $createdate
+     * @param  \DateTime           $createdate
      * @return HandlingMessageView
      */
     public function setCreatedate($createdate)
     {
         $this->createdate = $createdate;
-    
+
         return $this;
     }
 
     /**
      * Get createdate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedate()
     {
@@ -114,20 +111,20 @@ class HandlingMessageView
     /**
      * Set typeName
      *
-     * @param string $typeName
+     * @param  string              $typeName
      * @return HandlingMessageView
      */
     public function setTypeName($typeName)
     {
         $this->typeName = $typeName;
-    
+
         return $this;
     }
 
     /**
      * Get typeName
      *
-     * @return string 
+     * @return string
      */
     public function getTypeName()
     {
@@ -137,20 +134,20 @@ class HandlingMessageView
     /**
      * Set typeSlug
      *
-     * @param string $typeSlug
+     * @param  string              $typeSlug
      * @return HandlingMessageView
      */
     public function setTypeSlug($typeSlug)
     {
         $this->typeSlug = $typeSlug;
-    
+
         return $this;
     }
 
     /**
      * Get typeSlug
      *
-     * @return string 
+     * @return string
      */
     public function getTypeSlug()
     {
@@ -160,20 +157,20 @@ class HandlingMessageView
     /**
      * Set typeStayactiontime
      *
-     * @param integer $typeStayactiontime
+     * @param  integer             $typeStayactiontime
      * @return HandlingMessageView
      */
     public function setTypeStayactiontime($typeStayactiontime)
     {
         $this->typeStayactiontime = $typeStayactiontime;
-    
+
         return $this;
     }
 
     /**
      * Get typeStayactiontime
      *
-     * @return integer 
+     * @return integer
      */
     public function getTypeStayactiontime()
     {
@@ -183,20 +180,20 @@ class HandlingMessageView
     /**
      * Set userId
      *
-     * @param integer $userId
+     * @param  integer             $userId
      * @return HandlingMessageView
      */
     public function setUserId($userId)
     {
         $this->userId = $userId;
-    
+
         return $this;
     }
 
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -206,20 +203,20 @@ class HandlingMessageView
     /**
      * Set additionalType
      *
-     * @param string $additionalType
+     * @param  string              $additionalType
      * @return HandlingMessageView
      */
     public function setAdditionalType($additionalType)
     {
         $this->additionalType = $additionalType;
-    
+
         return $this;
     }
 
     /**
      * Get additionalType
      *
-     * @return string 
+     * @return string
      */
     public function getAdditionalType()
     {
@@ -229,20 +226,20 @@ class HandlingMessageView
     /**
      * Set userFullName
      *
-     * @param string $userFullName
+     * @param  string              $userFullName
      * @return HandlingMessageView
      */
     public function setUserFullName($userFullName)
     {
         $this->userFullName = $userFullName;
-    
+
         return $this;
     }
 
     /**
      * Get userFullName
      *
-     * @return string 
+     * @return string
      */
     public function getUserFullName()
     {
