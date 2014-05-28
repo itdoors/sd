@@ -1,6 +1,7 @@
 <?php
 
 namespace Lists\ReportBundle\Form;
+
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -28,8 +29,7 @@ class ReportLastMessagesType extends AbstractType
     }
 
     /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -82,7 +82,7 @@ class ReportLastMessagesType extends AbstractType
     }
 
     /**
-     * @{@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {
