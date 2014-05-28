@@ -2,8 +2,6 @@
 
 namespace Lists\OrganizationBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * OrganizationGroup
  */
@@ -29,11 +27,10 @@ class OrganizationGroup
      */
     private $description;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -44,19 +41,20 @@ class OrganizationGroup
      * Set slug
      *
      * @param string $slug
+     *
      * @return OrganizationGroup
      */
     public function setSlug($slug)
     {
         $this->slug = $slug;
-    
+
         return $this;
     }
 
     /**
      * Get slug
      *
-     * @return string 
+     * @return string
      */
     public function getSlug()
     {
@@ -67,19 +65,20 @@ class OrganizationGroup
      * Set name
      *
      * @param string $name
+     *
      * @return OrganizationGroup
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -90,29 +89,34 @@ class OrganizationGroup
      * Set description
      *
      * @param string $description
+     *
      * @return OrganizationGroup
      */
     public function setDescription($description)
     {
         $this->description = $description;
-    
+
         return $this;
     }
 
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
         return $this->description;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->getName();
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
@@ -125,17 +129,18 @@ class OrganizationGroup
     {
         $this->organizations = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Add organizations
      *
      * @param \Lists\OrganizationBundle\Entity\Organization $organizations
+     *
      * @return OrganizationGroup
      */
     public function addOrganization(\Lists\OrganizationBundle\Entity\Organization $organizations)
     {
         $this->organizations[] = $organizations;
-    
+
         return $this;
     }
 
@@ -152,7 +157,7 @@ class OrganizationGroup
     /**
      * Get organizations
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getOrganizations()
     {

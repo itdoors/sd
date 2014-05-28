@@ -12,10 +12,15 @@ use Doctrine\ORM\EntityRepository;
  */
 class OrganizationRepository extends EntityRepository
 {
+    /**
+     * @param int[]   $userIds
+     * @param mixed[] $filters
+     *
+     * @return \Doctrine\ORM\Query
+     */
     public function getAllForSalesQuery($userIds, $filters)
     {
-        if (!is_array($userIds) && $userIds)
-        {
+        if (!is_array($userIds) && $userIds) {
             $userIds = array($userIds);
         }
 
@@ -31,9 +36,7 @@ class OrganizationRepository extends EntityRepository
         $this->processBaseQuery($sql);
         $this->processBaseQuery($sqlCount);
 
-
-        if (sizeof($userIds))
-        {
+        if (sizeof($userIds)) {
             $this->processUserQuery($sql, $userIds);
             $this->processUserQuery($sqlCount, $userIds);
         }
@@ -64,7 +67,8 @@ class OrganizationRepository extends EntityRepository
             ->addSelect('c.name as cityName')
             ->addSelect('r.name as regionName')
             ->addSelect('scope.name as scopeName')
-            ->addSelect("
+            ->addSelect(
+                "
                 array_to_string(
                    ARRAY(
                       SELECT
@@ -74,10 +78,9 @@ class OrganizationRepository extends EntityRepository
                       LEFT JOIN u.organizations ou
                       WHERE ou.id = o.id
                    ), ','
-                 ) as fullNames
-                ");
+                 ) as fullNames"
+            );
     }
-
 
     /**
      * Processes sql query. adding select
@@ -111,7 +114,7 @@ class OrganizationRepository extends EntityRepository
      * Processes sql query. adding users query
      *
      * @param \Doctrine\ORM\QueryBuilder $sql
-     * @param int[] $userIds
+     * @param int[]                      $userIds
      */
     public function processUserQuery($sql, $userIds)
     {
@@ -135,21 +138,17 @@ class OrganizationRepository extends EntityRepository
      * Processes sql query depending on filters
      *
      * @param \Doctrine\ORM\QueryBuilder $sql
-     * @param mixed[] $filters
+     * @param mixed[]                    $filters
      */
     public function processFilters(\Doctrine\ORM\QueryBuilder $sql, $filters)
     {
-        if (sizeof($filters))
-        {
+        if (sizeof($filters)) {
 
-            foreach($filters as $key => $value)
-            {
-                if (!$value)
-                {
+            foreach ($filters as $key => $value) {
+                if (!$value) {
                     continue;
                 }
-                switch($key)
-                {
+                switch ($key) {
                     case 'organization':
                         $sql
                             ->andWhere("o.id = :organizationId");
@@ -157,32 +156,28 @@ class OrganizationRepository extends EntityRepository
                         $sql->setParameter(':organizationId', $value);
                         break;
                     case 'scope':
-                        if (isset($value[0]) && !$value[0])
-                        {
+                        if (isset($value[0]) && !$value[0]) {
                             break;
                         }
                         $sql->andWhere('scope.id in (:scopeIds)');
                         $sql->setParameter(':scopeIds', $value);
                         break;
                     case 'city':
-                        if (isset($value[0]) && !$value[0])
-                        {
+                        if (isset($value[0]) && !$value[0]) {
                             break;
                         }
                         $sql->andWhere('c.id in (:cityIds)');
                         $sql->setParameter(':cityIds', $value);
                         break;
                     case 'users':
-                        if (isset($value[0]) && !$value[0])
-                        {
+                        if (isset($value[0]) && !$value[0]) {
                             break;
                         }
                         $sql->andWhere('users.id in (:userFilterIds)');
                         $sql->setParameter(':userFilterIds', $value);
                         break;
                     /*case 'users':
-                        if (isset($value[0]) && !$value[0])
-                        {
+                        if (isset($value[0]) && !$value[0]) {
                             break;
                         }
                         $query->andWhereIn('ou.user_id', $value);
@@ -223,7 +218,8 @@ class OrganizationRepository extends EntityRepository
             ->select('DISTINCT(o.id) as organizationId')
             ->addSelect('o.name as organizationName')
             ->addSelect('o.shortname as organizationShortName')
-            ->addSelect("
+            ->addSelect(
+                "
                     array_to_string(
                        ARRAY(
                           SELECT
@@ -234,7 +230,8 @@ class OrganizationRepository extends EntityRepository
                           WHERE ou.id = o.id
                        ), ', '
                      ) as fullNames
-                    ")
+                    "
+            )
             ->leftJoin('o.users', 'users')
             ->where('lower(o.name) LIKE :q OR lower(o.shortname) LIKE :q')
             ->andWhere('o.parent_id is null')
@@ -244,6 +241,11 @@ class OrganizationRepository extends EntityRepository
         return $sql->getResult();
     }
 
+    /**
+     * @param string $edrpou
+     *
+     * @return array
+     */
     public function findByEdrpou($edrpou)
     {
         return $this->createQueryBuilder('o')
@@ -254,27 +256,30 @@ class OrganizationRepository extends EntityRepository
             ->getResult();
     }
 
-	/**
-	 * Returns organization ids with in one organization group
-	 */
-	public function getIdsInGroup($organizationId)
-	{
-		$organization = $this->getEntityManager()->getRepository('ListsOrganizationBundle:Organization')
-			->find($organizationId);
+    /**
+     * Returns organization ids with in one organization group
+     *
+     * @param int $organizationId
+     *
+     * @return array
+     */
+    public function getIdsInGroup($organizationId)
+    {
+        $organization = $this->getEntityManager()->getRepository('ListsOrganizationBundle:Organization')
+            ->find($organizationId);
 
-		if (!$organization || !$organization->getGroupId())
-		{
-			return array();
-		}
+        if (!$organization || !$organization->getGroupId()) {
+            return array();
+        }
 
-		$sql = $this->createQueryBuilder('o')
-			->select('o.id as id')
-			->where('o.group_id = :groupId')
+        $sql = $this->createQueryBuilder('o')
+            ->select('o.id as id')
+            ->where('o.group_id = :groupId')
             ->andWhere('o.parent_id is null')
-			->setParameter(':groupId', $organization->getGroupId())
-			->getQuery()
-			->getResult();
+            ->setParameter(':groupId', $organization->getGroupId())
+            ->getQuery()
+            ->getResult();
 
-		return $sql;
-	}
+        return $sql;
+    }
 }
