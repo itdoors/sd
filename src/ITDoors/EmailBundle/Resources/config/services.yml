@@ -1,6 +1,7 @@
 parameters:
 #    it_doors_email.example.class: ITDoors\EmailBundle\Example
     it_doors_email.form.class: ITDoors\EmailBundle\Form\EmailFormType
+    it_doors_email.service.class: ITDoors\EmailBundle\Services\EmailService
 
 services:
 #    it_doors_email.example:
@@ -11,3 +12,6 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: emailForm }
+    it_doors_email.service:
+        class: %it_doors_email.service.class%
+        arguments: [@service_container]
