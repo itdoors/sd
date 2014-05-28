@@ -125,7 +125,8 @@ class Handling
     /**
      * Set number
      *
-     * @param  string   $number
+     * @param string $number
+     *
      * @return Handling
      */
     public function setNumber($number)
@@ -148,7 +149,8 @@ class Handling
     /**
      * Set createdatetime
      *
-     * @param  \DateTime $createdatetime
+     * @param \DateTime $createdatetime
+     *
      * @return Handling
      */
     public function setCreatedatetime($createdatetime)
@@ -171,7 +173,8 @@ class Handling
     /**
      * Set statusDescription
      *
-     * @param  string   $statusDescription
+     * @param string $statusDescription
+     *
      * @return Handling
      */
     public function setStatusDescription($statusDescription)
@@ -194,7 +197,8 @@ class Handling
     /**
      * Set statusChangeDate
      *
-     * @param  \DateTime $statusChangeDate
+     * @param \DateTime $statusChangeDate
+     *
      * @return Handling
      */
     public function setStatusChangeDate($statusChangeDate)
@@ -217,7 +221,8 @@ class Handling
     /**
      * Set serviceOffered
      *
-     * @param  string   $serviceOffered
+     * @param string $serviceOffered
+     *
      * @return Handling
      */
     public function setServiceOffered($serviceOffered)
@@ -240,7 +245,8 @@ class Handling
     /**
      * Set budget
      *
-     * @param  string   $budget
+     * @param string $budget
+     *
      * @return Handling
      */
     public function setBudget($budget)
@@ -263,7 +269,8 @@ class Handling
     /**
      * Set square
      *
-     * @param  float    $square
+     * @param float $square
+     *
      * @return Handling
      */
     public function setSquare($square)
@@ -286,7 +293,8 @@ class Handling
     /**
      * Set chance
      *
-     * @param  string   $chance
+     * @param string $chance
+     *
      * @return Handling
      */
     public function setChance($chance)
@@ -309,7 +317,8 @@ class Handling
     /**
      * Set worktimeWithclient
      *
-     * @param  string   $worktimeWithclient
+     * @param string $worktimeWithclient
+     *
      * @return Handling
      */
     public function setWorktimeWithclient($worktimeWithclient)
@@ -332,7 +341,8 @@ class Handling
     /**
      * Set description
      *
-     * @param  string   $description
+     * @param string $description
+     *
      * @return Handling
      */
     public function setDescription($description)
@@ -355,7 +365,8 @@ class Handling
     /**
      * Set resultString
      *
-     * @param  string   $resultString
+     * @param string $resultString
+     *
      * @return Handling
      */
     public function setResultString($resultString)
@@ -378,7 +389,8 @@ class Handling
     /**
      * Set statusAdmin
      *
-     * @param  boolean  $statusAdmin
+     * @param boolean $statusAdmin
+     *
      * @return Handling
      */
     public function setStatusAdmin($statusAdmin)
@@ -401,7 +413,8 @@ class Handling
     /**
      * Set isClosed
      *
-     * @param  boolean  $isClosed
+     * @param boolean $isClosed
+     *
      * @return Handling
      */
     public function setIsClosed($isClosed)
@@ -424,7 +437,8 @@ class Handling
     /**
      * Set budgetClient
      *
-     * @param  string   $budgetClient
+     * @param string $budgetClient
+     *
      * @return Handling
      */
     public function setBudgetClient($budgetClient)
@@ -447,7 +461,8 @@ class Handling
     /**
      * Set lastHandlingDate
      *
-     * @param  \DateTime $lastHandlingDate
+     * @param \DateTime $lastHandlingDate
+     *
      * @return Handling
      */
     public function setLastHandlingDate($lastHandlingDate)
@@ -470,7 +485,8 @@ class Handling
     /**
      * Set createdate
      *
-     * @param  \DateTime $createdate
+     * @param \DateTime $createdate
+     *
      * @return Handling
      */
     public function setCreatedate($createdate)
@@ -493,7 +509,8 @@ class Handling
     /**
      * Set result
      *
-     * @param  \Lists\HandlingBundle\Entity\HandlingResult $result
+     * @param \Lists\HandlingBundle\Entity\HandlingResult $result
+     *
      * @return Handling
      */
     public function setResult(\Lists\HandlingBundle\Entity\HandlingResult $result = null)
@@ -520,7 +537,8 @@ class Handling
     /**
      * Set status
      *
-     * @param  \Lists\HandlingBundle\Entity\HandlingStatus $status
+     * @param \Lists\HandlingBundle\Entity\HandlingStatus $status
+     *
      * @return Handling
      */
     public function setStatus(\Lists\HandlingBundle\Entity\HandlingStatus $status = null)
@@ -549,7 +567,8 @@ class Handling
     /**
      * Set type
      *
-     * @param  \Lists\HandlingBundle\Entity\HandlingType $type
+     * @param \Lists\HandlingBundle\Entity\HandlingType $type
+     *
      * @return Handling
      */
     public function setType(\Lists\HandlingBundle\Entity\HandlingType $type = null)
@@ -576,7 +595,8 @@ class Handling
     /**
      * Set user
      *
-     * @param  \SD\UserBundle\Entity\User $user
+     * @param \SD\UserBundle\Entity\User $user
+     *
      * @return Handling
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
@@ -595,6 +615,7 @@ class Handling
     {
         return $this->user;
     }
+
     /**
      * @var integer
      */
@@ -603,12 +624,15 @@ class Handling
     /**
      * Set organization_id
      *
-     * @param  integer  $organizationId
+     * @param integer $organizationId
+     *
      * @return Handling
      */
     public function setOrganizationId($organizationId)
     {
+        // @codingStandardsIgnoreStart
         $this->organization_id = $organizationId;
+        // @codingStandardsIgnoreEnd
 
         return $this;
     }
@@ -620,8 +644,11 @@ class Handling
      */
     public function getOrganizationId()
     {
+        // @codingStandardsIgnoreStart
         return $this->organization_id;
+        // @codingStandardsIgnoreEnd
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
@@ -638,7 +665,8 @@ class Handling
     /**
      * Add users
      *
-     * @param  \SD\UserBundle\Entity\User $users
+     * @param \SD\UserBundle\Entity\User $users
+     *
      * @return Handling
      */
     public function addUser(\SD\UserBundle\Entity\User $users)
@@ -667,6 +695,7 @@ class Handling
     {
         return $this->users;
     }
+
     /**
      * @var \Lists\OrganizationBundle\Entity\Organization
      */
@@ -675,7 +704,8 @@ class Handling
     /**
      * Set organization
      *
-     * @param  \Lists\OrganizationBundle\Entity\Organization $organization
+     * @param \Lists\OrganizationBundle\Entity\Organization $organization
+     *
      * @return Handling
      */
     public function setOrganization(\Lists\OrganizationBundle\Entity\Organization $organization = null)
@@ -698,6 +728,7 @@ class Handling
     {
         return $this->organization;
     }
+
     /**
      * @var integer
      */
@@ -716,12 +747,15 @@ class Handling
     /**
      * Set result_id
      *
-     * @param  integer  $resultId
+     * @param integer $resultId
+     *
      * @return Handling
      */
     public function setResultId($resultId)
     {
+        // @codingStandardsIgnoreStart
         $this->result_id = $resultId;
+        // @codingStandardsIgnoreEnd
 
         return $this;
     }
@@ -733,18 +767,23 @@ class Handling
      */
     public function getResultId()
     {
+        // @codingStandardsIgnoreStart
         return $this->result_id;
+        // @codingStandardsIgnoreEnd
     }
 
     /**
      * Set status_id
      *
-     * @param  integer  $statusId
+     * @param integer $statusId
+     *
      * @return Handling
      */
     public function setStatusId($statusId)
     {
+        // @codingStandardsIgnoreStart
         $this->status_id = $statusId;
+        // @codingStandardsIgnoreEnd
 
         $this->setStatusChangeDate(new \DateTime());
 
@@ -758,19 +797,23 @@ class Handling
      */
     public function getStatusId()
     {
+        // @codingStandardsIgnoreStart
         return $this->status_id;
+        // @codingStandardsIgnoreEnd
     }
 
     /**
      * Set type_id
      *
-     * @param  integer  $typeId
+     * @param integer $typeId
+     *
      * @return Handling
      */
     public function setTypeId($typeId)
     {
+        // @codingStandardsIgnoreStart
         $this->type_id = $typeId;
-
+        // @codingStandardsIgnoreEnd
         return $this;
     }
 
@@ -781,8 +824,11 @@ class Handling
      */
     public function getTypeId()
     {
+        // @codingStandardsIgnoreStart
         return $this->type_id;
+        // @codingStandardsIgnoreEnd
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
@@ -791,7 +837,8 @@ class Handling
     /**
      * Add handlingServices
      *
-     * @param  \Lists\HandlingBundle\Entity\HandlingService $handlingServices
+     * @param \Lists\HandlingBundle\Entity\HandlingService $handlingServices
+     *
      * @return Handling
      */
     public function addHandlingService(\Lists\HandlingBundle\Entity\HandlingService $handlingServices)
@@ -830,6 +877,7 @@ class Handling
     {
         return $this->getId();
     }
+
     /**
      * @var \DateTime
      */
@@ -838,7 +886,8 @@ class Handling
     /**
      * Set nextHandlingDate
      *
-     * @param  \DateTime $nextHandlingDate
+     * @param \DateTime $nextHandlingDate
+     *
      * @return Handling
      */
     public function setNextHandlingDate($nextHandlingDate)
@@ -857,6 +906,7 @@ class Handling
     {
         return $this->nextHandlingDate;
     }
+
     /**
      * @var \DateTime
      */
@@ -870,7 +920,8 @@ class Handling
     /**
      * Set closedatetime
      *
-     * @param  \DateTime $closedatetime
+     * @param \DateTime $closedatetime
+     *
      * @return Handling
      */
     public function setClosedatetime($closedatetime)
@@ -893,7 +944,8 @@ class Handling
     /**
      * Set closer
      *
-     * @param  \SD\UserBundle\Entity\User $closer
+     * @param \SD\UserBundle\Entity\User $closer
+     *
      * @return Handling
      */
     public function setCloser(\SD\UserBundle\Entity\User $closer = null)
@@ -913,19 +965,6 @@ class Handling
         return $this->closer;
     }
 
-    /*public function __sleep()
-    {
-        return array(
-            'id',
-            'handlingServices',
-            'organization',
-            //'result',
-            //'status',
-            //'type',
-            //'user',
-            //'closer'
-        );
-    }*/
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
@@ -934,13 +973,15 @@ class Handling
     /**
      * Add HandlingMessages
      *
-     * @param  \Lists\HandlingBundle\Entity\HandlingMessage $handlingMessages
+     * @param \Lists\HandlingBundle\Entity\HandlingMessage $handlingMessages
+     *
      * @return Handling
      */
     public function addHandlingMessage(\Lists\HandlingBundle\Entity\HandlingMessage $handlingMessages)
     {
+        // @codingStandardsIgnoreStart
         $this->HandlingMessages[] = $handlingMessages;
-
+        // @codingStandardsIgnoreEnd
         return $this;
     }
 
@@ -951,7 +992,9 @@ class Handling
      */
     public function removeHandlingMessage(\Lists\HandlingBundle\Entity\HandlingMessage $handlingMessages)
     {
+        // @codingStandardsIgnoreStart
         $this->HandlingMessages->removeElement($handlingMessages);
+        // @codingStandardsIgnoreEnd
     }
 
     /**
@@ -961,6 +1004,8 @@ class Handling
      */
     public function getHandlingMessages()
     {
+        // @codingStandardsIgnoreStart
         return $this->HandlingMessages;
+        // @codingStandardsIgnoreEnd
     }
 }

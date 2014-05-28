@@ -16,6 +16,9 @@ class HandlingMessageRepository extends EntityRepository
     /**
      * getMessagesByHandlingId
      *
+     * @param int $handlingId
+     *
+     * @return array
      */
     public function getMessagesByHandlingId($handlingId)
     {
@@ -29,6 +32,9 @@ class HandlingMessageRepository extends EntityRepository
     /**
      * get Future messages
      *
+     * @param int[] $userIds
+     *
+     * @return array
      */
     public function getFutureMessages($userIds)
     {
@@ -51,6 +57,12 @@ class HandlingMessageRepository extends EntityRepository
             ->getResult();
     }
 
+    /**
+     * @param string $from
+     * @param string $to
+     *
+     * @return array
+     */
     public function getAdvancedResult($from, $to)
     {
         $q = $this->createQueryBuilder('hm')

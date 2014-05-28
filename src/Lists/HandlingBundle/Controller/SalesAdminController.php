@@ -6,6 +6,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Validator\Constraints\DateTime;
 
+/**
+ * Class SalesAdminController
+ */
 class SalesAdminController extends SalesController
 {
     protected $filterNamespace = 'handling.sales.admin.filters';
@@ -14,6 +17,9 @@ class SalesAdminController extends SalesController
     protected $baseRoutePrefix = 'sales_admin';
     protected $baseTemplate = 'SalesAdmin';
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction()
     {
         /** @var \Lists\TeamBundle\Entity\TeamRepository $teamRepository */
@@ -54,6 +60,9 @@ class SalesAdminController extends SalesController
             ));
     }
 
+    /**
+     * indexServicesAction
+     */
     public function indexServicesAction()
     {
         /** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
@@ -65,6 +74,12 @@ class SalesAdminController extends SalesController
 
     /**
      * Executes close action
+     *
+     * @param int $id
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
     public function closeAction($id)
     {
@@ -98,6 +113,9 @@ class SalesAdminController extends SalesController
             )));
     }
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function reportSimpleAction()
     {
         /** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
@@ -116,6 +134,9 @@ class SalesAdminController extends SalesController
             ));
     }
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function reportAdvancedRangeAction()
     {
         $form = $this->createForm('handlingReportDateRangeForm');
@@ -127,6 +148,11 @@ class SalesAdminController extends SalesController
             ));
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function reportAdvancedDoneAction(Request $request)
     {
         $form = $this->createForm('handlingReportDateRangeForm');
@@ -161,6 +187,8 @@ class SalesAdminController extends SalesController
 
     /**
      * Executes list action for dashboard
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listAction()
     {

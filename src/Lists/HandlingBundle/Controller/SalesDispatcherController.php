@@ -2,6 +2,9 @@
 
 namespace Lists\HandlingBundle\Controller;
 
+/**
+ * Class SalesDispatcherController
+ */
 class SalesDispatcherController extends SalesController
 {
     protected $filterNamespace = 'handling.sales.dispatcher.filters';
@@ -10,6 +13,9 @@ class SalesDispatcherController extends SalesController
     protected $baseRoutePrefix = 'sales_dispatcher';
     protected $baseTemplate = 'SalesDispatcher';
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction()
     {
         /** @var \Lists\TeamBundle\Entity\TeamRepository $teamRepository */
@@ -57,6 +63,8 @@ class SalesDispatcherController extends SalesController
 
     /**
      * Executes list action for dashboard
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listAction()
     {

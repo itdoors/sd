@@ -35,7 +35,8 @@ class HandlingMessageType
     /**
      * Set name
      *
-     * @param  string              $name
+     * @param string $name
+     *
      * @return HandlingMessageType
      */
     public function setName($name)
@@ -58,7 +59,8 @@ class HandlingMessageType
     /**
      * Set slug
      *
-     * @param  string              $slug
+     * @param string $slug
+     *
      * @return HandlingMessageType
      */
     public function setSlug($slug)
@@ -87,6 +89,7 @@ class HandlingMessageType
     {
         return $this->getName();
     }
+
     /**
      * @var integer
      */
@@ -100,7 +103,8 @@ class HandlingMessageType
     /**
      * Set stayActionTime
      *
-     * @param  integer             $stayActionTime
+     * @param integer $stayActionTime
+     *
      * @return HandlingMessageType
      */
     public function setStayActionTime($stayActionTime)
@@ -123,7 +127,8 @@ class HandlingMessageType
     /**
      * Set sortorder
      *
-     * @param  integer             $sortorder
+     * @param integer $sortorder
+     *
      * @return HandlingMessageType
      */
     public function setSortorder($sortorder)

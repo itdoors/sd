@@ -45,7 +45,8 @@ class HandlingMoreInfoType
     /**
      * Set name
      *
-     * @param  string               $name
+     * @param string $name
+     *
      * @return HandlingMoreInfoType
      */
     public function setName($name)
@@ -68,7 +69,8 @@ class HandlingMoreInfoType
     /**
      * Set dataType
      *
-     * @param  string               $dataType
+     * @param string $dataType
+     *
      * @return HandlingMoreInfoType
      */
     public function setDataType($dataType)
@@ -91,7 +93,8 @@ class HandlingMoreInfoType
     /**
      * Set enumChoices
      *
-     * @param  string               $enumChoices
+     * @param string $enumChoices
+     *
      * @return HandlingMoreInfoType
      */
     public function setEnumChoices($enumChoices)
@@ -114,7 +117,8 @@ class HandlingMoreInfoType
     /**
      * Set handlingResult
      *
-     * @param  \Lists\HandlingBundle\Entity\HandlingResult $handlingResult
+     * @param \Lists\HandlingBundle\Entity\HandlingResult $handlingResult
+     *
      * @return HandlingMoreInfoType
      */
     public function setHandlingResult(\Lists\HandlingBundle\Entity\HandlingResult $handlingResult = null)
@@ -133,6 +137,7 @@ class HandlingMoreInfoType
     {
         return $this->handlingResult;
     }
+
     /**
      * @var integer
      */
@@ -141,7 +146,8 @@ class HandlingMoreInfoType
     /**
      * Set handlingResultId
      *
-     * @param  integer              $handlingResultId
+     * @param integer $handlingResultId
+     *
      * @return HandlingMoreInfoType
      */
     public function setHandlingResultId($handlingResultId)

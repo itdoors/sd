@@ -68,15 +68,17 @@ class HandlingMessageViewRepository extends EntityRepository
                 ->setParameter(':additionalType', HandlingMessage::ADDITIONAL_TYPE_FUTURE_MESSAGE);
 
             $sql
-                ->andWhere('hmv.id =
-                (
-                    SELECT
-                        MAX(hm1.id)
-                    FROM
-                        ListsHandlingBundle:HandlingMessage hm1
-                    WHERE
-                        hm1.handling_id = hmv.handlingId
-                )');
+                ->andWhere(
+                    'hmv.id =
+                        (
+                            SELECT
+                                MAX(hm1.id)
+                            FROM
+                                ListsHandlingBundle:HandlingMessage hm1
+                            WHERE
+                                hm1.handling_id = hmv.handlingId
+                        )'
+                );
         }
 
         $dateTimeFrom = new \DateTime();

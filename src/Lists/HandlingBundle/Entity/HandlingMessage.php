@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class HandlingMessage
 {
-    CONST ADDITIONAL_TYPE_FUTURE_MESSAGE = 'fm';
+    const ADDITIONAL_TYPE_FUTURE_MESSAGE = 'fm';
 
     /**
      * @var integer
@@ -75,7 +75,8 @@ class HandlingMessage
     /**
      * Set createdatetime
      *
-     * @param  \DateTime       $createdatetime
+     * @param \DateTime $createdatetime
+     *
      * @return HandlingMessage
      */
     public function setCreatedatetime($createdatetime)
@@ -98,7 +99,8 @@ class HandlingMessage
     /**
      * Set description
      *
-     * @param  string          $description
+     * @param string $description
+     *
      * @return HandlingMessage
      */
     public function setDescription($description)
@@ -121,7 +123,8 @@ class HandlingMessage
     /**
      * Set createdate
      *
-     * @param  \DateTime       $createdate
+     * @param \DateTime $createdate
+     *
      * @return HandlingMessage
      */
     public function setCreatedate($createdate)
@@ -144,7 +147,8 @@ class HandlingMessage
     /**
      * Set filepath
      *
-     * @param  string          $filepath
+     * @param string $filepath
+     *
      * @return HandlingMessage
      */
     public function setFilepath($filepath)
@@ -167,7 +171,8 @@ class HandlingMessage
     /**
      * Set filename
      *
-     * @param  string          $filename
+     * @param string $filename
+     *
      * @return HandlingMessage
      */
     public function setFilename($filename)
@@ -190,13 +195,15 @@ class HandlingMessage
     /**
      * Set handling_id
      *
-     * @param  integer         $handlingId
+     * @param integer $handlingId
+     *
      * @return HandlingMessage
      */
     public function setHandlingId($handlingId)
     {
+        // @codingStandardsIgnoreStart
         $this->handling_id = $handlingId;
-
+        // @codingStandardsIgnoreEnd
         return $this;
     }
 
@@ -207,13 +214,16 @@ class HandlingMessage
      */
     public function getHandlingId()
     {
+        // @codingStandardsIgnoreStart
         return $this->handling_id;
+        // @codingStandardsIgnoreEnd
     }
 
     /**
      * Set handling
      *
-     * @param  \Lists\HandlingBundle\Entity\Handling $handling
+     * @param \Lists\HandlingBundle\Entity\Handling $handling
+     *
      * @return HandlingMessage
      */
     public function setHandling(\Lists\HandlingBundle\Entity\Handling $handling = null)
@@ -240,7 +250,8 @@ class HandlingMessage
     /**
      * Set type
      *
-     * @param  \Lists\HandlingBundle\Entity\HandlingMessageType $type
+     * @param \Lists\HandlingBundle\Entity\HandlingMessageType $type
+     *
      * @return HandlingMessage
      */
     public function setType(\Lists\HandlingBundle\Entity\HandlingMessageType $type = null)
@@ -263,7 +274,8 @@ class HandlingMessage
     /**
      * Set user
      *
-     * @param  \SD\UserBundle\Entity\User $user
+     * @param \SD\UserBundle\Entity\User $user
+     *
      * @return HandlingMessage
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
@@ -291,25 +303,34 @@ class HandlingMessage
         // Add your code here
     }
 
+    /**
+     * @return null|string
+     */
     public function getAbsolutePath()
     {
         return null === $this->filepath
             ? null
-            : $this->getUploadRootDir().'/'.$this->filepath;
+            : $this->getUploadRootDir() . '/' . $this->filepath;
     }
 
+    /**
+     * @return null|string
+     */
     public function getWebPath()
     {
         return null === $this->filepath
             ? null
-            : $this->getUploadDir().'/'.$this->filepath;
+            : $this->getUploadDir() . '/' . $this->filepath;
     }
 
+    /**
+     * @return null|string
+     */
     protected function getUploadRootDir()
     {
         // the absolute directory path where uploaded
         // documents should be saved
-        return __DIR__.'/../../../../web/'.$this->getUploadDir();
+        return __DIR__ . '/../../../../web/' . $this->getUploadDir();
     }
 
     protected function getUploadDir()
@@ -341,6 +362,9 @@ class HandlingMessage
         return $this->file;
     }
 
+    /**
+     * upload
+     */
     public function upload()
     {
         // the file property can be empty if the field is not required
@@ -382,7 +406,8 @@ class HandlingMessage
     /**
      * Set additionalType
      *
-     * @param  string          $additionalType
+     * @param string $additionalType
+     *
      * @return HandlingMessage
      */
     public function setAdditionalType($additionalType)
@@ -401,6 +426,7 @@ class HandlingMessage
     {
         return $this->additionalType;
     }
+
     /**
      * @var boolean
      */
@@ -409,7 +435,8 @@ class HandlingMessage
     /**
      * Set isBusinessTrip
      *
-     * @param  boolean         $isBusinessTrip
+     * @param boolean $isBusinessTrip
+     *
      * @return HandlingMessage
      */
     public function setIsBusinessTrip($isBusinessTrip)
@@ -431,11 +458,14 @@ class HandlingMessage
 
     /**
      * Is future message
+     *
+     * @return bool
      */
     public function isFutureMessage()
     {
         return $this->getAdditionalType() == self::ADDITIONAL_TYPE_FUTURE_MESSAGE;
     }
+
     /**
      * @var \Lists\ContactBundle\Entity\ModelContact
      */
@@ -444,7 +474,8 @@ class HandlingMessage
     /**
      * Set contact
      *
-     * @param  \Lists\ContactBundle\Entity\ModelContact $contact
+     * @param \Lists\ContactBundle\Entity\ModelContact $contact
+     *
      * @return HandlingMessage
      */
     public function setContact(\Lists\ContactBundle\Entity\ModelContact $contact = null)
@@ -463,6 +494,7 @@ class HandlingMessage
     {
         return $this->contact;
     }
+
     /**
      * @var integer
      */
@@ -471,13 +503,15 @@ class HandlingMessage
     /**
      * Set contact_id
      *
-     * @param  integer         $contactId
+     * @param integer $contactId
+     *
      * @return HandlingMessage
      */
     public function setContactId($contactId)
     {
+        // @codingStandardsIgnoreStart
         $this->contact_id = $contactId;
-
+        // @codingStandardsIgnoreEnd
         return $this;
     }
 
@@ -488,8 +522,11 @@ class HandlingMessage
      */
     public function getContactId()
     {
+        // @codingStandardsIgnoreStart
         return $this->contact_id;
+        // @codingStandardsIgnoreEnd
     }
+
     /**
      * @var integer
      */
@@ -498,13 +535,15 @@ class HandlingMessage
     /**
      * Set user_id
      *
-     * @param  integer         $userId
+     * @param integer $userId
+     *
      * @return HandlingMessage
      */
     public function setUserId($userId)
     {
+        // @codingStandardsIgnoreStart
         $this->user_id = $userId;
-
+        // @codingStandardsIgnoreEnd
         return $this;
     }
 
@@ -515,8 +554,11 @@ class HandlingMessage
      */
     public function getUserId()
     {
+        // @codingStandardsIgnoreStart
         return $this->user_id;
+        // @codingStandardsIgnoreEnd
     }
+
     /**
      * @var integer
      */
@@ -525,13 +567,15 @@ class HandlingMessage
     /**
      * Set type_id
      *
-     * @param  integer         $typeId
+     * @param integer $typeId
+     *
      * @return HandlingMessage
      */
     public function setTypeId($typeId)
     {
+        // @codingStandardsIgnoreStart
         $this->type_id = $typeId;
-
+        // @codingStandardsIgnoreEnd
         return $this;
     }
 
@@ -542,6 +586,8 @@ class HandlingMessage
      */
     public function getTypeId()
     {
+        // @codingStandardsIgnoreStart
         return $this->type_id;
+        // @codingStandardsIgnoreEnd
     }
 }

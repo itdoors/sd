@@ -40,7 +40,8 @@ class HandlingMoreInfo
     /**
      * Set value
      *
-     * @param  string           $value
+     * @param string $value
+     *
      * @return HandlingMoreInfo
      */
     public function setValue($value)
@@ -63,7 +64,8 @@ class HandlingMoreInfo
     /**
      * Set handling
      *
-     * @param  \Lists\HandlingBundle\Entity\Handling $handling
+     * @param \Lists\HandlingBundle\Entity\Handling $handling
+     *
      * @return HandlingMoreInfo
      */
     public function setHandling(\Lists\HandlingBundle\Entity\Handling $handling = null)
@@ -86,10 +88,11 @@ class HandlingMoreInfo
     /**
      * Set handlingMoreInfoType
      *
-     * @param  \Lists\HandlingBundle\Entity\HandlingMoreInfoType $handlingMoreInfoType
+     * @param \Lists\HandlingBundle\Entity\HandlingMoreInfoType $handlingMoreInfoType
+     *
      * @return HandlingMoreInfo
      */
-    public function setHandlingMoreInfoType(\Lists\HandlingBundle\Entity\HandlingMoreInfoType $handlingMoreInfoType = null)
+    public function setHandlingMoreInfoType(HandlingMoreInfoType $handlingMoreInfoType = null)
     {
         $this->handlingMoreInfoType = $handlingMoreInfoType;
 
@@ -105,6 +108,7 @@ class HandlingMoreInfo
     {
         return $this->handlingMoreInfoType;
     }
+
     /**
      * @var integer
      */
@@ -118,7 +122,8 @@ class HandlingMoreInfo
     /**
      * Set handlingId
      *
-     * @param  integer          $handlingId
+     * @param integer $handlingId
+     *
      * @return HandlingMoreInfo
      */
     public function setHandlingId($handlingId)
@@ -141,7 +146,8 @@ class HandlingMoreInfo
     /**
      * Set handlingMoreInfoTypeId
      *
-     * @param  integer          $handlingMoreInfoTypeId
+     * @param integer $handlingMoreInfoTypeId
+     *
      * @return HandlingMoreInfo
      */
     public function setHandlingMoreInfoTypeId($handlingMoreInfoTypeId)

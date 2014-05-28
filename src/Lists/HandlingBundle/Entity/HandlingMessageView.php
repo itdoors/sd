@@ -65,7 +65,8 @@ class HandlingMessageView
     /**
      * Set handlingId
      *
-     * @param  integer             $handlingId
+     * @param integer $handlingId
+     *
      * @return HandlingMessageView
      */
     public function setHandlingId($handlingId)
@@ -88,7 +89,8 @@ class HandlingMessageView
     /**
      * Set createdate
      *
-     * @param  \DateTime           $createdate
+     * @param \DateTime $createdate
+     *
      * @return HandlingMessageView
      */
     public function setCreatedate($createdate)
@@ -111,7 +113,8 @@ class HandlingMessageView
     /**
      * Set typeName
      *
-     * @param  string              $typeName
+     * @param string $typeName
+     *
      * @return HandlingMessageView
      */
     public function setTypeName($typeName)
@@ -134,7 +137,8 @@ class HandlingMessageView
     /**
      * Set typeSlug
      *
-     * @param  string              $typeSlug
+     * @param string $typeSlug
+     *
      * @return HandlingMessageView
      */
     public function setTypeSlug($typeSlug)
@@ -157,7 +161,8 @@ class HandlingMessageView
     /**
      * Set typeStayactiontime
      *
-     * @param  integer             $typeStayactiontime
+     * @param integer $typeStayactiontime
+     *
      * @return HandlingMessageView
      */
     public function setTypeStayactiontime($typeStayactiontime)
@@ -180,7 +185,8 @@ class HandlingMessageView
     /**
      * Set userId
      *
-     * @param  integer             $userId
+     * @param integer $userId
+     *
      * @return HandlingMessageView
      */
     public function setUserId($userId)
@@ -203,7 +209,8 @@ class HandlingMessageView
     /**
      * Set additionalType
      *
-     * @param  string              $additionalType
+     * @param string $additionalType
+     *
      * @return HandlingMessageView
      */
     public function setAdditionalType($additionalType)
@@ -226,7 +233,8 @@ class HandlingMessageView
     /**
      * Set userFullName
      *
-     * @param  string              $userFullName
+     * @param string $userFullName
+     *
      * @return HandlingMessageView
      */
     public function setUserFullName($userFullName)

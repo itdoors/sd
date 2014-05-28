@@ -11,6 +11,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\DBAL\Connection;
 
+/**
+ * Class DeleteCommand
+ */
 class DeleteCommand extends ContainerAwareCommand
 {
     /**
@@ -23,6 +26,9 @@ class DeleteCommand extends ContainerAwareCommand
      */
     protected $connection;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function configure()
     {
         $this
@@ -30,10 +36,12 @@ class DeleteCommand extends ContainerAwareCommand
           ->setDescription('Delete handling')
           ->setDefinition(array(
             new InputArgument('handling_ids', InputArgument::REQUIRED, 'Handling ids (coma separator)'),
-          ))
-        ;
+          ));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var \Symfony\Component\Console\Helper\DialogHelper $dialog*/
@@ -43,7 +51,9 @@ class DeleteCommand extends ContainerAwareCommand
 
         $handlingIds = explode(',', $handlingIdsString);
 
-        if (!$dialog->askConfirmation($output, sprintf('Are you sure you want to delete handling with ID = %s(yes/no)', $handlingIdsString), false )) {
+        $msgString = sprintf('Are you sure you want to delete handling with ID = %s(yes/no)', $handlingIdsString);
+
+        if (!$dialog->askConfirmation($output, $msgString, false)) {
             return;
         }
 
@@ -63,8 +73,9 @@ class DeleteCommand extends ContainerAwareCommand
    /**
     * physical delete handling
     *
-    * @param int $handlingId
+    * @param int             $handlingId
     * @param OutputInterface $output
+    *
     * @throws \Exception
     */
     public function deleteHandling($handlingId, OutputInterface $output)
@@ -127,8 +138,8 @@ class DeleteCommand extends ContainerAwareCommand
     }
 
     /**
-    * @see Command
-    */
+     * {@inheritdoc}
+     */
     protected function interact(InputInterface $input, OutputInterface $output)
     {
         if (!$input->getArgument('handling_ids')) {
@@ -143,7 +154,7 @@ class DeleteCommand extends ContainerAwareCommand
                     return $handlingId;
                 }
             );
-        $input->setArgument('handling_ids', $handlingId);
+            $input->setArgument('handling_ids', $handlingId);
         }
     }
 }

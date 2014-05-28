@@ -14,6 +14,9 @@ class HandlingMessageTypeRepository extends EntityRepository
 {
     protected static $list;
 
+    /**
+     * @return array
+     */
     public function getList()
     {
         if (!self::$list) {

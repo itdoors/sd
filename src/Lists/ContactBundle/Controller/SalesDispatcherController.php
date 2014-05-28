@@ -2,12 +2,20 @@
 
 namespace Lists\ContactBundle\Controller;
 
+/**
+ * Class SalesDispatcherController
+ */
 class SalesDispatcherController extends SalesController
 {
     protected $filterNamespace = 'contacts.sales.dispatcher.filters';
     protected $baseRoutePrefix = 'sales_dispatcher';
     protected $baseTemplate = 'SalesDispatcher';
 
+    /**
+     * @param int $organizationId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function organizationAction($organizationId)
     {
         $this->refreshFiltersIfAjax();

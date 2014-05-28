@@ -12,6 +12,9 @@ use Lists\HandlingBundle\Entity\Handling;
 use Lists\HandlingBundle\Entity\HandlingMessage;
 use Lists\ContactBundle\Entity\ModelContactRepository;
 
+/**
+ * Class SalesController
+ */
 class SalesController extends BaseController
 {
     protected $filterNamespace = 'handling.sales.filters';
@@ -22,6 +25,9 @@ class SalesController extends BaseController
     protected $wizardOrganizationNamespace = 'sales.wizard.organization';
     protected $wizardHandlingNamespace = 'sales.wizard.handling';
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction()
     {
         // Get organization filter
@@ -64,6 +70,8 @@ class SalesController extends BaseController
 
     /**
      * Executes list action for dashboard
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listAction()
     {
@@ -95,6 +103,10 @@ class SalesController extends BaseController
 
     /**
      * Executes new action
+     *
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function newAction(Request $request)
     {
@@ -125,8 +137,7 @@ class SalesController extends BaseController
             ->add('user', 'text', array(
                 'disabled' => true,
                 'data' => (string) $user
-            ))
-        ;
+            ));
 
         $form->handleRequest($request);
 
@@ -157,13 +168,17 @@ class SalesController extends BaseController
     }
 
     /**
-    * Execute addOrganizationFilter action
-    */
-    public function addOrganizationFilterAction($organization_id)
+     * Execute addOrganizationFilter action
+     *
+     * @param int $organizationId
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function addOrganizationFilterAction($organizationId)
     {
         $filters = $this->getFilters();
 
-        $filters['organization_id'] = $organization_id;
+        $filters['organization_id'] = $organizationId;
 
         $this->setFilters($filters);
 
@@ -172,6 +187,11 @@ class SalesController extends BaseController
 
     /**
      * Executes show action
+     *
+     * @param int     $id
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function showAction($id, Request $request)
     {
@@ -215,6 +235,11 @@ class SalesController extends BaseController
         ));
     }
 
+    /**
+     * @param int $handlingId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function messagesListAction($handlingId)
     {
         /** @var \Lists\HandlingBundle\Entity\HandlingMessageRepository $messagesRepository */
@@ -232,7 +257,11 @@ class SalesController extends BaseController
     }
 
     /**
-     * Renders ohandlingUsers list
+     * Renders handlingUsers list
+     *
+     * @param int $handlingId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handlingUsersAction($handlingId)
     {
@@ -273,6 +302,10 @@ class SalesController extends BaseController
 
     /**
      * Execute wizard step1 action
+     *
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function step1Action(Request $request)
     {
@@ -335,6 +368,12 @@ class SalesController extends BaseController
 
     /**
      * Execute wizard step2 action
+     *
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Exception
      */
     public function step2Action(Request $request)
     {
@@ -457,6 +496,8 @@ class SalesController extends BaseController
 
     /**
      * Checks if organization is new
+     *
+     * @return bool
      */
     public function isNewWizardOrganization()
     {
@@ -467,6 +508,8 @@ class SalesController extends BaseController
 
     /**
      * get wizard organizationId
+     *
+     * @return mixed|null
      */
     public function getWizardOrganizationId()
     {
@@ -477,6 +520,8 @@ class SalesController extends BaseController
 
     /**
      * get wizard organizationName
+     *
+     * @return mixed|null
      */
     public function getWizardOrganizationName()
     {
@@ -487,6 +532,10 @@ class SalesController extends BaseController
 
     /**
      * Execute wizard step3 action
+     *
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function step3Action(Request $request)
     {
@@ -511,8 +560,7 @@ class SalesController extends BaseController
             ->add('user', 'text', array(
                 'disabled' => true,
                 'data' => (string) $user
-            ))
-        ;
+            ));
 
         $form->handleRequest($request);
 
@@ -547,6 +595,12 @@ class SalesController extends BaseController
 
     /**
      * Execute wizard step4 action
+     *
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Exception
      */
     public function step4Action(Request $request)
     {
@@ -583,7 +637,7 @@ class SalesController extends BaseController
                             ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
                             ->setParameter(':modelId', $organizationId)
                             ->setParameter(':ownerIds', $userIds);
-                    }
+                }
             ));
 
         $form
@@ -601,7 +655,7 @@ class SalesController extends BaseController
                             ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
                             ->setParameter(':modelId', $organizationId)
                             ->setParameter(':ownerIds', $userIds);
-                    }
+                }
             ));
 
         $form
@@ -612,7 +666,7 @@ class SalesController extends BaseController
                 'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingStatusRepository $repository) {
                         return $repository->createQueryBuilder('s')
                             ->orderBy('s.sortorder', 'ASC');
-                    }
+                }
             ));
 
         // Bind form
