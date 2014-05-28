@@ -206,14 +206,19 @@
 </li>
 </div>
 <div style="height: 150px; width: 100%; margin-top: 10px; display: none;" id="add_div">
-
+    <b>{% trans %}Range{% endtrans %}:</b>
     {% trans %}From{% endtrans %}
-        <input class="timepicker-cool" size="5" id="newFromTime">
+        <input class="timepiker-cool" size="5" id="newFromTime">
     {% trans %}To{% endtrans %}
-        <input class="timepicker-cool" size="5" id="newToTime">
-{#
-    <div id="test"> test</div>
-#}
+        <input class="timepiker-cool" size="5" id="newToTime">
+    <br>
+    <b>{% trans %}Officially{% endtrans %}:</b> <input type="checkbox" id="officially">
+
+
+
+    {#
+        <div id="test"> test</div>
+    #}
 </div>
 
 <style>

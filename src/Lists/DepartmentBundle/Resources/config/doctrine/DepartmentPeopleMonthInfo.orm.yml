@@ -97,7 +97,7 @@ Lists\DepartmentBundle\Entity\DepartmentPeopleMonthInfo:
                     referencedColumnName: id
             orphanRemoval: false
         surchargeType:
-            targetEntity: Lookup
+            targetEntity: Lists\LookupBundle\Entity\Lookup
             cascade: {  }
             mappedBy: null
             inversedBy: null
