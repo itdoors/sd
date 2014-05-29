@@ -3,8 +3,10 @@
 namespace Lists\DogovorBundle\Controller;
 
 use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
-use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class DogovorDepartmentController
+ */
 class DogovorDepartmentController extends BaseController
 {
     protected $filterNamespace = 'base.dogovor.department.filters';

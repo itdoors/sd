@@ -4,6 +4,7 @@ namespace Lists\DogovorBundle\Form;
 
 use Lists\DogovorBundle\Entity\Dogovor;
 use Lists\DogovorBundle\Entity\DogovorRepository;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
@@ -11,6 +12,9 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * Class DogovorForm
+ */
 class DogovorForm extends AbstractType
 {
     /**
@@ -20,15 +24,16 @@ class DogovorForm extends AbstractType
 
     /**
      * __construct()
+     *
+     * @param Container $container
      */
-    public function __construct($container)
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
 
     /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -88,22 +93,20 @@ class DogovorForm extends AbstractType
             ->add('file', 'file', array(
                 'required' => false
             ))
-            ->add('mashtab','choice', array(
+            ->add('mashtab', 'choice', array(
                 'choices'   => $dr->getMashtabChoices(),
                 'empty_value' => false
             ))
             ->add('isActive', null, array(
                 'data' => true
-            ))
-        ;
+            ));
 
         $builder
             ->add('create', 'submit');
 
         $builder->addEventListener(
             FormEvents::POST_SUBMIT,
-            function(FormEvent $event) use ($container)
-            {
+            function (FormEvent $event) use ($container) {
                 /** @var Dogovor $data */
                 $data = $event->getData();
 
@@ -111,27 +114,17 @@ class DogovorForm extends AbstractType
 
                 $translator = $container->get('translator');
 
-                if ($data->getStartdatetime() >= $data->getStopdatetime() && $data->getStartdatetime())
-                {
-                    $msg = $translator->trans("Start date can't be greater then stop date", array(), 'ListsDogovorBundle');
+                if ($data->getStartdatetime() >= $data->getStopdatetime() && $data->getStartdatetime()) {
+                    $msgString = "Start date can't be greater then stop date";
+
+                    $msg = $translator->trans($msgString, array(), 'ListsDogovorBundle');
 
                     $form->addError(new FormError($msg));
                 }
-
-                // Maybe it will be needed in future
-                /*if ($data->getLaunchDate())
-                {
-                    if ($data->getLaunchDate() < $data->getStartdatetime() ||
-                        $data->getLaunchDate() > $data->getStopdatetime())
-                    {
-                        $msg = $translator->trans("Launch date can't be less then start or greater then stop date", array(), 'ListsDogovorBundle');
-
-                        $form->addError(new FormError($msg));
-                    }
-                }*/
-            });
+            }
+        );
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

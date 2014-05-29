@@ -4,6 +4,9 @@ namespace Lists\OrganizationBundle\Controller;
 
 use Lists\OrganizationBundle\Controller\SalesController as SalesController;
 
+/**
+ * Class SalesDispatcherController
+ */
 class SalesDispatcherController extends SalesController
 {
     protected $filterNamespace = 'organization.sales.dispatcher.filters';
@@ -12,6 +15,9 @@ class SalesDispatcherController extends SalesController
     protected $baseRoutePrefix = 'sales_dispatcher';
     protected $baseTemplate = 'SalesDispatcher';
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction()
     {
         /** @var \Lists\TeamBundle\Entity\TeamRepository $teamRepository */
@@ -50,6 +56,4 @@ class SalesDispatcherController extends SalesController
             'baseRoutePrefix' => $this->baseRoutePrefix,
         ));
     }
-
 }
-

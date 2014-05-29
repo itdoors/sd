@@ -3,6 +3,7 @@
 namespace Lists\DogovorBundle\Form;
 
 use Lists\DogovorBundle\Entity\DopDogovor;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
@@ -10,6 +11,9 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * Class DopDogovorForm
+ */
 class DopDogovorForm extends AbstractType
 {
     /**
@@ -17,14 +21,16 @@ class DopDogovorForm extends AbstractType
      */
     protected $container;
 
-    public function __construct($container)
+    /**
+     * @param Container $container
+     */
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
 
     /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
+     * {@inheritDoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -50,8 +56,7 @@ class DopDogovorForm extends AbstractType
             ->add('dogovorId', 'hidden')
             ->add('saller', 'hidden_entity', array(
                 'entity' => 'SDUserBundle:User'
-            ))
-        ;
+            ));
 
         $builder
             ->add('add', 'submit')
@@ -59,8 +64,7 @@ class DopDogovorForm extends AbstractType
 
         $builder->addEventListener(
             FormEvents::POST_SUBMIT,
-            function(FormEvent $event) use ($container)
-            {
+            function (FormEvent $event) use ($container) {
                 /** @var DopDogovor $data */
                 $data = $event->getData();
 
@@ -68,15 +72,18 @@ class DopDogovorForm extends AbstractType
 
                 $translator = $container->get('translator');
 
-                if ($data->getStartdatetime() > $data->getActivedatetime())
-                {
-                    $msg = $translator->trans("Start date can't be greater then activate date", array(), 'ListsDogovorBundle');
+                if ($data->getStartdatetime() > $data->getActivedatetime()) {
+
+                    $msgString = "Start date can't be greater then activate date";
+
+                    $msg = $translator->trans($msgString, array(), 'ListsDogovorBundle');
 
                     $form->addError(new FormError($msg));
                 }
-            });
+            }
+        );
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

@@ -2,22 +2,29 @@
 
 namespace Lists\TeamBundle\Form;
 
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * Class TeamFormType
+ */
 class TeamFormType extends AbstractType
 {
     protected $container;
 
-    public function __construct($container)
+    /**
+     * @param Container $container
+     */
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -32,13 +39,12 @@ class TeamFormType extends AbstractType
                 'multiple' => true,
                 'property'=>'fullname',
                 'query_builder' => $ur->getOnlyStaff()
-            ))
-        ;
+            ));
 
         $builder
             ->add('save', 'submit');
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

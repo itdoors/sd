@@ -9,7 +9,7 @@
 
             $('.timepiker-cool').timepicker({
                 autoclose: true,
-                minuteStep: 1,
+                minuteStep: 5,
                 showSeconds: false,
                 showMeridian: false
             });
@@ -160,6 +160,53 @@
             return false;
         });
 
+        $('#addButton').die('click');
+        $('#addButton').live('click', function(e){
+            $('#non_official_error').hide( 'blind', {}, 500 );
+            var timeFrom = $('#newFromTime').val();
+            var timeTo = $('#newToTime').val();
+            var officially = $('#officially').prop("checked");
+
+            var url = $(this).data('url');
+            var idCoworker = $(this).data('id_coworker');
+            var idDepartment = $(this).data('id_department');
+            var date = $(this).data('date');
+            var sendData ={
+                'idCoworker': idCoworker,
+                'idDepartment': idDepartment,
+                'date': date,
+                'officially': officially,
+                'fromTime': timeFrom,
+                'toTime' : timeTo
+            }
+            //fd.append('idCoworker', idCoworker);
+            //fd.append('idDepartment', idDepartment);
+            //fd.append('date', date);
+            //fd.append('officially', officially)
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+/*
+                beforeSend: function() {
+                    ITDoorsAjax.blockUI($('#'+block_id));
+                },
+*/
+                success: function(data) {
+                    //alert(data)
+                    data = JSON.parse(data);
+                    if (data.success == 0) {
+                        if (data.error == 'no_official_permitted') {
+                            $('#non_official_error').toggle( 'blind', {}, 500 );
+                        }
+                    }
+                    /*$('#'+block_id).empty().append(response);
+                    ITDoorsAjax.unblockUI($('#'+block_id));*/
+                }
+            })
+
+        })
     })
 </script>
 
@@ -206,14 +253,25 @@
 </li>
 </div>
 <div style="height: 150px; width: 100%; margin-top: 10px; display: none;" id="add_div">
+    <div class="alert alert-warning notDisplayed" id="non_official_error">
+        <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Non-official person cant  work officially{% endtrans %}
+    </div>
+
+
     <b>{% trans %}Range{% endtrans %}:</b>
     {% trans %}From{% endtrans %}
-        <input class="timepiker-cool" size="5" id="newFromTime">
+        <input class="timepiker-cool" size="5" id="newFromTime" value="00:00" type="text">
     {% trans %}To{% endtrans %}
-        <input class="timepiker-cool" size="5" id="newToTime">
+        <input class="timepiker-cool" size="5" id="newToTime" value="10:00" type="text">
     <br>
     <b>{% trans %}Officially{% endtrans %}:</b> <input type="checkbox" id="officially">
 
+    <br>
+    <button id="addButton"
+            data-id_coworker="{{ idCoworker }}"
+            data-date="{{ date }}"
+            data-id_department="{{ idDepartment }}"
+            data-url="{{ path('it_doors_oper_schedule_add_new_time') }}">{% trans %}Add{% endtrans %}</button>
 
 
     {#
@@ -237,6 +295,9 @@
     }
     .notDisplayed{
         display: none;
+    }
+    .timeFrom, .timeTo{
+        /*width: 25px;*/
     }
 </style>
 

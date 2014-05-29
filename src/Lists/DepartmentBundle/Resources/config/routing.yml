@@ -1,3 +1,0 @@
-lists_department_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: ListsDepartmentBundle:Default:index }

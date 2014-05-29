@@ -3,6 +3,8 @@
 namespace ITDoors\OperBundle\Controller;
 
 use ITDoors\AjaxBundle\Controller\BaseFilterController;
+use Lists\GrafikBundle\Entity\GrafikTime;
+use Lists\GrafikBundle\Entity\Grafik;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -167,14 +169,17 @@ class OperScheduleController extends BaseFilterController
         $idCoworker = $request->request->get('idCoworker');
         $idDepartment = $request->request->get('idDepartment');
 
+/*        if (!isset($date) || !isset($idCoworker) || !isset($idDepartment)) {
+            echo ('some error, variables had not been sent');exit;
+        }*/
         /** @var $grafikTimeRepository \Lists\GrafikBundle\Entity\GrafikTimeRepository   */
         $grafikTimeRepository = $this->getDoctrine()
             ->getRepository('ListsGrafikBundle:GrafikTime');
-        $date = explode('-', $date);
+        $dateParts = explode('-', $date);
 
-        $day = $date[2];
-        $month = $date[1];
-        $year = $date[0];
+        $day = $dateParts[2];
+        $month = $dateParts[1];
+        $year = $dateParts[0];
 
         $coworkerDayTime = $grafikTimeRepository->getCoworkerHoursDayInfo(
             $year,
@@ -190,10 +195,162 @@ class OperScheduleController extends BaseFilterController
 
         $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleDay.html.twig', array(
             'coworkerDayTime' => $coworkerDayTime,
+            'date' => $date,
+            'idCoworker' => $idCoworker,
+            'idDepartment' => $idDepartment
         ));
         $return['success'] = 1;
 
         return new Response(json_encode($return));
 
+    }
+
+    public function addNewTimeAction(Request $request)
+    {
+        $return = array();
+        $date =  $request->request->get('date');
+        $idCoworker = $request->request->get('idCoworker');
+        $idDepartment = $request->request->get('idDepartment');
+        $officially = $request->request->get('officially');
+        $fromTime = $request->request->get('fromTime');
+        $toTime = $request->request->get('toTime');
+
+        $addTypeOfficially = '';
+
+        if ($officially == 'false') {
+            $officially = false;
+            //we will need this down te code
+            $addTypeOfficially = 'NotOfficially';
+        } else {
+            $officially = true;
+        }
+
+        $departmentPeople  = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople')
+            ->find($idCoworker);
+
+        //can't non-official person work officially
+        if ($departmentPeople->getAdmissionDate() == null && $officially) {
+            $return['success'] = 0;
+            $return['error'] = 'no_official_permitted';
+            return new Response(json_encode($return));
+        }
+
+        /* if ($departmentPeople->getFaired()) {
+             $return['success'] = 0;
+             $return['error'] = 'faired';
+         }*/
+
+        list($hoursFromTime, $minutesFromTime) = explode(':', $fromTime);
+        list($hoursToTime, $minutesToTime) = explode(':', $toTime);
+        $midnight = '00:00';
+
+        $timeIn = array();
+        if ($fromTime != $toTime) {
+            if ($hoursFromTime > $hoursToTime || ($hoursToTime == 0 && $minutesToTime != 0 && $hoursFromTime != 0)) {
+                $timeIn[0]['from'] = $fromTime;
+                $timeIn[0]['to'] = $midnight;
+                $timeIn[0]['date'] = $date;
+
+                $timeIn[1]['from'] = $midnight;
+                $timeIn[1]['to'] = $toTime;
+                //date of the next day
+                $timeIn[1]['date'] = date('Y-m-d', strtotime($date .' +1 day'));
+            } else {
+                $timeIn[0]['from'] = $fromTime;
+                $timeIn[0]['to'] = $toTime;
+                $timeIn[0]['date'] = $date;
+            }
+        }
+
+        $department  = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:Departments')
+            ->find($idDepartment);
+
+
+
+        $departmentPeopleReplacement  = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople')
+            ->find(0);
+
+        //array of points during the day which make periods of the day(evening, night, etc)
+        $periodPoints[] = 7;
+        $periodPoints[] = 19;
+        $periodPoints[] = 22;
+        $periodPoints[] = 24;
+        foreach ($timeIn as $infoDay) {
+            list($year, $month, $day) = explode('-', $infoDay['date']);
+
+            $newTime = new GrafikTime();
+            $newTime->setDay($day);
+            $newTime->setYear($year);
+            $newTime->setMonth($month);
+
+            $newTime->setFromTime(new \DateTime($infoDay['from'].':00'));
+            $newTime->setToTime(new \DateTime($infoDay['to'].':00'));
+
+            list($hoursFrom, $minutesFrom) = explode(':', $infoDay['from']);
+            list($hoursTo, $minutesTo) = explode(':', $infoDay['to']);
+            if($hoursTo == 0 && $hoursFrom != 0) {
+                $hoursTo = 24;
+            }
+            $hoursFrom += $minutesFrom/60;
+            $hoursTo += $minutesTo/60;
+            $return[] =$hoursFrom;
+            $return[] = $hoursTo;
+            //Algorithm to calculate number of hours
+            //between two periods
+            $totalPeriod = array();
+            foreach ($periodPoints as $point) {
+                $check1 = $point - $hoursFrom;
+                $check2 = $point - $hoursTo;
+
+                if ($check1<0) {
+                    $check1 = 0;
+                }
+                if ($check2<0) {
+                    $check2 = 0;
+                }
+                $hours = $check1 - $check2 - array_sum($totalPeriod);
+                $return[] =$hours;
+                $totalPeriod[] = $hours;
+
+
+            }
+            //end of algorithm
+
+            $totalNight = $totalPeriod[0] + $totalPeriod[3];//from 0-7, 22-24
+            $totalEvening = $totalPeriod[2];//from 7-19
+            $totalDay = $totalPeriod[1];//from 19-22
+
+            $total = $totalNight + $totalEvening + $totalDay;
+
+            $funcTotal = 'setTotal'.$addTypeOfficially;
+            $funcTotalDay = 'setTotalDay'.$addTypeOfficially;
+            $funcTotalEvening = 'setTotalEvening'.$addTypeOfficially;
+            $funcTotalNight = 'setTotalNight'.$addTypeOfficially;
+
+            //setting official or not total ours
+            if (method_exists($newTime, $funcTotal)) {
+                $return[]='exists';
+            }
+            $newTime->$funcTotal($total);
+            $newTime->$funcTotalDay($totalDay);
+            $newTime->$funcTotalEvening($totalEvening);
+            $newTime->$funcTotalNight($totalNight);
+            $newTime->setNotOfficially(!$officially);
+            $newTime->setDepartment($department);
+            $newTime->setDepartmentPeople($departmentPeople);
+            $newTime->setDepartmentPeopleReplacement($departmentPeopleReplacement);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($newTime);
+            $em->flush();
+            //$newTime->setTotalDayNotOfficially($totalDay);
+            $return[] = $newTime->getTotalDayNotOfficially();
+        }
+
+
+        return new Response(json_encode($return));
     }
 }

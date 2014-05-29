@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Users utilities
  *
@@ -6,6 +6,9 @@
 
 namespace SD\UserBundle\Util;
 
+/**
+ * UserUtil
+ */
 class UserUtil
 {
     /**

@@ -2,8 +2,6 @@
 
 namespace Lists\HandlingBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * HandlingService
  */
@@ -41,11 +39,11 @@ class HandlingService
     {
         $this->handlings = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -56,19 +54,20 @@ class HandlingService
      * Set name
      *
      * @param string $name
+     *
      * @return HandlingService
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -79,19 +78,20 @@ class HandlingService
      * Set slug
      *
      * @param string $slug
+     *
      * @return HandlingService
      */
     public function setSlug($slug)
     {
         $this->slug = $slug;
-    
+
         return $this;
     }
 
     /**
      * Get slug
      *
-     * @return string 
+     * @return string
      */
     public function getSlug()
     {
@@ -102,19 +102,20 @@ class HandlingService
      * Set sortorder
      *
      * @param integer $sortorder
+     *
      * @return HandlingService
      */
     public function setSortorder($sortorder)
     {
         $this->sortorder = $sortorder;
-    
+
         return $this;
     }
 
     /**
      * Get sortorder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortorder()
     {
@@ -125,12 +126,13 @@ class HandlingService
      * Add handlings
      *
      * @param \Lists\HandlingBundle\Entity\Handling $handlings
+     *
      * @return HandlingService
      */
     public function addHandling(\Lists\HandlingBundle\Entity\Handling $handlings)
     {
         $this->handlings[] = $handlings;
-    
+
         return $this;
     }
 
@@ -147,7 +149,7 @@ class HandlingService
     /**
      * Get handlings
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getHandlings()
     {
@@ -164,6 +166,9 @@ class HandlingService
         return $this->getName();
     }
 
+    /**
+     * @return array
+     */
     public function __sleep()
     {
         return array(

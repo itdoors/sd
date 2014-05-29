@@ -41,11 +41,11 @@ class Team
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -56,19 +56,20 @@ class Team
      * Set name
      *
      * @param string $name
+     *
      * @return Team
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -79,19 +80,20 @@ class Team
      * Set descriprion
      *
      * @param string $descriprion
+     *
      * @return Team
      */
     public function setDescriprion($descriprion)
     {
         $this->descriprion = $descriprion;
-    
+
         return $this;
     }
 
     /**
      * Get descriprion
      *
-     * @return string 
+     * @return string
      */
     public function getDescriprion()
     {
@@ -102,19 +104,20 @@ class Team
      * Set owner
      *
      * @param \SD\UserBundle\Entity\User $owner
+     *
      * @return Team
      */
     public function setOwner(\SD\UserBundle\Entity\User $owner = null)
     {
         $this->owner = $owner;
-    
+
         return $this;
     }
 
     /**
      * Get owner
      *
-     * @return \SD\UserBundle\Entity\User 
+     * @return \SD\UserBundle\Entity\User
      */
     public function getOwner()
     {
@@ -125,12 +128,13 @@ class Team
      * Add users
      *
      * @param \SD\UserBundle\Entity\User $users
+     *
      * @return Team
      */
     public function addUser(\SD\UserBundle\Entity\User $users)
     {
         $this->users[] = $users;
-    
+
         return $this;
     }
 
@@ -147,7 +151,7 @@ class Team
     /**
      * Get users
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getUsers()
     {
@@ -158,24 +162,24 @@ class Team
      */
     private $description;
 
-
     /**
      * Set description
      *
      * @param string $description
+     *
      * @return Team
      */
     public function setDescription($description)
     {
         $this->description = $description;
-    
+
         return $this;
     }
 
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {

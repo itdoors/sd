@@ -12,30 +12,31 @@ use Doctrine\ORM\Query\SqlWalker;
  */
 class SelectNextHandlingMessageDateDQL extends FunctionNode
 {
-    public $value1 = null;
-    public $value2 = null;
+    public $valueFirst = null;
+    public $valueSecond = null;
 
     /**
-     * parse
+     * {@inheritDoc}
      */
     public function parse(Parser $parser)
     {
         $parser->match(Lexer::T_IDENTIFIER);
         $parser->match(Lexer::T_OPEN_PARENTHESIS);
-        $this->value1 = $parser->ArithmeticPrimary();
+        $this->valueFirst = $parser->ArithmeticPrimary();
         $parser->match(Lexer::T_COMMA);
-        $this->value2 = $parser->ArithmeticPrimary();
+        $this->valueSecond = $parser->ArithmeticPrimary();
         $parser->match(Lexer::T_CLOSE_PARENTHESIS);
     }
 
     /**
-     * getSql
+     * {@inheritDoc}
      */
     public function getSql(SqlWalker $sqlWalker)
     {
-        return sprintf('select_next_handling_message_date(%d, %d)',
-                $this->value1->dispatch($sqlWalker),
-                $this->value2->dispatch($sqlWalker)
+        return sprintf(
+            'select_next_handling_message_date(%d, %d)',
+            $this->valueFirst->dispatch($sqlWalker),
+            $this->valueSecond->dispatch($sqlWalker)
         );
     }
 }

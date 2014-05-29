@@ -2,8 +2,6 @@
 
 namespace Lists\OrganizationBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * OrganizationType
  */
@@ -24,11 +22,10 @@ class OrganizationType
      */
     private $title;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -39,19 +36,20 @@ class OrganizationType
      * Set type
      *
      * @param string $type
+     *
      * @return OrganizationType
      */
     public function setType($type)
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -62,19 +60,20 @@ class OrganizationType
      * Set title
      *
      * @param string $title
+     *
      * @return OrganizationType
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {

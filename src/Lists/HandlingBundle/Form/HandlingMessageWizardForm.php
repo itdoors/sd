@@ -3,28 +3,32 @@
 namespace Lists\HandlingBundle\Form;
 
 use Lists\HandlingBundle\Entity\HandlingMessage;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\ExecutionContextInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 
-
+/**
+ * Class HandlingMessageWizardForm
+ */
 class HandlingMessageWizardForm extends AbstractType
 {
     protected $container;
 
-    public function __construct($container)
+    /**
+     * @param Container $container
+     */
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -72,16 +76,14 @@ class HandlingMessageWizardForm extends AbstractType
             ->add('handling_id', 'hidden')
             ->add('mindate', 'hidden', array(
                 'mapped' => false
-            ))
-        ;
+            ));
 
         $builder
             ->add('create', 'submit');
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
-            function(FormEvent $event) use ($container)
-            {
+            function (FormEvent $event) use ($container) {
                 $data = $event->getData();
 
                 $form = $event->getForm();
@@ -89,38 +91,38 @@ class HandlingMessageWizardForm extends AbstractType
                 $currentDatetime = new \DateTime($data['createdate']);
                 $nextDatetime = new \DateTime($data['nextcreatedate']);
 
-                if ($currentDatetime > $nextDatetime)
-                {
+                if ($currentDatetime > $nextDatetime) {
                     $translator = $container->get('translator');
 
-                    $msg = $translator->trans("Event next date can't be greater then current event date", array(), 'ListsHandlingBundle');
+                    $msgString = "Event next date can't be greater then current event date";
+
+                    $msg = $translator->trans($msgString, array(), 'ListsHandlingBundle');
 
                     $form->addError(new FormError($msg));
                 }
-            });
-
-		$builder->addEventListener(
-			FormEvents::PRE_SUBMIT,
-			function(FormEvent $event) use ($container)
-			{
-				$data = $event->getData();
-
-				$form = $event->getForm();
-
-				if (!$data['nextcreatedate'])
-				{
-					$translator = $container->get('translator');
-
-					$msg = $translator->trans("Event next date can't be empty", array(), 'ListsHandlingBundle');
-
-					$form->addError(new FormError($msg));
-				}
-			});
+            }
+        );
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
-            function(FormEvent $event) use ($container)
-            {
+            function (FormEvent $event) use ($container) {
+                $data = $event->getData();
+
+                $form = $event->getForm();
+
+                if (!$data['nextcreatedate']) {
+                    $translator = $container->get('translator');
+
+                    $msg = $translator->trans("Event next date can't be empty", array(), 'ListsHandlingBundle');
+
+                    $form->addError(new FormError($msg));
+                }
+            }
+        );
+
+        $builder->addEventListener(
+            FormEvents::PRE_SUBMIT,
+            function (FormEvent $event) use ($container) {
                 $data = $event->getData();
 
                 $form = $event->getForm();
@@ -129,19 +131,21 @@ class HandlingMessageWizardForm extends AbstractType
 
                 $handlingCreatedate = new \DateTime('yesterday');
 
-                if ($handlingCreatedate > $currentDatetime)
-                {
+                if ($handlingCreatedate > $currentDatetime) {
                     $translator = $container->get('translator');
 
                     $creationDate = $handlingCreatedate;
 
-                    $msg = $translator->trans("Current event date can't be less then handling creation date (%date%)", array(
+                    $msgString = "Current event date can't be less then handling creation date (%date%)";
+
+                    $msg = $translator->trans($msgString, array(
                         '%date%' => $creationDate->format('d.m.y')
                     ), 'ListsHandlingBundle');
 
                     $form->addError(new FormError($msg));
                 }
-            });
+            }
+        );
     }
 
     /**

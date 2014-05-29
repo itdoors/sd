@@ -62,7 +62,7 @@ class AjaxController extends BaseFilterController
         $organizationsRepository = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization');
 
-        $organizations= $organizationsRepository->getSearchQuery($searchText);
+        $organizations = $organizationsRepository->getSearchQuery($searchText);
 
         $result = array();
 
@@ -89,7 +89,7 @@ class AjaxController extends BaseFilterController
         $organizationsRepository = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization');
 
-        $organizations= $organizationsRepository->getSearchContactsQuery($searchText);
+        $organizations = $organizationsRepository->getSearchContactsQuery($searchText);
 
         $result = array();
 
@@ -115,7 +115,7 @@ class AjaxController extends BaseFilterController
         $organizationsRepository = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization');
 
-        $organizations= $organizationsRepository->getSearchContactsQuery($searchText);
+        $organizations = $organizationsRepository->getSearchContactsQuery($searchText);
 
         $result = array();
 
@@ -148,7 +148,7 @@ class AjaxController extends BaseFilterController
         $organizationsRepository = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization');
 
-        $organizations= $organizationsRepository->getSearchContactsQuery($searchText);
+        $organizations = $organizationsRepository->getSearchContactsQuery($searchText);
 
         $result = array();
 
@@ -180,7 +180,7 @@ class AjaxController extends BaseFilterController
         $searchText = $this->get('request')->query->get('term');
 
         /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
-        $objects= $this->getDoctrine()
+        $objects = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingService')
             ->createQueryBuilder('hs')
             ->where('hs.name like :term')
@@ -209,7 +209,7 @@ class AjaxController extends BaseFilterController
         $repository = $this->getDoctrine()
             ->getRepository('ListsCityBundle:City');
 
-        $objects= $repository->getSearchQuery($searchText);
+        $objects = $repository->getSearchQuery($searchText);
 
         $result = array();
 
@@ -254,7 +254,7 @@ class AjaxController extends BaseFilterController
         $repository = $this->getDoctrine()
             ->getRepository('ListsCompanystructureBundle:Companystructure');
 
-        $objects= $repository->getSearchQuery($searchText);
+        $objects = $repository->getSearchQuery($searchText);
 
         $result = array();
 
@@ -321,7 +321,7 @@ class AjaxController extends BaseFilterController
             ->getRepository('ListsOrganizationBundle:OrganizationGroup')
             ->createQueryBuilder('og')
             ->where('lower(og.name) LIKE :q')
-            ->setParameter(':q', '%'. mb_strtolower($searchText, 'UTF-8') . '%')
+            ->setParameter(':q', '%' . mb_strtolower($searchText, 'UTF-8') . '%')
             ->getQuery()
             ->getResult();
 
@@ -589,7 +589,7 @@ class AjaxController extends BaseFilterController
 
         foreach ($keys as $key) {
             if ($item[$key]) {
-                $value .= ' '. $item[$key];
+                $value .= ' ' . $item[$key];
             }
         }
 
@@ -684,8 +684,7 @@ class AjaxController extends BaseFilterController
 
         $result = array();
 
-        foreach ($organizations as $organization)
-        {
+        foreach ($organizations as $organization) {
             $result[] = $this->serializeObject($organization);
         }
 
@@ -741,8 +740,7 @@ class AjaxController extends BaseFilterController
 
         $result = array();
 
-        foreach ($objects as $object)
-        {
+        foreach ($objects as $object) {
             $result[] = $this->serializeObject($object);
         }
 
@@ -788,8 +786,8 @@ class AjaxController extends BaseFilterController
         return array(
             'id' => $id,
             'value' => $id,
-            'name' =>(string) $string,
-            'text' =>(string) $string
+            'name' => (string) $string,
+            'text' => (string) $string
         );
     }
 
@@ -825,7 +823,7 @@ class AjaxController extends BaseFilterController
 
         $validator = $this->get('validator');
 
-        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
         $errors = $validator->validate($organization, array('edit'));
 
         if (sizeof($errors)) {
@@ -872,7 +870,7 @@ class AjaxController extends BaseFilterController
      * Get first error message
      *
      * @param \Symfony\Component\Validator\ConstraintViolationList $errors
-     * @param string $field
+     * @param string                                               $field
      *
      * @return string
      */
@@ -882,8 +880,7 @@ class AjaxController extends BaseFilterController
 
         /** @var ConstraintViolation[] $errors */
         foreach ($errors as $error) {
-            if ($error->getPropertyPath() == $field)
-            {
+            if ($error->getPropertyPath() == $field) {
                 $message = $error->getMessage();
             }
         }
@@ -966,15 +963,15 @@ class AjaxController extends BaseFilterController
         }
 
         $result['html'] = $this->renderView('SDCommonBundle:AjaxForm:' . $formName . '.html.twig', array(
-                'form' => $form->createView(),
-                'formName' => $formName,
-                'postFunction' => $postFunction,
-                'postTargetId' => $postTargetId,
-                'targetId' => $targetId,
-                'defaultData' => $defaultData,
-                'model' => $model,
-                'modelId' => $modelId,
-            ));
+            'form' => $form->createView(),
+            'formName' => $formName,
+            'postFunction' => $postFunction,
+            'postTargetId' => $postTargetId,
+            'targetId' => $targetId,
+            'defaultData' => $defaultData,
+            'model' => $model,
+            'modelId' => $modelId,
+        ));
 
         return new Response(json_encode($result));
     }
@@ -1037,27 +1034,19 @@ class AjaxController extends BaseFilterController
 
         $prolongationDateTo = new \DateTime($requestParams['prolongationDateTo']);
 
-        if ($dogovor->getProlongation())
-        {
+        if ($dogovor->getProlongation()) {
             // set stop date to prolongation date
             // set prolongation date to $request['prolongationDateTo']
 
             // Set prolongation date to
-            if ($dogovor->getProlongationDate())
-            {
+            if ($dogovor->getProlongationDate()) {
                 $prolongationDateFrom = $dogovor->getProlongationDate();
-            }
-            elseif ($dogovor->getStopdatetime())
-            {
+            } elseif ($dogovor->getStopdatetime()) {
                 $prolongationDateFrom = $dogovor->getStopdatetime();
-            }
-            elseif ($dogovor->getStartdatetime())
-            {
+            } elseif ($dogovor->getStartdatetime()) {
                 $prolongationDateFrom = $dogovor->getStartdatetime();
             }
-        }
-        else
-        {
+        } else {
             /** @var DopDogovorRepository $ddr */
             $ddr = $this->get('lists_dogovor.dopdogovor.repository');
 
@@ -1106,8 +1095,7 @@ class AjaxController extends BaseFilterController
 
         $user = $this->getUser();
 
-        if (!$data->getUser())
-        {
+        if (!$data->getUser()) {
             $data->setUser($user);
         }
 
@@ -1138,20 +1126,16 @@ class AjaxController extends BaseFilterController
         $handlingMessage->setCreatedate($nextDatetime);
         $handlingMessage->setCreatedatetime(new \DateTime());
 
-        if (isset($formData['userNext']) && $formData['userNext'])
-        {
+        if (isset($formData['userNext']) && $formData['userNext']) {
             /** @var UserRepository $ur */
             $ur = $this->get('sd_user.repository');
 
             $userNext = $ur->find($formData['userNext']);
 
-            if ($userNext)
-            {
+            if ($userNext) {
                 $handlingMessage->setUser($userNext);
             }
-        }
-        else
-        {
+        } else {
             $handlingMessage->setUser($user);
         }
 
@@ -1347,7 +1331,7 @@ class AjaxController extends BaseFilterController
     {
         $params = $this->get('request')->request->get('params');
 
-        $method = $params['model'] . 'Delete';
+        $method = lcfirst($params['model']) . 'Delete';
 
         $this->$method($params);
 
@@ -1361,7 +1345,7 @@ class AjaxController extends BaseFilterController
      *
      * @return void
      */
-    public function OrganizationUserDelete($params)
+    public function organizationUserDelete($params)
     {
         $organizationId = $params['organizationId'];
         $userId = $params['userId'];
@@ -1388,7 +1372,7 @@ class AjaxController extends BaseFilterController
      *
      * @return void
      */
-    public function HandlingUserDelete($params)
+    public function handlingUserDelete($params)
     {
         $handlingId = $params['handlingId'];
         $userId = $params['userId'];
@@ -1415,7 +1399,7 @@ class AjaxController extends BaseFilterController
      *
      * @return void
      */
-    public function DopDogovorDelete($params)
+    public function dopDogovorDelete($params)
     {
         $id = $params['id'];
 
@@ -1436,7 +1420,7 @@ class AjaxController extends BaseFilterController
      *
      * @return void
      */
-    public function DogovorDepartmentDelete($params)
+    public function dogovorDepartmentDelete($params)
     {
         $id = $params['id'];
 
@@ -1457,7 +1441,7 @@ class AjaxController extends BaseFilterController
      *
      * @return void
      */
-    public function ModelContactDelete($params)
+    public function modelContactDelete($params)
     {
         $id = $params['id'];
 
@@ -1503,7 +1487,7 @@ class AjaxController extends BaseFilterController
 
         $validator = $this->get('validator');
 
-        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
         $errors = $validator->validate($object, array('edit'));
 
         if (sizeof($errors)) {
@@ -1536,18 +1520,13 @@ class AjaxController extends BaseFilterController
         $result = $object->getResult();
         $status = $object->getStatus();
 
-        if ($result && $result->getProgress())
-        {
+        if ($result && $result->getProgress()) {
             $return['handling']['progress'] = $result->getProgress();
             $return['handling']['progressString'] = $result->getPercentageString();
-        }
-        elseif ($status && $status->getProgress())
-        {
+        } elseif ($status && $status->getProgress()) {
             $return['handling']['progress'] = $status->getProgress();
             $return['handling']['progressString'] = $status->getPercentageString();
-        }
-        else
-        {
+        } else {
             $return['handling']['progress'] = null;
             $return['handling']['progressString'] = null;
         }
@@ -1587,14 +1566,13 @@ class AjaxController extends BaseFilterController
 
         $validator = $this->get('validator');
 
-        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
         $errors = $validator->validate($object, array('edit'));
 
         if (sizeof($errors)) {
             $return = $this->getErrorByField($errors, $name);
 
-            if ($return)
-            {
+            if ($return) {
                 return new Response($return, 406);
             }
         }
@@ -1698,7 +1676,7 @@ class AjaxController extends BaseFilterController
             ->getRepository('ListsHandlingBundle:Handling')
             ->find($pk);
 
-        $handlingServices= $this->getDoctrine()
+        $handlingServices = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingService')
             ->findAll();
 
@@ -1712,7 +1690,7 @@ class AjaxController extends BaseFilterController
 
         $validator = $this->get('validator');
 
-        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
         $errors = $validator->validate($object, array('edit'));
 
         if (sizeof($errors)) {
@@ -1769,7 +1747,7 @@ class AjaxController extends BaseFilterController
 
         $validator = $this->get('validator');
 
-        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
         $errors = $validator->validate($object, array('edit'));
 
         if (sizeof($errors)) {
@@ -1797,8 +1775,10 @@ class AjaxController extends BaseFilterController
     /**
      * Adds children to {formName}ProcessDefaults depending on defaults in request
      *
-     * @param Form $form
+     * @param Form    $form
      * @param mixed[] $defaultData
+     *
+     * @return void
      */
     public function handlingMessageFormProcessDefaults($form, $defaultData)
     {
@@ -1836,7 +1816,7 @@ class AjaxController extends BaseFilterController
                             ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
                             ->setParameter(':modelId', $organizationId)
                             ->setParameter(':ownerIds', $userIds);
-                    }
+                }
             ));
 
         $form
@@ -1854,20 +1834,20 @@ class AjaxController extends BaseFilterController
                             ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
                             ->setParameter(':modelId', $organizationId)
                             ->setParameter(':ownerIds', $userIds);
-                    }
+                }
             ));
 
         $form
             ->add('status', 'entity', array(
-            'class' => 'ListsHandlingBundle:HandlingStatus',
-            'data' => $handling->getStatus(),
-            'empty_value' => '',
-            'mapped' => false,
-            'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingStatusRepository $repository) {
-                    return $repository->createQueryBuilder('s')
-                        ->orderBy('s.sortorder', 'ASC');
+                'class' => 'ListsHandlingBundle:HandlingStatus',
+                'data' => $handling->getStatus(),
+                'empty_value' => '',
+                'mapped' => false,
+                'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingStatusRepository $repository) {
+                        return $repository->createQueryBuilder('s')
+                            ->orderBy('s.sortorder', 'ASC');
                 }
-        ));
+            ));
 
         $form
             ->add('mindate', 'hidden', array(
@@ -1921,6 +1901,13 @@ class AjaxController extends BaseFilterController
         return new Response(json_encode($result));
     }
 
+    /**
+     * processHandlingMoreInfo
+     *
+     * @param mixed[] $moreInfoObjects
+     *
+     * @return mixed[]
+     */
     public function processHandlingMoreInfo($moreInfoObjects)
     {
         $result = array();
@@ -1940,6 +1927,14 @@ class AjaxController extends BaseFilterController
      * Saves organizationChildForm
      *
      * processes setting child organization
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @throws \Exception
+     *
+     * @return boolean
      */
     public function organizationChildFormSave(Form $form, User $user, Request $request)
     {
@@ -2029,7 +2024,13 @@ class AjaxController extends BaseFilterController
             ));
 
             // Departments Update
-            $sql = "UPDATE departments set organization_id = :organizationId where organization_id = :organizationChildId";
+            $sql = "UPDATE
+                departments
+            SET
+                organization_id = :organizationId
+            WHERE
+                organization_id = :organizationChildId";
+
             $statement = $connection->prepare($sql);
             $statement->execute(array(
                 ':organizationId' => $organizationId,
@@ -2125,6 +2126,15 @@ class AjaxController extends BaseFilterController
         return true;
     }
 
+    /**
+     * changePasswordFormSave
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
     public function changePasswordFormSave($form, $user, $request)
     {
         $data = $form->getData();
@@ -2143,6 +2153,12 @@ class AjaxController extends BaseFilterController
 
     /**
      * Saves dop dogovor ajax form
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
      */
     public function dopDogovorFormSave($form, $user, $request)
     {
@@ -2178,6 +2194,8 @@ class AjaxController extends BaseFilterController
      *
      * @param Form    $form
      * @param mixed[] $defaultData
+     *
+     * @return void
      */
     public function dogovorDepartmentFormProcessDefaults(Form $form, $defaultData)
     {
@@ -2198,7 +2216,7 @@ class AjaxController extends BaseFilterController
                         return $repository->createQueryBuilder('dd')
                             ->where('dd.dogovorId = :dogovorId')
                             ->setParameter(':dogovorId', $dogovorId);
-                    }
+                }
             ));
 
         /** @var DepartmentsRepository $dr */

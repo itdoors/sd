@@ -4,6 +4,9 @@ namespace Lists\OrganizationBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class SalesAdminController
+ */
 class SalesAdminController extends SalesDispatcherController
 {
     protected $filterNamespace = 'organization.sales.admin.filters';
@@ -12,6 +15,9 @@ class SalesAdminController extends SalesDispatcherController
     protected $baseRoutePrefix = 'sales_admin';
     protected $baseTemplate = 'SalesAdmin';
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction()
     {
         $page = $this->get('request')->query->get('page', 1);

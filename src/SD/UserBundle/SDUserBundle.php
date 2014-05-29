@@ -4,10 +4,17 @@ namespace SD\UserBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * SDUserBundle
+ */
 class SDUserBundle extends Bundle
 {
-  public function getParent()
-  {
-    return 'FOSUserBundle';
-  }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getParent()
+    {
+        return 'FOSUserBundle';
+    }
 }

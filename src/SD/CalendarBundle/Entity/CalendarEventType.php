@@ -2,8 +2,6 @@
 
 namespace SD\CalendarBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * CalendarEventType
  */
@@ -34,11 +32,10 @@ class CalendarEventType
      */
     private $modelName;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -49,19 +46,20 @@ class CalendarEventType
      * Set name
      *
      * @param string $name
+     *
      * @return CalendarEventType
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -72,19 +70,20 @@ class CalendarEventType
      * Set color
      *
      * @param string $color
+     *
      * @return CalendarEventType
      */
     public function setColor($color)
     {
         $this->color = $color;
-    
+
         return $this;
     }
 
     /**
      * Get color
      *
-     * @return string 
+     * @return string
      */
     public function getColor()
     {
@@ -95,19 +94,20 @@ class CalendarEventType
      * Set slug
      *
      * @param string $slug
+     *
      * @return CalendarEventType
      */
     public function setSlug($slug)
     {
         $this->slug = $slug;
-    
+
         return $this;
     }
 
     /**
      * Get slug
      *
-     * @return string 
+     * @return string
      */
     public function getSlug()
     {
@@ -118,19 +118,20 @@ class CalendarEventType
      * Set modelName
      *
      * @param string $modelName
+     *
      * @return CalendarEventType
      */
     public function setModelName($modelName)
     {
         $this->modelName = $modelName;
-    
+
         return $this;
     }
 
     /**
      * Get modelName
      *
-     * @return string 
+     * @return string
      */
     public function getModelName()
     {

@@ -2,8 +2,9 @@
 
 namespace Lists\OrganizationBundle\Form;
 
-use Symfony\Component\Form\FormBuilderInterface;
-
+/**
+ * Class OrganizationSalesAdminFilterFormType
+ */
 class OrganizationSalesAdminFilterFormType extends OrganizationSalesDispatcherFilterFormType
 {
     /**

@@ -13,14 +13,19 @@ use Doctrine\ORM\Query;
  */
 class HandlingRepository extends EntityRepository
 {
+    /**
+     * @param int[]   $userIds
+     * @param mixed[] $filters
+     *
+     * @return Query
+     */
     public function getAllForSalesQuery($userIds, $filters)
     {
-        if (!is_array($userIds) && $userIds)
-        {
+        if (!is_array($userIds) && $userIds) {
             $userIds = array($userIds);
         }
 
-        /** @var \Doctrine\ORM\QueryBuilder $sql*/
+        /** @var \Doctrine\ORM\QueryBuilder $sql */
         $sql = $this->createQueryBuilder('h');
 
         /** @var \Doctrine\ORM\QueryBuilder $sqlCount */
@@ -32,8 +37,7 @@ class HandlingRepository extends EntityRepository
         $this->processBaseQuery($sql);
         $this->processBaseQuery($sqlCount);
 
-        if (sizeof($userIds))
-        {
+        if (sizeof($userIds)) {
             $this->processUserQuery($sql, $userIds);
             $this->processUserQuery($sqlCount, $userIds);
         }
@@ -75,7 +79,8 @@ class HandlingRepository extends EntityRepository
             ->addSelect('status.progress as progress')
             ->addSelect('result.percentageString as resultPercentageString')
             ->addSelect('result.progress as resultProgress')
-            ->addSelect("
+            ->addSelect(
+                "
                 array_to_string(
                     ARRAY(
                         SELECT
@@ -85,9 +90,10 @@ class HandlingRepository extends EntityRepository
                         LEFT JOIN u.handlings hu
                         WHERE hu.id = h.id
                     ), ','
-                ) as fullNames
-            ")
-            ->addSelect("
+                ) as fullNames"
+            )
+            ->addSelect(
+                "
                   array_to_string(
                      ARRAY(
                         SELECT
@@ -97,10 +103,9 @@ class HandlingRepository extends EntityRepository
                         LEFT JOIN hs.handlings handlings
                         WHERE h.id = handlings.id
                      ), ','
-                   ) as serviceList
-           ");
+                   ) as serviceList"
+            );
     }
-
 
     /**
      * Processes sql query. adding select
@@ -135,7 +140,7 @@ class HandlingRepository extends EntityRepository
      * Processes sql query. adding users query
      *
      * @param \Doctrine\ORM\QueryBuilder $sql
-     * @param int[] $userIds
+     * @param int[]                      $userIds
      */
     public function processUserQuery($sql, $userIds)
     {
@@ -160,21 +165,17 @@ class HandlingRepository extends EntityRepository
      * Processes sql query depending on filters
      *
      * @param \Doctrine\ORM\QueryBuilder $sql
-     * @param mixed[] $filters
+     * @param mixed[]                    $filters
      */
     public function processFilters(\Doctrine\ORM\QueryBuilder $sql, $filters)
     {
-        if (sizeof($filters))
-        {
+        if (sizeof($filters)) {
 
-            foreach($filters as $key => $value)
-            {
-                if (!$value)
-                {
+            foreach ($filters as $key => $value) {
+                if (!$value) {
                     continue;
                 }
-                switch($key)
-                {
+                switch ($key) {
                     case 'organization_id':
                         $sql
                             ->andWhere("h.organization_id = :organizationId");
@@ -182,24 +183,21 @@ class HandlingRepository extends EntityRepository
                         $sql->setParameter(':organizationId', $value);
                         break;
                     case 'scope':
-                        if (isset($value[0]) && !$value[0])
-                        {
+                        if (isset($value[0]) && !$value[0]) {
                             break;
                         }
                         $sql->andWhere('scope.id in (:scopeIds)');
                         $sql->setParameter(':scopeIds', $value);
                         break;
                     case 'city':
-                        if (isset($value[0]) && !$value[0])
-                        {
+                        if (isset($value[0]) && !$value[0]) {
                             break;
                         }
                         $sql->andWhere('city.id in (:cityIds)');
                         $sql->setParameter(':cityIds', $value);
                         break;
                     case 'users':
-                        if (isset($value[0]) && !$value[0])
-                        {
+                        if (isset($value[0]) && !$value[0]) {
                             break;
                         }
                         $sql->andWhere('users.id in (:userFilterIds)');
@@ -234,15 +232,21 @@ class HandlingRepository extends EntityRepository
         }
     }
 
+    /**
+     * @param int $id
+     *
+     * @return mixed
+     */
     public function getHandlingShow($id)
     {
-       return $this->createQueryBuilder('h')
-           ->select('h')
-           ->addSelect('o.name as organizationName')
-           ->addSelect('o.id as organizationId')
-           ->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as creatorFullName")
-           ->addSelect("CONCAT(CONCAT(closer.lastName, ' '), closer.firstName) as closerFullname")
-           ->addSelect("
+        return $this->createQueryBuilder('h')
+            ->select('h')
+            ->addSelect('o.name as organizationName')
+            ->addSelect('o.id as organizationId')
+            ->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as creatorFullName")
+            ->addSelect("CONCAT(CONCAT(closer.lastName, ' '), closer.firstName) as closerFullname")
+            ->addSelect(
+                "
                   array_to_string(
                      ARRAY(
                         SELECT
@@ -252,9 +256,10 @@ class HandlingRepository extends EntityRepository
                         LEFT JOIN hsi.handlings handlingsi
                         WHERE h.id = handlingsi.id
                      ), ','
-                   ) as serviceIds
-           ")
-           ->addSelect("
+                   ) as serviceIds"
+            )
+            ->addSelect(
+                "
                   array_to_string(
                      ARRAY(
                         SELECT
@@ -264,26 +269,31 @@ class HandlingRepository extends EntityRepository
                         LEFT JOIN hs.handlings handlings
                         WHERE h.id = handlings.id
                      ), ','
-                   ) as serviceList
-           ")
-           ->addSelect('h.closedatetime as closedatetime')
-           ->addSelect('status.percentageString as percentageString')
-           ->addSelect('status.progress as progress')
-           ->addSelect('result.slug as resultSlug')
-           ->addSelect('result.percentageString as resultPercentageString')
-           ->addSelect('result.progress as resultProgress')
-           ->leftJoin('h.organization', 'o')
-           ->leftJoin('h.type', 'type')
-           ->leftJoin('h.status', 'status')
-           ->leftJoin('h.result', 'result')
-           ->leftJoin('h.user', 'u')
-           ->leftJoin('h.closer', 'closer')
-           ->where('h.id = :id')
-           ->setParameter(':id', $id)
-           ->getQuery()
-           ->getSingleResult();
+                   ) as serviceList"
+            )
+            ->addSelect('h.closedatetime as closedatetime')
+            ->addSelect('status.percentageString as percentageString')
+            ->addSelect('status.progress as progress')
+            ->addSelect('result.slug as resultSlug')
+            ->addSelect('result.percentageString as resultPercentageString')
+            ->addSelect('result.progress as resultProgress')
+            ->leftJoin('h.organization', 'o')
+            ->leftJoin('h.type', 'type')
+            ->leftJoin('h.status', 'status')
+            ->leftJoin('h.result', 'result')
+            ->leftJoin('h.user', 'u')
+            ->leftJoin('h.closer', 'closer')
+            ->where('h.id = :id')
+            ->setParameter(':id', $id)
+            ->getQuery()
+            ->getSingleResult();
     }
 
+    /**
+     * @param int $handlingId
+     *
+     * @return mixed
+     */
     public function getOrganizationByHandlingId($handlingId)
     {
         $sql = $this->createQueryBuilder('h')
@@ -306,12 +316,12 @@ class HandlingRepository extends EntityRepository
     {
         if (isset($filters['withDaterange']) &&
             isset($filters['daterange']['start']) &&
-            isset($filters['daterange']['end']))
-        {
+            isset($filters['daterange']['end'])
+        ) {
             if ($filters['daterange']['start'] &&
                 $filters['daterange']['end'] &&
-                $filters['withDaterange'])
-            {
+                $filters['withDaterange']
+            ) {
                 return true;
             }
         }
@@ -322,14 +332,13 @@ class HandlingRepository extends EntityRepository
     /**
      * Returns query of last manager messages
      *
-     * @param $filters
+     * @param mixed[] $filters
      *
      * @return Query
      */
     public function getReportLastMessages($filters = array())
     {
-        if (!isset($filters['userId']) || !$filters['userId'])
-        {
+        if (!isset($filters['userId']) || !$filters['userId']) {
             return array();
         }
 
@@ -342,8 +351,7 @@ class HandlingRepository extends EntityRepository
             ':userId' => $userId
         );
 
-        if (!$isInterval)
-        {
+        if (!$isInterval) {
             return $this->getReportLastMessagesResults($params);
 
         }
@@ -351,8 +359,11 @@ class HandlingRepository extends EntityRepository
         $params[':startdate'] = $filters['daterange']['start'];
         $params[':enddate'] = $filters['daterange']['end'];
 
-        $prevMessages = $this->toKeyValue('handlingId', 'itself', $this->getReportIntervalPrevMessagesResults($params));
-        $futureMessages = $this->toKeyValue('handlingId', 'itself', $this->getReportIntervalFutureMessagesResults($params));
+        $prevMessages =
+            $this->toKeyValue('handlingId', 'itself', $this->getReportIntervalPrevMessagesResults($params));
+
+        $futureMessages =
+            $this->toKeyValue('handlingId', 'itself', $this->getReportIntervalFutureMessagesResults($params));
 
         $results = $this->mergeMessages($prevMessages, $futureMessages);
 
@@ -376,12 +387,34 @@ class HandlingRepository extends EntityRepository
                 hm1.createdate as handlingMessageCreatedate1,
                 hm1.description as handlingMessageDescription1,
                 hm1.user_id as handlingMessageUserId1,
-                CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(contact1.lastName, ' '), contact1.firstName), ' | '), contact1.phone1), ' | '), contact1.phone2)  as handlingMessageContact1,
+                CONCAT(
+                  CONCAT(
+                    CONCAT(
+                      CONCAT(
+                        CONCAT(
+                          CONCAT(contact1.lastName, ' ')
+                          , contact1.firstName
+                        ), ' | '
+                      ), contact1.phone1
+                    ), ' | '
+                  ), contact1.phone2
+                )  as handlingMessageContact1,
                 ht2.name as handlingMessageTypeName2,
                 hm2.createdate as handlingMessageCreatedate2,
                 hm2.description as handlingMessageDescription2,
                 hm2.user_id as handlingMessageUserId2,
-                CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(contact2.lastName, ' '), contact2.firstName), ' | '), contact2.phone1), ' | '), contact2.phone2)  as handlingMessageContact2
+                CONCAT(
+                  CONCAT(
+                    CONCAT(
+                      CONCAT(
+                        CONCAT(
+                          CONCAT(contact2.lastName, ' ')
+                          , contact2.firstName
+                        ), ' | '
+                      ), contact2.phone1
+                    ), ' | '
+                  ), contact2.phone2
+                )  as handlingMessageContact2
             FROM
                 ListsHandlingBundle:Handling h
                 LEFT JOIN h.organization o
@@ -448,12 +481,34 @@ class HandlingRepository extends EntityRepository
                 hm1.createdate as handlingMessageCreatedate1,
                 hm1.description as handlingMessageDescription1,
                 hm1.user_id as handlingMessageUserId1,
-                CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(contact1.lastName, ' '), contact1.firstName), ' | '), contact1.phone1), ' | '), contact1.phone2)  as handlingMessageContact1,
+                CONCAT(
+                  CONCAT(
+                    CONCAT(
+                      CONCAT(
+                        CONCAT(
+                          CONCAT(contact1.lastName, ' ')
+                          , contact1.firstName
+                        ), ' | '
+                      ), contact1.phone1
+                    ), ' | '
+                  ), contact1.phone2
+                ) as handlingMessageContact1,
                 ht2.name as handlingMessageTypeName2,
                 hm2.createdate as handlingMessageCreatedate2,
                 hm2.description as handlingMessageDescription2,
                 hm2.user_id as handlingMessageUserId2,
-                CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(contact2.lastName, ' '), contact2.firstName), ' | '), contact2.phone1), ' | '), contact2.phone2)  as handlingMessageContact2
+                CONCAT(
+                  CONCAT(
+                    CONCAT(
+                      CONCAT(
+                        CONCAT(
+                          CONCAT(contact2.lastName, ' ')
+                          , contact2.firstName
+                        ), ' | '
+                      ), contact2.phone1
+                    ), ' | '
+                  ), contact2.phone2
+                )  as handlingMessageContact2
             FROM
                 ListsHandlingBundle:Handling h
                 LEFT JOIN h.organization o
@@ -523,12 +578,35 @@ class HandlingRepository extends EntityRepository
                 hm3.createdate as handlingMessageCreatedate1,
                 hm3.description as handlingMessageDescription1,
                 hm3.user_id as handlingMessageUserId1,
-                CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(contact3.lastName, ' '), contact3.firstName), ' | '), contact3.phone1), ' | '), contact3.phone2)  as handlingMessageContact1,
+                CONCAT(
+                  CONCAT(
+                    CONCAT(
+                      CONCAT(
+                        CONCAT(
+                          CONCAT(contact3.lastName, ' ')
+                          , contact3.firstName
+                        ), ' | '
+                      ), contact3.phone1
+                    ), ' | '
+                  ), contact3.phone2
+                )  as handlingMessageContact1,
                 ht4.name as handlingMessageTypeName2,
                 hm4.createdate as handlingMessageCreatedate2,
                 hm4.description as handlingMessageDescription2,
                 hm4.user_id as handlingMessageUserId2,
-                CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(contact4.lastName, ' '), contact4.firstName), ' | '), contact4.phone1), ' | '), contact4.phone2)  as handlingMessageContact2
+                CONCAT(
+                  CONCAT(
+                    CONCAT(
+                      CONCAT(
+                        CONCAT(
+                          CONCAT(contact4.lastName, ' '), contact4.firstName)
+                          , ' | '
+                        )
+                        , contact4.phone1
+                      )
+                      , ' | '
+                    ), contact4.phone2
+                  )  as handlingMessageContact2
             FROM
                 ListsHandlingBundle:Handling h
                 LEFT JOIN h.organization o
@@ -585,8 +663,8 @@ class HandlingRepository extends EntityRepository
     /**
      * toKeyValue
      *
-     * @param string $key
-     * @param string $value
+     * @param string  $key
+     * @param string  $value
      * @param mixed[] $arr
      *
      * @return mixed[]
@@ -597,8 +675,7 @@ class HandlingRepository extends EntityRepository
 
         $isItself = $value == 'itself';
 
-        foreach ($arr as $ar)
-        {
+        foreach ($arr as $ar) {
             $v = $isItself ? $ar : $arr[$value];
 
             $result[$ar[$key]] = $v;
@@ -618,15 +695,11 @@ class HandlingRepository extends EntityRepository
     protected function mergeMessages($prevMessages, $futureMessages)
     {
         foreach ($prevMessages as $key => $prevMessage) {
-            if (isset($futureMessages[$key]['handlingMessageCreatedate2']))
-            {
-                if ($prevMessage['handlingMessageCreatedate2'] > $futureMessages[$key]['handlingMessageCreatedate2'])
-                {
+            if (isset($futureMessages[$key]['handlingMessageCreatedate2'])) {
+                if ($prevMessage['handlingMessageCreatedate2'] > $futureMessages[$key]['handlingMessageCreatedate2']) {
                     $futureMessages[$key] = $prevMessage;
                 }
-            }
-            else
-            {
+            } else {
                 $futureMessages[$key] = $prevMessage;
             }
         }
@@ -637,13 +710,17 @@ class HandlingRepository extends EntityRepository
     }
 
     /**
-     * Sorting function
+     * @param mixed[] $a
+     * @param mixed[] $b
+     *
+     * @return int
      */
     public function createdateSort($a, $b)
     {
-        if($a['handlingMessageCreatedate2'] == $b['handlingMessageCreatedate2']) {
+        if ($a['handlingMessageCreatedate2'] == $b['handlingMessageCreatedate2']) {
             return 0;
         }
+
         return ($a['handlingMessageCreatedate2'] < $b['handlingMessageCreatedate2']) ? 1 : -1;
     }
 }

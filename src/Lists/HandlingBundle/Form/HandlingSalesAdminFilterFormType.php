@@ -2,6 +2,9 @@
 
 namespace Lists\HandlingBundle\Form;
 
+/**
+ * Class HandlingSalesAdminFilterFormType
+ */
 class HandlingSalesAdminFilterFormType extends HandlingSalesDispatcherFilterFormType
 {
     /**

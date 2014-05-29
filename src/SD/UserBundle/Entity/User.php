@@ -14,10 +14,14 @@ use FOS\UserBundle\Model\User as BaseUser;
  */
 class User extends BaseUser
 {
-  public function __construct()
-  {
-    parent::__construct();
-  }
+    /**
+     * __construct()
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
      * @var string
      */
@@ -63,24 +67,24 @@ class User extends BaseUser
      */
     protected $groups;
 
-
     /**
      * Set id
      *
      * @param string $id
+     *
      * @return User
      */
     public function setId($id)
     {
         $this->id = $id;
-    
+
         return $this;
     }
 
     /**
      * Get id
      *
-     * @return string 
+     * @return string
      */
     public function getId()
     {
@@ -91,19 +95,20 @@ class User extends BaseUser
      * Set firstName
      *
      * @param string $firstName
+     *
      * @return User
      */
     public function setFirstName($firstName)
     {
         $this->firstName = $firstName;
-    
+
         return $this;
     }
 
     /**
      * Get firstName
      *
-     * @return string 
+     * @return string
      */
     public function getFirstName()
     {
@@ -114,19 +119,20 @@ class User extends BaseUser
      * Set lastName
      *
      * @param string $lastName
+     *
      * @return User
      */
     public function setLastName($lastName)
     {
         $this->lastName = $lastName;
-    
+
         return $this;
     }
 
     /**
      * Get lastName
      *
-     * @return string 
+     * @return string
      */
     public function getLastName()
     {
@@ -137,19 +143,20 @@ class User extends BaseUser
      * Set middleName
      *
      * @param string $middleName
+     *
      * @return User
      */
     public function setMiddleName($middleName)
     {
         $this->middleName = $middleName;
-    
+
         return $this;
     }
 
     /**
      * Get middleName
      *
-     * @return string 
+     * @return string
      */
     public function getMiddleName()
     {
@@ -160,19 +167,20 @@ class User extends BaseUser
      * Set position
      *
      * @param string $position
+     *
      * @return User
      */
     public function setPosition($position)
     {
         $this->position = $position;
-    
+
         return $this;
     }
 
     /**
      * Get position
      *
-     * @return string 
+     * @return string
      */
     public function getPosition()
     {
@@ -183,19 +191,20 @@ class User extends BaseUser
      * Set isBlocked
      *
      * @param boolean $isBlocked
+     *
      * @return User
      */
     public function setIsBlocked($isBlocked)
     {
         $this->isBlocked = $isBlocked;
-    
+
         return $this;
     }
 
     /**
      * Get isBlocked
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsBlocked()
     {
@@ -206,19 +215,20 @@ class User extends BaseUser
      * Set isFired
      *
      * @param boolean $isFired
+     *
      * @return User
      */
     public function setIsFired($isFired)
     {
         $this->isFired = $isFired;
-    
+
         return $this;
     }
 
     /**
      * Get isFired
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsFired()
     {
@@ -229,19 +239,20 @@ class User extends BaseUser
      * Set birthday
      *
      * @param \DateTime $birthday
+     *
      * @return User
      */
     public function setBirthday($birthday)
     {
         $this->birthday = $birthday;
-    
+
         return $this;
     }
 
     /**
      * Get birthday
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getBirthday()
     {
@@ -252,30 +263,32 @@ class User extends BaseUser
      * Set salt
      *
      * @param string $salt
+     *
      * @return User
      */
     public function setSalt($salt)
     {
-      $this->salt = $salt;
+        $this->salt = $salt;
 
-      return $this;
+        return $this;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $organizations;
 
-
     /**
      * Add organizations
      *
      * @param \Lists\OrganizationBundle\Entity\Organization $organizations
+     *
      * @return User
      */
     public function addOrganization(\Lists\OrganizationBundle\Entity\Organization $organizations)
     {
         $this->organizations[] = $organizations;
-    
+
         return $this;
     }
 
@@ -292,28 +305,29 @@ class User extends BaseUser
     /**
      * Get organizations
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getOrganizations()
     {
         return $this->organizations;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $handlings;
 
-
     /**
      * Add handlings
      *
      * @param \Lists\HandlingBundle\Entity\Handling $handlings
+     *
      * @return User
      */
     public function addHandling(\Lists\HandlingBundle\Entity\Handling $handlings)
     {
         $this->handlings[] = $handlings;
-    
+
         return $this;
     }
 
@@ -330,7 +344,7 @@ class User extends BaseUser
     /**
      * Get handlings
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getHandlings()
     {
@@ -344,7 +358,7 @@ class User extends BaseUser
      */
     public function getFullname()
     {
-      return (string) sprintf('%s %s', $this->getLastName(), $this->getFirstName());
+        return (string) sprintf('%s %s', $this->getLastName(), $this->getFirstName());
     }
 
     /**
@@ -354,7 +368,7 @@ class User extends BaseUser
      */
     public function __toString()
     {
-      return (string) $this->getFullname();
+        return (string) $this->getFullname();
     }
 
     /**
@@ -362,29 +376,30 @@ class User extends BaseUser
      */
     private $staff;
 
-
     /**
      * Set staff
      *
      * @param \SD\UserBundle\Entity\Staff $staff
+     *
      * @return User
      */
     public function setStaff(\SD\UserBundle\Entity\Staff $staff = null)
     {
         $this->staff = $staff;
-    
+
         return $this;
     }
 
     /**
      * Get staff
      *
-     * @return \SD\UserBundle\Entity\Staff 
+     * @return \SD\UserBundle\Entity\Staff
      */
     public function getStaff()
     {
         return $this->staff;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
@@ -394,12 +409,13 @@ class User extends BaseUser
      * Add teams
      *
      * @param \Lists\TeamBundle\Entity\Team $teams
+     *
      * @return User
      */
     public function addTeam(\Lists\TeamBundle\Entity\Team $teams)
     {
         $this->teams[] = $teams;
-    
+
         return $this;
     }
 
@@ -416,7 +432,7 @@ class User extends BaseUser
     /**
      * Get teams
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTeams()
     {

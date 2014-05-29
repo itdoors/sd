@@ -4,28 +4,32 @@ namespace Lists\HandlingBundle\Form;
 
 use Lists\HandlingBundle\Entity\HandlingMessage;
 use SD\UserBundle\Entity\User;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\ExecutionContextInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 
-
+/**
+ * Class HandlingMessageFormType
+ */
 class HandlingMessageFormType extends AbstractType
 {
     protected $container;
 
-    public function __construct($container)
+    /**
+     * @param Container $container
+     */
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -73,14 +77,12 @@ class HandlingMessageFormType extends AbstractType
             ->add('handling_id', 'hidden')
             ->add('mindate', 'hidden', array(
                 'mapped' => false
-            ))
-        ;
+            ));
 
         /** @var User $user */
         $user = $container->get('security.context')->getToken()->getUser();
 
-        if ($user->hasRole('ROLE_SALESADMIN'))
-        {
+        if ($user->hasRole('ROLE_SALESADMIN')) {
             $builder
                 ->add('user', 'hidden_entity', array(
                     'entity' => 'SDUserBundle:User',
@@ -101,8 +103,7 @@ class HandlingMessageFormType extends AbstractType
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
-            function(FormEvent $event) use ($container)
-            {
+            function (FormEvent $event) use ($container) {
                 $data = $event->getData();
 
                 $form = $event->getForm();
@@ -110,46 +111,45 @@ class HandlingMessageFormType extends AbstractType
                 $currentDatetime = new \DateTime($data['createdate']);
                 $nextDatetime = new \DateTime($data['nextcreatedate']);
 
-                if ($currentDatetime > $nextDatetime)
-                {
+                if ($currentDatetime > $nextDatetime) {
                     $translator = $container->get('translator');
 
-                    $msg = $translator->trans("Event next date can't be greater then current event date", array(), 'ListsHandlingBundle');
+                    $msgString = "Event next date can't be greater then current event date";
+
+                    $msg = $translator->trans($msgString, array(), 'ListsHandlingBundle');
 
                     $form->addError(new FormError($msg));
                 }
-            });
-
-		$builder->addEventListener(
-			FormEvents::PRE_SUBMIT,
-			function(FormEvent $event) use ($container)
-			{
-				$data = $event->getData();
-
-				$form = $event->getForm();
-
-				if (!$data['nextcreatedate'])
-				{
-					$translator = $container->get('translator');
-
-					$msg = $translator->trans("Event next date can't be empty", array(), 'ListsHandlingBundle');
-
-					$form->addError(new FormError($msg));
-				}
-			});
+            }
+        );
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
-            function(FormEvent $event) use ($container)
-            {
+            function (FormEvent $event) use ($container) {
+                $data = $event->getData();
+
+                $form = $event->getForm();
+
+                if (!$data['nextcreatedate']) {
+                    $translator = $container->get('translator');
+
+                    $msg = $translator->trans("Event next date can't be empty", array(), 'ListsHandlingBundle');
+
+                    $form->addError(new FormError($msg));
+                }
+            }
+        );
+
+        $builder->addEventListener(
+            FormEvents::PRE_SUBMIT,
+            function (FormEvent $event) use ($container) {
                 $data = $event->getData();
 
                 $form = $event->getForm();
 
                 $currentDatetime = new \DateTime($data['createdate']);
 
-                if (isset($data['handling_id']) && $data['handling_id'])
-                {
+                if (isset($data['handling_id']) && $data['handling_id']) {
                     $handlingId = $data['handling_id'];
 
                     /** @var \Lists\HandlingBundle\Entity\Handling $handling */
@@ -157,15 +157,19 @@ class HandlingMessageFormType extends AbstractType
                         ->getRepository('ListsHandlingBundle:Handling')
                         ->find($handlingId);
 
-                    if ($handling)
-                    {
-                        if ($handling->getCreatedate() > $currentDatetime || $handling->getCreatedatetime() > $currentDatetime)
-                        {
+                    if ($handling) {
+                        if ($handling->getCreatedate() > $currentDatetime ||
+                            $handling->getCreatedatetime() > $currentDatetime
+                        ) {
                             $translator = $container->get('translator');
 
-                            $creationDate = $handling->getCreatedate()  ? $handling->getCreatedate() : $handling->getCreatedatetime();
+                            $creationDate = $handling->getCreatedate()  ?
+                                $handling->getCreatedate() :
+                                $handling->getCreatedatetime();
 
-                            $msg = $translator->trans("Current event date can't be less then handling creation date (%date%)", array(
+                            $msgString = "Current event date can't be less then handling creation date (%date%)";
+
+                            $msg = $translator->trans($msgString, array(
                                 '%date%' => $creationDate->format('d.m.y')
                             ), 'ListsHandlingBundle');
 
@@ -173,7 +177,8 @@ class HandlingMessageFormType extends AbstractType
                         }
                     }
                 }
-            });
+            }
+        );
     }
 
     /**

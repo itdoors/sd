@@ -5,36 +5,39 @@ namespace Lists\TeamBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class SalesAdminController
+ */
 class SalesAdminController extends SalesController
 {
     protected $baseRoute = 'lists_sales_admin_team_index';
     protected $baseRoutePrefix = 'sales_admin';
     protected $baseTemplate = 'SalesAdmin';
 
-
+    /**
+     * @param int     $id
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function editAction($id, Request $request)
     {
-        if ($id && $id !=0 )
-        {
+        if ($id && $id !=0) {
             $team = $this->getDoctrine()->getRepository('ListsTeamBundle:Team')
                 ->find($id);
 
             $form = $this->createForm('teamForm', $team);
-        }
-        else
-        {
+        } else {
             $form = $this->createForm('teamForm');
         }
 
         $form->handleRequest($request);
 
-        if ($form->isValid())
-        {
+        if ($form->isValid()) {
             /** @var \Lists\TeamBundle\Entity\Team $object*/
             $object = $form->getData();
 
-            if (!$object->getId())
-            {
+            if (!$object->getId()) {
                 $object->setOwner($this->getUser());
             }
 

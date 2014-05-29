@@ -72,7 +72,7 @@
 					{
 						'action': path('lists_' ~ baseRoutePrefix ~ '_organization_filter'),
 						'attr': {'novalidate': 'novalidate', 'class': 'form-inline', 'role': 'form'}
-					}) 
+					})
 				}}
 					{{ form_errors(filterForm) }}
                     <div class="form-group col-md-3">
@@ -81,21 +81,21 @@
                     </div>
 					<div class="form-group col-md-3">
 						{#{{ form_label(filterForm.city, 'Enter City', {'attr': {'class': 'sr-only'}}) }}#}
-						{{ form_widget(filterForm.city, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter City', 'multiple': 'multiple'}}) }}					
+						{{ form_widget(filterForm.city, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter City', 'multiple': 'multiple'}}) }}
 					</div>
-					{# <div class="form-group col-md-3">	
+					{# <div class="form-group col-md-3">
 						{{ form_label(filterForm.region, 'Region', {'attr': {'class': 'sr-only'}}) }}
-						{{ form_widget(filterForm.region, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Region', 'multiple': 'multiple'}}) }}																										
-					
+						{{ form_widget(filterForm.region, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Region', 'multiple': 'multiple'}}) }}
+
 					</div>
 					#}
 					<div class="form-group col-md-2">
 						{#	{{ form_label(filterForm.scope, 'Scope', {'attr': {'class': 'sr-only'}}) }}  #}
-							{{ form_widget(filterForm.scope, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Scope', 'multiple': 'multiple'}}) }}																										
+							{{ form_widget(filterForm.scope, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Scope', 'multiple': 'multiple'}}) }}
 					</div>
-					<div class="form-group col-md-2">	
+					<div class="form-group col-md-2">
 						{# {{ form_label(filterForm.users, 'Manager', {'attr': {'class': 'sr-only'}}) }} #}
-						{{ form_widget(filterForm.users, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Manager', 'multiple': 'multiple'}}) }}																										
+						{{ form_widget(filterForm.users, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Manager', 'multiple': 'multiple'}}) }}
 					</div>
 					<div class="form-group col-md-2">
 						{{ form_widget(filterForm.save, { 'label': 'Filter', 'attr': {'class': 'btn green'}} ) }}

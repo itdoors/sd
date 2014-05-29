@@ -5,6 +5,9 @@ namespace Lists\OrganizationBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
 
+/**
+ * Class SalesController
+ */
 class SalesController extends BaseController
 {
     protected $filterNamespace = 'organization.sales.filters';
@@ -13,6 +16,9 @@ class SalesController extends BaseController
     protected $baseRoutePrefix = 'sales';
     protected $baseTemplate = 'Sales';
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction()
     {
         $page = $this->get('request')->query->get('page', 1);
@@ -38,17 +44,21 @@ class SalesController extends BaseController
             20
         );
 
-      return $this->render('ListsOrganizationBundle:' . $this->baseTemplate. ':index.html.twig', array(
-          'pagination' => $pagination,
-          'filterForm' => $filterForm->createView(),
-          'filterFormName' => $this->filterFormName,
-          'baseTemplate' => $this->baseTemplate,
-          'baseRoutePrefix' => $this->baseRoutePrefix,
-      ));
+        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':index.html.twig', array(
+            'pagination' => $pagination,
+            'filterForm' => $filterForm->createView(),
+            'filterFormName' => $this->filterFormName,
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix,
+        ));
     }
 
     /**
      * Executes new action
+     *
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function newAction(Request $request)
     {
@@ -56,8 +66,7 @@ class SalesController extends BaseController
 
         $form->handleRequest($request);
 
-        if ($form->isValid())
-        {
+        if ($form->isValid()) {
             /** @var \Lists\OrganizationBundle\Entity\Organization $organization */
             $organization = $form->getData();
 
@@ -85,6 +94,10 @@ class SalesController extends BaseController
 
     /**
      * Executes show action
+     *
+     * @param int $id
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function showAction($id)
     {
@@ -95,8 +108,7 @@ class SalesController extends BaseController
             ->getRepository('ListsOrganizationBundle:Organization')
             ->find($id);
 
-        if ($organization->getParent())
-        {
+        if ($organization->getParent()) {
             return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_organization_show', array(
                     'id' => $organization->getParentId()
                 )));
@@ -115,6 +127,10 @@ class SalesController extends BaseController
 
     /**
      * Renders organizationUsers list
+     *
+     * @param int $organizationId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function organizationUsersAction($organizationId)
     {
@@ -131,4 +147,3 @@ class SalesController extends BaseController
             ));
     }
 }
-

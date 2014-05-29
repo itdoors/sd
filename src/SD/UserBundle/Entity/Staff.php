@@ -2,8 +2,6 @@
 
 namespace SD\UserBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Staff
  */
@@ -34,11 +32,10 @@ class Staff
      */
     private $user;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -49,19 +46,20 @@ class Staff
      * Set mobilephone
      *
      * @param string $mobilephone
+     *
      * @return Staff
      */
     public function setMobilephone($mobilephone)
     {
         $this->mobilephone = $mobilephone;
-    
+
         return $this;
     }
 
     /**
      * Get mobilephone
      *
-     * @return string 
+     * @return string
      */
     public function getMobilephone()
     {
@@ -72,19 +70,20 @@ class Staff
      * Set description
      *
      * @param string $description
+     *
      * @return Staff
      */
     public function setDescription($description)
     {
         $this->description = $description;
-    
+
         return $this;
     }
 
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -95,19 +94,20 @@ class Staff
      * Set stuffclass
      *
      * @param string $stuffclass
+     *
      * @return Staff
      */
     public function setStuffclass($stuffclass)
     {
         $this->stuffclass = $stuffclass;
-    
+
         return $this;
     }
 
     /**
      * Get stuffclass
      *
-     * @return string 
+     * @return string
      */
     public function getStuffclass()
     {
@@ -118,19 +118,20 @@ class Staff
      * Set user
      *
      * @param \SD\UserBundle\Entity\User $user
+     *
      * @return Staff
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 
     /**
      * Get user
      *
-     * @return \SD\UserBundle\Entity\User 
+     * @return \SD\UserBundle\Entity\User
      */
     public function getUser()
     {

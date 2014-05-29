@@ -2,8 +2,6 @@
 
 namespace Lists\ContactBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * ModelContactType
  */
@@ -24,11 +22,10 @@ class ModelContactType
      */
     private $slug;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -39,19 +36,20 @@ class ModelContactType
      * Set name
      *
      * @param string $name
+     *
      * @return ModelContactType
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -62,19 +60,20 @@ class ModelContactType
      * Set slug
      *
      * @param string $slug
+     *
      * @return ModelContactType
      */
     public function setSlug($slug)
     {
         $this->slug = $slug;
-    
+
         return $this;
     }
 
     /**
      * Get slug
      *
-     * @return string 
+     * @return string
      */
     public function getSlug()
     {
@@ -90,6 +89,7 @@ class ModelContactType
     {
         return $this->getName();
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
@@ -102,17 +102,18 @@ class ModelContactType
     {
         $this->contacts = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Add contacts
      *
      * @param \Lists\ContactBundle\Entity\ModelContact $contacts
+     *
      * @return ModelContactType
      */
     public function addContact(\Lists\ContactBundle\Entity\ModelContact $contacts)
     {
         $this->contacts[] = $contacts;
-    
+
         return $this;
     }
 
@@ -129,7 +130,7 @@ class ModelContactType
     /**
      * Get contacts
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getContacts()
     {

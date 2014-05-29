@@ -37,3 +37,7 @@ it_doors_oper_schedule_table:
 it_doors_oper_schedule_day_info:
     pattern:  /oper/schedule/day/info/
     defaults: { _controller: ITDoorsOperBundle:OperSchedule:oneDayInfo }
+
+it_doors_oper_schedule_add_new_time:
+    pattern:  /oper/schedule/add/new/time
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:addNewTime }

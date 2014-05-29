@@ -1,6 +1,7 @@
 <?php
 
 namespace SD\CalendarBundle\Services;
+
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Translation\Translator;
 
@@ -9,8 +10,8 @@ use Symfony\Component\Translation\Translator;
  */
 class CalendarService
 {
-    CONST EVENT_TYPE_CHOICE_LAST = 'last';
-    CONST EVENT_TYPE_CHOICE_ALL = 'all';
+    const EVENT_TYPE_CHOICE_LAST = 'last';
+    const EVENT_TYPE_CHOICE_ALL = 'all';
 
     /**
      * @var Container $container
@@ -47,4 +48,3 @@ class CalendarService
         );
     }
 }
-
