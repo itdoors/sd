@@ -3,7 +3,7 @@
 /**
  * Command class for adding user to group
  */
-namespace Sd\UserBundle\Command;
+namespace SD\UserBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;

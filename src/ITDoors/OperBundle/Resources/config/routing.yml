@@ -41,3 +41,7 @@ it_doors_oper_schedule_day_info:
 it_doors_oper_schedule_add_new_time:
     pattern:  /oper/schedule/add/new/time
     defaults: { _controller: ITDoorsOperBundle:OperSchedule:addNewTime }
+
+it_doors_oper_schedule_table_row:
+    pattern:  /oper/schedule/table/row
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:scheduleTableRow }

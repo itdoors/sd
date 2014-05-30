@@ -102,7 +102,6 @@ class SDAccess
         }
     }
 
-
     /**
      * If users in handling user
      *

@@ -23,8 +23,6 @@ use Lists\OrganizationBundle\Entity\Organization;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
-use Lists\DepartmentBundle\Entity\DepartmentsTypeRepository;
-use Lists\MpkBundle\Entity\MpkRepository;
 use ITDoors\AjaxBundle\Controller\BaseFilterController;
 
 /**
@@ -227,7 +225,7 @@ class AjaxController extends BaseFilterController
      */
     public function cityByIdAction()
     {
-        $ids = explode (',',$this->get('request')->query->get('id'));
+        $ids = explode(',', $this->get('request')->query->get('id'));
 
         $cityList = $this->getDoctrine()
             ->getRepository('ListsCityBundle:City')
@@ -2299,8 +2297,8 @@ class AjaxController extends BaseFilterController
      *
      * @return string
      */
-
-    public function mpkAction() {
+    public function mpkAction()
+    {
         $searchText = $this->get('request')->query->get('query');
 
         $repository = $this->getDoctrine()
@@ -2322,9 +2320,9 @@ class AjaxController extends BaseFilterController
      *
      * @return string
      */
-    public function MpkByIdAction()
+    public function mpkByIdAction()
     {
-        $ids = explode(',',$this->get('request')->query->get('id'));
+        $ids = explode(',', $this->get('request')->query->get('id'));
 
         $mpkList = $this->getDoctrine()
             ->getRepository('ListsMpkBundle:Mpk')
@@ -2332,7 +2330,7 @@ class AjaxController extends BaseFilterController
 
         $result = array();
 
-        foreach($mpkList as $mpk) {
+        foreach ($mpkList as $mpk) {
             $result[] = $this->serializeObject($mpk);
         }
 
@@ -2345,8 +2343,8 @@ class AjaxController extends BaseFilterController
      *
      * @return string
      */
-
-    public function departmentTypeAction() {
+    public function departmentTypeAction()
+    {
         $searchText = $this->get('request')->query->get('query');
 
         $repository = $this->getDoctrine()
@@ -2370,7 +2368,7 @@ class AjaxController extends BaseFilterController
      */
     public function departmentTypeByIdAction()
     {
-        $ids = explode(',',$this->get('request')->query->get('id'));
+        $ids = explode(',', $this->get('request')->query->get('id'));
 
         $departmentTypeList = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentsType')
@@ -2392,7 +2390,8 @@ class AjaxController extends BaseFilterController
      * @return string
      */
 
-    public function regionAction() {
+    public function regionAction()
+    {
         $searchText = $this->get('request')->query->get('query');
 
         $repository = $this->getDoctrine()
@@ -2416,7 +2415,7 @@ class AjaxController extends BaseFilterController
      */
     public function regionByIdAction()
     {
-        $ids = explode(',',$this->get('request')->query->get('id'));
+        $ids = explode(',', $this->get('request')->query->get('id'));
 
         $regionList = $this->getDoctrine()
             ->getRepository('ListsRegionBundle:Region')
@@ -2437,7 +2436,8 @@ class AjaxController extends BaseFilterController
      *
      * @return string
      */
-    public function departmentStatusAction() {
+    public function departmentStatusAction()
+    {
         $searchText = $this->get('request')->query->get('query');
 
         $repository = $this->getDoctrine()
@@ -2511,7 +2511,7 @@ class AjaxController extends BaseFilterController
         $repository = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization');
 
-        $objects= $repository->SearchSelfOrganization($searchText);
+        $objects= $repository->searchSelfOrganization($searchText);
 
         $result = array();
 
@@ -2527,7 +2527,8 @@ class AjaxController extends BaseFilterController
      *
      * @return mixed[]
      */
-    public function editableDepartmentAction() {
+    public function editableDepartmentAction()
+    {
 
         $pk = $this->get('request')->request->get('pk');
         $name = $this->get('request')->request->get('name');
@@ -2544,31 +2545,25 @@ class AjaxController extends BaseFilterController
         if ($name == 'status') {
             if (!$value) {
                 $value = null;
-            }
-            else {
+            } else {
                 $value = $this->getDoctrine()
                     ->getRepository('ListsDepartmentBundle:DepartmentsStatus')
                     ->find($value);
             }
-        }
-        elseif ($name == 'opermanager') {
+        } elseif ($name == 'opermanager') {
             if (!$value) {
                 $value = null;
-            }
-            else {
+            } else {
                 $value = $this->getDoctrine()
                     ->getRepository('SDUserBundle:User')
                     ->find($value);
             }
-        }
-        elseif ($name == 'statusDate') {
+        } elseif ($name == 'statusDate') {
             $value = new \DateTime($value);
-        }
-        elseif ($name == 'type') {
+        } elseif ($name == 'type') {
             if (!$value) {
                 $value = null;
-            }
-            else {
+            } else {
                 $value = $this->getDoctrine()
                     ->getRepository('ListsDepartmentBundle:DepartmentsType')
                     ->find($value);
@@ -2599,7 +2594,7 @@ class AjaxController extends BaseFilterController
             $em->flush();
 
             $em->refresh($object);
-        } catch(\ErrorException $e) {
+        } catch (\ErrorException $e) {
             $return['error'] = $e->getMessage();
         }
 
@@ -2613,7 +2608,8 @@ class AjaxController extends BaseFilterController
      *
      * @return string
      */
-    public function departmentPeopleMpkAction() {
+    public function departmentPeopleMpkAction()
+    {
 
         $id = $this->getSessionValueByKey('idDepartment', null, 'oper.paginator.department.coworkers', 'param');
         $searchText = $this->get('request')->query->get('query');
@@ -2638,7 +2634,8 @@ class AjaxController extends BaseFilterController
      *
      * @return string
      */
-    public function departmentPeopleIndividualAction() {
+    public function departmentPeopleIndividualAction()
+    {
         $id = $this->getSessionValueByKey('idDepartment', null, 'oper.paginator.department.coworkers', 'param');
 
         $filters = $this->getFilters('oper.paginator.department.coworkers');
@@ -2861,6 +2858,4 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($result));
     }
-
 }
-

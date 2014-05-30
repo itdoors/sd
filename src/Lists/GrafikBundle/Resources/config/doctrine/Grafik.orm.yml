@@ -70,6 +70,12 @@ Lists\GrafikBundle\Entity\Grafik:
             type: float
             nullable: true
             column: total_night_not_officially
+        replacementType:
+            type: string
+            length: 10
+            fixed: false
+            nullable: false
+            column: replacement_type
     oneToOne:
         department:
             targetEntity: Lists\DepartmentBundle\Entity\Departments

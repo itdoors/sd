@@ -9,9 +9,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * OperInfoController class
+ * OperScheduleController class
  *
- * Default controller for oper page
+ * Default controller for oper schedule
  */
 class OperScheduleController extends BaseFilterController
 {
@@ -60,7 +60,6 @@ class OperScheduleController extends BaseFilterController
 
         $filterNamespace = $this->container->getParameter($this->getNamespace());
         $filters = $this->getFilters($filterNamespace);
-
 
         $year = intval(date('Y'));
         $month = intval(date('m'));
@@ -111,7 +110,6 @@ class OperScheduleController extends BaseFilterController
             }
         }
 
-
         /** @var $departmentPeopleRepository \Lists\DepartmentBundle\Entity\DepartmentPeopleRepository   */
         $departmentPeopleRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeople');
@@ -122,7 +120,6 @@ class OperScheduleController extends BaseFilterController
         /** @var $grafikRepository \Lists\GrafikBundle\Entity\GrafikRepository   */
         $grafikRepository = $this->getDoctrine()
             ->getRepository('ListsGrafikBundle:Grafik');
-
 
         $infoHours = array();
         /** @var $coworker \Lists\DepartmentBundle\Entity\DepartmentPeople   */
@@ -154,7 +151,6 @@ class OperScheduleController extends BaseFilterController
             'infoHours' => $infoHours
         ));
     }
-
 
     /**
      * getting the info about grafik for one day for exact user
@@ -189,7 +185,6 @@ class OperScheduleController extends BaseFilterController
             $idCoworker
         );
 
-
         //var_dump($coworkerDayTime[0]);
         $return = array();
 
@@ -205,9 +200,15 @@ class OperScheduleController extends BaseFilterController
 
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
     public function addNewTimeAction(Request $request)
     {
         $return = array();
+        $return['html'] = '';
         $date =  $request->request->get('date');
         $idCoworker = $request->request->get('idCoworker');
         $idDepartment = $request->request->get('idDepartment');
@@ -233,6 +234,7 @@ class OperScheduleController extends BaseFilterController
         if ($departmentPeople->getAdmissionDate() == null && $officially) {
             $return['success'] = 0;
             $return['error'] = 'no_official_permitted';
+
             return new Response(json_encode($return));
         }
 
@@ -291,13 +293,12 @@ class OperScheduleController extends BaseFilterController
 
             list($hoursFrom, $minutesFrom) = explode(':', $infoDay['from']);
             list($hoursTo, $minutesTo) = explode(':', $infoDay['to']);
-            if($hoursTo == 0 && $hoursFrom != 0) {
+            if ($hoursTo == 0 && $hoursFrom != 0) {
                 $hoursTo = 24;
             }
             $hoursFrom += $minutesFrom/60;
             $hoursTo += $minutesTo/60;
-            $return[] =$hoursFrom;
-            $return[] = $hoursTo;
+
             //Algorithm to calculate number of hours
             //between two periods
             $totalPeriod = array();
@@ -312,10 +313,7 @@ class OperScheduleController extends BaseFilterController
                     $check2 = 0;
                 }
                 $hours = $check1 - $check2 - array_sum($totalPeriod);
-                $return[] =$hours;
                 $totalPeriod[] = $hours;
-
-
             }
             //end of algorithm
 
@@ -330,10 +328,7 @@ class OperScheduleController extends BaseFilterController
             $funcTotalEvening = 'setTotalEvening'.$addTypeOfficially;
             $funcTotalNight = 'setTotalNight'.$addTypeOfficially;
 
-            //setting official or not total ours
-            if (method_exists($newTime, $funcTotal)) {
-                $return[]='exists';
-            }
+            //setting official or not total hours
             $newTime->$funcTotal($total);
             $newTime->$funcTotalDay($totalDay);
             $newTime->$funcTotalEvening($totalEvening);
@@ -346,11 +341,106 @@ class OperScheduleController extends BaseFilterController
             $em = $this->getDoctrine()->getManager();
             $em->persist($newTime);
             $em->flush();
-            //$newTime->setTotalDayNotOfficially($totalDay);
-            $return[] = $newTime->getTotalDayNotOfficially();
+
+            $return['html'] .= $this->renderView('ITDoorsOperBundle:Schedule:scheduleDayTableRow.html.twig', array(
+                'oneDayTime'=> $newTime
+            ));
+
+
+            $this->updateSumGrafik($day, $month, $year, $idCoworker, $idDepartment);
         }
 
-
         return new Response(json_encode($return));
+    }
+
+    /**
+     * Render one row of the table in schedule of one day
+     *
+     * @param mixed[] $oneDayTime
+     *
+     * @return Response
+     */
+    public function scheduleTableRowAction($oneDayTime)
+    {
+        return $this->render('ITDoorsOperBundle:Schedule:scheduleDayTableRow.html.twig', array(
+            'oneDayTime'=> $oneDayTime
+        ));
+    }
+
+
+    private function updateSumGrafik($day, $month, $year, $idCoworker, $idDepartment)
+    {
+
+        /** @var $grafikTimeRepository \Lists\GrafikBundle\Entity\GrafikTimeRepository   */
+        $grafikTimeRepository = $this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:GrafikTime');
+
+
+        $coworkerDayTimes = $grafikTimeRepository->getCoworkerHoursDayInfo(
+            $year,
+            $month,
+            $day,
+            $idDepartment,
+            $idCoworker
+        );
+        $total = 0;
+        $totalDay = 0;
+        $totalEvening = 0;
+        $totalNight = 0;
+
+        $totalNotOfficially = 0;
+        $totalDayNotOfficially= 0;
+        $totalEveningNotOfficially = 0;
+        $totalNightNotOfficially = 0;
+
+        foreach ($coworkerDayTimes as $coworkerTime) {
+            $total += $coworkerTime->getTotal();
+            $totalDay += $coworkerTime->getTotalDay();
+            $totalEvening += $coworkerTime->getTotalEvening();
+            $totalNight += $coworkerTime->getTotalNight();
+
+            $totalNotOfficially += $coworkerTime->getTotalNotOfficially();
+            $totalDayNotOfficially += $coworkerTime->getTotalDayNotOfficially();
+            $totalEveningNotOfficially += $coworkerTime->getTotalEveningNotOfficially();
+            $totalNightNotOfficially += $coworkerTime->getTotalNightNotOfficially();
+        }
+
+        $department  = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:Departments')
+            ->find($idDepartment);
+
+        $departmentPeople  = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople')
+            ->find($idCoworker);
+
+        $departmentPeopleReplacement  = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople')
+            ->find(0);
+
+        /** @var  $grafik \Lists\GrafikBundle\Entity\Grafik*/
+        $grafik  =$this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:Grafik')
+            ->findOneBy(array(
+                'day' => $day,
+                'month' => $month,
+                'year' => $year,
+                'departmentPeople' => $departmentPeople,
+                'department' => $department,
+                'departmentPeopleReplacement' => $departmentPeopleReplacement,
+                'replacementType' => 'r'
+            ));
+
+        $grafik->setTotal($total);
+        $grafik->setTotalDay($totalDay);
+        $grafik->setTotalEvening($totalEvening);
+        $grafik->setTotalNight($totalNight);
+        $grafik->setTotalNotOfficially($totalNotOfficially);
+        $grafik->setTotalDayNotOfficially($totalDayNotOfficially);
+        $grafik->setTotalEveningNotOfficially($totalEveningNotOfficially);
+        $grafik->setTotalNightNotOfficially($totalNightNotOfficially);
+
+        $em =  $this->getDoctrine()->getManager();
+        $em->persist($grafik);
+        $em->flush();
     }
 }

@@ -2,8 +2,6 @@
 
 namespace Lists\RegionBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Region
  */
@@ -191,7 +189,6 @@ class Region
      * @var \Doctrine\Common\Collections\Collection
      */
     private $companystructure;
-
 
     /**
      * Add companystructure

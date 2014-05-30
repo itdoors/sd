@@ -3,7 +3,6 @@
 namespace Lists\RegionBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
 
 /**
  * RegionRepository
@@ -21,7 +20,8 @@ class RegionRepository extends EntityRepository
      *
      * @return mixed[]
      */
-    public function getSearchQueryRegion($q) {
+    public function getSearchQueryRegion($q)
+    {
         $sql = $this->createQueryBuilder('c')
             ->where('lower(c.name) LIKE :q')
             ->setParameter(':q', mb_strtolower($q, 'UTF-8') . '%')

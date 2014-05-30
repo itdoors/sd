@@ -65,6 +65,7 @@ Shown date: {{ dateInfo.0.date }}
                             href="#form_modal_more_info"
                             data-target_holder="moreInfoTpl"
                             data-params='{"date":"{{ dayInfo.date }}", "idCoworker": {{ idCoworker }}, "idDepartment":{{ idDepartment }}}'
+
                             data-url-more-info="{{ url('it_doors_oper_schedule_day_info') }}"
                                 >
                                     {% set showNothing = true %}
@@ -137,5 +138,3 @@ Shown date: {{ dateInfo.0.date }}
 
     } );
 </script>
-
-

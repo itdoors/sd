@@ -3,7 +3,6 @@
 namespace Lists\MpkBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
 
 /**
  * MpkRepository
@@ -21,7 +20,8 @@ class MpkRepository extends EntityRepository
      *
      * @return mixed[]
      */
-    public function getSearchQueryMpk($q) {
+    public function getSearchQueryMpk($q)
+    {
         $sql = $this->createQueryBuilder('c')
             ->where('lower(c.name) LIKE :q')
             ->setParameter(':q', mb_strtolower($q, 'UTF-8') . '%')
@@ -38,8 +38,8 @@ class MpkRepository extends EntityRepository
      *
      * @return mixed[]
      */
-    public function getDepartmentPeopleQueryMpk($q, $id) {
-
+    public function getDepartmentPeopleQueryMpk($q, $id)
+    {
         $sql = $this->createQueryBuilder('m')
             ->where('lower(m.name) LIKE :q')
             ->setParameter(':q', mb_strtolower($q, 'UTF-8') . '%');
@@ -52,5 +52,4 @@ class MpkRepository extends EntityRepository
 
         return $sql->getResult();
     }
-
 }

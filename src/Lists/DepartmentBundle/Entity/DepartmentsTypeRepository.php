@@ -3,8 +3,6 @@
 namespace Lists\DepartmentBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
-
 
 /**
  * DepartmentsTypeRepository
@@ -22,7 +20,8 @@ class DepartmentsTypeRepository extends EntityRepository
      *
      * @return mixed[]
      */
-    public function getSearchQueryType($q) {
+    public function getSearchQueryType($q)
+    {
         $sql = $this->createQueryBuilder('c')
             ->where('lower(c.name) LIKE :q')
             ->setParameter(':q', mb_strtolower($q, 'UTF-8') . '%')

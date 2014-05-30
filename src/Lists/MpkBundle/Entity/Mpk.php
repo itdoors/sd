@@ -2,8 +2,6 @@
 
 namespace Lists\MpkBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Mpk
  */
@@ -44,11 +42,10 @@ class Mpk
      */
     private $organization;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -59,19 +56,20 @@ class Mpk
      * Set name
      *
      * @param string $name
+     *
      * @return Mpk
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -82,19 +80,20 @@ class Mpk
      * Set active
      *
      * @param boolean $active
+     *
      * @return Mpk
      */
     public function setActive($active)
     {
         $this->active = $active;
-    
+
         return $this;
     }
 
     /**
      * Get active
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getActive()
     {
@@ -105,19 +104,20 @@ class Mpk
      * Set startDate
      *
      * @param \DateTime $startDate
+     *
      * @return Mpk
      */
     public function setStartDate($startDate)
     {
         $this->startDate = $startDate;
-    
+
         return $this;
     }
 
     /**
      * Get startDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getStartDate()
     {
@@ -128,19 +128,20 @@ class Mpk
      * Set endDate
      *
      * @param \DateTime $endDate
+     *
      * @return Mpk
      */
     public function setEndDate($endDate)
     {
         $this->endDate = $endDate;
-    
+
         return $this;
     }
 
     /**
      * Get endDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getEndDate()
     {
@@ -151,19 +152,20 @@ class Mpk
      * Set department
      *
      * @param \Lists\DepartmentBundle\Entity\Departments $department
+     *
      * @return Mpk
      */
     public function setDepartment(\Lists\DepartmentBundle\Entity\Departments $department = null)
     {
         $this->department = $department;
-    
+
         return $this;
     }
 
     /**
      * Get department
      *
-     * @return \Lists\DepartmentBundle\Entity\Departments 
+     * @return \Lists\DepartmentBundle\Entity\Departments
      */
     public function getDepartment()
     {
@@ -174,19 +176,20 @@ class Mpk
      * Set organization
      *
      * @param \Lists\OrganizationBundle\Entity\Organization $organization
+     *
      * @return Mpk
      */
     public function setOrganization(\Lists\OrganizationBundle\Entity\Organization $organization = null)
     {
         $this->organization = $organization;
-    
+
         return $this;
     }
 
     /**
      * Get organization
      *
-     * @return \Lists\OrganizationBundle\Entity\Organization 
+     * @return \Lists\OrganizationBundle\Entity\Organization
      */
     public function getOrganization()
     {

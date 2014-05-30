@@ -105,7 +105,7 @@ class Departments
     {
         $this->mpks = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
@@ -336,19 +336,20 @@ class Departments
      * Set organizationId
      *
      * @param integer $organizationId
+     *
      * @return Departments
      */
     public function setOrganizationId($organizationId)
     {
         $this->organizationId = $organizationId;
-    
+
         return $this;
     }
 
     /**
      * Get organizationId
      *
-     * @return integer 
+     * @return integer
      */
     public function getOrganizationId()
     {
@@ -359,12 +360,13 @@ class Departments
      * Add mpks
      *
      * @param \Lists\MpkBundle\Entity\Mpk $mpks
+     *
      * @return Departments
      */
     public function addMpk(\Lists\MpkBundle\Entity\Mpk $mpks)
     {
         $this->mpks[] = $mpks;
-    
+
         return $this;
     }
 
@@ -381,7 +383,7 @@ class Departments
     /**
      * Get mpks
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getMpks()
     {
@@ -501,7 +503,7 @@ class Departments
     /**
      * Get opermanager
      *
-     * @return \SD\UserBundle\Entity\User 
+     * @return \SD\UserBundle\Entity\User
      */
     public function getOpermanager()
     {
@@ -510,8 +512,11 @@ class Departments
 
     /**
      * toString Method
+     *
+     * @return string
      */
-    public function __toString() {
+    public function __toString()
+    {
         return $this->name;
     }
 }

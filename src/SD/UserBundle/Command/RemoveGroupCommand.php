@@ -3,7 +3,7 @@
 /**
  * Command class for removing user from group
  */
-namespace Sd\UserBundle\Command;
+namespace SD\UserBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;

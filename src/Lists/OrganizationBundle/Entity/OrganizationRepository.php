@@ -280,8 +280,8 @@ class OrganizationRepository extends EntityRepository
             ->getQuery()
             ->getResult();
 
-		return $sql;
-	}
+        return $sql;
+    }
 
     /**
      * Searches organization by $q
@@ -290,7 +290,7 @@ class OrganizationRepository extends EntityRepository
      *
      * @return mixed[]
      */
-    public function SearchSelfOrganization($q)
+    public function searchSelfOrganization($q)
     {
         $sql = $this->createQueryBuilder('o')
             ->leftJoin('o.lookup', 'l')

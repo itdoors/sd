@@ -17,7 +17,8 @@ class DepartmentPeopleRepository extends EntityRepository
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    private function DepartmentPeopleBuilder() {
+    private function departmentPeopleBuilder()
+    {
         $query = $this->createQueryBuilder('dp')
             ->select('dp.id as id')
             ->addSelect('i.firstName')
@@ -36,66 +37,62 @@ class DepartmentPeopleRepository extends EntityRepository
             ->leftJoin('dp.department', 'd')
             ->leftJoin('dp.individual', 'i')
             ->leftJoin('dp.mpks', 'm');
+
         return $query;
     }
 
     /**
      * creates query to find all departmentPeople by id
      *
-     * @param $idDepartment
+     * @param integer $idDepartment
      *
-     * @return Query
+     * @return \Doctrine\ORM\Query
      */
-    public function getAllDepartmentPeopleQueryById($idDepartment) {
-        $query = $this->DepartmentPeopleBuilder()
+    public function getAllDepartmentPeopleQueryById($idDepartment)
+    {
+        $query = $this->departmentPeopleBuilder()
             ->andWhere('d.id = :id')
             ->setParameter(':id', $idDepartment)
             ->orderBy('i.lastName', 'ASC')
             ->getQuery();
+
         return $query;
     }
 
     /**
      * creates query to find all Filtered departmentPeople
      *
-     * @param $idDepartment
-     * @param $filters
-     * @param $type
+     * @param integer $idDepartment
+     * @param mixed[] $filters
+     * @param string  $type
      *
-     * @return Query
+     * @return \Doctrine\ORM\Query
      */
-    public function getFilteredDepartmentPeopleQuery($idDepartment, $filters, $type = 'data') {
-
+    public function getFilteredDepartmentPeopleQuery($idDepartment, $filters, $type = 'data')
+    {
         if ($type == 'data') {
-            $sql = $this->DepartmentPeopleBuilder();
-        }
-        elseif ($type == 'count') {
+            $sql = $this->departmentPeopleBuilder();
+        } elseif ($type == 'count') {
             $sql = $this->countAllDepartmentPeopleBuilder();
         }
             $sql->andWhere('d.id = :id')
                 ->setParameter(':id', $idDepartment);
-        if (sizeof($filters))
-        {
+        if (sizeof($filters)) {
 
-            foreach($filters as $key => $value)
-            {
-                if (!$value)
-                {
+            foreach ($filters as $key => $value) {
+                if (!$value) {
                     continue;
                 }
-                switch($key)
-                {
+                switch ($key) {
                     case 'mpk':
-                        if (isset($value[0]) && !$value[0])
-                        {
+                        if (isset($value[0]) && !$value[0]) {
                             break;
                         }
                         $sql->andWhere('m.id in (:idsMpk)');
                         $sql->setParameter(':idsMpk', explode(',', $value));
                         break;
                     case 'coworker':
-                        if (isset($value[0]) && !$value[0])
-                        {
+                        if (isset($value[0]) && !$value[0]) {
                             break;
                         }
                         $sql->andWhere('i.id in (:idsIndividual)');
@@ -111,19 +108,20 @@ class DepartmentPeopleRepository extends EntityRepository
         return $sql->getQuery();
     }
 
-
     /**
      * creates count query to find the number of all departments
      *
-     * @param $idDepartment
+     * @param integer $idDepartment
      *
      * @return integer
      */
-    public function countAllDepartmentPeopleById($idDepartment) {
+    public function countAllDepartmentPeopleById($idDepartment)
+    {
         $countQuery = $this->countAllDepartmentPeopleBuilder()
             ->andWhere('d.id = :id')
             ->setParameter(':id', $idDepartment)
             ->getQuery();
+
         return $countQuery->getSingleScalarResult();
     }
 
@@ -132,7 +130,8 @@ class DepartmentPeopleRepository extends EntityRepository
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    private function countAllDepartmentPeopleBuilder() {
+    private function countAllDepartmentPeopleBuilder()
+    {
         $countQuery = $this->createQueryBuilder('dp')
             ->select('COUNT(dp.id) as id')
             ->leftJoin('dp.department', 'd')
@@ -145,29 +144,31 @@ class DepartmentPeopleRepository extends EntityRepository
     /**
      * Trying to get all info of individual by id
      *
-     * @param $id
+     * @param integer $id
      *
-     * @return Query
+     * @return \Doctrine\ORM\Query
      */
-    public function getInfoById($id) {
-
-        $query = $this->DepartmentPeopleBuilder()
+    public function getInfoById($id)
+    {
+        $query = $this->departmentPeopleBuilder()
             ->andWhere('dp.id = :id')
             ->setParameter(':id', $id)
             ->getQuery();
+
         return $query;
     }
 
     /**
      * Searches mpk by $q
      *
-     * @param string $q
+     * @param string  $q
      * @param integer $idDepartment
      * @param mixed[] $filters
      *
      * @return mixed[]
      */
-    public function getSearchQueryPeople($q, $idDepartment = null, $filters = array()) {
+    public function getSearchQueryPeople($q, $idDepartment = null, $filters = array())
+    {
         $sql = $this->createQueryBuilder('dp')
             ->leftJoin('dp.individual', 'i')
             ->leftJoin('dp.department', 'd')
@@ -182,20 +183,15 @@ class DepartmentPeopleRepository extends EntityRepository
                 ->setParameter(':department', $idDepartment);
         }
 
-        if (sizeof($filters))
-        {
+        if (sizeof($filters)) {
 
-            foreach($filters as $key => $value)
-            {
-                if (!$value)
-                {
+            foreach ($filters as $key => $value) {
+                if (!$value) {
                     continue;
                 }
-                switch($key)
-                {
+                switch ($key) {
                     case 'mpk':
-                        if (isset($value[0]) && !$value[0])
-                        {
+                        if (isset($value[0]) && !$value[0]) {
                             break;
                         }
                         $sql->andWhere('m.id in (:idsMpk)');

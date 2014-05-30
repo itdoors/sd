@@ -12,7 +12,17 @@ use Doctrine\ORM\EntityRepository;
  */
 class GrafikTimeRepository extends EntityRepository
 {
-    public function getCoworkerHoursDayInfo($year, $month, $day, $idDepartment, $idCoworker) {
+    /**
+     * @param integer $year
+     * @param integer $month
+     * @param integer $day
+     * @param integer $idDepartment
+     * @param integer $idCoworker
+     *
+     * @return array
+     */
+    public function getCoworkerHoursDayInfo($year, $month, $day, $idDepartment, $idCoworker)
+    {
         $result = $this->createQueryBuilder('gt')
             ->leftJoin('gt.department', 'd')
             ->leftJoin('gt.departmentPeople', 'dp')
@@ -31,5 +41,4 @@ class GrafikTimeRepository extends EntityRepository
 
         return $result;
     }
-
 }

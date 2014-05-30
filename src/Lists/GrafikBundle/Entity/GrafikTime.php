@@ -2,8 +2,6 @@
 
 namespace Lists\GrafikBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * GrafikTime
  */
@@ -74,11 +72,10 @@ class GrafikTime
      */
     private $departmentPeople;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -89,19 +86,20 @@ class GrafikTime
      * Set year
      *
      * @param integer $year
+     *
      * @return GrafikTime
      */
     public function setYear($year)
     {
         $this->year = $year;
-    
+
         return $this;
     }
 
     /**
      * Get year
      *
-     * @return integer 
+     * @return integer
      */
     public function getYear()
     {
@@ -112,19 +110,20 @@ class GrafikTime
      * Set month
      *
      * @param integer $month
+     *
      * @return GrafikTime
      */
     public function setMonth($month)
     {
         $this->month = $month;
-    
+
         return $this;
     }
 
     /**
      * Get month
      *
-     * @return integer 
+     * @return integer
      */
     public function getMonth()
     {
@@ -135,19 +134,20 @@ class GrafikTime
      * Set day
      *
      * @param integer $day
+     *
      * @return GrafikTime
      */
     public function setDay($day)
     {
         $this->day = $day;
-    
+
         return $this;
     }
 
     /**
      * Get day
      *
-     * @return integer 
+     * @return integer
      */
     public function getDay()
     {
@@ -158,19 +158,20 @@ class GrafikTime
      * Set fromTime
      *
      * @param \DateTime $fromTime
+     *
      * @return GrafikTime
      */
     public function setFromTime($fromTime)
     {
         $this->fromTime = $fromTime;
-    
+
         return $this;
     }
 
     /**
      * Get fromTime
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFromTime()
     {
@@ -181,19 +182,20 @@ class GrafikTime
      * Set toTime
      *
      * @param \DateTime $toTime
+     *
      * @return GrafikTime
      */
     public function setToTime($toTime)
     {
         $this->toTime = $toTime;
-    
+
         return $this;
     }
 
     /**
      * Get toTime
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getToTime()
     {
@@ -204,19 +206,20 @@ class GrafikTime
      * Set total
      *
      * @param float $total
+     *
      * @return GrafikTime
      */
     public function setTotal($total)
     {
         $this->total = $total;
-    
+
         return $this;
     }
 
     /**
      * Get total
      *
-     * @return float 
+     * @return float
      */
     public function getTotal()
     {
@@ -227,19 +230,20 @@ class GrafikTime
      * Set totalDay
      *
      * @param float $totalDay
+     *
      * @return GrafikTime
      */
     public function setTotalDay($totalDay)
     {
         $this->totalDay = $totalDay;
-    
+
         return $this;
     }
 
     /**
      * Get totalDay
      *
-     * @return float 
+     * @return float
      */
     public function getTotalDay()
     {
@@ -250,19 +254,20 @@ class GrafikTime
      * Set totalEvening
      *
      * @param float $totalEvening
+     *
      * @return GrafikTime
      */
     public function setTotalEvening($totalEvening)
     {
         $this->totalEvening = $totalEvening;
-    
+
         return $this;
     }
 
     /**
      * Get totalEvening
      *
-     * @return float 
+     * @return float
      */
     public function getTotalEvening()
     {
@@ -273,19 +278,20 @@ class GrafikTime
      * Set totalNight
      *
      * @param float $totalNight
+     *
      * @return GrafikTime
      */
     public function setTotalNight($totalNight)
     {
         $this->totalNight = $totalNight;
-    
+
         return $this;
     }
 
     /**
      * Get totalNight
      *
-     * @return float 
+     * @return float
      */
     public function getTotalNight()
     {
@@ -296,19 +302,24 @@ class GrafikTime
      * Set departmentPeopleReplacement
      *
      * @param \Lists\DepartmentBundle\Entity\DepartmentPeople $departmentPeopleReplacement
+     *
      * @return GrafikTime
      */
-    public function setDepartmentPeopleReplacement(\Lists\DepartmentBundle\Entity\DepartmentPeople $departmentPeopleReplacement = null)
+    public function setDepartmentPeopleReplacement(
+        \Lists\DepartmentBundle\Entity\DepartmentPeople $departmentPeopleReplacement = null
+    // @codingStandardsIgnoreStart
+    )
     {
+    // @codingStandardsIgnoreEnd
         $this->departmentPeopleReplacement = $departmentPeopleReplacement;
-    
+
         return $this;
     }
 
     /**
      * Get departmentPeopleReplacement
      *
-     * @return \Lists\DepartmentBundle\Entity\DepartmentPeople 
+     * @return \Lists\DepartmentBundle\Entity\DepartmentPeople
      */
     public function getDepartmentPeopleReplacement()
     {
@@ -319,19 +330,20 @@ class GrafikTime
      * Set department
      *
      * @param \Lists\DepartmentBundle\Entity\Departments $department
+     *
      * @return GrafikTime
      */
     public function setDepartment(\Lists\DepartmentBundle\Entity\Departments $department = null)
     {
         $this->department = $department;
-    
+
         return $this;
     }
 
     /**
      * Get department
      *
-     * @return \Lists\DepartmentBundle\Entity\Departments 
+     * @return \Lists\DepartmentBundle\Entity\Departments
      */
     public function getDepartment()
     {
@@ -342,19 +354,20 @@ class GrafikTime
      * Set departmentPeople
      *
      * @param \Lists\DepartmentBundle\Entity\DepartmentPeople $departmentPeople
+     *
      * @return GrafikTime
      */
     public function setDepartmentPeople(\Lists\DepartmentBundle\Entity\DepartmentPeople $departmentPeople = null)
     {
         $this->departmentPeople = $departmentPeople;
-    
+
         return $this;
     }
 
     /**
      * Get departmentPeople
      *
-     * @return \Lists\DepartmentBundle\Entity\DepartmentPeople 
+     * @return \Lists\DepartmentBundle\Entity\DepartmentPeople
      */
     public function getDepartmentPeople()
     {
@@ -380,24 +393,24 @@ class GrafikTime
      */
     private $totalNightNotOfficially;
 
-
     /**
      * Set totalNotOfficially
      *
      * @param float $totalNotOfficially
+     *
      * @return GrafikTime
      */
     public function setTotalNotOfficially($totalNotOfficially)
     {
         $this->totalNotOfficially = $totalNotOfficially;
-    
+
         return $this;
     }
 
     /**
      * Get totalNotOfficially
      *
-     * @return float 
+     * @return float
      */
     public function getTotalNotOfficially()
     {
@@ -408,19 +421,20 @@ class GrafikTime
      * Set totalDayNotOfficially
      *
      * @param float $totalDayNotOfficially
+     *
      * @return GrafikTime
      */
     public function setTotalDayNotOfficially($totalDayNotOfficially)
     {
         $this->totalDayNotOfficially = $totalDayNotOfficially;
-    
+
         return $this;
     }
 
     /**
      * Get totalDayNotOfficially
      *
-     * @return float 
+     * @return float
      */
     public function getTotalDayNotOfficially()
     {
@@ -431,19 +445,20 @@ class GrafikTime
      * Set totalEveningNotOfficially
      *
      * @param float $totalEveningNotOfficially
+     *
      * @return GrafikTime
      */
     public function setTotalEveningNotOfficially($totalEveningNotOfficially)
     {
         $this->totalEveningNotOfficially = $totalEveningNotOfficially;
-    
+
         return $this;
     }
 
     /**
      * Get totalEveningNotOfficially
      *
-     * @return float 
+     * @return float
      */
     public function getTotalEveningNotOfficially()
     {
@@ -454,19 +469,20 @@ class GrafikTime
      * Set totalNightNotOfficially
      *
      * @param float $totalNightNotOfficially
+     *
      * @return GrafikTime
      */
     public function setTotalNightNotOfficially($totalNightNotOfficially)
     {
         $this->totalNightNotOfficially = $totalNightNotOfficially;
-    
+
         return $this;
     }
 
     /**
      * Get totalNightNotOfficially
      *
-     * @return float 
+     * @return float
      */
     public function getTotalNightNotOfficially()
     {
@@ -477,24 +493,24 @@ class GrafikTime
      */
     private $notOfficially;
 
-
     /**
      * Set notOfficially
      *
      * @param boolean $notOfficially
+     *
      * @return GrafikTime
      */
     public function setNotOfficially($notOfficially)
     {
         $this->notOfficially = $notOfficially;
-    
+
         return $this;
     }
 
     /**
      * Get notOfficially
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getNotOfficially()
     {

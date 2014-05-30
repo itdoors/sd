@@ -2,8 +2,6 @@
 
 namespace Lists\DepartmentBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * DepartmentPeoplePosition
  */
@@ -24,7 +22,6 @@ class DepartmentPeoplePosition
      */
     private $slug;
 
-
     /**
      * Get id
      *
@@ -39,6 +36,7 @@ class DepartmentPeoplePosition
      * Set name
      *
      * @param string $name
+     *
      * @return DepartmentPeoplePosition
      */
     public function setName($name)
@@ -62,6 +60,7 @@ class DepartmentPeoplePosition
      * Set slug
      *
      * @param string $slug
+     *
      * @return DepartmentPeoplePosition
      */
     public function setSlug($slug)

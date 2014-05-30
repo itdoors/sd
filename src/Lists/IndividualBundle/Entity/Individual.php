@@ -2,8 +2,6 @@
 
 namespace Lists\IndividualBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Individual
  */
@@ -49,11 +47,10 @@ class Individual
      */
     private $address;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -64,19 +61,20 @@ class Individual
      * Set firstName
      *
      * @param string $firstName
+     *
      * @return Individual
      */
     public function setFirstName($firstName)
     {
         $this->firstName = $firstName;
-    
+
         return $this;
     }
 
     /**
      * Get firstName
      *
-     * @return string 
+     * @return string
      */
     public function getFirstName()
     {
@@ -87,19 +85,20 @@ class Individual
      * Set middleName
      *
      * @param string $middleName
+     *
      * @return Individual
      */
     public function setMiddleName($middleName)
     {
         $this->middleName = $middleName;
-    
+
         return $this;
     }
 
     /**
      * Get middleName
      *
-     * @return string 
+     * @return string
      */
     public function getMiddleName()
     {
@@ -110,19 +109,20 @@ class Individual
      * Set lastName
      *
      * @param string $lastName
+     *
      * @return Individual
      */
     public function setLastName($lastName)
     {
         $this->lastName = $lastName;
-    
+
         return $this;
     }
 
     /**
      * Get lastName
      *
-     * @return string 
+     * @return string
      */
     public function getLastName()
     {
@@ -133,19 +133,20 @@ class Individual
      * Set birthday
      *
      * @param \DateTime $birthday
+     *
      * @return Individual
      */
     public function setBirthday($birthday)
     {
         $this->birthday = $birthday;
-    
+
         return $this;
     }
 
     /**
      * Get birthday
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getBirthday()
     {
@@ -156,19 +157,20 @@ class Individual
      * Set tin
      *
      * @param string $tin
+     *
      * @return Individual
      */
     public function setTin($tin)
     {
         $this->tin = $tin;
-    
+
         return $this;
     }
 
     /**
      * Get tin
      *
-     * @return string 
+     * @return string
      */
     public function getTin()
     {
@@ -179,19 +181,20 @@ class Individual
      * Set passport
      *
      * @param string $passport
+     *
      * @return Individual
      */
     public function setPassport($passport)
     {
         $this->passport = $passport;
-    
+
         return $this;
     }
 
     /**
      * Get passport
      *
-     * @return string 
+     * @return string
      */
     public function getPassport()
     {
@@ -202,19 +205,20 @@ class Individual
      * Set address
      *
      * @param string $address
+     *
      * @return Individual
      */
     public function setAddress($address)
     {
         $this->address = $address;
-    
+
         return $this;
     }
 
     /**
      * Get address
      *
-     * @return string 
+     * @return string
      */
     public function getAddress()
     {
@@ -225,24 +229,24 @@ class Individual
      */
     private $phone;
 
-
     /**
      * Set phone
      *
      * @param string $phone
+     *
      * @return Individual
      */
     public function setPhone($phone)
     {
         $this->phone = $phone;
-    
+
         return $this;
     }
 
     /**
      * Get phone
      *
-     * @return string 
+     * @return string
      */
     public function getPhone()
     {
@@ -258,5 +262,4 @@ class Individual
     {
         return $this->lastName.' '.$this->firstName;
     }
-
 }

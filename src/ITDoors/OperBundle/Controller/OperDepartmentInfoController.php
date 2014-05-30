@@ -75,8 +75,6 @@ class OperDepartmentInfoController extends BaseFilterController
 
         $filterNamespace = $this->container->getParameter($this->getNamespace());
 
-
-
         $this->clearPaginator($filterNamespace);
         $filters = $this->getFilters($filterNamespace);
 

@@ -1,7 +1,4 @@
 {% trans_default_domain 'ITDoorsOperBundle' %}
-{#
-<script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
-#}
 
 <script>
     $(document).ready(function(){
@@ -12,6 +9,20 @@
                 minuteStep: 5,
                 showSeconds: false,
                 showMeridian: false
+            });
+            $('#newFromTime').timepicker({
+                autoclose: true,
+                minuteStep: 5,
+                showSeconds: false,
+                showMeridian: false,
+                defaultTime: '09:00'
+            });
+            $('#newToTime').timepicker({
+                autoclose: true,
+                minuteStep: 5,
+                showSeconds: false,
+                showMeridian: false,
+                defaultTime: '18:00'
             });
             //$('.timepicker-cool12').timepicker();
 
@@ -108,50 +119,26 @@
             inputFrom.addClass('notDisplayed');
             inputTo.addClass('notDisplayed');
 
-            /*
-             $.ajax({
-             type: 'POST',
-             url:,
-             var fd = new FormData();
-             fd.append('idCoworker', $(this).data('idCoworker'));
-             fd.append('idDepartment', $(this).data('idCoworker'));
-             fd.append('idTime', $(this).data('idCoworker'));
-             fd.append('day', $(this).data('idCoworker'));
-             fd.append('month', $(this).data('idCoworker'));
-             fd.append('year', $(this).data('idCoworker'));
-             fd.append('officially', $(this).data('idCoworker'))
 
-
-             beforeSend: function() {
-             ITDoorsAjax.blockUI($('#'+block_id));
-             },
-             success: function(response) {
-             $('#'+block_id).empty().append(response);
-             ITDoorsAjax.unblockUI($('#'+block_id));
-             }
-             })
-             */
-
-
-             })
+        })
 
 
 
 
 
-            $('.deleteButton').die('click');
-            $('.deleteButton').live('click', function(e){
+        $('.deleteButton').die('click');
+        $('.deleteButton').live('click', function(e){
 
-                e.preventDefault();
+            e.preventDefault();
 
-                var message = 'Do you confirm deleting?'
-                if (confirm(message)) {
-                    return true;
-                } else {
-                    return false;
-                }
-                //ajax here
-            })
+            var message = 'Do you confirm deleting?'
+            if (confirm(message)) {
+                return true;
+            } else {
+                return false;
+            }
+            //ajax here
+        })
 
         // set effect from select menu value
         $( "#add_button" ).click(function() {
@@ -179,30 +166,37 @@
                 'fromTime': timeFrom,
                 'toTime' : timeTo
             }
-            //fd.append('idCoworker', idCoworker);
-            //fd.append('idDepartment', idDepartment);
-            //fd.append('date', date);
-            //fd.append('officially', officially)
 
             $.ajax({
                 type: 'POST',
                 url: url,
                 data: sendData,
-/*
+
                 beforeSend: function() {
-                    ITDoorsAjax.blockUI($('#'+block_id));
+                    ITDoorsAjax.blockUI($('#add_div'));
                 },
-*/
                 success: function(data) {
-                    //alert(data)
+                    //alert(data);
+                    ITDoorsAjax.unblockUI($('#add_div'));
                     data = JSON.parse(data);
                     if (data.success == 0) {
                         if (data.error == 'no_official_permitted') {
                             $('#non_official_error').toggle( 'blind', {}, 500 );
                         }
                     }
-                    /*$('#'+block_id).empty().append(response);
-                    ITDoorsAjax.unblockUI($('#'+block_id));*/
+                    else {
+                        //alert(data.html)
+                        var tempHtml = $('#tbody_content').html();
+                        $('#tbody_content').html(data.html+tempHtml);
+                        $('.timepiker-cool').timepicker({
+                            autoclose: true,
+                            minuteStep: 5,
+                            showSeconds: false,
+                            showMeridian: false
+                        });
+                        $( "#add_div" ).hide( 'blind', {}, 500 );
+
+                    }
                 }
             })
 
@@ -260,9 +254,9 @@
 
     <b>{% trans %}Range{% endtrans %}:</b>
     {% trans %}From{% endtrans %}
-        <input class="timepiker-cool" size="5" id="newFromTime" value="00:00" type="text">
+        <input size="5" id="newFromTime" value="0000" type="text">
     {% trans %}To{% endtrans %}
-        <input class="timepiker-cool" size="5" id="newToTime" value="10:00" type="text">
+        <input size="5" id="newToTime" value="0000" type="text">
     <br>
     <b>{% trans %}Officially{% endtrans %}:</b> <input type="checkbox" id="officially">
 
@@ -312,56 +306,14 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="tbody_content">
     {% if coworkerDayTime is defined%}
         {% for oneDayTime in coworkerDayTime %}
-            {% if oneDayTime.notOfficially != true %}
-                <tr class="tdHolder">
-                    <td>
-                        <span class="timeFrom">{{ oneDayTime.fromTime|date('H:i') }}</span>
-                        <input type="text" class="timeFromInput notDisplayed timepiker-cool" size="5">
-                    </td>
-                    <td>
-                        <span class="timeTo">{{ oneDayTime.toTime|date('H:i') }}</span>
-                        <input type="text" class="timeToInput notDisplayed timepiker-cool" size="5">
-                    </td>
-                    <td>{{ oneDayTime.total }}</td>
-                    <td>{{ oneDayTime.totalDay }}</td>
-                    <td>{{ oneDayTime.totalEvening }}</td>
-                    <td>{{ oneDayTime.totalNight }}</td>
-                    <td align="center">
-                        <i class="fa fa-edit action_button editButton"></i>
-                        <i class="fa fa-check-circle-o action_button checkButton notDisplayed"></i>
-                        <i class="fa fa-spinner fa-spin spinner notDisplayed"></i>
-                        &nbsp;&nbsp;
-                        <i class="fa fa-trash-o action_button deleteButton"></i>
-                        <i class="fa fa-times action_button cancelButton notDisplayed"></i>
-                    </td>
-                </tr>
-            {% elseif oneDayTime.notOfficially == true %}
-                <tr class="tdHolder">
-                    <td>
-                        <span class="timeFrom">{{ oneDayTime.fromTime|date('H:i') }}</span>
-                        <input type="text" class="timeFromInput notDisplayed timepiker-cool" size="5">
-                    </td>
-                    <td>
-                        <span class="timeTo">{{ oneDayTime.toTime|date('H:i') }}</span>
-                        <input type="text" class="timeToInput notDisplayed timepiker-cool" size="5">
-                    </td>
-                    <td class="td_not_officialy">{{ oneDayTime.totalNotOfficially }}</td>
-                    <td class="td_not_officialy">{{ oneDayTime.totalDayNotOfficially }}</td>
-                    <td class="td_not_officialy">{{ oneDayTime.totalEveningNotOfficially }}</td>
-                    <td class="td_not_officialy">{{ oneDayTime.totalNightNotOfficially }}</td>
-                    <td align="center">
-                        <i class="fa fa-edit action_button editButton"></i>
-                        <i class="fa fa-check-circle-o action_button checkButton notDisplayed"></i>
-                        <i class="fa fa-spinner fa-spin spinner notDisplayed"></i>
-                        &nbsp;&nbsp;
-                        <i class="fa fa-trash-o action_button deleteButton"></i>
-                        <i class="fa fa-times action_button cancelButton notDisplayed"></i>
-                    </td>
-                </tr>
-            {% endif %}
+
+            {{ render(controller('ITDoorsOperBundle:OperSchedule:scheduleTableRow', {
+            'oneDayTime': oneDayTime
+            })) }}
+
         {% endfor %}
 
     {% endif %}
@@ -378,4 +330,3 @@
         </tr>
     </tfoot>
 </table>
-

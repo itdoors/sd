@@ -118,6 +118,4 @@ class DepartmentsStatus
     {
         return $this->name;
     }
-
-
 }

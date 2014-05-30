@@ -12,7 +12,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class GrafikRepository extends EntityRepository
 {
-    public function getCoworkerHoursMonthInfo($year, $month, $idDepartment, $idCoworker) {
+    /**
+     * @param integer $year
+     * @param integer $month
+     * @param integer $idDepartment
+     * @param integer $idCoworker
+     *
+     * @return array
+     */
+    public function getCoworkerHoursMonthInfo($year, $month, $idDepartment, $idCoworker)
+    {
         $result = $this->createQueryBuilder('t')
             ->select('t.total as total')
             ->addSelect('t.day as day')
@@ -33,7 +42,13 @@ class GrafikRepository extends EntityRepository
         return $result;
     }
 
-    public function getMonthsFromDepartment($idDepartment) {
+    /**
+     * @param integer $idDepartment
+     *
+     * @return array
+     */
+    public function getMonthsFromDepartment($idDepartment)
+    {
         $result = $this->createQueryBuilder('g')
             ->select('g.month')
             ->leftJoin('g.department', 'd')
@@ -44,10 +59,15 @@ class GrafikRepository extends EntityRepository
             ->getResult();
 
         return $result;
-
     }
 
-    public function getYearsFromDepartment($idDepartment) {
+    /**
+     * @param integer $idDepartment
+     *
+     * @return array
+     */
+    public function getYearsFromDepartment($idDepartment)
+    {
         $result = $this->createQueryBuilder('g')
             ->select('g.year')
             ->leftJoin('g.department', 'd')
@@ -58,6 +78,5 @@ class GrafikRepository extends EntityRepository
             ->getResult();
 
         return $result;
-
     }
 }

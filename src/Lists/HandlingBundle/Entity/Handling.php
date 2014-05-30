@@ -633,7 +633,6 @@ class Handling
         // @codingStandardsIgnoreStart
         $this->organization_id = $organizationId;
         // @codingStandardsIgnoreEnd
-
         return $this;
     }
 
@@ -756,7 +755,6 @@ class Handling
         // @codingStandardsIgnoreStart
         $this->result_id = $resultId;
         // @codingStandardsIgnoreEnd
-
         return $this;
     }
 

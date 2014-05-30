@@ -109,7 +109,6 @@ class ScheduleFilterFormType extends AbstractType
 
             ));
 
-
     }
 
     /**
