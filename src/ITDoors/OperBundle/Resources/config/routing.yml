@@ -49,3 +49,7 @@ it_doors_oper_schedule_table_row:
 it_doors_oper_schedule_delete_day_time:
     pattern:  /oper/schedule/delete/day/time
     defaults: { _controller: ITDoorsOperBundle:OperSchedule:deleteTimeFromDay }
+
+it_doors_oper_schedule_one_day_total:
+    pattern:  /oper/schedule/one/day/total
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:oneDayTotal }

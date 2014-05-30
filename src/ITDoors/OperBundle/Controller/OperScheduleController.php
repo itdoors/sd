@@ -72,6 +72,7 @@ class OperScheduleController extends BaseFilterController
         }
 
         $days = date("t", strtotime($year.'-'.$month)); //num days in selected month
+        $monthName = date("F", strtotime($year.'-'.$month));
         $dateInfo = array();
 
         $monthShow = $month;
@@ -148,7 +149,9 @@ class OperScheduleController extends BaseFilterController
             'coworkers' => $coworkers,
             'dateInfo' => $dateInfo,
             'idDepartment' => $idDepartment,
-            'infoHours' => $infoHours
+            'infoHours' => $infoHours,
+            'year' => $year,
+            'monthName' =>$monthName
         ));
     }
 
@@ -188,11 +191,18 @@ class OperScheduleController extends BaseFilterController
         //var_dump($coworkerDayTime[0]);
         $return = array();
 
+        $monthName = date("F", strtotime($date));
+        $dayName = date('D', strtotime($date));
+
         $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleDay.html.twig', array(
             'coworkerDayTime' => $coworkerDayTime,
             'date' => $date,
             'idCoworker' => $idCoworker,
-            'idDepartment' => $idDepartment
+            'idDepartment' => $idDepartment,
+            'monthName' => $monthName,
+            'dayName' => $dayName,
+            'day' => $day,
+            'year' => $year
         ));
         $return['success'] = 1;
 
@@ -505,5 +515,54 @@ class OperScheduleController extends BaseFilterController
         $em =  $this->getDoctrine()->getManager();
         $em->persist($grafik);
         $em->flush();
+    }
+
+    /**
+     * @param Request $request
+     * 
+     * @return Response
+     */
+    public function oneDayTotalAction(Request $request)
+    {
+
+        $params =  $request->request->get('params');
+
+        $date = $params['date'];
+        $idCoworker = $params['idCoworker'];
+        $idDepartment = $params['idDepartment'];
+        list($year, $month, $day) = explode('-', $date);
+
+        $return = array();
+
+        /** @var $grafikRepository \Lists\GrafikBundle\Entity\GrafikRepository   */
+        $grafikRepository = $this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:Grafik');
+
+
+        $infoDay = $grafikRepository->getCoworkerHoursDayInfo(
+            $day,
+            $year,
+            $month,
+            $idDepartment,
+            $idCoworker
+        );
+
+        if (!$infoDay[0]) {
+            $officially = 0;
+            $notOfficially = 0;
+        } else {
+            $officially = $infoDay[0]['total'];
+            $notOfficially = $infoDay[0]['totalNotOfficially'];
+        }
+
+
+        $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleTableCell.html.twig', array(
+            'officially'=> $officially,
+            'notOfficially'=> $notOfficially,
+        ));
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
     }
 }

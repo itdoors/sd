@@ -79,4 +79,36 @@ class GrafikRepository extends EntityRepository
 
         return $result;
     }
+
+    /**
+     * @param integer $day
+     * @param integer $year
+     * @param integer $month
+     * @param integer $idDepartment
+     * @param integer $idCoworker
+     *
+     * @return array
+     */
+    public function getCoworkerHoursDayInfo($day, $year, $month, $idDepartment, $idCoworker)
+    {
+        $result = $this->createQueryBuilder('t')
+            ->select('t.total as total')
+            ->addSelect('t.totalNotOfficially as totalNotOfficially')
+            ->leftJoin('t.department', 'd')
+            ->leftJoin('t.departmentPeople', 'dp')
+            ->andWhere('t.month = :month')
+            ->setParameter(':month', $month)
+            ->andWhere('t.day = :day')
+            ->setParameter(':day', $day)
+            ->andWhere('t.year = :year')
+            ->setParameter(':year', $year)
+            ->andWhere('d.id = :idDepartment')
+            ->setParameter(':idDepartment', $idDepartment)
+            ->andWhere('dp.id = :idCoworker')
+            ->setParameter(':idCoworker', $idCoworker)
+            ->getQuery()
+            ->getResult();
+
+        return $result;
+    }
 }

@@ -11,7 +11,7 @@
 #}
 
 <div id ="schedule_content" data-url="{{ path('it_doors_oper_schedule_table', {'id': idDepartment}) }}" >
-Shown date: {{ dateInfo.0.date }}
+{% trans %}Current date{% endtrans %}: {{ monthName|trans }} {{ year }}
 {#
     <br>
     <button class="btn green" id="multi">Test multi </button>
@@ -22,6 +22,50 @@ Shown date: {{ dateInfo.0.date }}
     });
 </script>
 #}
+    <script>
+        $(document).ready(function(){
+            var idLastHref = ''
+            $('#form_modal_more_info').on('hidden.bs.modal', function () {
+                var href = $('#'+idLastHref);
+                var params = href.data('params');
+                var sendData = {
+                    'params': params
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: $('#info_input').data('url_reload_href'),
+                    data: sendData,
+
+                    beforeSend: function() {
+                        ITDoorsAjax.blockUI($('#'+idLastHref));
+                    },
+                    success: function(data) {
+                        //alert(data);
+                        ITDoorsAjax.unblockUI($('#'+idLastHref));
+                        data = JSON.parse(data);
+                        if (data.success == 0) {
+                        }
+                        else {
+                            //alert(data.html)
+                            $('#'+idLastHref).html(data.html);
+                        }
+                    }
+
+                })
+            })
+
+            $('.tdModal').die('click');
+            $('.tdModal').live('click',function(e){
+
+                e.preventDefault();
+                idLastHref = this.id;
+            })
+        })
+
+
+
+    </script>
 
     <table class="table table-striped table-hover table-bordered" id="graffic_table">
         <thead>
@@ -46,13 +90,14 @@ Shown date: {{ dateInfo.0.date }}
             {% for coworker in coworkers %}
                 {% set counter = counter + 1 %}
                 {% set idCoworker = coworker.id %}
-                <tr>
+                <tr id="row{{ counter }}">
                     <td>
                         {{ counter }}
                     </td>
                     <td>{{ coworker.lastName }} {{ coworker.firstName }} {{ coworker.middleName }}</td>
                     <td>P</td>
                     <td>{{ coworker.mpkName }}</td>
+
                     {% for dayInfo in dateInfo %}
                         {% set day = dayInfo.day %}
                         {% if dayInfo.vacation %}
@@ -60,7 +105,7 @@ Shown date: {{ dateInfo.0.date }}
                         {% else %}
                             <td>
                         {% endif %}
-                        <a  class="more-info"
+                        <a  id="link{{ day }}{{ idCoworker }}" class="more-info tdModal"
                             data-toggle="modal"
                             href="#form_modal_more_info"
                             data-target_holder="moreInfoTpl"
@@ -68,20 +113,26 @@ Shown date: {{ dateInfo.0.date }}
 
                             data-url-more-info="{{ url('it_doors_oper_schedule_day_info') }}"
                                 >
-                                    {% set showNothing = true %}
-                                    {% if infoHours[idCoworker][day]['officially'] is defined  and infoHours[idCoworker][day]['officially'] != 0%}
-                                        {{ infoHours[idCoworker][day]['officially']|number_format(2) }} <br>
-                                        {% set showNothing = false %}
-                                    {% endif %}
 
-                                    {% if infoHours[idCoworker][day]['notOfficially'] is defined  and infoHours[idCoworker][day]['notOfficially'] != 0%}
-                                        <span style="color: red">{{ infoHours[idCoworker][day]['notOfficially']|number_format(2) }}</span>
-                                        {% set showNothing = false %}
-                                    {% endif %}
+                                {% if infoHours[idCoworker][day]['officially'] is defined %}
+                                    {% set officially = infoHours[idCoworker][day]['officially'] %}
+                                {% else %}
+                                    {% set officially = 0 %}
+                                {% endif %}
 
-                                    {% if showNothing %}
-                                        -
-                                    {% endif %}
+                                {% if infoHours[idCoworker][day]['notOfficially'] is defined %}
+                                    {% set notOfficially = infoHours[idCoworker][day]['notOfficially'] %}
+                                {% else %}
+                                    {% set notOfficially = 0 %}
+                                {% endif %}
+
+                                {{ include(
+                                'ITDoorsOperBundle:Schedule:scheduleTableCell.html.twig', {
+                                    'officially': officially,
+                                    'notOfficially': notOfficially,
+
+                                }) }}
+
                                 </a>
                             </td>
                     {% endfor %}
@@ -101,7 +152,7 @@ Shown date: {{ dateInfo.0.date }}
 
 </style>
 
-
+<input type="hidden" id="info_input" data-url_reload_href="{{ path('it_doors_oper_schedule_one_day_total') }}">
 <script>
     $(document).ready(function() {
 

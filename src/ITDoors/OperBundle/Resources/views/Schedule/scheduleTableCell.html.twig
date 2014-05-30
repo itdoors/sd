@@ -1,0 +1,15 @@
+
+{% set showNothing = true %}
+{% if officially is defined  and officially != 0%}
+    {{ officially|number_format(2) }} <br>
+    {% set showNothing = false %}
+{% endif %}
+
+{% if notOfficially is defined  and notOfficially != 0%}
+    <span style="color: red">{{ notOfficially|number_format(2) }}</span>
+    {% set showNothing = false %}
+{% endif %}
+
+{% if showNothing %}
+    -
+{% endif %}
