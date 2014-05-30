@@ -2,7 +2,11 @@ Lists\GrafikBundle\Entity\Grafik:
     repositoryClass : Lists\GrafikBundle\Entity\GrafikRepository
     type: entity
     table: grafik
-    fields:
+    id:
+        departmentId:
+            type: bigint
+            column: department_id
+            nullable: false
         year:
             id: true
             type: bigint
@@ -15,6 +19,21 @@ Lists\GrafikBundle\Entity\Grafik:
             id: true
             type: bigint
             nullable: false
+        departmentPeopleId:
+            type: bigint
+            column: department_people_id
+            nullable: false
+        departmentPeopleReplacementId:
+            type: bigint
+            column: department_people_replacement_id
+            nullable: false
+        replacementType:
+            type: string
+            length: 10
+            fixed: false
+            nullable: false
+            column: replacement_type
+    fields:
         fromTime:
             type: time
             nullable: true
@@ -70,12 +89,6 @@ Lists\GrafikBundle\Entity\Grafik:
             type: float
             nullable: true
             column: total_night_not_officially
-        replacementType:
-            type: string
-            length: 10
-            fixed: false
-            nullable: false
-            column: replacement_type
     oneToOne:
         department:
             targetEntity: Lists\DepartmentBundle\Entity\Departments
