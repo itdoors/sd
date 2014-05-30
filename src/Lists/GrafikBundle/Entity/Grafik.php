@@ -497,7 +497,7 @@ class Grafik
     /**
      * Set totalNotOfficially
      *
-     * @param float  $totalNotOfficially
+     * @param float $totalNotOfficially
      *
      * @return Grafik
      */
@@ -521,7 +521,7 @@ class Grafik
     /**
      * Set totalDayNotOfficially
      *
-     * @param float  $totalDayNotOfficially
+     * @param float $totalDayNotOfficially
      *
      * @return Grafik
      */
@@ -545,7 +545,7 @@ class Grafik
     /**
      * Set totalEveningNotOfficially
      *
-     * @param float  $totalEveningNotOfficially
+     * @param float $totalEveningNotOfficially
      *
      * @return Grafik
      */
@@ -569,7 +569,7 @@ class Grafik
     /**
      * Set totalNightNotOfficially
      *
-     * @param float  $totalNightNotOfficially
+     * @param float $totalNightNotOfficially
      *
      * @return Grafik
      */
@@ -637,12 +637,13 @@ class Grafik
      * Set departmentId
      *
      * @param integer $departmentId
+     *
      * @return Grafik
      */
     public function setDepartmentId($departmentId)
     {
         $this->departmentId = $departmentId;
-    
+
         return $this;
     }
 
@@ -660,12 +661,13 @@ class Grafik
      * Set departmentPeopleId
      *
      * @param integer $departmentPeopleId
+     *
      * @return Grafik
      */
     public function setDepartmentPeopleId($departmentPeopleId)
     {
         $this->departmentPeopleId = $departmentPeopleId;
-    
+
         return $this;
     }
 
@@ -683,12 +685,13 @@ class Grafik
      * Set departmentPeopleReplacementId
      *
      * @param integer $departmentPeopleReplacementId
+     *
      * @return Grafik
      */
     public function setDepartmentPeopleReplacementId($departmentPeopleReplacementId)
     {
         $this->departmentPeopleReplacementId = $departmentPeopleReplacementId;
-    
+
         return $this;
     }
 

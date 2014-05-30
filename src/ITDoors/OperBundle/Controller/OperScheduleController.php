@@ -367,7 +367,56 @@ class OperScheduleController extends BaseFilterController
         ));
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function deleteTimeFromDayAction(Request $request)
+    {
 
+        $return = array();
+        $date =  $request->request->get('date');
+        $idCoworker = $request->request->get('idCoworker');
+        $idDepartment = $request->request->get('idDepartment');
+        $idGrafikTime = $request->request->get('idGrafikTime');
+
+        list($year, $month, $day) = explode('-', $date);
+
+        /** @var $grafikTimeRepository \Lists\GrafikBundle\Entity\GrafikTimeRepository   */
+        $grafikTimeRepository = $this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:GrafikTime');
+
+        /** @var $grafik\Lists\GrafikBundle\Entity\Grafik   */
+        $grafik = $grafikTimeRepository->find($idGrafikTime);
+
+        if (!$grafik) {
+            $return = array();
+            $return['success'] = 0;
+            $return['error'] = 'no_entity_found';
+
+            return new Response(json_encode($return));
+        }
+
+        $em =  $this->getDoctrine()->getManager();
+        $em->remove($grafik);
+        $em->flush();
+
+        $this->updateSumGrafik($day, $month, $year, $idCoworker, $idDepartment);
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+
+    }
+
+    /**
+     * @param integer $day
+     * @param integer $month
+     * @param integer $year
+     * @param integer $idCoworker
+     * @param integer $idDepartment
+     */
     private function updateSumGrafik($day, $month, $year, $idCoworker, $idDepartment)
     {
 
@@ -429,6 +478,20 @@ class OperScheduleController extends BaseFilterController
                 'departmentPeopleReplacement' => $departmentPeopleReplacement,
                 'replacementType' => 'r'
             ));
+
+        if (!$grafik) {
+            $grafik = new Grafik();
+            $grafik->setDay($day);
+            $grafik->setMonth($month);
+            $grafik->setYear($year);
+            $grafik->setDepartmentPeople($departmentPeople);
+            $grafik->setDepartment($department);
+            $grafik->setReplacementType('r');
+            $grafik->setDepartmentId($idDepartment);
+            $grafik->setDepartmentPeopleId($idCoworker);
+            $grafik->setDepartmentPeopleReplacement($departmentPeopleReplacement);
+            $grafik->setDepartmentPeopleReplacementId(0);
+        }
 
         $grafik->setTotal($total);
         $grafik->setTotalDay($totalDay);

@@ -128,12 +128,58 @@
 
         $('.deleteButton').die('click');
         $('.deleteButton').live('click', function(e){
+            var parent = $(this).parent("td").parent("tr");
+            var deleteButton = parent.find(".deleteButton");
+            var cancelButton = parent.find(".cancelButton");
+            var editButton = parent.find(".editButton");
+            var spinner = parent.find(".spinner");
+            var checkButton = parent.find(".checkButton");
+
 
             e.preventDefault();
 
-            var message = 'Do you confirm deleting?'
+            var message = '{% trans %}Do you confirm deleting{% endtrans %}?'
             if (confirm(message)) {
-                return true;
+                var url = $(this).data('url');
+                var idGrafikTime = $(this).data('id_grafik_time');
+
+                var idCoworker = $('#addButton').data('id_coworker');
+                var idDepartment = $('#addButton').data('id_department');
+                var date = $('#addButton').data('date');
+                var sendData = {
+                    'idCoworker': idCoworker,
+                    'idDepartment': idDepartment,
+                    'date': date,
+                    'idGrafikTime': idGrafikTime
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: sendData,
+
+                    beforeSend: function() {
+                        spinner.removeClass('notDisplayed');
+                        editButton.addClass('notDisplayed');
+                        deleteButton.addClass('notDisplayed');
+                    },
+                    success: function(data) {
+                        //alert(data);
+                        ITDoorsAjax.unblockUI($(parent));
+                        data = JSON.parse(data);
+                        if (data.success == 0) {
+                            if (data.error == 'no_entity_found') {
+                                spinner.addClass('notDisplayed');
+                                editButton.removeClass('notDisplayed');
+                                deleteButton.removeClass('notDisplayed');
+                                alert('Oops, error happened');
+                            }
+                        }
+                        else {
+                            parent.remove();
+                        }
+                    }
+                })
+
             } else {
                 return false;
             }

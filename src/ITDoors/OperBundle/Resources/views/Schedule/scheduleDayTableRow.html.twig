@@ -17,7 +17,9 @@
             <i class="fa fa-check-circle-o action_button checkButton notDisplayed"></i>
             <i class="fa fa-spinner fa-spin spinner notDisplayed"></i>
             &nbsp;&nbsp;
-            <i class="fa fa-trash-o action_button deleteButton"></i>
+            <i class="fa fa-trash-o action_button deleteButton"
+               data-url="{{ path('it_doors_oper_schedule_delete_day_time') }}"
+               data-id_grafik_time="{{ oneDayTime.id }}"></i>
             <i class="fa fa-times action_button cancelButton notDisplayed"></i>
         </td>
     </tr>
@@ -40,7 +42,9 @@
             <i class="fa fa-check-circle-o action_button checkButton notDisplayed"></i>
             <i class="fa fa-spinner fa-spin spinner notDisplayed"></i>
             &nbsp;&nbsp;
-            <i class="fa fa-trash-o action_button deleteButton"></i>
+            <i class="fa fa-trash-o action_button deleteButton"
+               data-url="{{ path('it_doors_oper_schedule_delete_day_time') }}"
+               data-id_grafik_time="{{ oneDayTime.id }}"></i>
             <i class="fa fa-times action_button cancelButton notDisplayed"></i>
         </td>
     </tr>

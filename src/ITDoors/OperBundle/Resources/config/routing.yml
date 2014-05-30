@@ -45,3 +45,7 @@ it_doors_oper_schedule_add_new_time:
 it_doors_oper_schedule_table_row:
     pattern:  /oper/schedule/table/row
     defaults: { _controller: ITDoorsOperBundle:OperSchedule:scheduleTableRow }
+
+it_doors_oper_schedule_delete_day_time:
+    pattern:  /oper/schedule/delete/day/time
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:deleteTimeFromDay }
