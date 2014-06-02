@@ -49,8 +49,8 @@
         <echo msg="PHP CodeStyle is OK" />
     </target>
 
-    <target name="build:phpcsci" description="Find coding standard violations using PHP_CodeSniffer">
-        <exec executable="${bin.phpcs-ci}" passthru="true" checkreturn="true">
+    <target name="build:phpcs-ci" description="Find coding standard violations using PHP_CodeSniffer">
+        <exec executable="${bin.phpcs}" passthru="true" checkreturn="true">
             <arg value="--standard=${phpcs.standard}" />
             <arg path="${path.phpcs.src}" />
         </exec>
