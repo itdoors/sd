@@ -29,7 +29,7 @@ class UniqueEdrpouValidator extends ConstraintValidator
             {
                 $organization = $conflicts[0];
 
-                if ($root)
+                if ($root && $organization)
                 {
                     if ($root->getId() != $organization->getId())
                     {
