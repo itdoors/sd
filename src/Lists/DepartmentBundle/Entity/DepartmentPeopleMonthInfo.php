@@ -68,17 +68,17 @@ class DepartmentPeopleMonthInfo
     private $departmentPeopleReplacement;
 
     /**
-     * @var \Lists\DepartmentBundle\Entity\Lookup
+     * @var \Lists\LookupBundle\Entity\Lookup
      */
     private $employmentType;
 
     /**
-     * @var \Lists\DepartmentBundle\Entity\Lookup
+     * @var \Lists\LookupBundle\Entity\Lookup
      */
     private $salaryType;
 
     /**
-     * @var \Lists\DepartmentBundle\Entity\Lookup
+     * @var \Lists\LookupBundle\Entity\Lookup
      */
     private $type;
 
@@ -88,17 +88,17 @@ class DepartmentPeopleMonthInfo
     private $position;
 
     /**
-     * @var \Lists\DepartmentBundle\Entity\Lookup
+     * @var \Lists\LookupBundle\Entity\Lookup
      */
     private $surchargeType;
 
     /**
-     * @var \Lists\DepartmentBundle\Entity\Lookup
+     * @var \Lists\LookupBundle\Entity\Lookup
      */
     private $fineType;
 
     /**
-     * @var \Lists\DepartmentBundle\Entity\Lookup
+     * @var \Lists\LookupBundle\Entity\Lookup
      */
     private $bonusType;
 
@@ -397,11 +397,11 @@ class DepartmentPeopleMonthInfo
     /**
      * Set employmentType
      *
-     * @param \Lists\DepartmentBundle\Entity\Lookup $employmentType
+     * @param \Lists\LookupBundle\Entity\Lookup $employmentType
      *
      * @return DepartmentPeopleMonthInfo
      */
-    public function setEmploymentType(\Lists\DepartmentBundle\Entity\Lookup $employmentType = null)
+    public function setEmploymentType(\Lists\LookupBundle\Entity\Lookup $employmentType = null)
     {
         $this->employmentType = $employmentType;
 
@@ -411,7 +411,7 @@ class DepartmentPeopleMonthInfo
     /**
      * Get employmentType
      *
-     * @return \Lists\DepartmentBundle\Entity\Lookup
+     * @return \Lists\LookupBundle\Entity\Lookup
      */
     public function getEmploymentType()
     {
@@ -421,11 +421,11 @@ class DepartmentPeopleMonthInfo
     /**
      * Set salaryType
      *
-     * @param \Lists\DepartmentBundle\Entity\Lookup $salaryType
+     * @param \Lists\LookupBundle\Entity\Lookup $salaryType
      *
      * @return DepartmentPeopleMonthInfo
      */
-    public function setSalaryType(\Lists\DepartmentBundle\Entity\Lookup $salaryType = null)
+    public function setSalaryType(\Lists\LookupBundle\Entity\Lookup $salaryType = null)
     {
         $this->salaryType = $salaryType;
 
@@ -435,7 +435,7 @@ class DepartmentPeopleMonthInfo
     /**
      * Get salaryType
      *
-     * @return \Lists\DepartmentBundle\Entity\Lookup
+     * @return \Lists\LookupBundle\Entity\Lookup
      */
     public function getSalaryType()
     {
@@ -445,11 +445,11 @@ class DepartmentPeopleMonthInfo
     /**
      * Set type
      *
-     * @param \Lists\DepartmentBundle\Entity\Lookup $type
+     * @param \Lists\LookupBundle\Entity\Lookup $type
      *
      * @return DepartmentPeopleMonthInfo
      */
-    public function setType(\Lists\DepartmentBundle\Entity\Lookup $type = null)
+    public function setType(\Lists\LookupBundle\Entity\Lookup $type = null)
     {
         $this->type = $type;
 
@@ -459,7 +459,7 @@ class DepartmentPeopleMonthInfo
     /**
      * Get type
      *
-     * @return \Lists\DepartmentBundle\Entity\Lookup
+     * @return \Lists\LookupBundle\Entity\Lookup
      */
     public function getType()
     {
@@ -493,11 +493,11 @@ class DepartmentPeopleMonthInfo
     /**
      * Set surchargeType
      *
-     * @param \Lists\DepartmentBundle\Entity\Lookup $surchargeType
+     * @param \Lists\LookupBundle\Entity\Lookup $surchargeType
      *
      * @return DepartmentPeopleMonthInfo
      */
-    public function setSurchargeType(\Lists\DepartmentBundle\Entity\Lookup $surchargeType = null)
+    public function setSurchargeType(\Lists\LookupBundle\Entity\Lookup $surchargeType = null)
     {
         $this->surchargeType = $surchargeType;
 
@@ -507,7 +507,7 @@ class DepartmentPeopleMonthInfo
     /**
      * Get surchargeType
      *
-     * @return \Lists\DepartmentBundle\Entity\Lookup
+     * @return \Lists\LookupBundle\Entity\Lookup
      */
     public function getSurchargeType()
     {
@@ -517,11 +517,11 @@ class DepartmentPeopleMonthInfo
     /**
      * Set fineType
      *
-     * @param \Lists\DepartmentBundle\Entity\Lookup $fineType
+     * @param \Lists\LookupBundle\Entity\Lookup $fineType
      *
      * @return DepartmentPeopleMonthInfo
      */
-    public function setFineType(\Lists\DepartmentBundle\Entity\Lookup $fineType = null)
+    public function setFineType(\Lists\LookupBundle\Entity\Lookup $fineType = null)
     {
         $this->fineType = $fineType;
 
@@ -531,7 +531,7 @@ class DepartmentPeopleMonthInfo
     /**
      * Get fineType
      *
-     * @return \Lists\DepartmentBundle\Entity\Lookup
+     * @return \Lists\LookupBundle\Entity\Lookup
      */
     public function getFineType()
     {
@@ -541,11 +541,11 @@ class DepartmentPeopleMonthInfo
     /**
      * Set bonusType
      *
-     * @param \Lists\DepartmentBundle\Entity\Lookup $bonusType
+     * @param \Lists\LookupBundle\Entity\Lookup $bonusType
      *
      * @return DepartmentPeopleMonthInfo
      */
-    public function setBonusType(\Lists\DepartmentBundle\Entity\Lookup $bonusType = null)
+    public function setBonusType(\Lists\LookupBundle\Entity\Lookup $bonusType = null)
     {
         $this->bonusType = $bonusType;
 
@@ -555,7 +555,7 @@ class DepartmentPeopleMonthInfo
     /**
      * Get bonusType
      *
-     * @return \Lists\DepartmentBundle\Entity\Lookup
+     * @return \Lists\LookupBundle\Entity\Lookup
      */
     public function getBonusType()
     {
