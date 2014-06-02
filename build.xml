@@ -49,7 +49,7 @@
     </target>
 
     <target name="build:phpcs-ci" description="Find coding standard violations using PHP_CodeSniffer">
-        <exec executable="sudo ${bin.phpcs}" passthru="true" checkreturn="true">
+        <exec executable="${bin.phpcs-ci}" passthru="true" checkreturn="true">
             <arg value="--standard=${phpcs.standard}" />
             <arg path="${path.phpcs.src}" />
         </exec>
