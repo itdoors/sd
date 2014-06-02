@@ -56,12 +56,6 @@
         <echo msg="PHP CodeStyle is OK" />
     </target>
 
-    <target name="build:whoami" description="Whoami">
-        <exec executable="whoami > whoami" passthru="true" checkreturn="true">
-        </exec>
-        <echo msg="PHP CodeStyle is OK" />
-    </target>
-
     <target name="build:deploy" description="Deploying to server">
         <exec executable="${bin.cap}" passthru="true" checkreturn="true">
             <arg value="deploy" />
