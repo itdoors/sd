@@ -114,7 +114,7 @@ Evening kind: Вечерних
 Night kind: Ночных
 Edit: Редактировать
 Delete: Удалить
-Illness vacation: Заболел
+Sick: Заболел
 Hooky: Прогул
 Fired: Уволен
 Vacation: Отпуск
@@ -128,3 +128,5 @@ Error: Ошибка
 Non-official person cant  work officially: Официальное время не допускается для этого пользователя
 Do you confirm deleting: Вы подтверждаете удаление
 Current date: Текущая дата
+Wrong from-to time: Неверно заполненое время
+

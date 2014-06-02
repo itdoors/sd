@@ -1,4 +1,6 @@
+{% set shown = false %}
 {% if oneDayTime.notOfficially != true %}
+    {% set shown = true %}
     <tr class="tdHolder">
         <td>
             <span class="timeFrom">{{ oneDayTime.fromTime|date('H:i') }}</span>
@@ -12,18 +14,8 @@
         <td>{{ oneDayTime.totalDay }}</td>
         <td>{{ oneDayTime.totalEvening }}</td>
         <td>{{ oneDayTime.totalNight }}</td>
-        <td align="center">
-            <i class="fa fa-edit action_button editButton"></i>
-            <i class="fa fa-check-circle-o action_button checkButton notDisplayed"></i>
-            <i class="fa fa-spinner fa-spin spinner notDisplayed"></i>
-            &nbsp;&nbsp;
-            <i class="fa fa-trash-o action_button deleteButton"
-               data-url="{{ path('it_doors_oper_schedule_delete_day_time') }}"
-               data-id_grafik_time="{{ oneDayTime.id }}"></i>
-            <i class="fa fa-times action_button cancelButton notDisplayed"></i>
-        </td>
-    </tr>
 {% elseif oneDayTime.notOfficially == true %}
+    {% set shown = true %}
     <tr class="tdHolder">
         <td>
             <span class="timeFrom">{{ oneDayTime.fromTime|date('H:i') }}</span>
@@ -37,9 +29,14 @@
         <td class="td_not_officialy">{{ oneDayTime.totalDayNotOfficially }}</td>
         <td class="td_not_officialy">{{ oneDayTime.totalEveningNotOfficially }}</td>
         <td class="td_not_officialy">{{ oneDayTime.totalNightNotOfficially }}</td>
+{% endif %}
+
+{% if shown %}
         <td align="center">
             <i class="fa fa-edit action_button editButton"></i>
-            <i class="fa fa-check-circle-o action_button checkButton notDisplayed"></i>
+            <i class="fa fa-check-circle-o action_button checkButton notDisplayed"
+               data-url="{{ path('it_doors_oper_schedule_add_new_time') }}"
+               data-id_grafik_time="{{ oneDayTime.id }}"></i>
             <i class="fa fa-spinner fa-spin spinner notDisplayed"></i>
             &nbsp;&nbsp;
             <i class="fa fa-trash-o action_button deleteButton"

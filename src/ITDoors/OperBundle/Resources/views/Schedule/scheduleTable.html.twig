@@ -113,7 +113,11 @@
 
                             data-url-more-info="{{ url('it_doors_oper_schedule_day_info') }}"
                                 >
-
+                                {% if infoHours[idCoworker][day]['status'] is defined %}
+                                    {% set status = infoHours[idCoworker][day]['status'] %}
+                                {% else %}
+                                    {% set status = 'ok' %}
+                                {% endif %}
                                 {% if infoHours[idCoworker][day]['officially'] is defined %}
                                     {% set officially = infoHours[idCoworker][day]['officially'] %}
                                 {% else %}
@@ -130,6 +134,7 @@
                                 'ITDoorsOperBundle:Schedule:scheduleTableCell.html.twig', {
                                     'officially': officially,
                                     'notOfficially': notOfficially,
+                                    'status': status
 
                                 }) }}
 

@@ -54,6 +54,10 @@
 
             inputFrom.val(spanFrom.html()) ;
             inputTo.val(spanTo.html());
+
+            parent.after('<tr class="temp_row_checkbox"><td colspan="7">' +
+                    '{% trans %}Officially{% endtrans %}: <input type="checkbox" class="temp_checkbox"> </td></tr>');
+
             deleteButton.addClass('notDisplayed');
             cancelButton.removeClass('notDisplayed');
 
@@ -87,6 +91,8 @@
             inputTo.addClass('notDisplayed');
             spanFrom.removeClass('notDisplayed');
             spanTo.removeClass('notDisplayed');
+
+            parent.next().remove();//remove the temp checkbox
         })
 
         $('.checkButton').die('click');
@@ -111,15 +117,74 @@
             cancelButton.addClass('notDisplayed');
             spinner.removeClass('notDisplayed');
 
-            spanFrom.text(inputFrom.val());
-            spanTo.text(inputTo.val());
 
-            spanFrom.removeClass('notDisplayed');
-            spanTo.removeClass('notDisplayed');
-            inputFrom.addClass('notDisplayed');
-            inputTo.addClass('notDisplayed');
+            var timeFrom = inputFrom.val();
+            var timeTo = inputTo.val();
+            var officially = parent.next().find('.temp_checkbox').prop("checked");
 
+            var url = $(this).data('url');
+            var idTimeGrafik = $(this).data('id_grafik_time');
 
+            var idCoworker = $('#addButton').data('id_coworker');
+            var idDepartment = $('#addButton').data('id_department');
+            var date = $('#addButton').data('date');
+            var sendData ={
+                'idCoworker': idCoworker,
+                'idDepartment': idDepartment,
+                'date': date,
+                'officially': officially,
+                'fromTime': timeFrom,
+                'toTime' : timeTo,
+                'idTimeGrafik' : idTimeGrafik
+            }
+            $('.alert').hide( 'blind', {}, 500 );
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data) {
+                    //alert(data);
+                    spinner.addClass('notDisplayed');
+
+                    data = JSON.parse(data);
+                    if (data.success == 0) {
+                        if (data.error == 'no_official_permitted') {
+                            $('#non_official_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'wrong_from_to_time') {
+                            $('#wrong_date_error').toggle( 'blind', {}, 500 );
+                        }
+                        checkButton.removeClass('notDisplayed');
+                        cancelButton.removeClass('notDisplayed');
+                    }
+                    else {
+                        var tempHtml = $('#tbody_content').html();
+                        parent.next().remove();
+                        parent.replaceWith(data.html)
+                        $('.timepiker-cool').timepicker({
+                            autoclose: true,
+                            minuteStep: 5,
+                            showSeconds: false,
+                            showMeridian: false
+                        });
+
+/*
+                        editButton.removeClass('notDisplayed');
+                        deleteButton.removeClass('notDisplayed');
+
+                        spanFrom.text(inputFrom.val());
+                        spanTo.text(inputTo.val());
+                        spanFrom.removeClass('notDisplayed');
+                        spanTo.removeClass('notDisplayed');
+                        inputFrom.addClass('notDisplayed');
+                        inputTo.addClass('notDisplayed');
+*/
+
+                    }
+                }
+            })
+
+            //alert (timeFrom + timeTo+ officially)
         })
 
 
@@ -195,7 +260,7 @@
 
         $('#addButton').die('click');
         $('#addButton').live('click', function(e){
-            $('#non_official_error').hide( 'blind', {}, 500 );
+            $('.alert').hide( 'blind', {}, 500 );
             var timeFrom = $('#newFromTime').val();
             var timeTo = $('#newToTime').val();
             var officially = $('#officially').prop("checked");
@@ -229,6 +294,9 @@
                         if (data.error == 'no_official_permitted') {
                             $('#non_official_error').toggle( 'blind', {}, 500 );
                         }
+                        if (data.error == 'wrong_from_to_time') {
+                            $('#wrong_date_error').toggle( 'blind', {}, 500 );
+                        }
                     }
                     else {
                         //alert(data.html)
@@ -247,6 +315,37 @@
             })
 
         })
+
+        $('.statusButton').die('click');
+        $('.statusButton').live('click', function(e) {
+            e.preventDefault();
+
+            var url = $('#statusHolder').data('url');
+            var status = $(this).data('status');
+            //alert(status);
+            var idCoworker = $('#addButton').data('id_coworker');
+            var idDepartment = $('#addButton').data('id_department');
+            var date = $('#addButton').data('date');
+            var sendData = {
+                'idCoworker': idCoworker,
+                'idDepartment': idDepartment,
+                'date': date,
+                'status': status
+            }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                beforeSend: function() {
+                    //ITDoorsAjax.blockUI($('#add_div'));
+                },
+                success: function(data) {
+                    //alert(data);
+                }
+            })
+
+        })
+
     })
 
 </script>
@@ -262,31 +361,31 @@
 							</span>
         <i class="fa fa-angle-down"></i>
     </button>
-    <ul class="dropdown-menu pull-right" role="menu">
+    <ul class="dropdown-menu pull-right" role="menu" id="statusHolder" data-url="{{ path('it_doors_oper_schedule_update_status_coworker') }}">
         <li>
-            <a href="#">
-                {% trans %}Illness vacation{% endtrans %}
+            <a href="#" class="statusButton" data-status="sick" >
+                {% trans %}Sick{% endtrans %}
             </a>
         </li>
         <li>
-            <a href="#">
+            <a href="#" class="statusButton" data-status="skip">
                 {% trans %}Hooky{% endtrans %}
             </a>
         </li>
         <li>
-            <a href="#">
+            <a href="#" class="statusButton" data-status="fired">
                 {% trans %}Fired{% endtrans %}
             </a>
         </li>
         <li>
-            <a href="#">
+            <a href="#" class="statusButton" data-status="vacation">
                 {% trans %}Vacation{% endtrans %}
             </a>
         </li>
         <li class="divider">
         </li>
         <li>
-            <a href="#">
+            <a href="#" class="statusButton" data-status="ok">
                 {% trans %}Clear{% endtrans %}
             </a>
         </li>
@@ -294,10 +393,6 @@
 </li>
 </div>
 <div style="height: 150px; width: 100%; margin-top: 10px; display: none;" id="add_div">
-    <div class="alert alert-warning notDisplayed" id="non_official_error">
-        <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Non-official person cant  work officially{% endtrans %}
-    </div>
-
 
     <b>{% trans %}Range{% endtrans %}:</b>
     {% trans %}From{% endtrans %}
@@ -313,13 +408,14 @@
             data-date="{{ date }}"
             data-id_department="{{ idDepartment }}"
             data-url="{{ path('it_doors_oper_schedule_add_new_time') }}">{% trans %}Add{% endtrans %}</button>
-
-
-    {#
-        <div id="test"> test</div>
-    #}
 </div>
-
+<br>
+<div class="alert alert-warning notDisplayed" id="non_official_error">
+    <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Non-official person cant  work officially{% endtrans %}
+</div>
+<div class="alert alert-warning notDisplayed" id="wrong_date_error">
+    <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Wrong from-to time{% endtrans %}
+</div>
 <style>
     .action_button{
         cursor: pointer;

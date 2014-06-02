@@ -53,3 +53,7 @@ it_doors_oper_schedule_delete_day_time:
 it_doors_oper_schedule_one_day_total:
     pattern:  /oper/schedule/one/day/total
     defaults: { _controller: ITDoorsOperBundle:OperSchedule:oneDayTotal }
+
+it_doors_oper_schedule_update_status_coworker:
+    pattern:  /oper/schedule/update/status/coworker
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:updateStatusCoworker }

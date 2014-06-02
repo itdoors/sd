@@ -138,6 +138,21 @@ class OperScheduleController extends BaseFilterController
             //$info = array_fill(0, $days, '');
 
             foreach ($infoHoursCoworker as $infoDay) {
+                $status = 'ok';
+                if ($infoDay['isVacation']) {
+                    $status = 'vacation';
+                }
+                if ($infoDay['isSkip']) {
+                    $status = 'skip';
+                }
+                if ($infoDay['isFired']) {
+                    $status = 'fired';
+                }
+                if ($infoDay['isSick']) {
+                    $status = 'sick';
+                }
+
+                $infoHours[$idCoworker][$infoDay['day']]['status'] = $status;
                 $infoHours[$idCoworker][$infoDay['day']]['officially'] = $infoDay['total'];
                 $infoHours[$idCoworker][$infoDay['day']]['notOfficially'] = $infoDay['totalNotOfficially'];
             }
@@ -225,6 +240,7 @@ class OperScheduleController extends BaseFilterController
         $officially = $request->request->get('officially');
         $fromTime = $request->request->get('fromTime');
         $toTime = $request->request->get('toTime');
+        $idTimeGrafik = $request->request->get('idTimeGrafik');
 
         $addTypeOfficially = '';
 
@@ -258,8 +274,23 @@ class OperScheduleController extends BaseFilterController
         $midnight = '00:00';
 
         $timeIn = array();
-        if ($fromTime != $toTime) {
-            if ($hoursFromTime > $hoursToTime || ($hoursToTime == 0 && $minutesToTime != 0 && $hoursFromTime != 0)) {
+        $infoDay['date'] = $date;
+        $infoDay['from'] = $fromTime;
+        $infoDay['to'] = $toTime;
+        if (($hoursFromTime > $hoursToTime && $hoursToTime != 0) ||
+            ($hoursToTime == 0 && $minutesToTime != 0 && $hoursFromTime != 0) ||
+            ($hoursToTime == $hoursFromTime && $minutesFromTime>$minutesToTime) ||
+            ($fromTime == $toTime)) {
+
+            $return['success'] = 0;
+            $return['error'] = 'wrong_from_to_time';
+
+            return new Response(json_encode($return));
+
+
+        }
+
+/*            if ($hoursFromTime > $hoursToTime || ($hoursToTime == 0 && $minutesToTime != 0 && $hoursFromTime != 0)) {
                 $timeIn[0]['from'] = $fromTime;
                 $timeIn[0]['to'] = $midnight;
                 $timeIn[0]['date'] = $date;
@@ -272,8 +303,8 @@ class OperScheduleController extends BaseFilterController
                 $timeIn[0]['from'] = $fromTime;
                 $timeIn[0]['to'] = $toTime;
                 $timeIn[0]['date'] = $date;
-            }
-        }
+            }*/
+
 
         $department  = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments')
@@ -290,75 +321,82 @@ class OperScheduleController extends BaseFilterController
         $periodPoints[] = 19;
         $periodPoints[] = 22;
         $periodPoints[] = 24;
-        foreach ($timeIn as $infoDay) {
+        //foreach ($timeIn as $infoDay) {
             list($year, $month, $day) = explode('-', $infoDay['date']);
 
+        if (isset($idTimeGrafik) && $idTimeGrafik > 0) {
+            $newTime = $this->getDoctrine()
+                ->getRepository('ListsGrafikBundle:GrafikTime')
+                ->find($idTimeGrafik);
+        } else {
             $newTime = new GrafikTime();
-            $newTime->setDay($day);
-            $newTime->setYear($year);
-            $newTime->setMonth($month);
-
-            $newTime->setFromTime(new \DateTime($infoDay['from'].':00'));
-            $newTime->setToTime(new \DateTime($infoDay['to'].':00'));
-
-            list($hoursFrom, $minutesFrom) = explode(':', $infoDay['from']);
-            list($hoursTo, $minutesTo) = explode(':', $infoDay['to']);
-            if ($hoursTo == 0 && $hoursFrom != 0) {
-                $hoursTo = 24;
-            }
-            $hoursFrom += $minutesFrom/60;
-            $hoursTo += $minutesTo/60;
-
-            //Algorithm to calculate number of hours
-            //between two periods
-            $totalPeriod = array();
-            foreach ($periodPoints as $point) {
-                $check1 = $point - $hoursFrom;
-                $check2 = $point - $hoursTo;
-
-                if ($check1<0) {
-                    $check1 = 0;
-                }
-                if ($check2<0) {
-                    $check2 = 0;
-                }
-                $hours = $check1 - $check2 - array_sum($totalPeriod);
-                $totalPeriod[] = $hours;
-            }
-            //end of algorithm
-
-            $totalNight = $totalPeriod[0] + $totalPeriod[3];//from 0-7, 22-24
-            $totalEvening = $totalPeriod[2];//from 7-19
-            $totalDay = $totalPeriod[1];//from 19-22
-
-            $total = $totalNight + $totalEvening + $totalDay;
-
-            $funcTotal = 'setTotal'.$addTypeOfficially;
-            $funcTotalDay = 'setTotalDay'.$addTypeOfficially;
-            $funcTotalEvening = 'setTotalEvening'.$addTypeOfficially;
-            $funcTotalNight = 'setTotalNight'.$addTypeOfficially;
-
-            //setting official or not total hours
-            $newTime->$funcTotal($total);
-            $newTime->$funcTotalDay($totalDay);
-            $newTime->$funcTotalEvening($totalEvening);
-            $newTime->$funcTotalNight($totalNight);
-            $newTime->setNotOfficially(!$officially);
-            $newTime->setDepartment($department);
-            $newTime->setDepartmentPeople($departmentPeople);
-            $newTime->setDepartmentPeopleReplacement($departmentPeopleReplacement);
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($newTime);
-            $em->flush();
-
-            $return['html'] .= $this->renderView('ITDoorsOperBundle:Schedule:scheduleDayTableRow.html.twig', array(
-                'oneDayTime'=> $newTime
-            ));
-
-
-            $this->updateSumGrafik($day, $month, $year, $idCoworker, $idDepartment);
         }
+
+        $newTime->setDay($day);
+        $newTime->setYear($year);
+        $newTime->setMonth($month);
+
+        $newTime->setFromTime(new \DateTime($infoDay['from'].':00'));
+        $newTime->setToTime(new \DateTime($infoDay['to'].':00'));
+
+        list($hoursFrom, $minutesFrom) = explode(':', $infoDay['from']);
+        list($hoursTo, $minutesTo) = explode(':', $infoDay['to']);
+        if ($hoursTo == 0 && $hoursFrom != 0) {
+            $hoursTo = 24;
+        }
+        $hoursFrom += $minutesFrom/60;
+        $hoursTo += $minutesTo/60;
+
+        //Algorithm to calculate number of hours
+        //between two periods
+        $totalPeriod = array();
+        foreach ($periodPoints as $point) {
+            $check1 = $point - $hoursFrom;
+            $check2 = $point - $hoursTo;
+
+            if ($check1 < 0) {
+                $check1 = 0;
+            }
+            if ($check2 < 0) {
+                $check2 = 0;
+            }
+            $hours = $check1 - $check2 - array_sum($totalPeriod);
+            $totalPeriod[] = $hours;
+        }
+        //end of algorithm
+
+        $totalNight = $totalPeriod[0] + $totalPeriod[3];//from 0-7, 22-24
+        $totalEvening = $totalPeriod[2];//from 7-19
+        $totalDay = $totalPeriod[1];//from 19-22
+
+        $total = $totalNight + $totalEvening + $totalDay;
+
+        $funcTotal = 'setTotal'.$addTypeOfficially;
+        $funcTotalDay = 'setTotalDay'.$addTypeOfficially;
+        $funcTotalEvening = 'setTotalEvening'.$addTypeOfficially;
+        $funcTotalNight = 'setTotalNight'.$addTypeOfficially;
+
+        //setting official or not total hours
+        $newTime->$funcTotal($total);
+        $newTime->$funcTotalDay($totalDay);
+        $newTime->$funcTotalEvening($totalEvening);
+        $newTime->$funcTotalNight($totalNight);
+        $newTime->setNotOfficially(!$officially);
+        $newTime->setDepartment($department);
+        $newTime->setDepartmentPeople($departmentPeople);
+        $newTime->setDepartmentPeopleReplacement($departmentPeopleReplacement);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($newTime);
+        $em->flush();
+
+        $return['html'] .= $this->renderView('ITDoorsOperBundle:Schedule:scheduleDayTableRow.html.twig', array(
+            'oneDayTime'=> $newTime
+        ));
+
+
+        $this->updateSumGrafik($day, $month, $year, $idCoworker, $idDepartment);
+    //}
 
         return new Response(json_encode($return));
     }
@@ -555,11 +593,95 @@ class OperScheduleController extends BaseFilterController
             $notOfficially = $infoDay[0]['totalNotOfficially'];
         }
 
+        $status = 'ok';
+        if ($infoDay[0]['isVacation']) {
+            $status = 'vacation';
+        }
+        if ($infoDay[0]['isSkip']) {
+            $status = 'skip';
+        }
+        if ($infoDay[0]['isFired']) {
+            $status = 'fired';
+        }
+        if ($infoDay[0]['isSick']) {
+            $status = 'sick';
+        }
 
         $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleTableCell.html.twig', array(
             'officially'=> $officially,
             'notOfficially'=> $notOfficially,
+            'status' => $status,
         ));
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function updateStatusCoworkerAction (Request $request)
+    {
+        $status = $request->request->get('status');
+        $date =  $request->request->get('date');
+        $idCoworker = $request->request->get('idCoworker');
+        $idDepartment = $request->request->get('idDepartment');
+
+
+
+        list($year, $month, $day) = explode('-', $date);
+
+        $department  = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:Departments')
+            ->find($idDepartment);
+
+        $departmentPeople  = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople')
+            ->find($idCoworker);
+
+        $departmentPeopleReplacement  = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople')
+            ->find(0);
+
+        /** @var  $grafik \Lists\GrafikBundle\Entity\Grafik*/
+        $grafik  =$this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:Grafik')
+            ->findOneBy(array(
+                'day' => $day,
+                'month' => $month,
+                'year' => $year,
+                'departmentPeople' => $departmentPeople,
+                'department' => $department,
+                'departmentPeopleReplacement' => $departmentPeopleReplacement,
+                'replacementType' => 'r'
+            ));
+
+        if ($grafik) {
+            if ($status == 'fired') {
+                $grafik->setIsFired(true);
+            }
+            if ($status == 'vacation') {
+                $grafik->setIsVacation(true);
+            }
+            if ($status == 'skip') {
+                $grafik->setIsSkip(true);
+            }
+            if ($status == 'sick') {
+                $grafik->setIsSick(true);
+            }
+            if ($status == 'ok') {
+                $grafik->setIsSkip(false);
+                $grafik->setIsSick(false);
+                $grafik->setIsVacation(false);
+                $grafik->setIsFired(false);
+            }
+            $em =  $this->getDoctrine()->getManager();
+            $em->persist($grafik);
+            $em->flush();
+        }
 
         $return['success'] = 1;
 
