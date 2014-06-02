@@ -19,6 +19,7 @@
 
     <property name="bin.phpunit" value="phpunit" />
     <property name="bin.phpcs" value="${path.bin}/phpcs" />
+    <property name="bin.phpcs-ci" value="phpcs" />
     <property name="bin.cap" value="${path.bin}/cap" />
 
     <target name="build" depends="build:prepare,build:phpcs">
@@ -42,6 +43,14 @@
 
     <target name="build:phpcs" description="Find coding standard violations using PHP_CodeSniffer">
         <exec executable="${bin.phpcs}" passthru="true" checkreturn="true">
+            <arg value="--standard=${phpcs.standard}" />
+            <arg path="${path.phpcs.src}" />
+        </exec>
+        <echo msg="PHP CodeStyle is OK" />
+    </target>
+
+    <target name="build:phpcs-cs" description="Find coding standard violations using PHP_CodeSniffer">
+        <exec executable="${bin.phpcs-ci}" passthru="true" checkreturn="true">
             <arg value="--standard=${phpcs.standard}" />
             <arg path="${path.phpcs.src}" />
         </exec>
