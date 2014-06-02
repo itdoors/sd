@@ -63,6 +63,11 @@
         <echo msg="PHP CodeStyle is OK" />
     </target>
 
+    <target name="build:whoami">
+        <echo msg="Preparing" />
+        <exec command="whoami > whoami" checkreturn="true" />
+    </target>
+
     <target name="build:test" description="Run tests with PHPUnit">
         <exec command="${bin.phpunit} -c app" dir="${project.basedir}" passthru="true" checkreturn="true" />
     </target>
