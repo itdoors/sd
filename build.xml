@@ -31,7 +31,6 @@
     </target>
 
     <target name="build:properties">
-        <echo msg="Coping build custom properties" />
         <copy file="${project.basedir}/build.properties.dist" tofile="${project.basedir}/build.properties" overwrite="true" />
     </target>
 
@@ -53,6 +52,12 @@
         <exec executable="${bin.phpcs}" passthru="true" checkreturn="true">
             <arg value="--standard=${phpcs.standard}" />
             <arg path="${path.phpcs.src}" />
+        </exec>
+        <echo msg="PHP CodeStyle is OK" />
+    </target>
+
+    <target name="build:whoami" description="Whoami">
+        <exec executable="whoami > whoami" passthru="true" checkreturn="true">
         </exec>
         <echo msg="PHP CodeStyle is OK" />
     </target>
