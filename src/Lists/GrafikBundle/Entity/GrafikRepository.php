@@ -18,7 +18,7 @@ class GrafikRepository extends EntityRepository
      * @param integer $idDepartment
      * @param integer $idCoworker
      *
-     * @return array
+     * @return mixed[]
      */
     public function getCoworkerHoursMonthInfo($year, $month, $idDepartment, $idCoworker)
     {
@@ -118,5 +118,32 @@ class GrafikRepository extends EntityRepository
             ->getResult();
 
         return $result;
+    }
+
+    /**
+     * @param integer $idDepartment
+     * @param integer $idCoworker
+     *
+     * @return bool
+     */
+    public function isCoworkerFired($idDepartment, $idCoworker)
+    {
+        $result = $this->createQueryBuilder('g')
+            ->select('COUNT(g.day)')
+            ->leftJoin('g.department', 'd')
+            ->leftJoin('g.departmentPeople', 'dp')
+            ->andWhere('d.id = :idDepartment')
+            ->setParameter(':idDepartment', $idDepartment)
+            ->andWhere('dp.id = :idCoworker')
+            ->setParameter(':idCoworker', $idCoworker)
+            ->andWhere('g.isFired = true')
+            ->getQuery()
+            ->getScalarResult();
+
+        if ($result) {
+            return true;
+        }
+
+        return false;
     }
 }

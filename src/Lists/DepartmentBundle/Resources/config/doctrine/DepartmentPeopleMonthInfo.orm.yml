@@ -1,6 +1,7 @@
 Lists\DepartmentBundle\Entity\DepartmentPeopleMonthInfo:
     type: entity
     table: department_people_month_info
+    repositoryClass : Lists\DepartmentBundle\Entity\DepartmentPeopleMonthInfoRepository
     fields:
         departmentPeopleId:
             id: true
@@ -60,6 +61,15 @@ Lists\DepartmentBundle\Entity\DepartmentPeopleMonthInfo:
                     referencedColumnName: id
             orphanRemoval: false
     manyToOne:
+        departmentPeople:
+            targetEntity: DepartmentPeople
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                department_people_id:
+                    referencedColumnName: id
+            orphanRemoval: false
         employmentType:
             targetEntity: Lists\LookupBundle\Entity\Lookup
             cascade: {  }

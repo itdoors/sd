@@ -1,11 +1,12 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
 {% if status == 'vacation' %}
-    vacation
+    {% trans %}Vacation{% endtrans %}
 {% elseif status == 'sick' %}
-    sick
+    {% trans %}Sick{% endtrans %}
 {% elseif status == 'skip' %}
-    skip
+    {% trans %}Skip{% endtrans %}
 {% elseif status == 'fired' %}
-    fired
+    {% trans %}Fired{% endtrans %}
 {% elseif status == 'ok' %}
 
     {% set showNothing = true %}

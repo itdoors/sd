@@ -111,18 +111,22 @@ class OperScheduleController extends BaseFilterController
             }
         }
 
-        /** @var $departmentPeopleRepository \Lists\DepartmentBundle\Entity\DepartmentPeopleRepository   */
-        $departmentPeopleRepository = $this->getDoctrine()
-            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
 
-        $query = $departmentPeopleRepository->getFilteredDepartmentPeopleQuery($id, $filters);
-        $coworkers = $query->getResult();
 
         /** @var $grafikRepository \Lists\GrafikBundle\Entity\GrafikRepository   */
         $grafikRepository = $this->getDoctrine()
             ->getRepository('ListsGrafikBundle:Grafik');
 
+        /** @var  $monthInfoRepository \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfoRepository */
+        $monthInfoRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
+
+        $query = $monthInfoRepository->getFilteredCoworkers($idDepartment, $month, $year, $filters);
+
+        $coworkers = $query->getResult();
+
         $infoHours = array();
+
         /** @var $coworker \Lists\DepartmentBundle\Entity\DepartmentPeople   */
         foreach ($coworkers as $coworker) {
 
@@ -158,7 +162,9 @@ class OperScheduleController extends BaseFilterController
             }
 
         }
-
+        //ini_set('memory_limit', '512M');
+        //var_dump(count($coworkers), count($dateInfo));
+        //exit;
         return $this->render('ITDoorsOperBundle:Schedule:scheduleTable.html.twig', array(
             'days'=> $days,
             'coworkers' => $coworkers,
@@ -168,6 +174,7 @@ class OperScheduleController extends BaseFilterController
             'year' => $year,
             'monthName' =>$monthName
         ));
+
     }
 
     /**
@@ -264,10 +271,16 @@ class OperScheduleController extends BaseFilterController
             return new Response(json_encode($return));
         }
 
-        /* if ($departmentPeople->getFaired()) {
-             $return['success'] = 0;
-             $return['error'] = 'faired';
-         }*/
+        /** @var $grafikRepository \Lists\GrafikBundle\Entity\GrafikRepository   */
+        $grafikRepository = $this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:Grafik');
+
+        if ($grafikRepository->isCoworkerFired($idCoworker, $idDepartment)) {
+            $return['success'] = 0;
+            $return['error'] = 'fired';
+
+            return new Response(json_encode($return));
+        }
 
         list($hoursFromTime, $minutesFromTime) = explode(':', $fromTime);
         list($hoursToTime, $minutesToTime) = explode(':', $toTime);

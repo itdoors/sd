@@ -154,6 +154,9 @@
                         if (data.error == 'wrong_from_to_time') {
                             $('#wrong_date_error').toggle( 'blind', {}, 500 );
                         }
+                        if (data.error == 'fired') {
+                            $('#fired_error').toggle( 'blind', {}, 500 );
+                        }
                         checkButton.removeClass('notDisplayed');
                         cancelButton.removeClass('notDisplayed');
                     }
@@ -297,6 +300,9 @@
                         if (data.error == 'wrong_from_to_time') {
                             $('#wrong_date_error').toggle( 'blind', {}, 500 );
                         }
+                        if (data.error == 'fired') {
+                            $('#fired_error').toggle( 'blind', {}, 500 );
+                        }
                     }
                     else {
                         //alert(data.html)
@@ -322,7 +328,8 @@
 
             var url = $('#statusHolder').data('url');
             var status = $(this).data('status');
-            //alert(status);
+            var message = $(this).data('message');
+
             var idCoworker = $('#addButton').data('id_coworker');
             var idDepartment = $('#addButton').data('id_department');
             var date = $('#addButton').data('date');
@@ -340,7 +347,9 @@
                     //ITDoorsAjax.blockUI($('#add_div'));
                 },
                 success: function(data) {
-                    //alert(data);
+                    $('#status_span').html(message);
+                    $('#status_changed').show( 'blind', {}, 500 );
+
                 }
             })
 
@@ -363,29 +372,29 @@
     </button>
     <ul class="dropdown-menu pull-right" role="menu" id="statusHolder" data-url="{{ path('it_doors_oper_schedule_update_status_coworker') }}">
         <li>
-            <a href="#" class="statusButton" data-status="sick" >
+            <a href="#" class="statusButton" data-status="sick" data-message="{% trans %}Sick{% endtrans %}">
                 {% trans %}Sick{% endtrans %}
             </a>
         </li>
         <li>
-            <a href="#" class="statusButton" data-status="skip">
-                {% trans %}Hooky{% endtrans %}
+            <a href="#" class="statusButton" data-status="skip" data-message="{% trans %}Skip{% endtrans %}">
+                {% trans %}Skip{% endtrans %}
             </a>
         </li>
         <li>
-            <a href="#" class="statusButton" data-status="fired">
+            <a href="#" class="statusButton" data-status="fired" data-message="{% trans %}Fired{% endtrans %}">
                 {% trans %}Fired{% endtrans %}
             </a>
         </li>
         <li>
-            <a href="#" class="statusButton" data-status="vacation">
+            <a href="#" class="statusButton" data-status="vacation" data-message="{% trans %}Vacation{% endtrans %}">
                 {% trans %}Vacation{% endtrans %}
             </a>
         </li>
         <li class="divider">
         </li>
         <li>
-            <a href="#" class="statusButton" data-status="ok">
+            <a href="#" class="statusButton" data-status="ok" data-message="{% trans %}Cleared{% endtrans %}">
                 {% trans %}Clear{% endtrans %}
             </a>
         </li>
@@ -410,12 +419,21 @@
             data-url="{{ path('it_doors_oper_schedule_add_new_time') }}">{% trans %}Add{% endtrans %}</button>
 </div>
 <br>
-<div class="alert alert-warning notDisplayed" id="non_official_error">
+<div class="alert alert-danger notDisplayed" id="non_official_error">
     <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Non-official person cant  work officially{% endtrans %}
 </div>
-<div class="alert alert-warning notDisplayed" id="wrong_date_error">
+<div class="alert alert-danger notDisplayed" id="wrong_date_error">
     <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Wrong from-to time{% endtrans %}
 </div>
+<div class="alert alert-danger notDisplayed" id="fired_error">
+    <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Coworker was fired{% endtrans %}
+</div>
+<div class="alert alert-success notDisplayed" id="status_changed">
+    <strong>{% trans %}Success{% endtrans %}</strong> {% trans %}Status changed for{% endtrans %}:
+    "<span id="status_span"></span>"
+</div>
+
+
 <style>
     .action_button{
         cursor: pointer;
