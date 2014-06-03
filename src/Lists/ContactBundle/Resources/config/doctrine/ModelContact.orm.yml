@@ -82,6 +82,15 @@ Lists\ContactBundle\Entity\ModelContact:
             nullable: true
             default: false
             column: is_shared
+        levelId:
+            type: integer
+            nullable: true
+            column: level_id
+        isMarketing:
+            type: boolean
+            nullable: true
+            default: false
+            column: is_marketing
     manyToOne:
         type:
             targetEntity: ModelContactType
@@ -105,6 +114,12 @@ Lists\ContactBundle\Entity\ModelContact:
             inversedBy: null
             joinColumns:
                 owner_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        level:
+            targetEntity: ContactLevel
+            joinColumns:
+                level_id:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks:
