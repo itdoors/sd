@@ -7,7 +7,7 @@ SD\ModelBundle\Entity\ContractImportance:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         duration:
             type: bigint
             nullable: false

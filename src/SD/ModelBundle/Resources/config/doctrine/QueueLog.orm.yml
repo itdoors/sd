@@ -7,7 +7,7 @@ SD\ModelBundle\Entity\QueueLog:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         objectModel:
             type: string
             length: 128

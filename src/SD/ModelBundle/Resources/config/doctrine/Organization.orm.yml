@@ -7,7 +7,7 @@ SD\ModelBundle\Entity\Organization:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         mpk:
             type: string
             length: 20

@@ -7,7 +7,7 @@ SD\ModelBundle\Entity\Comments:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         description:
             type: text
             nullable: false

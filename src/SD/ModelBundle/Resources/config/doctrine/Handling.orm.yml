@@ -7,7 +7,7 @@ SD\ModelBundle\Entity\Handling:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         number:
             type: string
             length: 128

@@ -84,6 +84,11 @@
                     width: '250px'
                 }
             });
+
+            $('#isMarketing').editable({
+                url: '{{ path('sd_common_ajax_handling_save') }}',
+                source: {{  handling.isMarketingChoices|json_encode|raw }}
+            });
         {% endif %}
     })
 
@@ -226,8 +231,16 @@
                 </td>
             </tr>
             <tr> {# 9 #}
-                <td></td>
+                <td>{% trans %}Is Marketing{% endtrans %}</td>
                 <td>
+                    {% if handling.0.isMarketing %}
+                        {% set isMarketing ='Yes' %}
+                    {% else %}
+                        {% set isMarketing ='No' %}
+                    {% endif %}
+                    <a href="#" id="isMarketing" data-type="select" data-pk="{{ handling.0.id }}" data-value="{{ isMarketing }}" data-placement="right" data-original-title="{% trans %}Is Marketing{% endtrans %}">
+                        {{ isMarketing|trans({}, 'messages') }}
+                    </a>
                 </td>
                 <td></td>
                 <td></td>

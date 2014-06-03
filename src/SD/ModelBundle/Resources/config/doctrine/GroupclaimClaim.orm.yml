@@ -7,7 +7,7 @@ SD\ModelBundle\Entity\GroupclaimClaim:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         createdatetime:
             type: datetime
             nullable: false

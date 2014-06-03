@@ -7,7 +7,7 @@ SD\ModelBundle\Entity\Lookup:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         lukey:
             type: string
             length: 255

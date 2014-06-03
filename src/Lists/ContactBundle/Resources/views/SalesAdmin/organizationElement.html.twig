@@ -53,6 +53,9 @@
     {{ item.0.type }}
 </td>
 <td {% if item.0.isShared %} style="background-color: #9BC4FA"{% endif %}>
+    {{ item.0.level }}
+</td>
+<td {% if item.0.isShared %} style="background-color: #9BC4FA"{% endif %}>
     {{ item.ownerFullName }}
     {% if item.0.ownerdatetime %}
         ({{ item.0.ownerdatetime|date("d.m.y") }})

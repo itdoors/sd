@@ -7,7 +7,7 @@ SD\ModelBundle\Entity\FcCostsn:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         value:
             type: float
             nullable: false

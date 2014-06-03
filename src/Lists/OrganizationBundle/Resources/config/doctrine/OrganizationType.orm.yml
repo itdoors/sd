@@ -7,7 +7,7 @@ Lists\OrganizationBundle\Entity\OrganizationType:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         type:
             type: string
             length: 20

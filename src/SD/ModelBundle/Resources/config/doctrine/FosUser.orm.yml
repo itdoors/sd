@@ -8,7 +8,7 @@ SD\ModelBundle\Entity\FosUser:
             unsigned: false
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         username:
             type: string
             length: 255

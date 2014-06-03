@@ -7,7 +7,7 @@ SD\ModelBundle\Entity\History:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         modelName:
             type: string
             length: 255

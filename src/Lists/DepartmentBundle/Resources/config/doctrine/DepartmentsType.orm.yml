@@ -7,7 +7,7 @@ Lists\DepartmentBundle\Entity\DepartmentsType:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         name:
             type: string
             length: 255

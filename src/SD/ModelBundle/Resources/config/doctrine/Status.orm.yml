@@ -7,7 +7,7 @@ SD\ModelBundle\Entity\Status:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         stakey:
             type: string
             length: 50

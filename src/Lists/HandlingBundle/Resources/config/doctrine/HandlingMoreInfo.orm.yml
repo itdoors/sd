@@ -7,7 +7,7 @@ Lists\HandlingBundle\Entity\HandlingMoreInfo:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         value:
             type: string
             length: 255

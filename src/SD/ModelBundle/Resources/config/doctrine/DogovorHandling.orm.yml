@@ -7,7 +7,7 @@ SD\ModelBundle\Entity\DogovorHandling:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
     manyToOne:
         dogovor:
             targetEntity: Dogovor

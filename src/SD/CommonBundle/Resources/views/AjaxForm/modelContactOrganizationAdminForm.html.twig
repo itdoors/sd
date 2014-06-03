@@ -10,6 +10,10 @@
             allowClear: true
         });
 
+        $('#modelContactOrganizationAdminForm_level').select2({
+            allowClear: true
+        });
+
         $('#modelContactOrganizationAdminForm_phone1, #modelContactOrganizationAdminForm_phone2').select2({
             minimumInputLength: 2,
             allowClear: true,
@@ -195,6 +199,11 @@
                     <div class="form-group col-md-3">
                         {{  form_label(form.owner, 'Owner', {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.owner, {'attr' : {'class' : 'form-control', 'placeholder': "Owner"}}) }}
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        {{ form_label(form.level, 'Contact level', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.level, {'attr' : {'class' : 'form-control', 'placeholder': "Contact level"}}) }}
                     </div>
 
                     <input type="hidden" name="formName" value="{{ formName }}">

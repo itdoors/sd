@@ -1,7 +1,7 @@
-Lists\ContactBundle\Entity\ContactLevel:
+Lists\ContactBundle\Entity\ModelContactLevel:
     type: entity
-    table: model_contact
-    repositoryClass: Lists\ContactBundle\Entity\ContactLevelRepository
+    table: model_contact_level
+    repositoryClass: Lists\ContactBundle\Entity\ModelContactLevelRepository
     fields:
         id:
             id: true

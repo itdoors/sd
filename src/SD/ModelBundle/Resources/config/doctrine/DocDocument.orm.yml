@@ -7,7 +7,7 @@ SD\ModelBundle\Entity\DocDocument:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         name:
             type: string
             length: 100

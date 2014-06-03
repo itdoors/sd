@@ -7,7 +7,7 @@ SD\ModelBundle\Entity\Salary:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         year:
             type: bigint
             nullable: false

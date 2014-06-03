@@ -7,7 +7,7 @@ SD\ModelBundle\Entity\DepartmentPeoplePosition:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         name:
             type: string
             length: 128

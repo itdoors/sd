@@ -1008,4 +1008,32 @@ class Handling
         return $this->HandlingMessages;
         // @codingStandardsIgnoreEnd
     }
+    /**
+     * @var boolean
+     */
+    private $isMarketing;
+
+
+    /**
+     * Set isMarketing
+     *
+     * @param boolean $isMarketing
+     * @return Handling
+     */
+    public function setIsMarketing($isMarketing)
+    {
+        $this->isMarketing = $isMarketing;
+    
+        return $this;
+    }
+
+    /**
+     * Get isMarketing
+     *
+     * @return boolean 
+     */
+    public function getIsMarketing()
+    {
+        return $this->isMarketing;
+    }
 }
