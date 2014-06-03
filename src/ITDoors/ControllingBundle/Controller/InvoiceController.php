@@ -4,10 +4,8 @@ namespace ITDoors\ControllingBundle\Controller;
 
 use Container;
 use ITDoors\ControllingBundle\Entity\Invoice;
-use Lists\DogovorBundle\Entity\Dogovor;
 use ITDoors\ControllingBundle\Entity\InvoiceCompanystructure;
 use ITDoors\ControllingBundle\Entity\InvoiceRepository;
-use Symfony\Component\HttpFoundation\Request;
 use ITDoors\AjaxBundle\Controller\BaseFilterController;
 use Symfony\Component\HttpFoundation\Response;
 use ITDoors\ControllingBundle\Services\InvoiceService;

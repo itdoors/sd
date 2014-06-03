@@ -3,7 +3,13 @@
 <script>
     $(document).ready(function() {
         $('.textear-edit').summernote({
-            lang: 'ru-RU'
+            lang: 'ru-RU',
+            'disableDragAndDrop': true,
+            'disableLinkTarget': true,
+            'onblur': function(){
+                /** Костыль для страховки */
+                $('.textear-edit').text($('.textear-edit').code());
+            }
         });
     });
 </script>
@@ -57,5 +63,4 @@
         </div>
         {{ form_end(form) }}
     </div>
-
 </div>

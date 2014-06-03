@@ -64,12 +64,7 @@ class Invoice
     /**
      * @var string
      */
-    private $dogovorId1c;
-
-    /**
-     * @var integer
-     */
-    private $dogovorUUIE;
+    private $dogovorGuid;
 
     /**
      * @var string
@@ -377,7 +372,7 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setDogovorId1c($dogovorId1c)
+    public function setDogovorGuid($dogovorId1c)
     {
         $this->dogovorId1c = $dogovorId1c;
 
@@ -389,33 +384,9 @@ class Invoice
      *
      * @return string 
      */
-    public function getDogovorId1c()
+    public function getDogovorGuid()
     {
         return $this->dogovorId1c;
-    }
-
-    /**
-     * Set dogovorUUIE
-     *
-     * @param integer $dogovorUUIE
-     * 
-     * @return Invoice
-     */
-    public function setDogovorUUIE($dogovorUUIE)
-    {
-        $this->dogovorUUIE = $dogovorUUIE;
-
-        return $this;
-    }
-
-    /**
-     * Get dogovorUUIE
-     *
-     * @return integer 
-     */
-    public function getDogovorUUIE()
-    {
-        return $this->dogovorUUIE;
     }
 
     /**

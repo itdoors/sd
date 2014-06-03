@@ -6,23 +6,35 @@ it_doors_email_templates_list:
     pattern:  /email/templates/list
     defaults: { _controller: ITDoorsEmailBundle:Templates:list }
     
-automailer:
+it_doors_email_history:
     pattern:  /email/history
-    defaults: { _controller: TSSAutomailerBundle:Automailer:index }
+    defaults: { _controller: ITDoorsEmailBundle:Automailer:index }
+    
+it_doors_automailer_list:
+    pattern:  /email/list
+    defaults: { _controller: ITDoorsEmailBundle:Automailer:list }
     
 automailer_show:
-    pattern:  /email/show
-    defaults: { _controller: TSSAutomailerBundle:Automailer:show }
-    
-automailer_edit:
-    pattern:  /email/edit
-    defaults: { _controller: TSSAutomailerBundle:Automailer:edit }
-    
+    pattern:  /email/show/{id}
+    defaults: { _controller: ITDoorsEmailBundle:Automailer:show }
+
 automailer_new:
     pattern:  /email/new
-    defaults: { _controller: TSSAutomailerBundle:Automailer:new }
+    defaults: { _controller: ITDoorsEmailBundle:Automailer:new }
     
 automailer_create:
     pattern:  /email/create
-    defaults: { _controller: TSSAutomailerBundle:Automailer:create }
+    defaults: { _controller: ITDoorsEmailBundle:Automailer:create }
+
+automailer_delete:
+    pattern:  /email/delete/{id}
+    defaults: { _controller: ITDoorsEmailBundle:Automailer:delete }
+    
+file_upload:
+    pattern:  /file/upload
+    defaults: { _controller: ITDoorsEmailBundle:File:upload }
+    
+file_delete:
+    pattern:  /file/delete
+    defaults: { _controller: ITDoorsEmailBundle:File:delete }
 

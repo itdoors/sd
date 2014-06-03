@@ -105,10 +105,10 @@ Lists\DogovorBundle\Entity\Dogovor:
         dogovorTypeId:
             type: integer
             column: dogovor_type_id
-        dogovorId1c:
+        dogovorGuid:
             type: string
             length: 255
-            column: dogovor_id_1c
+            column: dogovor_guid
     manyToOne:
         customer:
             targetEntity: Lists\OrganizationBundle\Entity\Organization

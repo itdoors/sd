@@ -47,9 +47,7 @@ class InvoiceMessageFormType extends AbstractType
 
         /** @var User $user */
         $user = $container->get('security.context')->getToken()->getUser();
-//
-//        if ($user->hasRole('ROLE_SALESADMIN'))
-//        {
+
         $builder
             ->add('user', 'hidden_entity', array(
                 'entity' => 'SDUserBundle:User',
@@ -62,37 +60,6 @@ class InvoiceMessageFormType extends AbstractType
             ->add('create', 'submit')
             ->add('cancel', 'button');
 
-        $builder->addEventListener(
-            FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) use ($container) {
-                $data = $event->getData();
-                $form = $event->getForm();
-            }
-        );
-
-        $builder->addEventListener(
-            FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) use ($container) {
-                $data = $event->getData();
-
-                $form = $event->getForm();
-            }
-        );
-
-        $builder->addEventListener(
-            FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) use ($container) {
-                $data = $event->getData();
-
-                $form = $event->getForm();
-
-                $currentDatetime = new \DateTime($data['createdate']);
-
-                if (isset($data['invoice_id']) && $data['invoice_id']) {
-                    $invoiceId = $data['invoice_id'];
-                }
-            }
-        );
     }
 
     /**

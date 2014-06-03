@@ -43,16 +43,11 @@ ITDoors\ControllingBundle\Entity\Invoice:
             nullable: true
             length: 10
             column: dogovor_id
-        dogovorId1c:
+        dogovorGuid:
             type: string
             nullable: false
             length: 255
-            column: dogovor_id_1c
-        dogovorUUIE:
-            type: integer
-            nullable: true
-            length: 10
-            column: dogovor_uuie
+            column: dogovor_quid
         dogovorName:
             type: string
             length: 255

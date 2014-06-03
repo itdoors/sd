@@ -7,41 +7,27 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Class EmailFormType
- * 
+ * Class AutomailerType
+ *
  * @package ITDoors\EmailBundle\Form
  */
-class EmailFormType extends AbstractType
+class AutomailerType extends AbstractType
 {
 
-    protected $container;
-
     /**
-     *  __construct
-     * 
-     * @param obj $container Description
-     */
-    public function __construct($container)
-    {
-        $this->container = $container;
-    }
-
-    /**
-     * @param object $builder desc
-     * @param array  $options desc
+     * @param FormBuilderInterface $builder
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('alias', 'text')
+            ->add('fromEmail')
+            ->add('fromName', 'text', array(
+                'required' => false
+            ))
+            ->add('toEmail')
             ->add('subject', 'text')
-            ->add('text', 'textarea', array(
-                'required' => true,
-                'mapped' => true
-            ));
-        $builder
-            ->add('create', 'submit')
-            ->add('cancel', 'button');
+            ->add('body', 'textarea');
     }
 
     /**
@@ -50,8 +36,7 @@ class EmailFormType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'ITDoors\EmailBundle\Entity\Email',
-            'validation_groups' => array('new'),
+            'data_class' => 'TSS\AutomailerBundle\Entity\Automailer',
             'translation_domain' => 'ITDoorsEmailBundle'
         ));
     }
@@ -61,6 +46,6 @@ class EmailFormType extends AbstractType
      */
     public function getName()
     {
-        return 'emailForm';
+        return 'itdoors_emailbundle_automailertype';
     }
 }

@@ -9,6 +9,7 @@ parameters:
     ajax.filter.namespace.dashboard.calendar: "dashboard.calendar"
     ajax.filter.namespace.report.last.messages: "report.last.messages"
     ajax.filter.namespace.report.invoice: "report.invoice"
+    it.doors.email.namespace: "namespace.email"
     project.dir: '/var/www/vhosts/itdoors.com.ua/subdomains/haccp'
     project.web.dir: "%project.dir%/web"
     log.file.path: "%project.dir%/log.txt"
@@ -43,6 +44,7 @@ twig:
         ajax_filter_namespace_dashboard_calendar: %ajax.filter.namespace.dashboard.calendar%
         ajax_filter_namespace_report_last_messages: %ajax.filter.namespace.report.last.messages%
         ajax_filter_namespace_report_invoice: %ajax.filter.namespace.report.invoice%
+        it_doors_namespace_email: %it.doors.email.namespace%
 
 
 # Assetic Configuration

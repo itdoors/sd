@@ -1124,4 +1124,32 @@ class Dogovor
     {
         return $this->dogovorId1c;
     }
+    /**
+     * @var string
+     */
+    private $dogovorGuid;
+
+
+    /**
+     * Set dogovorGuid
+     *
+     * @param string $dogovorGuid
+     * @return Dogovor
+     */
+    public function setDogovorGuid($dogovorGuid)
+    {
+        $this->dogovorGuid = $dogovorGuid;
+    
+        return $this;
+    }
+
+    /**
+     * Get dogovorGuid
+     *
+     * @return string 
+     */
+    public function getDogovorGuid()
+    {
+        return $this->dogovorGuid;
+    }
 }

@@ -237,7 +237,7 @@ class InvoiceService
                     continue;
                 }
 
-                $invoiceNew->setDogovorId1c($invoice->dogovorId1c);
+                $invoiceNew->setDogovorGuid($invoice->dogovorGuid);
                 $invoiceNew->setDogovorNumber($invoice->dogovorNumber);
                 $invoiceNew->setDogovorName($invoice->dogovorName);
                 if (!empty($invoice->dogovorDate)) {
@@ -252,13 +252,13 @@ class InvoiceService
                     $em->flush();
                     continue;
                 }
-                if (is_numeric($invoice->dogovorUuie)) {
-                    $invoiceNew->setDogovorUUIE($invoice->dogovorUuie);
+                if (is_numeric($invoice->dogovorGuid)) {
+                    $invoiceNew->setDogovorGuid($invoice->dogovorGuid);
                 } else {
                     $error = new Invoicecron();
                     $error->setDate(new \DateTime());
                     $error->setStatus('error');
-                    $error->setReason('dogovorUuie');
+                    $error->setReason('dogovorGuid');
                     $error->setDescription(json_encode($invoice));
                     $em->persist($error);
                     $em->flush();
@@ -349,7 +349,7 @@ class InvoiceService
 
                 /** @var Dogovor  $dogovorfind*/
                 $dogovorfind = $em->getRepository('ListsDogovorBundle:Dogovor')
-                    ->findOneBy(array('dogovorId1c' => $invoice->dogovorId1c));
+                    ->findOneBy(array('dogovorGuid' => $invoice->dogovorGuid));
                 // договор не связан с 1С
                 if (!$dogovorfind) {
 
@@ -393,7 +393,7 @@ class InvoiceService
 //                            $dogovorNew->setStartdatetime(new \DateTime($invoice->dogovor_date));
 //                            $dogovorNew->setCustomerId($customerfind->getId());
 //                            $dogovorNew->setPerformerId($performerfind->getId());
-//                            $dogovorNew->setDogovorId1c($invoice->dogovor_id_1c);
+//                            $dogovorNew->setDogovorGuid($invoice->dogovorGuid);
 //                            $em->persist($dogovorNew);
 //                            $em->flush();
 //                            $invoiceNew->setDogovor($dogovorNew);
@@ -414,7 +414,7 @@ class InvoiceService
                         } else {
 
                             // подтвердить связь и 1С
-                            $dogovoradd->setDogovorId1c($invoice->dogovorId1c);
+                            $dogovoradd->setDogovorGuid($invoice->dogovorGuid);
                             $em->persist($dogovoradd);
                             $em->flush();
 
@@ -422,7 +422,7 @@ class InvoiceService
                             $error->setDate(new \DateTime());
                             $error->setInvoiceId($invoiceNew->getId());
                             $error->setStatus('join dogovor and 1c');
-                            $error->setReason('add dogovor_id_1c in dogovor id = ' . $dogovoradd->getId());
+                            $error->setReason('add dogovorGuid in dogovor id = ' . $dogovoradd->getId());
                             $error->setDescription(json_encode($invoice));
                             $em->persist($error);
                             $em->flush();
@@ -480,7 +480,7 @@ class InvoiceService
                 }
             // Find Invoice
             } else {
-//                $status[] = $invoice->invoice_id . ' found (need update:
+//                $status[] = $invoice->invoiceId . ' found (need update:
 //                 date_fact, court,dogovor_act_oroginal,
 //                  delay_days,delay_days_type) ';
                 // обновить данные, (Дата оплаты,

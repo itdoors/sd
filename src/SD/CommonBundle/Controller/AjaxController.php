@@ -29,6 +29,8 @@ use ITDoors\ControllingBundle\Entity\Invoice;
 use ITDoors\ControllingBundle\Entity\InvoiceMessage;
 use ITDoors\ControllingBundle\Entity\InvoiceCompanystructure;
 use ITDoors\EmailBundle\Entity\Email;
+use ITDoors\EmailBundle\Entity\EmailRepository;
+use TSS\AutomailerBundle\Entity\Automailer;
 
 /**
  * AjaxController class.
@@ -1232,37 +1234,8 @@ class AjaxController extends Controller
      */
     public function emailFormSave(Form $form, $user, $request)
     {
-    
-//        $formData = $request->request->get($form->getName());
-        
-        
-            /** @var Email $data */
-            $data = $form->getData();
-//            
-//        if(array_key_exists('id', $data)){
-//            var_dump($formData);die;
-//            /** @var Email $template */
-//            $data = $this->getDoctrine()
-//                ->getRepository('ITDoorsEmailBundle:Email')
-//                ->find( $formData['emailId']);
-//            $data->setAlias( $formData['alias']);
-//            $data->setSubject( $formData['subject']);
-//            $data->setText( $formData['text']);
-// 
-//        }
-//        $contactid = $formData['contactid'];
-//        if (is_numeric($contactid)) {
-//            /** @var ModelContact $contact */
-//            $contact = $this->getDoctrine()
-//                ->getRepository('ListsContactBundle:ModelContact')
-//                ->find($contactid);
-//            $data->setContact($contact);
-//        }
-//        $data->setUser($this->getUser());
-//
-//        $data->setNote($formData['note']);
-//        
-//        $data->setCreatedate(new \DateTime());                
+        /** @var Email $data */
+        $data = $form->getData();             
 
          /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
@@ -1511,6 +1484,7 @@ class AjaxController extends Controller
         $em->remove($object);
         $em->flush();
     }
+    
     /**
      * Deletes {entityName}Delete instance
      *
@@ -1525,6 +1499,28 @@ class AjaxController extends Controller
         /** @var Email $object */
         $object = $this->getDoctrine()
             ->getRepository('ITDoorsEmailBundle:Email')
+            ->find($id);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+    
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function AutomailerDelete($params)
+    {
+        $id = $params['id'];
+
+        /** @var Automailer $object */
+        $object = $this->getDoctrine()
+            ->getRepository('TSSAutomailerBundle:Automailer')
             ->find($id);
 
         /** @var EntityManager $em */
@@ -2139,42 +2135,6 @@ class AjaxController extends Controller
                     ->setParameter(':modelId', $organizationId);
             }
         ));
-    }
-
-    /**
-     * Adds children to {formName}ProcessDefaults depending on defaults in request
-     *
-     * @param Form $form
-     * @param mixed[] $defaultData
-     */
-    public function emailFormProcessDefaults($form, $defaultData)
-    {
-
-//        if (array_key_exists('emailId', $defaultData)) {
-//            $emailId = $defaultData['emailId'];
-//            
-//            /** @var Email $email */
-//            $email = $this->getDoctrine()
-//                ->getRepository('ITDoorsEmailBundle:Email')
-//                ->find($emailId);
-//             $form
-//            ->add('alias', 'text', array('data' => $email->getAlias()))
-//            ->add('subject', 'text', array('data' => $email->getSubject()))
-//            ->add('text', 'textarea', array(
-//                'data' => $email->getText(),
-//                'required' => true,
-//                'mapped' => true
-//            ));
-////        }else{
-////             $form
-////            ->add('alias', 'text')
-////            ->add('subject', 'text')
-////            ->add('text', 'textarea', array(
-////                'required' => true,
-////                'mapped' => true
-////            ));
-//        
-//        }
     }
 
     /**

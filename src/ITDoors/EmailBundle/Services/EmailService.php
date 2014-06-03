@@ -1,4 +1,5 @@
 <?php
+
 namespace ITDoors\EmailBundle\Services;
 
 use Symfony\Component\DependencyInjection\Container;
@@ -12,6 +13,7 @@ use Swift_Attachment;
  */
 class EmailService
 {
+
     /**
      * @var Container $container
      * 
@@ -54,7 +56,7 @@ class EmailService
      *          )
      *  );
      * 
-     * @return boolean
+     * @return $result
      */
     public function send($from, $template, $to)
     {
@@ -65,26 +67,70 @@ class EmailService
         $templateEmail = $em->getRepository('ITDoorsEmailBundle:Email')
             ->findOneBy(array('alias' => $template));
 
+        if (!$templateEmail) {
+            return false;
+        }
         /** Swift_Mailer $mailer */
         $mailer = $this->container->get('mailer');
 
-        $message = Swift_Message::newInstance()
-            ->setSubject($templateEmail->getSubject())
-            ->setFrom($from)
-            ->setTo($to['users']);
-        $body = $templateEmail->getText();
-        if (array_key_exists('variables', $to)) {
-            foreach ($to['variables'] as $key => $variable) {
-                $body = str_replace($key, $variable, $body);
-            }
+        if (!array_key_exists('users', $to)) {
+            return false;
         }
-        $message->setBody($body, 'text/html');
-        if (array_key_exists('files', $to)) {
-            foreach ($to['files'] as $file) {
-                $message->attach(Swift_Attachment::fromPath($file));
+        $result = array();
+        foreach ($to['users'] as $email) {
+            $message = Swift_Message::newInstance()
+                ->setSubject($templateEmail->getSubject())
+                ->setFrom($from)
+                ->setTo($email);
+            if (array_key_exists('variables', $to)) {
+                $message->setBody($this->changeOfVariables($templateEmail->getText(), $to['variables']), 'text/html');
+            } else {
+                $message->setBody($templateEmail->getText(), 'text/html');
             }
+            if (array_key_exists('files', $to)) {
+                $this->addFiles($message, $to['files']);
+            }
+            $mailer->send($message);
+
+            $result[$email] = $this->getDoctrine()->getRepository('TSSAutomailerBundle:Automailer')
+                ->findOneBy(array('id' => 'DESC'))
+                ->getId();
         }
 
-        return $mailer->send($message);
+        return $result;
+    }
+
+    /**
+     * changeOfVariables
+     *
+     * @param string $text
+     * @param array  $variables
+     * 
+     * @return string
+     */
+    public function changeOfVariables($text, $variables)
+    {
+        foreach ($variables as $key => $variable) {
+            $text = str_replace($key, $variable, $text);
+        }
+
+        return $text;
+    }
+
+    /**
+     * addFiles
+     *
+     * @param Swift_Message $message
+     * @param array         $files
+     * 
+     * @return Swift_Message
+     */
+    public function addFiles($message, $files)
+    {
+        foreach ($files as $file) {
+            $message->attach(Swift_Attachment::fromPath($file));
+        }
+
+        return $message;
     }
 }
