@@ -37,7 +37,7 @@ class UniqueEdrpouValidator extends ConstraintValidator
             if (count($conflicts) > 0 && isset($conflicts[0])) {
                 $organization = $conflicts[0];
 
-                if ($root) {
+                if ($root && $organization) {
                     if ($root->getId() != $organization->getId()) {
                         $msgString = 'Organization with edrpou = %edrpou% already exists.
                         %OrganizationName% %OrganizationShortName%';
