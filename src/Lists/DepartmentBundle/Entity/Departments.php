@@ -2,8 +2,6 @@
 
 namespace Lists\DepartmentBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Departments
  */
@@ -84,11 +82,10 @@ class Departments
      */
     private $status;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -99,19 +96,20 @@ class Departments
      * Set mpk
      *
      * @param string $mpk
+     *
      * @return Departments
      */
     public function setMpk($mpk)
     {
         $this->mpk = $mpk;
-    
+
         return $this;
     }
 
     /**
      * Get mpk
      *
-     * @return string 
+     * @return string
      */
     public function getMpk()
     {
@@ -122,19 +120,20 @@ class Departments
      * Set name
      *
      * @param string $name
+     *
      * @return Departments
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -145,19 +144,20 @@ class Departments
      * Set fullname
      *
      * @param string $fullname
+     *
      * @return Departments
      */
     public function setFullname($fullname)
     {
         $this->fullname = $fullname;
-    
+
         return $this;
     }
 
     /**
      * Get fullname
      *
-     * @return string 
+     * @return string
      */
     public function getFullname()
     {
@@ -168,19 +168,20 @@ class Departments
      * Set address
      *
      * @param string $address
+     *
      * @return Departments
      */
     public function setAddress($address)
     {
         $this->address = $address;
-    
+
         return $this;
     }
 
     /**
      * Get address
      *
-     * @return string 
+     * @return string
      */
     public function getAddress()
     {
@@ -191,19 +192,20 @@ class Departments
      * Set square
      *
      * @param float $square
+     *
      * @return Departments
      */
     public function setSquare($square)
     {
         $this->square = $square;
-    
+
         return $this;
     }
 
     /**
      * Get square
      *
-     * @return float 
+     * @return float
      */
     public function getSquare()
     {
@@ -214,19 +216,20 @@ class Departments
      * Set isdeleted
      *
      * @param boolean $isdeleted
+     *
      * @return Departments
      */
     public function setIsdeleted($isdeleted)
     {
         $this->isdeleted = $isdeleted;
-    
+
         return $this;
     }
 
     /**
      * Get isdeleted
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsdeleted()
     {
@@ -237,19 +240,20 @@ class Departments
      * Set addedField
      *
      * @param string $addedField
+     *
      * @return Departments
      */
     public function setAddedField($addedField)
     {
         $this->addedField = $addedField;
-    
+
         return $this;
     }
 
     /**
      * Get addedField
      *
-     * @return string 
+     * @return string
      */
     public function getAddedField()
     {
@@ -260,19 +264,20 @@ class Departments
      * Set statusDate
      *
      * @param \DateTime $statusDate
+     *
      * @return Departments
      */
     public function setStatusDate($statusDate)
     {
         $this->statusDate = $statusDate;
-    
+
         return $this;
     }
 
     /**
      * Get statusDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getStatusDate()
     {
@@ -283,19 +288,20 @@ class Departments
      * Set description
      *
      * @param string $description
+     *
      * @return Departments
      */
     public function setDescription($description)
     {
         $this->description = $description;
-    
+
         return $this;
     }
 
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -306,19 +312,20 @@ class Departments
      * Set coordinates
      *
      * @param string $coordinates
+     *
      * @return Departments
      */
     public function setCoordinates($coordinates)
     {
         $this->coordinates = $coordinates;
-    
+
         return $this;
     }
 
     /**
      * Get coordinates
      *
-     * @return string 
+     * @return string
      */
     public function getCoordinates()
     {
@@ -329,19 +336,20 @@ class Departments
      * Set city
      *
      * @param \Lists\CityBundle\Entity\City $city
+     *
      * @return Departments
      */
     public function setCity(\Lists\CityBundle\Entity\City $city = null)
     {
         $this->city = $city;
-    
+
         return $this;
     }
 
     /**
      * Get city
      *
-     * @return \Lists\CityBundle\Entity\City 
+     * @return \Lists\CityBundle\Entity\City
      */
     public function getCity()
     {
@@ -352,19 +360,20 @@ class Departments
      * Set type
      *
      * @param \Lists\DepartmentBundle\Entity\DepartmentsType $type
+     *
      * @return Departments
      */
     public function setType(\Lists\DepartmentBundle\Entity\DepartmentsType $type = null)
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
     /**
      * Get type
      *
-     * @return \Lists\DepartmentBundle\Entity\DepartmentsType 
+     * @return \Lists\DepartmentBundle\Entity\DepartmentsType
      */
     public function getType()
     {
@@ -375,19 +384,20 @@ class Departments
      * Set organization
      *
      * @param \Lists\OrganizationBundle\Entity\Organization $organization
+     *
      * @return Departments
      */
     public function setOrganization(\Lists\OrganizationBundle\Entity\Organization $organization = null)
     {
         $this->organization = $organization;
-    
+
         return $this;
     }
 
     /**
      * Get organization
      *
-     * @return \Lists\OrganizationBundle\Entity\Organization 
+     * @return \Lists\OrganizationBundle\Entity\Organization
      */
     public function getOrganization()
     {
@@ -398,47 +408,49 @@ class Departments
      * Set status
      *
      * @param \Lists\DepartmentBundle\Entity\DepartmentsStatus $status
+     *
      * @return Departments
      */
     public function setStatus(\Lists\DepartmentBundle\Entity\DepartmentsStatus $status = null)
     {
         $this->status = $status;
-    
+
         return $this;
     }
 
     /**
      * Get status
      *
-     * @return \Lists\DepartmentBundle\Entity\DepartmentsStatus 
+     * @return \Lists\DepartmentBundle\Entity\DepartmentsStatus
      */
     public function getStatus()
     {
         return $this->status;
     }
+
     /**
      * @var integer
      */
     private $organizationId;
 
-
     /**
      * Set organizationId
      *
      * @param integer $organizationId
+     *
      * @return Departments
      */
     public function setOrganizationId($organizationId)
     {
         $this->organizationId = $organizationId;
-    
+
         return $this;
     }
 
     /**
      * Get organizationId
      *
-     * @return integer 
+     * @return integer
      */
     public function getOrganizationId()
     {

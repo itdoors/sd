@@ -6,11 +6,14 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * Class DogovorDepartmentForm
+ */
 class DogovorDepartmentForm extends AbstractType
 {
         /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -27,7 +30,7 @@ class DogovorDepartmentForm extends AbstractType
             ->add('add', 'submit')
             ->add('cancel', 'button');
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

@@ -2,8 +2,6 @@
 
 namespace Lists\HandlingBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * HandlingMoreInfo
  */
@@ -29,11 +27,10 @@ class HandlingMoreInfo
      */
     private $handlingMoreInfoType;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -44,19 +41,20 @@ class HandlingMoreInfo
      * Set value
      *
      * @param string $value
+     *
      * @return HandlingMoreInfo
      */
     public function setValue($value)
     {
         $this->value = $value;
-    
+
         return $this;
     }
 
     /**
      * Get value
      *
-     * @return string 
+     * @return string
      */
     public function getValue()
     {
@@ -67,19 +65,20 @@ class HandlingMoreInfo
      * Set handling
      *
      * @param \Lists\HandlingBundle\Entity\Handling $handling
+     *
      * @return HandlingMoreInfo
      */
     public function setHandling(\Lists\HandlingBundle\Entity\Handling $handling = null)
     {
         $this->handling = $handling;
-    
+
         return $this;
     }
 
     /**
      * Get handling
      *
-     * @return \Lists\HandlingBundle\Entity\Handling 
+     * @return \Lists\HandlingBundle\Entity\Handling
      */
     public function getHandling()
     {
@@ -90,24 +89,26 @@ class HandlingMoreInfo
      * Set handlingMoreInfoType
      *
      * @param \Lists\HandlingBundle\Entity\HandlingMoreInfoType $handlingMoreInfoType
+     *
      * @return HandlingMoreInfo
      */
-    public function setHandlingMoreInfoType(\Lists\HandlingBundle\Entity\HandlingMoreInfoType $handlingMoreInfoType = null)
+    public function setHandlingMoreInfoType(HandlingMoreInfoType $handlingMoreInfoType = null)
     {
         $this->handlingMoreInfoType = $handlingMoreInfoType;
-    
+
         return $this;
     }
 
     /**
      * Get handlingMoreInfoType
      *
-     * @return \Lists\HandlingBundle\Entity\HandlingMoreInfoType 
+     * @return \Lists\HandlingBundle\Entity\HandlingMoreInfoType
      */
     public function getHandlingMoreInfoType()
     {
         return $this->handlingMoreInfoType;
     }
+
     /**
      * @var integer
      */
@@ -118,24 +119,24 @@ class HandlingMoreInfo
      */
     private $handlingMoreInfoTypeId;
 
-
     /**
      * Set handlingId
      *
      * @param integer $handlingId
+     *
      * @return HandlingMoreInfo
      */
     public function setHandlingId($handlingId)
     {
         $this->handlingId = $handlingId;
-    
+
         return $this;
     }
 
     /**
      * Get handlingId
      *
-     * @return integer 
+     * @return integer
      */
     public function getHandlingId()
     {
@@ -146,19 +147,20 @@ class HandlingMoreInfo
      * Set handlingMoreInfoTypeId
      *
      * @param integer $handlingMoreInfoTypeId
+     *
      * @return HandlingMoreInfo
      */
     public function setHandlingMoreInfoTypeId($handlingMoreInfoTypeId)
     {
         $this->handlingMoreInfoTypeId = $handlingMoreInfoTypeId;
-    
+
         return $this;
     }
 
     /**
      * Get handlingMoreInfoTypeId
      *
-     * @return integer 
+     * @return integer
      */
     public function getHandlingMoreInfoTypeId()
     {

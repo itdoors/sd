@@ -46,11 +46,11 @@ class Region
     {
         $this->cities = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -61,19 +61,20 @@ class Region
      * Set name
      *
      * @param string $name
+     *
      * @return Region
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -84,19 +85,20 @@ class Region
      * Set square
      *
      * @param float $square
+     *
      * @return Region
      */
     public function setSquare($square)
     {
         $this->square = $square;
-    
+
         return $this;
     }
 
     /**
      * Get square
      *
-     * @return float 
+     * @return float
      */
     public function getSquare()
     {
@@ -107,19 +109,20 @@ class Region
      * Set population
      *
      * @param float $population
+     *
      * @return Region
      */
     public function setPopulation($population)
     {
         $this->population = $population;
-    
+
         return $this;
     }
 
     /**
      * Get population
      *
-     * @return float 
+     * @return float
      */
     public function getPopulation()
     {
@@ -130,19 +133,20 @@ class Region
      * Set flag
      *
      * @param string $flag
+     *
      * @return Region
      */
     public function setFlag($flag)
     {
         $this->flag = $flag;
-    
+
         return $this;
     }
 
     /**
      * Get flag
      *
-     * @return string 
+     * @return string
      */
     public function getFlag()
     {
@@ -153,12 +157,13 @@ class Region
      * Add cities
      *
      * @param \Lists\CityBundle\Entity\City $cities
+     *
      * @return Region
      */
     public function addCitie(\Lists\CityBundle\Entity\City $cities)
     {
         $this->cities[] = $cities;
-    
+
         return $this;
     }
 
@@ -175,14 +180,12 @@ class Region
     /**
      * Get cities
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCities()
     {
         return $this->cities;
     }
-
-
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -194,12 +197,13 @@ class Region
      * Add companystructure
      *
      * @param \Lists\CompanystructureBundle\Entity\Companystructure $companystructure
+     *
      * @return Region
      */
     public function addCompanystructure(\Lists\CompanystructureBundle\Entity\Companystructure $companystructure)
     {
         $this->companystructure[] = $companystructure;
-    
+
         return $this;
     }
 
@@ -216,7 +220,7 @@ class Region
     /**
      * Get companystructure
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCompanystructure()
     {

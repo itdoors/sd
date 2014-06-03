@@ -12,12 +12,14 @@ use Doctrine\ORM\EntityRepository;
  */
 class HandlingMessageTypeRepository extends EntityRepository
 {
-    static protected $list;
+    protected static $list;
 
+    /**
+     * @return array
+     */
     public function getList()
     {
-        if (!self::$list)
-        {
+        if (!self::$list) {
             $handlingMessageTypes = self::createQueryBuilder('hmt')
                 ->getQuery()
                 ->getResult();

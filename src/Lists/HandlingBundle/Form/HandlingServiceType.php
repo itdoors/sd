@@ -6,22 +6,23 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * Class HandlingServiceType
+ */
 class HandlingServiceType extends AbstractType
 {
         /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('name')
             ->add('slug')
-            ->add('sortorder')
-            //->add('handlings')
-        ;
+            ->add('sortorder');
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

@@ -2,8 +2,6 @@
 
 namespace SD\CalendarBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * CalendarEvent
  */
@@ -64,11 +62,10 @@ class CalendarEvent
      */
     private $user;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -79,19 +76,20 @@ class CalendarEvent
      * Set eventName
      *
      * @param string $eventName
+     *
      * @return CalendarEvent
      */
     public function setEventName($eventName)
     {
         $this->eventName = $eventName;
-    
+
         return $this;
     }
 
     /**
      * Get eventName
      *
-     * @return string 
+     * @return string
      */
     public function getEventName()
     {
@@ -102,19 +100,20 @@ class CalendarEvent
      * Set description
      *
      * @param string $description
+     *
      * @return CalendarEvent
      */
     public function setDescription($description)
     {
         $this->description = $description;
-    
+
         return $this;
     }
 
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -125,19 +124,20 @@ class CalendarEvent
      * Set fromdatetime
      *
      * @param \DateTime $fromdatetime
+     *
      * @return CalendarEvent
      */
     public function setFromdatetime($fromdatetime)
     {
         $this->fromdatetime = $fromdatetime;
-    
+
         return $this;
     }
 
     /**
      * Get fromdatetime
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFromdatetime()
     {
@@ -148,19 +148,20 @@ class CalendarEvent
      * Set todatetime
      *
      * @param \DateTime $todatetime
+     *
      * @return CalendarEvent
      */
     public function setTodatetime($todatetime)
     {
         $this->todatetime = $todatetime;
-    
+
         return $this;
     }
 
     /**
      * Get todatetime
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getTodatetime()
     {
@@ -171,19 +172,20 @@ class CalendarEvent
      * Set isNotifi
      *
      * @param boolean $isNotifi
+     *
      * @return CalendarEvent
      */
     public function setIsNotifi($isNotifi)
     {
         $this->isNotifi = $isNotifi;
-    
+
         return $this;
     }
 
     /**
      * Get isNotifi
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsNotifi()
     {
@@ -194,19 +196,20 @@ class CalendarEvent
      * Set notificationTime
      *
      * @param integer $notificationTime
+     *
      * @return CalendarEvent
      */
     public function setNotificationTime($notificationTime)
     {
         $this->notificationTime = $notificationTime;
-    
+
         return $this;
     }
 
     /**
      * Get notificationTime
      *
-     * @return integer 
+     * @return integer
      */
     public function getNotificationTime()
     {
@@ -217,19 +220,20 @@ class CalendarEvent
      * Set isFullDay
      *
      * @param boolean $isFullDay
+     *
      * @return CalendarEvent
      */
     public function setIsFullDay($isFullDay)
     {
         $this->isFullDay = $isFullDay;
-    
+
         return $this;
     }
 
     /**
      * Get isFullDay
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsFullDay()
     {
@@ -240,19 +244,20 @@ class CalendarEvent
      * Set additionalData
      *
      * @param string $additionalData
+     *
      * @return CalendarEvent
      */
     public function setAdditionalData($additionalData)
     {
         $this->additionalData = $additionalData;
-    
+
         return $this;
     }
 
     /**
      * Get additionalData
      *
-     * @return string 
+     * @return string
      */
     public function getAdditionalData()
     {
@@ -263,19 +268,20 @@ class CalendarEvent
      * Set type
      *
      * @param \SD\CalendarBundle\Entity\CalendarEventType $type
+     *
      * @return CalendarEvent
      */
     public function setType(\SD\CalendarBundle\Entity\CalendarEventType $type = null)
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
     /**
      * Get type
      *
-     * @return \SD\CalendarBundle\Entity\CalendarEventType 
+     * @return \SD\CalendarBundle\Entity\CalendarEventType
      */
     public function getType()
     {
@@ -286,19 +292,20 @@ class CalendarEvent
      * Set user
      *
      * @param \SD\UserBundle\Entity\User $user
+     *
      * @return CalendarEvent
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 
     /**
      * Get user
      *
-     * @return \SD\UserBundle\Entity\User 
+     * @return \SD\UserBundle\Entity\User
      */
     public function getUser()
     {

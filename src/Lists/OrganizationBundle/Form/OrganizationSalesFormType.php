@@ -2,22 +2,29 @@
 
 namespace Lists\OrganizationBundle\Form;
 
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * Class OrganizationSalesFormType
+ */
 class OrganizationSalesFormType extends AbstractType
 {
     protected $container;
 
-    public function __construct($container)
+    /**
+     * @param Container $container
+     */
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -57,8 +64,7 @@ class OrganizationSalesFormType extends AbstractType
                 'query_builder' => $lr->getOnlyScopeQuery()
             ))
             ->add('phone')
-            ->add('physicalAddress')
-        ;
+            ->add('physicalAddress');
 
         $builder
             ->add('save', 'submit')

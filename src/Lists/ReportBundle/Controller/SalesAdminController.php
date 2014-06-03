@@ -19,6 +19,8 @@ class SalesAdminController extends BaseFilterController
 
     /**
      * Handling status report
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function reportHandlingStatusAction()
     {
@@ -47,6 +49,8 @@ class SalesAdminController extends BaseFilterController
 
     /**
      * Manager last messages report
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function reportLastMessagesAction()
     {
@@ -58,6 +62,8 @@ class SalesAdminController extends BaseFilterController
 
     /**
      * Manager last messages report table
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function reportLastMessagesTableAction()
     {

@@ -8,12 +8,17 @@ use SD\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\DBAL\Connection;
 
+/**
+ * UserController
+ */
 class UserController extends Controller
 {
     protected $baseTemplate = 'User';
 
     /**
      * Executes index action
+     *
+     * @return string
      */
     public function indexAction()
     {
@@ -29,6 +34,10 @@ class UserController extends Controller
 
     /**
      * Execute show action
+     *
+     * @param int $id
+     *
+     * @return string
      */
     public function showAction($id)
     {
@@ -39,8 +48,7 @@ class UserController extends Controller
 
         $isAdmin = $user->hasRole('ROLE_HRADMIN');
 
-        if (!$user)
-        {
+        if (!$user) {
             return $this->render($this->generateUrl('sd_user_index'));
         }
 
@@ -54,6 +62,10 @@ class UserController extends Controller
 
     /**
      * Renders changePasswordForm
+     *
+     * @param int $id
+     *
+     * @return string
      */
     public function changePasswordFormAction($id)
     {
@@ -63,8 +75,7 @@ class UserController extends Controller
 
         $notice = $session->get('noticePassword');
 
-        if ($notice)
-        {
+        if ($notice) {
             $session->remove('noticePassword');
         }
 
@@ -83,13 +94,18 @@ class UserController extends Controller
 
     /**
      * Executes new action
+     *
+     * @param Request $request
+     *
+     * @throws \Exception
+     *`
+     * @return string
      */
     public function newAction(Request $request)
     {
         $sessionUser = $this->getUser();
 
-        /*if (!$sessionUser->hasRole('ROLE_HRADMIN'))
-        {
+        /*if (!$sessionUser->hasRole('ROLE_HRADMIN')) {
             return $this->redirect($this->generateUrl('sd_user_index'));
         }*/
 
@@ -97,8 +113,7 @@ class UserController extends Controller
 
         $form->handleRequest($request);
 
-        if ($form->isValid())
-        {
+        if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
 
             /** @var Connection $connection */
@@ -106,8 +121,7 @@ class UserController extends Controller
 
             $connection->beginTransaction();
 
-            try
-            {
+            try {
                 $user = $form->getData();
 
                 $formData = $request->request->get($form->getName());
@@ -125,9 +139,7 @@ class UserController extends Controller
                 $em->flush();
 
                 $connection->commit();
-            }
-            catch (\Exception $e)
-            {
+            } catch (\Exception $e) {
                 $connection->rollBack();
                 $em->close();
                 throw $e;

@@ -2,29 +2,29 @@
 
 namespace Lists\HandlingBundle\Form;
 
-use Lists\HandlingBundle\Entity\HandlingMessage;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\ExecutionContextInterface;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormEvent;
 
-
+/**
+ * Class HandlingReportDateRangeForm
+ */
 class HandlingReportDateRangeForm extends AbstractType
 {
     protected $container;
 
-    public function __construct($container)
+    /**
+     * @param Container $container
+     */
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -43,9 +43,7 @@ class HandlingReportDateRangeForm extends AbstractType
                 'data' => new \DateTime(),
                 'widget' => 'single_text',
                 'format' => 'dd.M.yyyy HH:mm'
-            ))
-
-        ;
+            ));
 
         $builder
             ->add('create', 'submit');

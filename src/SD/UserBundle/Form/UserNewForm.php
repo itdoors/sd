@@ -1,17 +1,17 @@
 <?php
 
-
 namespace SD\UserBundle\Form;
 
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+/**
+ * UserNewForm
+ */
 class UserNewForm extends AbstractType
 {
     private $class;
@@ -19,7 +19,9 @@ class UserNewForm extends AbstractType
     protected $container;
 
     /**
-     * @param string $class The User class name
+     * __construct
+     *
+     * @param string    $class     The User class name
      * @param Container $container The User class name
      */
     public function __construct($class, $container)
@@ -28,6 +30,9 @@ class UserNewForm extends AbstractType
         $this->container = $container;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
@@ -61,6 +66,9 @@ class UserNewForm extends AbstractType
             ->add('create', 'submit');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
@@ -69,6 +77,9 @@ class UserNewForm extends AbstractType
         ));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'userNewForm';

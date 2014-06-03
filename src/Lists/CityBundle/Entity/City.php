@@ -23,7 +23,7 @@ class City
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -34,24 +34,26 @@ class City
      * Set name
      *
      * @param string $name
+     *
      * @return City
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
         return $this->name;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
@@ -64,17 +66,18 @@ class City
     {
         $this->organizations = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Add organizations
      *
      * @param \Lists\OrganizationBundle\Entity\Organization $organizations
+     *
      * @return City
      */
     public function addOrganization(\Lists\OrganizationBundle\Entity\Organization $organizations)
     {
         $this->organizations[] = $organizations;
-    
+
         return $this;
     }
 
@@ -91,12 +94,13 @@ class City
     /**
      * Get organizations
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getOrganizations()
     {
         return $this->organizations;
     }
+
     /**
      * @var \Lists\RegionBundle\Entity\Region
      */
@@ -107,24 +111,26 @@ class City
      * Set regions
      *
      * @param \Lists\RegionBundle\Entity\Region $regions
+     *
      * @return City
      */
     public function setRegions(\Lists\RegionBundle\Entity\Region $regions = null)
     {
         $this->regions = $regions;
-    
+
         return $this;
     }
 
     /**
      * Get regions
      *
-     * @return \Lists\RegionBundle\Entity\Region 
+     * @return \Lists\RegionBundle\Entity\Region
      */
     public function getRegions()
     {
         return $this->regions;
     }
+
     /**
      * @var \Lists\RegionBundle\Entity\Region
      */
@@ -135,19 +141,20 @@ class City
      * Set region
      *
      * @param \Lists\RegionBundle\Entity\Region $region
+     *
      * @return City
      */
     public function setRegion(\Lists\RegionBundle\Entity\Region $region = null)
     {
         $this->region = $region;
-    
+
         return $this;
     }
 
     /**
      * Get region
      *
-     * @return \Lists\RegionBundle\Entity\Region 
+     * @return \Lists\RegionBundle\Entity\Region
      */
     public function getRegion()
     {

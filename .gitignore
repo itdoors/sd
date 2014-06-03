@@ -3,13 +3,13 @@
 /app/cache/*
 /app/config/parameters.yml
 /app/logs/*
-logs/
-!app/cache/.gitkeep
-!app/logs/.gitkeep
+#!app/cache/.gitkeep
+#!app/logs/.gitkeep
 /build/
 /vendor/
 /bin/
 /.idea
 /composer.phar
-build.properties
+/logs
+/build.properties
 /*~

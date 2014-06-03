@@ -13,7 +13,7 @@
 {% endblock %}
 {% block page_title %}
 	<h3 class="page-title">
-		{% trans %}Organization <small>list of organization</small>{% endtrans %}  
+		{% trans %}Organization <small>list of organization</small>{% endtrans %}
 	</h3>
 {% endblock %}
 
@@ -93,7 +93,7 @@
                             href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_add_organization_filter', {'organization_id': item.organizationId}) }}">
                             {% trans %}Handling list link{% endtrans %}
                         </a>
-						
+
                     </td>
                 </tr>
             {% endfor %}

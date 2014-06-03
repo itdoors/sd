@@ -19,23 +19,23 @@ class ReportSalesAdminFilterForm extends AbstractType
 
     /**
      * __construct
+     *
+     * @param Container $container
      */
-    public function __construct($container)
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
 
     /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('usersString', 'hidden', array(
                 'mapped' => false,
-            ))
-        ;
+            ));
 
         $builder
             ->add('save', 'submit')

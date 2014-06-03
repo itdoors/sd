@@ -3,10 +3,14 @@
 namespace Lists\DogovorBundle\Form;
 
 use Lists\DogovorBundle\Entity\DogovorRepository;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * Class DogovorFilterForm
+ */
 class DogovorFilterForm extends AbstractType
 {
     /**
@@ -14,14 +18,19 @@ class DogovorFilterForm extends AbstractType
      */
     protected $container;
 
-    public function __construct($container)
+    /**
+     * __construct()
+     *
+     * @param Container $container
+     */
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -38,7 +47,7 @@ class DogovorFilterForm extends AbstractType
             ->add('organization', 'hidden')
             ->add('customer', 'hidden')
             ->add('performer', 'hidden')
-            ->add('prolongation','choice', array(
+            ->add('prolongation', 'choice', array(
                 'choices'   => $dr->getProlongationChoices(),
                 'empty_value' =>  ''
             ))
@@ -47,7 +56,6 @@ class DogovorFilterForm extends AbstractType
                 'query_builder' => $lr->getOnlyDogovorTypeQuery(),
                 'empty_value' =>  ''
             ));
-
 
         $builder
             ->add('save', 'submit')

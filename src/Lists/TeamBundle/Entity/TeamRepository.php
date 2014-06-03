@@ -23,7 +23,8 @@ class TeamRepository extends EntityRepository
     {
         $sql = $this->createQueryBuilder('t')
             ->select('t')
-            ->addSelect("
+            ->addSelect(
+                "
                 array_to_string(
                    ARRAY(
                       SELECT
@@ -33,8 +34,8 @@ class TeamRepository extends EntityRepository
                       LEFT JOIN u.teams tu
                       WHERE tu.id = t.id
                    ), ', '
-                 ) as fullNames
-            ")
+                 ) as fullNames"
+            )
             ->leftJoin('t.owner', 'owner')
             ->leftJoin('t.users', 'users')
             ->where('owner.id = :userId OR users.id = :userId')
@@ -42,7 +43,6 @@ class TeamRepository extends EntityRepository
 
         return $sql;
     }
-
 
     /**
      * Get my teamIds
@@ -64,8 +64,7 @@ class TeamRepository extends EntityRepository
             ->getQuery()
             ->getArrayResult();
 
-        if (!sizeof($sql))
-        {
+        if (!sizeof($sql)) {
             return array($user->getId());
         }
 

@@ -6,11 +6,14 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * CalendarEventForm class
+ */
 class CalendarEventForm extends AbstractType
 {
-        /**
+    /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -24,14 +27,13 @@ class CalendarEventForm extends AbstractType
             ->add('isFullDay')
             ->add('additionalData')
             ->add('type')
-            ->add('user')
-        ;
+            ->add('user');
 
         $builder
             ->add('create', 'submit')
             ->add('cancel', 'button');
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */
