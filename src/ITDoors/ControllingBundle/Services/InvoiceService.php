@@ -217,7 +217,7 @@ class InvoiceService
                     $em->flush();
                     continue;
                 }
-                
+
                 if (!empty($invoice->dogovorDate)) {
                     $invoiceNew->setDogovorDate(new \DateTime($invoice->dogovorDate));
                 } else {
@@ -230,8 +230,7 @@ class InvoiceService
                     $em->flush();
                     continue;
                 }
-                
-   
+
                 if (in_array($invoice->dogovorActOriginal, array('0', '1'))) {
                     $invoiceNew->setDogovorActOriginal($invoice->dogovorActOriginal);
                 } else {

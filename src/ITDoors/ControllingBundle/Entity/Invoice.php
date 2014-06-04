@@ -883,12 +883,13 @@ class Invoice
      * Set dogovorAct
      *
      * @param string $dogovorAct
+     * 
      * @return Invoice
      */
     public function setDogovorAct($dogovorAct)
     {
         $this->dogovorAct = $dogovorAct;
-    
+
         return $this;
     }
 

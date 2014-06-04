@@ -2,7 +2,7 @@
 
 namespace ITDoors\ControllingBundle\Twig\Extension;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;  
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use \Twig_Extension;
 
 /**
@@ -16,9 +16,8 @@ class VarsExtension extends Twig_Extension
      * __construct
      * 
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     * 
      */
-    public function __construct(ContainerInterface $container) 
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -28,7 +27,7 @@ class VarsExtension extends Twig_Extension
      * 
      * @return string
      */
-    public function getName() 
+    public function getName()
     {
         return 'some.extension';
     }
@@ -38,7 +37,8 @@ class VarsExtension extends Twig_Extension
      * 
      * @return array
      */
-    public function getFilters() {
+    public function getFilters()
+    {
         return array(
             'json_decode'   => new \Twig_Filter_Method($this, 'jsonDecode'),
         );
@@ -51,7 +51,8 @@ class VarsExtension extends Twig_Extension
      * 
      * @return array
      */
-    public function jsonDecode($str) {
+    public function jsonDecode($str)
+    {
         return json_decode($str);
     }
 }
