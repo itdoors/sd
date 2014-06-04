@@ -7,7 +7,6 @@ use ITDoors\ControllingBundle\Entity\Invoicecron;
 use ITDoors\ControllingBundle\Entity\InvoicecronRepository;
 use ITDoors\ControllingBundle\Entity\Invoice;
 use Symfony\Component\BrowserKit\Response;
-use Symfony\Component\HttpKernel\Fragment\Tests\FragmentRenderer\Renderer;
 
 /**
  * Invoice Service class
@@ -44,9 +43,9 @@ class InvoiceService
 
         /** @var InvoicecronRepository $invoicecron*/
         $invoicecron = $em->getRepository('ITDoorsControllingBundle:Invoicecron');
-
         if (is_dir($directory)) {
-            if ($dh = opendir($directory)) {
+            $dh = opendir($directory);
+            if ($dh) {
                 while (($fil = readdir($dh)) !== false) {
                     if (filetype($directory . $fil) == 'file') {
                         $findfile = $invoicecron->findBy(array('reason' => $fil));
