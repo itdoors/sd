@@ -17,31 +17,32 @@
                             weekStart: 1
                         }
                     });
-                })
+                });
 </script>
 <div class="col-md-12">
     <table id="handling" class="table table-bordered table-striped">
         <tbody>
             <tr>
-                <td style="width:40%">{% trans %}Number act{% endtrans %}</td>
-                <td style="width:40%">{{ entitie.dogovorActName}}</td>
-            </tr>
-            <tr>
+                <td>{% trans %}Number act{% endtrans %}</td>
+                <td>{% trans %}Date{% endtrans %}</td>
                 <td>{% trans %}MPK{% endtrans %}</td>
-                <td>{{ entitie.dogovorActMPK}}</td>
-            </tr>
-            <tr>
                 <td>{% trans %}Summa{% endtrans %}</td>
-                <td>{{ entitie.dogovorActSumma}}</td>
-            </tr>
-            <tr>
                 <td>{% trans %}Count{% endtrans %}</td>
-                <td> {{ entitie.dogovorActCount}}</td>
-            </tr>
-            <tr>
                 <td>{% trans %}Original ABP/BN{% endtrans %}</td>
-                <td> {% if entitie.dogovorActOriginal is not empty %}{% trans %}on{% endtrans %}{% else %}{% trans %}off{% endtrans %}{% endif %}</td>
+                <td>{% trans %}Note{% endtrans %}</td>
             </tr>
+            {% set acts = entitie.dogovorAct | json_decode()  %}
+            {% for act in acts %}
+            <tr>
+                <td>{{ entitie.dogovorActName}}</td>
+                <td>{{ entitie.dogovorActDate is empty ? '' :entitie.dogovorActDate | date('d-m-Y')}}</td>
+                <td>{{ act.mpk}}</td>
+                <td>{{ act.summa}}</td>
+                <td>{{ act.count}}</td>
+                <td>{% if entitie.dogovorActOriginal is not empty %}{% trans %}on{% endtrans %}{% else %}{% trans %}off{% endtrans %}{% endif %}</td>
+                <td>{{ entitie.dogovorActNote}}</td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>

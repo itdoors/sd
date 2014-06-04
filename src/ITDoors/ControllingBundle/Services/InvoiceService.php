@@ -175,6 +175,12 @@ class InvoiceService
                 // добавления invoice
                 $invoiceNew = new Invoice();
                 $invoiceNew->setInvoiceId($invoice->invoiceId);
+                $invoiceNew->setCourt(0);
+                $invoiceNew->setDogovorGuid($invoice->dogovorGuid);
+                $invoiceNew->setDogovorNumber($invoice->dogovorNumber);
+                $invoiceNew->setDogovorName($invoice->dogovorName);
+                $invoiceNew->setDogovorActNote($invoice->dogovorActNote);
+                $invoiceNew->setDogovorActName($invoice->dogovorActName);
                 if (!empty($invoice->date)) {
                     $invoiceNew->setDate(new \DateTime($invoice->date));
                 } else {
@@ -199,46 +205,19 @@ class InvoiceService
                     $em->flush();
                     continue;
                 }
-                if (!empty($invoice->dogovorActNote)) {
-                    $invoiceNew->setDogovorActNote($invoice->dogovorActNote);
+                if (!empty($invoice->dogovorAct)) {
+                    $invoiceNew->setDogovorAct(json_encode($invoice->dogovorAct));
                 } else {
                     $error = new Invoicecron();
                     $error->setDate(new \DateTime());
                     $error->setStatus('error');
-                    $error->setReason('dogovorActNote');
+                    $error->setReason('dogovorAct');
                     $error->setDescription(json_encode($invoice));
                     $em->persist($error);
                     $em->flush();
                     continue;
                 }
-                if (is_numeric($invoice->dogovorActSumma)) {
-                    $invoiceNew->setDogovorActSumma($invoice->dogovorActSumma);
-                } else {
-                    $error = new Invoicecron();
-                    $error->setDate(new \DateTime());
-                    $error->setStatus('error');
-                    $error->setReason('dogovorActSumma');
-                    $error->setDescription(json_encode($invoice));
-                    $em->persist($error);
-                    $em->flush();
-                    continue;
-                }
-                if (is_numeric($invoice->dogovorActCount)) {
-                    $invoiceNew->setDogovorActCount($invoice->dogovorActCount);
-                } else {
-                    $error = new Invoicecron();
-                    $error->setDate(new \DateTime());
-                    $error->setStatus('error');
-                    $error->setReason('dogovorActCount');
-                    $error->setDescription(json_encode($invoice));
-                    $em->persist($error);
-                    $em->flush();
-                    continue;
-                }
-
-                $invoiceNew->setDogovorGuid($invoice->dogovorGuid);
-                $invoiceNew->setDogovorNumber($invoice->dogovorNumber);
-                $invoiceNew->setDogovorName($invoice->dogovorName);
+                
                 if (!empty($invoice->dogovorDate)) {
                     $invoiceNew->setDogovorDate(new \DateTime($invoice->dogovorDate));
                 } else {
@@ -251,32 +230,9 @@ class InvoiceService
                     $em->flush();
                     continue;
                 }
-                if (is_numeric($invoice->dogovorGuid)) {
-                    $invoiceNew->setDogovorGuid($invoice->dogovorGuid);
-                } else {
-                    $error = new Invoicecron();
-                    $error->setDate(new \DateTime());
-                    $error->setStatus('error');
-                    $error->setReason('dogovorGuid');
-                    $error->setDescription(json_encode($invoice));
-                    $em->persist($error);
-                    $em->flush();
-                    continue;
-                }
-                $invoiceNew->setDogovorActName($invoice->dogovorActName);
-                if (!empty($invoice->dogovorActName)) {
-                    $invoiceNew->setDogovorActDate(new \DateTime($invoice->dogovorActName));
-                } else {
-                    $error = new Invoicecron();
-                    $error->setDate(new \DateTime());
-                    $error->setStatus('error');
-                    $error->setReason('dogovorActName');
-                    $error->setDescription(json_encode($invoice));
-                    $em->persist($error);
-                    $em->flush();
-                    continue;
-                }
-                if (in_array($invoice->dogovorActOriginal, array(0, 1))) {
+                
+   
+                if (in_array($invoice->dogovorActOriginal, array('0', '1'))) {
                     $invoiceNew->setDogovorActOriginal($invoice->dogovorActOriginal);
                 } else {
                     $error = new Invoicecron();
@@ -288,58 +244,17 @@ class InvoiceService
                     $em->flush();
                     continue;
                 }
-
-
                 if (!empty($invoice->delayDate)) {
                     $invoiceNew->setDelayDate(new \DateTime($invoice->delayDate));
-                } else {
-                    $error = new Invoicecron();
-                    $error->setDate(new \DateTime());
-                    $error->setStatus('error');
-                    $error->setReason('delayDate');
-                    $error->setDescription(json_encode($invoice));
-                    $em->persist($error);
-                    $em->flush();
-                    continue;
                 }
                 if (is_numeric($invoice->delayDays)) {
                     $invoiceNew->setDelayDays((int) $invoice->delayDays);
-                } else {
-                    $error = new Invoicecron();
-                    $error->setDate(new \DateTime());
-                    $error->setStatus('error');
-                    $error->setReason('delayDays');
-                    $error->setDescription(json_encode($invoice));
-                    $em->persist($error);
-                    $em->flush();
-                    continue;
                 }
-                if (in_array($invoice->delayDaysType, array('Б', 'К'))) {
+                if (in_array($invoice->delayDaysType, array('Б', 'К', 'б', 'к'))) {
                     $invoiceNew->setDelayDaysType($invoice->delayDaysType);
-                } else {
-                    $error = new Invoicecron();
-                    $error->setDate(new \DateTime());
-                    $error->setStatus('error');
-                    $error->setReason('delayDaysType');
-                    $error->setDescription(json_encode($invoice));
-                    $em->persist($error);
-                    $em->flush();
-                    continue;
                 }
                 if (!empty($invoice->dateFact)) {
                     $invoiceNew->setDateFact(new \DateTime($invoice->dateFact));
-                }
-                if (in_array($invoice->court, array(0, 1))) {
-                    $invoiceNew->setCourt($invoice->court);
-                } else {
-                    $error = new Invoicecron();
-                    $error->setDate(new \DateTime());
-                    $error->setStatus('error');
-                    $error->setReason('court');
-                    $error->setDescription(json_encode($invoice));
-                    $em->persist($error);
-                    $em->flush();
-                    continue;
                 }
                 $invoiceNew->setCustomerName($invoice->customerName);
                 $invoiceNew->setCustomerEdrpou($invoice->customerEdrpou);
@@ -415,7 +330,6 @@ class InvoiceService
                             // подтвердить связь и 1С
                             $dogovoradd->setDogovorGuid($invoice->dogovorGuid);
                             $em->persist($dogovoradd);
-                            $em->flush();
 
                             $error = new Invoicecron();
                             $error->setDate(new \DateTime());
@@ -463,7 +377,7 @@ class InvoiceService
                 }
 
 
-                // отвественых по договору =отвественных по счету
+                // отвественых по договору = отвественных по счету
                 if (!empty($invoiceNew->getDogovorId())) {
                     $companystructs = $em->getRepository('ListsDogovorBundle:DogovorCompanystructure')
                         ->findBy(array('dogovorId' => $invoiceNew->getDogovorId()));
@@ -489,20 +403,7 @@ class InvoiceService
                 if (!empty($invoice->dateFact)) {
                     $invoiceObj->setDateFact(new \DateTime($invoice->dateFact));
                 }
-                if (in_array($invoice->court, array(0, 1))) {
-                    $invoiceObj->setCourt($invoice->court);
-                } else {
-                    $error = new Invoicecron();
-                    $error->setDate(new \DateTime());
-                    $error->setStatus('error');
-                    $error->setReason('court');
-                    $error->setInvoiceId($invoiceObj->getId());
-                    $error->setDescription(json_encode($invoice));
-                    $em->persist($error);
-                    $em->flush();
-                    continue;
-                }
-                if (in_array($invoice->dogovorActOriginal, array(0, 1))) {
+                if (in_array($invoice->dogovorActOriginal, array('0', '1'))) {
                     $invoiceObj->setDogovorActOriginal($invoice->dogovorActOriginal);
                 } else {
                     $error = new Invoicecron();
@@ -517,29 +418,9 @@ class InvoiceService
                 }
                 if (is_numeric($invoice->delayDays)) {
                     $invoiceObj->setDelayDays((int) $invoice->delayDays);
-                } else {
-                    $error = new Invoicecron();
-                    $error->setDate(new \DateTime());
-                    $error->setInvoiceId($invoiceObj->getId());
-                    $error->setStatus('error');
-                    $error->setReason('delayDays');
-                    $error->setDescription(json_encode($invoice));
-                    $em->persist($error);
-                    $em->flush();
-                    continue;
                 }
-                if (in_array($invoice->delayDaysType, array('Б', 'К'))) {
+                if (in_array($invoice->delayDaysType, array('Б', 'К', 'б', 'к'))) {
                     $invoiceObj->setDelayDaysType((int) $invoice->delayDaysType);
-                } else {
-                    $error = new Invoicecron();
-                    $error->setDate(new \DateTime());
-                    $error->setInvoiceId($invoiceObj->getId());
-                    $error->setStatus('error');
-                    $error->setReason('delayDaysType');
-                    $error->setDescription(json_encode($invoice));
-                    $em->persist($error);
-                    $em->flush();
-                    continue;
                 }
                 $em->flush();
             }

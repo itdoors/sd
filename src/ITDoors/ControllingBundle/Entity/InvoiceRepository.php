@@ -3,7 +3,6 @@
 namespace ITDoors\ControllingBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -387,12 +386,11 @@ class InvoiceRepository extends EntityRepository
         switch ($tab) {
             case 'act':
                 $entitie
-                    ->select('i.dogovorActSumma')
-                    ->addSelect('i.dogovorActCount')
+                    ->select('i.dogovorAct')
+                    ->addSelect('i.dogovorActDate')
                     ->addSelect('i.dogovorActNote')
                     ->addSelect('i.dogovorActName')
                     ->addSelect('i.dogovorActOriginal')
-                    ->addSelect('i.dogovorActMPK')
                     ->where('i.id = :invoiceid')
                     ->setParameter(':invoiceid', $invoiceid);
                 $entitie = $entitie->getQuery()
@@ -467,6 +465,11 @@ class InvoiceRepository extends EntityRepository
                     ->addSelect('d.subject')
                     ->addSelect('type.name as dogovorTypeId')
                     ->addSelect('d.filepath')
+                    ->addSelect('i.dogovorName')
+                    ->addSelect('i.dogovorDate')
+                    ->addSelect('i.dogovorNumber')
+                    ->addSelect('i.customerName as customerName_1c')
+                    ->addSelect('i.performerName as performerName_1c')
                     ->leftJoin('i.dogovor', 'd')
                     ->leftJoin('d.customer', 'customer')
                     ->leftJoin('d.performer', 'performer')

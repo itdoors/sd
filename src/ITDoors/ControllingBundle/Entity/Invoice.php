@@ -366,27 +366,27 @@ class Invoice
     }
 
     /**
-     * Set dogovorId1c
+     * Set dogovorGuid
      *
-     * @param string $dogovorId1c
+     * @param string $dogovorGuid
      * 
      * @return Invoice
      */
-    public function setDogovorGuid($dogovorId1c)
+    public function setDogovorGuid($dogovorGuid)
     {
-        $this->dogovorId1c = $dogovorId1c;
+        $this->dogovorGuid = $dogovorGuid;
 
         return $this;
     }
 
     /**
-     * Get dogovorId1c
+     * Get dogovorGuid
      *
      * @return string 
      */
     public function getDogovorGuid()
     {
-        return $this->dogovorId1c;
+        return $this->dogovorGuid;
     }
 
     /**
@@ -872,5 +872,33 @@ class Invoice
     public function getDogovorActMPK()
     {
         return $this->dogovorActMPK;
+    }
+    /**
+     * @var string
+     */
+    private $dogovorAct;
+
+
+    /**
+     * Set dogovorAct
+     *
+     * @param string $dogovorAct
+     * @return Invoice
+     */
+    public function setDogovorAct($dogovorAct)
+    {
+        $this->dogovorAct = $dogovorAct;
+    
+        return $this;
+    }
+
+    /**
+     * Get dogovorAct
+     *
+     * @return string 
+     */
+    public function getDogovorAct()
+    {
+        return $this->dogovorAct;
     }
 }

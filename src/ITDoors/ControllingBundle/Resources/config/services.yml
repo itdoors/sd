@@ -4,6 +4,7 @@ parameters:
     it_doors_invoice.service.class: ITDoors\ControllingBundle\Services\InvoiceService
     itdoors_controlling.message.form.class: ITDoors\ControllingBundle\Form\InvoiceMessageFormType
     itdoors_controlling.company.form.class: ITDoors\ControllingBundle\Form\InvoiceCompanystructureFormType
+    some.extension: ITDoors\ControllingBundle\Twig\Extension\VarsExtension
 
 services:
     it_doors_controlling.repository:
@@ -11,6 +12,12 @@ services:
         factory_service: doctrine # this is an instance of Registry
         factory_method: getRepository
         arguments: [ %it_doors_controlling.repository.entity% ]
+        
+    some_id:
+        class: %some.extension%
+        arguments: [@service_container]
+        tags:
+            - { name: twig.extension, alias: some.extension }
         
     it_doors_invoice.service:
         class: %it_doors_invoice.service.class%

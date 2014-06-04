@@ -46,7 +46,7 @@ ITDoors\ControllingBundle\Entity\Invoice:
         dogovorGuid:
             type: string
             nullable: false
-            length: 255
+            length: 512
             column: dogovor_quid
         dogovorName:
             type: string
@@ -66,18 +66,10 @@ ITDoors\ControllingBundle\Entity\Invoice:
             nullable: true
             length: 255
             column: dogovor_act_name
-        dogovorActSumma:
-            type: float
-            length: 20
-            column: dogovor_act_summa
-        dogovorActMPK:
+        dogovorAct:
             type: string
-            length: 255
-            column: dogovor_act_mpk
-        dogovorActCount:
-            type: float
-            length: 10
-            column: dogovor_act_count
+            length: 512
+            column: dogovor_act
         dogovorActNote:
             type: text
             column: dogovor_act_note
