@@ -121,12 +121,12 @@ class GrafikRepository extends EntityRepository
     }
 
     /**
-     * @param integer $idDepartment
      * @param integer $idCoworker
+     * @param integer $idDepartment
      *
-     * @return bool
+     * @return mixed
      */
-    public function isCoworkerFired($idDepartment, $idCoworker)
+    public function isCoworkerFired($idCoworker, $idDepartment)
     {
         $result = $this->createQueryBuilder('g')
             ->select('COUNT(g.day)')
@@ -138,7 +138,7 @@ class GrafikRepository extends EntityRepository
             ->setParameter(':idCoworker', $idCoworker)
             ->andWhere('g.isFired = true')
             ->getQuery()
-            ->getScalarResult();
+            ->getSingleScalarResult();
 
         if ($result) {
             return true;

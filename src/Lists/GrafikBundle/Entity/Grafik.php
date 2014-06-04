@@ -704,4 +704,12 @@ class Grafik
     {
         return $this->departmentPeopleReplacementId;
     }
+
+    /**
+     * __clone method
+     */
+    public function __clone()
+    {
+        $this->id = null;
+    }
 }

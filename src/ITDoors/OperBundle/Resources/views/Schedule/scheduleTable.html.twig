@@ -24,6 +24,7 @@
 #}
     <script>
         $(document).ready(function(){
+/*
             var idLastHref = ''
             $('#form_modal_more_info').on('hidden.bs.modal', function () {
                 var href = $('#'+idLastHref);
@@ -61,12 +62,12 @@
                 e.preventDefault();
                 idLastHref = this.id;
             })
+*/
         })
 
 
 
     </script>
-
     <table class="table table-striped table-hover table-bordered" id="graffic_table">
         <thead>
             <tr style="background-color: #ffffff">
@@ -109,7 +110,7 @@
                             data-toggle="modal"
                             href="#form_modal_more_info"
                             data-target_holder="moreInfoTpl"
-                            data-params='{"date":"{{ dayInfo.date }}", "idCoworker": {{ idCoworker }}, "idDepartment":{{ idDepartment }}}'
+                            data-params='{"date":"{{ dayInfo.date }}", "idCoworker": {{ idCoworker }}, "idDepartment":{{ idDepartment }}, "idLink": "link{{ day }}{{ idCoworker }}" }'
 
                             data-url-more-info="{{ url('it_doors_oper_schedule_day_info') }}"
                                 >
@@ -153,6 +154,9 @@
     }
     #graffic_table{
         margin-top: 0px !important;
+    }
+    #schedule_content{
+        overflow: auto;
     }
 
 </style>

@@ -57,3 +57,7 @@ it_doors_oper_schedule_one_day_total:
 it_doors_oper_schedule_update_status_coworker:
     pattern:  /oper/schedule/update/status/coworker
     defaults: { _controller: ITDoorsOperBundle:OperSchedule:updateStatusCoworker }
+
+it_doors_oper_schedule_copy_month_dates:
+    pattern:  /oper/schedule/copy/month/dates
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:copyMonthDates }

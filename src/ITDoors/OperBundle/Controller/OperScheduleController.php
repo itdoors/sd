@@ -189,7 +189,7 @@ class OperScheduleController extends BaseFilterController
         $date =  $request->request->get('date');
         $idCoworker = $request->request->get('idCoworker');
         $idDepartment = $request->request->get('idDepartment');
-
+        $idLink = $request->request->get('idLink');
 /*        if (!isset($date) || !isset($idCoworker) || !isset($idDepartment)) {
             echo ('some error, variables had not been sent');exit;
         }*/
@@ -224,7 +224,8 @@ class OperScheduleController extends BaseFilterController
             'monthName' => $monthName,
             'dayName' => $dayName,
             'day' => $day,
-            'year' => $year
+            'year' => $year,
+            'idLink' => $idLink
         ));
         $return['success'] = 1;
 
@@ -259,12 +260,41 @@ class OperScheduleController extends BaseFilterController
             $officially = true;
         }
 
-        $departmentPeople  = $this->getDoctrine()
-            ->getRepository('ListsDepartmentBundle:DepartmentPeople')
-            ->find($idCoworker);
+        $departmentPeopleRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
+
+        /** @var  $departmentPeople \Lists\DepartmentBundle\Entity\DepartmentPeople */
+        $departmentPeople = $departmentPeopleRepository->find($idCoworker);
+        //can't person work when fired
+        if ($departmentPeople->getDismissalDateNotOfficially() != null
+            && $departmentPeople->getDismissalDateNotOfficially() < new \DateTime($date)) {
+
+            $return['success'] = 0;
+            $return['error'] = 'fired';
+
+            return new Response(json_encode($return));
+
+        }
 
         //can't non-official person work officially
         if ($departmentPeople->getAdmissionDate() == null && $officially) {
+            $return['success'] = 0;
+            $return['error'] = 'no_official_permitted';
+
+            return new Response(json_encode($return));
+        } elseif ($departmentPeople->getAdmissionDate() != null
+            && $departmentPeople->getAdmissionDate() < new \DateTime($date)
+            && $departmentPeople->getDismissalDate() != null
+            && $departmentPeople->getDismissalDate() > new \DateTime($date)
+            && $officially) {
+
+            $return['success'] = 0;
+            $return['error'] = 'no_official_permitted';
+
+            return new Response(json_encode($return));
+        } elseif ($departmentPeople->getAdmissionDate() != null
+            && $departmentPeople->getAdmissionDate() > new \DateTime($date)) {
+
             $return['success'] = 0;
             $return['error'] = 'no_official_permitted';
 
@@ -275,13 +305,7 @@ class OperScheduleController extends BaseFilterController
         $grafikRepository = $this->getDoctrine()
             ->getRepository('ListsGrafikBundle:Grafik');
 
-        if ($grafikRepository->isCoworkerFired($idCoworker, $idDepartment)) {
-            $return['success'] = 0;
-            $return['error'] = 'fired';
-
-            return new Response(json_encode($return));
-        }
-
+        //////////////////
         list($hoursFromTime, $minutesFromTime) = explode(':', $fromTime);
         list($hoursToTime, $minutesToTime) = explode(':', $toTime);
         $midnight = '00:00';
@@ -290,6 +314,8 @@ class OperScheduleController extends BaseFilterController
         $infoDay['date'] = $date;
         $infoDay['from'] = $fromTime;
         $infoDay['to'] = $toTime;
+
+        //wrong time error
         if (($hoursFromTime > $hoursToTime && $hoursToTime != 0) ||
             ($hoursToTime == 0 && $minutesToTime != 0 && $hoursFromTime != 0) ||
             ($hoursToTime == $hoursFromTime && $minutesFromTime>$minutesToTime) ||
@@ -299,8 +325,31 @@ class OperScheduleController extends BaseFilterController
             $return['error'] = 'wrong_from_to_time';
 
             return new Response(json_encode($return));
+        }
 
+        //check if time does not have sub times already in db
 
+        /** @var $grafikTimeRepository \Lists\GrafikBundle\Entity\GrafikTimeRepository   */
+        $grafikTimeRepository = $this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:GrafikTime');
+        list($year, $month, $day) = explode('-', $date);
+
+        $havingSubtime = $grafikTimeRepository->havingSubtime(
+            $year,
+            $month,
+            $day,
+            $idDepartment,
+            $idCoworker,
+            $fromTime,
+            $toTime,
+            $idTimeGrafik
+        );
+        if ($havingSubtime) {
+            $return['success'] = 0;
+            $return['error'] = 'subtime_having';
+            $return['info'] = $havingSubtime;
+
+            return new Response(json_encode($return));
         }
 
 /*            if ($hoursFromTime > $hoursToTime || ($hoursToTime == 0 && $minutesToTime != 0 && $hoursFromTime != 0)) {
@@ -598,27 +647,35 @@ class OperScheduleController extends BaseFilterController
             $idCoworker
         );
 
-        if (!$infoDay[0]) {
+        if (!isset($infoDay[0])) {
             $officially = 0;
             $notOfficially = 0;
+            $status = 'ok';
         } else {
-            $officially = $infoDay[0]['total'];
-            $notOfficially = $infoDay[0]['totalNotOfficially'];
+            if (!$infoDay[0]) {
+                $officially = 0;
+                $notOfficially = 0;
+            } else {
+                $officially = $infoDay[0]['total'];
+                $notOfficially = $infoDay[0]['totalNotOfficially'];
+            }
+
+            $status = 'ok';
+
+            if ($infoDay[0]['isVacation']) {
+                $status = 'vacation';
+            }
+            if ($infoDay[0]['isSkip']) {
+                $status = 'skip';
+            }
+            if ($infoDay[0]['isFired']) {
+                $status = 'fired';
+            }
+            if ($infoDay[0]['isSick']) {
+                $status = 'sick';
+            }
         }
 
-        $status = 'ok';
-        if ($infoDay[0]['isVacation']) {
-            $status = 'vacation';
-        }
-        if ($infoDay[0]['isSkip']) {
-            $status = 'skip';
-        }
-        if ($infoDay[0]['isFired']) {
-            $status = 'fired';
-        }
-        if ($infoDay[0]['isSick']) {
-            $status = 'sick';
-        }
 
         $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleTableCell.html.twig', array(
             'officially'=> $officially,
@@ -673,6 +730,12 @@ class OperScheduleController extends BaseFilterController
             ));
 
         if ($grafik) {
+
+            $grafik->setIsSkip(false);
+            $grafik->setIsSick(false);
+            $grafik->setIsVacation(false);
+            $grafik->setIsFired(false);
+
             if ($status == 'fired') {
                 $grafik->setIsFired(true);
             }
@@ -685,16 +748,112 @@ class OperScheduleController extends BaseFilterController
             if ($status == 'sick') {
                 $grafik->setIsSick(true);
             }
-            if ($status == 'ok') {
-                $grafik->setIsSkip(false);
-                $grafik->setIsSick(false);
-                $grafik->setIsVacation(false);
-                $grafik->setIsFired(false);
-            }
             $em =  $this->getDoctrine()->getManager();
             $em->persist($grafik);
             $em->flush();
         }
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function copyMonthDatesAction(Request $request)
+    {
+        $dates =  $request->request->get('dates');
+        $idCoworker = $request->request->get('idCoworker');
+        $idDepartment = $request->request->get('idDepartment');
+        $currentDate = $request->request->get('currentDate');
+
+        list($year, $month, $day) = explode('-', $currentDate);
+
+        foreach ($dates as $key => $date) {
+            $dates[$key] = date('d', strtotime($date));
+        }
+        $return = array();
+
+        $key = array_search($currentDate, $dates);
+        if ($key !== false) {
+            unset($dates[$key]);
+        }
+        //deleting old day grafik times
+        /** @var $grafikTimeRepository \Lists\GrafikBundle\Entity\GrafikTimeRepository   */
+        $grafikTimeRepository = $this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:GrafikTime');
+
+        $coworkerDayTimes = $grafikTimeRepository->findBy(array(
+            'department' => $idDepartment,
+            'departmentPeople' => $idCoworker,
+            'day' => $dates,
+            'year' => $year,
+            'month' => $month
+        ));
+
+        $em =  $this->getDoctrine()->getManager();
+
+        foreach ($coworkerDayTimes as $coworkerDayTime) {
+            $em->remove($coworkerDayTime);
+        }
+        $em->flush();
+
+
+        //deleting old day grafik
+        /** @var $grafikRepository \Lists\GrafikBundle\Entity\GrafikRepository   */
+        $grafikRepository = $this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:Grafik');
+        $coworkerDayTimesTotal = $grafikRepository->findBy(array(
+            'department' => $idDepartment,
+            'departmentPeople' => $idCoworker,
+            'day' => $dates,
+            'year' => $year,
+            'month' => $month
+        ));
+        foreach ($coworkerDayTimesTotal as $coworkerDayTimeTotal) {
+            $em->remove($coworkerDayTimeTotal);
+        }
+        $em->flush();
+
+        //copying new daytime to grafik time
+        /** @var  $copyGrafikTime \Lists\GrafikBundle\Entity\GrafikTime */
+        $copyGrafikTimes = $grafikTimeRepository->findBy(array(
+            'department' => $idDepartment,
+            'departmentPeople' => $idCoworker,
+            'day' => $day,
+            'year' => $year,
+            'month' => $month
+        ));
+
+        foreach ($copyGrafikTimes as $copyGrafikTime) {
+            foreach ($dates as $dayNew) {
+                $cloneGrafikTime = clone $copyGrafikTime;
+                $cloneGrafikTime->setDay($dayNew);
+                $em->persist($cloneGrafikTime);
+            }
+        }
+        $em->flush();
+
+        //copying new daytime to grafik
+        /** @var  $copyGrafikTime \Lists\GrafikBundle\Entity\Grafik */
+        $copyGrafik = $grafikRepository->findOneBy(array(
+            'department' => $idDepartment,
+            'departmentPeople' => $idCoworker,
+            'day' => $day,
+            'year' => $year,
+            'month' => $month
+        ));
+        if ($copyGrafik) {
+            foreach ($dates as $dayNew) {
+                $copyGrafik = clone $copyGrafik;
+                $copyGrafik->setDay($dayNew);
+                $em->persist($copyGrafik);
+            }
+        }
+        $em->flush();
 
         $return['success'] = 1;
 

@@ -1,30 +1,129 @@
 {% trans_default_domain 'ITDoorsOperBundle' %}
-
+<script type="text/javascript" src="{{ asset('bundles/itdoorsoper/js/multiDatePicker/bootstrap-datepicker.js')}} "></script>
 <script>
     $(document).ready(function(){
 
+        function updateTableCell(hrefId) {
+            if (!hrefId) {
+                var href = $('#'+$('#info_one_day').data('id_table_href'));
+            }
+            else {
+                var href = $('#'+hrefId);
+            }
 
-            $('.timepiker-cool').timepicker({
-                autoclose: true,
-                minuteStep: 5,
-                showSeconds: false,
-                showMeridian: false
-            });
-            $('#newFromTime').timepicker({
-                autoclose: true,
-                minuteStep: 5,
-                showSeconds: false,
-                showMeridian: false,
-                defaultTime: '09:00'
-            });
-            $('#newToTime').timepicker({
-                autoclose: true,
-                minuteStep: 5,
-                showSeconds: false,
-                showMeridian: false,
-                defaultTime: '18:00'
-            });
-            //$('.timepicker-cool12').timepicker();
+            var params = href.data('params');
+            var sendData = {
+                'params': params
+            }
+            $.ajax({
+                type: 'POST',
+                url: $('#info_input').data('url_reload_href'),
+                data: sendData,
+
+                beforeSend: function() {
+                    //ITDoorsAjax.blockUI($('#'+idLastHref));
+                },
+                success: function(data) {
+                    //alert(data);
+                    //ITDoorsAjax.unblockUI($('#'+idLastHref));
+                    data = JSON.parse(data);
+                    if (data.success == 0) {
+                    }
+                    else {
+                        //alert(data.html)
+                        href.html(data.html);
+                    }
+                }
+
+            })
+        }
+
+        $('.timepiker-cool').timepicker({
+            autoclose: true,
+            minuteStep: 5,
+            showSeconds: false,
+            showMeridian: false
+        });
+        $('#newFromTime').timepicker({
+            autoclose: true,
+            minuteStep: 5,
+            showSeconds: false,
+            showMeridian: false,
+            defaultTime: '09:00'
+        });
+        $('#newToTime').timepicker({
+            autoclose: true,
+            minuteStep: 5,
+            showSeconds: false,
+            showMeridian: false,
+            defaultTime: '18:00'
+        });
+
+        var currentTime = new Date()
+        var minDate = new Date(currentTime.getFullYear(), currentTime.getMonth(), +1); //one day next before month
+        var maxDate = new Date(currentTime.getFullYear(), currentTime.getMonth() +1, 0); // one day before next month
+
+        $('#copy_graf').datepicker({
+            startDate: minDate,
+            endDate: maxDate,
+            format: 'yyyy/mm/dd',
+            multidate: true
+        }).on('show', function(e){
+            var message = $('#copy_graf').data('message');
+            $('#copy_graf').html(message);
+            $('#copy_graf_submit').show( 'slide', {}, 500);
+        }).on('hide', function(e){
+            var text = $('#copy_graf').data('text');
+            $('#copy_graf').html(text);
+            setTimeout("$('#copy_graf_submit').hide( 'slide', {}, 500 );",500);
+        });
+
+
+        $('#copy_graf_submit').die('click');
+        $('#copy_graf_submit').live('click', function(e){
+            var dates = $('#copy_graf').datepicker('getDates');
+
+            var idCoworker = $('#addButton').data('id_coworker');
+            var idDepartment = $('#addButton').data('id_department');
+            var date = $('#addButton').data('date');
+
+            var sendData = {
+                'idCoworker': idCoworker,
+                'idDepartment': idDepartment,
+                'currentDate': date,
+                'dates': dates
+            }
+            $.ajax({
+                type: 'POST',
+                url: $('#info_one_day').data('url_copy'),
+                data: sendData,
+
+                beforeSend: function() {
+                    //ITDoorsAjax.blockUI($('#'+idLastHref));
+                },
+                success: function(data) {
+                    for (index = 0; index < dates.length; ++index) {
+                        var tempDate = new Date(dates[index]);
+                        updateTableCell('link'+tempDate.getDate()+idCoworker);
+                    }
+                    //dates = dates.split(',');
+
+                    //ITDoorsAjax.unblockUI($('#'+idLastHref));
+/*
+                    data = JSON.parse(data);
+                    if (data.success == 0) {
+                    }
+                    else {
+                        //alert(data.html)
+                        href.html(data.html);
+                    }
+*/
+                }
+
+            })
+        })
+
+
 
         $('.editButton').die('click');
         $('.editButton').live('click', function(e){
@@ -128,7 +227,7 @@
             var idCoworker = $('#addButton').data('id_coworker');
             var idDepartment = $('#addButton').data('id_department');
             var date = $('#addButton').data('date');
-            var sendData ={
+            var sendData = {
                 'idCoworker': idCoworker,
                 'idDepartment': idDepartment,
                 'date': date,
@@ -157,6 +256,9 @@
                         if (data.error == 'fired') {
                             $('#fired_error').toggle( 'blind', {}, 500 );
                         }
+                        if (data.error == 'subtime_having') {
+                            $('#subtime_error').toggle( 'blind', {}, 500 );
+                        }
                         checkButton.removeClass('notDisplayed');
                         cancelButton.removeClass('notDisplayed');
                     }
@@ -170,7 +272,7 @@
                             showSeconds: false,
                             showMeridian: false
                         });
-
+                        updateTableCell(false)
 /*
                         editButton.removeClass('notDisplayed');
                         deleteButton.removeClass('notDisplayed');
@@ -244,6 +346,7 @@
                         }
                         else {
                             parent.remove();
+                            updateTableCell(false)
                         }
                     }
                 })
@@ -303,6 +406,9 @@
                         if (data.error == 'fired') {
                             $('#fired_error').toggle( 'blind', {}, 500 );
                         }
+                        if (data.error == 'subtime_having') {
+                            $('#subtime_error').toggle( 'blind', {}, 500 );
+                        }
                     }
                     else {
                         //alert(data.html)
@@ -315,6 +421,8 @@
                             showMeridian: false
                         });
                         $( "#add_div" ).hide( 'blind', {}, 500 );
+
+                        updateTableCell(false)
 
                     }
                 }
@@ -349,7 +457,7 @@
                 success: function(data) {
                     $('#status_span').html(message);
                     $('#status_changed').show( 'blind', {}, 500 );
-
+                    updateTableCell(false)
                 }
             })
 
@@ -363,7 +471,10 @@
 <div>
     <a class="btn purple" id="add_button">{% trans %}Add{% endtrans %}</a>
 <li class="btn-group" style="float: right; ">
-    <a class="btn green" style="margin-right: 10px;">Скопировать график</a>
+    <a class="btn green notDisplayed" style="margin-right: 10px;" id="copy_graf_submit">Скопировать</a>
+    <a class="btn green" style="margin-right: 10px; width: 200px;" id="copy_graf"
+       data-message="{% trans %}Select dates{% endtrans %}" data-text="{% trans %}Copy graf{% endtrans %}">{% trans %}Copy graf{% endtrans %}</a>
+
     <button type="button" class="btn blue dropdown-toggle " data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true">
 							<span>
 								{% trans %}Actions{% endtrans %}
@@ -427,6 +538,9 @@
 </div>
 <div class="alert alert-danger notDisplayed" id="fired_error">
     <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Coworker was fired{% endtrans %}
+</div>
+<div class="alert alert-danger notDisplayed" id="subtime_error">
+    <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}This time is already busy{% endtrans %}
 </div>
 <div class="alert alert-success notDisplayed" id="status_changed">
     <strong>{% trans %}Success{% endtrans %}</strong> {% trans %}Status changed for{% endtrans %}:
@@ -492,3 +606,6 @@
         </tr>
     </tfoot>
 </table>
+<input type="hidden" id="info_one_day"
+       data-id_table_href ="{{ idLink }}"
+       data-url_copy = "{{ path('it_doors_oper_schedule_copy_month_dates') }}">
