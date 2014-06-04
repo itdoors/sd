@@ -17,6 +17,7 @@ use Doctrine\ORM\EntityManager;
  */
 class InvoiceController extends BaseFilterController
 {
+
     /** @var Invoice $filterNamespace */
     protected $filterNamespace = 'ajax.filter.namespace.report.invoice';
 
@@ -24,7 +25,8 @@ class InvoiceController extends BaseFilterController
     protected $service = 'it_doors_invoice.service';
 
     /** @var KnpPaginatorBundle $paginator */
-    protected $paginator ='knp_paginator';
+    protected $paginator = 'knp_paginator';
+
     /**
      * @var Container
      *
@@ -32,6 +34,9 @@ class InvoiceController extends BaseFilterController
      */
     public function indexAction()
     {
+        $servi = $this->get($this->service);
+        $servi->parserFile();
+
         $filterNamespace = $this->container->getParameter($this->getNamespace());
 
         $period = $this->getTab($filterNamespace);
@@ -40,16 +45,14 @@ class InvoiceController extends BaseFilterController
             $this->setTab($filterNamespace, $period);
         }
 
-        $service= $this->container->get($this->service);
-        $service->getTabsInvoices();
-
-        //$service->sendMail();
+        $service = $this->container->get($this->service);
 
         $tabs = $service->getTabsInvoices();
 
         return $this->render('ITDoorsControllingBundle:Invoice:index.html.twig', array(
                 'tabs' => $tabs,
-                'tab' => $period
+                'tab' => $period,
+                'namespace' => $filterNamespace
         ));
     }
 
@@ -83,7 +86,7 @@ class InvoiceController extends BaseFilterController
         }
 
         $paginator = $this->container->get($this->paginator);
-        $entities->setHint($this->paginator.'.count', $count);
+        $entities->setHint($this->paginator . '.count', $count);
         $pagination = $paginator->paginate($entities, $page, 20);
 
         $responsibles = array();
@@ -117,7 +120,7 @@ class InvoiceController extends BaseFilterController
         $session->set('invoiceid', $invoiceid);
 
         /** @var InvoiceService $service */
-        $service= $this->container->get($this->service);
+        $service = $this->container->get($this->service);
         $service->getTabsInvoices();
 
         $filterNamespace = $this->container->getParameter($this->getNamespace());
@@ -128,7 +131,7 @@ class InvoiceController extends BaseFilterController
             $this->setTab($namespaceTab, $tab);
         }
 
-        /** @var InvoiceRepository $invoiceObj*/
+        /** @var InvoiceRepository $invoiceObj */
         $invoiceObj = $this->getDoctrine()
             ->getRepository('ITDoorsControllingBundle:Invoice')
             ->find($invoiceid);
@@ -194,5 +197,119 @@ class InvoiceController extends BaseFilterController
                 'messages' => $messages,
                 'invoiceid' => $invoiceid
         ));
+    }
+
+    /**
+     *  listAction
+     * 
+     * @return render Description
+     */
+    public function listAction()
+    {
+        $filterNamespace = $this->container->getParameter($this->filterNamespace) . 'list';
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        /** @var Invoice $list */
+        $list = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice')
+            ->getInvoiceListForDashboard();
+        $count = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice')
+            ->getInvoiceListForDashboardCount();
+
+        $page = $this->getPaginator($filterNamespace);
+        if (!$page) {
+            $page = 1;
+        }
+
+        $paginator = $this->container->get($this->paginator);
+        $list->setHint($this->paginator . '.count', $count);
+        $pagination = $paginator->paginate($list, $page, 5);
+
+        $responsibles = array();
+        foreach ($pagination as $val) {
+            /** @var InvoiceCompanystructure */
+            $responsibles[$val['id']] = $em
+                ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
+                ->findBy(array('invoiceId' => $val['id']));
+        }
+
+        return $this->render('ITDoorsControllingBundle:Invoice:list.html.twig', array(
+                'list' => $pagination,
+                'responsibles' => $responsibles
+        ));
+    }
+
+    /**
+     *  expectedpayAction
+     * 
+     * @return render Description
+     */
+    public function expectedpayAction()
+    {
+        $filterNamespace = $this->container->getParameter($this->getNamespace());
+        $namespaceTab = $filterNamespace . 'expectedpay';
+        $tab = $this->getTab($namespaceTab);
+        if (!$tab) {
+            $tab = 'today';
+            $this->setTab($namespaceTab, $tab);
+        }
+        $service = $this->container->get($this->service);
+        $tabs = $service->getTabsExpectedPay();
+
+        return $this->render('ITDoorsControllingBundle:Invoice:expectedpay.html.twig', array(
+                'tabs' => $tabs,
+                'tab' => $tab,
+                'namespace' => $namespaceTab
+        ));
+    }
+
+    /**
+     *  expectedpayshowAction
+     * 
+     * @return render Description
+     */
+    public function expectedpayshowAction()
+    {
+        $filterNamespace = $this->container->getParameter($this->getNamespace());
+        $namespaceTab = $filterNamespace . 'expectedpay';
+        $tab = $this->getTab($namespaceTab);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var InvoiceRepository $invoice */
+        $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
+
+        $result = $invoice->getEntittyCountSum($tab);
+        $entities = $result['entities'];
+        $count = $result['count'];
+        $sum = $result['sum'];
+
+        $page = $this->getPaginator($filterNamespace);
+        if (!$page) {
+            $page = 1;
+        }
+
+        $paginator = $this->container->get($this->paginator);
+        $entities->setHint($this->paginator . '.count', $count);
+        $pagination = $paginator->paginate($entities, $page, 20);
+
+        $responsibles = array();
+        foreach ($pagination as $val) {
+            /** @var InvoiceCompanystructure */
+            $responsibles[$val['id']] = $em
+                ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
+                ->findBy(array('invoiceId' => $val['id']));
+        }
+
+        return $this->render('ITDoorsControllingBundle:Invoice:expectedpayshow.html.twig', array(
+                'period' => $tab,
+                'entities' => $pagination,
+                'responsibles' => $responsibles,
+                'namespace' => $namespaceTab,
+                'sum' => $sum
+        ));
+
     }
 }

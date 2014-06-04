@@ -175,6 +175,43 @@ class InvoiceRepository extends EntityRepository
                 ->getQuery()->getSingleScalarResult();
     }
 
+     /**
+     * Returns results for interval future invoice
+     *
+     * @return mixed[]
+     */
+    public function getInvoiceListForDashboard()
+    {
+        $res = $this->createQueryBuilder('i');
+
+        /** select */
+        $this->selectInvoicePeriod($res);
+        /** join */
+        $this->joinInvoicePeriod($res);
+        /** where */
+        $res->andWhere('i.delayDays is NULL or i.delayDays = 0');
+
+        return $res
+                ->orderBy('i.delayDate', 'DESC')->getQuery();
+    }
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @return integer count
+     */
+    public function getInvoiceListForDashboardCount()
+    {
+        $rescount = $this->createQueryBuilder('i');
+
+        /** select */
+        $this->selectInvoicePeriodCount($rescount);
+        /** where */
+        $rescount->andWhere('i.delayDays is NULL or i.delayDays = 0');
+
+        return $rescount
+                ->getQuery()->getSingleScalarResult();
+    }
+
     /**
      * Returns results for interval future invoice
      *
@@ -192,6 +229,28 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoiceSum($res);
         /** where */
         $this->whereInvoicePeriod($res, $periodmin, $periodmax);
+
+        return $res->getQuery()->getResult();
+    }
+
+    /**
+     * Returns results for interval future invoice
+     *
+     * @param date $date
+     *
+     * @return double summa
+     */
+    public function getSumma($date)
+    {
+        $res = $this->createQueryBuilder('i');
+
+        /** select */
+        $this->selectInvoiceSum($res);
+        /** where */
+
+        $res->andWhere(":date  = i.dateEnd")
+            ->setParameter(':date', $date)
+            ->andWhere("i.dateFact is NULL");
 
         return $res->getQuery()->getResult();
     }
@@ -279,6 +338,27 @@ class InvoiceRepository extends EntityRepository
 
         return $res->getQuery();
     }
+    /**
+     * Returns results for interval future invoice
+     *
+     * @param date $date Description
+     * 
+     * @return mixed[]
+     */
+    public function getInvoiceWhen($date)
+    {
+        $res = $this->createQueryBuilder('i');
+        /** select */
+        $this->selectInvoicePeriod($res);
+        /** join */
+        $this->joinInvoicePeriod($res);
+        /** where */
+        $res = $res->andWhere("i.dateEnd = :date")->setParameter(':date', $date)
+            ->andWhere("i.dateFact is NULL")
+            ->orderBy('i.dateEnd', 'DESC');
+
+        return $res->getQuery();
+    }
 
     /**
      * Returns results for interval future invoice
@@ -315,6 +395,27 @@ class InvoiceRepository extends EntityRepository
         $rescount = $rescount
             ->andWhere("i.dateFact is not NULL")
             ->andWhere("i.dateFact >= :date")
+            ->setParameter(':date', $date);
+
+        return $rescount->getQuery()->getSingleScalarResult();
+    }
+    /**
+     * Returns results for interval future invoice
+     *
+     * @param date $date Description
+     * 
+     * @return mixed[]
+     */
+    public function getInvoiceWhenCount($date)
+    {
+        $rescount = $this->createQueryBuilder('i');
+
+        /** select */
+        $this->selectInvoicePeriodCount($rescount);
+        /** where */
+        $rescount = $rescount
+            ->andWhere("i.dateEnd = :date")
+            ->andWhere("i.dateFact is NULL")
             ->setParameter(':date', $date);
 
         return $rescount->getQuery()->getSingleScalarResult();
@@ -365,6 +466,18 @@ class InvoiceRepository extends EntityRepository
                 $result['entities'] = $this->getInvoicePay();
                 $result['count'] = $this->getInvoicePayCount();
                 $result['sum'] = $this->getInvoicePaySum();
+                break;
+            case 'today':
+                $date = date('Y-m-d');
+                $result['entities'] = $this->getInvoiceWhen($date);
+                $result['count'] = $this->getInvoiceWhenCount($date);
+                $result['sum'] = $this->getSumma($date);
+                break;
+            case 'tomorrow':
+                $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d')+1, date('Y')));
+                $result['entities'] = $this->getInvoiceWhen($date);
+                $result['count'] = $this->getInvoiceWhenCount($date);
+                $result['sum'] = $this->getSumma($date);
                 break;
         }
 

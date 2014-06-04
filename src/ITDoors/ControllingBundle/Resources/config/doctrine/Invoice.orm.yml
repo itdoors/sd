@@ -59,7 +59,7 @@ ITDoors\ControllingBundle\Entity\Invoice:
             column: dogovor_number
         dogovorDate:
             type: datetime
-            nullable: false
+            nullable: true
             column: dogovor_date
         dogovorActName:
             type: string

@@ -2114,27 +2114,44 @@ class AjaxController extends Controller
         $invoiceObj = $this->getDoctrine()
             ->getRepository('ITDoorsControllingBundle:Invoice')
             ->find($invoiceId);
+        if(!empty($invoiceObj->getDogovor())){
         /** @var Dogovor $dogovor */
         $dogovor = $this->getDoctrine()
             ->getRepository('ListsDogovorBundle:Dogovor')
             ->find($invoiceObj->getDogovor());
-        $organizationId = $dogovor->getCustomerId() ? $dogovor->getCustomerId() : ($dogovor->getOrganization() ? $dogovor->getOrganization()->getId() : $invoiceObj->getOrganization()->getId());
-
-        $form
-            ->add('contactid', 'entity', array(
-                'class' => 'ListsContactBundle:ModelContact',
-                'empty_value' => '',
-                'required' => false,
-                'mapped' => false,
-                'query_builder' => function (ModelContactRepository $repository) use ($organizationId) {
-                return $repository->createQueryBuilder('mc')
-                    ->leftJoin('mc.owner', 'owner')
-                    ->where('mc.modelName = :modelName')
-                    ->andWhere('mc.modelId = :modelId')
-                    ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
-                    ->setParameter(':modelId', $organizationId);
-            }
-        ));
+            $organizationId = $dogovor->getCustomerId() ? $dogovor->getCustomerId() : ($dogovor->getOrganization() ? $dogovor->getOrganization()->getId() : $invoiceObj->getOrganization()->getId());
+            $form
+                ->add('contactid', 'entity', array(
+                    'class' => 'ListsContactBundle:ModelContact',
+                    'empty_value' => '',
+                    'required' => false,
+                    'mapped' => false,
+                    'query_builder' => function (ModelContactRepository $repository) use ($organizationId) {
+                    return $repository->createQueryBuilder('mc')
+                        ->leftJoin('mc.owner', 'owner')
+                        ->where('mc.modelName = :modelName')
+                        ->andWhere('mc.modelId = :modelId')
+                        ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                        ->setParameter(':modelId', $organizationId);
+                }
+            ));
+        }else{
+            $form
+                ->add('contactid', 'entity', array(
+                    'class' => 'ListsContactBundle:ModelContact',
+                    'empty_value' => '',
+                    'required' => false,
+                    'mapped' => false,
+                    'query_builder' => function (ModelContactRepository $repository) {
+                    return $repository->createQueryBuilder('mc')
+                        ->leftJoin('mc.owner', 'owner')
+                        ->where('mc.modelName = :modelName')
+                        ->andWhere('mc.modelId = :modelId')
+                        ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                        ->setParameter(':modelId', 0);
+                }
+            ));
+        }
     }
 
     /**

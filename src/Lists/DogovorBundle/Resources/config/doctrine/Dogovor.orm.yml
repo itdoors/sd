@@ -107,7 +107,7 @@ Lists\DogovorBundle\Entity\Dogovor:
             column: dogovor_type_id
         dogovorGuid:
             type: string
-            length: 255
+            length: 512
             column: dogovor_guid
     manyToOne:
         customer:

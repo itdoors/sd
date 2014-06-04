@@ -1,4 +1,5 @@
 <?php
+
 namespace ITDoors\ControllingBundle\Services;
 
 use Symfony\Component\DependencyInjection\Container;
@@ -13,6 +14,7 @@ use Symfony\Component\BrowserKit\Response;
  */
 class InvoiceService
 {
+
     /**
      * @var Container $container
      */
@@ -28,12 +30,12 @@ class InvoiceService
         $this->container = $container;
     }
 
-   /**
+    /**
      * @var Container
      * 
      * @return mixed[]
      */
-    public function parserFile ()
+    public function parserFile()
     {
         $directory = '../app/share/1c/debt/';
         $file = false;
@@ -41,7 +43,7 @@ class InvoiceService
         /** @var EntityManager $em */
         $em = $this->container->get('doctrine')->getManager();
 
-        /** @var InvoicecronRepository $invoicecron*/
+        /** @var InvoicecronRepository $invoicecron */
         $invoicecron = $em->getRepository('ITDoorsControllingBundle:Invoicecron');
         if (is_dir($directory)) {
             $dh = opendir($directory);
@@ -59,7 +61,13 @@ class InvoiceService
             }
         }
         if ($file && is_file($directory . $file)) {
-            $json = json_decode(file_get_contents($directory . $file));
+            $str = trim(file_get_contents($directory . $file));
+
+            if (substr($str, 0, 1) !== '{') {
+                $str = substr($str, strpos($str, '{'));
+            }
+            $json = json_decode($str);
+
             switch (json_last_error()) {
                 case JSON_ERROR_NONE:
                     /** @var Invoicecron $error */
@@ -155,7 +163,7 @@ class InvoiceService
         }
     }
 
-      /**
+    /**
      *  savejson
      *
      * @param object $json Description
@@ -181,68 +189,11 @@ class InvoiceService
                 $invoiceNew->setDogovorName($invoice->dogovorName);
                 $invoiceNew->setDogovorActNote($invoice->dogovorActNote);
                 $invoiceNew->setDogovorActName($invoice->dogovorActName);
-                if (!empty($invoice->date)) {
-                    $invoiceNew->setDate(new \DateTime($invoice->date));
-                } else {
-                    $error = new Invoicecron();
-                    $error->setDate(new \DateTime());
-                    $error->setStatus('error');
-                    $error->setReason('date');
-                    $error->setDescription(json_encode($invoice));
-                    $em->persist($error);
-                    $em->flush();
-                    continue;
-                }
-                if (is_numeric($invoice->sum)) {
-                    $invoiceNew->setSum($invoice->sum);
-                } else {
-                    $error = new Invoicecron();
-                    $error->setDate(new \DateTime());
-                    $error->setStatus('error');
-                    $error->setReason('sum');
-                    $error->setDescription(json_encode($invoice));
-                    $em->persist($error);
-                    $em->flush();
-                    continue;
-                }
-                if (!empty($invoice->dogovorAct)) {
-                    $invoiceNew->setDogovorAct(json_encode($invoice->dogovorAct));
-                } else {
-                    $error = new Invoicecron();
-                    $error->setDate(new \DateTime());
-                    $error->setStatus('error');
-                    $error->setReason('dogovorAct');
-                    $error->setDescription(json_encode($invoice));
-                    $em->persist($error);
-                    $em->flush();
-                    continue;
-                }
+                $invoiceNew->setCustomerName($invoice->customerName);
+                $invoiceNew->setCustomerEdrpou($invoice->customerEdrpou);
+                $invoiceNew->setPerformerName($invoice->performerName);
+                $invoiceNew->setPerformerEdrpou($invoice->performerEdrpou);
 
-                if (!empty($invoice->dogovorDate)) {
-                    $invoiceNew->setDogovorDate(new \DateTime($invoice->dogovorDate));
-                } else {
-                    $error = new Invoicecron();
-                    $error->setDate(new \DateTime());
-                    $error->setStatus('error');
-                    $error->setReason('dogovorDate');
-                    $error->setDescription(json_encode($invoice));
-                    $em->persist($error);
-                    $em->flush();
-                    continue;
-                }
-
-                if (in_array($invoice->dogovorActOriginal, array('0', '1'))) {
-                    $invoiceNew->setDogovorActOriginal($invoice->dogovorActOriginal);
-                } else {
-                    $error = new Invoicecron();
-                    $error->setDate(new \DateTime());
-                    $error->setStatus('error');
-                    $error->setReason('dogovorActOriginal');
-                    $error->setDescription(json_encode($invoice));
-                    $em->persist($error);
-                    $em->flush();
-                    continue;
-                }
                 if (!empty($invoice->delayDate)) {
                     $invoiceNew->setDelayDate(new \DateTime($invoice->delayDate));
                 }
@@ -255,34 +206,93 @@ class InvoiceService
                 if (!empty($invoice->dateFact)) {
                     $invoiceNew->setDateFact(new \DateTime($invoice->dateFact));
                 }
-                $invoiceNew->setCustomerName($invoice->customerName);
-                $invoiceNew->setCustomerEdrpou($invoice->customerEdrpou);
-                $invoiceNew->setPerformerName($invoice->performerName);
-                $invoiceNew->setPerformerEdrpou($invoice->performerEdrpou);
+                if (!empty($invoice->dogovorDate)) {
+                    $invoiceNew->setDogovorDate(new \DateTime($invoice->dogovorDate));
+                }
+                if (!empty($invoice->date)) {
+                    $invoiceNew->setDate(new \DateTime($invoice->date));
+                } else {
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('error data');
+                    $error->setReason('date');
+                    $error->setDescription(json_encode($invoice));
+                    $em->persist($error);
+                    $em->flush();
+                    continue;
+                }
+                if (is_numeric($invoice->sum)) {
+                    $invoiceNew->setSum($invoice->sum);
+                } else {
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('error data');
+                    $error->setReason('sum');
+                    $error->setDescription(json_encode($invoice));
+                    $em->persist($error);
+                    $em->flush();
+                    continue;
+                }
+                if (!empty($invoice->dogovorAct)) {
+                    $invoiceNew->setDogovorAct(json_encode($invoice->dogovorAct));
+                } else {
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('error data');
+                    $error->setReason('dogovorAct');
+                    $error->setDescription(json_encode($invoice));
+                    $em->persist($error);
+                    $em->flush();
+                    continue;
+                }
+                if (in_array($invoice->dogovorActOriginal, array('0', '1'))) {
+                    $invoiceNew->setDogovorActOriginal($invoice->dogovorActOriginal);
+                } else {
+                    $error = new Invoicecron();
+                    $error->setDate(new \DateTime());
+                    $error->setStatus('error data');
+                    $error->setReason('dogovorActOriginal');
+                    $error->setDescription(json_encode($invoice));
+                    $em->persist($error);
+                    $em->flush();
+                    continue;
+                }
 
-                /** @var Dogovor  $dogovorfind*/
+
+                /** @var Dogovor  $dogovorfind */
                 $dogovorfind = $em->getRepository('ListsDogovorBundle:Dogovor')
                     ->findOneBy(array('dogovorGuid' => $invoice->dogovorGuid));
                 // договор не связан с 1С
                 if (!$dogovorfind) {
 
-                     /** @var Organization  $customerfind*/
+                    /** @var Organization  $customerfind */
                     $customerfind = $em->getRepository('ListsOrganizationBundle:Organization')
                         ->findOneBy(array('edrpou' => $invoice->customerEdrpou));
-                     /** @var Organization  $performerfind*/
+                    /** @var Organization  $performerfind */
                     $performerfind = $em->getRepository('ListsOrganizationBundle:Organization')
                         ->findOneBy(array('edrpou' => $invoice->performerEdrpou));
 
                     // если заказчик и исполнитель найден
-                    if ($customerfind && $performerfind) {
-                         /** @var Dogovor  $dogovoradd*/
-                        $dogovoradd = $em->getRepository('ListsDogovorBundle:Dogovor')
-                            ->findOneBy(array(
-                            'number' => $invoice->dogovorNumber,
-                            'startdatetime' =>  new DateTime($invoice->dogovorDate),
-                            'customer_id' => $customerfind->getId(),
-                            'performer_id' => $performerfind->getId(),
-                        ));
+                    if ($customerfind) {
+
+                        if ($performerfind) {
+                            /** @var Dogovor  $dogovoradd */
+                            $dogovoradd = $em->getRepository('ListsDogovorBundle:Dogovor')
+                                ->findOneBy(array(
+                                'number' => $invoice->dogovorNumber,
+                                'startdatetime' => new \DateTime($invoice->dogovorDate),
+                                'customerId' => $customerfind->getId(),
+                                'performerId' => $performerfind->getId()
+                            ));
+                        } else {
+                            /** @var Dogovor  $dogovoradd */
+                            $dogovoradd = $em->getRepository('ListsDogovorBundle:Dogovor')
+                                ->findOneBy(array(
+                                'number' => $invoice->dogovorNumber,
+                                'startdatetime' => new \DateTime($invoice->dogovorDate),
+                                'customer_id' => $customerfind->getId(),
+                            ));
+                        }
 
                         if (!$dogovoradd) {
                             // можно поискать договор по 2 полям
@@ -296,8 +306,6 @@ class InvoiceService
                             if ($dogovoradd) {
 
                             } else {
-
-
 
                                 // добавить договор
 //                            $dogovorNew = new Dogovor();
@@ -390,7 +398,7 @@ class InvoiceService
                         $em->flush();
                     }
                 }
-            // Find Invoice
+                // Find Invoice
             } else {
 //                $status[] = $invoice->invoiceId . ' found (need update:
 //                 date_fact, court,dogovor_act_oroginal,
@@ -419,13 +427,14 @@ class InvoiceService
                     $invoiceObj->setDelayDays((int) $invoice->delayDays);
                 }
                 if (in_array($invoice->delayDaysType, array('Б', 'К', 'б', 'к'))) {
-                    $invoiceObj->setDelayDaysType((int) $invoice->delayDaysType);
+                    $invoiceObj->setDelayDaysType($invoice->delayDaysType);
                 }
                 $em->flush();
             }
         }
     }
-     /**
+
+    /**
      * Returns results for interval future invoice
      *
      * @var Container
@@ -477,6 +486,42 @@ class InvoiceService
             'tab' => 'history',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
             'text' => $translator->trans('History')
+        );
+
+        return $tabs;
+    }
+
+    /**
+     * Returns results for interval future invoice
+     *
+     * @var Container
+     * 
+     * @return array
+     */
+    public function getTabsExpectedPay()
+    {
+        /** @var EntityManager $em */
+        $em = $this->container->get('doctrine')->getManager();
+
+        /** @var InvoicecronRepository $invoice */
+        $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
+
+        $summa = $invoice->getSumma(date('Y-m-d'));
+
+        $translator = $this->container->get('translator');
+        $tabs = array();
+        $tabs['today'] = array(
+            'blockupdate' => 'ajax-tab-holder',
+            'tab' => 'today',
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
+            'text' => $translator->trans('Today') . ' ' . number_format($summa[0]['summa'], 2, ',', ' ')
+        );
+        $summa = $invoice->getSumma(date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + 1, date('Y'))));
+        $tabs['tomorrow'] = array(
+            'blockupdate' => 'ajax-tab-holder',
+            'tab' => 'tomorrow',
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
+            'text' => $translator->trans('Tomorrow') . ' ' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
 
         return $tabs;
@@ -551,7 +596,7 @@ class InvoiceService
         /** @var EntityManager $em */
         $em = $this->container->get('doctrine')->getManager();
 
-        /** @var InvoiceRepository $invoice*/
+        /** @var InvoiceRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
 
         $message = \Swift_Message::newInstance()
