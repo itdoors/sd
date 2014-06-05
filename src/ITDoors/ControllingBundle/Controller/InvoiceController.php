@@ -77,7 +77,8 @@ class InvoiceController extends BaseFilterController
         $count = $result['count'];
         $sum = $result['sum'];
 
-        $page = $this->getPaginator($filterNamespace);
+        $namespasePagin = $filterNamespace.'P'.$period;
+        $page = $this->getPaginator($namespasePagin);
         if (!$page) {
             $page = 1;
         }
@@ -98,6 +99,7 @@ class InvoiceController extends BaseFilterController
                 'period' => $period,
                 'entities' => $pagination,
                 'responsibles' => $responsibles,
+                'namespasePagin' => $namespasePagin,
                 'sum' => $sum
         ));
     }

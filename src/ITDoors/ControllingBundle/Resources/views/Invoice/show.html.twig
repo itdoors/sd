@@ -31,15 +31,15 @@
                 });
             });
 </script>
-<div class="table-scrollable">
-    <div class="navigation">
-        {{ ajax_paginator_render(
-            entities, ajax_filter_namespace_report_invoice, {
+<div class="navigation">
+    {{ ajax_paginator_render(
+            entities, namespasePagin, {
                     'datatable_ajax': 'ITDoorsAjax.updateList'
                 }
             )
-        }}
-    </div>
+    }}
+</div>
+<div class="table-scrollable">
     <table class="table table-striped table-bordered table-hover dataTable" aria-describedby="datatable_ajax_info">
         <thead>
             <tr role="row" class="heading">
@@ -153,9 +153,10 @@
             </tr>
         </tbody>
     </table>
+                </div>
     <div class="navigation">
         {{ ajax_paginator_render(
-            entities, ajax_filter_namespace_report_invoice, {
+            entities, namespasePagin, {
                     'datatable_ajax': 'ITDoorsAjax.updateList'
                 }
             )
@@ -176,4 +177,3 @@
             <!-- /.modal-content -->
         </div>
     </div>
-</div>
