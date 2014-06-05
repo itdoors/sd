@@ -34,9 +34,6 @@ class InvoiceController extends BaseFilterController
      */
     public function indexAction()
     {
-        $servi = $this->get($this->service);
-        $servi->parserFile();
-
         $filterNamespace = $this->container->getParameter($this->getNamespace());
 
         $period = $this->getTab($filterNamespace);

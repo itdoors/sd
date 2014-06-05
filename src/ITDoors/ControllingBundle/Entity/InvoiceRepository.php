@@ -248,7 +248,7 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoiceSum($res);
         /** where */
 
-        $res->andWhere(":date  = i.dateEnd")
+        $res->andWhere(":date  = i.dateEnd or i.delayDate = :date")
             ->setParameter(':date', $date)
             ->andWhere("i.dateFact is NULL");
 
@@ -353,7 +353,7 @@ class InvoiceRepository extends EntityRepository
         /** join */
         $this->joinInvoicePeriod($res);
         /** where */
-        $res = $res->andWhere("i.dateEnd = :date")->setParameter(':date', $date)
+        $res = $res->andWhere("i.dateEnd = :date or i.delayDate = :date")->setParameter(':date', $date)
             ->andWhere("i.dateFact is NULL")
             ->orderBy('i.dateEnd', 'DESC');
 
@@ -414,7 +414,7 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoicePeriodCount($rescount);
         /** where */
         $rescount = $rescount
-            ->andWhere("i.dateEnd = :date")
+            ->andWhere("i.dateEnd = :date or i.delayDate = :date")
             ->andWhere("i.dateFact is NULL")
             ->setParameter(':date', $date);
 

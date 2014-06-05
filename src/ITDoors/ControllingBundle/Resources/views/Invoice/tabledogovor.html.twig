@@ -4,7 +4,7 @@
         <tbody>
             <tr>
                 <td></td>
-                <td>{% trans %}ITDoors{% endtrans %}</td>
+                <td>{% trans %}DebitControll{% endtrans %}</td>
                 <td>{% trans %}1C{% endtrans %}</td>
             </tr>
             <tr>
@@ -42,7 +42,7 @@
                 <td>
                     {% if entitie.prolongation %}
                         {% trans from 'messages'%}Yes{% endtrans %}
-                    {% else %}
+                    {% elseif entitie.prolongation != null %}
                         {% trans from 'messages'%}No{% endtrans %}
                     {% endif %}
                 </td>
@@ -58,7 +58,7 @@
                 <td>
                     {% if entitie.isActive %}
                         {% trans from 'messages'%}Active{% endtrans %}
-                    {% else %}
+                    {% elseif entitie.isActive != null %}
                         {% trans from 'messages'%}Not Active{% endtrans %}
                     {% endif %}
                 </td>
@@ -75,7 +75,7 @@
                 <td></td>
             </tr>
             <tr>
-                <td> {% trans %}File{% endtrans %}</td>
+                <td> {% trans %}Scan dogovor{% endtrans %}</td>
                 <td>
                     {% if entitie.filepath %}
                     <a href="/uploads/dogovor/{{ entitie.filepath }}" target="_blank">{% trans %}File{% endtrans %}</a>

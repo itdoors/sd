@@ -67,8 +67,7 @@ ITDoors\ControllingBundle\Entity\Invoice:
             length: 255
             column: dogovor_act_name
         dogovorAct:
-            type: string
-            length: 512
+            type: text
             column: dogovor_act
         dogovorActNote:
             type: text
