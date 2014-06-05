@@ -2,10 +2,8 @@
 
 namespace Lists\HandlingBundle\Entity;
 
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use ITDoors\CommonBundle\Entity\BaseRepository;
-use Symfony\Component\Translation\Translator;
 
 /**
  * HandlingRepository

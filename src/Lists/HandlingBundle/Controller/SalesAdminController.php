@@ -2,6 +2,7 @@
 
 namespace Lists\HandlingBundle\Controller;
 
+use Lists\HandlingBundle\Entity\HandlingMessageRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Validator\Constraints\DateTime;
@@ -170,7 +171,7 @@ class SalesAdminController extends SalesController
         $handlingMessageRepository = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingMessage');
 
-        /** @var \Doctrine\ORM\Query $handlingQuery */
+        /** @var HandlingMessageRepository $handlingMessageRepository */
         $results = $handlingMessageRepository->getAdvancedResult($from, $to);
 
         $types = $this->getDoctrine()->getRepository('ListsHandlingBundle:HandlingMessageType')

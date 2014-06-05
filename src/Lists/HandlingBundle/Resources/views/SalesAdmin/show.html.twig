@@ -50,6 +50,7 @@
 					<li><a href="#tab_1" data-toggle="tab">{% trans %}Managers{% endtrans %}</a></li>
 					<li><a href="#tab_2" data-toggle="tab">{% trans %}Contacts{% endtrans %}</a></li>
                     <li><a href="#tab_3" data-toggle="tab">{% trans %}Organization{% endtrans %}</a></li>
+                    <li><a href="#tab_4" data-toggle="tab">{% trans %}Competitors{% endtrans %}</a></li>
 				</ul>
 				<div class="tab-content">
 
@@ -90,6 +91,16 @@
                                     showMoreInfoIds: showMoreInfoIds
                                 }
                             )
+                        }}
+                    </div>
+                    <!--tabpane-->
+                    <div class="tab-pane" id="tab_4">
+                        {{  render(controller(
+                                'ListsHandlingBundle:Competitor:Index',
+                                {
+                                    handlingId: handling.0.id
+                                }
+                            ))
                         }}
                     </div>
                     <!--tabpane-->

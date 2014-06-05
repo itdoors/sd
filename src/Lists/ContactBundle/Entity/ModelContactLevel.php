@@ -45,7 +45,7 @@ class ModelContactLevel
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
@@ -69,7 +69,7 @@ class ModelContactLevel
     public function setDigit($digit)
     {
         $this->digit = $digit;
-    
+
         return $this;
     }
 

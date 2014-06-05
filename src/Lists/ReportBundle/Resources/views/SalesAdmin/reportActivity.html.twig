@@ -1,0 +1,32 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsReportBundle' %}
+{% block title %}{% trans %}All manager activity{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li><a href="{{ path('lists_report_' ~ baseRoutePrefix ~ '_activity') }}" title="{% trans %}Report{% endtrans %}">{% trans %}All manager activity{% endtrans %}</a></li>
+    </ul>
+{% endblock %}
+
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Report <small>all manager activity</small>{% endtrans %}
+    </h3>
+{% endblock %}
+
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ render(controller('ListsReportBundle:' ~ baseTemplate ~ ':ReportActivityContent')) }}
+{% endblock body %}

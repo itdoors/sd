@@ -633,7 +633,6 @@ class Handling
         // @codingStandardsIgnoreStart
         $this->organization_id = $organizationId;
         // @codingStandardsIgnoreEnd
-
         return $this;
     }
 
@@ -756,7 +755,6 @@ class Handling
         // @codingStandardsIgnoreStart
         $this->result_id = $resultId;
         // @codingStandardsIgnoreEnd
-
         return $this;
     }
 
@@ -1013,27 +1011,124 @@ class Handling
      */
     private $isMarketing;
 
-
     /**
      * Set isMarketing
      *
      * @param boolean $isMarketing
+     *
      * @return Handling
      */
     public function setIsMarketing($isMarketing)
     {
         $this->isMarketing = $isMarketing;
-    
+
         return $this;
     }
 
     /**
      * Get isMarketing
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsMarketing()
     {
         return $this->isMarketing;
+    }
+    /**
+     * @var float
+     */
+    private $pf1;
+
+    /**
+     * @var \DateTime
+     */
+    private $launchDate;
+
+    /**
+     * Set pf1
+     *
+     * @param float $pf1
+     *
+     * @return Handling
+     */
+    public function setPf1($pf1)
+    {
+        $this->pf1 = $pf1;
+
+        return $this;
+    }
+
+    /**
+     * Get pf1
+     *
+     * @return float
+     */
+    public function getPf1()
+    {
+        return $this->pf1;
+    }
+
+    /**
+     * Set launchDate
+     *
+     * @param \DateTime $launchDate
+     *
+     * @return Handling
+     */
+    public function setLaunchDate($launchDate)
+    {
+        $this->launchDate = $launchDate;
+
+        return $this;
+    }
+
+    /**
+     * Get launchDate
+     *
+     * @return \DateTime
+     */
+    public function getLaunchDate()
+    {
+        return $this->launchDate;
+    }
+    /**
+     * @var integer
+     */
+    private $employees;
+
+    /**
+     * Set employees
+     *
+     * @param integer $employees
+     *
+     * @return Handling
+     */
+    public function setEmployees($employees)
+    {
+        $this->employees = $employees;
+
+        return $this;
+    }
+
+    /**
+     * Get employees
+     *
+     * @return integer
+     */
+    public function getEmployees()
+    {
+        return $this->employees;
+    }
+
+    /**
+     * Sets launchDate from launchDateString
+     *
+     * @param string $launchDateString
+     */
+    public function setLaunchDateString($launchDateString)
+    {
+        if ($launchDateString) {
+            $this->setLaunchDate(new \DateTime($launchDateString));
+        }
     }
 }

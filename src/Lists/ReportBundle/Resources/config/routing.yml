@@ -17,3 +17,7 @@ lists_report_sales_admin_last_messages:
 lists_report_sales_admin_last_messages_table:
     pattern:  /lists/salesadmin/report/last/messages/table
     defaults: { _controller: ListsReportBundle:SalesAdmin:reportLastMessagesTable }
+
+lists_report_sales_admin_activity:
+    pattern:  /lists/salesadmin/report/activity
+    defaults: { _controller: ListsReportBundle:SalesAdmin:reportActivity }

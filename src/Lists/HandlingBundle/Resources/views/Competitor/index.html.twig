@@ -1,0 +1,6 @@
+<div id="competitor-list" data-url="{{ path('lists_handling_competitor_list', { handlingId: handlingId }) }}">
+    {{ render(controller('ListsHandlingBundle:Competitor:List', { handlingId: handlingId })) }}
+</div>
+<div id="competitor-form">
+    {{ render(controller('ListsHandlingBundle:Competitor:Form', { handlingId: handlingId })) }}
+</div>

@@ -147,4 +147,90 @@ class HandlingMessageType
     {
         return $this->sortorder;
     }
+    /**
+     * @var string
+     */
+    private $reportName;
+
+    /**
+     * @var boolean
+     */
+    private $isReport;
+
+    /**
+     * @var integer
+     */
+    private $reportSortorder;
+
+    /**
+     * Set reportName
+     *
+     * @param string $reportName
+     *
+     * @return HandlingMessageType
+     */
+    public function setReportName($reportName)
+    {
+        $this->reportName = $reportName;
+
+        return $this;
+    }
+
+    /**
+     * Get reportName
+     *
+     * @return string
+     */
+    public function getReportName()
+    {
+        return $this->reportName;
+    }
+
+    /**
+     * Set isReport
+     *
+     * @param boolean $isReport
+     *
+     * @return HandlingMessageType
+     */
+    public function setIsReport($isReport)
+    {
+        $this->isReport = $isReport;
+
+        return $this;
+    }
+
+    /**
+     * Get isReport
+     *
+     * @return boolean
+     */
+    public function getIsReport()
+    {
+        return $this->isReport;
+    }
+
+    /**
+     * Set reportSortorder
+     *
+     * @param integer $reportSortorder
+     *
+     * @return HandlingMessageType
+     */
+    public function setReportSortorder($reportSortorder)
+    {
+        $this->reportSortorder = $reportSortorder;
+
+        return $this;
+    }
+
+    /**
+     * Get reportSortorder
+     *
+     * @return integer
+     */
+    public function getReportSortorder()
+    {
+        return $this->reportSortorder;
+    }
 }

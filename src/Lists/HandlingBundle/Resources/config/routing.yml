@@ -190,3 +190,12 @@ handling_service:
 lists_dogovor_admin_handling_add_organization_filter:
     pattern:  /lists/sales/handling/add_organization_filter/{organization_id}
     defaults: { _controller: ListsHandlingBundle:Sales:addOrganizationFilter }
+
+#Competitor
+lists_handling_competitor_list:
+    pattern:  /lists/sales/handling/competitor/{handlingId}
+    defaults: { _controller: ListsHandlingBundle:Competitor:list }
+
+lists_handling_competitor_form:
+    pattern:  /lists/sales/handling/competitor/{handlingId}
+    defaults: { _controller: ListsHandlingBundle:Competitor:form }

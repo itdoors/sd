@@ -2,6 +2,7 @@
 
 namespace Lists\ContactBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -12,4 +13,14 @@ use Doctrine\ORM\EntityRepository;
  */
 class ModelContactLevelRepository extends EntityRepository
 {
+    /**
+     * @return ModelContactLevel[]|Collection
+     */
+    public function getLevels()
+    {
+        return $this->createQueryBuilder('mcl')
+            ->orderBy('mcl.digit')
+            ->getQuery()
+            ->getResult();
+    }
 }

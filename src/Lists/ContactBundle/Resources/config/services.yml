@@ -8,6 +8,11 @@ parameters:
     lists_contact.repository.class: Lists\ContactBundle\Entity\ModelContactRepository
     lists_contact.repository.entity: Lists\ContactBundle\Entity\ModelContact
 
+    lists_contact.level.repository.class: Lists\ContactBundle\Entity\ModelContactLevelRepository
+    lists_contact.level.repository.entity: Lists\ContactBundle\Entity\ModelContactLevel
+
+    lists_contact.contact.service.class: Lists\ContactBundle\Services\ModelContactService
+
 services:
     lists_contact.form.modelContactOrganizationForm:
         class: %lists_contact.organization.form.class%
@@ -44,3 +49,13 @@ services:
         factory_service: doctrine # this is an instance of Registry
         factory_method: getRepository
         arguments: [ %lists_contact.repository.entity% ]
+
+    lists_contact.level.repository:
+       class: %lists_contact.level.repository.class%
+       factory_service: doctrine # this is an instance of Registry
+       factory_method: getRepository
+       arguments: [ %lists_contact.level.repository.entity% ]
+
+    lists_contact.contact.service:
+        class: %lists_contact.contact.service.class%
+        arguments: [@service_container]

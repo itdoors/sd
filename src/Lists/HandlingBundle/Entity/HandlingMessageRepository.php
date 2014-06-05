@@ -100,4 +100,113 @@ class HandlingMessageRepository extends EntityRepository
 
         return $result;
     }
+
+    /**
+     * @param \Datetime $to
+     * @param mixed[]   $slugs
+     *
+     * @return array
+     */
+    public function getActivity($to, $slugs)
+    {
+        $fromClone = clone $to;
+
+        $from = $fromClone->modify('-1 month');
+
+        /** @var HandlingMessage[] $q */
+        $q = $this->createQueryBuilder('hm')
+            ->select('hm.id as id')
+            ->addSelect('hm.type_id as typeId')
+            ->addSelect('handling.budget as budget')
+            ->addSelect('handling.pf1 as pf1')
+            ->addSelect('handling.launchDate as launchDate')
+            ->addSelect('handling.square as square')
+            ->addSelect('handling.employees as employees')
+            ->addSelect('handling.id as handlingId')
+            ->addSelect('organization.id as organizationId')
+            ->addSelect('organization.name as organizationName')
+            ->addSelect('user.id as userId')
+            ->addSelect("CONCAT(CONCAT(user.lastName, ' '), user.firstName) as userFullName")
+            ->addSelect("level.digit as levelDigit")
+            ->addSelect(
+                "
+                  array_to_string(
+                     ARRAY(
+                        SELECT
+                          hs.name
+                        FROM
+                          ListsHandlingBundle:HandlingService hs
+                        LEFT JOIN hs.handlings handlings
+                        WHERE handlings.id = handling.id
+                     ), ','
+                   ) as serviceList"
+            )
+            ->leftJoin('hm.user', 'user')
+            ->leftJoin('hm.handling', 'handling')
+            ->leftJoin('hm.contact', 'contact')
+            ->leftJoin('hm.type', 'type')
+            ->leftJoin('contact.level', 'level')
+            ->leftJoin('handling.organization', 'organization')
+            ->where('hm.createdate >= :createdateFrom')
+            ->andWhere('hm.createdate <= :createdateTo')
+            ->andWhere('type.slug in (:reportSlugs)')
+            ->setParameter(':createdateFrom', $from, \Doctrine\DBAL\Types\Type::DATETIME)
+            ->setParameter(':createdateTo', $to, \Doctrine\DBAL\Types\Type::DATETIME)
+            ->setParameter(':reportSlugs', $slugs)
+            ->getQuery()
+            ->getResult();
+
+        if (!sizeof($q)) {
+            return array();
+        }
+
+        $result = array();
+
+        foreach ($q as $handlingMessage) {
+            $handlingId = $handlingMessage['handlingId'];
+            $userId = $handlingMessage['userId'];
+            $organizationId = $handlingMessage['organizationId'];
+            $organizationName = $handlingMessage['organizationName'];
+            $typeId = $handlingMessage['typeId'];
+            $levelDigit = $handlingMessage['levelDigit'];
+            $serviceList = $handlingMessage['serviceList'];
+            $budget = $handlingMessage['budget'];
+            $pf1 = $handlingMessage['pf1'];
+            $launchDate = $handlingMessage['launchDate'];
+            $square = $handlingMessage['square'];
+            $employees = $handlingMessage['employees'];
+
+            if (!isset ( $result[$userId] )) {
+                $result[$userId] = array();
+                $result[$userId]['user'] = $handlingMessage['userFullName'];
+            }
+
+            if (!isset ( $result[$userId]['organizations'])) {
+                $result[$userId]['organizations'] = array();
+            }
+
+            if (!isset ( $result[$userId]['organizations'][$organizationId])) {
+                $result[$userId]['organizations'][$organizationId]['types'] = array();
+                $result[$userId]['organizations'][$organizationId]['name'] = $organizationName;
+                $result[$userId]['organizations'][$organizationId]['levelDigit'] = $levelDigit;
+                $result[$userId]['organizations'][$organizationId]['handlingId'] = $handlingId;
+                $result[$userId]['organizations'][$organizationId]['serviceList'] = $serviceList;
+                $result[$userId]['organizations'][$organizationId]['budget'] = $budget;
+                $result[$userId]['organizations'][$organizationId]['pf1'] = $pf1;
+                $result[$userId]['organizations'][$organizationId]['launchDate'] = $launchDate;
+                $result[$userId]['organizations'][$organizationId]['square'] = $square;
+                $result[$userId]['organizations'][$organizationId]['employees'] = $employees;
+            }
+
+            $current = 0;
+
+            if (isset( $result[$userId]['organizations'][$organizationId]['types'][$typeId] )) {
+                $current = $result[$userId]['organizations'][$organizationId]['types'][$typeId];
+            }
+
+            $result[$userId]['organizations'][$organizationId]['types'][$typeId] = $current + 1;
+        }
+
+        return $result;
+    }
 }

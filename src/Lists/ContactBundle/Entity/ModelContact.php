@@ -649,12 +649,13 @@ class ModelContact
      * Set levelId
      *
      * @param integer $levelId
+     *
      * @return ModelContact
      */
     public function setLevelId($levelId)
     {
         $this->levelId = $levelId;
-    
+
         return $this;
     }
 
@@ -672,12 +673,13 @@ class ModelContact
      * Set level
      *
      * @param \Lists\ContactBundle\Entity\ModelContactLevel $level
+     *
      * @return ModelContact
      */
     public function setLevel(\Lists\ContactBundle\Entity\ModelContactLevel $level = null)
     {
         $this->level = $level;
-    
+
         return $this;
     }
 
