@@ -61,3 +61,7 @@ it_doors_oper_schedule_update_status_coworker:
 it_doors_oper_schedule_copy_month_dates:
     pattern:  /oper/schedule/copy/month/dates
     defaults: { _controller: ITDoorsOperBundle:OperSchedule:copyMonthDates }
+
+it_doors_oper_schedule_copy_by_etalon:
+    pattern:  /oper/schedule/copy/by/etalon
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:copyCoworkersByEtalon }

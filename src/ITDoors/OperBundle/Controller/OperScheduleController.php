@@ -172,6 +172,7 @@ class OperScheduleController extends BaseFilterController
             'idDepartment' => $idDepartment,
             'infoHours' => $infoHours,
             'year' => $year,
+            'month' => $month,
             'monthName' =>$monthName
         ));
 
@@ -263,43 +264,14 @@ class OperScheduleController extends BaseFilterController
         $departmentPeopleRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeople');
 
+        //check for errors of admission/dismissal dates
+        $returnCheck = $this->checkErrorsForChangingDate($idCoworker, $date, $officially);
+        if ($returnCheck['success'] == 0) {
+            return new Response(json_encode($returnCheck));
+        }
+
         /** @var  $departmentPeople \Lists\DepartmentBundle\Entity\DepartmentPeople */
         $departmentPeople = $departmentPeopleRepository->find($idCoworker);
-        //can't person work when fired
-        if ($departmentPeople->getDismissalDateNotOfficially() != null
-            && $departmentPeople->getDismissalDateNotOfficially() < new \DateTime($date)) {
-
-            $return['success'] = 0;
-            $return['error'] = 'fired';
-
-            return new Response(json_encode($return));
-
-        }
-
-        //can't non-official person work officially
-        if ($departmentPeople->getAdmissionDate() == null && $officially) {
-            $return['success'] = 0;
-            $return['error'] = 'no_official_permitted';
-
-            return new Response(json_encode($return));
-        } elseif ($departmentPeople->getAdmissionDate() != null
-            && $departmentPeople->getAdmissionDate() < new \DateTime($date)
-            && $departmentPeople->getDismissalDate() != null
-            && $departmentPeople->getDismissalDate() > new \DateTime($date)
-            && $officially) {
-
-            $return['success'] = 0;
-            $return['error'] = 'no_official_permitted';
-
-            return new Response(json_encode($return));
-        } elseif ($departmentPeople->getAdmissionDate() != null
-            && $departmentPeople->getAdmissionDate() > new \DateTime($date)) {
-
-            $return['success'] = 0;
-            $return['error'] = 'no_official_permitted';
-
-            return new Response(json_encode($return));
-        }
 
         /** @var $grafikRepository \Lists\GrafikBundle\Entity\GrafikRepository   */
         $grafikRepository = $this->getDoctrine()
@@ -432,6 +404,22 @@ class OperScheduleController extends BaseFilterController
         $totalDay = $totalPeriod[1];//from 19-22
 
         $total = $totalNight + $totalEvening + $totalDay;
+
+        if ($addTypeOfficially == '') {
+            $cleanOtherOfficially = 'NotOfficially';
+        } else {
+            $cleanOtherOfficially = '';
+        }
+        $funcTotalClean = 'setTotal'.$cleanOtherOfficially;
+        $funcTotalDayClean = 'setTotalDay'.$cleanOtherOfficially;
+        $funcTotalEveningClean = 'setTotalEvening'.$cleanOtherOfficially;
+        $funcTotalNightClean = 'setTotalNight'.$cleanOtherOfficially;
+
+        $newTime->$funcTotalClean(0);
+        $newTime->$funcTotalDayClean(0);
+        $newTime->$funcTotalEveningClean(0);
+        $newTime->$funcTotalNightClean(0);
+
 
         $funcTotal = 'setTotal'.$addTypeOfficially;
         $funcTotalDay = 'setTotalDay'.$addTypeOfficially;
@@ -777,14 +765,68 @@ class OperScheduleController extends BaseFilterController
         }
         $return = array();
 
-        $key = array_search($currentDate, $dates);
+        $key = array_search($day, $dates);
         if ($key !== false) {
             unset($dates[$key]);
         }
-        //deleting old day grafik times
+
         /** @var $grafikTimeRepository \Lists\GrafikBundle\Entity\GrafikTimeRepository   */
         $grafikTimeRepository = $this->getDoctrine()
             ->getRepository('ListsGrafikBundle:GrafikTime');
+
+
+
+        $copyGrafikTimes = $grafikTimeRepository->findBy(array(
+            'department' => $idDepartment,
+            'departmentPeople' => $idCoworker,
+            'day' => $day,
+            'year' => $year,
+            'month' => $month
+        ));
+
+        $hasOfficially = false;
+        $hasNotOfficially = false;
+        /** @var  $copyGrafikTime \Lists\GrafikBundle\Entity\GrafikTime */
+        foreach ($copyGrafikTimes as $copyGrafikTime) {
+            if (!$copyGrafikTime->getNotOfficially()) {
+                $hasOfficially = true;
+            } else {
+                $hasNotOfficially = true;
+            }
+        }
+
+        $return['errors'] = 0;
+
+        //check for wrong dates, like admission/dismissal not correct
+        foreach ($dates as $dayCopy) {
+            $date = $year.'-'.$month.'-'.$dayCopy;
+            $checkOfficially['success'] = 1;
+            $checkNotOfficially['success'] = 1;
+            if ($hasNotOfficially) {
+                $checkOfficially = $this->checkErrorsForChangingDate($idCoworker, $date, false);
+            }
+            if ($hasOfficially) {
+                $checkNotOfficially = $this->checkErrorsForChangingDate($idCoworker, $date, true);
+            }
+
+            if ($checkOfficially['success'] == 0 || $checkNotOfficially['success'] == 0) {
+                $return['errors'] = 1;
+                $return['errorDay'][] = $dayCopy;
+                //deleting from the copy array
+                $key = array_search($dayCopy, $dates);
+                if ($key !== false) {
+                    unset($dates[$key]);
+                }
+            }
+        }
+
+        if (count($dates) == 0) {
+            $return['success'] = 1;
+
+            return new Response(json_encode($return));
+        }
+
+        //deleting old day grafik times
 
         $coworkerDayTimes = $grafikTimeRepository->findBy(array(
             'department' => $idDepartment,
@@ -854,6 +896,218 @@ class OperScheduleController extends BaseFilterController
             }
         }
         $em->flush();
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
+
+    /**
+     * @param integer $idCoworker
+     * @param string  $date
+     * @param boolean $officially
+     *
+     * @return mixed
+     */
+    private function checkErrorsForChangingDate($idCoworker, $date, $officially)
+    {
+
+        $departmentPeopleRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
+
+        /** @var  $departmentPeople \Lists\DepartmentBundle\Entity\DepartmentPeople */
+        $departmentPeople = $departmentPeopleRepository->find($idCoworker);
+        //can't person work when fired
+        if ($departmentPeople->getDismissalDateNotOfficially() != null
+            && $departmentPeople->getDismissalDateNotOfficially() < new \DateTime($date)) {
+
+            $return['success'] = 0;
+            $return['error'] = 'fired';
+
+            return $return;
+
+        }
+
+        //can't non-official person work officially
+        if ($departmentPeople->getAdmissionDate() == null && $officially) {
+            $return['success'] = 0;
+            $return['error'] = 'no_official_permitted';
+
+            return $return;
+        } elseif ($departmentPeople->getAdmissionDate() != null
+            && $departmentPeople->getAdmissionDate() < new \DateTime($date)
+            && $departmentPeople->getDismissalDate() != null
+            && $departmentPeople->getDismissalDate() > new \DateTime($date)
+            && $officially) {
+
+            $return['success'] = 0;
+            $return['error'] = 'no_official_permitted';
+
+            return $return;
+        } elseif ($departmentPeople->getAdmissionDate() != null
+            && $departmentPeople->getAdmissionDate() > new \DateTime($date)) {
+
+            $return['success'] = 0;
+            $return['error'] = 'no_official_permitted';
+
+            return $return;
+        }
+
+        $return['success'] = 1;
+
+        return $return;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function copyCoworkersByEtalonAction(Request $request)
+    {
+
+        $idsCopy =  $request->request->get('ids');
+        $idSelected = $request->request->get('selected');
+        $idDepartment = $request->request->get('idDepartment');
+        $date = $request->request->get('date');
+
+        list($year, $month) = explode('-', $date);
+
+        /** @var $grafikTimeRepository \Lists\GrafikBundle\Entity\GrafikTimeRepository   */
+        $grafikTimeRepository = $this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:GrafikTime');
+
+        /** @var $grafikRepository \Lists\GrafikBundle\Entity\GrafikRepository   */
+        $grafikRepository = $this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:Grafik');
+
+
+        //checking if possible to copy
+        $return['errors'] = 0;
+
+        $departmentPeopleRepository  = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
+
+        foreach ($idsCopy as $idCopy) {
+            for ($dayCopy=1; $dayCopy<=date("t", strtotime($year.'-'.$month)); $dayCopy++) {
+                $copyGrafikTimes = $grafikTimeRepository->findBy(array(
+                    'department' => $idDepartment,
+                    'departmentPeople' => $idSelected,
+                    'day' => $dayCopy,
+                    'year' => $year,
+                    'month' => $month
+                ));
+
+                $hasOfficially = false;
+                $hasNotOfficially = false;
+
+                /** @var  $copyGrafikTime \Lists\GrafikBundle\Entity\GrafikTime */
+                foreach ($copyGrafikTimes as $copyGrafikTime) {
+                    if (!$copyGrafikTime->getNotOfficially()) {
+                        $hasOfficially = true;
+                    } else {
+                        $hasNotOfficially = true;
+                    }
+                }
+                $date = $year.'-'.$month.'-'.$dayCopy;
+                $checkOfficially['success'] = 1;
+                $checkNotOfficially['success'] = 1;
+                if ($hasNotOfficially) {
+                    $checkOfficially = $this->checkErrorsForChangingDate($idCopy, $date, false);
+                }
+                if ($hasOfficially) {
+                    $checkNotOfficially = $this->checkErrorsForChangingDate($idCopy, $date, true);
+                }
+
+                if ($checkOfficially['success'] == 0 || $checkNotOfficially['success'] == 0) {
+                    $return['errors'] = 1;
+
+                    $errorPerson = $departmentPeopleRepository->find($idCopy);
+                    $return['errorName'][] = $errorPerson->getFirstName().' '.
+                        $errorPerson->getMiddleName().' '.$errorPerson->getLastName();
+                    //deleting from the copy array
+                    $key = array_search($idCopy, $idsCopy);
+                    if ($key !== false) {
+                        unset($idsCopy[$key]);
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (count($idsCopy) == 0) {
+            $return['success'] = 1;
+
+            return new Response(json_encode($return));
+        }
+
+        $em =  $this->getDoctrine()->getManager();
+
+
+        foreach ($idsCopy as $idCopy) {
+            $departmentPeople  = $this->getDoctrine()
+                ->getRepository('ListsDepartmentBundle:DepartmentPeople')
+                ->find($idCopy);
+
+            //deleting old day grafik times
+            $coworkerDayTimes = $grafikTimeRepository->findBy(array(
+                'department' => $idDepartment,
+                'departmentPeople' => $idCopy,
+                'year' => $year,
+                'month' => $month
+            ));
+
+            foreach ($coworkerDayTimes as $coworkerDayTime) {
+                $em->remove($coworkerDayTime);
+            }
+            //deleting old day grafik
+            $coworkerDayTimesTotal = $grafikRepository->findBy(array(
+                'department' => $idDepartment,
+                'departmentPeople' => $idCopy,
+                'year' => $year,
+                'month' => $month
+            ));
+            foreach ($coworkerDayTimesTotal as $coworkerDayTimeTotal) {
+                $em->remove($coworkerDayTimeTotal);
+            }
+            $em->flush();
+
+            //copying new daytime to grafik time
+            /** @var  $copyGrafikTime \Lists\GrafikBundle\Entity\GrafikTime */
+            $copyGrafikTimes = $grafikTimeRepository->findBy(array(
+                'department' => $idDepartment,
+                'departmentPeople' => $idSelected,
+                'year' => $year,
+                'month' => $month
+            ));
+            if (count($copyGrafikTimes) > 0) {
+                foreach ($copyGrafikTimes as $copyGrafikTime) {
+                        $cloneGrafikTime = clone $copyGrafikTime;
+                        $cloneGrafikTime->setDepartmentPeople($departmentPeople);
+                        $em->persist($cloneGrafikTime);
+                }
+                $em->flush();
+            }
+
+            //copying new daytime to grafik
+            /** @var  $copyGrafik \Lists\GrafikBundle\Entity\Grafik */
+            $copyGrafiks = $grafikRepository->findBy(array(
+                'department' => $idDepartment,
+                'departmentPeople' => $idSelected,
+                'year' => $year,
+                'month' => $month
+            ));
+            if (count($copyGrafiks) > 0) {
+                foreach ($copyGrafiks as $copyGrafik) {
+                        $cloneGrafikTime = clone $copyGrafik;
+                        $cloneGrafikTime->setDepartmentPeople($departmentPeople);
+                        $cloneGrafikTime->setDepartmentPeopleId($idCopy);
+                        $em->persist($cloneGrafikTime);
+                }
+            }
+            $em->flush();
+
+        }
 
         $return['success'] = 1;
 

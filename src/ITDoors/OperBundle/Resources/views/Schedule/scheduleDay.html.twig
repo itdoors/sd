@@ -102,22 +102,23 @@
                     //ITDoorsAjax.blockUI($('#'+idLastHref));
                 },
                 success: function(data) {
+                    //alert(data);
                     for (index = 0; index < dates.length; ++index) {
                         var tempDate = new Date(dates[index]);
                         updateTableCell('link'+tempDate.getDate()+idCoworker);
                     }
-                    //dates = dates.split(',');
-
-                    //ITDoorsAjax.unblockUI($('#'+idLastHref));
-/*
                     data = JSON.parse(data);
-                    if (data.success == 0) {
+                    if (data.errors == 1) {
+                        var message = '';
+                        for (var i=0; i<data.errorDay.length; i++) {
+                            message += data.errorDay[i] + '; ';
+                        }
+                        $('#copy_dates_error').html(message);
+                        $('#copy_error').show('blind', {}, 500);
+                    } else {
+                        $('#copy_finished').show('blind', {}, 500);
                     }
-                    else {
-                        //alert(data.html)
-                        href.html(data.html);
-                    }
-*/
+
                 }
 
             })
@@ -542,10 +543,20 @@
 <div class="alert alert-danger notDisplayed" id="subtime_error">
     <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}This time is already busy{% endtrans %}
 </div>
+<div class="alert alert-danger notDisplayed" id="copy_error">
+    <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Dates, what haven't been copied{% endtrans %}:
+    <span id="copy_dates_error"></span>
+</div>
+
 <div class="alert alert-success notDisplayed" id="status_changed">
     <strong>{% trans %}Success{% endtrans %}</strong> {% trans %}Status changed for{% endtrans %}:
     "<span id="status_span"></span>"
 </div>
+<div class="alert alert-success notDisplayed" id="copy_finished">
+    <strong>{% trans %}Success{% endtrans %}</strong> {% trans %}All dates where copied{% endtrans %}
+</div>
+
+
 
 
 <style>
