@@ -42,6 +42,8 @@
         'report-activity': 'ITDoorsAjax.updateList'
     }) }}
 
+    {{ include('ListsReportBundle:' ~ baseTemplate ~ ':serviceLegend.html.twig') }}
+
     <div id="report-activity" data-url="{{ path('lists_report_sales_admin_activity_content') }}">
         {{ render(controller('ListsReportBundle:' ~ baseTemplate ~ ':ReportActivityContent')) }}
     </div>

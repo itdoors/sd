@@ -175,4 +175,32 @@ class HandlingService
             'id',
         );
     }
+    /**
+     * @var integer
+     */
+    private $reportNumber;
+
+
+    /**
+     * Set reportNumber
+     *
+     * @param integer $reportNumber
+     * @return HandlingService
+     */
+    public function setReportNumber($reportNumber)
+    {
+        $this->reportNumber = $reportNumber;
+    
+        return $this;
+    }
+
+    /**
+     * Get reportNumber
+     *
+     * @return integer 
+     */
+    public function getReportNumber()
+    {
+        return $this->reportNumber;
+    }
 }

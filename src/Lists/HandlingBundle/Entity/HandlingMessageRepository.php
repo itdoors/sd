@@ -140,12 +140,12 @@ class HandlingMessageRepository extends EntityRepository
                   array_to_string(
                      ARRAY(
                         SELECT
-                          hs.name
+                          hs.reportNumber
                         FROM
                           ListsHandlingBundle:HandlingService hs
                         LEFT JOIN hs.handlings handlings
                         WHERE handlings.id = handling.id
-                     ), ','
+                     ), ', '
                    ) as serviceList"
             )
             ->addSelect(

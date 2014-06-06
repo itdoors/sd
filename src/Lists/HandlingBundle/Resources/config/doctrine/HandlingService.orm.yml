@@ -22,6 +22,10 @@ Lists\HandlingBundle\Entity\HandlingService:
         sortorder:
             type: integer
             nullable: true
+        reportNumber:
+            type: integer
+            nullable: true
+            column: report_number
     manyToMany:
       handlings:
         targetEntity: Lists\HandlingBundle\Entity\Handling

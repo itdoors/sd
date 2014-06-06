@@ -8,6 +8,7 @@ use Lists\HandlingBundle\Entity\HandlingMessageRepository;
 use Lists\HandlingBundle\Entity\HandlingMessageTypeRepository;
 use Lists\HandlingBundle\Entity\HandlingRepository;
 use ITDoors\CommonBundle\Controller\BaseFilterController;
+use Lists\HandlingBundle\Entity\HandlingService;
 use Lists\HandlingBundle\Services\HandlingMessageService;
 
 /**
@@ -94,9 +95,15 @@ class SalesAdminController extends BaseFilterController
      */
     public function reportActivityAction()
     {
+        /** @var HandlingService[] $services */
+        $services = $this->getDoctrine()->getManager()
+            ->getRepository('ListsHandlingBundle:HandlingService')
+            ->findAll();
+
         return $this->render('ListsReportBundle:' . $this->baseTemplate . ':reportActivity.html.twig', array(
             'baseRoutePrefix' => $this->baseRoutePrefix,
             'baseTemplate' => $this->baseTemplate,
+            'services' => $services
         ));
     }
 
