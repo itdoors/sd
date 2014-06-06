@@ -107,7 +107,9 @@ class SalesAdminController extends BaseFilterController
      */
     public function reportActivityContentAction()
     {
-        $to = new \DateTime();
+        $filterNamespace = $this->container->getParameter('ajax.filter.namespace.report.activity');
+
+        $filters = $this->getFilters($filterNamespace);
 
         /** @var HandlingMessageRepository $hmr */
         $hmr = $this->get('handling.message.repository');
@@ -117,7 +119,7 @@ class SalesAdminController extends BaseFilterController
         $hmtr = $this->get('handling.message.type.repository');
 
         /** @var HandlingMessageRepository $handlingMessageRepository */
-        $results = $hmr->getActivity($to, $hms->getReportSlugs());
+        $results = $hmr->getActivity($filters, $hms->getReportSlugs());
 
         $types = $hmtr->getListBySlug($hms->getReportSlugs());
 

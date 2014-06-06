@@ -1,6 +1,7 @@
 parameters:
     lists_report.salesadmin.filter.form.class: Lists\ReportBundle\Form\ReportSalesAdminFilterForm
     lists_report.salesadmin.last.messages.filter.form.class: Lists\ReportBundle\Form\ReportLastMessagesType
+    lists_report.activity.filter.form.class: Lists\ReportBundle\Form\ReportActivityFilterType
 
 services:
     lists_report.form.reportSalesAdminFilterForm:
@@ -14,3 +15,9 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: reportLastMessagesType }
+
+    lists_report.form.reportActivityFilterType:
+        class: %lists_report.activity.filter.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: reportActivityFilterType }

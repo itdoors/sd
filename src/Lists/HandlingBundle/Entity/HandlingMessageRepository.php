@@ -2,7 +2,6 @@
 
 namespace Lists\HandlingBundle\Entity;
 
-use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -102,18 +101,24 @@ class HandlingMessageRepository extends EntityRepository
     }
 
     /**
-     * @param \Datetime $to
+     * @param mixed[]   $filters
      * @param mixed[]   $slugs
      *
      * @return array
      */
-    public function getActivity($to, $slugs)
+    public function getActivity($filters, $slugs)
     {
+        if (isset($filters['endDate'])) {
+            $to = $filters['endDate'];
+        } else {
+            $to = new \DateTime();
+        }
+
         $fromClone = clone $to;
 
         $from = $fromClone->modify('-1 month');
 
-        /** @var HandlingMessage[] $q */
+        /** @var \Doctrine\ORM\QueryBuilder $q */
         $q = $this->createQueryBuilder('hm')
             ->select('hm.id as id')
             ->addSelect('hm.type_id as typeId')
@@ -192,8 +197,16 @@ class HandlingMessageRepository extends EntityRepository
             ->andWhere('type.slug in (:reportSlugs)')
             ->setParameter(':createdateFrom', $from, \Doctrine\DBAL\Types\Type::DATETIME)
             ->setParameter(':createdateTo', $to, \Doctrine\DBAL\Types\Type::DATETIME)
-            ->setParameter(':reportSlugs', $slugs)
-            ->getQuery()
+            ->setParameter(':reportSlugs', $slugs);
+
+        if (isset($filters['userId']) && $filters['userId']) {
+            $q
+                ->andWhere('user.id = :userId')
+                ->setParameter(':userId', $filters['userId']);
+        }
+
+        /** @var HandlingMessage[] $results */
+        $results = $q->getQuery()
             ->getResult();
 
         if (!sizeof($q)) {
@@ -202,7 +215,7 @@ class HandlingMessageRepository extends EntityRepository
 
         $result = array();
 
-        foreach ($q as $handlingMessage) {
+        foreach ($results as $handlingMessage) {
             $handlingId = $handlingMessage['handlingId'];
             $userId = $handlingMessage['userId'];
             $organizationId = $handlingMessage['organizationId'];
