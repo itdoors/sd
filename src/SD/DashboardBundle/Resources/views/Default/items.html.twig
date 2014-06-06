@@ -79,6 +79,7 @@
             <!-- /.modal-content -->
         </div>
     </div>
+    {% if app.user.hasRole('ROLE_CONTROLLING') %}
     <div class="portlet box blue">
         <div class="portlet-title">
             <div class="caption"><i class="fa fa-globe"></i> {% trans %}Invoice need stitch{% endtrans %}</div>
@@ -103,7 +104,7 @@
             {{ render(controller('ITDoorsControllingBundle:Invoice:Expectedpay')) }}
         </div>
     </div>
-
+    {% endif %}
     {{ render(controller('ListsHandlingBundle:' ~ masterRole ~ ':List')) }}
 
     {% if masterRole == 'SalesAdmin' %}

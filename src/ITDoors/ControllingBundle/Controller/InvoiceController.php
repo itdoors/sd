@@ -75,7 +75,6 @@ class InvoiceController extends BaseFilterController
         $result = $invoice->getEntittyCountSum($period);
         $entities = $result['entities'];
         $count = $result['count'];
-        $sum = $result['sum'];
 
         $namespasePagin = $filterNamespace.'P'.$period;
         $page = $this->getPaginator($namespasePagin);
@@ -99,8 +98,7 @@ class InvoiceController extends BaseFilterController
                 'period' => $period,
                 'entities' => $pagination,
                 'responsibles' => $responsibles,
-                'namespasePagin' => $namespasePagin,
-                'sum' => $sum
+                'namespasePagin' => $namespasePagin
         ));
     }
 
@@ -283,7 +281,6 @@ class InvoiceController extends BaseFilterController
         $result = $invoice->getEntittyCountSum($tab);
         $entities = $result['entities'];
         $count = $result['count'];
-        $sum = $result['sum'];
 
         $page = $this->getPaginator($filterNamespace);
         if (!$page) {
@@ -306,8 +303,7 @@ class InvoiceController extends BaseFilterController
                 'period' => $tab,
                 'entities' => $pagination,
                 'responsibles' => $responsibles,
-                'namespace' => $namespaceTab,
-                'sum' => $sum
+                'namespace' => $namespaceTab
         ));
 
     }

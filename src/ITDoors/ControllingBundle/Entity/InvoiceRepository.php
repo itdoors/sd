@@ -150,7 +150,7 @@ class InvoiceRepository extends EntityRepository
         $this->whereInvoicePeriod($res, $periodmin, $periodmax);
 
         return $res
-                ->orderBy('i.delayDate', 'DESC')->getQuery();
+                ->orderBy('i.performerEdrpou', 'DESC')->getQuery();
     }
 
     /**
@@ -272,7 +272,6 @@ class InvoiceRepository extends EntityRepository
 
         return $res
                 ->andWhere("i.court = :id")
-                ->andWhere("i.dateFact is NULL")
                 ->setParameter(':id', $id)->getQuery();
     }
 
@@ -293,7 +292,6 @@ class InvoiceRepository extends EntityRepository
 
         return $res
                 ->andWhere("i.court = :id")
-                ->andWhere("i.dateFact is NULL")
                 ->setParameter(':id', $id)->getQuery()->getResult();
     }
 
@@ -312,7 +310,6 @@ class InvoiceRepository extends EntityRepository
 
         return $rescount
                 ->andWhere("i.court = :id")
-                ->andWhere("i.dateFact is NULL")
                 ->setParameter(':id', $id)
                 ->getQuery()
                 ->getSingleScalarResult();
@@ -435,49 +432,40 @@ class InvoiceRepository extends EntityRepository
             case 30:
                 $result['entities'] = $this->getInvoicePeriod(1, 30);
                 $result['count'] = $this->getInvoicePeriodCount(1, 30);
-                $result['sum'] = $this->getInvoicePeriodSum(1, 30);
                 break;
             case 60:
                 $result['entities'] = $this->getInvoicePeriod(31, 60);
                 $result['count'] = $this->getInvoicePeriodCount(31, 60);
-                $result['sum'] = $this->getInvoicePeriodSum(31, 60);
                 break;
             case 120:
                 $result['entities'] = $this->getInvoicePeriod(61, 120);
                 $result['count'] = $this->getInvoicePeriodCount(61, 120);
-                $result['sum'] = $this->getInvoicePeriodSum(61, 120);
                 break;
             case 180:
                 $result['entities'] = $this->getInvoicePeriod(121, 180);
                 $result['count'] = $this->getInvoicePeriodCount(121, 180);
-                $result['sum'] = $this->getInvoicePeriodSum(121, 180);
                 break;
             case 181:
                 $result['entities'] = $this->getInvoicePeriod(181, 0);
                 $result['count'] = $this->getInvoicePeriodCount(181, 0);
-                $result['sum'] = $this->getInvoicePeriodSum(181, 0);
                 break;
             case 'court':
                 $result['entities'] = $this->getInvoiceCourt();
                 $result['count'] = $this->getInvoiceCourtCount();
-                $result['sum'] = $this->getInvoiceCourtSum();
                 break;
             case 'pay':
                 $result['entities'] = $this->getInvoicePay();
                 $result['count'] = $this->getInvoicePayCount();
-                $result['sum'] = $this->getInvoicePaySum();
                 break;
             case 'today':
                 $date = date('Y-m-d');
                 $result['entities'] = $this->getInvoiceWhen($date);
                 $result['count'] = $this->getInvoiceWhenCount($date);
-                $result['sum'] = $this->getSumma($date);
                 break;
             case 'tomorrow':
                 $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d')+1, date('Y')));
                 $result['entities'] = $this->getInvoiceWhen($date);
                 $result['count'] = $this->getInvoiceWhenCount($date);
-                $result['sum'] = $this->getSumma($date);
                 break;
         }
 

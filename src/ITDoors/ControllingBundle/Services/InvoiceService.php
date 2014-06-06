@@ -448,26 +448,39 @@ class InvoiceService
     public function getTabsInvoices()
     {
         $translator = $this->container->get('translator');
+        /** @var EntityManager $em */
+        $em = $this->container->get('doctrine')->getManager();
+
+        /** @var InvoicecronRepository $invoice */
+        $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
+
+        $summa = $invoice->getInvoicePeriodSum(1, 30);
         $tabs[] = array(
             'tab' => 30,
             'blockupdate' => 'ajax-tab-holder',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_show'),
             'text' => $translator->trans('from') . ' 1 ' . $translator->trans('to') . ' 30 ' . $translator->trans('day')
+             .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
+        $summa = $invoice->getInvoicePeriodSum(31, 60);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 60,
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_show'),
             'text' => $translator
                 ->trans('from') . ' 31 ' . $translator->trans('to') . ' 60 ' . $translator->trans('days')
+            .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
+        $summa = $invoice->getInvoicePeriodSum(61, 120);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 120,
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_show'),
             'text' => $translator
                 ->trans('from') . ' 61 ' . $translator->trans('to') . ' 120 ' . $translator->trans('days')
+            .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
+        $summa = $invoice->getInvoicePeriodSum(121, 180);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 180,
@@ -475,25 +488,32 @@ class InvoiceService
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_show'),
             'text' => $translator
                 ->trans('from') . ' 121 ' . $translator->trans('to') . ' 180 ' . $translator->trans('days')
+            .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
+        $summa = $invoice->getInvoicePeriodSum(180, 0);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 181,
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_show'),
             'text' => $translator
                 ->trans('from') . ' 181 ' . $translator->trans('days')
+            .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
+        $summa = $invoice->getInvoiceCourtSum();
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'court',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_show'),
             'text' => $translator->trans('court')
+            .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
+        $summa = $invoice->getInvoicePaySum();
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'pay',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_show'),
             'text' => $translator->trans('pay')
+            .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
 
         return $tabs;
