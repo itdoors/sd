@@ -62,3 +62,6 @@ services:
       factory_service: doctrine # this is an instance of Registry
       factory_method: getRepository
       arguments: [ %lists_organization.repository.entity% ]
+
+  organization.repository:
+      alias: lists_organization.repository

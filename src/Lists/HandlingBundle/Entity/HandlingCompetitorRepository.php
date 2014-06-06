@@ -22,6 +22,7 @@ class HandlingCompetitorRepository extends EntityRepository
         return $this->createQueryBuilder('hc')
             ->where('hc.handlingId = :handlingId')
             ->setParameter(':handlingId', $handlingId)
+            ->leftJoin('hc.competitor', 'competitor')
             ->getQuery()
             ->getResult();
     }

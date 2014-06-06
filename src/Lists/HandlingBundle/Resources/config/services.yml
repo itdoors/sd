@@ -9,12 +9,15 @@ parameters:
     lists_handling.form.user.class: Lists\HandlingBundle\Form\HandlingUserFormType
     lists_handling.sales.form.report.class: Lists\HandlingBundle\Form\HandlingReportDateRangeForm
 
+    lists_handling.competitor.form.class: Lists\HandlingBundle\Form\HandlingCompetitorType
+
     lists_handling.createdate_range.validator.class: Lists\HandlingBundle\Validator\CreatedateRangeValidator
 
     lists_handling.message.repository.class: Lists\HandlingBundle\Entity\HandlingMessageRepository
     lists_handling.message.repository.entity: Lists\HandlingBundle\Entity\HandlingMessage
 
     lists_handling.message.service.class: Lists\HandlingBundle\Services\HandlingMessageService
+    lists_handling.competitor.service.class: Lists\HandlingBundle\Services\HandlingCompetitorService
 
     lists_handling.message.type.repository.class: Lists\HandlingBundle\Entity\HandlingMessageTypeRepository
     lists_handling.message.type.repository.entity: Lists\HandlingBundle\Entity\HandlingMessageType
@@ -44,6 +47,13 @@ services:
 
     handling.message.service:
         alias: lists_handling.message.service
+
+    lists_handling.competitor.service:
+        class: %lists_handling.competitor.service.class%
+        arguments: [ @service_container ]
+
+    handling.competitor.service:
+        alias: lists_handling.competitor.service
 
     lists_handling.message.repository:
         class: %lists_handling.message.repository.class%
@@ -140,3 +150,9 @@ services:
             -
                 name: validator.constraint_validator
                 alias: createdate_range
+
+    lists_handling.form.handlingCompetitorType:
+        class: %lists_handling.competitor.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: handlingCompetitorType }

@@ -224,4 +224,32 @@ class HandlingCompetitor
     {
         return $this->handling;
     }
+    /**
+     * @var float
+     */
+    private $total;
+
+
+    /**
+     * Set total
+     *
+     * @param float $total
+     * @return HandlingCompetitor
+     */
+    public function setTotal($total)
+    {
+        $this->total = $total;
+    
+        return $this;
+    }
+
+    /**
+     * Get total
+     *
+     * @return float 
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
 }

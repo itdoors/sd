@@ -11,6 +11,7 @@ use Lists\DogovorBundle\Entity\DopDogovor;
 use Lists\DogovorBundle\Entity\DopDogovorRepository;
 use Lists\HandlingBundle\Entity\Handling;
 use Lists\HandlingBundle\Entity\HandlingMessage;
+use Lists\LookupBundle\Entity\LookupRepository;
 use SD\UserBundle\Entity\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,6 +43,38 @@ class AjaxController extends Controller
         'Dogovor' => 'ListsDogovorBundle:Dogovor',
         'DopDogovor' => 'ListsDogovorBundle:DopDogovor'
     );
+
+    /**
+     * Returns list of competitors in json
+     *
+     * @return string
+     */
+    public function competitorAction()
+    {
+        $searchTextQ = $this->get('request')->query->get('q');
+        $searchTextQuery = $this->get('request')->query->get('query');
+
+        $searchText = $searchTextQ ? $searchTextQ : $searchTextQuery;
+
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $organizationsRepository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+        /** @var LookupRepository $lr */
+        $lr = $this->get('lists_lookup.repository');
+
+        $organizationCompetitorId = $lr->getFirstIdByLukey($lr::KEY__ORGANIZATION_SIGN_COMPETITOR);
+
+        $organizations = $organizationsRepository->getSearchQuery($searchText, $organizationCompetitorId);
+
+        $result = array();
+
+        foreach ($organizations as $organization) {
+            $result[] = $this->serializeObject($organization);
+        }
+
+        return new Response(json_encode($result));
+    }
 
     /**
      * Returns list of organizations in json
@@ -1386,6 +1419,27 @@ class AjaxController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($object);
+        $em->flush();
+    }
+
+
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function handlingCompetitorDelete($params)
+    {
+        $id = $params['id'];
+
+        $object = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingCompetitor')
+            ->find($id);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
         $em->flush();
     }
 

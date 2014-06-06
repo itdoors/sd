@@ -937,4 +937,32 @@ class Organization
     {
         return $this->children;
     }
+    /**
+     * @var integer
+     */
+    private $organizationSignId;
+
+
+    /**
+     * Set organizationSignId
+     *
+     * @param integer $organizationSignId
+     * @return Organization
+     */
+    public function setOrganizationSignId($organizationSignId)
+    {
+        $this->organizationSignId = $organizationSignId;
+    
+        return $this;
+    }
+
+    /**
+     * Get organizationSignId
+     *
+     * @return integer 
+     */
+    public function getOrganizationSignId()
+    {
+        return $this->organizationSignId;
+    }
 }

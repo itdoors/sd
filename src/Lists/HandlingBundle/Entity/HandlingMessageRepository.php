@@ -141,6 +141,43 @@ class HandlingMessageRepository extends EntityRepository
                      ), ','
                    ) as serviceList"
             )
+            ->addSelect(
+                "
+                  array_to_string(
+                     ARRAY(
+                        SELECT
+                          competitor1.name
+                        FROM
+                          ListsHandlingBundle:HandlingCompetitor hc1
+                          LEFT JOIN hc1.competitor competitor1
+                        WHERE hc1.handlingId = handling.id
+                     ), ','
+                   ) as competitorList"
+            )
+            ->addSelect(
+                "
+                  array_to_string(
+                     ARRAY(
+                        SELECT
+                          hc2.endDate
+                        FROM
+                          ListsHandlingBundle:HandlingCompetitor hc2
+                        WHERE hc2.handlingId = handling.id
+                     ), ','
+                   ) as competitorEndDate"
+            )
+            ->addSelect(
+                "
+                  array_to_string(
+                     ARRAY(
+                        SELECT
+                          hc3.total
+                        FROM
+                          ListsHandlingBundle:HandlingCompetitor hc3
+                        WHERE hc3.handlingId = handling.id
+                     ), ','
+                   ) as competitorPrice"
+            )
             ->leftJoin('hm.user', 'user')
             ->leftJoin('hm.handling', 'handling')
             ->leftJoin('hm.contact', 'contact')
@@ -175,6 +212,9 @@ class HandlingMessageRepository extends EntityRepository
             $launchDate = $handlingMessage['launchDate'];
             $square = $handlingMessage['square'];
             $employees = $handlingMessage['employees'];
+            $competitorList = $handlingMessage['competitorList'];
+            $competitorPrice = $handlingMessage['competitorPrice'];
+            $competitorEndDate = $handlingMessage['competitorEndDate'];
 
             if (!isset ( $result[$userId] )) {
                 $result[$userId] = array();
@@ -196,6 +236,9 @@ class HandlingMessageRepository extends EntityRepository
                 $result[$userId]['organizations'][$organizationId]['launchDate'] = $launchDate;
                 $result[$userId]['organizations'][$organizationId]['square'] = $square;
                 $result[$userId]['organizations'][$organizationId]['employees'] = $employees;
+                $result[$userId]['organizations'][$organizationId]['competitorList'] = $competitorList;
+                $result[$userId]['organizations'][$organizationId]['competitorPrice'] = $competitorPrice;
+                $result[$userId]['organizations'][$organizationId]['competitorEndDate'] = $competitorEndDate;
             }
 
             $current = 0;

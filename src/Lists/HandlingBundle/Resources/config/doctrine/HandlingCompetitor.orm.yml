@@ -24,9 +24,14 @@ Lists\HandlingBundle\Entity\HandlingCompetitor:
         strengths:
             type: string
             length: 255
+            nullable: true
         weaknesses:
             type: string
             length: 255
+            nullable: true
+        total:
+            type: float
+            nullable: true
     manyToOne:
         competitor:
             targetEntity: Lists\OrganizationBundle\Entity\Organization
