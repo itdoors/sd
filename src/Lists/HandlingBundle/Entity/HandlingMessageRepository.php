@@ -119,12 +119,14 @@ class HandlingMessageRepository extends EntityRepository
             ->addSelect('hm.type_id as typeId')
             ->addSelect('handling.budget as budget')
             ->addSelect('handling.pf1 as pf1')
+            ->addSelect('handling.isMarketing as marketing')
             ->addSelect('handling.launchDate as launchDate')
             ->addSelect('handling.square as square')
             ->addSelect('handling.employees as employees')
             ->addSelect('handling.id as handlingId')
             ->addSelect('organization.id as organizationId')
             ->addSelect('organization.name as organizationName')
+            ->addSelect('organizationGroup.name as organizationGroupName')
             ->addSelect('user.id as userId')
             ->addSelect("CONCAT(CONCAT(user.lastName, ' '), user.firstName) as userFullName")
             ->addSelect("level.digit as levelDigit")
@@ -184,6 +186,7 @@ class HandlingMessageRepository extends EntityRepository
             ->leftJoin('hm.type', 'type')
             ->leftJoin('contact.level', 'level')
             ->leftJoin('handling.organization', 'organization')
+            ->leftJoin('organization.group', 'organizationGroup')
             ->where('hm.createdate >= :createdateFrom')
             ->andWhere('hm.createdate <= :createdateTo')
             ->andWhere('type.slug in (:reportSlugs)')
@@ -215,6 +218,8 @@ class HandlingMessageRepository extends EntityRepository
             $competitorList = $handlingMessage['competitorList'];
             $competitorPrice = $handlingMessage['competitorPrice'];
             $competitorEndDate = $handlingMessage['competitorEndDate'];
+            $marketing = $handlingMessage['marketing'];
+            $organizationGroupName = $handlingMessage['organizationGroupName'];
 
             if (!isset ( $result[$userId] )) {
                 $result[$userId] = array();
@@ -239,6 +244,8 @@ class HandlingMessageRepository extends EntityRepository
                 $result[$userId]['organizations'][$organizationId]['competitorList'] = $competitorList;
                 $result[$userId]['organizations'][$organizationId]['competitorPrice'] = $competitorPrice;
                 $result[$userId]['organizations'][$organizationId]['competitorEndDate'] = $competitorEndDate;
+                $result[$userId]['organizations'][$organizationId]['marketing'] = $marketing;
+                $result[$userId]['organizations'][$organizationId]['organizationGroupName'] = $organizationGroupName;
             }
 
             $current = 0;

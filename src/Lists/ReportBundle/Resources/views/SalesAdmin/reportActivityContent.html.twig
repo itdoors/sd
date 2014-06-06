@@ -10,20 +10,23 @@
                 <th>{{ type.reportName }}</th>
             {% endfor %}
             <th>{% trans %}Service list{% endtrans %}</th>
+            <th>{% trans %}PF1{% endtrans %}</th>
+            <th>{% trans %}Our summ{% endtrans %}</th>
+            <th>{% trans %}Dogovor{% endtrans %}</th>
+            <th>{% trans %}Launch date{% endtrans %}</th>
+            <th>{% trans %}Marketing{% endtrans %}</th>
             <th>{% trans %}Competitor list{% endtrans %}</th>
             <th>{% trans %}Competitor end date{% endtrans %}</th>
             <th>{% trans %}Competitor price{% endtrans %}</th>
-            <th>{% trans %}Our summ{% endtrans %}</th>
-            <th>{% trans %}PF1{% endtrans %}</th>
-            <th>{% trans %}Launch date{% endtrans %}</th>
             <th>{% trans %}Square{% endtrans %}</th>
             <th>{% trans %}Employees{% endtrans %}</th>
+            <th>{% trans %}Group{% endtrans %}</th>
         </tr>
         </thead>
         <tbody>
         {% for result in results %}
             <tr>
-                <td colspan="{{ 1 + types|length + levels|length + 9 }}">{{ result.user }}</td>
+                <td colspan="{{ 1 + types|length + levels|length + 13 }}">{{ result.user }}</td>
             </tr>
             {% for organization in result['organizations'] %}
             <tr>
@@ -51,22 +54,25 @@
                     </td>
                 {% endfor %}
                 <td>{{ organization['serviceList'] }}</td>
-                <td>{{ organization['competitorList'] }}</td>
-                <td>
-                    {% if organization['competitorEndDate'] is defined and organization['competitorEndDate'] %}
-                        {{ organization['competitorEndDate']|date('d.m.Y') }}
-                    {% endif %}
-                </td>
-                <td>{{ organization['competitorPrice'] }}</td>
-                <td>{{ organization['budget'] }}</td>
                 <td>{{ organization['pf1'] }}</td>
+                <td>{{ organization['budget'] }}</td>
+                <td>dogovor</td>
                 <td>
                     {% if organization['launchDate'] is defined and organization['launchDate'] %}
                         {{ organization['launchDate']|date('d.m.Y') }}
                     {% endif %}
                 </td>
+                <td>
+                    {% if organization['marketing'] %}
+                        +
+                    {% endif %}
+                </td>
+                <td>{{ organization['competitorList'] }}</td>
+                <td>{{ organization['competitorEndDate'] }}</td>
+                <td>{{ organization['competitorPrice'] }}</td>
                 <td>{{ organization['square'] }}</td>
                 <td>{{ organization['employees'] }}</td>
+                <td>{{ organization['organizationGroupName'] }}</td>
             </tr>
             {% endfor %}
         {% endfor %}
