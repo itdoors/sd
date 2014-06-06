@@ -185,6 +185,18 @@ class HandlingMessageRepository extends EntityRepository
                      ), ','
                    ) as competitorPrice"
             )
+            ->addSelect(
+                "
+                  array_to_string(
+                     ARRAY(
+                        SELECT
+                          hd3.dogovorId
+                        FROM
+                          ListsHandlingBundle:HandlingDogovor hd3
+                        WHERE hd3.handlingId = handling.id
+                     ), ','
+                   ) as dogovorList"
+            )
             ->leftJoin('hm.user', 'user')
             ->leftJoin('hm.handling', 'handling')
             ->leftJoin('hm.contact', 'contact')
@@ -233,6 +245,7 @@ class HandlingMessageRepository extends EntityRepository
             $competitorEndDate = $handlingMessage['competitorEndDate'];
             $marketing = $handlingMessage['marketing'];
             $organizationGroupName = $handlingMessage['organizationGroupName'];
+            $dogovorList = $handlingMessage['dogovorList'];
 
             if (!isset ( $result[$userId] )) {
                 $result[$userId] = array();
@@ -259,6 +272,7 @@ class HandlingMessageRepository extends EntityRepository
                 $result[$userId]['organizations'][$organizationId]['competitorEndDate'] = $competitorEndDate;
                 $result[$userId]['organizations'][$organizationId]['marketing'] = $marketing;
                 $result[$userId]['organizations'][$organizationId]['organizationGroupName'] = $organizationGroupName;
+                $result[$userId]['organizations'][$organizationId]['dogovorList'] = $dogovorList;
             }
 
             $current = 0;

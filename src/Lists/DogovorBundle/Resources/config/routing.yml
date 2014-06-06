@@ -3,6 +3,14 @@ lists_dogovor_dogovor_index:
     pattern:  /lists/dogovor/dogovor/index
     defaults: { _controller: ListsDogovorBundle:Dogovor:index }
 
+lists_dogovor_handling_list:
+    pattern:  /lists/dogovor/handling/list/{dogovorId}
+    defaults: { _controller: ListsDogovorBundle:Handling:list }
+
+lists_dogovor_handling_form:
+    pattern:  /lists/dogovor/handling/form
+    defaults: { _controller: ListsDogovorBundle:Handling:form }
+
 lists_dogovor_dogovor_new:
     pattern:  /lists/dogovor/dogovor/new
     defaults: { _controller: ListsDogovorBundle:Dogovor:new }

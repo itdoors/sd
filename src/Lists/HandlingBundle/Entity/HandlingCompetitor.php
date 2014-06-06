@@ -234,6 +234,7 @@ class HandlingCompetitor
      * Set total
      *
      * @param float $total
+     *
      * @return HandlingCompetitor
      */
     public function setTotal($total)

@@ -873,7 +873,7 @@ class Handling
      */
     public function __toString()
     {
-        return $this->getId();
+        return $this->getId() . ' - ' . $this->getOrganization();
     }
 
     /**

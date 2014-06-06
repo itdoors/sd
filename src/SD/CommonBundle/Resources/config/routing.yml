@@ -10,6 +10,10 @@ sd_common_ajax_competitor:
     pattern:  /ajax/competitor
     defaults: { _controller: SDCommonBundle:Ajax:competitor }
 
+sd_common_ajax_handling:
+    pattern:  /ajax/handling
+    defaults: { _controller: SDCommonBundle:Ajax:handling }
+
 sd_common_ajax_organization_for_contacts:
     pattern:  /ajax/organization/for/contacts
     defaults: { _controller: SDCommonBundle:Ajax:organizationForContacts }

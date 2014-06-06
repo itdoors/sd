@@ -1,0 +1,7 @@
+{% trans_default_domain 'ListsDogovorBundle' %}
+<div id="dogovor-handling-list" data-url="{{ path('lists_dogovor_handling_list', { dogovorId: dogovor.id }) }}">
+    {{ render(controller('ListsDogovorBundle:Handling:List', { dogovorId: dogovor.id })) }}
+</div>
+<div id="dogovor-handling-form">
+    {{ render(controller('ListsDogovorBundle:Handling:Form', { dogovorId: dogovor.id })) }}
+</div>

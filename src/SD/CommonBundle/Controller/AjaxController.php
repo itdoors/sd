@@ -11,6 +11,7 @@ use Lists\DogovorBundle\Entity\DopDogovor;
 use Lists\DogovorBundle\Entity\DopDogovorRepository;
 use Lists\HandlingBundle\Entity\Handling;
 use Lists\HandlingBundle\Entity\HandlingMessage;
+use Lists\HandlingBundle\Entity\HandlingRepository;
 use Lists\LookupBundle\Entity\LookupRepository;
 use SD\UserBundle\Entity\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -98,6 +99,33 @@ class AjaxController extends Controller
 
         foreach ($organizations as $organization) {
             $result[] = $this->serializeObject($organization);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns list of organizations in json
+     *
+     * @return string
+     */
+    public function handlingAction()
+    {
+        $searchTextQ = $this->get('request')->query->get('q');
+        $searchTextQuery = $this->get('request')->query->get('query');
+
+        $searchText = $searchTextQ ? $searchTextQ : $searchTextQuery;
+
+        /** @var HandlingRepository $handlingRepository */
+        $handlingRepository = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling');
+
+        $handlings = $handlingRepository->getSearchQuery($searchText);
+
+        $result = array();
+
+        foreach ($handlings as $handling) {
+            $result[] = $this->serializeObject($handling);
         }
 
         return new Response(json_encode($result));

@@ -723,4 +723,21 @@ class HandlingRepository extends BaseRepository
 
         return ($a['handlingMessageCreatedate2'] < $b['handlingMessageCreatedate2']) ? 1 : -1;
     }
+
+    /**
+     * Searches handling by $q
+     *
+     * @param string $q
+     *
+     * @return mixed[]
+     */
+    public function getSearchQuery($q)
+    {
+        $sql = $this->createQueryBuilder('h')
+            ->where('h.id = :q')
+            ->setParameter(':q', $q);
+
+        return $sql->getQuery()->getResult();
+    }
+
 }

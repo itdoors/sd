@@ -1,0 +1,25 @@
+{% trans_default_domain 'ListsDogovorBundle' %}
+<a class="btn green" id="handling-dogovor-add-btn" href="#">
+    <i class="fa fa-plus"></i>
+    {% trans %}Add handling{% endtrans %}
+</a>
+<div id="handling-dogovor-add-holder" style="display: none"></div>
+{{ ajax_form_render_btn({hanfdling
+    'selector' : '#handling-dogovor-add-btn',
+    'formType' : 'handlingDogovorType',
+        'successFunctions' : {
+        'dogovor-handling-list' : 'ITDoorsAjax.updateList'
+    },
+    'serviceDefault' : {
+        'alias' : 'handling.dogovor.service',
+        'method' : 'addFormDefaults'
+    },
+    'serviceSave' : {
+        'alias' : 'handling.dogovor.service',
+        'method' : 'saveForm'
+    },
+        'defaults' : {
+        'dogovorId' : dogovorId
+    },
+    'target' : '#handling-dogovor-add-holder'
+}) }}
