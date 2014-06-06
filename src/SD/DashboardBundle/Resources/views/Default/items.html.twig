@@ -80,30 +80,30 @@
         </div>
     </div>
     {% if app.user.hasRole('ROLE_CONTROLLING') %}
-    <div class="portlet box blue">
-        <div class="portlet-title">
-            <div class="caption"><i class="fa fa-globe"></i> {% trans %}Invoice need stitch{% endtrans %}</div>
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption"><i class="fa fa-globe"></i> {% trans %}Invoice need stitch{% endtrans %}</div>
+            </div>
+            <div class="tools">
+                <a class="collapse" href="javascript:;"></a>
+                <a class="reload" href="javascript:;"></a>
+            </div>
+            <div class="portlet-body" id="datatable_ajax" data-url="{{ url('it_doors_controlling_invoice_list') }}">
+                {{ render(controller('ITDoorsControllingBundle:Invoice:List')) }}
+            </div>
         </div>
-        <div class="tools">
-            <a class="collapse" href="javascript:;"></a>
-            <a class="reload" href="javascript:;"></a>
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption"><i class="fa fa-globe"></i> {% trans %}List expected payments{% endtrans %}</div>
+            </div>
+            <div class="tools">
+                <a class="collapse" href="javascript:;"></a>
+                <a class="reload" href="javascript:;"></a>
+            </div>
+            <div class="portlet-body" id="datatable_ajax" data-url="{{ url('it_doors_controlling_invoice_expected_pay') }}">
+                {{ render(controller('ITDoorsControllingBundle:Invoice:Expectedpay')) }}
+            </div>
         </div>
-        <div class="portlet-body" id="datatable_ajax" data-url="{{ url('it_doors_controlling_invoice_list') }}">
-            {{ render(controller('ITDoorsControllingBundle:Invoice:List')) }}
-        </div>
-    </div>
-    <div class="portlet box blue">
-        <div class="portlet-title">
-            <div class="caption"><i class="fa fa-globe"></i> {% trans %}List expected payments{% endtrans %}</div>
-        </div>
-        <div class="tools">
-            <a class="collapse" href="javascript:;"></a>
-            <a class="reload" href="javascript:;"></a>
-        </div>
-        <div class="portlet-body" id="datatable_ajax" data-url="{{ url('it_doors_controlling_invoice_expected_pay') }}">
-            {{ render(controller('ITDoorsControllingBundle:Invoice:Expectedpay')) }}
-        </div>
-    </div>
     {% endif %}
     {{ render(controller('ListsHandlingBundle:' ~ masterRole ~ ':List')) }}
 

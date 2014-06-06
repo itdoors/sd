@@ -8,7 +8,7 @@
             <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
         </li>
         {% include 'sidebar_search.html.twig' %}
-        <li class="start active ">
+        <li class="start{% if path(app.request.attributes.get('_route')) == path('sd_dashboard_homepage') %} active{% endif %}">
             <a href="{{ path('sd_dashboard_homepage') }}">
                 <i class="fa fa-home"></i> 
                 <span class="title">{% trans %}Dashboard{% endtrans %}</span>
@@ -288,7 +288,7 @@
         </li>
         {% endif %}
         {% if is_granted('ROLE_CONTROLLING') %}
-        <li>
+        <li{% if path(app.request.attributes.get('_route')) == path('it_doors_controlling_invoice') %} class="active"{% endif %}>
             <a href="javascript:;">
                 <i class="fa fa-tachometer"></i>
                 <span class="title">{% trans %}Controlling{% endtrans %}</span>
@@ -304,8 +304,8 @@
             </ul>
         </li>
         {% endif %}
-        {#% if is_granted('ROLE_EMAIL') %#}
-        <li>
+        {% if is_granted('ROLE_SALESADMIN') %}
+            <li{% if path(app.request.attributes.get('_route')) == path('it_doors_email_templates') or path(app.request.attributes.get('_route')) == path('it_doors_email_history')  %} class="active"{% endif %}>
             <a href="javascript:;">
                 <i class="fa fa-tachometer"></i>
                 <span class="title">{% trans %}Email{% endtrans %}</span>
@@ -324,7 +324,14 @@
                 </li>
             </ul>
         </li>
-        {#% endif %#}
+        {% endif %}
+        <li{% if path(app.request.attributes.get('_route')) == path('it_doors_email_templates') %} class="active"{% endif %}>
+            <a href="{{ path('it_doors_email_templates') }}">
+                <i class="fa fa-user"></i>
+                <span class="title">{% trans %}Staff{% endtrans %}</span>
+                <span class="arrow "></span>
+            </a>
+        </li>
     </ul>
     <!-- END SIDEBAR MENU -->
 </div>
