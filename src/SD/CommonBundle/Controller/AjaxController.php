@@ -1478,6 +1478,26 @@ class AjaxController extends Controller
      *
      * @return void
      */
+    public function handlingDogovorDelete($params)
+    {
+        $id = $params['id'];
+
+        $object = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingDogovor')
+            ->find($id);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
     public function dopDogovorDelete($params)
     {
         $id = $params['id'];

@@ -4,6 +4,7 @@
     <tr>
         <th>{% trans %}ID{% endtrans %}</th>
         <th>{% trans %}Handling{% endtrans %}</th>
+        <th>{% trans %}Actions{% endtrans %}</th>
     </tr>
     </thead>
     <tbody>
@@ -11,6 +12,15 @@
         <tr>
             <td>{{ result.id }}</td>
             <td>{{ result.handling }}</td>
+            <td>
+                <a
+                        class="ajax-delete"
+                        href="javascript:;"
+                        data-params='{"model":"HandlingDogovor","id":{{ result.id }}}'
+                        >
+                    {% trans %}Delete{% endtrans %}
+                </a>
+            </td>
         </tr>
     {% endfor %}
     </tbody>
