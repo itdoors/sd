@@ -65,3 +65,15 @@ it_doors_oper_schedule_copy_month_dates:
 it_doors_oper_schedule_copy_by_etalon:
     pattern:  /oper/schedule/copy/by/etalon
     defaults: { _controller: ITDoorsOperBundle:OperSchedule:copyCoworkersByEtalon }
+
+it_doors_oper_schedule_show_user_basic_table:
+    pattern:  /oper/schedule/show/user/basic/table
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:showUserBasicTable }
+
+it_doors_oper_schedule_add_accural:
+    pattern:  /oper/schedule/add/accural/
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:insertAccrual }
+
+it_doors_oper_schedule_delete_accural:
+    pattern:  /oper/schedule/delete/accural/
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:deleteAccrual }

@@ -2,18 +2,21 @@ Lists\DepartmentBundle\Entity\DepartmentPeopleMonthInfo:
     type: entity
     table: department_people_month_info
     repositoryClass : Lists\DepartmentBundle\Entity\DepartmentPeopleMonthInfoRepository
+    id:
+        id:
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
     fields:
         departmentPeopleId:
-            id: true
             type: bigint
             nullable: false
             column: department_people_id
         year:
-            id: true
             type: bigint
             nullable: false
         month:
-            id: true
             type: bigint
             nullable: false
         bonus:
@@ -50,6 +53,12 @@ Lists\DepartmentBundle\Entity\DepartmentPeopleMonthInfo:
         surcharge:
             type: float
             nullable: true
+        replacementType:
+            type: string
+            length: 10
+            fixed: false
+            nullable: false
+            column: replacement_type
     oneToOne:
         departmentPeopleReplacement:
             targetEntity: DepartmentPeople

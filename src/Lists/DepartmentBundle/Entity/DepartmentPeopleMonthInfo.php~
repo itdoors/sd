@@ -561,4 +561,61 @@ class DepartmentPeopleMonthInfo
     {
         return $this->bonusType;
     }
+    /**
+     * @var \Lists\DepartmentBundle\Entity\DepartmentPeople
+     */
+    private $departmentPeople;
+
+
+    /**
+     * Set departmentPeople
+     *
+     * @param \Lists\DepartmentBundle\Entity\DepartmentPeople $departmentPeople
+     *
+     * @return DepartmentPeopleMonthInfo
+     */
+    public function setDepartmentPeople(\Lists\DepartmentBundle\Entity\DepartmentPeople $departmentPeople = null)
+    {
+        $this->departmentPeople = $departmentPeople;
+
+        return $this;
+    }
+
+    /**
+     * Get departmentPeople
+     *
+     * @return \Lists\DepartmentBundle\Entity\DepartmentPeople 
+     */
+    public function getDepartmentPeople()
+    {
+        return $this->departmentPeople;
+    }
+    /**
+     * @var string
+     */
+    private $replacementType;
+
+
+    /**
+     * Set replacementType
+     *
+     * @param string $replacementType
+     * @return DepartmentPeopleMonthInfo
+     */
+    public function setReplacementType($replacementType)
+    {
+        $this->replacementType = $replacementType;
+    
+        return $this;
+    }
+
+    /**
+     * Get replacementType
+     *
+     * @return string 
+     */
+    public function getReplacementType()
+    {
+        return $this->replacementType;
+    }
 }

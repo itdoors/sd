@@ -1113,4 +1113,235 @@ class OperScheduleController extends BaseFilterController
 
         return new Response(json_encode($return));
     }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function showUserBasicTableAction(Request $request)
+    {
+        $params =  $request->request->get('params');
+        $date = $request->request->get('date');
+
+        $idCoworker =  $params['idCoworker'];
+        $idDepartment = $params['idDepartment'];
+
+        list($year, $month) = explode('-', $date);
+
+        //$date = $request->request->get('date');
+
+        $return['html'] = '';
+        $departmentPeopleRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
+        /** @var  $departmentPeople \Lists\DepartmentBundle\Entity\DepartmentPeople */
+        $departmentPeople = $departmentPeopleRepository->find($idCoworker);
+
+        $info['id'] = $departmentPeople->getId();
+        $info['mpk'] = $departmentPeople->getMpks();
+        $info['fio'] = $departmentPeople->getLastName().' '.
+            $departmentPeople->getMiddleName().' '.$departmentPeople->getFirstName();
+        $info['dateAcceptedOfficially'] = $departmentPeople->getAdmissionDate();
+        $info['dateAcceptedNotOfficially'] = $departmentPeople->getAdmissionDateNotOfficially();
+        $info['dateFiredOfficially'] = $departmentPeople->getDismissalDate();
+        $info['dateFiredNotOfficially'] = $departmentPeople->getDismissalDateNotOfficially();
+
+        /** @var  $monthInfoRepository \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfoRepository */
+        $monthInfoRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
+
+        $monthInfo = $monthInfoRepository->findOneBy(array(
+            'departmentPeople' => $departmentPeople->getId(),
+            'year' => $year,
+            'month' => $month,
+            'replacementType' => 'r',
+            'departmentPeopleReplacement' => 0
+
+        ));
+
+
+
+        $onceOnlyAccrualRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:OnceOnlyAccrual');
+
+        $onceOnlyAccrual = $onceOnlyAccrualRepository->findBy(array(
+            'departmentPeopleMonthInfo'=>$monthInfo->getId()
+        ));
+
+
+        $accrual['officially'] = array();
+        $accrual['notOfficially'] = array();
+
+                /** @var $oneAccrual \Lists\DepartmentBundle\Entity\OnceOnlyAccrual */
+/*          foreach($onceOnlyAccrual as $oneAccrual) {
+          if ($oneAccrual->getCode() == 'oz') {
+              $type = 'officially';
+          } else if ($oneAccrual->getCode() == 'uz') {
+              $type = 'notOfficially';
+          }
+
+                  $accrual[$type]['id'] = $oneAccrual->getId();
+                  $accrual[$type]['type'] = $oneAccrual->getType();
+                  $accrual[$type]['workType'] = $oneAccrual->getWorkType();
+                  $accrual[$type]['value'] = $oneAccrual->getValue();
+                  $accrual[$type]['value'] = $oneAccrual->getValue();
+              }
+
+              $accrual['officially']['id'] = 'sdfsdf';
+              $accrual['officially']['type'] = 'asdfsdf';
+              $accrual['officially']['workType'] = 'fdgdfg';
+              $accrual['officially']['value'] = 'asdfsd';
+              $accrual['officially']['value'] = 'sdf';*/
+
+
+          $plannedAccrualRepository = $this->getDoctrine()
+              ->getRepository('ListsDepartmentBundle:PlannedAccrual');
+
+          $plannedAccrual = $plannedAccrualRepository->findBy(array(
+              'departmentPeople' => $idCoworker
+          ));
+
+
+          $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleInfoUserBasic.html.twig', array(
+              'coworker'=> $info,
+              'accrual' => $onceOnlyAccrual,
+              'planned' => $plannedAccrual
+          ));
+
+
+          $return['success'] = 1;
+
+          return new Response(json_encode($return));
+    }
+
+    /**
+    * @param Request $request
+    *
+    * @return Response
+    */
+    public function insertAccrualAction(Request $request)
+    {
+        $date = $request->request->get('date');
+        $idCoworker =  $request->request->get('idCoworker');
+        $idDepartment = $request->request->get('idDepartment');
+        $value = $request->request->get('value');
+        $type = $request->request->get('type');
+        $workType = $request->request->get('workType');
+        $description = $request->request->get('description');
+        $officially = $request->request->get('officially');
+        $value = str_replace(',', '.', $value);
+
+        list($year, $month) = explode('-', $date);
+
+
+
+        /** @var  $monthInfoRepository \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfoRepository */
+        $monthInfoRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
+
+        $monthInfo = $monthInfoRepository->findOneBy(array(
+            'departmentPeople' => $idCoworker,
+            'year' => $year,
+            'month' => $month,
+            'replacementType' => 'r',
+            'departmentPeopleReplacement' => 0
+        ));
+
+        $departmentPeopleRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
+        /** @var  $departmentPeople \Lists\DepartmentBundle\Entity\DepartmentPeople */
+        $departmentPeople = $departmentPeopleRepository->find($idCoworker);
+
+
+        if ($officially == 'true') {
+            $code = 'oz';
+        } else {
+            $code = 'uz';
+        }
+
+        $newAccrual = new \Lists\DepartmentBundle\Entity\OnceOnlyAccrual();
+        $newAccrual->setCode($code);
+        $newAccrual->setDescription($description);
+        $newAccrual->setValue($value);
+        $newAccrual->setMpk($departmentPeople->getMpks());
+        $newAccrual->setWorkType($workType);
+        $newAccrual->setType($type);
+        $newAccrual->setIsActive(true);
+        $newAccrual->setDepartmentPeopleMonthInfo($monthInfo);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($newAccrual);
+        $em->flush();
+
+        $onceOnlyAccrualRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:OnceOnlyAccrual');
+
+        $onceOnlyAccrual = $onceOnlyAccrualRepository->findBy(array(
+            'departmentPeopleMonthInfo'=>$monthInfo->getId()
+        ));
+
+        $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleInfoUserBasicAccrual.html.twig', array(
+            'accruals'=> $onceOnlyAccrual,
+            'code' => $code
+        ));
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
+
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function deleteAccrualAction(Request $request)
+    {
+        $id = $request->request->get('pk');
+        $date = $request->request->get('date');
+        $idCoworker =  $request->request->get('idCoworker');
+        $code = $request->request->get('code');
+
+        list($year,$month) = explode('-', $date);
+
+        $departmentPeopleRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
+        /** @var  $departmentPeople \Lists\DepartmentBundle\Entity\DepartmentPeople */
+        $departmentPeople = $departmentPeopleRepository->find($idCoworker);
+
+        $onceOnlyAccrualRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:OnceOnlyAccrual');
+
+        $deleteAccrual = $onceOnlyAccrualRepository->find($id);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($deleteAccrual);
+        $em->flush();
+
+        /** @var  $monthInfoRepository \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfoRepository */
+        $monthInfoRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
+
+        $monthInfo = $monthInfoRepository->findOneBy(array(
+            'departmentPeople' => $idCoworker,
+            'year' => $year,
+            'month' => $month,
+            'replacementType' => 'r',
+            'departmentPeopleReplacement' => 0
+        ));
+
+        $onceOnlyAccrual = $onceOnlyAccrualRepository->findBy(array(
+            'departmentPeopleMonthInfo' => $monthInfo->getId()
+        ));
+
+        $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleInfoUserBasicAccrual.html.twig', array(
+            'accruals'=> $onceOnlyAccrual,
+            'code' => $code
+        ));
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
 }

@@ -95,8 +95,8 @@ class DepartmentsRepository extends EntityRepository
             ->leftJoin('d.type', 't')
             ->leftJoin('d.opermanager', 'u')
             ->leftJoin('d.mpks', 'm')
-            ->leftJoin('r.companystructure', 'companyStructure')
-            ->andWhere('m.active = true');
+            ->leftJoin('r.companystructure', 'companyStructure');
+            //->andWhere('m.active = true');
 
         return $query;
     }

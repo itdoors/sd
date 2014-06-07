@@ -590,4 +590,48 @@ class DepartmentPeopleMonthInfo
     {
         return $this->departmentPeople;
     }
+    /**
+     * @var string
+     */
+    private $replacementType;
+
+
+    /**
+     * Set replacementType
+     *
+     * @param string $replacementType
+     *
+     * @return DepartmentPeopleMonthInfo
+     */
+    public function setReplacementType($replacementType)
+    {
+        $this->replacementType = $replacementType;
+
+        return $this;
+    }
+
+    /**
+     * Get replacementType
+     *
+     * @return string 
+     */
+    public function getReplacementType()
+    {
+        return $this->replacementType;
+    }
+    /**
+     * @var integer
+     */
+    private $id;
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 }
