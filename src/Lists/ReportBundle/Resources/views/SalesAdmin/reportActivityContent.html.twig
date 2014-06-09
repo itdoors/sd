@@ -1,10 +1,12 @@
 {% trans_default_domain 'ListsReportBundle' %}
 
 {% if results|length %}
-    <table class="table table-striped table-bordered table-advance table-hover" id="report-handling-advanced">
+    <table class="table table-striped table-bordered table-advance table-hover" id="report-activity-content">
         <thead>
         <tr>
-            <th>&nbsp;</th>
+            <th >{% trans %}Handling Id{% endtrans %}</th>
+            <th >{% trans %}Createdatetime{% endtrans %}</th>
+            <th >{% trans %}Organization{% endtrans %}</th>
             <th colspan="{{ levels|length }}">{% trans %}Contact level{% endtrans %}</th>
             {% for type in types %}
                 <th>{{ type.reportName }}</th>
@@ -26,10 +28,18 @@
         <tbody>
         {% for result in results %}
             <tr>
-                <td colspan="{{ 1 + types|length + levels|length + 13 }}">{{ result.user }}</td>
+                <td colspan="{{ 3 + types|length + levels|length + 13 }}">{{ result.user }}</td>
             </tr>
             {% for organization in result['organizations'] %}
             <tr>
+                <td>
+                    {{ organization['handlingId'] }}
+                </td>
+                <td>
+                    {% if organization['handlingCreatedatetime'] %}
+                        {{ organization['handlingCreatedatetime']|date('d.m.Y') }}
+                    {% endif %}
+                </td>
                 <td>
                 <a
                    href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_show', { id: organization['handlingId'] }) }}"
@@ -40,18 +50,21 @@
                 </td>
                 {% for level in levels %}
                     <td>
-                        {% if level.digit == organization['levelDigit'] %}
-                            {{ organization['levelDigit'] }}
+                        {% if  organization['levelDigit'][level.digit] is defined %}
+                            {{ organization['levelDigit'][level.digit] }}
                         {% endif %}
                     </td>
                 {% endfor %}
                 {% for type in types %}
-                    <td>
-                        {% if organization['types'][type.id] is defined %}
-                            +
-                            {#{{ organization['types'][type.id] }}#}
-                        {% endif %}
-                    </td>
+                    {% if organization['types'][type.id] is defined %}
+                        <td>
+                            <div class="itdoors-week-number-{{ organization['types'][type.id] }}" style="width: 100%; height: 100%">
+                                &nbsp;+
+                            </div>
+                        </td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
                 {% endfor %}
                 <td>{{ organization['serviceList'] }}</td>
                 <td>{{ organization['pf1'] }}</td>

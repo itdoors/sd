@@ -240,7 +240,7 @@ class HandlingCompetitor
     public function setTotal($total)
     {
         $this->total = $total;
-    
+
         return $this;
     }
 

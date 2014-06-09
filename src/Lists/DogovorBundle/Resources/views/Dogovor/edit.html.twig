@@ -19,6 +19,16 @@
             }
         });
 
+        $('#sallerId').editable({
+            url: '{{ path('sd_common_ajax_dogovor_save') }}',
+            source: '{{ path('sd_common_ajax_user') }}',
+            select2: {
+                placeholder: '{% trans %}Select Saller{% endtrans %}',
+                minimumInputLength: 2,
+                width: 250
+            }
+        });
+
         $('#cityId').editable({
             url: '{{ path('sd_common_ajax_dogovor_save') }}',
             source: '{{ path('sd_common_ajax_city') }}',
@@ -231,6 +241,16 @@
                     {% endif %}
                 </a>
             </td>
+        </tr>
+        <tr> {# 8 #}
+            <td>{% trans %}Saller{% endtrans %}</td>
+            <td>
+                <a href="#" id="sallerId"  data-type="select2" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.sallerName }}" data-placement="right" data-original-title="{% trans %}Enter Saller{% endtrans %}">
+                    {{ dogovor.sallerName }}
+                </a>
+            </td>
+            <td></td>
+            <td></td>
         </tr>
         </tbody>
     </table>

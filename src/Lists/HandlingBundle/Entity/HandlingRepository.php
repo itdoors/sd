@@ -739,5 +739,4 @@ class HandlingRepository extends BaseRepository
 
         return $sql->getQuery()->getResult();
     }
-
 }

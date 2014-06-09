@@ -978,7 +978,7 @@ class AjaxController extends Controller
         }
 
         if ($defaultData && !is_array($defaultData)) {
-            $defaultData = json_decode($defaultData, true);
+            $defaultData = json_decode(stripslashes($defaultData), true);
         }
 
         if (sizeof($defaultData)) {
@@ -2138,6 +2138,22 @@ class AjaxController extends Controller
 
             // Dogovor Update
             $sql = "UPDATE dogovor set organization_id = :organizationId where organization_id = :organizationChildId";
+            $statement = $connection->prepare($sql);
+            $statement->execute(array(
+                ':organizationId' => $organizationId,
+                ':organizationChildId' => $organizationChildId
+            ));
+
+            // Dogovor Customer Update
+            $sql = "UPDATE dogovor set customer_id = :organizationId where customer_id = :organizationChildId";
+            $statement = $connection->prepare($sql);
+            $statement->execute(array(
+                ':organizationId' => $organizationId,
+                ':organizationChildId' => $organizationChildId
+            ));
+
+            // Dogovor Performer Update
+            $sql = "UPDATE dogovor set performer_id = :organizationId where performer_id = :organizationChildId";
             $statement = $connection->prepare($sql);
             $statement->execute(array(
                 ':organizationId' => $organizationId,

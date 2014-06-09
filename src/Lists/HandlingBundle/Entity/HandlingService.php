@@ -185,12 +185,13 @@ class HandlingService
      * Set reportNumber
      *
      * @param integer $reportNumber
+     *
      * @return HandlingService
      */
     public function setReportNumber($reportNumber)
     {
         $this->reportNumber = $reportNumber;
-    
+
         return $this;
     }
 

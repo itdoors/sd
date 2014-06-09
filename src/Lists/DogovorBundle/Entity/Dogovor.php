@@ -1133,4 +1133,33 @@ class Dogovor
     {
         return $this->dogovorTypeId;
     }
+    /**
+     * @var integer
+     */
+    private $sallerId;
+
+
+    /**
+     * Set sallerId
+     *
+     * @param integer $sallerId
+     *
+     * @return Dogovor
+     */
+    public function setSallerId($sallerId)
+    {
+        $this->sallerId = $sallerId;
+
+        return $this;
+    }
+
+    /**
+     * Get sallerId
+     *
+     * @return integer 
+     */
+    public function getSallerId()
+    {
+        return $this->sallerId;
+    }
 }

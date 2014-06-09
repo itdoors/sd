@@ -43,6 +43,7 @@
     }) }}
 
     {{ include('ListsReportBundle:' ~ baseTemplate ~ ':serviceLegend.html.twig') }}
+    {{ include('ListsReportBundle:' ~ baseTemplate ~ ':weekColorLegend.html.twig') }}
 
     <div id="report-activity" data-url="{{ path('lists_report_sales_admin_activity_content') }}">
         {{ render(controller('ListsReportBundle:' ~ baseTemplate ~ ':ReportActivityContent')) }}

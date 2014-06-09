@@ -65,3 +65,24 @@
     /* Should be unset in IE9+ I think. */
     filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
 }
+
+.itdoors-week-number-1 {
+    background-color: #006600;
+    color: #ffffff;
+    align-content: center;
+}
+.itdoors-week-number-2 {
+    background-color: #002a80;
+    color: #ffffff;
+    align-content: center;
+}
+.itdoors-week-number-3 {
+    background-color: #935f24;
+    color: #ffffff;
+    align-content: center;
+}
+.itdoors-week-number-4 {
+    background-color: #99a4ac;
+    color: #ffffff;
+    align-content: center;
+}

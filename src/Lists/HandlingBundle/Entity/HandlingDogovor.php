@@ -49,12 +49,13 @@ class HandlingDogovor
      * Set handlingId
      *
      * @param integer $handlingId
+     *
      * @return HandlingDogovor
      */
     public function setHandlingId($handlingId)
     {
         $this->handlingId = $handlingId;
-    
+
         return $this;
     }
 
@@ -72,12 +73,13 @@ class HandlingDogovor
      * Set dogovorId
      *
      * @param integer $dogovorId
+     *
      * @return HandlingDogovor
      */
     public function setDogovorId($dogovorId)
     {
         $this->dogovorId = $dogovorId;
-    
+
         return $this;
     }
 
@@ -95,12 +97,13 @@ class HandlingDogovor
      * Set dogovor
      *
      * @param \Lists\DogovorBundle\Entity\Dogovor $dogovor
+     *
      * @return HandlingDogovor
      */
     public function setDogovor(\Lists\DogovorBundle\Entity\Dogovor $dogovor = null)
     {
         $this->dogovor = $dogovor;
-    
+
         return $this;
     }
 
@@ -118,12 +121,13 @@ class HandlingDogovor
      * Set handling
      *
      * @param \Lists\HandlingBundle\Entity\Handling $handling
+     *
      * @return HandlingDogovor
      */
     public function setHandling(\Lists\HandlingBundle\Entity\Handling $handling = null)
     {
         $this->handling = $handling;
-    
+
         return $this;
     }
 

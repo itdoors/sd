@@ -96,6 +96,10 @@ Lists\DogovorBundle\Entity\Dogovor:
         performerId:
             type: integer
             column: performer_id
+        sallerId:
+            type: integer
+            column: saller_id
+            nullable: true
         organizationId:
             type: integer
             column: organization_id

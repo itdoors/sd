@@ -947,12 +947,13 @@ class Organization
      * Set organizationSignId
      *
      * @param integer $organizationSignId
+     *
      * @return Organization
      */
     public function setOrganizationSignId($organizationSignId)
     {
         $this->organizationSignId = $organizationSignId;
-    
+
         return $this;
     }
 

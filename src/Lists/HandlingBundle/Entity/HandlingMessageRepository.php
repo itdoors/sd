@@ -3,6 +3,7 @@
 namespace Lists\HandlingBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Lists\ContactBundle\Entity\ModelContactRepository;
 
 /**
  * HandlingMessageRepository
@@ -122,6 +123,7 @@ class HandlingMessageRepository extends EntityRepository
         $q = $this->createQueryBuilder('hm')
             ->select('hm.id as id')
             ->addSelect('hm.type_id as typeId')
+            ->addSelect('hm.createdate as createdate')
             ->addSelect('handling.budget as budget')
             ->addSelect('handling.pf1 as pf1')
             ->addSelect('handling.isMarketing as marketing')
@@ -129,6 +131,7 @@ class HandlingMessageRepository extends EntityRepository
             ->addSelect('handling.square as square')
             ->addSelect('handling.employees as employees')
             ->addSelect('handling.id as handlingId')
+            ->addSelect('handling.createdatetime as handlingCreatedatetime')
             ->addSelect('organization.id as organizationId')
             ->addSelect('organization.name as organizationName')
             ->addSelect('organizationGroup.name as organizationGroupName')
@@ -246,6 +249,8 @@ class HandlingMessageRepository extends EntityRepository
             $marketing = $handlingMessage['marketing'];
             $organizationGroupName = $handlingMessage['organizationGroupName'];
             $dogovorList = $handlingMessage['dogovorList'];
+            $createdate = $handlingMessage['createdate'];
+            $handlingCreatedatetime = $handlingMessage['handlingCreatedatetime'];
 
             if (!isset ( $result[$userId] )) {
                 $result[$userId] = array();
@@ -259,8 +264,9 @@ class HandlingMessageRepository extends EntityRepository
             if (!isset ( $result[$userId]['organizations'][$organizationId])) {
                 $result[$userId]['organizations'][$organizationId]['types'] = array();
                 $result[$userId]['organizations'][$organizationId]['name'] = $organizationName;
-                $result[$userId]['organizations'][$organizationId]['levelDigit'] = $levelDigit;
+                //$result[$userId]['organizations'][$organizationId]['levelDigit'][$levelDigit] = $levelDigit;
                 $result[$userId]['organizations'][$organizationId]['handlingId'] = $handlingId;
+                $result[$userId]['organizations'][$organizationId]['handlingCreatedatetime'] = $handlingCreatedatetime;
                 $result[$userId]['organizations'][$organizationId]['serviceList'] = $serviceList;
                 $result[$userId]['organizations'][$organizationId]['budget'] = $budget;
                 $result[$userId]['organizations'][$organizationId]['pf1'] = $pf1;
@@ -275,15 +281,42 @@ class HandlingMessageRepository extends EntityRepository
                 $result[$userId]['organizations'][$organizationId]['dogovorList'] = $dogovorList;
             }
 
-            $current = 0;
+            if (!isset( $result[$userId]['organizations'][$organizationId]['levelDigit'][$levelDigit] )) {
+                $result[$userId]['organizations'][$organizationId]['levelDigit'][$levelDigit] = $levelDigit;
+            }
+
+            /*$current = 0;
 
             if (isset( $result[$userId]['organizations'][$organizationId]['types'][$typeId] )) {
                 $current = $result[$userId]['organizations'][$organizationId]['types'][$typeId];
-            }
+            }*/
 
-            $result[$userId]['organizations'][$organizationId]['types'][$typeId] = $current + 1;
+            $weekNumber = $this->getActivityWeekNumber($createdate, $to);
+
+            $result[$userId]['organizations'][$organizationId]['types'][$typeId] = $weekNumber;
         }
 
         return $result;
+    }
+
+    /**
+     * getActivityWeekNumber
+     *
+     * @param \DateTime $currentDate
+     * @param \DateTime $endDate
+     *
+     * @return int
+     */
+    protected function getActivityWeekNumber(\DateTime $currentDate, \DateTime $endDate)
+    {
+        $interval = $currentDate->diff($endDate);
+
+        $diffInDays = (int) $interval->format('%R%a');
+
+        $weekNumber = round($diffInDays / 7);
+
+        $weekNumber = $weekNumber == 0 ? 1 : $weekNumber;
+
+        return $weekNumber;
     }
 }
