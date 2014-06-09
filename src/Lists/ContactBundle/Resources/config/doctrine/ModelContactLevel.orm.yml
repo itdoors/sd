@@ -1,0 +1,18 @@
+Lists\ContactBundle\Entity\ModelContactLevel:
+    type: entity
+    table: model_contact_level
+    repositoryClass: Lists\ContactBundle\Entity\ModelContactLevelRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 100
+            nullable: false
+        digit:
+            type: integer
+            nullable: false

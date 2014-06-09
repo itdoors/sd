@@ -7,7 +7,7 @@ SD\ModelBundle\Entity\UserContactinfo:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         value:
             type: string
             length: 255

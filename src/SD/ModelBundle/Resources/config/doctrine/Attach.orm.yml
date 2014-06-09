@@ -7,7 +7,7 @@ SD\ModelBundle\Entity\Attach:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         filename:
             type: string
             length: 255

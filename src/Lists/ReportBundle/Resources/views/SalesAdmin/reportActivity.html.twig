@@ -1,0 +1,51 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsReportBundle' %}
+{% block title %}{% trans %}All manager activity{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li><a href="{{ path('lists_report_' ~ baseRoutePrefix ~ '_activity') }}" title="{% trans %}Report{% endtrans %}">{% trans %}All manager activity{% endtrans %}</a></li>
+    </ul>
+{% endblock %}
+
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Report <small>all manager activity</small>{% endtrans %}
+    </h3>
+{% endblock %}
+
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datepicker/css/datepicker.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/jquery.dataTables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+{% endblock %}
+
+{% block body %}
+
+    {{ ajax_filter_render('reportActivityFilterType', ajax_filter_namespace_report_activity, {
+        'report-activity': 'ITDoorsAjax.updateList'
+    }) }}
+
+    {{ include('ListsReportBundle:' ~ baseTemplate ~ ':serviceLegend.html.twig') }}
+    {{ include('ListsReportBundle:' ~ baseTemplate ~ ':weekColorLegend.html.twig') }}
+
+    <div id="report-activity" data-url="{{ path('lists_report_sales_admin_activity_content') }}">
+        {{ render(controller('ListsReportBundle:' ~ baseTemplate ~ ':ReportActivityContent')) }}
+    </div>
+{% endblock body %}

@@ -8,7 +8,7 @@ Lists\DogovorBundle\Entity\DopDogovor:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         dopDogovorType:
             type: string
             length: 255

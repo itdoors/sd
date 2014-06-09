@@ -7,7 +7,7 @@ SD\UserBundle\Entity\Staff:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         mobilephone:
             type: string
             length: 12

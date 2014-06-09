@@ -2,6 +2,7 @@
 
 namespace Lists\ContactBundle\Form;
 
+use Lists\ContactBundle\Entity\ModelContactLevelRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -35,6 +36,13 @@ class ModelContactOrganizationFormType extends AbstractType
             ->add('email')
             ->add('type', null, array(
                 'required' => true
+            ))
+            ->add('level', null, array(
+                'required' => false,
+                'query_builder' => function (ModelContactLevelRepository $repository) {
+                        return $repository->createQueryBuilder('mcl')
+                            ->orderBy('mcl.digit', 'ASC');
+                }
             ));
 
         $builder

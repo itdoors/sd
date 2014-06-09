@@ -7,7 +7,7 @@ SD\ModelBundle\Entity\SfGuardRememberKey:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         rememberKey:
             type: string
             length: 32

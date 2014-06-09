@@ -2,6 +2,8 @@
 
 namespace Lists\HandlingBundle\Controller;
 
+use ITDoors\CommonBundle\Services\BaseService;
+use Lists\HandlingBundle\Entity\HandlingRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
@@ -197,10 +199,17 @@ class SalesController extends BaseController
     {
         $this->get('sd.security_access')->hasAccessToHandlingAndThrowException($id);
 
+        /** @var BaseService $baseService */
+        $baseService = $this->get('itdoors_common.base.service');
+
+        /** @var HandlingRepository $handlingRepository */
+        $handlingRepository = $this->get('handling.repository');
+
         /** @var \Lists\HandlingBundle\Entity\Handling $object */
-        $object = $this->getDoctrine()
-            ->getRepository('ListsHandlingBundle:Handling')
+        $object = $handlingRepository
             ->getHandlingShow($id);
+
+        $object['isMarketingChoices'] = $baseService->getYesNoChoices();
 
         /** @var \Lists\OrganizationBundle\Entity\Organization $organization */
         $organization = $this->getDoctrine()

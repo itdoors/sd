@@ -7,7 +7,7 @@ SD\ModelBundle\Entity\Groupclaimperiod:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         periodDay:
             type: string
             length: 10

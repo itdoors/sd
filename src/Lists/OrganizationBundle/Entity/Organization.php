@@ -937,33 +937,33 @@ class Organization
     {
         return $this->children;
     }
-
     /**
-     * @var \Lists\LookupBundle\Entity\Lookup
+     * @var integer
      */
-    private $lookup;
+    private $organizationSignId;
+
 
     /**
-     * Set lookup
+     * Set organizationSignId
      *
-     * @param \Lists\LookupBundle\Entity\Lookup $lookup
+     * @param integer $organizationSignId
      *
      * @return Organization
      */
-    public function setLookup(\Lists\LookupBundle\Entity\Lookup $lookup = null)
+    public function setOrganizationSignId($organizationSignId)
     {
-        $this->lookup = $lookup;
+        $this->organizationSignId = $organizationSignId;
 
         return $this;
     }
 
     /**
-     * Get lookup
+     * Get organizationSignId
      *
-     * @return \Lists\LookupBundle\Entity\Lookup
+     * @return integer 
      */
-    public function getLookup()
+    public function getOrganizationSignId()
     {
-        return $this->lookup;
+        return $this->organizationSignId;
     }
 }

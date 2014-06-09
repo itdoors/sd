@@ -10,6 +10,10 @@
             allowClear: true
         });
 
+        $('#modelContactOrganizationEditForm_level').select2({
+            allowClear: true
+        });
+
         $('#modelContactOrganizationEditForm_phone1, #modelContactOrganizationEditForm_phone2').select2({
             minimumInputLength: 2,
             allowClear: true,
@@ -308,6 +312,11 @@
                     <div class="form-group col-md-6">
                         {{ form_label(form.type, 'Contact type', {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': "Contact type"}}) }}
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        {{ form_label(form.level, 'Contact level', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.level, {'attr' : {'class' : 'form-control', 'placeholder': "Contact level"}}) }}
                     </div>
 
                     {% if form.isShared is defined %}

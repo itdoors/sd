@@ -6,7 +6,7 @@ SD\CalendarBundle\Entity\CalendarEventType:
         id:
             type: integer
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
     fields:
         name:
             type: string

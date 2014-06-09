@@ -634,4 +634,62 @@ class ModelContact
     {
         return $this->isShared;
     }
+    /**
+     * @var integer
+     */
+    private $levelId;
+
+    /**
+     * @var \Lists\ContactBundle\Entity\ModelContactLevel
+     */
+    private $level;
+
+
+    /**
+     * Set levelId
+     *
+     * @param integer $levelId
+     *
+     * @return ModelContact
+     */
+    public function setLevelId($levelId)
+    {
+        $this->levelId = $levelId;
+
+        return $this;
+    }
+
+    /**
+     * Get levelId
+     *
+     * @return integer 
+     */
+    public function getLevelId()
+    {
+        return $this->levelId;
+    }
+
+    /**
+     * Set level
+     *
+     * @param \Lists\ContactBundle\Entity\ModelContactLevel $level
+     *
+     * @return ModelContact
+     */
+    public function setLevel(\Lists\ContactBundle\Entity\ModelContactLevel $level = null)
+    {
+        $this->level = $level;
+
+        return $this;
+    }
+
+    /**
+     * Get level
+     *
+     * @return \Lists\ContactBundle\Entity\ModelContactLevel 
+     */
+    public function getLevel()
+    {
+        return $this->level;
+    }
 }

@@ -8,7 +8,7 @@ Lists\ContactBundle\Entity\ModelContact:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         modelName:
             type: string
             length: 255
@@ -82,6 +82,10 @@ Lists\ContactBundle\Entity\ModelContact:
             nullable: true
             default: false
             column: is_shared
+        levelId:
+            type: integer
+            nullable: true
+            column: level_id
     manyToOne:
         type:
             targetEntity: ModelContactType
@@ -105,6 +109,12 @@ Lists\ContactBundle\Entity\ModelContact:
             inversedBy: null
             joinColumns:
                 owner_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        level:
+            targetEntity: ModelContactLevel
+            joinColumns:
+                level_id:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks:

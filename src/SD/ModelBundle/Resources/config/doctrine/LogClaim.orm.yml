@@ -7,7 +7,7 @@ SD\ModelBundle\Entity\LogClaim:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         description:
             type: string
             length: 255

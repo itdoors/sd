@@ -191,18 +191,23 @@ class OrganizationRepository extends EntityRepository
      * Searches organization by $q
      *
      * @param string $q
+     * @param int    $organizationSignId
      *
      * @return mixed[]
      */
-    public function getSearchQuery($q)
+    public function getSearchQuery($q, $organizationSignId = null)
     {
         $sql = $this->createQueryBuilder('o')
             ->where('lower(o.name) LIKE :q')
             ->andWhere('o.parent_id is null')
-            ->setParameter(':q', '%'. mb_strtolower($q, 'UTF-8') . '%')
-            ->getQuery();
+            ->setParameter(':q', '%'. mb_strtolower($q, 'UTF-8') . '%');
 
-        return $sql->getResult();
+        if ($organizationSignId) {
+            $sql->andWhere('o.organizationSignId = :organizationSignId')
+                ->setParameter(':organizationSignId', $organizationSignId);
+        }
+
+        return $sql->getQuery()->getResult();
     }
 
     /**

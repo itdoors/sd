@@ -1,0 +1,47 @@
+Lists\HandlingBundle\Entity\HandlingCompetitor:
+    type: entity
+    table: handling_competitor
+    repositoryClass: Lists\HandlingBundle\Entity\HandlingCompetitorRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        handlingId:
+            type: integer
+            nullable: false
+            column: handling_id
+        competitorId:
+            type: integer
+            nullable: false
+            column: competitor_id
+        endDate:
+            type: date
+            nullable: true
+            column: end_date
+        strengths:
+            type: string
+            length: 255
+            nullable: true
+        weaknesses:
+            type: string
+            length: 255
+            nullable: true
+        total:
+            type: float
+            nullable: true
+    manyToOne:
+        competitor:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            joinColumns:
+                competitor_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        handling:
+            targetEntity: Handling
+            joinColumns:
+                handling_id:
+                    referencedColumnName: id
+            orphanRemoval: false

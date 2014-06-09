@@ -2,8 +2,8 @@
 
 namespace Lists\HandlingBundle\Entity;
 
-use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
+use Lists\ContactBundle\Entity\ModelContactRepository;
 
 /**
  * HandlingMessageRepository
@@ -99,5 +99,224 @@ class HandlingMessageRepository extends EntityRepository
         }
 
         return $result;
+    }
+
+    /**
+     * @param mixed[]   $filters
+     * @param mixed[]   $slugs
+     *
+     * @return array
+     */
+    public function getActivity($filters, $slugs)
+    {
+        if (isset($filters['endDate'])) {
+            $to = $filters['endDate'];
+        } else {
+            $to = new \DateTime();
+        }
+
+        $fromClone = clone $to;
+
+        $from = $fromClone->modify('-1 month');
+
+        /** @var \Doctrine\ORM\QueryBuilder $q */
+        $q = $this->createQueryBuilder('hm')
+            ->select('hm.id as id')
+            ->addSelect('hm.type_id as typeId')
+            ->addSelect('hm.createdate as createdate')
+            ->addSelect('handling.budget as budget')
+            ->addSelect('handling.pf1 as pf1')
+            ->addSelect('handling.isMarketing as marketing')
+            ->addSelect('handling.launchDate as launchDate')
+            ->addSelect('handling.square as square')
+            ->addSelect('handling.employees as employees')
+            ->addSelect('handling.id as handlingId')
+            ->addSelect('handling.createdatetime as handlingCreatedatetime')
+            ->addSelect('organization.id as organizationId')
+            ->addSelect('organization.name as organizationName')
+            ->addSelect('organizationGroup.name as organizationGroupName')
+            ->addSelect('user.id as userId')
+            ->addSelect("CONCAT(CONCAT(user.lastName, ' '), user.firstName) as userFullName")
+            ->addSelect("level.digit as levelDigit")
+            ->addSelect(
+                "
+                  array_to_string(
+                     ARRAY(
+                        SELECT
+                          hs.reportNumber
+                        FROM
+                          ListsHandlingBundle:HandlingService hs
+                        LEFT JOIN hs.handlings handlings
+                        WHERE handlings.id = handling.id
+                     ), ', '
+                   ) as serviceList"
+            )
+            ->addSelect(
+                "
+                  array_to_string(
+                     ARRAY(
+                        SELECT
+                          competitor1.name
+                        FROM
+                          ListsHandlingBundle:HandlingCompetitor hc1
+                          LEFT JOIN hc1.competitor competitor1
+                        WHERE hc1.handlingId = handling.id
+                     ), ','
+                   ) as competitorList"
+            )
+            ->addSelect(
+                "
+                  array_to_string(
+                     ARRAY(
+                        SELECT
+                          hc2.endDate
+                        FROM
+                          ListsHandlingBundle:HandlingCompetitor hc2
+                        WHERE hc2.handlingId = handling.id
+                     ), ','
+                   ) as competitorEndDate"
+            )
+            ->addSelect(
+                "
+                  array_to_string(
+                     ARRAY(
+                        SELECT
+                          hc3.total
+                        FROM
+                          ListsHandlingBundle:HandlingCompetitor hc3
+                        WHERE hc3.handlingId = handling.id
+                     ), ','
+                   ) as competitorPrice"
+            )
+            ->addSelect(
+                "
+                  array_to_string(
+                     ARRAY(
+                        SELECT
+                          hd3.dogovorId
+                        FROM
+                          ListsHandlingBundle:HandlingDogovor hd3
+                        WHERE hd3.handlingId = handling.id
+                     ), ','
+                   ) as dogovorList"
+            )
+            ->leftJoin('hm.user', 'user')
+            ->leftJoin('hm.handling', 'handling')
+            ->leftJoin('hm.contact', 'contact')
+            ->leftJoin('hm.type', 'type')
+            ->leftJoin('contact.level', 'level')
+            ->leftJoin('handling.organization', 'organization')
+            ->leftJoin('organization.group', 'organizationGroup')
+            ->where('hm.createdate >= :createdateFrom')
+            ->andWhere('hm.createdate <= :createdateTo')
+            ->andWhere('type.slug in (:reportSlugs)')
+            ->setParameter(':createdateFrom', $from, \Doctrine\DBAL\Types\Type::DATETIME)
+            ->setParameter(':createdateTo', $to, \Doctrine\DBAL\Types\Type::DATETIME)
+            ->setParameter(':reportSlugs', $slugs);
+
+        if (isset($filters['userId']) && $filters['userId']) {
+            $q
+                ->andWhere('user.id = :userId')
+                ->setParameter(':userId', $filters['userId']);
+        }
+
+        /** @var HandlingMessage[] $results */
+        $results = $q->getQuery()
+            ->getResult();
+
+        if (!sizeof($q)) {
+            return array();
+        }
+
+        $result = array();
+
+        foreach ($results as $handlingMessage) {
+            $handlingId = $handlingMessage['handlingId'];
+            $userId = $handlingMessage['userId'];
+            $organizationId = $handlingMessage['organizationId'];
+            $organizationName = $handlingMessage['organizationName'];
+            $typeId = $handlingMessage['typeId'];
+            $levelDigit = $handlingMessage['levelDigit'];
+            $serviceList = $handlingMessage['serviceList'];
+            $budget = $handlingMessage['budget'];
+            $pf1 = $handlingMessage['pf1'];
+            $launchDate = $handlingMessage['launchDate'];
+            $square = $handlingMessage['square'];
+            $employees = $handlingMessage['employees'];
+            $competitorList = $handlingMessage['competitorList'];
+            $competitorPrice = $handlingMessage['competitorPrice'];
+            $competitorEndDate = $handlingMessage['competitorEndDate'];
+            $marketing = $handlingMessage['marketing'];
+            $organizationGroupName = $handlingMessage['organizationGroupName'];
+            $dogovorList = $handlingMessage['dogovorList'];
+            $createdate = $handlingMessage['createdate'];
+            $handlingCreatedatetime = $handlingMessage['handlingCreatedatetime'];
+
+            if (!isset ( $result[$userId] )) {
+                $result[$userId] = array();
+                $result[$userId]['user'] = $handlingMessage['userFullName'];
+            }
+
+            if (!isset ( $result[$userId]['organizations'])) {
+                $result[$userId]['organizations'] = array();
+            }
+
+            if (!isset ( $result[$userId]['organizations'][$organizationId])) {
+                $result[$userId]['organizations'][$organizationId]['types'] = array();
+                $result[$userId]['organizations'][$organizationId]['name'] = $organizationName;
+                //$result[$userId]['organizations'][$organizationId]['levelDigit'][$levelDigit] = $levelDigit;
+                $result[$userId]['organizations'][$organizationId]['handlingId'] = $handlingId;
+                $result[$userId]['organizations'][$organizationId]['handlingCreatedatetime'] = $handlingCreatedatetime;
+                $result[$userId]['organizations'][$organizationId]['serviceList'] = $serviceList;
+                $result[$userId]['organizations'][$organizationId]['budget'] = $budget;
+                $result[$userId]['organizations'][$organizationId]['pf1'] = $pf1;
+                $result[$userId]['organizations'][$organizationId]['launchDate'] = $launchDate;
+                $result[$userId]['organizations'][$organizationId]['square'] = $square;
+                $result[$userId]['organizations'][$organizationId]['employees'] = $employees;
+                $result[$userId]['organizations'][$organizationId]['competitorList'] = $competitorList;
+                $result[$userId]['organizations'][$organizationId]['competitorPrice'] = $competitorPrice;
+                $result[$userId]['organizations'][$organizationId]['competitorEndDate'] = $competitorEndDate;
+                $result[$userId]['organizations'][$organizationId]['marketing'] = $marketing;
+                $result[$userId]['organizations'][$organizationId]['organizationGroupName'] = $organizationGroupName;
+                $result[$userId]['organizations'][$organizationId]['dogovorList'] = $dogovorList;
+            }
+
+            if (!isset( $result[$userId]['organizations'][$organizationId]['levelDigit'][$levelDigit] )) {
+                $result[$userId]['organizations'][$organizationId]['levelDigit'][$levelDigit] = $levelDigit;
+            }
+
+            /*$current = 0;
+
+            if (isset( $result[$userId]['organizations'][$organizationId]['types'][$typeId] )) {
+                $current = $result[$userId]['organizations'][$organizationId]['types'][$typeId];
+            }*/
+
+            $weekNumber = $this->getActivityWeekNumber($createdate, $to);
+
+            $result[$userId]['organizations'][$organizationId]['types'][$typeId] = $weekNumber;
+        }
+
+        return $result;
+    }
+
+    /**
+     * getActivityWeekNumber
+     *
+     * @param \DateTime $currentDate
+     * @param \DateTime $endDate
+     *
+     * @return int
+     */
+    protected function getActivityWeekNumber(\DateTime $currentDate, \DateTime $endDate)
+    {
+        $interval = $currentDate->diff($endDate);
+
+        $diffInDays = (int) $interval->format('%R%a');
+
+        $weekNumber = round($diffInDays / 7);
+
+        $weekNumber = $weekNumber == 0 ? 1 : $weekNumber;
+
+        return $weekNumber;
     }
 }

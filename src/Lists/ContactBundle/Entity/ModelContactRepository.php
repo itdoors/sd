@@ -107,6 +107,7 @@ class ModelContactRepository extends EntityRepository
             ->leftJoin('mc.user', 'creator')
             ->leftJoin('mc.owner', 'owner')
             ->leftJoin('mc.type', 'modelContactType')
+            ->leftJoin('mc.level', 'modelContactLevel')
             ->leftJoin('ListsOrganizationBundle:Organization', 'o', 'WITH', 'o.id = mc.modelId')
             //->leftJoin('o.users', 'users')
             ->where('mc.modelName = :modelName')

@@ -1,0 +1,25 @@
+{% trans_default_domain 'ListsHandlingBundle' %}
+<a class="btn green" id="handling-competitor-add-btn" href="#">
+    <i class="fa fa-plus"></i>
+    {% trans %}Add competitor{% endtrans %}
+</a>
+<div id="handling-competitor-add-holder" style="display: none"></div>
+{{ ajax_form_render_btn({
+    'selector' : '#handling-competitor-add-btn',
+    'formType' : 'handlingCompetitorType',
+    'successFunctions' : {
+        'competitor-list' : 'ITDoorsAjax.updateList'
+    },
+    'serviceDefault' : {
+        'alias' : 'handling.competitor.service',
+        'method' : 'addFormDefaults'
+    },
+    'serviceSave' : {
+        'alias' : 'handling.competitor.service',
+        'method' : 'saveForm'
+    },
+    'defaults' : {
+        'handlingId' : handlingId
+    },
+    'target' : '#handling-competitor-add-holder'
+}) }}

@@ -12,6 +12,8 @@ parameters:
     ajax.paginator.namespace.oper.department.table: "oper.paginator.department.table"
     ajax.paginator.namespace.oper.department.coworkers: "oper.paginator.department.coworkers"
     ajax.namespace.oper.department.schedule: "oper.department.schedule"
+    ajax.filter.namespace.report.activity: "report.activity"
+
 
 framework:
     #esi:             ~
@@ -46,6 +48,8 @@ twig:
         ajax_paginator_namespace_oper_department_table: %ajax.paginator.namespace.oper.department.table%
         ajax_paginator_namespace_oper_department_coworkers: %ajax.paginator.namespace.oper.department.coworkers%
         ajax_namespace_oper_department_schedule: %ajax.namespace.oper.department.schedule%
+        ajax_filter_namespace_report_activity: %ajax.filter.namespace.report.activity%
+
 
 # Assetic Configuration
 assetic:

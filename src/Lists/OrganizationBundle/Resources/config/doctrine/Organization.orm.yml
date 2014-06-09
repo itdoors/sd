@@ -8,7 +8,7 @@ Lists\OrganizationBundle\Entity\Organization:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         mpk:
             type: string
             length: 20
@@ -105,6 +105,10 @@ Lists\OrganizationBundle\Entity\Organization:
             type: integer
             nullable: true
             column: parent_id
+        organizationSignId:
+            type: integer
+            nullable: true
+            column: organization_sign_id
     manyToOne:
         city:
             targetEntity: Lists\CityBundle\Entity\City

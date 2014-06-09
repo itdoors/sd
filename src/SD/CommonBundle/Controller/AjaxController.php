@@ -11,6 +11,8 @@ use Lists\DogovorBundle\Entity\DopDogovor;
 use Lists\DogovorBundle\Entity\DopDogovorRepository;
 use Lists\HandlingBundle\Entity\Handling;
 use Lists\HandlingBundle\Entity\HandlingMessage;
+use Lists\HandlingBundle\Entity\HandlingRepository;
+use Lists\LookupBundle\Entity\LookupRepository;
 use SD\UserBundle\Entity\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,6 +47,38 @@ class AjaxController extends BaseFilterController
     );
 
     /**
+     * Returns list of competitors in json
+     *
+     * @return string
+     */
+    public function competitorAction()
+    {
+        $searchTextQ = $this->get('request')->query->get('q');
+        $searchTextQuery = $this->get('request')->query->get('query');
+
+        $searchText = $searchTextQ ? $searchTextQ : $searchTextQuery;
+
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $organizationsRepository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+        /** @var LookupRepository $lr */
+        $lr = $this->get('lists_lookup.repository');
+
+        $organizationCompetitorId = $lr->getFirstIdByLukey($lr::KEY__ORGANIZATION_SIGN_COMPETITOR);
+
+        $organizations = $organizationsRepository->getSearchQuery($searchText, $organizationCompetitorId);
+
+        $result = array();
+
+        foreach ($organizations as $organization) {
+            $result[] = $this->serializeObject($organization);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
      * Returns list of organizations in json
      *
      * @return string
@@ -66,6 +100,33 @@ class AjaxController extends BaseFilterController
 
         foreach ($organizations as $organization) {
             $result[] = $this->serializeObject($organization);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns list of organizations in json
+     *
+     * @return string
+     */
+    public function handlingAction()
+    {
+        $searchTextQ = $this->get('request')->query->get('q');
+        $searchTextQuery = $this->get('request')->query->get('query');
+
+        $searchText = $searchTextQ ? $searchTextQ : $searchTextQuery;
+
+        /** @var HandlingRepository $handlingRepository */
+        $handlingRepository = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling');
+
+        $handlings = $handlingRepository->getSearchQuery($searchText);
+
+        $result = array();
+
+        foreach ($handlings as $handling) {
+            $result[] = $this->serializeObject($handling);
         }
 
         return new Response(json_encode($result));
@@ -918,7 +979,7 @@ class AjaxController extends BaseFilterController
         }
 
         if ($defaultData && !is_array($defaultData)) {
-            $defaultData = json_decode($defaultData, true);
+            $defaultData = json_decode(stripslashes($defaultData), true);
         }
 
         if (sizeof($defaultData)) {
@@ -1387,6 +1448,47 @@ class AjaxController extends BaseFilterController
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($object);
+        $em->flush();
+    }
+
+
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function handlingCompetitorDelete($params)
+    {
+        $id = $params['id'];
+
+        $object = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingCompetitor')
+            ->find($id);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function handlingDogovorDelete($params)
+    {
+        $id = $params['id'];
+
+        $object = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingDogovor')
+            ->find($id);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
         $em->flush();
     }
 
@@ -2037,6 +2139,22 @@ class AjaxController extends BaseFilterController
 
             // Dogovor Update
             $sql = "UPDATE dogovor set organization_id = :organizationId where organization_id = :organizationChildId";
+            $statement = $connection->prepare($sql);
+            $statement->execute(array(
+                ':organizationId' => $organizationId,
+                ':organizationChildId' => $organizationChildId
+            ));
+
+            // Dogovor Customer Update
+            $sql = "UPDATE dogovor set customer_id = :organizationId where customer_id = :organizationChildId";
+            $statement = $connection->prepare($sql);
+            $statement->execute(array(
+                ':organizationId' => $organizationId,
+                ':organizationChildId' => $organizationChildId
+            ));
+
+            // Dogovor Performer Update
+            $sql = "UPDATE dogovor set performer_id = :organizationId where performer_id = :organizationChildId";
             $statement = $connection->prepare($sql);
             $statement->execute(array(
                 ':organizationId' => $organizationId,

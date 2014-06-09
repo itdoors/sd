@@ -29,4 +29,20 @@ class HandlingMessageTypeRepository extends EntityRepository
 
         return self::$list;
     }
+
+    /**
+     * @param array $slugs
+     *
+     * @return array
+     */
+    public function getListBySlug(array $slugs)
+    {
+        return self::createQueryBuilder('hmt')
+            ->where('hmt.slug in (:slugs)')
+            ->setParameter(':slugs', $slugs)
+            ->orderBy('hmt.reportSortorder')
+            ->getQuery()
+            ->getResult();
+
+    }
 }

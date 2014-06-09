@@ -25,6 +25,10 @@
                 url: '{{ path('sd_common_ajax_handling_save') }}'
             });
 
+            $('#pf1, #employees').editable({
+                url: '{{ path('sd_common_ajax_handling_save') }}'
+            });
+
             $('#statusId').editable({
                 url: '{{ path('sd_common_ajax_handling_save') }}',
                 source: '{{ path('sd_common_ajax_handling_status') }}'
@@ -86,6 +90,37 @@
                 }
             });
 
+            $('#isMarketing').editable({
+                url: '{{ path('sd_common_ajax_handling_save') }}',
+                source: {{  handling.isMarketingChoices|json_encode|raw }}
+            });
+
+            $('.sd-editable').editable({
+                url: '{{ path('sd_common_ajax_handling_save') }}'
+            });
+
+            $('.sd-dogovor-date').live('mouseover', function(e){
+
+                e.preventDefault();
+
+                $(this).on('shown', function(e, editable) {
+
+                    var input = editable.input.$input;
+
+                    input.attr('readonly', 'readonly');
+
+                    input.datepicker({
+                        rtl: App.isRTL(),
+                        autoclose: true,
+                        format: "dd.mm.yyyy",
+                        pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
+                        language: 'ru',
+                        startView: 'decade',
+                        //endDate: new Date(),
+                        weekStart: 1
+                    });
+                });
+            });
         {% endif %}
     })
 
@@ -193,14 +228,41 @@
                     </a>
                 </td>
             </tr>
+            <tr> {# 6 #}
+                <td>{% trans %}PF1{% endtrans %}</td>
+                <td>
+                    <a href="#" id="pf1" data-type="text" data-pk="{{ handling.0.id }}" data-placement="right" data-value="{{ handling.0.pf1 }}" data-placeholder="{% trans %}Enter pf1{% endtrans %}">{{ handling.0.pf1 }}</a>
+                </td>
+                <td>{% trans %}Employees{% endtrans %}</td>
+                <td>
+                    <a href="#" id="employees" data-type="text" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.employees }}" data-original-title="{% trans %}Enter Employees{% endtrans %}">
+                        {{ handling.0.employees }}
+                    </a>
+                </td>
+            </tr>
             <tr>{# 7 #}
                 <td>{% trans %}Notice{% endtrans %}</td>
                 <td>
                     <a href="#" id="description" data-type="textarea" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.description }}" data-original-title="{% trans %}Enter Handling Notice{% endtrans %}">{{ handling.0.description }}</a>
                 </td>
-                <td>{% trans %}History{% endtrans %}</td>
+                <td>{% trans %}Launch date{% endtrans %}</td>
                 <td>
-
+                    <a href="#"
+                       class="sd-dogovor-date sd-editable {% if handling.0.launchDate is empty %} editable-empty {% endif %}"
+                       data-name="launchDateString"
+                       data-type="text"
+                       data-pk="{{ handling.0.id }}"
+                            {% if handling.0.launchDate %}
+                                data-value="{{ handling.0.launchDate|date("d.m.Y") }}"
+                            {% endif %}
+                       data-original-title="{% trans %}Edit{% endtrans %}"
+                            >
+                        {% if handling.0.launchDate %}
+                            {{ handling.0.launchDate|date("d.m.Y") }}
+                        {% else %}
+                            {% trans from 'messages' %}Enter value{% endtrans %}
+                        {% endif %}
+                    </a>
                 </td>
             </tr> {# 8 #}
             <tr>
@@ -226,8 +288,16 @@
                 </td>
             </tr>
             <tr> {# 9 #}
-                <td></td>
+                <td>{% trans %}Is Marketing{% endtrans %}</td>
                 <td>
+                    {% if handling.0.isMarketing %}
+                        {% set isMarketing ='Yes' %}
+                    {% else %}
+                        {% set isMarketing ='No' %}
+                    {% endif %}
+                    <a href="#" id="isMarketing" data-type="select" data-pk="{{ handling.0.id }}" data-value="{{ isMarketing }}" data-placement="right" data-original-title="{% trans %}Is Marketing{% endtrans %}">
+                        {{ isMarketing|trans({}, 'messages') }}
+                    </a>
                 </td>
                 <td></td>
                 <td></td>

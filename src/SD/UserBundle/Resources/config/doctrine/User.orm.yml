@@ -6,7 +6,7 @@ SD\UserBundle\Entity\User:
         id:
             type: integer
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
     fields:
         firstName:
             type: string

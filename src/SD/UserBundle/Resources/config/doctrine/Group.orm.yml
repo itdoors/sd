@@ -5,4 +5,4 @@ SD\UserBundle\Entity\Group:
         id:
             type: integer
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY

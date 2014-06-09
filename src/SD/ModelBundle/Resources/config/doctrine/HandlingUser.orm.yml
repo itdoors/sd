@@ -7,7 +7,7 @@ SD\ModelBundle\Entity\HandlingUser:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         part:
             type: bigint
             nullable: true

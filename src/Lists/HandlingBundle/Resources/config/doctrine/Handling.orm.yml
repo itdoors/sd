@@ -8,7 +8,7 @@ Lists\HandlingBundle\Entity\Handling:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         number:
             type: string
             length: 128
@@ -98,6 +98,22 @@ Lists\HandlingBundle\Entity\Handling:
             type: integer
             nullable: true
             column: type_id
+        isMarketing:
+            type: boolean
+            nullable: true
+            default: false
+            column: is_marketing
+        pf1:
+            type: float
+            nullable: true
+            column: pf1
+        launchDate:
+            type: date
+            nullable: true
+            column: launch_date
+        employees:
+            type: integer
+            nullable: true
     oneToMany:
         HandlingMessages:
           targetEntity: HandlingMessage

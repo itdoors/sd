@@ -81,30 +81,4 @@
             jQuery('#report-handling-advanced_wrapper .dataTables_length select').select2(); // modify table per page dropdown
         })
     </script>
-
-    <table class="table table-striped table-bordered table-advance table-hover" id="report-handling-advanced">
-        <thead>
-            <tr>
-                <th></th>
-                {% for type in types %}
-                    <th>{{ type }}</th>
-                {% endfor %}
-            </tr>
-        </thead>
-        <tbody>
-        {% for result in results %}
-            <tr>
-                <td>{{ result.user }}</td>
-                {% for type in types %}
-                    <td>
-                        {% if result[type.id] is defined %}
-                            {{ result[type.id] }}
-                        {% endif %}
-                    </td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
 {% endblock body %}

@@ -7,7 +7,7 @@ SD\ModelBundle\Entity\SfGuardUser:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         firstName:
             type: string
             length: 255

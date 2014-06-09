@@ -8,7 +8,7 @@ Lists\DogovorBundle\Entity\DogovorDepartment:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
         isActive:
             type: boolean
             nullable: true

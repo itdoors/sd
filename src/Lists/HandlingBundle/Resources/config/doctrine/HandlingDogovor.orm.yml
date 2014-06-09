@@ -1,0 +1,32 @@
+Lists\HandlingBundle\Entity\HandlingDogovor:
+    type: entity
+    table: handling_dogovor
+    repositoryClass: Lists\HandlingBundle\Entity\HandlingDogovorRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        handlingId:
+            type: integer
+            nullable: false
+            column: handling_id
+        dogovorId:
+            type: integer
+            nullable: false
+            column: dogovor_id
+    manyToOne:
+        dogovor:
+            targetEntity: Lists\DogovorBundle\Entity\Dogovor
+            joinColumns:
+                dogovor_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        handling:
+            targetEntity: Handling
+            joinColumns:
+                handling_id:
+                    referencedColumnName: id
+            orphanRemoval: false

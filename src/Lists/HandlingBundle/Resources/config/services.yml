@@ -9,16 +9,32 @@ parameters:
     lists_handling.form.user.class: Lists\HandlingBundle\Form\HandlingUserFormType
     lists_handling.sales.form.report.class: Lists\HandlingBundle\Form\HandlingReportDateRangeForm
 
+    lists_handling.competitor.form.class: Lists\HandlingBundle\Form\HandlingCompetitorType
+    lists_handling.dogovor.form.class: Lists\HandlingBundle\Form\HandlingDogovorType
+
     lists_handling.createdate_range.validator.class: Lists\HandlingBundle\Validator\CreatedateRangeValidator
 
     lists_handling.message.repository.class: Lists\HandlingBundle\Entity\HandlingMessageRepository
     lists_handling.message.repository.entity: Lists\HandlingBundle\Entity\HandlingMessage
+
+    lists_handling.message.service.class: Lists\HandlingBundle\Services\HandlingMessageService
+    lists_handling.competitor.service.class: Lists\HandlingBundle\Services\HandlingCompetitorService
+    lists_handling.dogovor.service.class: Lists\HandlingBundle\Services\HandlingDogovorService
+
+    lists_handling.message.type.repository.class: Lists\HandlingBundle\Entity\HandlingMessageTypeRepository
+    lists_handling.message.type.repository.entity: Lists\HandlingBundle\Entity\HandlingMessageType
 
     lists_handling.message.view.repository.class: Lists\HandlingBundle\Entity\HandlingMessageViewRepository
     lists_handling.message.view.repository.entity: Lists\HandlingBundle\Entity\HandlingMessageView
 
     lists_handling.repository.class: Lists\HandlingBundle\Entity\HandlingRepository
     lists_handling.repository.entity: Lists\HandlingBundle\Entity\Handling
+
+    lists_handling.competitor.repository.class: Lists\HandlingBundle\Entity\HandlingCompetitorRepository
+    lists_handling.competitor.repository.entity: Lists\HandlingBundle\Entity\HandlingCompetitor
+
+    lists_handling.dogovor.repository.class: Lists\HandlingBundle\Entity\HandlingDogovorRepository
+    lists_handling.dogovor.repository.entity: Lists\HandlingBundle\Entity\HandlingDogovor
 
 services:
     lists_handling.repository:
@@ -30,11 +46,62 @@ services:
     handling.repository:
         alias: lists_handling.repository
 
+    lists_handling.message.service:
+        class: %lists_handling.message.service.class%
+        arguments: [ @service_container ]
+
+    handling.message.service:
+        alias: lists_handling.message.service
+
+    lists_handling.competitor.service:
+        class: %lists_handling.competitor.service.class%
+        arguments: [ @service_container ]
+
+    lists_handling.dogovor.service:
+        class: %lists_handling.dogovor.service.class%
+        arguments: [ @service_container ]
+
+    handling.competitor.service:
+        alias: lists_handling.competitor.service
+
+    handling.dogovor.service:
+        alias: lists_handling.dogovor.service
+
     lists_handling.message.repository:
         class: %lists_handling.message.repository.class%
         factory_service: doctrine # this is an instance of Registry
         factory_method: getRepository
         arguments: [ %lists_handling.message.repository.entity% ]
+
+    handling.message.repository:
+        alias: lists_handling.message.repository
+
+    lists_handling.competitor.repository:
+        class: %lists_handling.competitor.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_handling.competitor.repository.entity% ]
+
+    handling.competitor.repository:
+        alias: lists_handling.competitor.repository
+
+    lists_handling.dogovor.repository:
+        class: %lists_handling.dogovor.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_handling.dogovor.repository.entity% ]
+
+    handling.dogovor.repository:
+        alias: lists_handling.dogovor.repository
+
+    lists_handling.message.type.repository:
+        class: %lists_handling.message.type.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_handling.message.type.repository.entity% ]
+
+    handling.message.type.repository:
+          alias: lists_handling.message.type.repository
 
     lists_handling.message.view.repository:
         class: %lists_handling.message.view.repository.class%
@@ -104,3 +171,15 @@ services:
             -
                 name: validator.constraint_validator
                 alias: createdate_range
+
+    lists_handling.form.handlingCompetitorType:
+        class: %lists_handling.competitor.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: handlingCompetitorType }
+
+    lists_handling.form.handlingDogovorType:
+        class: %lists_handling.dogovor.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: handlingDogovorType }
