@@ -1,0 +1,10 @@
+<?php
+
+namespace Lists\DepartmentBundle\Entity;
+
+/**
+ * PlannedAccrual
+ */
+class PlannedAccrual
+{
+}

@@ -1,15 +1,27 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
+{% if status == 'vacation' %}
+    {% trans %}Vacation{% endtrans %}
+{% elseif status == 'sick' %}
+    {% trans %}Sick{% endtrans %}
+{% elseif status == 'skip' %}
+    {% trans %}Skip{% endtrans %}
+{% elseif status == 'fired' %}
+    {% trans %}Fired{% endtrans %}
+{% elseif status == 'ok' %}
 
-{% set showNothing = true %}
-{% if officially is defined  and officially != 0%}
-    {{ officially|number_format(2) }} <br>
-    {% set showNothing = false %}
-{% endif %}
+    {% set showNothing = true %}
+    {% if officially is defined  and officially != 0%}
+        {{ officially|number_format(2) }} <br>
+        {% set showNothing = false %}
+    {% endif %}
 
-{% if notOfficially is defined  and notOfficially != 0%}
-    <span style="color: red">{{ notOfficially|number_format(2) }}</span>
-    {% set showNothing = false %}
-{% endif %}
+    {% if notOfficially is defined  and notOfficially != 0%}
+        <span style="color: red">{{ notOfficially|number_format(2) }}</span>
+        {% set showNothing = false %}
+    {% endif %}
 
-{% if showNothing %}
-    -
+    {% if showNothing %}
+        -
+    {% endif %}
+
 {% endif %}

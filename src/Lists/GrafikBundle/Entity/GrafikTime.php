@@ -516,4 +516,12 @@ class GrafikTime
     {
         return $this->notOfficially;
     }
+
+    /**
+     * __clone method
+     */
+    public function __clone()
+    {
+        $this->id = null;
+    }
 }

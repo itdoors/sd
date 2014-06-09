@@ -7,6 +7,7 @@ Show departments: Список отделений
 Notice all departments: Отображаются все доступные Вам отделения
 Filter Settings: Настройки фильтра
 Mpk: МПК
+Fio: ФИО
 Name: Название
 FullName: Полное название
 Address: Адрес
@@ -114,8 +115,8 @@ Evening kind: Вечерних
 Night kind: Ночных
 Edit: Редактировать
 Delete: Удалить
-Illness vacation: Заболел
-Hooky: Прогул
+Sick: Заболел
+Skip: Прогул
 Fired: Уволен
 Vacation: Отпуск
 Clear: Очистить
@@ -128,3 +129,27 @@ Error: Ошибка
 Non-official person cant  work officially: Официальное время не допускается для этого пользователя
 Do you confirm deleting: Вы подтверждаете удаление
 Current date: Текущая дата
+Wrong from-to time: Неверно заполненое время
+Cleared: Очищен
+Success: Успешно
+Status changed for: Статус изменен на
+Coworker was fired: Сотрудник уволен
+This time is already busy: Это время уже занято
+Select dates: Выберите даты
+Copy graf: Скопировать график
+Dates, what haven't been copied: Такой график недопустим для этого пользователя в днях
+All dates where copied: Все даты были успешно скопированы
+People, what haven't been copied: Такой график недопустим для пользователей
+Copy finished: Копирование завершено
+Exit: Закрыть
+Choose etalon: Выберите эталон
+
+P/z: П/З
+Add coworker: Добавить сотрудника
+Add coworker to grafik: Добавить сотрудника в график
+Officially: Официально
+Not officially: Неофициально
+Once accrural: Разовые начисления
+
+Date accepted simple: Дата приема
+Date faired simple : Дата увольнения
