@@ -2980,7 +2980,8 @@ class AjaxController extends BaseFilterController
     /**
      * @return Response
      */
-    public function departmentIndividualGrafikAction() {
+    public function departmentIndividualGrafikAction()
+    {
         $idDepartment = $this->get('request')->request->get('pk');
 
         $repository = $this->getDoctrine()

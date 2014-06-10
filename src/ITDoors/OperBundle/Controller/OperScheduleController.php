@@ -1378,8 +1378,8 @@ class OperScheduleController extends BaseFilterController
         return new Response(json_encode($return));
     }
 
-    public function addUserToGrafik()
+/*    public function addUserToGrafik()
     {
 
-    }
+    }*/
 }
