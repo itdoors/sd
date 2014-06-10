@@ -1240,7 +1240,7 @@ class OperScheduleController extends BaseFilterController
             $check = false;
         }
         for ($i=1; $i<=date("t", strtotime($year.'-'.$month)); $i++) {
-            $return = $this->checkErrorsForChangingDate($idCoworker, $date.'-01', $check );
+            $return = $this->checkErrorsForChangingDate($idCoworker, $date.'-01', $check);
             if ($return['success'] == 1) {
                 break;
             }

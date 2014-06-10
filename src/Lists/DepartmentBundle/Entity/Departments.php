@@ -529,12 +529,13 @@ class Departments
      * Set mpk
      *
      * @param string $mpk
+     *
      * @return Departments
      */
     public function setMpk($mpk)
     {
         $this->mpk = $mpk;
-    
+
         return $this;
     }
 
