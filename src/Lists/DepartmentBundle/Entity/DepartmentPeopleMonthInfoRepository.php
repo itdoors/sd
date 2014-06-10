@@ -23,7 +23,7 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
      */
     public function getFilteredCoworkers($idDepartment, $month, $year, $filters = array())
     {
-        $query = $this->createQueryBuilder('dpmi')
+        $sql = $this->createQueryBuilder('dpmi')
             ->select('dpmi.departmentPeopleId as id')
             ->addSelect('i.firstName')
             ->addSelect('i.lastName')
@@ -47,9 +47,36 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
             ->andWhere('dpmi.year = :year')
             ->setParameter(':year', $year)
             ->andWhere('dpmi.month = :month')
-            ->setParameter(':month', $month)
+            ->setParameter(':month', $month);
             //->groupBy('g.departmentPeopleId')
-            ->getQuery();
+
+
+        if (sizeof($filters)) {
+
+            foreach ($filters as $key => $value) {
+                if (!$value) {
+                    continue;
+                }
+                switch ($key) {
+                    case 'mpk':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $sql->andWhere('m.id in (:idsMpk)');
+                        $sql->setParameter(':idsMpk', explode(',', $value));
+                        break;
+                    case 'coworker':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $sql->andWhere('i.id  in (:idsUser)');
+                        $sql->setParameter(':idsUser', explode(',', $value));
+                        break;
+                }
+            }
+        }
+
+        $query = $sql->getQuery();
 
         return $query;
 
