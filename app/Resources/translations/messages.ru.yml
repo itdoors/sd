@@ -14,6 +14,9 @@ Logout: Выход
 
 #MENU
 Dashboard: Рабочий стол
+
+#menu role_oper:
+Opermanager: Оперменеджер
 #menu role_sales
 My Sales: Мои продажи
 My Contacts: Мои контакты
