@@ -1,6 +1,18 @@
 sd_user_index:
     pattern:  /user/index
     defaults: { _controller: SDUserBundle:User:index }
+    
+sd_user_staff:
+    pattern:  /user/staff
+    defaults: { _controller: SDUserBundle:User:staff }
+    
+sd_user_stafflist:
+    pattern:  /user/staff/list
+    defaults: { _controller: SDUserBundle:User:stafflist }
+    
+sd_user_staff_filter:
+    pattern:  /user/staff/filter
+    defaults: { _controller: SDUserBundle:User:filter }
 
 sd_user_show:
     pattern:  /user/show/{id}

@@ -509,6 +509,89 @@ class AjaxController extends Controller
     }
 
     /**
+     * Returns json users list
+     *
+     * @return string
+     */
+    public function userFIOAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        /** @var \SD\UserBundle\Entity\UserRepository $repository */
+        $repository = $this->container->get('sd_user.repository');
+
+        $objects = $repository->getOnlyStaff()
+            ->andWhere('lower(u.firstName) LIKE :q OR lower(u.lastName) LIKE :q OR lower(u.middleName) LIKE :q')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $nameFirst = $this->serializeObject($object, false, 'getFirstName');
+            $nameLast = $this->serializeObject($object, false, 'getLastName');
+            $nameMiddle = $this->serializeObject($object, false, 'getMiddleName');
+            $nameFirst['text'] .= ' '.$nameLast['text'].' '.$nameMiddle['text'];
+            $result[] = $nameFirst;  
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json users list
+     *
+     * @return string
+     */
+    public function userPositionAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        /** @var \SD\UserBundle\Entity\UserRepository $repository */
+        $repository = $this->container->get('sd_user.repository');
+
+        $objects = $repository->getOnlyStaff()
+            ->andWhere('lower(u.position) LIKE :q')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object, false, 'getPosition');
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json users list
+     *
+     * @return string
+     */
+    public function userEmailAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        /** @var \SD\UserBundle\Entity\UserRepository $repository */
+        $repository = $this->container->get('sd_user.repository');
+
+        $objects = $repository->getOnlyStaff()
+            ->andWhere('lower(u.email) LIKE :q')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object, false, 'getEmail');
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
      * Returns json contact phones list already user in other contacts
      *
      * @return string

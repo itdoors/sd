@@ -3,6 +3,8 @@
 namespace SD\UserBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Query;
 
 /**
  * UserRepository
@@ -15,7 +17,7 @@ class UserRepository extends EntityRepository
     /**
      * Get Only stuff
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getOnlyStaff()
     {
@@ -25,7 +27,6 @@ class UserRepository extends EntityRepository
             //->setParameter(':isFired', false)
             ->innerJoin('u.staff', 'staff')
             ->orderBy('u.lastName', 'ASC');
-
     }
 
     /**
@@ -33,7 +34,7 @@ class UserRepository extends EntityRepository
      *
      * @param int $organizationId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getOrganizationUsersQuery($organizationId)
     {
@@ -50,7 +51,7 @@ class UserRepository extends EntityRepository
      *
      * @param int $handlingId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getHandlingUsersQuery($handlingId)
     {
@@ -60,5 +61,145 @@ class UserRepository extends EntityRepository
             ->innerJoin('u.handlings', 'handlings')
             ->where('handlings.id = :handlingId')
             ->setParameter(':handlingId', $handlingId);
+    }
+    
+    
+    /**
+     * Processes sql query. adding select
+     *
+     * @param QueryBuilder $sql
+     */
+    public function processSelect(QueryBuilder $sql)
+    {
+        $sql
+            ->select('u.id as id')
+            ->addSelect('u.firstName')
+            ->addSelect('u.lastName')
+            ->addSelect('u.middleName')
+            ->addSelect('u.position')
+            ->addSelect('s.mobilephone')
+            ->addSelect('u.email')
+            ->addSelect('u.isBlocked')
+            ->addSelect('u.isFired')
+        ;
+    }
+    /**
+     * Processes sql query. adding select
+     *
+     * @param QueryBuilder $sql
+     */
+    public function processCount(QueryBuilder $sql)
+    {
+        $sql->select('COUNT(u.id) as usercount');
+
+    }
+    
+    /**
+     * Processes sql query. adding base query
+     *
+     * @param QueryBuilder $sql
+     */
+    public function processBaseQuery(QueryBuilder $sql)
+    {
+        $sql
+            ->leftJoin('u.staff', 's')
+        ;
+            /*->leftJoin('o.city', 'c')
+            ->leftJoin('c.region', 'r');*/
+    }
+     /**
+     * Processes sql query. adding id query
+     *
+     * @param QueryBuilder $sql
+     * @param int $id
+     */
+    public function processIdQuery(QueryBuilder $sql, $id)
+    {
+        $sql
+            ->andWhere('u.id = :id')
+            ->setParameter(':id', $id);
+    }
+    
+    
+     /**
+     * Processes sql query depending on filters
+     *
+     * @param QueryBuilder $sql
+     * @param mixed[] $filters
+     */
+    public function processFilters(QueryBuilder $sql, $filters)
+    {
+        
+        if (sizeof($filters))
+        {
+            foreach($filters as $key => $value)
+            {
+                if (!$value)
+                {
+                    continue;
+                }
+                switch($key)
+                {
+                    case 'isActive':
+                        $sql->andWhere("u.isBlocked = :active");
+                        $sql->setParameter(':active', ($value == 'active'? 0 : 1));
+                        break;
+                    case 'isFired':
+                        $sql->andWhere("u.isFired = :fired");
+                        $sql->setParameter(':fired', ($value == 'fired'? 0 : 1));
+                        break;
+                    default :
+                        $sql->andWhere("u.id IN (:userIds)");
+                        $ids = explode(',', $value);
+                        $sql->setParameter(':userIds', $ids);
+                }
+
+            }
+        }
+    }
+    
+    
+     /**
+     * Processes sql query. adding users query
+     *
+     * @param \Doctrine\ORM\QueryBuilder $sql
+     */
+    public function processOrdering($sql)
+    {
+        $sql->orderBy('u.firstName', 'ASC');
+    }
+    public function getAllForUserQuery($filters, $id = null)
+    {
+        /** @var \Doctrine\ORM\QueryBuilder $sql*/
+        $sql = $this->createQueryBuilder('u');
+
+        /** @var \Doctrine\ORM\QueryBuilder $sqlCount */
+        $sqlCount = $this->createQueryBuilder('u');
+
+        $this->processSelect($sql);
+        $this->processCount($sqlCount);
+
+        $this->processBaseQuery($sql);
+        $this->processBaseQuery($sqlCount);
+
+        if ($id)
+        {
+            $this->processIdQuery($sql, $id);
+            $this->processIdQuery($sqlCount, $id);
+        }
+        else
+        {
+            $this->processFilters($sql, $filters);
+            $this->processFilters($sqlCount, $filters);
+        }
+
+        $this->processOrdering($sql);
+
+        $query = array(
+            'entity' =>$sql->getQuery(),
+            'count' =>$sqlCount->getQuery()->getSingleScalarResult()
+            );
+
+        return $query;
     }
 }

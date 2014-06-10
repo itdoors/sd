@@ -3,30 +3,75 @@
 namespace SD\UserBundle\Controller;
 
 use SD\UserBundle\Entity\Staff;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
 use SD\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\DBAL\Connection;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
     protected $baseTemplate = 'User';
+    protected $filterNamespace = 'staffFilterForm';
+    protected $filterFormName = 'staffFilterForm';
+    protected $baseRoute = 'sd_user_staff';
 
+    /** @var KnpPaginatorBundle $paginator */
+    protected $paginator = 'knp_paginator';
     /**
      * Executes index action
      */
-    public function indexAction()
+//    public function indexAction()
+//    {
+//        $users = $this->get('sd_user.repository')->getOnlyStaff()
+//            ->getQuery()
+//            ->getResult();
+//
+//        return $this->render('SDUserBundle:' . $this->baseTemplate . ':index.html.twig', array(
+//                'items' => $users,
+//                'baseTemplate' => $this->baseTemplate
+//            ));
+//    }
+    /**
+     * Executes index action
+     */
+    public function staffAction()
     {
-        $users = $this->get('sd_user.repository')->getOnlyStaff()
-            ->getQuery()
-            ->getResult();
 
-        return $this->render('SDUserBundle:' . $this->baseTemplate . ':index.html.twig', array(
-                'items' => $users,
+        return $this->render('SDUserBundle:' . $this->baseTemplate . ':staff.html.twig', array(
                 'baseTemplate' => $this->baseTemplate
             ));
     }
 
+    public function stafflistAction()
+    {
+        $filterNamespace = $this->filterNamespace;
+        
+        $Form = $this->createForm($this->filterFormName);
+
+        $filterForm = $Form->bind($this->getFilters());
+        
+        $users = $this->get('sd_user.repository')->getAllForUserQuery($this->getFilters());
+        $entities = $users['entity'];
+        $count = $users['count'];
+        
+         $namespasePagin = $filterNamespace.'P';
+//        $page = $this->getPaginator($namespasePagin);
+//        if (!$page) {
+//            $page = 1;
+//        }
+//
+//        $paginator = $this->container->get($this->paginator);
+//        $entities->setHint($this->paginator . '.count', $count);
+//        $pagination = $paginator->paginate($entities, $page, 10);
+
+        return $this->render('SDUserBundle:' . $this->baseTemplate . ':stafflist.html.twig', array(
+                'namespasePagin' => $namespasePagin,
+                'items' => $entities->getResult(),
+                'filterForm' => $filterForm->createView(),
+                'filterFormName' => $this->filterFormName,
+                'baseTemplate' => $this->baseTemplate
+            ));
+    }
     /**
      * Execute show action
      */
