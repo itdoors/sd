@@ -1,7 +1,7 @@
 {% trans_default_domain 'ListsOrganizationBundle' %}
 
 <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
         SD.select2('#' + '{{ filterForm.vars.name }}' + '_firstName', {
             multiple: true
         });
@@ -23,20 +23,20 @@
 </script>
 
 <div class="row ">
-	<div class="col-md-12">
-		<div class="portlet box yellow">
-			<div class="portlet-title">
-				<div class="caption">
+    <div class="col-md-12">
+        <div class="portlet box yellow">
+            <div class="portlet-title">
+                <div class="caption">
                     <i class="fa fa-reorder"></i>
                     {{ 'Filters'|trans({}, 'messages') }}
                 </div>
-				<div class="tools"><a class="collapse" href="" title="{% trans %}Filters{% endtrans %}"></a></div>
-			</div>
-			<div class="portlet-body">
+                <div class="tools"><a class="collapse" href="" title="{% trans %}Filters{% endtrans %}"></a></div>
+            </div>
+            <div class="portlet-body">
                 <p>{% trans %}Enter filter parameters and press Filter button.{% endtrans %}</p>
                 {{ form_start(filterForm,
                     {
-                        'action': path('sd_user_staff_filter'),
+                        'action': path('sd_user_stafflist'),
                         'attr': {'novalidate': 'novalidate', 'class': 'form-inline', 'role': 'form'}
                     })
                 }}
@@ -85,7 +85,7 @@
                         }}) }#}
                     </div>
                 </div>
-                    <br>
+                <br>
                 <div class="row">
                     <div class="form-group col-md-3">
                         {{ form_widget(filterForm.isActive, {'attr': {
@@ -117,7 +117,7 @@
                     </div>
                 </div>
                 {{ form_end(filterForm) }}
-		    </div>
-		</div>
-	</div>
+            </div>
+        </div>
+    </div>
 </div>

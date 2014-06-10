@@ -1,21 +1,12 @@
 {% trans_default_domain 'SDUserBundle' %}
-
-{{  include(
-        'SDUserBundle:User:filters.html.twig',
-        {
-            filterForm: filterForm,
-            filterFormName: filterFormName
-        }
-        )
-    }}
-{#<div class="navigation">
+<div class="navigation">
     {{ ajax_paginator_render(
-            items, namespasePagin, {
+            items, namespase, {
                     'datatable_ajax': 'ITDoorsAjax.updateList'
                 }
             )
     }}
-</div>#}
+</div>
 <div class="table-scrollable">
     {% if items|length %}
         <table class="table table-striped table-bordered table-advance table-hover" id="user-list">
@@ -51,18 +42,18 @@
                     <td>{{ item.email|e }}</td>
                     <td>{{ item.position|e }}</td>
                     <td>где связь?</td>
-                    <td>{% if item.isBlocked %}blocked{% else %}active{% endif %}</td>
-                    <td>{% if item.isFired %}fired{% else %}No fired{% endif %}</td>
+                    <td>{% if item.isBlocked %}{% trans %}blocked{% endtrans %}{% else %}{% trans %}active{% endtrans %}{% endif %}</td>
+                    <td>{% if item.isFired %}{% trans %}fired{% endtrans %}{% else %}{% trans %}No fired{% endtrans %}{% endif %}</td>
                 </tr>
             {% endfor %}
         </table>
     {% endif %}
 </div>
-{#<div class="navigation">
+<div class="navigation">
     {{ ajax_paginator_render(
-            items, namespasePagin, {
+            items, namespase, {
                     'datatable_ajax': 'ITDoorsAjax.updateList'
                 }
             )
     }}
-</div>#}
+</div>

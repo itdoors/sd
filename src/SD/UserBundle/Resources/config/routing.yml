@@ -9,10 +9,6 @@ sd_user_staff:
 sd_user_stafflist:
     pattern:  /user/staff/list
     defaults: { _controller: SDUserBundle:User:stafflist }
-    
-sd_user_staff_filter:
-    pattern:  /user/staff/filter
-    defaults: { _controller: SDUserBundle:User:filter }
 
 sd_user_show:
     pattern:  /user/show/{id}

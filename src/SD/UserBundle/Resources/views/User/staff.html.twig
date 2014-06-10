@@ -30,6 +30,9 @@
 {% endblock %}
 
 {% block body %}
+    {{ ajax_filter_render('staffFilterForm', namespase, {
+        'datatable_ajax': 'ITDoorsAjax.updateList'
+    }) }}
     <div class="row">
 
         <div id="datatable_ajax"  data-url="{{ url('sd_user_stafflist') }}">

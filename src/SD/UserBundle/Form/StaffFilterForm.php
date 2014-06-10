@@ -9,6 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class StaffFilterForm extends AbstractType
 {
+
     /**
      * @var \ProjectServiceContainer $container
      */
@@ -30,29 +31,74 @@ class StaffFilterForm extends AbstractType
 
         $translator = $this->container->get('translator');
 
-        $builder
-            ->add('firstName')
-            ->add('email')
-            ->add('position')
-            ->add('isActive','choice', array(
-                'choices'   =>  array(
-                       'active' => $translator->trans("Active", array(), 'SDUserBundle.ru'),
-                        'blocked' => $translator->trans("Blocked", array(), 'SDUserBundle.ru'),
-                    ),
-                'empty_value' =>  ''
-            ))
-            ->add('isFired','choice', array(
-                'choices'   =>  array(
-                        'fired' => $translator->trans("Fired", array(), 'SDUserBundle.ru'),
-                        'No fired' => $translator->trans("No fired", array(), 'SDUserBundle.ru'),
-                    ),
-                'empty_value' =>  ''
-            ))
-            ;
-
+        $router = $this->container->get('router');
 
         $builder
-            ->add('save', 'submit')
+            ->add('firstName', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_user_fio'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 2,
+                        'allowClear' => true,
+                        'width' => '200px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter fio',
+                )
+            ))
+            ->add('email', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_user_email'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 2,
+                        'allowClear' => true,
+                        'width' => '200px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter email',
+                )
+            ))
+            ->add('position', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_user_position'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 2,
+                        'allowClear' => true,
+                        'width' => '200px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter position',
+                )
+            ))
+            ->add('isActive', 'choice', array(
+                'attr' => array(
+                    'class' => 'form-control select2 input-middle',
+                    'placeholder' => 'Status'
+                ),
+                'choices' => array(
+                    'active' => $translator->trans("Active", array(), 'SDUserBundle.ru'),
+                    'blocked' => $translator->trans("Blocked", array(), 'SDUserBundle.ru'),
+                ),
+                'empty_value' => ''
+            ))
+            ->add('isFired', 'choice', array(
+                'attr' => array(
+                    'class' => 'form-control select2 input-middle',
+                    'placeholder' => 'Fired'
+                ),
+                'choices' => array(
+                    'fired' => $translator->trans("Fired", array(), 'SDUserBundle.ru'),
+                    'No fired' => $translator->trans("No fired", array(), 'SDUserBundle.ru'),
+                ),
+                'empty_value' => ''
+            ))
+            ->add('submit', 'submit')
             ->add('reset', 'submit');
     }
 

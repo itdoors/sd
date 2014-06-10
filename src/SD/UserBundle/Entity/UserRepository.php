@@ -145,8 +145,12 @@ class UserRepository extends EntityRepository
                         $sql->setParameter(':active', ($value == 'active'? 0 : 1));
                         break;
                     case 'isFired':
-                        $sql->andWhere("u.isFired = :fired");
-                        $sql->setParameter(':fired', ($value == 'fired'? 0 : 1));
+                        if($value !== 'fired'){
+                            $sql->andWhere("u.isFired is NULL or u.isFired = :fired");
+                        }else{                            
+                            $sql->andWhere("u.isFired = :fired");
+                        }
+                        $sql->setParameter(':fired', ($value == 'fired'? 1 : 0));
                         break;
                     default :
                         $sql->andWhere("u.id IN (:userIds)");
