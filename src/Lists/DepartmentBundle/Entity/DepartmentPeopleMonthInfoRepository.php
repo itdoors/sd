@@ -51,32 +51,33 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
             //->groupBy('g.departmentPeopleId')
 
 
-            if (sizeof($filters)) {
+        if (sizeof($filters)) {
 
-                foreach ($filters as $key => $value) {
-                    if (!$value) {
-                        continue;
-                    }
-                    switch ($key) {
-                        case 'mpk':
-                            if (isset($value[0]) && !$value[0]) {
-                                break;
-                            }
-                            $sql->andWhere('m.id in (:idsMpk)');
-                            $sql->setParameter(':idsMpk', explode(',', $value));
+            foreach ($filters as $key => $value) {
+                if (!$value) {
+                    continue;
+                }
+                switch ($key) {
+                    case 'mpk':
+                        if (isset($value[0]) && !$value[0]) {
                             break;
-                        case 'coworker':
-                            if (isset($value[0]) && !$value[0]) {
-                                break;
-                            }
-                            $sql->andWhere('i.id  in (:idsUser)');
-                            $sql->setParameter(':idsUser', explode(',', $value));
+                        }
+                        $sql->andWhere('m.id in (:idsMpk)');
+                        $sql->setParameter(':idsMpk', explode(',', $value));
+                        break;
+                    case 'coworker':
+                        if (isset($value[0]) && !$value[0]) {
                             break;
-                    }
+                        }
+                        $sql->andWhere('i.id  in (:idsUser)');
+                        $sql->setParameter(':idsUser', explode(',', $value));
+                        break;
                 }
             }
+        }
 
         $query = $sql->getQuery();
+
         return $query;
 
     }
