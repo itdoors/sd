@@ -2976,4 +2976,31 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($result));
     }
+
+    /**
+     * @return Response
+     */
+    public function departmentIndividualGrafikAction() {
+        $idDepartment = $this->get('request')->request->get('pk');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
+
+        $departmentPeople = $repository->findBy(array(
+            'department' => $idDepartment,
+        ));
+
+        $result = array();
+        if (is_array($departmentPeople)) {
+            foreach ($departmentPeople as $object) {
+                $result[] = $this->serializeObject($object);
+            }
+        } else {
+            $result[] = $this->serializeObject($departmentPeople);
+        }
+
+
+        return new Response(json_encode($result));
+
+    }
 }

@@ -209,3 +209,7 @@ sd_common_ajax_oper_schedule_year:
 sd_common_ajax_oper_schedule_year_by_id:
     pattern: /ajax/oper/schedule/year/by/id
     defaults: { _controller: SDCommonBundle:Ajax:yearsFromDepartmentById }
+
+sd_common_ajax_schedule_grafik_people:
+    pattern:  /ajax/schedule/grafik/people/
+    defaults: { _controller: SDCommonBundle:Ajax:departmentIndividualGrafik }

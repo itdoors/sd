@@ -67,7 +67,8 @@
             startDate: minDate,
             endDate: maxDate,
             format: 'yyyy/mm/dd',
-            multidate: true
+            multidate: true,
+            weekStart: 2
         }).on('show', function(e){
             var message = $('#copy_graf').data('message');
             $('#copy_graf').html(message);

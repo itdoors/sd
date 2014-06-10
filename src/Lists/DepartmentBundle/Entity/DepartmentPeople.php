@@ -1035,4 +1035,14 @@ class DepartmentPeople
     {
         return $this->mpks;
     }
+
+    /**
+     * toString menthod
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getFirstName().' '.$this->getLastName();
+    }
 }
