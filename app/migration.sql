@@ -389,3 +389,21 @@ ALTER TABLE dogovor_history ADD CONSTRAINT FK_32605586C06CDB2C FOREIGN KEY (dop_
 ALTER TABLE dogovor_history ADD CONSTRAINT FK_32605586A76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 +++++++++++
+
+CREATE SEQUENCE department_people_month_info_id_seq INCREMENT BY 1 MINVALUE 1 START 1;
+ALTER TABLE department_people_month_info ADD id BIGINT NOT NULL;
+ALTER TABLE department_people_month_info ALTER department_people_replacement_id DROP NOT NULL;
+DROP INDEX department_people_month_info_pkey;
+ALTER TABLE department_people_month_info ADD CONSTRAINT FK_BA53F01FEAC5BEFA FOREIGN KEY (department_people_id) REFERENCES department_people (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE UNIQUE INDEX UNIQ_BA53F01F49432DF9 ON department_people_month_info (department_people_replacement_id);
+CREATE INDEX IDX_BA53F01FEAC5BEFA ON department_people_month_info (department_people_id);
+ALTER TABLE department_people_month_info ADD PRIMARY KEY (id);
+CREATE UNIQUE INDEX department_people_month_info_unique_idx ON department_people_month_info (department_people_id, year, month, department_people_replacement_id, replacement_type);
+
+
+CREATE SEQUENCE once_only_accrual_id_seq INCREMENT BY 1 MINVALUE 1 START 1;
+CREATE TABLE once_only_accrual (id BIGINT NOT NULL, mpk_id BIGINT DEFAULT NULL, department_people_month_info_id BIGINT DEFAULT NULL, work_type VARCHAR(1) NOT NULL, type VARCHAR(2) NOT NULL, code VARCHAR(2) NOT NULL, value DOUBLE PRECISION NOT NULL, description VARCHAR(255) DEFAULT NULL, is_active BOOLEAN DEFAULT NULL, PRIMARY KEY(id));
+CREATE UNIQUE INDEX UNIQ_85E87E8C895D31C8 ON once_only_accrual (mpk_id);
+CREATE INDEX IDX_85E87E8C97E5C034 ON once_only_accrual (department_people_month_info_id);
+ALTER TABLE once_only_accrual ADD CONSTRAINT FK_85E87E8C895D31C8 FOREIGN KEY (mpk_id) REFERENCES mpk (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE once_only_accrual ADD CONSTRAINT FK_85E87E8C97E5C034 FOREIGN KEY (department_people_month_info_id) REFERENCES department_people_month_info (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
