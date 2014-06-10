@@ -28,6 +28,22 @@ class UserRepository extends EntityRepository
             ->innerJoin('u.staff', 'staff')
             ->orderBy('u.lastName', 'ASC');
     }
+    /**
+     * Get Only stuff
+     *
+     * @return Query
+     */
+    public function getOnlyStaffCompany()
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u', 'staff')
+            ->where('u.isFired = FALSE OR u.isFired IS NULL')
+            //->setParameter(':isFired', false)
+            ->innerJoin('u.staff', 'staff')
+            ->innerJoin('staff.companystructure', 'c')
+            ->groupBy('c.id')
+            ->orderBy('u.lastName', 'ASC');
+    }
 
     /**
      * Get users by organization
@@ -81,7 +97,7 @@ class UserRepository extends EntityRepository
             ->addSelect('u.email')
             ->addSelect('u.isBlocked')
             ->addSelect('u.isFired')
-            ->addSelect('organizations.name as organization')
+            ->addSelect('c.name as company')
         ;
     }
     /**
@@ -91,7 +107,8 @@ class UserRepository extends EntityRepository
      */
     public function processCount(QueryBuilder $sql)
     {
-        $sql->select('COUNT(u.id) as usercount');
+        $sql
+            ->select('COUNT(u.id) as usercount');
 
     }
     
@@ -104,7 +121,7 @@ class UserRepository extends EntityRepository
     {
         $sql
             ->leftJoin('u.staff', 's')
-            ->innerJoin('u.organizations', 'organizations')
+            ->leftJoin('s.companystructure', 'c')
         ;
             /*->leftJoin('o.city', 'c')
             ->leftJoin('c.region', 'r');*/

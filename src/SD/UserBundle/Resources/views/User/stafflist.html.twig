@@ -41,7 +41,7 @@
                     <td>{{ item.mobilephone }} </td>
                     <td>{{ item.email|e }}</td>
                     <td>{{ item.position|e }}</td>
-                    <td>{{ item.organization|e }}</td>
+                    <td>{{ item.company|e }}</td>
                     <td>{% if item.isBlocked %}{% trans %}blocked{% endtrans %}{% else %}{% trans %}active{% endtrans %}{% endif %}</td>
                     <td>{% if item.isFired %}{% trans %}fired{% endtrans %}{% else %}{% trans %}No fired{% endtrans %}{% endif %}</td>
                 </tr>

@@ -136,4 +136,32 @@ class Staff
     {
         return $this->user;
     }
+    /**
+     * @var \SD\UserBundle\Entity\Companystructure
+     */
+    private $companystructure;
+
+
+    /**
+     * Set companystructure
+     *
+     * @param \SD\UserBundle\Entity\Companystructure $companystructure
+     * @return Staff
+     */
+    public function setCompanystructure(\SD\UserBundle\Entity\Companystructure $companystructure = null)
+    {
+        $this->companystructure = $companystructure;
+    
+        return $this;
+    }
+
+    /**
+     * Get companystructure
+     *
+     * @return \SD\UserBundle\Entity\Companystructure 
+     */
+    public function getCompanystructure()
+    {
+        return $this->companystructure;
+    }
 }

@@ -28,3 +28,11 @@ SD\UserBundle\Entity\Staff:
           joinColumn:
             name: user_id
             referencedColumnName: id
+    manyToOne:
+        companystructure:
+          targetEntity: Lists\CompanystructureBundle\Entity\Companystructure
+          cascade: {  }
+          inversedBy: null
+          joinColumn:
+            companystructure_id:
+                referencedColumnName: id

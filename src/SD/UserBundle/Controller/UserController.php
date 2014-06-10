@@ -34,7 +34,6 @@ class UserController extends BaseController
     {
         $namespase = $this->filterNamespace;
         $filters = $this->getFilters($namespase);
-        
         $users = $this->get('sd_user.repository')->getAllForUserQuery($filters);
         $entities = $users['entity'];
         $count = $users['count'];

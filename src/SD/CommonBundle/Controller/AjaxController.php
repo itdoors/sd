@@ -529,11 +529,11 @@ class AjaxController extends Controller
         $result = array();
 
         foreach ($objects as $object) {
-            $nameFirst = $this->serializeObject($object, false, 'getFirstName');
-            $nameLast = $this->serializeObject($object, false, 'getLastName');
-            $nameMiddle = $this->serializeObject($object, false, 'getMiddleName');
-            $nameFirst['text'] .= ' '.$nameLast['text'].' '.$nameMiddle['text'];
-            $result[] = $nameFirst;  
+            $nameFirst = $this->serializeObject($object);
+//            $nameLast = $this->serializeObject($object, false, 'getLastName');
+//            $nameMiddle = $this->serializeObject($object, false, 'getMiddleName');
+            //$nameFirst['text'] .= ' '.$nameLast['text'].' '.$nameMiddle['text'];
+            $result[] = $nameFirst; 
         }
 
         return new Response(json_encode($result));
@@ -615,6 +615,36 @@ class AjaxController extends Controller
             'value' => $object->getId(),
             'name' => $object->getStaff()->getMobilephone(),
             'text' => $object->getStaff()->getMobilephone()
+        );
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json users list
+     *
+     * @return string
+     */
+    public function userStaffCompanyAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->container->get('sd_user.repository');
+        
+        $objects = $repository->getOnlyStaffCompany()
+            ->andWhere('lower(c.name) LIKE :q')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = array(
+            'id' => $object->getId(),
+            'value' => $object->getId(),
+            'name' => $object->getStaff()->getCompanystructure()->getName(),
+            'text' => $object->getStaff()->getCompanystructure()->getName()
         );
         }
 
