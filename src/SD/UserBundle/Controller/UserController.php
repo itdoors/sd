@@ -16,20 +16,7 @@ class UserController extends BaseController
     protected $baseRoute = 'sd_user_staff';
     /** @var KnpPaginatorBundle $paginator */
     protected $paginator = 'knp_paginator';
-    /**
-     * Executes index action
-     */
-//    public function indexAction()
-//    {
-//        $users = $this->get('sd_user.repository')->getOnlyStaff()
-//            ->getQuery()
-//            ->getResult();
-//
-//        return $this->render('SDUserBundle:' . $this->baseTemplate . ':index.html.twig', array(
-//                'items' => $users,
-//                'baseTemplate' => $this->baseTemplate
-//            ));
-//    }
+    
     /**
      * Executes index action
      */

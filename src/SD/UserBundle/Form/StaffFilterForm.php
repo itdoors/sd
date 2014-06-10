@@ -48,6 +48,20 @@ class StaffFilterForm extends AbstractType
                     'placeholder' => 'Enter fio',
                 )
             ))
+             ->add('mobilephone', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_contact_phone'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 2,
+                        'allowClear' => true,
+                        'width' => '200px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter phone',
+                )
+            ))
             ->add('email', 'text', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',

@@ -590,6 +590,36 @@ class AjaxController extends Controller
 
         return new Response(json_encode($result));
     }
+    /**
+     * Returns json users list
+     *
+     * @return string
+     */
+    public function userPhoneAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->container->get('sd_user.repository');
+        
+        $objects = $repository->getOnlyStaff()
+            ->andWhere('lower(staff.mobilephone) LIKE :q')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = array(
+            'id' => $object->getId(),
+            'value' => $object->getId(),
+            'name' => $object->getStaff()->getMobilephone(),
+            'text' => $object->getStaff()->getMobilephone()
+        );
+        }
+
+        return new Response(json_encode($result));
+    }
 
     /**
      * Returns json contact phones list already user in other contacts

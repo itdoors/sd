@@ -81,6 +81,7 @@ class UserRepository extends EntityRepository
             ->addSelect('u.email')
             ->addSelect('u.isBlocked')
             ->addSelect('u.isFired')
+            ->addSelect('organizations.name as organization')
         ;
     }
     /**
@@ -103,6 +104,7 @@ class UserRepository extends EntityRepository
     {
         $sql
             ->leftJoin('u.staff', 's')
+            ->innerJoin('u.organizations', 'organizations')
         ;
             /*->leftJoin('o.city', 'c')
             ->leftJoin('c.region', 'r');*/
