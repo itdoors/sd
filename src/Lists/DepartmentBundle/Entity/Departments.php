@@ -88,13 +88,7 @@ class Departments
     private $status;
 
     /**
-<<<<<<< HEAD
      * @var \SD\UserBundle\Entity\User
-=======
-     * Get id
-     *
-     * @return integer
->>>>>>> origin/staging
      */
     private $opermanager;
 
@@ -519,6 +513,7 @@ class Departments
     {
         return $this->name;
     }
+
     /**
      * @var string
      */
