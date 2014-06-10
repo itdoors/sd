@@ -1,9 +1,19 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
 {% for accrual in accruals %}
     {% if accrual.code == code %}
         <div style="border:1px solid #cfcfcf; padding:5px;">
-            {{ accrual.type }}: {{ accrual.value }} ({{ accrual.workType }})
+            {% if accrual.type == 'add' %}
+                {% trans %}Add accrual{% endtrans %}
+            {% elseif accrual.type == 'premium' %}
+                {% trans %}Premium accrual{% endtrans %}
+            {% elseif accrual.type == 'fine' %}
+                {% trans %}Fine accrual{% endtrans %}
+            {% endif %}
+            : {{ accrual.value }} ({{ accrual.workType }})
             <br> {{ accrual.description }}<br>
-            <a href="#" class="delete_accrual" data-pk="{{ accrual.id }}" data-code="{{ accrual.code }}">delete</a>
+            <a href="#" class="delete_accrual" data-pk="{{ accrual.id }}" data-code="{{ accrual.code }}">
+                {% trans %}Delete{% endtrans %}
+            </a>
         </div>
             <br>
     {% endif %}

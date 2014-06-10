@@ -70,10 +70,11 @@
                     //ITDoorsAjax.unblockUI($('#'+idLastHref));
                     data = JSON.parse(data);
                     if (data.success == 0) {
+                        alert('Ошибка Не разрешено');
                     }
                     else {
                         //alert(data.html)
-                        $('#holder_'+type).html(data.html)
+                        $('#holder_'+type).html(data.html);
                     }
                 }
 
@@ -133,7 +134,7 @@
 <div class="tabbable tabbable-custom boxless">
     <ul class="nav nav-tabs" id="ajax_tabs">
         <li class="active"><a href="#tab_0" data-block="tab_content" data-toggle="tab">{% trans %}Basic{% endtrans %}</a></li>
-        <li><a href="#tab_1" data-toggle="tab">{% trans %}Tech parameters{% endtrans %}</a></li>
+        <li><a href="#tab_1" data-toggle="tab">{% trans %}Planned accrual{% endtrans %}</a></li>
     </ul>
     <div class="tab-content" id="tab_content">
         <div class="tab-pane active" id="tab_0">
@@ -167,14 +168,14 @@
     <tr>
         <td>{% trans %}Date accepted simple{% endtrans %}</td>
         <td>
-            {% if coworker.dateAcceptedOfficially is defined %}
+            {% if coworker.dateAcceptedOfficially is not empty %}
                 {{ coworker.dateAcceptedOfficially|date('Y-m-d') }}
             {% endif %}
         </td>
 
         <td>{% trans %}Date accepted simple{% endtrans %}</td>
         <td>
-            {% if coworker.dateAcceptedNotOfficially is defined %}
+            {% if coworker.dateAcceptedNotOfficially is not empty %}
                 {{ coworker.dateAcceptedNotOfficially|date('Y-m-d') }}
             {% endif %}
         </td>
@@ -183,14 +184,14 @@
     <tr>
         <td>{% trans %}Date faired simple{% endtrans %}</td>
         <td>
-            {% if coworker.dateFiredOfficially is defined %}
+            {% if coworker.dateFiredOfficially is not empty %}
                 {{ coworker.dateFiredOfficially|date('Y-m-d') }}
             {% endif %}
         </td>
 
         <td>{% trans %}Date faired simple{% endtrans %}</td>
         <td>
-            {% if coworker.dateFiredNotOfficially is defined %}
+            {% if coworker.dateFiredNotOfficially is not empty %}
                 {{ coworker.dateFiredNotOfficially|date('Y-m-d') }}
             {% endif %}
         </td>
@@ -215,9 +216,9 @@
                 <div id="add_form_accrual_officially" class="notDisplayed" data-type="officially" style="border:1px solid green; padding:5px;">
                     Выберите тип:
                     <select id="type_accrual_officially">
-                        <option value="add">Доплата</option>
-                        <option value="premium">Премия</option>
-                        <option value="fine">Удержание</option>
+                        <option value="add">{% trans %}Add accrual{% endtrans %}</option>
+                        <option value="premium">{% trans %}Premium accrual{% endtrans %}</option>
+                        <option value="fine">{% trans %}Fine accrual{% endtrans %}</option>
                     </select>
                     <br><br>
                     Выберите тип работ:

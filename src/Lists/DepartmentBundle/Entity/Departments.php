@@ -519,4 +519,32 @@ class Departments
     {
         return $this->name;
     }
+    /**
+     * @var string
+     */
+    private $mpk;
+
+
+    /**
+     * Set mpk
+     *
+     * @param string $mpk
+     * @return Departments
+     */
+    public function setMpk($mpk)
+    {
+        $this->mpk = $mpk;
+    
+        return $this;
+    }
+
+    /**
+     * Get mpk
+     *
+     * @return string 
+     */
+    public function getMpk()
+    {
+        return $this->mpk;
+    }
 }

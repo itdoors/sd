@@ -1233,6 +1233,23 @@ class OperScheduleController extends BaseFilterController
 
         list($year, $month) = explode('-', $date);
 
+        $return['success'] = 0;
+        if ($officially == 'true') {
+            $check = true;
+        } else {
+            $check = false;
+        }
+        for ($i=1; $i<=date("t", strtotime($year.'-'.$month)); $i++) {
+            $return = $this->checkErrorsForChangingDate($idCoworker, $date.'-01', $check );
+            if ($return['success'] == 1) {
+                break;
+            }
+        }
+
+        if ($return['success'] == 0) {
+
+            return new Response(json_encode($return));
+        }
 
 
         /** @var  $monthInfoRepository \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfoRepository */

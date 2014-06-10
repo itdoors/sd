@@ -1,7 +1,7 @@
 parameters:
     lists_report.salesadmin.filter.form.class: Lists\ReportBundle\Form\ReportSalesAdminFilterForm
     lists_report.salesadmin.last.messages.filter.form.class: Lists\ReportBundle\Form\ReportLastMessagesType
-
+    lists_report.activity.filter.form.class: Lists\ReportBundle\Form\ReportActivityFilterType
 services:
     lists_report.form.reportSalesAdminFilterForm:
         class: %lists_report.salesadmin.filter.form.class%
