@@ -688,7 +688,10 @@ class OperScheduleController extends BaseFilterController
         $idCoworker = $request->request->get('idCoworker');
         $idDepartment = $request->request->get('idDepartment');
 
-
+        var_dump($status);
+        var_dump($date);
+        var_dump($idCoworker);
+        var_dump($idDepartment);
 
         list($year, $month, $day) = explode('-', $date);
 
@@ -717,29 +720,42 @@ class OperScheduleController extends BaseFilterController
                 'replacementType' => 'r'
             ));
 
-        if ($grafik) {
+        if (!$grafik) {
+            $grafik = new \Lists\GrafikBundle\Entity\Grafik();
 
-            $grafik->setIsSkip(false);
-            $grafik->setIsSick(false);
-            $grafik->setIsVacation(false);
-            $grafik->setIsFired(false);
-
-            if ($status == 'fired') {
-                $grafik->setIsFired(true);
-            }
-            if ($status == 'vacation') {
-                $grafik->setIsVacation(true);
-            }
-            if ($status == 'skip') {
-                $grafik->setIsSkip(true);
-            }
-            if ($status == 'sick') {
-                $grafik->setIsSick(true);
-            }
-            $em =  $this->getDoctrine()->getManager();
-            $em->persist($grafik);
-            $em->flush();
+            $grafik->setDay($day);
+            $grafik->setMonth($month);
+            $grafik->setYear($year);
+            $grafik->setDepartmentPeople($departmentPeople);
+            $grafik->setDepartment($department);
+            $grafik->setDepartmentPeopleReplacement($departmentPeopleReplacement);
+            $grafik->setReplacementType('r');
+            $grafik->setDepartmentId($idDepartment);
+            $grafik->setDepartmentPeopleId($idCoworker);
+            $grafik->setDepartmentPeopleReplacementId(0);
         }
+
+        $grafik->setIsSkip(false);
+        $grafik->setIsSick(false);
+        $grafik->setIsVacation(false);
+        $grafik->setIsFired(false);
+
+        if ($status == 'fired') {
+            $grafik->setIsFired(true);
+        }
+        if ($status == 'vacation') {
+            $grafik->setIsVacation(true);
+        }
+        if ($status == 'skip') {
+            $grafik->setIsSkip(true);
+        }
+        if ($status == 'sick') {
+            $grafik->setIsSick(true);
+        }
+        $em =  $this->getDoctrine()->getManager();
+        $em->persist($grafik);
+        $em->flush();
+
 
         $return['success'] = 1;
 
@@ -1360,5 +1376,10 @@ class OperScheduleController extends BaseFilterController
         $return['success'] = 1;
 
         return new Response(json_encode($return));
+    }
+
+    public function addUserToGrafik()
+    {
+
     }
 }

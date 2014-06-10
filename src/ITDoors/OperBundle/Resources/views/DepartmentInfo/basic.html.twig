@@ -7,18 +7,6 @@
         $.fn.editable.defaults.inputclass = 'form-control';
         $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
 
-        setProgress = function(response)
-        {
-            if (response.handling.progress)
-            {
-                var targetProcess = $('.progress-bar.progress-bar-success');
-                targetProcess.attr('aria-valuenow', response.handling.progress);
-                targetProcess.css('width', response.handling.progress + '%');
-                targetProcess.find('span').html(response.handling.progressString);
-            }
-
-        }
-
         $('#description').editable({
             url: '{{ path('sd_common_ajax_editable_department') }}'
         });
