@@ -13,14 +13,15 @@ use Doctrine\ORM\EntityRepository;
 class GrafikRepository extends EntityRepository
 {
     /**
-     * @param integer $year
-     * @param integer $month
-     * @param integer $idDepartment
-     * @param integer $idCoworker
+     * @param int $year
+     * @param int $month
+     * @param int $idDepartment
+     * @param int $idCoworker
+     * @param int $idReplacement
      *
-     * @return mixed[]
+     * @return array
      */
-    public function getCoworkerHoursMonthInfo($year, $month, $idDepartment, $idCoworker)
+    public function getCoworkerHoursMonthInfo($year, $month, $idDepartment, $idCoworker, $idReplacement = 0)
     {
         $result = $this->createQueryBuilder('t')
             ->select('t.total as total')
@@ -40,6 +41,8 @@ class GrafikRepository extends EntityRepository
             ->setParameter(':idDepartment', $idDepartment)
             ->andWhere('dp.id = :idCoworker')
             ->setParameter(':idCoworker', $idCoworker)
+            ->andWhere('t.departmentPeopleReplacement = :idReplacement')
+            ->setParameter(':idReplacement', $idReplacement)
             ->getQuery()
             ->getResult();
 
@@ -84,16 +87,18 @@ class GrafikRepository extends EntityRepository
         return $result;
     }
 
+
     /**
-     * @param integer $day
-     * @param integer $year
-     * @param integer $month
-     * @param integer $idDepartment
-     * @param integer $idCoworker
+     * @param int $day
+     * @param int $year
+     * @param int $month
+     * @param int $idDepartment
+     * @param int $idCoworker
+     * @param int $idReplacement
      *
      * @return array
      */
-    public function getCoworkerHoursDayInfo($day, $year, $month, $idDepartment, $idCoworker)
+    public function getCoworkerHoursDayInfo($day, $year, $month, $idDepartment, $idCoworker, $idReplacement = 0)
     {
         $result = $this->createQueryBuilder('t')
             ->select('t.total as total')
@@ -104,6 +109,8 @@ class GrafikRepository extends EntityRepository
             ->addSelect('t.isVacation as isVacation')
             ->leftJoin('t.department', 'd')
             ->leftJoin('t.departmentPeople', 'dp')
+            ->andWhere('t.departmentPeopleReplacement = :idReplacement')
+            ->setParameter(':idReplacement', $idReplacement)
             ->andWhere('t.month = :month')
             ->setParameter(':month', $month)
             ->andWhere('t.day = :day')

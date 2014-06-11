@@ -88,12 +88,14 @@
             var idCoworker = $('#addButton').data('id_coworker');
             var idDepartment = $('#addButton').data('id_department');
             var date = $('#addButton').data('date');
+            var idReplacement = $('#info_one_day').data('id_replacement');
 
             var sendData = {
                 'idCoworker': idCoworker,
                 'idDepartment': idDepartment,
                 'currentDate': date,
-                'dates': dates
+                'dates': dates,
+                'idReplacement': idReplacement
             }
             $.ajax({
                 type: 'POST',
@@ -107,7 +109,7 @@
                     //alert(data);
                     for (index = 0; index < dates.length; ++index) {
                         var tempDate = new Date(dates[index]);
-                        updateTableCell('link'+tempDate.getDate()+idCoworker);
+                        updateTableCell('link'+tempDate.getDate()+idCoworker+idReplacement);
                     }
                     data = JSON.parse(data);
                     if (data.errors == 1) {
@@ -230,6 +232,8 @@
             var idCoworker = $('#addButton').data('id_coworker');
             var idDepartment = $('#addButton').data('id_department');
             var date = $('#addButton').data('date');
+            var idReplacement = $('#info_one_day').data('id_replacement');
+
             var sendData = {
                 'idCoworker': idCoworker,
                 'idDepartment': idDepartment,
@@ -237,7 +241,8 @@
                 'officially': officially,
                 'fromTime': timeFrom,
                 'toTime' : timeTo,
-                'idTimeGrafik' : idTimeGrafik
+                'idTimeGrafik' : idTimeGrafik,
+                'idReplacement': idReplacement
             }
             $('.alert').hide( 'blind', {}, 500 );
             $.ajax({
@@ -319,11 +324,13 @@
                 var idCoworker = $('#addButton').data('id_coworker');
                 var idDepartment = $('#addButton').data('id_department');
                 var date = $('#addButton').data('date');
+                var idReplacement = $('#info_one_day').data('id_replacement');
                 var sendData = {
                     'idCoworker': idCoworker,
                     'idDepartment': idDepartment,
                     'date': date,
-                    'idGrafikTime': idGrafikTime
+                    'idGrafikTime': idGrafikTime,
+                    'idReplacement': idReplacement
                 }
                 $.ajax({
                     type: 'POST',
@@ -378,13 +385,16 @@
             var idCoworker = $(this).data('id_coworker');
             var idDepartment = $(this).data('id_department');
             var date = $(this).data('date');
+            var idReplacement = $('#info_one_day').data('id_replacement');
+
             var sendData ={
                 'idCoworker': idCoworker,
                 'idDepartment': idDepartment,
                 'date': date,
                 'officially': officially,
                 'fromTime': timeFrom,
-                'toTime' : timeTo
+                'toTime' : timeTo,
+                'idReplacement': idReplacement
             }
 
             $.ajax({
@@ -444,11 +454,14 @@
             var idCoworker = $('#addButton').data('id_coworker');
             var idDepartment = $('#addButton').data('id_department');
             var date = $('#addButton').data('date');
+            var idReplacement = $('#info_one_day').data('id_replacement');
+
             var sendData = {
                 'idCoworker': idCoworker,
                 'idDepartment': idDepartment,
                 'date': date,
-                'status': status
+                'status': status,
+                'idReplacement': idReplacement
             }
             $.ajax({
                 type: 'POST',
@@ -621,4 +634,5 @@
 </table>
 <input type="hidden" id="info_one_day"
        data-id_table_href ="{{ idLink }}"
-       data-url_copy = "{{ path('it_doors_oper_schedule_copy_month_dates') }}">
+       data-url_copy = "{{ path('it_doors_oper_schedule_copy_month_dates') }}"
+       data-id_replacement="{{ idReplacement }}">
