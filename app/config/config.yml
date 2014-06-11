@@ -14,7 +14,6 @@ parameters:
     ajax.namespace.oper.department.schedule: "oper.department.schedule"
     ajax.filter.namespace.report.activity: "report.activity"
 
-
 framework:
     #esi:             ~
     translator:      { fallback: ru }
