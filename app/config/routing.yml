@@ -1,5 +1,13 @@
-it_doors_email:
-    resource: "@ITDoorsEmailBundle/Resources/config/routing.yml"
+lists_grafik:
+    resource: "@ListsGrafikBundle/Resources/config/routing.yml"
+    prefix:   /
+
+lists_individual:
+    resource: "@ListsIndividualBundle/Resources/config/routing.yml"
+    prefix:   /
+
+lists_mpk:
+    resource: "@ListsMpkBundle/Resources/config/routing.yml"
     prefix:   /
 
 it_doors_controlling:

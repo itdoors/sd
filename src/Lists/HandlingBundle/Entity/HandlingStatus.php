@@ -2,8 +2,6 @@
 
 namespace Lists\HandlingBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * HandlingStatus
  */
@@ -19,11 +17,10 @@ class HandlingStatus
      */
     protected $name;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -34,19 +31,20 @@ class HandlingStatus
      * Set name
      *
      * @param string $name
+     *
      * @return HandlingStatus
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -62,34 +60,36 @@ class HandlingStatus
     {
         return $this->getName();
     }
+
     /**
      * @var integer
      */
     protected $sortorder;
 
-
     /**
      * Set sortorder
      *
      * @param integer $sortorder
+     *
      * @return HandlingStatus
      */
     public function setSortorder($sortorder)
     {
         $this->sortorder = $sortorder;
-    
+
         return $this;
     }
 
     /**
      * Get sortorder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortorder()
     {
         return $this->sortorder;
     }
+
     /**
      * @var string
      */
@@ -105,24 +105,24 @@ class HandlingStatus
      */
     protected $progress;
 
-
     /**
      * Set slug
      *
      * @param string $slug
+     *
      * @return HandlingStatus
      */
     public function setSlug($slug)
     {
         $this->slug = $slug;
-    
+
         return $this;
     }
 
     /**
      * Get slug
      *
-     * @return string 
+     * @return string
      */
     public function getSlug()
     {
@@ -133,19 +133,20 @@ class HandlingStatus
      * Set percentageString
      *
      * @param string $percentageString
+     *
      * @return HandlingStatus
      */
     public function setPercentageString($percentageString)
     {
         $this->percentageString = $percentageString;
-    
+
         return $this;
     }
 
     /**
      * Get percentageString
      *
-     * @return string 
+     * @return string
      */
     public function getPercentageString()
     {
@@ -156,25 +157,29 @@ class HandlingStatus
      * Set progress
      *
      * @param integer $progress
+     *
      * @return HandlingStatus
      */
     public function setProgress($progress)
     {
         $this->progress = $progress;
-    
+
         return $this;
     }
 
     /**
      * Get progress
      *
-     * @return integer 
+     * @return integer
      */
     public function getProgress()
     {
         return $this->progress;
     }
 
+    /**
+     * @return array
+     */
     public function __sleep()
     {
         return array(

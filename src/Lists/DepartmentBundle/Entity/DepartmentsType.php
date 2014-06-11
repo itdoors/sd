@@ -2,8 +2,6 @@
 
 namespace Lists\DepartmentBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * DepartmentsType
  */
@@ -29,11 +27,10 @@ class DepartmentsType
      */
     private $description;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -44,19 +41,20 @@ class DepartmentsType
      * Set name
      *
      * @param string $name
+     *
      * @return DepartmentsType
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -67,19 +65,20 @@ class DepartmentsType
      * Set slug
      *
      * @param string $slug
+     *
      * @return DepartmentsType
      */
     public function setSlug($slug)
     {
         $this->slug = $slug;
-    
+
         return $this;
     }
 
     /**
      * Get slug
      *
-     * @return string 
+     * @return string
      */
     public function getSlug()
     {
@@ -90,22 +89,33 @@ class DepartmentsType
      * Set description
      *
      * @param string $description
+     *
      * @return DepartmentsType
      */
     public function setDescription($description)
     {
         $this->description = $description;
-    
+
         return $this;
     }
 
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Get name as string
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->name;
     }
 }

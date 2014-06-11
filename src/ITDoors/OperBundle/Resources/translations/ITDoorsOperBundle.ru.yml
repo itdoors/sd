@@ -1,0 +1,130 @@
+Dashboard: Рабочий стол
+Loading data. Please wait: Данные загружаются. Пожалуйста подождите...
+
+Filters: Фильтры
+Departments: Отделения
+Show departments: Список отделений
+Notice all departments: Отображаются все доступные Вам отделения
+Filter Settings: Настройки фильтра
+Mpk: МПК
+Name: Название
+FullName: Полное название
+Address: Адрес
+Square: Площадь
+AddedField: Доп. поле
+StatusDate: Дата статуса
+Description: Описание
+Coordinates: Координаты
+City: Город
+Type: Тип
+Organization: Организация
+Status: Статус
+Region: Область
+OperManager: Опер Менеджер
+Enter mpk: Введите МПК
+Enter organization: Введите организацию
+Enter company structure: Введите структуру компании
+Enter region: Введите область
+Enter city: Введите город
+Enter status: Введите статус
+Enter department type: Введите тип объекта
+Enter address: Введите адрес
+Enter opermanager: Введите опер менеджера
+Enter performer: Введите исполнителя
+
+Basic: Основное
+Tech parameters: Технические параметры
+Documents: Документы
+Schedule: График работы
+Audit: Аудит
+Labor protection: Охрана труда
+Calculation: Калькуляция
+Logistik: Логистика
+Final result: Фин результат
+Resposible: Ответственные
+Co-workers: Сотрудники
+Department: Отделение
+
+Status Date: Дата статуса
+Rs: Р/С
+Inn: ИНН
+Edrpou: ЕДРПОУ
+Certificate: Свидетельство
+Organization address: Адрес организации
+Oper manager: Опер Менеджер
+Organization type: Тип организации
+Object type: Тип объекта
+Enter Description: Введите описание
+Find: Найти
+Type address and press find: Введите адрес и нажмите "Найти"
+Enter Status Date: Введите статус даты
+Select status: Выберите статус
+Select opermanger: Выберите Оперменеджера
+Type opermanger: Введите оперменеджера
+Enter Description: Введите описание
+Select Type: Выберите тип
+Old mpks: Неактивные мпк
+history: история
+Coordinates refreshed: Координаты обновлены
+
+Id: ID
+Surname: Фамилия
+Name: Имя
+Middle Name: Отчество
+Date accepted: Дата приема офиц
+Date faired: Дата увольнения офиц
+Date accepted UU: Дата приема УУ
+Date faired UU: Дата увольнения УУ
+DRFO: ДРФО
+Passport: Паспорт
+No coworkers found: Не найдено ни одного сотрудника
+Enter value: Введите значение
+
+Birthday: Дата Рождения
+Phone: Телефон
+Enter indvidual: Введите пользователя
+From: От
+To: До
+
+January: Январь
+February: Февраль
+March: Март
+April: Апрель
+May: Май
+June: Июнь
+July: Июль
+August: Август
+September: Сентябрь
+October: Октябрь
+November: Ноябрь
+December: Декабрь
+
+Mon: Пн
+Tue: Вт
+Wed: Ср
+Thu: Чт
+Fri: Пт
+Sat: Сб
+Sun: Вс
+
+Range: Диапазон
+Sum: Сумма
+Day kind: Дневных
+Evening kind: Вечерних
+Night kind: Ночных
+Edit: Редактировать
+Delete: Удалить
+Illness vacation: Заболел
+Hooky: Прогул
+Fired: Уволен
+Vacation: Отпуск
+Clear: Очистить
+Actions: Действия
+
+Enter month: Выберите месяц
+Enter year: Выберите год
+Add: Добавить
+Error: Ошибка
+Non-official person cant  work officially: Официальное время не допускается для этого пользователя
+Do you confirm deleting: Вы подтверждаете удаление
+Current date: Текущая дата

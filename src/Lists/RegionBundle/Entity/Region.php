@@ -2,8 +2,6 @@
 
 namespace Lists\RegionBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Region
  */
@@ -51,7 +49,7 @@ class Region
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -62,6 +60,7 @@ class Region
      * Set name
      *
      * @param string $name
+     *
      * @return Region
      */
     public function setName($name)
@@ -74,7 +73,7 @@ class Region
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -85,6 +84,7 @@ class Region
      * Set square
      *
      * @param float $square
+     *
      * @return Region
      */
     public function setSquare($square)
@@ -97,7 +97,7 @@ class Region
     /**
      * Get square
      *
-     * @return float 
+     * @return float
      */
     public function getSquare()
     {
@@ -108,6 +108,7 @@ class Region
      * Set population
      *
      * @param float $population
+     *
      * @return Region
      */
     public function setPopulation($population)
@@ -120,7 +121,7 @@ class Region
     /**
      * Get population
      *
-     * @return float 
+     * @return float
      */
     public function getPopulation()
     {
@@ -131,6 +132,7 @@ class Region
      * Set flag
      *
      * @param string $flag
+     *
      * @return Region
      */
     public function setFlag($flag)
@@ -143,7 +145,7 @@ class Region
     /**
      * Get flag
      *
-     * @return string 
+     * @return string
      */
     public function getFlag()
     {
@@ -154,6 +156,7 @@ class Region
      * Add cities
      *
      * @param \Lists\CityBundle\Entity\City $cities
+     *
      * @return Region
      */
     public function addCitie(\Lists\CityBundle\Entity\City $cities)
@@ -176,7 +179,7 @@ class Region
     /**
      * Get cities
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCities()
     {
@@ -192,6 +195,7 @@ class Region
      * Add companystructure
      *
      * @param \Lists\CompanystructureBundle\Entity\Companystructure $companystructure
+     *
      * @return Region
      */
     public function addCompanystructure(\Lists\CompanystructureBundle\Entity\Companystructure $companystructure)
@@ -214,7 +218,7 @@ class Region
     /**
      * Get companystructure
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCompanystructure()
     {
@@ -230,5 +234,4 @@ class Region
     {
         return $this->getName();
     }
-
 }

@@ -4,7 +4,7 @@
     <property file="${project.basedir}/build.properties" />
 
     <property name="path.bin" value="/usr/local/bin" />
-    <property name="phpcs.standard" value="Symfony2" />
+    <property name="phpcs.standard" value="PSR2" />
 
     <property name="dir.build" value="build" />
     <property name="dir.cache" value="app/cache" />
@@ -19,9 +19,25 @@
 
     <property name="bin.phpunit" value="phpunit" />
     <property name="bin.phpcs" value="${path.bin}/phpcs" />
+    <property name="bin.phpcs-ci" value="phpcs" />
+    <property name="bin.cap" value="${path.bin}/cap" />
 
-    <target name="build" depends="build:phpcs">
+    <target name="build" depends="build:prepare,build:phpcs">
         <echo msg="Building project ${phing.project.name}" />
+    </target>
+
+    <target name="build:prepare" depends="build:properties">
+        <echo msg="Preparing" />
+    </target>
+
+    <target name="build:properties">
+        <copy file="${project.basedir}/build.properties.dist" tofile="${project.basedir}/build.properties" overwrite="true" />
+    </target>
+
+    <target name="build:submodules">
+        <echo msg="Init/update git submodules" />
+        <exec command="/usr/bin/git submodule init" checkreturn="true" />
+        <exec command="/usr/bin/git submodule update" checkreturn="true" />
     </target>
 
     <target name="build:phpcs" description="Find coding standard violations using PHP_CodeSniffer">
@@ -30,6 +46,26 @@
             <arg path="${path.phpcs.src}" />
         </exec>
         <echo msg="PHP CodeStyle is OK" />
+    </target>
+
+    <target name="build:phpcs-ci" description="Find coding standard violations using PHP_CodeSniffer">
+        <exec executable="${bin.phpcs-ci}" passthru="true" checkreturn="true">
+            <arg value="--standard=${phpcs.standard}" />
+            <arg path="${path.phpcs.src}" />
+        </exec>
+        <echo msg="PHP CodeStyle is OK" />
+    </target>
+
+    <target name="build:deploy" description="Deploying to server">
+        <exec executable="${bin.cap}" passthru="true" checkreturn="true">
+            <arg value="deploy" />
+        </exec>
+        <echo msg="PHP CodeStyle is OK" />
+    </target>
+
+    <target name="build:whoami">
+        <echo msg="Preparing" />
+        <exec command="whoami > whoami" checkreturn="true" />
     </target>
 
     <target name="build:test" description="Run tests with PHPUnit">

@@ -3,6 +3,7 @@
 namespace Lists\LookupBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 
 /**
  * LookupRepository
@@ -17,6 +18,8 @@ class LookupRepository extends EntityRepository
 
     /**
      * Returns choices for scope
+     *
+     * @return Query
      */
     public function getOnlyScopeQuery()
     {
@@ -25,6 +28,8 @@ class LookupRepository extends EntityRepository
 
     /**
      * Returns choices for dogovor_type
+     *
+     * @return Query
      */
     public function getOnlyDogovorTypeQuery()
     {

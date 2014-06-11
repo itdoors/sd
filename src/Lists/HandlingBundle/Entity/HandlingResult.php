@@ -2,8 +2,6 @@
 
 namespace Lists\HandlingBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * HandlingResult
  */
@@ -26,11 +24,10 @@ class HandlingResult
      */
     protected $slug;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -41,19 +38,20 @@ class HandlingResult
      * Set name
      *
      * @param string $name
+     *
      * @return HandlingResult
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -64,19 +62,20 @@ class HandlingResult
      * Set slug
      *
      * @param string $slug
+     *
      * @return HandlingResult
      */
     public function setSlug($slug)
     {
         $this->slug = $slug;
-    
+
         return $this;
     }
 
     /**
      * Get slug
      *
-     * @return string 
+     * @return string
      */
     public function getSlug()
     {
@@ -92,22 +91,23 @@ class HandlingResult
     {
         return $this->getName();
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     protected $handlings;
 
-
     /**
      * Add handlings
      *
      * @param \Lists\HandlingBundle\Entity\Handling $handlings
+     *
      * @return HandlingResult
      */
     public function addHandling(\Lists\HandlingBundle\Entity\Handling $handlings)
     {
         $this->handlings[] = $handlings;
-    
+
         return $this;
     }
 
@@ -124,12 +124,13 @@ class HandlingResult
     /**
      * Get handlings
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getHandlings()
     {
         return $this->handlings;
     }
+
     /**
      * Constructor
      */
@@ -137,36 +138,39 @@ class HandlingResult
     {
         $this->handlings = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * @var integer
      */
     protected $sortorder;
 
-
     /**
      * Set sortorder
      *
      * @param integer $sortorder
+     *
      * @return HandlingResult
      */
     public function setSortorder($sortorder)
     {
         $this->sortorder = $sortorder;
-    
+
         return $this;
     }
 
     /**
      * Get sortorder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortorder()
     {
         return $this->sortorder;
     }
 
+    /**
+     * @return array
+     */
     public function __sleep()
     {
         return array(
@@ -174,6 +178,7 @@ class HandlingResult
             'name',
         );
     }
+
     /**
      * @var string
      */
@@ -184,24 +189,24 @@ class HandlingResult
      */
     private $progress;
 
-
     /**
      * Set percentageString
      *
      * @param string $percentageString
+     *
      * @return HandlingResult
      */
     public function setPercentageString($percentageString)
     {
         $this->percentageString = $percentageString;
-    
+
         return $this;
     }
 
     /**
      * Get percentageString
      *
-     * @return string 
+     * @return string
      */
     public function getPercentageString()
     {
@@ -212,19 +217,20 @@ class HandlingResult
      * Set progress
      *
      * @param integer $progress
+     *
      * @return HandlingResult
      */
     public function setProgress($progress)
     {
         $this->progress = $progress;
-    
+
         return $this;
     }
 
     /**
      * Get progress
      *
-     * @return integer 
+     * @return integer
      */
     public function getProgress()
     {

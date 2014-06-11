@@ -3,14 +3,19 @@
 namespace Lists\TeamBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class SalesController
+ */
 class SalesController extends Controller
 {
     protected $baseRoute = 'lists_sales_team_index';
     protected $baseRoutePrefix = 'sales';
     protected $baseTemplate = 'Sales';
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction()
     {
         $user = $this->getUser();

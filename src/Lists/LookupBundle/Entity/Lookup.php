@@ -2,8 +2,6 @@
 
 namespace Lists\LookupBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Lookup
  */
@@ -24,11 +22,10 @@ class Lookup
      */
     private $lukey;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -39,19 +36,20 @@ class Lookup
      * Set name
      *
      * @param string $name
+     *
      * @return Lookup
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -62,19 +60,20 @@ class Lookup
      * Set lukey
      *
      * @param string $lukey
+     *
      * @return Lookup
      */
     public function setLukey($lukey)
     {
         $this->lukey = $lukey;
-    
+
         return $this;
     }
 
     /**
      * Get lukey
      *
-     * @return string 
+     * @return string
      */
     public function getLukey()
     {

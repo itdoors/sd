@@ -1,0 +1,119 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
+<table id="handling" class="table table-bordered table-striped">
+    <tbody>
+        <tr>
+            <td>
+                {% trans %}Id{% endtrans %}
+            </td>
+            <td>
+                {{ person.0.id }}
+            </td>
+            <td>
+                {% trans %}Mpk{% endtrans %}
+            </td>
+            <td>
+                {{ person.0.mpkName }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% trans %}Surname{% endtrans %}
+            </td>
+            <td>
+                {{ person.0.lastName }}
+            </td>
+            <td>
+                {% trans %}Name{% endtrans %}
+            </td>
+            <td>
+                {{ person.0.firstName }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% trans %}Middle Name{% endtrans %}
+            </td>
+            <td>
+                {{ person.0.middleName }}
+            </td>
+            <td>
+
+            </td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% trans %}DRFO{% endtrans %}
+            </td>
+            <td>
+                {{ person.0.drfo }}
+            </td>
+            <td>
+                {% trans %}Passport{% endtrans %}
+            </td>
+            <td>
+                {{ person.0.passport }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% trans %}Date accepted{% endtrans %}
+            </td>
+            <td>
+                {% if person.0.admissionDate %}
+                    {{ person.0.admissionDate|date("d-m-Y") }}
+                {% endif %}
+            </td>
+            <td>
+                {% trans %}Date faired{% endtrans %}
+            </td>
+            <td>
+                {% if person.0.dismissalDate %}
+                    {{ person.0.dismissalDate|date("d-m-Y") }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% trans %}Date accepted UU{% endtrans %}
+            </td>
+            <td>
+                {% if person.0.admissionDateNotOfficially %}
+                    {{ person.0.admissionDateNotOfficially|date("d-m-Y") }}
+                {% endif %}
+            </td>
+            <td>
+                {% trans %}Date faired UU{% endtrans %}
+            </td>
+            <td>
+                {% if person.0.dismissalDateNotOfficially %}
+                    {{ person.0.dismissalDateNotOfficially|date("d-m-Y") }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% trans %}Phone{% endtrans %}
+            </td>
+            <td>
+                {{ person.0.phone }}
+            </td>
+            <td>
+                {% trans %}Birthday{% endtrans %}
+            </td>
+            <td>
+                {{ person.0.birthday }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% trans %}Address{% endtrans %}
+            </td>
+            <td colspan="3">
+                {{ person.0.address }}
+            </td>
+        </tr>
+    </tbody>
+</table>

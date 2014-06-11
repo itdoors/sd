@@ -1,0 +1,21 @@
+parameters:
+    itdoors_oper.department.filter.form.class: ITDoors\OperBundle\Form\DepartmentFilterFormType
+    itdoors_oper.coworker.filter.form.class: ITDoors\OperBundle\Form\CoworkerFilterFormType
+    itdoors_oper.schedule.filter.form.class: ITDoors\OperBundle\Form\ScheduleFilterFormType
+
+services:
+    itdoors_oper.form.DepartmentFilterFormType:
+        class: %itdoors_oper.department.filter.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: DepartmentFilterFormType }
+    itdoors_oper.form.CoworkerFilterFormType:
+        class: %itdoors_oper.coworker.filter.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: CoworkerFilterFormType }
+    itdoors_oper.form.ScheduleFilterFormType:
+        class: %itdoors_oper.schedule.filter.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: ScheduleFilterFormType }

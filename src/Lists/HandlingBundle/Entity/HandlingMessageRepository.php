@@ -2,10 +2,8 @@
 
 namespace Lists\HandlingBundle\Entity;
 
-use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
-use SD\CalendarBundle\Services\CalendarService;
 
 /**
  * HandlingMessageRepository
@@ -18,6 +16,9 @@ class HandlingMessageRepository extends EntityRepository
     /**
      * getMessagesByHandlingId
      *
+     * @param int $handlingId
+     *
+     * @return array
      */
     public function getMessagesByHandlingId($handlingId)
     {
@@ -31,29 +32,37 @@ class HandlingMessageRepository extends EntityRepository
     /**
      * get Future messages
      *
+     * @param int[] $userIds
+     *
+     * @return array
      */
     public function getFutureMessages($userIds)
     {
         $sql = $this->createQueryBuilder('hm')
-			->leftJoin('hm.user', 'user')
-			->leftJoin('hm.type', 'type')
-			->where('hm.createdate >= :createdate');
+            ->leftJoin('hm.user', 'user')
+            ->leftJoin('hm.type', 'type')
+            ->where('hm.createdate >= :createdate');
 
-		$sql
-			->setParameter(':createdate', new \DateTime(), \Doctrine\DBAL\Types\Type::DATETIME);
+        $sql
+            ->setParameter(':createdate', new \DateTime(), \Doctrine\DBAL\Types\Type::DATETIME);
 
-		if ($userIds && sizeof($userIds))
-		{
-			$sql
-				->andWhere('user.id in (:userIds)')
-				->setParameter(':userIds', $userIds);
-		}
+        if ($userIds && sizeof($userIds)) {
+            $sql
+                ->andWhere('user.id in (:userIds)')
+                ->setParameter(':userIds', $userIds);
+        }
 
-		return $sql
-			->getQuery()
-			->getResult();
+        return $sql
+            ->getQuery()
+            ->getResult();
     }
 
+    /**
+     * @param string $from
+     * @param string $to
+     *
+     * @return array
+     */
     public function getAdvancedResult($from, $to)
     {
         $q = $this->createQueryBuilder('hm')
@@ -65,8 +74,7 @@ class HandlingMessageRepository extends EntityRepository
             ->getQuery()
             ->getResult();
 
-        if (!sizeof($q))
-        {
+        if (!sizeof($q)) {
             return array();
         }
 
@@ -75,18 +83,15 @@ class HandlingMessageRepository extends EntityRepository
 
         $result = array();
 
-        foreach ($q as $handlingMessage)
-        {
-            if (!isset ( $result[$handlingMessage->getUserId()] ))
-            {
+        foreach ($q as $handlingMessage) {
+            if (!isset ( $result[$handlingMessage->getUserId()] )) {
                 $result[$handlingMessage->getUserId()] = array();
                 $result[$handlingMessage->getUserId()]['user'] = $handlingMessage->getUser();
             }
 
             $current = 0;
 
-            if (isset( $result[$handlingMessage->getUserId()][$handlingMessage->getTypeId()] ))
-            {
+            if (isset( $result[$handlingMessage->getUserId()][$handlingMessage->getTypeId()] )) {
                 $current = $result[$handlingMessage->getUserId()][$handlingMessage->getTypeId()];
             }
 

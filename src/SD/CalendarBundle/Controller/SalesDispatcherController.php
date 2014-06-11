@@ -11,45 +11,49 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class SalesDispatcherController extends SalesController
 {
-	protected $baseRoutePrefix = 'sales_dispatcher';
-	protected $baseTemplate = 'SalesDispatcher';
+    protected $baseRoutePrefix = 'sales_dispatcher';
+    protected $baseTemplate = 'SalesDispatcher';
 
     /**
      * Renders calendar for handlingMessage for dispatcher
+     *
+     * @param Request $request
+     *
+     * @return string
      */
     public function handlingMessageAction(Request $request)
-	{
+    {
         $startTimestamp = $request->query->get('start');
         $endTimestamp = $request->query->get('end');
 
         /** @var \Lists\TeamBundle\Entity\TeamRepository $teamRepository */
-		$teamRepository = $this->get('lists_team.repository');
+        $teamRepository = $this->get('lists_team.repository');
 
-		/** @var \SD\UserBundle\Entity\User $user */
-		$user = $this->getUser();
+        /** @var \SD\UserBundle\Entity\User $user */
+        $user = $this->getUser();
 
-		$teamUserIds = $teamRepository->getMyTeamIdsByUser($user);
+        $teamUserIds = $teamRepository->getMyTeamIdsByUser($user);
 
         $filters = $this->getFilters($this->container->getParameter('ajax.filter.namespace.dashboard.calendar'));
 
-		$events = $this->getEventsByUserIds($teamUserIds, $startTimestamp, $endTimestamp, $filters);
+        $events = $this->getEventsByUserIds($teamUserIds, $startTimestamp, $endTimestamp, $filters);
 
         return new Response(json_encode($events));
-	}
+    }
 
-	/**
-	 * Return specific event title
-	 *
-	 * @param HandlingMessage $handlingMessage
-	 *
-	 * @return string
-	 */
-	public function getEventTitle($handlingMessage)
-	{
-		$start = $this->getEventStart($handlingMessage);
+    /**
+     * Return specific event title
+     *
+     * @param HandlingMessage $handlingMessage
+     *
+     * @return string
+     */
+    public function getEventTitle($handlingMessage)
+    {
+        $start = $this->getEventStart($handlingMessage);
 
-		return (string)$handlingMessage['userFullName']
-				. ' | '. (string) $handlingMessage['typeName']
-				. ' (' . $start->format('H:i').')';
-	}
+        return (string) $handlingMessage['userFullName']
+                . ' | '. (string) $handlingMessage['typeName']
+                . ' (' . $start->format('H:i').')';
+    }
 }

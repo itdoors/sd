@@ -2,12 +2,20 @@
 
 namespace Lists\ContactBundle\Controller;
 
+/**
+ * Class SalesDispatcherController
+ */
 class SalesDispatcherController extends SalesController
 {
     protected $filterNamespace = 'contacts.sales.dispatcher.filters';
     protected $baseRoutePrefix = 'sales_dispatcher';
     protected $baseTemplate = 'SalesDispatcher';
 
+    /**
+     * @param int $organizationId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function organizationAction($organizationId)
     {
         $this->refreshFiltersIfAjax();
@@ -24,8 +32,7 @@ class SalesDispatcherController extends SalesController
             ->getMyOrganizationsContacts($teamUserIds, $organizationId)
             ->getResult();
 
-        if (!$organizationId)
-        {
+        if (!$organizationId) {
             /** @var \Knp\Component\Pager\Paginator $paginator */
             $paginator  = $this->get('knp_paginator');
 
@@ -34,9 +41,7 @@ class SalesDispatcherController extends SalesController
                 $page,
                 20
             );
-        }
-        else
-        {
+        } else {
             $pagination = $organizationContacts->getResult();
         }
 
@@ -48,6 +53,11 @@ class SalesDispatcherController extends SalesController
             ));
     }
 
+    /**
+     * @param int $handlingId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function handlingAction($handlingId)
     {
         /** @var \Lists\TeamBundle\Entity\TeamRepository $teamRepository */

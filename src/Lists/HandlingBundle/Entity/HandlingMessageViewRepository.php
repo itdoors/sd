@@ -18,9 +18,9 @@ class HandlingMessageViewRepository extends EntityRepository
     /**
      * get All messages
      *
-     * @param int[] $userIds
-     * @param string $startTimestamp
-     * @param string $endTimestamp
+     * @param int[]   $userIds
+     * @param string  $startTimestamp
+     * @param string  $endTimestamp
      * @param mixed[] $filters
      *
      * @return mixed[]
@@ -51,36 +51,34 @@ class HandlingMessageViewRepository extends EntityRepository
 
         $onlyLastMessages = true;
 
-        if (isset($filters['eventType']))
-        {
-            if ($filters['eventType'] == CalendarService::EVENT_TYPE_CHOICE_ALL)
-            {
+        if (isset($filters['eventType'])) {
+            if ($filters['eventType'] == CalendarService::EVENT_TYPE_CHOICE_ALL) {
                 $onlyLastMessages = false;
             }
         }
 
-        if (isset($filters['userIds']) && $filters['userIds'])
-        {
+        if (isset($filters['userIds']) && $filters['userIds']) {
             $userIds = explode(',', $filters['userIds']);
         }
 
         // Set handling future messages
-        if ($onlyLastMessages)
-        {
+        if ($onlyLastMessages) {
             $sql
                 ->andWhere('hmv.additionalType = :additionalType')
                 ->setParameter(':additionalType', HandlingMessage::ADDITIONAL_TYPE_FUTURE_MESSAGE);
 
             $sql
-                ->andWhere('hmv.id =
-                (
-                    SELECT
-                        MAX(hm1.id)
-                    FROM
-                        ListsHandlingBundle:HandlingMessage hm1
-                    WHERE
-                        hm1.handling_id = hmv.handlingId
-                )');
+                ->andWhere(
+                    'hmv.id =
+                        (
+                            SELECT
+                                MAX(hm1.id)
+                            FROM
+                                ListsHandlingBundle:HandlingMessage hm1
+                            WHERE
+                                hm1.handling_id = hmv.handlingId
+                        )'
+                );
         }
 
         $dateTimeFrom = new \DateTime();
@@ -90,8 +88,7 @@ class HandlingMessageViewRepository extends EntityRepository
             ->setParameter(':startTimestamp', $dateTimeFrom->setTimestamp($startTimestamp), Type::DATETIME)
             ->setParameter(':endTimestamp', $dateTimeTo->setTimestamp($endTimestamp), Type::DATETIME);
 
-        if ($userIds && sizeof($userIds))
-        {
+        if ($userIds && sizeof($userIds)) {
             $sql
                 ->andWhere('hmv.userId in (:userIds)')
                 ->setParameter(':userIds', $userIds);

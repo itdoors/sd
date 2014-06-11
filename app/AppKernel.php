@@ -37,6 +37,10 @@ class AppKernel extends Kernel
             new Lists\ReportBundle\ListsReportBundle(),
             new ITDoors\AjaxBundle\ITDoorsAjaxBundle(),
             new ITDoors\CommonBundle\ITDoorsCommonBundle(),
+            new ITDoors\OperBundle\ITDoorsOperBundle(),
+            new Lists\MpkBundle\ListsMpkBundle(),
+            new Lists\IndividualBundle\ListsIndividualBundle(),
+            new Lists\GrafikBundle\ListsGrafikBundle(),
             new ITDoors\ControllingBundle\ITDoorsControllingBundle(),
             new ITDoors\EmailBundle\ITDoorsEmailBundle(),
             new TSS\AutomailerBundle\TSSAutomailerBundle()

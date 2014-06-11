@@ -6,15 +6,23 @@
 
 namespace SD\CommonBundle\Security;
 
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use SD\UserBundle\Entity\User;
 
-
+/**
+ * SDAccess
+ */
 class SDAccess
 {
     protected $container;
 
-    public function __construct($container)
+    /**
+     * __construct()
+     *
+     * @param Container $container
+     */
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
@@ -32,14 +40,12 @@ class SDAccess
         $user = $this->container->get('security.context')->getToken()->getUser();
 
         // FOR SALES ADMIN
-        if ($user->hasRole('ROLE_SALESADMIN'))
-        {
+        if ($user->hasRole('ROLE_SALESADMIN')) {
             return true;
         }
 
         // FOR DOGOVOR ADMIN
-        if ($user->hasRole('ROLE_DOGOVORADMIN'))
-        {
+        if ($user->hasRole('ROLE_DOGOVORADMIN')) {
             return true;
         }
 
@@ -47,23 +53,18 @@ class SDAccess
 
         //FOR SALES AND SALES DISPATCHER
 
-        if ($user->hasRole('ROLE_SALESDISPATCHER'))
-        {
+        if ($user->hasRole('ROLE_SALESDISPATCHER')) {
             /** @var \Lists\TeamBundle\Entity\TeamRepository $teamRepository */
             $teamRepository = $this->get('lists_team.repository');
 
             $userIds = $teamRepository->getMyTeamIdsByUser($user);
-        }
-        else
-        {
-            if ($user->hasRole('ROLE_SALES'))
-            {
+        } else {
+            if ($user->hasRole('ROLE_SALES')) {
                 $userIds = array($user->getId());
             }
         }
 
-        if (!sizeof($userIds))
-        {
+        if (!sizeof($userIds)) {
             return false;
         }
 
@@ -78,8 +79,7 @@ class SDAccess
             ->getQuery()
             ->getResult();
 
-        if (sizeof($organizationUsers))
-        {
+        if (sizeof($organizationUsers)) {
             return true;
         }
 
@@ -97,12 +97,10 @@ class SDAccess
      */
     public function hasAccessToOrganizationAndThrowException($organizationId)
     {
-        if (!$this->hasAccessToOrganization($organizationId))
-        {
+        if (!$this->hasAccessToOrganization($organizationId)) {
             throw new AccessDeniedException();
         }
     }
-
 
     /**
      * If users in handling user
@@ -117,8 +115,7 @@ class SDAccess
         $user = $this->container->get('security.context')->getToken()->getUser();
 
         // Form SaLES ADMIN
-        if ($user->hasRole('ROLE_SALESADMIN'))
-        {
+        if ($user->hasRole('ROLE_SALESADMIN')) {
             return true;
         }
 
@@ -126,23 +123,18 @@ class SDAccess
 
         //FOR SALES AND SALES DISPATCHER
 
-        if ($user->hasRole('ROLE_SALESDISPATCHER'))
-        {
+        if ($user->hasRole('ROLE_SALESDISPATCHER')) {
             /** @var \Lists\TeamBundle\Entity\TeamRepository $teamRepository */
             $teamRepository = $this->get('lists_team.repository');
 
             $userIds = $teamRepository->getMyTeamIdsByUser($user);
-        }
-        else
-        {
-            if ($user->hasRole('ROLE_SALES'))
-            {
+        } else {
+            if ($user->hasRole('ROLE_SALES')) {
                 $userIds = array($user->getId());
             }
         }
 
-        if (!sizeof($userIds))
-        {
+        if (!sizeof($userIds)) {
             return false;
         }
 
@@ -157,8 +149,7 @@ class SDAccess
             ->getQuery()
             ->getResult();
 
-        if (sizeof($handlingUsers))
-        {
+        if (sizeof($handlingUsers)) {
             return true;
         }
 
@@ -176,8 +167,7 @@ class SDAccess
      */
     public function hasAccessToHandlingAndThrowException($handlingId)
     {
-        if (!$this->hasAccessToHandling($handlingId))
-        {
+        if (!$this->hasAccessToHandling($handlingId)) {
             throw new AccessDeniedException();
         }
     }

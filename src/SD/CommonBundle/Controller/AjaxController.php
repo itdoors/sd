@@ -24,14 +24,7 @@ use Symfony\Component\Form\Form;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
-use Doctrine\ORM\EntityManager;
-use ITDoors\ControllingBundle\Entity\Invoice;
-use ITDoors\ControllingBundle\Entity\InvoiceMessage;
-use ITDoors\ControllingBundle\Entity\InvoiceCompanystructure;
-use ITDoors\EmailBundle\Entity\Email;
-use ITDoors\EmailBundle\Entity\EmailRepository;
-use TSS\AutomailerBundle\Entity\Automailer;
-use SD\UserBundle\Entity\Usercontactinfo;
+use ITDoors\AjaxBundle\Controller\BaseFilterController;
 
 /**
  * AjaxController class.
@@ -43,7 +36,7 @@ use SD\UserBundle\Entity\Usercontactinfo;
  * @author     Pavel Pecheny <ppecheny@gmail.com>
  * @version    "Release: 1.0"
  */
-class AjaxController extends Controller
+class AjaxController extends BaseFilterController
 {
 
     protected $modelRepositoryDependence = array(
@@ -235,7 +228,7 @@ class AjaxController extends Controller
      */
     public function cityByIdAction()
     {
-        $id = $this->get('request')->query->get('id');
+        $ids = explode(',', $this->get('request')->query->get('id'));
 
         $city = $this->getDoctrine()
             ->getRepository('ListsCityBundle:City')
@@ -1020,7 +1013,7 @@ class AjaxController extends Controller
      * Get first error message
      *
      * @param \Symfony\Component\Validator\ConstraintViolationList $errors
-     * @param string $field
+     * @param string                                               $field
      *
      * @return string
      */
@@ -1634,7 +1627,7 @@ class AjaxController extends Controller
     {
         $params = $this->get('request')->request->get('params');
 
-        $method = $params['model'] . 'Delete';
+        $method = lcfirst($params['model']) . 'Delete';
 
         $this->$method($params);
 
@@ -1763,7 +1756,7 @@ class AjaxController extends Controller
      *
      * @return void
      */
-    public function HandlingUserDelete($params)
+    public function handlingUserDelete($params)
     {
         $handlingId = $params['handlingId'];
         $userId = $params['userId'];
@@ -1790,7 +1783,7 @@ class AjaxController extends Controller
      *
      * @return void
      */
-    public function DopDogovorDelete($params)
+    public function dopDogovorDelete($params)
     {
         $id = $params['id'];
 
@@ -1811,7 +1804,7 @@ class AjaxController extends Controller
      *
      * @return void
      */
-    public function DogovorDepartmentDelete($params)
+    public function dogovorDepartmentDelete($params)
     {
         $id = $params['id'];
 
@@ -1832,7 +1825,7 @@ class AjaxController extends Controller
      *
      * @return void
      */
-    public function ModelContactDelete($params)
+    public function modelContactDelete($params)
     {
         $id = $params['id'];
 
@@ -2222,8 +2215,10 @@ class AjaxController extends Controller
     /**
      * Adds children to {formName}ProcessDefaults depending on defaults in request
      *
-     * @param Form $form
+     * @param Form    $form
      * @param mixed[] $defaultData
+     *
+     * @return void
      */
     public function handlingMessageFormProcessDefaults($form, $defaultData)
     {
@@ -2271,16 +2266,6 @@ class AjaxController extends Controller
                 'required' => false,
                 'mapped' => false,
                 'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
-                return $repository->createQueryBuilder('mc')
-                    ->leftJoin('mc.owner', 'owner')
-                    ->where('mc.modelName = :modelName')
-                    ->andWhere('mc.modelId = :modelId')
-                    ->andWhere('owner.id in (:ownerIds)')
-                    ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
-                    ->setParameter(':modelId', $organizationId)
-                    ->setParameter(':ownerIds', $userIds);
-            }
-        ));
 
         $form
             ->add('status', 'entity', array(
@@ -2289,10 +2274,6 @@ class AjaxController extends Controller
                 'empty_value' => '',
                 'mapped' => false,
                 'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingStatusRepository $repository) {
-                return $repository->createQueryBuilder('s')
-                    ->orderBy('s.sortorder', 'ASC');
-            }
-        ));
 
         $form
             ->add('mindate', 'hidden', array(
@@ -2425,6 +2406,13 @@ class AjaxController extends Controller
         return new Response(json_encode($result));
     }
 
+    /**
+     * processHandlingMoreInfo
+     *
+     * @param mixed[] $moreInfoObjects
+     *
+     * @return mixed[]
+     */
     public function processHandlingMoreInfo($moreInfoObjects)
     {
         $result = array();
@@ -2444,6 +2432,14 @@ class AjaxController extends Controller
      * Saves organizationChildForm
      *
      * processes setting child organization
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @throws \Exception
+     *
+     * @return boolean
      */
     public function organizationChildFormSave(Form $form, User $user, Request $request)
     {
@@ -2533,7 +2529,13 @@ class AjaxController extends Controller
             ));
 
             // Departments Update
-            $sql = "UPDATE departments set organization_id = :organizationId where organization_id = :organizationChildId";
+            $sql = "UPDATE
+                departments
+            SET
+                organization_id = :organizationId
+            WHERE
+                organization_id = :organizationChildId";
+
             $statement = $connection->prepare($sql);
             $statement->execute(array(
                 ':organizationId' => $organizationId,
@@ -2628,6 +2630,15 @@ class AjaxController extends Controller
         return true;
     }
 
+    /**
+     * changePasswordFormSave
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
     public function changePasswordFormSave($form, $user, $request)
     {
         $data = $form->getData();
@@ -2645,6 +2656,12 @@ class AjaxController extends Controller
 
     /**
      * Saves dop dogovor ajax form
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
      */
     public function dopDogovorFormSave($form, $user, $request)
     {
@@ -2680,6 +2697,8 @@ class AjaxController extends Controller
      *
      * @param Form    $form
      * @param mixed[] $defaultData
+     *
+     * @return void
      */
     public function dogovorDepartmentFormProcessDefaults(Form $form, $defaultData)
     {
@@ -2697,9 +2716,14 @@ class AjaxController extends Controller
                 'empty_value' => '',
                 'required' => false,
                 'query_builder' => function (DopDogovorRepository $repository) use ($dogovorId) {
-                return $repository->createQueryBuilder('dd')
-                    ->where('dd.dogovorId = :dogovorId')
-                    ->setParameter(':dogovorId', $dogovorId);
+                return $repository->createQueryBuilder('mc')
+                    ->leftJoin('mc.owner', 'owner')
+                    ->where('mc.modelName = :modelName')
+                    ->andWhere('mc.modelId = :modelId')
+                    ->andWhere('owner.id in (:ownerIds)')
+                    ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                    ->setParameter(':modelId', $organizationId)
+                    ->setParameter(':ownerIds', $userIds);
             }
         ));
 
@@ -2777,4 +2801,13 @@ class AjaxController extends Controller
         return true;
     }
 
+                return $repository->createQueryBuilder('s')
+                    ->orderBy('s.sortorder', 'ASC');
+            }
+        ));
 }
+                return $repository->createQueryBuilder('dd')
+                    ->where('dd.dogovorId = :dogovorId')
+                    ->setParameter(':dogovorId', $dogovorId);
+            }
+        ));

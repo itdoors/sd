@@ -11,6 +11,9 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 
+/**
+ * Class OrganizationChildForm
+ */
 class OrganizationChildForm extends AbstractType
 {
     /**
@@ -18,14 +21,17 @@ class OrganizationChildForm extends AbstractType
      */
     protected $container;
 
-    public function __construct($container)
+    /**
+     * @param Container $container
+     */
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -42,8 +48,7 @@ class OrganizationChildForm extends AbstractType
 
         $builder->addEventListener(
             FormEvents::POST_SUBMIT,
-            function(FormEvent $event) use ($container)
-            {
+            function (FormEvent $event) use ($container) {
                 $data = $event->getData();
 
                 $form = $event->getForm();
@@ -54,23 +59,22 @@ class OrganizationChildForm extends AbstractType
                 $msg = '';
                 $error = false;
 
-                if (!$data['organizationChildId'])
-                {
+                if (!$data['organizationChildId']) {
                     $msg = $translator->trans("Child organization cant be empty", array(), 'ListsOrganizationBundle');
                     $error = true;
                 }
 
-                if ($data['organizationChildId'] && $data['organizationChildId'] == $data['organizationId'])
-                {
-                    $msg = $translator->trans("You've picked the same organization", array(), 'ListsOrganizationBundle');
+                if ($data['organizationChildId'] && $data['organizationChildId'] == $data['organizationId']) {
+                    $msg =
+                        $translator->trans("You've picked the same organization", array(), 'ListsOrganizationBundle');
                     $error = true;
                 }
 
-                if ($error)
-                {
+                if ($error) {
                     $form->get('organizationChildId')->addError(new FormError($msg));
                 }
-            });
+            }
+        );
     }
 
     /**

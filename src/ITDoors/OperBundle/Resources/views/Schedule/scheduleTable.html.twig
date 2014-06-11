@@ -1,0 +1,191 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
+
+{#
+<script src="{{ asset('/bundles/itdoorsoper/js/data-tables/jquery.dataTables.js')}}"></script>
+<script src="{{ asset('/bundles/itdoorsoper/js/data-tables/dataTables.fixedColumns.js')}}"></script>
+<script src="{{ asset('/bundles/itdoorsoper/js/floatThead/jquery.floatThead.js')}}"></script>
+<script src="{{ asset('/bundles/itdoorsoper/js/multiDatepicker/js/jquery.ui.core.js')}}"></script>
+<script src="{{ asset('/bundles/itdoorsoper/js/multiDatepicker/js/jquery.ui.datepicker.js')}}"></script>
+<script src="{{ asset('/bundles/itdoorsoper/js/multiDatepicker/js/jquery.ui.datepicker-es.js')}}"></script>
+<script src="{{ asset('/bundles/itdoorsoper/js/multiDatepicker/jquery-ui.multidatespicker.js')}}"></script>
+#}
+
+<div id ="schedule_content" data-url="{{ path('it_doors_oper_schedule_table', {'id': idDepartment}) }}" >
+{% trans %}Current date{% endtrans %}: {{ monthName|trans }} {{ year }}
+{#
+    <br>
+    <button class="btn green" id="multi">Test multi </button>
+<script>
+    var date = new Date();
+    $('#multi').multiDatesPicker({
+        addDates: [date.setDate(14), date.setDate(19)]
+    });
+</script>
+#}
+    <script>
+        $(document).ready(function(){
+            var idLastHref = ''
+            $('#form_modal_more_info').on('hidden.bs.modal', function () {
+                var href = $('#'+idLastHref);
+                var params = href.data('params');
+                var sendData = {
+                    'params': params
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: $('#info_input').data('url_reload_href'),
+                    data: sendData,
+
+                    beforeSend: function() {
+                        ITDoorsAjax.blockUI($('#'+idLastHref));
+                    },
+                    success: function(data) {
+                        //alert(data);
+                        ITDoorsAjax.unblockUI($('#'+idLastHref));
+                        data = JSON.parse(data);
+                        if (data.success == 0) {
+                        }
+                        else {
+                            //alert(data.html)
+                            $('#'+idLastHref).html(data.html);
+                        }
+                    }
+
+                })
+            })
+
+            $('.tdModal').die('click');
+            $('.tdModal').live('click',function(e){
+
+                e.preventDefault();
+                idLastHref = this.id;
+            })
+        })
+
+
+
+    </script>
+
+    <table class="table table-striped table-hover table-bordered" id="graffic_table">
+        <thead>
+            <tr style="background-color: #ffffff">
+                <th>#</th>
+                <th>{% trans %}Fio{% endtrans %}</th>
+                <th>{% trans %}P/z{% endtrans %}</th>
+                <th>{% trans %}Mpk{% endtrans %}</th>
+                {% for dayInfo in dateInfo %}
+                    <th>
+                        {{ dayInfo.day }}
+                        <br>
+                        <span style="color: #ccc; font-size: small;">
+                            {{ dayInfo.dayName|trans }}
+                        </span>
+                    </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% set counter = 0 %}
+            {% for coworker in coworkers %}
+                {% set counter = counter + 1 %}
+                {% set idCoworker = coworker.id %}
+                <tr id="row{{ counter }}">
+                    <td>
+                        {{ counter }}
+                    </td>
+                    <td>{{ coworker.lastName }} {{ coworker.firstName }} {{ coworker.middleName }}</td>
+                    <td>P</td>
+                    <td>{{ coworker.mpkName }}</td>
+
+                    {% for dayInfo in dateInfo %}
+                        {% set day = dayInfo.day %}
+                        {% if dayInfo.vacation %}
+                            <td style="background-color: lightgreen;">
+                        {% else %}
+                            <td>
+                        {% endif %}
+                        <a  id="link{{ day }}{{ idCoworker }}" class="more-info tdModal"
+                            data-toggle="modal"
+                            href="#form_modal_more_info"
+                            data-target_holder="moreInfoTpl"
+                            data-params='{"date":"{{ dayInfo.date }}", "idCoworker": {{ idCoworker }}, "idDepartment":{{ idDepartment }}}'
+
+                            data-url-more-info="{{ url('it_doors_oper_schedule_day_info') }}"
+                                >
+
+                                {% if infoHours[idCoworker][day]['officially'] is defined %}
+                                    {% set officially = infoHours[idCoworker][day]['officially'] %}
+                                {% else %}
+                                    {% set officially = 0 %}
+                                {% endif %}
+
+                                {% if infoHours[idCoworker][day]['notOfficially'] is defined %}
+                                    {% set notOfficially = infoHours[idCoworker][day]['notOfficially'] %}
+                                {% else %}
+                                    {% set notOfficially = 0 %}
+                                {% endif %}
+
+                                {{ include(
+                                'ITDoorsOperBundle:Schedule:scheduleTableCell.html.twig', {
+                                    'officially': officially,
+                                    'notOfficially': notOfficially,
+
+                                }) }}
+
+                                </a>
+                            </td>
+                    {% endfor %}
+                </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+<style>
+    .DTFC_RightWrapper{
+        display: none;
+    }
+    #graffic_table{
+        margin-top: 0px !important;
+    }
+
+</style>
+
+<input type="hidden" id="info_input" data-url_reload_href="{{ path('it_doors_oper_schedule_one_day_total') }}">
+<script>
+    $(document).ready(function() {
+
+/*
+        var table = $('#graffic_table').DataTable( {
+
+            scrollY:        "100%",
+
+            scrollX:        true,
+            scrollCollapse: true,
+            paging:         false,
+            searching: false,
+            ordering:  false,
+            info: false
+        } );
+
+        new $.fn.dataTable.FixedColumns( table, {
+            leftColumns: 4
+        } );
+
+
+        $('.date-a').click(function() {
+            collDate = $(this).data('date');
+            alert(collDate);
+        })
+*/
+
+/*
+        $('#graffic_table').floatThead({
+            scrollingTop: 42,
+            useAbsolutePositioning: false
+        });
+*/
+
+    } );
+</script>

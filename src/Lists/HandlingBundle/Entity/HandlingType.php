@@ -2,8 +2,6 @@
 
 namespace Lists\HandlingBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * HandlingType
  */
@@ -24,11 +22,10 @@ class HandlingType
      */
     protected $slug;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -39,19 +36,20 @@ class HandlingType
      * Set name
      *
      * @param string $name
+     *
      * @return HandlingType
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -62,19 +60,20 @@ class HandlingType
      * Set slug
      *
      * @param string $slug
+     *
      * @return HandlingType
      */
     public function setSlug($slug)
     {
         $this->slug = $slug;
-    
+
         return $this;
     }
 
     /**
      * Get slug
      *
-     * @return string 
+     * @return string
      */
     public function getSlug()
     {
@@ -90,35 +89,39 @@ class HandlingType
     {
         return $this->getName();
     }
+
     /**
      * @var integer
      */
     protected $sortorder;
 
-
     /**
      * Set sortorder
      *
      * @param integer $sortorder
+     *
      * @return HandlingType
      */
     public function setSortorder($sortorder)
     {
         $this->sortorder = $sortorder;
-    
+
         return $this;
     }
 
     /**
      * Get sortorder
      *
-     * @return integer 
+     * @return integer
      */
     public function getSortorder()
     {
         return $this->sortorder;
     }
 
+    /**
+     * @return array
+     */
     public function __sleep()
     {
         return array(

@@ -1,0 +1,44 @@
+Lists\MpkBundle\Entity\Mpk:
+    type: entity
+    table: mpk
+    repositoryClass: Lists\MpkBundle\Entity\MpkRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 50
+            fixed: false
+            nullable: false
+            unique: true
+        active:
+            type: boolean
+            nullable: false
+        startDate:
+            type: date
+            nullable: true
+        endDate:
+            type: date
+            nullable: true
+    manyToOne:
+        department:
+            targetEntity: Lists\DepartmentBundle\Entity\Departments
+            cascade: {  }
+            inversedBy: mpks
+            joinColumns:
+                department_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        organization:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            cascade: {  }
+            inversedBy: null
+            joinColumns:
+                self_organization_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace SD\UserBundle\Form;
 
 use Symfony\Component\Form\FormBuilderInterface;
@@ -9,6 +8,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\DependencyInjection\Container;
 
+/**
+ * ChangePasswordForm
+ */
 class ChangePasswordForm extends AbstractType
 {
     private $class;
@@ -16,7 +18,9 @@ class ChangePasswordForm extends AbstractType
     protected $container;
 
     /**
-     * @param string $class The User class name
+     * __construct()
+     *
+     * @param string    $class     The User class name
      * @param Container $container The User class name
      */
     public function __construct($class, $container)
@@ -25,12 +29,14 @@ class ChangePasswordForm extends AbstractType
         $this->container = $container;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
 
-        if (!$user->hasRole('ROLE_HRADMIN'))
-        {
+        if (!$user->hasRole('ROLE_HRADMIN')) {
             $constraint = new UserPassword();
 
             $builder->add('current_password', 'password', array(
@@ -53,6 +59,9 @@ class ChangePasswordForm extends AbstractType
             ->add('create', 'submit');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
@@ -61,6 +70,9 @@ class ChangePasswordForm extends AbstractType
         ));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'changePasswordForm';

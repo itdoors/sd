@@ -18,6 +18,7 @@ class HandlingServiceController extends Controller
     /**
      * Lists all HandlingService entities.
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction()
     {
@@ -29,9 +30,13 @@ class HandlingServiceController extends Controller
             'entities' => $entities,
         ));
     }
+
     /**
      * Creates a new HandlingService entity.
      *
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function createAction(Request $request)
     {
@@ -75,6 +80,7 @@ class HandlingServiceController extends Controller
     /**
      * Displays a form to create a new HandlingService entity.
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function newAction()
     {
@@ -90,6 +96,11 @@ class HandlingServiceController extends Controller
     /**
      * Finds and displays a HandlingService entity.
      *
+     * @param int $id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function showAction($id)
     {
@@ -111,6 +122,11 @@ class HandlingServiceController extends Controller
     /**
      * Displays a form to edit an existing HandlingService entity.
      *
+     * @param int $id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function editAction($id)
     {
@@ -150,9 +166,16 @@ class HandlingServiceController extends Controller
 
         return $form;
     }
+
     /**
      * Edits an existing HandlingService entity.
      *
+     * @param Request $request
+     * @param int     $id
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function updateAction(Request $request, $id)
     {
@@ -180,9 +203,16 @@ class HandlingServiceController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
+
     /**
      * Deletes a HandlingService entity.
      *
+     * @param Request $request
+     * @param int     $id
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function deleteAction(Request $request, $id)
     {
@@ -217,7 +247,6 @@ class HandlingServiceController extends Controller
             ->setAction($this->generateUrl('handlingservice_delete', array('id' => $id)))
             ->setMethod('DELETE')
             ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
+            ->getForm();
     }
 }

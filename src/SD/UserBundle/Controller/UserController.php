@@ -26,6 +26,8 @@ class UserController extends BaseController
 
     /**
      * Executes index action
+     *
+     * @return string
      */
     public function staffAction()
     {
@@ -66,6 +68,10 @@ class UserController extends BaseController
     }
     /**
      * Execute show action
+     *
+     * @param int $id
+     *
+     * @return string
      */
     public function showAction($id)
     {
@@ -177,6 +183,10 @@ class UserController extends BaseController
 
     /**
      * Renders changePasswordForm
+     *
+     * @param int $id
+     *
+     * @return string
      */
     public function changePasswordFormAction($id)
     {
@@ -186,8 +196,7 @@ class UserController extends BaseController
 
         $notice = $session->get('noticePassword');
 
-        if ($notice)
-        {
+        if ($notice) {
             $session->remove('noticePassword');
         }
 
@@ -206,13 +215,18 @@ class UserController extends BaseController
 
     /**
      * Executes new action
+     *
+     * @param Request $request
+     *
+     * @throws \Exception
+     *`
+     * @return string
      */
     public function newAction(Request $request)
     {
         $sessionUser = $this->getUser();
 
-        /*if (!$sessionUser->hasRole('ROLE_HRADMIN'))
-        {
+        /*if (!$sessionUser->hasRole('ROLE_HRADMIN')) {
             return $this->redirect($this->generateUrl('sd_user_index'));
         }*/
 
@@ -220,8 +234,7 @@ class UserController extends BaseController
 
         $form->handleRequest($request);
 
-        if ($form->isValid())
-        {
+        if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
 
             /** @var Connection $connection */
@@ -229,8 +242,7 @@ class UserController extends BaseController
 
             $connection->beginTransaction();
 
-            try
-            {
+            try {
                 $user = $form->getData();
 
                 $formData = $request->request->get($form->getName());
@@ -248,9 +260,7 @@ class UserController extends BaseController
                 $em->flush();
 
                 $connection->commit();
-            }
-            catch (\Exception $e)
-            {
+            } catch (\Exception $e) {
                 $connection->rollBack();
                 $em->close();
                 throw $e;

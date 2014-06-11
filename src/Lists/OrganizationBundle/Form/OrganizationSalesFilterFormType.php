@@ -2,15 +2,22 @@
 
 namespace Lists\OrganizationBundle\Form;
 
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * Class OrganizationSalesFilterFormType
+ */
 class OrganizationSalesFilterFormType extends AbstractType
 {
     protected $container;
 
-    public function __construct($container)
+    /**
+     * @param Container $container
+     */
+    public function __construct(Container $container)
     {
         $this->container = $container;
 
@@ -23,7 +30,7 @@ class OrganizationSalesFilterFormType extends AbstractType
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -47,14 +54,13 @@ class OrganizationSalesFilterFormType extends AbstractType
                 'multiple' => true,
                 'property'=>'fullname',
                 'query_builder' => $this->ur->getOnlyStaff()
-            ))
-        ;
+            ));
 
         $builder
             ->add('save', 'submit')
             ->add('reset', 'submit');
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

@@ -4,6 +4,7 @@ namespace Lists\DogovorBundle\Entity;
 
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 
 /**
@@ -31,6 +32,11 @@ class DogovorRepository extends EntityRepository
 
     /**
      * Returns dogovor collection depending on filter
+     *
+     * @param mixed[] $filters
+     * @param int     $id
+     *
+     * @return Query
      */
     public function getAllForDogovorQuery($filters, $id = null)
     {
@@ -46,13 +52,10 @@ class DogovorRepository extends EntityRepository
         $this->processBaseQuery($sql);
         $this->processBaseQuery($sqlCount);
 
-        if ($id)
-        {
+        if ($id) {
             $this->processIdQuery($sql, $id);
             $this->processIdQuery($sqlCount, $id);
-        }
-        else
-        {
+        } else {
             $this->processFilters($sql, $filters);
             $this->processFilters($sqlCount, $filters);
         }
@@ -87,8 +90,7 @@ class DogovorRepository extends EntityRepository
             ->addSelect('performer.name as performerName')
             ->addSelect('d.isActive as dogovorIsActive')
             ->addSelect('d.subject as dogovorSubject')
-            ->addSelect('type.name as dogovorType')
-        ;
+            ->addSelect('type.name as dogovorType');
     }
 
     /**
@@ -114,17 +116,14 @@ class DogovorRepository extends EntityRepository
             ->leftJoin('d.organization', 'o')
             ->leftJoin('d.customer', 'customer')
             ->leftJoin('d.performer', 'performer')
-            ->leftJoin('d.dogovorType', 'type')
-        ;
-            /*->leftJoin('o.city', 'c')
-            ->leftJoin('c.region', 'r');*/
+            ->leftJoin('d.dogovorType', 'type');
     }
 
     /**
      * Processes sql query. adding id query
      *
      * @param \Doctrine\ORM\QueryBuilder $sql
-     * @param int $id
+     * @param int                        $id
      */
     public function processIdQuery($sql, $id)
     {
@@ -148,20 +147,16 @@ class DogovorRepository extends EntityRepository
      * Processes sql query depending on filters
      *
      * @param \Doctrine\ORM\QueryBuilder $sql
-     * @param mixed[] $filters
+     * @param mixed[]                    $filters
      */
     public function processFilters(\Doctrine\ORM\QueryBuilder $sql, $filters)
     {
-        if (sizeof($filters))
-        {
-            foreach($filters as $key => $value)
-            {
-                if (!$value)
-                {
+        if (sizeof($filters)) {
+            foreach ($filters as $key => $value) {
+                if (!$value) {
                     continue;
                 }
-                switch($key)
-                {
+                switch ($key) {
                     case 'organization':
                         $sql
                             ->andWhere("o.id IN (:organizationIds)");

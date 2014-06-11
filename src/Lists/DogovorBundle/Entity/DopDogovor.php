@@ -2,7 +2,6 @@
 
 namespace Lists\DogovorBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -65,11 +64,10 @@ class DopDogovor
      */
     private $user;
 
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -80,19 +78,20 @@ class DopDogovor
      * Set dopDogovorType
      *
      * @param string $dopDogovorType
+     *
      * @return DopDogovor
      */
     public function setDopDogovorType($dopDogovorType)
     {
         $this->dopDogovorType = $dopDogovorType;
-    
+
         return $this;
     }
 
     /**
      * Get dopDogovorType
      *
-     * @return string 
+     * @return string
      */
     public function getDopDogovorType()
     {
@@ -103,19 +102,20 @@ class DopDogovor
      * Set number
      *
      * @param string $number
+     *
      * @return DopDogovor
      */
     public function setNumber($number)
     {
         $this->number = $number;
-    
+
         return $this;
     }
 
     /**
      * Get number
      *
-     * @return string 
+     * @return string
      */
     public function getNumber()
     {
@@ -126,19 +126,20 @@ class DopDogovor
      * Set startdatetime
      *
      * @param \DateTime $startdatetime
+     *
      * @return DopDogovor
      */
     public function setStartdatetime($startdatetime)
     {
         $this->startdatetime = $startdatetime;
-    
+
         return $this;
     }
 
     /**
      * Get startdatetime
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getStartdatetime()
     {
@@ -149,19 +150,20 @@ class DopDogovor
      * Set activedatetime
      *
      * @param \DateTime $activedatetime
+     *
      * @return DopDogovor
      */
     public function setActivedatetime($activedatetime)
     {
         $this->activedatetime = $activedatetime;
-    
+
         return $this;
     }
 
     /**
      * Get activedatetime
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getActivedatetime()
     {
@@ -172,19 +174,20 @@ class DopDogovor
      * Set subject
      *
      * @param string $subject
+     *
      * @return DopDogovor
      */
     public function setSubject($subject)
     {
         $this->subject = $subject;
-    
+
         return $this;
     }
 
     /**
      * Get subject
      *
-     * @return string 
+     * @return string
      */
     public function getSubject()
     {
@@ -195,19 +198,20 @@ class DopDogovor
      * Set isActive
      *
      * @param boolean $isActive
+     *
      * @return DopDogovor
      */
     public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
-    
+
         return $this;
     }
 
     /**
      * Get isActive
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsActive()
     {
@@ -218,19 +222,20 @@ class DopDogovor
      * Set filepath
      *
      * @param string $filepath
+     *
      * @return DopDogovor
      */
     public function setFilepath($filepath)
     {
         $this->filepath = $filepath;
-    
+
         return $this;
     }
 
     /**
      * Get filepath
      *
-     * @return string 
+     * @return string
      */
     public function getFilepath()
     {
@@ -241,19 +246,20 @@ class DopDogovor
      * Set total
      *
      * @param float $total
+     *
      * @return DopDogovor
      */
     public function setTotal($total)
     {
         $this->total = $total;
-    
+
         return $this;
     }
 
     /**
      * Get total
      *
-     * @return float 
+     * @return float
      */
     public function getTotal()
     {
@@ -264,19 +270,20 @@ class DopDogovor
      * Set dogovor
      *
      * @param \Lists\DogovorBundle\Entity\Dogovor $dogovor
+     *
      * @return DopDogovor
      */
     public function setDogovor(\Lists\DogovorBundle\Entity\Dogovor $dogovor = null)
     {
         $this->dogovor = $dogovor;
-    
+
         return $this;
     }
 
     /**
      * Get dogovor
      *
-     * @return \Lists\DogovorBundle\Entity\Dogovor 
+     * @return \Lists\DogovorBundle\Entity\Dogovor
      */
     public function getDogovor()
     {
@@ -287,19 +294,20 @@ class DopDogovor
      * Set user
      *
      * @param \SD\UserBundle\Entity\User $user
+     *
      * @return DopDogovor
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 
     /**
      * Get user
      *
-     * @return \SD\UserBundle\Entity\User 
+     * @return \SD\UserBundle\Entity\User
      */
     public function getUser()
     {
@@ -310,24 +318,24 @@ class DopDogovor
      */
     private $dogovorId;
 
-
     /**
      * Set dogovorId
      *
      * @param integer $dogovorId
+     *
      * @return DopDogovor
      */
     public function setDogovorId($dogovorId)
     {
         $this->dogovorId = $dogovorId;
-    
+
         return $this;
     }
 
     /**
      * Get dogovorId
      *
-     * @return integer 
+     * @return integer
      */
     public function getDogovorId()
     {
@@ -338,30 +346,33 @@ class DopDogovor
      */
     private $saller;
 
-
     /**
      * Set saller
      *
      * @param \SD\UserBundle\Entity\User $saller
+     *
      * @return DopDogovor
      */
     public function setSaller(\SD\UserBundle\Entity\User $saller = null)
     {
         $this->saller = $saller;
-    
+
         return $this;
     }
 
     /**
      * Get saller
      *
-     * @return \SD\UserBundle\Entity\User 
+     * @return \SD\UserBundle\Entity\User
      */
     public function getSaller()
     {
         return $this->saller;
     }
 
+    /**
+     * @return null|string
+     */
     public function getAbsolutePath()
     {
         return null === $this->filepath
@@ -369,6 +380,9 @@ class DopDogovor
             : $this->getUploadRootDir().'/'.$this->filepath;
     }
 
+    /**
+     * @return null|string
+     */
     public function getWebPath()
     {
         return null === $this->filepath
@@ -376,6 +390,9 @@ class DopDogovor
             : $this->getUploadDir().'/'.$this->filepath;
     }
 
+    /**
+     * @return string
+     */
     protected function getUploadRootDir()
     {
         // the absolute directory path where uploaded
@@ -383,6 +400,9 @@ class DopDogovor
         return __DIR__.'/../../../../web/'.$this->getUploadDir();
     }
 
+    /**
+     * @return string
+     */
     protected function getUploadDir()
     {
         // get rid of the __DIR__ so it doesn't screw up
@@ -412,6 +432,9 @@ class DopDogovor
         return $this->file;
     }
 
+    /**
+     * upload
+     */
     public function upload()
     {
         // the file property can be empty if the field is not required

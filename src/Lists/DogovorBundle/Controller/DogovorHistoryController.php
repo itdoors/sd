@@ -5,6 +5,9 @@ namespace Lists\DogovorBundle\Controller;
 use Lists\DogovorBundle\Entity\DogovorHistoryRepository;
 use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
 
+/**
+ * Class DogovorHistoryController
+ */
 class DogovorHistoryController extends BaseController
 {
     protected $filterNamespace = 'base.dogovor.history.filters';

@@ -1,3 +1,0 @@
-lists_lookup_homepage:
-    pattern:  /hello/{name}
-    defaults: { _controller: ListsLookupBundle:Default:index }
