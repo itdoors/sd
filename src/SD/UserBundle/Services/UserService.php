@@ -29,9 +29,11 @@ class UserService
      *
      * @var Container
      * 
+    * @param array $options Description
+    * 
      * @return array
      */
-    public function getTabs()
+    public function getTabs($options)
     {
         $translator = $this->container->get('translator');
         $tabs = array();
@@ -41,12 +43,14 @@ class UserService
             'url' => $this->container->get('router')->generate('sd_user_show_tabs'),
             'text' => $translator->trans('Profile',array(),'SDUserBundle')
         );
-        $tabs['settings'] = array(
-            'blockupdate' => 'ajax-tab-holder',
-            'tab' => 'settings',
-            'url' => $this->container->get('router')->generate('sd_user_show_tabs'),
-            'text' => $translator->trans('Settings profile',array(),'SDUserBundle')
-        );
+        if($options['settings']){            
+            $tabs['settings'] = array(
+                'blockupdate' => 'ajax-tab-holder',
+                'tab' => 'settings',
+                'url' => $this->container->get('router')->generate('sd_user_show_tabs'),
+                'text' => $translator->trans('Settings profile',array(),'SDUserBundle')
+            );
+        }
         $tabs['plan'] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'plan',

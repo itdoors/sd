@@ -39,7 +39,7 @@
                                     <i class="fa fa-map-marker"></i>{{ item.companyName }}
                                 </li>
                                 <li>
-                                    <i class="fa fa-calendar"></i>{{ item.birthday == '' ? '' : item.birthday|date('d m Y') }}
+                                    <i class="fa fa-calendar"></i>{{ item.birthday == '' ? '' : item.birthday|date('d.m.Y') }}
                                 </li>
                                 <li>
                                     <i class="fa fa-briefcase"></i>{{ item.position }}
@@ -85,6 +85,14 @@
                                                 </td>
                                                 <td>
                                                     {{ item.companyName }}
+                                                </td>
+                                            </tr>
+                                            <tr>                                                                                                
+                                                <td class="hidden-xs">
+                                                   {% trans %}Email{% endtrans %} 
+                                                </td>
+                                                <td>
+                                                    {{ item.email }}
                                                 </td>
                                             </tr>
                                             <tr>                                                                                                

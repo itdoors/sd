@@ -13,8 +13,8 @@
             <thead>
             <tr>
                 <th>{% trans %}ID{% endtrans %} </th>
-                <th>{% trans %}First name{% endtrans %} </th>
                 <th>{% trans %}Last name{% endtrans %} </th>
+                <th>{% trans %}First name{% endtrans %} </th>
                 <th>{% trans %}Middle name{% endtrans %} </th>
                 <th>{% trans %}Mobile phone{% endtrans %} </th>
                 <th>{% trans %}Email{% endtrans %} </th>
@@ -33,10 +33,10 @@
                     </td>
                     <td>
                         <a href="{{ path('sd_user_show', { id : item.id }) }}">
-                            {{ item.firstName|e }}
+                            {{ item.lastName|e }}
                         </a>
                     </td>
-                    <td>{{ item.lastName|e }}</td>
+                    <td>{{ item.firstName|e }}</td>
                     <td>{{ item.middleName|e }}</td>
                     <td>{{ item.mobilephone }} </td>
                     <td>{{ item.email|e }}</td>

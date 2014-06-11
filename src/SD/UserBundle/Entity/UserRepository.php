@@ -38,6 +38,7 @@ class UserRepository extends EntityRepository
         return $this->createQueryBuilder('u')
             ->select('u.id')
             ->addselect('u.photo')
+            ->addselect('u.email')
             ->addselect('u.lastName')
             ->addselect('u.firstName')
             ->addselect('u.middleName')

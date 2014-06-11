@@ -95,9 +95,14 @@ class UserController extends BaseController
             $tab = 'profile';
             $this->setTab($namespace, $tab);
         }
-        $tabs = $service->getTabs();
+        
+        if($isCurrentUser || $isAdmin){
+            $options['settings'] = true;
+        }else{
+            $options['settings'] = false;            
+        }
+        $tabs = $service->getTabs($options);
 
-       
         return $this->render('SDUserBundle:' . $this->baseTemplate . ':show.html.twig', array(
                 'tabs' => $tabs,
                 'tab' => $tab,

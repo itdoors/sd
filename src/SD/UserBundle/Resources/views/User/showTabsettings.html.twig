@@ -1,25 +1,26 @@
+{% trans_default_domain 'SDUserBundle' %}
 <div class="tab-pane active" id="tab_1_3">
     <div class="row profile-account">
         <div class="col-md-3">
             <ul class="ver-inline-menu tabbable margin-bottom-10">
                 <li class="active">
                     <a data-toggle="tab" href="#tab_1-1">
-                        <i class="fa fa-cog"></i> Personal info </a>
+                        <i class="fa fa-cog"></i>{% trans %}Contaсts{% endtrans %}</a>
                     <span class="after">
                     </span>
                 </li>
                 <li>
                     <a data-toggle="tab" href="#tab_2-2">
-                        <i class="fa fa-picture-o"></i> Change Avatar </a>
+                        <i class="fa fa-picture-o"></i>{% trans %}Change Avatar{% endtrans %}</a>
                 </li>
                 <li>
                     <a data-toggle="tab" href="#tab_3-3">
                         <i class="fa fa-lock"></i>{% trans %}Change Password{% endtrans %}</a>
                 </li>
-                <li>
+                {#<li>
                     <a data-toggle="tab" href="#tab_4-4">
                         <i class="fa fa-eye"></i> Privacity Settings </a>
-                </li>
+                </li>#}
             </ul>
         </div>
         <div class="col-md-9">
@@ -50,15 +51,9 @@
                             <label class="control-label">About</label>
                             <textarea class="form-control" rows="3" placeholder="We are KeenThemes!!!"></textarea>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label">Website Url</label>
-                            <input type="text" placeholder="http://www.mywebsite.com" class="form-control"/>
-                        </div>
                         <div class="margiv-top-10">
                             <a href="#" class="btn green">
                                 Save Changes </a>
-                            <a href="#" class="btn default">
-                                Cancel </a>
                         </div>
                     </form>
                 </div>
