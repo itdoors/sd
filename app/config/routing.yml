@@ -6,10 +6,6 @@ lists_individual:
     resource: "@ListsIndividualBundle/Resources/config/routing.yml"
     prefix:   /
 
-lists_mpk:
-    resource: "@ListsMpkBundle/Resources/config/routing.yml"
-    prefix:   /
-
 it_doors_controlling:
     resource: "@ITDoorsControllingBundle/Resources/config/routing.yml"
     prefix:   /
