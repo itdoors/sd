@@ -7,7 +7,7 @@ use Lists\ContactBundle\Services\ModelContactService;
 use Lists\HandlingBundle\Entity\HandlingMessageRepository;
 use Lists\HandlingBundle\Entity\HandlingMessageTypeRepository;
 use Lists\HandlingBundle\Entity\HandlingRepository;
-use ITDoors\CommonBundle\Controller\BaseFilterController;
+use ITDoors\AjaxBundle\Controller\BaseFilterController;
 use Lists\HandlingBundle\Entity\HandlingService;
 use Lists\HandlingBundle\Services\HandlingMessageService;
 
