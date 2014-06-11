@@ -12,16 +12,18 @@ use Doctrine\ORM\EntityRepository;
  */
 class GrafikTimeRepository extends EntityRepository
 {
+
     /**
-     * @param integer $year
-     * @param integer $month
-     * @param integer $day
-     * @param integer $idDepartment
-     * @param integer $idCoworker
+     * @param int $year
+     * @param int $month
+     * @param int $day
+     * @param int $idDepartment
+     * @param int $idCoworker
+     * @param int $idReplacement
      *
      * @return array
      */
-    public function getCoworkerHoursDayInfo($year, $month, $day, $idDepartment, $idCoworker)
+    public function getCoworkerHoursDayInfo($year, $month, $day, $idDepartment, $idCoworker, $idReplacement = 0)
     {
         $result = $this->createQueryBuilder('gt')
             ->leftJoin('gt.department', 'd')
@@ -36,26 +38,42 @@ class GrafikTimeRepository extends EntityRepository
             ->setParameter(':idDepartment', $idDepartment)
             ->andWhere('dp.id = :idCoworker')
             ->setParameter(':idCoworker', $idCoworker)
+            ->andWhere('gt.departmentPeopleReplacement = :idReplacement')
+            ->setParameter(':idReplacement', $idReplacement)
+
             ->getQuery()
             ->getResult();
 
         return $result;
     }
 
+
     /**
-     * @param integer $year
-     * @param integer $month
-     * @param integer $day
-     * @param integer $idDepartment
-     * @param integer $idCoworker
-     * @param string  $fromTime
-     * @param string  $toTime
-     * @param integer $idTimeGrafik
+     * @param int    $year
+     * @param int    $month
+     * @param int    $day
+     * @param int    $idDepartment
+     * @param int    $idCoworker
+     * @param string $fromTime
+     * @param string $toTime
+     * @param int    $idTimeGrafik
+     * @param int    $idReplacement
      *
      * @return \Doctrine\ORM\QueryBuilder|mixed
      */
-    public function havingSubtime($year, $month, $day, $idDepartment, $idCoworker, $fromTime, $toTime, $idTimeGrafik)
-    {
+    public function havingSubtime(
+        $year,
+        $month,
+        $day,
+        $idDepartment,
+        $idCoworker,
+        $fromTime,
+        $toTime,
+        $idTimeGrafik,
+        $idReplacement
+    // @codingStandardsIgnoreStart
+    ) {
+    // @codingStandardsIgnoreEnd
         $result = $this->createQueryBuilder('gt')
             ->select('COUNT (gt.id)')
             ->leftJoin('gt.department', 'd')
@@ -64,6 +82,8 @@ class GrafikTimeRepository extends EntityRepository
             ->setParameter('month', $month)
             ->andWhere('gt.day = :day')
             ->setParameter('day', $day)
+            ->andWhere('gt.departmentPeopleReplacement = :idReplacement')
+            ->setParameter(':idReplacement', $idReplacement)
             ->andWhere('gt.year = :year')
             ->setParameter(':year', $year)
             ->andWhere('d.id = :idDepartment')

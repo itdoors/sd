@@ -190,23 +190,26 @@
                 } else {
                     var idCoworkers = new Array();
                     var fioCoworkers = new Array();
+                    var idReplacements = new Array();
                     var counter = 0;
                     for (var i=0; i<checkboxes.length; i++) {
                         if (checkboxes[i].checked) {
                             idCoworkers[counter] = checkboxes[i].value;
                             fioCoworkers[counter] = $('#fio_'+checkboxes[i].value).html();
+                            idReplacements[counter] = $(checkboxes[i]).data('id_replacement')
                             counter++;
                         }
                     }
-                    showModalCopy(idCoworkers, fioCoworkers);
+                    //alert(idReplacements)
+                    showModalCopy(idCoworkers, fioCoworkers,idReplacements);
                 }
 
             })
 
-            function showModalCopy(idCoworkers, fioCoworkers) {
+            function showModalCopy(idCoworkers, fioCoworkers, idReplacements) {
                 $('#select_copy_etalon').html('');
                 for (var i=0; i<idCoworkers.length; i++) {
-                    $('#select_copy_etalon').append('<option value="'+idCoworkers[i]+'">'+fioCoworkers[i]+'</option>');
+                    $('#select_copy_etalon').append('<option value="'+idCoworkers[i]+'" data-id_replacement="'+idReplacements[i]+'">'+fioCoworkers[i]+'</option>');
                 }
                 $('#form_modal_copy').modal('show');
             }
@@ -217,6 +220,7 @@
                 var options = $('#select_copy_etalon').find("option");
                 var selectedCoworker = '';
                 var ids = new Array();
+                var idsReplacement = new Array();
                 var counter = 0;
                 var info = new Array();
                 for (var i=0; i<options.length; i++) {
@@ -224,6 +228,7 @@
                         selectedCoworker = options[i].value;
                     }else {
                         ids[counter] = options[i].value;
+                        idsReplacement[counter] = $(options[i]).data('id_replacement');
                         counter++;
                     }
                 }
@@ -235,7 +240,8 @@
                     'ids': ids,
                     'selected': selectedCoworker,
                     'date': date,
-                    'idDepartment': idDepartment
+                    'idDepartment': idDepartment,
+                    'idsReplacement': idsReplacement
                 };
                 $.ajax({
                     type: 'POST',
@@ -258,7 +264,7 @@
 
                         for (var j=0; j<ids.length; j++) {
                             for (var i=1; i<=31; i++) {
-                                var hrefId = 'link'+i+ids[j]+'';
+                                var hrefId = 'link'+i+ids[j]+idsReplacement[j]+'';
 
                                 if($("#" + hrefId).length) {
                                     updateTableCell(hrefId);
@@ -394,8 +400,9 @@
             {% for coworker in coworkers %}
                 {% set counter = counter + 1 %}
                 {% set idCoworker = coworker.id %}
+                {% set idReplacement = coworker.replacementId %}
                 <tr id="row{{ counter }}">
-                    <td><input class="checkbox_copy" type="checkbox" value="{{ idCoworker }}"></td>
+                    <td><input class="checkbox_copy" type="checkbox" value="{{ idCoworker }}" data-id_replacement="{{ idReplacement }}"></td>
                     <td>
                         {{ counter }}
                     </td>
@@ -420,27 +427,28 @@
                         {% else %}
                             <td>
                         {% endif %}
-                        <a  id="link{{ day }}{{ idCoworker }}" class="more-info tdModal"
+                        <a  id="link{{ day }}{{ idCoworker }}{{ coworker.replacementId }}" class="more-info tdModal"
                             data-toggle="modal"
                             href="#form_modal_more_info"
                             data-target_holder="moreInfoTpl"
-                            data-params='{"date":"{{ dayInfo.date }}", "idCoworker": {{ idCoworker }}, "idDepartment":{{ idDepartment }}, "idLink": "link{{ day }}{{ idCoworker }}" }'
+                            data-params='{"date":"{{ dayInfo.date }}", "idCoworker": {{ idCoworker }}, "idDepartment":{{ idDepartment }}, "idLink": "link{{ day }}{{ idCoworker }}{{ coworker.replacementId }}", "idReplacement": {{ coworker.replacementId }}}'
 
                             data-url-more-info="{{ url('it_doors_oper_schedule_day_info') }}"
                                 >
-                                {% if infoHours[idCoworker][day]['status'] is defined %}
-                                    {% set status = infoHours[idCoworker][day]['status'] %}
+                                {% if infoHours[idCoworker~'-'~idReplacement~'-'~day]['status'] is defined %}
+                                    {% set status = infoHours[idCoworker~'-'~idReplacement~'-'~day]['status'] %}
                                 {% else %}
                                     {% set status = 'ok' %}
                                 {% endif %}
-                                {% if infoHours[idCoworker][day]['officially'] is defined %}
-                                    {% set officially = infoHours[idCoworker][day]['officially'] %}
+
+                                {% if infoHours[idCoworker~'-'~idReplacement~'-'~day]['officially'] is defined %}
+                                    {% set officially = infoHours[idCoworker~'-'~idReplacement~'-'~day]['officially'] %}
                                 {% else %}
                                     {% set officially = 0 %}
                                 {% endif %}
 
-                                {% if infoHours[idCoworker][day]['notOfficially'] is defined %}
-                                    {% set notOfficially = infoHours[idCoworker][day]['notOfficially'] %}
+                                {% if infoHours[idCoworker~'-'~idReplacement~'-'~day]['notOfficially'] is defined %}
+                                    {% set notOfficially = infoHours[idCoworker~'-'~idReplacement~'-'~day]['notOfficially'] %}
                                 {% else %}
                                     {% set notOfficially = 0 %}
                                 {% endif %}
