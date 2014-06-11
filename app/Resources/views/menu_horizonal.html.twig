@@ -20,13 +20,13 @@ Muzyka Dmytro
 	<!-- BEGIN USER LOGIN DROPDOWN -->
 	<li class="dropdown user">
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-			{#<img alt="" src="{{ asset('templates/metronic/img/avatar1_small.jpg') }}"/>#}
+			{% if app.user.photo is not empty %}<img alt="" src="{{ asset('uploads/userprofiles/' ~ app.user.id ~ '/image29_' ~ app.user.photo) }}"/>{% endif %}
 			<span class="username">{{ app.user.fullName }}</span>
 			<i class="fa fa-angle-down"></i>
 		</a>
 		<ul class="dropdown-menu">
-			{#<li><a href="extra_profile.html"><i class="fa fa-user"></i> {% trans %}My Profile{% endtrans %}</a></li>
-			<li><a href="page_calendar.html"><i class="fa fa-calendar"></i> {% trans %}My Calendar{% endtrans %}</a></li>
+			<li><a href="{{ path('sd_user_show', {'id': app.user.id}) }}"><i class="fa fa-user"></i> {% trans %}My Profile{% endtrans %}</a></li>
+			{#<li><a href="#"><i class="fa fa-calendar"></i> {% trans %}My Calendar{% endtrans %}</a></li>
 			<li><a href="inbox.html"><i class="fa fa-envelope"></i> {% trans %}My Inbox{% endtrans %} <span class="badge badge-danger">3</span></a></li>
 			<li><a href="#"><i class="fa fa-tasks"></i> {% trans %}My Tasks{% endtrans %} <span class="badge badge-success">7</span></a></li>
 			<li class="divider"></li>#}

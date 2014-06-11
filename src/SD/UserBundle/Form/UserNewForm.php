@@ -14,8 +14,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 class UserNewForm extends AbstractType
 {
-    private $class;
 
+    private $class;
     protected $container;
 
     /**
@@ -49,11 +49,11 @@ class UserNewForm extends AbstractType
             ->add('email')
             ->add('plainPassword', 'repeated', array(
                 'type' => 'password',
-                'options' => array('translation_domain' => 'FOSUserBundle'),
+                'options' => array('translation_domain' => 'SDUserBundle'),
                 'first_options' => array('label' => 'form.new_password'),
                 'second_options' => array('label' => 'form.new_password_confirmation'),
                 'invalid_message' => 'fos_user.password.mismatch',
-            ));
+        ));
 
         // Staff
         $builder

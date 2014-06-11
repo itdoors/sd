@@ -1,0 +1,34 @@
+# src/ITDoors/ControllingBundle/Resources/config/doctrine/Invoice.orm.yml
+ITDoors\ControllingBundle\Entity\Invoicecron:
+    type: entity
+    table: invoicecron
+    repositoryClass: ITDoors\ControllingBundle\Entity\InvoicecronRepository
+    id:
+        id:
+            type: integer
+            generator: { strategy: IDENTITY }
+    fields:
+        invoiceId:
+            nullable: true
+            type: integer
+            length: 10
+            column: invoice_id
+        date:
+            type: datetime
+        status:
+            type: string
+            length: 64
+        description:
+            type: text
+        reason:
+            type: string
+            length: 255
+            nullable: true
+    manyToOne:
+        invoice:
+            targetEntity: ITDoors\ControllingBundle\Entity\Invoice
+            inversedBy: null
+            cascade: null
+            joinColumn:
+                name: invoice_id
+                referencedColumnName: id

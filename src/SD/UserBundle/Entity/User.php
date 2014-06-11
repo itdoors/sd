@@ -1,4 +1,5 @@
 <?php
+
 /**
  * User model class
  *
@@ -437,5 +438,73 @@ class User extends BaseUser
     public function getTeams()
     {
         return $this->teams;
+    }
+
+    /**
+     * @var string
+     */
+    private $photo;
+
+    /**
+     * Set photo
+     *
+     * @param string $photo
+     * 
+     * @return User
+     */
+    public function setPhoto($photo)
+    {
+        $this->photo = $photo;
+
+        return $this;
+    }
+
+    /**
+     * Get photo
+     *
+     * @return string 
+     */
+    public function getPhoto()
+    {
+        return $this->photo;
+    }
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $usercontactinfo;
+
+    /**
+     * Add usercontactinfo
+     *
+     * @param \SD\UserBundle\Entity\Contactinfo $usercontactinfo
+     * 
+     * @return User
+     */
+    public function addUsercontactinfo(\SD\UserBundle\Entity\Contactinfo $usercontactinfo)
+    {
+        $this->usercontactinfo[] = $usercontactinfo;
+
+        return $this;
+    }
+
+    /**
+     * Remove usercontactinfo
+     *
+     * @param \SD\UserBundle\Entity\Contactinfo $usercontactinfo
+     */
+    public function removeUsercontactinfo(\SD\UserBundle\Entity\Contactinfo $usercontactinfo)
+    {
+        $this->usercontactinfo->removeElement($usercontactinfo);
+    }
+
+    /**
+     * Get usercontactinfo
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUsercontactinfo()
+    {
+        return $this->usercontactinfo;
     }
 }

@@ -60,4 +60,8 @@ Lists\CompanystructureBundle\Entity\Companystructure:
             joinColumns:
                 parent_id:
                     referencedColumnName: id
+    oneToMany:
+        invoicecompanystructure:
+            targetEntity: ITDoors\ControllingBundle\Entity\InvoiceCompanystructure
+            mappedBy: companystructure
     lifecycleCallbacks: {  }

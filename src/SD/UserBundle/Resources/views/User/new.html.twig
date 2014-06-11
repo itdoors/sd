@@ -13,7 +13,11 @@
             <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
             <i class="fa fa-angle-right"></i>
         </li>
-        <li><a href="" title="{% trans %}User list{% endtrans %}">{% trans %}User list{% endtrans %}</a></li>
+        <li>
+            <a href="{{ path('sd_user_staff') }}" title="{% trans %}List of staff{% endtrans %}">{% trans %}List of staff{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li><a href="" title="{% trans %}New user{% endtrans %}">{% trans %}New user{% endtrans %}</a></li>
     </ul>
 {% endblock %}
 
@@ -31,99 +35,100 @@
 {% endblock %}
 
 {% block body %}
-
     {% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
     <div class="row">
-        {% if form.vars.valid %}
-        {% else %}
-            <div class="alert alert-danger">
-                <button class="close" data-close="alert"></button>
-                {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
-                {{ form_errors(form) }}
-            </div>
-        {% endif %}
-        {% if notice is defined and notice %}
-            <div class="alert alert-success">
-                {{ notice }}
-            </div>
-        {% endif %}
-        <div class="portlet-body form">
-            {{ form_start(form, {
+        <div class="col-md-12">
+            {% if form.vars.valid %}
+            {% else %}
+                <div class="alert alert-danger">
+                    <button class="close" data-close="alert"></button>
+                    {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                    {{ form_errors(form) }}
+                </div>
+            {% endif %}
+            {% if notice is defined and notice %}
+                <div class="alert alert-success">
+                    {{ notice }}
+                </div>
+            {% endif %}
+            <div class="portlet-body form">
+                {{ form_start(form, {
                         'action' : path('sd_user_new'),
                         'attr' : {
                         'method' : 'POST',
                     }
             }) }}
-            <div class="row">
-                <div class="form-group col-md-4{% if form.firstName.vars.errors|length %} has-error{% endif %}">
-                    {{ form_label(form.firstName, 'First Name', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.firstName, {'attr' : {'class' : 'form-control', 'placeholder': "First Name"}}) }}
-                    {% if form.firstName.vars.errors|length %}
-                        {{ form_errors(form.firstName) }}
-                    {% endif %}
+                <div class="row">
+
+                    <div class="form-group col-md-4{% if form.lastName.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.lastName, 'Last name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.lastName, {'attr' : {'class' : 'form-control', 'placeholder': "Last name"}}) }}
+                        {% if form.lastName.vars.errors|length %}
+                            {{ form_errors(form.lastName) }}
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group col-md-4{% if form.firstName.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.firstName, 'First Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.firstName, {'attr' : {'class' : 'form-control', 'placeholder': "First Name"}}) }}
+                        {% if form.firstName.vars.errors|length %}
+                            {{ form_errors(form.firstName) }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-md-4{% if form.middleName.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.middleName, 'Middle Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.middleName, {'attr' : {'class' : 'form-control', 'placeholder': "Middle Name"}}) }}
+                        {% if form.middleName.vars.errors|length %}
+                            {{ form_errors(form.middleName) }}
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group col-md-4{% if form.username.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.username, 'Username', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.username, {'attr' : {'class' : 'form-control', 'placeholder': "Username"}}) }}
+                        {% if form.username.vars.errors|length %}
+                            {{ form_errors(form.username) }}
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group col-md-4{% if form.email.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.email, 'Email', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.email, {'attr' : {'class' : 'form-control', 'placeholder': "Email"}}) }}
+                        {% if form.email.vars.errors|length %}
+                            {{ form_errors(form.email) }}
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group col-md-4{% if form.plainPassword.first.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.plainPassword.first, 'New password', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.plainPassword.first, {'attr' : {'class' : 'form-control', 'placeholder': "New password"}}) }}
+                        {% if form.plainPassword.first.vars.errors|length %}
+                            {{ form_errors(form.plainPassword.first) }}
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group col-md-4{% if form.plainPassword.second.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.plainPassword.second, 'Password again', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.plainPassword.second, {'attr' : {'class' : 'form-control', 'placeholder': "Password again"}}) }}
+                        {% if form.plainPassword.second.vars.errors|length %}
+                            {{ form_errors(form.plainPassword.second) }}
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group col-md-4{% if form.mobilephone.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.mobilephone, 'Mobile Phone', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.mobilephone, {'attr' : {'class' : 'form-control', 'placeholder': "Mobile Phone"}}) }}
+                        {% if form.mobilephone.vars.errors|length %}
+                            {{ form_errors(form.mobilephone) }}
+                        {% endif %}
+                    </div>
                 </div>
 
-                <div class="form-group col-md-4{% if form.lastName.vars.errors|length %} has-error{% endif %}">
-                    {{ form_label(form.lastName, 'Last Name', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.lastName, {'attr' : {'class' : 'form-control', 'placeholder': "Last Name"}}) }}
-                    {% if form.lastName.vars.errors|length %}
-                        {{ form_errors(form.lastName) }}
-                    {% endif %}
+                <div class="form-actions">
+                    {{ form_widget(form.create, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
                 </div>
-
-                <div class="form-group col-md-4{% if form.middleName.vars.errors|length %} has-error{% endif %}">
-                    {{ form_label(form.middleName, 'Middle Name', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.middleName, {'attr' : {'class' : 'form-control', 'placeholder': "Middle Name"}}) }}
-                    {% if form.middleName.vars.errors|length %}
-                        {{ form_errors(form.middleName) }}
-                    {% endif %}
-                </div>
-
-                <div class="form-group col-md-4{% if form.username.vars.errors|length %} has-error{% endif %}">
-                    {{ form_label(form.username, 'Username', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.username, {'attr' : {'class' : 'form-control', 'placeholder': "Username"}}) }}
-                    {% if form.username.vars.errors|length %}
-                        {{ form_errors(form.username) }}
-                    {% endif %}
-                </div>
-
-                <div class="form-group col-md-4{% if form.email.vars.errors|length %} has-error{% endif %}">
-                    {{ form_label(form.email, 'Email', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.email, {'attr' : {'class' : 'form-control', 'placeholder': "Email"}}) }}
-                    {% if form.email.vars.errors|length %}
-                        {{ form_errors(form.email) }}
-                    {% endif %}
-                </div>
-
-                <div class="form-group col-md-4{% if form.plainPassword.first.vars.errors|length %} has-error{% endif %}">
-                    {{ form_label(form.plainPassword.first, 'New password', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.plainPassword.first, {'attr' : {'class' : 'form-control', 'placeholder': "New password"}}) }}
-                    {% if form.plainPassword.first.vars.errors|length %}
-                        {{ form_errors(form.plainPassword.first) }}
-                    {% endif %}
-                </div>
-
-                <div class="form-group col-md-4{% if form.plainPassword.second.vars.errors|length %} has-error{% endif %}">
-                    {{ form_label(form.plainPassword.second, 'Password again', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.plainPassword.second, {'attr' : {'class' : 'form-control', 'placeholder': "Password again"}}) }}
-                    {% if form.plainPassword.second.vars.errors|length %}
-                        {{ form_errors(form.plainPassword.second) }}
-                    {% endif %}
-                </div>
-
-                <div class="form-group col-md-4{% if form.mobilephone.vars.errors|length %} has-error{% endif %}">
-                    {{ form_label(form.mobilephone, 'Mobile Phone', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.mobilephone, {'attr' : {'class' : 'form-control', 'placeholder': "Mobile Phone"}}) }}
-                    {% if form.mobilephone.vars.errors|length %}
-                        {{ form_errors(form.mobilephone) }}
-                    {% endif %}
-                </div>
+                {{ form_end(form) }}
             </div>
-
-            <div class="form-actions">
-                {{ form_widget(form.create, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
-            </div>
-            {{ form_end(form) }}
         </div>
     </div>
 

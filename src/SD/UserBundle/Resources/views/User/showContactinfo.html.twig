@@ -1,0 +1,15 @@
+<table class="table table-striped table-bordered table-advance table-hover">
+    {% for contact in usercontactinfo %}
+        <tr>
+            <td>{{ contact.contactinfo.name }}:</td>
+            <td>{{ contact.value }}</td>
+            <td><a
+                    class="ajax-delete fa fa-trash-o"
+                    title="{% trans %}Delete{% endtrans %}"
+                    href="javascript:;"
+                    data-params='{"model":"Usercontactinfo","id":{{ contact.id }}}'
+                    ></a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>

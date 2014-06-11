@@ -10,8 +10,8 @@ lists_mpk:
     resource: "@ListsMpkBundle/Resources/config/routing.yml"
     prefix:   /
 
-it_doors_oper:
-    resource: "@ITDoorsOperBundle/Resources/config/routing.yml"
+it_doors_controlling:
+    resource: "@ITDoorsControllingBundle/Resources/config/routing.yml"
     prefix:   /
 
 it_doors_ajax:

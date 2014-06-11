@@ -1,7 +1,6 @@
 Lists\DepartmentBundle\Entity\DepartmentsType:
     type: entity
     table: departments_type
-    repositoryClass: Lists\DepartmentBundle\Entity\DepartmentsTypeRepository
     fields:
         id:
             id: true

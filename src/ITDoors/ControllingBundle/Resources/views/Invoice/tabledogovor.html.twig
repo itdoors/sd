@@ -1,0 +1,88 @@
+{% trans_default_domain 'ListsDogovorBundle' %}
+<div class="col-md-12">
+    <table id="handling" class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <td></td>
+                <td>{% trans %}DebitControll{% endtrans %}</td>
+                <td>{% trans %}1C{% endtrans %}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}ID{% endtrans %} </td>
+                <td>{{ entitie.id }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>{% trans %}Number{% endtrans %}</td>
+                <td>{{ entitie.number }}</td>
+                <td>{{ entitie.dogovorNumber }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Customer{% endtrans %}</td>
+                <td>{{ entitie.customerName }}</td>
+                <td>{{ entitie.customerName_1c }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Performer{% endtrans %}</td>
+                <td>{{ entitie.performerName }}</td>
+                <td>{{ entitie.performerName_1c }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Startdatetime{% endtrans %}</td>
+                <td>{{  entitie.startdatetime is empty ? '' : entitie.startdatetime|date('d.m.Y') }}</td>
+                <td>{{  entitie.dogovorDate is empty ? '' : entitie.dogovorDate|date('d.m.Y') }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Stopdatetime{% endtrans %}</td>
+                <td>{{ entitie.stopdatetime is empty ? '' : entitie.stopdatetime|date('d.m.Y') }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>{% trans %}Prolongation{% endtrans %}</td>
+                <td>
+                    {% if entitie.prolongation %}
+                        {% trans from 'messages'%}Yes{% endtrans %}
+                    {% elseif entitie.prolongation != null %}
+                        {% trans from 'messages'%}No{% endtrans %}
+                    {% endif %}
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>{% trans %}Prolongation Date{% endtrans %} </td>
+                <td>{{ entitie.prolongationDate is empty ? '' : entitie.prolongationDate|date('d.m.Y') }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>{% trans %}Status{% endtrans %} </td>
+                <td>
+                    {% if entitie.isActive %}
+                        {% trans from 'messages'%}Active{% endtrans %}
+                    {% elseif entitie.isActive != null %}
+                        {% trans from 'messages'%}Not Active{% endtrans %}
+                    {% endif %}
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>{% trans %}Subject{% endtrans %} </td>
+                <td>{{ entitie.subject }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>{% trans %}Dogovor Type{% endtrans %} </td>
+                <td>{{ entitie.dogovorTypeId }}</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td> {% trans %}Scan dogovor{% endtrans %}</td>
+                <td>
+                    {% if entitie.filepath %}
+                    <a href="/uploads/dogovor/{{ entitie.filepath }}" target="_blank">{% trans %}File{% endtrans %}</a>
+                    {% endif %}
+                </td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

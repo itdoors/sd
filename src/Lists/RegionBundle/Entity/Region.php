@@ -7,6 +7,7 @@ namespace Lists\RegionBundle\Entity;
  */
 class Region
 {
+
     /**
      * @var integer
      */
@@ -225,12 +226,12 @@ class Region
     }
 
     /**
-     * toString method
+     * __toStrong
      *
      * @return string
      */
     public function __toString()
     {
-        return $this->name;
+        return $this->getName();
     }
 }

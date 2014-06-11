@@ -50,13 +50,25 @@ sd_common_ajax_user:
     pattern:  /ajax/user
     defaults: { _controller: SDCommonBundle:Ajax:user }
 
+sd_common_ajax_user_fio:
+    pattern:  /ajax/user/fio
+    defaults: { _controller: SDCommonBundle:Ajax:userFIO }
+    
+sd_common_ajax_user_position:
+    pattern:  /ajax/user/position
+    defaults: { _controller: SDCommonBundle:Ajax:userPosition }
+    
+sd_common_ajax_user_email:
+    pattern:  /ajax/user/email
+    defaults: { _controller: SDCommonBundle:Ajax:userEmail }
+
 sd_common_ajax_contact_phone:
     pattern:  /ajax/contact/phone
-    defaults: { _controller: SDCommonBundle:Ajax:contactPhone }
+    defaults: { _controller: SDCommonBundle:Ajax:userPhone }
 
-sd_common_ajax_contact_email:
-    pattern:  /ajax/contact/email
-    defaults: { _controller: SDCommonBundle:Ajax:contactEmail }
+sd_common_ajax_contact_company:
+    pattern:  /ajax/contact/company
+    defaults: { _controller: SDCommonBundle:Ajax:userStaffCompany }
 
 sd_common_ajax_delete:
     pattern:  /ajax/delete
@@ -213,3 +225,7 @@ sd_common_ajax_oper_schedule_year_by_id:
 sd_common_ajax_schedule_grafik_people:
     pattern:  /ajax/schedule/grafik/people/
     defaults: { _controller: SDCommonBundle:Ajax:departmentIndividualGrafik }
+
+sd_common_ajax_invoice_save:
+    pattern:  /ajax/invoice/save
+    defaults: { _controller: SDCommonBundle:Ajax:invoiceSave }

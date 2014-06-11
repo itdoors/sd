@@ -1,11 +1,33 @@
-sd_user_index:
-    pattern:  /user/index
-    defaults: { _controller: SDUserBundle:User:index }
+#sd_user_index:
+#    pattern:  /user/index
+#    defaults: { _controller: SDUserBundle:User:index }
+    
+sd_user_staff:
+    pattern:  /user/staff
+    defaults: { _controller: SDUserBundle:User:staff }
+    
+sd_user_stafflist:
+    pattern:  /user/staff/list
+    defaults: { _controller: SDUserBundle:User:stafflist }
 
 sd_user_show:
     pattern:  /user/show/{id}
     defaults: { _controller: SDUserBundle:User:show }
+    requirements:
+        id: \d+
+    
+sd_user_show_tabs:
+    pattern:  /user/show/tabs
+    defaults: { _controller: SDUserBundle:User:showtabs }
+    
+sd_user_show_contactinfo:
+    pattern:  /user/show/contactinfo
+    defaults: { _controller: SDUserBundle:User:contactinfo }
 
+sd_user_new_staff:
+    pattern:  /user/newstaff
+    defaults: { _controller: SDUserBundle:User:newstaff }
+    
 sd_user_new:
     pattern:  /user/new
     defaults: { _controller: SDUserBundle:User:new }
