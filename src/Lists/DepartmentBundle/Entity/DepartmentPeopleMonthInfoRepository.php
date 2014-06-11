@@ -25,6 +25,8 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
     {
         $sql = $this->createQueryBuilder('dpmi')
             ->select('dpmi.departmentPeopleId as id')
+            ->addSelect('dpr.id as replacementId')
+            ->addSelect('i.firstName')
             ->addSelect('i.firstName')
             ->addSelect('i.lastName')
             ->addSelect('i.middleName')
@@ -38,6 +40,7 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
             ->addSelect('i.birthday')
             ->addSelect('i.passport')
             ->addSelect('m.name as mpkName')
+            ->leftJoin('dpmi.departmentPeopleReplacement', 'dpr')
             ->leftJoin('dpmi.departmentPeople', 'dp')
             ->leftJoin('dp.department', 'd')
             ->leftJoin('dp.individual', 'i')

@@ -77,3 +77,7 @@ it_doors_oper_schedule_add_accural:
 it_doors_oper_schedule_delete_accural:
     pattern:  /oper/schedule/delete/accural/
     defaults: { _controller: ITDoorsOperBundle:OperSchedule:deleteAccrual }
+
+it_doors_oper_schedule_add_user:
+    pattern:  /oper/schedule/add/user/
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:addUserToGrafik }

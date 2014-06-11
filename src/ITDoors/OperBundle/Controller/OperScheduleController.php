@@ -111,7 +111,21 @@ class OperScheduleController extends BaseFilterController
             }
         }
 
+        /** @var  $monthInfoRepository \Lists\DepartmentBundle\Entity\departmentPeopleRepository */
+        $departmentPeopleRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
 
+        $coworkersAll = $departmentPeopleRepository->findBy(array(
+            'department' => $idDepartment
+        ));
+
+        /** @var  $coworkersOne \Lists\DepartmentBundle\Entity\departmentPeople */
+        foreach ($coworkersAll as $key => $departmentPeople) {
+            if ($departmentPeople->getDismissalDateNotOfficially() != null
+                && $departmentPeople->getDismissalDateNotOfficially() < new \DateTime($year.'-'.$month)) {
+                unset($coworkersAll[$key]);
+            }
+        }
 
         /** @var $grafikRepository \Lists\GrafikBundle\Entity\GrafikRepository   */
         $grafikRepository = $this->getDoctrine()
@@ -163,7 +177,7 @@ class OperScheduleController extends BaseFilterController
 
         }
         //ini_set('memory_limit', '512M');
-        //var_dump(count($coworkers), count($dateInfo));
+        //var_dump(count($coworkersAll));
         //exit;
         return $this->render('ITDoorsOperBundle:Schedule:scheduleTable.html.twig', array(
             'days'=> $days,
@@ -173,7 +187,8 @@ class OperScheduleController extends BaseFilterController
             'infoHours' => $infoHours,
             'year' => $year,
             'month' => $month,
-            'monthName' =>$monthName
+            'monthName' => $monthName,
+            'filterCoworkers' => $coworkersAll
         ));
 
     }
@@ -1156,7 +1171,7 @@ class OperScheduleController extends BaseFilterController
         $info['id'] = $departmentPeople->getId();
         $info['mpk'] = $departmentPeople->getMpks();
         $info['fio'] = $departmentPeople->getLastName().' '.
-            $departmentPeople->getMiddleName().' '.$departmentPeople->getFirstName();
+            $departmentPeople->getFirstName().' '.$departmentPeople->getMiddleName();
         $info['dateAcceptedOfficially'] = $departmentPeople->getAdmissionDate();
         $info['dateAcceptedNotOfficially'] = $departmentPeople->getAdmissionDateNotOfficially();
         $info['dateFiredOfficially'] = $departmentPeople->getDismissalDate();
@@ -1188,46 +1203,24 @@ class OperScheduleController extends BaseFilterController
         $accrual['officially'] = array();
         $accrual['notOfficially'] = array();
 
-                /** @var $oneAccrual \Lists\DepartmentBundle\Entity\OnceOnlyAccrual */
-/*          foreach($onceOnlyAccrual as $oneAccrual) {
-          if ($oneAccrual->getCode() == 'oz') {
-              $type = 'officially';
-          } else if ($oneAccrual->getCode() == 'uz') {
-              $type = 'notOfficially';
-          }
+        $plannedAccrualRepository = $this->getDoctrine()
+          ->getRepository('ListsDepartmentBundle:PlannedAccrual');
 
-                  $accrual[$type]['id'] = $oneAccrual->getId();
-                  $accrual[$type]['type'] = $oneAccrual->getType();
-                  $accrual[$type]['workType'] = $oneAccrual->getWorkType();
-                  $accrual[$type]['value'] = $oneAccrual->getValue();
-                  $accrual[$type]['value'] = $oneAccrual->getValue();
-              }
-
-              $accrual['officially']['id'] = 'sdfsdf';
-              $accrual['officially']['type'] = 'asdfsdf';
-              $accrual['officially']['workType'] = 'fdgdfg';
-              $accrual['officially']['value'] = 'asdfsd';
-              $accrual['officially']['value'] = 'sdf';*/
+        $plannedAccrual = $plannedAccrualRepository->findBy(array(
+          'departmentPeople' => $idCoworker
+        ));
 
 
-          $plannedAccrualRepository = $this->getDoctrine()
-              ->getRepository('ListsDepartmentBundle:PlannedAccrual');
-
-          $plannedAccrual = $plannedAccrualRepository->findBy(array(
-              'departmentPeople' => $idCoworker
-          ));
-
-
-          $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleInfoUserBasic.html.twig', array(
-              'coworker'=> $info,
-              'accrual' => $onceOnlyAccrual,
-              'planned' => $plannedAccrual
-          ));
+        $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleInfoUserBasic.html.twig', array(
+          'coworker'=> $info,
+          'accrual' => $onceOnlyAccrual,
+          'planned' => $plannedAccrual
+        ));
 
 
-          $return['success'] = 1;
+        $return['success'] = 1;
 
-          return new Response(json_encode($return));
+        return new Response(json_encode($return));
     }
 
     /**
@@ -1378,8 +1371,66 @@ class OperScheduleController extends BaseFilterController
         return new Response(json_encode($return));
     }
 
-/*    public function addUserToGrafik()
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function addUserToGrafikAction(Request $request)
     {
+        $idCoworker = $request->request->get('idCoworker');
+        $date = $request->request->get('date');
+        $idCoworkerReplacement =  $request->request->get('idCoworkerReplacement');
+        $type = $request->request->get('typeReplacement');
 
-    }*/
+        list($year, $month) = explode('-', $date);
+
+        $departmentPeopleRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
+        /** @var  $departmentPeople \Lists\DepartmentBundle\Entity\DepartmentPeople */
+        $departmentPeople = $departmentPeopleRepository->find($idCoworker);
+
+        /** @var  $monthInfoRepository \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfoRepository */
+        $monthInfoRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
+
+        if ($type == 'change') {
+            $departmentPeopleReplacement = $departmentPeopleRepository->find($idCoworkerReplacement);
+        } elseif ($type == 'permanent') {
+            $departmentPeopleReplacement = $departmentPeopleRepository->find(0);
+        }
+        $monthInfo = $monthInfoRepository->findBy(array(
+            'departmentPeople' => $departmentPeople,
+            'month' => $month,
+            'year' => $year,
+            'departmentPeopleReplacement' => $departmentPeopleReplacement,
+            'departmentPeopleId'=> $idCoworker
+
+        ));
+
+
+
+        if ($monthInfo) {
+            $return['success'] = 0;
+            $return['error'] = 'exists';
+
+            return new Response(json_encode($return));
+        }
+
+        $monthInfo = new \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfo();
+        $monthInfo->setYear($year);
+        $monthInfo->setMonth($month);
+        $monthInfo->setDepartmentPeople($departmentPeople);
+        $monthInfo->setDepartmentPeopleId($idCoworker);
+        $monthInfo->setDepartmentPeopleReplacement($departmentPeopleReplacement);
+        $monthInfo->setReplacementType('r');
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($monthInfo);
+        $em->flush();
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
 }
