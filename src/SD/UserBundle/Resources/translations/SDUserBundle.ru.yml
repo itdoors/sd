@@ -29,9 +29,11 @@ First name: Имя
 Last name: Фамилия
 Middle name: Отчество
 Mobile phone: Мобильный
+Personale phone: Персональный телефон
+Inside phone: Внутрений телефон
 Fired: Уволен
 fired: Уволен
-No fired: Не уволен
+No fired: Работает
 Active: Активный
 Blocked: Заблокирован
 blocked: заблокирован
@@ -40,5 +42,22 @@ Status: Статус
 Enter email: Введите Email
 Enter phone: Введите телефон
 
-Company structure: Название компании
-Enter company structure: Введите название компании
+Subdivision: Подразделение
+Enter subdivision: Введите подразделение
+User profile: Профиль пользователя
+Users <small>user profile</small>: Пользователи <small>профиль пользователя</small>
+
+Profile: Главный профиль
+Plan: План
+Settings profile: Настройки профиля
+
+Current password: Текущий пароль
+New password: Новый пароль
+New password again: Повторить новый пароль
+
+Change Password: Сменить пароль
+
+Place of birth: Место рождения
+Hire Date: Дата приема на работу
+Termination date: Дата увольнения
+Education: Образование

@@ -20,7 +20,7 @@ Muzyka Dmytro
 	<!-- BEGIN USER LOGIN DROPDOWN -->
 	<li class="dropdown user">
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-			<img alt="" src="{{ asset('templates/metronic/img/avatar1_small.jpg') }}"/>
+			{% if app.user.photo is not empty %}<img alt="" src="{{ asset('uploads/userprofiles/' ~ app.user.id ~ '/image29_' ~ app.user.photo) }}"/>{% endif %}
 			<span class="username">{{ app.user.fullName }}</span>
 			<i class="fa fa-angle-down"></i>
 		</a>

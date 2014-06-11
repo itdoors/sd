@@ -1,6 +1,6 @@
-sd_user_index:
-    pattern:  /user/index
-    defaults: { _controller: SDUserBundle:User:index }
+#sd_user_index:
+#    pattern:  /user/index
+#    defaults: { _controller: SDUserBundle:User:index }
     
 sd_user_staff:
     pattern:  /user/staff
@@ -13,14 +13,20 @@ sd_user_stafflist:
 sd_user_show:
     pattern:  /user/show/{id}
     defaults: { _controller: SDUserBundle:User:show }
+    requirements:
+        id: \d+
+    
+sd_user_show_tabs:
+    pattern:  /user/show/tabs
+    defaults: { _controller: SDUserBundle:User:showtabs }
 
 sd_user_new:
     pattern:  /user/new
     defaults: { _controller: SDUserBundle:User:new }
 
-#sd_user_change_password_form:
-#    pattern:  /user/change_password_form/{id}
-#    defaults: { _controller: SDUserBundle:User:changePasswordForm }
+sd_user_change_password_form:
+    pattern:  /user/change_password_form/{id}
+    defaults: { _controller: SDUserBundle:User:changePasswordForm }
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"

@@ -8,11 +8,22 @@ SD\UserBundle\Entity\Staff:
             nullable: false
             generator:
                 strategy: SEQUENCE
+        phoneInside:
+            type: string
+            length: 128
+            nullable: true
+            column: phone_inside
         mobilephone:
             type: string
             length: 12
             fixed: false
             nullable: false
+        phonePersonal:
+            type: string
+            length: 12
+            fixed: false
+            nullable: true
+            column: mobilephone_personal
         description:
             type: text
             nullable: true
@@ -21,6 +32,26 @@ SD\UserBundle\Entity\Staff:
             length: 255
             fixed: false
             nullable: true
+        issues:
+            type: text
+            nullable: true
+        birthPlace:
+            type: string
+            length: 128
+            nullable: true
+            column: birth_place
+        dateFire:
+            type: date
+            nullable: true
+            column: hire_date
+        dateHire:
+            type: date
+            column: fire_date
+        education:
+            type: string
+            length: 128
+            nullable: true
+            column: education
     oneToOne:
         user:
           targetEntity: User

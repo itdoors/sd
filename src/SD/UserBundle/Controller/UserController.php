@@ -5,8 +5,10 @@ namespace SD\UserBundle\Controller;
 use SD\UserBundle\Entity\Staff;
 use ITDoors\AjaxBundle\Controller\BaseFilterController as BaseController;
 use SD\UserBundle\Entity\User;
+use SD\UserBundle\Entity\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\DBAL\Connection;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class UserController extends BaseController
 {
@@ -16,7 +18,10 @@ class UserController extends BaseController
     protected $baseRoute = 'sd_user_staff';
     /** @var KnpPaginatorBundle $paginator */
     protected $paginator = 'knp_paginator';
+    /** @var InvoiceService $service */
+    protected $service = 'sd_user.service';
     
+
     /**
      * Executes index action
      */
@@ -34,6 +39,10 @@ class UserController extends BaseController
     {
         $namespase = $this->filterNamespace;
         $filters = $this->getFilters($namespase);
+        if(empty($filters)){
+            $filters['isFired'] = 'No fired';
+            $this->setFilters($namespase,$filters);
+        }
         $users = $this->get('sd_user.repository')->getAllForUserQuery($filters);
         $entities = $users['entity'];
         $count = $users['count'];
@@ -58,23 +67,72 @@ class UserController extends BaseController
      */
     public function showAction($id)
     {
-        /** @var User $user */
-        $user = $this->get('sd_user.repository')->find($id);
-
+        /** @var UserRepository $user */
+        $user = $this->get('sd_user.repository');
+        
+         /** @var User $item */
+        $item = $user->find($id);
+         if (!$item)
+        {
+            return $this->redirect($this->generateUrl('sd_user_staff'));
+        }
+        /** @var Session $session */
+        $session = $this->get('session');
+        $session->set('userid', $id);
+        
+        
         $isCurrentUser = $id == $this->getUser()->getId();
 
-        $isAdmin = $user->hasRole('ROLE_HRADMIN');
+        $isAdmin = $item->hasRole('ROLE_HRADMIN');
 
-        if (!$user)
-        {
-            return $this->render($this->generateUrl('sd_user_index'));
+        /** @var UserService $service */
+        $service = $this->container->get($this->service);
+
+        $namespace = $this->filterNamespace.$id;
+        
+        $tab = $this->getTab($namespace);
+        if (!$tab) {
+            $tab = 'profile';
+            $this->setTab($namespace, $tab);
         }
+        $tabs = $service->getTabs();
 
+       
         return $this->render('SDUserBundle:' . $this->baseTemplate . ':show.html.twig', array(
-                'item' => $user,
+                'tabs' => $tabs,
+                'tab' => $tab,
+                'item' => $item,
+                'namespace' => $namespace,
                 'baseTemplate' => $this->baseTemplate,
                 'isCurrentUser' => $isCurrentUser,
                 'isAdmin' => $isAdmin
+            ));
+    }
+    /**
+     * Execute show action
+     */
+    public function showtabsAction()
+    {
+        /** @var Session $session */
+        $session = $this->get('session');
+        $userId = $session->get('userid', false);
+        
+        if(!$userId){
+            return $this->redirect($this->generateUrl('sd_user_staff'));
+        }
+        /** @var UserRepository $user */
+        $user = $this->get('sd_user.repository');
+        
+         /** @var User $item */
+        $item = $user->getStaffById((int)$userId);
+
+        $namespace = $this->filterNamespace.$userId;
+
+        $tab = $this->getTab($namespace);
+        
+        return $this->render('SDUserBundle:User:showTab' . $tab . '.html.twig',
+            array(
+                'item' => $item
             ));
     }
 

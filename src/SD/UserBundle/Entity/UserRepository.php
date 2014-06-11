@@ -33,6 +33,36 @@ class UserRepository extends EntityRepository
      *
      * @return Query
      */
+    public function getStaffById($id)
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u.id')
+            ->addselect('u.photo')
+            ->addselect('u.lastName')
+            ->addselect('u.firstName')
+            ->addselect('u.middleName')
+            ->addselect('u.birthday')
+            ->addselect('u.position')
+            ->addselect('s.issues')
+            ->addselect('s.mobilephone')
+            ->addselect('s.phonePersonal')
+            ->addselect('s.phoneInside')
+            ->addselect('s.birthPlace')
+            ->addselect('s.dateFire')
+            ->addselect('s.dateHire')
+            ->addselect('s.education')
+            ->addselect('c.name as companyName')
+            ->innerJoin('u.staff', 's')
+            ->leftJoin('s.companystructure', 'c')
+            ->where('u.id = :id')
+            ->setParameter(':id', $id)
+            ->getQuery()->getSingleResult();
+    }
+    /**
+     * Get Only stuff
+     *
+     * @return Query
+     */
     public function getOnlyStaffCompany()
     {
         return $this->createQueryBuilder('u')
@@ -120,7 +150,7 @@ class UserRepository extends EntityRepository
     public function processBaseQuery(QueryBuilder $sql)
     {
         $sql
-            ->leftJoin('u.staff', 's')
+            ->innerJoin('u.staff', 's')
             ->leftJoin('s.companystructure', 'c')
         ;
             /*->leftJoin('o.city', 'c')
@@ -191,7 +221,15 @@ class UserRepository extends EntityRepository
     {
         $sql->orderBy('u.firstName', 'ASC');
     }
-    public function getAllForUserQuery($filters, $id = null)
+    
+    /**
+     * getAllForUserQuery
+     * 
+     * @param array $filters
+     * @param integer|boolean $id
+     * @return type
+     */
+    public function getAllForUserQuery($filters, $id = false)
     {
         /** @var \Doctrine\ORM\QueryBuilder $sql*/
         $sql = $this->createQueryBuilder('u');
@@ -205,13 +243,10 @@ class UserRepository extends EntityRepository
         $this->processBaseQuery($sql);
         $this->processBaseQuery($sqlCount);
 
-        if ($id)
-        {
+        if ($id) {
             $this->processIdQuery($sql, $id);
             $this->processIdQuery($sqlCount, $id);
-        }
-        else
-        {
+        } else {
             $this->processFilters($sql, $filters);
             $this->processFilters($sqlCount, $filters);
         }

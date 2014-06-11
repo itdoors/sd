@@ -8,7 +8,7 @@
             <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
         </li>
         {% include 'sidebar_search.html.twig' %}
-        <li class="start{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params'))  == path('sd_dashboard_homepage') %} active{% endif %}">
+        <li class="start{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_dashboard_homepage') %} active{% endif %}">
             <a href="{{ path('sd_dashboard_homepage') }}">
                 <i class="fa fa-home"></i> 
                 <span class="title">{% trans %}Dashboard{% endtrans %}</span>

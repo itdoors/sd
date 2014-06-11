@@ -4,6 +4,7 @@ parameters:
     sd_user.form.class: SD\UserBundle\Form\ChangePasswordForm
     sd_user.form.new.class: SD\UserBundle\Form\UserNewForm
     staff.filter.form.class: SD\UserBundle\Form\StaffFilterForm
+    sd_user.service.class: SD\UserBundle\Services\UserService
 
 services:
     sd_user.repository:
@@ -29,3 +30,7 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: staffFilterForm }
+            
+    sd_user.service:
+        class: %sd_user.service.class%
+        arguments: [@service_container]

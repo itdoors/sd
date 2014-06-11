@@ -101,7 +101,7 @@ class StaffFilterForm extends AbstractType
                         'width' => '200px',
                         'multiple' => 'multiple'
                     )),
-                    'placeholder' => 'Enter company structure',
+                    'placeholder' => 'Enter subdivision',
                 )
             ))
             ->add('isActive', 'choice', array(
