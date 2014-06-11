@@ -19,7 +19,6 @@ class Contactinfo
      */
     private $name;
 
-
     /**
      * Get id
      *
@@ -34,12 +33,13 @@ class Contactinfo
      * Set name
      *
      * @param string $name
+     * 
      * @return Contactinfo
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
@@ -52,8 +52,7 @@ class Contactinfo
     {
         return $this->name;
     }
-    
-    
+
     /**
      * ToString magic method
      *
@@ -61,6 +60,6 @@ class Contactinfo
      */
     public function __toString()
     {
-      return (string) $this->getName();
+        return (string) $this->getName();
     }
 }

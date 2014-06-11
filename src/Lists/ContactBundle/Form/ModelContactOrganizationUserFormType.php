@@ -7,11 +7,14 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Lists\ContactBundle\Entity\ModelContactRepository;
 
+/**
+ * ModelContactOrganizationUserFormType
+ */
 class ModelContactOrganizationUserFormType extends ModelContactOrganizationFormType
 {
-        /**
+    /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -30,14 +33,13 @@ class ModelContactOrganizationUserFormType extends ModelContactOrganizationFormT
                 'widget' => 'single_text',
                 'format' => 'dd.M.yyyy'
             ))
-            ->add('email')
-        ;
+            ->add('email');
 
         $builder
             ->add('add', 'submit')
             ->add('cancel', 'button');
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

@@ -22,43 +22,47 @@ class UserRepository extends EntityRepository
     public function getOnlyStaff()
     {
         return $this->createQueryBuilder('u')
-            ->select('u', 'staff')
-            ->where('u.isFired = FALSE OR u.isFired IS NULL')
-            //->setParameter(':isFired', false)
-            ->innerJoin('u.staff', 'staff')
-            ->orderBy('u.lastName', 'ASC');
+                ->select('u', 'staff')
+                ->where('u.isFired = FALSE OR u.isFired IS NULL')
+                //->setParameter(':isFired', false)
+                ->innerJoin('u.staff', 'staff')
+                ->orderBy('u.lastName', 'ASC');
     }
+
     /**
      * Get Only stuff
      *
+     * @param integer $id
+     * 
      * @return Query
      */
     public function getStaffById($id)
     {
         return $this->createQueryBuilder('u')
-            ->select('u.id')
-            ->addselect('u.photo')
-            ->addselect('u.email')
-            ->addselect('u.lastName')
-            ->addselect('u.firstName')
-            ->addselect('u.middleName')
-            ->addselect('u.birthday')
-            ->addselect('u.position')
-            ->addselect('s.issues')
-            ->addselect('s.mobilephone')
-            ->addselect('s.phonePersonal')
-            ->addselect('s.phoneInside')
-            ->addselect('s.birthPlace')
-            ->addselect('s.dateFire')
-            ->addselect('s.dateHire')
-            ->addselect('s.education')
-            ->addselect('c.name as companyName')
-            ->innerJoin('u.staff', 's')
-            ->leftJoin('s.companystructure', 'c')
-            ->where('u.id = :id')
-            ->setParameter(':id', $id)
-            ->getQuery()->getSingleResult();
+                ->select('u.id')
+                ->addselect('u.photo')
+                ->addselect('u.email')
+                ->addselect('u.lastName')
+                ->addselect('u.firstName')
+                ->addselect('u.middleName')
+                ->addselect('u.birthday')
+                ->addselect('u.position')
+                ->addselect('s.issues')
+                ->addselect('s.mobilephone')
+                ->addselect('s.phonePersonal')
+                ->addselect('s.phoneInside')
+                ->addselect('s.birthPlace')
+                ->addselect('s.dateFire')
+                ->addselect('s.dateHire')
+                ->addselect('s.education')
+                ->addselect('c.name as companyName')
+                ->innerJoin('u.staff', 's')
+                ->leftJoin('s.companystructure', 'c')
+                ->where('u.id = :id')
+                ->setParameter(':id', $id)
+                ->getQuery()->getSingleResult();
     }
+
     /**
      * Get Only stuff
      *
@@ -67,13 +71,13 @@ class UserRepository extends EntityRepository
     public function getOnlyStaffCompany()
     {
         return $this->createQueryBuilder('u')
-            ->select('u', 'staff')
-            ->where('u.isFired = FALSE OR u.isFired IS NULL')
-            //->setParameter(':isFired', false)
-            ->innerJoin('u.staff', 'staff')
-            ->innerJoin('staff.companystructure', 'c')
-            ->groupBy('c.id')
-            ->orderBy('u.lastName', 'ASC');
+                ->select('u', 'staff')
+                ->where('u.isFired = FALSE OR u.isFired IS NULL')
+                //->setParameter(':isFired', false)
+                ->innerJoin('u.staff', 'staff')
+                ->innerJoin('staff.companystructure', 'c')
+                ->groupBy('c.id')
+                ->orderBy('u.lastName', 'ASC');
     }
 
     /**
@@ -86,11 +90,11 @@ class UserRepository extends EntityRepository
     public function getOrganizationUsersQuery($organizationId)
     {
         return $this->createQueryBuilder('u')
-            ->select('u', 'staff')
-            ->innerJoin('u.staff', 'staff')
-            ->innerJoin('u.organizations', 'organizations')
-            ->where('organizations.id = :organizationId')
-            ->setParameter(':organizationId', $organizationId);
+                ->select('u', 'staff')
+                ->innerJoin('u.staff', 'staff')
+                ->innerJoin('u.organizations', 'organizations')
+                ->where('organizations.id = :organizationId')
+                ->setParameter(':organizationId', $organizationId);
     }
 
     /**
@@ -103,14 +107,13 @@ class UserRepository extends EntityRepository
     public function getHandlingUsersQuery($handlingId)
     {
         return $this->createQueryBuilder('u')
-            ->select('u', 'staff')
-            ->innerJoin('u.staff', 'staff')
-            ->innerJoin('u.handlings', 'handlings')
-            ->where('handlings.id = :handlingId')
-            ->setParameter(':handlingId', $handlingId);
+                ->select('u', 'staff')
+                ->innerJoin('u.staff', 'staff')
+                ->innerJoin('u.handlings', 'handlings')
+                ->where('handlings.id = :handlingId')
+                ->setParameter(':handlingId', $handlingId);
     }
-    
-    
+
     /**
      * Processes sql query. adding select
      *
@@ -128,9 +131,9 @@ class UserRepository extends EntityRepository
             ->addSelect('u.email')
             ->addSelect('u.isBlocked')
             ->addSelect('u.isFired')
-            ->addSelect('c.name as company')
-        ;
+            ->addSelect('c.name as company');
     }
+
     /**
      * Processes sql query. adding select
      *
@@ -140,9 +143,8 @@ class UserRepository extends EntityRepository
     {
         $sql
             ->select('COUNT(u.id) as usercount');
-
     }
-    
+
     /**
      * Processes sql query. adding base query
      *
@@ -150,18 +152,17 @@ class UserRepository extends EntityRepository
      */
     public function processBaseQuery(QueryBuilder $sql)
     {
-        $sql
-            ->innerJoin('u.staff', 's')
-            ->leftJoin('s.companystructure', 'c')
-        ;
-            /*->leftJoin('o.city', 'c')
-            ->leftJoin('c.region', 'r');*/
+        $sql->innerJoin('u.staff', 's')
+            ->leftJoin('s.companystructure', 'c');
+        /* ->leftJoin('o.city', 'c')
+          ->leftJoin('c.region', 'r'); */
     }
-     /**
+
+    /**
      * Processes sql query. adding id query
      *
      * @param QueryBuilder $sql
-     * @param int $id
+     * @param int          $id
      */
     public function processIdQuery(QueryBuilder $sql, $id)
     {
@@ -169,51 +170,44 @@ class UserRepository extends EntityRepository
             ->andWhere('u.id = :id')
             ->setParameter(':id', $id);
     }
-    
-    
-     /**
+
+    /**
      * Processes sql query depending on filters
      *
      * @param QueryBuilder $sql
-     * @param mixed[] $filters
+     * @param mixed[]      $filters
      */
     public function processFilters(QueryBuilder $sql, $filters)
     {
-        
-        if (sizeof($filters))
-        {
-            foreach($filters as $key => $value)
-            {
-                if (!$value)
-                {
+
+        if (sizeof($filters)) {
+            foreach ($filters as $key => $value) {
+                if (!$value) {
                     continue;
                 }
-                switch($key)
-                {
+                switch ($key) {
                     case 'isActive':
                         $sql->andWhere("u.isBlocked = :active");
-                        $sql->setParameter(':active', ($value == 'active'? 0 : 1));
+                        $sql->setParameter(':active', ($value == 'active' ? 0 : 1));
                         break;
                     case 'isFired':
-                        if($value !== 'fired'){
+                        if ($value !== 'fired') {
                             $sql->andWhere("u.isFired is NULL or u.isFired = :fired");
-                        }else{                            
+                        } else {
                             $sql->andWhere("u.isFired = :fired");
                         }
-                        $sql->setParameter(':fired', ($value == 'fired'? 1 : 0));
+                        $sql->setParameter(':fired', ($value == 'fired' ? 1 : 0));
                         break;
-                    default :
+                    default:
                         $sql->andWhere("u.id IN (:userIds)");
                         $ids = explode(',', $value);
                         $sql->setParameter(':userIds', $ids);
                 }
-
             }
         }
     }
-    
-    
-     /**
+
+    /**
      * Processes sql query. adding users query
      *
      * @param \Doctrine\ORM\QueryBuilder $sql
@@ -222,17 +216,18 @@ class UserRepository extends EntityRepository
     {
         $sql->orderBy('u.firstName', 'ASC');
     }
-    
+
     /**
      * getAllForUserQuery
      * 
-     * @param array $filters
+     * @param array           $filters
      * @param integer|boolean $id
+     * 
      * @return type
      */
     public function getAllForUserQuery($filters, $id = false)
     {
-        /** @var \Doctrine\ORM\QueryBuilder $sql*/
+        /** @var \Doctrine\ORM\QueryBuilder $sql */
         $sql = $this->createQueryBuilder('u');
 
         /** @var \Doctrine\ORM\QueryBuilder $sqlCount */
@@ -255,9 +250,9 @@ class UserRepository extends EntityRepository
         $this->processOrdering($sql);
 
         $query = array(
-            'entity' =>$sql->getQuery(),
-            'count' =>$sqlCount->getQuery()->getSingleScalarResult()
-            );
+            'entity' => $sql->getQuery(),
+            'count' => $sqlCount->getQuery()->getSingleScalarResult()
+        );
 
         return $query;
     }

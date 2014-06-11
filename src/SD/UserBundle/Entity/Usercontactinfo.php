@@ -29,7 +29,6 @@ class Usercontactinfo
      */
     private $contactinfo;
 
-
     /**
      * Get id
      *
@@ -44,12 +43,13 @@ class Usercontactinfo
      * Set value
      *
      * @param string $value
+     * 
      * @return Usercontactinfo
      */
     public function setValue($value)
     {
         $this->value = $value;
-    
+
         return $this;
     }
 
@@ -67,12 +67,13 @@ class Usercontactinfo
      * Set user
      *
      * @param \SD\UserBundle\Entity\User $user
+     * 
      * @return Usercontactinfo
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 
@@ -90,12 +91,13 @@ class Usercontactinfo
      * Set contactinfo
      *
      * @param \SD\UserBundle\Entity\Contactinfo $contactinfo
+     * 
      * @return Usercontactinfo
      */
     public function setContactinfo(\SD\UserBundle\Entity\Contactinfo $contactinfo = null)
     {
         $this->contactinfo = $contactinfo;
-    
+
         return $this;
     }
 
@@ -107,5 +109,5 @@ class Usercontactinfo
     public function getContactinfo()
     {
         return $this->contactinfo;
-    } 
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace Lists\DogovorBundle\Entity;
 
+use Lists\CompanystructureBundle\Entity\Companystructure;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -34,7 +35,6 @@ class DogovorCompanystructure
      */
     private $companyStructures;
 
-
     /**
      * Get id
      *
@@ -49,12 +49,13 @@ class DogovorCompanystructure
      * Set dogovorId
      *
      * @param integer $dogovorId
+     * 
      * @return DogovorCompanystructure
      */
     public function setDogovorId($dogovorId)
     {
         $this->dogovorId = $dogovorId;
-    
+
         return $this;
     }
 
@@ -72,12 +73,13 @@ class DogovorCompanystructure
      * Set companyStructureId
      *
      * @param integer $companyStructureId
+     * 
      * @return DogovorCompanystructure
      */
     public function setCompanyStructureId($companyStructureId)
     {
         $this->companyStructureId = $companyStructureId;
-    
+
         return $this;
     }
 
@@ -95,12 +97,13 @@ class DogovorCompanystructure
      * Set dogovors
      *
      * @param \Lists\DogovorBundle\Entity\Dogovor $dogovors
+     * 
      * @return DogovorCompanystructure
      */
     public function setDogovors(\Lists\DogovorBundle\Entity\Dogovor $dogovors = null)
     {
         $this->dogovors = $dogovors;
-    
+
         return $this;
     }
 
@@ -118,12 +121,13 @@ class DogovorCompanystructure
      * Set companyStructures
      *
      * @param \Lists\CompanystructureBundle\Entity\Companystructure $companyStructures
+     * 
      * @return DogovorCompanystructure
      */
-    public function setCompanyStructures(\Lists\CompanystructureBundle\Entity\Companystructure $companyStructures = null)
+    public function setCompanyStructures(Companystructure $companyStructures = null)
     {
         $this->companyStructures = $companyStructures;
-    
+
         return $this;
     }
 

@@ -7,6 +7,7 @@ namespace Lists\DepartmentBundle\Entity;
  */
 class Departments
 {
+
     /**
      * @var integer
      */
@@ -58,8 +59,6 @@ class Departments
     private $coordinates;
 
     /**
-<<<<<<< HEAD
-=======
      * @var integer
      */
     private $organizationId;
@@ -70,7 +69,6 @@ class Departments
     private $mpks;
 
     /**
->>>>>>> staging
      * @var \Lists\CityBundle\Entity\City
      */
     private $city;
@@ -90,19 +88,8 @@ class Departments
      */
     private $status;
 
-<<<<<<< HEAD
-
     /**
-=======
-    /**
-<<<<<<< HEAD
      * @var \SD\UserBundle\Entity\User
-=======
->>>>>>> staging
-     * Get id
-     *
-     * @return integer
->>>>>>> origin/staging
      */
     private $opermanager;
 
@@ -341,8 +328,6 @@ class Departments
     }
 
     /**
-<<<<<<< HEAD
-=======
      * Set organizationId
      *
      * @param integer $organizationId
@@ -401,7 +386,6 @@ class Departments
     }
 
     /**
->>>>>>> staging
      * Set city
      *
      * @param \Lists\CityBundle\Entity\City $city
@@ -496,57 +480,29 @@ class Departments
     {
         return $this->status;
     }
-    /**
-     * @var integer
-     */
-    private $organizationId;
-
 
     /**
-     * Set organizationId
+     * Set opermanager
      *
-<<<<<<< HEAD
-     * @param integer $organizationId
-=======
      * @param \SD\UserBundle\Entity\User $opermanager
      *
->>>>>>> staging
      * @return Departments
      */
-    public function setOrganizationId($organizationId)
+    public function setOpermanager(\SD\UserBundle\Entity\User $opermanager = null)
     {
-<<<<<<< HEAD
-        $this->organizationId = $organizationId;
-    
-=======
         $this->opermanager = $opermanager;
 
->>>>>>> staging
         return $this;
     }
 
     /**
-     * Get organizationId
+     * Get opermanager
      *
-     * @return integer 
-     */
-    public function getOrganizationId()
-    {
-        return $this->organizationId;
-    }
-
-    /**
-     * __toString()
-     *
-<<<<<<< HEAD
-     * @return string
-=======
      * @return \SD\UserBundle\Entity\User
->>>>>>> staging
      */
-    public function __toString()
+    public function getOpermanager()
     {
-        return $this->getCity()->getName() . ' | ' . $this->getAddress();
+        return $this->opermanager;
     }
 
     /**
@@ -557,5 +513,34 @@ class Departments
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @var string
+     */
+    private $mpk;
+
+    /**
+     * Set mpk
+     *
+     * @param string $mpk
+     *
+     * @return Departments
+     */
+    public function setMpk($mpk)
+    {
+        $this->mpk = $mpk;
+
+        return $this;
+    }
+
+    /**
+     * Get mpk
+     *
+     * @return string 
+     */
+    public function getMpk()
+    {
+        return $this->mpk;
     }
 }

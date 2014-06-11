@@ -7,14 +7,21 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * StaffFilterForm
+ */
 class StaffFilterForm extends AbstractType
 {
-
     /**
      * @var \ProjectServiceContainer $container
      */
     protected $container;
 
+    /**
+     * __construct
+     * 
+     * @param type $container
+     */
     public function __construct($container)
     {
         $this->container = $container;
@@ -22,7 +29,7 @@ class StaffFilterForm extends AbstractType
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -48,7 +55,7 @@ class StaffFilterForm extends AbstractType
                     'placeholder' => 'Enter fio',
                 )
             ))
-             ->add('mobilephone', 'text', array(
+            ->add('mobilephone', 'text', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
                     'data-url' => $router->generate('sd_common_ajax_contact_phone'),

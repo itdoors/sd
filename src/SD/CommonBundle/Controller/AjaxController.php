@@ -524,10 +524,10 @@ class AjaxController extends BaseFilterController
 
         foreach ($objects as $object) {
             $nameFirst = $this->serializeObject($object);
-//            $nameLast = $this->serializeObject($object, false, 'getLastName');
-//            $nameMiddle = $this->serializeObject($object, false, 'getMiddleName');
-            //$nameFirst['text'] .= ' '.$nameLast['text'].' '.$nameMiddle['text'];
-            $result[] = $nameFirst; 
+            $nameLast = $this->serializeObject($object, false, 'getLastName');
+            $nameMiddle = $this->serializeObject($object, false, 'getMiddleName');
+            $nameFirst['text'] .= ' '.$nameLast['text'].' '.$nameMiddle['text'];
+            $result[] = $nameFirst;
         }
 
         return new Response(json_encode($result));
@@ -594,7 +594,7 @@ class AjaxController extends BaseFilterController
         $searchText = $this->get('request')->query->get('query');
 
         $repository = $this->container->get('sd_user.repository');
-        
+
         $objects = $repository->getOnlyStaff()
             ->andWhere('lower(staff.mobilephone) LIKE :q')
             ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
@@ -605,11 +605,11 @@ class AjaxController extends BaseFilterController
 
         foreach ($objects as $object) {
             $result[] = array(
-            'id' => $object->getId(),
-            'value' => $object->getId(),
-            'name' => $object->getStaff()->getMobilephone(),
-            'text' => $object->getStaff()->getMobilephone()
-        );
+                'id' => $object->getId(),
+                'value' => $object->getId(),
+                'name' => $object->getStaff()->getMobilephone(),
+                'text' => $object->getStaff()->getMobilephone()
+            );
         }
 
         return new Response(json_encode($result));
@@ -624,7 +624,7 @@ class AjaxController extends BaseFilterController
         $searchText = $this->get('request')->query->get('query');
 
         $repository = $this->container->get('sd_user.repository');
-        
+
         $objects = $repository->getOnlyStaffCompany()
             ->andWhere('lower(c.name) LIKE :q')
             ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
@@ -635,11 +635,11 @@ class AjaxController extends BaseFilterController
 
         foreach ($objects as $object) {
             $result[] = array(
-            'id' => $object->getId(),
-            'value' => $object->getId(),
-            'name' => $object->getStaff()->getCompanystructure()->getName(),
-            'text' => $object->getStaff()->getCompanystructure()->getName()
-        );
+                'id' => $object->getId(),
+                'value' => $object->getId(),
+                'name' => $object->getStaff()->getCompanystructure()->getName(),
+                'text' => $object->getStaff()->getCompanystructure()->getName()
+            );
         }
 
         return new Response(json_encode($result));
@@ -980,7 +980,7 @@ class AjaxController extends BaseFilterController
 
         try {
             $em->flush();
-        }catch (\ErrorException $e) {
+        } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1374,7 +1374,7 @@ class AjaxController extends BaseFilterController
         $data = $form->getData();
 
         $formData = $request->request->get($form->getName());
-    
+
         $userContact = new Usercontactinfo();
         $userContact->setValue($data['value']);
         $userContact->setUser($user);
@@ -1384,7 +1384,7 @@ class AjaxController extends BaseFilterController
         $contact = $this->getDoctrine()
             ->getRepository('SDUserBundle:Contactinfo')
             ->find($contactinfoId);
-        
+
         $userContact->setContactinfo($contact);
 
         $em = $this->getDoctrine()->getManager();
@@ -1398,15 +1398,15 @@ class AjaxController extends BaseFilterController
      * Saves {formName}Save after valid ajax validation
      *
      * @param Form    $form
-     * @param User    $request
-     * @param Request $user
+     * @param User    $user
+     * @param Request $request
      *
      * @return boolean
      */
-    public function emailFormSave(Form $form, $user, $request)
+    public function emailFormSave(Form $form, User $user, Request $request)
     {
         /** @var Email $data */
-        $data = $form->getData();             
+        $data = $form->getData();
 
          /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
@@ -1641,7 +1641,7 @@ class AjaxController extends BaseFilterController
      *
      * @return void
      */
-    public function InvoiceCompanystructureDelete($params)
+    public function invoiceCompanystructureDelete($params)
     {
         $id = $params['id'];
 
@@ -1655,7 +1655,7 @@ class AjaxController extends BaseFilterController
         $em->remove($object);
         $em->flush();
     }
-    
+
     /**
      * Deletes {entityName}Delete instance
      *
@@ -1663,7 +1663,7 @@ class AjaxController extends BaseFilterController
      *
      * @return void
      */
-    public function UsercontactinfoDelete($params)
+    public function usercontactinfoDelete($params)
     {
         $id = $params['id'];
 
@@ -1677,7 +1677,7 @@ class AjaxController extends BaseFilterController
         $em->remove($object);
         $em->flush();
     }
-    
+
     /**
      * Deletes {entityName}Delete instance
      *
@@ -1685,7 +1685,7 @@ class AjaxController extends BaseFilterController
      *
      * @return void
      */
-    public function EmailDelete($params)
+    public function emailDelete($params)
     {
         $id = $params['id'];
 
@@ -1699,7 +1699,7 @@ class AjaxController extends BaseFilterController
         $em->remove($object);
         $em->flush();
     }
-    
+
     /**
      * Deletes {entityName}Delete instance
      *
@@ -1707,7 +1707,7 @@ class AjaxController extends BaseFilterController
      *
      * @return void
      */
-    public function AutomailerDelete($params)
+    public function automailerDelete($params)
     {
         $id = $params['id'];
 
@@ -1729,7 +1729,7 @@ class AjaxController extends BaseFilterController
      *
      * @return void
      */
-    public function OrganizationUserDelete($params)
+    public function organizationUserDelete($params)
     {
         $organizationId = $params['organizationId'];
         $userId = $params['userId'];
@@ -1887,7 +1887,7 @@ class AjaxController extends BaseFilterController
             $em->flush();
 
             $em->refresh($object);
-        }catch (\ErrorException $e) {
+        } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -1965,7 +1965,7 @@ class AjaxController extends BaseFilterController
 
         try {
             $em->flush();
-        }catch (\ErrorException $e) {
+        } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -2003,7 +2003,7 @@ class AjaxController extends BaseFilterController
 
         try {
             $object = $query->getSingleResult();
-        }catch (\Doctrine\Orm\NoResultException $e) {
+        } catch (\Doctrine\Orm\NoResultException $e) {
             $object = null;
         }
 
@@ -2031,7 +2031,7 @@ class AjaxController extends BaseFilterController
 
         try {
             $em->flush();
-        }catch (\ErrorException $e) {
+        } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -2087,7 +2087,7 @@ class AjaxController extends BaseFilterController
 
         try {
             $em->flush();
-        }catch (\ErrorException $e) {
+        } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -2144,7 +2144,7 @@ class AjaxController extends BaseFilterController
 
         try {
             $em->flush();
-        }catch (\ErrorException $e) {
+        } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -2169,7 +2169,7 @@ class AjaxController extends BaseFilterController
 
         if ($name == 'DateEnd') {
             $value = new \DateTime($this->get('request')->request->get('value'));
-        } else if ($name == 'court') {
+        } elseif ($name == 'court') {
             $value = (boolean) $this->get('request')->request->get('value');
         } else {
             $value = $this->get('request')->request->get('value');
@@ -2201,7 +2201,7 @@ class AjaxController extends BaseFilterController
 
         try {
             $em->flush();
-        }catch (\ErrorException $e) {
+        } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
             return new Response(json_encode($return));
@@ -2248,24 +2248,34 @@ class AjaxController extends BaseFilterController
                 'empty_value' => '',
                 'required' => false,
                 'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
-                return $repository->createQueryBuilder('mc')
-                    ->leftJoin('mc.owner', 'owner')
-                    ->where('mc.modelName = :modelName')
-                    ->andWhere('mc.modelId = :modelId')
-                    ->andWhere('owner.id in (:ownerIds)')
-                    ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
-                    ->setParameter(':modelId', $organizationId)
-                    ->setParameter(':ownerIds', $userIds);
-            }
-        ));
+                    return $repository->createQueryBuilder('mc')
+                        ->leftJoin('mc.owner', 'owner')
+                        ->where('mc.modelName = :modelName')
+                        ->andWhere('mc.modelId = :modelId')
+                        ->andWhere('owner.id in (:ownerIds)')
+                        ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                        ->setParameter(':modelId', $organizationId)
+                        ->setParameter(':ownerIds', $userIds);
+                }
+            ));
 
-        $form
+         $form
             ->add('contactnext', 'entity', array(
                 'class' => 'ListsContactBundle:ModelContact',
                 'empty_value' => '',
                 'required' => false,
                 'mapped' => false,
                 'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
+                        return $repository->createQueryBuilder('mc')
+                            ->leftJoin('mc.owner', 'owner')
+                            ->where('mc.modelName = :modelName')
+                            ->andWhere('mc.modelId = :modelId')
+                            ->andWhere('owner.id in (:ownerIds)')
+                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                            ->setParameter(':modelId', $organizationId)
+                            ->setParameter(':ownerIds', $userIds);
+                }
+            ));
 
         $form
             ->add('status', 'entity', array(
@@ -2274,6 +2284,10 @@ class AjaxController extends BaseFilterController
                 'empty_value' => '',
                 'mapped' => false,
                 'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingStatusRepository $repository) {
+                        return $repository->createQueryBuilder('s')
+                            ->orderBy('s.sortorder', 'ASC');
+                }
+            ));
 
         $form
             ->add('mindate', 'hidden', array(
@@ -2285,8 +2299,10 @@ class AjaxController extends BaseFilterController
     /**
      * Adds children to {formName}ProcessDefaults depending on defaults in request
      *
-     * @param Form $form
+     * @param Form    $form
      * @param mixed[] $defaultData
+     * 
+     * @return Form
      */
     public function invoiceMessageFormProcessDefaults($form, $defaultData)
     {
@@ -2295,12 +2311,20 @@ class AjaxController extends BaseFilterController
         $invoiceObj = $this->getDoctrine()
             ->getRepository('ITDoorsControllingBundle:Invoice')
             ->find($invoiceId);
-        if(!empty($invoiceObj->getDogovor())){
-        /** @var Dogovor $dogovor */
-        $dogovor = $this->getDoctrine()
-            ->getRepository('ListsDogovorBundle:Dogovor')
-            ->find($invoiceObj->getDogovor());
-            $organizationId = $dogovor->getCustomerId() ? $dogovor->getCustomerId() : ($dogovor->getOrganization() ? $dogovor->getOrganization()->getId() : $invoiceObj->getOrganization()->getId());
+        if (!empty($invoiceObj->getDogovor())) {
+            /** @var Dogovor $dogovor */
+            $dogovor = $this->getDoctrine()
+                ->getRepository('ListsDogovorBundle:Dogovor')
+                ->find($invoiceObj->getDogovor());
+
+            $organizationId =
+                $dogovor->getCustomerId() ?
+                $dogovor->getCustomerId() :
+                (
+                    $dogovor->getOrganization() ?
+                    $dogovor->getOrganization()->getId() :
+                    $invoiceObj->getOrganization()->getId()
+                );
             $form
                 ->add('contactid', 'entity', array(
                     'class' => 'ListsContactBundle:ModelContact',
@@ -2308,15 +2332,15 @@ class AjaxController extends BaseFilterController
                     'required' => false,
                     'mapped' => false,
                     'query_builder' => function (ModelContactRepository $repository) use ($organizationId) {
-                    return $repository->createQueryBuilder('mc')
-                        ->leftJoin('mc.owner', 'owner')
-                        ->where('mc.modelName = :modelName')
-                        ->andWhere('mc.modelId = :modelId')
-                        ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
-                        ->setParameter(':modelId', $organizationId);
-                }
-            ));
-        }else{
+                        return $repository->createQueryBuilder('mc')
+                            ->leftJoin('mc.owner', 'owner')
+                            ->where('mc.modelName = :modelName')
+                            ->andWhere('mc.modelId = :modelId')
+                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                            ->setParameter(':modelId', $organizationId);
+                    }
+                ));
+        } else {
             $form
                 ->add('contactid', 'entity', array(
                     'class' => 'ListsContactBundle:ModelContact',
@@ -2330,8 +2354,8 @@ class AjaxController extends BaseFilterController
                         ->andWhere('mc.modelId = :modelId')
                         ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
                         ->setParameter(':modelId', 0);
-                }
-            ));
+                    }
+                ));
         }
     }
 
@@ -2340,6 +2364,8 @@ class AjaxController extends BaseFilterController
      *
      * @param Form    $form
      * @param mixed[] $defaultData
+     * 
+     * @return QueryBuilder
      */
     public function invoiceCompanystructureFormProcessDefaults(Form $form, $defaultData)
     {
@@ -2353,12 +2379,13 @@ class AjaxController extends BaseFilterController
                 'mapped' => false,
                 'query_builder' => function ($repository) use ($invoiceId) {
                 $repository = $this->getDoctrine()->getRepository('ListsCompanystructureBundle:Companystructure');
+
                 return $repository->createQueryBuilder('c')
                     ->leftJoin('c.invoicecompanystructure', 'idc')
                     ->where('(idc.invoiceId is NULL OR idc.invoiceId <> :invoiceId)')
                     ->setParameter(':invoiceId', $invoiceId);
-            }
-        ));
+                }
+            ));
     }
 
     /**
@@ -2621,7 +2648,7 @@ class AjaxController extends BaseFilterController
             ));
 
             $connection->commit();
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $connection->rollback();
             $em->close();
             throw $e;
@@ -2648,7 +2675,8 @@ class AjaxController extends BaseFilterController
         $userManager->updateUser($data);
 
         $this->get('session')->set(
-            'noticePassword', 'Password changed successfully!'
+            'noticePassword',
+            'Password changed successfully!'
         );
 
         return true;
@@ -2716,15 +2744,10 @@ class AjaxController extends BaseFilterController
                 'empty_value' => '',
                 'required' => false,
                 'query_builder' => function (DopDogovorRepository $repository) use ($dogovorId) {
-                return $repository->createQueryBuilder('mc')
-                    ->leftJoin('mc.owner', 'owner')
-                    ->where('mc.modelName = :modelName')
-                    ->andWhere('mc.modelId = :modelId')
-                    ->andWhere('owner.id in (:ownerIds)')
-                    ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
-                    ->setParameter(':modelId', $organizationId)
-                    ->setParameter(':ownerIds', $userIds);
-            }
+                    return $repository->createQueryBuilder('dd')
+                        ->where('dd.dogovorId = :dogovorId')
+                        ->setParameter(':dogovorId', $dogovorId);
+                }
         ));
 
         /** @var DepartmentsRepository $dr */
@@ -2800,14 +2823,4 @@ class AjaxController extends BaseFilterController
 
         return true;
     }
-
-                return $repository->createQueryBuilder('s')
-                    ->orderBy('s.sortorder', 'ASC');
-            }
-        ));
 }
-                return $repository->createQueryBuilder('dd')
-                    ->where('dd.dogovorId = :dogovorId')
-                    ->setParameter(':dogovorId', $dogovorId);
-            }
-        ));

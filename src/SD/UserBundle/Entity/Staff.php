@@ -137,22 +137,23 @@ class Staff
     {
         return $this->user;
     }
+
     /**
      * @var \SD\UserBundle\Entity\Companystructure
      */
     private $companystructure;
 
-
     /**
      * Set companystructure
      *
      * @param \SD\UserBundle\Entity\Companystructure $companystructure
+     * 
      * @return Staff
      */
     public function setCompanystructure(\SD\UserBundle\Entity\Companystructure $companystructure = null)
     {
         $this->companystructure = $companystructure;
-    
+
         return $this;
     }
 
@@ -165,22 +166,23 @@ class Staff
     {
         return $this->companystructure;
     }
+
     /**
      * @var string
      */
     private $issues;
 
-
     /**
      * Set issues
      *
      * @param string $issues
+     * 
      * @return Staff
      */
     public function setIssues($issues)
     {
         $this->issues = $issues;
-    
+
         return $this;
     }
 
@@ -193,6 +195,7 @@ class Staff
     {
         return $this->issues;
     }
+
     /**
      * @var string
      */
@@ -203,17 +206,17 @@ class Staff
      */
     private $phonePersonal;
 
-
     /**
      * Set phoneInside
      *
      * @param string $phoneInside
+     * 
      * @return Staff
      */
     public function setPhoneInside($phoneInside)
     {
         $this->phoneInside = $phoneInside;
-    
+
         return $this;
     }
 
@@ -231,12 +234,13 @@ class Staff
      * Set phonePersonal
      *
      * @param string $phonePersonal
+     * 
      * @return Staff
      */
     public function setPhonePersonal($phonePersonal)
     {
         $this->phonePersonal = $phonePersonal;
-    
+
         return $this;
     }
 
@@ -249,22 +253,23 @@ class Staff
     {
         return $this->phonePersonal;
     }
+
     /**
      * @var string
      */
     private $birthPlase;
 
-
     /**
      * Set birthPlase
      *
      * @param string $birthPlase
+     * 
      * @return Staff
      */
     public function setBirthPlase($birthPlase)
     {
         $this->birthPlase = $birthPlase;
-    
+
         return $this;
     }
 
@@ -277,22 +282,23 @@ class Staff
     {
         return $this->birthPlase;
     }
+
     /**
      * @var string
      */
     private $birthPlace;
 
-
     /**
      * Set birthPlace
      *
      * @param string $birthPlace
+     * 
      * @return Staff
      */
     public function setBirthPlace($birthPlace)
     {
         $this->birthPlace = $birthPlace;
-    
+
         return $this;
     }
 
@@ -305,6 +311,7 @@ class Staff
     {
         return $this->birthPlace;
     }
+
     /**
      * @var \DateTime
      */
@@ -320,17 +327,17 @@ class Staff
      */
     private $education;
 
-
     /**
      * Set dateFire
      *
      * @param \DateTime $dateFire
+     * 
      * @return Staff
      */
     public function setDateFire($dateFire)
     {
         $this->dateFire = $dateFire;
-    
+
         return $this;
     }
 
@@ -348,12 +355,13 @@ class Staff
      * Set dateHire
      *
      * @param \DateTime $dateHire
+     * 
      * @return Staff
      */
     public function setDateHire($dateHire)
     {
         $this->dateHire = $dateHire;
-    
+
         return $this;
     }
 
@@ -371,12 +379,13 @@ class Staff
      * Set education
      *
      * @param string $education
+     * 
      * @return Staff
      */
     public function setEducation($education)
     {
         $this->education = $education;
-    
+
         return $this;
     }
 

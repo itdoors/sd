@@ -6,15 +6,23 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use SD\UserBundle\Entity\ContactinfoRepository;
+use Symfony\Component\DependencyInjection\Container;
 
+/**
+ * UserContactinfoForm
+ */
 class UserContactinfoForm extends AbstractType
 {
-
     /**
      * @var \ProjectServiceContainer $container
      */
     protected $container;
 
+    /**
+     * __construct
+     * 
+     * @param Container $container
+     */
     public function __construct($container)
     {
         $this->container = $container;
@@ -22,7 +30,9 @@ class UserContactinfoForm extends AbstractType
 
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
+     * 
+     * @return FormBuilderInterface
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -33,8 +43,8 @@ class UserContactinfoForm extends AbstractType
                 'required' => false,
                 'mapped' => false,
                 'query_builder' => function (ContactinfoRepository $repository) {
-                return $repository->createQueryBuilder('mc');
-            }
+                    return $repository->createQueryBuilder('mc');
+                }
             ))
             ->add('value', 'text', array(
                 'attr' => array(

@@ -6,9 +6,11 @@ use Symfony\Component\DependencyInjection\Container;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\BrowserKit\Response;
 
+/**
+ * UserService
+ */
 class UserService
 {
-
     /**
      * @var Container $container
      */
@@ -23,14 +25,12 @@ class UserService
     {
         $this->container = $container;
     }
-    
-   /**
+
+    /**
      * Returns results for interval future invoice
-     *
-     * @var Container
      * 
-    * @param array $options Description
-    * 
+     * @param array $options 
+     * 
      * @return array
      */
     public function getTabs($options)
@@ -41,21 +41,21 @@ class UserService
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'profile',
             'url' => $this->container->get('router')->generate('sd_user_show_tabs'),
-            'text' => $translator->trans('Profile',array(),'SDUserBundle')
+            'text' => $translator->trans('Profile', array(), 'SDUserBundle')
         );
-        if($options['settings']){            
+        if ($options['settings']) {
             $tabs['settings'] = array(
                 'blockupdate' => 'ajax-tab-holder',
                 'tab' => 'settings',
                 'url' => $this->container->get('router')->generate('sd_user_show_tabs'),
-                'text' => $translator->trans('Settings profile',array(),'SDUserBundle')
+                'text' => $translator->trans('Settings profile', array(), 'SDUserBundle')
             );
         }
         $tabs['plan'] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'plan',
             'url' => $this->container->get('router')->generate('sd_user_show_tabs'),
-            'text' => $translator->trans('Plan',array(),'SDUserBundle')
+            'text' => $translator->trans('Plan', array(), 'SDUserBundle')
         );
 //        if($pass){
 //          $tabs['pass'] = array(
@@ -68,5 +68,4 @@ class UserService
 
         return $tabs;
     }
-
 }

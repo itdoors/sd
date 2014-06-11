@@ -748,6 +748,7 @@ class Dogovor
     {
         return $this->user;
     }
+
     /**
      * @var \DateTime
      */
@@ -834,6 +835,7 @@ class Dogovor
     {
         return $this->performer;
     }
+
     /**
      * @var \SD\UserBundle\Entity\User
      */
@@ -870,9 +872,7 @@ class Dogovor
      */
     public function getAbsolutePath()
     {
-        return null === $this->filepath
-            ? null
-            : $this->getUploadRootDir().'/'.$this->filepath;
+        return null === $this->filepath ? null : $this->getUploadRootDir() . '/' . $this->filepath;
     }
 
     /**
@@ -882,9 +882,7 @@ class Dogovor
      */
     public function getWebPath()
     {
-        return null === $this->filepath
-            ? null
-            : $this->getUploadDir().'/'.$this->filepath;
+        return null === $this->filepath ? null : $this->getUploadDir() . '/' . $this->filepath;
     }
 
     /**
@@ -896,7 +894,7 @@ class Dogovor
     {
         // the absolute directory path where uploaded
         // documents should be saved
-        return __DIR__.'/../../../../web/'.$this->getUploadDir();
+        return __DIR__ . '/../../../../web/' . $this->getUploadDir();
     }
 
     /**
@@ -945,7 +943,6 @@ class Dogovor
 
         // use the original file name here but you should
         // sanitize it at least to avoid any security issues
-
         // move takes the target directory and then the
         // target filename to move to
 
@@ -968,6 +965,7 @@ class Dogovor
         // clean up the file property as you won't need it anymore
         $this->file = null;
     }
+
     /**
      * @var integer
      */
@@ -1025,6 +1023,7 @@ class Dogovor
     {
         return $this->performerId;
     }
+
     /**
      * @var integer
      */
@@ -1077,6 +1076,7 @@ class Dogovor
             $this->setStopdatetime(new \DateTime($stopdatetimeString));
         }
     }
+
     /**
      * @var integer
      */
@@ -1105,6 +1105,7 @@ class Dogovor
     {
         return $this->cityId;
     }
+
     /**
      * @var integer
      */
@@ -1133,7 +1134,7 @@ class Dogovor
     {
         return $this->dogovorTypeId;
     }
-    
+
     /**
      * __toString()
      * 
@@ -1143,22 +1144,23 @@ class Dogovor
     {
         return $this->getNumber();
     }
+
     /**
      * @var integer
      */
     private $dogovorId1c;
 
-
     /**
      * Set dogovorId1c
      *
      * @param integer $dogovorId1c
+     * 
      * @return Dogovor
      */
     public function setDogovorId1c($dogovorId1c)
     {
         $this->dogovorId1c = $dogovorId1c;
-    
+
         return $this;
     }
 
@@ -1171,22 +1173,23 @@ class Dogovor
     {
         return $this->dogovorId1c;
     }
+
     /**
      * @var string
      */
     private $dogovorGuid;
 
-
     /**
      * Set dogovorGuid
      *
      * @param string $dogovorGuid
+     * 
      * @return Dogovor
      */
     public function setDogovorGuid($dogovorGuid)
     {
         $this->dogovorGuid = $dogovorGuid;
-    
+
         return $this;
     }
 

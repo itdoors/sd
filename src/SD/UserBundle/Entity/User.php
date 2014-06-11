@@ -1,4 +1,5 @@
 <?php
+
 /**
  * User model class
  *
@@ -438,22 +439,23 @@ class User extends BaseUser
     {
         return $this->teams;
     }
+
     /**
      * @var string
      */
     private $photo;
 
-
     /**
      * Set photo
      *
      * @param string $photo
+     * 
      * @return User
      */
     public function setPhoto($photo)
     {
         $this->photo = $photo;
-    
+
         return $this;
     }
 
@@ -466,22 +468,23 @@ class User extends BaseUser
     {
         return $this->photo;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $usercontactinfo;
 
-
     /**
      * Add usercontactinfo
      *
      * @param \SD\UserBundle\Entity\Contactinfo $usercontactinfo
+     * 
      * @return User
      */
     public function addUsercontactinfo(\SD\UserBundle\Entity\Contactinfo $usercontactinfo)
     {
         $this->usercontactinfo[] = $usercontactinfo;
-    
+
         return $this;
     }
 
