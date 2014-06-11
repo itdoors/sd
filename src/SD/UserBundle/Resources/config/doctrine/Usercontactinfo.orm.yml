@@ -14,7 +14,7 @@ SD\UserBundle\Entity\Usercontactinfo:
         user:
           targetEntity: User
           cascade: {  }
-          inversedBy: usercontactinfo
+          inversedBy: null
           joinColumn:
             user_id:
                 referencedColumnName: id

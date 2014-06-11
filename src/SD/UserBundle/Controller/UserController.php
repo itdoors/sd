@@ -11,6 +11,7 @@ use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Session\Session;
 use SD\UserBundle\Entity\Usercontactinfo;
 
+
 class UserController extends BaseController
 {
     protected $baseTemplate = 'User';
@@ -259,6 +260,59 @@ class UserController extends BaseController
         }
 
         return $this->render('SDUserBundle:' . $this->baseTemplate . ':new.html.twig', array(
+                'form' => $form->createView(),
+                'baseTemplate' => $this->baseTemplate
+            ));
+    }
+    /**
+     * Executes new action
+     */
+    public function newstaffAction(Request $request)
+    {
+        $form = $this->createForm('userNewForm');
+
+        $form->handleRequest($request);
+
+        if ($form->isValid())
+        {
+            $em = $this->getDoctrine()->getManager();
+
+            /** @var Connection $connection */
+            $connection = $this->getDoctrine()->getConnection();
+
+            $connection->beginTransaction();
+
+            try
+            {
+                $user = $form->getData();
+
+                $formData = $request->request->get($form->getName());
+
+                $em->persist($user);
+                $em->flush();
+
+                $staff = new Staff();
+
+                $staff->setUser($user);
+                $staff->setMobilephone($formData['mobilephone']);
+                $staff->setStuffclass('stuff');
+
+                $em->persist($staff);
+                $em->flush();
+
+                $connection->commit();
+            }
+            catch (\Exception $e)
+            {
+                $connection->rollBack();
+                $em->close();
+                throw $e;
+            }
+
+            return $this->redirect($this->generateUrl('sd_user_show', array('id' => $user->getId())));
+        }
+
+        return $this->render('SDUserBundle:' . $this->baseTemplate . ':newstaff.html.twig', array(
                 'form' => $form->createView(),
                 'baseTemplate' => $this->baseTemplate
             ));

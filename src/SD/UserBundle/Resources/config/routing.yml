@@ -24,6 +24,10 @@ sd_user_show_contactinfo:
     pattern:  /user/show/contactinfo
     defaults: { _controller: SDUserBundle:User:contactinfo }
 
+sd_user_new_staff:
+    pattern:  /user/newstaff
+    defaults: { _controller: SDUserBundle:User:newstaff }
+    
 sd_user_new:
     pattern:  /user/new
     defaults: { _controller: SDUserBundle:User:new }
