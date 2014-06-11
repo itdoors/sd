@@ -41,9 +41,42 @@
             </div>
             <div class="modal-body">
                 <div id="moreInfoTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
-                    <a href="#" id="coworker_list" data-type="select2" data-pk="{{ idDepartment }}"
-                       data-placement="right" data-value="" data-placeholder="{% trans %}Select opermanger{% endtrans %}"
-                       data-original-title="{% trans %}Select coworker{% endtrans %}"></a>
+                    Выберите сотрудника:
+                    <select id="add_coworker_select_list">
+                        {% for filterCoworker in filterCoworkers %}
+                             <option value="{{ filterCoworker.id }}">
+                                 ({{ filterCoworker.mpks.name }}) {{ filterCoworker.firstName }} {{ filterCoworker.lastName }} {{ filterCoworker.middleName }}
+                             </option>
+                        {% endfor %}
+                    </select>
+                    <br><br>
+
+                    Выберите тип:
+                    <select id="add_coworker_select_type">
+                            <option value="permanent">
+                                Постоянный
+                            </option>
+                            <option value="change">
+                                Замена
+                            </option>
+                    </select>
+                    <br><br>
+                    <div id="change_div_select" class="notDisplayed">
+                        Выберите кого заменяет:
+                        <select id="add_coworker_select_change" >
+                            {% for filterCoworker in filterCoworkers %}
+                                <option value="{{ filterCoworker.id }}">
+                                    ({{ filterCoworker.mpks.name }}) {{ filterCoworker.firstName }} {{ filterCoworker.lastName }} {{ filterCoworker.middleName }}
+                                </option>
+                            {% endfor %}
+                        </select>
+
+                    </div>
+
+                    <div class="alert alert-danger notDisplayed errorAddUser" id="errorAddUser_exists">
+                        <strong>{% trans %}Error{% endtrans %}</strong> Пользователь уже добавлен
+                    </div>
+
 
 
                 </div>
@@ -141,15 +174,19 @@
                 e.preventDefault();
                 var checkboxes = $('.checkbox_copy');
                 var atLeastOneChecked = false;
+                var counter = 0;
                 for (var i=0; i<checkboxes.length; i++) {
                     if (checkboxes[i].checked) {
-                        atLeastOneChecked = true;
-                        break;
+                        counter++;
+                        if(counter == 2) {
+                            atLeastOneChecked = true;
+                            break;
+                        }
                     }
                 }
 
-                if (!atLeastOneChecked) {
-                    alert('Никого не выбрано!')
+                if (counter<2) {
+                    alert('Выберите хотя бы двух сотрудников')
                 } else {
                     var idCoworkers = new Array();
                     var fioCoworkers = new Array();
@@ -272,6 +309,56 @@
 
             })
 
+            $('#add_coworker_select_list').select2();
+            $('#add_coworker_select_type').select2();
+            $('#add_coworker_select_change').select2();
+
+            $('#add_coworker_select_type').die('change');
+            $('#add_coworker_select_type').live('change', function(e) {
+                if ($(this).val() == 'change') {
+                    $('#change_div_select').show( 'blind', {}, 500 );
+                } else {
+                    $('#change_div_select').hide( 'blind', {}, 500 );
+                }
+            })
+
+
+            $('#submit_add_coworker').die('click');
+            $('#submit_add_coworker').live('click', function(e) {
+                $('.errorAddUser').hide( 'blind', {}, 500 );
+                var coworker = $('#add_coworker_select_list option:selected').val();
+                var typeReplacement = $('#add_coworker_select_type option:selected').val();
+                var coworkerReplacement = $('#add_coworker_select_change option:selected').val();
+                var date = $('#info_input').data('date');
+                var url = $('#info_input').data('url_add_user');
+                var sendData = {
+                    idCoworker: coworker,
+                    typeReplacement: typeReplacement,
+                    idCoworkerReplacement: coworkerReplacement,
+                    date: date
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: sendData,
+                    success: function(data) {
+                        alert(data);
+                        data = JSON.parse(data);
+
+                        if (data.success == 0) {
+                            if (data.error == 'exists') {
+                                $('#errorAddUser_exists').show( 'blind', {}, 500 );
+                            }
+                        } else {
+                            $('#form_modal_add').modal('hide');
+                            $( "#schedule_block" ).trigger( "click" );
+
+                        }
+                    }
+                })
+
+            })
+
         })
 
 
@@ -319,7 +406,11 @@
                             {{ coworker.lastName }} {{ coworker.firstName }} {{ coworker.middleName }}
                         </a>
                     </td>
-                    <td>P</td>
+                    <td>{% if coworker.replacementId>0 %}
+                            З
+                        {% else %}
+                            П
+                        {% endif %}
                     <td>{{ coworker.mpkName }}</td>
 
                     {% for dayInfo in dateInfo %}
@@ -391,6 +482,7 @@
 <input type="hidden" id="info_input"
        data-url_reload_href="{{ path('it_doors_oper_schedule_one_day_total') }}"
        data-url_copy_etalon="{{ path('it_doors_oper_schedule_copy_by_etalon') }}"
+       data-url_add_user="{{ path('it_doors_oper_schedule_add_user') }}"
        data-id_department="{{ idDepartment }}"
        data-date = "{{ year }}-{{ month }}"
        data-url_user_info="{{ path('it_doors_oper_schedule_show_user_basic_table') }}">
