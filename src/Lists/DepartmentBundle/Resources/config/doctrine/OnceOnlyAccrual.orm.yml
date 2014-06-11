@@ -17,7 +17,7 @@ Lists\DepartmentBundle\Entity\OnceOnlyAccrual:
             column: work_type
         type:
             type: string
-            length: 2
+            length: 10
             fixed: false
             nullable: false
         code:
