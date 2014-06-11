@@ -1,0 +1,343 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+        $.fn.editable.defaults.inputclass = 'form-control';
+        $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
+
+        $('#description').editable({
+            url: '{{ path('sd_common_ajax_editable_department') }}'
+        });
+
+        $('#status').editable({
+            url: '{{ path('sd_common_ajax_editable_department') }}',
+            source: '{{ path('sd_common_ajax_department_status') }}'
+        });
+
+        $('#type').editable({
+            url: '{{ path('sd_common_ajax_editable_department') }}',
+            source: '{{ path('sd_common_ajax_department_type') }}'
+        });
+
+        $('#statusDate').editable({
+            url: '{{ path('sd_common_ajax_editable_department') }}'
+        });
+
+
+        $('#typeId').editable({
+            url: '{{ path('sd_common_ajax_handling_save') }}',
+            source: '{{ path('sd_common_ajax_handling_type') }}'
+        });
+
+        $('#opermanager').editable({
+            url: '{{ path('sd_common_ajax_editable_department') }}',
+            source: '{{ path('sd_common_ajax_user') }}',
+            select2: {
+                multiple: false,
+                width: '250px'
+            }
+        });
+    })
+
+</script>
+
+
+<div class="tab-pane active" id="tab_0">
+    <div class="col-md-12">
+        <table class="table table-bordered table-striped">
+            <tbody>
+            <tr> {# 1 #}
+                <td style="width:15%">{% trans %}Mpk{% endtrans %}</td>
+                <td style="width:35%">
+
+                {% if mpks|length >0 %}
+                        {% for mpk in mpks %}
+                            {% if mpk.active %}
+                                {{ mpk.name }}
+                            {% endif %}
+                        {% endfor %}
+                        {% if oldMpks == true %}
+                            <span class="popovers"  id="pop1" data-html="true" style="color: grey;" data-trigger="hover" data-content="
+                                {% for mpk in mpks %}
+                                    {% if mpk.active == false %}
+                                        {{ mpk.name }} ( {% trans %}From{% endtrans %} {{ mpk.startDate|date('Y-m-d') }} {% trans %}To{% endtrans %} {{ mpk.endDate|date('Y-m-d') }})<br>
+                                    {% endif %}
+                                {% endfor %}
+                            " data-original-title="{% trans %}Old mpks{% endtrans %}">{% trans %}history{% endtrans %}</span>
+                            <script>
+                                $(document).ready(function(){
+                                    jQuery('.popovers').popover();
+                                })
+                            </script>
+
+                        {% endif %}
+                {% endif %}
+                </td>
+                <td style="width:15%">{% trans %}Object type{% endtrans %}</td>
+                <td style="width:35%">
+                    <a href="#" id="type" data-type="select" data-pk="{{ department.0.id }}" data-value="" data-placement="right" data-original-title="{% trans %}Select Type{% endtrans %}">
+                        {{ department.0.typeName }}
+                    </a>
+                </td>
+            </tr>
+            <tr> {# 2 #}
+                <td>{% trans %}Organization{% endtrans %}</td>
+                <td>{{ department.0.organizationName }}</td>
+                <td>{% trans %}Organization type{% endtrans %}</td>
+                <td>
+                    {{ department.0.organizationType }}
+                </td>
+            </tr>
+            <tr> {# 3 #}
+                <td>{% trans %}Region{% endtrans %}</td>
+                <td>{{ department.0.regionName }}</td>
+                <td>{% trans %}Description{% endtrans %}</td>
+                <td>
+                    <a href="#" id="description" data-type="textarea" data-pk="{{ department.0.id }}" data-value="{{ department.0.description }}" data-placement="right" data-original-title="{% trans %}Enter Description{% endtrans %}">{{ department.0.description }}</a>
+                </td>
+            </tr>
+            <tr> {# 4 #}
+                <td>{% trans %}City{% endtrans %}</td>
+                <td>{{ department.0.cityName }}</td>
+                <td>{% trans %}Oper manager{% endtrans %}</td>
+                <td>
+                    <a href="#" id="opermanager" data-type="select2" data-pk="{{ department.0.id }}" data-placement="right" data-value="" data-placeholder="{% trans %}Select opermanger{% endtrans %}" data-original-title="{% trans %}Type opermanger{% endtrans %}">{{ department.0.opermanagerName }}</a>
+                </td>
+            </tr>
+            <tr>{# 5 #}
+                <td>{% trans %}Address{% endtrans %}</td>
+                <td>
+                    {{ department.0.address }}
+                </td>
+                <td>{% trans %}Rs{% endtrans %}</td>
+                <td>
+                    {{ department.0.rs }}
+                </td>
+            </tr>
+            <tr> {# 6 #}
+                <td>{% trans %}Status{% endtrans %}</td>
+                <td>
+                    <a href="#" id="status" data-type="select" data-pk="{{ department.0.id }}" data-value="" data-placement="right" data-original-title="{% trans %}Select status{% endtrans %}">
+                        {{ department.0.statusName }}
+                    </a>
+                </td>
+                <td>{% trans %}Edrpou{% endtrans %}</td>
+                <td>
+                    {{ department.0.edrpou }}
+                </td>
+            </tr>
+            <tr>{# 7 #}
+                <td>{% trans %}Status Date{% endtrans %}</td>
+                <td>
+                    <a href="#" id="statusDate" data-type="date" data-pk="{{ department.0.id }}" data-value="" data-original-title="{% trans %}Enter Status Date{% endtrans %}">{{ department.0.statusDate|date('Y-m-d') }}</a>
+                </td>
+                <td>{% trans %}Inn{% endtrans %}</td>
+                <td>
+                    {{ department.0.inn }}
+                </td>
+            </tr> {# 8 #}
+            <tr>
+                <td>{% trans %}Certificate{% endtrans %}</td> {# 306 #}
+                <td>
+                    {{ department.0.certificate }}
+                </td>
+                <td>{% trans %}Organization address{% endtrans %}</td>
+                <td>
+                    {{ department.0.organizationAddress }}
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+        {# goooogle map#}
+
+        <script type="text/javascript">
+
+            var ddLatLng;
+
+            var GM;
+
+            var geocoder;
+
+            var map;
+
+            var GMMarker;
+
+            function codeAddress() {
+
+                var address = document.getElementById("address1").value;
+
+                geocoder.geocode( { "address": address}, function(results, status) {
+
+                    if (status == google.maps.GeocoderStatus.OK) {
+
+                        map.setCenter(results[0].geometry.location);
+
+                        GMMarker.setPosition(results[0].geometry.location);
+                        var new_location = results[0].geometry.location;
+                        //console.log(new_coordinates);
+
+                        var new_coordinates = new_location.lat() + ',' + new_location.lng();
+
+                        document.getElementById("coordinates").value=new_coordinates;//Сохраняем значение в поле
+                        send_coordinates();
+
+                    } else {
+
+                        alert("Error: Nothing was found");// + status);
+
+                    }
+
+                });
+                //alert(new_coordinates)
+
+
+            };
+
+            //Callback функция для GM
+
+            function initialize(){
+
+                ddLatLng = document.getElementById("coordinates").value;//Координаты
+
+                //Если координаты не заданны, то задаём дефолт
+
+                if(ddLatLng == "") {ddLatLng = "50.450912,30.522637";document.getElementById("coordinates").value=ddLatLng;}
+
+                ddLatLng = ddLatLng.split(",");
+
+                geocoder = new google.maps.Geocoder();
+
+                GM = google.maps;
+
+                var myOptions = {
+
+                    zoom: 15,
+
+                    center: new GM.LatLng(ddLatLng[0],ddLatLng[1]),
+
+                    mapTypeId: GM.MapTypeId.ROADMAP,
+
+                    streetViewControl: false,
+
+                    scrollwheel: false
+
+                };
+
+                map = new GM.Map(document.getElementById("ddGMap"), myOptions);
+
+                //Добавляем маркер на карту
+
+                GMMarker = new GM.Marker({
+
+                    position: new GM.LatLng(ddLatLng[0],ddLatLng[1]),
+
+                    map: map,
+
+                    draggable: true
+
+                });
+
+                //При перетаскивании маркера
+
+                GM.event.addListener(GMMarker, "drag", function(event){
+
+                    var position = event.latLng;//Координаты
+
+                    document.getElementById("coordinates").value=position.lat() + "," + position.lng();//Сохраняем значение в поле
+
+                });
+
+                GM.event.addListener(GMMarker, "dragend", function(event){
+                    var position = event.latLng;//Координаты
+
+                    document.getElementById("coordinates").value=position.lat() + "," + position.lng();//Сохраняем значение в поле
+
+                    send_coordinates();
+                });
+                //При клике на карте
+
+                GM.event.addListener(map, "click", function(event){
+
+                    var position = event.latLng;//Новые координаты
+
+                    GMMarker.setPosition(position);//Меняем позицию маркера
+
+                    map.setCenter(position);//Центрируем карту на маркере
+
+                    document.getElementById("coordinates").value=position.lat() + "," + position.lng();//Сохраняем значение в поле
+
+                });
+
+
+
+            };
+
+            function runEffect() {
+                // get effect type from
+                var selectedEffect = "blind";
+
+                // most effect types need no options passed by default
+                var options = {};
+                // some effects have required parameters
+                if ( selectedEffect === "scale" ) {
+                    options = { percent: 100 };
+                } else if ( selectedEffect === "size" ) {
+                    options = { to: { width: 280, height: 185 } };
+                }
+
+                // run the effect
+                $( "#effect" ).show( selectedEffect, options, 500, callback );
+            };
+
+            //callback function to bring a hidden box back
+            function callback() {
+                setTimeout(function() {
+                    $( "#effect:visible" ).removeAttr( "style" ).fadeOut();
+                }, 1000 );
+            };
+
+            // set effect from select menu value
+            $( "#toggle" ).click(function() {
+                runEffect();
+                return false;
+            });
+
+
+            function send_coordinates() {
+                var url = "{{ path('sd_common_ajax_editable_department') }}";
+                var id = {{ department.0.id }};
+                var name = "coordinates";
+                var coordinates = $('#coordinates').val();
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: {
+                        name: name,
+                        pk: id,
+                        value: coordinates
+                    },
+                    success: function ()
+                    {
+                        runEffect();
+                    }
+                });
+                return false;
+            }
+        </script>
+
+
+        <input type="text" class="form-control form-filter" name="coordinates" value="{{ department.0.coordinates }}" id="coordinates"  style="display: none;"  />
+
+        <label for="address"><span>{% trans %}Type address and press find{% endtrans %}</span></label><br />
+
+        <input type="text" value="{{ department.0.regionName }} {{ department.0.cityName }} {{ department.0.address }} " name="address" id="address1" style="width:40%" />
+        <input type="button" value="{% trans %}Find{% endtrans %}" data-url="{{ path('sd_common_ajax_editable_department') }}" data-pk="{{ department.0.id }}" data-name="coordinates" onclick="codeAddress()" id ="send_coordinates"/>
+
+        <div style="color: green; float:right;"><span id="effect" style="display: none;">{% trans %}Coordinates refreshed{% endtrans %}</span></div>
+        <div id="ddGMap" style="width:100%;height:400px;margin:7px;"></div>
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true&callback=initialize"></script>
+</div>
+</div>

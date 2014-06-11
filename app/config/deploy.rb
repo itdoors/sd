@@ -8,7 +8,7 @@ set :scm,         :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `subversion`, `mercurial`, `perforce`, or `none`
 
 #git
-set :branch, "dev-master"
+set :branch, "staging"
 set :git_enable_submodules, 1
 
 set :model_manager, "doctrine"
@@ -17,7 +17,7 @@ set :model_manager, "doctrine"
 role :web,        domain                         # Your HTTP server, Apache/etc
 role :app,        domain, :primary => true       # This may be the same as your `Web` server
 
-set :keep_releases,  3
+set :keep_releases,  2
 set :use_sudo,      false
 set :user,       "root"
 

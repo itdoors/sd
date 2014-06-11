@@ -2,8 +2,6 @@
 
 namespace Lists\CityBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * City
  */
@@ -18,7 +16,6 @@ class City
      * @var string
      */
     private $name;
-
 
     /**
      * Get id
@@ -106,7 +103,6 @@ class City
      */
     private $regions;
 
-
     /**
      * Set regions
      *
@@ -135,7 +131,6 @@ class City
      * @var \Lists\RegionBundle\Entity\Region
      */
     private $region;
-
 
     /**
      * Set region

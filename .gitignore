@@ -13,3 +13,5 @@
 /logs
 /build.properties
 /*~
+/nbproject
+nbproject/*

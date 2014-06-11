@@ -1,0 +1,624 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
+<script type="text/javascript" src="{{ asset('bundles/itdoorsoper/js/multiDatePicker/bootstrap-datepicker.js')}} "></script>
+<script>
+    $(document).ready(function(){
+
+        function updateTableCell(hrefId) {
+            if (!hrefId) {
+                var href = $('#'+$('#info_one_day').data('id_table_href'));
+            }
+            else {
+                var href = $('#'+hrefId);
+            }
+
+            var params = href.data('params');
+            var sendData = {
+                'params': params
+            }
+            $.ajax({
+                type: 'POST',
+                url: $('#info_input').data('url_reload_href'),
+                data: sendData,
+
+                beforeSend: function() {
+                    //ITDoorsAjax.blockUI($('#'+idLastHref));
+                },
+                success: function(data) {
+                    //alert(data);
+                    //ITDoorsAjax.unblockUI($('#'+idLastHref));
+                    data = JSON.parse(data);
+                    if (data.success == 0) {
+                    }
+                    else {
+                        //alert(data.html)
+                        href.html(data.html);
+                    }
+                }
+
+            })
+        }
+
+        $('.timepiker-cool').timepicker({
+            autoclose: true,
+            minuteStep: 5,
+            showSeconds: false,
+            showMeridian: false
+        });
+        $('#newFromTime').timepicker({
+            autoclose: true,
+            minuteStep: 5,
+            showSeconds: false,
+            showMeridian: false,
+            defaultTime: '09:00'
+        });
+        $('#newToTime').timepicker({
+            autoclose: true,
+            minuteStep: 5,
+            showSeconds: false,
+            showMeridian: false,
+            defaultTime: '18:00'
+        });
+
+        var currentTime = new Date()
+        var minDate = new Date(currentTime.getFullYear(), currentTime.getMonth(), +1); //one day next before month
+        var maxDate = new Date(currentTime.getFullYear(), currentTime.getMonth() +1, 0); // one day before next month
+
+        $('#copy_graf').datepicker({
+            startDate: minDate,
+            endDate: maxDate,
+            format: 'yyyy/mm/dd',
+            multidate: true,
+            weekStart: 1,
+            language: "ru"
+        }).on('show', function(e){
+            var message = $('#copy_graf').data('message');
+            $('#copy_graf').html(message);
+            $('#copy_graf_submit').show( 'slide', {}, 500);
+        }).on('hide', function(e){
+            var text = $('#copy_graf').data('text');
+            $('#copy_graf').html(text);
+            setTimeout("$('#copy_graf_submit').hide( 'slide', {}, 500 );",500);
+        });
+
+
+        $('#copy_graf_submit').die('click');
+        $('#copy_graf_submit').live('click', function(e){
+            var dates = $('#copy_graf').datepicker('getDates');
+
+            var idCoworker = $('#addButton').data('id_coworker');
+            var idDepartment = $('#addButton').data('id_department');
+            var date = $('#addButton').data('date');
+
+            var sendData = {
+                'idCoworker': idCoworker,
+                'idDepartment': idDepartment,
+                'currentDate': date,
+                'dates': dates
+            }
+            $.ajax({
+                type: 'POST',
+                url: $('#info_one_day').data('url_copy'),
+                data: sendData,
+
+                beforeSend: function() {
+                    //ITDoorsAjax.blockUI($('#'+idLastHref));
+                },
+                success: function(data) {
+                    //alert(data);
+                    for (index = 0; index < dates.length; ++index) {
+                        var tempDate = new Date(dates[index]);
+                        updateTableCell('link'+tempDate.getDate()+idCoworker);
+                    }
+                    data = JSON.parse(data);
+                    if (data.errors == 1) {
+                        var message = '';
+                        for (var i=0; i<data.errorDay.length; i++) {
+                            message += data.errorDay[i] + '; ';
+                        }
+                        $('#copy_dates_error').html(message);
+                        $('#copy_error').show('blind', {}, 500);
+                    } else {
+                        $('#copy_finished').show('blind', {}, 500);
+                    }
+
+                }
+
+            })
+        })
+
+
+
+        $('.editButton').die('click');
+        $('.editButton').live('click', function(e){
+            e.preventDefault();
+
+            var parent = $(this).parent("td").parent("tr");
+            var spanFrom = parent.find('.timeFrom');
+            var spanTo = parent.find('.timeTo');
+            var inputFrom = parent.find('.timeFromInput');
+            var inputTo = parent.find('.timeToInput');
+            var spinClass ="fa fa-spinner fa-spin";
+            var editClass = "fa-edit";
+            var checkClass = "fa-check-circle-o";
+            var deleteButton = parent.find(".deleteButton");
+            var cancelButton = parent.find(".cancelButton");
+            var editButton = parent.find(".editButton");
+            var spinner = parent.find(".spinner");
+            var checkButton = parent.find(".checkButton");
+
+            $(this).addClass('notDisplayed');
+            checkButton.removeClass('notDisplayed');
+
+            spanFrom.addClass('notDisplayed');
+            spanTo.addClass('notDisplayed');
+            inputFrom.removeClass('notDisplayed');
+            inputTo.removeClass('notDisplayed');
+
+            inputFrom.val(spanFrom.html()) ;
+            inputTo.val(spanTo.html());
+
+            parent.after('<tr class="temp_row_checkbox"><td colspan="7">' +
+                    '{% trans %}Officially{% endtrans %}: <input type="checkbox" class="temp_checkbox"> </td></tr>');
+
+            deleteButton.addClass('notDisplayed');
+            cancelButton.removeClass('notDisplayed');
+
+
+        })
+
+        $('.cancelButton').die('click');
+        $('.cancelButton').live('click', function(e){
+            e.preventDefault();
+
+            var parent = $(this).parent("td").parent("tr");
+            var spanFrom = parent.find('.timeFrom');
+            var spanTo = parent.find('.timeTo');
+            var inputFrom = parent.find('.timeFromInput');
+            var inputTo = parent.find('.timeToInput');
+            var spinClass ="fa fa-spinner fa-spin";
+            var editClass = "fa-edit";
+            var checkClass = "fa-check-circle-o";
+            var deleteButton = parent.find(".deleteButton");
+            var cancelButton = parent.find(".cancelButton");
+            var editButton = parent.find(".editButton");
+            var spinner = parent.find(".spinner");
+            var checkButton = parent.find(".checkButton");
+
+            $(this).addClass('notDisplayed');
+            checkButton.addClass('notDisplayed');
+            deleteButton.removeClass('notDisplayed');
+            editButton.removeClass('notDisplayed');
+
+            inputFrom.addClass('notDisplayed');
+            inputTo.addClass('notDisplayed');
+            spanFrom.removeClass('notDisplayed');
+            spanTo.removeClass('notDisplayed');
+
+            parent.next().remove();//remove the temp checkbox
+        })
+
+        $('.checkButton').die('click');
+        $('.checkButton').live('click', function(e){
+            e.preventDefault();
+
+            var parent = $(this).parent("td").parent("tr");
+            var spanFrom = parent.find('.timeFrom');
+            var spanTo = parent.find('.timeTo');
+            var inputFrom = parent.find('.timeFromInput');
+            var inputTo = parent.find('.timeToInput');
+            var spinClass ="fa fa-spinner fa-spin";
+            var editClass = "fa-edit";
+            var checkClass = "fa-check-circle-o";
+            var deleteButton = parent.find(".deleteButton");
+            var cancelButton = parent.find(".cancelButton");
+            var editButton = parent.find(".editButton");
+            var spinner = parent.find(".spinner");
+            var checkButton = parent.find(".checkButton");
+
+            $(this).addClass('notDisplayed');
+            cancelButton.addClass('notDisplayed');
+            spinner.removeClass('notDisplayed');
+
+
+            var timeFrom = inputFrom.val();
+            var timeTo = inputTo.val();
+            var officially = parent.next().find('.temp_checkbox').prop("checked");
+
+            var url = $(this).data('url');
+            var idTimeGrafik = $(this).data('id_grafik_time');
+
+            var idCoworker = $('#addButton').data('id_coworker');
+            var idDepartment = $('#addButton').data('id_department');
+            var date = $('#addButton').data('date');
+            var sendData = {
+                'idCoworker': idCoworker,
+                'idDepartment': idDepartment,
+                'date': date,
+                'officially': officially,
+                'fromTime': timeFrom,
+                'toTime' : timeTo,
+                'idTimeGrafik' : idTimeGrafik
+            }
+            $('.alert').hide( 'blind', {}, 500 );
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data) {
+                    //alert(data);
+                    spinner.addClass('notDisplayed');
+
+                    data = JSON.parse(data);
+                    if (data.success == 0) {
+                        if (data.error == 'no_official_permitted') {
+                            $('#non_official_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'wrong_from_to_time') {
+                            $('#wrong_date_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'fired') {
+                            $('#fired_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'subtime_having') {
+                            $('#subtime_error').toggle( 'blind', {}, 500 );
+                        }
+                        checkButton.removeClass('notDisplayed');
+                        cancelButton.removeClass('notDisplayed');
+                    }
+                    else {
+                        var tempHtml = $('#tbody_content').html();
+                        parent.next().remove();
+                        parent.replaceWith(data.html)
+                        $('.timepiker-cool').timepicker({
+                            autoclose: true,
+                            minuteStep: 5,
+                            showSeconds: false,
+                            showMeridian: false
+                        });
+                        updateTableCell(false)
+/*
+                        editButton.removeClass('notDisplayed');
+                        deleteButton.removeClass('notDisplayed');
+
+                        spanFrom.text(inputFrom.val());
+                        spanTo.text(inputTo.val());
+                        spanFrom.removeClass('notDisplayed');
+                        spanTo.removeClass('notDisplayed');
+                        inputFrom.addClass('notDisplayed');
+                        inputTo.addClass('notDisplayed');
+*/
+
+                    }
+                }
+            })
+
+            //alert (timeFrom + timeTo+ officially)
+        })
+
+
+
+
+
+        $('.deleteButton').die('click');
+        $('.deleteButton').live('click', function(e){
+            var parent = $(this).parent("td").parent("tr");
+            var deleteButton = parent.find(".deleteButton");
+            var cancelButton = parent.find(".cancelButton");
+            var editButton = parent.find(".editButton");
+            var spinner = parent.find(".spinner");
+            var checkButton = parent.find(".checkButton");
+
+
+            e.preventDefault();
+
+            var message = '{% trans %}Do you confirm deleting{% endtrans %}?'
+            if (confirm(message)) {
+                var url = $(this).data('url');
+                var idGrafikTime = $(this).data('id_grafik_time');
+
+                var idCoworker = $('#addButton').data('id_coworker');
+                var idDepartment = $('#addButton').data('id_department');
+                var date = $('#addButton').data('date');
+                var sendData = {
+                    'idCoworker': idCoworker,
+                    'idDepartment': idDepartment,
+                    'date': date,
+                    'idGrafikTime': idGrafikTime
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: sendData,
+
+                    beforeSend: function() {
+                        spinner.removeClass('notDisplayed');
+                        editButton.addClass('notDisplayed');
+                        deleteButton.addClass('notDisplayed');
+                    },
+                    success: function(data) {
+                        //alert(data);
+                        ITDoorsAjax.unblockUI($(parent));
+                        data = JSON.parse(data);
+                        if (data.success == 0) {
+                            if (data.error == 'no_entity_found') {
+                                spinner.addClass('notDisplayed');
+                                editButton.removeClass('notDisplayed');
+                                deleteButton.removeClass('notDisplayed');
+                                alert('Oops, error happened');
+                            }
+                        }
+                        else {
+                            parent.remove();
+                            updateTableCell(false)
+                        }
+                    }
+                })
+
+            } else {
+                return false;
+            }
+            //ajax here
+        })
+
+        // set effect from select menu value
+        $( "#add_button" ).click(function() {
+            var options = {};
+            $( "#add_div" ).toggle( 'blind', options, 500 );
+            return false;
+        });
+
+        $('#addButton').die('click');
+        $('#addButton').live('click', function(e){
+            $('.alert').hide( 'blind', {}, 500 );
+            var timeFrom = $('#newFromTime').val();
+            var timeTo = $('#newToTime').val();
+            var officially = $('#officially').prop("checked");
+
+            var url = $(this).data('url');
+            var idCoworker = $(this).data('id_coworker');
+            var idDepartment = $(this).data('id_department');
+            var date = $(this).data('date');
+            var sendData ={
+                'idCoworker': idCoworker,
+                'idDepartment': idDepartment,
+                'date': date,
+                'officially': officially,
+                'fromTime': timeFrom,
+                'toTime' : timeTo
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+
+                beforeSend: function() {
+                    ITDoorsAjax.blockUI($('#add_div'));
+                },
+                success: function(data) {
+                    //alert(data);
+                    ITDoorsAjax.unblockUI($('#add_div'));
+                    data = JSON.parse(data);
+                    if (data.success == 0) {
+                        if (data.error == 'no_official_permitted') {
+                            $('#non_official_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'wrong_from_to_time') {
+                            $('#wrong_date_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'fired') {
+                            $('#fired_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'subtime_having') {
+                            $('#subtime_error').toggle( 'blind', {}, 500 );
+                        }
+                    }
+                    else {
+                        //alert(data.html)
+                        var tempHtml = $('#tbody_content').html();
+                        $('#tbody_content').html(data.html+tempHtml);
+                        $('.timepiker-cool').timepicker({
+                            autoclose: true,
+                            minuteStep: 5,
+                            showSeconds: false,
+                            showMeridian: false
+                        });
+                        $( "#add_div" ).hide( 'blind', {}, 500 );
+
+                        updateTableCell(false)
+
+                    }
+                }
+            })
+
+        })
+
+        $('.statusButton').die('click');
+        $('.statusButton').live('click', function(e) {
+            e.preventDefault();
+
+            var url = $('#statusHolder').data('url');
+            var status = $(this).data('status');
+            var message = $(this).data('message');
+
+            var idCoworker = $('#addButton').data('id_coworker');
+            var idDepartment = $('#addButton').data('id_department');
+            var date = $('#addButton').data('date');
+            var sendData = {
+                'idCoworker': idCoworker,
+                'idDepartment': idDepartment,
+                'date': date,
+                'status': status
+            }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                beforeSend: function() {
+                    //ITDoorsAjax.blockUI($('#add_div'));
+                },
+                success: function(data) {
+                    $('#status_span').html(message);
+                    $('#status_changed').show( 'blind', {}, 500 );
+                    updateTableCell(false)
+                }
+            })
+
+        })
+
+    })
+
+</script>
+
+
+<div>
+    <a class="btn purple" id="add_button">{% trans %}Add{% endtrans %}</a>
+<li class="btn-group" style="float: right; ">
+    <a class="btn green notDisplayed" style="margin-right: 10px;" id="copy_graf_submit">Скопировать</a>
+    <a class="btn green" style="margin-right: 10px; width: 200px;" id="copy_graf"
+       data-message="{% trans %}Select dates{% endtrans %}" data-text="{% trans %}Copy graf{% endtrans %}">{% trans %}Copy graf{% endtrans %}</a>
+
+    <button type="button" class="btn blue dropdown-toggle " data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true">
+							<span>
+								{% trans %}Actions{% endtrans %}
+							</span>
+        <i class="fa fa-angle-down"></i>
+    </button>
+    <ul class="dropdown-menu pull-right" role="menu" id="statusHolder" data-url="{{ path('it_doors_oper_schedule_update_status_coworker') }}">
+        <li>
+            <a href="#" class="statusButton" data-status="sick" data-message="{% trans %}Sick{% endtrans %}">
+                {% trans %}Sick{% endtrans %}
+            </a>
+        </li>
+        <li>
+            <a href="#" class="statusButton" data-status="skip" data-message="{% trans %}Skip{% endtrans %}">
+                {% trans %}Skip{% endtrans %}
+            </a>
+        </li>
+        <li>
+            <a href="#" class="statusButton" data-status="fired" data-message="{% trans %}Fired{% endtrans %}">
+                {% trans %}Fired{% endtrans %}
+            </a>
+        </li>
+        <li>
+            <a href="#" class="statusButton" data-status="vacation" data-message="{% trans %}Vacation{% endtrans %}">
+                {% trans %}Vacation{% endtrans %}
+            </a>
+        </li>
+        <li class="divider">
+        </li>
+        <li>
+            <a href="#" class="statusButton" data-status="ok" data-message="{% trans %}Cleared{% endtrans %}">
+                {% trans %}Clear{% endtrans %}
+            </a>
+        </li>
+    </ul>
+</li>
+</div>
+<div style="height: 150px; width: 100%; margin-top: 10px; display: none;" id="add_div">
+
+    <b>{% trans %}Range{% endtrans %}:</b>
+    {% trans %}From{% endtrans %}
+        <input size="5" id="newFromTime" value="0000" type="text">
+    {% trans %}To{% endtrans %}
+        <input size="5" id="newToTime" value="0000" type="text">
+    <br>
+    <b>{% trans %}Officially{% endtrans %}:</b> <input type="checkbox" id="officially">
+
+    <br>
+    <button id="addButton"
+            data-id_coworker="{{ idCoworker }}"
+            data-date="{{ date }}"
+            data-id_department="{{ idDepartment }}"
+            data-url="{{ path('it_doors_oper_schedule_add_new_time') }}">{% trans %}Add{% endtrans %}</button>
+</div>
+<br>
+<div class="alert alert-danger notDisplayed" id="non_official_error">
+    <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Non-official person cant  work officially{% endtrans %}
+</div>
+<div class="alert alert-danger notDisplayed" id="wrong_date_error">
+    <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Wrong from-to time{% endtrans %}
+</div>
+<div class="alert alert-danger notDisplayed" id="fired_error">
+    <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Coworker was fired{% endtrans %}
+</div>
+<div class="alert alert-danger notDisplayed" id="subtime_error">
+    <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}This time is already busy{% endtrans %}
+</div>
+<div class="alert alert-danger notDisplayed" id="copy_error">
+    <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Dates, what haven't been copied{% endtrans %}:
+    <span id="copy_dates_error"></span>
+</div>
+
+<div class="alert alert-success notDisplayed" id="status_changed">
+    <strong>{% trans %}Success{% endtrans %}</strong> {% trans %}Status changed for{% endtrans %}:
+    "<span id="status_span"></span>"
+</div>
+<div class="alert alert-success notDisplayed" id="copy_finished">
+    <strong>{% trans %}Success{% endtrans %}</strong> {% trans %}All dates where copied{% endtrans %}
+</div>
+
+
+
+
+<style>
+    .action_button{
+        cursor: pointer;
+    }
+    .action_button:hover{
+        color: red;
+    }
+    .fa-check-circle-o:hover{
+        color: green;
+    }
+
+    .td_not_officialy{
+        color: red;
+    }
+    .notDisplayed{
+        display: none;
+    }
+    .timeFrom, .timeTo{
+        /*width: 25px;*/
+    }
+</style>
+<br>
+{{ day }}-{{ monthName|trans }}-{{ year }}
+<table class="table table-striped table-hover table-bordered" style="margin-top: 10px;">
+    <thead>
+        <tr>
+            <th colspan="2">{% trans %}Range{% endtrans %}</th>
+            <th>{% trans %}Sum{% endtrans %}</th>
+            <th>{% trans %}Day kind{% endtrans %}</th>
+            <th>{% trans %}Evening kind{% endtrans %}</th>
+            <th>{% trans %}Night kind{% endtrans %}</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="tbody_content">
+    {% if coworkerDayTime is defined%}
+        {% for oneDayTime in coworkerDayTime %}
+
+            {{ render(controller('ITDoorsOperBundle:OperSchedule:scheduleTableRow', {
+            'oneDayTime': oneDayTime
+            })) }}
+
+        {% endfor %}
+
+    {% endif %}
+
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="2">{% trans %}Range{% endtrans %}</th>
+            <th>{% trans %}Sum{% endtrans %}</th>
+            <th>{% trans %}Day kind{% endtrans %}</th>
+            <th>{% trans %}Evening kind{% endtrans %}</th>
+            <th>{% trans %}Night kind{% endtrans %}</th>
+            <th></th>
+        </tr>
+    </tfoot>
+</table>
+<input type="hidden" id="info_one_day"
+       data-id_table_href ="{{ idLink }}"
+       data-url_copy = "{{ path('it_doors_oper_schedule_copy_month_dates') }}">

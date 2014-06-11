@@ -25,6 +25,7 @@ use Lists\OrganizationBundle\Entity\Organization;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
+use ITDoors\AjaxBundle\Controller\BaseFilterController;
 
 /**
  * AjaxController class.
@@ -36,7 +37,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
  * @author     Pavel Pecheny <ppecheny@gmail.com>
  * @version    "Release: 1.0"
  */
-class AjaxController extends Controller
+class AjaxController extends BaseFilterController
 {
     protected $modelRepositoryDependence = array(
         'ModelContact' => 'ListsContactBundle:ModelContact',
@@ -285,16 +286,16 @@ class AjaxController extends Controller
      */
     public function cityByIdAction()
     {
-        $id = $this->get('request')->query->get('id');
+        $ids = explode(',', $this->get('request')->query->get('id'));
 
-        $city = $this->getDoctrine()
+        $cityList = $this->getDoctrine()
             ->getRepository('ListsCityBundle:City')
-            ->find($id);
+            ->findBy(array('id'=>$ids));
 
         $result = array();
 
-        if ($city) {
-            $result = $this->serializeObject($city);
+        foreach ($cityList as $city) {
+            $result[] = $this->serializeObject($city);
         }
 
         return new Response(json_encode($result));
@@ -2406,5 +2407,601 @@ class AjaxController extends Controller
         }
 
         return true;
+    }
+
+    /**
+     * ajax php function to get  mpk
+     * return json of all mpk that was found
+     *
+     * @return string
+     */
+    public function mpkAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsMpkBundle:Mpk');
+
+        $objects= $repository->getSearchQueryMpk($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json mpk by id
+     *
+     * @return string
+     */
+    public function mpkByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $mpkList = $this->getDoctrine()
+            ->getRepository('ListsMpkBundle:Mpk')
+            ->findBy(array('id'=>$ids));
+
+        $result = array();
+
+        foreach ($mpkList as $mpk) {
+            $result[] = $this->serializeObject($mpk);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * ajax php function to get department's type
+     * return json of all department type that was found
+     *
+     * @return string
+     */
+    public function departmentTypeAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentsType');
+
+        $objects= $repository->getSearchQueryType($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json type of department by id
+     *
+     * @return string
+     */
+    public function departmentTypeByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $departmentTypeList = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentsType')
+            ->findBy(array('id'=>$ids));
+
+        $result = array();
+
+        foreach ($departmentTypeList as $departmentType) {
+            $result[] = $this->serializeObject($departmentType);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * ajax php function to get regions
+     * return json of all regions that was found
+     *
+     * @return string
+     */
+
+    public function regionAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsRegionBundle:Region');
+
+        $objects= $repository->getSearchQueryRegion($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json region name by id
+     *
+     * @return string
+     */
+    public function regionByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $regionList = $this->getDoctrine()
+            ->getRepository('ListsRegionBundle:Region')
+            ->findBy(array('id' => $ids));
+
+        $result = array();
+
+        foreach ($regionList as $region) {
+            $result[] = $this->serializeObject($region);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * ajax php function to get department status
+     * return json of all regions that was found
+     *
+     * @return string
+     */
+    public function departmentStatusAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentsStatus');
+
+        $objects= $repository->getSearchQueryStatus($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json department status by id
+     *
+     * @return string
+     */
+    public function departmentStatusByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $departmentStatusList = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentsStatus')
+            ->findBy(array('id' => $ids));
+
+        $result = array();
+
+        foreach ($departmentStatusList as $departmentStatus) {
+            $result[] = $this->serializeObject($departmentStatus);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+
+    /**
+     * Returns json company structure by id
+     *
+     * @return string
+     */
+    public function companyStructureByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $regionList = $this->getDoctrine()
+            ->getRepository('ListsCompanystructureBundle:Companystructure')
+            ->findBy(array('id'=>$ids));
+
+        $result = array();
+
+        foreach ($regionList as $region) {
+            $result[] = $this->serializeObject($region);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json of searchin self Organizations
+     *
+     * @return string
+     */
+    public function selfOrganizationAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+        $objects= $repository->searchSelfOrganization($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Function to handle the ajax queries from editable elements
+     *
+     * @return mixed[]
+     */
+    public function editableDepartmentAction()
+    {
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        $methodSet = 'set' . ucfirst($name);
+
+
+        /** @var Handling $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:Departments')
+            ->find($pk);
+
+        if ($name == 'status') {
+            if (!$value) {
+                $value = null;
+            } else {
+                $value = $this->getDoctrine()
+                    ->getRepository('ListsDepartmentBundle:DepartmentsStatus')
+                    ->find($value);
+            }
+        } elseif ($name == 'opermanager') {
+            if (!$value) {
+                $value = null;
+            } else {
+                $value = $this->getDoctrine()
+                    ->getRepository('SDUserBundle:User')
+                    ->find($value);
+            }
+        } elseif ($name == 'statusDate') {
+            $value = new \DateTime($value);
+        } elseif ($name == 'type') {
+            if (!$value) {
+                $value = null;
+            } else {
+                $value = $this->getDoctrine()
+                    ->getRepository('ListsDepartmentBundle:DepartmentsType')
+                    ->find($value);
+            }
+        }
+        $object->$methodSet($value);
+
+        $validator = $this->get('validator');
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
+        $errors = $validator->validate($object, array('edit'));
+
+        if (sizeof($errors)) {
+            $return = $this->getFirstError($errors);
+
+            return new Response($return, 406);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+
+        $return = array('error'=>false);
+
+        $return['value'] = $value;
+        $return['method'] = $methodSet;
+        $return['object'] = $object;
+        try {
+            $em->flush();
+
+            $em->refresh($object);
+        } catch (\ErrorException $e) {
+            $return['error'] = $e->getMessage();
+        }
+
+        return new Response(json_encode($return));
+
+    }
+
+    /**
+     * ajax php function to get department people mpk
+     * return json of all department people mpks that was found
+     *
+     * @return string
+     */
+    public function departmentPeopleMpkAction()
+    {
+
+        $id = $this->getSessionValueByKey('idDepartment', null, 'oper.paginator.department.coworkers', 'param');
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsMpkBundle:Mpk');
+
+        $objects= $repository->getDepartmentPeopleQueryMpk($searchText, $id);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * ajax php function to get department people
+     * return json of all department people that was found
+     *
+     * @return string
+     */
+    public function departmentPeopleIndividualAction()
+    {
+        $id = $this->getSessionValueByKey('idDepartment', null, 'oper.paginator.department.coworkers', 'param');
+
+        $filters = $this->getFilters('oper.paginator.department.coworkers');
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
+
+        $objects= $repository->getSearchQueryPeople($searchText, $id, $filters);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object->getIndividual());
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json department individual by id
+     *
+     * @return string
+     */
+    public function departmentPeopleIndividualByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $individualList = $this->getDoctrine()
+            ->getRepository('ListsIndividualBundle:Individual')
+            ->findBy(array('id' => $ids));
+
+        $result = array();
+
+        foreach ($individualList as $individual) {
+            $result[] = $this->serializeObject($individual);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json month from department by id
+     *
+     * @return string
+     */
+    public function monthsFromDepartmentAction()
+    {
+        $idDepartment = $this->getSessionValueByKey('idDepartment', null, 'oper.bundle.department', 'param');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:Grafik');
+
+        $objects= $repository->getMonthsFromDepartment($idDepartment);
+
+        $result = array();
+
+        $translator = $this->get('translator');
+        foreach ($objects as $object) {
+            $numberMonth = $object['month'];
+
+            switch ($numberMonth) {
+                case '1':
+                    $text = $translator->trans('January', array(), 'ITDoorsOperBundle');
+                    break;
+                case '2':
+                    $text = $translator->trans('February', array(), 'ITDoorsOperBundle');
+                    break;
+                case '3':
+                    $text = $translator->trans('March', array(), 'ITDoorsOperBundle');
+                    break;
+                case '4':
+                    $text = $translator->trans('April', array(), 'ITDoorsOperBundle');
+                    break;
+                case '5':
+                    $text = $translator->trans('May', array(), 'ITDoorsOperBundle');
+                    break;
+                case '6':
+                    $text = $translator->trans('June', array(), 'ITDoorsOperBundle');
+                    break;
+                case '7':
+                    $text = $translator->trans('July', array(), 'ITDoorsOperBundle');
+                    break;
+                case '8':
+                    $text = $translator->trans('August', array(), 'ITDoorsOperBundle');
+                    break;
+                case '9':
+                    $text = $translator->trans('September', array(), 'ITDoorsOperBundle');
+                    break;
+                case '10':
+                    $text = $translator->trans('October', array(), 'ITDoorsOperBundle');
+                    break;
+                case '11':
+                    $text = $translator->trans('November', array(), 'ITDoorsOperBundle');
+                    break;
+                case '12':
+                    $text = $translator->trans('December', array(), 'ITDoorsOperBundle');
+                    break;
+            }
+            $result[] = array(
+                'id' => $numberMonth,
+                'value' => $numberMonth,
+                'name' => $text,
+                'text' => $text
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json months by id
+     *
+     * @return string
+     */
+    public function monthsFromDepartmentByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $result = array();
+        $translator = $this->get('translator');
+        foreach ($ids as $idMonth) {
+            switch ($idMonth) {
+                case '1':
+                    $text = $translator->trans('January', array(), 'ITDoorsOperBundle');
+                    break;
+                case '2':
+                    $text = $translator->trans('February', array(), 'ITDoorsOperBundle');
+                    break;
+                case '3':
+                    $text = $translator->trans('March', array(), 'ITDoorsOperBundle');
+                    break;
+                case '4':
+                    $text = $translator->trans('April', array(), 'ITDoorsOperBundle');
+                    break;
+                case '5':
+                    $text = $translator->trans('May', array(), 'ITDoorsOperBundle');
+                    break;
+                case '6':
+                    $text = $translator->trans('June', array(), 'ITDoorsOperBundle');
+                    break;
+                case '7':
+                    $text = $translator->trans('July', array(), 'ITDoorsOperBundle');
+                    break;
+                case '8':
+                    $text = $translator->trans('August', array(), 'ITDoorsOperBundle');
+                    break;
+                case '9':
+                    $text = $translator->trans('September', array(), 'ITDoorsOperBundle');
+                    break;
+                case '10':
+                    $text = $translator->trans('October', array(), 'ITDoorsOperBundle');
+                    break;
+                case '11':
+                    $text = $translator->trans('November', array(), 'ITDoorsOperBundle');
+                    break;
+                case '12':
+                    $text = $translator->trans('December', array(), 'ITDoorsOperBundle');
+                    break;
+            }
+            $result = array(
+                'id' => $idMonth,
+                'value' => $idMonth,
+                'name' => $text,
+                'text' => $text
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+
+
+    /**
+     * Returns json years from department
+     *
+     * @return string
+     */
+    public function yearsFromDepartmentAction()
+    {
+        $idDepartment = $this->getSessionValueByKey('idDepartment', null, 'oper.bundle.department', 'param');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:Grafik');
+
+        $objects= $repository->getYearsFromDepartment($idDepartment);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $year = $object['year'];
+
+            $result[] = array(
+                'id' => $year,
+                'value' => $year,
+                'name' => $year,
+                'text' => $year
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json years from department by id
+     *
+     * @return string
+     */
+    public function yearsFromDepartmentByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+        foreach ($ids as $idYear) {
+
+            $result = array(
+                'id' => $idYear,
+                'value' => $idYear,
+                'name' => $idYear,
+                'text' => $idYear
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * @return Response
+     */
+    public function departmentIndividualGrafikAction()
+    {
+        $idDepartment = $this->get('request')->request->get('pk');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
+
+        $departmentPeople = $repository->findBy(array(
+            'department' => $idDepartment,
+        ));
+
+        $result = array();
+        if (is_array($departmentPeople)) {
+            foreach ($departmentPeople as $object) {
+                $result[] = $this->serializeObject($object);
+            }
+        } else {
+            $result[] = $this->serializeObject($departmentPeople);
+        }
+
+
+        return new Response(json_encode($result));
+
     }
 }

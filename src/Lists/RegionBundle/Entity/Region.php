@@ -2,8 +2,6 @@
 
 namespace Lists\RegionBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Region
  */
@@ -192,7 +190,6 @@ class Region
      */
     private $companystructure;
 
-
     /**
      * Add companystructure
      *
@@ -225,5 +222,15 @@ class Region
     public function getCompanystructure()
     {
         return $this->companystructure;
+    }
+
+    /**
+     * toString method
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->name;
     }
 }

@@ -3,9 +3,6 @@
 namespace Lists\ReportBundle\Controller;
 
 use Doctrine\ORM\Query;
-use Lists\ContactBundle\Services\ModelContactService;
-use Lists\HandlingBundle\Entity\HandlingMessageRepository;
-use Lists\HandlingBundle\Entity\HandlingMessageTypeRepository;
 use Lists\HandlingBundle\Entity\HandlingRepository;
 use ITDoors\CommonBundle\Controller\BaseFilterController;
 use Lists\HandlingBundle\Entity\HandlingService;
@@ -85,62 +82,6 @@ class SalesAdminController extends BaseFilterController
             'results' => $results,
             'baseRoutePrefix' => $this->baseRoutePrefix,
             'baseTemplate' => $this->baseTemplate,
-        ));
-    }
-
-    /**
-     * reportActivityAction
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function reportActivityAction()
-    {
-        /** @var HandlingService[] $services */
-        $services = $this->getDoctrine()->getManager()
-            ->getRepository('ListsHandlingBundle:HandlingService')
-            ->findAll();
-
-        return $this->render('ListsReportBundle:' . $this->baseTemplate . ':reportActivity.html.twig', array(
-            'baseRoutePrefix' => $this->baseRoutePrefix,
-            'baseTemplate' => $this->baseTemplate,
-            'services' => $services
-        ));
-    }
-
-    /**
-     * ReportActivityContentAction
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function reportActivityContentAction()
-    {
-        $filterNamespace = $this->container->getParameter('ajax.filter.namespace.report.activity');
-
-        $filters = $this->getFilters($filterNamespace);
-
-        /** @var HandlingMessageRepository $hmr */
-        $hmr = $this->get('handling.message.repository');
-        /** @var HandlingMessageService $hms */
-        $hms = $this->get('handling.message.service');
-        /** @var HandlingMessageTypeRepository $hmtr */
-        $hmtr = $this->get('handling.message.type.repository');
-
-        /** @var HandlingMessageRepository $handlingMessageRepository */
-        $results = $hmr->getActivity($filters, $hms->getReportSlugs());
-
-        $types = $hmtr->getListBySlug($hms->getReportSlugs());
-
-        /** @var ModelContactService $mcs */
-        $mcs = $this->get('lists_contact.contact.service');
-
-        $levels = $mcs->getLevels();
-
-        return $this->render('ListsReportBundle:' . $this->baseTemplate . ':reportActivityContent.html.twig', array(
-            'results' => $results,
-            'baseRoutePrefix' => $this->baseRoutePrefix,
-            'baseTemplate' => $this->baseTemplate,
-            'types' => $types,
-            'levels' => $levels
         ));
     }
 }

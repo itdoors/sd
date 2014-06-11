@@ -1,0 +1,55 @@
+Lists\DepartmentBundle\Entity\OnceOnlyAccrual:
+    type: entity
+    table: once_only_accrual
+    repositoryClass : Lists\DepartmentBundle\Entity\OnceOnlyAccrualRepository
+    id:
+        id:
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+    fields:
+        workType:
+            type: string
+            length: 1
+            fixed: false
+            nullable: false
+            column: work_type
+        type:
+            type: string
+            length: 10
+            fixed: false
+            nullable: false
+        code:
+            type: string
+            length: 2
+            fixed: false
+            nullable: false
+            column: code
+        value:
+            type: float
+            nullable: false
+        description:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        isActive:
+            type: boolean
+            nullable: true
+            column: is_active
+    oneToOne:
+        mpk:
+            targetEntity: Lists\MpkBundle\Entity\Mpk
+            joinColumns:
+                mpk_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    manyToOne:
+        departmentPeopleMonthInfo:
+            targetEntity: Lists\DepartmentBundle\Entity\DepartmentPeopleMonthInfo
+            joinColumns:
+                department_people_month_info_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

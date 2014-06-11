@@ -1,0 +1,21 @@
+Lists\DepartmentBundle\Entity\DepartmentPeoplePosition:
+    type: entity
+    table: department_people_position
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        name:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+        slug:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+    lifecycleCallbacks: {  }
