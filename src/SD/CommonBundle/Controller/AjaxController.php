@@ -2413,7 +2413,7 @@ class AjaxController extends BaseFilterController
         $invoiceObj = $this->getDoctrine()
             ->getRepository('ITDoorsControllingBundle:Invoice')
             ->find($invoiceId);
-        if (!empty($invoiceObj->getDogovor())) {
+        if ($invoiceObj->getDogovor()) {
             /** @var Dogovor $dogovor */
             $dogovor = $this->getDoctrine()
                 ->getRepository('ListsDogovorBundle:Dogovor')
@@ -2473,14 +2473,15 @@ class AjaxController extends BaseFilterController
     {
         $invoiceId = $defaultData['invoiceId'];
 
+        $repository = $this->getDoctrine()->getRepository('ListsCompanystructureBundle:Companystructure');
+
         $form
             ->add('companystructure', 'entity', array(
                 'class' => 'ListsCompanystructureBundle:Companystructure',
                 'empty_value' => '',
                 'required' => false,
                 'mapped' => false,
-                'query_builder' => function ($repository) use ($invoiceId) {
-                $repository = $this->getDoctrine()->getRepository('ListsCompanystructureBundle:Companystructure');
+                'query_builder' => function ($repository) use ($invoiceId, $repository) {
 
                 return $repository->createQueryBuilder('c')
                     ->leftJoin('c.invoicecompanystructure', 'idc')
