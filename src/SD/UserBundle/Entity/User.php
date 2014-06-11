@@ -450,4 +450,42 @@ class User extends BaseUser
     {
         return $this->photo;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $usercontactinfo;
+
+
+    /**
+     * Add usercontactinfo
+     *
+     * @param \SD\UserBundle\Entity\Contactinfo $usercontactinfo
+     * @return User
+     */
+    public function addUsercontactinfo(\SD\UserBundle\Entity\Contactinfo $usercontactinfo)
+    {
+        $this->usercontactinfo[] = $usercontactinfo;
+    
+        return $this;
+    }
+
+    /**
+     * Remove usercontactinfo
+     *
+     * @param \SD\UserBundle\Entity\Contactinfo $usercontactinfo
+     */
+    public function removeUsercontactinfo(\SD\UserBundle\Entity\Contactinfo $usercontactinfo)
+    {
+        $this->usercontactinfo->removeElement($usercontactinfo);
+    }
+
+    /**
+     * Get usercontactinfo
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUsercontactinfo()
+    {
+        return $this->usercontactinfo;
+    }
 }

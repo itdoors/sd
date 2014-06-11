@@ -31,6 +31,7 @@ use ITDoors\ControllingBundle\Entity\InvoiceCompanystructure;
 use ITDoors\EmailBundle\Entity\Email;
 use ITDoors\EmailBundle\Entity\EmailRepository;
 use TSS\AutomailerBundle\Entity\Automailer;
+use SD\UserBundle\Entity\Usercontactinfo;
 
 /**
  * AjaxController class.
@@ -1365,6 +1366,40 @@ class AjaxController extends Controller
 
         return true;
     }
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function userContactinfoFormSave(Form $form, $user, $request)
+    {
+        /** @var Usercontactinfo $data */
+        $data = $form->getData();
+
+        $formData = $request->request->get($form->getName());
+    
+        $userContact = new Usercontactinfo();
+        $userContact->setValue($data['value']);
+        $userContact->setUser($user);
+        $contactinfoId = $formData['contactinfo'];
+
+        /** @var Contactinfo $contact */
+        $contact = $this->getDoctrine()
+            ->getRepository('SDUserBundle:Contactinfo')
+            ->find($contactinfoId);
+        
+        $userContact->setContactinfo($contact);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($userContact);
+        $em->flush();
+
+        return true;
+    }
 
     /**
      * Saves {formName}Save after valid ajax validation
@@ -1620,6 +1655,28 @@ class AjaxController extends Controller
         /** @var InvoiceCompanystructure $object */
         $object = $this->getDoctrine()
             ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
+            ->find($id);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+    
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function UsercontactinfoDelete($params)
+    {
+        $id = $params['id'];
+
+        /** @var InvoiceCompanystructure $object */
+        $object = $this->getDoctrine()
+            ->getRepository('SDUserBundle:Usercontactinfo')
             ->find($id);
 
         /** @var EntityManager $em */

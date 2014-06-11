@@ -26,36 +26,18 @@
         <div class="col-md-9">
             <div class="tab-content">
                 <div id="tab_1-1" class="tab-pane active">
-                    <form role="form" action="#">
-                        <div class="form-group">
-                            <label class="control-label">First Name</label>
-                            <input type="text" placeholder="John" class="form-control"/>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Last Name</label>
-                            <input type="text" placeholder="Doe" class="form-control"/>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Mobile Number</label>
-                            <input type="text" placeholder="+1 646 580 DEMO (6284)" class="form-control"/>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Interests</label>
-                            <input type="text" placeholder="Design, Web etc." class="form-control"/>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Occupation</label>
-                            <input type="text" placeholder="Web Developer" class="form-control"/>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">About</label>
-                            <textarea class="form-control" rows="3" placeholder="We are KeenThemes!!!"></textarea>
-                        </div>
-                        <div class="margiv-top-10">
-                            <a href="#" class="btn green">
-                                Save Changes </a>
-                        </div>
-                    </form>
+                    <button id="managers_list_new" class="btn green ajax-form"
+                            data-target_holder="userContactinfoFormTpl"
+                            data-form_name="userContactinfoForm"
+                            data-post_function="updateList"
+                            data-post_target_id="contact_list"
+                            >
+                        {% trans %}Add Contact{% endtrans %} <i class="fa fa-plus"></i>
+                    </button>
+                    <div id="userContactinfoFormTpl"></div>
+                    <div class="portlet-body" id="contact_list" data-url="{{ url('sd_user_show_contactinfo') }}">
+                        {{ render(controller('SDUserBundle:User:contactinfo')) }}
+                    </div>
                 </div>
                 <div id="tab_2-2" class="tab-pane">
                     <p>

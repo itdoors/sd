@@ -81,7 +81,7 @@
                                         <tbody>
                                             <tr>
                                                 <td class="hidden-xs">
-                                                   {% trans %}Subdivision{% endtrans %} 
+                                                    {% trans %}Subdivision{% endtrans %} 
                                                 </td>
                                                 <td>
                                                     {{ item.companyName }}
@@ -89,7 +89,7 @@
                                             </tr>
                                             <tr>                                                                                                
                                                 <td class="hidden-xs">
-                                                   {% trans %}Email{% endtrans %} 
+                                                    {% trans %}Email{% endtrans %} 
                                                 </td>
                                                 <td>
                                                     {{ item.email }}
@@ -97,7 +97,7 @@
                                             </tr>
                                             <tr>                                                                                                
                                                 <td class="hidden-xs">
-                                                   {% trans %}Mobile phone{% endtrans %} 
+                                                    {% trans %}Mobile phone{% endtrans %} 
                                                 </td>
                                                 <td>
                                                     {{ item.mobilephone }}
@@ -105,7 +105,7 @@
                                             </tr>
                                             <tr>  
                                                 <td class="hidden-xs">
-                                                   {% trans %}Personale phone{% endtrans %} 
+                                                    {% trans %}Personale phone{% endtrans %} 
                                                 </td>
                                                 <td>
                                                     {{ item.phonePersonal }}
@@ -113,7 +113,7 @@
                                             </tr>
                                             <tr>  
                                                 <td class="hidden-xs">
-                                                   {% trans %}Inside phone{% endtrans %} 
+                                                    {% trans %}Inside phone{% endtrans %} 
                                                 </td>
                                                 <td>
                                                     {{ item.phoneInside }}
@@ -121,15 +121,15 @@
                                             </tr>
                                             <tr>  
                                                 <td class="hidden-xs">
-                                                   {% trans %}Place of birth{% endtrans %} 
+                                                    {% trans %}Place of birth{% endtrans %} 
                                                 </td>
                                                 <td>
-                                                   {{ item.birthPlace }}
+                                                    {{ item.birthPlace }}
                                                 </td>
                                             </tr>
                                             <tr>  
                                                 <td class="hidden-xs">
-                                                   {% trans %}Hire Date{% endtrans %} 
+                                                    {% trans %}Hire Date{% endtrans %} 
                                                 </td>
                                                 <td>
                                                     {{ item.dateHire == '' ? '' : item.dateHire|date('d.m.Y') }}
@@ -137,20 +137,26 @@
                                             </tr>
                                             <tr>  
                                                 <td class="hidden-xs">
-                                                   {% trans %}Termination date{% endtrans %} 
+                                                    {% trans %}Termination date{% endtrans %} 
                                                 </td>
                                                 <td>
-                                                   {{ item.dateFire == '' ? '' : item.dateFire|date('d.m.Y') }}
+                                                    {{ item.dateFire == '' ? '' : item.dateFire|date('d.m.Y') }}
                                                 </td>
                                             </tr>
                                             <tr>  
                                                 <td class="hidden-xs">
-                                                   {% trans %}Education{% endtrans %} 
+                                                    {% trans %}Education{% endtrans %} 
                                                 </td>
                                                 <td>
                                                     {{ item.education }}
                                                 </td>
                                             </tr>
+                                            {% for contact in usercontactinfo %}
+                                                <tr>
+                                                    <td>{{ contact.contactinfo.name }}:</td>
+                                                    <td>{{ contact.value }}</td>
+                                                </tr>
+                                            {% endfor %}
                                         </tbody>
                                     </table>
                                 </div>

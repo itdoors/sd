@@ -70,3 +70,7 @@ SD\UserBundle\Entity\User:
         staff:
             targetEntity: Staff
             mappedBy: user
+    oneToMany:
+        usercontactinfo:
+            targetEntity: Contactinfo
+            mappedBy: user

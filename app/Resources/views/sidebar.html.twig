@@ -325,7 +325,7 @@
             </ul>
         </li>
         {% endif %}
-        <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_staff') %} class="active"{% endif %}>
+        <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_staff')  %} class="active"{% endif %}>
             <a href="{{ path('sd_user_staff') }}">
                 <i class="fa fa-user"></i>
                 <span class="title">{% trans %}Staff{% endtrans %}</span>

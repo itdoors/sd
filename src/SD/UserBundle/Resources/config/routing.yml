@@ -19,6 +19,10 @@ sd_user_show:
 sd_user_show_tabs:
     pattern:  /user/show/tabs
     defaults: { _controller: SDUserBundle:User:showtabs }
+    
+sd_user_show_contactinfo:
+    pattern:  /user/show/contactinfo
+    defaults: { _controller: SDUserBundle:User:contactinfo }
 
 sd_user_new:
     pattern:  /user/new

@@ -9,6 +9,7 @@ use SD\UserBundle\Entity\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Session\Session;
+use SD\UserBundle\Entity\Usercontactinfo;
 
 class UserController extends BaseController
 {
@@ -135,9 +136,41 @@ class UserController extends BaseController
 
         $tab = $this->getTab($namespace);
         
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var Usercontactinfo $usercontactinfo */
+        $usercontactinfo = $em->getRepository('SDUserBundle:Usercontactinfo')->findBy(array('user' => $userId));
+
+       
         return $this->render('SDUserBundle:User:showTab' . $tab . '.html.twig',
             array(
-                'item' => $item
+                'item' => $item,
+                'usercontactinfo' => $usercontactinfo,
+            ));
+    }
+    /**
+     * Execute show action
+     */
+    public function contactinfoaction()
+    {
+        /** @var Session $session */
+        $session = $this->get('session');
+        $userId = $session->get('userid', false);
+        
+        if(!$userId){
+            return $this->redirect($this->generateUrl('sd_user_staff'));
+        }
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var Usercontactinfo $usercontactinfo */
+        $usercontactinfo = $em->getRepository('SDUserBundle:Usercontactinfo')->findBy(array('user' => $userId));
+
+       
+        return $this->render('SDUserBundle:User:showContactinfo.html.twig',
+            array(
+                'usercontactinfo' => $usercontactinfo,
             ));
     }
 
