@@ -984,7 +984,7 @@ class OperScheduleController extends BaseFilterController
             $return['error'] = 'no_official_permitted';
 
             return $return;
-        } elseif ($departmentPeople->getAdmissionDate() != null
+/*        } elseif ($departmentPeople->getAdmissionDate() != null
             && $departmentPeople->getAdmissionDate() < new \DateTime($date)
             && $departmentPeople->getDismissalDate() != null
             && $departmentPeople->getDismissalDate() > new \DateTime($date)
@@ -993,9 +993,13 @@ class OperScheduleController extends BaseFilterController
             $return['success'] = 0;
             $return['error'] = 'no_official_permitted';
 
-            return $return;
-        } elseif ($departmentPeople->getAdmissionDate() != null
-            && $departmentPeople->getAdmissionDate() > new \DateTime($date)) {
+            return $return;*/
+        } elseif (($departmentPeople->getAdmissionDate() != null
+            && $departmentPeople->getAdmissionDate() > new \DateTime($date)
+            && $officially) ||
+            ($departmentPeople->getDismissalDate() != null
+            && $departmentPeople->getDismissalDate() < new \DateTime($date)
+            && $officially)) {
 
             $return['success'] = 0;
             $return['error'] = 'no_official_permitted';

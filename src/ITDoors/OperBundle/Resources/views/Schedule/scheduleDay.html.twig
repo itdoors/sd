@@ -147,7 +147,7 @@
             var editButton = parent.find(".editButton");
             var spinner = parent.find(".spinner");
             var checkButton = parent.find(".checkButton");
-
+            var notOfficially = $(this).data('not_officially')
             $(this).addClass('notDisplayed');
             checkButton.removeClass('notDisplayed');
 
@@ -158,9 +158,12 @@
 
             inputFrom.val(spanFrom.html()) ;
             inputTo.val(spanTo.html());
-
+            var checked = "";
+            if (notOfficially) {
+                checked = "checked";
+            }
             parent.after('<tr class="temp_row_checkbox"><td colspan="7">' +
-                    '{% trans %}Officially{% endtrans %}: <input type="checkbox" class="temp_checkbox"> </td></tr>');
+                    '{% trans %}NotOfficially{% endtrans %}: <input type="checkbox" class="temp_checkbox" '+checked+'> </td></tr>');
 
             deleteButton.addClass('notDisplayed');
             cancelButton.removeClass('notDisplayed');
@@ -238,7 +241,7 @@
                 'idCoworker': idCoworker,
                 'idDepartment': idDepartment,
                 'date': date,
-                'officially': officially,
+                'officially': !officially,
                 'fromTime': timeFrom,
                 'toTime' : timeTo,
                 'idTimeGrafik' : idTimeGrafik,
@@ -391,7 +394,7 @@
                 'idCoworker': idCoworker,
                 'idDepartment': idDepartment,
                 'date': date,
-                'officially': officially,
+                'officially': !officially,//change due to fast fixes before staging
                 'fromTime': timeFrom,
                 'toTime' : timeTo,
                 'idReplacement': idReplacement
@@ -528,7 +531,7 @@
     </ul>
 </li>
 </div>
-<div style="height: 150px; width: 100%; margin-top: 10px; display: none;" id="add_div">
+<div style="height: 100px; width: 100%; margin-top: 10px; display: none;" id="add_div">
 
     <b>{% trans %}Range{% endtrans %}:</b>
     {% trans %}From{% endtrans %}
@@ -536,7 +539,7 @@
     {% trans %}To{% endtrans %}
         <input size="5" id="newToTime" value="0000" type="text">
     <br>
-    <b>{% trans %}Officially{% endtrans %}:</b> <input type="checkbox" id="officially">
+    <b>{% trans %}NotOfficially{% endtrans %}:</b> <input type="checkbox" id="officially">
 
     <br>
     <button id="addButton"
@@ -586,8 +589,14 @@
     }
 
     .td_not_officialy{
-        color: red;
+        color: blue;
     }
+
+    .td_officialy{
+        color: green;
+    }
+
+
     .notDisplayed{
         display: none;
     }
