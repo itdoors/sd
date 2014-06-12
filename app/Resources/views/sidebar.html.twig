@@ -337,10 +337,10 @@
             </ul>
         </li>
         {% endif %}
-        <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_staff')  %} class="active"{% endif %}>
-            <a href="{{ path('sd_user_staff') }}">
+        <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_stuff')  %} class="active"{% endif %}>
+            <a href="{{ path('sd_user_stuff') }}">
                 <i class="fa fa-user"></i>
-                <span class="title">{% trans %}Staff{% endtrans %}</span>
+                <span class="title">{% trans %}Stuff{% endtrans %}</span>
             </a>
         </li>
     </ul>

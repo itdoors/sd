@@ -1,9 +1,9 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'SDUserBundle' %}
-{% block title %}{% trans %}List of staff{% endtrans %} {% endblock %}
+{% block title %}{% trans %}List of stuff{% endtrans %} {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
-        {% trans %}Staff <small>list of staff</small>{% endtrans %}
+        {% trans %}Stuff <small>list of stuff</small>{% endtrans %}
     </h3>
 {% endblock %}
 {% block page_breadcrumbs %}
@@ -13,7 +13,7 @@
             <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
             <i class="fa fa-angle-right"></i>
         </li>
-        <li><a href="" title="{% trans %}List of staff{% endtrans %}">{% trans %}List of staff{% endtrans %}</a></li>
+        <li><a href="" title="{% trans %}List of stuff{% endtrans %}">{% trans %}List of stuff{% endtrans %}</a></li>
     </ul>
 {% endblock %}
 
@@ -30,13 +30,13 @@
 {% endblock %}
 
 {% block body %}
-    {{ ajax_filter_render('staffFilterForm', namespase, {
+    {{ ajax_filter_render('stuffFilterForm', namespase, {
         'datatable_ajax': 'ITDoorsAjax.updateList'
     }) }}
-    <a href="{{ url('sd_user_new_staff') }}">{% trans %}Add new user{% endtrans %}</a>
+    <a href="{{ url('sd_user_new_stuff') }}">{% trans %}Add new user{% endtrans %}</a>
     <div class="row">
-        <div id="datatable_ajax"  data-url="{{ url('sd_user_stafflist') }}">
-            {{ render(controller('SDUserBundle:' ~ baseTemplate ~ ':stafflist')) }}
+        <div id="datatable_ajax"  data-url="{{ url('sd_user_stufflist') }}">
+            {{ render(controller('SDUserBundle:' ~ baseTemplate ~ ':stufflist')) }}
         </div>
     </div>
 {% endblock body %}

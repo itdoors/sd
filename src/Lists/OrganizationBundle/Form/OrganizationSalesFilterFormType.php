@@ -53,7 +53,7 @@ class OrganizationSalesFilterFormType extends AbstractType
                 'mapped' => false,
                 'multiple' => true,
                 'property'=>'fullname',
-                'query_builder' => $this->ur->getOnlyStaff()
+                'query_builder' => $this->ur->getOnlyStuff()
             ));
 
         $builder
