@@ -143,12 +143,13 @@ class AutomailerController extends BaseFilterController
         $session = $this->get('session');
         $filesName = json_decode($session->get('files_upload', '{}'), true);
         $filesLoad = array();
+        $directoryTemp = $this->container->getParameter('upload.file.path');
         foreach ($filesName as $name => $nameOrig) {
             $filesLoad[] = array(
                 'name' => $name,
                 'nameOrig' => $nameOrig,
-                'size' => filesize('../web/files/upload/'.$name),
-                'type' => mime_content_type('../web/files/upload/'.$name)
+                'size' => filesize($directoryTemp.'/'.$name),
+                'type' => mime_content_type($directoryTemp.'/'.$name)
             );
         }
 
@@ -201,12 +202,12 @@ class AutomailerController extends BaseFilterController
             $directoryTemp = $this->container->getParameter('upload.file.path');
             $directory = $this->container->getParameter('email.file.path');
             foreach ($filesArr as $key => $file) {
-                if (is_file($directoryTemp . $key)) {
-                    rename($directoryTemp . $key, $directory . $key);
-                    $message->attach(Swift_Attachment::fromPath($directory . $key));
+                if (is_file($directoryTemp.'/' . $key)) {
+                    rename($directoryTemp.'/' . $key, $directory .'/'. $key);
+                    $message->attach(Swift_Attachment::fromPath($directory .'/'. $key));
                     $session->remove('files_upload');
                 } else {
-                    echo $directoryTemp . $key;
+                    echo $directoryTemp.'/'. $key;
                     die;
                 }
             }
@@ -217,7 +218,7 @@ class AutomailerController extends BaseFilterController
                 ->getId();
 
             foreach ($filesArr as $key => $file) {
-                if (is_file($directory . $key)) {
+                if (is_file($directory .'/'. $key)) {
                     $addFile = new File();
                     $addFile->setName($key);
                     $addFile->setPath($directory);

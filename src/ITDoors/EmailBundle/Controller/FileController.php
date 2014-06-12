@@ -68,9 +68,9 @@ class FileController extends BaseFilterController
     {
         $request = $this->get('request');
         $fileName = $request->get('name');
-        $directory = '../web/files/upload/';
-        if (is_file($directory . $fileName)) {
-            if (unlink($directory . $fileName)) {
+        $directory = $this->container->getParameter('upload.file.path');
+        if (is_file($directory .'/'. $fileName)) {
+            if (unlink($directory .'/'. $fileName)) {
                 $session = $this->get('session');
                 $filesArr = json_decode($session->get('files_upload'), true);
                 unset($filesArr[$fileName]);
