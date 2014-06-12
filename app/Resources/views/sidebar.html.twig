@@ -15,7 +15,7 @@
                 <span class="selected"></span>
             </a>
         </li>
-		{% if is_granted('ROLE_SALES') %}
+        {% if is_granted('ROLE_SALES') %}
         <li class="">
             <a href="javascript:;">
                 <i class="fa fa-money"></i> 
@@ -23,19 +23,19 @@
                 <span class="arrow "></span>
             </a>
             <ul class="sub-menu">
-                <li >
+                <li>
                     <a href="{{ path('lists_sales_handling_index') }}" title="{% trans %}My Handlings{% endtrans %}">
                         <i class="fa fa-comments"></i>
                         {% trans %}My Handlings{% endtrans %}
                     </a>
                 </li>
-                <li >
+                <li>
                     <a href="{{ path('lists_sales_contact_index') }}" title="{% trans %}My Contacts{% endtrans %}">
                         <i class="fa fa-envelope"></i>
                         {% trans %}My Contacts{% endtrans %}
                     </a>
                 </li>
-                <li >
+                <li>
                     <a href="{{ path('lists_sales_organization_index') }}" title="{% trans %}My Organizations{% endtrans %}">
                         <i class="fa fa-building"></i>
                         {% trans %}My Organizations{% endtrans %}
@@ -54,12 +54,12 @@
 					<i class="fa fa-calendar"></i>
 					&#123;&#35;<span class="badge badge-important">14</span>&#35;&#125;{% trans %}My Calendar{% endtrans %}</a>
 				</li>#}
-                <li >
+                <li>
                     <a href="{{ path('lists_sales_report_index') }}" title="{% trans %}My Reports{% endtrans %}">
                         <i class="fa fa-bar-chart-o"></i>
                         {% trans %}My Reports{% endtrans %}</a>
                 </li>
-                <li >
+                <li>
                     <a href="{{ path('lists_sales_team_index') }}" title="{% trans %}My Team{% endtrans %}">
                         <i class="fa fa-group"></i>
                         {% trans %}My Team{% endtrans %}</a>
@@ -76,7 +76,7 @@
                 <span class="arrow "></span>
             </a>
             <ul class="sub-menu">
-                <li >
+                <li>
                     <a href="{{ path('lists_sales_dispatcher_handling_index') }}" title="{% trans %}Team Handlings{% endtrans %}">
                         <i class="fa fa-comments"></i>
                         {% trans %}Team Handlings{% endtrans %}
@@ -88,7 +88,7 @@
                         {% trans %}Team Contacts{% endtrans %}
                     </a>
                 </li>
-                <li >
+                <li>
                     <a href="{{ path('lists_sales_dispatcher_organization_index') }}" title="{% trans %}Team Organizations{% endtrans %}">
                         <i class="fa fa-building"></i>
                         {% trans %}Team Organizations{% endtrans %}
@@ -107,7 +107,7 @@
 					<i class="fa fa-calendar"></i>
 					{% trans %}Team Calendar{% endtrans %}</a>
 				</li>#}
-                <li >
+                <li>
                     <a href="{{ path('lists_sales_dispatcher_report_index') }}" title="{% trans %}Team Reports{% endtrans %}">
                         <i class="fa fa-bar-chart-o"></i>
                         {% trans %}Team Reports{% endtrans %}</a>
@@ -120,7 +120,6 @@
             </ul>
         </li>
         {% endif %}
-
         {% if is_granted('ROLE_SALESADMIN') %}
         <li class="">
             <a href="javascript:;">
@@ -129,26 +128,25 @@
                 <span class="arrow "></span>
             </a>
             <ul class="sub-menu">
-                <li >
+                <li>
                     <a href="{{ path('lists_sales_admin_handling_index') }}" title="{% trans %}Handlings{% endtrans %}">
                         <i class="fa fa-comments"></i>
                         {% trans %}Handlings{% endtrans %}
                     </a>
                 </li>
-                <li >
+                <li>
                     <a href="{{ path('lists_sales_admin_contact_index') }}" title="{% trans %}Contacts{% endtrans %}">
                         <i class="fa fa-envelope"></i>
                         {% trans %}Contacts{% endtrans %}
                     </a>
                 </li>
-                <li >
+                <li>
                     <a href="{{ path('lists_sales_admin_organization_index') }}" title="{% trans %}Organizations{% endtrans %}">
                         <i class="fa fa-building"></i>
                         {% trans %}Organizations{% endtrans %}
                     </a>
                 </li>				
-
-                <li >
+                <li>
                     <a href="{{ path('lists_sales_admin_tender_index') }}" title="{% trans %}Tenders{% endtrans %}">
                         <i class="fa fa-gavel"></i>
                         {% trans %}Tenders{% endtrans %}
@@ -162,16 +160,17 @@
                 <li >
                     <a href="/report/salesadmin/" title="{% trans %}Reports{% endtrans %}">
                         <i class="fa fa-bar-chart-o"></i>
-                        {% trans %}Reports{% endtrans %}</a>
+                        {% trans %}Reports{% endtrans %}
+                    </a>
                 </li>				
                 <li >
                     <a href="{{ path('lists_sales_admin_team_index') }}" title="{% trans %}Teams{% endtrans %}">
                         <i class="fa fa-group"></i>
-                        {% trans %}Teams{% endtrans %}</a>
+                        {% trans %}Teams{% endtrans %}
+                    </a>
                 </li>
             </ul>
         </li>
-
         <li class="">
             <a href="javascript:;">
                 <i class="fa fa-tachometer"></i>
@@ -212,8 +211,6 @@
             </ul>
         </li>
         {% endif %}
-
-
         {% if is_granted('ROLE_INTRANET') %}
         <li class="">
             <a href="javascript:;">
@@ -263,7 +260,7 @@
                 </li>
             </ul>
         </li>
-		{% endif %}
+        {% endif %}
         {% if is_granted('ROLE_DOGOVORADMIN') %}
         <li class="">
             <a href="javascript:;">
@@ -275,7 +272,7 @@
                 <li >
                     <a href="{{ path('lists_dogovor_admin_organization_index') }}" title="{% trans %}Organizations{% endtrans %}">
                         <i class="fa fa-comments"></i>
-                            {% trans %}Organizations{% endtrans %}
+                        {% trans %}Organizations{% endtrans %}
                     </a>
                 </li>
                 <li >
@@ -293,19 +290,15 @@
             </ul>
         </li>
         {% endif %}
-
-		{% if is_granted('ROLE_OPER') %}
+        {% if is_granted('ROLE_OPER') %}
             <li class="start">
                 <a href="{{ path('it_doors_oper_homepage') }}">
                     <i class="fa fa-money"></i>
                     <span class="title">{% trans %}Opermanager{% endtrans %}</span>
                     <span class="arrow "></span>
                 </a>
-                
             </li>
-        {% endif %}        
-	
-	<!-- END SIDEBAR MENU -->
+        {% endif %}
         {% if is_granted('ROLE_CONTROLLING') %}
         <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_controlling_invoice') %} class="active"{% endif %}>
             <a href="javascript:;">
