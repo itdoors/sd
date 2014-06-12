@@ -197,7 +197,7 @@ class AutomailerController extends BaseFilterController
 
             $session = $this->get('session');
             $filesArr = json_decode($session->get('files_upload', '{}'), true);
-            
+
             $directoryTemp = $this->container->getParameter('upload.file.path');
             $directory = $this->container->getParameter('email.file.path');
             foreach ($filesArr as $key => $file) {

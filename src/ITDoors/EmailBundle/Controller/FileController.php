@@ -45,7 +45,7 @@ class FileController extends BaseFilterController
 
             } else {
                 $name = uniqid();
-                $directory = '../web/files/upload/';
+                $directory = $this->container->getParameter('upload.file.path');
                 $fileName = $name . '.' . $uploadedFile->getClientOriginalExtension();
                 $session = $this->get('session');
                 $filesArr = json_decode($session->get('files_upload', '{}'), true);
