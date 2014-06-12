@@ -114,7 +114,7 @@ class OperInfoController extends BaseFilterController
         $idUser = $this->getUser()->getId();
         $checkOper =  $this->getUser()->hasRole('ROLE_OPER');
 
-        $checkSuperviser =  $this->getUser()->hasRole('ROLE_SUPERVISER');
+        $checkSuperviser =  $this->getUser()->hasRole('ROLE_SUPERVISOR');
 
         if ($checkSuperviser) {
 
@@ -163,4 +163,18 @@ class OperInfoController extends BaseFilterController
             return $idDepartmentsAllowed;
         }
     }
+
+/*    public function updateAccrualsTask() {
+        $monthInfos = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo')->findAll();
+
+        foreach($monthInfos as $monthInfo) {
+
+
+
+        }
+
+
+
+    }*/
 }
