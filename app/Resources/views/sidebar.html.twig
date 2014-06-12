@@ -304,7 +304,7 @@
                 
             </li>
         {% endif %}        
-	</ul>
+	
 	<!-- END SIDEBAR MENU -->
         {% if is_granted('ROLE_CONTROLLING') %}
         <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_controlling_invoice') %} class="active"{% endif %}>
