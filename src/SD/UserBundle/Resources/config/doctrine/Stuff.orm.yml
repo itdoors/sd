@@ -52,6 +52,9 @@ SD\UserBundle\Entity\Stuff:
             length: 128
             nullable: true
             column: education
+        companystructureId:
+            type: integer
+            column: companystructure_id
     oneToOne:
         user:
           targetEntity: User

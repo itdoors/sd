@@ -26,9 +26,12 @@ Filter: Фильтр
 Clear Filter: Очистить фильтр
 Position: Должность
 First name: Имя
+First Name: Имя
 Last name: Фамилия
 Middle name: Отчество
+Middle Name: Отчество
 Mobile phone: Мобильный
+Mobile Phone: Мобильный
 Personale phone: Персональный телефон
 Inside phone: Внутрений телефон
 Fired: Уволен
@@ -54,6 +57,8 @@ Settings profile: Настройки профиля
 Current password: Текущий пароль
 New password: Новый пароль
 New password again: Повторить новый пароль
+Password again: Повторить новый пароль
+Save: Сохранить
 
 Change Password: Сменить пароль
 
@@ -75,4 +80,4 @@ Add new user: Добавить нового пользователя
 New user: Новый пользователь
 Users <small>new stuff</small>: Пользователи <small>новый сотрудник</small>
 New stuff: Новый сотрудник
-
+Select subdivision: Выберите подразделение

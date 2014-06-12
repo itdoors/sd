@@ -1,3 +1,7 @@
+lists_companystructure:
+    resource: "@ListsCompanystructureBundle/Resources/config/routing.yml"
+    prefix:   /
+
 lists_grafik:
     resource: "@ListsGrafikBundle/Resources/config/routing.yml"
     prefix:   /
@@ -28,10 +32,6 @@ lists_report:
 
 lists_department:
     resource: "@ListsDepartmentBundle/Resources/config/routing.yml"
-    prefix:   /
-
-lists_companystructure:
-    resource: "@ListsCompanystructureBundle/Resources/config/routing.yml"
     prefix:   /
 
 lists_dogovor:
