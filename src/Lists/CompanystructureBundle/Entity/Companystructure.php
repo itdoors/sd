@@ -3,6 +3,7 @@
 namespace Lists\CompanystructureBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use ITDoors\ControllingBundle\Entity\InvoiceCompanystructure;
 
 /**
  * Companystructure
@@ -67,7 +68,7 @@ class Companystructure
         $this->invoicecompanystructure = new \Doctrine\Common\Collections\ArrayCollection();
         $this->region = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
@@ -82,12 +83,13 @@ class Companystructure
      * Set name
      *
      * @param string $name
+     * 
      * @return Companystructure
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
@@ -105,12 +107,13 @@ class Companystructure
      * Set mpk
      *
      * @param string $mpk
+     * 
      * @return Companystructure
      */
     public function setMpk($mpk)
     {
         $this->mpk = $mpk;
-    
+
         return $this;
     }
 
@@ -128,12 +131,13 @@ class Companystructure
      * Set address
      *
      * @param string $address
+     * 
      * @return Companystructure
      */
     public function setAddress($address)
     {
         $this->address = $address;
-    
+
         return $this;
     }
 
@@ -151,12 +155,13 @@ class Companystructure
      * Set phone
      *
      * @param string $phone
+     * 
      * @return Companystructure
      */
     public function setPhone($phone)
     {
         $this->phone = $phone;
-    
+
         return $this;
     }
 
@@ -174,12 +179,13 @@ class Companystructure
      * Set stuffId
      *
      * @param integer $stuffId
+     * 
      * @return Companystructure
      */
     public function setStuffId($stuffId)
     {
         $this->stuffId = $stuffId;
-    
+
         return $this;
     }
 
@@ -196,22 +202,23 @@ class Companystructure
     /**
      * Add invoicecompanystructure
      *
-     * @param \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicecompanystructure
+     * @param InvoiceCompanystructure $invoicecompanystructure
+     * 
      * @return Companystructure
      */
-    public function addInvoicecompanystructure(\ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicecompanystructure)
+    public function addInvoicecompanystructure(InvoiceCompanystructure $invoicecompanystructure)
     {
         $this->invoicecompanystructure[] = $invoicecompanystructure;
-    
+
         return $this;
     }
 
     /**
      * Remove invoicecompanystructure
      *
-     * @param \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicecompanystructure
+     * @param InvoiceCompanystructure $invoicecompanystructure
      */
-    public function removeInvoicecompanystructure(\ITDoors\ControllingBundle\Entity\InvoiceCompanystructure $invoicecompanystructure)
+    public function removeInvoicecompanystructure(InvoiceCompanystructure $invoicecompanystructure)
     {
         $this->invoicecompanystructure->removeElement($invoicecompanystructure);
     }
@@ -230,12 +237,13 @@ class Companystructure
      * Set stuff
      *
      * @param \SD\UserBundle\Entity\Stuff $stuff
+     * 
      * @return Companystructure
      */
     public function setStuff(\SD\UserBundle\Entity\Stuff $stuff = null)
     {
         $this->stuff = $stuff;
-    
+
         return $this;
     }
 
@@ -253,12 +261,13 @@ class Companystructure
      * Set parent
      *
      * @param \Lists\CompanystructureBundle\Entity\Companystructure $parent
+     * 
      * @return Companystructure
      */
     public function setParent(\Lists\CompanystructureBundle\Entity\Companystructure $parent = null)
     {
         $this->parent = $parent;
-    
+
         return $this;
     }
 
@@ -276,12 +285,13 @@ class Companystructure
      * Add region
      *
      * @param \Lists\RegionBundle\Entity\Region $region
+     * 
      * @return Companystructure
      */
     public function addRegion(\Lists\RegionBundle\Entity\Region $region)
     {
         $this->region[] = $region;
-    
+
         return $this;
     }
 
