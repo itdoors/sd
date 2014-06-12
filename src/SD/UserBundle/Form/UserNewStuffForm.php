@@ -8,8 +8,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Lists\CompanystructureBundle\Entity\Companystructure;
 use Lists\CompanystructureBundle\Entity\CompanystructureRepository;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * UserNewForm
@@ -43,6 +43,7 @@ class UserNewStuffForm extends AbstractType
                 'constraints' => new NotBlank()
             ))
             ->add('middleName')
+            ->add('birthday', 'date')
             ->add('username')
             ->add('email')
             ->add('plainPassword', 'repeated', array(
@@ -59,7 +60,24 @@ class UserNewStuffForm extends AbstractType
                 'mapped' => false,
                 'constraints' => new NotBlank()
             ))
+            ->add('hiredate', 'date', array(
+                'mapped' => false,
+                'constraints' => new NotBlank()
+            ))
+            ->add('description', 'textarea', array(
+                'mapped' => false,
+                'constraints' => new NotBlank()
+            ))
+            ->add('education', 'textarea', array(
+                'mapped' => false,
+                'constraints' => new NotBlank()
+            ))
+            ->add('issues', 'textarea', array(
+                'mapped' => false,
+                'constraints' => new NotBlank()
+            ))
             ->add('companystructure', 'entity', array(
+                'mapped' => false,
                 'class' => 'ListsCompanystructureBundle:Companystructure',
                 'empty_value' => '',
                 'required' => false,

@@ -314,4 +314,14 @@ class Companystructure
     {
         return $this->region;
     }
+
+    /**
+     * __toStrong
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }

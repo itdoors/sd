@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Session\Session;
 use SD\UserBundle\Entity\Usercontactinfo;
+use Lists\CompanystructureBundle\Entity\Companystructure;
 
 /**
  * UserController
@@ -311,19 +312,45 @@ class UserController extends BaseController
 
             try {
                 $user = $form->getData();
+                $user->setBirthday(
+                    new \DateTime(
+                        $formData['birthday']['day'].
+                        '.'.$formData['birthday']['month'].
+                        '.'.$formData['birthday']['year']
+                    )
+                );
 
                 $formData = $request->request->get($form->getName());
 
                 $em->persist($user);
                 $em->flush();
 
+                $companystructure =
+                    $em->getRepository('ListsCompanystructureBundle:Companystructure')
+                        ->find((int) $formData['companystructure']);
+
                 $stuff = new Stuff();
 
                 $stuff->setUser($user);
                 $stuff->setMobilephone($formData['mobilephone']);
+                if ($companystructure) {
+                    $stuff->setCompanystructure($companystructure);
+                }
+
+                $stuff->setDateHire(
+                    new \DateTime(
+                        $formData['hiredate']['day']
+                        .'.'.$formData['hiredate']['month']
+                        .'.'.$formData['hiredate']['year']
+                    )
+                );
+                $stuff->setDescription($formData['description']);
+                $stuff->setEducation($formData['education']);
+                $stuff->setIssues($formData['issues']);
                 $stuff->setStuffclass('stuff');
 
                 $em->persist($stuff);
+
                 $em->flush();
 
                 $connection->commit();

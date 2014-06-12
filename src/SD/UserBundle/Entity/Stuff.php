@@ -7,6 +7,7 @@ namespace SD\UserBundle\Entity;
  */
 class Stuff
 {
+
     /**
      * @var integer
      */
@@ -15,7 +16,17 @@ class Stuff
     /**
      * @var string
      */
+    private $phoneInside;
+
+    /**
+     * @var string
+     */
     private $mobilephone;
+
+    /**
+     * @var string
+     */
+    private $phonePersonal;
 
     /**
      * @var string
@@ -28,183 +39,49 @@ class Stuff
     private $stuffclass;
 
     /**
-     * @var \SD\UserBundle\Entity\User
-     */
-    private $user;
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set mobilephone
-     *
-     * @param string $mobilephone
-     *
-     * @return Stuff
-     */
-    public function setMobilephone($mobilephone)
-    {
-        $this->mobilephone = $mobilephone;
-
-        return $this;
-    }
-
-    /**
-     * Get mobilephone
-     *
-     * @return string
-     */
-    public function getMobilephone()
-    {
-        return $this->mobilephone;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return Stuff
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set stuffclass
-     *
-     * @param string $stuffclass
-     *
-     * @return Stuff
-     */
-    public function setStuffclass($stuffclass)
-    {
-        $this->stuffclass = $stuffclass;
-
-        return $this;
-    }
-
-    /**
-     * Get stuffclass
-     *
-     * @return string
-     */
-    public function getStuffclass()
-    {
-        return $this->stuffclass;
-    }
-
-    /**
-     * Set user
-     *
-     * @param \SD\UserBundle\Entity\User $user
-     *
-     * @return Stuff
-     */
-    public function setUser(\SD\UserBundle\Entity\User $user = null)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return \SD\UserBundle\Entity\User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @var \SD\UserBundle\Entity\Companystructure
-     */
-    private $companystructure;
-
-    /**
-     * Set companystructure
-     *
-     * @param \SD\UserBundle\Entity\Companystructure $companystructure
-     * 
-     * @return Stuff
-     */
-    public function setCompanystructure(\SD\UserBundle\Entity\Companystructure $companystructure = null)
-    {
-        $this->companystructure = $companystructure;
-
-        return $this;
-    }
-
-    /**
-     * Get companystructure
-     *
-     * @return \SD\UserBundle\Entity\Companystructure 
-     */
-    public function getCompanystructure()
-    {
-        return $this->companystructure;
-    }
-
-    /**
      * @var string
      */
     private $issues;
 
     /**
-     * Set issues
-     *
-     * @param string $issues
-     * 
-     * @return Stuff
+     * @var string
      */
-    public function setIssues($issues)
-    {
-        $this->issues = $issues;
-
-        return $this;
-    }
+    private $birthPlace;
 
     /**
-     * Get issues
-     *
-     * @return string 
+     * @var \DateTime
      */
-    public function getIssues()
-    {
-        return $this->issues;
-    }
+    private $dateFire;
+
+    /**
+     * @var \DateTime
+     */
+    private $dateHire;
 
     /**
      * @var string
      */
-    private $phoneInside;
+    private $education;
 
     /**
-     * @var string
+     * @var \SD\UserBundle\Entity\User
      */
-    private $phonePersonal;
+    private $user;
+
+    /**
+     * @var \Lists\CompanystructureBundle\Entity\Companystructure
+     */
+    private $companystructure;
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set phoneInside
@@ -228,6 +105,30 @@ class Stuff
     public function getPhoneInside()
     {
         return $this->phoneInside;
+    }
+
+    /**
+     * Set mobilephone
+     *
+     * @param string $mobilephone
+     * 
+     * @return Stuff
+     */
+    public function setMobilephone($mobilephone)
+    {
+        $this->mobilephone = $mobilephone;
+
+        return $this;
+    }
+
+    /**
+     * Get mobilephone
+     *
+     * @return string 
+     */
+    public function getMobilephone()
+    {
+        return $this->mobilephone;
     }
 
     /**
@@ -255,38 +156,76 @@ class Stuff
     }
 
     /**
-     * @var string
-     */
-    private $birthPlase;
-
-    /**
-     * Set birthPlase
+     * Set description
      *
-     * @param string $birthPlase
+     * @param string $description
      * 
      * @return Stuff
      */
-    public function setBirthPlase($birthPlase)
+    public function setDescription($description)
     {
-        $this->birthPlase = $birthPlase;
+        $this->description = $description;
 
         return $this;
     }
 
     /**
-     * Get birthPlase
+     * Get description
      *
      * @return string 
      */
-    public function getBirthPlase()
+    public function getDescription()
     {
-        return $this->birthPlase;
+        return $this->description;
     }
 
     /**
-     * @var string
+     * Set stuffclass
+     *
+     * @param string $stuffclass
+     * 
+     * @return Stuff
      */
-    private $birthPlace;
+    public function setStuffclass($stuffclass)
+    {
+        $this->stuffclass = $stuffclass;
+
+        return $this;
+    }
+
+    /**
+     * Get stuffclass
+     *
+     * @return string 
+     */
+    public function getStuffclass()
+    {
+        return $this->stuffclass;
+    }
+
+    /**
+     * Set issues
+     *
+     * @param string $issues
+     * 
+     * @return Stuff
+     */
+    public function setIssues($issues)
+    {
+        $this->issues = $issues;
+
+        return $this;
+    }
+
+    /**
+     * Get issues
+     *
+     * @return string 
+     */
+    public function getIssues()
+    {
+        return $this->issues;
+    }
 
     /**
      * Set birthPlace
@@ -311,21 +250,6 @@ class Stuff
     {
         return $this->birthPlace;
     }
-
-    /**
-     * @var \DateTime
-     */
-    private $dateFire;
-
-    /**
-     * @var \DateTime
-     */
-    private $dateHire;
-
-    /**
-     * @var string
-     */
-    private $education;
 
     /**
      * Set dateFire
@@ -397,5 +321,82 @@ class Stuff
     public function getEducation()
     {
         return $this->education;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \SD\UserBundle\Entity\User $user
+     * 
+     * @return Stuff
+     */
+    public function setUser(\SD\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \SD\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set companystructure
+     *
+     * @param \Lists\CompanystructureBundle\Entity\Companystructure $companystructure
+     * 
+     * @return Stuff
+     */
+    public function setCompanystructure(\Lists\CompanystructureBundle\Entity\Companystructure $companystructure = null)
+    {
+        $this->companystructure = $companystructure;
+
+        return $this;
+    }
+
+    /**
+     * Get companystructure
+     *
+     * @return \Lists\CompanystructureBundle\Entity\Companystructure 
+     */
+    public function getCompanystructure()
+    {
+        return $this->companystructure;
+    }
+    /**
+     * @var integer
+     */
+    private $companystructureId;
+
+
+    /**
+     * Set companystructureId
+     *
+     * @param integer $companystructureId
+     * 
+     * @return Stuff
+     */
+    public function setCompanystructureId($companystructureId)
+    {
+        $this->companystructureId = $companystructureId;
+
+        return $this;
+    }
+
+    /**
+     * Get companystructureId
+     *
+     * @return integer 
+     */
+    public function getCompanystructureId()
+    {
+        return $this->companystructureId;
     }
 }
