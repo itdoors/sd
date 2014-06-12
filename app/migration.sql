@@ -449,5 +449,6 @@ CREATE TABLE email (id SERIAL NOT NULL, alias VARCHAR(255) NOT NULL, subject VAR
 CREATE UNIQUE INDEX UNIQ_E7927C74E16C6B94 ON email (alias);
 
 -- chmod on web/files/upload
-
+-- chmod on web/files/email
+-- app/share/1c/debt/
 

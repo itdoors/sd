@@ -297,7 +297,7 @@ class UserController extends BaseController
      */
     public function newstaffAction(Request $request)
     {
-        $form = $this->createForm('userNewForm');
+        $form = $this->createForm('userNewStaffForm');
 
         $form->handleRequest($request);
 

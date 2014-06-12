@@ -79,6 +79,18 @@
             <!-- /.modal-content -->
         </div>
     </div>
+    {% if masterRole == 'SalesAdmin' %}
+        {{ ajax_filter_render('dashboardCalendarFilterType', ajax_filter_namespace_dashboard_calendar, {
+        '#calendar': 'SD.updateCalendar'
+        }) }}
+    {%  endif %}
+
+    {{ include('SDCalendarBundle:Dashboard:filterColors.html.twig') }}
+
+    {{ include('SDCalendarBundle::base.html.twig', {
+        url: path('sd_calendar_' ~ masterRoleRoute ~ '_handling_message')
+    }) }} 
+                    
     {% if app.user.hasRole('ROLE_CONTROLLING') %}
         <div class="portlet box blue">
             <div class="portlet-title">
@@ -107,15 +119,4 @@
     {% endif %}
     {{ render(controller('ListsHandlingBundle:' ~ masterRole ~ ':List')) }}
 
-    {% if masterRole == 'SalesAdmin' %}
-        {{ ajax_filter_render('dashboardCalendarFilterType', ajax_filter_namespace_dashboard_calendar, {
-        '#calendar': 'SD.updateCalendar'
-        }) }}
-    {%  endif %}
-
-    {{ include('SDCalendarBundle:Dashboard:filterColors.html.twig') }}
-
-    {{ include('SDCalendarBundle::base.html.twig', {
-        url: path('sd_calendar_' ~ masterRoleRoute ~ '_handling_message')
-    }) }}
 {% endif %}

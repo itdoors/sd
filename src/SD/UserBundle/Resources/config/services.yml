@@ -3,6 +3,7 @@ parameters:
     sd_user.repository.entity: SD\UserBundle\Entity\User
     sd_user.form.class: SD\UserBundle\Form\ChangePasswordForm
     sd_user.form.new.class: SD\UserBundle\Form\UserNewForm
+    sd_user.form.new.staff.class: SD\UserBundle\Form\UserNewStaffForm
     staff.filter.form.class: SD\UserBundle\Form\StaffFilterForm
     sd_user_contactinfo.form.class: SD\UserBundle\Form\UserContactinfoForm
     sd_user.service.class: SD\UserBundle\Services\UserService
@@ -25,6 +26,12 @@ services:
         arguments: [%sd_user.repository.entity%, @service_container]
         tags:
             - { name: form.type, alias: userNewForm }
+            
+    sd_user.form.userNewStaffForm:
+        class: %sd_user.form.new.staff.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: userNewStaffForm }
             
     sd.user.form.staffFilterForm:
         class: %staff.filter.form.class%
