@@ -7,7 +7,7 @@ Lists\DepartmentBundle\Entity\DepartmentPeopleMonthInfo:
             type: bigint
             nullable: false
             generator:
-                strategy: SEQUENCE
+                strategy: IDENTITY
     fields:
         departmentPeopleId:
             type: bigint
@@ -59,6 +59,9 @@ Lists\DepartmentBundle\Entity\DepartmentPeopleMonthInfo:
             fixed: false
             nullable: false
             column: replacement_type
+    uniqueConstraints:
+        department_people_month_info_unique_idx:
+            columns: [ department_people_id, year, month, department_people_replacement_id, replacement_type ]
     oneToOne:
         departmentPeopleReplacement:
             targetEntity: DepartmentPeople

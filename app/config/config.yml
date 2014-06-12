@@ -8,12 +8,19 @@ parameters:
     dogovor.prolongation.limit: 5184000 # in seconds
     ajax.filter.namespace.dashboard.calendar: "dashboard.calendar"
     ajax.filter.namespace.report.last.messages: "report.last.messages"
+    ajax.filter.namespace.report.invoice: "report.invoice"
+    it.doors.email.namespace: "namespace.email"
     ajax.filter.namespace.oper.department.table: "oper.department.table"
     ajax.paginator.namespace.oper.department.table: "oper.paginator.department.table"
     ajax.paginator.namespace.oper.department.coworkers: "oper.paginator.department.coworkers"
     ajax.namespace.oper.department.schedule: "oper.department.schedule"
     ajax.filter.namespace.report.activity: "report.activity"
-
+    project.dir: '/var/www/vhosts/itdoors.com.ua/subdomains/t/sd'
+    project.web.dir: '%project.dir%/web'
+    log.file.path: "%project.dir%/log.txt"
+    1C.file.path: "%project.dir%/app/share/1c/debt/"
+    email.file.path: "%project.dir%/web/files/email/"
+    upload.file.path: "%project.dir%/web/files/upload/"
 
 framework:
     #esi:             ~
@@ -44,6 +51,9 @@ twig:
         prolongation_limit : %dogovor.prolongation.limit%
         ajax_filter_namespace_dashboard_calendar: %ajax.filter.namespace.dashboard.calendar%
         ajax_filter_namespace_report_last_messages: %ajax.filter.namespace.report.last.messages%
+        ajax_filter_namespace_report_invoice: %ajax.filter.namespace.report.invoice%
+        it_doors_namespace_email: %it.doors.email.namespace%
+
         ajax_filter_namespace_oper_department_table: %ajax.filter.namespace.oper.department.table%
         ajax_paginator_namespace_oper_department_table: %ajax.paginator.namespace.oper.department.table%
         ajax_paginator_namespace_oper_department_coworkers: %ajax.paginator.namespace.oper.department.coworkers%
@@ -84,6 +94,8 @@ doctrine:
         entity_managers:
             default:
                 auto_mapping: true
+                mappings:
+                    TSSAutomailerBundle: ~
                 dql:
                     string_functions:
                         array_to_string: ITDoors\CommonBundle\DQL\ArrayToStringDQL
@@ -92,13 +104,17 @@ doctrine:
                     # numeric_functions:
                     # datetime_functions:
 
+tss_automailer:
+  beanstalk: true
+  
 # Swiftmailer Configuration
 swiftmailer:
     transport: %mailer_transport%
     host:      %mailer_host%
     username:  %mailer_user%
     password:  %mailer_password%
-    spool:     { type: memory }
+    spool:     
+        type: automailer
 
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'

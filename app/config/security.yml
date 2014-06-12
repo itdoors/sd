@@ -10,6 +10,7 @@ security:
     providers:
         fos_userbundle:
             id: fos_user.user_provider.username_email
+            
 
     firewalls:
         login_firewall:
@@ -24,7 +25,7 @@ security:
                 always_use_default_target_path: true
             logout:       true
             anonymous:    false
-
+            
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/lists/salesadmin, role: ROLE_SALESADMIN }
@@ -36,3 +37,5 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/controlling/invoice/cron, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        

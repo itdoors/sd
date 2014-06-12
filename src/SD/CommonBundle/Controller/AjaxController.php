@@ -13,15 +13,16 @@ use Lists\HandlingBundle\Entity\Handling;
 use Lists\HandlingBundle\Entity\HandlingMessage;
 use Lists\HandlingBundle\Entity\HandlingRepository;
 use Lists\LookupBundle\Entity\LookupRepository;
+use Lists\ContactBundle\Entity\ModelContact;
+use Lists\ContactBundle\Entity\ModelContactRepository;
+use Lists\OrganizationBundle\Entity\Organization;
+use Lists\HandlingBundle\Entity\HandlingMoreInfo;
 use SD\UserBundle\Entity\UserRepository;
+use SD\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Lists\ContactBundle\Entity\ModelContactRepository;
-use Lists\HandlingBundle\Entity\HandlingMoreInfo;
 use Symfony\Component\Form\Form;
-use SD\UserBundle\Entity\User;
-use Lists\OrganizationBundle\Entity\Organization;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -39,11 +40,13 @@ use ITDoors\AjaxBundle\Controller\BaseFilterController;
  */
 class AjaxController extends BaseFilterController
 {
+
     protected $modelRepositoryDependence = array(
         'ModelContact' => 'ListsContactBundle:ModelContact',
         'User' => 'SDUserBundle:User',
         'Dogovor' => 'ListsDogovorBundle:Dogovor',
-        'DopDogovor' => 'ListsDogovorBundle:DopDogovor'
+        'DopDogovor' => 'ListsDogovorBundle:DopDogovor',
+        'Email' => 'ITDoorsEmailBundle:Email'
     );
 
     /**
@@ -561,6 +564,149 @@ class AjaxController extends BaseFilterController
     }
 
     /**
+     * Returns json users list
+     *
+     * @return string
+     */
+    public function userFIOAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        /** @var \SD\UserBundle\Entity\UserRepository $repository */
+        $repository = $this->container->get('sd_user.repository');
+
+        $objects = $repository->getOnlyStaff()
+            ->andWhere('lower(u.firstName) LIKE :q OR lower(u.lastName) LIKE :q OR lower(u.middleName) LIKE :q')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $nameFirst = $this->serializeObject($object);
+            $nameLast = $this->serializeObject($object, false, 'getLastName');
+            $nameMiddle = $this->serializeObject($object, false, 'getMiddleName');
+            $nameFirst['text'] .= ' '.$nameLast['text'].' '.$nameMiddle['text'];
+            $result[] = $nameFirst;
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json users list
+     *
+     * @return string
+     */
+    public function userPositionAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        /** @var \SD\UserBundle\Entity\UserRepository $repository */
+        $repository = $this->container->get('sd_user.repository');
+
+        $objects = $repository->getOnlyStaff()
+            ->andWhere('lower(u.position) LIKE :q')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object, false, 'getPosition');
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json users list
+     *
+     * @return string
+     */
+    public function userEmailAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        /** @var \SD\UserBundle\Entity\UserRepository $repository */
+        $repository = $this->container->get('sd_user.repository');
+
+        $objects = $repository->getOnlyStaff()
+            ->andWhere('lower(u.email) LIKE :q')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object, false, 'getEmail');
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json users list
+     *
+     * @return string
+     */
+    public function userPhoneAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->container->get('sd_user.repository');
+
+        $objects = $repository->getOnlyStaff()
+            ->andWhere('lower(staff.mobilephone) LIKE :q')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = array(
+                'id' => $object->getId(),
+                'value' => $object->getId(),
+                'name' => $object->getStaff()->getMobilephone(),
+                'text' => $object->getStaff()->getMobilephone()
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json users list
+     *
+     * @return string
+     */
+    public function userStaffCompanyAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->container->get('sd_user.repository');
+
+        $objects = $repository->getOnlyStaffCompany()
+            ->andWhere('lower(c.name) LIKE :q')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = array(
+                'id' => $object->getId(),
+                'value' => $object->getId(),
+                'name' => $object->getStaff()->getCompanystructure()->getName(),
+                'text' => $object->getStaff()->getCompanystructure()->getName()
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
      * Returns json contact phones list already user in other contacts
      *
      * @return string
@@ -691,7 +837,6 @@ class AjaxController extends BaseFilterController
         }
 
         $item['value'] = $value;
-
     }
 
     /**
@@ -983,6 +1128,7 @@ class AjaxController extends BaseFilterController
         }
 
         if (sizeof($defaultData)) {
+
             foreach ($defaultData as $key => $default) {
                 $form->add($key, 'hidden', array(
                     'data' => $default
@@ -1096,7 +1242,6 @@ class AjaxController extends BaseFilterController
         if ($dogovor->getProlongation()) {
             // set stop date to prolongation date
             // set prolongation date to $request['prolongationDateTo']
-
             // Set prolongation date to
             if ($dogovor->getProlongationDate()) {
                 $prolongationDateFrom = $dogovor->getProlongationDate();
@@ -1169,7 +1314,6 @@ class AjaxController extends BaseFilterController
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
         // $em->flush();
-
         // Insert future
         $type = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingMessageType')
@@ -1225,6 +1369,146 @@ class AjaxController extends BaseFilterController
 
         $em->persist($handling);
 
+        $em->flush();
+
+        return true;
+    }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function invoiceMessageFormSave(Form $form, $user, $request)
+    {
+        /** @var InvoiceMessage $data */
+        $data = $form->getData();
+
+        $formData = $request->request->get($form->getName());
+
+        $invoiceId = $data->getInvoiceId();
+
+        /** @var Invoice $invoice */
+        $invoice = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice')
+            ->find($invoiceId);
+        $data->setInvoice($invoice);
+
+        $contactid = $formData['contactid'];
+
+        if (is_numeric($contactid)) {
+            /** @var ModelContact $contact */
+            $contact = $this->getDoctrine()
+                ->getRepository('ListsContactBundle:ModelContact')
+                ->find($contactid);
+            $data->setContact($contact);
+        }
+
+        $data->setUser($this->getUser());
+
+        $data->setNote($formData['note']);
+
+        $data->setCreatedate(new \DateTime());
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function userContactinfoFormSave(Form $form, $user, $request)
+    {
+        /** @var Usercontactinfo $data */
+        $data = $form->getData();
+
+        $formData = $request->request->get($form->getName());
+
+        $userContact = new Usercontactinfo();
+        $userContact->setValue($data['value']);
+        $userContact->setUser($user);
+        $contactinfoId = $formData['contactinfo'];
+
+        /** @var Contactinfo $contact */
+        $contact = $this->getDoctrine()
+            ->getRepository('SDUserBundle:Contactinfo')
+            ->find($contactinfoId);
+
+        $userContact->setContactinfo($contact);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($userContact);
+        $em->flush();
+
+        return true;
+    }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function emailFormSave(Form $form, User $user, Request $request)
+    {
+        /** @var Email $data */
+        $data = $form->getData();
+
+         /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function invoiceCompanystructureFormSave(Form $form, User $user, Request $request)
+    {
+
+        /** @var InvoiceCompanystructure $data */
+        $data = $form->getData();
+
+        $formData = $request->request->get($form->getName());
+
+        /** @var ModelContact $contact */
+        $company = $this->getDoctrine()
+            ->getRepository('ListsCompanystructureBundle:Companystructure')
+            ->find($formData['companystructure']);
+        $data->setCompanystructure($company);
+
+        /** @var Invoice $invoice */
+        $invoice = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice')
+            ->find($data->getInvoiceID());
+        $data->setInvoice($invoice);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
         $em->flush();
 
         return true;
@@ -1324,6 +1608,20 @@ class AjaxController extends BaseFilterController
      *
      * @return boolean
      */
+    public function modelContactOrganizationUserFormSave($form, $user, $request)
+    {
+        return $this->modelContactOrganizationFormSave($form, $user, $request);
+    }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
     public function modelContactOrganizationEditFormSave($form, $user, $request)
     {
         $data = $form->getData();
@@ -1395,6 +1693,94 @@ class AjaxController extends BaseFilterController
         $this->$method($params);
 
         return new Response('');
+    }
+
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function invoiceCompanystructureDelete($params)
+    {
+        $id = $params['id'];
+
+        /** @var InvoiceCompanystructure $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
+            ->find($id);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function usercontactinfoDelete($params)
+    {
+        $id = $params['id'];
+
+        /** @var InvoiceCompanystructure $object */
+        $object = $this->getDoctrine()
+            ->getRepository('SDUserBundle:Usercontactinfo')
+            ->find($id);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function emailDelete($params)
+    {
+        $id = $params['id'];
+
+        /** @var Email $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ITDoorsEmailBundle:Email')
+            ->find($id);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function automailerDelete($params)
+    {
+        $id = $params['id'];
+
+        /** @var Automailer $object */
+        $object = $this->getDoctrine()
+            ->getRepository('TSSAutomailerBundle:Automailer')
+            ->find($id);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
     }
 
     /**
@@ -1603,7 +1989,6 @@ class AjaxController extends BaseFilterController
             $em->flush();
 
             $em->refresh($object);
-
         } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
@@ -1873,6 +2258,63 @@ class AjaxController extends BaseFilterController
     }
 
     /**
+     * Saves object to db
+     *
+     * @return mixed[]
+     */
+    public function invoiceSaveAction()
+    {
+        $translator = $this->get('translator');
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+
+        if ($name == 'DateEnd') {
+            $value = new \DateTime($this->get('request')->request->get('value'));
+        } elseif ($name == 'court') {
+            $value = (boolean) $this->get('request')->request->get('value');
+        } else {
+            $value = $this->get('request')->request->get('value');
+        }
+
+        $methodSet = 'set' . ucfirst($name);
+
+        /** @var Invoice $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice')
+            ->find($pk);
+
+        $object->$methodSet($value);
+
+        $validator = $this->get('validator');
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
+        $errors = $validator->validate($object, array('edit'));
+
+        if (sizeof($errors)) {
+            $return = $this->getFirstError($errors);
+
+            return new Response($return, 406);
+        }
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+
+        try {
+            $em->flush();
+        } catch (\ErrorException $e) {
+            $return = array('msg' => $translator->trans('Wrong input data'));
+
+            return new Response(json_encode($return));
+        }
+
+        $return = array('success' => 1);
+
+        return new Response(json_encode($return));
+    }
+
+    /**
      * Adds children to {formName}ProcessDefaults depending on defaults in request
      *
      * @param Form    $form
@@ -1908,18 +2350,18 @@ class AjaxController extends BaseFilterController
                 'empty_value' => '',
                 'required' => false,
                 'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
-                        return $repository->createQueryBuilder('mc')
-                            ->leftJoin('mc.owner', 'owner')
-                            ->where('mc.modelName = :modelName')
-                            ->andWhere('mc.modelId = :modelId')
-                            ->andWhere('owner.id in (:ownerIds)')
-                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
-                            ->setParameter(':modelId', $organizationId)
-                            ->setParameter(':ownerIds', $userIds);
+                    return $repository->createQueryBuilder('mc')
+                        ->leftJoin('mc.owner', 'owner')
+                        ->where('mc.modelName = :modelName')
+                        ->andWhere('mc.modelId = :modelId')
+                        ->andWhere('owner.id in (:ownerIds)')
+                        ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                        ->setParameter(':modelId', $organizationId)
+                        ->setParameter(':ownerIds', $userIds);
                 }
             ));
 
-        $form
+         $form
             ->add('contactnext', 'entity', array(
                 'class' => 'ListsContactBundle:ModelContact',
                 'empty_value' => '',
@@ -1953,6 +2395,99 @@ class AjaxController extends BaseFilterController
             ->add('mindate', 'hidden', array(
                 'data' => $defaultData['mindate'],
                 'mapped' => false
+        ));
+    }
+
+    /**
+     * Adds children to {formName}ProcessDefaults depending on defaults in request
+     *
+     * @param Form    $form
+     * @param mixed[] $defaultData
+     * 
+     * @return Form
+     */
+    public function invoiceMessageFormProcessDefaults($form, $defaultData)
+    {
+        $invoiceId = $defaultData['invoice_id'];
+        /** @var Invoice $invoiceObj */
+        $invoiceObj = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice')
+            ->find($invoiceId);
+        if ($invoiceObj->getDogovor()) {
+            /** @var Dogovor $dogovor */
+            $dogovor = $this->getDoctrine()
+                ->getRepository('ListsDogovorBundle:Dogovor')
+                ->find($invoiceObj->getDogovor());
+
+            $organizationId =
+                $dogovor->getCustomerId() ?
+                $dogovor->getCustomerId() :
+                (
+                    $dogovor->getOrganization() ?
+                    $dogovor->getOrganization()->getId() :
+                    $invoiceObj->getOrganization()->getId()
+                );
+            $form
+                ->add('contactid', 'entity', array(
+                    'class' => 'ListsContactBundle:ModelContact',
+                    'empty_value' => '',
+                    'required' => false,
+                    'mapped' => false,
+                    'query_builder' => function (ModelContactRepository $repository) use ($organizationId) {
+                        return $repository->createQueryBuilder('mc')
+                            ->leftJoin('mc.owner', 'owner')
+                            ->where('mc.modelName = :modelName')
+                            ->andWhere('mc.modelId = :modelId')
+                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                            ->setParameter(':modelId', $organizationId);
+                    }
+                ));
+        } else {
+            $form
+                ->add('contactid', 'entity', array(
+                    'class' => 'ListsContactBundle:ModelContact',
+                    'empty_value' => '',
+                    'required' => false,
+                    'mapped' => false,
+                    'query_builder' => function (ModelContactRepository $repository) {
+                    return $repository->createQueryBuilder('mc')
+                        ->leftJoin('mc.owner', 'owner')
+                        ->where('mc.modelName = :modelName')
+                        ->andWhere('mc.modelId = :modelId')
+                        ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                        ->setParameter(':modelId', 0);
+                    }
+                ));
+        }
+    }
+
+    /**
+     * Adds children to {formName}ProcessDefaults depending on defaults in request
+     *
+     * @param Form    $form
+     * @param mixed[] $defaultData
+     * 
+     * @return QueryBuilder
+     */
+    public function invoiceCompanystructureFormProcessDefaults(Form $form, $defaultData)
+    {
+        $invoiceId = $defaultData['invoiceId'];
+
+        $repository = $this->getDoctrine()->getRepository('ListsCompanystructureBundle:Companystructure');
+
+        $form
+            ->add('companystructure', 'entity', array(
+                'class' => 'ListsCompanystructureBundle:Companystructure',
+                'empty_value' => '',
+                'required' => false,
+                'mapped' => false,
+                'query_builder' => function ($repository) use ($invoiceId, $repository) {
+
+                return $repository->createQueryBuilder('c')
+                    ->leftJoin('c.invoicecompanystructure', 'idc')
+                    ->where('(idc.invoiceId is NULL OR idc.invoiceId <> :invoiceId)')
+                    ->setParameter(':invoiceId', $invoiceId);
+                }
             ));
     }
 
@@ -2232,7 +2767,6 @@ class AjaxController extends BaseFilterController
             ));
 
             $connection->commit();
-
         } catch (\Exception $e) {
             $connection->rollback();
             $em->close();
@@ -2329,11 +2863,11 @@ class AjaxController extends BaseFilterController
                 'empty_value' => '',
                 'required' => false,
                 'query_builder' => function (DopDogovorRepository $repository) use ($dogovorId) {
-                        return $repository->createQueryBuilder('dd')
-                            ->where('dd.dogovorId = :dogovorId')
-                            ->setParameter(':dogovorId', $dogovorId);
+                    return $repository->createQueryBuilder('dd')
+                        ->where('dd.dogovorId = :dogovorId')
+                        ->setParameter(':dogovorId', $dogovorId);
                 }
-            ));
+        ));
 
         /** @var DepartmentsRepository $dr */
         $dr = $this->get('lists_department.repository');
@@ -2346,7 +2880,7 @@ class AjaxController extends BaseFilterController
                 'mapped' => false,
                 'multiple' => true,
                 'query_builder' => $dr->getDepartmentsForDogovor($dogovorId)
-            ));
+        ));
     }
 
     /**
@@ -3000,8 +3534,6 @@ class AjaxController extends BaseFilterController
             $result[] = $this->serializeObject($departmentPeople);
         }
 
-
         return new Response(json_encode($result));
-
     }
 }

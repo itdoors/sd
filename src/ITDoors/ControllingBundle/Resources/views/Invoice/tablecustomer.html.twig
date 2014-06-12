@@ -1,0 +1,73 @@
+{% trans_default_domain 'ITDoorsControllingBundle' %}
+<div class="col-md-12">
+    <table id="handling" class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <td style="width:50%">{% trans %}Creator{% endtrans %}</td> 
+                <td style="width:50%">
+                    {{ entitie.lastName }} {{ entitie.firstName }} {{ entitie.createdatetime is empty ? '' : '(' ~ entitie.createdatetime|date('d.m.Y, H:i') ~ ')'}}
+                </td>
+            </tr>
+            <tr>
+                <td>{% trans %}Organization name{% endtrans %}</td>
+                <td>{{ entitie.customerName }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Short Name{% endtrans %}</td>
+                <td> {{ entitie.shortname }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Organization type{% endtrans %}</td>
+                <td>{{ entitie.customerType }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Scope{% endtrans %}</td>
+                <td>{{ entitie.scope }} </td>
+            </tr>
+            <tr>
+                <td>{% trans %}Organization Group{% endtrans %}</td>
+                <td>{{ entitie.groupName }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}City{% endtrans %}</td>
+                <td>{{ entitie.cityName }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Legal Address{% endtrans %}</td>
+                <td>{{ entitie.address }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Mailing Address{% endtrans %}</td>
+                <td>{{ entitie.mailingAddress }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Physical Address{% endtrans %}</td>
+                <td>{{entitie.physicalAddress}}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Phone{% endtrans %}</td>
+                <td>{{entitie.phone}}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Site{% endtrans %}</td>
+                <td>{{ entitie.site }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Edrpou{% endtrans %}</td>
+                <td>{{ entitie.customerEdrpou }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}INN{% endtrans %}</td>
+                <td>{{ entitie.inn }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}INN Certificate{% endtrans %}</td>
+                <td> {{ entitie.certificate }}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Organization Description{% endtrans %}</td>
+                <td>{{ entitie.shortDescription }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

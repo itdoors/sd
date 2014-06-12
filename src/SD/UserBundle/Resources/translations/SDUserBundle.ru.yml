@@ -16,3 +16,63 @@ Enter your e-mail address below to reset your password.: Введите Ваш e
 Back: Назад
 Submit: ОК
 Login: Вход
+
+List of staff: Список сотрудников
+Staff <small>list of staff</small>: Сотрудники <small>список сотрудников</small>
+Dashboard: Рабочий стол
+Enter fio: Введите ФИО
+Enter position: Введите должность
+Filter: Фильтр
+Clear Filter: Очистить фильтр
+Position: Должность
+First name: Имя
+Last name: Фамилия
+Middle name: Отчество
+Mobile phone: Мобильный
+Personale phone: Персональный телефон
+Inside phone: Внутрений телефон
+Fired: Уволен
+fired: Уволен
+No fired: Работает
+Active: Активный
+Blocked: Заблокирован
+blocked: заблокирован
+active: активный
+Status: Статус
+Enter email: Введите Email
+Enter phone: Введите телефон
+
+Subdivision: Подразделение
+Enter subdivision: Введите подразделение
+User profile: Профиль пользователя
+Users <small>user profile</small>: Пользователи <small>профиль пользователя</small>
+
+Profile: Главный профиль
+Plan: План
+Settings profile: Настройки профиля
+
+Current password: Текущий пароль
+New password: Новый пароль
+New password again: Повторить новый пароль
+
+Change Password: Сменить пароль
+
+Place of birth: Место рождения
+Hire Date: Дата приема на работу
+Termination date: Дата увольнения
+Education: Образование
+
+Contaсts: Контакты
+Change Avatar: Изменить аватарку
+
+Select contact: Укажите контакт
+Enter value: Введите значение
+Add: Добавить
+Cancel: Закрыть
+Add Contact: Добавить контакт
+
+Add new user: Добавить нового пользователя
+New user: Новый пользователь
+Users <small>new staff</small>: Пользователи <small>новый сотрудник</small>
+New staff: Новый сотрудник
+

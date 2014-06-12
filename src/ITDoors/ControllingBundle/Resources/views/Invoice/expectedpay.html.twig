@@ -1,0 +1,11 @@
+{% trans_default_domain 'ITDoorsControllingBundle' %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="tabbable tabbable-custom boxless">
+             {{ ajax_tab_render( tabs, tab, namespace) }}
+            <div class="tab-content ajax-tab-holder" id="datatable_ajax" data-url="{{ url('it_doors_controlling_invoice_expected_pay_show', { period: tab }) }}">
+                 {{ render(controller('ITDoorsControllingBundle:Invoice:expectedpayshow')) }}
+            </div>
+        </div>
+    </div>
+</div>
