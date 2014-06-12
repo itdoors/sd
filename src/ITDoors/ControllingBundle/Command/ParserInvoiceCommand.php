@@ -22,7 +22,7 @@ class ParserInvoiceCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('id:doors:invoice-parser')
+            ->setName('it:doors:invoice-parser')
             ->setDescription('parser invoices');
     }
 
