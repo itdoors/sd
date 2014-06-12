@@ -15,6 +15,12 @@ parameters:
     ajax.paginator.namespace.oper.department.coworkers: "oper.paginator.department.coworkers"
     ajax.namespace.oper.department.schedule: "oper.department.schedule"
     ajax.filter.namespace.report.activity: "report.activity"
+    project.dir: '/var/www/sd'
+    project.web.dir: '%project.dir%/web'
+    log.file.path: "%project.dir%/log.txt"
+    1C.file.path: "%project.dir%/app/share/1c/debt/"
+    email.file.path: "%project.dir%/web/files/email/"
+    upload.file.path: "%project.dir%/web/files/upload/"
 
 framework:
     #esi:             ~
