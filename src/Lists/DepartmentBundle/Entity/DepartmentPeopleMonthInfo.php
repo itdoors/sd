@@ -634,4 +634,178 @@ class DepartmentPeopleMonthInfo
     {
         return $this->id;
     }
+    /**
+     * @var string
+     */
+    private $fineDescription;
+
+    /**
+     * @var string
+     */
+    private $surchargeDescription;
+
+    /**
+     * @var string
+     */
+    private $bonusDescription;
+
+
+    /**
+     * Set fineDescription
+     *
+     * @param string $fineDescription
+     *
+     * @return DepartmentPeopleMonthInfo
+     */
+    public function setFineDescription($fineDescription)
+    {
+        $this->fineDescription = $fineDescription;
+
+        return $this;
+    }
+
+    /**
+     * Get fineDescription
+     *
+     * @return string 
+     */
+    public function getFineDescription()
+    {
+        return $this->fineDescription;
+    }
+
+    /**
+     * Set surchargeDescription
+     *
+     * @param string $surchargeDescription
+     *
+     * @return DepartmentPeopleMonthInfo
+     */
+    public function setSurchargeDescription($surchargeDescription)
+    {
+        $this->surchargeDescription = $surchargeDescription;
+
+        return $this;
+    }
+
+    /**
+     * Get surchargeDescription
+     *
+     * @return string 
+     */
+    public function getSurchargeDescription()
+    {
+        return $this->surchargeDescription;
+    }
+
+    /**
+     * Set bonusDescription
+     *
+     * @param string $bonusDescription
+     *
+     * @return DepartmentPeopleMonthInfo
+     */
+    public function setBonusDescription($bonusDescription)
+    {
+        $this->bonusDescription = $bonusDescription;
+
+        return $this;
+    }
+
+    /**
+     * Get bonusDescription
+     *
+     * @return string 
+     */
+    public function getBonusDescription()
+    {
+        return $this->bonusDescription;
+    }
+    /**
+     * @var string
+     */
+    private $fineTypeKey;
+
+    /**
+     * @var string
+     */
+    private $surchargeTypeKey;
+
+    /**
+     * @var string
+     */
+    private $bonusTypeKey;
+
+
+    /**
+     * Set fineTypeKey
+     *
+     * @param string $fineTypeKey
+     *
+     * @return DepartmentPeopleMonthInfo
+     */
+    public function setFineTypeKey($fineTypeKey)
+    {
+        $this->fineTypeKey = $fineTypeKey;
+
+        return $this;
+    }
+
+    /**
+     * Get fineTypeKey
+     *
+     * @return string 
+     */
+    public function getFineTypeKey()
+    {
+        return $this->fineTypeKey;
+    }
+
+    /**
+     * Set surchargeTypeKey
+     *
+     * @param string $surchargeTypeKey
+     *
+     * @return DepartmentPeopleMonthInfo
+     */
+    public function setSurchargeTypeKey($surchargeTypeKey)
+    {
+        $this->surchargeTypeKey = $surchargeTypeKey;
+
+        return $this;
+    }
+
+    /**
+     * Get surchargeTypeKey
+     *
+     * @return string 
+     */
+    public function getSurchargeTypeKey()
+    {
+        return $this->surchargeTypeKey;
+    }
+
+    /**
+     * Set bonusTypeKey
+     *
+     * @param string $bonusTypeKey
+     *
+     * @return DepartmentPeopleMonthInfo
+     */
+    public function setBonusTypeKey($bonusTypeKey)
+    {
+        $this->bonusTypeKey = $bonusTypeKey;
+
+        return $this;
+    }
+
+    /**
+     * Get bonusTypeKey
+     *
+     * @return string 
+     */
+    public function getBonusTypeKey()
+    {
+        return $this->bonusTypeKey;
+    }
 }

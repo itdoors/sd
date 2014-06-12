@@ -3,6 +3,7 @@
 namespace ITDoors\OperBundle\Controller;
 
 use ITDoors\AjaxBundle\Controller\BaseFilterController;
+use Lists\DepartmentBundle\ListsDepartmentBundle;
 
 /**
  * OperInfoController class
@@ -164,17 +165,144 @@ class OperInfoController extends BaseFilterController
         }
     }
 
-/*    public function updateAccrualsTask() {
-        $monthInfos = $this->getDoctrine()
-            ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo')->findAll();
+    /**
+     * updateAccrualsTask
+     */
+    public function updateAccrualsTaskAction()
+    {
+        for ($i=1; $i<=40; $i++) {
+            $counter = $i*1000;
+            $offset = ($i-1)*1000;
 
-        foreach($monthInfos as $monthInfo) {
+            $monthInfos = $this->getDoctrine()
+                ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo')
+                ->findBy(array(), array(), $counter, $offset);
+
+            $em = $this->getDoctrine()->getManager();
+            /** @var  $monthInfo \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfo */
+            foreach ($monthInfos as $monthInfo) {
+
+                $id = $monthInfo->getId();
+
+                $fineDescription = $monthInfo->getFineDescription();
+                if (!$fineDescription) {
+                    $fineDescription = '';
+                }
+
+                $bonusDescription = $monthInfo->getBonusDescription();
+                if (!$bonusDescription) {
+                    $bonusDescription = '';
+                }
+
+                $surchargeDescription = $monthInfo->getSurchargeDescription();
+                if (!$surchargeDescription) {
+                    $surchargeDescription = '';
+                }
 
 
+                $fineValue = $monthInfo->getFine();
+                if (!$fineValue) {
+                    $fineValue = 0;
+                }
+                $bonusValue = $monthInfo->getBonus();
+                if (!$bonusValue) {
+                    $bonusValue = 0;
+                }
 
+                $surchargeValue = $monthInfo->getSurcharge();
+                if (!$surchargeValue) {
+                    $surchargeValue = 0;
+                }
+
+
+                $fineType = $monthInfo->getFineType();//a
+                if ($fineType) {
+                    $fineType = $fineType->getName();
+                }
+                $bonusType = $monthInfo->getBonusType();//b
+                if ($bonusType) {
+                    $bonusType = $bonusType->getName();
+                }
+                $surchargeType = $monthInfo->getSurchargeType();//c
+                if ($surchargeType) {
+                    $surchargeType = $surchargeType->getName();
+                }
+
+                $fineKey = $monthInfo->getFineTypeKey();//r,d,k
+                $bonusKey = $monthInfo->getBonusTypeKey();
+                $surchargeKey = $monthInfo->getSurchargeTypeKey();
+
+
+                if ($fineType != null) {
+                    $onceOnlyAccrual = new \Lists\DepartmentBundle\Entity\OnceOnlyAccrual();
+                    $onceOnlyAccrual->setDepartmentPeopleMonthInfo($monthInfo);
+
+                    $mpk = $monthInfo->getDepartmentPeople()->getMpks();
+
+                    $onceOnlyAccrual->setMpk($mpk);
+                    $onceOnlyAccrual->setType('fine');
+                    $onceOnlyAccrual->setValue($fineValue);
+                    $onceOnlyAccrual->setWorkType($fineKey);
+                    $onceOnlyAccrual->setDescription($fineDescription);
+                    $onceOnlyAccrual->setIsActive(true);
+
+                    if (substr($fineType, 0, 1) == 'B') {
+                        $code = 'uo';
+                    } else {
+                        $code = 'oz';
+                    }
+                    $onceOnlyAccrual->setCode($code);
+                    $em->persist($onceOnlyAccrual);
+                    $em->flush();
+                }
+                if ($bonusType != null) {
+                    $onceOnlyAccrual = new \Lists\DepartmentBundle\Entity\OnceOnlyAccrual();
+                    $onceOnlyAccrual->setDepartmentPeopleMonthInfo($monthInfo);
+
+                    $mpk = $monthInfo->getDepartmentPeople()->getMpks();
+
+                    $onceOnlyAccrual->setMpk($mpk);
+                    $onceOnlyAccrual->setType('add');
+                    $onceOnlyAccrual->setValue($bonusValue);
+                    $onceOnlyAccrual->setWorkType($bonusKey);
+                    $onceOnlyAccrual->setDescription($bonusDescription);
+                    $onceOnlyAccrual->setIsActive(true);
+
+                    if (substr($bonusType, 0, 1) == 'B') {
+                        $code = 'uo';
+                    } else {
+                        $code = 'oz';
+                    }
+                    $onceOnlyAccrual->setCode($code);
+                    $em->persist($onceOnlyAccrual);
+                    $em->flush();
+                }
+                if ($surchargeType != null) {
+                    $onceOnlyAccrual = new \Lists\DepartmentBundle\Entity\OnceOnlyAccrual();
+                    $onceOnlyAccrual->setDepartmentPeopleMonthInfo($monthInfo);
+
+                    $mpk = $monthInfo->getDepartmentPeople()->getMpks();
+
+                    $onceOnlyAccrual->setMpk($mpk);
+                    $onceOnlyAccrual->setType('add');
+                    $onceOnlyAccrual->setValue($surchargeValue);
+                    $onceOnlyAccrual->setWorkType($surchargeKey);
+                    $onceOnlyAccrual->setDescription($surchargeDescription);
+                    $onceOnlyAccrual->setIsActive(true);
+
+                    if (substr($surchargeType, 0, 1) == 'B') {
+                        $code = 'uo';
+                    } else {
+                        $code = 'oz';
+                    }
+                    $onceOnlyAccrual->setCode($code);
+                    $em->persist($onceOnlyAccrual);
+                    $em->flush();
+                }
+
+            }
         }
 
 
-
-    }*/
+    }
 }

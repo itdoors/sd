@@ -30,6 +30,42 @@ Lists\DepartmentBundle\Entity\DepartmentPeopleMonthInfo:
             length: 128
             fixed: false
             nullable: true
+        fineDescription:
+            type: string
+            length: 50
+            fixed: false
+            nullable: true
+            column: fine_description
+        surchargeDescription:
+            type: string
+            length: 50
+            fixed: false
+            nullable: true
+            column: surcharge_description
+        bonusDescription:
+            type: string
+            length: 50
+            fixed: false
+            nullable: true
+            column: bonus_description
+        fineTypeKey:
+            type: string
+            length: 3
+            fixed: false
+            nullable: true
+            column: fine_type_key
+        surchargeTypeKey:
+            type: string
+            length: 3
+            fixed: false
+            nullable: true
+            column: surcharge_type_key
+        bonusTypeKey:
+            type: string
+            length: 3
+            fixed: false
+            nullable: true
+            column: bonus_type_key
         typeString:
             type: string
             length: 255

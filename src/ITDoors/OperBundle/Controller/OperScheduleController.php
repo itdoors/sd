@@ -1316,7 +1316,7 @@ class OperScheduleController extends BaseFilterController
         if ($officially == 'true') {
             $code = 'oz';
         } else {
-            $code = 'uz';
+            $code = 'uo';
         }
 
         $newAccrual = new \Lists\DepartmentBundle\Entity\OnceOnlyAccrual();
