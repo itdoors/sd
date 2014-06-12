@@ -3,7 +3,6 @@
 namespace Lists\CompanystructureBundle\Entity;
 
 use ITDoors\ControllingBundle\Entity\InvoiceCompanystructure;
-use ITDoors\ControllingBundle\Entity\InvoiceCompanystructure;
 
 /**
  * Companystructure
