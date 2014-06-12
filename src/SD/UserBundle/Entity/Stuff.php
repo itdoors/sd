@@ -3,9 +3,9 @@
 namespace SD\UserBundle\Entity;
 
 /**
- * Staff
+ * Stuff
  */
-class Staff
+class Stuff
 {
     /**
      * @var integer
@@ -47,7 +47,7 @@ class Staff
      *
      * @param string $mobilephone
      *
-     * @return Staff
+     * @return Stuff
      */
     public function setMobilephone($mobilephone)
     {
@@ -71,7 +71,7 @@ class Staff
      *
      * @param string $description
      *
-     * @return Staff
+     * @return Stuff
      */
     public function setDescription($description)
     {
@@ -95,7 +95,7 @@ class Staff
      *
      * @param string $stuffclass
      *
-     * @return Staff
+     * @return Stuff
      */
     public function setStuffclass($stuffclass)
     {
@@ -119,7 +119,7 @@ class Staff
      *
      * @param \SD\UserBundle\Entity\User $user
      *
-     * @return Staff
+     * @return Stuff
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
     {
@@ -148,7 +148,7 @@ class Staff
      *
      * @param \SD\UserBundle\Entity\Companystructure $companystructure
      * 
-     * @return Staff
+     * @return Stuff
      */
     public function setCompanystructure(\SD\UserBundle\Entity\Companystructure $companystructure = null)
     {
@@ -177,7 +177,7 @@ class Staff
      *
      * @param string $issues
      * 
-     * @return Staff
+     * @return Stuff
      */
     public function setIssues($issues)
     {
@@ -211,7 +211,7 @@ class Staff
      *
      * @param string $phoneInside
      * 
-     * @return Staff
+     * @return Stuff
      */
     public function setPhoneInside($phoneInside)
     {
@@ -235,7 +235,7 @@ class Staff
      *
      * @param string $phonePersonal
      * 
-     * @return Staff
+     * @return Stuff
      */
     public function setPhonePersonal($phonePersonal)
     {
@@ -264,7 +264,7 @@ class Staff
      *
      * @param string $birthPlase
      * 
-     * @return Staff
+     * @return Stuff
      */
     public function setBirthPlase($birthPlase)
     {
@@ -293,7 +293,7 @@ class Staff
      *
      * @param string $birthPlace
      * 
-     * @return Staff
+     * @return Stuff
      */
     public function setBirthPlace($birthPlace)
     {
@@ -332,7 +332,7 @@ class Staff
      *
      * @param \DateTime $dateFire
      * 
-     * @return Staff
+     * @return Stuff
      */
     public function setDateFire($dateFire)
     {
@@ -356,7 +356,7 @@ class Staff
      *
      * @param \DateTime $dateHire
      * 
-     * @return Staff
+     * @return Stuff
      */
     public function setDateHire($dateHire)
     {
@@ -380,7 +380,7 @@ class Staff
      *
      * @param string $education
      * 
-     * @return Staff
+     * @return Stuff
      */
     public function setEducation($education)
     {

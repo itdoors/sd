@@ -130,7 +130,7 @@ class Dogovor
     private $organization;
 
     /**
-     * @var \SD\UserBundle\Entity\Staff
+     * @var \SD\UserBundle\Entity\Stuff
      */
     private $stuff;
 
@@ -704,11 +704,11 @@ class Dogovor
     /**
      * Set stuff
      *
-     * @param \SD\UserBundle\Entity\Staff $stuff
+     * @param \SD\UserBundle\Entity\Stuff $stuff
      *
      * @return Dogovor
      */
-    public function setStuff(\SD\UserBundle\Entity\Staff $stuff = null)
+    public function setStuff(\SD\UserBundle\Entity\Stuff $stuff = null)
     {
         $this->stuff = $stuff;
 
@@ -718,7 +718,7 @@ class Dogovor
     /**
      * Get stuff
      *
-     * @return \SD\UserBundle\Entity\Staff
+     * @return \SD\UserBundle\Entity\Stuff
      */
     public function getStuff()
     {

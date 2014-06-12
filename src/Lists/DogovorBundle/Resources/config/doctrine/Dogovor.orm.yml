@@ -178,7 +178,7 @@ Lists\DogovorBundle\Entity\Dogovor:
                     referencedColumnName: id
             orphanRemoval: false
         stuff:
-            targetEntity: SD\UserBundle\Entity\Staff
+            targetEntity: SD\UserBundle\Entity\Stuff
             cascade: {  }
             mappedBy: null
             inversedBy: null

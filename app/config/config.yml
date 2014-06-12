@@ -16,6 +16,7 @@ parameters:
     ajax.namespace.oper.department.schedule: "oper.department.schedule"
     ajax.filter.namespace.report.activity: "report.activity"
     project.dir: '/var/www/vhosts/itdoors.com.ua/subdomains/t/sd'
+    #project.dir: '/var/www/vhosts/itdoors.com.ua/subdomains/deploy_sd/current'
     project.web.dir: '%project.dir%/web'
     log.file.path: "%project.dir%/log.txt"
     1C.file.path: "%project.dir%/app/share/1c/debt/"

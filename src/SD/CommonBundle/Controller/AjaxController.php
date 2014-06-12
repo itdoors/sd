@@ -548,7 +548,7 @@ class AjaxController extends BaseFilterController
         /** @var \SD\UserBundle\Entity\UserRepository $repository */
         $repository = $this->container->get('sd_user.repository');
 
-        $objects = $repository->getOnlyStaff()
+        $objects = $repository->getOnlyStuff()
             ->andWhere('lower(u.firstName) LIKE :q OR lower(u.lastName) LIKE :q')
             ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
             ->getQuery()
@@ -575,7 +575,7 @@ class AjaxController extends BaseFilterController
         /** @var \SD\UserBundle\Entity\UserRepository $repository */
         $repository = $this->container->get('sd_user.repository');
 
-        $objects = $repository->getOnlyStaff()
+        $objects = $repository->getOnlyStuff()
             ->andWhere('lower(u.firstName) LIKE :q OR lower(u.lastName) LIKE :q OR lower(u.middleName) LIKE :q')
             ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
             ->getQuery()
@@ -605,7 +605,7 @@ class AjaxController extends BaseFilterController
         /** @var \SD\UserBundle\Entity\UserRepository $repository */
         $repository = $this->container->get('sd_user.repository');
 
-        $objects = $repository->getOnlyStaff()
+        $objects = $repository->getOnlyStuff()
             ->andWhere('lower(u.position) LIKE :q')
             ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
             ->getQuery()
@@ -631,7 +631,7 @@ class AjaxController extends BaseFilterController
         /** @var \SD\UserBundle\Entity\UserRepository $repository */
         $repository = $this->container->get('sd_user.repository');
 
-        $objects = $repository->getOnlyStaff()
+        $objects = $repository->getOnlyStuff()
             ->andWhere('lower(u.email) LIKE :q')
             ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
             ->getQuery()
@@ -656,8 +656,8 @@ class AjaxController extends BaseFilterController
 
         $repository = $this->container->get('sd_user.repository');
 
-        $objects = $repository->getOnlyStaff()
-            ->andWhere('lower(staff.mobilephone) LIKE :q')
+        $objects = $repository->getOnlyStuff()
+            ->andWhere('lower(stuff.mobilephone) LIKE :q')
             ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
             ->getQuery()
             ->getResult();
@@ -668,8 +668,8 @@ class AjaxController extends BaseFilterController
             $result[] = array(
                 'id' => $object->getId(),
                 'value' => $object->getId(),
-                'name' => $object->getStaff()->getMobilephone(),
-                'text' => $object->getStaff()->getMobilephone()
+                'name' => $object->getStuff()->getMobilephone(),
+                'text' => $object->getStuff()->getMobilephone()
             );
         }
 
@@ -680,13 +680,13 @@ class AjaxController extends BaseFilterController
      *
      * @return string
      */
-    public function userStaffCompanyAction()
+    public function userStuffCompanyAction()
     {
         $searchText = $this->get('request')->query->get('query');
 
         $repository = $this->container->get('sd_user.repository');
 
-        $objects = $repository->getOnlyStaffCompany()
+        $objects = $repository->getOnlyStuffCompany()
             ->andWhere('lower(c.name) LIKE :q')
             ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
             ->getQuery()
@@ -698,8 +698,8 @@ class AjaxController extends BaseFilterController
             $result[] = array(
                 'id' => $object->getId(),
                 'value' => $object->getId(),
-                'name' => $object->getStaff()->getCompanystructure()->getName(),
-                'text' => $object->getStaff()->getCompanystructure()->getName()
+                'name' => $object->getStuff()->getCompanystructure()->getName(),
+                'text' => $object->getStuff()->getCompanystructure()->getName()
             );
         }
 

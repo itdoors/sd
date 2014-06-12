@@ -17,8 +17,8 @@ Back: Назад
 Submit: ОК
 Login: Вход
 
-List of staff: Список сотрудников
-Staff <small>list of staff</small>: Сотрудники <small>список сотрудников</small>
+List of stuff: Список сотрудников
+Stuff <small>list of stuff</small>: Сотрудники <small>список сотрудников</small>
 Dashboard: Рабочий стол
 Enter fio: Введите ФИО
 Enter position: Введите должность
@@ -73,6 +73,6 @@ Add Contact: Добавить контакт
 
 Add new user: Добавить нового пользователя
 New user: Новый пользователь
-Users <small>new staff</small>: Пользователи <small>новый сотрудник</small>
-New staff: Новый сотрудник
+Users <small>new stuff</small>: Пользователи <small>новый сотрудник</small>
+New stuff: Новый сотрудник
 

@@ -55,7 +55,7 @@ class UserNewForm extends AbstractType
                 'invalid_message' => 'fos_user.password.mismatch',
         ));
 
-        // Staff
+        // Stuff
         $builder
             ->add('mobilephone', 'text', array(
                 'mapped' => false,

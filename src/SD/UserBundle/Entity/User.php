@@ -373,32 +373,32 @@ class User extends BaseUser
     }
 
     /**
-     * @var \SD\UserBundle\Entity\Staff
+     * @var \SD\UserBundle\Entity\Stuff
      */
-    private $staff;
+    private $stuff;
 
     /**
-     * Set staff
+     * Set stuff
      *
-     * @param \SD\UserBundle\Entity\Staff $staff
+     * @param \SD\UserBundle\Entity\Stuff $stuff
      *
      * @return User
      */
-    public function setStaff(\SD\UserBundle\Entity\Staff $staff = null)
+    public function setStuff(\SD\UserBundle\Entity\Stuff $stuff = null)
     {
-        $this->staff = $staff;
+        $this->stuff = $stuff;
 
         return $this;
     }
 
     /**
-     * Get staff
+     * Get stuff
      *
-     * @return \SD\UserBundle\Entity\Staff
+     * @return \SD\UserBundle\Entity\Stuff
      */
-    public function getStaff()
+    public function getStuff()
     {
-        return $this->staff;
+        return $this->stuff;
     }
 
     /**

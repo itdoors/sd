@@ -1,9 +1,9 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'SDUserBundle' %}
-{% block title %}{% trans %}New staff{% endtrans %} {% endblock %}
+{% block title %}{% trans %}New stuff{% endtrans %} {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
-        {% trans %}Users <small>new staff</small>{% endtrans %}
+        {% trans %}Users <small>new stuff</small>{% endtrans %}
     </h3>
 {% endblock %}
 {% block page_breadcrumbs %}
@@ -14,7 +14,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a href="{{ path('sd_user_staff') }}" title="{% trans %}List of staff{% endtrans %}">{% trans %}List of staff{% endtrans %}</a>
+            <a href="{{ path('sd_user_stuff') }}" title="{% trans %}List of stuff{% endtrans %}">{% trans %}List of stuff{% endtrans %}</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li><a href="" title="{% trans %}New user{% endtrans %}">{% trans %}New user{% endtrans %}</a></li>
@@ -53,7 +53,7 @@
             {% endif %}
             <div class="portlet-body form">
                 {{ form_start(form, {
-                        'action' : path('sd_user_new_staff'),
+                        'action' : path('sd_user_new_stuff'),
                         'attr' : {
                         'method' : 'POST',
                     }

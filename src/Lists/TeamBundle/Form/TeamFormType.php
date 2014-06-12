@@ -38,7 +38,7 @@ class TeamFormType extends AbstractType
                 'class'=>'SD\UserBundle\Entity\User',
                 'multiple' => true,
                 'property'=>'fullname',
-                'query_builder' => $ur->getOnlyStaff()
+                'query_builder' => $ur->getOnlyStuff()
             ));
 
         $builder

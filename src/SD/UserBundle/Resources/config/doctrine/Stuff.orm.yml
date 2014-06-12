@@ -1,4 +1,4 @@
-SD\UserBundle\Entity\Staff:
+SD\UserBundle\Entity\Stuff:
     type: entity
     table: stuff
     fields:
@@ -55,7 +55,7 @@ SD\UserBundle\Entity\Staff:
     oneToOne:
         user:
           targetEntity: User
-          inversedBy: staff
+          inversedBy: stuff
           joinColumn:
             name: user_id
             referencedColumnName: id

@@ -29,7 +29,7 @@ Lists\CompanystructureBundle\Entity\Companystructure:
             length: 12
             fixed: false
             nullable: true
-        staffId:
+        stuffId:
             type: bigint
             nullable: true
             column: stuff_id
@@ -46,8 +46,8 @@ Lists\CompanystructureBundle\Entity\Companystructure:
                     region_id:
                         referencedColumnName: id
     manyToOne:
-        staff:
-            targetEntity: SD\UserBundle\Entity\Staff
+        stuff:
+            targetEntity: SD\UserBundle\Entity\Stuff
             cascade: {  }
             mappedBy: null
             inversedBy: null

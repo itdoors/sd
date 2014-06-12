@@ -19,13 +19,13 @@ class UserRepository extends EntityRepository
      *
      * @return Query
      */
-    public function getOnlyStaff()
+    public function getOnlyStuff()
     {
         return $this->createQueryBuilder('u')
-                ->select('u', 'staff')
+                ->select('u', 'stuff')
                 ->where('u.isFired = FALSE OR u.isFired IS NULL')
                 //->setParameter(':isFired', false)
-                ->innerJoin('u.staff', 'staff')
+                ->innerJoin('u.stuff', 'stuff')
                 ->orderBy('u.lastName', 'ASC');
     }
 
@@ -36,7 +36,7 @@ class UserRepository extends EntityRepository
      * 
      * @return Query
      */
-    public function getStaffById($id)
+    public function getStuffById($id)
     {
         return $this->createQueryBuilder('u')
                 ->select('u.id')
@@ -56,7 +56,7 @@ class UserRepository extends EntityRepository
                 ->addselect('s.dateHire')
                 ->addselect('s.education')
                 ->addselect('c.name as companyName')
-                ->innerJoin('u.staff', 's')
+                ->leftJoin('u.stuff', 's')
                 ->leftJoin('s.companystructure', 'c')
                 ->where('u.id = :id')
                 ->setParameter(':id', $id)
@@ -68,14 +68,14 @@ class UserRepository extends EntityRepository
      *
      * @return Query
      */
-    public function getOnlyStaffCompany()
+    public function getOnlyStuffCompany()
     {
         return $this->createQueryBuilder('u')
-                ->select('u', 'staff')
+                ->select('u', 'stuff')
                 ->where('u.isFired = FALSE OR u.isFired IS NULL')
                 //->setParameter(':isFired', false)
-                ->innerJoin('u.staff', 'staff')
-                ->innerJoin('staff.companystructure', 'c')
+                ->innerJoin('u.stuff', 'stuff')
+                ->innerJoin('stuff.companystructure', 'c')
                 ->groupBy('c.id')
                 ->orderBy('u.lastName', 'ASC');
     }
@@ -90,8 +90,8 @@ class UserRepository extends EntityRepository
     public function getOrganizationUsersQuery($organizationId)
     {
         return $this->createQueryBuilder('u')
-                ->select('u', 'staff')
-                ->innerJoin('u.staff', 'staff')
+                ->select('u', 'stuff')
+                ->innerJoin('u.stuff', 'stuff')
                 ->innerJoin('u.organizations', 'organizations')
                 ->where('organizations.id = :organizationId')
                 ->setParameter(':organizationId', $organizationId);
@@ -107,8 +107,8 @@ class UserRepository extends EntityRepository
     public function getHandlingUsersQuery($handlingId)
     {
         return $this->createQueryBuilder('u')
-                ->select('u', 'staff')
-                ->innerJoin('u.staff', 'staff')
+                ->select('u', 'stuff')
+                ->innerJoin('u.stuff', 'stuff')
                 ->innerJoin('u.handlings', 'handlings')
                 ->where('handlings.id = :handlingId')
                 ->setParameter(':handlingId', $handlingId);
@@ -152,7 +152,7 @@ class UserRepository extends EntityRepository
      */
     public function processBaseQuery(QueryBuilder $sql)
     {
-        $sql->innerJoin('u.staff', 's')
+        $sql->innerJoin('u.stuff', 's')
             ->leftJoin('s.companystructure', 'c');
         /* ->leftJoin('o.city', 'c')
           ->leftJoin('c.region', 'r'); */

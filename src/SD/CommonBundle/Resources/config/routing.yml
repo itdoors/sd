@@ -68,7 +68,7 @@ sd_common_ajax_contact_phone:
 
 sd_common_ajax_contact_company:
     pattern:  /ajax/contact/company
-    defaults: { _controller: SDCommonBundle:Ajax:userStaffCompany }
+    defaults: { _controller: SDCommonBundle:Ajax:userStuffCompany }
 
 sd_common_ajax_delete:
     pattern:  /ajax/delete

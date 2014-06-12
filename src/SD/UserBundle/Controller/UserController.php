@@ -2,7 +2,7 @@
 
 namespace SD\UserBundle\Controller;
 
-use SD\UserBundle\Entity\Staff;
+use SD\UserBundle\Entity\Stuff;
 use ITDoors\AjaxBundle\Controller\BaseFilterController as BaseController;
 use SD\UserBundle\Entity\User;
 use SD\UserBundle\Entity\UserRepository;
@@ -18,9 +18,9 @@ class UserController extends BaseController
 {
 
     protected $baseTemplate = 'User';
-    protected $filterNamespace = 'staffFilterForm';
-    protected $filterFormName = 'staffFilterForm';
-    protected $baseRoute = 'sd_user_staff';
+    protected $filterNamespace = 'stuffFilterForm';
+    protected $filterFormName = 'stuffFilterForm';
+    protected $baseRoute = 'sd_user_stuff';
 
     /** @var KnpPaginatorBundle $paginator */
     protected $paginator = 'knp_paginator';
@@ -33,22 +33,22 @@ class UserController extends BaseController
      *
      * @return string
      */
-    public function staffAction()
+    public function stuffAction()
     {
         $namespase = $this->filterNamespace;
 
-        return $this->render('SDUserBundle:' . $this->baseTemplate . ':staff.html.twig', array(
+        return $this->render('SDUserBundle:' . $this->baseTemplate . ':stuff.html.twig', array(
                 'baseTemplate' => $this->baseTemplate,
                 'namespase' => $namespase,
         ));
     }
 
     /**
-     * stafflistAction
+     * stufflistAction
      * 
      * @return string
      */
-    public function stafflistAction()
+    public function stufflistAction()
     {
         $namespase = $this->filterNamespace;
         $filters = $this->getFilters($namespase);
@@ -69,7 +69,7 @@ class UserController extends BaseController
         $entities->setHint($this->paginator . '.count', $count);
         $pagination = $paginator->paginate($entities, $page, 10);
 
-        return $this->render('SDUserBundle:' . $this->baseTemplate . ':stafflist.html.twig', array(
+        return $this->render('SDUserBundle:' . $this->baseTemplate . ':stufflist.html.twig', array(
                 'namespase' => $namespase,
                 'items' => $pagination,
                 'baseTemplate' => $this->baseTemplate
@@ -91,7 +91,7 @@ class UserController extends BaseController
         /** @var User $item */
         $item = $user->find($id);
         if (!$item) {
-            return $this->redirect($this->generateUrl('sd_user_staff'));
+            return $this->redirect($this->generateUrl('sd_user_stuff'));
         }
         /** @var Session $session */
         $session = $this->get('session');
@@ -143,13 +143,13 @@ class UserController extends BaseController
         $userId = $session->get('userid', false);
 
         if (!$userId) {
-            return $this->redirect($this->generateUrl('sd_user_staff'));
+            return $this->redirect($this->generateUrl('sd_user_stuff'));
         }
         /** @var UserRepository $user */
         $user = $this->get('sd_user.repository');
 
         /** @var User $item */
-        $item = $user->getStaffById((int) $userId);
+        $item = $user->getStuffById((int) $userId);
 
         $namespace = $this->filterNamespace . $userId;
 
@@ -180,7 +180,7 @@ class UserController extends BaseController
         $userId = $session->get('userid', false);
 
         if (!$userId) {
-            return $this->redirect($this->generateUrl('sd_user_staff'));
+            return $this->redirect($this->generateUrl('sd_user_stuff'));
         }
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
@@ -263,13 +263,13 @@ class UserController extends BaseController
                 $em->persist($user);
                 $em->flush();
 
-                $staff = new Staff();
+                $stuff = new Stuff();
 
-                $staff->setUser($user);
-                $staff->setMobilephone($formData['mobilephone']);
-                $staff->setStuffclass('stuff');
+                $stuff->setUser($user);
+                $stuff->setMobilephone($formData['mobilephone']);
+                $stuff->setStuffclass('stuff');
 
-                $em->persist($staff);
+                $em->persist($stuff);
                 $em->flush();
 
                 $connection->commit();
@@ -295,9 +295,9 @@ class UserController extends BaseController
      * 
      * @return string
      */
-    public function newstaffAction(Request $request)
+    public function newstuffAction(Request $request)
     {
-        $form = $this->createForm('userNewStaffForm');
+        $form = $this->createForm('userNewStuffForm');
 
         $form->handleRequest($request);
 
@@ -317,13 +317,13 @@ class UserController extends BaseController
                 $em->persist($user);
                 $em->flush();
 
-                $staff = new Staff();
+                $stuff = new Stuff();
 
-                $staff->setUser($user);
-                $staff->setMobilephone($formData['mobilephone']);
-                $staff->setStuffclass('stuff');
+                $stuff->setUser($user);
+                $stuff->setMobilephone($formData['mobilephone']);
+                $stuff->setStuffclass('stuff');
 
-                $em->persist($staff);
+                $em->persist($stuff);
                 $em->flush();
 
                 $connection->commit();
@@ -336,7 +336,7 @@ class UserController extends BaseController
             return $this->redirect($this->generateUrl('sd_user_show', array('id' => $user->getId())));
         }
 
-        return $this->render('SDUserBundle:' . $this->baseTemplate . ':newstaff.html.twig', array(
+        return $this->render('SDUserBundle:' . $this->baseTemplate . ':newstuff.html.twig', array(
                 'form' => $form->createView(),
                 'baseTemplate' => $this->baseTemplate
         ));

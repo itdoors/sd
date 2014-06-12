@@ -40,9 +40,9 @@ class Companystructure
     private $stuffId;
 
     /**
-     * @var \SD\UserBundle\Entity\Staff
+     * @var \SD\UserBundle\Entity\Stuff
      */
-    private $staff;
+    private $stuff;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -188,27 +188,27 @@ class Companystructure
     }
 
     /**
-     * Set staff
+     * Set stuff
      *
-     * @param \SD\UserBundle\Entity\Staff $staff
+     * @param \SD\UserBundle\Entity\Stuff $stuff
      *
      * @return Companystructure
      */
-    public function setStaff(\SD\UserBundle\Entity\Staff $staff = null)
+    public function setStuff(\SD\UserBundle\Entity\Stuff $stuff = null)
     {
-        $this->staff = $staff;
+        $this->stuff = $stuff;
 
         return $this;
     }
 
     /**
-     * Get staff
+     * Get stuff
      *
-     * @return \SD\UserBundle\Entity\Staff
+     * @return \SD\UserBundle\Entity\Stuff
      */
-    public function getStaff()
+    public function getStuff()
     {
-        return $this->staff;
+        return $this->stuff;
     }
 
     /**
@@ -258,30 +258,30 @@ class Companystructure
     /**
      * @var integer
      */
-    private $staffId;
+    private $stuffId;
 
     /**
-     * Set staffId
+     * Set stuffId
      *
-     * @param integer $staffId
+     * @param integer $stuffId
      *
      * @return Companystructure
      */
-    public function setStaffId($staffId)
+    public function setStuffId($stuffId)
     {
-        $this->staffId = $staffId;
+        $this->stuffId = $stuffId;
 
         return $this;
     }
 
     /**
-     * Get staffId
+     * Get stuffId
      *
      * @return integer
      */
-    public function getStaffId()
+    public function getStuffId()
     {
-        return $this->staffId;
+        return $this->stuffId;
     }
 
     /**

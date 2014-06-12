@@ -14,7 +14,7 @@ use Lists\CompanystructureBundle\Entity\CompanystructureRepository;
 /**
  * UserNewForm
  */
-class UserNewStaffForm extends AbstractType
+class UserNewStuffForm extends AbstractType
 {
     protected $container;
 
@@ -53,7 +53,7 @@ class UserNewStaffForm extends AbstractType
                 'invalid_message' => 'fos_user.password.mismatch',
         ));
 
-        // Staff
+        // Stuff
         $builder
             ->add('mobilephone', 'text', array(
                 'mapped' => false,
@@ -89,6 +89,6 @@ class UserNewStaffForm extends AbstractType
      */
     public function getName()
     {
-        return 'userNewStaffForm';
+        return 'userNewStuffForm';
     }
 }

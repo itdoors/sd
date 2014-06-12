@@ -2,15 +2,15 @@
 
 namespace SD\UserBundle\Form;
 
-use SD\UserBundle\Entity\Staff;
+use SD\UserBundle\Entity\Stuff;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * StaffFilterForm
+ * StuffFilterForm
  */
-class StaffFilterForm extends AbstractType
+class StuffFilterForm extends AbstractType
 {
     /**
      * @var \ProjectServiceContainer $container
@@ -154,6 +154,6 @@ class StaffFilterForm extends AbstractType
      */
     public function getName()
     {
-        return 'staffFilterForm';
+        return 'stuffFilterForm';
     }
 }

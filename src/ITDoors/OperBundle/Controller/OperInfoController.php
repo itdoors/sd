@@ -21,7 +21,7 @@ class OperInfoController extends BaseFilterController
      */
     public function indexAction()
     {
-        var_dump($this->getAllowedDepartmentsId());die()
+        var_dump($this->getAllowedDepartmentsId());die();
         return $this->render('ITDoorsOperBundle:Patterns:index.html.twig', array(
 
         ));

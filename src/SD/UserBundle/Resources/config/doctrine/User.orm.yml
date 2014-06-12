@@ -67,6 +67,6 @@ SD\UserBundle\Entity\User:
             targetEntity: Lists\TeamBundle\Entity\Team
             mappedBy: users
     oneToOne:
-        staff:
-            targetEntity: Staff
+        stuff:
+            targetEntity: Stuff
             mappedBy: user
