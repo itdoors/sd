@@ -21,7 +21,6 @@ class OperInfoController extends BaseFilterController
      */
     public function indexAction()
     {
-        var_dump($this->getAllowedDepartmentsId());die();
         return $this->render('ITDoorsOperBundle:Patterns:index.html.twig', array(
 
         ));
@@ -48,9 +47,9 @@ class OperInfoController extends BaseFilterController
         $repository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments');
 
-        $query = $repository->getFilteredDepartments($filters);
+        $query = $repository->getFilteredDepartments($filters, $this->getAllowedDepartmentsId());
 
-        $countDepartments = $repository->getFilteredDepartments($filters, "count")->getSingleScalarResult();
+        $countDepartments = $repository->getFilteredDepartments($filters, $this->getAllowedDepartmentsId(), "count")->getSingleScalarResult();
 
         $query->setHint('knp_paginator.count', $countDepartments);
         $pagination = $paginator->paginate(
@@ -84,11 +83,11 @@ class OperInfoController extends BaseFilterController
         $departmentsRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments');
 
-        $query = $departmentsRepository->getFilteredDepartments($filters);
+        $query = $departmentsRepository->getFilteredDepartments($filters, $this->getAllowedDepartmentsId());
 
         $paginator  = $this->get('knp_paginator');
 
-        $countDepartments = $departmentsRepository->getFilteredDepartments($filters, "count")->getSingleScalarResult();
+        $countDepartments = $departmentsRepository->getFilteredDepartments($filters, $this->getAllowedDepartmentsId() , "count")->getSingleScalarResult();
 
         $query->setHint('knp_paginator.count', $countDepartments);
 
@@ -118,19 +117,40 @@ class OperInfoController extends BaseFilterController
             return false;
         } elseif ($checkOper) {
 
-            /** @var  $stuff \SD\UserBundle\Entity\Staff */
+            /** @var  $stuff \SD\UserBundle\Entity\Stuff */
             $stuff = $this->getDoctrine()
                 ->getRepository('SDUserBundle:Stuff')
-                ->findBy(array('user' => $idUser));
+                ->findOneBy(array('user' => $idUser));
 
+            if (!$stuff) {
+                return array();
+            }
 
             $stuffDepartments = $this->getDoctrine()
-                ->getRepository('SDUserBundle:Stuff')
+                ->getRepository('SDUserBundle:StuffDepartments')
                 ->findBy(array('stuff' => $stuff));
+
+            if (count($stuffDepartments) == 0 || !$stuffDepartments){
+                return array();
+            }
+
+            if (!is_array($stuffDepartments)) {
+                $stuffDepartments = array($stuffDepartments);
+            }
+
             $idDepartmentsAllowed = array();
+
             /** @var  $stuffDepartment \SD\UserBundle\Entity\StuffDepartments */
             foreach ($stuffDepartments as $stuffDepartment) {
                 $departmentsAllowed = $stuffDepartment->getDepartments();
+
+                if (count($departmentsAllowed) == 0){
+                    return array();
+                }
+                if (!is_array($departmentsAllowed)) {
+                    $departmentsAllowed = array($departmentsAllowed);
+                }
+
                 foreach ($departmentsAllowed as $departmentAllowed) {
                     $idDepartmentsAllowed[] = $departmentAllowed->getId();
                 }

@@ -30,7 +30,7 @@ SD\UserBundle\Entity\StuffDepartments:
                 departments_id:
                     referencedColumnName: id
             orphanRemoval: false
-        staff:
+        stuff:
             targetEntity: SD\UserBundle\Entity\Stuff
             cascade: {  }
             mappedBy: null

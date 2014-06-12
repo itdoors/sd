@@ -156,7 +156,7 @@ class DepartmentsRepository extends EntityRepository
      *
      * @return mixed[]
      */
-    public function getFilteredDepartments($filters, $type = 'data')
+    public function getFilteredDepartments($filters, $allowedDepartments, $type = 'data')
     {
         if ($type == 'data') {
             $sql = $this->getAllDepartmentsBuilder();
@@ -243,6 +243,15 @@ class DepartmentsRepository extends EntityRepository
 
                         break;
                 }
+            }
+        }
+
+        if ($allowedDepartments !== false) {
+            if (count($allowedDepartments)>0) {
+                $sql->andWhere('d.id in (:idsDepartments)');
+                $sql->setParameter(':idsDepartments', $allowedDepartments);
+            } else {
+                $sql->andWhere('d.id < 0');
             }
         }
 
