@@ -49,7 +49,9 @@ class OperInfoController extends BaseFilterController
 
         $query = $repository->getFilteredDepartments($filters, $this->getAllowedDepartmentsId());
 
-        $countDepartments = $repository->getFilteredDepartments($filters, $this->getAllowedDepartmentsId(), "count")->getSingleScalarResult();
+        $countDepartments = $repository
+            ->getFilteredDepartments($filters, $this->getAllowedDepartmentsId(), "count")
+            ->getSingleScalarResult();
 
         $query->setHint('knp_paginator.count', $countDepartments);
         $pagination = $paginator->paginate(
@@ -87,7 +89,9 @@ class OperInfoController extends BaseFilterController
 
         $paginator  = $this->get('knp_paginator');
 
-        $countDepartments = $departmentsRepository->getFilteredDepartments($filters, $this->getAllowedDepartmentsId() , "count")->getSingleScalarResult();
+        $countDepartments = $departmentsRepository
+            ->getFilteredDepartments($filters, $this->getAllowedDepartmentsId(), "count")
+            ->getSingleScalarResult();
 
         $query->setHint('knp_paginator.count', $countDepartments);
 
@@ -130,7 +134,7 @@ class OperInfoController extends BaseFilterController
                 ->getRepository('SDUserBundle:StuffDepartments')
                 ->findBy(array('stuff' => $stuff));
 
-            if (count($stuffDepartments) == 0 || !$stuffDepartments){
+            if (count($stuffDepartments) == 0 || !$stuffDepartments) {
                 return array();
             }
 
@@ -144,7 +148,7 @@ class OperInfoController extends BaseFilterController
             foreach ($stuffDepartments as $stuffDepartment) {
                 $departmentsAllowed = $stuffDepartment->getDepartments();
 
-                if (count($departmentsAllowed) == 0){
+                if (count($departmentsAllowed) == 0) {
                     return array();
                 }
                 if (!is_array($departmentsAllowed)) {

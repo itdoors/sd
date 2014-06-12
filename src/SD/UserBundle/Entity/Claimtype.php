@@ -5,8 +5,9 @@ namespace SD\UserBundle\Entity;
 /**
  * Claimtype
  */
-class Claimtype {
-    
+class Claimtype
+{
+
     /**
      * @var integer
      */

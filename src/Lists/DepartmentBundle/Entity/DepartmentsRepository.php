@@ -151,8 +151,9 @@ class DepartmentsRepository extends EntityRepository
     /**
      * Searches departments through filters
      *
-     * @param array  $filters
-     * @param string $type
+     * @param array      $filters
+     * @param array|bool $allowedDepartments
+     * @param string     $type
      *
      * @return mixed[]
      */

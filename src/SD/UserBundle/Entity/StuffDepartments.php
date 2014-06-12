@@ -5,7 +5,8 @@ namespace SD\UserBundle\Entity;
 /**
  * StuffDepartments
  */
-class StuffDepartments {
+class StuffDepartments
+{
 
     /**
      * @var string
@@ -43,7 +44,7 @@ class StuffDepartments {
     public function setUserkey($userkey)
     {
         $this->userkey = $userkey;
-    
+
         return $this;
     }
 
@@ -67,7 +68,7 @@ class StuffDepartments {
     public function setId($id)
     {
         $this->id = $id;
-    
+
         return $this;
     }
 
@@ -91,7 +92,7 @@ class StuffDepartments {
     public function setClaimtype(\SD\UserBundle\Entity\Claimtype $claimtype = null)
     {
         $this->claimtype = $claimtype;
-    
+
         return $this;
     }
 
@@ -115,7 +116,7 @@ class StuffDepartments {
     public function setDepartments(\Lists\DepartmentBundle\Entity\Departments $departments = null)
     {
         $this->departments = $departments;
-    
+
         return $this;
     }
 
@@ -139,7 +140,7 @@ class StuffDepartments {
     public function setStuff(\SD\UserBundle\Entity\Stuff $stuff = null)
     {
         $this->stuff = $stuff;
-    
+
         return $this;
     }
 
