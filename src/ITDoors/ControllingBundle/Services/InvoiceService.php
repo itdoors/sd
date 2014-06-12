@@ -282,7 +282,7 @@ class InvoiceService
             if (!$invoiceNew) {
                 unset($json[$key]);
                 continue;
-            } elseif (empty($invoiceNew->getId())) {
+            } elseif ($invoiceNew->getId()) {
                 $invoiceFind = false;
             }
 
