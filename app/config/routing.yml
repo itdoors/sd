@@ -14,6 +14,10 @@ it_doors_oper:
     resource: "@ITDoorsOperBundle/Resources/config/routing.yml"
     prefix:   /
 
+it_doors_email:
+    resource: "@ITDoorsEmailBundle/Resources/config/routing.yml"
+    prefix:   /
+
 it_doors_ajax:
     resource: "@ITDoorsAjaxBundle/Resources/config/routing.yml"
     prefix:   /
