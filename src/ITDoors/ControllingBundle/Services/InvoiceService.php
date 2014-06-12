@@ -71,8 +71,7 @@ class InvoiceService
      */
     public function parserFile()
     {
-        $directory = 'app/share/1c/debt/';
-
+        $directory = $this->container->getParameter('1C.file.path');
 
         if (!is_dir($directory)) {
             return false;
