@@ -21,9 +21,11 @@ class OperInfoController extends BaseFilterController
      */
     public function indexAction()
     {
+        var_dump($this->getAllowedDepartmentsId());die()
         return $this->render('ITDoorsOperBundle:Patterns:index.html.twig', array(
 
         ));
+
     }
 
     /**
@@ -42,6 +44,7 @@ class OperInfoController extends BaseFilterController
         /** @var \Knp\Component\Pager\Paginator $paginator */
         $paginator  = $this->get('knp_paginator');
 
+        /** @var  $repository \Lists\DepartmentBundle\Entity\DepartmentsRepository*/
         $repository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments');
 
@@ -77,6 +80,7 @@ class OperInfoController extends BaseFilterController
             $page=1;
         }
 
+        /** @var  $departmentsRepository \Lists\DepartmentBundle\Entity\DepartmentsRepository*/
         $departmentsRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments');
 
@@ -97,5 +101,42 @@ class OperInfoController extends BaseFilterController
         return $this->render('ITDoorsOperBundle:Parts:department.html.twig', array(
             'pagination' => $pagination
         ));
+    }
+
+    /**
+     * @return array|bool
+     */
+    private function getAllowedDepartmentsId()
+    {
+        $idUser = $this->getUser()->getId();
+        $checkOper =  $this->getUser()->hasRole('ROLE_OPER');
+
+        $checkSuperviser =  $this->getUser()->hasRole('ROLE_SUPERVISER');
+
+        if ($checkSuperviser) {
+
+            return false;
+        } elseif ($checkOper) {
+
+            /** @var  $stuff \SD\UserBundle\Entity\Staff */
+            $stuff = $this->getDoctrine()
+                ->getRepository('SDUserBundle:Stuff')
+                ->findBy(array('user' => $idUser));
+
+
+            $stuffDepartments = $this->getDoctrine()
+                ->getRepository('SDUserBundle:Stuff')
+                ->findBy(array('stuff' => $stuff));
+            $idDepartmentsAllowed = array();
+            /** @var  $stuffDepartment \SD\UserBundle\Entity\StuffDepartments */
+            foreach ($stuffDepartments as $stuffDepartment) {
+                $departmentsAllowed = $stuffDepartment->getDepartments();
+                foreach ($departmentsAllowed as $departmentAllowed) {
+                    $idDepartmentsAllowed[] = $departmentAllowed->getId();
+                }
+            }
+
+            return $idDepartmentsAllowed;
+        }
     }
 }

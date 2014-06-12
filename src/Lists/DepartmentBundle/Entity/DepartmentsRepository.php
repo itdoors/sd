@@ -66,6 +66,7 @@ class DepartmentsRepository extends EntityRepository
      */
     private function getAllDepartmentsBuilder()
     {
+
         $query = $this->createQueryBuilder('d')
             ->select('d.id as id')
             ->addSelect('d.statusDate as statusDate')
