@@ -198,12 +198,14 @@ class AutomailerController extends BaseFilterController
             $session = $this->get('session');
             $filesArr = json_decode($session->get('files_upload', '{}'), true);
 
-            $directoryTemp = '../web/files/upload/';
-            $directory = '../web/files/email/';
+            $dirAbsolut = $this->container->getParameter('project.dir');
+
+            $directoryTemp = $dirAbsolut.'web/files/upload/';
+            $directory = $dirAbsolut.'web/files/email/';
             foreach ($filesArr as $key => $file) {
                 if (is_file($directoryTemp . $key)) {
                     rename($directoryTemp . $key, $directory . $key);
-                    $message->attach(Swift_Attachment::fromPath('/var/www/sd/web/files/email/' . $key));
+                    $message->attach(Swift_Attachment::fromPath($dirAbsolut.'web/files/email/' . $key));
                     $session->remove('files_upload');
                 } else {
                     echo $directoryTemp . $key;
