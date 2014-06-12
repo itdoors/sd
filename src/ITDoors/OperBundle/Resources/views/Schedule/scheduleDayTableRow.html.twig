@@ -10,10 +10,10 @@
             <span class="timeTo">{{ oneDayTime.toTime|date('H:i') }}</span>
             <input type="text" class="timeToInput notDisplayed timepiker-cool" size="5">
         </td>
-        <td>{{ oneDayTime.total }}</td>
-        <td>{{ oneDayTime.totalDay }}</td>
-        <td>{{ oneDayTime.totalEvening }}</td>
-        <td>{{ oneDayTime.totalNight }}</td>
+        <td class="td_officialy">{{ oneDayTime.total }}</td>
+        <td class="td_officialy">{{ oneDayTime.totalDay }}</td>
+        <td class="td_officialy">{{ oneDayTime.totalEvening }}</td>
+        <td class="td_officialy">{{ oneDayTime.totalNight }}</td>
 {% elseif oneDayTime.notOfficially == true %}
     {% set shown = true %}
     <tr class="tdHolder">
@@ -33,7 +33,7 @@
 
 {% if shown %}
         <td align="center">
-            <i class="fa fa-edit action_button editButton"></i>
+            <i class="fa fa-edit action_button editButton" data-not_officially="{{ oneDayTime.notOfficially }}"></i>
             <i class="fa fa-check-circle-o action_button checkButton notDisplayed"
                data-url="{{ path('it_doors_oper_schedule_add_new_time') }}"
                data-id_grafik_time="{{ oneDayTime.id }}"></i>

@@ -28,7 +28,7 @@ ssh_options[:forward_agent] = true
 default_run_options[:pty] = true
 
 set :shared_files,        ["app/config/parameters.yml"]
-set :shared_children,     [app_path + "/logs", web_path + "/uploads", "vendor"]
+set :shared_children,     [app_path + "/logs", web_path + "/uploads", "vendor", app_path + "/share", web_path + "/files"]
 
 #composer
 set :use_composer,        true
