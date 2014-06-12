@@ -447,3 +447,7 @@ CREATE INDEX recover_sending ON automailer (is_sending, started_sending_at);
 
 CREATE TABLE email (id SERIAL NOT NULL, alias VARCHAR(255) NOT NULL, subject VARCHAR(255) NOT NULL, text TEXT NOT NULL, PRIMARY KEY(id));
 CREATE UNIQUE INDEX UNIQ_E7927C74E16C6B94 ON email (alias);
+
+-- chmod on web/files/upload
+
+
