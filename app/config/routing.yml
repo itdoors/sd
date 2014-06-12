@@ -10,6 +10,10 @@ it_doors_controlling:
     resource: "@ITDoorsControllingBundle/Resources/config/routing.yml"
     prefix:   /
 
+it_doors_oper:
+    resource: "@ITDoorsOperBundle/Resources/config/routing.yml"
+    prefix:   /
+
 it_doors_ajax:
     resource: "@ITDoorsAjaxBundle/Resources/config/routing.yml"
     prefix:   /
