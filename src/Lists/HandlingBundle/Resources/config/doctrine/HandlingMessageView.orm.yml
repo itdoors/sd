@@ -45,3 +45,10 @@ Lists\HandlingBundle\Entity\HandlingMessageView:
             length: 128
             column: user_full_name
             nullable: true
+    oneToOne:
+        handling:
+          targetEntity: Handling
+          inversedBy: null
+          joinColumn:
+            handling_id:
+                referencedColumnName: id

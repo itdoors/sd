@@ -1047,7 +1047,7 @@ function EventManager(options, _sources) {
 				pushLoading();
 				$.ajax($.extend({}, ajaxDefaults, source, {
 					data: data,
-					success: function(events) {
+					success: function(events) {zz
 						events = events || [];
 						var res = applyAll(success, this, arguments);
 						if ($.isArray(res)) {
