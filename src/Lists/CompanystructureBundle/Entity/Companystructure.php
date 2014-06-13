@@ -324,4 +324,42 @@ class Companystructure
     {
         return $this->getName();
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $userstuff;
+
+
+    /**
+     * Add userstuff
+     *
+     * @param \SD\UserBundle\Entity\Stuff $userstuff
+     * @return Companystructure
+     */
+    public function addUserstuff(\SD\UserBundle\Entity\Stuff $userstuff)
+    {
+        $this->userstuff[] = $userstuff;
+    
+        return $this;
+    }
+
+    /**
+     * Remove userstuff
+     *
+     * @param \SD\UserBundle\Entity\Stuff $userstuff
+     */
+    public function removeUserstuff(\SD\UserBundle\Entity\Stuff $userstuff)
+    {
+        $this->userstuff->removeElement($userstuff);
+    }
+
+    /**
+     * Get userstuff
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUserstuff()
+    {
+        return $this->userstuff;
+    }
 }

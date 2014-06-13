@@ -66,7 +66,7 @@ SD\UserBundle\Entity\Stuff:
         companystructure:
           targetEntity: Lists\CompanystructureBundle\Entity\Companystructure
           cascade: {  }
-          inversedBy: null
+          inversedBy: userstuff
           joinColumn:
             companystructure_id:
                 referencedColumnName: id

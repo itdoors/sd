@@ -64,4 +64,7 @@ Lists\CompanystructureBundle\Entity\Companystructure:
         invoicecompanystructure:
             targetEntity: ITDoors\ControllingBundle\Entity\InvoiceCompanystructure
             mappedBy: companystructure
+        userstuff:
+            targetEntity: SD\UserBundle\Entity\Stuff
+            mappedBy: companystructure
     lifecycleCallbacks: {  }

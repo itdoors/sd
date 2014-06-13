@@ -71,12 +71,13 @@ class UserRepository extends EntityRepository
     public function getOnlyStuffCompany()
     {
         return $this->createQueryBuilder('u')
-                ->select('u', 'stuff')
+                ->select('u.id')
+                ->addSelect('c.name')
                 ->where('u.isFired = FALSE OR u.isFired IS NULL')
                 //->setParameter(':isFired', false)
                 ->innerJoin('u.stuff', 'stuff')
                 ->innerJoin('stuff.companystructure', 'c')
-                ->groupBy('c.id')
+                ->groupBy('c.id','u.id')
                 ->orderBy('u.lastName', 'ASC');
     }
 

@@ -27,6 +27,7 @@ use Doctrine\DBAL\Connection;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use ITDoors\AjaxBundle\Controller\BaseFilterController;
+use Lists\CompanystructureBundle\Entity\Companystructure;
 
 /**
  * AjaxController class.
@@ -584,11 +585,14 @@ class AjaxController extends BaseFilterController
         $result = array();
 
         foreach ($objects as $object) {
-            $nameFirst = $this->serializeObject($object);
-            $nameLast = $this->serializeObject($object, false, 'getLastName');
-            $nameMiddle = $this->serializeObject($object, false, 'getMiddleName');
-            $nameFirst['text'] .= ' '.$nameLast['text'].' '.$nameMiddle['text'];
-            $result[] = $nameFirst;
+            $string = $object->getLastName().' '.$object->getFirstName().' '.$object->getMiddleName();
+
+            $result[] =  array(
+                    'id' => $object->getId(),
+                    'value' => $object->getId(),
+                    'name' => $string,
+                    'text' => $string
+                );
         }
 
         return new Response(json_encode($result));
@@ -684,9 +688,12 @@ class AjaxController extends BaseFilterController
     {
         $searchText = $this->get('request')->query->get('query');
 
-        $repository = $this->container->get('sd_user.repository');
+        $dm = $this->getDoctrine()->getManager();
 
-        $objects = $repository->getOnlyStuffCompany()
+        /** @var Companystructure $companystructure */
+        $companystructure = $dm->getRepository('ListsCompanystructureBundle:Companystructure');
+
+        $objects = $companystructure->createQueryBuilder('c')
             ->andWhere('lower(c.name) LIKE :q')
             ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
             ->getQuery()
@@ -695,12 +702,7 @@ class AjaxController extends BaseFilterController
         $result = array();
 
         foreach ($objects as $object) {
-            $result[] = array(
-                'id' => $object->getId(),
-                'value' => $object->getId(),
-                'name' => $object->getStuff()->getCompanystructure()->getName(),
-                'text' => $object->getStuff()->getCompanystructure()->getName()
-            );
+            $result[] = $this->serializeObject($object, false, 'getName');
         }
 
         return new Response(json_encode($result));
