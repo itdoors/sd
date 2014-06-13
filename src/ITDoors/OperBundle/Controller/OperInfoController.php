@@ -131,6 +131,7 @@ class OperInfoController extends BaseFilterController
                 return array();
             }
 
+
             $stuffDepartments = $this->getDoctrine()
                 ->getRepository('SDUserBundle:StuffDepartments')
                 ->findBy(array('stuff' => $stuff));
