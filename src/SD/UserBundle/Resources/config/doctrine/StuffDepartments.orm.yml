@@ -3,12 +3,12 @@ SD\UserBundle\Entity\StuffDepartments:
     table: stuff_departments
     fields:
         userkey:
-            id: true
             type: string
             length: 25
             fixed: false
             nullable: false
         id:
+            id: true
             type: bigint
             nullable: false
     oneToOne:
