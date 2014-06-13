@@ -79,7 +79,7 @@ class OperInfoController extends BaseFilterController
 
         $page = $this->getPaginator($filterNamespace);
         if (!$page) {
-            $page=1;
+            $page = 1;
         }
 
         /** @var  $departmentsRepository \Lists\DepartmentBundle\Entity\DepartmentsRepository*/
