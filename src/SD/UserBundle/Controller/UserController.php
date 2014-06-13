@@ -312,15 +312,9 @@ class UserController extends BaseController
 
             try {
                 $user = $form->getData();
-                $user->setBirthday(
-                    new \DateTime(
-                        $formData['birthday']['day'].
-                        '.'.$formData['birthday']['month'].
-                        '.'.$formData['birthday']['year']
-                    )
-                );
-
                 $formData = $request->request->get($form->getName());
+                $user->setBirthday(new \DateTime($formData['birthday']));
+
 
                 $em->persist($user);
                 $em->flush();
@@ -336,14 +330,9 @@ class UserController extends BaseController
                 if ($companystructure) {
                     $stuff->setCompanystructure($companystructure);
                 }
-
-                $stuff->setDateHire(
-                    new \DateTime(
-                        $formData['hiredate']['day']
-                        .'.'.$formData['hiredate']['month']
-                        .'.'.$formData['hiredate']['year']
-                    )
-                );
+                if (!empty($formData['hiredate'])) {
+                    $stuff->setDateHire(new \DateTime($formData['hiredate']));
+                }
                 $stuff->setDescription($formData['description']);
                 $stuff->setEducation($formData['education']);
                 $stuff->setIssues($formData['issues']);
