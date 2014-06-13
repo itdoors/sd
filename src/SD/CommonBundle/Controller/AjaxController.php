@@ -3338,57 +3338,20 @@ class AjaxController extends BaseFilterController
      */
     public function monthsFromDepartmentAction()
     {
-        $idDepartment = $this->getSessionValueByKey('idDepartment', null, 'oper.bundle.department', 'param');
+/*        //$idDepartment = $this->getSessionValueByKey('idDepartment', null, 'oper.bundle.department', 'param');
 
         $repository = $this->getDoctrine()
             ->getRepository('ListsGrafikBundle:Grafik');
 
-        $objects= $repository->getMonthsFromDepartment($idDepartment);
-
+        //$objects= $repository->getMonthsFromDepartment($idDepartment);
+*/
         $result = array();
 
         $translator = $this->get('translator');
-        foreach ($objects as $object) {
-            $numberMonth = $object['month'];
+        for ($i=1; $i<=12; $i++) {
+            $numberMonth = $i;//$object['month'];
 
-            switch ($numberMonth) {
-                case '1':
-                    $text = $translator->trans('January', array(), 'ITDoorsOperBundle');
-                    break;
-                case '2':
-                    $text = $translator->trans('February', array(), 'ITDoorsOperBundle');
-                    break;
-                case '3':
-                    $text = $translator->trans('March', array(), 'ITDoorsOperBundle');
-                    break;
-                case '4':
-                    $text = $translator->trans('April', array(), 'ITDoorsOperBundle');
-                    break;
-                case '5':
-                    $text = $translator->trans('May', array(), 'ITDoorsOperBundle');
-                    break;
-                case '6':
-                    $text = $translator->trans('June', array(), 'ITDoorsOperBundle');
-                    break;
-                case '7':
-                    $text = $translator->trans('July', array(), 'ITDoorsOperBundle');
-                    break;
-                case '8':
-                    $text = $translator->trans('August', array(), 'ITDoorsOperBundle');
-                    break;
-                case '9':
-                    $text = $translator->trans('September', array(), 'ITDoorsOperBundle');
-                    break;
-                case '10':
-                    $text = $translator->trans('October', array(), 'ITDoorsOperBundle');
-                    break;
-                case '11':
-                    $text = $translator->trans('November', array(), 'ITDoorsOperBundle');
-                    break;
-                case '12':
-                    $text = $translator->trans('December', array(), 'ITDoorsOperBundle');
-                    break;
-            }
+            $text = $this->getMonthTranslation($numberMonth);
             $result[] = array(
                 'id' => $numberMonth,
                 'value' => $numberMonth,
@@ -3412,44 +3375,7 @@ class AjaxController extends BaseFilterController
         $result = array();
         $translator = $this->get('translator');
         foreach ($ids as $idMonth) {
-            switch ($idMonth) {
-                case '1':
-                    $text = $translator->trans('January', array(), 'ITDoorsOperBundle');
-                    break;
-                case '2':
-                    $text = $translator->trans('February', array(), 'ITDoorsOperBundle');
-                    break;
-                case '3':
-                    $text = $translator->trans('March', array(), 'ITDoorsOperBundle');
-                    break;
-                case '4':
-                    $text = $translator->trans('April', array(), 'ITDoorsOperBundle');
-                    break;
-                case '5':
-                    $text = $translator->trans('May', array(), 'ITDoorsOperBundle');
-                    break;
-                case '6':
-                    $text = $translator->trans('June', array(), 'ITDoorsOperBundle');
-                    break;
-                case '7':
-                    $text = $translator->trans('July', array(), 'ITDoorsOperBundle');
-                    break;
-                case '8':
-                    $text = $translator->trans('August', array(), 'ITDoorsOperBundle');
-                    break;
-                case '9':
-                    $text = $translator->trans('September', array(), 'ITDoorsOperBundle');
-                    break;
-                case '10':
-                    $text = $translator->trans('October', array(), 'ITDoorsOperBundle');
-                    break;
-                case '11':
-                    $text = $translator->trans('November', array(), 'ITDoorsOperBundle');
-                    break;
-                case '12':
-                    $text = $translator->trans('December', array(), 'ITDoorsOperBundle');
-                    break;
-            }
+            $text = $this->getMonthTranslation($idMonth);
             $result = array(
                 'id' => $idMonth,
                 'value' => $idMonth,
@@ -3461,6 +3387,55 @@ class AjaxController extends BaseFilterController
         return new Response(json_encode($result));
     }
 
+    /**
+     * @param int $numberMonth
+     *
+     * @return mixed
+     */
+    private function getMonthTranslation($numberMonth)
+    {
+        $translator = $this->get('translator');
+        switch ($numberMonth) {
+            case '1':
+                $text = $translator->trans('January', array(), 'ITDoorsOperBundle');
+                break;
+            case '2':
+                $text = $translator->trans('February', array(), 'ITDoorsOperBundle');
+                break;
+            case '3':
+                $text = $translator->trans('March', array(), 'ITDoorsOperBundle');
+                break;
+            case '4':
+                $text = $translator->trans('April', array(), 'ITDoorsOperBundle');
+                break;
+            case '5':
+                $text = $translator->trans('May', array(), 'ITDoorsOperBundle');
+                break;
+            case '6':
+                $text = $translator->trans('June', array(), 'ITDoorsOperBundle');
+                break;
+            case '7':
+                $text = $translator->trans('July', array(), 'ITDoorsOperBundle');
+                break;
+            case '8':
+                $text = $translator->trans('August', array(), 'ITDoorsOperBundle');
+                break;
+            case '9':
+                $text = $translator->trans('September', array(), 'ITDoorsOperBundle');
+                break;
+            case '10':
+                $text = $translator->trans('October', array(), 'ITDoorsOperBundle');
+                break;
+            case '11':
+                $text = $translator->trans('November', array(), 'ITDoorsOperBundle');
+                break;
+            case '12':
+                $text = $translator->trans('December', array(), 'ITDoorsOperBundle');
+                break;
+        }
+
+        return $text;
+    }
 
     /**
      * Returns json years from department
@@ -3469,23 +3444,23 @@ class AjaxController extends BaseFilterController
      */
     public function yearsFromDepartmentAction()
     {
-        $idDepartment = $this->getSessionValueByKey('idDepartment', null, 'oper.bundle.department', 'param');
+/*        $idDepartment = $this->getSessionValueByKey('idDepartment', null, 'oper.bundle.department', 'param');
 
         $repository = $this->getDoctrine()
             ->getRepository('ListsGrafikBundle:Grafik');
 
-        $objects= $repository->getYearsFromDepartment($idDepartment);
+        $objects= $repository->getYearsFromDepartment($idDepartment);*/
 
         $result = array();
-
-        foreach ($objects as $object) {
-            $year = $object['year'];
+        $currentYear = intval(date('Y'));
+        for ($year = 2013; $year<=$currentYear; $year++) {
+            //$year = $object['year'];
 
             $result[] = array(
                 'id' => $year,
                 'value' => $year,
-                'name' => $year,
-                'text' => $year
+                'name' => (string) $year,
+                'text' => (string) $year
             );
         }
 
