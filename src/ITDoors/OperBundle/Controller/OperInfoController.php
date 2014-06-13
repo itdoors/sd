@@ -292,7 +292,7 @@ class OperInfoController extends BaseFilterController
                     $onceOnlyAccrual->setIsActive(true);
 
                     if (substr($surchargeType, 0, 1) == 'B') {
-                        $code = 'uo';
+                        $code = 'uu';
                     } else {
                         $code = 'oz';
                     }

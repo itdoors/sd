@@ -142,7 +142,7 @@ All dates where copied: Все даты были успешно скопиров
 People, what haven't been copied: Такой график недопустим для пользователей
 Copy finished: Копирование завершено
 Exit: Закрыть
-Choose etalon: Выберите эталон
+Choose etalon: Выберите эталонного сотрудника
 
 P/z: П/З
 Add coworker: Добавить сотрудника
@@ -160,3 +160,7 @@ Fine accrual: Удержание
 Planned accrual: Плановые начисления
 Coworker info: Информация о соруднике
 NotOfficially: Подряд
+Copy grafik people: Копирование по сотрудникам
+Copy: Копировать
+
+Not defined: Не установлено

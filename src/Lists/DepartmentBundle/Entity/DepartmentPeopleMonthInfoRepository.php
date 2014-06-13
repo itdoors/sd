@@ -27,7 +27,6 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
             ->select('dpmi.departmentPeopleId as id')
             ->addSelect('dpr.id as replacementId')
             ->addSelect('i.firstName')
-            ->addSelect('i.firstName')
             ->addSelect('i.lastName')
             ->addSelect('i.middleName')
             ->addSelect('dp.admissionDate')
@@ -79,6 +78,7 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
             }
         }
 
+        $sql->orderBy('i.lastName', "ASC");
         $query = $sql->getQuery();
 
         return $query;

@@ -62,7 +62,19 @@
                             <span class="popovers"  id="pop1" data-html="true" style="color: grey;" data-trigger="hover" data-content="
                                 {% for mpk in mpks %}
                                     {% if mpk.active == false %}
-                                        {{ mpk.name }} ( {% trans %}From{% endtrans %} {{ mpk.startDate|date('Y-m-d') }} {% trans %}To{% endtrans %} {{ mpk.endDate|date('Y-m-d') }})<br>
+                                        {{ mpk.name }} ( {% trans %}From{% endtrans %}
+                                        {% if mpk.startDate is not empty %}
+                                            {{ mpk.startDate|date('Y-m-d') }}
+                                        {% else %}
+                                            {% trans %}Not defined{% endtrans %}
+                                        {% endif %}
+
+                                        {% trans %}To{% endtrans %}
+                                        {% if mpk.endDate is not empty %}
+                                            {{ mpk.endDate|date('Y-m-d') }}
+                                        {% else %}
+                                            {% trans %}Not defined{% endtrans %}
+                                        {% endif %}
                                     {% endif %}
                                 {% endfor %}
                             " data-original-title="{% trans %}Old mpks{% endtrans %}">{% trans %}history{% endtrans %}</span>

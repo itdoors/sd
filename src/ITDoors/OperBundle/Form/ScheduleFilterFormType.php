@@ -81,7 +81,7 @@ class ScheduleFilterFormType extends AbstractType
         $builder
             ->add('year', 'hidden', array(
                 'attr' => array(
-                    'class' => 'itdoors-select2',
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
                     'data-url'  => $router->generate('sd_common_ajax_oper_schedule_year'),
                     'data-url-by-id' => $router->generate('sd_common_ajax_oper_schedule_year_by_id'),
                     'data-params' => json_encode(array(
@@ -96,7 +96,7 @@ class ScheduleFilterFormType extends AbstractType
         $builder
             ->add('month', 'hidden', array(
                 'attr' => array(
-                    'class' => 'itdoors-select2',
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
                     'data-url'  => $router->generate('sd_common_ajax_oper_schedule_month'),
                     'data-url-by-id' => $router->generate('sd_common_ajax_oper_schedule_month_by_id'),
                     'data-params' => json_encode(array(

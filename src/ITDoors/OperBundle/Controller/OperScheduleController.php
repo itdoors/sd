@@ -30,12 +30,31 @@ class OperScheduleController extends BaseFilterController
     {
 
         $this->addToSessionValues('idDepartment', $id, 'param', 'oper.bundle.department', 'param');
-
+        $this->checkEmtyDateFilter();
         return $this->render('ITDoorsOperBundle:Schedule:schedule.html.twig', array(
             'id' => $id
         ));
+
+
     }
 
+    /**
+     * checkEmtyDateFilter
+     */
+    private function checkEmtyDateFilter() {
+        $year = intval(date('Y'));
+        $month = intval(date('m'));
+
+        $filterNamespace = $this->container->getParameter($this->getNamespace());
+        $filters = $this->getFilters($filterNamespace);
+
+        if (!array_key_exists('year', $filters) || $filters['year'] == null || $filters['year'] == '') {
+            $this->addToFilters('year', $year, $filterNamespace);
+        }
+        if (!array_key_exists('month', $filters) || $filters['month'] == null || $filters['month'] == '') {
+            $this->addToFilters('month', $month, $filterNamespace);
+        }
+    }
     /**
      * indexAction
      *
@@ -1316,7 +1335,7 @@ class OperScheduleController extends BaseFilterController
         if ($officially == 'true') {
             $code = 'oz';
         } else {
-            $code = 'uo';
+            $code = 'uu';
         }
 
         $newAccrual = new \Lists\DepartmentBundle\Entity\OnceOnlyAccrual();
