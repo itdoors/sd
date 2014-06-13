@@ -66,6 +66,10 @@ sd_common_ajax_contact_phone:
     pattern:  /ajax/contact/phone
     defaults: { _controller: SDCommonBundle:Ajax:userPhone }
 
+sd_common_ajax_contact_email:
+    pattern:  /ajax/contact/email
+    defaults: { _controller: SDCommonBundle:Ajax:contactEmail }
+
 sd_common_ajax_contact_company:
     pattern:  /ajax/contact/company
     defaults: { _controller: SDCommonBundle:Ajax:userStuffCompany }
