@@ -1,0 +1,13 @@
+SD\UserBundle\Entity\Contactinfo:
+    type:  entity
+    table: contactinfo
+    repositoryClass: SD\UserBundle\Entity\ContactinfoRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: SEQUENCE
+    fields:
+        name:
+            type: string
+            length: 100

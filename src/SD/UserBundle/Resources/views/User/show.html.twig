@@ -13,30 +13,43 @@
             <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
             <i class="fa fa-angle-right"></i>
         </li>
-        <li><a href="" title="{% trans %}User profile{% endtrans %}">{% trans %}User profile{% endtrans %}</a></li>
+        <li>
+            <a href="{{ path('sd_user_stuff') }}" title="{% trans %}List of stuff{% endtrans %}">{% trans %}List of stuff{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li><a href="" title="{{ item.lastName }} {{ item.firstName }}">{{ item.lastName }} {{ item.firstName }}</a></li>
     </ul>
 {% endblock %}
 
 {% block css_page_level_plugin %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.css')}} " />
-    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/css/pages/profile.css')}} " />
+    {#<link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />#}
 {% endblock %}
 
 {% block js_page_level_plugins %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/jquery.dataTables.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.js') }}"></script>
+    {# <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
+     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/jquery.dataTables.min.js') }}"></script>
+     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.js') }}"></script>#}
 {% endblock %}
 
 {% block body %}
-    user profile body for {{ item.fullName }}
+    {#user profile body for {{ item.fullName }}
     {% if isCurrentUser or isAdmin %}
         {{ include('SDUserBundle:' ~ baseTemplate ~ ':changePassword.html.twig', {
             item: item
         }) }}
-    {% endif %}
-
-
+    {% endif %#}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tabbable tabbable-custom boxless">
+                {{ ajax_tab_render( tabs, tab, namespace) }}
+                <div class="tab-content ajax-tab-holder" id="datatable_ajax" data-url="{{ url('sd_user_show_tabs') }}">
+                    {{ render(controller('SDUserBundle:User:showtabs')) }}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock body %}

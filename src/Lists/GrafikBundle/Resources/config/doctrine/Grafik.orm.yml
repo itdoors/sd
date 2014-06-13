@@ -1,0 +1,120 @@
+Lists\GrafikBundle\Entity\Grafik:
+    repositoryClass : Lists\GrafikBundle\Entity\GrafikRepository
+    type: entity
+    table: grafik
+    id:
+        departmentId:
+            type: bigint
+            column: department_id
+            nullable: false
+        year:
+            id: true
+            type: bigint
+            nullable: false
+        month:
+            id: true
+            type: bigint
+            nullable: false
+        day:
+            id: true
+            type: bigint
+            nullable: false
+        departmentPeopleId:
+            type: bigint
+            column: department_people_id
+            nullable: false
+        departmentPeopleReplacementId:
+            type: bigint
+            column: department_people_replacement_id
+            nullable: false
+        replacementType:
+            type: string
+            length: 10
+            fixed: false
+            nullable: false
+            column: replacement_type
+    fields:
+        fromTime:
+            type: time
+            nullable: true
+            column: from_time
+        toTime:
+            type: time
+            nullable: true
+            column: to_time
+        total:
+            type: float
+            nullable: true
+        isSick:
+            type: boolean
+            nullable: true
+            column: is_sick
+        isSkip:
+            type: boolean
+            nullable: true
+            column: is_skip
+        isFired:
+            type: boolean
+            nullable: true
+            column: is_fired
+        isVacation:
+            type: boolean
+            nullable: true
+            column: is_vacation
+        totalDay:
+            type: float
+            nullable: true
+            column: total_day
+        totalEvening:
+            type: float
+            nullable: true
+            column: total_evening
+        totalNight:
+            type: float
+            nullable: true
+            column: total_night
+        totalNotOfficially:
+            type: float
+            nullable: true
+            column: total_not_officially
+        totalDayNotOfficially:
+            type: float
+            nullable: true
+            column: total_day_not_officially
+        totalEveningNotOfficially:
+            type: float
+            nullable: true
+            column: total_evening_not_officially
+        totalNightNotOfficially:
+            type: float
+            nullable: true
+            column: total_night_not_officially
+    oneToOne:
+        department:
+            targetEntity: Lists\DepartmentBundle\Entity\Departments
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                department_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        departmentPeople:
+            targetEntity: Lists\DepartmentBundle\Entity\DepartmentPeople
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                department_people_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        departmentPeopleReplacement:
+            targetEntity: Lists\DepartmentBundle\Entity\DepartmentPeople
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                department_people_replacement_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

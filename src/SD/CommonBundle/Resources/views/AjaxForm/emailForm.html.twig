@@ -1,0 +1,66 @@
+{% trans_default_domain 'ITDoorsEmailBundle' %}
+{% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+<script>
+    $(document).ready(function() {
+        $('.textear-edit').summernote({
+            lang: 'ru-RU',
+            'disableDragAndDrop': true,
+            'disableLinkTarget': true,
+            'onblur': function(){
+                /** Костыль для страховки */
+                $('.textear-edit').text($('.textear-edit').code());
+            }
+        });
+    });
+</script>
+<div class="row">
+
+    <div class="portlet-body">
+        {% if form.vars.valid %}
+        {% else %}
+            <div class="alert alert-danger">
+                <button class="close" data-close="alert"></button>
+                {{ form_errors(form) }}
+            </div>
+        {% endif %}
+
+        {{ form_start(form, {
+                    'action' : path('sd_common_ajax_form'),
+                    'attr' : {
+                        'method' : 'POST',
+                        'class' : 'ajax-form-entity',
+                        'data-post_function': postFunction,
+                        'data-post_target_id': postTargetId,
+                        'data-target_id': targetId
+                }
+                }) }}
+            <div class="panel-body">
+                <div class="form-group">
+                    {{ form_label(form.alias, 'Alias', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.alias, {'attr' : {'class' : 'form-control', 'placeholder': 'Alias'} } ) }}
+
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.subject, 'Subject', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.subject, {'attr' : {'class' : 'form-control', 'placeholder': 'Subject'} } ) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.text, 'Text', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.text, {'attr' : {'style' :'height:200px','class' : 'textear-edit form-control', 'placeholder': 'Text'} } ) }}
+                </div>
+            </div>
+        <input type="hidden" name="formName" value="{{ formName }}">
+        <input type="hidden" name="postFunction" value="{{ postFunction }}">
+        <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
+        <input type="hidden" name="targetId" value="{{ targetId }}">
+        <input type="hidden" name="defaultData" value='{{ defaultData|json_encode|raw }}'>
+        <input type="hidden" name="model" value="{{ model }}">
+        <input type="hidden" name="modelId" value="{{ modelId }}">
+
+        <div class="form-actions">
+            {{ form_widget(form.create, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
+            {{ form_widget(form.cancel, { 'label': 'Cancel', 'attr': {'class': 'btn default sd-cancel-btn', 'data-dismiss':'modal'} } ) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>

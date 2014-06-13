@@ -1,0 +1,56 @@
+Lists\IndividualBundle\Entity\Individual:
+    type: entity
+    table: individual
+    repositoryClass : Lists\IndividualBundle\Entity\IndividualRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        firstName:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            column: first_name
+        middleName:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            column: middle_name
+        lastName:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            column: last_name
+        birthday:
+            type: date
+            nullable: true
+        tin:
+            type: string
+            length: 24
+            fixed: false
+            nullable: true
+            column: tin
+        passport:
+            type: string
+            length: 10
+            fixed: false
+            nullable: true
+            column: passport
+        address:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            column: address
+        phone:
+            type: string
+            length: 32
+            fixed: false
+            nullable: true
+            column: phone

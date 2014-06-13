@@ -31,6 +31,10 @@ SD\UserBundle\Entity\User:
             length: 255
             fixed: false
             nullable: true
+        photo:
+            type: string
+            length: 255
+            nullable: true
         isBlocked:
             type: boolean
             nullable: true
@@ -63,6 +67,6 @@ SD\UserBundle\Entity\User:
             targetEntity: Lists\TeamBundle\Entity\Team
             mappedBy: users
     oneToOne:
-        staff:
-            targetEntity: Staff
+        stuff:
+            targetEntity: Stuff
             mappedBy: user

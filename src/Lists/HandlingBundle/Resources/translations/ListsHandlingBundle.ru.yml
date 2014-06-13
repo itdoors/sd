@@ -95,6 +95,7 @@ Extra: Дополнительно
 Select Contact Person: Выберите контактное лицо
 Contact Person: Контактное лицо
 Project Status: Статус проекта
+Select responsible:  Выберите отвественого
 
 List of Organizations: Список организаций
 Create Organization: Создание организации
@@ -178,6 +179,7 @@ Create: Создать
 Add New: Добавить
 Add Contact: Добавить контакт
 Save: Сохранить
+Cancel: Отменить
 Handling list link: Проекты
 Enter value: Введите значение
 Search: Поиск

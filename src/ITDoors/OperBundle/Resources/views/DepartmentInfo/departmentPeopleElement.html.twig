@@ -1,0 +1,48 @@
+<td>
+{#    <a id="managers_list_new" class="fa ajax-form fa-plus" title="{% trans %}Add note{% endtrans %}"
+       data-toggle="modal"
+       href="#form_modal"
+       data-target_holder="invoiceMessageFormTpl"
+       data-default='{"invoiceId":"{{ entity.id }}"}'
+       data-form_name="invoiceCompanystructureForm"
+       data-post_function="updateList"
+       data-post_target_id="invoice_list"
+            ></a>#}
+    <a  class="btn green button_wide more-info"
+            data-toggle="modal"
+            href="#form_modal_more_info"
+            data-target_holder="moreInfoTpl"
+            data-params='{"id":5}'
+            data-url-more-info="{{ url('it_doors_oper_department_info_coworker_table', { 'id': item.id }) }}"
+            >
+        {{ counter }}
+    </a>
+
+</td>
+<td>{{ item.id }}</td>
+<td>{{ item.mpkName }}</td>
+<td>{{ item.drfo }}</td>
+<td>{{ item.passport }}</td>
+<td>{{ item.lastName }}</td>
+<td>{{ item.firstName }}</td>
+<td>{{ item.middleName }}</td>
+<td>
+    {% if item.admissionDate  %}
+        {{ item.admissionDate|date("d-m-Y") }}
+    {% endif %}
+</td>
+<td>
+    {% if item.dismissalDate  %}
+        {{ item.dismissalDate|date("d-m-Y") }}
+    {% endif %}
+</td>
+<td>
+    {% if item.admissionDateNotOfficially  %}
+        {{ item.admissionDateNotOfficially|date("d-m-Y") }}
+    {% endif %}
+</td>
+<td>
+    {% if item.dismissalDateNotOfficially  %}
+        {{ item.dismissalDateNotOfficially|date("d-m-Y") }}
+    {% endif %}
+</td>

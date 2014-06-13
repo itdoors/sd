@@ -56,6 +56,16 @@ Lists\DepartmentBundle\Entity\Departments:
         organizationId:
             type: integer
             column: organization_id
+    oneToMany:
+        mpks:
+            targetEntity: Lists\MpkBundle\Entity\Mpk
+            cascade: {  }
+            mappedBy: department
+            inversedBy: null
+            joinColumns:
+                id:
+                    referencedColumnName: department_id
+            orphanRemoval: false
     manyToOne:
         city:
             targetEntity: Lists\CityBundle\Entity\City
@@ -90,6 +100,15 @@ Lists\DepartmentBundle\Entity\Departments:
             inversedBy: null
             joinColumns:
                 status_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        opermanager:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                opermanager_id:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

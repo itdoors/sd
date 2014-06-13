@@ -1,0 +1,53 @@
+{% trans_default_domain 'ListsContactBundle' %}
+
+
+<div class="navigation right_float">
+    {{ ajax_paginator_render(
+        pagination, ajax_filter_namespace_oper_department_table, {
+                'department_list': 'ITDoorsAjax.updateList'
+            }
+        )
+    }}
+</div>
+<div class="table-scrollable" id="department-table">
+    <table class="table table-striped table-hover table-bordered">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>{% trans  from 'ITDoorsOperBundle' %}Mpk{% endtrans %}</th>
+            <th>{% trans  from 'ITDoorsOperBundle' %}Organization{% endtrans %}</th>
+            <th>{% trans  from 'ITDoorsOperBundle' %}Region{% endtrans %}</th>
+            <th>{% trans  from 'ITDoorsOperBundle' %}City{% endtrans %}</th>
+            <th>{% trans  from 'ITDoorsOperBundle' %}Address{% endtrans %}</th>
+            <th>{% trans  from 'ITDoorsOperBundle' %}Status{% endtrans %}</th>
+            <th>{% trans  from 'ITDoorsOperBundle' %}StatusDate{% endtrans %}</th>
+            <th>{% trans  from 'ITDoorsOperBundle' %}Type{% endtrans %}</th>
+            <th>{% trans  from 'ITDoorsOperBundle' %}Description{% endtrans %}</th>
+            <th>{% trans  from 'ITDoorsOperBundle' %}OperManager{% endtrans %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in pagination %}
+                <tr id="ModelContact{{ item.id }}">
+                    {{  include(
+                    'ITDoorsOperBundle:Parts:departmentElement.html.twig',
+                    {
+                    item: item,
+                    baseRoutePrefix: 0,
+                    }
+                    )
+                    }}
+                </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+    <div class="navigation right_float">
+        {{ ajax_paginator_render(
+                pagination, ajax_filter_namespace_oper_department_table, {
+                    'department_list': 'ITDoorsAjax.updateList'
+                }
+            )
+        }}
+    </div>

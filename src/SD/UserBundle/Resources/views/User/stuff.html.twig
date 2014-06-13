@@ -1,0 +1,42 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'SDUserBundle' %}
+{% block title %}{% trans %}List of stuff{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Stuff <small>list of stuff</small>{% endtrans %}
+    </h3>
+{% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li><a href="" title="{% trans %}List of stuff{% endtrans %}">{% trans %}List of stuff{% endtrans %}</a></li>
+    </ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    {{ ajax_filter_render('stuffFilterForm', namespase, {
+        'datatable_ajax': 'ITDoorsAjax.updateList'
+    }) }}
+    <a href="{{ url('sd_user_new_stuff') }}">{% trans %}Add new user{% endtrans %}</a>
+    <div class="row">
+        <div id="datatable_ajax"  data-url="{{ url('sd_user_stufflist') }}">
+            {{ render(controller('SDUserBundle:' ~ baseTemplate ~ ':stufflist')) }}
+        </div>
+    </div>
+{% endblock body %}

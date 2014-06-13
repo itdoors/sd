@@ -1,0 +1,87 @@
+it_doors_oper_homepage:
+    pattern:  /oper/all
+    defaults: { _controller: ITDoorsOperBundle:OperInfo:index }
+
+it_doors_oper_department_table:
+    pattern:  /oper/table/department
+    defaults: { _controller: ITDoorsOperBundle:OperInfo:departmentTable }
+
+it_doors_oper_department_info:
+    pattern:  /oper/department/info/{id}
+    defaults: { _controller: ITDoorsOperBundle:OperDepartmentInfo:index }
+
+it_doors_oper_department_info_basic:
+    pattern:  /oper/department/info/basic/{id}
+    defaults: { _controller: ITDoorsOperBundle:OperDepartmentInfo:basic }
+
+it_doors_oper_department_info_coworkers:
+    pattern:  /oper/department/info/coworkers/{id}
+    defaults: { _controller: ITDoorsOperBundle:OperDepartmentInfo:coworkers }
+
+it_doors_oper_department_info_coworkers_table:
+    pattern:  /oper/department/info/coworkers/table/{id}
+    defaults: { _controller: ITDoorsOperBundle:OperDepartmentInfo:coworkersTable }
+
+it_doors_oper_department_info_coworker_table:
+    pattern:  /oper/department/info/coworker/table/{id}
+    defaults: { _controller: ITDoorsOperBundle:OperDepartmentInfo:userInfoTable }
+
+it_doors_oper_schedule:
+    pattern:  /oper/schedule/{id}
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:index }
+
+it_doors_oper_schedule_table:
+    pattern:  /oper/schedule/table/{id}
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:scheduleTable }
+
+it_doors_oper_schedule_day_info:
+    pattern:  /oper/schedule/day/info/
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:oneDayInfo }
+
+it_doors_oper_schedule_add_new_time:
+    pattern:  /oper/schedule/add/new/time
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:addNewTime }
+
+it_doors_oper_schedule_table_row:
+    pattern:  /oper/schedule/table/row
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:scheduleTableRow }
+
+it_doors_oper_schedule_delete_day_time:
+    pattern:  /oper/schedule/delete/day/time
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:deleteTimeFromDay }
+
+it_doors_oper_schedule_one_day_total:
+    pattern:  /oper/schedule/one/day/total
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:oneDayTotal }
+
+it_doors_oper_schedule_update_status_coworker:
+    pattern:  /oper/schedule/update/status/coworker
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:updateStatusCoworker }
+
+it_doors_oper_schedule_copy_month_dates:
+    pattern:  /oper/schedule/copy/month/dates
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:copyMonthDates }
+
+it_doors_oper_schedule_copy_by_etalon:
+    pattern:  /oper/schedule/copy/by/etalon
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:copyCoworkersByEtalon }
+
+it_doors_oper_schedule_show_user_basic_table:
+    pattern:  /oper/schedule/show/user/basic/table
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:showUserBasicTable }
+
+it_doors_oper_schedule_add_accural:
+    pattern:  /oper/schedule/add/accural/
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:insertAccrual }
+
+it_doors_oper_schedule_delete_accural:
+    pattern:  /oper/schedule/delete/accural/
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:deleteAccrual }
+
+it_doors_oper_schedule_add_user:
+    pattern:  /oper/schedule/add/user/
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:addUserToGrafik }
+
+it_doors_oper_task:
+    pattern:  /oper/task/
+    defaults: { _controller: ITDoorsOperBundle:OperInfo:updateAccrualsTask }
