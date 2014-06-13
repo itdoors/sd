@@ -25,6 +25,7 @@
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datepicker/css/datepicker.css')}} " />
 {% endblock %}
 
 {% block js_page_level_plugins %}
@@ -32,10 +33,26 @@
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/jquery.dataTables.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
 {% endblock %}
 
 {% block body %}
     {% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+    <script>
+        $(document).ready(function(){
+            $('.datapicer-class').datepicker({
+                rtl: App.isRTL(),
+                autoclose: true,
+                format: "dd.mm.yyyy",
+                pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
+                language: 'ru',
+                startView: 'decade',
+                weekStart: 1
+            });
+        });
+    </script>
+    
     <div class="row">
         <div class="col-md-12">
             {% if form.vars.valid %}
@@ -84,7 +101,8 @@
                     </div>
                     <div class="form-group col-md-4{% if form.birthday.vars.errors|length %} has-error{% endif %}">
                         {{ form_label(form.birthday, 'Birthday', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.birthday, {'attr' : {'class' : 'form-control', 'placeholder': "Birthday"}}) }}
+                        {{ form_widget(form.birthday, {'attr' : {'class' : 'form-control datapicer-class', 'placeholder': "Birthday"}}) }}
+                        {{ block('date_widget') }}
                         {% if form.birthday.vars.errors|length %}
                             {{ form_errors(form.birthday) }}
                         {% endif %}
@@ -137,8 +155,9 @@
                         {% endif %}
                     </div>
                     <div class="form-group col-md-4{% if form.hiredate.vars.errors|length %} has-error{% endif %}">
-                        {{ form_label(form.hiredate, 'Select subdivision', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.hiredate, {'attr' : {'class' : 'form-control', 'placeholder': "Select subdivision"}}) }}
+                        {{ form_label(form.hiredate, 'Enter date hire', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.hiredate, {'attr' : {'class' : 'form-control datapicer-class', 'placeholder': "Enter date hire"}}) }}
+                        {{ block('date_widget') }}
                         {% if form.hiredate.vars.errors|length %}
                             {{ form_errors(form.hiredate) }}
                         {% endif %}
