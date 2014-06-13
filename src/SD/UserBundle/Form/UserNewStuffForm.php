@@ -43,7 +43,7 @@ class UserNewStuffForm extends AbstractType
                 'constraints' => new NotBlank()
             ))
             ->add('middleName')
-            ->add('birthday', 'date')
+            ->add('birthday', 'text')
             ->add('username')
             ->add('email')
             ->add('plainPassword', 'repeated', array(
@@ -60,7 +60,7 @@ class UserNewStuffForm extends AbstractType
                 'mapped' => false,
                 'constraints' => new NotBlank()
             ))
-            ->add('hiredate', 'date', array(
+            ->add('hiredate', 'text', array(
                 'mapped' => false,
                 'constraints' => new NotBlank()
             ))
