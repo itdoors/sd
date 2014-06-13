@@ -334,12 +334,13 @@ class Companystructure
      * Add userstuff
      *
      * @param \SD\UserBundle\Entity\Stuff $userstuff
+     * 
      * @return Companystructure
      */
     public function addUserstuff(\SD\UserBundle\Entity\Stuff $userstuff)
     {
         $this->userstuff[] = $userstuff;
-    
+
         return $this;
     }
 
