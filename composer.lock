@@ -3,11 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-<<<<<<< HEAD
-    "hash": "7e28c598cd42a94a81ac4e078109b1a5",
-=======
     "hash": "d85cd9746f1fb9bd914f16f4df210899",
->>>>>>> e23495d1d62e16ed3e41c3f05f59fde88dd56c8b
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -629,21 +625,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-<<<<<<< HEAD
-                "reference": "f7380a4e476302aa8ca16c9fd017d6d9adc9482e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/f7380a4e476302aa8ca16c9fd017d6d9adc9482e",
-                "reference": "f7380a4e476302aa8ca16c9fd017d6d9adc9482e",
-=======
                 "reference": "a93c355d70fd57a8171faece7969a13cb9387efb"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/a93c355d70fd57a8171faece7969a13cb9387efb",
                 "reference": "a93c355d70fd57a8171faece7969a13cb9387efb",
->>>>>>> e23495d1d62e16ed3e41c3f05f59fde88dd56c8b
                 "shasum": ""
             },
             "require": {
@@ -698,11 +685,7 @@
             "keywords": [
                 "User management"
             ],
-<<<<<<< HEAD
-            "time": "2013-12-02 23:42:45"
-=======
             "time": "2014-06-08 14:16:45"
->>>>>>> e23495d1d62e16ed3e41c3f05f59fde88dd56c8b
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -758,18 +741,6 @@
         },
         {
             "name": "jdorn/sql-formatter",
-<<<<<<< HEAD
-            "version": "v1.2.16",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jdorn/sql-formatter.git",
-                "reference": "8859d664737492d313c34796731b35eca851b362"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jdorn/sql-formatter/zipball/8859d664737492d313c34796731b35eca851b362",
-                "reference": "8859d664737492d313c34796731b35eca851b362",
-=======
             "version": "v1.2.17",
             "source": {
                 "type": "git",
@@ -780,7 +751,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/jdorn/sql-formatter/zipball/64990d96e0959dff8e059dfcdc1af130728d92bc",
                 "reference": "64990d96e0959dff8e059dfcdc1af130728d92bc",
->>>>>>> e23495d1d62e16ed3e41c3f05f59fde88dd56c8b
                 "shasum": ""
             },
             "require": {
@@ -817,11 +787,7 @@
                 "highlight",
                 "sql"
             ],
-<<<<<<< HEAD
-            "time": "2013-11-27 22:51:13"
-=======
             "time": "2014-01-12 16:20:24"
->>>>>>> e23495d1d62e16ed3e41c3f05f59fde88dd56c8b
         },
         {
             "name": "knplabs/knp-components",
@@ -1263,18 +1229,6 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-<<<<<<< HEAD
-            "version": "v5.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "32edc3b0de0fdc1b10f5c4912e8677b3f411a230"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/32edc3b0de0fdc1b10f5c4912e8677b3f411a230",
-                "reference": "32edc3b0de0fdc1b10f5c4912e8677b3f411a230",
-=======
             "version": "v5.2.0",
             "source": {
                 "type": "git",
@@ -1285,7 +1239,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/043e336b871f17a117f76ef8e190eddfc04c8d48",
                 "reference": "043e336b871f17a117f76ef8e190eddfc04c8d48",
->>>>>>> e23495d1d62e16ed3e41c3f05f59fde88dd56c8b
                 "shasum": ""
             },
             "require": {
@@ -1326,11 +1279,7 @@
                 "mail",
                 "mailer"
             ],
-<<<<<<< HEAD
-            "time": "2013-12-03 13:33:24"
-=======
             "time": "2014-05-08 08:11:19"
->>>>>>> e23495d1d62e16ed3e41c3f05f59fde88dd56c8b
         },
         {
             "name": "symfony/assetic-bundle",
@@ -1766,18 +1715,6 @@
         },
         {
             "name": "twig/twig",
-<<<<<<< HEAD
-            "version": "v1.15.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/fabpot/Twig.git",
-                "reference": "85e4ff98000157ff753d934b9f13659a953f5666"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/85e4ff98000157ff753d934b9f13659a953f5666",
-                "reference": "85e4ff98000157ff753d934b9f13659a953f5666",
-=======
             "version": "v1.15.1",
             "source": {
                 "type": "git",
@@ -1788,7 +1725,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/fabpot/Twig/zipball/1fb5784662f438d7d96a541e305e28b812e2eeed",
                 "reference": "1fb5784662f438d7d96a541e305e28b812e2eeed",
->>>>>>> e23495d1d62e16ed3e41c3f05f59fde88dd56c8b
                 "shasum": ""
             },
             "require": {
@@ -1832,11 +1768,7 @@
             "keywords": [
                 "templating"
             ],
-<<<<<<< HEAD
-            "time": "2013-12-06 07:47:10"
-=======
             "time": "2014-02-13 10:19:29"
->>>>>>> e23495d1d62e16ed3e41c3f05f59fde88dd56c8b
         }
     ],
     "packages-dev": [
