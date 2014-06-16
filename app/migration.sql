@@ -452,3 +452,98 @@ CREATE UNIQUE INDEX UNIQ_E7927C74E16C6B94 ON email (alias);
 -- chmod on web/files/email
 -- app/share/1c/debt/
 
+INSERT INTO once_only_accrual
+(mpk_id, department_people_month_info_id, work_type, type, code, value, description)
+(SELECT
+	dp.mpk_id, dpmi.id, dpmi.surcharge_type_key, 'add', 'uu', dpmi.surcharge, dpmi.surcharge_description
+FROM
+	department_people_month_info dpmi
+LEFT JOIN
+	department_people dp ON dp.id = dpmi.department_people_id
+WHERE
+	dpmi.surcharge_type_id = 32 AND
+	dpmi.surcharge_type_id IS NOT NULL AND
+	dpmi.surcharge_type_key IS NOT NULL AND
+	dpmi.surcharge IS NOT NULL AND
+	dpmi.surcharge::int <> 0
+);
+
+INSERT INTO once_only_accrual
+(mpk_id, department_people_month_info_id, work_type, type, code, value, description)
+(SELECT
+	dp.mpk_id, dpmi.id, dpmi.surcharge_type_key, 'add', 'oz', dpmi.surcharge, dpmi.surcharge_description
+FROM
+	department_people_month_info dpmi
+LEFT JOIN
+	department_people dp ON dp.id = dpmi.department_people_id
+WHERE
+	dpmi.surcharge_type_id <> 32 AND
+	dpmi.surcharge_type_id IS NOT NULL AND
+	dpmi.surcharge_type_key IS NOT NULL AND
+	dpmi.surcharge IS NOT NULL AND
+	dpmi.surcharge::int <> 0
+);
+
+INSERT INTO once_only_accrual
+(mpk_id, department_people_month_info_id, work_type, type, code, value, description)
+(SELECT
+	dp.mpk_id, dpmi.id, dpmi.bonus_type_key, 'premium', 'uu', dpmi.bonus, dpmi.bonus_description
+FROM
+	department_people_month_info dpmi
+LEFT JOIN
+	department_people dp ON dp.id = dpmi.department_people_id
+WHERE
+	dpmi.bonus_type_id = 32 AND
+	dpmi.bonus_type_id IS NOT NULL AND
+	dpmi.bonus_type_key IS NOT NULL AND
+	dpmi.bonus IS NOT NULL AND
+	dpmi.bonus::int <> 0
+);
+
+INSERT INTO once_only_accrual
+(mpk_id, department_people_month_info_id, work_type, type, code, value, description)
+(SELECT
+	dp.mpk_id, dpmi.id, dpmi.bonus_type_key, 'premium', 'oz', dpmi.bonus, dpmi.bonus_description
+FROM
+	department_people_month_info dpmi
+LEFT JOIN
+	department_people dp ON dp.id = dpmi.department_people_id
+WHERE
+	dpmi.bonus_type_id <> 32 AND
+	dpmi.bonus_type_id IS NOT NULL AND
+	dpmi.bonus_type_key IS NOT NULL AND
+	dpmi.bonus IS NOT NULL AND
+	dpmi.bonus::int <> 0
+);
+
+INSERT INTO once_only_accrual
+(mpk_id, department_people_month_info_id, work_type, type, code, value, description)
+(SELECT
+	dp.mpk_id, dpmi.id, dpmi.fine_type_key, 'fine', 'uu', dpmi.fine, dpmi.fine_description
+FROM
+	department_people_month_info dpmi
+LEFT JOIN
+	department_people dp ON dp.id = dpmi.department_people_id
+WHERE
+	dpmi.fine_type_id = 32 AND
+	dpmi.fine_type_id IS NOT NULL AND
+	dpmi.fine_type_key IS NOT NULL AND
+	dpmi.fine IS NOT NULL AND
+	dpmi.fine::int <> 0
+);
+
+INSERT INTO once_only_accrual
+(mpk_id, department_people_month_info_id, work_type, type, code, value, description)
+(SELECT
+	dp.mpk_id, dpmi.id, dpmi.fine_type_key, 'fine', 'oz', dpmi.fine, dpmi.fine_description
+FROM
+	department_people_month_info dpmi
+LEFT JOIN
+	department_people dp ON dp.id = dpmi.department_people_id
+WHERE
+	dpmi.fine_type_id <> 32 AND
+	dpmi.fine_type_id IS NOT NULL AND
+	dpmi.fine_type_key IS NOT NULL AND
+	dpmi.fine IS NOT NULL AND
+	dpmi.fine::int <> 0
+);
