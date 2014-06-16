@@ -416,6 +416,8 @@ class SalesController extends BaseController
                     $em->persist($organization);
                     $em->flush();
 
+                    $em->refresh($organization);
+
                     $organizationId = $organization->getId();
 
                     $this->setWizardOrganization(array(
