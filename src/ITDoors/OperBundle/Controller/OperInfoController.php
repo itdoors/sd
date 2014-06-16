@@ -248,7 +248,7 @@ class OperInfoController extends BaseFilterController
                     $onceOnlyAccrual->setIsActive(true);
 
                     if (substr($fineType, 0, 1) == 'B') {
-                        $code = 'uo';
+                        $code = 'uu';
                     } else {
                         $code = 'oz';
                     }
@@ -270,7 +270,7 @@ class OperInfoController extends BaseFilterController
                     $onceOnlyAccrual->setIsActive(true);
 
                     if (substr($bonusType, 0, 1) == 'B') {
-                        $code = 'uo';
+                        $code = 'uu';
                     } else {
                         $code = 'oz';
                     }

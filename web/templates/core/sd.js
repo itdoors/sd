@@ -200,6 +200,9 @@ var SD = (function() {
                         {
                             target.html(response.html);
                         }
+                    },
+                    error: function () {
+                        selfSD.unblockUI(selfAjaxMoreInfoObject);
                     }
                 })
             })

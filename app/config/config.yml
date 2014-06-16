@@ -23,6 +23,8 @@ parameters:
     email.file.path: "%project.dir%/web/files/email/"
     upload.file.path: "%project.dir%/web/files/upload/"
     userprofiles.file.path: "%project.dir%/web/uploads/userprofiles/"
+    email.file.path: "%project.dir%/web/uploads/email/"
+    upload.file.path: "%project.dir%/web/uploads/files/"
 
 framework:
     #esi:             ~
