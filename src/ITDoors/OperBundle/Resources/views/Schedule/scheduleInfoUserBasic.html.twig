@@ -2,6 +2,16 @@
 
 <script>
     $(document).ready(function(){
+
+        $('#delete_user_button').die('click');
+        $('#delete_user_button').live('click', function(e) {
+            var type = $(this).data('type');
+            $(this).addClass('notDisplayed');
+            $('#add_form_accrual_'+type).show('blind',{}, 500);
+            //$('#add_form_accrual_'+type).removeClass('notDisplayed');//.show( 'show', {}, 500 );
+        })
+
+
         $('.submit_add_accrual').die('click');
         $('.submit_add_accrual').live('click', function(e) {
             var type = $(this).data('type');

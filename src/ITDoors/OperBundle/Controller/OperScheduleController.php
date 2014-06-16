@@ -1244,7 +1244,6 @@ class OperScheduleController extends BaseFilterController
         ));
 
 
-
         $onceOnlyAccrualRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:OnceOnlyAccrual');
 
