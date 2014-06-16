@@ -166,10 +166,7 @@ class OperInfoController extends BaseFilterController
         }
     }
 
-    /**
-     * updateAccrualsTask
-     */
-    public function updateAccrualsTaskAction()
+/*    public function updateAccrualsTaskAction()
     {
         for ($i=1; $i<=40; $i++) {
             $counter = $i*1000;
@@ -180,7 +177,6 @@ class OperInfoController extends BaseFilterController
                 ->findBy(array(), array(), $counter, $offset);
 
             $em = $this->getDoctrine()->getManager();
-            /** @var  $monthInfo \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfo */
             foreach ($monthInfos as $monthInfo) {
 
                 $id = $monthInfo->getId();
@@ -305,5 +301,5 @@ class OperInfoController extends BaseFilterController
         }
 
 
-    }
+    }*/
 }

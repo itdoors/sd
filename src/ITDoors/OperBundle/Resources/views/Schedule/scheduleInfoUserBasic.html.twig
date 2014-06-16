@@ -293,10 +293,30 @@
         </div>
         <div class="tab-pane" id="tab_1">
             <table  class="table table-bordered table-striped">
+                <thead>
+                    <th>{% trans %}Type accrual{% endtrans %}</th>
+                    <th>{% trans %}Value{% endtrans %}</th>
+                    <th>{% trans %}Date{% endtrans %}</th>
+                    <th>{% trans %}Status{% endtrans %}</th>
+                </thead>
                 {% for plannedAccrual in planned %}
                 <tr>
                     <td width="50%">{{ plannedAccrual.name }} ({{ plannedAccrual.type }})</td>
                     <td>{{ plannedAccrual.value }}</td>
+                    <td>
+                        {% if plannedAccrual.period is not empty %}
+                            {{ plannedAccrual.period|date('Y-m-d') }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if plannedAccrual.isActive is not empty %}
+                            {% if plannedAccrual.isActive %}
+                                {% trans %}Not active{% endtrans %}
+                            {% else %}
+                                {% trans %}Active{% endtrans %}
+                            {% endif %}
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </table>
