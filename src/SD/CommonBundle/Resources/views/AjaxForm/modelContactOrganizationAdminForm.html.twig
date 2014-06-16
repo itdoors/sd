@@ -141,7 +141,7 @@
                     {% endif %}
 
                     <div class="form-group col-md-3">
-                        {{ form_label(form.firstName, 'First Name'~'<span class="required"> * </span>', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_label(form.firstName, 'First Name', {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.firstName, {'attr' : {'class' : 'form-control', 'placeholder': "First name"}}) }}
                     </div>
 
