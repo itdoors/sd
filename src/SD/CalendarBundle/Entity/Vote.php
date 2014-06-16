@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Vote
 {
+
     /**
      * @var integer
      */
@@ -39,7 +40,6 @@ class Vote
      */
     private $dateCreate;
 
-
     /**
      * Get id
      *
@@ -54,12 +54,13 @@ class Vote
      * Set userId
      *
      * @param integer $userId
+     * 
      * @return Vote
      */
     public function setUserId($userId)
     {
         $this->userId = $userId;
-    
+
         return $this;
     }
 
@@ -77,12 +78,13 @@ class Vote
      * Set model
      *
      * @param string $model
+     * 
      * @return Vote
      */
     public function setModel($model)
     {
         $this->model = $model;
-    
+
         return $this;
     }
 
@@ -100,12 +102,13 @@ class Vote
      * Set modelId
      *
      * @param integer $modelId
+     * 
      * @return Vote
      */
     public function setModelId($modelId)
     {
         $this->modelId = $modelId;
-    
+
         return $this;
     }
 
@@ -123,12 +126,13 @@ class Vote
      * Set value
      *
      * @param integer $value
+     * 
      * @return Vote
      */
     public function setValue($value)
     {
         $this->value = $value;
-    
+
         return $this;
     }
 
@@ -146,12 +150,13 @@ class Vote
      * Set dateCreate
      *
      * @param \DateTime $dateCreate
+     * 
      * @return Vote
      */
     public function setDateCreate($dateCreate)
     {
         $this->dateCreate = $dateCreate;
-    
+
         return $this;
     }
 

@@ -31,14 +31,16 @@ class VoteController extends BaseFilterController
     {
         return $this->render('SDCalendarBundle:' . $this->baseTemplate . ':list.html.twig');
     }
+
     /**
      * Renders template holder for calendar
      *
+     * @param Request $request
+     * 
      * @return string
      */
     public function addPartyAction(Request $request)
     {
-        
         $article = new Article();
         $router = $this->get('router');
         $form = $this->createFormBuilder($article)
@@ -53,17 +55,13 @@ class VoteController extends BaseFilterController
                         'width' => '200px',
                         'multiple' => 'multiple'
                     )),
-                    'placeholder' => 'Enter fio',
+                    'placeholder' => 'Enter fio'
                 )
             ))
-            ->add('datecreate', 'text', array(
-            ))
-            ->add('title', 'text', array(
-            ))
-            ->add('textShort', 'textarea', array(
-            ))
-            ->add('text', 'textarea', array(
-            ))
+            ->add('datecreate', 'text', array())
+            ->add('title', 'text', array())
+            ->add('textShort', 'textarea', array())
+            ->add('text', 'textarea', array())
             ->getForm();
 
         $form->handleRequest($request);
@@ -100,7 +98,6 @@ class VoteController extends BaseFilterController
 //                $em->flush();
 
                 $connection->commit();
-                
             } catch (\Exception $e) {
                 $connection->rollBack();
                 $em->close();
@@ -109,10 +106,9 @@ class VoteController extends BaseFilterController
 
             return $this->redirect($this->generateUrl('sd_calendar_vote_history'));
         }
-        
+
         return $this->render('SDCalendarBundle:' . $this->baseTemplate . ':addParty.html.twig', array(
             'form' => $form->createView(),
         ));
     }
-    
 }

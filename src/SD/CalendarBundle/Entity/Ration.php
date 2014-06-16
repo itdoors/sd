@@ -29,7 +29,6 @@ class Ration
      */
     private $article;
 
-
     /**
      * Get id
      *
@@ -44,12 +43,13 @@ class Ration
      * Set articleId
      *
      * @param integer $articleId
+     * 
      * @return Ration
      */
     public function setArticleId($articleId)
     {
         $this->articleId = $articleId;
-    
+
         return $this;
     }
 
@@ -67,12 +67,13 @@ class Ration
      * Set value
      *
      * @param \double $value
+     * 
      * @return Ration
      */
     public function setValue(\double $value)
     {
         $this->value = $value;
-    
+
         return $this;
     }
 
@@ -90,12 +91,13 @@ class Ration
      * Set article
      *
      * @param \SD\CalendarBundle\Entity\Article $article
+     * 
      * @return Ration
      */
     public function setArticle(\SD\CalendarBundle\Entity\Article $article = null)
     {
         $this->article = $article;
-    
+
         return $this;
     }
 

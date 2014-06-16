@@ -64,7 +64,6 @@ class Article
      */
     private $user;
 
-
     /**
      * Get id
      *
@@ -79,12 +78,13 @@ class Article
      * Set userId
      *
      * @param integer $userId
+     * 
      * @return Article
      */
     public function setUserId($userId)
     {
         $this->userId = $userId;
-    
+
         return $this;
     }
 
@@ -102,12 +102,13 @@ class Article
      * Set type
      *
      * @param string $type
+     * 
      * @return Article
      */
     public function setType($type)
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
@@ -125,12 +126,13 @@ class Article
      * Set title
      *
      * @param string $title
+     * 
      * @return Article
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
@@ -148,12 +150,13 @@ class Article
      * Set textShort
      *
      * @param string $textShort
+     * 
      * @return Article
      */
     public function setTextShort($textShort)
     {
         $this->textShort = $textShort;
-    
+
         return $this;
     }
 
@@ -171,12 +174,13 @@ class Article
      * Set text
      *
      * @param string $text
+     * 
      * @return Article
      */
     public function setText($text)
     {
         $this->text = $text;
-    
+
         return $this;
     }
 
@@ -194,12 +198,13 @@ class Article
      * Set dateCreate
      *
      * @param \DateTime $dateCreate
+     * 
      * @return Article
      */
     public function setDateCreate($dateCreate)
     {
         $this->dateCreate = $dateCreate;
-    
+
         return $this;
     }
 
@@ -217,12 +222,13 @@ class Article
      * Set dateUpdate
      *
      * @param \DateTime $dateUpdate
+     * 
      * @return Article
      */
     public function setDateUpdate($dateUpdate)
     {
         $this->dateUpdate = $dateUpdate;
-    
+
         return $this;
     }
 
@@ -240,12 +246,13 @@ class Article
      * Set datePablick
      *
      * @param \DateTime $datePablick
+     * 
      * @return Article
      */
     public function setDatePablick($datePablick)
     {
         $this->datePablick = $datePablick;
-    
+
         return $this;
     }
 
@@ -263,12 +270,13 @@ class Article
      * Set dateUnpablick
      *
      * @param \DateTime $dateUnpablick
+     * 
      * @return Article
      */
     public function setDateUnpablick($dateUnpablick)
     {
         $this->dateUnpablick = $dateUnpablick;
-    
+
         return $this;
     }
 
@@ -286,12 +294,13 @@ class Article
      * Set user
      *
      * @param \SD\UserBundle\Entity\User $user
+     * 
      * @return Article
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 
@@ -304,7 +313,7 @@ class Article
     {
         return $this->user;
     }
-    
+
     /**
      * __toString()
      * 

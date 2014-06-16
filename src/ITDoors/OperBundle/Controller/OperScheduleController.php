@@ -31,17 +31,17 @@ class OperScheduleController extends BaseFilterController
 
         $this->addToSessionValues('idDepartment', $id, 'param', 'oper.bundle.department', 'param');
         $this->checkEmtyDateFilter();
+
         return $this->render('ITDoorsOperBundle:Schedule:schedule.html.twig', array(
             'id' => $id
         ));
-
-
     }
 
     /**
      * checkEmtyDateFilter
      */
-    private function checkEmtyDateFilter() {
+    private function checkEmtyDateFilter()
+    {
         $year = intval(date('Y'));
         $month = intval(date('m'));
 

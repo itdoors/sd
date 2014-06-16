@@ -391,9 +391,9 @@ class SalesController extends BaseController
         }
 
         $form = $this->createForm('modelContactOrganizationWizardForm');
-        
+
         $form->handleRequest($request);
-           
+
         if ($form->isValid()) {
 
             $em = $this->getDoctrine()->getManager();
