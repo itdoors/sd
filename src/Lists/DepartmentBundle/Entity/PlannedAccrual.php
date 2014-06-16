@@ -206,12 +206,13 @@ class PlannedAccrual
      * Set isActive
      *
      * @param boolean $isActive
+     *
      * @return PlannedAccrual
      */
     public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
-    
+
         return $this;
     }
 
