@@ -7,9 +7,8 @@
                     <ul class="list-unstyled profile-nav">
                         <li>
                             {% if item.photo is not empty %}
-                                <img src="{{ asset('uploads/userprofiles/' ~ item.id ~ '/image29' ~ item.photo) }}" class="img-responsive" alt=""/>
+                                <img src="{{ asset( userprofiles_url ~ item.id ~ '/image29_' ~ item.photo) }}" class="img-responsive" alt=""/>
                             {% endif %}
-                            {#<img src="{{ asset('templates/metronic/img/bg/1.jpg')}}" class="img-responsive" alt=""/>#            {# <a href="#" class="profile-edit">edit</a>#}
                         </li>
                         {#<li>
                             <a href="#">Projects </a>

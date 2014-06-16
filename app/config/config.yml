@@ -62,7 +62,7 @@ twig:
         ajax_namespace_oper_department_schedule: %ajax.namespace.oper.department.schedule%
         ajax_filter_namespace_report_activity: %ajax.filter.namespace.report.activity%
 
-
+        userprofiles_url: %userprofiles.file.path%
 # Assetic Configuration
 assetic:
     debug:          %kernel.debug%
