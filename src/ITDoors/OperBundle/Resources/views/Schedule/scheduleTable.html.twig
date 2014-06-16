@@ -46,7 +46,7 @@
             <div class="modal-body">
                 <div id="moreInfoTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
                     Выберите сотрудника:
-                    <select id="add_coworker_select_list">
+                    <select id="add_coworker_select_list" style="width: 300px;">
                         {% for filterCoworker in filterCoworkers %}
                              <option value="{{ filterCoworker.id }}">
                                  {% if filterCoworker.mpks is not empty %}
@@ -70,7 +70,7 @@
                     <br><br>
                     <div id="change_div_select" class="notDisplayed">
                         Выберите кого заменяет:
-                        <select id="add_coworker_select_change" >
+                        <select id="add_coworker_select_change" style="width: 300px;">
                             {% for filterCoworker in filterCoworkers %}
                                 <option value="{{ filterCoworker.id }}">
                                     {% if filterCoworker.mpks is not empty %}
