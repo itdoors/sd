@@ -37,7 +37,7 @@ lists_sales_handling_filter_clear:
     defaults: { _controller: ListsHandlingBundle:Sales:filterClear }
 
 lists_sales_handling_add_organization_filter:
-    pattern:  /lists/sales/handling/add_organization_filter/{organization_id}
+    pattern:  /lists/sales/handling/add_organization_filter/{organizationId}
     defaults: { _controller: ListsHandlingBundle:Sales:addOrganizationFilter }
 
 lists_sales_handling_ajax_users:
@@ -81,7 +81,7 @@ lists_sales_dispatcher_handling_filter_clear:
     defaults: { _controller: ListsHandlingBundle:SalesDispatcher:filterClear }
 
 lists_sales_dispatcher_handling_add_organization_filter:
-    pattern:  /lists/salesdispatcher/handling/add_organization_filter/{organization_id}
+    pattern:  /lists/salesdispatcher/handling/add_organization_filter/{organizationId}
     defaults: { _controller: ListsHandlingBundle:SalesDispatcher:addOrganizationFilter }
 
 lists_sales_dispatcher_handling_ajax_users:
@@ -98,7 +98,7 @@ lists_sales_dispatcher_tender_index:
 
 
 lists_sales_dispatcher_handling_add_organization_filter:
-    pattern:  /lists/salesdispatcher/handling/add_organization_filter/{organization_id}
+    pattern:  /lists/salesdispatcher/handling/add_organization_filter/{organizationId}
     defaults: { _controller: ListsHandlingBundle:SalesDispatcher:addOrganizationFilter }
 
 lists_sales_dispatcher_tender_index:
@@ -134,7 +134,7 @@ lists_sales_admin_handling_filter_clear:
     defaults: { _controller: ListsHandlingBundle:SalesAdmin:filterClear }
 
 lists_sales_admin_handling_add_organization_filter:
-    pattern:  /lists/salesadmin/handling/add_organization_filter/{organization_id}
+    pattern:  /lists/salesadmin/handling/add_organization_filter/{organizationId}
     defaults: { _controller: ListsHandlingBundle:SalesAdmin:addOrganizationFilter }
 
 lists_sales_admin_handling_ajax_users:
@@ -151,7 +151,7 @@ lists_sales_admin_tender_index:
 
 
 lists_sales_admin_handling_add_organization_filter:
-    pattern:  /lists/salesadmin/handling/add_organization_filter/{organization_id}
+    pattern:  /lists/salesadmin/handling/add_organization_filter/{organizationId}
     defaults: { _controller: ListsHandlingBundle:SalesAdmin:addOrganizationFilter }
 
 lists_sales_admin_tender_index:
@@ -188,7 +188,7 @@ handling_service:
 
 # Dogovor Admin Route
 lists_dogovor_admin_handling_add_organization_filter:
-    pattern:  /lists/sales/handling/add_organization_filter/{organization_id}
+    pattern:  /lists/sales/handling/add_organization_filter/{organizationId}
     defaults: { _controller: ListsHandlingBundle:Sales:addOrganizationFilter }
 
 #Competitor
