@@ -44,7 +44,7 @@ Lists\ContactBundle\Entity\ModelContact:
             type: string
             length: 255
             fixed: false
-            nullable: false
+            nullable: true
         phone2:
             type: string
             length: 255

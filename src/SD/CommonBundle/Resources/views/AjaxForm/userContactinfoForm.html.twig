@@ -1,0 +1,46 @@
+{% trans_default_domain 'ListsOrganizationBundle' %}
+<div class="row ">
+    <div class="col-md-12">
+        <div class="portlet box yellow">
+            <div class="portlet-title"><div class="caption"><i class="fa fa-edit"></i>
+                    {% trans %}Create New Contact{% endtrans %}                    
+                </div>
+            </div>
+            <div class="portlet-body">
+
+                {{ form_start(form, {
+                        'action' : path('sd_common_ajax_form'),
+                        'attr' : {
+                        'method' : 'POST',
+                        'class' : 'ajax-form-entity',
+                        'data-post_function': postFunction,
+                        'data-post_target_id': postTargetId,
+                        'data-target_id': targetId
+                    }
+                }) }}
+                <div class="form-body row">
+
+                    <div class="form-group col-md-3">
+                        {{  form_label(form.contactinfo, 'Select contact', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.contactinfo, {'attr' : {'class' : 'form-control', 'placeholder': "Select contact"}}) }}
+                    </div>
+                    <div class="form-group col-md-3">
+                        {{  form_label(form.value, 'Enter value', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.value, {'attr' : {'class' : 'form-control', 'placeholder': "Enter value"}}) }}
+                    </div>
+
+                    <input type="hidden" name="formName" value="{{ formName }}">
+                    <input type="hidden" name="postFunction" value="{{ postFunction }}">
+                    <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
+                    <input type="hidden" name="targetId" value="{{ targetId }}">
+                </div>
+                <div class="form-actions">
+                    {{ form_widget(form.add, { 'label': 'Add', 'attr': {'class': 'btn blue'} } ) }}
+                    {{ form_widget(form.cancel, { 'label': 'Cancel', 'attr': {'class': 'btn default sd-cancel-btn'} } ) }}
+                </div>
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+    </div>
+</div>

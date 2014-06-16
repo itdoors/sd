@@ -71,6 +71,7 @@ class SalesController extends BaseFilterController
 
         foreach ($handlingMessages as $handlingMessage) {
             $events[] = array(
+                'hover_title' => $this->getEventHoverTitle($handlingMessage),
                 'title' => $this->getEventTitle($handlingMessage),
                 'start' => $this->getEventStart($handlingMessage)->format('Y-m-d H:i:s'),
                 'url' => $this->getEventUrl($handlingMessage),
@@ -93,6 +94,18 @@ class SalesController extends BaseFilterController
         $start = $this->getEventStart($handlingMessage);
 
         return (string) $handlingMessage['typeName'] . ' (' . $start->format('H:i').')';
+    }
+
+    /**
+     * Return specific event title
+     *
+     * @param HandlingMessage $handlingMessage
+     *
+     * @return string
+     */
+    public function getEventHoverTitle($handlingMessage)
+    {
+        return '';
     }
 
     /**

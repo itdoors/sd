@@ -1,0 +1,54 @@
+{% trans_default_domain 'ITDoorsControllingBundle' %}
+{% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title"><div class="caption"><i class="fa fa-cogs"></i>{% trans %}Add responsible{% endtrans %}</div></div>
+            <div class="portlet-body">
+                {% if form.vars.valid %}
+                {% else %}
+                <div class="alert alert-danger">
+                    <button class="close" data-close="alert"></button>
+                    {{ form_errors(form) }}
+                </div>
+                {% endif %}
+
+                {{ form_start(form, {
+                    'action' : path('sd_common_ajax_form'),
+                    'attr' : {
+                        'method' : 'POST',
+                        'class' : 'ajax-form-entity',
+                        'data-post_function': postFunction,
+                        'data-post_target_id': postTargetId,
+                        'data-target_id': targetId
+                }
+                }) }}
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    {{ form_label(form.companystructure, 'Select responsible', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.companystructure, {'attr' : {'class' : 'form-control', 'placeholder': 'Select responsible'} } ) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="formName" value="{{ formName }}">
+                <input type="hidden" name="postFunction" value="{{ postFunction }}">
+                <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
+                <input type="hidden" name="targetId" value="{{ targetId }}">
+                <input type="hidden" name="defaultData" value='{{ defaultData|json_encode|raw }}'>
+
+                <div class="form-actions">
+                    {{ form_widget(form.create, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
+                    {{ form_widget(form.cancel, { 'label': 'Cancel', 'attr': {'class': 'btn default sd-cancel-btn', 'data-dismiss':'modal'} } ) }}
+                </div>
+                {{ form_end(form) }}
+                {{ form_rest(form) }}
+            </div>
+        </div>
+    </div>
+</div>

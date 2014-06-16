@@ -19,6 +19,7 @@
 
     <property name="bin.phpunit" value="phpunit" />
     <property name="bin.phpcs" value="${path.bin}/phpcs" />
+    <property name="bin.phpcs-ci" value="phpcs" />
     <property name="bin.cap" value="${path.bin}/cap" />
 
     <target name="build" depends="build:prepare,build:phpcs">
@@ -30,7 +31,6 @@
     </target>
 
     <target name="build:properties">
-        <echo msg="Coping build custom properties" />
         <copy file="${project.basedir}/build.properties.dist" tofile="${project.basedir}/build.properties" overwrite="true" />
     </target>
 
@@ -48,11 +48,24 @@
         <echo msg="PHP CodeStyle is OK" />
     </target>
 
+    <target name="build:phpcs-ci" description="Find coding standard violations using PHP_CodeSniffer">
+        <exec executable="${bin.phpcs-ci}" passthru="true" checkreturn="true">
+            <arg value="--standard=${phpcs.standard}" />
+            <arg path="${path.phpcs.src}" />
+        </exec>
+        <echo msg="PHP CodeStyle is OK" />
+    </target>
+
     <target name="build:deploy" description="Deploying to server">
         <exec executable="${bin.cap}" passthru="true" checkreturn="true">
             <arg value="deploy" />
         </exec>
         <echo msg="PHP CodeStyle is OK" />
+    </target>
+
+    <target name="build:whoami">
+        <echo msg="Preparing" />
+        <exec command="whoami > whoami" checkreturn="true" />
     </target>
 
     <target name="build:test" description="Run tests with PHPUnit">

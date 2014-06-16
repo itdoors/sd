@@ -253,4 +253,33 @@ class HandlingMessageView
     {
         return $this->userFullName;
     }
+    /**
+     * @var \Lists\HandlingBundle\Entity\Handling
+     */
+    private $handling;
+
+
+    /**
+     * Set handling
+     *
+     * @param \Lists\HandlingBundle\Entity\Handling $handling
+     * 
+     * @return HandlingMessageView
+     */
+    public function setHandling(\Lists\HandlingBundle\Entity\Handling $handling = null)
+    {
+        $this->handling = $handling;
+
+        return $this;
+    }
+
+    /**
+     * Get handling
+     *
+     * @return \Lists\HandlingBundle\Entity\Handling 
+     */
+    public function getHandling()
+    {
+        return $this->handling;
+    }
 }

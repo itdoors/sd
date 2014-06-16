@@ -1,0 +1,42 @@
+SD\UserBundle\Entity\StuffDepartments:
+    type: entity
+    table: stuff_departments
+    fields:
+        userkey:
+            type: string
+            length: 25
+            fixed: false
+            nullable: false
+        id:
+            id: true
+            type: bigint
+            nullable: false
+    oneToOne:
+        claimtype:
+            targetEntity: SD\UserBundle\Entity\Claimtype
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                claimtype_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        departments:
+            targetEntity: Lists\DepartmentBundle\Entity\Departments
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                departments_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        stuff:
+            targetEntity: SD\UserBundle\Entity\Stuff
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                stuff_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

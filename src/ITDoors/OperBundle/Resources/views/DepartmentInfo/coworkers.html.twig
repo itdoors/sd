@@ -1,0 +1,15 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
+{{ include(
+'ITDoorsOperBundle:DepartmentInfo:coworkerFilter.html.twig',
+{}) }}
+
+
+
+{{ include(
+'ITDoorsOperBundle:DepartmentInfo:coworkerMainTable.html.twig',
+{
+counter: counter,
+pagination: pagination
+}
+)
+}}

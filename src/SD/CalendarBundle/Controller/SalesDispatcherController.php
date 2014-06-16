@@ -41,6 +41,18 @@ class SalesDispatcherController extends SalesController
         return new Response(json_encode($events));
     }
 
+     /**
+     * Return specific event title
+     *
+     * @param HandlingMessage $handlingMessage
+     *
+     * @return string
+     */
+    public function getEventHoverTitle($handlingMessage)
+    {
+        return (string) $handlingMessage['typeName']. ' | '. $handlingMessage['status'];
+    }
+
     /**
      * Return specific event title
      *
@@ -52,8 +64,13 @@ class SalesDispatcherController extends SalesController
     {
         $start = $this->getEventStart($handlingMessage);
 
-        return (string) $handlingMessage['userFullName']
-                . ' | '. (string) $handlingMessage['typeName']
-                . ' (' . $start->format('H:i').')';
+        $arrName = explode(' ', $handlingMessage['userFullName']);
+        $strName = $arrName[0].(array_key_exists('1', $arrName)?
+                ' '.mb_substr($arrName[1], 0, 1, 'UTF-8'):''
+            );
+
+        return $strName
+            . ' | '. $handlingMessage['organizationName']
+            . ' (' . $start->format('H:i').')';
     }
 }

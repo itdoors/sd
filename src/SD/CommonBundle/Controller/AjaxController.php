@@ -13,18 +13,21 @@ use Lists\HandlingBundle\Entity\Handling;
 use Lists\HandlingBundle\Entity\HandlingMessage;
 use Lists\HandlingBundle\Entity\HandlingRepository;
 use Lists\LookupBundle\Entity\LookupRepository;
+use Lists\ContactBundle\Entity\ModelContact;
+use Lists\ContactBundle\Entity\ModelContactRepository;
+use Lists\OrganizationBundle\Entity\Organization;
+use Lists\HandlingBundle\Entity\HandlingMoreInfo;
 use SD\UserBundle\Entity\UserRepository;
+use SD\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Lists\ContactBundle\Entity\ModelContactRepository;
-use Lists\HandlingBundle\Entity\HandlingMoreInfo;
 use Symfony\Component\Form\Form;
-use SD\UserBundle\Entity\User;
-use Lists\OrganizationBundle\Entity\Organization;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
+use ITDoors\AjaxBundle\Controller\BaseFilterController;
+use Lists\CompanystructureBundle\Entity\Companystructure;
 
 /**
  * AjaxController class.
@@ -36,13 +39,15 @@ use Symfony\Component\Validator\ConstraintViolationList;
  * @author     Pavel Pecheny <ppecheny@gmail.com>
  * @version    "Release: 1.0"
  */
-class AjaxController extends Controller
+class AjaxController extends BaseFilterController
 {
+
     protected $modelRepositoryDependence = array(
         'ModelContact' => 'ListsContactBundle:ModelContact',
         'User' => 'SDUserBundle:User',
         'Dogovor' => 'ListsDogovorBundle:Dogovor',
-        'DopDogovor' => 'ListsDogovorBundle:DopDogovor'
+        'DopDogovor' => 'ListsDogovorBundle:DopDogovor',
+        'Email' => 'ITDoorsEmailBundle:Email'
     );
 
     /**
@@ -285,16 +290,16 @@ class AjaxController extends Controller
      */
     public function cityByIdAction()
     {
-        $id = $this->get('request')->query->get('id');
+        $ids = explode(',', $this->get('request')->query->get('id'));
 
-        $city = $this->getDoctrine()
+        $cityList = $this->getDoctrine()
             ->getRepository('ListsCityBundle:City')
-            ->find($id);
+            ->findBy(array('id'=>$ids));
 
         $result = array();
 
-        if ($city) {
-            $result = $this->serializeObject($city);
+        foreach ($cityList as $city) {
+            $result[] = $this->serializeObject($city);
         }
 
         return new Response(json_encode($result));
@@ -544,7 +549,7 @@ class AjaxController extends Controller
         /** @var \SD\UserBundle\Entity\UserRepository $repository */
         $repository = $this->container->get('sd_user.repository');
 
-        $objects = $repository->getOnlyStaff()
+        $objects = $repository->getOnlyStuff()
             ->andWhere('lower(u.firstName) LIKE :q OR lower(u.lastName) LIKE :q')
             ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
             ->getQuery()
@@ -554,6 +559,150 @@ class AjaxController extends Controller
 
         foreach ($objects as $object) {
             $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json users list
+     *
+     * @return string
+     */
+    public function userFIOAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        /** @var \SD\UserBundle\Entity\UserRepository $repository */
+        $repository = $this->container->get('sd_user.repository');
+
+        $objects = $repository->getOnlyStuff()
+            ->andWhere('lower(u.firstName) LIKE :q OR lower(u.lastName) LIKE :q OR lower(u.middleName) LIKE :q')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $string = $object->getLastName().' '.$object->getFirstName().' '.$object->getMiddleName();
+
+            $result[] =  array(
+                    'id' => $object->getId(),
+                    'value' => $object->getId(),
+                    'name' => $string,
+                    'text' => $string
+                );
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json users list
+     *
+     * @return string
+     */
+    public function userPositionAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        /** @var \SD\UserBundle\Entity\UserRepository $repository */
+        $repository = $this->container->get('sd_user.repository');
+
+        $objects = $repository->getOnlyStuff()
+            ->andWhere('lower(u.position) LIKE :q')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object, false, 'getPosition');
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json users list
+     *
+     * @return string
+     */
+    public function userEmailAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        /** @var \SD\UserBundle\Entity\UserRepository $repository */
+        $repository = $this->container->get('sd_user.repository');
+
+        $objects = $repository->getOnlyStuff()
+            ->andWhere('lower(u.email) LIKE :q')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object, false, 'getEmail');
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json users list
+     *
+     * @return string
+     */
+    public function userPhoneAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->container->get('sd_user.repository');
+
+        $objects = $repository->getOnlyStuff()
+            ->andWhere('lower(stuff.mobilephone) LIKE :q')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = array(
+                'id' => $object->getId(),
+                'value' => $object->getId(),
+                'name' => $object->getStuff()->getMobilephone(),
+                'text' => $object->getStuff()->getMobilephone()
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json users list
+     *
+     * @return string
+     */
+    public function userStuffCompanyAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $dm = $this->getDoctrine()->getManager();
+
+        /** @var Companystructure $companystructure */
+        $companystructure = $dm->getRepository('ListsCompanystructureBundle:Companystructure');
+
+        $objects = $companystructure->createQueryBuilder('c')
+            ->andWhere('lower(c.name) LIKE :q')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object, false, 'getName');
         }
 
         return new Response(json_encode($result));
@@ -690,7 +839,6 @@ class AjaxController extends Controller
         }
 
         $item['value'] = $value;
-
     }
 
     /**
@@ -982,6 +1130,7 @@ class AjaxController extends Controller
         }
 
         if (sizeof($defaultData)) {
+
             foreach ($defaultData as $key => $default) {
                 $form->add($key, 'hidden', array(
                     'data' => $default
@@ -1095,7 +1244,6 @@ class AjaxController extends Controller
         if ($dogovor->getProlongation()) {
             // set stop date to prolongation date
             // set prolongation date to $request['prolongationDateTo']
-
             // Set prolongation date to
             if ($dogovor->getProlongationDate()) {
                 $prolongationDateFrom = $dogovor->getProlongationDate();
@@ -1168,7 +1316,6 @@ class AjaxController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
         // $em->flush();
-
         // Insert future
         $type = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingMessageType')
@@ -1224,6 +1371,146 @@ class AjaxController extends Controller
 
         $em->persist($handling);
 
+        $em->flush();
+
+        return true;
+    }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function invoiceMessageFormSave(Form $form, $user, $request)
+    {
+        /** @var InvoiceMessage $data */
+        $data = $form->getData();
+
+        $formData = $request->request->get($form->getName());
+
+        $invoiceId = $data->getInvoiceId();
+
+        /** @var Invoice $invoice */
+        $invoice = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice')
+            ->find($invoiceId);
+        $data->setInvoice($invoice);
+
+        $contactid = $formData['contactid'];
+
+        if (is_numeric($contactid)) {
+            /** @var ModelContact $contact */
+            $contact = $this->getDoctrine()
+                ->getRepository('ListsContactBundle:ModelContact')
+                ->find($contactid);
+            $data->setContact($contact);
+        }
+
+        $data->setUser($this->getUser());
+
+        $data->setNote($formData['note']);
+
+        $data->setCreatedate(new \DateTime());
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function userContactinfoFormSave(Form $form, $user, $request)
+    {
+        /** @var Usercontactinfo $data */
+        $data = $form->getData();
+
+        $formData = $request->request->get($form->getName());
+
+        $userContact = new Usercontactinfo();
+        $userContact->setValue($data['value']);
+        $userContact->setUser($user);
+        $contactinfoId = $formData['contactinfo'];
+
+        /** @var Contactinfo $contact */
+        $contact = $this->getDoctrine()
+            ->getRepository('SDUserBundle:Contactinfo')
+            ->find($contactinfoId);
+
+        $userContact->setContactinfo($contact);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($userContact);
+        $em->flush();
+
+        return true;
+    }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function emailFormSave(Form $form, User $user, Request $request)
+    {
+        /** @var Email $data */
+        $data = $form->getData();
+
+         /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function invoiceCompanystructureFormSave(Form $form, User $user, Request $request)
+    {
+
+        /** @var InvoiceCompanystructure $data */
+        $data = $form->getData();
+
+        $formData = $request->request->get($form->getName());
+
+        /** @var ModelContact $contact */
+        $company = $this->getDoctrine()
+            ->getRepository('ListsCompanystructureBundle:Companystructure')
+            ->find($formData['companystructure']);
+        $data->setCompanystructure($company);
+
+        /** @var Invoice $invoice */
+        $invoice = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice')
+            ->find($data->getInvoiceID());
+        $data->setInvoice($invoice);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
         $em->flush();
 
         return true;
@@ -1323,6 +1610,20 @@ class AjaxController extends Controller
      *
      * @return boolean
      */
+    public function modelContactOrganizationUserFormSave($form, $user, $request)
+    {
+        return $this->modelContactOrganizationFormSave($form, $user, $request);
+    }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
     public function modelContactOrganizationEditFormSave($form, $user, $request)
     {
         $data = $form->getData();
@@ -1394,6 +1695,94 @@ class AjaxController extends Controller
         $this->$method($params);
 
         return new Response('');
+    }
+
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function invoiceCompanystructureDelete($params)
+    {
+        $id = $params['id'];
+
+        /** @var InvoiceCompanystructure $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
+            ->find($id);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function usercontactinfoDelete($params)
+    {
+        $id = $params['id'];
+
+        /** @var InvoiceCompanystructure $object */
+        $object = $this->getDoctrine()
+            ->getRepository('SDUserBundle:Usercontactinfo')
+            ->find($id);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function emailDelete($params)
+    {
+        $id = $params['id'];
+
+        /** @var Email $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ITDoorsEmailBundle:Email')
+            ->find($id);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function automailerDelete($params)
+    {
+        $id = $params['id'];
+
+        /** @var Automailer $object */
+        $object = $this->getDoctrine()
+            ->getRepository('TSSAutomailerBundle:Automailer')
+            ->find($id);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
     }
 
     /**
@@ -1602,7 +1991,6 @@ class AjaxController extends Controller
             $em->flush();
 
             $em->refresh($object);
-
         } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
@@ -1872,6 +2260,63 @@ class AjaxController extends Controller
     }
 
     /**
+     * Saves object to db
+     *
+     * @return mixed[]
+     */
+    public function invoiceSaveAction()
+    {
+        $translator = $this->get('translator');
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+
+        if ($name == 'DateEnd') {
+            $value = new \DateTime($this->get('request')->request->get('value'));
+        } elseif ($name == 'court') {
+            $value = (boolean) $this->get('request')->request->get('value');
+        } else {
+            $value = $this->get('request')->request->get('value');
+        }
+
+        $methodSet = 'set' . ucfirst($name);
+
+        /** @var Invoice $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice')
+            ->find($pk);
+
+        $object->$methodSet($value);
+
+        $validator = $this->get('validator');
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
+        $errors = $validator->validate($object, array('edit'));
+
+        if (sizeof($errors)) {
+            $return = $this->getFirstError($errors);
+
+            return new Response($return, 406);
+        }
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+
+        try {
+            $em->flush();
+        } catch (\ErrorException $e) {
+            $return = array('msg' => $translator->trans('Wrong input data'));
+
+            return new Response(json_encode($return));
+        }
+
+        $return = array('success' => 1);
+
+        return new Response(json_encode($return));
+    }
+
+    /**
      * Adds children to {formName}ProcessDefaults depending on defaults in request
      *
      * @param Form    $form
@@ -1907,18 +2352,18 @@ class AjaxController extends Controller
                 'empty_value' => '',
                 'required' => false,
                 'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
-                        return $repository->createQueryBuilder('mc')
-                            ->leftJoin('mc.owner', 'owner')
-                            ->where('mc.modelName = :modelName')
-                            ->andWhere('mc.modelId = :modelId')
-                            ->andWhere('owner.id in (:ownerIds)')
-                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
-                            ->setParameter(':modelId', $organizationId)
-                            ->setParameter(':ownerIds', $userIds);
+                    return $repository->createQueryBuilder('mc')
+                        ->leftJoin('mc.owner', 'owner')
+                        ->where('mc.modelName = :modelName')
+                        ->andWhere('mc.modelId = :modelId')
+                        ->andWhere('owner.id in (:ownerIds)')
+                        ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                        ->setParameter(':modelId', $organizationId)
+                        ->setParameter(':ownerIds', $userIds);
                 }
             ));
 
-        $form
+         $form
             ->add('contactnext', 'entity', array(
                 'class' => 'ListsContactBundle:ModelContact',
                 'empty_value' => '',
@@ -1952,6 +2397,99 @@ class AjaxController extends Controller
             ->add('mindate', 'hidden', array(
                 'data' => $defaultData['mindate'],
                 'mapped' => false
+        ));
+    }
+
+    /**
+     * Adds children to {formName}ProcessDefaults depending on defaults in request
+     *
+     * @param Form    $form
+     * @param mixed[] $defaultData
+     * 
+     * @return Form
+     */
+    public function invoiceMessageFormProcessDefaults($form, $defaultData)
+    {
+        $invoiceId = $defaultData['invoice_id'];
+        /** @var Invoice $invoiceObj */
+        $invoiceObj = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice')
+            ->find($invoiceId);
+        if ($invoiceObj->getDogovor()) {
+            /** @var Dogovor $dogovor */
+            $dogovor = $this->getDoctrine()
+                ->getRepository('ListsDogovorBundle:Dogovor')
+                ->find($invoiceObj->getDogovor());
+
+            $organizationId =
+                $dogovor->getCustomerId() ?
+                $dogovor->getCustomerId() :
+                (
+                    $dogovor->getOrganization() ?
+                    $dogovor->getOrganization()->getId() :
+                    $invoiceObj->getOrganization()->getId()
+                );
+            $form
+                ->add('contactid', 'entity', array(
+                    'class' => 'ListsContactBundle:ModelContact',
+                    'empty_value' => '',
+                    'required' => false,
+                    'mapped' => false,
+                    'query_builder' => function (ModelContactRepository $repository) use ($organizationId) {
+                        return $repository->createQueryBuilder('mc')
+                            ->leftJoin('mc.owner', 'owner')
+                            ->where('mc.modelName = :modelName')
+                            ->andWhere('mc.modelId = :modelId')
+                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                            ->setParameter(':modelId', $organizationId);
+                    }
+                ));
+        } else {
+            $form
+                ->add('contactid', 'entity', array(
+                    'class' => 'ListsContactBundle:ModelContact',
+                    'empty_value' => '',
+                    'required' => false,
+                    'mapped' => false,
+                    'query_builder' => function (ModelContactRepository $repository) {
+                    return $repository->createQueryBuilder('mc')
+                        ->leftJoin('mc.owner', 'owner')
+                        ->where('mc.modelName = :modelName')
+                        ->andWhere('mc.modelId = :modelId')
+                        ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                        ->setParameter(':modelId', 0);
+                    }
+                ));
+        }
+    }
+
+    /**
+     * Adds children to {formName}ProcessDefaults depending on defaults in request
+     *
+     * @param Form    $form
+     * @param mixed[] $defaultData
+     * 
+     * @return QueryBuilder
+     */
+    public function invoiceCompanystructureFormProcessDefaults(Form $form, $defaultData)
+    {
+        $invoiceId = $defaultData['invoiceId'];
+
+        $repository = $this->getDoctrine()->getRepository('ListsCompanystructureBundle:Companystructure');
+
+        $form
+            ->add('companystructure', 'entity', array(
+                'class' => 'ListsCompanystructureBundle:Companystructure',
+                'empty_value' => '',
+                'required' => false,
+                'mapped' => false,
+                'query_builder' => function ($repository) use ($invoiceId, $repository) {
+
+                return $repository->createQueryBuilder('c')
+                    ->leftJoin('c.invoicecompanystructure', 'idc')
+                    ->where('(idc.invoiceId is NULL OR idc.invoiceId <> :invoiceId)')
+                    ->setParameter(':invoiceId', $invoiceId);
+                }
             ));
     }
 
@@ -2231,7 +2769,6 @@ class AjaxController extends Controller
             ));
 
             $connection->commit();
-
         } catch (\Exception $e) {
             $connection->rollback();
             $em->close();
@@ -2328,11 +2865,11 @@ class AjaxController extends Controller
                 'empty_value' => '',
                 'required' => false,
                 'query_builder' => function (DopDogovorRepository $repository) use ($dogovorId) {
-                        return $repository->createQueryBuilder('dd')
-                            ->where('dd.dogovorId = :dogovorId')
-                            ->setParameter(':dogovorId', $dogovorId);
+                    return $repository->createQueryBuilder('dd')
+                        ->where('dd.dogovorId = :dogovorId')
+                        ->setParameter(':dogovorId', $dogovorId);
                 }
-            ));
+        ));
 
         /** @var DepartmentsRepository $dr */
         $dr = $this->get('lists_department.repository');
@@ -2345,7 +2882,7 @@ class AjaxController extends Controller
                 'mapped' => false,
                 'multiple' => true,
                 'query_builder' => $dr->getDepartmentsForDogovor($dogovorId)
-            ));
+        ));
     }
 
     /**
@@ -2406,5 +2943,574 @@ class AjaxController extends Controller
         }
 
         return true;
+    }
+
+    /**
+     * ajax php function to get  mpk
+     * return json of all mpk that was found
+     *
+     * @return string
+     */
+    public function mpkAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsMpkBundle:Mpk');
+
+        $objects= $repository->getSearchQueryMpk($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json mpk by id
+     *
+     * @return string
+     */
+    public function mpkByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $mpkList = $this->getDoctrine()
+            ->getRepository('ListsMpkBundle:Mpk')
+            ->findBy(array('id'=>$ids));
+
+        $result = array();
+
+        foreach ($mpkList as $mpk) {
+            $result[] = $this->serializeObject($mpk);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * ajax php function to get department's type
+     * return json of all department type that was found
+     *
+     * @return string
+     */
+    public function departmentTypeAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentsType');
+
+        $objects= $repository->getSearchQueryType($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json type of department by id
+     *
+     * @return string
+     */
+    public function departmentTypeByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $departmentTypeList = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentsType')
+            ->findBy(array('id'=>$ids));
+
+        $result = array();
+
+        foreach ($departmentTypeList as $departmentType) {
+            $result[] = $this->serializeObject($departmentType);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * ajax php function to get regions
+     * return json of all regions that was found
+     *
+     * @return string
+     */
+
+    public function regionAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsRegionBundle:Region');
+
+        $objects= $repository->getSearchQueryRegion($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json region name by id
+     *
+     * @return string
+     */
+    public function regionByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $regionList = $this->getDoctrine()
+            ->getRepository('ListsRegionBundle:Region')
+            ->findBy(array('id' => $ids));
+
+        $result = array();
+
+        foreach ($regionList as $region) {
+            $result[] = $this->serializeObject($region);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * ajax php function to get department status
+     * return json of all regions that was found
+     *
+     * @return string
+     */
+    public function departmentStatusAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentsStatus');
+
+        $objects= $repository->getSearchQueryStatus($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json department status by id
+     *
+     * @return string
+     */
+    public function departmentStatusByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $departmentStatusList = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentsStatus')
+            ->findBy(array('id' => $ids));
+
+        $result = array();
+
+        foreach ($departmentStatusList as $departmentStatus) {
+            $result[] = $this->serializeObject($departmentStatus);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+
+    /**
+     * Returns json company structure by id
+     *
+     * @return string
+     */
+    public function companyStructureByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $regionList = $this->getDoctrine()
+            ->getRepository('ListsCompanystructureBundle:Companystructure')
+            ->findBy(array('id'=>$ids));
+
+        $result = array();
+
+        foreach ($regionList as $region) {
+            $result[] = $this->serializeObject($region);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json of searchin self Organizations
+     *
+     * @return string
+     */
+    public function selfOrganizationAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+        $objects= $repository->searchSelfOrganization($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Function to handle the ajax queries from editable elements
+     *
+     * @return mixed[]
+     */
+    public function editableDepartmentAction()
+    {
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        $methodSet = 'set' . ucfirst($name);
+
+
+        /** @var Handling $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:Departments')
+            ->find($pk);
+
+        if ($name == 'status') {
+            if (!$value) {
+                $value = null;
+            } else {
+                $value = $this->getDoctrine()
+                    ->getRepository('ListsDepartmentBundle:DepartmentsStatus')
+                    ->find($value);
+            }
+        } elseif ($name == 'opermanager') {
+            if (!$value) {
+                $value = null;
+            } else {
+                $value = $this->getDoctrine()
+                    ->getRepository('SDUserBundle:User')
+                    ->find($value);
+            }
+        } elseif ($name == 'statusDate') {
+            $value = new \DateTime($value);
+        } elseif ($name == 'type') {
+            if (!$value) {
+                $value = null;
+            } else {
+                $value = $this->getDoctrine()
+                    ->getRepository('ListsDepartmentBundle:DepartmentsType')
+                    ->find($value);
+            }
+        }
+        $object->$methodSet($value);
+
+        $validator = $this->get('validator');
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
+        $errors = $validator->validate($object, array('edit'));
+
+        if (sizeof($errors)) {
+            $return = $this->getFirstError($errors);
+
+            return new Response($return, 406);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+
+        $return = array('error'=>false);
+
+        $return['value'] = $value;
+        $return['method'] = $methodSet;
+        $return['object'] = $object;
+        try {
+            $em->flush();
+
+            $em->refresh($object);
+        } catch (\ErrorException $e) {
+            $return['error'] = $e->getMessage();
+        }
+
+        return new Response(json_encode($return));
+
+    }
+
+    /**
+     * ajax php function to get department people mpk
+     * return json of all department people mpks that was found
+     *
+     * @return string
+     */
+    public function departmentPeopleMpkAction()
+    {
+
+        $id = $this->getSessionValueByKey('idDepartment', null, 'oper.paginator.department.coworkers', 'param');
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsMpkBundle:Mpk');
+
+        $objects= $repository->getDepartmentPeopleQueryMpk($searchText, $id);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * ajax php function to get department people
+     * return json of all department people that was found
+     *
+     * @return string
+     */
+    public function departmentPeopleIndividualAction()
+    {
+        $id = $this->getSessionValueByKey('idDepartment', null, 'oper.paginator.department.coworkers', 'param');
+
+        $filters = $this->getFilters('oper.paginator.department.coworkers');
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
+
+        $objects= $repository->getSearchQueryPeople($searchText, $id, $filters);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object->getIndividual());
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json department individual by id
+     *
+     * @return string
+     */
+    public function departmentPeopleIndividualByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $individualList = $this->getDoctrine()
+            ->getRepository('ListsIndividualBundle:Individual')
+            ->findBy(array('id' => $ids));
+
+        $result = array();
+
+        foreach ($individualList as $individual) {
+            $result[] = $this->serializeObject($individual);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json month from department by id
+     *
+     * @return string
+     */
+    public function monthsFromDepartmentAction()
+    {
+/*        //$idDepartment = $this->getSessionValueByKey('idDepartment', null, 'oper.bundle.department', 'param');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:Grafik');
+
+        //$objects= $repository->getMonthsFromDepartment($idDepartment);
+*/
+        $result = array();
+
+        $translator = $this->get('translator');
+        for ($i=1; $i<=12; $i++) {
+            $numberMonth = $i;//$object['month'];
+
+            $text = $this->getMonthTranslation($numberMonth);
+            $result[] = array(
+                'id' => $numberMonth,
+                'value' => $numberMonth,
+                'name' => $text,
+                'text' => $text
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json months by id
+     *
+     * @return string
+     */
+    public function monthsFromDepartmentByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $result = array();
+        $translator = $this->get('translator');
+        foreach ($ids as $idMonth) {
+            $text = $this->getMonthTranslation($idMonth);
+            $result = array(
+                'id' => $idMonth,
+                'value' => $idMonth,
+                'name' => $text,
+                'text' => $text
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * @param int $numberMonth
+     *
+     * @return mixed
+     */
+    private function getMonthTranslation($numberMonth)
+    {
+        $translator = $this->get('translator');
+        switch ($numberMonth) {
+            case '1':
+                $text = $translator->trans('January', array(), 'ITDoorsOperBundle');
+                break;
+            case '2':
+                $text = $translator->trans('February', array(), 'ITDoorsOperBundle');
+                break;
+            case '3':
+                $text = $translator->trans('March', array(), 'ITDoorsOperBundle');
+                break;
+            case '4':
+                $text = $translator->trans('April', array(), 'ITDoorsOperBundle');
+                break;
+            case '5':
+                $text = $translator->trans('May', array(), 'ITDoorsOperBundle');
+                break;
+            case '6':
+                $text = $translator->trans('June', array(), 'ITDoorsOperBundle');
+                break;
+            case '7':
+                $text = $translator->trans('July', array(), 'ITDoorsOperBundle');
+                break;
+            case '8':
+                $text = $translator->trans('August', array(), 'ITDoorsOperBundle');
+                break;
+            case '9':
+                $text = $translator->trans('September', array(), 'ITDoorsOperBundle');
+                break;
+            case '10':
+                $text = $translator->trans('October', array(), 'ITDoorsOperBundle');
+                break;
+            case '11':
+                $text = $translator->trans('November', array(), 'ITDoorsOperBundle');
+                break;
+            case '12':
+                $text = $translator->trans('December', array(), 'ITDoorsOperBundle');
+                break;
+        }
+
+        return $text;
+    }
+
+    /**
+     * Returns json years from department
+     *
+     * @return string
+     */
+    public function yearsFromDepartmentAction()
+    {
+/*        $idDepartment = $this->getSessionValueByKey('idDepartment', null, 'oper.bundle.department', 'param');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:Grafik');
+
+        $objects= $repository->getYearsFromDepartment($idDepartment);*/
+
+        $result = array();
+        $currentYear = intval(date('Y'));
+        for ($year = 2013; $year<=$currentYear; $year++) {
+            //$year = $object['year'];
+
+            $result[] = array(
+                'id' => $year,
+                'value' => $year,
+                'name' => (string) $year,
+                'text' => (string) $year
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json years from department by id
+     *
+     * @return string
+     */
+    public function yearsFromDepartmentByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+        foreach ($ids as $idYear) {
+
+            $result = array(
+                'id' => $idYear,
+                'value' => $idYear,
+                'name' => $idYear,
+                'text' => $idYear
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * @return Response
+     */
+    public function departmentIndividualGrafikAction()
+    {
+        $idDepartment = $this->get('request')->request->get('pk');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
+
+        $departmentPeople = $repository->findBy(array(
+            'department' => $idDepartment,
+        ));
+
+        $result = array();
+        if (is_array($departmentPeople)) {
+            foreach ($departmentPeople as $object) {
+                $result[] = $this->serializeObject($object);
+            }
+        } else {
+            $result[] = $this->serializeObject($departmentPeople);
+        }
+
+        return new Response(json_encode($result));
     }
 }

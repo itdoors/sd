@@ -155,10 +155,10 @@ class ModelContactOrganizationEditForm extends ModelContactOrganizationFormType
                         $form->get('modelId')->addError(new FormError($msg));
                     }
 
-                    if (!$data->getPhone1()) {
+                    if (!$data->getPhone1() && !$data->getPhone2() && !$data->getEmail()) {
                         $translator = $container->get('translator');
 
-                        $msg = $translator->trans("Phone cant be empty", array(), 'ListsContactBundle');
+                        $msg = $translator->trans("Enter Phone or Phone mob or email", array(), 'ListsContactBundle');
 
                         $form->get('phone1')->addError(new FormError($msg));
                     }

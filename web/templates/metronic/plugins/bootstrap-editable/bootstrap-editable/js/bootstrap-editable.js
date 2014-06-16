@@ -5631,9 +5631,9 @@ Editableform based on Twitter Bootstrap
         });
         return out;
     }
-
+   console.log($.fn.datepicker.dates);
     var old = $.fn.datepicker;
-    var datepicker = $.fn.datepicker = function ( option ) {
+    var datepicker = $.fn.datepicker ;/*= function ( option ) {
         var args = Array.apply(null, arguments);
         args.shift();
         var internal_return,
@@ -5669,9 +5669,9 @@ Editableform based on Twitter Bootstrap
             return internal_return;
         else
             return this;
-    };
+    };*/
 
-    var defaults = $.fn.datepicker.defaults = {
+    var defaults = $.fn.datepicker.defaults; /*= {
         autoclose: false,
         beforeShowDay: $.noop,
         calendarWeeks: false,
@@ -5689,14 +5689,14 @@ Editableform based on Twitter Bootstrap
         todayBtn: false,
         todayHighlight: false,
         weekStart: 0
-    };
-    var locale_opts = $.fn.datepicker.locale_opts = [
+    };*/
+    var locale_opts = $.fn.datepicker.locale_opts/* = [
         'format',
         'rtl',
         'weekStart'
-    ];
+    ]*/;
     $.fn.datepicker.Constructor = Datepicker;
-    var dates = $.fn.datepicker.dates = {
+    var dates = $.fn.datepicker.dates /*= {
         en: {
             days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
             daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
@@ -5706,7 +5706,10 @@ Editableform based on Twitter Bootstrap
             today: "Today",
             clear: "Clear"
         }
-    };
+        
+    }*/;
+ 
+    
 
     var DPGlobal = {
         modes: [

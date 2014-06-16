@@ -1,0 +1,40 @@
+it_doors_email_templates:
+    pattern:  /email/templates
+    defaults: { _controller: ITDoorsEmailBundle:Templates:index }
+    
+it_doors_email_templates_list:
+    pattern:  /email/templates/list
+    defaults: { _controller: ITDoorsEmailBundle:Templates:list }
+    
+it_doors_email_history:
+    pattern:  /email/history
+    defaults: { _controller: ITDoorsEmailBundle:Automailer:index }
+    
+it_doors_automailer_list:
+    pattern:  /email/list
+    defaults: { _controller: ITDoorsEmailBundle:Automailer:list }
+    
+automailer_show:
+    pattern:  /email/show/{id}
+    defaults: { _controller: ITDoorsEmailBundle:Automailer:show }
+
+automailer_new:
+    pattern:  /email/new
+    defaults: { _controller: ITDoorsEmailBundle:Automailer:new }
+    
+automailer_create:
+    pattern:  /email/create
+    defaults: { _controller: ITDoorsEmailBundle:Automailer:create }
+
+automailer_delete:
+    pattern:  /email/delete/{id}
+    defaults: { _controller: ITDoorsEmailBundle:Automailer:delete }
+    
+file_upload:
+    pattern:  /file/upload
+    defaults: { _controller: ITDoorsEmailBundle:File:upload }
+    
+file_delete:
+    pattern:  /file/delete
+    defaults: { _controller: ITDoorsEmailBundle:File:delete }
+

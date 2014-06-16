@@ -1,0 +1,28 @@
+SD\UserBundle\Entity\Usercontactinfo:
+    type:  entity
+    table: user_contactinfo
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: SEQUENCE
+    fields:
+        value:
+            type: string
+            length: 255
+    manyToOne:
+        user:
+          targetEntity: User
+          cascade: {  }
+          inversedBy: null
+          joinColumn:
+            user_id:
+                referencedColumnName: id
+        contactinfo:
+          targetEntity: Contactinfo
+          cascade: {  }
+          inversedBy: null
+          joinColumn:
+            contactinfo_id:
+                referencedColumnName: id
+            

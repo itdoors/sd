@@ -116,6 +116,11 @@ Lists\OrganizationBundle\Entity\Organization:
             joinColumn:
                 name: city_id
                 referencedColumnName: id
+        lookup:
+            targetEntity: Lists\LookupBundle\Entity\Lookup
+            joinColumn:
+                name: organization_sign_id
+                referencedColumnName: id
         scope:
             targetEntity: Lists\LookupBundle\Entity\Lookup
             joinColumn:

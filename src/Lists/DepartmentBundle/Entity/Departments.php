@@ -15,11 +15,6 @@ class Departments
     /**
      * @var string
      */
-    private $mpk;
-
-    /**
-     * @var string
-     */
     private $name;
 
     /**
@@ -63,6 +58,16 @@ class Departments
     private $coordinates;
 
     /**
+     * @var integer
+     */
+    private $organizationId;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $mpks;
+
+    /**
      * @var \Lists\CityBundle\Entity\City
      */
     private $city;
@@ -83,6 +88,19 @@ class Departments
     private $status;
 
     /**
+     * @var \SD\UserBundle\Entity\User
+     */
+    private $opermanager;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->mpks = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * Get id
      *
      * @return integer
@@ -90,30 +108,6 @@ class Departments
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set mpk
-     *
-     * @param string $mpk
-     *
-     * @return Departments
-     */
-    public function setMpk($mpk)
-    {
-        $this->mpk = $mpk;
-
-        return $this;
-    }
-
-    /**
-     * Get mpk
-     *
-     * @return string
-     */
-    public function getMpk()
-    {
-        return $this->mpk;
     }
 
     /**
@@ -333,6 +327,64 @@ class Departments
     }
 
     /**
+     * Set organizationId
+     *
+     * @param integer $organizationId
+     *
+     * @return Departments
+     */
+    public function setOrganizationId($organizationId)
+    {
+        $this->organizationId = $organizationId;
+
+        return $this;
+    }
+
+    /**
+     * Get organizationId
+     *
+     * @return integer
+     */
+    public function getOrganizationId()
+    {
+        return $this->organizationId;
+    }
+
+    /**
+     * Add mpks
+     *
+     * @param \Lists\MpkBundle\Entity\Mpk $mpks
+     *
+     * @return Departments
+     */
+    public function addMpk(\Lists\MpkBundle\Entity\Mpk $mpks)
+    {
+        $this->mpks[] = $mpks;
+
+        return $this;
+    }
+
+    /**
+     * Remove mpks
+     *
+     * @param \Lists\MpkBundle\Entity\Mpk $mpks
+     */
+    public function removeMpk(\Lists\MpkBundle\Entity\Mpk $mpks)
+    {
+        $this->mpks->removeElement($mpks);
+    }
+
+    /**
+     * Get mpks
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMpks()
+    {
+        return $this->mpks;
+    }
+
+    /**
      * Set city
      *
      * @param \Lists\CityBundle\Entity\City $city
@@ -429,41 +481,66 @@ class Departments
     }
 
     /**
-     * @var integer
-     */
-    private $organizationId;
-
-    /**
-     * Set organizationId
+     * Set opermanager
      *
-     * @param integer $organizationId
+     * @param \SD\UserBundle\Entity\User $opermanager
      *
      * @return Departments
      */
-    public function setOrganizationId($organizationId)
+    public function setOpermanager(\SD\UserBundle\Entity\User $opermanager = null)
     {
-        $this->organizationId = $organizationId;
+        $this->opermanager = $opermanager;
 
         return $this;
     }
 
     /**
-     * Get organizationId
+     * Get opermanager
      *
-     * @return integer
+     * @return \SD\UserBundle\Entity\User
      */
-    public function getOrganizationId()
+    public function getOpermanager()
     {
-        return $this->organizationId;
+        return $this->opermanager;
     }
 
     /**
-     * __toString()
+     * toString Method
      *
      * @return string
      */
     public function __toString()
     {
-        return $this->getCity()->getName() . ' | ' . $this->getAddress();
+        return $this->name;
+    }
+
+    /**
+     * @var string
+     */
+    private $mpk;
+
+
+    /**
+     * Set mpk
+     *
+     * @param string $mpk
+     *
+     * @return Departments
+     */
+    public function setMpk($mpk)
+    {
+        $this->mpk = $mpk;
+
+        return $this;
+    }
+
+    /**
+     * Get mpk
+     *
+     * @return string 
+     */
+    public function getMpk()
+    {
+        return $this->mpk;
     }
 }

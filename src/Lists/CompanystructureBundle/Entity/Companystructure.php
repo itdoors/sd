@@ -2,6 +2,9 @@
 
 namespace Lists\CompanystructureBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+use ITDoors\ControllingBundle\Entity\InvoiceCompanystructure;
+
 /**
  * Companystructure
  */
@@ -38,9 +41,19 @@ class Companystructure
     private $stuffId;
 
     /**
-     * @var \SD\UserBundle\Entity\Staff
+     * @var \Doctrine\Common\Collections\Collection
      */
-    private $staff;
+    private $invoicecompanystructure;
+
+    /**
+     * @var \SD\UserBundle\Entity\Stuff
+     */
+    private $stuff;
+
+    /**
+     * @var \Lists\CompanystructureBundle\Entity\Companystructure
+     */
+    private $parent;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -52,13 +65,14 @@ class Companystructure
      */
     public function __construct()
     {
+        $this->invoicecompanystructure = new \Doctrine\Common\Collections\ArrayCollection();
         $this->region = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
      * Get id
      *
-     * @return integer
+     * @return integer 
      */
     public function getId()
     {
@@ -69,7 +83,7 @@ class Companystructure
      * Set name
      *
      * @param string $name
-     *
+     * 
      * @return Companystructure
      */
     public function setName($name)
@@ -82,7 +96,7 @@ class Companystructure
     /**
      * Get name
      *
-     * @return string
+     * @return string 
      */
     public function getName()
     {
@@ -93,7 +107,7 @@ class Companystructure
      * Set mpk
      *
      * @param string $mpk
-     *
+     * 
      * @return Companystructure
      */
     public function setMpk($mpk)
@@ -106,7 +120,7 @@ class Companystructure
     /**
      * Get mpk
      *
-     * @return string
+     * @return string 
      */
     public function getMpk()
     {
@@ -117,7 +131,7 @@ class Companystructure
      * Set address
      *
      * @param string $address
-     *
+     * 
      * @return Companystructure
      */
     public function setAddress($address)
@@ -130,7 +144,7 @@ class Companystructure
     /**
      * Get address
      *
-     * @return string
+     * @return string 
      */
     public function getAddress()
     {
@@ -141,7 +155,7 @@ class Companystructure
      * Set phone
      *
      * @param string $phone
-     *
+     * 
      * @return Companystructure
      */
     public function setPhone($phone)
@@ -154,7 +168,7 @@ class Companystructure
     /**
      * Get phone
      *
-     * @return string
+     * @return string 
      */
     public function getPhone()
     {
@@ -165,7 +179,7 @@ class Companystructure
      * Set stuffId
      *
      * @param integer $stuffId
-     *
+     * 
      * @return Companystructure
      */
     public function setStuffId($stuffId)
@@ -178,7 +192,7 @@ class Companystructure
     /**
      * Get stuffId
      *
-     * @return integer
+     * @return integer 
      */
     public function getStuffId()
     {
@@ -186,34 +200,92 @@ class Companystructure
     }
 
     /**
-     * Set staff
+     * Add invoicecompanystructure
      *
-     * @param \SD\UserBundle\Entity\Staff $staff
-     *
+     * @param InvoiceCompanystructure $invoicecompanystructure
+     * 
      * @return Companystructure
      */
-    public function setStaff(\SD\UserBundle\Entity\Staff $staff = null)
+    public function addInvoicecompanystructure(InvoiceCompanystructure $invoicecompanystructure)
     {
-        $this->staff = $staff;
+        $this->invoicecompanystructure[] = $invoicecompanystructure;
 
         return $this;
     }
 
     /**
-     * Get staff
+     * Remove invoicecompanystructure
      *
-     * @return \SD\UserBundle\Entity\Staff
+     * @param InvoiceCompanystructure $invoicecompanystructure
      */
-    public function getStaff()
+    public function removeInvoicecompanystructure(InvoiceCompanystructure $invoicecompanystructure)
     {
-        return $this->staff;
+        $this->invoicecompanystructure->removeElement($invoicecompanystructure);
+    }
+
+    /**
+     * Get invoicecompanystructure
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInvoicecompanystructure()
+    {
+        return $this->invoicecompanystructure;
+    }
+
+    /**
+     * Set stuff
+     *
+     * @param \SD\UserBundle\Entity\Stuff $stuff
+     * 
+     * @return Companystructure
+     */
+    public function setStuff(\SD\UserBundle\Entity\Stuff $stuff = null)
+    {
+        $this->stuff = $stuff;
+
+        return $this;
+    }
+
+    /**
+     * Get stuff
+     *
+     * @return \SD\UserBundle\Entity\Stuff 
+     */
+    public function getStuff()
+    {
+        return $this->stuff;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \Lists\CompanystructureBundle\Entity\Companystructure $parent
+     * 
+     * @return Companystructure
+     */
+    public function setParent(\Lists\CompanystructureBundle\Entity\Companystructure $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Lists\CompanystructureBundle\Entity\Companystructure 
+     */
+    public function getParent()
+    {
+        return $this->parent;
     }
 
     /**
      * Add region
      *
      * @param \Lists\RegionBundle\Entity\Region $region
-     *
+     * 
      * @return Companystructure
      */
     public function addRegion(\Lists\RegionBundle\Entity\Region $region)
@@ -236,7 +308,7 @@ class Companystructure
     /**
      * Get region
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Doctrine\Common\Collections\Collection 
      */
     public function getRegion()
     {
@@ -244,7 +316,7 @@ class Companystructure
     }
 
     /**
-     *  __toString()
+     * __toStrong
      *
      * @return string
      */
@@ -253,59 +325,42 @@ class Companystructure
         return $this->getName();
     }
     /**
-     * @var integer
+     * @var \Doctrine\Common\Collections\Collection
      */
-    private $staffId;
+    private $userstuff;
+
 
     /**
-     * Set staffId
+     * Add userstuff
      *
-     * @param integer $staffId
-     *
+     * @param \SD\UserBundle\Entity\Stuff $userstuff
+     * 
      * @return Companystructure
      */
-    public function setStaffId($staffId)
+    public function addUserstuff(\SD\UserBundle\Entity\Stuff $userstuff)
     {
-        $this->staffId = $staffId;
+        $this->userstuff[] = $userstuff;
 
         return $this;
     }
 
     /**
-     * Get staffId
+     * Remove userstuff
      *
-     * @return integer
+     * @param \SD\UserBundle\Entity\Stuff $userstuff
      */
-    public function getStaffId()
+    public function removeUserstuff(\SD\UserBundle\Entity\Stuff $userstuff)
     {
-        return $this->staffId;
-    }
-    /**
-     * @var \Lists\CompanystructureBundle\Entity\Companystructure
-     */
-    private $parent;
-
-    /**
-     * Set parent
-     *
-     * @param \Lists\CompanystructureBundle\Entity\Companystructure $parent
-     *
-     * @return Companystructure
-     */
-    public function setParent(\Lists\CompanystructureBundle\Entity\Companystructure $parent = null)
-    {
-        $this->parent = $parent;
-
-        return $this;
+        $this->userstuff->removeElement($userstuff);
     }
 
     /**
-     * Get parent
+     * Get userstuff
      *
-     * @return \Lists\CompanystructureBundle\Entity\Companystructure
+     * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getParent()
+    public function getUserstuff()
     {
-        return $this->parent;
+        return $this->userstuff;
     }
 }

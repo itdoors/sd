@@ -1,5 +1,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
+        
+        
         $('#calendar').fullCalendar({
             header: {
                 left:   'title',
@@ -36,9 +38,15 @@
                 month: "Месяц",
                 week: "Неделя",
                 day: "День"
+            },
+            eventMouseover: function(event, jsEvent, view) {
+                $(this).attr('title', event.hover_title);
+                //console.log(event);
+               // console.log(this);
+                //$(this).append('<div title=\"'+event.title+'\" class=\"hover-end\">'+event.title+'</div>');
             }
         });
-    })
+    });
 </script>
 
 <div class="col-md-12 col-sm-12">

@@ -309,7 +309,7 @@ class ModelContactRepository extends EntityRepository
 
         $sql
             ->andWhere('mc.email LIKE :searchText')
-            ->setParameter(':searchText', '%' . $searchText . '%');
+            ->setParameter(':searchText', '%' . mb_strtolower($searchText, 'UTF-8') . '%');
 
         return $sql;
     }

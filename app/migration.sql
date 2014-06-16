@@ -389,3 +389,66 @@ ALTER TABLE dogovor_history ADD CONSTRAINT FK_32605586C06CDB2C FOREIGN KEY (dop_
 ALTER TABLE dogovor_history ADD CONSTRAINT FK_32605586A76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 +++++++++++
+-- DROP INDEX department_people_month_info_pkey;
+-- ALTER TABLE department_people_month_info ADD CONSTRAINT FK_BA53F01FEAC5BEFA FOREIGN KEY (department_people_id) REFERENCES department_people (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+CREATE SEQUENCE department_people_month_info_id_seq INCREMENT BY 1 MINVALUE 1 START 1;
+ALTER TABLE department_people_month_info ADD id BIGINT DEFAULT nextval('department_people_month_info_id_seq'::regclass);
+ALTER TABLE department_people_month_info ALTER COLUMN id SET NOT NULL;
+ALTER TABLE department_people_month_info ADD PRIMARY KEY (id);
+
+CREATE UNIQUE INDEX department_people_month_info_unique_idx ON department_people_month_info (department_people_id, year, month, department_people_replacement_id, replacement_type);
+
+
+CREATE SEQUENCE once_only_accrual_id_seq INCREMENT BY 1 MINVALUE 1 START 1;
+CREATE TABLE once_only_accrual (id BIGINT NOT NULL DEFAULT nextval('once_only_accrual_id_seq'::regclass), mpk_id BIGINT DEFAULT NULL, department_people_month_info_id BIGINT DEFAULT NULL, work_type VARCHAR(1) NOT NULL, type VARCHAR(2) NOT NULL, code VARCHAR(2) NOT NULL, value DOUBLE PRECISION NOT NULL, description VARCHAR(255) DEFAULT NULL, is_active BOOLEAN DEFAULT NULL, PRIMARY KEY(id));
+CREATE UNIQUE INDEX UNIQ_85E87E8C895D31C8 ON once_only_accrual (mpk_id);
+CREATE INDEX IDX_85E87E8C97E5C034 ON once_only_accrual (department_people_month_info_id);
+ALTER TABLE once_only_accrual ADD CONSTRAINT FK_85E87E8C895D31C8 FOREIGN KEY (mpk_id) REFERENCES mpk (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE once_only_accrual ADD CONSTRAINT FK_85E87E8C97E5C034 FOREIGN KEY (department_people_month_info_id) REFERENCES department_people_month_info (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+
+CREATE SEQUENCE invoice_companystructure_id_seq INCREMENT BY 1 MINVALUE 1 START 1;
+CREATE TABLE invoice_companystructure (id INT NOT NULL, invoice_id INT NOT NULL, companystructure_id INT NOT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_517FBE652989F1FD ON invoice_companystructure (invoice_id);
+CREATE INDEX IDX_517FBE6562580AED ON invoice_companystructure (companystructure_id);
+CREATE TABLE invoice_message (id SERIAL NOT NULL, invoice_id INT DEFAULT NULL, user_id INT DEFAULT NULL, model_contact_id INT DEFAULT NULL, note VARCHAR(255) NOT NULL, createdate TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_446406AC2989F1FD ON invoice_message (invoice_id);
+CREATE INDEX IDX_446406ACA76ED395 ON invoice_message (user_id);
+CREATE INDEX IDX_446406AC8E9E2EDD ON invoice_message (model_contact_id);
+CREATE TABLE invoicecron (id SERIAL NOT NULL, invoice_id INT DEFAULT NULL, date TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, status VARCHAR(64) NOT NULL, description TEXT NOT NULL, reason VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_F25776C12989F1FD ON invoicecron (invoice_id);
+ALTER TABLE invoice_companystructure ADD CONSTRAINT FK_517FBE652989F1FD FOREIGN KEY (invoice_id) REFERENCES invoice (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE invoice_companystructure ADD CONSTRAINT FK_517FBE6562580AED FOREIGN KEY (companystructure_id) REFERENCES companystructure (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE invoice_message ADD CONSTRAINT FK_446406AC2989F1FD FOREIGN KEY (invoice_id) REFERENCES invoice (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE invoice_message ADD CONSTRAINT FK_446406ACA76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE invoice_message ADD CONSTRAINT FK_446406AC8E9E2EDD FOREIGN KEY (model_contact_id) REFERENCES model_contact (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE invoicecron ADD CONSTRAINT FK_F25776C12989F1FD FOREIGN KEY (invoice_id) REFERENCES invoice (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE invoice ADD dogovor_quid VARCHAR(512);
+ALTER TABLE invoice ADD dogovor_act TEXT;
+ALTER TABLE invoice ADD dogovor_act_note TEXT;
+ALTER TABLE invoice ADD customer_name VARCHAR(255) DEFAULT NULL;
+ALTER TABLE invoice ADD customer_edrpou VARCHAR(255) DEFAULT NULL;
+ALTER TABLE invoice ADD performer_name VARCHAR(255) DEFAULT NULL;
+ALTER TABLE invoice ADD performer_edrpou VARCHAR(255) DEFAULT NULL;
+ALTER TABLE invoice DROP organization_id;
+ALTER TABLE invoice DROP organization_name;
+ALTER TABLE invoice DROP organization_edrpou;
+ALTER TABLE invoice DROP dogovor_uuie;
+ALTER TABLE invoice DROP organization_edrpou_doer;
+ALTER TABLE invoice ALTER dogovor_date TYPE TIMESTAMP(0) WITHOUT TIME ZONE;
+ALTER TABLE invoice ALTER dogovor_date DROP NOT NULL;
+
+
+CREATE SEQUENCE automailer_id_seq INCREMENT BY 1 MINVALUE 1 START 1;
+CREATE TABLE automailer (id INT NOT NULL, from_email VARCHAR(255) NOT NULL, from_name VARCHAR(255) NOT NULL, to_email VARCHAR(255) NOT NULL, subject TEXT NOT NULL, body TEXT NOT NULL, alt_body TEXT NOT NULL, swift_message TEXT NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, sent_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, started_sending_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, is_html BOOLEAN NOT NULL, is_sending BOOLEAN DEFAULT NULL, is_sent BOOLEAN DEFAULT NULL, is_failed BOOLEAN DEFAULT NULL, PRIMARY KEY(id));
+CREATE INDEX find_next ON automailer (is_sent, is_failed, is_sending, created_at);
+CREATE INDEX recover_sending ON automailer (is_sending, started_sending_at);
+
+CREATE TABLE email (id SERIAL NOT NULL, alias VARCHAR(255) NOT NULL, subject VARCHAR(255) NOT NULL, text TEXT NOT NULL, PRIMARY KEY(id));
+CREATE UNIQUE INDEX UNIQ_E7927C74E16C6B94 ON email (alias);
+
+-- chmod on web/files/upload
+-- chmod on web/files/email
+-- app/share/1c/debt/
+

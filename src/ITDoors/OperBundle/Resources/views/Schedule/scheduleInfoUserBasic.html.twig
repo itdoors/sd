@@ -1,0 +1,312 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
+
+<script>
+    $(document).ready(function(){
+        $('.submit_add_accrual').die('click');
+        $('.submit_add_accrual').live('click', function(e) {
+            var type = $(this).data('type');
+            $(this).addClass('notDisplayed');
+            $('#add_form_accrual_'+type).show('blind',{}, 500);
+            //$('#add_form_accrual_'+type).removeClass('notDisplayed');//.show( 'show', {}, 500 );
+        })
+
+        $('.cancel_add_accrual').die('click');
+        $('.cancel_add_accrual').live('click', function(e) {
+            var add_buttons = $('.submit_add_accrual');
+            var type = $(this).data('type');
+            $('#add_form_accrual_'+type).hide('blind',{}, 500);
+
+            if ( $(add_buttons[0]).data('type') == type) {
+                $(add_buttons[0]).removeClass('notDisplayed');
+            } else {
+                $(add_buttons[1]).removeClass('notDisplayed');
+            }
+
+            //$('#add_form_accrual_'+type).removeClass('notDisplayed');//.show( 'show', {}, 500 );
+        })
+
+        $('.send_add_accrual').die('click');
+        $('.send_add_accrual').live('click', function(e) {
+            var add_buttons = $('.submit_add_accrual');
+            var type = $(this).data('type');
+            var date = $('#info_input').data('date');
+
+            var workType = $('#work_type_accrual_'+type+' option:selected').val();
+            var description = $('#adding_accrual_'+type).val();
+            var value = $('#value_accrual_'+type).val();
+            if (value.length == 0) {
+                alert ('Заполните значение');
+                return true;
+            }
+            if (type == 'officially') {
+                var officially = true;
+            } else {
+                var officially = false;
+            }
+            var typeAccural = $('#type_accrual_' + type + ' option:selected').val();
+            var idCoworker = $('#info_input_user_basic').data('id_coworker');
+            var url = $('#info_input_user_basic').data('url_add_accrual');
+
+            var sendData = {
+                'date': date,
+                'workType': workType,
+                'description': description,
+                'officially': officially,
+                'type': typeAccural,
+                'value': value,
+                'idCoworker': idCoworker
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+
+                beforeSend: function() {
+                    //ITDoorsAjax.blockUI($('#'+idLastHref));
+                },
+                success: function(data) {
+                    //alert(data);
+                    //ITDoorsAjax.unblockUI($('#'+idLastHref));
+                    data = JSON.parse(data);
+                    if (data.success == 0) {
+                        alert('Ошибка Не разрешено');
+                    }
+                    else {
+                        //alert(data.html)
+                        $('#holder_'+type).html(data.html);
+                    }
+                }
+
+            })
+            //alert(date+workType+description+officially+typeAccural+value);
+
+            //$('#add_form_accrual_'+type).removeClass('notDisplayed');//.show( 'show', {}, 500 );
+        })
+
+        $('.delete_accrual').die('click');
+        $('.delete_accrual').live('click', function(e) {
+            e.preventDefault();
+            var pk = $(this).data('pk');
+            var code = $(this).data('code');
+            var url = $('#info_input_user_basic').data('url_delete_accrual');
+            var idCoworker = $('#info_input_user_basic').data('id_coworker');
+            var date = $('#info_input').data('date');
+            var sendData = {
+                'pk': pk,
+                'idCoworker': idCoworker,
+                'code': code,
+                'date': date
+            }
+            if (code == 'oz') {
+                type = 'officially'
+            } else {
+                type = 'notOfficially'
+            }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data) {
+                    //alert(data);
+                    data = JSON.parse(data);
+                    if (data.success == 0) {
+
+                    }
+                    else {
+                        //alert(data.html)
+                        $('#holder_'+type).html(data.html)
+                    }
+                }
+
+            })
+
+        })
+    })
+</script>
+
+<style>
+    .notDisplayed{
+        display: none;
+    }
+</style>
+
+<div class="tabbable tabbable-custom boxless">
+    <ul class="nav nav-tabs" id="ajax_tabs">
+        <li class="active"><a href="#tab_0" data-block="tab_content" data-toggle="tab">{% trans %}Basic{% endtrans %}</a></li>
+        <li><a href="#tab_1" data-toggle="tab">{% trans %}Planned accrual{% endtrans %}</a></li>
+    </ul>
+    <div class="tab-content" id="tab_content">
+        <div class="tab-pane active" id="tab_0">
+
+
+
+<table  class="table table-bordered table-striped">
+    <tr>
+        <td width="25%">{% trans %}Mpk{% endtrans %}</td>
+        <td width="25%">{{ coworker.mpk }}
+{#
+            {% if coworker.mpk|length>0 %}
+                {% for mpk in  coworker.mpk%}
+                    {{ mpk.name }}
+                {% endfor %}
+            {% else %}
+                {{ coworker.mpk }}
+            {% endif %}
+#}
+        </td>
+
+        <td width="25%">{% trans %}Fio{% endtrans %}</td>
+        <td width="25%">{{ coworker.fio }}</td>
+    </tr>
+
+    <tr>
+        <td colspan="2" align="center">{% trans %}Officially{% endtrans %}</td>
+        <td colspan="2" align="center">{% trans %}Not officially{% endtrans %}</td>
+    </tr>
+
+    <tr>
+        <td>{% trans %}Date accepted simple{% endtrans %}</td>
+        <td>
+            {% if coworker.dateAcceptedOfficially is not empty %}
+                {{ coworker.dateAcceptedOfficially|date('Y-m-d') }}
+            {% endif %}
+        </td>
+
+        <td>{% trans %}Date accepted simple{% endtrans %}</td>
+        <td>
+            {% if coworker.dateAcceptedNotOfficially is not empty %}
+                {{ coworker.dateAcceptedNotOfficially|date('Y-m-d') }}
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td>{% trans %}Date faired simple{% endtrans %}</td>
+        <td>
+            {% if coworker.dateFiredOfficially is not empty %}
+                {{ coworker.dateFiredOfficially|date('Y-m-d') }}
+            {% endif %}
+        </td>
+
+        <td>{% trans %}Date faired simple{% endtrans %}</td>
+        <td>
+            {% if coworker.dateFiredNotOfficially is not empty %}
+                {{ coworker.dateFiredNotOfficially|date('Y-m-d') }}
+            {% endif %}
+        </td>
+    </tr>
+
+    <tr>
+        <td colspan="4" align="center">{% trans %}Once accrural{% endtrans %}</td>
+    </tr>
+
+    <tr>
+        <td colspan="2" align="center">
+            <div id="holder_officially">
+                {{ include(
+                'ITDoorsOperBundle:Schedule:scheduleInfoUserBasicAccrual.html.twig', {
+                'accruals': accrual,
+                'code' : 'oz'
+                    })
+                }}
+            </div>
+            <br>
+            <div style="text-align:center;">
+                <div id="add_form_accrual_officially" class="notDisplayed" data-type="officially" style="border:1px solid green; padding:5px;">
+                    Выберите тип:
+                    <select id="type_accrual_officially">
+                        <option value="add">{% trans %}Add accrual{% endtrans %}</option>
+                        <option value="premium">{% trans %}Premium accrual{% endtrans %}</option>
+                        <option value="fine">{% trans %}Fine accrual{% endtrans %}</option>
+                    </select>
+                    <br><br>
+                    Выберите тип работ:
+                    <select id="work_type_accrual_officially">
+                        <option value="k">k</option>
+                        <option value="d">d</option>
+                        <option value="r">r</option>
+                    </select>
+                    <br><br>
+                    <input type="text" id="value_accrual_officially" placeholder="Значение"><br>
+                    <input type="text" id="adding_accrual_officially" placeholder="Примечание"><br><br>
+
+                    <a class="btn red cancel_add_accrual" data-type="officially">
+                        {% trans %}Cancel{% endtrans %}
+                    </a>
+                    <a class="btn green send_add_accrual"  data-type="officially">
+                        {% trans %}Add{% endtrans %}
+                    </a>
+                </div>
+
+                <a class="btn blue submit_add_accrual" data-type="officially">
+                    {% trans %}Add{% endtrans %}
+                </a>
+
+            </div>
+        </td>
+        <td colspan="2" align="center">
+            <div id="holder_notOfficially">
+            {{ include(
+            'ITDoorsOperBundle:Schedule:scheduleInfoUserBasicAccrual.html.twig', {
+            'accruals': accrual,
+            'code' : 'uu'
+            })
+            }}
+            </div>
+            <br>
+            <div style="text-align:center;">
+                <div id="add_form_accrual_notOfficially" class="notDisplayed" data-type="notOfficially" style="border:1px solid green; padding:5px;">
+                    Выберите тип:
+                    <select id="type_accrual_notOfficially">
+                        <option value="add">Доплата</option>
+                        <option value="premium">Премия</option>
+                        <option value="fine">Удержание</option>
+                    </select>
+                    <br><br>
+                    Выберите тип работ:
+                    <select id="work_type_accrual_notOfficially">
+                        <option value="k">k</option>
+                        <option value="d">d</option>
+                        <option value="r">r</option>
+                    </select>
+                    <br><br>
+                    <input type="text" id="value_accrual_notOfficially" placeholder="Значение"><br>
+                    <input type="text" id="adding_accrual_notOfficially" placeholder="Примечание"><br><br>
+
+                    <a class="btn red cancel_add_accrual" data-type="notOfficially">
+                        {% trans %}Cancel{% endtrans %}
+                    </a>
+                    <a class="btn green send_add_accrual"  data-type="notOfficially">
+                        {% trans %}Add{% endtrans %}
+                    </a>
+                </div>
+
+                <a class="btn blue submit_add_accrual" data-type="notOfficially">
+                    {% trans %}Add{% endtrans %}
+                </a>
+            </div>
+        </td>
+    </tr>
+
+</table>
+        </div>
+        <div class="tab-pane" id="tab_1">
+            <table  class="table table-bordered table-striped">
+                {% for plannedAccrual in planned %}
+                <tr>
+                    <td width="50%">{{ plannedAccrual.name }} ({{ plannedAccrual.type }})</td>
+                    <td>{{ plannedAccrual.value }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+
+    </div>
+</div>
+
+<input type="hidden" id="info_input_user_basic"
+       data-id_coworker="{{ coworker.id }}"
+       data-url_add_accrual="{{ path('it_doors_oper_schedule_add_accural') }}"
+       data-url_delete_accrual="{{ path('it_doors_oper_schedule_delete_accural') }}">

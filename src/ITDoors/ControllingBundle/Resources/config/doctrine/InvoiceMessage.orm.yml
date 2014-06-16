@@ -1,0 +1,52 @@
+# src/ITDoors/ControllingBundle/Resources/config/doctrine/InvoiceMessage.orm.yml
+ITDoors\ControllingBundle\Entity\InvoiceMessage:
+    type: entity
+    table: invoice_message
+    repositoryClass: ITDoors\ControllingBundle\Entity\InvoiceMessageRepository
+    id:
+        id:
+            type: integer
+            generator: { strategy: IDENTITY }
+    fields:
+        invoiceId:
+            type: integer
+            length: 10
+            column: invoice_id
+            nullable: true
+        userId:
+            type: integer
+            length: 10
+            column: user_id
+            nullable: true
+        contactId:
+            type: integer
+            length: 10
+            column: model_contact_id
+            nullable: true
+        note:
+            type: string
+            length: 255
+        createdate:
+            type: datetime
+    manyToOne:
+        invoice:
+            targetEntity: ITDoors\ControllingBundle\Entity\Invoice
+            inversedBy: messages
+            joinColumn:
+                name: invoice_id
+                referencedColumnName: id
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        contact:
+            targetEntity: Lists\ContactBundle\Entity\ModelContact
+            inversedBy: null
+            joinColumn:
+                name: model_contact_id
+                referencedColumnName: id

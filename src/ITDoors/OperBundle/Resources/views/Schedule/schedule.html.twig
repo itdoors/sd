@@ -1,0 +1,30 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
+
+<div id="form_modal_more_info" class="modal fade" role="basic" aria-hidden="true">
+    <div class="modal-dialog" style="width: 60%; min-width: 650px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">{% trans  from 'ListsHandlingBundle' %}More info{% endtrans %}</h4>
+            </div>
+            <div class="modal-body">
+                <div id="moreInfoTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
+                </div>
+                <a class="btn green right_float" data-dismiss="modal" aria-hidden="true">{% trans %}Exit {% endtrans %}</a>
+                <br>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+
+
+
+{{ include(
+'ITDoorsOperBundle:Schedule:scheduleFilter.html.twig',
+{}) }}
+
+
+{{ render(controller('ITDoorsOperBundle:OperSchedule:scheduleTable', {
+    'id': id
+})) }}

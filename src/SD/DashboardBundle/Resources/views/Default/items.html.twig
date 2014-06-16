@@ -49,7 +49,7 @@
                data-form_name="modelContactOrganizationEditForm"
                data-post_function=""
                data-post_target_id=""
-                    >
+               >
                 {% trans %}Create contact{% endtrans %} <i class="fa fa-comments"></i>
             </a>
         {% endif %}
@@ -57,8 +57,9 @@
 </div>
 
 <script type="text/javascript">
-    $(document).ready(function(){
-        $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+    $(document).ready(function() {
+        $.fn.modal.Constructor.prototype.enforceFocus = function() {
+        };
     });
 </script>
 
@@ -78,8 +79,6 @@
             <!-- /.modal-content -->
         </div>
     </div>
-    {{ render(controller('ListsHandlingBundle:' ~ masterRole ~ ':List')) }}
-
     {% if masterRole == 'SalesAdmin' %}
         {{ ajax_filter_render('dashboardCalendarFilterType', ajax_filter_namespace_dashboard_calendar, {
         '#calendar': 'SD.updateCalendar'
@@ -90,5 +89,34 @@
 
     {{ include('SDCalendarBundle::base.html.twig', {
         url: path('sd_calendar_' ~ masterRoleRoute ~ '_handling_message')
-    }) }}
+    }) }} 
+                    
+    {% if app.user.hasRole('ROLE_CONTROLLING') %}
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption"><i class="fa fa-globe"></i> {% trans %}Invoice need stitch{% endtrans %}</div>
+            </div>
+            <div class="tools">
+                <a class="collapse" href="javascript:;"></a>
+                <a class="reload" href="javascript:;"></a>
+            </div>
+            <div class="portlet-body" id="datatable_ajax" data-url="{{ url('it_doors_controlling_invoice_list') }}">
+                {{ render(controller('ITDoorsControllingBundle:Invoice:List')) }}
+            </div>
+        </div>
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption"><i class="fa fa-globe"></i> {% trans %}List expected payments{% endtrans %}</div>
+            </div>
+            <div class="tools">
+                <a class="collapse" href="javascript:;"></a>
+                <a class="reload" href="javascript:;"></a>
+            </div>
+            <div class="portlet-body" id="datatable_ajax" data-url="{{ url('it_doors_controlling_invoice_expected_pay') }}">
+                {{ render(controller('ITDoorsControllingBundle:Invoice:Expectedpay')) }}
+            </div>
+        </div>
+    {% endif %}
+    {{ render(controller('ListsHandlingBundle:' ~ masterRole ~ ':List')) }}
+
 {% endif %}

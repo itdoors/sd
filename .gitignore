@@ -1,4 +1,6 @@
 /web/bundles/
+/web/files/email/*
+/web/files/upload/*
 /app/bootstrap.php.cache
 /app/cache/*
 /app/config/parameters.yml
@@ -13,3 +15,6 @@
 /logs
 /build.properties
 /*~
+/nbproject
+nbproject/*
+/app/share/1c/debt/

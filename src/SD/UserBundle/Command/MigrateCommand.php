@@ -3,7 +3,7 @@
 /**
  * Command class for migration users from sf1.4 sfGuardUser to sf2
  */
-namespace Sd\UserBundle\Command;
+namespace SD\UserBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;

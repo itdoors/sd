@@ -1,0 +1,92 @@
+Lists\GrafikBundle\Entity\GrafikTime:
+    repositoryClass : Lists\GrafikBundle\Entity\GrafikTimeRepository
+    type: entity
+    table: grafik_time
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        year:
+            type: bigint
+            nullable: false
+        month:
+            type: bigint
+            nullable: false
+        day:
+            type: bigint
+            nullable: false
+        fromTime:
+            type: time
+            nullable: true
+            column: from_time
+        toTime:
+            type: time
+            nullable: true
+            column: to_time
+        total:
+            type: float
+            nullable: true
+        totalDay:
+            type: float
+            nullable: true
+            column: total_day
+        totalEvening:
+            type: float
+            nullable: true
+            column: total_evening
+        totalNight:
+            type: float
+            nullable: true
+            column: total_night
+        totalNotOfficially:
+            type: float
+            nullable: true
+            column: total_not_officially
+        totalDayNotOfficially:
+            type: float
+            nullable: true
+            column: total_day_not_officially
+        totalEveningNotOfficially:
+            type: float
+            nullable: true
+            column: total_evening_not_officially
+        totalNightNotOfficially:
+            type: float
+            nullable: true
+            column: total_night_not_officially
+        notOfficially:
+            type: boolean
+            nullable: true
+            column: not_officially
+    manyToOne:
+        departmentPeopleReplacement:
+            targetEntity: Lists\DepartmentBundle\Entity\DepartmentPeople
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                department_people_replacement_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        department:
+            targetEntity: Lists\DepartmentBundle\Entity\Departments
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                department_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        departmentPeople:
+            targetEntity: Lists\DepartmentBundle\Entity\DepartmentPeople
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                department_people_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }
