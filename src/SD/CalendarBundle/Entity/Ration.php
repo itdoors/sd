@@ -66,11 +66,11 @@ class Ration
     /**
      * Set value
      *
-     * @param \double $value
+     * @param \float $value
      * 
      * @return Ration
      */
-    public function setValue(\double $value)
+    public function setValue($value)
     {
         $this->value = $value;
 
@@ -80,7 +80,7 @@ class Ration
     /**
      * Get value
      *
-     * @return \double 
+     * @return \float
      */
     public function getValue()
     {
