@@ -49,7 +49,10 @@
                     <select id="add_coworker_select_list">
                         {% for filterCoworker in filterCoworkers %}
                              <option value="{{ filterCoworker.id }}">
-                                 ({{ filterCoworker.mpks.name }}) {{ filterCoworker.lastName }} {{ filterCoworker.firstName }} {{ filterCoworker.middleName }}
+                                 {% if filterCoworker.mpks is not empty %}
+                                    ({{ filterCoworker.mpks.name }})
+                                 {% endif %}
+                                 {{ filterCoworker.lastName }} {{ filterCoworker.firstName }} {{ filterCoworker.middleName }}
                              </option>
                         {% endfor %}
                     </select>
@@ -70,7 +73,10 @@
                         <select id="add_coworker_select_change" >
                             {% for filterCoworker in filterCoworkers %}
                                 <option value="{{ filterCoworker.id }}">
-                                    ({{ filterCoworker.mpks.name }}) {{ filterCoworker.lastName }} {{ filterCoworker.firstName }} {{ filterCoworker.middleName }}
+                                    {% if filterCoworker.mpks is not empty %}
+                                        ({{ filterCoworker.mpks.name }})
+                                    {% endif %}
+                                    {{ filterCoworker.lastName }} {{ filterCoworker.firstName }} {{ filterCoworker.middleName }}
                                 </option>
                             {% endfor %}
                         </select>
@@ -431,7 +437,11 @@
                         {% else %}
                             П
                         {% endif %}
-                    <td>{{ coworker.mpkName }}</td>
+                    <td>
+                        {% if coworker.mpkName is not empty %}
+                            ({{ coworker.mpkName }})
+                        {% endif %}
+                    </td>
 
                     {% for dayInfo in dateInfo %}
                         {% set day = dayInfo.day %}
