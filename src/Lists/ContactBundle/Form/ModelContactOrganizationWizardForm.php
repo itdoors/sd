@@ -65,6 +65,13 @@ class ModelContactOrganizationWizardForm extends ModelContactOrganizationFormTyp
 
                         $form->get('phone1')->addError(new FormError($msg));
                     }
+                    if (!$data->getLevel()) {
+                        $translator = $container->get('translator');
+
+                        $msg = $translator->trans("Enter level", array(), 'ListsContactBundle');
+
+                        $form->get('level')->addError(new FormError($msg));
+                    }
                 }
             }
         );

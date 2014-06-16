@@ -633,7 +633,7 @@ class SalesController extends BaseController
             ->add('contact', 'entity', array(
                 'class' => 'ListsContactBundle:ModelContact',
                 'empty_value' => '',
-                'required' => false,
+                'required' => true,
                 'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
                         return $repository->createQueryBuilder('mc')
                             ->leftJoin('mc.owner', 'owner')
@@ -650,7 +650,7 @@ class SalesController extends BaseController
             ->add('contactnext', 'entity', array(
                 'class' => 'ListsContactBundle:ModelContact',
                 'empty_value' => '',
-                'required' => false,
+                'required' => true,
                 'mapped' => false,
                 'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
                         return $repository->createQueryBuilder('mc')
