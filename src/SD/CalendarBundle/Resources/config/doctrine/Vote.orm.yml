@@ -1,0 +1,28 @@
+SD\CalendarBundle\Entity\Vote:
+    type:  entity
+    table: vote
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+    fields:
+        userId:
+            type: integer
+            nullable: false
+            column: user_id
+        model:
+            type: string
+            nullable: 128
+            column: model
+        modelId:
+            type: integer
+            nullable: false
+            column: model_id
+        value:
+            type: integer
+            nullable: false
+        dateCreate:
+            type: datetime
+            column: date_create
+

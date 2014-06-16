@@ -1,0 +1,43 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'SDCalendarBundle' %}
+{% block title %}{% trans %}History{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Vote <small>list of party</small>{% endtrans %}
+    </h3>
+{% endblock %}
+
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="{{ path('sd_calendar_vote_history') }}" title="{% trans %}Vote history{% endtrans %}">{% trans %}Vote history{% endtrans %}</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.js') }}"></script>
+
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tab-content ajax-tab-holder" id="datatable_ajax" data-url="{{ url('sd_calendar_vote_history_list') }}">
+                {{ render(controller('SDCalendarBundle:Vote:list')) }}
+            </div>
+        </div>
+    </div>
+{% endblock body %}

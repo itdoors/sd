@@ -12,3 +12,15 @@ sd_calendar_salesdispatcher_handling_message:
 sd_calendar_salesadmin_handling_message:
     pattern:  sd/calendar/ajax/salesadmin/handlind_message
     defaults: { _controller: SDCalendarBundle:SalesAdmin:HandlingMessage }
+    
+sd_calendar_vote_history:
+    pattern:  /dashboard/vote/history
+    defaults: { _controller: SDCalendarBundle:Vote:history }
+    
+sd_calendar_vote_history_list:
+    pattern:  /dashboard/vote/history/list
+    defaults: { _controller: SDCalendarBundle:Vote:list }
+    
+sd_calendar_vote_add_party:
+    pattern:  /dashboard/vote/add/party
+    defaults: { _controller: SDCalendarBundle:Vote:addParty }

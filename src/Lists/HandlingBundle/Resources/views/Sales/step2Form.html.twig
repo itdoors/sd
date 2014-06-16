@@ -69,6 +69,16 @@
 
     <div class="form-group">
         <div class="portlet-body">
+            {% if form.vars.valid is sameas(false) %}
+                    <div class="alert alert-danger">
+                        <button class="close" data-close="alert"></button>
+                        {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                        {{ form_errors(form) }}
+                        {% if form.phone1.vars.errors|length %}
+                            {{ form_errors(form.phone1) }}
+                        {% endif %}
+                    </div>
+                {% endif %}
 
             {{ form_start(form, {
                     'action' : path('lists_sales_handling_create_step2'),

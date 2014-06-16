@@ -22,6 +22,7 @@ parameters:
     1C.file.path: "%project.dir%/app/share/1c/debt/"
     email.file.path: "%project.dir%/web/files/email/"
     upload.file.path: "%project.dir%/web/files/upload/"
+    userprofiles.file.path: "%project.dir%/web/uploads/userprofiles/"
 
 framework:
     #esi:             ~

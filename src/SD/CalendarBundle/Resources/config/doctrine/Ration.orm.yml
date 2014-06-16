@@ -1,0 +1,29 @@
+SD\CalendarBundle\Entity\Ration:
+    type:  entity
+    table: ration
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+    fields:
+        articleId:
+            type: integer
+            nullable: false
+            column: article_id
+        value:
+            type: double
+            length: 10,4
+            nullable: false
+            options:
+                default: 0.0000
+    oneToOne:
+            article:
+                targetEntity: Article
+                cascade: {  }
+                mappedBy: null
+                inversedBy: null
+                joinColumns:
+                    article_id:
+                        referencedColumnName: id
+                orphanRemoval: false

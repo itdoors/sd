@@ -391,10 +391,11 @@ class SalesController extends BaseController
         }
 
         $form = $this->createForm('modelContactOrganizationWizardForm');
-
+        
         $form->handleRequest($request);
-
+           
         if ($form->isValid()) {
+
             $em = $this->getDoctrine()->getManager();
 
             $em->getConnection()->beginTransaction();
@@ -469,12 +470,6 @@ class SalesController extends BaseController
 
             return $this->redirect($this->generateUrl('lists_sales_handling_create_step3'));
         }
-
-        $form
-            ->add('organization', 'text', array(
-                'disabled' => true,
-                'data' => (string) $this->getWizardOrganizationName()
-            ));
 
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate. ':step2.html.twig', array(
                 'baseTemplate' => $this->baseTemplate,

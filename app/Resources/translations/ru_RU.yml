@@ -19,7 +19,7 @@ Dashboard: Рабочий стол
 My Sales: Мои продажи
 My Contacts: Мои контакты
 My Organizations: Мои организации
-My Handlings: Мои обращения
+My Handlings: Мои активности
 My Tenders: Мои тендеры
 My Calendar: Мой календарь
 My Reports: Мои отчеты
@@ -29,7 +29,7 @@ My Team: Моя команда
 Sales Dispatcher: Диспетчер продаж
 Team Contacts: Контакты команды
 Team Organizations: Организации команды
-Team Handlings: Обращения команды
+Team Handlings: Активности команды
 Team Tenders: Тендеры команды
 Team Calendar: Календарь команды
 Team Reports: Отчеты команды
@@ -40,7 +40,9 @@ Manage Teams: Управление командами
 Reports: Отчеты
 Calendar: Календарь
 Tenders: Тендеры
-Handlings: Обращения
+Handlings: Активности
+
+
 Organizations: Организации
 Contacts: Контакты
 Teams: Команды

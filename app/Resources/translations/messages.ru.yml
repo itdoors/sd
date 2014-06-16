@@ -20,7 +20,7 @@ Opermanager: Оперменеджер
 My Sales: Мои продажи
 My Contacts: Мои контакты
 My Organizations: Мои организации
-My Handlings: Мои обращения
+My Handlings: Мои активности
 My Tenders: Мои тендеры
 My Calendar: Мой календарь
 My Reports: Мои отчеты
@@ -30,7 +30,7 @@ My Team: Моя команда
 Sales Dispatcher: Диспетчер продаж
 Team Contacts: Контакты команды
 Team Organizations: Организации команды
-Team Handlings: Обращения команды
+Team Handlings: Активности команды
 Team Tenders: Тендеры команды
 Team Calendar: Календарь команды
 Team Reports: Отчеты команды
@@ -42,7 +42,7 @@ Manage Teams: Управление командами
 Reports: Отчеты
 Calendar: Календарь
 Tenders: Тендеры
-Handlings: Обращения
+Handlings: Активности
 Organizations: Организации
 Contacts: Контакты
 Teams: Команды
@@ -130,7 +130,7 @@ Createdatetime: Дата создания
 Delete: Удалить
 100% projects: Состояние проекта
 Reset: Очистить
-Last messages: Последние обращения
+Last messages: Последние активности
 All manager activity: Отчет за 4 недели
 # emeil
 Email: Email сообщения
@@ -142,3 +142,7 @@ Stuff: Сотрудники
 Current password: Текущий пароль
 New password: Новый пароль
 New password again: Повторить новый пароль
+
+Vote: Голосование
+History: История
+Add party: Добавить участника

@@ -37,5 +37,5 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
-        - { path: ^/controlling/invoice/cron, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/dashboard/vote/add/party, role: ROLE_ARTICLEADMIN }
         
