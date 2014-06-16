@@ -5,11 +5,38 @@
 
         $('#delete_user_button').die('click');
         $('#delete_user_button').live('click', function(e) {
-            var type = $(this).data('type');
-            $(this).addClass('notDisplayed');
-            $('#add_form_accrual_'+type).show('blind',{}, 500);
-            //$('#add_form_accrual_'+type).removeClass('notDisplayed');//.show( 'show', {}, 500 );
-        })
+            var idCoworker = $('#info_input_user_basic').data('id_coworker');
+            var idReplacement = $('#info_input_user_basic').data('id_replacement');
+            //var idDepartment = $('#info_input_user_basic').data('id_department');
+            var url = $('#info_input_user_basic').data('url_delete_user');
+            var date = $('#info_input').data('date');
+
+            var sendData = {
+                'idCoworker': idCoworker,
+                'idReplacement': idReplacement,
+                //'idDepartment': idDepartment,
+                'date': date
+            }
+
+            var message = '{% trans %}Do you confirm deleting{% endtrans %}?'
+            if (confirm(message)) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: sendData,
+                    success: function(data) {
+                        data = JSON.parse(data);
+
+                        if (data.success == 1) {
+                            $('#form_modal_info_user').modal('hide');
+                            $( "#schedule_block" ).trigger( "click" );
+                        }
+                    }
+
+                })
+            }
+
+        });
 
 
         $('.submit_add_accrual').die('click');
@@ -339,4 +366,8 @@
 <input type="hidden" id="info_input_user_basic"
        data-id_coworker="{{ coworker.id }}"
        data-url_add_accrual="{{ path('it_doors_oper_schedule_add_accural') }}"
-       data-url_delete_accrual="{{ path('it_doors_oper_schedule_delete_accural') }}">
+       data-url_delete_accrual="{{ path('it_doors_oper_schedule_delete_accural') }}"
+       data-url_delete_user = "{{ path('it_doors_oper_schedule_delete_user') }}"
+       data-id_coworker="{{ idCoworker }}"
+       data-id_replacement = "{{ idReplacement }}"
+        >
