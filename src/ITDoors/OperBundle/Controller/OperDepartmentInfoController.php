@@ -26,8 +26,15 @@ class OperDepartmentInfoController extends BaseFilterController
     {
         $this->addToSessionValues('idDepartment', $id, 'param', 'oper.bundle.department', 'param');
 
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:Departments');
+
+        $department = $repository->find($id);
+        $name = $department->getName();
+
         return $this->render('ITDoorsOperBundle:DepartmentInfo:template.html.twig', array(
-            'idDepartment' => $id
+            'idDepartment' => $id,
+            'departmentName' => $name
         ));
     }
 

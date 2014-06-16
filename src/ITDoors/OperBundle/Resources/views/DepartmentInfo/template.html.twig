@@ -8,7 +8,8 @@
             <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
             <i class="fa fa-angle-right"></i>
         </li>
-        <li><a href="#" title="{% trans   %}Departments{% endtrans %}">{% trans   %}Departments{% endtrans %}</a></li>
+        <li><a href="{{ path('it_doors_oper_homepage') }}" title="{% trans   %}Departments{% endtrans %}">{% trans   %}Departments{% endtrans %}</a><i class="fa fa-angle-right"></i></li>
+        <li><a href="">{{ departmentName }}</a></li>
     </ul>
 {% endblock %}
 {% block page_title %}
