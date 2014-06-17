@@ -35,8 +35,10 @@
     }) }}
     <a href="{{ url('sd_user_new_stuff') }}">{% trans %}Add new user{% endtrans %}</a>
     <div class="row">
-        <div id="datatable_ajax"  data-url="{{ url('sd_user_stufflist') }}">
-            {{ render(controller('SDUserBundle:' ~ baseTemplate ~ ':stufflist')) }}
+        <div class="col-md-12">
+            <div id="datatable_ajax"  data-url="{{ url('sd_user_stufflist') }}">
+                {{ render(controller('SDUserBundle:' ~ baseTemplate ~ ':stufflist')) }}
+            </div>
         </div>
     </div>
 {% endblock body %}
