@@ -219,7 +219,7 @@ class InvoiceRepository extends EntityRepository
      * 
      * @param integer $periodmax 0 - no restrictions
      *
-     * @return double summa
+     * @return float summa
      */
     public function getInvoicePeriodSum($periodmin, $periodmax)
     {
@@ -238,7 +238,7 @@ class InvoiceRepository extends EntityRepository
      *
      * @param date $date
      *
-     * @return double summa
+     * @return float summa
      */
     public function getSumma($date)
     {
