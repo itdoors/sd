@@ -24,7 +24,7 @@ class OperDepartmentInfoController extends BaseFilterController
      */
     public function indexAction($id)
     {
-        $this->addToSessionValues('idDepartment', $id, 'param', 'oper.bundle.department', 'param');
+        $this->addToSessionValues('idDepartment', $id, 'param', 'oper.bundle.department');
 
         $repository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments');
@@ -79,6 +79,8 @@ class OperDepartmentInfoController extends BaseFilterController
      */
     public function coworkersAction($id)
     {
+        $this->addToSessionValues('idDepartment', $id, 'param', 'oper.bundle.department');
+
 
         $filterNamespace = $this->container->getParameter($this->getNamespace());
 

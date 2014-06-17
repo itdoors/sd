@@ -62,7 +62,7 @@
                 {% trans %}Date accepted{% endtrans %}
             </td>
             <td>
-                {% if person.0.admissionDate %}
+                {% if person.0.admissionDate is not empty %}
                     {{ person.0.admissionDate|date("d-m-Y") }}
                 {% endif %}
             </td>
@@ -70,7 +70,7 @@
                 {% trans %}Date faired{% endtrans %}
             </td>
             <td>
-                {% if person.0.dismissalDate %}
+                {% if person.0.dismissalDate is not empty %}
                     {{ person.0.dismissalDate|date("d-m-Y") }}
                 {% endif %}
             </td>
@@ -80,7 +80,7 @@
                 {% trans %}Date accepted UU{% endtrans %}
             </td>
             <td>
-                {% if person.0.admissionDateNotOfficially %}
+                {% if person.0.admissionDateNotOfficially is not empty %}
                     {{ person.0.admissionDateNotOfficially|date("d-m-Y") }}
                 {% endif %}
             </td>
@@ -88,7 +88,7 @@
                 {% trans %}Date faired UU{% endtrans %}
             </td>
             <td>
-                {% if person.0.dismissalDateNotOfficially %}
+                {% if person.0.dismissalDateNotOfficially is not empty %}
                     {{ person.0.dismissalDateNotOfficially|date("d-m-Y") }}
                 {% endif %}
             </td>
@@ -104,7 +104,9 @@
                 {% trans %}Birthday{% endtrans %}
             </td>
             <td>
-                {{ person.0.birthday }}
+                {% if person.0.birthday is not empty %}
+                    {{ person.0.birthday|date("d-m-Y") }}
+                {% endif %}
             </td>
         </tr>
         <tr>
