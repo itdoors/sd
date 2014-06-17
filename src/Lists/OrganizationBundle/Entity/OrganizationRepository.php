@@ -34,7 +34,7 @@ class OrganizationRepository extends EntityRepository
         $this->processCount($sqlCount);
 
         $this->processBaseQuery($sql);
-        $this->processBaseQuery($sqlCount);
+        $sqlCount->andWhere('o.parent_id is null');
 
         if (sizeof($userIds)) {
             $this->processUserQuery($sql, $userIds);
@@ -49,6 +49,8 @@ class OrganizationRepository extends EntityRepository
         $query = $sql->getQuery();
 
         $count = $sqlCount->getQuery()->getSingleScalarResult();
+        
+        var_dump($count);
 
         $query->setHint('knp_paginator.count', $count);
 
