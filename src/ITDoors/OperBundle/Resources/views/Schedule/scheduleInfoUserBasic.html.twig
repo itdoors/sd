@@ -348,9 +348,9 @@
                     <td>
                         {% if plannedAccrual.isActive is not empty %}
                             {% if plannedAccrual.isActive %}
-                                {% trans %}Not active{% endtrans %}
-                            {% else %}
                                 {% trans %}Active{% endtrans %}
+                            {% else %}
+                                {% trans %}Not active{% endtrans %}
                             {% endif %}
                         {% endif %}
                     </td>

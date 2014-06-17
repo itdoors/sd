@@ -1259,9 +1259,12 @@ class OperScheduleController extends BaseFilterController
         $plannedAccrualRepository = $this->getDoctrine()
           ->getRepository('ListsDepartmentBundle:PlannedAccrual');
 
-        $plannedAccrual = $plannedAccrualRepository->findBy(array(
-          'departmentPeople' => $idCoworker
-        ));
+        $plannedAccrual = $plannedAccrualRepository->findBy(
+            array(
+                'departmentPeople' => $idCoworker
+            ),
+            array('period' => 'DESC')
+        );
 
 
         $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleInfoUserBasic.html.twig', array(
@@ -1270,7 +1273,7 @@ class OperScheduleController extends BaseFilterController
           'planned' => $plannedAccrual,
           'idCoworker' => $idCoworker,
           'idReplacement' => $idReplacement,
-          'idDepartmetn' => $idDepartment
+          'idDepartment' => $idDepartment
         ));
 
 
