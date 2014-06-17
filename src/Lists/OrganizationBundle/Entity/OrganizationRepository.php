@@ -48,9 +48,9 @@ class OrganizationRepository extends EntityRepository
 
         $query = $sql->getQuery();
 
-        $count = $sqlCount->groupBy('o.id')->getQuery()->getScalarResult();
+        $count = $sqlCount->getQuery()->getSingleScalarResult();
 
-        $query->setHint('knp_paginator.count', count($count));
+        $query->setHint('knp_paginator.count', $count);
 
         return $query;
     }
@@ -89,7 +89,7 @@ class OrganizationRepository extends EntityRepository
      */
     public function processCount($sql)
     {
-        $sql->select('COUNT(o.id) as orgcount');
+        $sql->select('COUNT(DISTINCT o.id) as orgcount');
     }
 
     /**
