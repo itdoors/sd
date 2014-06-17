@@ -1,0 +1,35 @@
+Lists\GrafikBundle\Entity\Salary:
+    type: entity
+    table: salary
+    repositoryClass : Lists\GrafikBundle\Entity\SalaryRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        year:
+            type: bigint
+            nullable: false
+        month:
+            type: bigint
+            nullable: false
+        daysCount:
+            type: bigint
+            nullable: false
+            column: days_count
+        weekends:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+        daySalary:
+            type: float
+            nullable: true
+            column: day_salary
+        summaryCoef:
+            type: float
+            nullable: true
+            column: summary_coef
+    lifecycleCallbacks: {  }

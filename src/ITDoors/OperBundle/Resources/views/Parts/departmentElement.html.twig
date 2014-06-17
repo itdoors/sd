@@ -26,7 +26,9 @@
     {{ item.statusName }}
 </td>
 <td>
-    {{ item.statusDate|date("d.m.Y") }}
+    {% if item.statusDate is not empty %}
+        {{ item.statusDate|date("d.m.Y") }}
+    {% endif %}
 </td>
 <td>
     {{ item.typeName }}

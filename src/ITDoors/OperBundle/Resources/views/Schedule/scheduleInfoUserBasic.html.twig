@@ -112,6 +112,17 @@
                     else {
                         //alert(data.html)
                         $('#holder_'+type).html(data.html);
+                        $('#add_form_accrual_'+type).hide('blind',{}, 500);
+
+                        var add_buttons = $('.submit_add_accrual');
+
+                        $('#add_form_accrual_'+type).hide('blind',{}, 500);
+
+                        if ( $(add_buttons[0]).data('type') == type) {
+                            $(add_buttons[0]).removeClass('notDisplayed');
+                        } else {
+                            $(add_buttons[1]).removeClass('notDisplayed');
+                        }
                     }
                 }
 
@@ -159,12 +170,20 @@
             })
 
         })
+
+        $('#type_accrual_officially').select2();
+        $('#work_type_accrual_officially').select2();
+        $('#type_accrual_notOfficially').select2();
+        $('#work_type_accrual_notOfficially').select2();
     })
 </script>
 
 <style>
     .notDisplayed{
         display: none;
+    }
+    .margin_left {
+        margin-left:15px;;
     }
 </style>
 
@@ -252,21 +271,21 @@
             <div style="text-align:center;">
                 <div id="add_form_accrual_officially" class="notDisplayed" data-type="officially" style="border:1px solid green; padding:5px;">
                     Выберите тип:
-                    <select id="type_accrual_officially">
+                    <select id="type_accrual_officially" class="margin_left">
                         <option value="add">{% trans %}Add accrual{% endtrans %}</option>
                         <option value="premium">{% trans %}Premium accrual{% endtrans %}</option>
                         <option value="fine">{% trans %}Fine accrual{% endtrans %}</option>
                     </select>
                     <br><br>
                     Выберите тип работ:
-                    <select id="work_type_accrual_officially">
+                    <select id="work_type_accrual_officially" class="margin_left">
                         <option value="k">k</option>
                         <option value="d">d</option>
                         <option value="r">r</option>
                     </select>
                     <br><br>
-                    <input type="text" id="value_accrual_officially" placeholder="Значение"><br>
-                    <input type="text" id="adding_accrual_officially" placeholder="Примечание"><br><br>
+                    <input type="text" id="value_accrual_officially" placeholder="Значение" class="form-control form-filter input-sm"><br>
+                    <input type="text" id="adding_accrual_officially" placeholder="Примечание" class="form-control form-filter input-sm"><br><br>
 
                     <a class="btn red cancel_add_accrual" data-type="officially">
                         {% trans %}Cancel{% endtrans %}
@@ -295,21 +314,21 @@
             <div style="text-align:center;">
                 <div id="add_form_accrual_notOfficially" class="notDisplayed" data-type="notOfficially" style="border:1px solid green; padding:5px;">
                     Выберите тип:
-                    <select id="type_accrual_notOfficially">
+                    <select id="type_accrual_notOfficially" class="margin_left">
                         <option value="add">Доплата</option>
                         <option value="premium">Премия</option>
                         <option value="fine">Удержание</option>
                     </select>
                     <br><br>
                     Выберите тип работ:
-                    <select id="work_type_accrual_notOfficially">
+                    <select id="work_type_accrual_notOfficially" class="margin_left">
                         <option value="k">k</option>
                         <option value="d">d</option>
                         <option value="r">r</option>
                     </select>
                     <br><br>
-                    <input type="text" id="value_accrual_notOfficially" placeholder="Значение"><br>
-                    <input type="text" id="adding_accrual_notOfficially" placeholder="Примечание"><br><br>
+                    <input type="text" id="value_accrual_notOfficially" placeholder="Значение" class="form-control form-filter input-sm"><br>
+                    <input type="text" id="adding_accrual_notOfficially" placeholder="Примечание" class="form-control form-filter input-sm"><br><br>
 
                     <a class="btn red cancel_add_accrual" data-type="notOfficially">
                         {% trans %}Cancel{% endtrans %}
