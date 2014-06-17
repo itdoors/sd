@@ -49,8 +49,6 @@ class OrganizationRepository extends EntityRepository
         $query = $sql->getQuery();
 
         $count = $sqlCount->getQuery()->getSingleScalarResult();
-        
-        var_dump($count);
 
         $query->setHint('knp_paginator.count', $count);
 
