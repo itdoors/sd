@@ -1,4 +1,13 @@
 {% trans_default_domain 'ITDoorsOperBundle' %}
+
+<div class="tabbable tabbable-custom boxless">
+    <ul class="nav nav-tabs" id="ajax_tabs">
+        <li class="active"><a href="#tab_0" data-block="tab_content" data-toggle="tab">{% trans %}Basic{% endtrans %}</a></li>
+        <li><a href="#tab_1" data-toggle="tab">{% trans %}Planned accrual{% endtrans %}</a></li>
+    </ul>
+    <div class="tab-content" id="tab_content">
+        <div class="tab-pane active" id="tab_0">
+
 <table id="handling" class="table table-bordered table-striped">
     <tbody>
         <tr>
@@ -119,3 +128,39 @@
         </tr>
     </tbody>
 </table>
+
+        </div>
+        <div class="tab-pane" id="tab_1">
+            <table  class="table table-bordered table-striped">
+                <thead>
+                <th>{% trans %}Type accrual{% endtrans %}</th>
+                <th>{% trans %}Value{% endtrans %}</th>
+                <th>{% trans %}Date{% endtrans %}</th>
+                <th>{% trans %}Status{% endtrans %}</th>
+                </thead>
+                {% for plannedAccrual in planned %}
+                    <tr>
+                        <td width="50%">{{ plannedAccrual.name }} ({{ plannedAccrual.type }})</td>
+                        <td>{{ plannedAccrual.value }}</td>
+                        <td>
+                            {% if plannedAccrual.period is not empty %}
+                                {{ plannedAccrual.period|date('Y-m-d') }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if plannedAccrual.isActive is not empty %}
+                                {% if plannedAccrual.isActive %}
+                                    {% trans %}Active{% endtrans %}
+                                {% else %}
+                                    {% trans %}Not active{% endtrans %}
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+
+    </div>
+</div>

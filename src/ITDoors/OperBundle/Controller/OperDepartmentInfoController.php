@@ -185,8 +185,20 @@ class OperDepartmentInfoController extends BaseFilterController
 
         $return = array();
 
+        $plannedAccrualRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:PlannedAccrual');
+
+        $plannedAccrual = $plannedAccrualRepository->findBy(
+            array(
+                'departmentPeople' => $id
+            ),
+            array('period' => 'DESC')
+        );
+
+
         $return['html'] = $this->renderView('ITDoorsOperBundle:DepartmentInfo:coworkerInfoTable.html.twig', array(
             'person' => $person,
+            'planned' => $plannedAccrual
         ));
         $return['success'] = 1;
 
