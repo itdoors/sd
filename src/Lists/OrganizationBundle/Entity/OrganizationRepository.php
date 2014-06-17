@@ -35,7 +35,7 @@ class OrganizationRepository extends EntityRepository
 
         $this->processBaseQuery($sql);
         $this->processBaseQuery($sqlCount);
-        
+
         if (sizeof($userIds)) {
             $this->processUserQuery($sql, $userIds);
             $this->processUserQuery($sqlCount, $userIds);
@@ -89,10 +89,7 @@ class OrganizationRepository extends EntityRepository
      */
     public function processCount($sql)
     {
-        $sql
-            ->select('COUNT(o.id) as orgcount')
-            ;
-
+        $sql->select('COUNT(o.id) as orgcount');
     }
 
     /**
