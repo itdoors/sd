@@ -34,7 +34,7 @@ class OrganizationRepository extends EntityRepository
         $this->processCount($sqlCount);
 
         $this->processBaseQuery($sql);
-        $this->processBaseQuery($sqlCount);
+        $sqlCount->andWhere('o.parent_id is null');
 
         if (sizeof($userIds)) {
             $this->processUserQuery($sql, $userIds);

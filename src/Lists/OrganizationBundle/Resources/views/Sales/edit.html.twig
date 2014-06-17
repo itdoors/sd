@@ -58,7 +58,7 @@
                 <td style="width:50%">
                     {{ organization.creator }} ({{ organization.createdatetime == '' ? '' : organization.createdatetime|date('d.m.Y, H:i') }})
                 </td>
-                <td style="width:35%"><span class="text-muted">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп"</span></td>
+                <td style="width:35%"><span class="text-muted">{% trans %}Creator{% endtrans %}</span></td>
             </tr>
             <tr>
                 <td style="width:15%">{% trans %}Organization name{% endtrans %}</td>
@@ -117,7 +117,7 @@
                         {{ organization.address }}
                     </a>
                 </td>
-                <td><span class="text-muted">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп"</span></td>
+                <td><span class="text-muted">{% trans %}Enter Legal Address{% endtrans %}</span></td>
             </tr>
             <tr>
                 <td>{% trans %}Mailing Address{% endtrans %}</td>
@@ -130,7 +130,11 @@
             </tr>
             <tr>
                 <td>{% trans %}Physical Address{% endtrans %}</td>
-                <td><a href="#" id="physicalAddress" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Enter Physical Address{% endtrans %}">{{ organization.physicalAddress }}</a></td>
+                <td>
+                    <a href="#" id="physicalAddress" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Enter Physical Address{% endtrans %}">
+                        {{ organization.physicalAddress }}
+                    </a>
+                </td>
                 <td><span class="text-muted">{% trans %}Enter Physical Address{% endtrans %}</span></td>
             </tr>
             <tr>
