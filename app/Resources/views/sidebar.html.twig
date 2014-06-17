@@ -290,7 +290,7 @@
             </ul>
         </li>
         {% endif %}
-        {% if is_granted('ROLE_OPER') %}
+        {% if is_granted('ROLE_OPER') or is_granted('ROLE_SUPERVISOR') %}
             <li class="">
                 <a href="{{ path('it_doors_oper_homepage') }}">
                     <i class="fa fa-money"></i>

@@ -46,10 +46,13 @@
             <div class="modal-body">
                 <div id="moreInfoTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
                     Выберите сотрудника:
-                    <select id="add_coworker_select_list">
+                    <select id="add_coworker_select_list" style="width: 300px;">
                         {% for filterCoworker in filterCoworkers %}
                              <option value="{{ filterCoworker.id }}">
-                                 ({{ filterCoworker.mpks.name }}) {{ filterCoworker.lastName }} {{ filterCoworker.firstName }} {{ filterCoworker.middleName }}
+                                 {% if filterCoworker.mpks is not empty %}
+                                    ({{ filterCoworker.mpks.name }})
+                                 {% endif %}
+                                 {{ filterCoworker.lastName }} {{ filterCoworker.firstName }} {{ filterCoworker.middleName }}
                              </option>
                         {% endfor %}
                     </select>
@@ -67,10 +70,13 @@
                     <br><br>
                     <div id="change_div_select" class="notDisplayed">
                         Выберите кого заменяет:
-                        <select id="add_coworker_select_change" >
+                        <select id="add_coworker_select_change" style="width: 300px;">
                             {% for filterCoworker in filterCoworkers %}
                                 <option value="{{ filterCoworker.id }}">
-                                    ({{ filterCoworker.mpks.name }}) {{ filterCoworker.lastName }} {{ filterCoworker.firstName }} {{ filterCoworker.middleName }}
+                                    {% if filterCoworker.mpks is not empty %}
+                                        ({{ filterCoworker.mpks.name }})
+                                    {% endif %}
+                                    {{ filterCoworker.lastName }} {{ filterCoworker.firstName }} {{ filterCoworker.middleName }}
                                 </option>
                             {% endfor %}
                         </select>
@@ -107,6 +113,7 @@
                 <div id="infoUserTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
                 </div>
                 <br>
+                <a class="btn red left_float" id="delete_user_button">{% trans %}Delete{% endtrans %}</a>
                 <a class="btn green right_float" data-dismiss="modal" aria-hidden="true">{% trans %}Exit{% endtrans %}</a>
                 <br>
             </div>
@@ -421,7 +428,7 @@
                     </td>
                     <td id="fio_{{ idCoworker }}">
                         <a class="fio"
-                           data-params='{"idCoworker": {{ idCoworker }}, "idDepartment":{{ idDepartment }}, "idLink": "fio_{{ idCoworker }}" }'
+                           data-params='{"idCoworker": {{ idCoworker }}, "idDepartment":{{ idDepartment }}, "idLink": "fio_{{ idCoworker }}", "idReplacement": {{ idReplacement }} }'
                            >
                             {{ coworker.lastName }} {{ coworker.firstName }} {{ coworker.middleName }}
                         </a>
@@ -431,7 +438,11 @@
                         {% else %}
                             П
                         {% endif %}
-                    <td>{{ coworker.mpkName }}</td>
+                    <td>
+                        {% if coworker.mpkName is not empty %}
+                            ({{ coworker.mpkName }})
+                        {% endif %}
+                    </td>
 
                     {% for dayInfo in dateInfo %}
                         {% set day = dayInfo.day %}
@@ -521,11 +532,10 @@
        data-url_user_info="{{ path('it_doors_oper_schedule_show_user_basic_table') }}">
 <script>
     $(document).ready(function() {
-
-/*
+        /*
         var table = $('#graffic_table').DataTable( {
 
-            scrollY:        "100%",
+            scrollY:        "100",
 
             scrollX:        true,
             scrollCollapse: true,
