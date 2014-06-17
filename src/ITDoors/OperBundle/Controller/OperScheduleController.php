@@ -754,6 +754,8 @@ class OperScheduleController extends BaseFilterController
 
         list($year, $month, $day) = explode('-', $date);
 
+        $em =  $this->getDoctrine()->getManager();
+
         $department  = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments')
             ->find($idDepartment);
@@ -765,6 +767,26 @@ class OperScheduleController extends BaseFilterController
         $departmentPeopleReplacement  = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeople')
             ->find($idReplacement);
+
+        /** @var $grafikTimeRepository \Lists\GrafikBundle\Entity\GrafikTimeRepository   */
+        $grafikTimeRepository = $this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:GrafikTime');
+
+
+
+        $deleteGrafikTimes = $grafikTimeRepository->findBy(array(
+            'department' => $idDepartment,
+            'departmentPeople' => $idCoworker,
+            'day' => $day,
+            'year' => $year,
+            'month' => $month,
+            'departmentPeopleReplacement' => $idReplacement
+        ));
+
+        foreach ($deleteGrafikTimes as $deleteGrafikTime) {
+            $em->remove($deleteGrafikTime);
+            $em->flush();
+        }
 
         /** @var  $grafik \Lists\GrafikBundle\Entity\Grafik*/
         $grafik  =$this->getDoctrine()
@@ -798,6 +820,15 @@ class OperScheduleController extends BaseFilterController
         $grafik->setIsSick(false);
         $grafik->setIsVacation(false);
         $grafik->setIsFired(false);
+        $grafik->setTotal(0);
+        $grafik->setTotalNotOfficially(0);
+        $grafik->setTotalDay(0);
+        $grafik->setTotalDayNotOfficially(0);
+        $grafik->setTotalEvening(0);
+        $grafik->setTotalEveningNotOfficially(0);
+        $grafik->setTotalNight(0);
+        $grafik->setTotalNightNotOfficially(0);
+
 
         if ($status == 'fired') {
             $grafik->setIsFired(true);
@@ -811,7 +842,6 @@ class OperScheduleController extends BaseFilterController
         if ($status == 'sick') {
             $grafik->setIsSick(true);
         }
-        $em =  $this->getDoctrine()->getManager();
         $em->persist($grafik);
         $em->flush();
 
