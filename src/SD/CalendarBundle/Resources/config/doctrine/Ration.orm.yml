@@ -12,7 +12,7 @@ SD\CalendarBundle\Entity\Ration:
             nullable: false
             column: article_id
         value:
-            type: double
+            type: float
             length: 10,4
             nullable: false
             options:
