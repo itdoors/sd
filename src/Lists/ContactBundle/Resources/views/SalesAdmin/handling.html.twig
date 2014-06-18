@@ -4,8 +4,8 @@
         <thead>
             <tr>
                 <th>№</th>
-                <th>{% trans %}FirstName{% endtrans %}</th>
                 <th>{% trans %}LastName{% endtrans %}</th>
+                <th>{% trans %}FirstName{% endtrans %}</th>
                 <th>{% trans %}SurName{% endtrans %}</th>
                 <th>{% trans %}Position{% endtrans %}</th>
                 <th>{% trans %}Phone{% endtrans %}</th>
@@ -19,8 +19,8 @@
             {% for item in handlingContacts %}
             <tr >
                 <td>{{ item.0.id }}</td>
-                <td>{{ item.0.firstName }}</td>
                 <td>{{ item.0.lastName }}</td>
+                <td>{{ item.0.firstName }}</td>
                 <td>{{ item.0.middleName }}</td>
                 <td>{{ item.0.position }}</td>
                 <td>{{ item.0.phone1 }}</td>
