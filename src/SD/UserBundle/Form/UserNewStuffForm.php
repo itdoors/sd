@@ -16,6 +16,7 @@ use Symfony\Component\Validator\Constraints\DateTime;
  */
 class UserNewStuffForm extends AbstractType
 {
+
     protected $container;
 
     /**
@@ -80,9 +81,9 @@ class UserNewStuffForm extends AbstractType
                 'mapped' => false,
                 'class' => 'ListsCompanystructureBundle:Companystructure',
                 'empty_value' => '',
-                'required' => false,
+                'required' => true,
                 'query_builder' => function (CompanystructureRepository $repository) {
-                    return $repository->createQueryBuilder('cs');
+                    return  $repository->createQueryBuilder('cs');
                 }
             ));
 
