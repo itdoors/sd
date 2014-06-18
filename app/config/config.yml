@@ -137,7 +137,7 @@ knp_paginator:
         sortable: ITDoorsCommonBundle:Pagination:sortable_link.html.twig # sort link template
 
 services:
-   get_set_method_normalizer:
+    get_set_method_normalizer:
       class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
       tags:
          - { name: serializer.normalizer }
