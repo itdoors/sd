@@ -264,20 +264,6 @@
                 <td>
                     <a href="#" id="description" data-type="textarea" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.description }}" data-original-title="{% trans %}Enter Handling Notice{% endtrans %}">{{ handling.0.description }}</a>
                 </td>
-                <td>{% trans %}Closed{% endtrans %}</td>
-                <td>
-                    {% if canEdit %}
-                        {% trans %}No{% endtrans %}
-                    {% else %}
-                        {% trans %}Yes{% endtrans %}
-                    {% endif %}
-                    {{ handling.closerFullname }}
-                    {% if handling.closedatetime %}
-                        {{ handling.closedatetime|date("d.m.y, H:i") }}
-                    {% endif %}
-                </td>
-            </tr>
-            <tr>
                 <td>{% trans %}Launch date{% endtrans %}</td>
                 <td>
                     <a href="#"
@@ -297,8 +283,23 @@
                         {% endif %}
                     </a>
                 </td>
+            </tr>
+            <tr>
+                
                 <td>                </td>
                 <td>                </td>
+                <td>{% trans %}Closed{% endtrans %}</td>
+                <td>
+                    {% if canEdit %}
+                        {% trans %}No{% endtrans %}
+                    {% else %}
+                        {% trans %}Yes{% endtrans %}
+                    {% endif %}
+                    {{ handling.closerFullname }}
+                    {% if handling.closedatetime %}
+                        {{ handling.closedatetime|date("d.m.y, H:i") }}
+                    {% endif %}
+                </td>
             </tr>
             {#<tr> 
                 <td>{% trans %}Service offered{% endtrans %} old</td>
