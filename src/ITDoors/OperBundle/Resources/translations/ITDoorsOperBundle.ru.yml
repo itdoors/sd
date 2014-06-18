@@ -48,7 +48,7 @@ Department: Отделение
 
 Status Date: Дата статуса
 Rs: Р/С
-Inn: ИНН
+Inn: Свидетельство
 Edrpou: ЕДРПОУ
 Certificate: Свидетельство
 Organization address: Адрес организации
@@ -129,6 +129,10 @@ Error: Ошибка
 Non-official person cant  work officially: Официальное время не допускается для этого пользователя
 Do you confirm deleting: Вы подтверждаете удаление
 Current date: Текущая дата
+Current month: Текущий месяц
+Number workdays: К-во рабочих дней
+Number hours: К-во часов
+Holidays: Праздники
 Wrong from-to time: Неверно заполненое время
 Cleared: Очищен
 Success: Успешно
@@ -164,3 +168,13 @@ Copy grafik people: Копирование по сотрудникам
 Copy: Копировать
 
 Not defined: Не установлено
+
+Type accrual: Тип начисления
+Date: Дата
+Value: Значение
+
+Active: Активно
+Not active: Не активно
+
+Submit: Подтвердить
+Cancel: Отменить

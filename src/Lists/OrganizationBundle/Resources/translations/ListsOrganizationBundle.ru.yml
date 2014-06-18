@@ -53,6 +53,7 @@ Enter INN Certificate: Введите номер свидетельства НД
 INN Certificate: Номер свидетельства НДС
 Enter INN: Введите Индивидульный Налоговый Номер
 INN: ИНН
+Certificate: Свидетельство
 
 
 Enter Organization Site: Введите адрес сайта
@@ -126,3 +127,7 @@ Organization child: Дочерняя организация
 Set child organization: Установить дочернюю организацию
 Child organization cant be empty: Дочерняя организация не может быть пустой
 You've picked the same organization: Организация не может быть дочерней относительно самой себя. Перепроверьте выбранные данные.
+
+Enter value: Введите значение
+
+Select a control group that owns the organization: Выберите группу влияния

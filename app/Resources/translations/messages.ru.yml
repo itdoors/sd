@@ -20,7 +20,7 @@ Opermanager: Оперменеджер
 My Sales: Мои продажи
 My Contacts: Мои контакты
 My Organizations: Мои организации
-My Handlings: Мои активности
+My Handlings: Мои проекты
 My Tenders: Мои тендеры
 My Calendar: Мой календарь
 My Reports: Мои отчеты
@@ -50,6 +50,7 @@ Teams: Команды
 Sales Admin report: Отчеты
 Activity: Активность
 All projects: Все проекты
+Projects: Проекты
 
 #menu role_intranet
 Intranet: Интранет
@@ -138,11 +139,6 @@ Email templates: Email шаблоны
 Email history: Email история
 
 Stuff: Сотрудники
-
-Current password: Текущий пароль
-New password: Новый пароль
-New password again: Повторить новый пароль
-
 Vote: Голосование
-History: История
-Add party: Добавить участника
+History: Истории
+Add history: Добавить историю

@@ -22,7 +22,7 @@ parameters:
     1C.file.path: "%project.dir%/app/share/1c/debt/"
     email.file.path: "%project.dir%/web/uploads/email/"
     upload.file.path: "%project.dir%/web/uploads/files/"
-    userprofiles.file.path: "%project.dir%/web/uploads/userprofiles/"
+    userprofiles.file.path: "/uploads/userprofiles/"
 
 framework:
     #esi:             ~
@@ -137,7 +137,7 @@ knp_paginator:
         sortable: ITDoorsCommonBundle:Pagination:sortable_link.html.twig # sort link template
 
 services:
-   get_set_method_normalizer:
+    get_set_method_normalizer:
       class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
       tags:
          - { name: serializer.normalizer }

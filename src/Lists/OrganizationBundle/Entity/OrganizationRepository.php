@@ -89,9 +89,7 @@ class OrganizationRepository extends EntityRepository
      */
     public function processCount($sql)
     {
-        $sql
-            ->select('COUNT(o.id) as orgcount');
-
+        $sql->select('COUNT(DISTINCT o.id) as orgcount');
     }
 
     /**

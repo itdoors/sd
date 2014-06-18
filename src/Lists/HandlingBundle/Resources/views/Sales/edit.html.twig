@@ -19,7 +19,7 @@
                     targetProcess.find('span').html(response.handling.progressString);
                 }
 
-            }
+            };
 
             $('#serviceOffered, #resultString, #statusDescription, #square, #description, #chance, #budget').editable({
                 url: '{{ path('sd_common_ajax_handling_save') }}'
@@ -53,19 +53,16 @@
 
                 var moreInfoHref = $(this).parent().find('a.more-info');
 
-                if ($.inArray(params.newValue, showMoreInfoIds))
-                {
+                if ($.inArray(params.newValue, showMoreInfoIds)) {
                     moreInfoHref.show();
-                }
-                else
-                {
+                } else {
                     moreInfoHref.hide();
                 }
 
                 var moreInfoHrefParams = {
                     handlingId: $(this).data('pk'),
                     resultId: params.newValue
-                }
+                };
 
                 moreInfoHref.data('params', moreInfoHrefParams);
 
@@ -121,7 +118,7 @@
                 });
             });
         {% endif %}
-    })
+    });
 
 </script>
 
@@ -197,7 +194,7 @@
             </tr>
             <tr> {# 4 #}
                 <td>{% trans %}Create Date{% endtrans %}</td>
-                <td>{{ handling.0.createdate|date("d.m.y") }} ({{ handling.0.createdatetime|date("d.m.y, H:i") }})</td> {# Create Date Time (Real Date time) TASK 323 #}
+                <td>{{ handling.0.createdate == '' ? '' : handling.0.createdate|date("d.m.y") }} {{ handling.0.createdatetime == '' ? '' : '(' ~ handling.0.createdatetime|date("d.m.y, H:i") ~ ')' }}</td> {# Create Date Time (Real Date time) TASK 323 #}
                 <td>{% trans %}Result Description{% endtrans %}</td>
                 <td><a href="#" id="resultString" data-type="textarea" data-pk="{{ handling.0.id }}" data-placement="right" data-original-title="{% trans %}Enter Status{% endtrans %}">{{ handling.0.resultString }}</a></td>
             </tr>
@@ -208,11 +205,13 @@
                         {{ handling.0.type }}
                     </a>
                 </td>
-                <td>{% trans %}Square{% endtrans %}</td>
+                <td>{% trans %}Chance{% endtrans %}</td> {# 306 #}
+                {% set progress = (handling.resultProgress is not null) ? handling.resultProgress : handling.progress %}
+                {% set percentageString = handling.resultPercentageString ? handling.resultPercentageString : handling.percentageString %}
                 <td>
-                    <a href="#" id="square" data-type="text" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.square }}" data-original-title="{% trans %}Enter Square{% endtrans %}">
-                        {{ handling.0.square }}
-                    </a>
+                    <div style="width: {{ progress }}%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="{{ progress }}" role="progressbar" class="progress-bar progress-bar-success">
+                        <span class="">{{ percentageString|e }}</span>
+                    </div>
                 </td>
             </tr>
             <tr> {# 6 #}
@@ -229,24 +228,43 @@
                     </a>
                 </td>
             </tr>
-            <tr> {# 6 #}
+            <tr> {# 7 #}
+                <td>{% trans %}Square{% endtrans %}</td>
+                <td>
+                    <a href="#" id="square" data-type="text" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.square }}" data-original-title="{% trans %}Enter Square{% endtrans %}">
+                        {{ handling.0.square }}
+                    </a>
+                </td>
                 <td>{% trans %}PF1{% endtrans %}</td>
                 <td>
                     <a href="#" id="pf1" data-type="text" data-pk="{{ handling.0.id }}" data-placement="right" data-value="{{ handling.0.pf1 }}" data-placeholder="{% trans %}Enter pf1{% endtrans %}">{{ handling.0.pf1 }}</a>
                 </td>
-                <td>{% trans %}Employees{% endtrans %}</td>
+            </tr>
+            <tr>{# 8 #}
+                <td>{% trans %}Count employees{% endtrans %}</td>
                 <td>
-                    <a href="#" id="employees" data-type="text" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.employees }}" data-original-title="{% trans %}Enter Employees{% endtrans %}">
+                    <a href="#" id="employees" data-type="text" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.employees }}" data-original-title="{% trans %}Enter count employees{% endtrans %}">
                         {{ handling.0.employees }}
                     </a>
                 </td>
-            </tr>
-            <tr>{# 7 #}
+                <td>{% trans %}Is Marketing{% endtrans %}</td>
+                <td>
+                    {% if handling.0.isMarketing %}
+                        {% set isMarketing ='Yes' %}
+                    {% else %}
+                        {% set isMarketing ='No' %}
+                    {% endif %}
+                    <a href="#" id="isMarketing" data-type="select" data-pk="{{ handling.0.id }}" data-value="{{ isMarketing }}" data-placement="right" data-original-title="{% trans %}Is Marketing{% endtrans %}">
+                        {{ isMarketing|trans({}, 'messages') }}
+                    </a>
+                </td>                
+            </tr> {# 9 #}
+            <tr>
                 <td>{% trans %}Notice{% endtrans %}</td>
                 <td>
                     <a href="#" id="description" data-type="textarea" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.description }}" data-original-title="{% trans %}Enter Handling Notice{% endtrans %}">{{ handling.0.description }}</a>
                 </td>
-                {#<td>{% trans %}Launch date{% endtrans %}</td>#}
+                <td>{% trans %}Launch date{% endtrans %}</td>
                 <td>
                     <a href="#"
                        class="sd-dogovor-date sd-editable {% if handling.0.launchDate is empty %} editable-empty {% endif %}"
@@ -265,16 +283,11 @@
                         {% endif %}
                     </a>
                 </td>
-            </tr> {# 8 #}
+            </tr>
             <tr>
-                <td>{% trans %}Chance{% endtrans %}</td> {# 306 #}
-                {% set progress = (handling.resultProgress is not null) ? handling.resultProgress : handling.progress %}
-                {% set percentageString = handling.resultPercentageString ? handling.resultPercentageString : handling.percentageString %}
-                <td>
-                    <div style="width: {{ progress }}%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="{{ progress }}" role="progressbar" class="progress-bar progress-bar-success">
-                        <span class="">{{ percentageString|e }}</span>
-                    </div>
-                </td>
+                
+                <td>                </td>
+                <td>                </td>
                 <td>{% trans %}Closed{% endtrans %}</td>
                 <td>
                     {% if canEdit %}
@@ -287,21 +300,6 @@
                         {{ handling.closedatetime|date("d.m.y, H:i") }}
                     {% endif %}
                 </td>
-            </tr>
-            <tr> {# 9 #}
-                <td>{% trans %}Is Marketing{% endtrans %}</td>
-                <td>
-                    {% if handling.0.isMarketing %}
-                        {% set isMarketing ='Yes' %}
-                    {% else %}
-                        {% set isMarketing ='No' %}
-                    {% endif %}
-                    <a href="#" id="isMarketing" data-type="select" data-pk="{{ handling.0.id }}" data-value="{{ isMarketing }}" data-placement="right" data-original-title="{% trans %}Is Marketing{% endtrans %}">
-                        {{ isMarketing|trans({}, 'messages') }}
-                    </a>
-                </td>
-                <td></td>
-                <td></td>
             </tr>
             {#<tr> 
                 <td>{% trans %}Service offered{% endtrans %} old</td>

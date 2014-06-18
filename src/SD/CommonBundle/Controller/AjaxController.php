@@ -3265,7 +3265,8 @@ class AjaxController extends BaseFilterController
     public function departmentPeopleMpkAction()
     {
 
-        $id = $this->getSessionValueByKey('idDepartment', null, 'oper.paginator.department.coworkers', 'param');
+        $id = $this->getSessionValueByKey('idDepartment', null, 'oper.bundle.department', 'param');
+
         $searchText = $this->get('request')->query->get('query');
 
         $repository = $this->getDoctrine()
@@ -3290,7 +3291,7 @@ class AjaxController extends BaseFilterController
      */
     public function departmentPeopleIndividualAction()
     {
-        $id = $this->getSessionValueByKey('idDepartment', null, 'oper.paginator.department.coworkers', 'param');
+        $id = $this->getSessionValueByKey('idDepartment', null, 'oper.bundle.department', 'param');
 
         $filters = $this->getFilters('oper.paginator.department.coworkers');
         $searchText = $this->get('request')->query->get('query');

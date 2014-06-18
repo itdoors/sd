@@ -149,7 +149,7 @@
                     </div>
                     <div class="form-group col-md-4{% if form.companystructure.vars.errors|length %} has-error{% endif %}">
                         {{ form_label(form.companystructure, 'Select subdivision', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.companystructure, {'attr' : {'class' : 'form-control', 'placeholder': "Select subdivision"}}) }}
+                        {{ form_widget(form.companystructure,   {'attr' : {'class' : 'form-control', 'placeholder': "Select subdivision"}}) }}
                         {% if form.companystructure.vars.errors|length %}
                             {{ form_errors(form.companystructure) }}
                         {% endif %}

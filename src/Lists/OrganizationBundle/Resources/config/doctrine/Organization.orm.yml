@@ -19,6 +19,7 @@ Lists\OrganizationBundle\Entity\Organization:
         address:
             type: string
             length: 255
+            nullable: true
         contacts:
             type: string
             length: 255

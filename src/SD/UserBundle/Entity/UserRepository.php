@@ -161,13 +161,16 @@ class UserRepository extends EntityRepository
      */
     public function processFilters(QueryBuilder $sql, $filters)
     {
-
         if (sizeof($filters)) {
             foreach ($filters as $key => $value) {
                 if (!$value) {
                     continue;
                 }
                 switch ($key) {
+                    case 'company':
+                        $sql->andWhere("c.id = :company");
+                        $sql->setParameter(':company', $value);
+                        break;
                     case 'isActive':
                         $sql->andWhere("u.isBlocked = :active");
                         $sql->setParameter(':active', ($value == 'active' ? 0 : 1));
