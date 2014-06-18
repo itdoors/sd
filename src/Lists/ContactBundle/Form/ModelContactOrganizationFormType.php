@@ -7,17 +7,39 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Lists\ContactBundle\Entity\ModelContactRepository;
+use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormError;
 
 /**
  * Class ModelContactOrganizationFormType
  */
 class ModelContactOrganizationFormType extends AbstractType
 {
+    protected $container;
+    
+    /**
+     * @param Container $container
+     */
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+        
+         /** @var \SD\UserBundle\Entity\UserRepository $ur */
+        $this->ur = $this->container->get('sd_user.repository');
+    } 
+
+ 
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        parent::buildForm($builder, $options);
+
+        $container = $this->container;
+        
         $builder
             ->add('modelName', 'hidden', array(
                 'data' => ModelContactRepository::MODEL_ORGANIZATION
@@ -48,6 +70,7 @@ class ModelContactOrganizationFormType extends AbstractType
         $builder
             ->add('add', 'submit')
             ->add('cancel', 'button');
+        
         $builder->addEventListener(
             FormEvents::POST_SUBMIT,
             function (FormEvent $event) use ($container) {

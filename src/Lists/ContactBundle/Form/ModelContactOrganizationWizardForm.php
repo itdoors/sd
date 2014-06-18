@@ -13,20 +13,6 @@ use Symfony\Component\Form\FormError;
  */
 class ModelContactOrganizationWizardForm extends ModelContactOrganizationFormType
 {
-
-    protected $container;
-
-    /**
-     * @param Container $container
-     */
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-
-        /** @var \SD\UserBundle\Entity\UserRepository $ur */
-        $this->ur = $this->container->get('sd_user.repository');
-    }
-
     /**
      * {@inheritdoc}
      */
