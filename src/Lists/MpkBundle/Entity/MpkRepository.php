@@ -38,7 +38,7 @@ class MpkRepository extends EntityRepository
      *
      * @return mixed[]
      */
-    public function getDepartmentPeopleQueryMpk($q, $id)
+    public function getDepartmentPeopleQueryMpk($q, $id = null)
     {
         $sql = $this->createQueryBuilder('m')
             ->where('lower(m.name) LIKE :q')

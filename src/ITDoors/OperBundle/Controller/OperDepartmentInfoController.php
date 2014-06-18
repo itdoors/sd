@@ -24,7 +24,7 @@ class OperDepartmentInfoController extends BaseFilterController
      */
     public function indexAction($id)
     {
-        $this->addToSessionValues('idDepartment', $id, 'param', 'oper.bundle.department', 'param');
+        $this->addToSessionValues('idDepartment', $id, 'param', 'oper.bundle.department');
 
         $repository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments');
@@ -79,6 +79,8 @@ class OperDepartmentInfoController extends BaseFilterController
      */
     public function coworkersAction($id)
     {
+        $this->addToSessionValues('idDepartment', $id, 'param', 'oper.bundle.department');
+
 
         $filterNamespace = $this->container->getParameter($this->getNamespace());
 
@@ -183,8 +185,20 @@ class OperDepartmentInfoController extends BaseFilterController
 
         $return = array();
 
+        $plannedAccrualRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:PlannedAccrual');
+
+        $plannedAccrual = $plannedAccrualRepository->findBy(
+            array(
+                'departmentPeople' => $id
+            ),
+            array('period' => 'DESC')
+        );
+
+
         $return['html'] = $this->renderView('ITDoorsOperBundle:DepartmentInfo:coworkerInfoTable.html.twig', array(
             'person' => $person,
+            'planned' => $plannedAccrual
         ));
         $return['success'] = 1;
 
