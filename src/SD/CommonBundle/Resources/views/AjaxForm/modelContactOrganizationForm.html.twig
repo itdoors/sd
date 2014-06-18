@@ -147,12 +147,8 @@
                         {{ form_widget(form.middleName, {'attr' : {'class' : 'form-control', 'placeholder': "Middle name"}}) }}
                     </div>
 
-                    <div class="form-group col-md-3">
-                        {{ form_label(form.level, 'Contact level', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.level, {'attr' : {'class' : 'form-control', 'placeholder': "Contact level"}}) }}
-                    </div>
                     
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                         {{ form_label(form.birthday, 'Birthday', {'attr': {'class': 'control-label'}}) }}
                         <div class="input-group input-medium date date-picker">
                             {{ form_widget(form.birthday, {'attr': {
@@ -165,6 +161,10 @@
                             <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
                             </span>
                         </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        {{ form_label(form.level, 'Contact level', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.level, {'attr' : {'class' : 'form-control', 'placeholder': "Contact level"}}) }}
                     </div>
                     
                     <div class="form-group col-md-4">
