@@ -141,13 +141,13 @@
                     {% endif %}
 
                     <div class="form-group col-md-3">
-                        {{ form_label(form.firstName, 'First Name', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.firstName, {'attr' : {'class' : 'form-control', 'placeholder': "First name"}}) }}
-                    </div>
-
-                    <div class="form-group col-md-3">
                         {{ form_label(form.lastName, 'Last Name', {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.lastName, {'attr' : {'class' : 'form-control', 'placeholder': "Last name"}}) }}
+                    </div>
+                    
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.firstName, 'First Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.firstName, {'attr' : {'class' : 'form-control', 'placeholder': "First name"}}) }}
                     </div>
 
                     <div class="form-group col-md-3">
