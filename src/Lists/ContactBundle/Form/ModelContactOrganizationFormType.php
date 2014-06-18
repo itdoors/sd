@@ -36,15 +36,13 @@ class ModelContactOrganizationFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        parent::buildForm($builder, $options);
-
         $container = $this->container;
         
         $builder
             ->add('modelName', 'hidden', array(
                 'data' => ModelContactRepository::MODEL_ORGANIZATION
             ))
-            ->add('modelId', 'text')
+            ->add('modelId', 'hidden')
             ->add('firstName')
             ->add('lastName')
             ->add('middleName')
