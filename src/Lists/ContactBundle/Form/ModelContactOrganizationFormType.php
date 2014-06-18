@@ -48,6 +48,31 @@ class ModelContactOrganizationFormType extends AbstractType
         $builder
             ->add('add', 'submit')
             ->add('cancel', 'button');
+        $builder->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) use ($container) {
+                $data = $event->getData();
+
+                $form = $event->getForm();
+
+                if ($data) {
+                    if (!$data->getPhone1() && !$data->getPhone2() && !$data->getEmail()) {
+                        $translator = $container->get('translator');
+
+                        $msg = $translator->trans("Enter Phone or Phone mob or email", array(), 'ListsContactBundle');
+
+                        $form->get('phone1')->addError(new FormError($msg));
+                    }
+                    if (!$data->getLevel()) {
+                        $translator = $container->get('translator');
+
+                        $msg = $translator->trans("Enter level", array(), 'ListsContactBundle');
+
+                        $form->get('level')->addError(new FormError($msg));
+                    }
+                }
+            }
+        );
     }
 
     /**
