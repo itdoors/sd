@@ -357,9 +357,9 @@
             <ul  class="sub-menu">
                 {% if is_granted('ROLE_ARTICLEADMIN') %}
                     <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_calendar_vote_add_party')  %} class="active"{% endif %}>
-                        <a href="{{ path('sd_calendar_vote_add_party') }}" title="{% trans %}Add party{% endtrans %}">
+                        <a href="{{ path('sd_calendar_vote_add_party') }}" title="{% trans %}Add history{% endtrans %}">
                             <i class="fa fa-comments"></i>
-                            {% trans %}Add party{% endtrans %}
+                            {% trans %}Add history{% endtrans %}
                         </a>
                     </li>
                 {% endif %}
