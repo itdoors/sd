@@ -169,7 +169,7 @@ class UserRepository extends EntityRepository
                 switch ($key) {
                     case 'company':
                         $sql->andWhere("c.id = :company");
-                        $sql->setParameter(':company', (int)$value);
+                        $sql->setParameter(':company', $value);
                         break;
                     case 'isActive':
                         $sql->andWhere("u.isBlocked = :active");
