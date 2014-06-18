@@ -113,26 +113,6 @@
                 </div>
 
                 <div class="form-group col-md-3">
-                    {{ form_label(form.position, 'Position', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.position, {'attr' : {'class' : 'form-control', 'placeholder': "Position"}}) }}
-                </div>
-
-                <div class="form-group col-md-3">
-                    {{ form_label(form.phone1, 'Phone 1', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.phone1, {'attr' : {'class' : 'form-control', 'placeholder': "Phone 1"}}) }}
-                </div>
-
-                <div class="form-group col-md-3">
-                    {{ form_label(form.phone2, 'Phone 2', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.phone2, {'attr' : {'class' : 'form-control', 'placeholder': "Phone 2"}}) }}
-                </div>
-
-                <div class="form-group col-md-3">
-                    {{ form_label(form.email, 'Email', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.email, {'attr' : {'class' : 'form-control', 'placeholder': "Email"}}) }}
-                </div>
-
-                <div class="form-group col-md-3">
                     {{ form_label(form.birthday, 'Birthday', {'attr': {'class': 'control-label'}}) }}
                     <div class="input-group input-medium date date-picker">
                         {{ form_widget(form.birthday, {'attr': {
@@ -146,14 +126,35 @@
                         </span>
                     </div>
                 </div>
-
-                <div class="form-group col-md-3">
+                        
+                <div class="form-group col-md-4">
+                    {{ form_label(form.level, 'Level of contact', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.level, {'attr' : {'class' : 'form-control', 'placeholder': "Level of contact"}}) }}
+                </div>
+                
+                <div class="form-group col-md-4">
+                    {{ form_label(form.position, 'Position', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.position, {'attr' : {'class' : 'form-control', 'placeholder': "Position"}}) }}
+                </div>
+                
+                <div class="form-group col-md-4">
                     {{ form_label(form.type, 'Contact type', {'attr': {'class': 'control-label'}}) }}
                     {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': "Contact type"}}) }}
                 </div>
-                <div class="form-group col-md-3">
-                    {{ form_label(form.level, 'Level of contact', {'attr': {'class': 'control-label'}}) }}
-                    {{ form_widget(form.level, {'attr' : {'class' : 'form-control', 'placeholder': "Level of contact"}}) }}
+
+                <div class="form-group col-md-4">
+                    {{ form_label(form.phone1, 'Phone 1', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.phone1, {'attr' : {'class' : 'form-control', 'placeholder': "Phone 1"}}) }}
+                </div>
+
+                <div class="form-group col-md-4">
+                    {{ form_label(form.phone2, 'Phone 2', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.phone2, {'attr' : {'class' : 'form-control', 'placeholder': "Phone 2"}}) }}
+                </div>
+
+                <div class="form-group col-md-4">
+                    {{ form_label(form.email, 'Email', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.email, {'attr' : {'class' : 'form-control', 'placeholder': "Email"}}) }}
                 </div>
 
             </div>
