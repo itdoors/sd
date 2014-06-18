@@ -93,7 +93,9 @@ class SalesController extends BaseFilterController
     {
         $start = $this->getEventStart($handlingMessage);
 
-        return (string) $handlingMessage['typeName'] . ' (' . $start->format('H:i').')';
+        return (string) $handlingMessage['typeName']
+            . ' | '. $handlingMessage['organizationName']
+            . ' (' . $start->format('H:i').')';
     }
 
     /**
