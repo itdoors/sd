@@ -19,7 +19,7 @@
                     targetProcess.find('span').html(response.handling.progressString);
                 }
 
-            }
+            };
 
             $('#serviceOffered, #resultString, #statusDescription, #square, #description, #chance, #budget').editable({
                 url: '{{ path('sd_common_ajax_handling_save') }}'
@@ -53,19 +53,16 @@
 
                 var moreInfoHref = $(this).parent().find('a.more-info');
 
-                if ($.inArray(params.newValue, showMoreInfoIds))
-                {
+                if ($.inArray(params.newValue, showMoreInfoIds)) {
                     moreInfoHref.show();
-                }
-                else
-                {
+                } else {
                     moreInfoHref.hide();
                 }
 
                 var moreInfoHrefParams = {
                     handlingId: $(this).data('pk'),
                     resultId: params.newValue
-                }
+                };
 
                 moreInfoHref.data('params', moreInfoHrefParams);
 
@@ -121,7 +118,7 @@
                 });
             });
         {% endif %}
-    })
+    });
 
 </script>
 
@@ -197,7 +194,7 @@
             </tr>
             <tr> {# 4 #}
                 <td>{% trans %}Create Date{% endtrans %}</td>
-                <td>{{ handling.0.createdate|date("d.m.y") }} ({{ handling.0.createdatetime|date("d.m.y, H:i") }})</td> {# Create Date Time (Real Date time) TASK 323 #}
+                <td>{{ handling.0.createdate == '' ? '' : handling.0.createdate|date("d.m.y") }} {{ handling.0.createdatetime == '' ? '' : '(' ~ handling.0.createdatetime|date("d.m.y, H:i") ~ ')' }}</td> {# Create Date Time (Real Date time) TASK 323 #}
                 <td>{% trans %}Result Description{% endtrans %}</td>
                 <td><a href="#" id="resultString" data-type="textarea" data-pk="{{ handling.0.id }}" data-placement="right" data-original-title="{% trans %}Enter Status{% endtrans %}">{{ handling.0.resultString }}</a></td>
             </tr>
@@ -234,9 +231,9 @@
                 <td>
                     <a href="#" id="pf1" data-type="text" data-pk="{{ handling.0.id }}" data-placement="right" data-value="{{ handling.0.pf1 }}" data-placeholder="{% trans %}Enter pf1{% endtrans %}">{{ handling.0.pf1 }}</a>
                 </td>
-                <td>{% trans %}Employees{% endtrans %}</td>
+                <td>{% trans %}Count employees{% endtrans %}</td>
                 <td>
-                    <a href="#" id="employees" data-type="text" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.employees }}" data-original-title="{% trans %}Enter Employees{% endtrans %}">
+                    <a href="#" id="employees" data-type="text" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.employees }}" data-original-title="{% trans %}Enter count employees{% endtrans %}">
                         {{ handling.0.employees }}
                     </a>
                 </td>
