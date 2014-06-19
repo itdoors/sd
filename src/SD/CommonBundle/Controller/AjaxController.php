@@ -522,7 +522,7 @@ class AjaxController extends BaseFilterController
     public function scopeAction()
     {
         $searchText = $this->get('request')->query->get('query');
-        
+
         /** @var \Lists\LookupBundle\Entity\LookupRepository $repository */
         $repository = $this->container->get('lists_lookup.repository');
 
