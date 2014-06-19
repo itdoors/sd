@@ -15,7 +15,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a href="{{ path('sd_calendar_vote_history') }}" title="{% trans %}Vote history{% endtrans %}">{% trans %}Vote history{% endtrans %}</a>
+            <a href="{{ path('sd_calendar_vote_history') }}" title="{% trans %}Historis{% endtrans %}">{% trans %}Histories{% endtrans %}</a>
         </li>
     </ul>
 {% endblock %}
@@ -35,6 +35,11 @@
 {% block body %}
     <div class="row">
         <div class="col-md-12">
+            {% if is_granted('ROLE_ARTICLEADMIN') %}
+                <a class="btn btn-lg green" href="{{ path('sd_calendar_vote_add_history') }}" title="{% trans %}Add history{% endtrans %}">
+                    {% trans %}Add history{% endtrans %}
+                </a>
+            {% endif %}
             <div class="tab-content ajax-tab-holder" id="datatable_ajax" data-url="{{ url('sd_calendar_vote_history_list') }}">
                 {{ render(controller('SDCalendarBundle:Vote:list')) }}
             </div>

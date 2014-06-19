@@ -382,17 +382,55 @@
                     })
                 }
 
+            });
+
+            $('#copy-to-next-month').die('click');
+            $('#copy-to-next-month').live('click', function(e){
+                e.preventDefault();
+
+                var self = $(this);
+
+                var idDepartment = $('#info_input').data('id_department');
+                var date = $('#info_input').data('date');
+                var url = $('#info_input').data('url_copy_to_next_month');
+
+                console.log('Submiting copy next month', idDepartment, date);
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    dataType: 'Json',
+                    data: {
+                        idDepartment: idDepartment,
+                        date: date
+                    },
+                    beforeSend: function() {
+                        ITDoorsAjax.blockUI(self);
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        ITDoorsAjax.unblockUI(self);
+                        self.html(self.data('text'));
+                    },
+                    error: function() {
+                        ITDoorsAjax.unblockUI(self);
+                    }
+
+                })
             })
-
         })
-
-
-
     </script>
 
     <a class="btn green" style="float: right; margin-bottom: 20px;" id="copy_etalon">Скопировать из выбранных</a>
-
     <a class="btn blue" style="float: right; margin-right: 20px;" id="add_coworker_button">{% trans %}Add coworker{% endtrans %}</a>
+
+    <a class="btn green" style="float: right; margin-bottom: 20px; margin-right: 20px;"
+       id="copy-to-next-month"
+       data-text="{% trans %}Copy to the next month success{% endtrans %}"
+    >
+        {% trans %}Copy to the next month{% endtrans %}
+    </a>
+
     <table style="width: 30%">
         <tr>
             <td style="color: #333333;"><strong>{% trans %}Current month{% endtrans %}</strong></td>
@@ -542,6 +580,7 @@
        data-url_add_user="{{ path('it_doors_oper_schedule_add_user') }}"
        data-id_department="{{ idDepartment }}"
        data-date = "{{ year }}-{{ month }}"
+       data-url_copy_to_next_month = "{{ path('it_doors_oper_copy_to_next_month') }}"
        data-url_user_info="{{ path('it_doors_oper_schedule_show_user_basic_table') }}">
 <script src="{{ asset('bundles/itdoorsoper/js/fixedHederColumn/jquery.fixedheadertable.js')}}" ></script>
 <link rel="stylesheet" type="text/css" href="{{ asset('bundles/itdoorsoper/js/fixedHederColumn/defaultTheme.css')}}" />

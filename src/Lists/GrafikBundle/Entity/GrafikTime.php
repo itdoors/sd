@@ -524,4 +524,91 @@ class GrafikTime
     {
         $this->id = null;
     }
+    /**
+     * @var integer
+     */
+    private $departmentPeopleId;
+
+    /**
+     * @var integer
+     */
+    private $departmentPeopleReplacementId;
+
+
+    /**
+     * Set departmentPeopleId
+     *
+     * @param integer $departmentPeopleId
+     *
+     * @return GrafikTime
+     */
+    public function setDepartmentPeopleId($departmentPeopleId)
+    {
+        $this->departmentPeopleId = $departmentPeopleId;
+
+        return $this;
+    }
+
+    /**
+     * Get departmentPeopleId
+     *
+     * @return integer 
+     */
+    public function getDepartmentPeopleId()
+    {
+        return $this->departmentPeopleId;
+    }
+
+    /**
+     * Set departmentPeopleReplacementId
+     *
+     * @param integer $departmentPeopleReplacementId
+     *
+     * @return GrafikTime
+     */
+    public function setDepartmentPeopleReplacementId($departmentPeopleReplacementId)
+    {
+        $this->departmentPeopleReplacementId = $departmentPeopleReplacementId;
+
+        return $this;
+    }
+
+    /**
+     * Get departmentPeopleReplacementId
+     *
+     * @return integer 
+     */
+    public function getDepartmentPeopleReplacementId()
+    {
+        return $this->departmentPeopleReplacementId;
+    }
+    /**
+     * @var integer
+     */
+    private $departmentId;
+
+
+    /**
+     * Set departmentId
+     *
+     * @param integer $departmentId
+     *
+     * @return GrafikTime
+     */
+    public function setDepartmentId($departmentId)
+    {
+        $this->departmentId = $departmentId;
+
+        return $this;
+    }
+
+    /**
+     * Get departmentId
+     *
+     * @return integer 
+     */
+    public function getDepartmentId()
+    {
+        return $this->departmentId;
+    }
 }

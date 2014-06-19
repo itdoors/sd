@@ -33,7 +33,11 @@
         $('#scopeId').editable({
             url: '{{ path('sd_common_ajax_organization_save') }}',
             source: '{{ path('sd_common_ajax_scope') }}',
-            emptytext: '{% trans %}Enter value{% endtrans %}'
+            emptytext: '{% trans %}Enter value{% endtrans %}',
+            select2: {
+                placeholder: '{% trans %}Select scope{% endtrans %}',
+                minimumInputLength: 0
+            }
         });
 
         $('#cityId').editable({
@@ -42,7 +46,7 @@
             emptytext: '{% trans %}Enter value{% endtrans %}',
             select2: {
                 placeholder: '{% trans %}Select City{% endtrans %}',
-                minimumInputLength: 2,
+                minimumInputLength: 0,
                 width: 250
             }
         });
@@ -56,9 +60,9 @@
             <tr>
                 <td style="width:15%">{% trans %}Creator{% endtrans %}</td> {# Добавляем создателя и дату создания #}
                 <td style="width:50%">
-                    {{ organization.creator }} ({{ organization.createdatetime == '' ? '' : organization.createdatetime|date('d.m.Y, H:i') }})
+                    {{ organization.creator }} {{ organization.createdatetime == '' ? '' : '(' ~ organization.createdatetime|date('d.m.Y, H:i') ~ ')' }}
                 </td>
-                <td style="width:35%"><span class="text-muted">{% trans %}Creator{% endtrans %}</span></td>
+                <td style="width:35%"><span class="text-muted">{% trans %}Creator (date create){% endtrans %}</span></td>
             </tr>
             <tr>
                 <td style="width:15%">{% trans %}Organization name{% endtrans %}</td>
@@ -76,7 +80,7 @@
                         {{ organization.shortname }}
                     </a>
                 </td>
-                <td><span class="text-muted">{% trans %}for example{% endtrans %}: Impel Griffin</span></td>
+                <td><span class="text-muted">{% trans %}for example{% endtrans %}: Impel Griffin {% trans %}(limit 50 chars){% endtrans %}</span></td>
             </tr>
             <tr>
                 <td>{% trans %}Organization type{% endtrans %}</td>
@@ -86,7 +90,7 @@
             <tr>
                 <td>{% trans %}Scope{% endtrans %}</td>
                 <td>
-                    <a href="#" id="scopeId" data-type="select" data-pk="{{ organization.id }}" data-value="{{ organization.scopeId }}" data-original-title="{% trans %}Select scope{% endtrans %}">
+                    <a href="#" id="scopeId" data-type="select2" data-pk="{{ organization.id }}" data-value="{{ organization.scopeId }}" data-original-title="{% trans %}Select scope{% endtrans %}">
                         {{ organization.scope }}
                     </a>
                 </td>
