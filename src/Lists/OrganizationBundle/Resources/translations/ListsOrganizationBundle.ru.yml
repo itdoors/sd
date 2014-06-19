@@ -127,3 +127,6 @@ You've picked the same organization: Организация не может бы
 Enter value: Введите значение
 
 Select a control group that owns the organization: Выберите группу влияния
+
+Creator (date create): Кто создал (дата создания)
+(limit 50 chars):  (ограничено 50 символами)
