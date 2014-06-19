@@ -91,7 +91,7 @@ class ArticleRepository extends EntityRepository
         $this->whereHistoryPage($count);
 
         return array(
-            'articles' => $sql->getQuery(),
+            'articles' => $sql->orderBy('a.datePublick', 'Desc')->getQuery(),
             'count' => $count->getQuery()->getSingleScalarResult()
         );
     }
