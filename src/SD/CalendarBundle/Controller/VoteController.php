@@ -182,7 +182,10 @@ class VoteController extends BaseFilterController
             $votes = $vR->getVoites($id);
             $rationResult = $vR->getVoteForArticle($id);
             if (!empty($rationResult['countVote'])) {
-                $ratValue = round($rationResult['sumVote'] / $rationResult['countVote'], 2);
+                $ratValue = round(
+                    $rationResult['countVote'] / ($rationResult['sumVote'] / $rationResult['countVote']),
+                    2
+                );
             }
         }
         $formView = false;
@@ -235,7 +238,12 @@ class VoteController extends BaseFilterController
                         $ration = new Ration();
                         $ration->setArticle($em->getRepository('SDCalendarBundle:Article')->find($id));
                     }
-                    $ratValue = round(($rationResult['sumVote'] + $value) / ($rationResult['countVote'] + 1), 2);
+                    $ratValue = round(
+                        ($rationResult['countVote'] + 1)
+                        /
+                        (($rationResult['sumVote'] + $value) / ($rationResult['countVote'] + 1)),
+                        2
+                    );
 
                     $ration->setValue($ratValue);
 

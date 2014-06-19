@@ -3,6 +3,7 @@
 namespace ITDoors\OperBundle\Controller;
 
 use ITDoors\AjaxBundle\Controller\BaseFilterController;
+use ITDoors\OperBundle\Services\ScheduleService;
 use Lists\GrafikBundle\Entity\GrafikTime;
 use Lists\GrafikBundle\Entity\Grafik;
 use Symfony\Component\HttpFoundation\Response;
@@ -1580,6 +1581,32 @@ class OperScheduleController extends BaseFilterController
         $em->flush();
 
         $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function copyToNextMonthAction(Request $request)
+    {
+        $idDepartment = $request->request->get('idDepartment');
+        $date = $request->request->get('date');
+
+        list($year, $month) = explode('-', $date);
+
+        /** @var ScheduleService $scheduleService */
+        $scheduleService = $this->get('schedule.service');
+
+        $scheduleService->copyToNextMonth($idDepartment, $year, $month);
+
+        $return = array(
+            'year' => $year,
+            'month' => $month,
+            'idDepartment' => $idDepartment
+        );
 
         return new Response(json_encode($return));
     }

@@ -61,6 +61,18 @@ Lists\GrafikBundle\Entity\GrafikTime:
             type: boolean
             nullable: true
             column: not_officially
+        departmentPeopleId:
+            type: bigint
+            column: department_people_id
+            nullable: false
+        departmentPeopleReplacementId:
+            type: bigint
+            column: department_people_replacement_id
+            nullable: false
+        departmentId:
+            type: bigint
+            column: department_id
+            nullable: false
     manyToOne:
         departmentPeopleReplacement:
             targetEntity: Lists\DepartmentBundle\Entity\DepartmentPeople

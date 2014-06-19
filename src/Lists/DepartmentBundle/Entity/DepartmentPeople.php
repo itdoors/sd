@@ -1045,4 +1045,33 @@ class DepartmentPeople
     {
         return $this->getFirstName().' '.$this->getLastName();
     }
+    /**
+     * @var integer
+     */
+    private $departmentId;
+
+
+    /**
+     * Set departmentId
+     *
+     * @param integer $departmentId
+     *
+     * @return DepartmentPeople
+     */
+    public function setDepartmentId($departmentId)
+    {
+        $this->departmentId = $departmentId;
+
+        return $this;
+    }
+
+    /**
+     * Get departmentId
+     *
+     * @return integer 
+     */
+    public function getDepartmentId()
+    {
+        return $this->departmentId;
+    }
 }

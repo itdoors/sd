@@ -8,7 +8,7 @@ set :scm,         :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `subversion`, `mercurial`, `perforce`, or `none`
 
 #git
-set :branch, "oper"
+set :branch, "staging"
 set :git_enable_submodules, 1
 
 set :model_manager, "doctrine"

@@ -89,3 +89,7 @@ it_doors_oper_task:
 it_doors_oper_schedule_delete_user:
     pattern:  /oper/schedule/delete/user
     defaults: { _controller: ITDoorsOperBundle:OperSchedule:deleteUserFromGrafik }
+
+it_doors_oper_copy_to_next_month:
+    pattern:  /oper/schedule/copy/to/next/month/
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:copyToNextMonth }

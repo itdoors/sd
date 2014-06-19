@@ -808,4 +808,33 @@ class DepartmentPeopleMonthInfo
     {
         return $this->bonusTypeKey;
     }
+
+    /**
+     * @var integer
+     */
+    private $replacementId;
+
+    /**
+     * Set replacementId
+     *
+     * @param integer $replacementId
+     *
+     * @return DepartmentPeopleMonthInfo
+     */
+    public function setReplacementId($replacementId)
+    {
+        $this->replacementId = $replacementId;
+
+        return $this;
+    }
+
+    /**
+     * Get replacementId
+     *
+     * @return integer 
+     */
+    public function getReplacementId()
+    {
+        return $this->replacementId;
+    }
 }
