@@ -1,5 +1,4 @@
 {% trans_default_domain 'ListsOrganizationBundle' %}
-
 <script>
     $(document).ready(function(){
         $('#' + '{{ filterFormName }}' + '_users, #' + '{{ filterFormName }}' + '_city, #' + '{{ filterFormName }}' + '_scope', '').select2({
@@ -95,7 +94,7 @@
 						{{ form_widget(filterForm.users, {'attr': {'class': 'form-control select2 input-middle', 'placeholder': 'Enter Name', 'multiple': 'multiple'}}) }}
 					</div>
 					<div class="form-group col-md-2">
-						{{ form_widget(filterForm.save, { 'label': 'Filter', 'attr': {'class': 'btn green'}} ) }}
+						{{ form_widget(filterForm.submit, { 'label': 'Filter', 'attr': {'class': 'btn green'}} ) }}
 						{{ form_widget(filterForm.reset, { 'label': 'Clear Filter', 'attr': {'class': 'btn'}} ) }}
 					</div>
 				{{ form_end(filterForm) }}

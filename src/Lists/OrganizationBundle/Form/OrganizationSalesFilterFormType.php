@@ -36,10 +36,18 @@ class OrganizationSalesFilterFormType extends AbstractType
     {
         $builder
             ->add('city', 'entity', array(
-                'class'=>'Lists\CityBundle\Entity\City',
-                'multiple' => true,
-                'mapped' => false,
-                'property'=>'name'
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_user_fio'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 2,
+                        'allowClear' => true,
+                        'width' => '200px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter fio',
+                )
             ))
             ->add('scope', 'entity', array(
                 'class'=>'Lists\LookupBundle\Entity\Lookup',
@@ -57,7 +65,7 @@ class OrganizationSalesFilterFormType extends AbstractType
             ));
 
         $builder
-            ->add('save', 'submit')
+            ->add('submit', 'submit')
             ->add('reset', 'submit');
     }
 
@@ -67,7 +75,6 @@ class OrganizationSalesFilterFormType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Lists\OrganizationBundle\Entity\Organization',
             'validation_groups' => false,
             'csrf_protection' => false,
             'translation_domain' => 'ListsOrganizationBundle'

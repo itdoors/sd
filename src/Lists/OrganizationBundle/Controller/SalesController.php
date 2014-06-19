@@ -3,7 +3,7 @@
 namespace Lists\OrganizationBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
+use ITDoors\AjaxBundle\Controller\BaseFilterController as BaseController;
 
 /**
  * Class SalesController
@@ -21,9 +21,18 @@ class SalesController extends BaseController
      */
     public function indexAction()
     {
+        $namespaseFilter = $this->filterFormName;
+        $filters = $this->getFilters($namespaseFilter);
+        if (empty($filters)) {
+            $filters['isFired'] = 'No fired';
+            $this->setFilters($namespaseFilter, $filters);
+        }
+        
+        //$filterForm = $this->getFilters($namespaseFilter);
+
         $page = $this->get('request')->query->get('page', 1);
 
-        $filterForm = $this->processFilters();
+        //$filterForm = $this->processFilters();
 
         /** @var \SD\UserBundle\Entity\User $user*/
         $user = $this->getUser();
@@ -46,7 +55,8 @@ class SalesController extends BaseController
 
         return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':index.html.twig', array(
             'pagination' => $pagination,
-            'filterForm' => $filterForm->createView(),
+            'namespaseFilter' => $namespaseFilter,
+           // 'filterForm' => $filterForm->createView(),
             'filterFormName' => $this->filterFormName,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,

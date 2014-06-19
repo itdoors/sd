@@ -29,15 +29,19 @@
 {% endblock %}
 
 {% block body %}
+    
+    {{ ajax_filter_render('organizationSalesFilterForm', namespaseFilter, {
+        'datatable_ajax': 'ITDoorsAjax.updateList'
+    }) }}
 
-    {{  include(
+    {#{  include(
             'ListsOrganizationBundle:' ~ baseTemplate ~ ':filters.html.twig',
             {
                 filterForm: filterForm,
                 filterFormName: filterFormName
             }
         )
-    }}
+    }#}
 	<div class="table-toolbar">
 		<div class="btn-group">
 			<a class="btn green" id="add_organization" href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_new') }}">
@@ -56,7 +60,7 @@
 		</div>
 		#}
 	</div>
-    <div class="table-responsive">
+    <div class="table-responsive"  id="datatable_ajax">
         <div class="navigation">
             {{ knp_pagination_render(pagination) }}
         </div>
