@@ -88,7 +88,7 @@ Contacts on sales admin: Список контактных лиц по данн�
 Contacts on organization: Список контактных лиц в данной организации
 Action: Действие
 
-FirstName, LastName: Имя, Фамилия
+LastName, FirstName: Фамилия, Имя
 
 FirstName: Имя
 LastName: Фамилия
@@ -109,10 +109,6 @@ Filter: Фильтр
 General information: Общая информация
 for example: например
 Сontact details: Контактные данные
-
-FirstName, LastName: Имя, Фамилия
-Mobile: Мобильный
-Email: Email
 
 You have some form errors. Please check below.: В форме обнаружены ошибки. Пожалуйста, проверьте.
 This field is required.: Это поле обязательно к заполнению
