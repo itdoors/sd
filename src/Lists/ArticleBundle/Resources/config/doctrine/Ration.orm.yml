@@ -1,4 +1,4 @@
-SD\CalendarBundle\Entity\Ration:
+Lists\ArticleBundle\Entity\Ration:
     type:  entity
     table: ration
     id:

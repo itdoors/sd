@@ -1,5 +1,5 @@
 {% extends "::base.html.twig" %}
-{% trans_default_domain 'SDCalendarBundle' %}
+{% trans_default_domain 'ListsArticleBundle' %}
 {% block title %}{% trans %}History{% endtrans %} {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
@@ -15,7 +15,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a href="{{ path('sd_calendar_vote_history') }}" title="{% trans %}Histories{% endtrans %}">{% trans %}Histories{% endtrans %}</a>
+            <a href="{{ path('list_article_vote_history') }}" title="{% trans %}Histories{% endtrans %}">{% trans %}Histories{% endtrans %}</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li>

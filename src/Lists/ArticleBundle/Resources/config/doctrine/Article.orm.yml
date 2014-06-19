@@ -1,8 +1,8 @@
-# src/SD/CalendarBundle/Resources/config/doctrine/Article.orm.yml
-SD\CalendarBundle\Entity\Article:
+# src/Lists/ArticleBundle/Resources/config/doctrine/Article.orm.yml
+Lists\ArticleBundle\Entity\Article:
     type:  entity
     table: article
-    repositoryClass: SD\CalendarBundle\Entity\ArticleRepository
+    repositoryClass: Lists\ArticleBundle\Entity\ArticleRepository
     id:
         id:
             type: integer

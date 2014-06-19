@@ -1,7 +1,7 @@
-SD\CalendarBundle\Entity\Vote:
+Lists\ArticleBundle\Entity\Vote:
     type:  entity
     table: vote
-    repositoryClass: SD\CalendarBundle\Entity\VoteRepository
+    repositoryClass: Lists\ArticleBundle\Entity\VoteRepository
     id:
         id:
             type: integer

@@ -1,6 +1,6 @@
 <?php
 
-namespace SD\CalendarBundle\Entity;
+namespace Lists\ArticleBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 

@@ -33,7 +33,7 @@ class VoteController extends BaseFilterController
      */
     public function historyAction()
     {
-        return $this->render('SDCalendarBundle:' . $this->baseTemplate . ':history.html.twig');
+        return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':history.html.twig');
     }
 
     /**
@@ -138,7 +138,7 @@ class VoteController extends BaseFilterController
                 throw $e;
             }
 
-            return $this->redirect($this->generateUrl('lists_article_vote_history'));
+            return $this->redirect($this->generateUrl('list_article_vote_history'));
         }
 
         return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':addHistory.html.twig', array(
@@ -265,7 +265,7 @@ class VoteController extends BaseFilterController
                     throw $e;
                 }
 
-                return $this->redirect($this->generateUrl('lists_atricle_vote_history_show', array('id' => $id)));
+                return $this->redirect($this->generateUrl('list_article_vote_history_show', array('id' => $id)));
             }
             $formView = $form->createView();
         }

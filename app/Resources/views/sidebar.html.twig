@@ -347,14 +347,14 @@
             </a>
         </li>
         <li{% if 
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_calendar_vote_history') 
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('list_article_vote_history') 
                         or
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_calendar_vote_add_history')
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('list_article_vote_add_history')
                         or
                     (
                     app.request.attributes.get('_route_params') is not empty
                     and
-                    path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('sd_calendar_vote_history_show', app.request.attributes.get('_route_params')) 
+                    path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('list_article_vote_history_show', app.request.attributes.get('_route_params')) 
                     )
                 %} class="active"{% endif %}>
             <a href="javascript:;">
@@ -363,8 +363,8 @@
                 <span class="arrow "></span>
             </a>
             <ul  class="sub-menu">
-                <li{% if  path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('sd_calendar_vote_history') %} class="active"{% endif %}>
-                    <a href="{{ path('sd_calendar_vote_history') }}" title="{% trans %}History{% endtrans %}">
+                <li{% if  path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('list_article_vote_history') %} class="active"{% endif %}>
+                    <a href="{{ path('list_article_vote_history') }}" title="{% trans %}History{% endtrans %}">
                         <i class="fa fa-comments"></i>
                         {% trans %}History{% endtrans %}
                     </a>
