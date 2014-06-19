@@ -123,7 +123,7 @@
                                     {% for key,itm in votes %}
                                         <tr>
                                             <td>{{ key+1 }}</td>
-                                            <td>{{ itm.dateCreate | date('d.m.Y') }}</td>
+                                            <td>{{ itm.dateCreate | date('d.m.Y H:i') }}</td>
                                             <td>{{ itm.lastName }} {{ itm.firstName }} {{ itm.middleName }}</td>
                                             <td>{{ itm.value }}</td>
                                         </tr>
