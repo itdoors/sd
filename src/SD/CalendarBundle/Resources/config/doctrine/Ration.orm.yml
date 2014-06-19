@@ -18,12 +18,12 @@ SD\CalendarBundle\Entity\Ration:
             options:
                 default: 0.0000
     oneToOne:
-            article:
-                targetEntity: Article
-                cascade: {  }
-                mappedBy: null
-                inversedBy: null
-                joinColumns:
-                    article_id:
-                        referencedColumnName: id
-                orphanRemoval: false
+        article:
+            targetEntity: Article
+            cascade: {  }
+            mappedBy: null
+            inversedBy: ration
+            joinColumns:
+                article_id:
+                    referencedColumnName: id
+            orphanRemoval: false

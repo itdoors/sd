@@ -52,12 +52,12 @@ class Article
     /**
      * @var \DateTime
      */
-    private $datePablick;
+    private $datePublick;
 
     /**
      * @var \DateTime
      */
-    private $dateUnpablick;
+    private $dateUnpublick;
 
     /**
      * @var \SD\UserBundle\Entity\User
@@ -243,51 +243,51 @@ class Article
     }
 
     /**
-     * Set datePablick
+     * Set datePublick
      *
-     * @param \DateTime $datePablick
+     * @param \DateTime $datePublick
      * 
      * @return Article
      */
-    public function setDatePablick($datePablick)
+    public function setDatePublick($datePublick)
     {
-        $this->datePablick = $datePablick;
+        $this->datePublick = $datePublick;
 
         return $this;
     }
 
     /**
-     * Get datePablick
+     * Get datePublick
      *
      * @return \DateTime 
      */
-    public function getDatePablick()
+    public function getDatePublick()
     {
-        return $this->datePablick;
+        return $this->datePublick;
     }
 
     /**
-     * Set dateUnpablick
+     * Set dateUnpublick
      *
-     * @param \DateTime $dateUnpablick
+     * @param \DateTime $dateUnpublick
      * 
      * @return Article
      */
-    public function setDateUnpablick($dateUnpablick)
+    public function setDateUnpulick($dateUnpublick)
     {
-        $this->dateUnpablick = $dateUnpablick;
+        $this->dateUnpublick = $dateUnpublick;
 
         return $this;
     }
 
     /**
-     * Get dateUnpablick
+     * Get dateUnpublick
      *
      * @return \DateTime 
      */
-    public function getDateUnpablick()
+    public function getDateUnpublick()
     {
-        return $this->dateUnpablick;
+        return $this->dateUnpublick;
     }
 
     /**
@@ -322,5 +322,48 @@ class Article
     public function __toString()
     {
         return (string) $this->getTitle();
+    }
+
+    /**
+     * @var \SD\CalendarBundle\Entity\Ration
+     */
+    private $ration;
+
+    /**
+     * Set dateUnpublick
+     *
+     * @param \DateTime $dateUnpublick
+     * 
+     * @return Article
+     */
+    public function setDateUnpublick($dateUnpublick)
+    {
+        $this->dateUnpublick = $dateUnpublick;
+
+        return $this;
+    }
+
+    /**
+     * Set ration
+     *
+     * @param \SD\CalendarBundle\Entity\Ration $ration
+     * 
+     * @return Article
+     */
+    public function setRation(\SD\CalendarBundle\Entity\Ration $ration = null)
+    {
+        $this->ration = $ration;
+
+        return $this;
+    }
+
+    /**
+     * Get ration
+     *
+     * @return \SD\CalendarBundle\Entity\Ration 
+     */
+    public function getRation()
+    {
+        return $this->ration;
     }
 }

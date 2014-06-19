@@ -35,12 +35,15 @@ SD\CalendarBundle\Entity\Article:
         dateUpdate:
             type: datetime
             column: date_update
-        datePablick:
+            nullable: true
+        datePublick:
             type: datetime
-            column: date_pablick
-        dateUnpablick:
+            column: date_publick
+            nullable: true
+        dateUnpublick:
             type: datetime
-            column: date_unpablick
+            column: date_unpublick
+            nullable: true
     manyToOne:
         user:
             targetEntity: SD\UserBundle\Entity\User
@@ -49,3 +52,7 @@ SD\CalendarBundle\Entity\Article:
                 user_id:
                     referencedColumnName: id
             orphanRemoval: false
+    oneToOne:
+        ration:
+            targetEntity: Ration
+            mappedBy: article

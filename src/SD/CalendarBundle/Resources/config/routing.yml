@@ -21,6 +21,10 @@ sd_calendar_vote_history_list:
     pattern:  /dashboard/vote/history/list
     defaults: { _controller: SDCalendarBundle:Vote:list }
     
-sd_calendar_vote_add_party:
-    pattern:  /dashboard/vote/add/party
-    defaults: { _controller: SDCalendarBundle:Vote:addParty }
+sd_calendar_vote_history_show:
+    pattern:  /dashboard/vote/history/show/{id}
+    defaults: { _controller: SDCalendarBundle:Vote:show }
+    
+sd_calendar_vote_add_history:
+    pattern:  /dashboard/vote/add/history
+    defaults: { _controller: SDCalendarBundle:Vote:addHistory }

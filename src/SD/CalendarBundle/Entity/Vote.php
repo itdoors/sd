@@ -23,7 +23,7 @@ class Vote
     /**
      * @var string
      */
-    private $model;
+    private $modelName;
 
     /**
      * @var integer
@@ -75,15 +75,15 @@ class Vote
     }
 
     /**
-     * Set model
+     * Set modelName
      *
-     * @param string $model
+     * @param string $modelName
      * 
      * @return Vote
      */
-    public function setModel($model)
+    public function setModelName($modelName)
     {
-        $this->model = $model;
+        $this->modelName = $modelName;
 
         return $this;
     }
@@ -93,9 +93,9 @@ class Vote
      *
      * @return string 
      */
-    public function getModel()
+    public function getModelName()
     {
-        return $this->model;
+        return $this->modelName;
     }
 
     /**
@@ -168,5 +168,34 @@ class Vote
     public function getDateCreate()
     {
         return $this->dateCreate;
+    }
+    /**
+     * @var \SD\UserBundle\Entity\User
+     */
+    private $user;
+
+
+    /**
+     * Set user
+     *
+     * @param \SD\UserBundle\Entity\User $user
+     * 
+     * @return Vote
+     */
+    public function setUser(\SD\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \SD\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }
