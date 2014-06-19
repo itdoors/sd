@@ -32,7 +32,7 @@
             {% for item in items %}
                 <tr class="{{ cycle(['odd', 'even'], item.id) }}">
                     <td><a href="{{ path('sd_calendar_vote_history_show',{'id':item.id}) }}">{{item.id}}</a></td>
-                    <td>{{item.title}}</td>
+                    <td><a href="{{ path('sd_calendar_vote_history_show',{'id':item.id}) }}">{{item.title}}</a></td>
                     <td>{{item.lastName}} {{item.firstName}} {{item.middleName}}</td>
                     <td>{{ item.datePublick == '' ? '' : item.datePublick | date('d-m-Y')}}</td>
                     <td>{{ item.value == '' ? 0 : item.value}}</td>
