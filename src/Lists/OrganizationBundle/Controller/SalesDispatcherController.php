@@ -30,7 +30,7 @@ class SalesDispatcherController extends SalesController
             'baseRoutePrefix' => $this->baseRoutePrefix,
         ));
     }
-    
+
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -51,7 +51,7 @@ class SalesDispatcherController extends SalesController
         $user = $this->getUser();
 
         $teamUserIds = $teamRepository->getMyTeamIdsByUser($user);
-        
+
         /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
         $organizationsRepository = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization');
@@ -71,7 +71,6 @@ class SalesDispatcherController extends SalesController
         return $this->render('ListsOrganizationBundle:Sales:list.html.twig', array(
             'pagination' => $pagination,
             'namespase' => $namespase,
-            'filterFormName' => $this->filterFormName,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
         ));

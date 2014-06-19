@@ -22,7 +22,7 @@ class SalesAdminController extends SalesDispatcherController
     {
         $namespase = $this->filterNamespace;
         $filter = $this->filterFormName;
-      
+
         return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':index.html.twig', array(
             'namespase' => $namespase,
             'filter' => $filter,
@@ -30,7 +30,7 @@ class SalesAdminController extends SalesDispatcherController
             'baseRoutePrefix' => $this->baseRoutePrefix,
         ));
     }
-    
+
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -47,13 +47,13 @@ class SalesAdminController extends SalesDispatcherController
         if (!$page) {
             $page = 1;
         }
-        
+
         /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
         $organizationsRepository = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization');
 
         /** @var \Doctrine\ORM\Query */
-        $organizationsQuery = $organizationsRepository->getAllForSalesQuery(null,$filters);
+        $organizationsQuery = $organizationsRepository->getAllForSalesQuery(null, $filters);
 
         /** @var \Knp\Component\Pager\Paginator $paginator */
         $paginator  = $this->get('knp_paginator');

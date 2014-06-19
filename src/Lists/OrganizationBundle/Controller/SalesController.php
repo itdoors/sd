@@ -31,7 +31,7 @@ class SalesController extends BaseController
             'baseRoutePrefix' => $this->baseRoutePrefix,
         ));
     }
-    
+
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -56,7 +56,7 @@ class SalesController extends BaseController
             ->getRepository('ListsOrganizationBundle:Organization');
 
         /** @var \Doctrine\ORM\Query */
-        $organizationsQuery = $organizationsRepository->getAllForSalesQuery($user->getId(),$filters);
+        $organizationsQuery = $organizationsRepository->getAllForSalesQuery($user->getId(), $filters);
 
         /** @var \Knp\Component\Pager\Paginator $paginator */
         $paginator  = $this->get('knp_paginator');

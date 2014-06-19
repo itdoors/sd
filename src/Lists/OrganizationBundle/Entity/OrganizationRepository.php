@@ -306,7 +306,7 @@ class OrganizationRepository extends EntityRepository
 
         return $sql->getResult();
     }
-    
+
     /**
      * Searches organization by $q
      *

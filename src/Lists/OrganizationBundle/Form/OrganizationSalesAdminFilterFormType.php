@@ -18,7 +18,7 @@ class OrganizationSalesAdminFilterFormType extends OrganizationSalesDispatcherFi
         parent::buildForm($builder, $options);
 
         $router = $this->container->get('router');
-        
+
         $builder
             ->add('users', 'text', array(
                 'attr' => array(
@@ -35,7 +35,7 @@ class OrganizationSalesAdminFilterFormType extends OrganizationSalesDispatcherFi
                 )
             ));
     }
-    
+
     /**
      * @return string
      */
