@@ -59,6 +59,7 @@ class VoteRepository extends EntityRepository
             ->andwhere('v.modelName = :text')
             ->setParameter(':id', $id)
             ->setParameter(':text', 'article')
+            ->orderBy('v.dateCreate', 'DESC')
             ->getQuery()
             ->getResult();
 
