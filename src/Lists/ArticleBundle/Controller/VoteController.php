@@ -183,7 +183,7 @@ class VoteController extends BaseFilterController
             $rationResult = $vR->getVoteForArticle($id);
             if (!empty($rationResult['countVote'])) {
                 $ratValue = round(
-                    $rationResult['countVote'] / ($rationResult['sumVote'] / $rationResult['countVote']),
+                    $rationResult['sumVote'] / $rationResult['countVote'],
                     2
                 );
             }
@@ -239,9 +239,7 @@ class VoteController extends BaseFilterController
                         $ration->setArticle($em->getRepository('ListsArticleBundle:Article')->find($id));
                     }
                     $ratValue = round(
-                        ($rationResult['countVote'] + 1)
-                        /
-                        (($rationResult['sumVote'] + $value) / ($rationResult['countVote'] + 1)),
+                        ($rationResult['sumVote'] + $value) / ($rationResult['countVote'] + 1),
                         2
                     );
 
