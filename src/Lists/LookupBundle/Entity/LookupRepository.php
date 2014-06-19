@@ -60,7 +60,8 @@ class LookupRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('l')
             ->where('l.lukey = :lukey')
-            ->setParameter(':lukey', $lukey);
+            ->setParameter(':lukey', $lukey)
+            ->orderBy('l.name');
 
         return $query;
     }
