@@ -521,10 +521,14 @@ class AjaxController extends BaseFilterController
      */
     public function scopeAction()
     {
+        $searchText = $this->get('request')->query->get('query');
+        
         /** @var \Lists\LookupBundle\Entity\LookupRepository $repository */
         $repository = $this->container->get('lists_lookup.repository');
 
         $objects = $repository->getOnlyScopeQuery()
+            ->andWhere('lower(l.name) LIKE :q')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
             ->getQuery()
             ->getResult();
 
