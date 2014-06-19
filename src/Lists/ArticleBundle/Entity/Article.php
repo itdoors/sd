@@ -1,6 +1,6 @@
 <?php
 
-namespace SD\CalendarBundle\Entity;
+namespace Lists\ArticleBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -325,7 +325,7 @@ class Article
     }
 
     /**
-     * @var \SD\CalendarBundle\Entity\Ration
+     * @var \Lists\ArticleBundle\Entity\Ration
      */
     private $ration;
 
@@ -346,11 +346,11 @@ class Article
     /**
      * Set ration
      *
-     * @param \SD\CalendarBundle\Entity\Ration $ration
+     * @param \Lists\ArticleBundle\Entity\Ration $ration
      * 
      * @return Article
      */
-    public function setRation(\SD\CalendarBundle\Entity\Ration $ration = null)
+    public function setRation(\Lists\ArticleBundle\Entity\Ration $ration = null)
     {
         $this->ration = $ration;
 
@@ -360,7 +360,7 @@ class Article
     /**
      * Get ration
      *
-     * @return \SD\CalendarBundle\Entity\Ration 
+     * @return \Lists\ArticleBundle\Entity\Ration 
      */
     public function getRation()
     {

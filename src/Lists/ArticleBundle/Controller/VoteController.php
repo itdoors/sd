@@ -1,15 +1,15 @@
 <?php
 
-namespace SD\CalendarBundle\Controller;
+namespace Lists\ArticleBundle\Controller;
 
 use ITDoors\AjaxBundle\Controller\BaseFilterController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use SD\CalendarBundle\Entity\Article;
+use Lists\ArticleBundle\Entity\Article;
 use Doctrine\Common\EventManager;
-use SD\CalendarBundle\Entity\ArticleRepository;
-use SD\CalendarBundle\Entity\Vote;
-use SD\CalendarBundle\Entity\Ration;
+use Lists\ArticleBundle\Entity\ArticleRepository;
+use Lists\ArticleBundle\Entity\Vote;
+use Lists\ArticleBundle\Entity\Ration;
 use SD\UserBundle\Entity\User;
 
 /**
@@ -49,7 +49,7 @@ class VoteController extends BaseFilterController
         $em = $this->getDoctrine()->getManager();
 
         /** ArticleRepository $artivles */
-        $artivles = $em->getRepository('SDCalendarBundle:Article')->getArticles();
+        $artivles = $em->getRepository('ListsArticleBundle:Article')->getArticles();
 
         $namespasePagin = $filterNamespace . 'P';
         $page = $this->getPaginator($namespasePagin);
@@ -61,7 +61,7 @@ class VoteController extends BaseFilterController
         $artivles['articles']->setHint($this->paginator . '.count', $artivles['count']);
         $pagination = $paginator->paginate($artivles['articles'], $page, 20);
 
-        return $this->render('SDCalendarBundle:' . $this->baseTemplate . ':list.html.twig', array(
+        return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':list.html.twig', array(
                 'items' => $pagination,
                 'namespasePagin' => $namespasePagin
         ));
@@ -138,10 +138,10 @@ class VoteController extends BaseFilterController
                 throw $e;
             }
 
-            return $this->redirect($this->generateUrl('sd_calendar_vote_history'));
+            return $this->redirect($this->generateUrl('lists_article_vote_history'));
         }
 
-        return $this->render('SDCalendarBundle:' . $this->baseTemplate . ':addHistory.html.twig', array(
+        return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':addHistory.html.twig', array(
                 'form' => $form->createView(),
         ));
     }
@@ -162,7 +162,7 @@ class VoteController extends BaseFilterController
         $em = $this->getDoctrine()->getManager();
 
         /** ArticleRepository $aR */
-        $aR = $em->getRepository('SDCalendarBundle:Article');
+        $aR = $em->getRepository('ListsArticleBundle:Article');
 
         /** User $user */
         $user = $this->getUser();
@@ -172,7 +172,7 @@ class VoteController extends BaseFilterController
         $voteValue = $aR->getVote($id, $user->getId());
 
         /** VoteRepository $vR */
-        $vR = $em->getRepository('SDCalendarBundle:Vote');
+        $vR = $em->getRepository('ListsArticleBundle:Vote');
 
         $votes = false;
 
@@ -232,11 +232,11 @@ class VoteController extends BaseFilterController
                     $vote->setValue($value);
                     $vote->setDateCreate(new \DateTime(date('Y-m-d H:i:s')));
 
-                    $ration = $em->getRepository('SDCalendarBundle:Ration')
+                    $ration = $em->getRepository('ListsArticleBundle:Ration')
                         ->findOneBy(array( 'articleId' => $id ));
                     if (!$ration) {
                         $ration = new Ration();
-                        $ration->setArticle($em->getRepository('SDCalendarBundle:Article')->find($id));
+                        $ration->setArticle($em->getRepository('ListsArticleBundle:Article')->find($id));
                     }
                     $ratValue = round(
                         ($rationResult['countVote'] + 1)
@@ -265,12 +265,12 @@ class VoteController extends BaseFilterController
                     throw $e;
                 }
 
-                return $this->redirect($this->generateUrl('sd_calendar_vote_history_show', array('id' => $id)));
+                return $this->redirect($this->generateUrl('lists_atricle_vote_history_show', array('id' => $id)));
             }
             $formView = $form->createView();
         }
 
-        return $this->render('SDCalendarBundle:' . $this->baseTemplate . ':show.html.twig', array(
+        return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':show.html.twig', array(
                 'item' => $article,
                 'vote' => $voteValue,
                 'form' => $formView,

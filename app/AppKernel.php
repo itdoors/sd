@@ -44,6 +44,7 @@ class AppKernel extends Kernel
             new ITDoors\EmailBundle\ITDoorsEmailBundle(),
             new TSS\AutomailerBundle\TSSAutomailerBundle(),
             new Lists\CompanystructureBundle\ListsCompanystructureBundle(),
+            new Lists\ArticleBundle\ListsArticleBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

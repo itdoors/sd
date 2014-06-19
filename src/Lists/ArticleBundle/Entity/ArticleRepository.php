@@ -1,6 +1,6 @@
 <?php
 
-namespace SD\CalendarBundle\Entity;
+namespace Lists\ArticleBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -138,7 +138,7 @@ class ArticleRepository extends EntityRepository
 
         return $sql
                 ->addSelect('v.value')
-                ->leftJoin('SD\CalendarBundle\Entity\Vote', 'v', 'WITH', $subQueryCase)
+                ->leftJoin('Lists\ArticleBundle\Entity\Vote', 'v', 'WITH', $subQueryCase)
                 ->where('a.id = :id')
                 ->andWhere('v.userId = :user')
                 ->setParameter(':text', 'article')
