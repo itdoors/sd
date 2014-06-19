@@ -33,7 +33,11 @@
         $('#scopeId').editable({
             url: '{{ path('sd_common_ajax_organization_save') }}',
             source: '{{ path('sd_common_ajax_scope') }}',
-            emptytext: '{% trans %}Enter value{% endtrans %}'
+            emptytext: '{% trans %}Enter value{% endtrans %}',
+            select2: {
+                placeholder: '{% trans %}Select scope{% endtrans %}',
+                minimumInputLength: 2
+            }
         });
 
         $('#cityId').editable({
@@ -86,7 +90,7 @@
             <tr>
                 <td>{% trans %}Scope{% endtrans %}</td>
                 <td>
-                    <a href="#" id="scopeId" data-type="select" data-pk="{{ organization.id }}" data-value="{{ organization.scopeId }}" data-original-title="{% trans %}Select scope{% endtrans %}">
+                    <a href="#" id="scopeId" data-type="select2" data-pk="{{ organization.id }}" data-value="{{ organization.scopeId }}" data-original-title="{% trans %}Select scope{% endtrans %}">
                         {{ organization.scope }}
                     </a>
                 </td>
