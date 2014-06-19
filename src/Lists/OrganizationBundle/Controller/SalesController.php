@@ -21,19 +21,33 @@ class SalesController extends BaseController
      */
     public function indexAction()
     {
-        $namespaseFilter = $this->filterFormName;
-        $filters = $this->getFilters($namespaseFilter);
+        $namespase = $this->filterNamespace;
+        $filter = $this->filterFormName;
+
+        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':index.html.twig', array(
+            'namespase' => $namespase,
+            'filter' => $filter,
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix,
+        ));
+    }
+    
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listAction()
+    {
+        $namespase = $this->filterNamespace;
+        $filters = $this->getFilters($namespase);
         if (empty($filters)) {
             $filters['isFired'] = 'No fired';
-            $this->setFilters($namespaseFilter, $filters);
+            $this->setFilters($namespase, $filters);
         }
-        
-        //$filterForm = $this->getFilters($namespaseFilter);
 
-        $page = $this->get('request')->query->get('page', 1);
-
-        //$filterForm = $this->processFilters();
-
+        $page = $this->getPaginator($namespase);
+        if (!$page) {
+            $page = 1;
+        }
         /** @var \SD\UserBundle\Entity\User $user*/
         $user = $this->getUser();
 
@@ -42,7 +56,7 @@ class SalesController extends BaseController
             ->getRepository('ListsOrganizationBundle:Organization');
 
         /** @var \Doctrine\ORM\Query */
-        $organizationsQuery = $organizationsRepository->getAllForSalesQuery($user->getId(), $this->getFilters());
+        $organizationsQuery = $organizationsRepository->getAllForSalesQuery($user->getId(),$filters);
 
         /** @var \Knp\Component\Pager\Paginator $paginator */
         $paginator  = $this->get('knp_paginator');
@@ -53,11 +67,9 @@ class SalesController extends BaseController
             20
         );
 
-        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':index.html.twig', array(
+        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':list.html.twig', array(
             'pagination' => $pagination,
-            'namespaseFilter' => $namespaseFilter,
-           // 'filterForm' => $filterForm->createView(),
-            'filterFormName' => $this->filterFormName,
+            'namespase' => $namespase,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
         ));

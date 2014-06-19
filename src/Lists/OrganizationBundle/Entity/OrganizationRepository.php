@@ -64,6 +64,7 @@ class OrganizationRepository extends EntityRepository
     {
         $sql
             ->select('DISTINCT(o.id) as organizationId', 'o.name as organizationName')
+            ->addSelect('o.edrpou')
             ->addSelect('c.name as cityName')
             ->addSelect('r.name as regionName')
             ->addSelect('scope.name as scopeName')
@@ -301,6 +302,23 @@ class OrganizationRepository extends EntityRepository
             ->setParameter(':q', '%'. mb_strtolower($q, 'UTF-8') . '%')
             ->andWhere('l.lukey = :key')
             ->setParameter(':key', 'organization_sign_own')
+            ->getQuery();
+
+        return $sql->getResult();
+    }
+    
+    /**
+     * Searches organization by $q
+     *
+     * @param string $q
+     *
+     * @return mixed[]
+     */
+    public function searchOrganizationFirst($q)
+    {
+        $sql = $this->createQueryBuilder('o')
+            ->where('lower(o.name) LIKE :q')
+            ->setParameter(':q', mb_strtolower($q, 'UTF-8') . '%')
             ->getQuery();
 
         return $sql->getResult();

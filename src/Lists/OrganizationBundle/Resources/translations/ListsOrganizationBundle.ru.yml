@@ -74,7 +74,6 @@ Users: Пользователи
 
 Organization: Организация
 
-
 No matches found: Совпадений ненайдено
 
 Managers: Менеджеры
@@ -130,3 +129,7 @@ Select a control group that owns the organization: Выберите группу
 
 Creator (date create): Кто создал (дата создания)
 (limit 50 chars):  (ограничено 50 символами)
+
+Add New organization: Добавить организацию
+Projects: Проекты
+Enter manager: Введите менеджера

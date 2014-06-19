@@ -2,6 +2,10 @@
 lists_sales_organization_index:
     pattern:  /lists/sales/organization/index
     defaults: { _controller: ListsOrganizationBundle:Sales:index }
+    
+lists_sales_organization_index_list:
+    pattern:  /lists/sales/organization/index/list
+    defaults: { _controller: ListsOrganizationBundle:Sales:list }
 
 lists_sales_organization_new:
     pattern:  /lists/sales/organization/new
@@ -32,6 +36,10 @@ lists_sales_organization_ajax_users:
 lists_sales_dispatcher_organization_index:
     pattern:  /lists/salesdispatcher/organization/index
     defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:index }
+    
+lists_sales_dispatcher_organization_index_list:
+    pattern:  /lists/salesdispatcher/organization/index/list
+    defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:list }
 
 lists_sales_dispatcher_organization_new:
     pattern:  /lists/salesdispatcher/organization/new
@@ -63,6 +71,10 @@ lists_sales_dispatcher_organization_ajax_users:
 lists_sales_admin_organization_index:
     pattern:  /lists/salesadmin/organization/index
     defaults: { _controller: ListsOrganizationBundle:SalesAdmin:index }
+    
+lists_sales_admin_organization_index_list:
+    pattern:  /lists/salesadmin/organization/index/list
+    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:list }
 
 lists_sales_admin_organization_new:
     pattern:  /lists/salesadmin/organization/new
@@ -93,6 +105,10 @@ lists_sales_admin_organization_ajax_users:
 lists_dogovor_admin_organization_index:
     pattern:  /lists/dogovor/admin/organization/index
     defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:index }
+    
+lists_dogovor_admin_organization_index_list:
+    pattern:  /lists/dogovor/admin/organization/index/list
+    defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:list }
 
 lists_dogovor_admin_organization_new:
     pattern:  /lists/dogovor/admin/organization/new

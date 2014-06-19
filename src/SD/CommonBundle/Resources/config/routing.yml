@@ -6,6 +6,10 @@ sd_common_ajax_organization:
     pattern:  /ajax/organization
     defaults: { _controller: SDCommonBundle:Ajax:organization }
 
+sd_common_ajax_organization_first:
+    pattern: /ajax/organization/first
+    defaults: { _controller: SDCommonBundle:Ajax:organizationFirst }
+
 sd_common_ajax_competitor:
     pattern:  /ajax/competitor
     defaults: { _controller: SDCommonBundle:Ajax:competitor }
@@ -117,7 +121,11 @@ sd_common_ajax_user_by_ids:
 sd_common_ajax_city_by_id:
     pattern:  /ajax/city_by_id
     defaults: { _controller: SDCommonBundle:Ajax:cityById }
-
+    
+sd_common_ajax_scope_by_id:
+    pattern:  /ajax/scope_by_id
+    defaults: { _controller: SDCommonBundle:Ajax:scopeById }
+    
 sd_common_ajax_organization_type:
     pattern:  /ajax/organization_type
     defaults: { _controller: SDCommonBundle:Ajax:organizationType }

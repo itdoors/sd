@@ -12,6 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  */
 class OrganizationSalesFilterFormType extends AbstractType
 {
+
     protected $container;
 
     /**
@@ -34,35 +35,51 @@ class OrganizationSalesFilterFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $router = $this->container->get('router');
+
         $builder
-            ->add('city', 'entity', array(
+            ->add('city', 'text', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url' => $router->generate('sd_common_ajax_user_fio'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
+                    'data-url' => $router->generate('sd_common_ajax_city'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_city_by_id'),
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 2,
                         'allowClear' => true,
                         'width' => '200px',
                         'multiple' => 'multiple'
                     )),
-                    'placeholder' => 'Enter fio',
+                    'placeholder' => 'Enter City',
                 )
             ))
-            ->add('scope', 'entity', array(
-                'class'=>'Lists\LookupBundle\Entity\Lookup',
-                'property'=>'name',
-                'mapped' => false,
-                'multiple' => true,
-                'query_builder' => $this->lr->getOnlyScopeQuery()
+            ->add('scope', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_scope'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_scope_by_id'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 0,
+                        'allowClear' => true,
+                        'width' => '200px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter Scope',
+                )
             ))
-            ->add('users', 'entity', array(
-                'class'=>'SD\UserBundle\Entity\User',
-                'mapped' => false,
-                'multiple' => true,
-                'property'=>'fullname',
-                'query_builder' => $this->ur->getOnlyStuff()
-            ));
+            ->add('organization', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_organization_first'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_organization_by_ids'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 2,
+                        'allowClear' => true,
+                        'width' => '200px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter Name',
+                )
+        ));
 
         $builder
             ->add('submit', 'submit')

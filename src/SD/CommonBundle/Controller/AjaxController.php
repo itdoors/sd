@@ -306,6 +306,28 @@ class AjaxController extends BaseFilterController
     }
 
     /**
+     * Returns json city object by id
+     *
+     * @return string
+     */
+    public function scopeByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $cityList = $this->getDoctrine()
+            ->getRepository('lists_lookup.repository')
+            ->findBy(array('id'=>$ids));
+
+        $result = array();
+
+        foreach ($cityList as $city) {
+            $result[] = $this->serializeObject($city);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
      * Returns json companystructure list
      *
      * @return string
@@ -3181,6 +3203,29 @@ class AjaxController extends BaseFilterController
     }
 
     /**
+     * Returns json of searchin self Organizations
+     *
+     * @return string
+     */
+    public function organizationFirstAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+        $objects= $repository->searchOrganizationFirst($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
      * Function to handle the ajax queries from editable elements
      *
      * @return mixed[]
@@ -3514,40 +3559,6 @@ class AjaxController extends BaseFilterController
             }
         } else {
             $result[] = $this->serializeObject($departmentPeople);
-        }
-
-        return new Response(json_encode($result));
-    }
-    
-     /**
-     * Returns json users list
-     *
-     * @return string
-     */
-    public function userFIOAction()
-    {
-        $searchText = $this->get('request')->query->get('query');
-
-        /** @var \SD\UserBundle\Entity\UserRepository $repository */
-        $repository = $this->container->get('sd_user.repository');
-
-        $objects = $repository->getOnlyStuff()
-            ->andWhere('lower(u.firstName) LIKE :q OR lower(u.lastName) LIKE :q OR lower(u.middleName) LIKE :q')
-            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
-            ->getQuery()
-            ->getResult();
-
-        $result = array();
-
-        foreach ($objects as $object) {
-            $string = $object->getLastName().' '.$object->getFirstName().' '.$object->getMiddleName();
-
-            $result[] =  array(
-                    'id' => $object->getId(),
-                    'value' => $object->getId(),
-                    'name' => $string,
-                    'text' => $string
-                );
         }
 
         return new Response(json_encode($result));

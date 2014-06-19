@@ -20,24 +20,44 @@ class SalesDispatcherController extends SalesController
      */
     public function indexAction()
     {
-        /** @var \Lists\TeamBundle\Entity\TeamRepository $teamRepository */
-        $teamRepository = $this->get('lists_team.repository');
+        $namespase = $this->filterNamespace;
+        $filter = $this->filterFormName;
 
-        $page = $this->get('request')->query->get('page', 1);
+        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':index.html.twig', array(
+            'namespase' => $namespase,
+            'filter' => $filter,
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix,
+        ));
+    }
+    
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listAction()
+    {
+        $namespase = $this->filterFormName;
+        $filters = $this->getFilters($namespase);
+        if (empty($filters)) {
+            $filters['isFired'] = 'No fired';
+            $this->setFilters($namespase, $filters);
+        }
 
-        $filterForm = $this->processFilters();
-
-        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
-        $organizationsRepository = $this->getDoctrine()
-            ->getRepository('ListsOrganizationBundle:Organization');
-
+        $page = $this->getPaginator($namespase);
+        if (!$page) {
+            $page = 1;
+        }
         /** @var \SD\UserBundle\Entity\User $user */
         $user = $this->getUser();
 
         $teamUserIds = $teamRepository->getMyTeamIdsByUser($user);
+        
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $organizationsRepository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
 
         /** @var \Doctrine\ORM\Query */
-        $organizationsQuery = $organizationsRepository->getAllForSalesQuery($teamUserIds, $this->getFilters());
+        $organizationsQuery = $organizationsRepository->getAllForSalesQuery($teamUserIds, $filters);
 
         /** @var \Knp\Component\Pager\Paginator $paginator */
         $paginator  = $this->get('knp_paginator');
@@ -48,9 +68,9 @@ class SalesDispatcherController extends SalesController
             20
         );
 
-        return $this->render('ListsOrganizationBundle:Sales:index.html.twig', array(
+        return $this->render('ListsOrganizationBundle:Sales:list.html.twig', array(
             'pagination' => $pagination,
-            'filterForm' => $filterForm->createView(),
+            'namespase' => $namespase,
             'filterFormName' => $this->filterFormName,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
