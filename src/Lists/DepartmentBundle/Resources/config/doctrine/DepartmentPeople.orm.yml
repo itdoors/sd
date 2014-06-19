@@ -141,6 +141,10 @@ Lists\DepartmentBundle\Entity\DepartmentPeople:
             fixed: false
             nullable: true
             column: passport
+        departmentId:
+            type: bigint
+            nullable: false
+            column: department_id
     oneToOne:
         mpks:
             targetEntity: Lists\MpkBundle\Entity\Mpk

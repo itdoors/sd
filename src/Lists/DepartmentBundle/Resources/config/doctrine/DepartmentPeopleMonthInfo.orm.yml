@@ -95,6 +95,10 @@ Lists\DepartmentBundle\Entity\DepartmentPeopleMonthInfo:
             fixed: false
             nullable: false
             column: replacement_type
+        replacementId:
+            type: bigint
+            nullable: false
+            column: department_people_replacement_id
     uniqueConstraints:
         department_people_month_info_unique_idx:
             columns: [ department_people_id, year, month, department_people_replacement_id, replacement_type ]
