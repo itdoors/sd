@@ -12,6 +12,8 @@ use Doctrine\ORM\EntityRepository;
  */
 class DepartmentPeopleMonthInfoRepository extends EntityRepository
 {
+    const REPLACEMENT_TYPE_REPLACEMENT = 'r';
+    const REPLACEMENT_TYPE_SUBSTITUTION = 's';
 
     /**
      * @param integer $idDepartment

@@ -2,6 +2,7 @@ parameters:
     itdoors_oper.department.filter.form.class: ITDoors\OperBundle\Form\DepartmentFilterFormType
     itdoors_oper.coworker.filter.form.class: ITDoors\OperBundle\Form\CoworkerFilterFormType
     itdoors_oper.schedule.filter.form.class: ITDoors\OperBundle\Form\ScheduleFilterFormType
+    itdoors_oper.schedule.service.class: ITDoors\OperBundle\Services\ScheduleService
 
 services:
     itdoors_oper.form.DepartmentFilterFormType:
@@ -19,3 +20,10 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: ScheduleFilterFormType }
+
+    itdoors_oper.schedule.service:
+        class: %itdoors_oper.schedule.service.class%
+        arguments: [@service_container]
+
+    schedule.service:
+        alias: itdoors_oper.schedule.service
