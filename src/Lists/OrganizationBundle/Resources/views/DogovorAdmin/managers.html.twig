@@ -1,0 +1,33 @@
+{% trans_default_domain 'ListsOrganizationBundle' %}
+
+<div class="tab-pane" id="tab_1">
+    <div class="col-md-12">
+        <h3>{% trans %}Managers{% endtrans %}</h3>
+        <p>{% trans %}Managers on organization{% endtrans %}</p>
+        <div class="table-toolbar">
+            <div class="btn-group">
+                <button id="managers_list_new" class="btn green ajax-form"
+                        data-target_holder="managerFormTpl"
+                        data-form_name="organizationUserForm"
+                        data-default='{"organizationId":{{ organization.id }}}'
+                        data-post_function="updateList"
+                        data-post_target_id="managers_list"
+                >
+                    {% trans %}Add New{% endtrans %} <i class="fa fa-plus"></i>
+                </button>
+            </div>
+            <div style="display: none" id="managerFormTpl">
+            </div>
+        </div>
+        <div id="managers_list"
+             data-url="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_ajax_users', {
+                organizationId: organization.id
+             }) }}"
+             data-params='{"organizationId":{{ organization.id }}'
+        >
+            {{ render(controller('ListsOrganizationBundle:' ~ baseTemplate ~ ':OrganizationUsers', {
+                organizationId: organization.id
+            })) }}
+        </div>
+    </div>
+</div>
