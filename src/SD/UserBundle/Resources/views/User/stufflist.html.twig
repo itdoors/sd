@@ -1,5 +1,6 @@
 {% trans_default_domain 'SDUserBundle' %}
 <div class="navigation">
+<a class="btn btn-lg green" href="{{ url('sd_user_new_stuff') }}">{% trans %}Add new user{% endtrans %}</a>
     {{ ajax_paginator_render(
             items, namespase, {
                     'datatable_ajax': 'ITDoorsAjax.updateList'
