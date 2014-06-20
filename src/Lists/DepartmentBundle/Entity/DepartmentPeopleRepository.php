@@ -12,6 +12,36 @@ use Doctrine\ORM\EntityRepository;
  */
 class DepartmentPeopleRepository extends EntityRepository
 {
+
+    /**
+     * @param integer $idDepartment
+     *
+     * @return array
+     */
+    public function getOrderedPeopleFromDepartment($idDepartment) {
+        $result = $this->createQueryBuilder('dp')
+            ->select('dp.id as id')
+            ->addSelect('i.firstName')
+            ->addSelect('i.lastName')
+            ->addSelect('i.middleName')
+            ->addSelect('dp.dismissalDateNotOfficially')
+            ->addSelect('m.name as mpkName')
+
+            ->leftJoin('dp.department', 'd')
+            ->leftJoin('dp.individual', 'i')
+            ->leftJoin('dp.mpks', 'm')
+
+            ->andWhere('d.id = :id')
+            ->setParameter(':id', $idDepartment)
+
+            ->orderBy('i.lastName')
+            //->orderBy('m.name')
+
+            ->getQuery()
+            ->getResult();
+
+        return $result;
+    }
     /**
      * creates builder query to find all departmentPeople by id
      *
