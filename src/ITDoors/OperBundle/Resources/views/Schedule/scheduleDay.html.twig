@@ -59,9 +59,17 @@
             defaultTime: '18:00'
         });
 
+        var currentDate = $('#addButton').data('date');
+        var currentDateParts = currentDate.split('-');
+        var minDate = new Date(currentDateParts[0], parseInt(currentDateParts[1])-1, +1); //one day next before month
+        var maxDate = new Date(currentDateParts[0], parseInt(currentDateParts[1]), 0); // one day before next month
+
+/*
         var currentTime = new Date()
+        alert(currentTime.getFullYear()+' '+currentTime.getMonth());
         var minDate = new Date(currentTime.getFullYear(), currentTime.getMonth(), +1); //one day next before month
         var maxDate = new Date(currentTime.getFullYear(), currentTime.getMonth() +1, 0); // one day before next month
+*/
 
         $('#copy_graf').datepicker({
             startDate: minDate,
@@ -492,7 +500,10 @@
 <li class="btn-group" style="float: right; ">
     <a class="btn green notDisplayed" style="margin-right: 10px;" id="copy_graf_submit">Скопировать</a>
     <a class="btn green" style="margin-right: 10px; width: 200px;" id="copy_graf"
-       data-message="{% trans %}Select dates{% endtrans %}" data-text="{% trans %}Copy graf{% endtrans %}">{% trans %}Copy graf{% endtrans %}</a>
+       data-message="{% trans %}Select dates{% endtrans %}"
+       data-text="{% trans %}Copy graf{% endtrans %}"
+
+            >{% trans %}Copy graf{% endtrans %}</a>
 
     <button type="button" class="btn blue dropdown-toggle " data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true">
 							<span>
