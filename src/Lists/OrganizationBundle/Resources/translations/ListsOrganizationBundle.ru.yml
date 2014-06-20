@@ -29,13 +29,13 @@ Organization short name: Сокращенное название
 Enter organization short name: Введите короткое название
 
 Organization type: Тип организации
-Enter Organization type: Введите тип организации
-Select Organization type: Выберите тип организации
+Enter organization type: Введите тип организации
+Select organization type: Выберите тип организации
 
 Legal Address: Юридический адрес
 Enter Legal Address: Введите юридический адрес
 
-Select City: Выберите город
+Select city: Выберите город
 Mailing Address: Почтовый адрес
 Enter Mailing Address: Введите почтовый адрес
 Enter Physical Address: Введите физический адрес
@@ -134,3 +134,4 @@ Add New organization: Добавить организацию
 Projects: Проекты
 Enter manager: Введите менеджера
 Add contact: Добавить контакт
+Select scope: Выберите деятельность
