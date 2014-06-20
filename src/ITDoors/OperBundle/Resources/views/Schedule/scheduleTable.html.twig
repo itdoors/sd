@@ -52,7 +52,9 @@
                                  {% if filterCoworker.mpks is not empty %}
                                     ({{ filterCoworker.mpks.name }})
                                  {% endif %}
-                                 {{ filterCoworker.lastName }} {{ filterCoworker.firstName }} {{ filterCoworker.middleName }}
+                                 {% if filterCoworker.individual is not empty %}
+                                     {{ filterCoworker.individual.lastName }} {{ filterCoworker.individual.firstName }} {{ filterCoworker.individual.middleName }}
+                                 {% endif %}
                              </option>
                         {% endfor %}
                     </select>

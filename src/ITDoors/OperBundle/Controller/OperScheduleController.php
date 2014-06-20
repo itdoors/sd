@@ -160,6 +160,7 @@ class OperScheduleController extends BaseFilterController
             }
         }
 
+
         /** @var $grafikRepository \Lists\GrafikBundle\Entity\GrafikRepository   */
         $grafikRepository = $this->getDoctrine()
             ->getRepository('ListsGrafikBundle:Grafik');
