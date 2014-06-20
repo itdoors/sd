@@ -432,17 +432,17 @@
         {% trans %}Copy to the next month{% endtrans %}
     </a>
 
-    <table style="width: 35%">
+    <table style="width: 35%;">
         <tr>
-            <td style="color: #333333;"><strong>{% trans %}Current month{% endtrans %}</strong></td>
+            <td style="color: #333333; font-weight: bold;">{% trans %}Current month{% endtrans %}</td>
             <td>{{ monthName|trans }} {{ year }}</td>
-            <td style="color: #333333;"><strong>{% trans %}Number workdays{% endtrans %}</strong></td>
+            <td style="color: #333333; font-weight: bold;"><strong>{% trans %}Number workdays{% endtrans %}</strong></td>
             <td>{{ workDaysTotal }}</td>
         </tr>
         <tr>
-            <td style="color: #333333;"><strong>{% trans %}Number hours{% endtrans %}</strong></td>
+            <td style="color: #333333; font-weight: bold;"><strong>{% trans %}Number hours{% endtrans %}</strong></td>
             <td>{{ hoursTotal }}</td>
-            <td style="color: #333333;"><strong>{% trans %}Holidays{% endtrans %}</strong></td>
+            <td style="color: #333333; font-weight: bold;"><strong>{% trans %}Holidays{% endtrans %}</strong></td>
             <td>{{ holydaysTotalString }}</td>
         </tr>
     </table>
