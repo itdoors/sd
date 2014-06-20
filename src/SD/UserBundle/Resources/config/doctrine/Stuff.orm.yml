@@ -43,10 +43,10 @@ SD\UserBundle\Entity\Stuff:
         dateFire:
             type: date
             nullable: true
-            column: hire_date
+            column: fire_date
         dateHire:
             type: date
-            column: fire_date
+            column: hire_date
         education:
             type: string
             length: 128
