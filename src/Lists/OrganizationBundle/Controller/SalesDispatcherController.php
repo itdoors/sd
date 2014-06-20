@@ -23,7 +23,7 @@ class SalesDispatcherController extends SalesController
         $namespase = $this->filterNamespace;
         $filter = $this->filterFormName;
 
-        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':index.html.twig', array(
+        return $this->render('ListsOrganizationBundle:Sales:index.html.twig', array(
             'namespase' => $namespase,
             'filter' => $filter,
             'baseTemplate' => $this->baseTemplate,

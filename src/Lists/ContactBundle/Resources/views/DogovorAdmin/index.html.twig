@@ -1,0 +1,90 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsContactBundle' %}
+{% block title %}{% trans %}Show contacts{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_contact_index') }}" title="{% trans %}My Contacts{% endtrans %}">{% trans %}My Contacts{% endtrans %}</a></li>
+    </ul>
+{% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}My Contacts <small>show contacts</small>{% endtrans %}
+    </h3>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.cs')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <p>{% trans %}Contacts on contacts{% endtrans %}</p>
+        <div class="table-toolbar">
+            <a id="managers_list_new" class="btn green ajax-form"
+               data-toggle="modal"
+               href="#form_modal_contact"
+               data-target_holder="modelContactFormTpl"
+               data-form_name="modelContactOrganizationEditForm"
+               data-post_function="updateList"
+               data-post_target_id="contact_list"
+                    >
+                {% trans %}Add New{% endtrans %} <i class="fa fa-plus"></i>
+            </a>
+        </div>
+
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+            });
+        </script>
+
+        <div id="form_modal_contact" class="modal fade" role="basic" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title">{% trans from 'ListsContactBundle' %}New Contact{% endtrans %}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="modelContactFormTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+        </div>
+
+        <div id="contact_list"
+             data-url="{{ path('lists_' ~ baseRoutePrefix ~ '_contact_ajax_organization', {
+                    organizationId: 0
+                 }) }}"
+             data-params='{"organizationId":""'
+        >
+            {{ render(controller('ListsContactBundle:' ~ baseTemplate ~ ':Organization', {
+                organizationId: 0,
+                baseRoutePrefix: baseRoutePrefix
+            })) }}
+        </div>
+    </div>
+</div>
+{% endblock body %}
