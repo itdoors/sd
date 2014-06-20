@@ -37,7 +37,7 @@
                 placeholder: "Select a State",
                 allowClear: true
             });
-        })
+        });
 
         $(document).ready(function(){
 
@@ -198,10 +198,7 @@
 
                     <h3 class="form-section">{% trans %}Organization details{% endtrans %}</h3>
                     <div class="row">
-                        <div class="col-md-6
-                            {% if filterForm.edrpou.vars.errors|length %}
-							    has-error
-							{% endif %}">
+                        <div class="col-md-6{% if filterForm.edrpou.vars.errors|length %} has-error{% endif %}">
                             <div class="form-group">
                                 {{ form_label(filterForm.edrpou, 'Edrpou', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.edrpou, {'attr': {'class': 'form-control'}}) }}
