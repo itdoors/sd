@@ -98,6 +98,12 @@ class OperScheduleController extends BaseFilterController
             foreach ($holidaysParts as $holidayPart) {
                 $holiday[] = $holidayPart;
             }
+            if (count($holidaysParts) == 1) {
+                $holidays .= 'e';
+            } else {
+                $holidays = str_replace(',', 'e, ', $holidays);
+                $holidays .= 'e';
+            }
         }
 
         $days = date("t", strtotime($year.'-'.$month)); //num days in selected month
@@ -108,9 +114,6 @@ class OperScheduleController extends BaseFilterController
         if ($month<10) {
             $monthShow = '0'.$month;
         }
-
-        $countWorkDays = 0;
-        $countHoliday = 0;
 
         for ($i=0; $i<$days; $i++) {
             $day = $i+1;
@@ -141,7 +144,6 @@ class OperScheduleController extends BaseFilterController
                 }
             }
         }
-        $countWorkDays = $days - $countHoliday;
         /** @var  $monthInfoRepository \Lists\DepartmentBundle\Entity\departmentPeopleRepository */
         $departmentPeopleRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeople');
