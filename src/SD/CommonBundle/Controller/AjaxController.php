@@ -28,6 +28,7 @@ use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use ITDoors\AjaxBundle\Controller\BaseFilterController;
 use Lists\CompanystructureBundle\Entity\Companystructure;
+use SD\UserBundle\Entity\Usercontactinfo;
 
 /**
  * AjaxController class.
