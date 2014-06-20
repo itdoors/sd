@@ -52,7 +52,9 @@
                                  {% if filterCoworker.mpks is not empty %}
                                     ({{ filterCoworker.mpks.name }})
                                  {% endif %}
-                                 {{ filterCoworker.lastName }} {{ filterCoworker.firstName }} {{ filterCoworker.middleName }}
+                                 {% if filterCoworker.individual is not empty %}
+                                     {{ filterCoworker.individual.lastName }} {{ filterCoworker.individual.firstName }} {{ filterCoworker.individual.middleName }}
+                                 {% endif %}
                              </option>
                         {% endfor %}
                     </select>
@@ -431,7 +433,7 @@
         {% trans %}Copy to the next month{% endtrans %}
     </a>
 
-    <table style="width: 30%">
+    <table style="width: 35%">
         <tr>
             <td style="color: #333333;"><strong>{% trans %}Current month{% endtrans %}</strong></td>
             <td>{{ monthName|trans }} {{ year }}</td>
