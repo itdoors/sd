@@ -1,3 +1,4 @@
+{% trans_default_domain 'ListsContactBundle' %}
 <script type="text/javascript">
 
     $(document).ready(function(){
@@ -113,7 +114,7 @@
     <div class="col-md-12">
         <div class="portlet box green">
             <div class="portlet-title"><div class="caption"><i class="fa fa-edit"></i>
-                    Create New Contact
+                    {% trans %}Create New Contact{% endtrans %}
                 </div>
             </div>
             <div class="portlet-body form">
@@ -127,12 +128,20 @@
                 'data-target_id': targetId
                 }
                 }) }}
-                <div class="form-body row">
-                    <div class="alert alert-danger display-hide">
+                    {% if form.vars.valid is sameas(false) %}
+                    <div class="alert alert-danger">
                         <button class="close" data-close="alert"></button>
-                        {% trans %}You have some form errors. Please check below.{% endtrans %}
+                        {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
                         {{ form_errors(form) }}
+                        {% if form.phone1.vars.errors|length %}
+                            {{ form_errors(form.phone1) }}
+                        {% endif %}
+                        {% if form.level.vars.errors|length %}
+                            {{ form_errors(form.level) }}
+                        {% endif %}
                     </div>
+                {% endif %}
+                <div class="form-body row">
                     {% if form.modelId.vars.block_prefixes.1 != 'hidden' %}
                         <div class="form-group col-md-12">
                             {{ form_label(form.modelId, 'Organization Name', {'attr': {'class': 'control-label'}}) }}

@@ -148,7 +148,7 @@
 
 <div class="row ">
     <div class="col-md-12">
-        <div class="portlet box yellow">
+        {#<div class="portlet box yellow">
             <div class="portlet-title"><div class="caption"><i class="fa fa-edit"></i>
                     {% if form.isNew is defined %}
                         {% trans  from 'ListsContactBundle' %}New Contact{% endtrans %}
@@ -157,7 +157,7 @@
                     {% endif %}
 
                 </div>
-            </div>
+            </div>#}
             <div class="portlet-body">
                 {% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
                 {% if form.vars.valid is sameas(false) %}
@@ -220,6 +220,8 @@
                             {{  form_label(form.owner, 'Owner', {'attr': {'class': 'control-label'}}) }}
                             {{ form_widget(form.owner, {'attr' : {'class' : 'form-control', 'placeholder': "Owner"}}) }}
                         </div>
+                    {% else %}
+                        <div class="form-group col-md-6" style="height: 60px;"></div>
                     {% endif %}
 
                     <div class="form-group col-md-6">
@@ -236,10 +238,35 @@
                         {{ form_label(form.middleName, 'Middle Name', {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.middleName, {'attr' : {'class' : 'form-control', 'placeholder': "Middle name"}}) }}
                     </div>
+                    
+                    <div class="form-group col-md-6">
+                        {{ form_label(form.birthday, 'Birthday', {'attr': {'class': 'control-label'}}) }}
+                        <div class="input-group input-medium date date-picker">
+                            {{ form_widget(form.birthday, {'attr': {
+                            'class': 'form-control',
+                            'data-required': '1',
+                            'placeholder': 'Enter Birthday',
+                            'readonly': 'readonly'
+                            }}) }}
+                            <span class="input-group-btn">
+                            <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                    </div>
 
+                    <div class="form-group col-md-6">
+                        {{ form_label(form.level, 'Contact level', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.level, {'attr' : {'class' : 'form-control', 'placeholder': "Contact level"}}) }}
+                    </div>
+                    
                     <div class="form-group col-md-6">
                         {{ form_label(form.position, 'Position', {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.position, {'attr' : {'class' : 'form-control', 'placeholder': "Position"}}) }}
+                    </div>
+                    
+                    <div class="form-group col-md-6">
+                        {{ form_label(form.type, 'Contact type', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': "Contact type"}}) }}
                     </div>
 
                     <div class="form-group col-md-6">
@@ -249,8 +276,6 @@
                         {% else %}
                             {% set phone1 = '' %}
                         {% endif %}
-
-                        
                             {{ form_label(form.phone1, 'Phone 1', {'attr': {'class': 'control-label'}}) }}
                        
                         {{ form_widget(form.phone1, {'attr' : {
@@ -296,31 +321,6 @@
                         }}) }}
                     </div>
 
-                    <div class="form-group col-md-6">
-                        {{ form_label(form.birthday, 'Birthday', {'attr': {'class': 'control-label'}}) }}
-                        <div class="input-group input-medium date date-picker">
-                            {{ form_widget(form.birthday, {'attr': {
-                            'class': 'form-control',
-                            'data-required': '1',
-                            'placeholder': 'Enter Birthday',
-                            'readonly': 'readonly'
-                            }}) }}
-                            <span class="input-group-btn">
-                            <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="form-group col-md-6">
-                        {{ form_label(form.type, 'Contact type', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': "Contact type"}}) }}
-                    </div>
-
-                    <div class="form-group col-md-6">
-                        {{ form_label(form.level, 'Contact level', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.level, {'attr' : {'class' : 'form-control', 'placeholder': "Contact level"}}) }}
-                    </div>
-
                     {% if form.isShared is defined %}
                     <div class="form-group col-md-6">
                         {{ form_label(form.isShared, 'Shared', {'attr': {'class': 'control-label'}}) }}
@@ -350,6 +350,6 @@
                 {{ form_end(form) }}
 
             </div>
-        </div>
+       {# </div>#}
     </div>
 </div>

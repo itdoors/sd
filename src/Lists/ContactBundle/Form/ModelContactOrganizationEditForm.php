@@ -59,7 +59,7 @@ class ModelContactOrganizationEditForm extends ModelContactOrganizationFormType
                 'mapped' => false,
                 'disabled' => true,
                 'widget' => 'single_text',
-                'format' => 'dd.M.yyyy HH:mm',
+                'format' => 'dd.MM.yyyy HH:mm',
             ));
 
         $data = $builder->getData();
@@ -153,14 +153,6 @@ class ModelContactOrganizationEditForm extends ModelContactOrganizationFormType
                         $msg = $translator->trans("Organization cant be empty", array(), 'ListsContactBundle');
 
                         $form->get('modelId')->addError(new FormError($msg));
-                    }
-
-                    if (!$data->getPhone1() && !$data->getPhone2() && !$data->getEmail()) {
-                        $translator = $container->get('translator');
-
-                        $msg = $translator->trans("Enter Phone or Phone mob or email", array(), 'ListsContactBundle');
-
-                        $form->get('phone1')->addError(new FormError($msg));
                     }
                 }
             }

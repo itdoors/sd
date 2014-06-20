@@ -24,7 +24,7 @@ class SalesController extends BaseController
         $namespase = $this->filterNamespace;
         $filter = $this->filterFormName;
 
-        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':index.html.twig', array(
+        return $this->render('ListsOrganizationBundle:Sales:index.html.twig', array(
             'namespase' => $namespase,
             'filter' => $filter,
             'baseTemplate' => $this->baseTemplate,
@@ -67,7 +67,7 @@ class SalesController extends BaseController
             20
         );
 
-        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':list.html.twig', array(
+        return $this->render('ListsOrganizationBundle:Sales:list.html.twig', array(
             'pagination' => $pagination,
             'namespase' => $namespase,
             'baseTemplate' => $this->baseTemplate,
