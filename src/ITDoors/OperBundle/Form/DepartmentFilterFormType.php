@@ -43,7 +43,7 @@ class DepartmentFilterFormType extends AbstractType
             ->add('mpk', 'hidden', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url'  => $router->generate('sd_common_ajax_mpk'),
+                    'data-url'  => $router->generate('sd_common_ajax_oper_department_mpk'),
                     'data-url-by-id' => $router->generate('sd_common_ajax_mpk_by_id'),
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 2,
@@ -153,7 +153,7 @@ class DepartmentFilterFormType extends AbstractType
         $builder
             ->add('address', 'text', array(
                 'attr' => array(
-                    'class' => 'form-control form-filter input-sm',
+                    'class' => 'form-control form-filter input-sm can-be-reseted submit-field',
                     'placeholder' => 'Enter address',
                 )
             ));

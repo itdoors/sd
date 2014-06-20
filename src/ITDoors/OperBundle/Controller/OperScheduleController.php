@@ -148,14 +148,11 @@ class OperScheduleController extends BaseFilterController
         $departmentPeopleRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeople');
 
-        $coworkersAll = $departmentPeopleRepository->findBy(array(
-            'department' => $idDepartment
-        ));
-
+        $coworkersAll = $departmentPeopleRepository->getOrderedPeopleFromDepartment($idDepartment);
         /** @var  $coworkersOne \Lists\DepartmentBundle\Entity\departmentPeople */
         foreach ($coworkersAll as $key => $departmentPeople) {
-            if ($departmentPeople->getDismissalDateNotOfficially() != null
-                && $departmentPeople->getDismissalDateNotOfficially() < new \DateTime($year.'-'.$month)) {
+            if ($departmentPeople['dismissalDateNotOfficially'] != null
+                && $departmentPeople['dismissalDateNotOfficially'] < new \DateTime($year.'-'.$month)) {
                 unset($coworkersAll[$key]);
             }
         }
@@ -278,6 +275,38 @@ class OperScheduleController extends BaseFilterController
         $monthName = date("F", strtotime($date));
         $dayName = date('D', strtotime($date));
 
+
+        /** @var $grafikRepository \Lists\GrafikBundle\Entity\GrafikRepository   */
+        $grafikRepository = $this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:Grafik');
+
+
+        $infoDay = $grafikRepository->getCoworkerHoursDayInfo(
+            $day,
+            $year,
+            $month,
+            $idDepartment,
+            $idCoworker,
+            $idReplacement
+        );
+
+            $status = 'ok';
+
+        if ($infoDay[0]['isVacation']) {
+            $status = 'vacation';
+        }
+        if ($infoDay[0]['isSkip']) {
+            $status = 'skip';
+        }
+        if ($infoDay[0]['isFired']) {
+            $status = 'fired';
+        }
+        if ($infoDay[0]['isSick']) {
+            $status = 'sick';
+        }
+
+
+
         $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleDay.html.twig', array(
             'coworkerDayTime' => $coworkerDayTime,
             'date' => $date,
@@ -288,7 +317,8 @@ class OperScheduleController extends BaseFilterController
             'dayName' => $dayName,
             'day' => $day,
             'year' => $year,
-            'idLink' => $idLink
+            'idLink' => $idLink,
+            'status' => $status
         ));
         $return['success'] = 1;
 
@@ -1270,10 +1300,18 @@ class OperScheduleController extends BaseFilterController
         /** @var  $departmentPeople \Lists\DepartmentBundle\Entity\DepartmentPeople */
         $departmentPeople = $departmentPeopleRepository->find($idCoworker);
 
+        $fio = '';
+        if ($departmentPeople->getIndividual()) {
+            $individual = $departmentPeople->getIndividual();
+            $fio = $individual->getLastName().' '.
+                $individual->getFirstName().' '.$individual->getMiddleName();
+        } else {
+            $fio = $departmentPeople->getLastName().' '.
+                $departmentPeople->getFirstName().' '.$departmentPeople->getMiddleName();
+        }
         $info['id'] = $departmentPeople->getId();
         $info['mpk'] = $departmentPeople->getMpks();
-        $info['fio'] = $departmentPeople->getLastName().' '.
-            $departmentPeople->getFirstName().' '.$departmentPeople->getMiddleName();
+        $info['fio'] = $fio;
         $info['dateAcceptedOfficially'] = $departmentPeople->getAdmissionDate();
         $info['dateAcceptedNotOfficially'] = $departmentPeople->getAdmissionDateNotOfficially();
         $info['dateFiredOfficially'] = $departmentPeople->getDismissalDate();

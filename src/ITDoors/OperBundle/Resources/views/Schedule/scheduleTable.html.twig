@@ -49,12 +49,10 @@
                     <select id="add_coworker_select_list" style="width: 300px;">
                         {% for filterCoworker in filterCoworkers %}
                              <option value="{{ filterCoworker.id }}">
-                                 {% if filterCoworker.mpks is not empty %}
-                                    ({{ filterCoworker.mpks.name }})
+                                 {% if filterCoworker.mpkName is not empty %}
+                                    ({{ filterCoworker.mpkName }})
                                  {% endif %}
-                                 {% if filterCoworker.individual is not empty %}
-                                     {{ filterCoworker.individual.lastName }} {{ filterCoworker.individual.firstName }} {{ filterCoworker.individual.middleName }}
-                                 {% endif %}
+                                     {{ filterCoworker.lastName }} {{ filterCoworker.firstName }} {{ filterCoworker.middleName }}
                              </option>
                         {% endfor %}
                     </select>
@@ -75,8 +73,8 @@
                         <select id="add_coworker_select_change" style="width: 300px;">
                             {% for filterCoworker in filterCoworkers %}
                                 <option value="{{ filterCoworker.id }}">
-                                    {% if filterCoworker.mpks is not empty %}
-                                        ({{ filterCoworker.mpks.name }})
+                                    {% if filterCoworker.mpkName is not empty %}
+                                        ({{ filterCoworker.mpkName }})
                                     {% endif %}
                                     {{ filterCoworker.lastName }} {{ filterCoworker.firstName }} {{ filterCoworker.middleName }}
                                 </option>
@@ -125,6 +123,7 @@
 </div>
 
 <script src="{{ asset('/bundles/itdoorsoper/js/floatThead/jquery.floatThead.js')}}"></script>
+
 {#
 <script src="{{ asset('/bundles/itdoorsoper/js/data-tables/jquery.dataTables.js')}}"></script>
 <script src="{{ asset('/bundles/itdoorsoper/js/data-tables/dataTables.fixedColumns.js')}}"></script>

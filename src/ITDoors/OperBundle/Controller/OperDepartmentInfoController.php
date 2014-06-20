@@ -30,7 +30,20 @@ class OperDepartmentInfoController extends BaseFilterController
             ->getRepository('ListsDepartmentBundle:Departments');
 
         $department = $repository->find($id);
-        $name = $department->getName();
+
+        $name = '';
+        $mpks = $department->getMpks();
+        foreach ($mpks as $mpk) {
+            if ($mpk->getActive()) {
+                $name = $mpk->getName().' | ';
+                break;
+            }
+        }
+        if ($department->getOrganization()) {
+            $organization = $department->getOrganization()->getName();
+        }
+        $name .= $organization.' | '.$department->getName();
+
 
         return $this->render('ITDoorsOperBundle:DepartmentInfo:template.html.twig', array(
             'idDepartment' => $id,

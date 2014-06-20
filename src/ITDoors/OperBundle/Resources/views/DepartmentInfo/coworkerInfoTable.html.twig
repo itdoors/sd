@@ -144,7 +144,7 @@
                         <td>{{ plannedAccrual.value }}</td>
                         <td>
                             {% if plannedAccrual.period is not empty %}
-                                {{ plannedAccrual.period|date('Y-m-d') }}
+                                {{ plannedAccrual.period|date('d-m-Y') }}
                             {% endif %}
                         </td>
                         <td>
