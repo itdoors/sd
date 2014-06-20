@@ -340,6 +340,12 @@
         {% endif %}
         <li{% if 
                 path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_stuff')
+                or
+                (
+                    app.request.attributes.get('_route_params') is not empty 
+                    and
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_show',app.request.attributes.get('_route_params'))
+                )
                  %} class="active"{% endif %}>
             <a href="{{ path('sd_user_stuff') }}">
                 <i class="fa fa-user"></i>
