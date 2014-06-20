@@ -33,7 +33,7 @@
 
     <script>
         $(document).ready(function(){
-            $('#organizationSalesForm_lookup, #organizationSalesForm_organizationType, #organizationSalesForm_scope, #organizationSalesForm_city').select2({
+            $('#organizationSalesForm_organizationType, #organizationSalesForm_scope, #organizationSalesForm_city').select2({
                 placeholder: "Select a State",
                 allowClear: true
             });
@@ -91,7 +91,7 @@
                         {% trans %}You have some form errors. Please check below.{% endtrans %}
                     </div>
                     
-                    {% if is_granted('ROLE_DOGOVORADMIN') %}
+                    {#% if is_granted('ROLE_DOGOVORADMIN') %}
                         <div class="col-md-12">
                             <div class="form-group">
                                 {{ form_label(filterForm.lookup, 'Organization lookup', {'attr': {'class': 'control-label'}}) }}
@@ -99,7 +99,7 @@
                                 <span class="help-block">{% trans %}Select lookup{% endtrans %}</span>
                             </div>
                         </div>
-                    {% endif %}
+                    {% endif %#}
                     
                     <h3 class="form-section">{% trans %}General information{% endtrans %}</h3>
                     <div class="row">

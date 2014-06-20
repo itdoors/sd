@@ -23,11 +23,11 @@ class OrganizationDogovorAdminFormType extends OrganizationSalesFormType
         /** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
         $lr = $this->container->get('lists_lookup.repository');
 
-        $builder->add('lookup', 'entity', array(
-            'class' => 'Lists\LookupBundle\Entity\Lookup',
-            'property' => 'name',
-            'query_builder' => $lr->getLookups()
-        ));
+//        $builder->add('lookup', 'entity', array(
+//            'class' => 'Lists\LookupBundle\Entity\Lookup',
+//            'property' => 'name',
+//            'query_builder' => $lr->getLookups()
+//        ));
     }
 
     /**
