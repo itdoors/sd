@@ -18,12 +18,12 @@
             <div style="display: none" id="contactsFormTpl"></div>
         </div>
         <div id="contact_list"
-             data-url="{{ path('lists_' ~ baseRoutePrefix ~ '_contact_ajax_organization', {
+             data-url="{{ path('lists_sales_contact_ajax_organization', {
                 organizationId: organization.id
              }) }}"
              data-params='{"organizationId":{{ organization.id }}'
          >
-            {{ render(controller('ListsContactBundle:' ~ baseTemplate ~ ':Organization', {
+            {{ render(controller('ListsContactBundle:Sales:Organization', {
                 organizationId: organization.id
             })) }}
         </div>

@@ -65,7 +65,6 @@ class OrganizationSalesFormType extends AbstractType
             ))
             ->add('phone')
             ->add('physicalAddress');
-
         $builder
             ->add('save', 'submit')
             ->add('cancel', 'submit');

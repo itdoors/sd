@@ -30,21 +30,23 @@
 
 {% block body %}
 
-    {#{ ajax_filter_render(filter, namespase, {
+    {{ ajax_filter_render(filter, namespase, {
         'datatable_ajax': 'ITDoorsAjax.updateList'
     }) }}
+    {% if is_granted('ROLE_INTRANETADMIN') or is_granted('ROLE_DOGOVORADMIN') %}
     <div class="table-toolbar">
         <div class="btn-group">
             <a class="btn green" id="add_organization" href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_new') }}">
-                {% trans %}Add New organization{% endtrans %} <i class="fa fa-plus"></i>
+                {% trans %}Add competitor{% endtrans %} <i class="fa fa-plus"></i>
             </a>
         </div>
     </div>
+        {% endif %}
     <div class="row">
         <div class="col-md-12">
             <div id="datatable_ajax"  data-url="{{ url('lists_' ~ baseRoutePrefix ~ '_organization_index_list') }}">
                 {{ render(controller('ListsOrganizationBundle:' ~ baseTemplate ~ ':list')) }}
             </div>
         </div>
-    </div>#}
+    </div>
 {% endblock body %}

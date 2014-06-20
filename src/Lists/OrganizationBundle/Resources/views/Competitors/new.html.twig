@@ -13,7 +13,7 @@
             <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
             <i class="fa fa-angle-right"></i>
         </li>
-		<li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_index') }}" title="{% trans %}My Organizations{% endtrans %}">{% trans %}My Organizations{% endtrans %}</a><i class="fa fa-angle-right"></i></li>
+		<li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_index') }}" title="{% trans %}Competitors{% endtrans %}">{% trans %}Competitors{% endtrans %}</a><i class="fa fa-angle-right"></i></li>
         <li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_new') }}" title="{% trans %}Create Organization{% endtrans %}">{% trans %}Create Organization{% endtrans %}</a></li>
     </ul>
 {% endblock %}
@@ -33,7 +33,7 @@
 
     <script>
         $(document).ready(function(){
-            $('#organizationSalesForm_organizationType, #organizationSalesForm_scope, #organizationSalesForm_city').select2({
+            $('#organizationSalesForm_lookup, #organizationSalesForm_organizationType, #organizationSalesForm_scope, #organizationSalesForm_city').select2({
                 placeholder: "Select a State",
                 allowClear: true
             });
@@ -90,14 +90,28 @@
                         <button class="close" data-close="alert"></button>
                         {% trans %}You have some form errors. Please check below.{% endtrans %}
                     </div>
+                    
+                    {% if is_granted('ROLE_DOGOVORADMIN') %}
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                {{ form_label(filterForm.lookup, 'Organization lookup', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.lookup, {'attr': {'class': 'form-control select2me'}}) }}
+                                <span class="help-block">{% trans %}Select lookup{% endtrans %}</span>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
                     <h3 class="form-section">{% trans %}General information{% endtrans %}</h3>
                     <div class="row">
                         <div class="col-md-6
-							{% if filterForm.name.vars.errors|length %}
-							    has-error
-							{% endif %}">
+                            {% if filterForm.name.vars.errors|length %}
+                                has-error
+                            {% endif %}">
+                            
+                            
+                            
                             <div class="form-group">
-                                {{ form_label(filterForm.name, 'Organization name *', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_label(filterForm.name, 'Organization name'|trans ~ ' *', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.name, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter organization name'}}) }}
                                 <span class="help-block">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп"</span>
                                 {{ form_errors(filterForm.name) }}
@@ -119,9 +133,10 @@
                             <div class="form-group">
                                 {{ form_label(filterForm.organizationType, 'Organization type', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.organizationType, {'attr': {'class': 'form-control select2me'}}) }}
-                                <span class="help-block">{% trans %}Select Organization type{% endtrans %}</span>
+                                <span class="help-block">{% trans %}Select organization type{% endtrans %}</span>
                             </div>
                         </div>
+                        
                         <!--/span-->
                         <div class="col-md-6">
                             <div class="form-group">
@@ -139,7 +154,7 @@
                             <div class="form-group">
                                 {{ form_label(filterForm.city, 'City', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.city, {'attr': {'class': 'form-control select2me'}}) }}
-                                <span class="help-block">{% trans %}Select City{% endtrans %}</span>
+                                <span class="help-block">{% trans %}Select city{% endtrans %}</span>
                             </div>
                         </div>
                         <!--/span-->

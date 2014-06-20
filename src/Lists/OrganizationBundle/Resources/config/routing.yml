@@ -135,6 +135,22 @@ lists_dogovor_admin_organization_ajax_users:
     defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:organizationUsers }
     
 # Competitors 
-lists_organization_competitors:
-    pattern:  /lists/organization/competitors
+lists_competitors_organization_index:
+    pattern:  /lists/competitors/organization/index
     defaults: { _controller: ListsOrganizationBundle:Competitors:index }
+
+lists_competitors_organization_index_list:
+    pattern:  /lists/competitors/organization/index/list
+    defaults: { _controller: ListsOrganizationBundle:Competitors:list }
+
+lists_competitors_organization_new:
+    pattern:  /lists/competitors/organization/new
+    defaults: { _controller: ListsOrganizationBundle:Competitors:new }
+
+lists_competitors_organization_show:
+    pattern:  /lists/competitors/organization/show/{id}
+    defaults: { _controller: ListsOrganizationBundle:Competitors:show }
+
+lists_competitors_organization_filter:
+    pattern:  /lists/competitors/organization/filter
+    defaults: { _controller: ListsOrganizationBundle:Competitors:filter }

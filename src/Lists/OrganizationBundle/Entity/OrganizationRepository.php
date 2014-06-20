@@ -18,7 +18,7 @@ class OrganizationRepository extends EntityRepository
      *
      * @return \Doctrine\ORM\Query
      */
-    public function getAllForSalesQuery($userIds, $filters)
+    public function getCompetitorsForSalesQuery($userIds, $filters)
     {
         if (!is_array($userIds) && $userIds) {
             $userIds = array($userIds);
@@ -54,6 +54,50 @@ class OrganizationRepository extends EntityRepository
 
         return $query;
     }
+    /**
+     * @param int[]   $userIds
+     * @param mixed[] $filters
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getAllForSalesQuery($userIds, $filters)
+    {
+        if (!is_array($userIds) && $userIds) {
+            $userIds = array($userIds);
+        }
+
+        /** @var \Doctrine\ORM\QueryBuilder $sql*/
+        $sql = $this->createQueryBuilder('o');
+
+        /** @var \Doctrine\ORM\QueryBuilder $sqlCount */
+        $sqlCount = $this->createQueryBuilder('o');
+
+        $this->processSelect($sql);
+        $this->processCount($sqlCount);
+
+        $this->processBaseQuery($sql);
+        $sql->where('o.organizationSignId = 61');
+        $this->processBaseQuery($sqlCount);
+        $sqlCount->where('o.organizationSignId = 61');
+
+        if (sizeof($userIds)) {
+            $this->processUserQuery($sql, $userIds);
+            $this->processUserQuery($sqlCount, $userIds);
+        }
+
+        $this->processFilters($sql, $filters);
+        $this->processFilters($sqlCount, $filters);
+
+        $this->processOrdering($sql);
+
+        $query = $sql->getQuery();
+
+        $count = $sqlCount->getQuery()->getSingleScalarResult();
+
+        $query->setHint('knp_paginator.count', $count);
+
+        return $query;
+    }
 
     /**
      * Processes sql query. adding select
@@ -65,6 +109,7 @@ class OrganizationRepository extends EntityRepository
         $sql
             ->select('DISTINCT(o.id) as organizationId', 'o.name as organizationName')
             ->addSelect('o.edrpou')
+            ->addSelect('creator.id as creatorId')
             ->addSelect('c.name as cityName')
             ->addSelect('r.name as regionName')
             ->addSelect('scope.name as scopeName')
@@ -105,6 +150,7 @@ class OrganizationRepository extends EntityRepository
             ->leftJoin('c.region', 'r')
             ->leftJoin('o.scope', 'scope')
             ->leftJoin('o.users', 'users')
+            ->leftJoin('o.creator', 'creator')
             ->andWhere('o.parent_id is null');
 
     }

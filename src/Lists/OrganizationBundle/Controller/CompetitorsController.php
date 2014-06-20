@@ -3,32 +3,33 @@
 namespace Lists\OrganizationBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use ITDoors\AjaxBundle\Controller\BaseFilterController as BaseController;
+use Lists\OrganizationBundle\Controller\SalesController;
 
 /**
  * Class SalesController
  */
-class CompetitorsController extends BaseController
+class CompetitorsController extends SalesController
 {
-//    protected $filterNamespace = 'organization.sales.filters';
+
+    protected $filterNamespace = 'organization.competitors.filters';
 //    protected $filterFormName = 'organizationSalesFilterForm';
 //    protected $baseRoute = 'lists_sales_organization_index';
-//    protected $baseRoutePrefix = 'sales';
-//    protected $baseTemplate = 'Sales';
+    protected $baseRoutePrefix = 'competitors';
+    protected $baseTemplate = 'Competitors';
 
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction()
     {
-//        $namespase = $this->filterNamespace;
-//        $filter = $this->filterFormName;
+        $namespase = $this->filterNamespace;
+        $filter = $this->filterFormName;
 
         return $this->render('ListsOrganizationBundle:Competitors:index.html.twig', array(
-//            'namespase' => $namespase,
-//            'filter' => $filter,
-//            'baseTemplate' => $this->baseTemplate,
-//            'baseRoutePrefix' => $this->baseRoutePrefix,
+                'namespase' => $namespase,
+                'filter' => $filter,
+                'baseTemplate' => $this->baseTemplate,
+                'baseRoutePrefix' => $this->baseRoutePrefix,
         ));
     }
 
@@ -48,7 +49,7 @@ class CompetitorsController extends BaseController
         if (!$page) {
             $page = 1;
         }
-        /** @var \SD\UserBundle\Entity\User $user*/
+        /** @var \SD\UserBundle\Entity\User $user */
         $user = $this->getUser();
 
         /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
@@ -56,10 +57,10 @@ class CompetitorsController extends BaseController
             ->getRepository('ListsOrganizationBundle:Organization');
 
         /** @var \Doctrine\ORM\Query */
-        $organizationsQuery = $organizationsRepository->getAllForSalesQuery($user->getId(), $filters);
+        $organizationsQuery = $organizationsRepository->getAllForSalesQuery(null, $filters);
 
         /** @var \Knp\Component\Pager\Paginator $paginator */
-        $paginator  = $this->get('knp_paginator');
+        $paginator = $this->get('knp_paginator');
 
         $pagination = $paginator->paginate(
             $organizationsQuery,
@@ -67,11 +68,11 @@ class CompetitorsController extends BaseController
             20
         );
 
-        return $this->render('ListsOrganizationBundle:Sales:list.html.twig', array(
-            'pagination' => $pagination,
-            'namespase' => $namespase,
-            'baseTemplate' => $this->baseTemplate,
-            'baseRoutePrefix' => $this->baseRoutePrefix,
+        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':list.html.twig', array(
+                'pagination' => $pagination,
+                'namespase' => $namespase,
+                'baseTemplate' => $this->baseTemplate,
+                'baseRoutePrefix' => $this->baseRoutePrefix
         ));
     }
 
@@ -84,7 +85,11 @@ class CompetitorsController extends BaseController
      */
     public function newAction(Request $request)
     {
-        $form = $this->createForm('organizationSalesForm');
+        if ($this->getUser()->hasRole('ROLE_DOGOVORADMIN')) {
+            $form = $this->createForm('organizationDogovorAdminForm');
+        } else {
+            $form = $this->createForm('organizationSalesForm');
+        }
 
         $form->handleRequest($request);
 
@@ -98,19 +103,47 @@ class CompetitorsController extends BaseController
             $organization->setCreator($user);
 
             $em = $this->getDoctrine()->getManager();
+            if (!$organization->getLookup || !$this->getUser()->hasRole('ROLE_DOGOVORADMIN')) {
+                $lookup = $em->getRepository('ListsLookupBundle:Lookup')
+                    ->find(61);
+                $organization->setLookup($lookup);
+            }
+
             $em->persist($organization);
             $em->flush();
 
             return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_organization_show', array(
-                'id' => $organization->getId()
+                        'id' => $organization->getId()
             )));
         }
 
-        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate. ':new.html.twig', array(
-            'filterForm' => $form->createView(),
-            'filterFormName' => $this->filterFormName,
-            'baseTemplate' => $this->baseTemplate,
-            'baseRoutePrefix' => $this->baseRoutePrefix,
+        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':new.html.twig', array(
+                'filterForm' => $form->createView(),
+                'filterFormName' => $this->filterFormName,
+                'baseTemplate' => $this->baseTemplate,
+                'baseRoutePrefix' => $this->baseRoutePrefix,
+        ));
+    }
+
+    /**
+     * Renders organizationUsers list
+     *
+     * @param int $organizationId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function organizationUsersAction($organizationId)
+    {
+        /** @var \SD\UserBundle\Entity\UserRepository $ur */
+        $ur = $this->container->get('sd_user.repository');
+
+        $organizationUsers = $ur->getOrganizationUsersQuery($organizationId)
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':organizationUsers.html.twig', array(
+                'organizationUsers' => $organizationUsers,
+                'organizationId' => $organizationId
         ));
     }
 
@@ -126,46 +159,24 @@ class CompetitorsController extends BaseController
         $this->get('sd.security_access')->hasAccessToOrganizationAndThrowException($id);
 
         /** @var \Lists\OrganizationBundle\Entity\Organization $organization */
-        $organization= $this->getDoctrine()
+        $organization = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization')
             ->find($id);
 
         if ($organization->getParent()) {
             return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_organization_show', array(
-                    'id' => $organization->getParentId()
-                )));
+                        'id' => $organization->getParentId()
+            )));
         }
 
         $managerForm = $this->createForm('organizationUserForm');
 
-        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate. ':show.html.twig', array(
-            'organization' => $organization,
-            'filterFormName' => $this->filterFormName,
-            'baseTemplate' => $this->baseTemplate,
-            'baseRoutePrefix' => $this->baseRoutePrefix,
-            'managerForm' => $managerForm->createView()
+        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':show.html.twig', array(
+                'organization' => $organization,
+                'filterFormName' => $this->filterFormName,
+                'baseTemplate' => $this->baseTemplate,
+                'baseRoutePrefix' => $this->baseRoutePrefix,
+                'managerForm' => $managerForm->createView()
         ));
-    }
-
-    /**
-     * Renders organizationUsers list
-     *
-     * @param int $organizationId
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function organizationUsersAction($organizationId)
-    {
-        /** @var \SD\UserBundle\Entity\UserRepository $ur*/
-        $ur = $this->container->get('sd_user.repository');
-
-        $organizationUsers = $ur->getOrganizationUsersQuery($organizationId)
-            ->getQuery()
-            ->getResult();
-
-        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate. ':organizationUsers.html.twig', array(
-                'organizationUsers' => $organizationUsers,
-                'organizationId' => $organizationId
-            ));
     }
 }

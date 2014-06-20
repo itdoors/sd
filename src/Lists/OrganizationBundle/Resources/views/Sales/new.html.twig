@@ -97,7 +97,7 @@
 							    has-error
 							{% endif %}">
                             <div class="form-group">
-                                {{ form_label(filterForm.name, 'Organization name *', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_label(filterForm.name, 'Organization name'|trans ~ ' *', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.name, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter organization name'}}) }}
                                 <span class="help-block">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп"</span>
                                 {{ form_errors(filterForm.name) }}
@@ -119,7 +119,7 @@
                             <div class="form-group">
                                 {{ form_label(filterForm.organizationType, 'Organization type', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.organizationType, {'attr': {'class': 'form-control select2me'}}) }}
-                                <span class="help-block">{% trans %}Select Organization type{% endtrans %}</span>
+                                <span class="help-block">{% trans %}Select organization type{% endtrans %}</span>
                             </div>
                         </div>
                         <!--/span-->
@@ -139,7 +139,7 @@
                             <div class="form-group">
                                 {{ form_label(filterForm.city, 'City', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.city, {'attr': {'class': 'form-control select2me'}}) }}
-                                <span class="help-block">{% trans %}Select City{% endtrans %}</span>
+                                <span class="help-block">{% trans %}Select city{% endtrans %}</span>
                             </div>
                         </div>
                         <!--/span-->

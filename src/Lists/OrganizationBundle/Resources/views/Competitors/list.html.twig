@@ -18,17 +18,20 @@
                 <th>{% trans %}Region{% endtrans %} </th>
                 <th>{% trans %}Scope{% endtrans %} </th>
                 <th>{% trans %}Managers{% endtrans %} </th>
-                <th>{% trans %}Actions{% endtrans %} </th>
             </tr>
         </thead>
         <tbody>
             {% for item in pagination %}
                 <tr {% if loop.index is odd %}class="color"{% endif %}>
                     <td>
+                        {% if item.creatorId == app.user.id %}
                         <a
                             href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_show', { id: item.organizationId }) }}">
                             {{ item.organizationId|e }}
                         </a>
+                        {% else %}
+                            {{ item.organizationId|e }}
+                        {% endif %}
                     </td>
                     <td>{{ item.organizationName|e }}</td>
                     <td>{{ item.edrpou|e }}</td>
@@ -36,23 +39,16 @@
                     <td>{{ item.regionName|e }}</td>
                     <td>{{ item.scopeName|e }}</td>
                     <td>{{ item.fullNames|e }}</td>
-                    <td>
-                        <a
-                            class="btn default btn-xs green-stripe"
-                            href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_add_organization_filter', {'organizationId': item.organizationId}) }}">
-                            {% trans %}Projects{% endtrans %}
-                        </a>
-                    </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
     <div class="navigation">
         {{ ajax_paginator_render(
-                    pagination, namespase, {
-                            'datatable_ajax': 'ITDoorsAjax.updateList'
-                        }
-                    )
+            pagination, namespase, {
+                    'datatable_ajax': 'ITDoorsAjax.updateList'
+                }
+            )
         }}
     </div>
 </div>

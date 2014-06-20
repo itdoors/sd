@@ -85,4 +85,16 @@ class LookupRepository extends EntityRepository
 
         return null;
     }
+    /**
+     * Get lookup by lukey
+     * 
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getLookups()
+    {
+        $query = $this->createQueryBuilder('l')
+            ->orderBy('l.name');
+
+        return $query;
+    }
 }
