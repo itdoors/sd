@@ -29,6 +29,7 @@ class DepartmentPeopleRepository extends EntityRepository
             ->addSelect('dp.admissionDateNotOfficially')
             ->addSelect('dp.dismissalDateNotOfficially')
             ->addSelect('dp.drfo')
+            ->addSelect('i.tin')
             ->addSelect('i.address')
             ->addSelect('i.phone')
             ->addSelect('i.birthday')
