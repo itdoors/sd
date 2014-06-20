@@ -275,6 +275,38 @@ class OperScheduleController extends BaseFilterController
         $monthName = date("F", strtotime($date));
         $dayName = date('D', strtotime($date));
 
+
+        /** @var $grafikRepository \Lists\GrafikBundle\Entity\GrafikRepository   */
+        $grafikRepository = $this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:Grafik');
+
+
+        $infoDay = $grafikRepository->getCoworkerHoursDayInfo(
+            $day,
+            $year,
+            $month,
+            $idDepartment,
+            $idCoworker,
+            $idReplacement
+        );
+
+            $status = 'ok';
+
+        if ($infoDay[0]['isVacation']) {
+            $status = 'vacation';
+        }
+        if ($infoDay[0]['isSkip']) {
+            $status = 'skip';
+        }
+        if ($infoDay[0]['isFired']) {
+            $status = 'fired';
+        }
+        if ($infoDay[0]['isSick']) {
+            $status = 'sick';
+        }
+
+
+
         $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleDay.html.twig', array(
             'coworkerDayTime' => $coworkerDayTime,
             'date' => $date,
@@ -285,7 +317,8 @@ class OperScheduleController extends BaseFilterController
             'dayName' => $dayName,
             'day' => $day,
             'year' => $year,
-            'idLink' => $idLink
+            'idLink' => $idLink,
+            'status' => $status
         ));
         $return['success'] = 1;
 

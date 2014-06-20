@@ -18,7 +18,8 @@ class DepartmentPeopleRepository extends EntityRepository
      *
      * @return array
      */
-    public function getOrderedPeopleFromDepartment($idDepartment) {
+    public function getOrderedPeopleFromDepartment($idDepartment)
+    {
         $result = $this->createQueryBuilder('dp')
             ->select('dp.id as id')
             ->addSelect('i.firstName')

@@ -22,10 +22,11 @@ class OperInfoController extends BaseFilterController
      */
     public function indexAction()
     {
+        $this->addToSessionValues('idDepartment', $this->getAllowedDepartmentsId(), 'param', 'oper.bundle.department');
+
         return $this->render('ITDoorsOperBundle:Patterns:index.html.twig', array(
 
         ));
-
     }
 
     /**

@@ -73,14 +73,14 @@
                                     {% if mpk.active == false %}
                                         {{ mpk.name }} ( {% trans %}From{% endtrans %}
                                         {% if mpk.startDate is not empty %}
-                                            {{ mpk.startDate|date('Y-m-d') }}
+                                            {{ mpk.startDate|date('d-m-Y') }}
                                         {% else %}
                                             {% trans %}Not defined{% endtrans %}
                                         {% endif %}
 
                                         {% trans %}To{% endtrans %}
                                         {% if mpk.endDate is not empty %}
-                                            {{ mpk.endDate|date('Y-m-d') }}
+                                            {{ mpk.endDate|date('d-m-Y') }}
                                         {% else %}
                                             {% trans %}Not defined{% endtrans %}
                                         {% endif %}
