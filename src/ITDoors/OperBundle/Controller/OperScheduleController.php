@@ -1300,10 +1300,18 @@ class OperScheduleController extends BaseFilterController
         /** @var  $departmentPeople \Lists\DepartmentBundle\Entity\DepartmentPeople */
         $departmentPeople = $departmentPeopleRepository->find($idCoworker);
 
+        $fio = '';
+        if ($departmentPeople->getIndividual()) {
+            $individual = $departmentPeople->getIndividual();
+            $fio = $individual->getLastName().' '.
+                $individual->getFirstName().' '.$individual->getMiddleName();
+        } else {
+            $fio = $departmentPeople->getLastName().' '.
+                $departmentPeople->getFirstName().' '.$departmentPeople->getMiddleName();
+        }
         $info['id'] = $departmentPeople->getId();
         $info['mpk'] = $departmentPeople->getMpks();
-        $info['fio'] = $departmentPeople->getLastName().' '.
-            $departmentPeople->getFirstName().' '.$departmentPeople->getMiddleName();
+        $info['fio'] = $fio;
         $info['dateAcceptedOfficially'] = $departmentPeople->getAdmissionDate();
         $info['dateAcceptedNotOfficially'] = $departmentPeople->getAdmissionDateNotOfficially();
         $info['dateFiredOfficially'] = $departmentPeople->getDismissalDate();
