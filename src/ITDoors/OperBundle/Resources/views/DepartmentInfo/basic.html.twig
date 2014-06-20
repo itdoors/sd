@@ -22,10 +22,12 @@
         });
 
         $('#statusDate').editable({
+            clear: '{% trans from 'ITDoorsControllingBundle' %}clear{% endtrans %}<i class="icon-remove fa fa-times" style="font-size:12px"></i>',
+            type: 'date',
             url: '{{ path('sd_common_ajax_editable_department') }}',
             datepicker: {
                 autoclose: true,
-                format: "dd.mm.yyyy",
+                format: "dd-mm-yyyy",
                 language: "ru",
                 startView: 'month',
                 weekStart: 1
@@ -151,9 +153,16 @@
             <tr>{# 7 #}
                 <td>{% trans %}Status Date{% endtrans %}</td>
                 <td>
-                    <a href="#" id="statusDate" data-type="date" data-pk="{{ department.0.id }}" data-value="" data-original-title="{% trans %}Enter Status Date{% endtrans %}">
+                    <a href="#" id="statusDate" data-type="date" data-pk="{{ department.0.id }}"
+                       data-original-title="{% trans %}Enter Status Date{% endtrans %}"
+                       data-format="dd-mm-yyyy"
+                       data-date="
+                       {% if department.0.statusDate is not empty %}
+                            {{ department.0.statusDate|date('d-m-Y') }}
+                       {% endif %}
+                       ">
                         {% if department.0.statusDate is not empty %}
-                            {{ department.0.statusDate|date('Y-m-d') }}
+                            {{ department.0.statusDate|date('d-m-Y') }}
                         {% else %}
                             {% trans %}Not defined{% endtrans %}
                         {% endif %}

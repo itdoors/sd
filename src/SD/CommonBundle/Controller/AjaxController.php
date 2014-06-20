@@ -3291,7 +3291,7 @@ class AjaxController extends BaseFilterController
 
         $return = array('error'=>false);
 
-        $return['value'] = $value;
+        $return['value'] = $value->format('d-m-Y');
         $return['method'] = $methodSet;
         $return['object'] = $object;
         try {
