@@ -133,3 +133,8 @@ lists_dogovor_admin_organization_ajax_index:
 lists_dogovor_admin_organization_ajax_users:
     pattern:  /lists/dogovor/admin/organization/ajax/users/{organizationId}
     defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:organizationUsers }
+    
+# Competitors 
+lists_organization_competitors:
+    pattern:  /lists/organization/competitors
+    defaults: { _controller: ListsOrganizationBundle:Competitors:index }

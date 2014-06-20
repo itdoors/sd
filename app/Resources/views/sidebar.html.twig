@@ -291,11 +291,31 @@
         </li>
         {% endif %}
         {% if is_granted('ROLE_OPER') or is_granted('ROLE_SUPERVISOR') %}
-            <li class="">
-                <a href="{{ path('it_doors_oper_homepage') }}">
+            <li{% if 
+                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_oper_homepage') 
+                         or
+                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_competitors')
+                    %} class="active"{% endif %}>
+                <a href="javascript:;">
                     <i class="fa fa-money"></i>
                     <span class="title">{% trans %}Opermanager{% endtrans %}</span>
+                    <span class="arrow "></span>
                 </a>
+                <ul  class="sub-menu">
+                    <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_oper_homepage')
+                            %} class="active"{% endif %}>
+                         <a href="{{ path('it_doors_oper_homepage') }}">
+                            <i class="fa fa-money"></i>
+                            <span class="title">{% trans %}Offices{% endtrans %}</span>
+                        </a>
+                    </li>
+                    <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_competitors') %} class="active"{% endif %}>
+                         <a href="{{ path('lists_organization_competitors') }}">
+                            <i class="fa fa-money"></i>
+                            <span class="title">{% trans %}Competitors{% endtrans %}</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
         {% endif %}
         {% if is_granted('ROLE_CONTROLLING') %}
