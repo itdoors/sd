@@ -22,7 +22,14 @@
         });
 
         $('#statusDate').editable({
-            url: '{{ path('sd_common_ajax_editable_department') }}'
+            url: '{{ path('sd_common_ajax_editable_department') }}',
+            datepicker: {
+                autoclose: true,
+                format: "dd.mm.yyyy",
+                language: "ru",
+                startView: 'month',
+                weekStart: 1
+            }
         });
 
 
@@ -144,7 +151,13 @@
             <tr>{# 7 #}
                 <td>{% trans %}Status Date{% endtrans %}</td>
                 <td>
-                    <a href="#" id="statusDate" data-type="date" data-pk="{{ department.0.id }}" data-value="" data-original-title="{% trans %}Enter Status Date{% endtrans %}">{{ department.0.statusDate|date('Y-m-d') }}</a>
+                    <a href="#" id="statusDate" data-type="date" data-pk="{{ department.0.id }}" data-value="" data-original-title="{% trans %}Enter Status Date{% endtrans %}">
+                        {% if department.0.statusDate is not empty %}
+                            {{ department.0.statusDate|date('Y-m-d') }}
+                        {% else %}
+                            {% trans %}Not defined{% endtrans %}
+                        {% endif %}
+                    </a>
                 </td>
                 <td>{% trans %}Inn{% endtrans %}</td>
                 <td>

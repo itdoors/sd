@@ -5631,7 +5631,7 @@ Editableform based on Twitter Bootstrap
         });
         return out;
     }
-   console.log($.fn.datepicker.dates);
+    console.log($.fn.datepicker.dates);
     var old = $.fn.datepicker;
     var datepicker = $.fn.datepicker ;/*= function ( option ) {
         var args = Array.apply(null, arguments);
