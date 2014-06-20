@@ -31,8 +31,10 @@
 
 {% block js_page_level_plugins %}
     {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.js') }}"></script>
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-timepicker/js/bootstrap-timepicker.js') }}"></script>
 
 {#
@@ -41,8 +43,6 @@
 {#
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.js') }}"></script>
 #}
-    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
-    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
     <script src="{{ asset('bundles/itdoorsoper/js/tabs_department_info.js')}}" ></script>
 
 {% endblock %}
