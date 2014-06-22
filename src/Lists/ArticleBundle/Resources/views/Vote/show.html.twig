@@ -138,7 +138,7 @@
                         </div>
                         <div class=" form-actions">
                             <div class="col-md-12 blog-tag-data-inner">
-                                {% trans %}Average rating{% endtrans %}: {{ rationResult.sumVote }}
+                                {% trans %}Average rating{% endtrans %}: {{ rationResult.sumVote/rationResult.countVote }}
                             </div>
                             <div class="col-md-12 blog-tag-data-inner">
                                 {% trans %}Count vote{% endtrans %}: {{ rationResult.countVote }}
