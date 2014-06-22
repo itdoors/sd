@@ -100,7 +100,9 @@
                         </div>
                     {% endif %}
                     {% if vote %}
-                        {% trans %}Your vote{% endtrans %} {{ vote.0.value }} {{ '(' ~ vote.0.date | date('d.m.Y H:i') ~ ')'}}
+                        <div class=" form-actions">
+                            {% trans %}Your vote{% endtrans %} {{ vote.0.value }} {{ '(' ~ vote.0.date | date('d.m.Y H:i') ~ ')'}}                            
+                        </div>
                     {% endif %}
 
                     {% if votes %}
