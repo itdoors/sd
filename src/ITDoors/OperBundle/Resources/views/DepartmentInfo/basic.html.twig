@@ -22,7 +22,16 @@
         });
 
         $('#statusDate').editable({
-            url: '{{ path('sd_common_ajax_editable_department') }}'
+            clear: '{% trans from 'ITDoorsControllingBundle' %}clear{% endtrans %}<i class="icon-remove fa fa-times" style="font-size:12px"></i>',
+            type: 'date',
+            url: '{{ path('sd_common_ajax_editable_department') }}',
+            datepicker: {
+                autoclose: true,
+                format: "dd-mm-yyyy",
+                language: "ru",
+                startView: 'month',
+                weekStart: 1
+            }
         });
 
 
@@ -64,14 +73,14 @@
                                     {% if mpk.active == false %}
                                         {{ mpk.name }} ( {% trans %}From{% endtrans %}
                                         {% if mpk.startDate is not empty %}
-                                            {{ mpk.startDate|date('Y-m-d') }}
+                                            {{ mpk.startDate|date('d-m-Y') }}
                                         {% else %}
                                             {% trans %}Not defined{% endtrans %}
                                         {% endif %}
 
                                         {% trans %}To{% endtrans %}
                                         {% if mpk.endDate is not empty %}
-                                            {{ mpk.endDate|date('Y-m-d') }}
+                                            {{ mpk.endDate|date('d-m-Y') }}
                                         {% else %}
                                             {% trans %}Not defined{% endtrans %}
                                         {% endif %}
@@ -144,7 +153,20 @@
             <tr>{# 7 #}
                 <td>{% trans %}Status Date{% endtrans %}</td>
                 <td>
-                    <a href="#" id="statusDate" data-type="date" data-pk="{{ department.0.id }}" data-value="" data-original-title="{% trans %}Enter Status Date{% endtrans %}">{{ department.0.statusDate|date('Y-m-d') }}</a>
+                    <a href="#" id="statusDate" data-type="date" data-pk="{{ department.0.id }}"
+                       data-original-title="{% trans %}Enter Status Date{% endtrans %}"
+                       data-format="dd-mm-yyyy"
+                       data-date="
+                       {% if department.0.statusDate is not empty %}
+                            {{ department.0.statusDate|date('d-m-Y') }}
+                       {% endif %}
+                       ">
+                        {% if department.0.statusDate is not empty %}
+                            {{ department.0.statusDate|date('d-m-Y') }}
+                        {% else %}
+                            {% trans %}Not defined{% endtrans %}
+                        {% endif %}
+                    </a>
                 </td>
                 <td>{% trans %}Inn{% endtrans %}</td>
                 <td>
@@ -199,7 +221,7 @@
 
                     } else {
 
-                        alert("Error: Nothing was found");// + status);
+                        alert("{% trans %}Object was not found{% endtrans %}");// + status);
 
                     }
 

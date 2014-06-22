@@ -12,6 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  */
 class OrganizationSalesFilterFormType extends AbstractType
 {
+
     protected $container;
 
     /**
@@ -34,30 +35,54 @@ class OrganizationSalesFilterFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('city', 'entity', array(
-                'class'=>'Lists\CityBundle\Entity\City',
-                'multiple' => true,
-                'mapped' => false,
-                'property'=>'name'
-            ))
-            ->add('scope', 'entity', array(
-                'class'=>'Lists\LookupBundle\Entity\Lookup',
-                'property'=>'name',
-                'mapped' => false,
-                'multiple' => true,
-                'query_builder' => $this->lr->getOnlyScopeQuery()
-            ))
-            ->add('users', 'entity', array(
-                'class'=>'SD\UserBundle\Entity\User',
-                'mapped' => false,
-                'multiple' => true,
-                'property'=>'fullname',
-                'query_builder' => $this->ur->getOnlyStuff()
-            ));
+        $router = $this->container->get('router');
 
         $builder
-            ->add('save', 'submit')
+            ->add('city', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_city'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_city_by_id'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 2,
+                        'allowClear' => true,
+                        'width' => '300px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter City',
+                )
+            ))
+            ->add('scope', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_scope'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_scope_by_id'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 0,
+                        'allowClear' => true,
+                        'width' => '300px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter Scope',
+                )
+            ))
+            ->add('organization', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_organization_first'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_organization_by_ids'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 2,
+                        'allowClear' => true,
+                        'width' => '300px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter Name',
+                )
+        ));
+
+        $builder
+            ->add('submit', 'submit')
             ->add('reset', 'submit');
     }
 
@@ -67,7 +92,6 @@ class OrganizationSalesFilterFormType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Lists\OrganizationBundle\Entity\Organization',
             'validation_groups' => false,
             'csrf_protection' => false,
             'translation_domain' => 'ListsOrganizationBundle'

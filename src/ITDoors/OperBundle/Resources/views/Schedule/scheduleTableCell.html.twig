@@ -1,12 +1,24 @@
 {% trans_default_domain 'ITDoorsOperBundle' %}
 {% if status == 'vacation' %}
+{#
     {% trans %}Vacation{% endtrans %}
+#}
+    в
 {% elseif status == 'sick' %}
+{#
     {% trans %}Sick{% endtrans %}
+#}
+    тн
 {% elseif status == 'skip' %}
+{#
     {% trans %}Skip{% endtrans %}
+#}
+    пр
 {% elseif status == 'fired' %}
+{#
     {% trans %}Fired{% endtrans %}
+#}
+    ув
 {% elseif status == 'ok' %}
 
     {% set showNothing = true %}

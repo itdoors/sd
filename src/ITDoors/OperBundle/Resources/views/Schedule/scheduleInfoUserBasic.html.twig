@@ -107,7 +107,7 @@
                     //ITDoorsAjax.unblockUI($('#'+idLastHref));
                     data = JSON.parse(data);
                     if (data.success == 0) {
-                        alert('Ошибка Не разрешено');
+                        alert('Сотрудник не работает официально. Разовые начисления не разрешены.')
                     }
                     else {
                         //alert(data.html)
@@ -225,14 +225,14 @@
         <td>{% trans %}Date accepted simple{% endtrans %}</td>
         <td>
             {% if coworker.dateAcceptedOfficially is not empty %}
-                {{ coworker.dateAcceptedOfficially|date('Y-m-d') }}
+                {{ coworker.dateAcceptedOfficially|date('d-m-Y') }}
             {% endif %}
         </td>
 
         <td>{% trans %}Date accepted simple{% endtrans %}</td>
         <td>
             {% if coworker.dateAcceptedNotOfficially is not empty %}
-                {{ coworker.dateAcceptedNotOfficially|date('Y-m-d') }}
+                {{ coworker.dateAcceptedNotOfficially|date('d-m-Y') }}
             {% endif %}
         </td>
     </tr>
@@ -241,14 +241,14 @@
         <td>{% trans %}Date faired simple{% endtrans %}</td>
         <td>
             {% if coworker.dateFiredOfficially is not empty %}
-                {{ coworker.dateFiredOfficially|date('Y-m-d') }}
+                {{ coworker.dateFiredOfficially|date('d-m-Y') }}
             {% endif %}
         </td>
 
         <td>{% trans %}Date faired simple{% endtrans %}</td>
         <td>
             {% if coworker.dateFiredNotOfficially is not empty %}
-                {{ coworker.dateFiredNotOfficially|date('Y-m-d') }}
+                {{ coworker.dateFiredNotOfficially|date('d-m-Y') }}
             {% endif %}
         </td>
     </tr>
@@ -361,7 +361,7 @@
                     <td>{{ plannedAccrual.value }}</td>
                     <td>
                         {% if plannedAccrual.period is not empty %}
-                            {{ plannedAccrual.period|date('Y-m-d') }}
+                            {{ plannedAccrual.period|date('d-m-Y') }}
                         {% endif %}
                     </td>
                     <td>

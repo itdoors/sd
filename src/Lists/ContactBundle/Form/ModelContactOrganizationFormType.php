@@ -57,6 +57,7 @@ class ModelContactOrganizationFormType extends AbstractType
             ))
             ->add('level', null, array(
                 'required' => true,
+                'empty_value' => '',
                 'query_builder' => function (ModelContactLevelRepository $repository) {
                         return $repository->createQueryBuilder('mcl')
                             ->orderBy('mcl.digit', 'ASC');

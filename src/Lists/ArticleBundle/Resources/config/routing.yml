@@ -1,0 +1,15 @@
+list_article_vote_history:
+    pattern:  /dashboard/vote/history
+    defaults: { _controller: ListsArticleBundle:Vote:history }
+    
+list_article_vote_history_list:
+    pattern:  /dashboard/vote/history/list
+    defaults: { _controller: ListsArticleBundle:Vote:list }
+
+list_article_vote_history_show:
+    pattern:  /dashboard/vote/history/show/{id}
+    defaults: { _controller: ListsArticleBundle:Vote:show }
+    
+list_article_vote_add_history:
+    pattern:  /dashboard/vote/add/history
+    defaults: { _controller: ListsArticleBundle:Vote:addHistory }

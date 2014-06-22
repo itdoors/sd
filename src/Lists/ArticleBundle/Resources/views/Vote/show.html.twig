@@ -1,0 +1,155 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsArticleBundle' %}
+{% block title %}{% trans %}History{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Vote <small>list of party</small>{% endtrans %}
+    </h3>
+{% endblock %}
+
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="{{ path('list_article_vote_history') }}" title="{% trans %}Histories{% endtrans %}">{% trans %}Histories{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="" title="{{item.title}}">{{item.title}}</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12 news-page blog-page">
+            <div class="row">
+                <div class="col-md-12 blog-tag-data">
+                    <h3>{{item.title}}</h3>
+                    <div class="row">
+                        <div class="col-md-6 blog-tag-data-inner">
+                            <ul class="list-inline sale-num">
+                                <li>
+                                    <i class="fa fa-calendar"></i>
+                                    {{ item.datePublick == '' ? '' : item.datePublick | date('d-m-Y')}}
+                                </li>
+                                <li>
+                                    <i class="fa fa-user"></i>
+                                    {{item.lastName}} {{item.firstName}} {{item.middleName}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="news-item-page">
+                        {{ item.text | raw('html')}}
+                    </div>
+                    {% if form %}
+                        <div>
+                            {% if form.vars.valid is sameas(false) %}
+                                <div class="alert alert-danger">
+                                    <button class="close" data-close="alert"></button>
+                                    {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                                    {{ form_errors(form) }}
+                                    {% if form.phone1.vars.errors|length %}
+                                        {{ form_errors(form.phone1) }}
+                                    {% endif %}
+                                    {% if form.level.vars.errors|length %}
+                                        {{ form_errors(form.level) }}
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+
+                            {{ form_start(form, {
+                            'attr' : {
+                                'method' : 'POST'
+                            }
+                        }) }}
+                            <div class="form-body form-actions">
+                                <div class="form-group">
+                                    <div class="form-group col-md-2" style="margin-top: 7px;">
+                                        {% trans %}Enter vote{% endtrans %}:
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        {{ form_widget(form.value, {'attr' : {'class' : 'form-control', 'placeholder': "Vote"}}) }}
+                                    </div>
+                                    <div class="form-group col-md-3">
+
+                                        <button type="submit" class="btn green">{% trans %}add vote{% endtrans %}</button>
+                                    </div>
+                                </div>
+                                {{ form_end(form) }}
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if vote %}
+                        <div class=" form-actions">
+                            {% trans %}Your vote{% endtrans %} {{ vote.0.value }} {{ '(' ~ vote.0.date | date('d.m.Y H:i') ~ ')'}}                            
+                        </div>
+                    {% endif %}
+
+                    {% if votes %}
+                        <div class="table-scrollable" style="clear: right;">
+                            <table class="table table-striped table-bordered table-hover dataTable" aria-describedby="datatable_ajax_info">
+                                <thead>
+                                    <tr role="row" class="heading">
+                                        <th width="5%" class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">
+                                            {% trans %}№{% endtrans %}
+                                        </th>
+                                        <th width="5%" class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">
+                                            {% trans %}Date vote{% endtrans %}
+                                        </th>
+                                        <th width="5%" class="sorting" role="columnheader" tabindex="0" rowspan="1" colspan="1">
+                                            {% trans %}Autor{% endtrans %}
+                                        </th>
+                                        <th width="5%" class="sorting" role="columnheader" tabindex="0" rowspan="1" colspan="1">
+                                            {% trans %}Rating{% endtrans %}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody role="alert" aria-live="polite" aria-relevant="all">
+                                    {% for key,itm in votes %}
+                                        <tr>
+                                            <td>{{ key+1 }}</td>
+                                            <td>{{ itm.dateCreate | date('d.m.Y H:i') }}</td>
+                                            <td>{{ itm.lastName }} {{ itm.firstName }} {{ itm.middleName }}</td>
+                                            <td>{{ itm.value }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class=" form-actions">
+                            <div class="col-md-12 blog-tag-data-inner">
+                                {% trans %}Average rating{% endtrans %}: {{ rationResult.sumVote/rationResult.countVote }}
+                            </div>
+                            <div class="col-md-12 blog-tag-data-inner">
+                                {% trans %}Count vote{% endtrans %}: {{ rationResult.countVote }}
+                            </div>
+                            <div class="col-md-12 blog-tag-data-inner">
+                                {% trans %}Ration{% endtrans %}: {{ ratValue }}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

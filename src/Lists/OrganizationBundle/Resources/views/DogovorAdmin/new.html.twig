@@ -1,0 +1,248 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsOrganizationBundle' %}
+{% block title %}{% trans %}Create Organization{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+		<li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_index') }}" title="{% trans %}Organization List{% endtrans %}">{% trans %}Organization List{% endtrans %}</a><i class="fa fa-angle-right"></i></li>
+        <li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_new') }}" title="{% trans %}Create Organization{% endtrans %}">{% trans %}Create Organization{% endtrans %}</a></li>
+    </ul>
+{% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Organization <small>create organization</small>{% endtrans %}
+    </h3>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    {#Для оранизаций нужно фиксировать Создателя и Дату создания  #}
+
+    <script>
+        $(document).ready(function(){
+            $('#organizationSalesForm_organizationType, #organizationSalesForm_scope, #organizationSalesForm_city').select2({
+                allowClear: true
+            });
+
+            $('#organizationSalesForm_name, #organizationSalesForm_shortname').select2({
+                minimumInputLength: 2,
+                allowClear: true,
+                initSelection : function (element, callback) {
+                    var data = {id: element.val(), text: element.val()};
+                    callback(data);
+                },
+                ajax: {
+                    url: '{{ path('sd_common_ajax_organization_for_creation') }}',
+                    dataType: 'json',
+                    data: function (term, page) {
+                        return {
+                            q: term
+                        };
+                    },
+                    results: function (data, page) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            })
+        });
+    </script>
+
+    <div class="row">
+    <div class="col-md-12">
+
+        <div class="portlet box blue">
+            <div class="portlet-title">
+                <div class="caption"><i class="fa fa-reorder"></i>{% trans %}Create Organization{% endtrans %}</div>
+                <div class="tools">
+                    <a class="collapse" href="javascript:;"></a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                {% form_theme filterForm 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+                {{ form_start(filterForm,
+                    {
+                        'action': path('lists_' ~ baseRoutePrefix ~ '_organization_new'),
+                        'attr': {'novalidate': 'novalidate', 'class' : 'horizontal-form'}
+                    })
+                }}
+                {{ form_errors(filterForm) }}
+                <div class="form-body">
+                    <div class="alert alert-danger display-hide">
+                        <button class="close" data-close="alert"></button>
+                        {% trans %}You have some form errors. Please check below.{% endtrans %}
+                    </div>
+                    <h3 class="form-section">{% trans %}General information{% endtrans %}</h3>
+                    <div class="row">
+                        <div class="col-md-6
+                            {% if filterForm.name.vars.errors|length %}
+                                has-error
+                            {% endif %}">
+                            <div class="form-group">
+                                {{ form_label(filterForm.name, 'Organization Name'|trans ~ ' *', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.name, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter organization name'}}) }}
+                                <span class="help-block">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп" {% trans %}(limit 50 chars){% endtrans %}</span>
+                                {{ form_errors(filterForm.name) }}
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(filterForm.shortname, 'Organization short name', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.shortname, {'attr': {'class': 'form-control', 'placeholder': 'Enter organization short name'}}) }}
+                                <span class="help-block">{% trans %}for example{% endtrans %}: Impel Griffin {% trans %}(limit 50 chars){% endtrans %}</span>
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <!--/row-->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(filterForm.organizationType, 'Organization type', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.organizationType, {'attr': {'class': 'form-control select2me', 'placeholder': 'Select organization type'}}) }}
+                                <span class="help-block">{% trans %}Select organization type{% endtrans %}</span>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(filterForm.scope, 'Scope', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.scope, {'attr': {'class': 'form-control select2me'}}) }}
+                                <span class="help-block">{% trans %}Select Organization scope{% endtrans %}</span>
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <!--/row-->
+                    <h3 class="form-section">{% trans %}Сontact details{% endtrans %}</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(filterForm.city, 'City', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.city, {'attr': {'class': 'form-control select2me'}}) }}
+                                <span class="help-block">{% trans %}Select city{% endtrans %}</span>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6
+                                {% if filterForm.address.vars.errors|length %}
+                                    has-error
+                                {% endif %}">
+                            <div class="form-group">
+                                {{ form_label(filterForm.address, 'Legal Address', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.address, {'attr': {'class': 'form-control'}}) }}
+                                <span class="help-block">{% trans %}Enter Legal Address{% endtrans %}</span>
+                                {{ form_errors(filterForm.address) }}
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <!--/row-->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(filterForm.mailingAddress, 'Mailing Address', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.mailingAddress, {'attr': {'class': 'form-control'}}) }}
+                                <span class="help-block">{% trans %}Enter Mailing Address{% endtrans %}</span>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(filterForm.physicalAddress, 'Physical Address', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.physicalAddress, {'attr': {'class': 'form-control'}}) }}
+                                <span class="help-block">{% trans %}Enter Physical Address{% endtrans %}</span>
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <!--/row-->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(filterForm.phone, 'Phone', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.phone, {'attr': {'class': 'form-control'}}) }}
+                                <span class="help-block">{% trans %}Enter Phone{% endtrans %}</span>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(filterForm.site, 'Site', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.site, {'attr': {'class': 'form-control'}}) }}
+                                <span class="help-block">{% trans %}Enter Organization Site{% endtrans %}</span>
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <!--/row-->
+
+                    <h3 class="form-section">{% trans %}Сontact details{% endtrans %}</h3>
+                    <div class="row">
+                        <div class="col-md-6
+                            {% if filterForm.edrpou.vars.errors|length %}
+							    has-error
+							{% endif %}">
+                            <div class="form-group">
+                                {{ form_label(filterForm.edrpou, 'Edrpou', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.edrpou, {'attr': {'class': 'form-control'}}) }}
+                                <span class="help-block">{% trans %}Enter edrpou{% endtrans %}</span>
+                                {{ form_errors(filterForm.edrpou) }}
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+                            <div class="form-group">
+
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <!--/row-->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(filterForm.inn, 'INN', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.inn, {'attr': {'class': 'form-control'}}) }}
+                                <span class="help-block">{% trans %}Enter INN{% endtrans %}</span>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(filterForm.certificate, 'INN Certificate', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.certificate, {'attr': {'class': 'form-control'}}) }}
+                                <span class="help-block">{% trans %}Enter INN Certificate{% endtrans %}</span>
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <!--/row-->
+
+                    <div class="form-actions right">
+                        {{ form_widget(filterForm.save, { 'label': 'Save', 'attr': {'class': 'btn blue'}} ) }}
+                        {{ form_widget(filterForm.cancel, { 'label': 'Cancel', 'attr': {'class': 'btn default'}} ) }}
+                    </div>
+                    {{ form_end(filterForm) }}
+                    <!-- END FORM-->
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

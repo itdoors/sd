@@ -1,5 +1,8 @@
 {% trans_default_domain 'SDUserBundle' %}
 <div class="navigation">
+{% if is_granted('ROLE_INTRANETADMIN') or is_granted('ROLE_HRADMIN')   %}    
+<a class="btn btn-lg green" href="{{ url('sd_user_new_stuff') }}">{% trans %}Add new user{% endtrans %}</a>
+{% endif %}
     {{ ajax_paginator_render(
             items, namespase, {
                     'datatable_ajax': 'ITDoorsAjax.updateList'

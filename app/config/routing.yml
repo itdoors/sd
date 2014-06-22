@@ -1,3 +1,7 @@
+lists_article:
+    resource: "@ListsArticleBundle/Resources/config/routing.yml"
+    prefix:   /
+
 lists_companystructure:
     resource: "@ListsCompanystructureBundle/Resources/config/routing.yml"
     prefix:   /

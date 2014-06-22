@@ -59,9 +59,17 @@
             defaultTime: '18:00'
         });
 
+        var currentDate = $('#addButton').data('date');
+        var currentDateParts = currentDate.split('-');
+        var minDate = new Date(currentDateParts[0], parseInt(currentDateParts[1])-1, +1); //one day next before month
+        var maxDate = new Date(currentDateParts[0], parseInt(currentDateParts[1]), 0); // one day before next month
+
+/*
         var currentTime = new Date()
+        alert(currentTime.getFullYear()+' '+currentTime.getMonth());
         var minDate = new Date(currentTime.getFullYear(), currentTime.getMonth(), +1); //one day next before month
         var maxDate = new Date(currentTime.getFullYear(), currentTime.getMonth() +1, 0); // one day before next month
+*/
 
         $('#copy_graf').datepicker({
             startDate: minDate,
@@ -476,7 +484,22 @@
                 success: function(data) {
                     $('#status_span').html(message);
                     $('#status_changed').show( 'blind', {}, 500 );
-                    updateTableCell(false)
+                    updateTableCell(false);
+
+                    if (status != 'ok') {
+                        $('#add_button').addClass('notDisplayed');
+                        $('#one_day_table').addClass('notDisplayed');
+                        $('#status_name_holder').removeClass('notDisplayed');
+                        $( "#add_div" ).hide( 'blind', {}, 100 );
+                        $('#status_name_holder').removeClass('notDisplayed');
+
+                        $('#status_name').html(message);
+
+                    } else {
+                        $('#add_button').removeClass('notDisplayed');
+                        $('#one_day_table').removeClass('notDisplayed');
+                        $('#status_name_holder').addClass('notDisplayed');
+                    }
                 }
             })
 
@@ -488,11 +511,14 @@
 
 
 <div>
-    <a class="btn purple" id="add_button">{% trans %}Add{% endtrans %}</a>
+    <a class="btn purple {% if status != 'ok' %}notDisplayed{% endif %}" id="add_button">{% trans %}Add{% endtrans %}</a>
 <li class="btn-group" style="float: right; ">
     <a class="btn green notDisplayed" style="margin-right: 10px;" id="copy_graf_submit">Скопировать</a>
     <a class="btn green" style="margin-right: 10px; width: 200px;" id="copy_graf"
-       data-message="{% trans %}Select dates{% endtrans %}" data-text="{% trans %}Copy graf{% endtrans %}">{% trans %}Copy graf{% endtrans %}</a>
+       data-message="{% trans %}Select dates{% endtrans %}"
+       data-text="{% trans %}Copy graf{% endtrans %}"
+
+            >{% trans %}Copy graf{% endtrans %}</a>
 
     <button type="button" class="btn blue dropdown-toggle " data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true">
 							<span>
@@ -503,22 +529,22 @@
     <ul class="dropdown-menu pull-right" role="menu" id="statusHolder" data-url="{{ path('it_doors_oper_schedule_update_status_coworker') }}">
         <li>
             <a href="#" class="statusButton" data-status="sick" data-message="{% trans %}Sick{% endtrans %}">
-                {% trans %}Sick{% endtrans %}
+                {% trans %}Sick{% endtrans %} (тн)
             </a>
         </li>
         <li>
             <a href="#" class="statusButton" data-status="skip" data-message="{% trans %}Skip{% endtrans %}">
-                {% trans %}Skip{% endtrans %}
+                {% trans %}Skip{% endtrans %} (пр)
             </a>
         </li>
         <li>
             <a href="#" class="statusButton" data-status="fired" data-message="{% trans %}Fired{% endtrans %}">
-                {% trans %}Fired{% endtrans %}
+                {% trans %}Fired{% endtrans %} (ув)
             </a>
         </li>
         <li>
             <a href="#" class="statusButton" data-status="vacation" data-message="{% trans %}Vacation{% endtrans %}">
-                {% trans %}Vacation{% endtrans %}
+                {% trans %}Vacation{% endtrans %} (в)
             </a>
         </li>
         <li class="divider">
@@ -531,6 +557,7 @@
     </ul>
 </li>
 </div>
+<div class="clear"></div>
 <div style="height: 100px; width: 100%; margin-top: 10px; display: none;" id="add_div">
 
     <b>{% trans %}Range{% endtrans %}:</b>
@@ -595,7 +622,12 @@
     .td_officialy{
         color: green;
     }
-
+    .clear{
+        height:0;
+        font-size:1px;
+        line-height:0px;
+        clear:both;
+    }
 
     .notDisplayed{
         display: none;
@@ -606,7 +638,28 @@
 </style>
 <br>
 {{ day }}-{{ monthName|trans }}-{{ year }}
-<table class="table table-striped table-hover table-bordered" style="margin-top: 10px;">
+
+<div id="status_name_holder" style="margin-bottom: 150px; text-align: center;" class="{% if status == 'ok' %}notDisplayed{% endif %}">
+    <h1>
+        {% trans %}Status{% endtrans %}: <span id="status_name"
+              data-sick="{% trans %}Sick{% endtrans %} (тн)"
+              data-fired="{% trans %}Fired{% endtrans %} (ув)"
+              data-skip="{% trans %}Skip{% endtrans %} (пр)"
+              date-vacation="{% trans %}Vacation{% endtrans %} (в)">
+            {% if status == 'vacation' %}
+                {% trans %}Vacation{% endtrans %}
+            {% elseif status == 'sick' %}
+                {% trans %}Sick{% endtrans %}
+            {% elseif status == 'skip' %}
+                {% trans %}Skip{% endtrans %}
+            {% elseif status == 'fired' %}
+                {% trans %}Fired{% endtrans %}
+            {% endif %}
+        </span>
+    </h1>
+</div>
+<br>
+<table id="one_day_table" class="table table-striped table-hover table-bordered {% if status != 'ok' %}notDisplayed{% endif %}" style="margin-top: 10px;">
     <thead>
         <tr>
             <th colspan="2">{% trans %}Range{% endtrans %}</th>

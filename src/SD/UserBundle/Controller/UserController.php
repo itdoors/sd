@@ -150,7 +150,7 @@ class UserController extends BaseController
         $user = $this->get('sd_user.repository');
 
         /** @var User $item */
-        $item = $user->getStuffById((int) $userId);
+        $item = $user->getStuffById($userId);
 
         $namespace = $this->filterNamespace . $userId;
 

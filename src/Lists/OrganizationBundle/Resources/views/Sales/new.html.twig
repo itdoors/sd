@@ -34,12 +34,8 @@
     <script>
         $(document).ready(function(){
             $('#organizationSalesForm_organizationType, #organizationSalesForm_scope, #organizationSalesForm_city').select2({
-                placeholder: "Select a State",
                 allowClear: true
             });
-        })
-
-        $(document).ready(function(){
 
             $('#organizationSalesForm_name, #organizationSalesForm_shortname').select2({
                 minimumInputLength: 2,
@@ -62,7 +58,7 @@
                         };
                     }
                 }
-            })
+            });
         });
     </script>
     <div class="row">
@@ -97,9 +93,9 @@
 							    has-error
 							{% endif %}">
                             <div class="form-group">
-                                {{ form_label(filterForm.name, 'Organization name *', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_label(filterForm.name, 'Organization name'|trans ~ ' *', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.name, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter organization name'}}) }}
-                                <span class="help-block">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп"</span>
+                                <span class="help-block">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп" {% trans %}(limit 50 chars){% endtrans %}</span>
                                 {{ form_errors(filterForm.name) }}
                             </div>
                         </div>
@@ -108,7 +104,7 @@
                             <div class="form-group">
                                 {{ form_label(filterForm.shortname, 'Organization short name', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.shortname, {'attr': {'class': 'form-control', 'placeholder': 'Enter organization short name'}}) }}
-                                <span class="help-block">{% trans %}for example{% endtrans %}: Impel Griffin</span>
+                                <span class="help-block">{% trans %}for example{% endtrans %}: Impel Griffin {% trans %}(limit 50 chars){% endtrans %}</span>
                             </div>
                         </div>
                         <!--/span-->
@@ -119,7 +115,7 @@
                             <div class="form-group">
                                 {{ form_label(filterForm.organizationType, 'Organization type', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.organizationType, {'attr': {'class': 'form-control select2me'}}) }}
-                                <span class="help-block">{% trans %}Select Organization type{% endtrans %}</span>
+                                <span class="help-block">{% trans %}Select organization type{% endtrans %}</span>
                             </div>
                         </div>
                         <!--/span-->
@@ -139,7 +135,7 @@
                             <div class="form-group">
                                 {{ form_label(filterForm.city, 'City', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.city, {'attr': {'class': 'form-control select2me'}}) }}
-                                <span class="help-block">{% trans %}Select City{% endtrans %}</span>
+                                <span class="help-block">{% trans %}Select city{% endtrans %}</span>
                             </div>
                         </div>
                         <!--/span-->
@@ -198,10 +194,7 @@
 
                     <h3 class="form-section">{% trans %}Organization details{% endtrans %}</h3>
                     <div class="row">
-                        <div class="col-md-6
-                            {% if filterForm.edrpou.vars.errors|length %}
-							    has-error
-							{% endif %}">
+                        <div class="col-md-6{% if filterForm.edrpou.vars.errors|length %} has-error{% endif %}">
                             <div class="form-group">
                                 {{ form_label(filterForm.edrpou, 'Edrpou', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.edrpou, {'attr': {'class': 'form-control'}}) }}

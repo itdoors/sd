@@ -28,6 +28,7 @@ use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use ITDoors\AjaxBundle\Controller\BaseFilterController;
 use Lists\CompanystructureBundle\Entity\Companystructure;
+use SD\UserBundle\Entity\Usercontactinfo;
 
 /**
  * AjaxController class.
@@ -294,6 +295,28 @@ class AjaxController extends BaseFilterController
 
         $cityList = $this->getDoctrine()
             ->getRepository('ListsCityBundle:City')
+            ->findBy(array('id'=>$ids));
+
+        $result = array();
+
+        foreach ($cityList as $city) {
+            $result[] = $this->serializeObject($city);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json city object by id
+     *
+     * @return string
+     */
+    public function scopeByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $cityList = $this->getDoctrine()
+            ->getRepository('lists_lookup.repository')
             ->findBy(array('id'=>$ids));
 
         $result = array();
@@ -3170,6 +3193,29 @@ class AjaxController extends BaseFilterController
             ->getRepository('ListsOrganizationBundle:Organization');
 
         $objects= $repository->searchSelfOrganization($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json of searchin self Organizations
+     *
+     * @return string
+     */
+    public function organizationFirstAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+        $objects= $repository->searchOrganizationFirst($searchText);
 
         $result = array();
 

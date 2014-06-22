@@ -1,5 +1,4 @@
 {% trans_default_domain 'ListsOrganizationBundle' %}
-
 <script type="text/javascript">
 
     $(document).ready(function(){
@@ -23,8 +22,8 @@
             source: '{{ path('sd_common_ajax_organization_group') }}',
             emptytext: '{% trans %}Enter value{% endtrans %}',
             select2: {
-                placeholder: '{% trans %}Select Group{% endtrans %}',
-                minimumInputLength: 2,
+                placeholder: '{% trans %}Select Organization Group{% endtrans %}',
+                minimumInputLength: 0,
                 width: 250,
                 allowClear: true
             }
@@ -41,7 +40,7 @@
             source: '{{ path('sd_common_ajax_city') }}',
             emptytext: '{% trans %}Enter value{% endtrans %}',
             select2: {
-                placeholder: '{% trans %}Select City{% endtrans %}',
+                placeholder: '{% trans %}Select city{% endtrans %}',
                 minimumInputLength: 2,
                 width: 250
             }
@@ -63,11 +62,11 @@
         <tr>
             <td style="width:15%">{% trans %}Organization name{% endtrans %}</td>
             <td style="width:50%">
-                <a href="#" id="name" data-type="text" data-pk="{{ organization.id }}" data-placement="right" data-placeholder="Required" data-original-title="{% trans %}Enter Organization name{% endtrans %}">
+                <a href="#" id="name" data-type="text" data-pk="{{ organization.id }}" data-placement="right" data-placeholder="{% trans %}Enter organization name{% endtrans %}" data-original-title="{% trans %}Enter organization name{% endtrans %}">
                     {{ organization.name }}
                 </a>
             </td>
-            <td style="width:35%"><span class="text-muted">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп"</span></td>
+            <td style="width:35%"><span class="text-muted">{% trans %}for example{% endtrans %}: Impel Griffin {% trans %}(limit 50 chars){% endtrans %}</span></td>
         </tr>
         <tr>
             <td>{% trans %}Short Name{% endtrans %}</td>
@@ -81,11 +80,11 @@
         <tr>
             <td>{% trans %}Organization type{% endtrans %}</td>
             <td>
-                <a href="#" id="organizationTypeId" data-type="select" data-pk="{{ organization.id }}" data-value="" data-original-title="{% trans %}Select type{% endtrans %}">
+                <a href="#" id="organizationTypeId" data-type="select" data-pk="{{ organization.id }}" data-value="" data-original-title="{% trans %}Enter organization type{% endtrans %}">
                     {{ organization.organizationType }}
                 </a>
             </td>
-            <td><span class="text-muted">{% trans %}Select Organization type{% endtrans %}</span></td>
+            <td><span class="text-muted">{% trans %}Select organization type{% endtrans %}</span></td>
         </tr>
         <tr>
             <td>{% trans %}Scope{% endtrans %}</td>
@@ -112,7 +111,7 @@
                     {{ organization.city }}
                 </a>
             </td>
-            <td><span class="text-muted">{% trans %}Select City{% endtrans %}</span></td>
+            <td><span class="text-muted">{% trans %}Select city{% endtrans %}</span></td>
         </tr>
         <tr>
             <td>{% trans %}Legal Address{% endtrans %}</td>
@@ -153,7 +152,7 @@
         <tr>
             <td>{% trans %}Site{% endtrans %}</td>
             <td>
-                <a href="#" id="site" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Enter site{% endtrans %}">
+                <a href="#" id="site" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Enter Organization Site{% endtrans %}">
                     {{ organization.site }}
                 </a>
             </td>
@@ -180,7 +179,7 @@
         <tr>
             <td>{% trans %}INN{% endtrans %}</td>
             <td>
-                <a href="#" id="certificate" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}INN Certificate:{% endtrans %}">
+                <a href="#" id="certificate" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}INN Certificate{% endtrans %}">
                     {{ organization.certificate }}
                 </a>
             </td>

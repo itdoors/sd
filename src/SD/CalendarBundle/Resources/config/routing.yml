@@ -12,19 +12,4 @@ sd_calendar_salesdispatcher_handling_message:
 sd_calendar_salesadmin_handling_message:
     pattern:  sd/calendar/ajax/salesadmin/handlind_message
     defaults: { _controller: SDCalendarBundle:SalesAdmin:HandlingMessage }
-    
-sd_calendar_vote_history:
-    pattern:  /dashboard/vote/history
-    defaults: { _controller: SDCalendarBundle:Vote:history }
-    
-sd_calendar_vote_history_list:
-    pattern:  /dashboard/vote/history/list
-    defaults: { _controller: SDCalendarBundle:Vote:list }
-    
-sd_calendar_vote_history_show:
-    pattern:  /dashboard/vote/history/show/{id}
-    defaults: { _controller: SDCalendarBundle:Vote:show }
-    
-sd_calendar_vote_add_history:
-    pattern:  /dashboard/vote/add/history
-    defaults: { _controller: SDCalendarBundle:Vote:addHistory }
+
