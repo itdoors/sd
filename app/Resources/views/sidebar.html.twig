@@ -16,7 +16,21 @@
             </a>
         </li>
         {% if is_granted('ROLE_SALES') %}
-            <li class="">
+            <li{% if 
+                    is_granted('ROLE_DOGOVORADMIN') != true
+                    and
+                    (
+                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_index')
+                         or
+                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_new')
+                        or
+                        (
+                            app.request.attributes.get('_route_params') is not empty
+                            and
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_show', app.request.attributes.get('_route_params'))
+                        )
+                    )
+                %} class="active"{% endif %}>
                 <a href="javascript:;">
                     <i class="fa fa-money"></i> 
                     <span class="title">{% trans %}My Sales{% endtrans %}</span>
@@ -64,6 +78,24 @@
                             <i class="fa fa-group"></i>
                             {% trans %}My Team{% endtrans %}</a>
                     </li>
+                    {% if is_granted('ROLE_DOGOVORADMIN') != true %}
+                    <li{% if
+                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_index')
+                                or 
+                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_new')
+                                or
+                                (
+                                    app.request.attributes.get('_route_params') is not empty
+                                    and
+                                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_show',app.request.attributes.get('_route_params'))
+                                )
+                        %} class="active"{% endif %}>
+                        <a href="{{ path('lists_competitors_organization_index') }}">
+                            <i class="fa fa-comments"></i>
+                            <span class="title">{% trans %}Competitors{% endtrans %}</span>
+                        </a>
+                    </li>
+                    {% endif %}
                 </ul>
             </li>
         {% endif %}
@@ -262,7 +294,18 @@
             </li>
         {% endif %}
         {% if is_granted('ROLE_DOGOVORADMIN') %}
-            <li class="">
+            <li{% if 
+                   
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_index')
+                     or
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_new')
+                    or
+                    (
+                        app.request.attributes.get('_route_params') is not empty
+                        and
+                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_show', app.request.attributes.get('_route_params'))
+                  )
+                %} class="active"{% endif %}>
                 <a href="javascript:;">
                     <i class="fa fa-money"></i>
                     <span class="title">{% trans %}My Dogovor{% endtrans %}</span>
@@ -287,41 +330,6 @@
                             {% trans %}New Dogovor{% endtrans %}
                         </a>
                     </li>
-                </ul>
-            </li>
-        {% endif %}
-        <li{% if 
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_oper_homepage') 
-                     or
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_index')
-                     or
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_new')
-                    or
-                    (
-                        app.request.attributes.get('_route_params') is not empty
-                        and
-                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_show', app.request.attributes.get('_route_params'))
-                  )
-            %} class="active"{% endif %}>
-            <a href="javascript:;">
-                <i class="fa fa-money"></i>
-                <span class="title">{% trans %}Opermanager{% endtrans %}</span>
-                <span class="arrow "></span>
-            </a>
-            <ul  class="sub-menu">
-                {% if 
-                            is_granted('ROLE_OPER') 
-                            or
-                            is_granted('ROLE_SUPERVISOR')
-                %}
-                <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_oper_homepage')
-                    %} class="active"{% endif %}>
-                    <a href="{{ path('it_doors_oper_homepage') }}">
-                        <i class="fa fa-money"></i>
-                        <span class="title">{% trans %}Offices{% endtrans %}</span>
-                    </a>
-                </li>
-                {% endif %}
                     <li{% if
                                 path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_index')
                                 or 
@@ -332,14 +340,38 @@
                                     and
                                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_show',app.request.attributes.get('_route_params'))
                                 )
-                                %} class="active"{% endif %}>
+                        %} class="active"{% endif %}>
                         <a href="{{ path('lists_competitors_organization_index') }}">
-                            <i class="fa fa-money"></i>
+                            <i class="fa fa-comments"></i>
                             <span class="title">{% trans %}Competitors{% endtrans %}</span>
                         </a>
                     </li>
                 </ul>
             </li>
+        {% endif %}
+        {% if 
+            is_granted('ROLE_OPER') 
+            or
+            is_granted('ROLE_SUPERVISOR')
+        %}
+        <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_oper_homepage') 
+            %} class="active"{% endif %}>
+            <a href="javascript:;">
+                <i class="fa fa-money"></i>
+                <span class="title">{% trans %}Opermanager{% endtrans %}</span>
+                <span class="arrow "></span>
+            </a>
+            <ul  class="sub-menu">
+                <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_oper_homepage')
+                    %} class="active"{% endif %}>
+                    <a href="{{ path('it_doors_oper_homepage') }}">
+                        <i class="fa fa-money"></i>
+                        <span class="title">{% trans %}Offices{% endtrans %}</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        {% endif %}
             {% if is_granted('ROLE_CONTROLLING') %}
                 <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_controlling_invoice') %} class="active"{% endif %}>
                     <a href="javascript:;">

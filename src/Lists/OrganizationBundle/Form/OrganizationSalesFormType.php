@@ -37,15 +37,18 @@ class OrganizationSalesFormType extends AbstractType
             ->add('mailingAddress')
             ->add('organizationType', 'entity', array(
                 'class'=>'Lists\OrganizationBundle\Entity\OrganizationType',
-                'property'=>'title'
+                'property'=>'title',
+                'empty_value' => ''
             ))
             ->add('city', 'entity', array(
                 'class'=>'Lists\CityBundle\Entity\City',
-                'property'=>'name'
+                'property'=>'name',
+                'empty_value' => ''
             ))
             ->add('scope', 'entity', array(
                 'class'=>'Lists\LookupBundle\Entity\Lookup',
-                'property'=>'name'
+                'property'=>'name',
+                'empty_value' => ''
             ))
             ->add('edrpou')
             ->add('inn')
@@ -56,11 +59,13 @@ class OrganizationSalesFormType extends AbstractType
             ->add('city', 'entity', array(
                 'class'=>'Lists\CityBundle\Entity\City',
                 'property'=>'name',
+                'empty_value' => ''
                 //'query_builder' =>
             ))
             ->add('scope', 'entity', array(
                 'class'=>'Lists\LookupBundle\Entity\Lookup',
                 'property'=>'name',
+                'empty_value' => '',
                 'query_builder' => $lr->getOnlyScopeQuery()
             ))
             ->add('phone')

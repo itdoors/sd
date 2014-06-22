@@ -22,8 +22,8 @@
             source: '{{ path('sd_common_ajax_organization_group') }}',
             emptytext: '{% trans %}Enter value{% endtrans %}',
             select2: {
-                placeholder: '{% trans %}Select Group{% endtrans %}',
-                minimumInputLength: 2,
+                placeholder: '{% trans %}Select Organization Group{% endtrans %}',
+                minimumInputLength: 0,
                 width: 250,
                 allowClear: true
             }
@@ -84,7 +84,7 @@
                     {{ organization.organizationType }}
                 </a>
             </td>
-            <td><span class="text-muted">{% trans %}Select Organization type{% endtrans %}</span></td>
+            <td><span class="text-muted">{% trans %}Select organization type{% endtrans %}</span></td>
         </tr>
         <tr>
             <td>{% trans %}Scope{% endtrans %}</td>

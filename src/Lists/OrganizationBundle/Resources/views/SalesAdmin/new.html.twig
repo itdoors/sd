@@ -34,7 +34,7 @@
     <script>
         $(document).ready(function(){
             $('#organizationSalesForm_organizationType, #organizationSalesForm_scope, #organizationSalesForm_city').select2({
-                placeholder: "Select a State",
+                placeholder: {% trans %}"Select organization type"{% endtrans %},
                 allowClear: true
             });
         })
@@ -100,7 +100,7 @@
                             <div class="form-group">
                                 {{ form_label(filterForm.name, 'Organization name'|trans ~ ' *', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.name, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter organization name'}}) }}
-                                <span class="help-block">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп"</span>
+                                <span class="help-block">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп" {% trans %}(limit 50 chars){% endtrans %}</span>
                                 {{ form_errors(filterForm.name) }}
                             </div>
                         </div>
@@ -109,7 +109,7 @@
                             <div class="form-group">
                                 {{ form_label(filterForm.shortname, 'Organization short name', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.shortname, {'attr': {'class': 'form-control', 'placeholder': 'Enter organization short name'}}) }}
-                                <span class="help-block">{% trans %}for example{% endtrans %}: Impel Griffin</span>
+                                <span class="help-block">{% trans %}for example{% endtrans %}: Impel Griffin {% trans %}(limit 50 chars){% endtrans %}</span>
                             </div>
                         </div>
                         <!--/span-->
