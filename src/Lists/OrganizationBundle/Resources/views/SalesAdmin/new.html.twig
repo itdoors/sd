@@ -34,12 +34,8 @@
     <script>
         $(document).ready(function(){
             $('#organizationSalesForm_organizationType, #organizationSalesForm_scope, #organizationSalesForm_city').select2({
-                placeholder: {% trans %}"Select organization type"{% endtrans %},
                 allowClear: true
             });
-        })
-
-        $(document).ready(function(){
 
             $('#organizationSalesForm_name, #organizationSalesForm_shortname').select2({
                 minimumInputLength: 2,
@@ -100,7 +96,7 @@
                             <div class="form-group">
                                 {{ form_label(filterForm.name, 'Organization name'|trans ~ ' *', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.name, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter organization name'}}) }}
-                                <span class="help-block">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп" {% trans %}(limit 50 chars){% endtrans %}</span>
+                                <span class="help-block">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп"</span>
                                 {{ form_errors(filterForm.name) }}
                             </div>
                         </div>

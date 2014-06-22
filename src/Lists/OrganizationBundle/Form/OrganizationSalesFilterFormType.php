@@ -46,7 +46,7 @@ class OrganizationSalesFilterFormType extends AbstractType
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 2,
                         'allowClear' => true,
-                        'width' => '200px',
+                        'width' => '300px',
                         'multiple' => 'multiple'
                     )),
                     'placeholder' => 'Enter City',
@@ -60,7 +60,7 @@ class OrganizationSalesFilterFormType extends AbstractType
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 0,
                         'allowClear' => true,
-                        'width' => '200px',
+                        'width' => '300px',
                         'multiple' => 'multiple'
                     )),
                     'placeholder' => 'Enter Scope',
@@ -74,7 +74,7 @@ class OrganizationSalesFilterFormType extends AbstractType
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 2,
                         'allowClear' => true,
-                        'width' => '200px',
+                        'width' => '300px',
                         'multiple' => 'multiple'
                     )),
                     'placeholder' => 'Enter Name',

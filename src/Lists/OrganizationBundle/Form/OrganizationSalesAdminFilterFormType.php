@@ -28,7 +28,7 @@ class OrganizationSalesAdminFilterFormType extends OrganizationSalesDispatcherFi
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 2,
                         'allowClear' => true,
-                        'width' => '200px',
+                        'width' => '300px',
                         'multiple' => 'multiple'
                     )),
                     'placeholder' => 'Enter manager',
