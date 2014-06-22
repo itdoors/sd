@@ -62,7 +62,7 @@
         <tr>
             <td style="width:15%">{% trans %}Organization name{% endtrans %}</td>
             <td style="width:50%">
-                <a href="#" id="name" data-type="text" data-pk="{{ organization.id }}" data-placement="right" data-placeholder="Required" data-original-title="{% trans form 'ListsOrganizationBundle' %}Enter organization name{% endtrans %}">
+                <a href="#" id="name" data-type="text" data-pk="{{ organization.id }}" data-placement="right" data-placeholder="{% trans %}Enter organization name{% endtrans %}" data-original-title="{% trans %}Enter organization name{% endtrans %}">
                     {{ organization.name }}
                 </a>
             </td>
