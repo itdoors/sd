@@ -57,7 +57,7 @@ class CompetitorsController extends SalesController
             ->getRepository('ListsOrganizationBundle:Organization');
 
         /** @var \Doctrine\ORM\Query */
-        $organizationsQuery = $organizationsRepository->getAllForSalesQuery(null, $filters);
+        $organizationsQuery = $organizationsRepository->getCompetitors(null, $filters);
 
         /** @var \Knp\Component\Pager\Paginator $paginator */
         $paginator = $this->get('knp_paginator');

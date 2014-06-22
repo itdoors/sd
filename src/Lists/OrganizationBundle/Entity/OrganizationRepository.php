@@ -62,7 +62,7 @@ class OrganizationRepository extends EntityRepository
      *
      * @return \Doctrine\ORM\Query
      */
-    public function getCompetitorsForSalesQuery($userIds, $filters)
+    public function getCompetitors($userIds, $filters)
     {
         if (!is_array($userIds) && $userIds) {
             $userIds = array($userIds);
