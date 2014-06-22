@@ -244,7 +244,7 @@ class VoteController extends BaseFilterController
                     }
                     $ratValue = round(
                         (
-                            ($rationResult['countVote'] + 1) +
+                            ($rationResult['countVote'] + 1) *
                             (($rationResult['sumVote'] + $value) / ($rationResult['countVote'] + 1))-
                             (($rationResult['sumVote'] + $value) / ($rationResult['countVote'] + 1))
                         )+1,
