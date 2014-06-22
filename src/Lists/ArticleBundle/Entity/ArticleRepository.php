@@ -138,6 +138,7 @@ class ArticleRepository extends EntityRepository
 
         return $sql
                 ->addSelect('v.value')
+                ->addSelect('v.dateCreate as date')
                 ->leftJoin('Lists\ArticleBundle\Entity\Vote', 'v', 'WITH', $subQueryCase)
                 ->where('a.id = :id')
                 ->andWhere('v.userId = :user')

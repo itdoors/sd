@@ -156,7 +156,7 @@ class VoteController extends BaseFilterController
      */
     public function showAction(Request $request, $id)
     {
-        $filterNamespace = $this->container->getParameter($this->getNamespace());
+        //$filterNamespace = $this->container->getParameter($this->getNamespace());
 
         /** @var EventManager $em */
         $em = $this->getDoctrine()->getManager();

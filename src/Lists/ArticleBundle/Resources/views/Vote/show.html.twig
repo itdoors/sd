@@ -100,7 +100,7 @@
                         </div>
                     {% endif %}
                     {% if vote %}
-                        {% trans %}Your vote{% endtrans %} {{ vote.0.value }}
+                        {% trans %}Your vote{% endtrans %} {{ vote.0.value }} {{ '(' ~ vote.0.date | date('d.m.Y H:i') ~ ')'}}
                     {% endif %}
 
                     {% if votes %}
@@ -118,7 +118,7 @@
                                             {% trans %}Autor{% endtrans %}
                                         </th>
                                         <th width="5%" class="sorting" role="columnheader" tabindex="0" rowspan="1" colspan="1">
-                                            {% trans %}Vot{% endtrans %}
+                                            {% trans %}Rating{% endtrans %}
                                         </th>
                                     </tr>
                                 </thead>
@@ -134,14 +134,16 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-md-12 blog-tag-data-inner">
-                            {% trans %}Summa vote{% endtrans %}: {{ rationResult.sumVote }}
-                        </div>
-                        <div class="col-md-12 blog-tag-data-inner">
-                            {% trans %}Count vote{% endtrans %}: {{ rationResult.countVote }}
-                        </div>
-                        <div class="col-md-12 blog-tag-data-inner">
-                            {% trans %}Rate{% endtrans %}: {{ ratValue }}
+                        <div class=" form-actions">
+                            <div class="col-md-12 blog-tag-data-inner">
+                                {% trans %}Average rating{% endtrans %}: {{ rationResult.sumVote }}
+                            </div>
+                            <div class="col-md-12 blog-tag-data-inner">
+                                {% trans %}Count vote{% endtrans %}: {{ rationResult.countVote }}
+                            </div>
+                            <div class="col-md-12 blog-tag-data-inner">
+                                {% trans %}Ration{% endtrans %}: {{ ratValue }}
+                            </div>
                         </div>
                     {% endif %}
                 </div>
