@@ -13,7 +13,7 @@ class DogovorAdminController extends SalesAdminController
     protected $baseRoute = 'lists_dogovor_admin_organization_index';
     protected $baseRoutePrefix = 'dogovor_admin';
     protected $baseTemplate = 'DogovorAdmin';
-    
+
      /**
      * Executes new action
      *
@@ -43,10 +43,10 @@ class DogovorAdminController extends SalesAdminController
             $em->persist($organization);
             $em->flush();
 
-            if($organization->getLookup() && $organization->getLookup()->getId() == 61){
+            if ($organization->getLookup() && $organization->getLookup()->getId() == 61) {
                 $this->baseRoutePrefix = 'competitors';
             }
-            
+
             return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_organization_show', array(
                         'id' => $organization->getId()
             )));
@@ -59,5 +59,4 @@ class DogovorAdminController extends SalesAdminController
                 'baseRoutePrefix' => $this->baseRoutePrefix,
         ));
     }
-
 }

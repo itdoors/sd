@@ -241,7 +241,7 @@ class VoteController extends BaseFilterController
                         $ration = new Ration();
                         $ration->setArticle($em->getRepository('ListsArticleBundle:Article')->find($id));
                     }
-                    
+
                     if (in_array($value, array(1, 2, 3, 4, 5))) {
                         $rationResult['sumVote'] += $value;
                         $rationResult['countVote'] += 1;

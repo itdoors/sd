@@ -99,12 +99,13 @@ class Lookup
      * Set group
      *
      * @param string $group
+     * 
      * @return Lookup
      */
     public function setGroup($group)
     {
         $this->group = $group;
-    
+
         return $this;
     }
 
