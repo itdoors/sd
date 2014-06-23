@@ -2,7 +2,6 @@
 <script type="text/javascript" src="{{ asset('bundles/itdoorsoper/js/multiDatePicker/bootstrap-datepicker.js')}} "></script>
 <script>
     $(document).ready(function(){
-
         function updateTableCell(hrefId) {
             if (!hrefId) {
                 var href = $('#'+$('#info_one_day').data('id_table_href'));
@@ -28,14 +27,18 @@
                     //ITDoorsAjax.unblockUI($('#'+idLastHref));
                     data = JSON.parse(data);
                     if (data.success == 0) {
-                    }
-                    else {
+
+                    } else {
                         //alert(data.html)
                         href.html(data.html);
                     }
                 }
 
             })
+            var idCoworker = $('#addButton').data('id_coworker');
+            var idReplacement = $('#info_one_day').data('id_replacement');
+
+            updateSums(sendData, idCoworker, idReplacement);
         }
 
         $('#day_header_date').html($('#info_one_day').data('header'));

@@ -1,0 +1,38 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
+
+<td class="sums{{ idCoworker }}{{ idReplacement }}">
+    {{ sumOfficially }}
+</td>
+<td class="sums{{ idCoworker }}{{ idReplacement }}">
+    {% if accrual['officially']['plus'] > 0 %}
+        <span style="color: green">+ {{ accrual['officially']['plus'] }}</span>
+        <br>
+    {% endif %}
+    {% if accrual['officially']['minus'] > 0 %}
+        <span style="color: red">- {{ accrual['officially']['minus'] }}</span>
+    {% endif %}
+
+</td>
+
+<td class="sums{{ idCoworker }}{{ idReplacement }}">
+    {{ salaryOfficially }}
+</td>
+
+<td class="sums{{ idCoworker }}{{ idReplacement }}">
+    {{ sumNotOfficially }}
+</td>
+
+<td class="sums{{ idCoworker }}{{ idReplacement }}">
+    {{ plannedAccrual }}
+</td>
+
+<td class="sums{{ idCoworker }}{{ idReplacement }}">
+    {% if accrual['notOfficially']['plus'] > 0 %}
+        <span style="color: green">+ {{ accrual['notOfficially']['plus'] }}</span>
+        <br>
+    {% endif %}
+    {% if accrual['notOfficially']['minus'] > 0 %}
+        <span style="color: red">- {{ accrual['notOfficially']['minus'] }}</span>
+    {% endif %}
+
+</td>

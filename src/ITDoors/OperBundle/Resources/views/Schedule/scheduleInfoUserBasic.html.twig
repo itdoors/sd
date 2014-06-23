@@ -124,6 +124,19 @@
                             $(add_buttons[1]).removeClass('notDisplayed');
                         }
                     }
+
+                    var idReplacement = $('#info_input_user_basic').data('id_replacement');
+                    var idDepartment = $('#info_input_user_basic').data('id_department');
+                    var params = {
+                        "date": date,
+                        "idCoworker": idCoworker,
+                        "idReplacement": idReplacement,
+                        "idDepartment": idDepartment
+                    }
+                    var sendData = {
+                        "params": params
+                    }
+                    updateSums(sendData, idCoworker, idReplacement);
                 }
 
             })
@@ -165,6 +178,19 @@
                         //alert(data.html)
                         $('#holder_'+type).html(data.html)
                     }
+                    var idReplacement = $('#info_input_user_basic').data('id_replacement');
+                    var idDepartment = $('#info_input_user_basic').data('id_department');
+                    var params = {
+                        "date": date,
+                        "idCoworker": idCoworker,
+                        "idReplacement": idReplacement,
+                        "idDepartment": idDepartment
+                    }
+                    var sendData = {
+                        "params": params
+                    }
+                    updateSums(sendData, idCoworker, idReplacement);
+
                 }
 
             })
@@ -389,4 +415,5 @@
        data-url_delete_user = "{{ path('it_doors_oper_schedule_delete_user') }}"
        data-id_coworker="{{ idCoworker }}"
        data-id_replacement = "{{ idReplacement }}"
+       data-id_department="{{ idDepartment }}"
         >
