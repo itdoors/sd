@@ -144,9 +144,6 @@ class InvoiceService
         if (in_array($invoice->delayDaysType, array('Б', 'К', 'б', 'к'))) {
             $invoiceNew->setDelayDaysType($invoice->delayDaysType);
         }
-        if (!empty($invoice->dateFact) && $invoice->dateFact != 'null') {
-            $invoiceNew->setDateFact(new \DateTime($invoice->dateFact));
-        }
         if (!empty($invoice->dogovorDate) && $invoice->dogovorDate != 'null') {
             $invoiceNew->setDogovorDate(new \DateTime($invoice->dogovorDate));
         }

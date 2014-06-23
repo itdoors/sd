@@ -66,7 +66,7 @@
                     {{ organization.name }}
                 </a>
             </td>
-            <td style="width:35%"><span class="text-muted">{% trans %}for example{% endtrans %}: Impel Griffin {% trans %}(limit 50 chars){% endtrans %}</span></td>
+            <td style="width:35%"><span class="text-muted">{% trans %}for example{% endtrans %}: Impel Griffin</span></td>
         </tr>
         <tr>
             <td>{% trans %}Short Name{% endtrans %}</td>
@@ -75,7 +75,7 @@
                     {{ organization.shortname }}
                 </a>
             </td>
-            <td><span class="text-muted">{% trans %}for example{% endtrans %}: Impel Griffin</span></td>
+            <td><span class="text-muted">{% trans %}for example{% endtrans %}: Impel Griffin {% trans %}(limit 50 chars){% endtrans %}</span></td>
         </tr>
         <tr>
             <td>{% trans %}Organization type{% endtrans %}</td>
@@ -177,7 +177,7 @@
             <td><span class="text-muted">{% trans %}Enter INN{% endtrans %}</span></td>
         </tr>
         <tr>
-            <td>{% trans %}INN{% endtrans %}</td>
+            <td>{% trans %}Certificate{% endtrans %}</td>
             <td>
                 <a href="#" id="certificate" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}INN Certificate{% endtrans %}">
                     {{ organization.certificate }}
