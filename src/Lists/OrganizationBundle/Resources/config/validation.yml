@@ -3,4 +3,4 @@ Lists\OrganizationBundle\Entity\Organization:
         name:
             - NotBlank: { groups: [new, edit] }
         edrpou:
-            - Lists\OrganizationBundle\Validator\UniqueEdrpou: { groups: [new, edit] }
+            - Lists\OrganizationBundle\Validator\UniqueEdrpou: {  groups: [new, edit]}

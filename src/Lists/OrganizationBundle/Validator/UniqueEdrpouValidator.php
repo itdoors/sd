@@ -5,6 +5,7 @@ namespace Lists\OrganizationBundle\Validator;
 use Symfony\Component\Validator\ConstraintValidator;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Class UniqueEdrpouValidator
@@ -12,13 +13,16 @@ use Symfony\Component\Validator\Constraint;
 class UniqueEdrpouValidator extends ConstraintValidator
 {
     private $em;
+    private $translator;
 
     /**
      * @param EntityManager $em
+     * @param Translator    $translator
      */
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManager $em, Translator $translator)
     {
         $this->em = $em;
+        $this->translator = $translator;
     }
 
     /**
@@ -29,7 +33,6 @@ class UniqueEdrpouValidator extends ConstraintValidator
     {
         if ($value) {
             $root = $this->context->getRoot();
-
             $conflicts = $this->em
                 ->getRepository('ListsOrganizationBundle:Organization')
                 ->findByEdrpou($value);
@@ -38,9 +41,14 @@ class UniqueEdrpouValidator extends ConstraintValidator
                 $organization = $conflicts[0];
 
                 if ($root && $organization) {
-                    if ($root->getId() != $organization->getId()) {
-                        $msgString = 'Organization with edrpou = %edrpou% already exists.
-                        %OrganizationName% %OrganizationShortName%';
+                    if (!method_exists($root, 'getId')
+                        ||
+                        (method_exists($root, 'getId') && $root->getId() != $organization->getId())) {
+                        $msgString =
+                            $this->translator->trans('Organization with edrpou', array(), 'ListsOrganizationBundle').
+                            ' = %edrpou% '.
+                            $this->translator->trans('already exists', array(), 'ListsOrganizationBundle').' '.
+                            '%OrganizationName% %OrganizationShortName%';
 
                         $this->context->addViolation(
                             $msgString,

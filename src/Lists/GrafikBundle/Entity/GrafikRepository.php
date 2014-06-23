@@ -153,4 +153,67 @@ class GrafikRepository extends EntityRepository
 
         return false;
     }
+
+
+    /**
+     * @param int $year
+     * @param int $month
+     * @param int $idDepartment
+     * @param int $idCoworker
+     * @param int $idReplacement
+     *
+     * @return array
+     */
+    public function getSumTotalOfficially($year, $month, $idDepartment, $idCoworker, $idReplacement = 0)
+    {
+        $result = $this->createQueryBuilder('t')
+            ->select('SUM(t.total)')
+            ->leftJoin('t.department', 'd')
+            ->leftJoin('t.departmentPeople', 'dp')
+            ->andWhere('t.departmentPeopleReplacement = :idReplacement')
+            ->setParameter(':idReplacement', $idReplacement)
+            ->andWhere('t.month = :month')
+            ->setParameter(':month', $month)
+            ->andWhere('t.year = :year')
+            ->setParameter(':year', $year)
+            ->andWhere('d.id = :idDepartment')
+            ->setParameter(':idDepartment', $idDepartment)
+            ->andWhere('dp.id = :idCoworker')
+            ->setParameter(':idCoworker', $idCoworker)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $result;
+    }
+
+    /**
+     * @param int $year
+     * @param int $month
+     * @param int $idDepartment
+     * @param int $idCoworker
+     * @param int $idReplacement
+     *
+     * @return array
+     */
+    public function getSumTotalNotOfficially($year, $month, $idDepartment, $idCoworker, $idReplacement = 0)
+    {
+        $result = $this->createQueryBuilder('t')
+            ->select('SUM(t.totalNotOfficially)')
+            ->leftJoin('t.department', 'd')
+            ->leftJoin('t.departmentPeople', 'dp')
+            ->andWhere('t.departmentPeopleReplacement = :idReplacement')
+            ->setParameter(':idReplacement', $idReplacement)
+            ->andWhere('t.month = :month')
+            ->setParameter(':month', $month)
+            ->andWhere('t.year = :year')
+            ->setParameter(':year', $year)
+            ->andWhere('d.id = :idDepartment')
+            ->setParameter(':idDepartment', $idDepartment)
+            ->andWhere('dp.id = :idCoworker')
+            ->setParameter(':idCoworker', $idCoworker)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $result;
+    }
 }

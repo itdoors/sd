@@ -24,7 +24,7 @@
             {% for item in pagination %}
                 <tr {% if loop.index is odd %}class="color"{% endif %}>
                     <td>
-                        {% if item.creatorId == app.user.id %}
+                        {% if item.creatorId == app.user.id or is_granted('ROLE_DOGOVORADMIN') %}
                         <a
                             href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_show', { id: item.organizationId }) }}">
                             {{ item.organizationId|e }}

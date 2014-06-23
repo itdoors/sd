@@ -2,7 +2,6 @@
 <script type="text/javascript" src="{{ asset('bundles/itdoorsoper/js/multiDatePicker/bootstrap-datepicker.js')}} "></script>
 <script>
     $(document).ready(function(){
-
         function updateTableCell(hrefId) {
             if (!hrefId) {
                 var href = $('#'+$('#info_one_day').data('id_table_href'));
@@ -28,15 +27,21 @@
                     //ITDoorsAjax.unblockUI($('#'+idLastHref));
                     data = JSON.parse(data);
                     if (data.success == 0) {
-                    }
-                    else {
+
+                    } else {
                         //alert(data.html)
                         href.html(data.html);
                     }
                 }
 
             })
+            var idCoworker = $('#addButton').data('id_coworker');
+            var idReplacement = $('#info_one_day').data('id_replacement');
+
+            updateSums(sendData, idCoworker, idReplacement);
         }
+
+        $('#day_header_date').html($('#info_one_day').data('header'));
 
         $('.timepiker-cool').timepicker({
             autoclose: true,
@@ -380,10 +385,24 @@
 
         // set effect from select menu value
         $( "#add_button" ).click(function() {
-            var options = {};
-            $( "#add_div" ).toggle( 'blind', options, 500 );
+            changeAddButtonValue();
             return false;
         });
+        function changeAddButtonValue() {
+            var options = {};
+            if ($("#add_button").html() == '{% trans %}Cancel{% endtrans %}') {
+                $( "#add_div" ).hide( 'blind', options, 500 );
+                $("#add_button").html('{% trans %}Add{% endtrans %}');
+            } else {
+                $( "#add_div" ).show( 'blind', options, 500 );
+                $("#add_button").html('{% trans %}Cancel{% endtrans %}');
+            }
+        }
+        function hideAddButton() {
+            var options = {};
+            $( "#add_div" ).hide( 'blind', options, 500 );
+            $("#add_button").html('{% trans %}Add{% endtrans %}');
+        }
 
         $('#addButton').die('click');
         $('#addButton').live('click', function(e){
@@ -444,7 +463,7 @@
                             showSeconds: false,
                             showMeridian: false
                         });
-                        $( "#add_div" ).hide( 'blind', {}, 500 );
+                        hideAddButton()
 
                         updateTableCell(false)
 
@@ -490,12 +509,13 @@
                         $('#add_button').addClass('notDisplayed');
                         $('#one_day_table').addClass('notDisplayed');
                         $('#status_name_holder').removeClass('notDisplayed');
-                        $( "#add_div" ).hide( 'blind', {}, 100 );
+                        hideAddButton()
                         $('#status_name_holder').removeClass('notDisplayed');
 
                         $('#status_name').html(message);
 
                     } else {
+                        $('#tbody_content').html('');
                         $('#add_button').removeClass('notDisplayed');
                         $('#one_day_table').removeClass('notDisplayed');
                         $('#status_name_holder').addClass('notDisplayed');
@@ -558,22 +578,33 @@
 </li>
 </div>
 <div class="clear"></div>
-<div style="height: 100px; width: 100%; margin-top: 10px; display: none;" id="add_div">
+<div style="height: 50px; width: 100%; margin-top: 10px; display: none;" id="add_div">
+    <table width="60%">
+        <tr>
+            <td><b>{% trans %}Range{% endtrans %}:</b></td>
+            <td>
+                {% trans %}From{% endtrans %}
+                <input class="input-sm" size="5" id="newFromTime" value="0000" type="text">
+            </td>
+            <td>
+                {% trans %}To{% endtrans %}
+                <input class="input-sm" size="5" id="newToTime" value="0000" type="text">
+            </td>
+            <td>
+                <b>{% trans %}NotOfficially{% endtrans %}:</b>
+                <input type="checkbox" id="officially">
+            </td>
+            <td>
+                <button class="btn blue" id="addButton"
+                        data-id_coworker="{{ idCoworker }}"
+                        data-date="{{ date }}"
+                        data-id_department="{{ idDepartment }}"
+                        data-url="{{ path('it_doors_oper_schedule_add_new_time') }}">{% trans %}Add{% endtrans %}</button>
+            </td>
+        </tr>
+    </table>
 
-    <b>{% trans %}Range{% endtrans %}:</b>
-    {% trans %}From{% endtrans %}
-        <input size="5" id="newFromTime" value="0000" type="text">
-    {% trans %}To{% endtrans %}
-        <input size="5" id="newToTime" value="0000" type="text">
-    <br>
-    <b>{% trans %}NotOfficially{% endtrans %}:</b> <input type="checkbox" id="officially">
 
-    <br>
-    <button id="addButton"
-            data-id_coworker="{{ idCoworker }}"
-            data-date="{{ date }}"
-            data-id_department="{{ idDepartment }}"
-            data-url="{{ path('it_doors_oper_schedule_add_new_time') }}">{% trans %}Add{% endtrans %}</button>
 </div>
 <br>
 <div class="alert alert-danger notDisplayed" id="non_official_error">
@@ -636,9 +667,10 @@
         /*width: 25px;*/
     }
 </style>
-<br>
-{{ day }}-{{ monthName|trans }}-{{ year }}
-
+{% if mpk is not empty %}
+    ({{ mpk }})
+{% endif %}
+{{ fio }}
 <div id="status_name_holder" style="margin-bottom: 150px; text-align: center;" class="{% if status == 'ok' %}notDisplayed{% endif %}">
     <h1>
         {% trans %}Status{% endtrans %}: <span id="status_name"
@@ -697,4 +729,5 @@
 <input type="hidden" id="info_one_day"
        data-id_table_href ="{{ idLink }}"
        data-url_copy = "{{ path('it_doors_oper_schedule_copy_month_dates') }}"
-       data-id_replacement="{{ idReplacement }}">
+       data-id_replacement="{{ idReplacement }}"
+       data-header="{{ day }} {{ monthName|trans }} {{ year }} - {{ stringDay|trans }} ">

@@ -90,16 +90,6 @@
                         {% trans %}You have some form errors. Please check below.{% endtrans %}
                     </div>
                     
-                    {#% if is_granted('ROLE_DOGOVORADMIN') %}
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                {{ form_label(filterForm.lookup, 'Organization lookup', {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(filterForm.lookup, {'attr': {'class': 'form-control select2me'}}) }}
-                                <span class="help-block">{% trans %}Select lookup{% endtrans %}</span>
-                            </div>
-                        </div>
-                    {% endif %#}
-                    
                     <h3 class="form-section">{% trans %}General information{% endtrans %}</h3>
                     <div class="row">
                         <div class="col-md-6

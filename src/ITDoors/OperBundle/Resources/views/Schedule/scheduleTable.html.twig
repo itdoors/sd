@@ -9,7 +9,7 @@
             <div class="modal-body">
                 <div id="moreInfoTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
                     <span style="font-size: smaller; color:#ccc;">
-                        Вы выбрали сотрудников для которых график работ будет скопирован с выбранного эталлонного сотрудника.
+                        {% trans %}You choosed coworkers which schedule will be copied from selected coworker{% endtrans %}.
                     </span>
                     <br><br>
                     {% trans %}Choose etalon{% endtrans %}<br>
@@ -136,7 +136,30 @@
 <div id ="schedule_content" data-url="{{ path('it_doors_oper_schedule_table', {'id': idDepartment}) }}" >
 
     <script>
-        $(document).ready(function(){
+
+    function updateSums(sendData, idCoworker, idReplacement) {
+        $.ajax({
+            type: 'POST',
+            url: $('#info_input').data('url_reload_sums'),
+            data: sendData,
+
+            success: function(data) {
+                data = JSON.parse(data);
+                if (data.success == 0) {
+
+                } else {
+
+                    $('.sums'+idCoworker+idReplacement).remove();
+                    $('#row'+idCoworker+idReplacement).append(data.html);
+                    //href.html(data.html);
+                }
+            }
+
+        })
+
+    }
+
+    $(document).ready(function(){
 
 /*
             $('#coworker_list').editable({
@@ -144,7 +167,6 @@
                 source: '{{ path('sd_common_ajax_schedule_grafik_people') }}'
             });
 */
-
 
             function updateTableCell(hrefId) {
                 if (!hrefId) {
@@ -179,6 +201,23 @@
                     }
 
                 })
+            }
+
+            function updateSums(params) {
+                var sendData = {
+                    'params': params
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: $('#info_input').data('url_reload_sums'),
+                    data: sendData,
+
+                    success: function(data) {
+                        alert(data);
+                    }
+
+                })
+
             }
 
             $('#copy_etalon').die('click');
@@ -466,6 +505,13 @@
                         </span>
                     </th>
                 {% endfor %}
+                <th>{% trans %}Total officially{% endtrans %}</th>
+                <th>{% trans %}Accruals officially{% endtrans %}</th>
+                <th>{% trans %}Official salary{% endtrans %}</th>
+                <th>{% trans %}Total notofficially{% endtrans %}</th>
+                <th>{% trans %}Planned accrual{% endtrans %}</th>
+                <th>{% trans %}Accruals notofficially{% endtrans %}</th>
+                <th>{% trans %}Real salary{% endtrans %}</th>
             </tr>
         </thead>
         <tbody>
@@ -474,7 +520,7 @@
                 {% set counter = counter + 1 %}
                 {% set idCoworker = coworker.id %}
                 {% set idReplacement = coworker.replacementId %}
-                <tr id="row{{ counter }}">
+                <tr id="row{{ idCoworker }}{{ idReplacement }}">
                     <td><input class="checkbox_copy" type="checkbox" value="{{ idCoworker }}" data-id_replacement="{{ idReplacement }}"></td>
                     <td>
                         {{ counter }}
@@ -541,6 +587,18 @@
                                 </a>
                             </td>
                     {% endfor %}
+                    {{ include(
+                        'ITDoorsOperBundle:Schedule:scheduleTableSums.html.twig', {
+                            'sumOfficially': infoHours[idCoworker~'-'~idReplacement]['officially'],
+                            'sumNotOfficially': infoHours[idCoworker~'-'~idReplacement]['notOfficially'],
+                            'plannedAccrual': infoHours[idCoworker~'-'~idReplacement]['plannedAccrual'],
+                            'accrual': infoHours[idCoworker~'-'~idReplacement]['accrual'],
+                            'salaryOfficially': infoHours[idCoworker~'-'~idReplacement]['salaryOfficially'],
+                            'idCoworker': idCoworker,
+                            'idReplacement': idReplacement,
+                            'realSalary': infoHours[idCoworker~'-'~idReplacement]['realSalary']
+                    }) }}
+
                 </tr>
         {% endfor %}
         </tbody>
@@ -582,7 +640,8 @@
        data-id_department="{{ idDepartment }}"
        data-date = "{{ year }}-{{ month }}"
        data-url_copy_to_next_month = "{{ path('it_doors_oper_copy_to_next_month') }}"
-       data-url_user_info="{{ path('it_doors_oper_schedule_show_user_basic_table') }}">
+       data-url_user_info="{{ path('it_doors_oper_schedule_show_user_basic_table') }}"
+       data-url_reload_sums="{{ path('it_doors_oper_schedule_sums_table') }}">
 <script src="{{ asset('bundles/itdoorsoper/js/fixedHederColumn/jquery.fixedheadertable.js')}}" ></script>
 <link rel="stylesheet" type="text/css" href="{{ asset('bundles/itdoorsoper/js/fixedHederColumn/defaultTheme.css')}}" />
 

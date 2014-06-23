@@ -99,6 +99,18 @@ Lists\DepartmentBundle\Entity\DepartmentPeopleMonthInfo:
             type: bigint
             nullable: false
             column: department_people_replacement_id
+        salaryOfficially:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            column: salary_officially
+        salaryNotOfficially:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            column: salary_notofficially
     uniqueConstraints:
         department_people_month_info_unique_idx:
             columns: [ department_people_id, year, month, department_people_replacement_id, replacement_type ]
