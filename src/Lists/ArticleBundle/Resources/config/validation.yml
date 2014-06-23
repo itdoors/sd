@@ -1,0 +1,4 @@
+Lists\ArticleBundle\Entity\Article:
+    properties:
+        title:
+            - NotBlank: { groups: [new, edit] }

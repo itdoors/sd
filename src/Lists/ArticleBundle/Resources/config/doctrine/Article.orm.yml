@@ -24,7 +24,7 @@ Lists\ArticleBundle\Entity\Article:
         textShort:
             type: string
             length: 512
-            nullable: false
+            nullable: true
             column: text_short
         text:
             type: text

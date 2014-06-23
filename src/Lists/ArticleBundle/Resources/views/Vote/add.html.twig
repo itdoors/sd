@@ -19,7 +19,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a href="" title="{% trans %}New party{% endtrans %}">{% trans %}New history{% endtrans %}</a>
+            <a href="" title="{% trans %}New history{% endtrans %}">{% trans %}New history{% endtrans %}</a>
         </li>
     </ul>
 {% endblock %}
@@ -88,7 +88,7 @@
             {% endif %}
 
             {{ form_start(form, {
-                    'action' : path('list_article_vote_add_history'),
+                    'action' : path('list_article_vote_history_add'),
                     'attr' : {
                         'method' : 'POST',
                         'class' : 'form-horizontal form-row-seperated',

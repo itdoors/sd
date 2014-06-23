@@ -1,0 +1,161 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsArticleBundle' %}
+{% block title %}{% trans %}New decision{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Vote <small>new decision</small>{% endtrans %}
+    </h3>
+{% endblock %}
+
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="{{ path('list_article_vote_decision') }}" title="{% trans %}Decisions{% endtrans %}">{% trans %}Decisions{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="" title="{% trans %}New decision{% endtrans %}">{% trans %}New decision{% endtrans %}</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-summernote/summernote.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datepicker/css/datepicker.css')}} " />
+
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-summernote/summernote.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-summernote/lang/summernote-ru-RU.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.js') }}"></script>
+
+{% endblock %}
+
+{% block body %}
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-gift"></i>{% trans %}New decision{% endtrans %}
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <script>
+                $(document).ready(function() {
+                    SD.select2('#' + '{{ form.vars.name }}' + '_userId', {
+                        multiple: false
+                    });
+                    SD.select2('#' + '{{ form.vars.name }}' + '_users', {
+                        multiple: true
+                    });
+                    $('.itdoors-date-picker').datepicker({
+                        rtl: App.isRTL(),
+                        autoclose: true,
+                        format: "dd.mm.yyyy",
+                        pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
+                        language: 'ru',
+                        startView: 'decade',
+                        weekStart: 1
+                    });
+                    $('.textear-edit').summernote({
+                        lang: 'ru-RU',
+                        'disableDragAndDrop': true,
+                        'disableLinkTarget': true,
+                        'onblur': function() {
+                            /** Костыль для страховки */
+                            $('.textear-edit').text($('.textear-edit').code());
+                        }
+                    });
+                });
+            </script>
+
+            {% if form.vars.valid %}
+            {% else %}
+                <div class="alert alert-danger">
+                    <button class="close" data-close="alert"></button>
+                    {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                    {{ form_errors(form) }}
+                </div>
+            {% endif %}
+
+            {{ form_start(form, {
+                    'action' : path('list_article_vote_decision_add'),
+                    'attr' : {
+                        'method' : 'POST',
+                        'class' : 'form-horizontal form-row-seperated',
+                    }
+            }) }}
+            {% if form.userId is defined %}
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Autor{% endtrans%}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.userId, {'attr' : {'id' : 'select2','class' : 'form-control', 'placeholder': "Autor"| trans}}) }}
+                        {% if form.userId.vars.errors|length %}{{ form_errors(form.userId) }}{% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Date end{% endtrans%}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.dateUnpublick, {'attr' : {'id' : 'datepic','class' : 'form-control itdoors-date-picker', 'placeholder': "Date end"| trans}}) }}
+                        {% if form.dateUnpublick.vars.errors|length %}{{ form_errors(form.dateUnpublick) }}{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Header{% endtrans%}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.title, {'attr' : {'class' : 'form-control', 'placeholder': "Header"| trans}}) }}
+                        {% if form.title.vars.errors|length %}{{ form_errors(form.title) }}{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Description of the solution{% endtrans%}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.text, {'attr' : {'id' : 'select2','class' : 'form-control textear-edit', 'placeholder': "Description of the solution"| trans}}) }}
+                        {% if form.text.vars.errors|length %}{{ form_errors(form.text) }}{% endif %}
+                    </div>
+                </div>
+            </div>
+                    
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Participants{% endtrans%}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.users, {'attr' : {'id' : 'select2','class' : 'form-control', 'placeholder': "Participants"| trans}}) }}
+                        {% if form.users.vars.errors|length %}{{ form_errors(form.users) }}{% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-offset-3 col-md-9">
+                            <button type="submit" class="btn green"><i class="fa fa-pencil"></i>{% trans %}Add history{% endtrans %}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock body %}

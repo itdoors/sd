@@ -40,7 +40,7 @@ class ArticleRepository extends EntityRepository
      * 
      * @return QueryBuilder
      */
-    public function countHistoryPage(QueryBuilder $res)
+    public function countPage(QueryBuilder $res)
     {
         return $res->select('COUNT(a.id)');
     }
@@ -69,21 +69,23 @@ class ArticleRepository extends EntityRepository
         return $res
                 ->where('a.datePublick < :date')
                 ->andWhere('a.dateUnpublick > :date or a.dateUnpublick is NULL')
+                ->andWhere('a.type = :type')
+                ->setParameter(':type', 'history')
                 ->setParameter(':date', date('Y-m-d H:i:s'));
     }
 
     /**
      * Returns results for interval future invoice
-
+     * 
      * @return array
      */
-    public function getArticles()
+    public function getHistory()
     {
         $sql = $this->createQueryBuilder('a');
         $count = $this->createQueryBuilder('a');
 
         $this->selectHistoryPage($sql);
-        $this->countHistoryPage($count);
+        $this->countPage($count);
 
         $this->joinHistoryPage($sql);
 
@@ -147,5 +149,78 @@ class ArticleRepository extends EntityRepository
                 ->setParameter(':user', $userId)
                 ->getQuery()
                 ->getScalarResult();
+    }
+
+    /**
+     * Returns results for interval future invoice
+     *
+     * @param QueryBuilder $res Description
+     * 
+     * @return QueryBuilder
+     */
+    public function selectDecisionPage(QueryBuilder $res)
+    {
+        return $res
+                ->select('a.id')
+                ->addSelect('a.title')
+                ->addSelect('a.datePublick')
+                ->addSelect('a.dateUnpublick')
+                ->addSelect('u.firstName')
+                ->addSelect('u.lastName')
+                ->addSelect('u.middleName')
+                ->addSelect('r.value');
+    }
+
+     /** Returns results for interval future invoice
+     *
+     * @param QueryBuilder $res Description
+     * 
+     * @return QueryBuilder
+     */
+    public function joinDecisionPage(QueryBuilder $res)
+    {
+        return $res
+                ->leftJoin('a.user', 'u')
+                ->leftJoin('a.ration', 'r');
+    }
+
+    /** Returns results for interval future invoice
+     *
+     * @param QueryBuilder $res Description
+     * 
+     * @return QueryBuilder
+     */
+    public function whereDecisionPage(QueryBuilder $res)
+    {
+        return $res
+                ->where('a.datePublick < :date')
+                ->andWhere('a.dateUnpublick > :date or a.dateUnpublick is NULL')
+                ->andWhere('a.type = :type')
+                ->setParameter(':type', 'decision')
+                ->setParameter(':date', date('Y-m-d H:i:s'));
+    }
+
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @return array
+     */
+    public function getDecision()
+    {
+        $sql = $this->createQueryBuilder('a');
+        $count = $this->createQueryBuilder('a');
+
+        $this->selectDecisionPage($sql);
+        $this->countPage($count);
+
+        $this->joinDecisionPage($sql);
+
+        $this->whereDecisionPage($sql);
+        $this->whereDecisionPage($count);
+
+        return array(
+            'articles' => $sql->orderBy('a.datePublick', 'Desc')->getQuery(),
+            'count' => $count->getQuery()->getSingleScalarResult()
+        );
     }
 }
