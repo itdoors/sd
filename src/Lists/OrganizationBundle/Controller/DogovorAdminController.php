@@ -26,9 +26,8 @@ class DogovorAdminController extends SalesAdminController
 
         $form = $this->createForm('organizationDogovorAdminForm');
 
-
         $form->handleRequest($request);
-
+        
         if ($form->isValid()) {
             /** @var \Lists\OrganizationBundle\Entity\Organization $organization */
             $organization = $form->getData();

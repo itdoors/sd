@@ -59,6 +59,7 @@ services:
         class: %lists_organization.edrpou.validator.class%
         arguments:
             - "@doctrine.orm.entity_manager"
+            - "@translator"
         tags:
             -
                 name: validator.constraint_validator
