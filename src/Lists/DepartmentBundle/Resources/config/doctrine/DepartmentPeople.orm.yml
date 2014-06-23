@@ -145,6 +145,10 @@ Lists\DepartmentBundle\Entity\DepartmentPeople:
             type: bigint
             nullable: false
             column: department_id
+        isGph:
+            type: boolean
+            nullable: false
+            column: is_gph
     oneToOne:
         mpks:
             targetEntity: Lists\MpkBundle\Entity\Mpk

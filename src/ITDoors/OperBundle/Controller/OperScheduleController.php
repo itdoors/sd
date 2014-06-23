@@ -1384,7 +1384,22 @@ class OperScheduleController extends BaseFilterController
         $info['dateAcceptedNotOfficially'] = $departmentPeople->getAdmissionDateNotOfficially();
         $info['dateFiredOfficially'] = $departmentPeople->getDismissalDate();
         $info['dateFiredNotOfficially'] = $departmentPeople->getDismissalDateNotOfficially();
-
+        $info['gph'] = $departmentPeople->getIsGph();
+        $info['change'] = false;
+        if ($idReplacement > 0) {
+            $info['change'] = true;
+            $departmentPeopleReplacement = $departmentPeopleRepository->find($idReplacement);
+            $info['changeFio'] = '';
+            if ($departmentPeopleReplacement->getIndividual()) {
+                $individual = $departmentPeopleReplacement->getIndividual();
+                $info['changeFio'] = $individual->getLastName().' '.
+                    $individual->getFirstName().' '.$individual->getMiddleName();
+            } else {
+                $info['changeFio'] = $departmentPeopleReplacement->getLastName().' '.
+                    $departmentPeopleReplacement->getFirstName().' '.$departmentPeopleReplacement->getMiddleName();
+            }
+            $info['changeMpk'] = $departmentPeopleReplacement->getMpks();
+        }
         /** @var  $monthInfoRepository \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfoRepository */
         $monthInfoRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');

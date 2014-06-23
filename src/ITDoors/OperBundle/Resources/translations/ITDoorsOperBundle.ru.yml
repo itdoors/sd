@@ -194,10 +194,17 @@ Friday: Пятница
 Saturday: Суббота
 Sunday: Воскресенье
 
-Real salary: Зп
-Accruals notofficially: Подряд начисления
-Planned accrual: План. начисления
-Total notofficially: Сумма часов подряд
-Official salary: Офиц. зарплата
-Accruals officially: Офиц. начисления
-Total officially: Сумма часов офиц.
+Real salary: ЗП
+Accruals notofficially: Раз УУ
+Planned accruals: План УУ
+Total notofficially: Часы УУ
+Official salary: ЗП ОЗ
+Accruals officially: Раз ОЗ
+Total officially: Часы ОЗ
+
+Type of working: Тип трудоустройства
+GPH: ГПХ
+Substituting: Заменяет
+
+OZ: ОЗ
+UU: УУ
