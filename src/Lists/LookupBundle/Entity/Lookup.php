@@ -89,4 +89,32 @@ class Lookup
     {
         return $this->getName();
     }
+    /**
+     * @var string
+     */
+    private $group;
+
+
+    /**
+     * Set group
+     *
+     * @param string $group
+     * @return Lookup
+     */
+    public function setGroup($group)
+    {
+        $this->group = $group;
+    
+        return $this;
+    }
+
+    /**
+     * Get group
+     *
+     * @return string 
+     */
+    public function getGroup()
+    {
+        return $this->group;
+    }
 }

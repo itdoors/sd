@@ -49,9 +49,6 @@ class CompetitorsController extends SalesController
         if (!$page) {
             $page = 1;
         }
-        /** @var \SD\UserBundle\Entity\User $user */
-        $user = $this->getUser();
-
         /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
         $organizationsRepository = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization');
@@ -85,11 +82,7 @@ class CompetitorsController extends SalesController
      */
     public function newAction(Request $request)
     {
-        if ($this->getUser()->hasRole('ROLE_DOGOVORADMIN')) {
-            $form = $this->createForm('organizationDogovorAdminForm');
-        } else {
-            $form = $this->createForm('organizationSalesForm');
-        }
+        $form = $this->createForm('organizationSalesForm');
 
         $form->handleRequest($request);
 
@@ -103,11 +96,10 @@ class CompetitorsController extends SalesController
             $organization->setCreator($user);
 
             $em = $this->getDoctrine()->getManager();
-            if (!$organization->getLookup || !$this->getUser()->hasRole('ROLE_DOGOVORADMIN')) {
-                $lookup = $em->getRepository('ListsLookupBundle:Lookup')
-                    ->find(61);
-                $organization->setLookup($lookup);
-            }
+
+            $lookup = $em->getRepository('ListsLookupBundle:Lookup')
+                ->find(61);
+            $organization->setLookup($lookup);
 
             $em->persist($organization);
             $em->flush();
@@ -144,39 +136,6 @@ class CompetitorsController extends SalesController
         return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':organizationUsers.html.twig', array(
                 'organizationUsers' => $organizationUsers,
                 'organizationId' => $organizationId
-        ));
-    }
-
-    /**
-     * Executes show action
-     *
-     * @param int $id
-     *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     */
-    public function showAction($id)
-    {
-        $this->get('sd.security_access')->hasAccessToOrganizationAndThrowException($id);
-
-        /** @var \Lists\OrganizationBundle\Entity\Organization $organization */
-        $organization = $this->getDoctrine()
-            ->getRepository('ListsOrganizationBundle:Organization')
-            ->find($id);
-
-        if ($organization->getParent()) {
-            return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_organization_show', array(
-                        'id' => $organization->getParentId()
-            )));
-        }
-
-        $managerForm = $this->createForm('organizationUserForm');
-
-        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':show.html.twig', array(
-                'organization' => $organization,
-                'filterFormName' => $this->filterFormName,
-                'baseTemplate' => $this->baseTemplate,
-                'baseRoutePrefix' => $this->baseRoutePrefix,
-                'managerForm' => $managerForm->createView()
         ));
     }
 }

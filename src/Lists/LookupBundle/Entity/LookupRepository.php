@@ -97,4 +97,20 @@ class LookupRepository extends EntityRepository
 
         return $query;
     }
+    /**
+     * Get lookup by lukey
+     * 
+     * @param string $group
+     * 
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getLookupsGroup($group)
+    {
+        $query = $this->createQueryBuilder('l')
+            ->where('l.group = :group')
+            ->setParameter(':group', $group)
+            ->orderBy('l.name');
+
+        return $query;
+    }
 }

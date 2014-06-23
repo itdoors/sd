@@ -15,3 +15,7 @@ Lists\LookupBundle\Entity\Lookup:
             type: string
             length: 255
             nullable: false
+        group:
+            type: string
+            length: 255
+            nullable: true
