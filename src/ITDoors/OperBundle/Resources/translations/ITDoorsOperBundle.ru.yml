@@ -184,3 +184,12 @@ Copy to the next month success: Данные скопированы успешн
 
 Object was not found: Объект не найден
 You choosed coworkers which schedule will be copied from selected coworker: Вы выбрали сотрудников для которых график работ внутри месяца будет скопирован с выбранного эталлонного сотрудника
+Day schedule: Дневной график
+
+Monday: Понедельник
+Tuesday: Вторник
+Wednesday: Среда
+Thursday: Четверг
+Friday: Пятница
+Saturday: Суббота
+Sunday: Воскресенье

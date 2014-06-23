@@ -291,21 +291,38 @@ class OperScheduleController extends BaseFilterController
         );
 
             $status = 'ok';
+        if (isset($infoDay[0])) {
+            if ($infoDay[0]['isVacation']) {
+                $status = 'vacation';
+            }
+            if ($infoDay[0]['isSkip']) {
+                $status = 'skip';
+            }
+            if ($infoDay[0]['isFired']) {
+                $status = 'fired';
+            }
+            if ($infoDay[0]['isSick']) {
+                $status = 'sick';
+            }
+        }
 
-        if ($infoDay[0]['isVacation']) {
-            $status = 'vacation';
-        }
-        if ($infoDay[0]['isSkip']) {
-            $status = 'skip';
-        }
-        if ($infoDay[0]['isFired']) {
-            $status = 'fired';
-        }
-        if ($infoDay[0]['isSick']) {
-            $status = 'sick';
-        }
+        $stringDay = date('l', strtotime($date));
 
+        $departmentPeopleRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
 
+        $departmentPeople = $departmentPeopleRepository->find($idCoworker);
+
+        $fio = '';
+        if ($departmentPeople->getIndividual()) {
+            $individual = $departmentPeople->getIndividual();
+            $fio = $individual->getLastName().' '.
+                $individual->getFirstName().' '.$individual->getMiddleName();
+        } else {
+            $fio = $departmentPeople->getLastName().' '.
+                $departmentPeople->getFirstName().' '.$departmentPeople->getMiddleName();
+        }
+        $mpk = $departmentPeople->getMpks();
 
         $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleDay.html.twig', array(
             'coworkerDayTime' => $coworkerDayTime,
@@ -318,7 +335,10 @@ class OperScheduleController extends BaseFilterController
             'day' => $day,
             'year' => $year,
             'idLink' => $idLink,
-            'status' => $status
+            'status' => $status,
+            'stringDay' => $stringDay,
+            'fio' => $fio,
+            'mpk' => $mpk
         ));
         $return['success'] = 1;
 
