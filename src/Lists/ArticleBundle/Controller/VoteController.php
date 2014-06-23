@@ -156,8 +156,6 @@ class VoteController extends BaseFilterController
      */
     public function showAction(Request $request, $id)
     {
-        //$filterNamespace = $this->container->getParameter($this->getNamespace());
-
         /** @var EventManager $em */
         $em = $this->getDoctrine()->getManager();
 
@@ -182,11 +180,12 @@ class VoteController extends BaseFilterController
             $votes = $vR->getVoites($id);
             $rationResult = $vR->getVoteForArticle($id);
             if (!empty($rationResult['countVote'])) {
+                $rationResult['average'] =  round($rationResult['sumVote'] / $rationResult['countVote'], 2);
                 $ratValue = round(
                     (
                         $rationResult['countVote'] *
-                        ($rationResult['sumVote'] / $rationResult['countVote']) -
-                        ($rationResult['sumVote'] / $rationResult['countVote'])
+                        $rationResult['average'] -
+                        $rationResult['average']
                     )+1,
                     2
                 );
@@ -242,24 +241,25 @@ class VoteController extends BaseFilterController
                         $ration = new Ration();
                         $ration->setArticle($em->getRepository('ListsArticleBundle:Article')->find($id));
                     }
-                    $ratValue = round(
-                        (
-                            ($rationResult['countVote'] + 1) *
-                            (($rationResult['sumVote'] + $value) / ($rationResult['countVote'] + 1))-
-                            (($rationResult['sumVote'] + $value) / ($rationResult['countVote'] + 1))
-                        )+1,
-                        2
-                    );
-
-                    $ration->setValue($ratValue);
-
+                    
                     if (in_array($value, array(1, 2, 3, 4, 5))) {
+                        $rationResult['sumVote'] += $value;
+                        $rationResult['countVote'] += 1;
+                        $rationResult['average'] = round($rationResult['sumVote']  / $rationResult['countVote'], 2);
+                        $ratValue = round(
+                            (
+                                $rationResult['countVote'] *
+                                $rationResult['average']-
+                                $rationResult['average']
+                            )+1,
+                            2
+                        );
+
+                        $ration->setValue($ratValue);
                         $em->persist($vote);
                         $em->persist($ration);
                         $em->flush();
-                        if ($user->hasRole('ROLE_ARTICLEADMIN')) {
-                            $rationResult = $vR->getVoteForArticle($id);
-                        } else {
+                        if (!$user->hasRole('ROLE_ARTICLEADMIN')) {
                             $rationResult = false;
                             $ratValue = false;
                         }
