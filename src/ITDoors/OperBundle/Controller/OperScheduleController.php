@@ -189,9 +189,17 @@ class OperScheduleController extends BaseFilterController
             );
 
             $infoHours[$idCoworker.'-'.$idReplacement]['salaryOfficially'] = 0;
+
             if (isset($coworker['salaryOfficially'])) {
                 $infoHours[$idCoworker.'-'.$idReplacement]['salaryOfficially'] = $coworker['salaryOfficially'];
             }
+
+            $infoHours[$idCoworker.'-'.$idReplacement]['realSalary'] = 0;
+
+            if (isset($coworker['realSalary'])) {
+                $infoHours[$idCoworker.'-'.$idReplacement]['realSalary'] = $coworker['realSalary'];
+            }
+
             $infoHours[$idCoworker.'-'.$idReplacement]['officially'] = $grafikRepository->getSumTotalOfficially(
                 $year,
                 $month,
@@ -1814,7 +1822,13 @@ class OperScheduleController extends BaseFilterController
             if (!$salaryOfficially) {
                 $salaryOfficially = 0;
             }
+
+            $realSalary = $monthInfo->getRealSalary();
+            if (!$realSalary) {
+                $realSalary = 0;
+            }
         }
+
         $officiallyTotal = $grafikRepository->getSumTotalOfficially(
             $year,
             $month,
@@ -1860,7 +1874,8 @@ class OperScheduleController extends BaseFilterController
             'accrual' => $accrual,
             'salaryOfficially' => $salaryOfficially,
             'idCoworker' => $idCoworker,
-            'idReplacement' => $idReplacement
+            'idReplacement' => $idReplacement,
+            'realSalary' => $realSalary
         ));
 
         $return['success'] = 1;

@@ -27,6 +27,7 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
     {
         $sql = $this->createQueryBuilder('dpmi')
             ->select('dpmi.departmentPeopleId as id')
+            ->addSelect('dpmi.realSalary')
             ->addSelect('dpmi.salaryNotOfficially')
             ->addSelect('dpmi.salaryOfficially')
             ->addSelect('dpr.id as replacementId')
