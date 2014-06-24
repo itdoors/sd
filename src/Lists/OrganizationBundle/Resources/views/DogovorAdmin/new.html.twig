@@ -127,19 +127,26 @@
                                 <span class="help-block">{% trans %}Select Organization scope{% endtrans %}</span>
                             </div>
                         </div>
-                        
-                        {% if is_granted('ROLE_DOGOVORADMIN') %}
-                        <div class="col-md-6
-                            {% if filterForm.lookup.vars.errors|length %}
-                                has-error
-                            {% endif %}">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                {{ form_label(filterForm.lookup, 'Organization lookup', {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(filterForm.lookup, {'attr': {'class': 'form-control select2me','placeholder': 'Select lookup'}}) }}
-                                <span class="help-block">{% trans %}Select lookup{% endtrans %}</span>
-                                {{ form_errors(filterForm.lookup) }}
+                                {{ form_label(filterForm.group, 'Organization Group', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.group, {'attr': {'class': 'form-control select2me'}}) }}
+                                <span class="help-block">{% trans %}Select Organization Group{% endtrans %}</span>
                             </div>
                         </div>
+                        
+                        {% if is_granted('ROLE_DOGOVORADMIN') %}
+                            <div class="col-md-6
+                                {% if filterForm.lookup.vars.errors|length %}
+                                    has-error
+                                {% endif %}">
+                                <div class="form-group">
+                                    {{ form_label(filterForm.lookup, 'Organization lookup', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(filterForm.lookup, {'attr': {'class': 'form-control select2me','placeholder': 'Select lookup'}}) }}
+                                    <span class="help-block">{% trans %}Select lookup{% endtrans %}</span>
+                                    {{ form_errors(filterForm.lookup) }}
+                                </div>
+                            </div>
                         {% endif %}
                         <!--/span-->
                     </div>
