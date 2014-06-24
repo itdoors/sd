@@ -40,6 +40,11 @@ class OrganizationSalesFormType extends AbstractType
                 'property'=>'title',
                 'empty_value' => ''
             ))
+            ->add('group', 'entity', array(
+                'class'=>'Lists\OrganizationBundle\Entity\OrganizationGroup',
+                'property'=>'name',
+                'empty_value' => ''
+            ))
             ->add('city', 'entity', array(
                 'class'=>'Lists\CityBundle\Entity\City',
                 'property'=>'name',
