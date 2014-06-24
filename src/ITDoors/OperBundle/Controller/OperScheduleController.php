@@ -1036,15 +1036,20 @@ class OperScheduleController extends BaseFilterController
         }
 
         //deleting old day grafik times
-
-        $coworkerDayTimes = $grafikTimeRepository->findBy(array(
-            'department' => $idDepartment,
-            'departmentPeople' => $idCoworker,
-            'day' => $dates,
-            'year' => $year,
-            'month' => $month,
-            'departmentPeopleReplacement' => $idReplacement
-        ));
+        $coworkerDayTimes = array();
+        foreach ($dates as $dayCopy) {
+            $founded = $grafikTimeRepository->findOneBy(array(
+                'department' => $idDepartment,
+                'departmentPeople' => $idCoworker,
+                'day' => $dayCopy,
+                'year' => $year,
+                'month' => $month,
+                'departmentPeopleReplacement' => $idReplacement
+            ));
+            if ($founded) {
+                $coworkerDayTimes[] = $founded;
+            }
+        }
 
         $em =  $this->getDoctrine()->getManager();
 
@@ -1058,15 +1063,21 @@ class OperScheduleController extends BaseFilterController
         /** @var $grafikRepository \Lists\GrafikBundle\Entity\GrafikRepository   */
         $grafikRepository = $this->getDoctrine()
             ->getRepository('ListsGrafikBundle:Grafik');
-        $coworkerDayTimesTotal = $grafikRepository->findBy(array(
-            'department' => $idDepartment,
-            'departmentPeople' => $idCoworker,
-            'day' => $dates,
-            'year' => $year,
-            'month' => $month,
-            'departmentPeopleReplacement' => $idReplacement
+        $coworkerDayTimesTotal = array();
+        foreach ($dates as $dayCopy) {
+            $founded = $grafikRepository->findOneBy(array(
+                'department' => $idDepartment,
+                'departmentPeople' => $idCoworker,
+                'day' => $dayCopy,
+                'year' => $year,
+                'month' => $month,
+                'departmentPeopleReplacement' => $idReplacement
 
-        ));
+            ));
+            if ($founded) {
+                $coworkerDayTimesTotal[] = $founded;
+            }
+        }
         foreach ($coworkerDayTimesTotal as $coworkerDayTimeTotal) {
             $em->remove($coworkerDayTimeTotal);
         }
