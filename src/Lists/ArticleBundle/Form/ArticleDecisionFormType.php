@@ -6,6 +6,9 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormError;
 
 /**
  * Class ArticleDecisionFormType
@@ -28,6 +31,7 @@ class ArticleDecisionFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $container = $this->container;
         $router = $this->container->get('router');
         $builder
             ->add('userId', 'text', array(
@@ -44,12 +48,13 @@ class ArticleDecisionFormType extends AbstractType
             ))
             ->add('dateUnpublick', 'text', array())
             ->add('title', 'text', array())
-            ->add('text', 'textarea', array())
-            ->add('users', 'text', array(
+            ->add('text', 'textarea', array());
+        
+        $builder->add('users', 'text', array(
                 'mapped' => false,
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field control-label col-md-3',
-                    'data-url' => $router->generate('sd_common_ajax_user_fio'),
+                    'data-url' => $router->generate('sd_common_ajax_user_fio_not_my'),
                     'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 2,
@@ -58,6 +63,28 @@ class ArticleDecisionFormType extends AbstractType
                     'placeholder' => 'Enter fio'
                 )
             ));
+        $builder->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) use ($container) {
+            
+                $data = $event->getData();
+
+                $form = $event->getForm();
+                
+                $formData = $container->get('request')->get($form->getName());
+
+                /** @var Translator $translator*/
+                $translator = $container->get('translator');
+                if (count(explode(',', $formData['users'])) < 2 ) {
+                    $msg = $translator->trans("You need to add at least 2 members", array(), 'ListsArticleBundle');
+                    $form->get('users')->addError(new FormError($msg));
+                }
+                if (in_array($data->getUserId() ,explode(',', $formData['users']))) {
+                    $msg = $translator->trans("You can not add website", array(), 'ListsArticleBundle');
+                    $form->get('users')->addError(new FormError($msg));
+                }
+            }
+        );
     }
 
     /**
