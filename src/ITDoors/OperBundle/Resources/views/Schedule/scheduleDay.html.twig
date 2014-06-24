@@ -87,15 +87,26 @@
             var message = $('#copy_graf').data('message');
             $('#copy_graf').html(message);
             $('#copy_graf_submit').show( 'slide', {}, 500);
+            $('#copy_graf_cancel').show( 'slide', {}, 500);
         }).on('hide', function(e){
             var text = $('#copy_graf').data('text');
             $('#copy_graf').html(text);
-            setTimeout("$('#copy_graf_submit').hide( 'slide', {}, 500 );",500);
+            //setTimeout("$('#copy_graf_submit').hide( 'slide', {}, 500 );",2000);
         });
 
-
+        $('#copy_graf_cancel').die('click');
+        $('#copy_graf_cancel').live('click', function(e){
+            $('#copy_graf_cancel').hide( 'slide', {}, 500 );
+            $('#copy_graf_submit').hide( 'slide', {}, 500 );
+        })
+        
         $('#copy_graf_submit').die('click');
         $('#copy_graf_submit').live('click', function(e){
+            $('#copy_error').hide('blind', {}, 500);
+            $('#copy_finished').hide('blind', {}, 500);
+            $('#copy_graf_cancel').hide( 'slide', {}, 500 );
+
+            $(this).hide( 'slide', {}, 500 );
             var dates = $('#copy_graf').datepicker('getDates');
 
             var idCoworker = $('#addButton').data('id_coworker');
@@ -533,7 +544,8 @@
 <div>
     <a class="btn purple {% if status != 'ok' %}notDisplayed{% endif %}" id="add_button">{% trans %}Add{% endtrans %}</a>
 <li class="btn-group" style="float: right; ">
-    <a class="btn green notDisplayed" style="margin-right: 10px;" id="copy_graf_submit">Скопировать</a>
+    <a class="btn green notDisplayed" style="margin-right: 10px;" id="copy_graf_submit">{% trans %}Copy{% endtrans %}</a>
+    <a class="btn red notDisplayed" style="margin-right: 10px;" id="copy_graf_cancel">{% trans %}Cancel{% endtrans %}</a>
     <a class="btn green" style="margin-right: 10px; width: 200px;" id="copy_graf"
        data-message="{% trans %}Select dates{% endtrans %}"
        data-text="{% trans %}Copy graf{% endtrans %}"
