@@ -44,10 +44,15 @@
                     <td>{{item.id}}</td>
                     <td><a href="{{ path('list_article_vote_decision_show',{'id':item.id}) }}">{{item.title}}</a></td>
                     <td>{{item.lastName}} {{item.firstName}} {{item.middleName}}</td>
-                    <td>{{ item.datePublick == '' ? '' : item.datePublick | date('d-m-Y')}}</td>
-                    <td>{{ item.dateUnpublick == '' ? '' : item.dateUnpublick | date('d-m-Y')}}</td>
-                    <td>{{ item.value}}</td>
-                    <td>{{ item.dateUnpublick == '' ? '' : item.dateUnpublick|date('U') > ''|date('U') ?  'not end' : 'and'}}</td>
+                    <td>{{ item.datePublick == '' ? '' : item.datePublick | date('d-m-Y H:i')}}</td>
+                    <td>{{ item.dateUnpublick == '' ? '' : item.dateUnpublick | date('d-m-Y H:i')}}</td>
+                    <td>
+                        {% for key,user in users[item.id] %}
+                              {{ user.lastName }} {{ user.firstName }} {{ user.middleName }} 
+                              <br>
+                        {% endfor %}
+                    </td>
+                    <td>{{ item.dateUnpublick == '' ? '' : item.dateUnpublick|date('U') > ''|date('U') ?  'Not completed'|trans :  item.value == 1 ? 'Received'|trans : 'Declined'|trans }}</td>
                 </tr>
             {% endfor %}
         </tbody>

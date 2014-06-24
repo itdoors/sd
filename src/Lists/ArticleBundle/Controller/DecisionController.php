@@ -30,6 +30,51 @@ class DecisionController extends BaseController
     /**
      * Renders template holder for calendar
      *
+     * @return string
+     */
+    public function listAction()
+    {
+        $filterNamespace = $this->container->getParameter($this->getNamespace());
+
+        /** @var EventManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        $method = 'get' . ucfirst($this->articleType);
+        /** ArticleRepository $artivles */
+        if ($this->getUser()->hasRole('ROLE_ARTICLEADMIN')) {
+            $userId = false;
+        } else {
+            $userId = $this->getUser()->getId();
+        }
+        $artivles = $em->getRepository('ListsArticleBundle:Article')->$method($userId);
+
+        $namespasePagin = $filterNamespace . 'P';
+        $page = $this->getPaginator($namespasePagin);
+        if (!$page) {
+            $page = 1;
+        }
+
+        $paginator = $this->container->get($this->paginator);
+        $artivles['articles']->setHint($this->paginator . '.count', $artivles['count']);
+        $pagination = $paginator->paginate($artivles['articles'], $page, 20);
+
+        $users = array();
+        foreach ($pagination as $val) {
+            /** @var User */
+            $users[$val['id']] = $em
+                    ->getRepository('ListsArticleBundle:Vote')->getVoites($val['id']);
+        }
+
+        return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':list.html.twig', array(
+                'items' => $pagination,
+                'namespasePagin' => $namespasePagin,
+                'users' => $users
+        ));
+    }
+
+    /**
+     * Renders template holder for calendar
+     *
      * @param Request $request
      * 
      * @return string
@@ -80,7 +125,7 @@ class DecisionController extends BaseController
 
                     $emailTo = $this->container->getParameter('email.from');
                     $nameTo = $this->container->getParameter('name.from');
-                    
+
                     $email = $this->get('it_doors_email.service');
                     $email->send(
                         array($emailTo => $nameTo),
@@ -100,7 +145,7 @@ class DecisionController extends BaseController
                     );
                 }
                 $connection->commit();
-            }catch (\Exception $e) {
+            } catch (\Exception $e) {
                 $connection->rollBack();
                 $em->close();
                 throw $e;
@@ -133,36 +178,18 @@ class DecisionController extends BaseController
         /** User $user */
         $user = $this->getUser();
 
-        $article = $aR->getArticle($id);
-
-        $voteValue = $aR->getVote($id, $user->getId());
-
         /** VoteRepository $vR */
         $vR = $em->getRepository('ListsArticleBundle:Vote');
 
-        $votes = false;
+        $article = $aR->getArticle($id);
+        $voteValue = $aR->getVote($id, $user->getId());
 
-        $rationResult = false;
-        $ratValue = 0;
-        if ($user->hasRole('ROLE_ARTICLEADMIN')) {
-            $votes = $vR->getVoites($id);
-            $rationResult = $vR->getVoteForArticle($id);
-            if (!empty($rationResult['countVote'])) {
-                $rationResult['average'] = round($rationResult['sumVote'] / $rationResult['countVote'], 2);
-                $ratValue = round(
-                    (
-                    $rationResult['countVote'] *
-                    $rationResult['average'] -
-                    $rationResult['average']
-                    ) + 1, 2
-                );
-            }
-        }
+        $votes = $vR->getVoites($id);
+        $rationResult = $vR->getVoteForArticleDecision($id);
+
         $formView = false;
-
-        if (!$voteValue) {
+        if ($voteValue && $voteValue[0]['value'] === null && $article['dateUnpublick']->getTimestamp() > time()) {
             $vote = new Vote();
-            //$router = $this->get('router');
             $form = $this->createFormBuilder($vote)
                 ->add('value', 'choice', array(
                     'attr' => array(
@@ -171,8 +198,8 @@ class DecisionController extends BaseController
                     ),
                     'translation_domain' => 'ListsArticleBundle',
                     'choices' => array(
-                        '0' => 'Accept',
-                        '1' => 'Deflecting'
+                        '1' => 'Accept',
+                        '0' => 'Deflecting'
                     )
                 ))
                 ->getForm();
@@ -193,12 +220,13 @@ class DecisionController extends BaseController
                     $user = $this->getUser();
                     $value = $formData['value'];
 
-                    $vote = new Vote();
-                    $vote->setUser($user);
-                    $vote->setModelName('article');
-                    $vote->setModelid($id);
+                    $vote = $vR->find($voteValue[0]['id']);
                     $vote->setValue($value);
                     $vote->setDateCreate(new \DateTime(date('Y-m-d H:i:s')));
+                    $em->persist($vote);
+                    $em->flush();
+
+                    $rationResult = $vR->getVoteForArticleDecision($id);
 
                     $ration = $em->getRepository('ListsArticleBundle:Ration')
                         ->findOneBy(array('articleId' => $id));
@@ -208,34 +236,23 @@ class DecisionController extends BaseController
                     }
 
                     if (in_array($value, array(0, 1))) {
-                        $rationResult['sumVote'] += $value;
-                        $rationResult['countVote'] += 1;
-                        $rationResult['average'] = round($rationResult['sumVote'] / $rationResult['countVote'], 2);
-                        $ratValue = round(
-                            (
-                            $rationResult['countVote'] *
-                            $rationResult['average'] -
-                            $rationResult['average']
-                            ) + 1, 2
-                        );
 
-                        $ration->setValue($ratValue);
+                        $ration->setValue($rationResult['count0'] > $rationResult['count1'] ? 0 : 1);
                         $em->persist($vote);
                         $em->persist($ration);
                         $em->flush();
                         if (!$user->hasRole('ROLE_ARTICLEADMIN')) {
                             $rationResult = false;
-                            $ratValue = false;
                         }
                     }
                     $connection->commit();
-                }catch (\Exception $e) {
+                } catch (\Exception $e) {
                     $connection->rollBack();
                     $em->close();
                     throw $e;
                 }
 
-                return $this->redirect($this->generateUrl('list_article_vote_history_show', array('id' => $id)));
+                return $this->redirect($this->generateUrl('list_article_vote_decision_show', array('id' => $id)));
             }
             $formView = $form->createView();
         }
@@ -245,8 +262,7 @@ class DecisionController extends BaseController
                 'vote' => $voteValue,
                 'form' => $formView,
                 'rationResult' => $rationResult,
-                'votes' => $votes,
-                'ratValue' => $ratValue
+                'votes' => $votes
         ));
     }
 }

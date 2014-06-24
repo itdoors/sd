@@ -28,6 +28,7 @@ class ArticleRepository extends EntityRepository
                 ->select('a.id')
                 ->addSelect('a.title')
                 ->addSelect('a.datePublick')
+                ->addSelect('a.dateUnpublick')
                 ->addSelect('u.firstName')
                 ->addSelect('u.lastName')
                 ->addSelect('u.middleName')
@@ -139,9 +140,10 @@ class ArticleRepository extends EntityRepository
             );
 
         return $sql
+                ->select('v.id')
                 ->addSelect('v.value')
                 ->addSelect('v.dateCreate as date')
-                ->leftJoin('Lists\ArticleBundle\Entity\Vote', 'v', 'WITH', $subQueryCase)
+                ->innerJoin('Lists\ArticleBundle\Entity\Vote', 'v', 'WITH', $subQueryCase)
                 ->where('a.id = :id')
                 ->andWhere('v.userId = :user')
                 ->setParameter(':text', 'article')
@@ -184,6 +186,27 @@ class ArticleRepository extends EntityRepository
                 ->leftJoin('a.ration', 'r');
     }
 
+     /** Returns results for interval future invoice
+     *
+     * @param QueryBuilder $res
+     * @param integer      $userId
+     * 
+     * @return QueryBuilder
+     */
+    public function joinInnerDecisionPage(QueryBuilder $res, $userId)
+    {
+        $subQueryCase = $res->expr()
+            ->andx(
+                $res->expr()->eq('v.modelId', 'a.id'),
+                $res->expr()->eq('v.modelName', ':text')
+            );
+
+        return $res->innerJoin('Lists\ArticleBundle\Entity\Vote', 'v', 'WITH', $subQueryCase)
+                ->andwhere('v.userId = :user')
+                ->setParameter(':text', 'article')
+                ->setParameter(':user', $userId);
+    }
+
     /** Returns results for interval future invoice
      *
      * @param QueryBuilder $res Description
@@ -193,7 +216,7 @@ class ArticleRepository extends EntityRepository
     public function whereDecisionPage(QueryBuilder $res)
     {
         return $res
-                ->where('a.datePublick < :date')
+                ->andwhere('a.datePublick < :date')
                 ->andWhere('a.dateUnpublick > :date or a.dateUnpublick is NULL')
                 ->andWhere('a.type = :type')
                 ->setParameter(':type', 'decision')
@@ -203,9 +226,11 @@ class ArticleRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      * 
+     * @param integer $userId User.id
+     * 
      * @return array
      */
-    public function getDecision()
+    public function getDecision($userId)
     {
         $sql = $this->createQueryBuilder('a');
         $count = $this->createQueryBuilder('a');
@@ -215,6 +240,10 @@ class ArticleRepository extends EntityRepository
 
         $this->joinDecisionPage($sql);
 
+        if ($userId) {
+            $this->joinInnerDecisionPage($sql, $userId);
+            $this->joinInnerDecisionPage($count, $userId);
+        }
         $this->whereDecisionPage($sql);
         $this->whereDecisionPage($count);
 
@@ -222,5 +251,33 @@ class ArticleRepository extends EntityRepository
             'articles' => $sql->orderBy('a.datePublick', 'Desc')->getQuery(),
             'count' => $count->getQuery()->getSingleScalarResult()
         );
+    }
+
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @param integer $userId User.id
+     * 
+     * @return array
+     */
+    public function getDecisionForCalendar($userId)
+    {
+        $sql = $this->createQueryBuilder('a');
+
+        $sql->select('a.id')
+                ->addSelect('a.title')
+                ->addSelect('a.dateUnpublick');
+        if ($userId) {
+            $this->joinInnerDecisionPage($sql, $userId);
+            $sql->andWhere('v.value is NULL');
+        }
+        $sql->andWhere('a.dateUnpublick > :date')
+                ->andWhere('a.type = :type')
+                ->setParameter(':type', 'decision')
+                ->setParameter(':date', date('Y-m-d H:i:s'));
+
+        return $sql->orderBy('a.datePublick', 'Desc')
+            ->getQuery()
+            ->getResult();
     }
 }

@@ -1,9 +1,9 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'ListsArticleBundle' %}
-{% block title %}{% trans %}History{% endtrans %} {% endblock %}
+{% block title %}{% trans %}Decision{% endtrans %} {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
-        {% trans %}Vote <small>list of party</small>{% endtrans %}
+        {% trans %}Decisions <small>list of decision</small>{% endtrans %}
     </h3>
 {% endblock %}
 
@@ -15,7 +15,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a href="{{ path('list_article_vote_history') }}" title="{% trans %}Histories{% endtrans %}">{% trans %}Histories{% endtrans %}</a>
+            <a href="{{ path('list_article_vote_decision') }}" title="{% trans %}Decision{% endtrans %}">{% trans %}Decision{% endtrans %}</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
@@ -85,13 +85,13 @@
                             <div class="form-body form-actions">
                                 <div class="form-group">
                                     <div class="form-group col-md-2" style="margin-top: 7px;">
-                                        {% trans %}Enter vote{% endtrans %}:
+                                        {% trans %}Your decision{% endtrans %}:
                                     </div>
                                     <div class="form-group col-md-2">
                                         {{ form_widget(form.value, {'attr' : {'class' : 'form-control', 'placeholder': "Vote"}}) }}
                                     </div>
                                     <div class="form-group col-md-8">
-                                        <button type="submit" class="btn green">{% trans %}add vote{% endtrans %}</button>
+                                        <button type="submit" class="btn green">{% trans %}Solve{% endtrans %}</button>
                                     </div>
                                 </div>
                                 {{ form_end(form) }}
@@ -100,7 +100,7 @@
                     {% endif %}
                     {% if vote %}
                         <div class=" form-actions">
-                            {% trans %}Your vote{% endtrans %} {{ vote.0.value }} {{ '(' ~ vote.0.date | date('d.m.Y H:i') ~ ')'}}                            
+                            {% trans %}Your decision{% endtrans %} <b>{{ vote.0.value == 0 ? 'Deflecting'|trans : 'Accept'|trans }}</b> {{ '(' ~ vote.0.date | date('d.m.Y H:i') ~ ')'}}                            
                         </div>
                     {% endif %}
 
@@ -112,14 +112,14 @@
                                         <th width="5%" class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">
                                             {% trans %}№{% endtrans %}
                                         </th>
-                                        <th width="5%" class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">
-                                            {% trans %}Date vote{% endtrans %}
-                                        </th>
                                         <th width="5%" class="sorting" role="columnheader" tabindex="0" rowspan="1" colspan="1">
                                             {% trans %}Autor{% endtrans %}
                                         </th>
+                                        <th width="5%" class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">
+                                            {% trans %}Date decision{% endtrans %}
+                                        </th>
                                         <th width="5%" class="sorting" role="columnheader" tabindex="0" rowspan="1" colspan="1">
-                                            {% trans %}Rating{% endtrans %}
+                                            {% trans %}Decision{% endtrans %}
                                         </th>
                                     </tr>
                                 </thead>
@@ -127,9 +127,9 @@
                                     {% for key,itm in votes %}
                                         <tr>
                                             <td>{{ key+1 }}</td>
-                                            <td>{{ itm.dateCreate | date('d.m.Y H:i') }}</td>
                                             <td>{{ itm.lastName }} {{ itm.firstName }} {{ itm.middleName }}</td>
-                                            <td>{{ itm.value }}</td>
+                                            <td>{{ itm.dateCreate == '' ? '' : itm.dateCreate | date('d.m.Y H:i') }}</td>
+                                            <td>{{ itm.value is null ? 'No answer'|trans : itm.value == 0 ? 'Deflecting'|trans : 'Accept'|trans }}</td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
@@ -137,13 +137,10 @@
                         </div>
                         <div class=" form-actions">
                             <div class="col-md-12 blog-tag-data-inner">
-                                {% trans %}Average rating{% endtrans %}: {{ rationResult.average }}
+                                {% trans %}All participants{% endtrans %}: {{ rationResult.countVote }}
                             </div>
                             <div class="col-md-12 blog-tag-data-inner">
-                                {% trans %}Count vote{% endtrans %}: {{ rationResult.countVote }}
-                            </div>
-                            <div class="col-md-12 blog-tag-data-inner">
-                                {% trans %}Ration{% endtrans %}: {{ ratValue }}
+                                {% trans %}All decision{% endtrans %}: {{ rationResult.count0 + rationResult.count1 }} ( {% trans %}Accept{% endtrans %} : {{ rationResult.count1 }},  {% trans %}Deflecting{% endtrans %} : {{ rationResult.count0 }} )
                             </div>
                         </div>
                     {% endif %}

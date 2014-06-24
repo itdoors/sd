@@ -637,14 +637,14 @@ class AjaxController extends BaseFilterController
         /** @var \SD\UserBundle\Entity\UserRepository $repository */
         $repository = $this->container->get('sd_user.repository');
 
-       $objects = $repository->getOnlyStuff()
+        $objects = $repository->getOnlyStuff()
             ->andWhere('lower(u.firstName) LIKE :q OR lower(u.lastName) LIKE :q OR lower(u.middleName) LIKE :q')
             ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%');
-       if (!$this->getUser()->hasRole('ROLE_ARTICLEADMIN')) {
-            $objects->andWhere('u.id != :id')
-                ->setParameter(':id', $this->getUser()->getId());
-       }
-       $objects = $objects->getQuery()
+        if (!$this->getUser()->hasRole('ROLE_ARTICLEADMIN')) {
+             $objects->andWhere('u.id != :id')
+                 ->setParameter(':id', $this->getUser()->getId());
+        }
+        $objects = $objects->getQuery()
             ->getResult();
 
         $result = array();

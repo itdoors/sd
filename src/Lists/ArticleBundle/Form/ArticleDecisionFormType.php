@@ -49,7 +49,7 @@ class ArticleDecisionFormType extends AbstractType
             ->add('dateUnpublick', 'text', array())
             ->add('title', 'text', array())
             ->add('text', 'textarea', array());
-        
+
         $builder->add('users', 'text', array(
                 'mapped' => false,
                 'attr' => array(
@@ -66,22 +66,29 @@ class ArticleDecisionFormType extends AbstractType
         $builder->addEventListener(
             FormEvents::POST_SUBMIT,
             function (FormEvent $event) use ($container) {
-            
                 $data = $event->getData();
-
                 $form = $event->getForm();
-                
                 $formData = $container->get('request')->get($form->getName());
 
                 /** @var Translator $translator*/
                 $translator = $container->get('translator');
-                if (count(explode(',', $formData['users'])) < 2 ) {
+
+                if (count(explode(',', $formData['users'])) < 2) {
                     $msg = $translator->trans("You need to add at least 2 members", array(), 'ListsArticleBundle');
                     $form->get('users')->addError(new FormError($msg));
                 }
-                if (in_array($data->getUserId() ,explode(',', $formData['users']))) {
+                if (in_array($data->getUserId(), explode(',', $formData['users']))) {
                     $msg = $translator->trans("You can not add website", array(), 'ListsArticleBundle');
                     $form->get('users')->addError(new FormError($msg));
+                }
+                $dateTime = new \DateTime($data->getDateUnpublick());
+                if ($dateTime->getTimestamp() < time()) {
+                    $msg = $translator->trans(
+                        "Date can not be less than the start date of",
+                        array(),
+                        'ListsArticleBundle'
+                    );
+                    $form->get('dateUnpublick')->addError(new FormError($msg));
                 }
             }
         );
