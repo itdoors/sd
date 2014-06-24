@@ -89,6 +89,8 @@ class OperScheduleController extends BaseFilterController
 
         $holiday = array();
 
+        $dayAdvance = $monthDay->getDayAdvance();
+        $dayPayment = $monthDay->getDayPayment();
         $countWorkDays = $monthDay->getDaysCount();
         $countHours = $monthDay->getDaySalary();
         $holidays = $monthDay->getWeekends();
@@ -261,9 +263,7 @@ class OperScheduleController extends BaseFilterController
             }
             //var_dump(count($infoHours));
         }
-        //ini_set('memory_limit', '512M');
 
-        //exit;
         return $this->render('ITDoorsOperBundle:Schedule:scheduleTable.html.twig', array(
             'days'=> $days,
             'coworkers' => $coworkers,
@@ -276,7 +276,9 @@ class OperScheduleController extends BaseFilterController
             'filterCoworkers' => $coworkersAll,
             'workDaysTotal' => $countWorkDays,
             'hoursTotal' => $countHours,
-            'holydaysTotalString' => $holidays
+            'holydaysTotalString' => $holidays,
+            'dayAdvance' => $dayAdvance,
+            'dayPayment' => $dayPayment
         ));
 
     }

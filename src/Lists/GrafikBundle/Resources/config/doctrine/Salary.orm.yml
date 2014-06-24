@@ -32,4 +32,12 @@ Lists\GrafikBundle\Entity\Salary:
             type: float
             nullable: true
             column: summary_coef
+        dayAdvance:
+            type: bigint
+            nullable: true
+            column: day_advance
+        dayPayment:
+            type: bigint
+            nullable: true
+            column: day_payment
     lifecycleCallbacks: {  }

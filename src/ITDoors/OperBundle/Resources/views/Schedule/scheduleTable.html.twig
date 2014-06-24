@@ -484,6 +484,12 @@
             <td style="color: #333333; font-weight: bold;"><strong>{% trans %}Holidays{% endtrans %}</strong></td>
             <td>{{ holydaysTotalString }}</td>
         </tr>
+        <tr>
+            <td style="color: #333333; font-weight: bold;"><strong>{% trans %}dayAdvance{% endtrans %}</strong></td>
+            <td>{{ dayAdvance }} {{ monthName|trans }} {{ year }}</td>
+            <td style="color: #333333; font-weight: bold;"><strong>{% trans %}dayPayment{% endtrans %}</strong></td>
+            <td>{{ dayPayment }} {{ monthName|trans }} {{ year }}</td>
+        </tr>
     </table>
 
     <div class="clear"></div>
