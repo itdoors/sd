@@ -1,9 +1,9 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'ListsArticleBundle' %}
-{% block title %}{% trans %}History{% endtrans %} {% endblock %}
+{% block title %}{% trans %}Decisions{% endtrans %} {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
-        {% trans %}Vote <small>list of party</small>{% endtrans %}
+        {% trans %}Decisions <small>list of decision</small>{% endtrans %}
     </h3>
 {% endblock %}
 
@@ -15,7 +15,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a href="{{ path('list_article_vote_history') }}" title="{% trans %}Historis{% endtrans %}">{% trans %}Histories{% endtrans %}</a>
+            <a href="{{ path('list_article_vote_decision') }}" title="{% trans %}Decisions{% endtrans %}">{% trans %}Decisions{% endtrans %}</a>
         </li>
     </ul>
 {% endblock %}
@@ -36,12 +36,12 @@
     <div class="row">
         <div class="col-md-12">
             {% if is_granted('ROLE_ARTICLEADMIN') %}
-                <a class="btn btn-lg green" href="{{ path('list_article_vote_add_history') }}" title="{% trans %}Add history{% endtrans %}">
-                    {% trans %}Add history{% endtrans %}
+                <a class="btn btn-cl green" href="{{ path('list_article_vote_decision_add') }}" title="{% trans %}Add decision{% endtrans %}">
+                    {% trans %}Add decision{% endtrans %}
                 </a>
             {% endif %}
-            <div class="tab-content ajax-tab-holder" id="datatable_ajax" data-url="{{ url('list_article_vote_history_list') }}">
-                {{ render(controller('ListsArticleBundle:Vote:list')) }}
+            <div class="tab-content ajax-tab-holder" id="datatable_ajax" data-url="{{ url('list_article_vote_decision_list') }}">
+                {{ render(controller('ListsArticleBundle:Decision:list')) }}
             </div>
         </div>
     </div>

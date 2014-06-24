@@ -78,6 +78,19 @@ class SalesController extends BaseFilterController
                 'className' => $this->getEventCssClass($handlingMessage)
             );
         }
+        $em = $this->getDoctrine()->getManager();
+        $decision = $em->getRepository('ListsArticleBundle:Article')->getDecisionForCalendar($this->getUser()->getId());
+        foreach ($decision as $val) {
+            $events[] = array(
+                'hover_title' => $this->getEventHoverTitle($handlingMessage),
+                'title' => $val['title']. ' ('. $val['dateUnpublick']->format('H:i'). ')',
+                'start' => $val['dateUnpublick']->format('Y-m-d H:i:s'),
+                'url' => $this->generateUrl('list_article_vote_decision_show', array(
+                            'id' => $val['id']
+                        )),
+                'className' => 'sd-event-next'
+            );
+        }
 
         return $events;
     }

@@ -2,6 +2,11 @@
 sd_calendar_sales_handling_message:
     pattern:  sd/calendar/ajax/sales/handlind_message
     defaults: { _controller: SDCalendarBundle:Sales:HandlingMessage }
+    
+#OPER ROUTES
+sd_calendar_oper_handling_message:
+    pattern:  sd/calendar/ajax/oper/handlind_message
+    defaults: { _controller: SDCalendarBundle:Oper:HandlingMessage }
 
 #SALES DISPATCHER ROUTES
 sd_calendar_salesdispatcher_handling_message:

@@ -1,6 +1,6 @@
 list_article_vote_history:
     pattern:  /dashboard/vote/history
-    defaults: { _controller: ListsArticleBundle:Vote:history }
+    defaults: { _controller: ListsArticleBundle:Vote:index }
     
 list_article_vote_history_list:
     pattern:  /dashboard/vote/history/list
@@ -10,6 +10,23 @@ list_article_vote_history_show:
     pattern:  /dashboard/vote/history/show/{id}
     defaults: { _controller: ListsArticleBundle:Vote:show }
     
-list_article_vote_add_history:
-    pattern:  /dashboard/vote/add/history
-    defaults: { _controller: ListsArticleBundle:Vote:addHistory }
+list_article_vote_history_add:
+    pattern:  /dashboard/vote/history/add
+    defaults: { _controller: ListsArticleBundle:Vote:add }
+    
+# decision
+list_article_vote_decision:
+    pattern:  /dashboard/vote/decision
+    defaults: { _controller: ListsArticleBundle:Decision:index }
+    
+list_article_vote_decision_list:
+    pattern:  /dashboard/vote/decision/list
+    defaults: { _controller: ListsArticleBundle:Decision:list }
+
+list_article_vote_decision_show:
+    pattern:  /dashboard/vote/decision/show/{id}
+    defaults: { _controller: ListsArticleBundle:Decision:show }
+    
+list_article_vote_decision_add:
+    pattern:  /dashboard/vote/decision/add
+    defaults: { _controller: ListsArticleBundle:Decision:add }

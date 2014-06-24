@@ -24,6 +24,8 @@ parameters:
     email.file.path: "%project.dir%/web/uploads/email/"
     upload.file.path: "%project.dir%/web/uploads/files/"
     userprofiles.file.path: "/uploads/userprofiles/"
+    email.from: "admin@itdoors.ru"
+    name.from: "ITDOORS"
 
 framework:
     #esi:             ~
