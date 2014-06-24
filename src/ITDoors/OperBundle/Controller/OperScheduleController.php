@@ -1185,6 +1185,17 @@ class OperScheduleController extends BaseFilterController
             return $return;
         }
 
+        $currentDate = date('Y-m-d');
+        list($year, $month, $day) = explode('-', $date);
+
+        $monthDaysRepository = $this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:Salary');
+
+        $monthDay = $monthDaysRepository->findOneBy(array(
+            'year' => $year,
+            'month' =>$month
+        ));
+
         $return['success'] = 1;
 
         return $return;

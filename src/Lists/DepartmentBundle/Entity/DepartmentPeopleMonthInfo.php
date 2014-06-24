@@ -895,32 +895,4 @@ class DepartmentPeopleMonthInfo
     {
         return $this->salaryNotOfficially;
     }
-    /**
-     * @var boolean
-     */
-    private $isGph;
-
-
-    /**
-     * Set isGph
-     *
-     * @param boolean $isGph
-     * @return DepartmentPeopleMonthInfo
-     */
-    public function setIsGph($isGph)
-    {
-        $this->isGph = $isGph;
-    
-        return $this;
-    }
-
-    /**
-     * Get isGph
-     *
-     * @return boolean 
-     */
-    public function getIsGph()
-    {
-        return $this->isGph;
-    }
 }

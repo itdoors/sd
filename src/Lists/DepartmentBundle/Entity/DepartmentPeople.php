@@ -1084,12 +1084,13 @@ class DepartmentPeople
      * Set isGph
      *
      * @param boolean $isGph
+     *
      * @return DepartmentPeople
      */
     public function setIsGph($isGph)
     {
         $this->isGph = $isGph;
-    
+
         return $this;
     }
 
