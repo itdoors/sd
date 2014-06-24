@@ -30,6 +30,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datepicker/css/datepicker.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}} " />
 
 {% endblock %}
 
@@ -41,6 +42,8 @@
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
     <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
 
 {% endblock %}
 
@@ -60,13 +63,12 @@
                     SD.select2('#' + '{{ form.vars.name }}' + '_users', {
                         multiple: true
                     });
-                    $('.itdoors-date-picker').datepicker({
+                    $('.itdoors-date-picker').datetimepicker({
                         rtl: App.isRTL(),
                         autoclose: true,
-                        format: "dd.mm.yyyy",
+                        format: "dd.mm.yyyy hh:ii",
                         pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
                         language: 'ru',
-                        startView: 'decade',
                         weekStart: 1
                     });
                     $('.textear-edit').summernote({
@@ -151,6 +153,9 @@
                     <div class="col-md-12">
                         <div class="col-md-offset-3 col-md-9">
                             <button type="submit" class="btn green"><i class="fa fa-pencil"></i>{% trans %}Add history{% endtrans %}</button>
+                            <a class="btn btn-cl green" href="{{ path('list_article_vote_decision') }}" title="{% trans %}Cancel{% endtrans %}">
+                                {% trans %}Cancel{% endtrans %}
+                            </a>
                         </div>
                     </div>
                 </div>

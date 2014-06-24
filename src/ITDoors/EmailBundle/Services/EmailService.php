@@ -43,7 +43,7 @@ class EmailService
      *            'alias',
      *             array(
      *                 'users' => array(
-     *                     'senj@mail.ru'  => 'Сергей'
+     *                     'senj@mail.ru'
      *                 ),
      *                 'variables' => array(
      *                     '{$name}' => 'Имя пользователя',
@@ -92,9 +92,10 @@ class EmailService
             }
             $mailer->send($message);
 
-            $result[$email] = $this->getDoctrine()->getRepository('TSSAutomailerBundle:Automailer')
-                ->findOneBy(array('id' => 'DESC'))
-                ->getId();
+//            $result[$email] = $em->getRepository('TSSAutomailerBundle:Automailer')
+//                ->findOneBy(array('id' => 'DESC'))
+//                ->getId();
+            $result[$email] = true;
         }
 
         return $result;

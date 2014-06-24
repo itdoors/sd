@@ -22,8 +22,9 @@ Lists\ArticleBundle\Entity\Vote:
             column: model_id
         value:
             type: integer
-            nullable: false
+            nullable: true
         dateCreate:
+            nullable: true
             type: datetime
             column: date_create
     oneToOne:
