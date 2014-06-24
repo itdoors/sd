@@ -33,11 +33,11 @@ Lists\GrafikBundle\Entity\Salary:
             nullable: true
             column: summary_coef
         dayAdvance:
-            type: bigint
-            nullable: true
+            type: date
+            nullable: false
             column: day_advance
         dayPayment:
-            type: bigint
-            nullable: true
+            type: date
+            nullable: false
             column: day_payment
     lifecycleCallbacks: {  }
