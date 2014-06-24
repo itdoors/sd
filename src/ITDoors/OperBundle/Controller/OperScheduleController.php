@@ -188,7 +188,55 @@ class OperScheduleController extends BaseFilterController
                 $idReplacement
             );
 
-            //$info = array_fill(0, $days, '');
+            $infoHours[$idCoworker.'-'.$idReplacement]['salaryOfficially'] = 0;
+
+            if (isset($coworker['salaryOfficially'])) {
+                $infoHours[$idCoworker.'-'.$idReplacement]['salaryOfficially'] = $coworker['salaryOfficially'];
+            }
+
+            $infoHours[$idCoworker.'-'.$idReplacement]['realSalary'] = 0;
+
+            if (isset($coworker['realSalary'])) {
+                $infoHours[$idCoworker.'-'.$idReplacement]['realSalary'] = $coworker['realSalary'];
+            }
+
+            $infoHours[$idCoworker.'-'.$idReplacement]['officially'] = $grafikRepository->getSumTotalOfficially(
+                $year,
+                $month,
+                $idDepartment,
+                $idCoworker,
+                $idReplacement
+            );
+            $infoHours[$idCoworker.'-'.$idReplacement]['notOfficially'] = $grafikRepository->getSumTotalNotOfficially(
+                $year,
+                $month,
+                $idDepartment,
+                $idCoworker,
+                $idReplacement
+            );
+
+            $infoHours[$idCoworker.'-'.$idReplacement]['accrual'] = $this->getTotalOnceOnlyAccruals(
+                $month,
+                $year,
+                $idCoworker
+            );
+
+            $plannedAccrualRepository = $this->getDoctrine()
+                ->getRepository('ListsDepartmentBundle:PlannedAccrual');
+
+            $plannedAccrual = $plannedAccrualRepository->findOneBy(
+                array(
+                    'departmentPeople' => $idCoworker,
+                    'code' => 'UU',
+                    'isActive' => true
+                )
+            );
+
+            if ($plannedAccrual) {
+                $infoHours[$idCoworker.'-'.$idReplacement]['plannedAccrual'] = $plannedAccrual->getValue();
+            } else {
+                $infoHours[$idCoworker.'-'.$idReplacement]['plannedAccrual'] = 0;
+            }
 
             foreach ($infoHoursCoworker as $infoDay) {
                 $status = 'ok';
@@ -1346,7 +1394,7 @@ class OperScheduleController extends BaseFilterController
             'year' => $year,
             'month' => $month,
             'replacementType' => 'r',
-            'departmentPeopleReplacement' => 0
+            //'departmentPeopleReplacement' => 0
 
         ));
 
@@ -1670,5 +1718,169 @@ class OperScheduleController extends BaseFilterController
         );
 
         return new Response(json_encode($return));
+    }
+
+    /**
+     * @param integer $month
+     * @param integer $year
+     * @param integer $idCoworker
+     *
+     * @return mixed[]
+     */
+    private function getTotalOnceOnlyAccruals($month, $year, $idCoworker)
+    {
+
+        /** @var  $monthInfoRepository \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfoRepository */
+        $monthInfoRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
+
+        $monthInfo = $monthInfoRepository->findOneBy(array(
+            'departmentPeople' => $idCoworker,
+            'year' => $year,
+            'month' => $month,
+            'replacementType' => 'r',
+            //'departmentPeopleReplacement' => 0
+
+        ));
+
+
+        $onceOnlyAccrualRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:OnceOnlyAccrual');
+
+
+        $accrual['officially'] = array();
+        $accrual['notOfficially'] = array();
+
+        $accrual['officially']['plus'] = 0;
+        $accrual['notOfficially']['plus'] = 0;
+
+        $accrual['officially']['minus'] = 0;
+        $accrual['notOfficially']['minus'] = 0;
+
+        if (!$monthInfo) {
+
+            return $accrual;
+        }
+        $onceOnlyAccruals = $onceOnlyAccrualRepository->findBy(array(
+            'departmentPeopleMonthInfo'=>$monthInfo->getId()
+        ));
+
+        foreach ($onceOnlyAccruals as $onceOnlyAccrual) {
+            if ($onceOnlyAccrual->getCode() == 'uu') {
+                $key = 'notOfficially';
+            } else {
+                $key = 'officially';
+            }
+            if ($onceOnlyAccrual->getType() == 'fine') {
+                $accrual[$key]['minus'] += $onceOnlyAccrual->getValue();
+            } else {
+                $accrual[$key]['plus'] += $onceOnlyAccrual->getValue();
+            }
+        }
+
+        return $accrual;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function getSumsRenderedAction(Request $request)
+    {
+        $params =  $request->request->get('params');
+
+        $date =  $params['date'];
+        $idCoworker = $params['idCoworker'];
+        $idDepartment = $params['idDepartment'];
+        $idReplacement = $params['idReplacement'];
+
+        list($year, $month) = explode('-', $date);
+
+        /** @var $grafikRepository \Lists\GrafikBundle\Entity\GrafikRepository   */
+        $grafikRepository = $this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:Grafik');
+
+        /** @var  $monthInfoRepository \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfoRepository */
+        $monthInfoRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
+
+        $monthInfo = $monthInfoRepository->findOneBy(array(
+            'departmentPeople' => $idCoworker,
+            'year' => $year,
+            'month' => $month,
+            'replacementType' => 'r',
+            'departmentPeopleReplacement' => $idReplacement
+
+        ));
+
+
+
+
+        if (isset($monthInfo)) {
+            $salaryOfficially = $monthInfo->getSalaryOfficially();
+            if (!$salaryOfficially) {
+                $salaryOfficially = 0;
+            }
+
+            $realSalary = $monthInfo->getRealSalary();
+            if (!$realSalary) {
+                $realSalary = 0;
+            }
+        }
+
+        $officiallyTotal = $grafikRepository->getSumTotalOfficially(
+            $year,
+            $month,
+            $idDepartment,
+            $idCoworker,
+            $idReplacement
+        );
+        $notOfficiallyTotal = $grafikRepository->getSumTotalNotOfficially(
+            $year,
+            $month,
+            $idDepartment,
+            $idCoworker,
+            $idReplacement
+        );
+
+        $accrual = $this->getTotalOnceOnlyAccruals(
+            $month,
+            $year,
+            $idCoworker
+        );
+
+        $plannedAccrualRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:PlannedAccrual');
+
+        $plannedAccrual = $plannedAccrualRepository->findOneBy(
+            array(
+                'departmentPeople' => $idCoworker,
+                'code' => 'UU',
+                'isActive' => true
+            )
+        );
+
+        if ($plannedAccrual) {
+            $plannedAccrualValue = $plannedAccrual->getValue();
+        } else {
+            $plannedAccrualValue = 0;
+        }
+
+        $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleTableSums.html.twig', array(
+            'sumOfficially' => $officiallyTotal,
+            'sumNotOfficially' => $notOfficiallyTotal,
+            'plannedAccrual' => $plannedAccrualValue,
+            'accrual' => $accrual,
+            'salaryOfficially' => $salaryOfficially,
+            'idCoworker' => $idCoworker,
+            'idReplacement' => $idReplacement,
+            'realSalary' => $realSalary
+        ));
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+
     }
 }

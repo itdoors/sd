@@ -93,3 +93,7 @@ it_doors_oper_schedule_delete_user:
 it_doors_oper_copy_to_next_month:
     pattern:  /oper/schedule/copy/to/next/month/
     defaults: { _controller: ITDoorsOperBundle:OperSchedule:copyToNextMonth }
+
+it_doors_oper_schedule_sums_table:
+    pattern:  /oper/schedule/sums/table/
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:getSumsRendered }

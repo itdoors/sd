@@ -837,4 +837,62 @@ class DepartmentPeopleMonthInfo
     {
         return $this->replacementId;
     }
+    /**
+     * @var string
+     */
+    private $salaryOfficially;
+
+    /**
+     * @var string
+     */
+    private $salaryNotOfficially;
+
+
+    /**
+     * Set salaryOfficially
+     *
+     * @param string $salaryOfficially
+     *
+     * @return DepartmentPeopleMonthInfo
+     */
+    public function setSalaryOfficially($salaryOfficially)
+    {
+        $this->salaryOfficially = $salaryOfficially;
+
+        return $this;
+    }
+
+    /**
+     * Get salaryOfficially
+     *
+     * @return string 
+     */
+    public function getSalaryOfficially()
+    {
+        return $this->salaryOfficially;
+    }
+
+    /**
+     * Set salaryNotOfficially
+     *
+     * @param string $salaryNotOfficially
+     *
+     * @return DepartmentPeopleMonthInfo
+     */
+    public function setSalaryNotOfficially($salaryNotOfficially)
+    {
+        $this->salaryNotOfficially = $salaryNotOfficially;
+
+        return $this;
+    }
+
+    /**
+     * Get salaryNotOfficially
+     *
+     * @return string 
+     */
+    public function getSalaryNotOfficially()
+    {
+        return $this->salaryNotOfficially;
+    }
 }
