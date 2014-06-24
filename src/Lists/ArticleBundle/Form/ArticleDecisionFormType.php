@@ -73,8 +73,8 @@ class ArticleDecisionFormType extends AbstractType
                 /** @var Translator $translator*/
                 $translator = $container->get('translator');
 
-                if (count(explode(',', $formData['users'])) < 2) {
-                    $msg = $translator->trans("You need to add at least 2 members", array(), 'ListsArticleBundle');
+                if (count(explode(',', $formData['users'])) < 1) {
+                    $msg = $translator->trans("You need to add at least 1 members", array(), 'ListsArticleBundle');
                     $form->get('users')->addError(new FormError($msg));
                 }
                 if (in_array($data->getUserId(), explode(',', $formData['users']))) {
