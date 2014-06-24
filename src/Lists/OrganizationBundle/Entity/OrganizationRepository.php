@@ -287,7 +287,7 @@ class OrganizationRepository extends EntityRepository
             ->leftJoin('o.users', 'users')
             ->where('lower(o.name) LIKE :q OR lower(o.shortname) LIKE :q')
             ->andWhere('o.parent_id is null')
-            ->setParameter(':q', '%'. mb_strtolower($q, 'UTF-8') . '%')
+            ->setParameter(':q', mb_strtolower($q, 'UTF-8') . '%')
             ->getQuery();
 
         return $sql->getResult();
