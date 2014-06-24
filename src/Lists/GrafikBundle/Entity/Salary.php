@@ -212,12 +212,13 @@ class Salary
      * Set dayAdvance
      *
      * @param integer $dayAdvance
+     *
      * @return Salary
      */
     public function setDayAdvance($dayAdvance)
     {
         $this->dayAdvance = $dayAdvance;
-    
+
         return $this;
     }
 
@@ -235,12 +236,13 @@ class Salary
      * Set dayPayment
      *
      * @param integer $dayPayment
+     *
      * @return Salary
      */
     public function setDayPayment($dayPayment)
     {
         $this->dayPayment = $dayPayment;
-    
+
         return $this;
     }
 
