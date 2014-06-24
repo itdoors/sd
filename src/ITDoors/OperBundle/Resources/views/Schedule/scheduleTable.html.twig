@@ -486,9 +486,21 @@
         </tr>
         <tr>
             <td style="color: #333333; font-weight: bold;"><strong>{% trans %}Day advance{% endtrans %}</strong></td>
-            <td>{{ dayAdvance }} {{ monthName|trans }} {{ year }}</td>
+            <td>
+                {% if dayAdvance is not empty %}
+                    {{ dayAdvance|date('d-m-Y') }}
+                {% else %}
+                    {% trans %}Not defined{% endtrans %}
+                {% endif %}
+            </td>
             <td style="color: #333333; font-weight: bold;"><strong>{% trans %}Day payment{% endtrans %}</strong></td>
-            <td>{{ dayPayment }} {{ monthName|trans }} {{ year }}</td>
+            <td>
+                {% if dayPayment is not empty %}
+                    {{ dayPayment|date('d-m-Y') }}
+                {% else %}
+                    {% trans %}Not defined{% endtrans %}
+                {% endif %}
+            </td>
         </tr>
     </table>
 

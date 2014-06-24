@@ -1196,6 +1196,26 @@ class OperScheduleController extends BaseFilterController
             'month' =>$month
         ));
 
+        $advanceDate = $monthDay->getDayAdvance();
+        $paymentDay = $monthDay->getDayPayment();
+
+        if (new \DateTime($date) < $advanceDate && $officially) {
+
+            $return['success'] = 0;
+            $return['error'] = 'advance_passed';
+
+            return $return;
+        }
+
+        if (new \DateTime($date) < $paymentDay) {
+            $return['success'] = 0;
+            $return['error'] = 'payment_passed';
+
+            return $return;
+        }
+
+
+
         $return['success'] = 1;
 
         return $return;

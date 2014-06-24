@@ -294,6 +294,13 @@
                         if (data.error == 'subtime_having') {
                             $('#subtime_error').toggle( 'blind', {}, 500 );
                         }
+                        if (data.error == 'advance_passed') {
+                            $('#advance_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'payment_passed') {
+                            $('#payment_error').toggle( 'blind', {}, 500 );
+                        }
+
                         checkButton.removeClass('notDisplayed');
                         cancelButton.removeClass('notDisplayed');
                     }
@@ -462,6 +469,12 @@
                         }
                         if (data.error == 'subtime_having') {
                             $('#subtime_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'advance_passed') {
+                            $('#advance_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'payment_passed') {
+                            $('#payment_error').toggle( 'blind', {}, 500 );
                         }
                     }
                     else {
@@ -634,6 +647,12 @@
 <div class="alert alert-danger notDisplayed" id="copy_error">
     <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Dates, what haven't been copied{% endtrans %}:
     <span id="copy_dates_error"></span>
+</div>
+<div class="alert alert-danger notDisplayed" id="advance_error">
+    <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Advance passed{% endtrans %}:
+</div>
+<div class="alert alert-danger notDisplayed" id="payment_error">
+    <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Payment passed{% endtrans %}:
 </div>
 
 <div class="alert alert-success notDisplayed" id="status_changed">
