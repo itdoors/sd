@@ -1185,8 +1185,8 @@ class OperScheduleController extends BaseFilterController
             return $return;
         }
 
-/*        $currentDate = date('Y-m-d');
-        list($year, $month, $day) = explode('-', $date);
+        $currentDate = date('Y-m-d');
+        list($year, $month, $day) = explode('-', $currentDate);
 
         $monthDaysRepository = $this->getDoctrine()
             ->getRepository('ListsGrafikBundle:Salary');
@@ -1200,7 +1200,6 @@ class OperScheduleController extends BaseFilterController
         $paymentDay = $monthDay->getDayPayment();
 
         if (new \DateTime($date) < $advanceDate && $officially) {
-
             $return['success'] = 0;
             $return['error'] = 'advance_passed';
 
@@ -1212,7 +1211,7 @@ class OperScheduleController extends BaseFilterController
             $return['error'] = 'payment_passed';
 
             return $return;
-        }*/
+        }
 
 
 
