@@ -7,6 +7,10 @@
     {% set isCrm = true %}
 {%  endif %}
 
+{% if app.user.hasRole('ROLE_OPER') %}
+    {% set isCrm = true %}
+{%  endif %}
+
 {% if app.user.hasRole('ROLE_SALESDISPATCHER') %}
     {% set masterRole = 'SalesDispatcher' %}
     {% set isCrm = true %}
@@ -28,6 +32,7 @@
 {% if app.user.hasGroup('admin') %}
     user has group admin
 {% endif %}
+{% if app.user.hasRole('ROLE_OPER') != true %}
 <div class="portlet box blue">
     <div class="portlet-title">
         <div class="caption"><i class="fa fa-globe"></i> {% trans %}My Actions{% endtrans %}</div>
@@ -62,8 +67,9 @@
         };
     });
 </script>
-
+{% endif %}
 {% if isCrm %}
+    {% if app.user.hasRole('ROLE_OPER') != true %}
     <div id="form_modal_contact" class="modal fade" role="basic" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -86,10 +92,11 @@
     {%  endif %}
 
     {{ include('SDCalendarBundle:Dashboard:filterColors.html.twig') }}
+    {%  endif %}
 
     {{ include('SDCalendarBundle::base.html.twig', {
         url: path('sd_calendar_' ~ masterRoleRoute ~ '_handling_message')
-    }) }} 
+    }) }}
                     
     {% if app.user.hasRole('ROLE_CONTROLLING') %}
         <div class="portlet box blue">
@@ -117,6 +124,8 @@
             </div>
         </div>
     {% endif %}
-    {{ render(controller('ListsHandlingBundle:' ~ masterRole ~ ':List')) }}
+    {% if app.user.hasRole('ROLE_OPER') != true %}
+        {{ render(controller('ListsHandlingBundle:' ~ masterRole ~ ':List')) }}
+    {% endif %}
 
 {% endif %}

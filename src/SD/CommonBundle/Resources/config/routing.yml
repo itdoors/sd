@@ -58,6 +58,10 @@ sd_common_ajax_user_fio:
     pattern:  /ajax/user/fio
     defaults: { _controller: SDCommonBundle:Ajax:userFIO }
     
+sd_common_ajax_user_fio_not_my:
+    pattern:  /ajax/user/fio/not_my
+    defaults: { _controller: SDCommonBundle:Ajax:userFIONotMy }
+    
 sd_common_ajax_user_position:
     pattern:  /ajax/user/position
     defaults: { _controller: SDCommonBundle:Ajax:userPosition }

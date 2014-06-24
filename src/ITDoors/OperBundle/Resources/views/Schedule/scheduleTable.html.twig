@@ -88,7 +88,10 @@
                     </div>
 
                     <div class="alert alert-danger notDisplayed errorAddUser" id="errorAddUser_self">
-                        <strong>{% trans %}Error{% endtrans %}</strong> Сотрудник не може заменять сам себя
+                        <strong>{% trans %}Error{% endtrans %}</strong> Сотрудник не может заменять сам себя
+                    </div>
+                    <div class="alert alert-danger notDisplayed errorAddUser" id="errorAddUser_payment">
+                        <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Payment passed{% endtrans %}
                     </div>
 
                 </div>
@@ -406,12 +409,15 @@
                         url: url,
                         data: sendData,
                         success: function(data) {
-                            //alert(data);
+                            alert(data);
                             data = JSON.parse(data);
 
                             if (data.success == 0) {
                                 if (data.error == 'exists') {
                                     $('#errorAddUser_exists').show( 'blind', {}, 500 );
+                                }
+                                if (data.error == 'payment_passed') {
+                                    $('#errorAddUser_payment').toggle( 'blind', {}, 500 );
                                 }
                             } else {
                                 $('#form_modal_add').modal('hide');
@@ -484,6 +490,24 @@
             <td style="color: #333333; font-weight: bold;"><strong>{% trans %}Holidays{% endtrans %}</strong></td>
             <td>{{ holydaysTotalString }}</td>
         </tr>
+        <tr>
+            <td style="color: #333333; font-weight: bold;"><strong>{% trans %}Day advance{% endtrans %}</strong></td>
+            <td>
+                {% if dayAdvance is not empty %}
+                    {{ dayAdvance|date('d-m-Y') }}
+                {% else %}
+                    {% trans %}Not defined{% endtrans %}
+                {% endif %}
+            </td>
+            <td style="color: #333333; font-weight: bold;"><strong>{% trans %}Day payment{% endtrans %}</strong></td>
+            <td>
+                {% if dayPayment is not empty %}
+                    {{ dayPayment|date('d-m-Y') }}
+                {% else %}
+                    {% trans %}Not defined{% endtrans %}
+                {% endif %}
+            </td>
+        </tr>
     </table>
 
     <div class="clear"></div>
@@ -509,7 +533,7 @@
                 <th>{% trans %}Accruals officially{% endtrans %}</th>
                 <th>{% trans %}Official salary{% endtrans %}</th>
                 <th>{% trans %}Total notofficially{% endtrans %}</th>
-                <th>{% trans %}Planned accrual{% endtrans %}</th>
+                <th>{% trans %}Planned accruals{% endtrans %}</th>
                 <th>{% trans %}Accruals notofficially{% endtrans %}</th>
                 <th>{% trans %}Real salary{% endtrans %}</th>
             </tr>
@@ -641,7 +665,9 @@
        data-date = "{{ year }}-{{ month }}"
        data-url_copy_to_next_month = "{{ path('it_doors_oper_copy_to_next_month') }}"
        data-url_user_info="{{ path('it_doors_oper_schedule_show_user_basic_table') }}"
-       data-url_reload_sums="{{ path('it_doors_oper_schedule_sums_table') }}">
+       data-url_reload_sums="{{ path('it_doors_oper_schedule_sums_table') }}"
+       data-day_advane="{{ dayAdvance|date('Y-m-d') }}"
+       data-day_payment="{{ dayPayment|date('Y-m-d') }}">
 <script src="{{ asset('bundles/itdoorsoper/js/fixedHederColumn/jquery.fixedheadertable.js')}}" ></script>
 <link rel="stylesheet" type="text/css" href="{{ asset('bundles/itdoorsoper/js/fixedHederColumn/defaultTheme.css')}}" />
 

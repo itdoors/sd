@@ -222,7 +222,6 @@
         <div class="tab-pane active" id="tab_0">
 
 
-
 <table  class="table table-bordered table-striped">
     <tr>
         <td width="25%">{% trans %}Mpk{% endtrans %}</td>
@@ -242,9 +241,17 @@
         <td width="25%">{{ coworker.fio }}</td>
     </tr>
 
+    {% if coworker.change %}
+        <tr>
+            <td>{% trans %}Substituting{% endtrans %}</td>
+            <td>{{ coworker.changeMpk }}</td>
+            <td colspan="2">{{ coworker.changeFio }}</td>
+        </tr>
+    {% endif %}
+
     <tr>
         <td colspan="2" align="center">{% trans %}Officially{% endtrans %}</td>
-        <td colspan="2" align="center">{% trans %}Not officially{% endtrans %}</td>
+        <td colspan="2" align="center">{% trans %}NotOfficially{% endtrans %}</td>
     </tr>
 
     <tr>
@@ -278,6 +285,13 @@
             {% endif %}
         </td>
     </tr>
+    {% if coworker.gph %}
+        <tr>
+            <td>{% trans %}Type of working{% endtrans %}</td>
+            <td>{% trans %}GPH{% endtrans %}</td>
+            <td colspan="2"></td>
+        </tr>
+    {% endif %}
 
     <tr>
         <td colspan="4" align="center">{% trans %}Once accrural{% endtrans %}</td>
@@ -383,7 +397,7 @@
                 </thead>
                 {% for plannedAccrual in planned %}
                 <tr>
-                    <td width="50%">{{ plannedAccrual.name }} ({{ plannedAccrual.type }})</td>
+                    <td width="50%">{{ plannedAccrual.name }} ({{ plannedAccrual.type|trans }})</td>
                     <td>{{ plannedAccrual.value }}</td>
                     <td>
                         {% if plannedAccrual.period is not empty %}
@@ -391,7 +405,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        {% if plannedAccrual.isActive is not empty %}
+                        {% if plannedAccrual.isActive is defined %}
                             {% if plannedAccrual.isActive %}
                                 {% trans %}Active{% endtrans %}
                             {% else %}

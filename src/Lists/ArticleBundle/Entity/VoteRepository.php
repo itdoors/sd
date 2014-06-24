@@ -36,6 +36,30 @@ class VoteRepository extends EntityRepository
 
         return $res;
     }
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @param integer $id Article.id
+     * 
+     * @return array
+     */
+    public function getVoteForArticleDecision($id)
+    {
+        $sql = $this->createQueryBuilder('v');
+
+        $res = $sql
+            ->select('SUM(CASE when v.value = 0 THEN 1 ELSE 0 END) as count0')
+            ->addSelect('SUM(CASE WHEN v.value = 1 THEN 1 ELSE 0 END) as count1')
+            ->addSelect('COUNT(v.id) as countVote')
+            ->where('v.modelId = :id')
+            ->andwhere('v.modelName = :text')
+            ->setParameter(':id', $id)
+            ->setParameter(':text', 'article')
+            ->getQuery()
+            ->getSingleResult();
+
+        return $res;
+    }
 
     /**
      * Returns results for interval future invoice

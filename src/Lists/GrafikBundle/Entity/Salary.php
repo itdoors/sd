@@ -197,4 +197,62 @@ class Salary
     {
         return $this->summaryCoef;
     }
+    /**
+     * @var \DateTime
+     */
+    private $dayAdvance;
+
+    /**
+     * @var \DateTime
+     */
+    private $dayPayment;
+
+
+    /**
+     * Set dayAdvance
+     *
+     * @param \DateTime $dayAdvance
+     *
+     * @return Salary
+     */
+    public function setDayAdvance($dayAdvance)
+    {
+        $this->dayAdvance = $dayAdvance;
+
+        return $this;
+    }
+
+    /**
+     * Get dayAdvance
+     *
+     * @return \DateTime 
+     */
+    public function getDayAdvance()
+    {
+        return $this->dayAdvance;
+    }
+
+    /**
+     * Set dayPayment
+     *
+     * @param \DateTime $dayPayment
+     *
+     * @return Salary
+     */
+    public function setDayPayment($dayPayment)
+    {
+        $this->dayPayment = $dayPayment;
+
+        return $this;
+    }
+
+    /**
+     * Get dayPayment
+     *
+     * @return \DateTime 
+     */
+    public function getDayPayment()
+    {
+        return $this->dayPayment;
+    }
 }

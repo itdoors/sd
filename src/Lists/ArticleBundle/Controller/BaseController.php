@@ -2,20 +2,19 @@
 
 namespace Lists\ArticleBundle\Controller;
 
-use Lists\ArticleBundle\Controller\BaseController;
+use ITDoors\AjaxBundle\Controller\BaseFilterController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Lists\ArticleBundle\Entity\Article;
 use Doctrine\Common\EventManager;
-use Lists\ArticleBundle\Entity\ArticleRepository;
 use Lists\ArticleBundle\Entity\Vote;
 use Lists\ArticleBundle\Entity\Ration;
+use Lists\ArticleBundle\Entity\ArticleRepository;
 use SD\UserBundle\Entity\User;
 
 /**
- * Class VoteController
+ * Class BaseController
  */
-class VoteController extends BaseController
+class BaseController extends BaseFilterController
 {
 
     protected $baseTemplate = 'Vote';
@@ -26,6 +25,96 @@ class VoteController extends BaseController
 
     /** @var KnpPaginatorBundle $paginator */
     protected $paginator = 'knp_paginator';
+
+    /**
+     * Renders template holder for calendar
+     *
+     * @return string
+     */
+    public function indexAction()
+    {
+        return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':index.html.twig');
+    }
+
+    /**
+     * Renders template holder for calendar
+     *
+     * @return string
+     */
+    public function listAction()
+    {
+        $filterNamespace = $this->container->getParameter($this->getNamespace());
+
+        /** @var EventManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        $method = 'get'.ucfirst($this->articleType);
+        /** ArticleRepository $artivles */
+        $artivles = $em->getRepository('ListsArticleBundle:Article')->$method();
+
+        $namespasePagin = $filterNamespace . 'P';
+        $page = $this->getPaginator($namespasePagin);
+        if (!$page) {
+            $page = 1;
+        }
+
+        $paginator = $this->container->get($this->paginator);
+        $artivles['articles']->setHint($this->paginator . '.count', $artivles['count']);
+        $pagination = $paginator->paginate($artivles['articles'], $page, 20);
+
+        return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':list.html.twig', array(
+                'items' => $pagination,
+                'namespasePagin' => $namespasePagin
+        ));
+    }
+
+    /**
+     * Renders template holder for calendar
+     *
+     * @param Request $request
+     * 
+     * @return string
+     */
+    public function addAction(Request $request)
+    {
+        $form = $this->createForm('article'.ucfirst($this->articleType).'Form');
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+
+            $em = $this->getDoctrine()->getManager();
+
+            try {
+                $party = $form->getData();
+                if ($this->getUser()->hasRole('ROLE_ARTICLEADMIN')) {
+                    $user = $em->getRepository('SDUserBundle:User')->find($party->getUserId());
+                    $party->setUser($user);
+                } else {
+                    $party->setUser($this->getUser());
+                }
+                $party->setType($this->articleType);
+
+                if (method_exists($party, 'getDatePublick') && $party->getDatePublick() != '') {
+                    $party->setDatePublick(new \DateTime($party->getDatePublick()));
+                }
+                $party->setDateCreate(new \DateTime(date('Y-m-d H:i:s')));
+
+                $em->persist($party);
+
+                $em->flush();
+            } catch (\Exception $e) {
+                $em->close();
+                throw $e;
+            }
+
+            return $this->redirect($this->generateUrl('list_article_vote_history'));
+        }
+
+        return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':add.html.twig', array(
+                'form' => $form->createView(),
+        ));
+    }
 
     /**
      * Renders template holder for calendar
@@ -51,6 +140,7 @@ class VoteController extends BaseController
 
         /** VoteRepository $vR */
         $vR = $em->getRepository('ListsArticleBundle:Vote');
+
         $votes = false;
         $rationResult = false;
         $ratValue = 0;
