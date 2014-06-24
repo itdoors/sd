@@ -1185,7 +1185,7 @@ class OperScheduleController extends BaseFilterController
             return $return;
         }
 
-        $currentDate = date('Y-m-d');
+/*        $currentDate = date('Y-m-d');
         list($year, $month, $day) = explode('-', $date);
 
         $monthDaysRepository = $this->getDoctrine()
@@ -1195,6 +1195,26 @@ class OperScheduleController extends BaseFilterController
             'year' => $year,
             'month' =>$month
         ));
+
+        $advanceDate = $monthDay->getDayAdvance();
+        $paymentDay = $monthDay->getDayPayment();
+
+        if (new \DateTime($date) < $advanceDate && $officially) {
+
+            $return['success'] = 0;
+            $return['error'] = 'advance_passed';
+
+            return $return;
+        }
+
+        if (new \DateTime($date) < $paymentDay) {
+            $return['success'] = 0;
+            $return['error'] = 'payment_passed';
+
+            return $return;
+        }*/
+
+
 
         $return['success'] = 1;
 

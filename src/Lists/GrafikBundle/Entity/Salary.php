@@ -198,12 +198,12 @@ class Salary
         return $this->summaryCoef;
     }
     /**
-     * @var integer
+     * @var \DateTime
      */
     private $dayAdvance;
 
     /**
-     * @var integer
+     * @var \DateTime
      */
     private $dayPayment;
 
@@ -211,7 +211,7 @@ class Salary
     /**
      * Set dayAdvance
      *
-     * @param integer $dayAdvance
+     * @param \DateTime $dayAdvance
      *
      * @return Salary
      */
@@ -225,7 +225,7 @@ class Salary
     /**
      * Get dayAdvance
      *
-     * @return integer 
+     * @return \DateTime 
      */
     public function getDayAdvance()
     {
@@ -235,7 +235,7 @@ class Salary
     /**
      * Set dayPayment
      *
-     * @param integer $dayPayment
+     * @param \DateTime $dayPayment
      *
      * @return Salary
      */
@@ -249,7 +249,7 @@ class Salary
     /**
      * Get dayPayment
      *
-     * @return integer 
+     * @return \DateTime 
      */
     public function getDayPayment()
     {
