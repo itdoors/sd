@@ -95,7 +95,7 @@ class BaseController extends BaseFilterController
                 }
                 $party->setType($this->articleType);
 
-                if (method_exists($party, 'getDatePublick') && !empty($party->getDatePublick())) {
+                if (method_exists($party, 'getDatePublick') && $party->getDatePublick() != '') {
                     $party->setDatePublick(new \DateTime($party->getDatePublick()));
                 }
                 $party->setDateCreate(new \DateTime(date('Y-m-d H:i:s')));
