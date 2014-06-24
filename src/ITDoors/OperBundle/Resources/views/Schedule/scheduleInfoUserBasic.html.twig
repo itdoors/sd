@@ -251,7 +251,7 @@
 
     <tr>
         <td colspan="2" align="center">{% trans %}Officially{% endtrans %}</td>
-        <td colspan="2" align="center">{% trans %}Not officially{% endtrans %}</td>
+        <td colspan="2" align="center">{% trans %}NotOfficially{% endtrans %}</td>
     </tr>
 
     <tr>
@@ -405,7 +405,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        {% if plannedAccrual.isActive is not empty %}
+                        {% if plannedAccrual.isActive is defined %}
                             {% if plannedAccrual.isActive %}
                                 {% trans %}Active{% endtrans %}
                             {% else %}

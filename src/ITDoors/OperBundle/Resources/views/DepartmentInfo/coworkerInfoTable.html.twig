@@ -140,7 +140,7 @@
                 </thead>
                 {% for plannedAccrual in planned %}
                     <tr>
-                        <td width="50%">{{ plannedAccrual.name }} ({{ plannedAccrual.type }})</td>
+                        <td width="50%">{{ plannedAccrual.name }} ({{ plannedAccrual.type|trans }})</td>
                         <td>{{ plannedAccrual.value }}</td>
                         <td>
                             {% if plannedAccrual.period is not empty %}
@@ -148,7 +148,7 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% if plannedAccrual.isActive is not empty %}
+                            {% if plannedAccrual.isActive is defined %}
                                 {% if plannedAccrual.isActive %}
                                     {% trans %}Active{% endtrans %}
                                 {% else %}
