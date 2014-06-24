@@ -1185,7 +1185,7 @@ class OperScheduleController extends BaseFilterController
             return $return;
         }
 
-        $currentDate = date('Y-m-d');
+/*        $currentDate = date('Y-m-d');
         list($year, $month, $day) = explode('-', $date);
 
         $monthDaysRepository = $this->getDoctrine()
@@ -1212,7 +1212,7 @@ class OperScheduleController extends BaseFilterController
             $return['error'] = 'payment_passed';
 
             return $return;
-        }
+        }*/
 
 
 

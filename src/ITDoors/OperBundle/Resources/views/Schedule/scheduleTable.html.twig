@@ -660,8 +660,8 @@
        data-url_copy_to_next_month = "{{ path('it_doors_oper_copy_to_next_month') }}"
        data-url_user_info="{{ path('it_doors_oper_schedule_show_user_basic_table') }}"
        data-url_reload_sums="{{ path('it_doors_oper_schedule_sums_table') }}"
-       data-day_advane="{{ dayAdvance }}"
-       data-day_payment="{{ dayPayment }}">
+       data-day_advane="{{ dayAdvance|date('Y-m-d') }}"
+       data-day_payment="{{ dayPayment|date('Y-m-d') }}">
 <script src="{{ asset('bundles/itdoorsoper/js/fixedHederColumn/jquery.fixedheadertable.js')}}" ></script>
 <link rel="stylesheet" type="text/css" href="{{ asset('bundles/itdoorsoper/js/fixedHederColumn/defaultTheme.css')}}" />
 
