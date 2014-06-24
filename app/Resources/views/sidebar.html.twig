@@ -251,25 +251,25 @@
                     <span class="arrow "></span>
                 </a>
                 <ul class="sub-menu">
-                    <li >
+                    <li>
                         <a href="/profile/intranet/" title="{% trans %}My Profile{% endtrans %}">
                             <i class="fa fa-user"></i>
                             {% trans %}My Profile{% endtrans %}
                         </a>
                     </li>
-                    <li >
+                    <li>
                         <a href="/document/intranet/" title="{% trans %}Documents{% endtrans %}">
                             <i class="fa fa-building"></i>
                             {% trans %}My Organizations{% endtrans %}
                         </a>
                     </li>				
-                    <li >
+                    <li>
                         <a href="/news/intranet/" title="{% trans %}News{% endtrans %}">
                             <i class="fa fa-coffee"></i>
                             {% trans %}News{% endtrans %}
                         </a>
                     </li>
-                    <li >
+                    <li>
                         <a href="/tender/sales" title="{% trans %}My Tenders{% endtrans %}">
                             <i class="fa fa-gavel"></i>
                             {% trans %}My Tenders{% endtrans %}
@@ -280,12 +280,12 @@
                             <i class="fa fa-calendar"></i>
                             <span class="badge badge-important">14</span>{% trans %}My Calendar{% endtrans %}</a>
                     </li>
-                    <li >
+                    <li>
                         <a href="/report/sales/" title="{% trans %}My Reports{% endtrans %}">
                             <i class="fa fa-bar-chart-o"></i>
                             {% trans %}My Reports{% endtrans %}</a>
                     </li>
-                    <li >
+                    <li>
                         <a href="/team/sales/" title="{% trans %}My Team{% endtrans %}">
                             <i class="fa fa-group"></i>
                             {% trans %}My Team{% endtrans %}</a>
@@ -461,14 +461,20 @@
             <li{% if 
                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('list_article_vote_history') 
                         or
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('list_article_vote_add_history')
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('list_article_vote_history_add')
+                        or
+                    path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('list_article_vote_decision')
+                        or
+                    path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('list_article_vote_decision_add') 
                         or
                     (
-                        app.request.attributes.get('_route_params') is not empty
-                        and
                         app.request.attributes.get('_route_params').id is defined
                         and
-                        path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('list_article_vote_history_show', app.request.attributes.get('_route_params')) 
+                        (
+                            path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('list_article_vote_history_show', app.request.attributes.get('_route_params')) 
+                            or
+                            path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('list_article_vote_decision_show', app.request.attributes.get('_route_params'))
+                        )
                     )
                 %} class="active"{% endif %}>
                 <a href="javascript:;">
@@ -481,6 +487,22 @@
                         <a href="{{ path('list_article_vote_history') }}" title="{% trans %}History{% endtrans %}">
                             <i class="fa fa-comments"></i>
                             {% trans %}History{% endtrans %}
+                        </a>
+                    </li>
+                    <li{% if  
+                            path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('list_article_vote_decision') 
+                            or
+                            path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('list_article_vote_decision_add') 
+                            or
+                            (
+                                app.request.attributes.get('_route_params').id is defined
+                                and
+                                path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('list_article_vote_decision_show', app.request.attributes.get('_route_params'))
+                            ) 
+                            %} class="active"{% endif %}>
+                        <a href="{{ path('list_article_vote_decision') }}" title="{% trans %}Decisions{% endtrans %}">
+                            <i class="fa fa-comments"></i>
+                            {% trans %}Decisions{% endtrans %}
                         </a>
                     </li>
                 </ul>

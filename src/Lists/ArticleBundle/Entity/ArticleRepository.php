@@ -28,6 +28,7 @@ class ArticleRepository extends EntityRepository
                 ->select('a.id')
                 ->addSelect('a.title')
                 ->addSelect('a.datePublick')
+                ->addSelect('a.dateUnpublick')
                 ->addSelect('u.firstName')
                 ->addSelect('u.lastName')
                 ->addSelect('u.middleName')
@@ -40,7 +41,7 @@ class ArticleRepository extends EntityRepository
      * 
      * @return QueryBuilder
      */
-    public function countHistoryPage(QueryBuilder $res)
+    public function countPage(QueryBuilder $res)
     {
         return $res->select('COUNT(a.id)');
     }
@@ -69,21 +70,23 @@ class ArticleRepository extends EntityRepository
         return $res
                 ->where('a.datePublick < :date')
                 ->andWhere('a.dateUnpublick > :date or a.dateUnpublick is NULL')
+                ->andWhere('a.type = :type')
+                ->setParameter(':type', 'history')
                 ->setParameter(':date', date('Y-m-d H:i:s'));
     }
 
     /**
      * Returns results for interval future invoice
-
+     * 
      * @return array
      */
-    public function getArticles()
+    public function getHistory()
     {
         $sql = $this->createQueryBuilder('a');
         $count = $this->createQueryBuilder('a');
 
         $this->selectHistoryPage($sql);
-        $this->countHistoryPage($count);
+        $this->countPage($count);
 
         $this->joinHistoryPage($sql);
 
@@ -137,9 +140,10 @@ class ArticleRepository extends EntityRepository
             );
 
         return $sql
+                ->select('v.id')
                 ->addSelect('v.value')
                 ->addSelect('v.dateCreate as date')
-                ->leftJoin('Lists\ArticleBundle\Entity\Vote', 'v', 'WITH', $subQueryCase)
+                ->innerJoin('Lists\ArticleBundle\Entity\Vote', 'v', 'WITH', $subQueryCase)
                 ->where('a.id = :id')
                 ->andWhere('v.userId = :user')
                 ->setParameter(':text', 'article')
@@ -147,5 +151,133 @@ class ArticleRepository extends EntityRepository
                 ->setParameter(':user', $userId)
                 ->getQuery()
                 ->getScalarResult();
+    }
+
+    /**
+     * Returns results for interval future invoice
+     *
+     * @param QueryBuilder $res Description
+     * 
+     * @return QueryBuilder
+     */
+    public function selectDecisionPage(QueryBuilder $res)
+    {
+        return $res
+                ->select('a.id')
+                ->addSelect('a.title')
+                ->addSelect('a.datePublick')
+                ->addSelect('a.dateUnpublick')
+                ->addSelect('u.firstName')
+                ->addSelect('u.lastName')
+                ->addSelect('u.middleName')
+                ->addSelect('r.value');
+    }
+
+     /** Returns results for interval future invoice
+     *
+     * @param QueryBuilder $res Description
+     * 
+     * @return QueryBuilder
+     */
+    public function joinDecisionPage(QueryBuilder $res)
+    {
+        return $res
+                ->leftJoin('a.user', 'u')
+                ->leftJoin('a.ration', 'r');
+    }
+
+     /** Returns results for interval future invoice
+     *
+     * @param QueryBuilder $res
+     * @param integer      $userId
+     * 
+     * @return QueryBuilder
+     */
+    public function joinInnerDecisionPage(QueryBuilder $res, $userId)
+    {
+        $subQueryCase = $res->expr()
+            ->andx(
+                $res->expr()->eq('v.modelId', 'a.id'),
+                $res->expr()->eq('v.modelName', ':text')
+            );
+
+        return $res->innerJoin('Lists\ArticleBundle\Entity\Vote', 'v', 'WITH', $subQueryCase)
+                ->andwhere('v.userId = :user')
+                ->setParameter(':text', 'article')
+                ->setParameter(':user', $userId);
+    }
+
+    /** Returns results for interval future invoice
+     *
+     * @param QueryBuilder $res Description
+     * 
+     * @return QueryBuilder
+     */
+    public function whereDecisionPage(QueryBuilder $res)
+    {
+        return $res
+                ->andwhere('a.datePublick < :date')
+                ->andWhere('a.dateUnpublick > :date or a.dateUnpublick is NULL')
+                ->andWhere('a.type = :type')
+                ->setParameter(':type', 'decision')
+                ->setParameter(':date', date('Y-m-d H:i:s'));
+    }
+
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @param integer $userId User.id
+     * 
+     * @return array
+     */
+    public function getDecision($userId)
+    {
+        $sql = $this->createQueryBuilder('a');
+        $count = $this->createQueryBuilder('a');
+
+        $this->selectDecisionPage($sql);
+        $this->countPage($count);
+
+        $this->joinDecisionPage($sql);
+
+        if ($userId) {
+            $this->joinInnerDecisionPage($sql, $userId);
+            $this->joinInnerDecisionPage($count, $userId);
+        }
+        $this->whereDecisionPage($sql);
+        $this->whereDecisionPage($count);
+
+        return array(
+            'articles' => $sql->orderBy('a.datePublick', 'Desc')->getQuery(),
+            'count' => $count->getQuery()->getSingleScalarResult()
+        );
+    }
+
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @param integer $userId User.id
+     * 
+     * @return array
+     */
+    public function getDecisionForCalendar($userId)
+    {
+        $sql = $this->createQueryBuilder('a');
+
+        $sql->select('a.id')
+                ->addSelect('a.title')
+                ->addSelect('a.dateUnpublick');
+        if ($userId) {
+            $this->joinInnerDecisionPage($sql, $userId);
+            $sql->andWhere('v.value is NULL');
+        }
+        $sql->andWhere('a.dateUnpublick > :date')
+                ->andWhere('a.type = :type')
+                ->setParameter(':type', 'decision')
+                ->setParameter(':date', date('Y-m-d H:i:s'));
+
+        return $sql->orderBy('a.datePublick', 'Desc')
+            ->getQuery()
+            ->getResult();
     }
 }
