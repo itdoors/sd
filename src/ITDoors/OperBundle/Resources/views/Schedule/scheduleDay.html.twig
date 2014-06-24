@@ -349,6 +349,7 @@
 
 
             e.preventDefault();
+            $('.alert').hide( 'blind', {}, 500 );
 
             var message = '{% trans %}Do you confirm deleting{% endtrans %}?'
             if (confirm(message)) {
@@ -386,6 +387,12 @@
                                 editButton.removeClass('notDisplayed');
                                 deleteButton.removeClass('notDisplayed');
                                 alert('Oops, error happened');
+                            }
+                            if (data.error == 'advance_passed') {
+                                $('#advance_error').toggle( 'blind', {}, 500 );
+                            }
+                            if (data.error == 'payment_passed') {
+                                $('#payment_error').toggle( 'blind', {}, 500 );
                             }
                         }
                         else {
@@ -525,25 +532,37 @@
                     //ITDoorsAjax.blockUI($('#add_div'));
                 },
                 success: function(data) {
-                    $('#status_span').html(message);
-                    $('#status_changed').show( 'blind', {}, 500 );
-                    updateTableCell(false);
-
-                    if (status != 'ok') {
-                        $('#add_button').addClass('notDisplayed');
-                        $('#one_day_table').addClass('notDisplayed');
-                        $('#status_name_holder').removeClass('notDisplayed');
-                        hideAddButton()
-                        $('#status_name_holder').removeClass('notDisplayed');
-
-                        $('#status_name').html(message);
-
+                    data = JSON.parse(data);
+                    if (data.success == 0) {
+                        if (data.error == 'advance_passed') {
+                            $('#advance_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'payment_passed') {
+                            $('#payment_error').toggle( 'blind', {}, 500 );
+                        }
                     } else {
-                        $('#tbody_content').html('');
-                        $('#add_button').removeClass('notDisplayed');
-                        $('#one_day_table').removeClass('notDisplayed');
-                        $('#status_name_holder').addClass('notDisplayed');
+
+                        $('#status_span').html(message);
+                        $('#status_changed').show( 'blind', {}, 500 );
+                        updateTableCell(false);
+
+                        if (status != 'ok') {
+                            $('#add_button').addClass('notDisplayed');
+                            $('#one_day_table').addClass('notDisplayed');
+                            $('#status_name_holder').removeClass('notDisplayed');
+                            hideAddButton()
+                            $('#status_name_holder').removeClass('notDisplayed');
+
+                            $('#status_name').html(message);
+
+                        } else {
+                            $('#tbody_content').html('');
+                            $('#add_button').removeClass('notDisplayed');
+                            $('#one_day_table').removeClass('notDisplayed');
+                            $('#status_name_holder').addClass('notDisplayed');
+                        }
                     }
+
                 }
             })
 
