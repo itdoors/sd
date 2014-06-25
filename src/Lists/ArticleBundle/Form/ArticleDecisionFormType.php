@@ -33,20 +33,8 @@ class ArticleDecisionFormType extends AbstractType
     {
         $container = $this->container;
         $router = $this->container->get('router');
-        $builder
-            ->add('userId', 'text', array(
-                'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field control-label col-md-3',
-                    'data-url' => $router->generate('sd_common_ajax_user_fio'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_id'),
-                    'data-params' => json_encode(array(
-                        'minimumInputLength' => 2,
-                        'allowClear' => true
-                    )),
-                    'placeholder' => 'Enter fio'
-                )
-            ))
-            ->add('dateUnpublick', 'text', array())
+      
+        $builder->add('dateUnpublick', 'text', array())
             ->add('title', 'text', array())
             ->add('text', 'textarea', array());
 

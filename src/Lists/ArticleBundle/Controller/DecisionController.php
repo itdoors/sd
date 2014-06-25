@@ -82,7 +82,20 @@ class DecisionController extends BaseController
     public function addAction(Request $request)
     {
         $form = $this->createForm('article' . ucfirst($this->articleType) . 'Form');
-
+        if($this->getUser()->hasRole('ROLE_ARTICLEADMIN')){
+            $form->add('userId', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field control-label col-md-3',
+                    'data-url' => $this->generateUrl('sd_common_ajax_user_fio'),
+                    'data-url-by-id' => $this->generateUrl('sd_common_ajax_user_by_id'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 2,
+                        'allowClear' => true
+                    )),
+                    'placeholder' => 'Enter fio'
+                )
+            ));
+        }
         $form->handleRequest($request);
 
         if ($form->isValid()) {
