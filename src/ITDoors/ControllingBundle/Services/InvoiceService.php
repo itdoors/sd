@@ -75,7 +75,7 @@ class InvoiceService
 
         if (!is_dir($directory)) {
             $this->addCronError(0, 'ok', 'directory not found', $directory);
-            
+
             return false;
         }
         $file = $this->findFile($directory);
