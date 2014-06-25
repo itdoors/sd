@@ -650,8 +650,15 @@ class OperScheduleController extends BaseFilterController
         $grafikTimeRepository = $this->getDoctrine()
             ->getRepository('ListsGrafikBundle:GrafikTime');
 
-        /** @var $grafik\Lists\GrafikBundle\Entity\Grafik   */
+        /** @var $grafik\Lists\GrafikBundle\Entity\GrafikTime   */
         $grafik = $grafikTimeRepository->find($idGrafikTime);
+        $officially = !$grafik->getNotOfficially();
+
+        $return = $this->checkErrorsForPeriods($date, $officially);
+
+        if ($return['success'] == 0) {
+            return new Response(json_encode($return));
+        }
 
         if (!$grafik) {
             $return = array();
@@ -856,6 +863,10 @@ class OperScheduleController extends BaseFilterController
         $idDepartment = $request->request->get('idDepartment');
         $idReplacement = $request->request->get('idReplacement');
 
+        $return = $this->checkErrorsForPeriods($date, true);
+        if ($return['success'] == 0) {
+            return new Response(json_encode($return));
+        }
         list($year, $month, $day) = explode('-', $date);
 
         $em =  $this->getDoctrine()->getManager();
@@ -989,7 +1000,7 @@ class OperScheduleController extends BaseFilterController
         $copyGrafikTimes = $grafikTimeRepository->findBy(array(
             'department' => $idDepartment,
             'departmentPeople' => $idCoworker,
-            'day' => $day,
+            'day' => intval($day),
             'year' => $year,
             'month' => $month,
             'departmentPeopleReplacement' => $idReplacement
@@ -1043,7 +1054,7 @@ class OperScheduleController extends BaseFilterController
             $founded = $grafikTimeRepository->findOneBy(array(
                 'department' => $idDepartment,
                 'departmentPeople' => $idCoworker,
-                'day' => $dayCopy,
+                'day' => intval($dayCopy),
                 'year' => $year,
                 'month' => $month,
                 'departmentPeopleReplacement' => $idReplacement
@@ -1057,8 +1068,9 @@ class OperScheduleController extends BaseFilterController
 
         foreach ($coworkerDayTimes as $coworkerDayTime) {
             $em->remove($coworkerDayTime);
+            $em->flush();
         }
-        $em->flush();
+
 
 
         //deleting old day grafik
@@ -1070,7 +1082,7 @@ class OperScheduleController extends BaseFilterController
             $founded = $grafikRepository->findOneBy(array(
                 'department' => $idDepartment,
                 'departmentPeople' => $idCoworker,
-                'day' => $dayCopy,
+                'day' => intval($dayCopy),
                 'year' => $year,
                 'month' => $month,
                 'departmentPeopleReplacement' => $idReplacement
@@ -1082,8 +1094,8 @@ class OperScheduleController extends BaseFilterController
         }
         foreach ($coworkerDayTimesTotal as $coworkerDayTimeTotal) {
             $em->remove($coworkerDayTimeTotal);
+            $em->flush();
         }
-        $em->flush();
 
         //copying new daytime to grafik time
         /** @var  $copyGrafikTime \Lists\GrafikBundle\Entity\GrafikTime */
@@ -1100,14 +1112,14 @@ class OperScheduleController extends BaseFilterController
         foreach ($copyGrafikTimes as $copyGrafikTime) {
             foreach ($dates as $dayNew) {
                 $cloneGrafikTime = clone $copyGrafikTime;
-                $cloneGrafikTime->setDay($dayNew);
+                $cloneGrafikTime->setDay(intval($dayNew));
                 $em->persist($cloneGrafikTime);
             }
         }
         $em->flush();
 
         //copying new daytime to grafik
-        /** @var  $copyGrafikTime \Lists\GrafikBundle\Entity\Grafik */
+        /** @var  $copyGrafik \Lists\GrafikBundle\Entity\Grafik */
         $copyGrafik = $grafikRepository->findOneBy(array(
             'department' => $idDepartment,
             'departmentPeople' => $idCoworker,
@@ -1119,7 +1131,7 @@ class OperScheduleController extends BaseFilterController
         if ($copyGrafik) {
             foreach ($dates as $dayNew) {
                 $copyGrafik = clone $copyGrafik;
-                $copyGrafik->setDay($dayNew);
+                $copyGrafik->setDay(intval($dayNew));
                 $em->persist($copyGrafik);
             }
         }
@@ -1185,6 +1197,26 @@ class OperScheduleController extends BaseFilterController
             return $return;
         }
 
+        $return = $this->checkErrorsForPeriods($date, $officially);
+        if ($return['success'] == 0) {
+
+            return$return;
+        }
+
+
+        $return['success'] = 1;
+
+        return $return;
+    }
+
+    /**
+     * @param string  $date
+     * @param boolean $officially
+     *
+     * @return mixed
+     */
+    private function checkErrorsForPeriods($date, $officially)
+    {
         $currentDate = date('Y-m-d');
         list($year, $month, $day) = explode('-', $currentDate);
 
@@ -1196,28 +1228,37 @@ class OperScheduleController extends BaseFilterController
             'month' =>$month
         ));
 
-        $advanceDate = $monthDay->getDayAdvance();
-        $paymentDay = $monthDay->getDayPayment();
+        $advanceDateCurrent = $monthDay->getDayAdvance();
+        $paymentDateCurrent = $monthDay->getDayPayment();
 
-        if (new \DateTime($date) < $advanceDate && $officially) {
+        list($year, $month, $day) = explode('-', $date);
+        $monthDay = $monthDaysRepository->findOneBy(array(
+            'year' => $year,
+            'month' =>$month
+        ));
+
+        $advanceDate = $monthDay->getDayAdvance();
+        $paymentDate = $monthDay->getDayPayment();
+
+
+        if (new \DateTime($date) < $advanceDateCurrent && $officially && $advanceDate < new \DateTime($currentDate)) {
             $return['success'] = 0;
             $return['error'] = 'advance_passed';
 
             return $return;
         }
 
-        if (new \DateTime($date) < $paymentDay) {
+        if (new \DateTime($date) < $paymentDateCurrent && $paymentDate < new \DateTime($currentDate)) {
             $return['success'] = 0;
             $return['error'] = 'payment_passed';
 
             return $return;
         }
 
-
-
         $return['success'] = 1;
 
         return $return;
+
     }
 
     /**
@@ -1656,6 +1697,10 @@ class OperScheduleController extends BaseFilterController
 
         list($year, $month) = explode('-', $date);
 
+        $return = $this->checkErrorsForPeriods($date.'-01', false);
+        if ($return['success'] == 0) {
+            return new Response(json_encode($return));
+        }
         $departmentPeopleRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeople');
         /** @var  $departmentPeople \Lists\DepartmentBundle\Entity\DepartmentPeople */
