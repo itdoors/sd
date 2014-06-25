@@ -1000,7 +1000,7 @@ class OperScheduleController extends BaseFilterController
         $copyGrafikTimes = $grafikTimeRepository->findBy(array(
             'department' => $idDepartment,
             'departmentPeople' => $idCoworker,
-            'day' => $day,
+            'day' => intval($day),
             'year' => $year,
             'month' => $month,
             'departmentPeopleReplacement' => $idReplacement
@@ -1054,7 +1054,7 @@ class OperScheduleController extends BaseFilterController
             $founded = $grafikTimeRepository->findOneBy(array(
                 'department' => $idDepartment,
                 'departmentPeople' => $idCoworker,
-                'day' => $dayCopy,
+                'day' => intval($dayCopy),
                 'year' => $year,
                 'month' => $month,
                 'departmentPeopleReplacement' => $idReplacement
@@ -1068,8 +1068,9 @@ class OperScheduleController extends BaseFilterController
 
         foreach ($coworkerDayTimes as $coworkerDayTime) {
             $em->remove($coworkerDayTime);
+            $em->flush();
         }
-        $em->flush();
+
 
 
         //deleting old day grafik
@@ -1081,7 +1082,7 @@ class OperScheduleController extends BaseFilterController
             $founded = $grafikRepository->findOneBy(array(
                 'department' => $idDepartment,
                 'departmentPeople' => $idCoworker,
-                'day' => $dayCopy,
+                'day' => intval($dayCopy),
                 'year' => $year,
                 'month' => $month,
                 'departmentPeopleReplacement' => $idReplacement
@@ -1093,8 +1094,8 @@ class OperScheduleController extends BaseFilterController
         }
         foreach ($coworkerDayTimesTotal as $coworkerDayTimeTotal) {
             $em->remove($coworkerDayTimeTotal);
+            $em->flush();
         }
-        $em->flush();
 
         //copying new daytime to grafik time
         /** @var  $copyGrafikTime \Lists\GrafikBundle\Entity\GrafikTime */
@@ -1111,14 +1112,14 @@ class OperScheduleController extends BaseFilterController
         foreach ($copyGrafikTimes as $copyGrafikTime) {
             foreach ($dates as $dayNew) {
                 $cloneGrafikTime = clone $copyGrafikTime;
-                $cloneGrafikTime->setDay($dayNew);
+                $cloneGrafikTime->setDay(intval($dayNew));
                 $em->persist($cloneGrafikTime);
             }
         }
         $em->flush();
 
         //copying new daytime to grafik
-        /** @var  $copyGrafikTime \Lists\GrafikBundle\Entity\Grafik */
+        /** @var  $copyGrafik \Lists\GrafikBundle\Entity\Grafik */
         $copyGrafik = $grafikRepository->findOneBy(array(
             'department' => $idDepartment,
             'departmentPeople' => $idCoworker,
@@ -1130,7 +1131,7 @@ class OperScheduleController extends BaseFilterController
         if ($copyGrafik) {
             foreach ($dates as $dayNew) {
                 $copyGrafik = clone $copyGrafik;
-                $copyGrafik->setDay($dayNew);
+                $copyGrafik->setDay(intval($dayNew));
                 $em->persist($copyGrafik);
             }
         }
