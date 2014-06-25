@@ -24,7 +24,7 @@ parameters:
     email.file.path: "%project.dir%/web/uploads/email/"
     upload.file.path: "%project.dir%/web/uploads/files/"
     userprofiles.file.path: "/uploads/userprofiles/"
-    email.from: "admin@itdoors.ru"
+    email.from: "noreply@griffin.ua"
     name.from: "ITDOORS"
 
 framework:

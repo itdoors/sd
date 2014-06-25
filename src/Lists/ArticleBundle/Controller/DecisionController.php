@@ -138,7 +138,7 @@ class DecisionController extends BaseController
                                 '${lastName}$' => $user->getLastName(),
                                 '${firstName}$' => $user->getFirstName(),
                                 '${middleName}$' => $user->getMiddleName(),
-                                '${id}$' => $party->getId(),
+                                '${id}$' => '<a href="'.$this->generateUrl('list_article_vote_decision_show', array('id' => $party->getId()), true).'">'.$party->getId().'</a>',
                                 '${dateUnpublic}$' => date('d.m.Y H:i', $party->getDateUnpublick()->getTimestamp()),
                             )
                         )
