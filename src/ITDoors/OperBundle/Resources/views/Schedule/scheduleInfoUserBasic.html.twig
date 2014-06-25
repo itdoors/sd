@@ -107,7 +107,19 @@
                     //ITDoorsAjax.unblockUI($('#'+idLastHref));
                     data = JSON.parse(data);
                     if (data.success == 0) {
-                        alert('Сотрудник не работает официально. Разовые начисления не разрешены.')
+                        if (data.error == 'no_official_permitted') {
+                            alert('Сотрудник не работает официально. Разовые начисления не разрешены.');
+                        }
+                        if (data.error == 'fired') {
+                            alert('Сотрудник уволен');
+                        }
+                        if (data.error == 'advance_passed') {
+                            alert('Дата аванса прошла');
+                        }
+                        if (data.error == 'payment_passed') {
+                            alert('Дата зарплаты прошла');
+                        }
+
                     }
                     else {
                         //alert(data.html)
@@ -172,7 +184,18 @@
                     //alert(data);
                     data = JSON.parse(data);
                     if (data.success == 0) {
-
+                        if (data.error == 'no_official_permitted') {
+                            alert('Сотрудник не работает официально. Разовые начисления не разрешены.');
+                        }
+                        if (data.error == 'fired') {
+                            alert('Сотрудник уволен');
+                        }
+                        if (data.error == 'advance_passed') {
+                            alert('Дата аванса уже прошла');
+                        }
+                        if (data.error == 'payment_passed') {
+                            alert('Дата зарплаты уже прошла');
+                        }
                     }
                     else {
                         //alert(data.html)

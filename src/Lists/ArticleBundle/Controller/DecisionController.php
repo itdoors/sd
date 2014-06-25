@@ -18,7 +18,10 @@ use SD\UserBundle\Entity\User;
 class DecisionController extends BaseController
 {
 
+    /** @var Decision */
     protected $baseTemplate = 'Decision';
+
+    /** @var decision */
     protected $articleType = 'decision';
 
     /** @var Article $filterNamespace */
@@ -82,7 +85,20 @@ class DecisionController extends BaseController
     public function addAction(Request $request)
     {
         $form = $this->createForm('article' . ucfirst($this->articleType) . 'Form');
-
+        if ($this->getUser()->hasRole('ROLE_ARTICLEADMIN')) {
+            $form->add('userId', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field control-label col-md-3',
+                    'data-url' => $this->generateUrl('sd_common_ajax_user_fio'),
+                    'data-url-by-id' => $this->generateUrl('sd_common_ajax_user_by_id'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 2,
+                        'allowClear' => true
+                    )),
+                    'placeholder' => 'Enter fio'
+                )
+            ));
+        }
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -131,16 +147,22 @@ class DecisionController extends BaseController
                         array($emailTo => $nameTo),
                         'decision-making',
                         array(
-                            'users' => array(
-                                $user->getEmail()
-                            ),
-                            'variables' => array(
-                                '${lastName}$' => $user->getLastName(),
-                                '${firstName}$' => $user->getFirstName(),
-                                '${middleName}$' => $user->getMiddleName(),
-                                '${id}$' => $party->getId(),
-                                '${dateUnpublic}$' => date('d.m.Y H:i', $party->getDateUnpublick()->getTimestamp()),
-                            )
+                        'users' => array(
+                            $user->getEmail()
+                        ),
+                        'variables' => array(
+                            '${lastName}$' => $user->getLastName(),
+                            '${firstName}$' => $user->getFirstName(),
+                            '${middleName}$' => $user->getMiddleName(),
+                            '${id}$' =>
+                                '<a href="' . $this->generateUrl(
+                                    'list_article_vote_decision_show',
+                                    array('id' => $party->getId()),
+                                    true
+                                )
+                            . '">' . $party->getId() . '</a>',
+                            '${dateUnpublic}$' => date('d.m.Y H:i', $party->getDateUnpublick()->getTimestamp()),
+                        )
                         )
                     );
                 }

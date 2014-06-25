@@ -461,9 +461,12 @@
 		_zero_utc_time: function(utc){
 			return utc && new Date(Date.UTC(utc.getUTCFullYear(), utc.getUTCMonth(), utc.getUTCDate()));
 		},
+        __time_to_str: function(utc){
+            return utc.getUTCFullYear()+'-'+ utc.getUTCMonth()+'-'+utc.getUTCDate();
+        },
 
 		getDates: function(){
-			return $.map(this.dates, this._utc_to_local);
+			return $.map(this.dates, this.__time_to_str);
 		},
 
 		getUTCDates: function(){
