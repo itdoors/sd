@@ -203,7 +203,7 @@ class ArticleRepository extends EntityRepository
 
         return $res->innerJoin('Lists\ArticleBundle\Entity\Vote', 'v', 'WITH', $subQueryCase)
                 ->andwhere('v.userId = :user')
-                ->setParameter(':text', 'article')
+                ->setParameter(':text', 'decision')
                 ->setParameter(':user', $userId);
     }
 
