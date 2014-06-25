@@ -18,7 +18,10 @@ use SD\UserBundle\Entity\User;
 class DecisionController extends BaseController
 {
 
+    /** @var Decision */
     protected $baseTemplate = 'Decision';
+
+    /** @var decision */
     protected $articleType = 'decision';
 
     /** @var Article $filterNamespace */
@@ -144,22 +147,22 @@ class DecisionController extends BaseController
                         array($emailTo => $nameTo),
                         'decision-making',
                         array(
-                            'users' => array(
-                                $user->getEmail()
-                            ),
-                            'variables' => array(
-                                '${lastName}$' => $user->getLastName(),
-                                '${firstName}$' => $user->getFirstName(),
-                                '${middleName}$' => $user->getMiddleName(),
-                                '${id}$' =>
-                                    '<a href="'.$this->generateUrl(
-                                        'list_article_vote_decision_show',
-                                        array('id' => $party->getId()),
-                                        true
-                                    )
-                                    .'">'.$party->getId().'</a>',
-                                '${dateUnpublic}$' => date('d.m.Y H:i', $party->getDateUnpublick()->getTimestamp()),
-                            )
+                        'users' => array(
+                            $user->getEmail()
+                        ),
+                        'variables' => array(
+                            '${lastName}$' => $user->getLastName(),
+                            '${firstName}$' => $user->getFirstName(),
+                            '${middleName}$' => $user->getMiddleName(),
+                            '${id}$' =>
+                                '<a href="' . $this->generateUrl(
+                                    'list_article_vote_decision_show',
+                                    array('id' => $party->getId()),
+                                    true
+                                )
+                            . '">' . $party->getId() . '</a>',
+                            '${dateUnpublic}$' => date('d.m.Y H:i', $party->getDateUnpublick()->getTimestamp()),
+                        )
                         )
                     );
                 }
