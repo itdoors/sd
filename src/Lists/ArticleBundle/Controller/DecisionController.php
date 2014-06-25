@@ -82,7 +82,7 @@ class DecisionController extends BaseController
     public function addAction(Request $request)
     {
         $form = $this->createForm('article' . ucfirst($this->articleType) . 'Form');
-        if($this->getUser()->hasRole('ROLE_ARTICLEADMIN')){
+        if ($this->getUser()->hasRole('ROLE_ARTICLEADMIN')) {
             $form->add('userId', 'text', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field control-label col-md-3',
