@@ -1652,6 +1652,22 @@ class OperScheduleController extends BaseFilterController
 
         $deleteAccrual = $onceOnlyAccrualRepository->find($id);
 
+        $check = true;
+        if ($deleteAccrual->getCode() == 'uu') {
+            $check = false;
+        }
+        for ($i=1; $i<=date("t", strtotime($year.'-'.$month)); $i++) {
+            $return = $this->checkErrorsForChangingDate($idCoworker, $date.'-'.$i, $check);
+            if ($return['success'] == 1) {
+                break;
+            }
+        }
+
+        if ($return['success'] == 0) {
+
+            return new Response(json_encode($return));
+        }
+
         $em = $this->getDoctrine()->getManager();
         $em->remove($deleteAccrual);
         $em->flush();
