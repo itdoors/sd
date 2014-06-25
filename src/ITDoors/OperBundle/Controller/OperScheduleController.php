@@ -1210,7 +1210,7 @@ class OperScheduleController extends BaseFilterController
     }
 
     /**
-     * @param string $date
+     * @param string  $date
      * @param boolean $officially
      *
      * @return mixed
