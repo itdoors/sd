@@ -107,7 +107,15 @@
                     //ITDoorsAjax.unblockUI($('#'+idLastHref));
                     data = JSON.parse(data);
                     if (data.success == 0) {
-                        alert('Сотрудник не работает официально. Разовые начисления не разрешены.')
+                        if (data.error == 'no_official_permitted') {
+                            alert('Сотрудник не работает официально. Разовые начисления не разрешены.');
+                        }
+                        if (data.error == 'fired') {
+                            alert('Сотрудник уволен');
+                        }
+                        if (data.error == 'advance_passed') {
+                            alert('Дата аван');
+                        }
                     }
                     else {
                         //alert(data.html)

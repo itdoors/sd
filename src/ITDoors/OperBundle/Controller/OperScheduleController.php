@@ -982,7 +982,7 @@ class OperScheduleController extends BaseFilterController
         list($year, $month, $day) = explode('-', $currentDate);
 
         foreach ($dates as $key => $date) {
-            $dates[$key] = date('d', strtotime($date));
+            $dates[$key] = date('j', strtotime($date));
         }
         $return = array();
 
@@ -994,7 +994,6 @@ class OperScheduleController extends BaseFilterController
         /** @var $grafikTimeRepository \Lists\GrafikBundle\Entity\GrafikTimeRepository   */
         $grafikTimeRepository = $this->getDoctrine()
             ->getRepository('ListsGrafikBundle:GrafikTime');
-
 
 
         $copyGrafikTimes = $grafikTimeRepository->findBy(array(
@@ -1561,7 +1560,7 @@ class OperScheduleController extends BaseFilterController
             $check = false;
         }
         for ($i=1; $i<=date("t", strtotime($year.'-'.$month)); $i++) {
-            $return = $this->checkErrorsForChangingDate($idCoworker, $date.'-01', $check);
+            $return = $this->checkErrorsForChangingDate($idCoworker, $date.'-'.$i, $check);
             if ($return['success'] == 1) {
                 break;
             }
