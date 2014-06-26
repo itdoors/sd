@@ -1240,12 +1240,13 @@ class Dogovor
      * Set createDateTime
      *
      * @param \DateTime $createDateTime
+     * 
      * @return Dogovor
      */
     public function setCreateDateTime($createDateTime)
     {
         $this->createDateTime = $createDateTime;
-    
+
         return $this;
     }
 

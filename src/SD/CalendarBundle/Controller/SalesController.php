@@ -61,14 +61,12 @@ class SalesController extends BaseFilterController
     {
         $events = array();
 
-        if(
+        if (
             $this->getUser()->hasRole('ROLE_SALES')
             ||
             $this->getUser()->hasRole('ROLE_SALESADMIN')
             ||
-            $this->getUser()->hasRole('ROLE_SALEDISPATCHER')
-        )
-        {
+            $this->getUser()->hasRole('ROLE_SALEDISPATCHER')) {
             /** @var HandlingMessageViewRepository $handlingMessagesViewRepository */
             $handlingMessagesViewRepository = $this->get('lists_handling.message.view.repository');
 
