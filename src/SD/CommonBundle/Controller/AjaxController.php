@@ -115,6 +115,33 @@ class AjaxController extends BaseFilterController
      *
      * @return string
      */
+    public function organizationEdrpouAction()
+    {
+        $searchTextQ = $this->get('request')->query->get('q');
+        $searchTextQuery = $this->get('request')->query->get('query');
+
+        $searchText = $searchTextQ ? $searchTextQ : $searchTextQuery;
+
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $organizationsRepository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+        $organizations = $organizationsRepository->findEdrpou($searchText);
+
+        $result = array();
+
+        foreach ($organizations as $organization) {
+            $result[] = $this->serializeObject($organization, null, 'getEdrpou');
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns list of organizations in json
+     *
+     * @return string
+     */
     public function handlingAction()
     {
         $searchTextQ = $this->get('request')->query->get('q');

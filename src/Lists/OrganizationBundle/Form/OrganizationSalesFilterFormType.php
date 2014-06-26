@@ -46,7 +46,7 @@ class OrganizationSalesFilterFormType extends AbstractType
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 2,
                         'allowClear' => true,
-                        'width' => '300px',
+                        'width' => '250px',
                         'multiple' => 'multiple'
                     )),
                     'placeholder' => 'Enter City',
@@ -60,7 +60,7 @@ class OrganizationSalesFilterFormType extends AbstractType
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 0,
                         'allowClear' => true,
-                        'width' => '300px',
+                        'width' => '250px',
                         'multiple' => 'multiple'
                     )),
                     'placeholder' => 'Enter Scope',
@@ -69,17 +69,31 @@ class OrganizationSalesFilterFormType extends AbstractType
             ->add('organization', 'text', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url' => $router->generate('sd_common_ajax_organization_first'),
+                    'data-url' => $router->generate('sd_common_ajax_organization'),
                     'data-url-by-id' => $router->generate('sd_common_ajax_organization_by_ids'),
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 2,
                         'allowClear' => true,
-                        'width' => '300px',
+                        'width' => '250px',
                         'multiple' => 'multiple'
                     )),
                     'placeholder' => 'Enter Name',
                 )
-        ));
+            ))
+            ->add('organizationEdrpou', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_organization_edrpou'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_organization_by_ids'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 1,
+                        'allowClear' => true,
+                        'width' => '250px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter edrpou',
+                )
+            ));
 
         $builder
             ->add('submit', 'submit')

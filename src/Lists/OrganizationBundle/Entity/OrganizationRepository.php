@@ -309,6 +309,21 @@ class OrganizationRepository extends EntityRepository
     }
 
     /**
+     * @param string $edrpou
+     *
+     * @return array
+     */
+    public function findEdrpou($edrpou)
+    {
+        return $this->createQueryBuilder('o')
+            ->where('o.edrpou LIKE :edrpou')
+            ->andWhere('o.parent_id is null')
+            ->setParameter(':edrpou', $edrpou . '%')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * Returns organization ids with in one organization group
      *
      * @param int $organizationId
