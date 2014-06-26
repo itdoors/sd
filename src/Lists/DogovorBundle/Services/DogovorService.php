@@ -42,27 +42,35 @@ class DogovorService
          /** @var DogovorRepository $dogovorR */
         $dogovorR = $em->getRepository('ListsDogovorBundle:Dogovor')->findAll();
         
+         /** @var DopDogovorRepository $dopDogovorR */
+        $dopDogovorR = $em->getRepository('ListsDogovorBundle:DopDogovor')->findAll();
+        
         $countErr = 0;
+        $countOk = 0;
         foreach ($dogovorR as $dogovor){
-            if($dogovor->getFilepath() ==  'eb7625a90752dd53cf631a07fc2a41a7.PDF'){
                 if(is_file($directory . $dogovor->getFilepath())){
+                    $countOk++;
                     $date = date ("d.m.Y H:i:s.", filemtime($directory.$dogovor->getFilepath()));
                     $dogovor->setCreateDateTime(new \DateTime($date));
                     $em->persist($dogovor);
                     $em->flush();
-                    
-                    return 'найден '.$dogovor->getId(). ' '.date ("d.m.Y H:i:s.", filemtime($directory.$dogovor->getFilepath()));
                 }else{
                    $countErr++;
                 }
-            }
         }
-        if($countErr > 0 ){
-            return 'not found '.$countErr.' files';
+        foreach ($dopDogovorR as $dogovor){
+                if(is_file($directory . $dogovor->getFilepath())){
+                    $countOk++;
+                    $date = date ("d.m.Y H:i:s.", filemtime($directory.$dogovor->getFilepath()));
+                    $dogovor->setCreateDateTime(new \DateTime($date));
+                    $em->persist($dogovor);
+                    $em->flush();
+                }else{
+                   $countErr++;
+                }
         }
+        return 'ok: '.$countOk . ' error: ' .$countErr ;
         
-        
-        return date ("d.m.Y H:i:s.", filemtime($filename));
     }
 
     /**
