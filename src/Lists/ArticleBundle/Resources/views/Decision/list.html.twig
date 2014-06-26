@@ -57,9 +57,9 @@
                             {{ 'Not completed'|trans }}
                         {% else %}
                             {% if item.value == 1 %}
-                                <span class="btn default btn-xs green-stripe">{{ 'Received'|trans }}</span>
+                                <span class="label label-success">{{ 'Received'|trans }}</span>
                             {% else %}
-                                <span class="btn default btn-xs red-stripe">{{ 'Declined'|trans }}</span>
+                                <span class="label label-danger">{{ 'Declined'|trans }}</span>
                             {% endif %}
                         {% endif %}                  
                     </td>

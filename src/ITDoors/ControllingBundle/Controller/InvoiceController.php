@@ -282,14 +282,14 @@ class InvoiceController extends BaseFilterController
         $entities = $result['entities'];
         $count = $result['count'];
 
-        $page = $this->getPaginator($filterNamespace);
+        $page = $this->getPaginator($namespaceTab);
         if (!$page) {
             $page = 1;
         }
 
         $paginator = $this->container->get($this->paginator);
         $entities->setHint($this->paginator . '.count', $count);
-        $pagination = $paginator->paginate($entities, $page, 20);
+        $pagination = $paginator->paginate($entities, $page, 5);
 
         $responsibles = array();
         foreach ($pagination as $val) {

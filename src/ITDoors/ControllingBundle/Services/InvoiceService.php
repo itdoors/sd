@@ -420,14 +420,14 @@ class InvoiceService
         $translator = $this->container->get('translator');
         $tabs = array();
         $tabs['today'] = array(
-            'blockupdate' => 'ajax-tab-holder',
+            'blockupdate' => 'ajax-tab-holder-2',
             'tab' => 'today',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
             'text' => $translator->trans('Today') . ' ' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
         $summa = $invoice->getSumma(date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + 1, date('Y'))));
         $tabs['tomorrow'] = array(
-            'blockupdate' => 'ajax-tab-holder',
+            'blockupdate' => 'ajax-tab-holder-2',
             'tab' => 'tomorrow',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
             'text' => $translator->trans('Tomorrow') . ' ' . number_format($summa[0]['summa'], 2, ',', ' ')
