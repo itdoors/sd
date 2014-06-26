@@ -49,6 +49,11 @@ class SDAccess
             return true;
         }
 
+        // FOR CONTROLLING
+        if ($user->hasRole('ROLE_CONTROLLING')) {
+            return true;
+        }
+
         $userIds = array();
 
         //FOR SALES AND SALES DISPATCHER

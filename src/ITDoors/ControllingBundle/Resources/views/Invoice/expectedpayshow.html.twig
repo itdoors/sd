@@ -43,6 +43,9 @@
     <table class="table table-striped table-bordered table-hover dataTable" aria-describedby="datatable_ajax_info">
         <thead>
             <tr role="row" class="heading">
+                <th width="5%" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}№ and date invoice{% endtrans %}
+                </th>
                 <th width="5%" role="columnheader" rowspan="1" colspan="1">
                     {% trans %}Customer{% endtrans %}
                 </th>
@@ -76,10 +79,10 @@
         <tbody role="alert" aria-live="polite" aria-relevant="all">
             {% for entity in entities %}
                 <tr class="{{ cycle(['odd', 'even'], entity.invoiceId) }}">
+                    <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceId }}</a> {{ entity.date is empty ? '' : entity.date|date("d.m.y") }}</td>
                     <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.customerName }}</a></td>
                     <td class="">{{ entity.performerName }}</td>
                     <td class="">{{ entity.sum|number_format(2, ',', ' ')  }}</td>
-                    <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceId }}</a> {{ entity.date is empty ? '' : entity.date|date("d.m.y") }}</td>
                     <td class="">{{ entity.dogovorActName }} {{ entity.dogovorActDate is empty ? '' : entity.dogovorActDate|date("d.m.y") }}</td>
                     <td class="">
                         <a id="managers_list_new" class="fa ajax-form fa-plus" title="{% trans %}Add note{% endtrans %}"

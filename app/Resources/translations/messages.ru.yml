@@ -59,8 +59,9 @@ Documents: Документы
 News: Новости
 
 #menu role_controlling
-Controlling: Управление
-debtors: Дебиторы
+Invoices: Счета
+Debtors: Дебиторы
+Dogovors: Договора
 
 # Menu Dogovor
 My Dogovor: Мои договора

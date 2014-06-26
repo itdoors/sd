@@ -349,12 +349,12 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoicePeriod($res);
         /** join */
         $this->joinInvoicePeriod($res);
-        /** where */
-        $res = $res->andWhere("i.dateEnd = :date or i.delayDate = :date")->setParameter(':date', $date)
-            ->andWhere("i.dateFact is NULL")
-            ->orderBy('i.dateEnd', 'DESC');
 
-        return $res->getQuery();
+        return $res->andWhere("i.dateEnd = :date or i.delayDate = :date")
+            ->setParameter(':date', $date)
+            ->andWhere("i.dateFact is NULL")
+            ->orderBy('i.dateEnd', 'DESC')
+            ->getQuery();
     }
 
     /**
