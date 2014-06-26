@@ -17,6 +17,7 @@ parameters:
     lists_dogovor.department.repository.class: Lists\DogovorBundle\Entity\DogovorDepartmentRepository
     lists_dogovor.department.repository.entity: Lists\DogovorBundle\Entity\DogovorDepartment
 
+    lists_dogovor.service.class: Lists\DogovorBundle\Services\DogovorService
 services:
 
     lists_dogovor.repository:
@@ -74,3 +75,7 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: dogovorHistoryForm }
+            
+    lists_dogovor.service:
+        class: %lists_dogovor.service.class%
+        arguments: [@service_container]

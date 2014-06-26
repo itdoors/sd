@@ -1233,30 +1233,29 @@ class Dogovor
     /**
      * @var \DateTime
      */
-    private $createDate;
+    private $createDateTime;
 
 
     /**
-     * Set createDate
+     * Set createDateTime
      *
-     * @param \DateTime $createDate
-     * 
+     * @param \DateTime $createDateTime
      * @return Dogovor
      */
-    public function setCreateDate($createDate)
+    public function setCreateDateTime($createDateTime)
     {
-        $this->createDate = $createDate;
-
+        $this->createDateTime = $createDateTime;
+    
         return $this;
     }
 
     /**
-     * Get createDate
+     * Get createDateTime
      *
      * @return \DateTime 
      */
-    public function getCreateDate()
+    public function getCreateDateTime()
     {
-        return $this->createDate;
+        return $this->createDateTime;
     }
 }
