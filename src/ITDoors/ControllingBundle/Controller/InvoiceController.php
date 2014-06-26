@@ -221,7 +221,7 @@ class InvoiceController extends BaseFilterController
 
         $paginator = $this->container->get($this->paginator);
         $list->setHint($this->paginator . '.count', $count);
-        $pagination = $paginator->paginate($list, $page, 5);
+        $pagination = $paginator->paginate($list, $page, 10);
 
         $responsibles = array();
         foreach ($pagination as $val) {
@@ -289,7 +289,7 @@ class InvoiceController extends BaseFilterController
 
         $paginator = $this->container->get($this->paginator);
         $entities->setHint($this->paginator . '.count', $count);
-        $pagination = $paginator->paginate($entities, $page, 5);
+        $pagination = $paginator->paginate($entities, $page, 10);
 
         $responsibles = array();
         foreach ($pagination as $val) {
