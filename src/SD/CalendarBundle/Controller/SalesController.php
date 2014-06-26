@@ -61,28 +61,37 @@ class SalesController extends BaseFilterController
     {
         $events = array();
 
-        /** @var HandlingMessageViewRepository $handlingMessagesViewRepository */
-        $handlingMessagesViewRepository = $this->get('lists_handling.message.view.repository');
+        if(
+            $this->getUser()->hasRole('ROLE_SALES')
+            ||
+            $this->getUser()->hasRole('ROLE_SALESADMIN')
+            ||
+            $this->getUser()->hasRole('ROLE_SALEDISPATCHER')
+        )
+        {
+            /** @var HandlingMessageViewRepository $handlingMessagesViewRepository */
+            $handlingMessagesViewRepository = $this->get('lists_handling.message.view.repository');
 
-        $filters = $this->getFilters($this->container->getParameter('ajax.filter.namespace.dashboard.calendar'));
+            $filters = $this->getFilters($this->container->getParameter('ajax.filter.namespace.dashboard.calendar'));
 
-        $handlingMessages = $handlingMessagesViewRepository
-            ->getAllMessages($userIds, $startTimestamp, $endTimestamp, $filters);
+            $handlingMessages = $handlingMessagesViewRepository
+                ->getAllMessages($userIds, $startTimestamp, $endTimestamp, $filters);
 
-        foreach ($handlingMessages as $handlingMessage) {
-            $events[] = array(
-                'hover_title' => $this->getEventHoverTitle($handlingMessage),
-                'title' => $this->getEventTitle($handlingMessage),
-                'start' => $this->getEventStart($handlingMessage)->format('Y-m-d H:i:s'),
-                'url' => $this->getEventUrl($handlingMessage),
-                'className' => $this->getEventCssClass($handlingMessage)
-            );
+            foreach ($handlingMessages as $handlingMessage) {
+                $events[] = array(
+                    'hover_title' => $this->getEventHoverTitle($handlingMessage),
+                    'title' => $this->getEventTitle($handlingMessage),
+                    'start' => $this->getEventStart($handlingMessage)->format('Y-m-d H:i:s'),
+                    'url' => $this->getEventUrl($handlingMessage),
+                    'className' => $this->getEventCssClass($handlingMessage)
+                );
+            }
         }
         $em = $this->getDoctrine()->getManager();
         $decision = $em->getRepository('ListsArticleBundle:Article')->getDecisionForCalendar($this->getUser()->getId());
         foreach ($decision as $val) {
             $events[] = array(
-                'hover_title' => $this->getEventHoverTitle($handlingMessage),
+                'hover_title' => '',
                 'title' => $val['title']. ' ('. $val['dateUnpublick']->format('H:i'). ')',
                 'start' => $val['dateUnpublick']->format('Y-m-d H:i:s'),
                 'url' => $this->generateUrl('list_article_vote_decision_show', array(
