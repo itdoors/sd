@@ -487,12 +487,13 @@ class DopDogovor
      * Set createTime
      *
      * @param \DateTime $createTime
+     * 
      * @return DopDogovor
      */
     public function setCreateTime($createTime)
     {
         $this->createTime = $createTime;
-    
+
         return $this;
     }
 
