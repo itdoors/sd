@@ -69,7 +69,7 @@ class OrganizationSalesFilterFormType extends AbstractType
             ->add('organization', 'text', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url' => $router->generate('sd_common_ajax_organization'),
+                    'data-url' => $router->generate('sd_common_ajax_organization_for_contacts'),
                     'data-url-by-id' => $router->generate('sd_common_ajax_organization_by_ids'),
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 2,

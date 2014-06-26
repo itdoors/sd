@@ -72,12 +72,12 @@
                     weekStart: 1
                 });
             });
-        })
+        });
 
         $('#prolongationTerm').editable({
             url: '{{ path('sd_common_ajax_dogovor_save') }}',
             emptytext: '{% trans %}Enter Prolongation Term{% endtrans %}'
-        })
+        });
 
         $('#isActive').editable({
             url: '{{ path('sd_common_ajax_dogovor_save') }}',

@@ -520,7 +520,7 @@
                     <span class="title">{% trans %}Stuff{% endtrans %}</span>
                 </a>
             </li>
-            {#<li{% if 
+            <li{% if 
                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('list_article_vote_history') 
                         or
                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('list_article_vote_history_add')
@@ -568,7 +568,7 @@
                         </a>
                     </li>
                 </ul>
-            </li>#}
+            </li>
         </ul>
         <!-- END SIDEBAR MENU -->
     </div>

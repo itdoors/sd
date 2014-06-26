@@ -390,12 +390,12 @@ class InvoiceService
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
             'text' => $translator->trans('Customer')
         );
-        $tabs['history'] = array(
-            'blockupdate' => 'ajax-tab-holder',
-            'tab' => 'history',
-            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
-            'text' => $translator->trans('History')
-        );
+//        $tabs['history'] = array(
+//            'blockupdate' => 'ajax-tab-holder',
+//            'tab' => 'history',
+//            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
+//            'text' => $translator->trans('History')
+//        );
 
         return $tabs;
     }
