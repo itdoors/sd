@@ -46,6 +46,10 @@ Lists\DogovorBundle\Entity\DopDogovor:
         dogovorId:
             type: integer
             column: dogovor_id
+        createTime:
+            type: datetime
+            nullable: true
+            column: create_time
     manyToOne:
         dogovor:
             targetEntity: Dogovor

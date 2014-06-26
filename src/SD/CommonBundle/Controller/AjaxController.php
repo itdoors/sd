@@ -2925,6 +2925,7 @@ class AjaxController extends BaseFilterController
             ->find($dogovorId);
 
         $data->setDogovor($dogovor);
+        $data->setCreateTime(new \DateTime(date('Y-m-d H:i:s')));
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
