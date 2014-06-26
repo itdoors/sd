@@ -113,6 +113,10 @@ Lists\DogovorBundle\Entity\Dogovor:
             type: string
             length: 512
             column: dogovor_guid
+        createDate:
+            type: date
+            nullable: true
+            column: create_date
     manyToOne:
         customer:
             targetEntity: Lists\OrganizationBundle\Entity\Organization
