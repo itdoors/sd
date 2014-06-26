@@ -135,7 +135,7 @@
                             </div>
                         </div>
                         
-                        {% if is_granted('ROLE_DOGOVORADMIN') %}
+                        {% if filterForm.lookup is defined %}
                             <div class="col-md-6
                                 {% if filterForm.lookup.vars.errors|length %}
                                     has-error
