@@ -90,7 +90,7 @@
                            data-default='{"invoiceId":"{{ entity.id }}"}'
                            data-form_name="invoiceCompanystructureForm"
                            data-post_function="updateList"
-                           data-post_target_id="datatable_ajax"
+                           data-post_target_id="datatable_ajax_2"
                            ></a><br>
                         {% for responsible in responsibles[entity.id] %}
                             <a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">
@@ -115,7 +115,7 @@
                            data-default='{"invoice_id":"{{ entity.id }}"}'
                            data-form_name="invoiceMessageForm"
                            data-post_function="updateList"
-                           data-post_target_id="datatable_ajax"
+                           data-post_target_id="datatable_ajax_2"
                            ></a>
                         {{ entity.descriptiondate is empty ? '' : '('~entity.descriptiondate |date("d.m.y")~')'}} {{ entity.description }}
                     </td>
