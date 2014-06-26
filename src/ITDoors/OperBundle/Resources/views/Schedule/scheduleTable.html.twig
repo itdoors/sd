@@ -535,6 +535,7 @@
                 <th>{% trans %}Total notofficially{% endtrans %}</th>
                 <th>{% trans %}Planned accruals{% endtrans %}</th>
                 <th>{% trans %}Accruals notofficially{% endtrans %}</th>
+                <th>{% trans %}Not Official salary{% endtrans %}</th>
                 <th>{% trans %}Real salary{% endtrans %}</th>
             </tr>
         </thead>
@@ -620,7 +621,9 @@
                             'salaryOfficially': infoHours[idCoworker~'-'~idReplacement]['salaryOfficially'],
                             'idCoworker': idCoworker,
                             'idReplacement': idReplacement,
-                            'realSalary': infoHours[idCoworker~'-'~idReplacement]['realSalary']
+                            'realSalary': infoHours[idCoworker~'-'~idReplacement]['realSalary'],
+                            'salaryNotOfficially': infoHours[idCoworker~'-'~idReplacement]['salaryNotOfficially'],
+                            'totalSalary': infoHours[idCoworker~'-'~idReplacement]['totalSalary']
                     }) }}
 
                 </tr>

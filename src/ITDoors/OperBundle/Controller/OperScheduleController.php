@@ -240,6 +240,21 @@ class OperScheduleController extends BaseFilterController
                 $infoHours[$idCoworker.'-'.$idReplacement]['plannedAccrual'] = 0;
             }
 
+            $infoHours[$idCoworker.'-'.$idReplacement]['salaryNotOfficially'] = $coworker['salaryNotOfficially'];
+            if (!$infoHours[$idCoworker.'-'.$idReplacement]['salaryNotOfficially']) {
+                $infoHours[$idCoworker.'-'.$idReplacement]['salaryNotOfficially'] =
+                    $infoHours[$idCoworker.'-'.$idReplacement]['plannedAccrual'];
+                $infoHours[$idCoworker.'-'.$idReplacement]['salaryNotOfficially'] +=
+                    $infoHours[$idCoworker.'-'.$idReplacement]['accrual']['notOfficially']['plus'];
+                $infoHours[$idCoworker.'-'.$idReplacement]['salaryNotOfficially'] -=
+                    $infoHours[$idCoworker.'-'.$idReplacement]['accrual']['notOfficially']['minus'];
+            }
+
+            $infoHours[$idCoworker.'-'.$idReplacement]['totalSalary'] =
+                $infoHours[$idCoworker.'-'.$idReplacement]['salaryOfficially']
+                + $infoHours[$idCoworker.'-'.$idReplacement]['salaryNotOfficially'];
+
+
             foreach ($infoHoursCoworker as $infoDay) {
                 $status = 'ok';
                 if ($infoDay['isVacation']) {
@@ -278,7 +293,7 @@ class OperScheduleController extends BaseFilterController
             'hoursTotal' => $countHours,
             'holydaysTotalString' => $holidays,
             'dayAdvance' => $dayAdvance,
-            'dayPayment' => $dayPayment
+            'dayPayment' => $dayPayment,
         ));
 
     }
@@ -1984,6 +1999,14 @@ class OperScheduleController extends BaseFilterController
         } else {
             $plannedAccrualValue = 0;
         }
+        $salaryNotOfficially = $monthInfo->getSalaryNotOfficially();
+        if (!$salaryNotOfficially) {
+            $salaryNotOfficially = $plannedAccrualValue;
+            $salaryNotOfficially += $accrual['notOfficially']['plus'];
+            $salaryNotOfficially -= $accrual['notOfficially']['minus'];
+        }
+
+        $totalSalary = $salaryOfficially + $salaryNotOfficially;
 
         $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleTableSums.html.twig', array(
             'sumOfficially' => $officiallyTotal,
@@ -1993,7 +2016,9 @@ class OperScheduleController extends BaseFilterController
             'salaryOfficially' => $salaryOfficially,
             'idCoworker' => $idCoworker,
             'idReplacement' => $idReplacement,
-            'realSalary' => $realSalary
+            'realSalary' => $realSalary,
+            'salaryNotOfficially' => $salaryNotOfficially,
+            'totalSalary' => $totalSalary
         ));
 
         $return['success'] = 1;
