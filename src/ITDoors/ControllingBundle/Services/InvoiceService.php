@@ -91,12 +91,18 @@ class InvoiceService
                     $this->addCronError(0, 'start parser', $file, 'parser file');
                     $this->savejson($json->invoice);
                     $this->addCronError(0, 'stop parser', $file, 'parser file');
+                    if (!is_dir($directory.'old')) {
+                        mkdir($directory.'old', 0700);
+                    }
+                    rename($directory.$file, $directory.'old/'.$file);
                     break;
                 default:
                     $this->addCronError(0, 'FATAL ERROR', $file, json_last_error());
             }
         } else {
             $this->addCronError(0, 'ok', 'file not found', 'new file not found');
+
+            return 'File not found';
         }
     }
 
