@@ -223,6 +223,13 @@ class OrganizationRepository extends EntityRepository
                         $sql->andWhere('users.id in (:userFilterIds)');
                         $sql->setParameter(':userFilterIds', $value);
                         break;
+                    case 'organizationEdrpou':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $sql->andWhere('o.edrpou in (:edrpou)');
+                        $sql->setParameter(':edrpou', explode(',', $value));
+                        break;
                     /*case 'users':
                         if (isset($value[0]) && !$value[0]) {
                             break;
@@ -287,7 +294,7 @@ class OrganizationRepository extends EntityRepository
             ->leftJoin('o.users', 'users')
             ->where('lower(o.name) LIKE :q OR lower(o.shortname) LIKE :q')
             ->andWhere('o.parent_id is null')
-            ->setParameter(':q', mb_strtolower($q, 'UTF-8') . '%')
+            ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%')
             ->getQuery();
 
         return $sql->getResult();
@@ -304,6 +311,21 @@ class OrganizationRepository extends EntityRepository
             ->where('o.edrpou = :edrpou')
             ->andWhere('o.parent_id is null')
             ->setParameter(':edrpou', $edrpou)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param string $edrpou
+     *
+     * @return array
+     */
+    public function findEdrpou($edrpou)
+    {
+        return $this->createQueryBuilder('o')
+            ->where('o.edrpou LIKE :edrpou')
+            ->andWhere('o.parent_id is null')
+            ->setParameter(':edrpou', $edrpou . '%')
             ->getQuery()
             ->getResult();
     }

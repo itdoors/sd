@@ -74,7 +74,9 @@ class InvoiceService
         $directory = $this->container->getParameter('1C.file.path');
 
         if (!is_dir($directory)) {
-            return false;
+            $this->addCronError(0, 'ok', 'directory not found', $directory);
+
+            return $directory;
         }
         $file = $this->findFile($directory);
 
@@ -89,12 +91,18 @@ class InvoiceService
                     $this->addCronError(0, 'start parser', $file, 'parser file');
                     $this->savejson($json->invoice);
                     $this->addCronError(0, 'stop parser', $file, 'parser file');
+                    if (!is_dir($directory.'old')) {
+                        mkdir($directory.'old', 0700);
+                    }
+                    rename($directory.$file, $directory.'old/'.$file);
                     break;
                 default:
                     $this->addCronError(0, 'FATAL ERROR', $file, json_last_error());
             }
         } else {
             $this->addCronError(0, 'ok', 'file not found', 'new file not found');
+
+            return 'File not found';
         }
     }
 
@@ -388,12 +396,12 @@ class InvoiceService
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
             'text' => $translator->trans('Customer')
         );
-        $tabs['history'] = array(
-            'blockupdate' => 'ajax-tab-holder',
-            'tab' => 'history',
-            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
-            'text' => $translator->trans('History')
-        );
+//        $tabs['history'] = array(
+//            'blockupdate' => 'ajax-tab-holder',
+//            'tab' => 'history',
+//            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
+//            'text' => $translator->trans('History')
+//        );
 
         return $tabs;
     }
@@ -418,14 +426,14 @@ class InvoiceService
         $translator = $this->container->get('translator');
         $tabs = array();
         $tabs['today'] = array(
-            'blockupdate' => 'ajax-tab-holder',
+            'blockupdate' => 'ajax-tab-holder-2',
             'tab' => 'today',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
             'text' => $translator->trans('Today') . ' ' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
         $summa = $invoice->getSumma(date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + 1, date('Y'))));
         $tabs['tomorrow'] = array(
-            'blockupdate' => 'ajax-tab-holder',
+            'blockupdate' => 'ajax-tab-holder-2',
             'tab' => 'tomorrow',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
             'text' => $translator->trans('Tomorrow') . ' ' . number_format($summa[0]['summa'], 2, ',', ' ')

@@ -21,6 +21,7 @@ Add note: Добавить примечание
 Select data: Выберите дату
 Controlling: Управление
 debtors: дебиторы
+Debtors: Дебиторы
 clear: очистить
 List of debtors: Список дебиторов
 Invoice <small>list of debtors</small>:  Счета <small>список дебиторов</small>
@@ -59,6 +60,7 @@ Organization Description: Заметки
 Note: Примечание
 invoice: счет
 Invoice: Счет
+Invoices: Счета
 
 Organization name: Название организации
 Number invoice: Номер счета

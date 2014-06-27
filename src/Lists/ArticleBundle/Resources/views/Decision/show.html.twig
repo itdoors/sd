@@ -129,7 +129,17 @@
                                             <td>{{ key+1 }}</td>
                                             <td>{{ itm.lastName }} {{ itm.firstName }} {{ itm.middleName }}</td>
                                             <td>{{ itm.dateCreate == '' ? '' : itm.dateCreate | date('d.m.Y H:i') }}</td>
-                                            <td>{{ itm.value is null ? 'No answer'|trans : itm.value == 0 ? 'Deflecting'|trans : 'Accept'|trans }}</td>
+                                            <td>
+                                                {% if itm.value is null %}
+                                                    {{ 'No answer'|trans }}
+                                                {% else %}
+                                                    {% if itm.value == 0 %}
+                                                        <span class="label label-danger">{{ 'Deflecting'|trans }}</span>
+                                                    {% else %}
+                                                        <span class="label label-success">{{ 'Accept'|trans }}</span>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>

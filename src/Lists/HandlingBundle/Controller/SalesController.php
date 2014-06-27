@@ -785,7 +785,6 @@ class SalesController extends BaseController
                     }
                 }
 
-                $em = $this->getDoctrine()->getManager();
                 $em->persist($handlingMessage);
                 // $em->flush();
 

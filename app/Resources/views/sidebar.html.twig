@@ -79,7 +79,7 @@
                             {% trans %}My Team{% endtrans %}</a>
                     </li>
                     {% if is_granted('ROLE_DOGOVORADMIN') != true %}
-                    <li{% if
+                        <li{% if
                                 path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_index')
                                 or 
                                 path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_new')
@@ -89,12 +89,12 @@
                                     and
                                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_show',app.request.attributes.get('_route_params'))
                                 )
-                        %} class="active"{% endif %}>
-                        <a href="{{ path('lists_competitors_organization_index') }}">
-                            <i class="fa fa-comments"></i>
-                            <span class="title">{% trans %}Competitors{% endtrans %}</span>
-                        </a>
-                    </li>
+                            %} class="active"{% endif %}>
+                            <a href="{{ path('lists_competitors_organization_index') }}">
+                                <i class="fa fa-comments"></i>
+                                <span class="title">{% trans %}Competitors{% endtrans %}</span>
+                            </a>
+                        </li>
                     {% endif %}
                 </ul>
             </li>
@@ -346,7 +346,7 @@
                             {% trans %}Organizations{% endtrans %}
                         </a>
                     </li>
-                    <li >
+                    <li>
                         <a href="{{ path('lists_dogovor_dogovor_index') }}" title="{% trans %}Dogovor List{% endtrans %}">
                             <i class="fa fa-comments"></i>
                             {% trans %}My Dogovor{% endtrans %}
@@ -403,17 +403,79 @@
         </li>
         {% endif %}
             {% if is_granted('ROLE_CONTROLLING') %}
-                <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_controlling_invoice') %} class="active"{% endif %}>
+                <li{% if 
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_dogovor_index')
+                            or
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_controlling_invoice')
+                            or
+                            (
+                                app.request.attributes.get('_route_params').invoiceid is defined
+                                and
+                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_controlling_invoice_invoice',app.request.attributes.get('_route_params'))
+                            )
+                            or
+                            (
+                                app.request.attributes.get('_route_params').id is defined
+                                and
+                                (
+                                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_admin_organization_show',app.request.attributes.get('_route_params'))
+                                    or
+                                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_dogovor_show',app.request.attributes.get('_route_params'))
+                                )
+                            )
+                                or
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_admin_organization_index')
+                                or
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_admin_organization_new')
+                    %} class="active"{% endif %}>
                     <a href="javascript:;">
                         <i class="fa fa-tachometer"></i>
-                        <span class="title">{% trans %}Controlling{% endtrans %}</span>
+                        <span class="title">{% trans %}Debtors{% endtrans %}</span>
                         <span class="arrow "></span>
                     </a>
                     <ul  class="sub-menu">
-                        <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_controlling_invoice') %} class="active"{% endif %}>
-                            <a href="{{ path('it_doors_controlling_invoice') }}" title="{% trans %}debtors{% endtrans %}">
+                        <li{% if 
+                                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_controlling_invoice')
+                                    or
+                                    (
+                                        app.request.attributes.get('_route_params').invoiceid is defined
+                                        and
+                                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_controlling_invoice_invoice',app.request.attributes.get('_route_params'))
+                                    )
+                            %} class="active"{% endif %}>
+                            <a href="{{ path('it_doors_controlling_invoice') }}" title="{% trans %}Invoices{% endtrans %}">
                                 <i class="fa fa-comments"></i>
-                                {% trans %}debtors{% endtrans %}
+                                {% trans %}Invoices{% endtrans %}
+                            </a>
+                        </li>
+                        <li{% if 
+                                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_dogovor_index')
+                                    or
+                                    (
+                                        app.request.attributes.get('_route_params').id is defined
+                                        and
+                                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_dogovor_show',app.request.attributes.get('_route_params'))
+                                    )
+                            %} class="active"{% endif %}>
+                        <a href="{{ path('lists_dogovor_dogovor_index') }}" title="{% trans %}Dogovors{% endtrans %}">
+                            <i class="fa fa-comments"></i>
+                            {% trans %}Dogovors{% endtrans %}
+                        </a>
+                    </li>
+                        <li{% if 
+                            (
+                                app.request.attributes.get('_route_params').id is defined
+                                and
+                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_admin_organization_show',app.request.attributes.get('_route_params'))
+                            )
+                                or
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_admin_organization_index')
+                                or
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_admin_organization_new')
+                            %} class="active"{% endif %}>
+                            <a href="{{ path('lists_dogovor_admin_organization_index') }}" title="{% trans %}Organizations{% endtrans %}">
+                                <i class="fa fa-comments"></i>
+                                {% trans %}Organizations{% endtrans %}
                             </a>
                         </li>
                     </ul>

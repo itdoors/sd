@@ -34,7 +34,8 @@ class ArticleDecisionFormType extends AbstractType
         $container = $this->container;
         $router = $this->container->get('router');
 
-        $builder->add('dateUnpublick', 'text', array())
+        $builder
+            ->add('dateUnpublick', 'text', array())
             ->add('title', 'text', array())
             ->add('text', 'textarea', array());
 

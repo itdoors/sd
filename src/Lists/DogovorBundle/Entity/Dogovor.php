@@ -1230,4 +1230,33 @@ class Dogovor
     {
         return $this->dogovorGuid;
     }
+    /**
+     * @var \DateTime
+     */
+    private $createDateTime;
+
+
+    /**
+     * Set createDateTime
+     *
+     * @param \DateTime $createDateTime
+     * 
+     * @return Dogovor
+     */
+    public function setCreateDateTime($createDateTime)
+    {
+        $this->createDateTime = $createDateTime;
+
+        return $this;
+    }
+
+    /**
+     * Get createDateTime
+     *
+     * @return \DateTime 
+     */
+    public function getCreateDateTime()
+    {
+        return $this->createDateTime;
+    }
 }

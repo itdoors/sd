@@ -97,3 +97,7 @@ it_doors_oper_copy_to_next_month:
 it_doors_oper_schedule_sums_table:
     pattern:  /oper/schedule/sums/table/
     defaults: { _controller: ITDoorsOperBundle:OperSchedule:getSumsRendered }
+
+it_doors_oper_schedule_ajax_editing_salary:
+    pattern:  /oper/schedule/ajax/editing/salary/
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:ajaxEditingSalary }

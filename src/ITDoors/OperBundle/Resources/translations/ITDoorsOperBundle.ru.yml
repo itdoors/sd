@@ -199,6 +199,7 @@ Accruals notofficially: Раз УУ
 Planned accruals: План УУ
 Total notofficially: Часы УУ
 Official salary: ЗП ОЗ
+Not Official salary: ЗП УУ
 Accruals officially: Раз ОЗ
 Total officially: Часы ОЗ
 
@@ -214,3 +215,5 @@ Day payment: Дата зарплаты
 
 Payment passed: Дата зарплаты уже прошла
 Advance passed: Дата аванса уже прошла
+
+Input value: Введите значение

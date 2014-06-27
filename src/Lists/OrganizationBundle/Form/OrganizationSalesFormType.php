@@ -50,23 +50,11 @@ class OrganizationSalesFormType extends AbstractType
                 'property'=>'name',
                 'empty_value' => ''
             ))
-            ->add('scope', 'entity', array(
-                'class'=>'Lists\LookupBundle\Entity\Lookup',
-                'property'=>'name',
-                'empty_value' => ''
-            ))
             ->add('edrpou')
             ->add('inn')
             ->add('certificate')
-            //->add('shortDescription')
             ->add('shortname')
             ->add('site')
-            ->add('city', 'entity', array(
-                'class'=>'Lists\CityBundle\Entity\City',
-                'property'=>'name',
-                'empty_value' => ''
-                //'query_builder' =>
-            ))
             ->add('scope', 'entity', array(
                 'class'=>'Lists\LookupBundle\Entity\Lookup',
                 'property'=>'name',

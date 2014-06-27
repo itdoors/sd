@@ -240,6 +240,21 @@ class OperScheduleController extends BaseFilterController
                 $infoHours[$idCoworker.'-'.$idReplacement]['plannedAccrual'] = 0;
             }
 
+            $infoHours[$idCoworker.'-'.$idReplacement]['salaryNotOfficially'] = $coworker['salaryNotOfficially'];
+            if (!$infoHours[$idCoworker.'-'.$idReplacement]['salaryNotOfficially']) {
+                $infoHours[$idCoworker.'-'.$idReplacement]['salaryNotOfficially'] =
+                    $infoHours[$idCoworker.'-'.$idReplacement]['plannedAccrual'];
+                $infoHours[$idCoworker.'-'.$idReplacement]['salaryNotOfficially'] +=
+                    $infoHours[$idCoworker.'-'.$idReplacement]['accrual']['notOfficially']['plus'];
+                $infoHours[$idCoworker.'-'.$idReplacement]['salaryNotOfficially'] -=
+                    $infoHours[$idCoworker.'-'.$idReplacement]['accrual']['notOfficially']['minus'];
+            }
+
+            $infoHours[$idCoworker.'-'.$idReplacement]['totalSalary'] =
+                $infoHours[$idCoworker.'-'.$idReplacement]['salaryOfficially']
+                + $infoHours[$idCoworker.'-'.$idReplacement]['salaryNotOfficially'];
+
+
             foreach ($infoHoursCoworker as $infoDay) {
                 $status = 'ok';
                 if ($infoDay['isVacation']) {
@@ -262,6 +277,7 @@ class OperScheduleController extends BaseFilterController
 
             }
             //var_dump(count($infoHours));
+            $infoHours[$idCoworker.'-'.$idReplacement]['idMonthInfo'] = $coworker['idMonthInfo'];
         }
 
         return $this->render('ITDoorsOperBundle:Schedule:scheduleTable.html.twig', array(
@@ -1932,7 +1948,7 @@ class OperScheduleController extends BaseFilterController
 
         ));
 
-
+        $idMonthInfo = $monthInfo->getId();
 
 
         if (isset($monthInfo)) {
@@ -1984,6 +2000,14 @@ class OperScheduleController extends BaseFilterController
         } else {
             $plannedAccrualValue = 0;
         }
+        $salaryNotOfficially = $monthInfo->getSalaryNotOfficially();
+        if (!$salaryNotOfficially) {
+            $salaryNotOfficially = $plannedAccrualValue;
+            $salaryNotOfficially += $accrual['notOfficially']['plus'];
+            $salaryNotOfficially -= $accrual['notOfficially']['minus'];
+        }
+
+        $totalSalary = $salaryOfficially + $salaryNotOfficially;
 
         $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleTableSums.html.twig', array(
             'sumOfficially' => $officiallyTotal,
@@ -1993,12 +2017,46 @@ class OperScheduleController extends BaseFilterController
             'salaryOfficially' => $salaryOfficially,
             'idCoworker' => $idCoworker,
             'idReplacement' => $idReplacement,
-            'realSalary' => $realSalary
+            'realSalary' => $realSalary,
+            'salaryNotOfficially' => $salaryNotOfficially,
+            'totalSalary' => $totalSalary,
+            'idMonthInfo'=> $idMonthInfo
         ));
 
         $return['success'] = 1;
 
         return new Response(json_encode($return));
+
+    }
+
+    /**
+     * @return Response
+     */
+    public function ajaxEditingSalaryAction()
+    {
+        $idMonthInfo = $this->get('request')->request->get('pk');
+        $value = $this->get('request')->request->get('value');
+
+        /** @var  $monthInfoRepository \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfoRepository */
+        $monthInfoRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
+
+        $monthInfo = $monthInfoRepository->find($idMonthInfo);
+
+        $monthInfo->setSalaryNotOfficially($value);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($monthInfo);
+        $em->flush();
+
+        $result = array(
+            'id' => $idMonthInfo,
+            'value' => $value,
+            'name' => '1',
+            'text' => (string) $value
+        );
+
+        return new Response(json_encode($result));
 
     }
 }

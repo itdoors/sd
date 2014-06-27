@@ -99,6 +99,14 @@
                         'class' : 'form-horizontal form-row-seperated',
                     }
             }) }}
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Date create{% endtrans%}</label>
+                    <div class="col-md-9">
+                        <label class="required control-label">{{ ''|date('d.m.Y H:i') }}</label>
+                    </div>
+                </div>
+            </div>
             {% if form.userId is defined %}
             <div class="form-body">
                 <div class="form-group">
@@ -113,9 +121,11 @@
             <div class="form-body">
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Date end{% endtrans%}</label>
-                    <div class="col-md-9">
+                    <div class="col-md-9{% if form.dateUnpublick.vars.errors|length %}
+                                            has-error
+                                        {% endif %}">
                         {{ form_widget(form.dateUnpublick, {'attr' : {'id' : 'datepic','class' : 'form-control itdoors-date-picker', 'placeholder': "Date end"| trans}}) }}
-                        {% if form.dateUnpublick.vars.errors|length %}{{ form_errors(form.dateUnpublick) }}{% endif %}
+                        <span class="help-block">{{ form_errors(form.dateUnpublick) }}</span>
                     </div>
                 </div>
             </div>

@@ -37,7 +37,7 @@
                 <td>{{ entitie.dogovorActName}}</td>
                 <td>{{ entitie.dogovorActDate is empty ? '' :entitie.dogovorActDate | date('d-m-Y')}}</td>
                 <td>{{ act.mpk}}</td>
-                <td>{{ act.summa}}</td>
+                <td>{{ act.summa|number_format(2, ',', ' ')}}</td>
                 <td>{{ act.count}}</td>
                 <td>{% if entitie.dogovorActOriginal is not empty %}{% trans %}on{% endtrans %}{% else %}{% trans %}off{% endtrans %}{% endif %}</td>
                 <td>{{ entitie.dogovorActNote}}</td>

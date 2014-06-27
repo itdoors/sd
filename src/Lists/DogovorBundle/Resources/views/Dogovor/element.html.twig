@@ -8,8 +8,8 @@
 <td>{{ item.organizationName|e }}</td>
 <td>{{ item.customerName|e }}</td>
 <td>{{ item.performerName|e }}</td>
-<td>{{ item.dogovorStartdatetime|date('d.m.Y') }}</td>
-<td>{{ item.dogovorStopdatetime|date('d.m.Y') }}</td>
+<td>{{ item.dogovorStartdatetime == '' ? '' : item.dogovorStartdatetime|date('d.m.Y') }}</td>
+<td>{{ item.dogovorStopdatetime == '' ? '' : item.dogovorStopdatetime|date('d.m.Y') }}</td>
 <td>
     {% if item.dogovorProlongation %}
         {% trans from 'messages'%}Yes{% endtrans %}
@@ -17,7 +17,7 @@
         {% trans from 'messages'%}No{% endtrans %}
     {% endif %}
 </td>
-<td>{{ item.dogovorProlongationDate|date('d.m.Y') }}</td>
+<td>{{ item.dogovorProlongationDate == '' ? '' : item.dogovorProlongationDate|date('d.m.Y') }}</td>
 <td>
     {% if item.dogovorIsActive %}
         {% trans from 'messages'%}Active{% endtrans %}

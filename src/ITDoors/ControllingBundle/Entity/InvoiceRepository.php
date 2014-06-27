@@ -349,12 +349,12 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoicePeriod($res);
         /** join */
         $this->joinInvoicePeriod($res);
-        /** where */
-        $res = $res->andWhere("i.dateEnd = :date or i.delayDate = :date")->setParameter(':date', $date)
-            ->andWhere("i.dateFact is NULL")
-            ->orderBy('i.dateEnd', 'DESC');
 
-        return $res->getQuery();
+        return $res->andWhere("i.dateEnd = :date or i.delayDate = :date")
+            ->setParameter(':date', $date)
+            ->andWhere("i.dateFact is NULL")
+            ->orderBy('i.dateEnd', 'DESC')
+            ->getQuery();
     }
 
     /**
@@ -595,22 +595,14 @@ class InvoiceRepository extends EntityRepository
                     ->getResult();
                 break;
             case 'customer':
-                $subQueryCase = '
-                    CASE 
-                    when customer.name is not NULL 
-                    then customer.name else i.customerName 
-                    end  as customerName';
-                $subQueryCaseTwo = '
-                    CASE
-                    when customer.edrpou is not NULL
-                    then customer.edrpou else i.customerEdrpou
-                    end as customerEdrpou';
                 $entitie
                     ->Select('creator.lastName')
                     ->addSelect('creator.firstName')
                     ->addSelect('customer.createdatetime')
-                    ->addSelect("{$subQueryCase}")
-                    ->addSelect("{$subQueryCaseTwo}")
+                     ->addSelect('customer.name as customerName')
+                    ->addSelect(' i.customerName as customerName1c')
+                    ->addSelect('customer.edrpou as customerEdrpou')
+                    ->addSelect('i.customerEdrpou as customerEdrpou1c')
                     ->addSelect('customer.shortname')
                     ->addSelect('customer.address')
                     ->addSelect('customer.mailingAddress')

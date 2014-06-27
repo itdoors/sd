@@ -125,7 +125,9 @@
     </div>
 </div>
 
+{#
 <script src="{{ asset('/bundles/itdoorsoper/js/floatThead/jquery.floatThead.js')}}"></script>
+#}
 
 {#
 <script src="{{ asset('/bundles/itdoorsoper/js/data-tables/jquery.dataTables.js')}}"></script>
@@ -204,23 +206,6 @@
                     }
 
                 })
-            }
-
-            function updateSums(params) {
-                var sendData = {
-                    'params': params
-                }
-                $.ajax({
-                    type: 'POST',
-                    url: $('#info_input').data('url_reload_sums'),
-                    data: sendData,
-
-                    success: function(data) {
-                        alert(data);
-                    }
-
-                })
-
             }
 
             $('#copy_etalon').die('click');
@@ -535,6 +520,7 @@
                 <th>{% trans %}Total notofficially{% endtrans %}</th>
                 <th>{% trans %}Planned accruals{% endtrans %}</th>
                 <th>{% trans %}Accruals notofficially{% endtrans %}</th>
+                <th>{% trans %}Not Official salary{% endtrans %}</th>
                 <th>{% trans %}Real salary{% endtrans %}</th>
             </tr>
         </thead>
@@ -620,7 +606,10 @@
                             'salaryOfficially': infoHours[idCoworker~'-'~idReplacement]['salaryOfficially'],
                             'idCoworker': idCoworker,
                             'idReplacement': idReplacement,
-                            'realSalary': infoHours[idCoworker~'-'~idReplacement]['realSalary']
+                            'realSalary': infoHours[idCoworker~'-'~idReplacement]['realSalary'],
+                            'salaryNotOfficially': infoHours[idCoworker~'-'~idReplacement]['salaryNotOfficially'],
+                            'totalSalary': infoHours[idCoworker~'-'~idReplacement]['totalSalary'],
+                            'idMonthInfo': infoHours[idCoworker~'-'~idReplacement]['idMonthInfo']
                     }) }}
 
                 </tr>
@@ -637,11 +626,9 @@
     }
 */
 
-/*
     #shedule_table{
         overflow: auto;
     }
-*/
     .notDisplayed{
         display: none;
     }
@@ -699,10 +686,12 @@
         })
 */
 
+/*
         $('#graffic_table').floatThead({
             scrollingTop: 42,
             useAbsolutePositioning: false
         });
+*/
 
     } );
 </script>
