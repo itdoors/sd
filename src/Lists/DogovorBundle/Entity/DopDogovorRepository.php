@@ -4,6 +4,7 @@ namespace Lists\DogovorBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * DopDogovorRepository
@@ -77,5 +78,148 @@ class DopDogovorRepository extends EntityRepository
             ->where('dd.dogovorId = :dogovorId')
             ->setParameter(':dogovorId', $dogovorId);
 
+    }
+
+    /**
+     * Returns dogovor collection depending on filter
+     *
+     * @param mixed[] $filters
+     * @param int     $id
+     *
+     * @return Query
+     */
+    public function getAllForDopDogovorQuery($filters, $id = null)
+    {
+        /** @var \Doctrine\ORM\QueryBuilder $sql*/
+        $sql = $this->createQueryBuilder('dd');
+
+        /** @var \Doctrine\ORM\QueryBuilder $sqlCount */
+        $sqlCount = $this->createQueryBuilder('dd');
+
+        $this->processSelect($sql);
+        $this->processCount($sqlCount);
+
+        $this->processBaseQuery($sql);
+        $this->processBaseQuery($sqlCount);
+
+        if ($id) {
+            $this->processIdQuery($sql, $id);
+            $this->processIdQuery($sqlCount, $id);
+        } else {
+            $this->processFilters($sql, $filters);
+            $this->processFilters($sqlCount, $filters);
+        }
+
+        $this->processOrdering($sql);
+
+        $query = $sql->getQuery();
+
+        $count = $sqlCount->getQuery()->getSingleScalarResult();
+
+        $query->setHint('knp_paginator.count', $count);
+
+        return $query;
+    }
+    /**
+     * Processes sql query. adding select
+     *
+     * @param QueryBuilder $sql
+     */
+    public function processSelect($sql)
+    {
+        $sql
+            ->select('dd.id as id')
+            ->addSelect('dd.number as number')
+            ->addSelect('dd.subject as subject')
+            ->addSelect('dd.dogovorId as dogovorId')
+            ->addSelect('dd.dopDogovorType as dopDogovorType')
+            ->addSelect('dd.startdatetime as startdatetime')
+            ->addSelect('dd.activedatetime as activedatetime')
+            ->addSelect('dd.isActive as dopDogovorIsActive')
+            ->addSelect('dd.filepath as filepath')
+            ->addSelect('dd.total as total')
+            ->addSelect("CONCAT(CONCAT(creator.lastName, ' '), creator.firstName) as creatorFullName")
+            ->addSelect("CONCAT(CONCAT(saller.lastName, ' '), saller.firstName) as sallerFullName")
+            ->addSelect(
+                '(
+                SELECT
+                    COUNT(ddd.id) as countId
+                FROM
+                    ListsDogovorBundle:DogovorDepartment ddd
+                WHERE
+                    ddd.dopDogovorId = dd.id
+                ) as departmentCount'
+            );
+    }
+    /**
+     * Processes sql query. adding select
+     *
+     * @param QueryBuilder $sql
+     */
+    public function processCount($sql)
+    {
+        $sql
+            ->select('COUNT(dd.id) as dopcount');
+
+    }
+
+    /**
+     * Processes sql query. adding base query
+     *
+     * @param QueryBuilder $sql
+     */
+    public function processBaseQuery($sql)
+    {
+        $sql
+            ->leftJoin('dd.user', 'creator')
+            ->leftJoin('dd.saller', 'saller');
+    }
+
+    /**
+     * Processes sql query. adding id query
+     *
+     * @param QueryBuilder $sql
+     * @param int          $id
+     */
+    public function processIdQuery($sql, $id)
+    {
+        $sql
+            ->andWhere('dd.id = :id')
+            ->setParameter(':id', $id);
+    }
+
+    /**
+     * Processes sql query depending on filters
+     *
+     * @param QueryBuilder $sql
+     * @param mixed[]      $filters
+     */
+    public function processFilters(QueryBuilder $sql, $filters)
+    {
+        if (sizeof($filters)) {
+            foreach ($filters as $key => $value) {
+                if (!$value) {
+                    continue;
+                }
+                switch ($key) {
+                    case 'startdatetime':
+                        $ids = explode(',', $value);
+                        $sql
+                            ->andWhere("dd.startdatetime in (:datestart)")
+                            ->setParameter(':datestart', $ids);
+                        break;
+                }
+            }
+        }
+    }
+    /**
+     * Processes sql query. adding users query
+     *
+     * @param QueryBuilder $sql
+     */
+    public function processOrdering($sql)
+    {
+        $sql
+            ->orderBy('dd.number', 'ASC');
     }
 }

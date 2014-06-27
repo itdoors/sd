@@ -188,9 +188,10 @@ class DogovorRepository extends EntityRepository
 
                         break;
                     case 'dogovorType':
+                        $ids = explode(',', $value);
                         $sql
-                            ->andWhere("d.dogovorTypeId = :dogovorTypeId")
-                            ->setParameter(':dogovorTypeId', $value);
+                            ->andWhere("d.dogovorTypeId in (:dogovorTypeId)")
+                            ->setParameter(':dogovorTypeId', $ids);
                         break;
                     case 'number':
                         $value = trim($value);
@@ -198,6 +199,18 @@ class DogovorRepository extends EntityRepository
                         $sql
                             ->andWhere("d.number LIKE :number")
                             ->setParameter(':number', "{$value}%");
+                        break;
+                    case 'startdatetime':
+                        $ids = explode(',', $value);
+                        $sql
+                            ->andWhere("d.startdatetime in (:datestart)")
+                            ->setParameter(':datestart', $ids);
+                        break;
+                    case 'stopdatetime':
+                        $ids = explode(',', $value);
+                        $sql
+                            ->andWhere("d.stopdatetime in (:datestop)")
+                            ->setParameter(':datestop', $ids);
                         break;
                 }
             }

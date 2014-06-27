@@ -1,0 +1,257 @@
+{% trans_default_domain 'ListsDogovorBundle' %}
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $.fn.editable.defaults.inputclass = 'form-control';
+        $.fn.editable.defaults.emptytext = '{% trans from 'messages' %}Enter value{% endtrans %}';
+
+        $('.sd-editable').editable({
+            url: '{{ path('sd_common_ajax_dogovor_save') }}'
+        });
+
+        $('#organizationId, #customerId, #performerId').editable({
+            url: '{{ path('sd_common_ajax_dogovor_save') }}',
+            source: '{{ path('sd_common_ajax_organization') }}',
+            select2: {
+                placeholder: '{% trans %}Select Organization{% endtrans %}',
+                minimumInputLength: 2,
+                width: 250
+            }
+        });
+
+        $('#sallerId').editable({
+            url: '{{ path('sd_common_ajax_dogovor_save') }}',
+            source: '{{ path('sd_common_ajax_user') }}',
+            select2: {
+                placeholder: '{% trans %}Select Saller{% endtrans %}',
+                minimumInputLength: 2,
+                width: 250
+            }
+        });
+
+        $('#cityId').editable({
+            url: '{{ path('sd_common_ajax_dogovor_save') }}',
+            source: '{{ path('sd_common_ajax_city') }}',
+            select2: {
+                placeholder: '{% trans %}Select City{% endtrans %}',
+                minimumInputLength: 2,
+                width: 250
+            }
+        });
+
+        $('#dogovorTypeId').editable({
+            url: '{{ path('sd_common_ajax_dogovor_save') }}',
+            source: '{{ path('sd_common_ajax_dogovor_type') }}',
+            select2: {
+                placeholder: '{% trans %}Select Dogovor Type{% endtrans %}',
+                minimumInputLength: 0,
+                width: 250
+            }
+        });
+
+        $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+
+        $('.sd-dogovor-date').live('mouseover', function(e){
+
+            e.preventDefault();
+
+            $(this).on('shown', function(e, editable) {
+
+                var input = editable.input.$input;
+
+                input.attr('readonly', 'readonly');
+
+                input.datepicker({
+                    rtl: App.isRTL(),
+                    autoclose: true,
+                    format: "dd.mm.yyyy",
+                    pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
+                    language: 'ru',
+                    startView: 'decade',
+                    //endDate: new Date(),
+                    weekStart: 1
+                });
+            });
+        });
+
+        $('#prolongationTerm').editable({
+            url: '{{ path('sd_common_ajax_dogovor_save') }}',
+            emptytext: '{% trans %}Enter Prolongation Term{% endtrans %}'
+        });
+
+        $('#isActive').editable({
+            url: '{{ path('sd_common_ajax_dogovor_save') }}',
+            source: {{  dogovor.isActiveChoices|json_encode|raw }}
+        });
+
+        $('#prolongation').editable({
+            url: '{{ path('sd_common_ajax_dogovor_save') }}',
+            source: {{  dogovor.prolongationChoices|json_encode|raw }}
+        });
+
+        $('#mashtab').editable({
+            url: '{{ path('sd_common_ajax_dogovor_save') }}',
+            source: {{  dogovor.mashtabChoices|json_encode|raw }}
+        });
+    });
+</script>
+
+<div class="col-md-12">
+    <table id="dogovor" class="table table-bordered table-striped">
+        <tbody>
+        <tr> {# 1 #}
+            <td style="width:15%">{% trans %}ID{% endtrans %}</td>
+            <td style="width:35%">{{ dogovor.id }}</td>
+            <td style="width:15%">{% trans %}Prolongation{% endtrans %}</td>
+            <td style="width:35%">
+                {% if dogovor.prolongation %}
+                    {% set prolongation ='Yes' %}
+                {% else %}
+                    {% set prolongation ='No' %}
+                {% endif %}
+                <a href="#" id="prolongation" data-type="select" data-pk="{{ dogovor.id }}" data-value="{{ prolongation }}" data-placement="right" data-original-title="{% trans %}Prolongation{% endtrans %}">
+                    {{ prolongation|trans({}, 'messages')  }}
+                </a>
+
+                (<a href="#" id="prolongationTerm" data-type="text" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.prolongationTerm }}" data-placement="right" data-original-title="{% trans %}Enter Prolongation Term In Days{% endtrans %}">
+                    {{ dogovor.prolongationTerm }}
+                </a>)
+            </td>
+        </tr>
+        <tr> {# 2 #}
+            <td>{% trans %}Dogovor Number{% endtrans %}</td>
+            <td>
+                <a href="#" id="number" class="sd-editable" data-type="text" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.number }}" data-placement="right" data-original-title="{% trans %}Enter Number{% endtrans %}">
+                    {{ dogovor.number }}
+                </a>
+            </td>
+            <td>{% trans %}Organization{% endtrans %}</td>
+            <td>
+                <a href="#" id="organizationId" data-type="select2" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.organizationName }}" data-placement="right" data-original-title="{% trans %}Enter Organization{% endtrans %}">
+                    {{ dogovor.organizationName }}
+                </a>
+            </td>
+        </tr>
+        <tr> {# 3 #}
+            <td>{% trans %}Customer{% endtrans %}</td>
+            <td>
+                <a href="#" id="customerId"  data-type="select2" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.customerName }}" data-placement="right" data-original-title="{% trans %}Enter Customer{% endtrans %}">
+                    {{ dogovor.customerName }}
+                </a>
+            </td>
+            <td>{% trans %}Performer{% endtrans %}</td>
+            <td>
+                <a href="#" id="performerId"  data-type="select2" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.performerName }}" data-placement="right" data-original-title="{% trans %}Enter Performer{% endtrans %}">
+                    {{ dogovor.performerName }}
+                </a>
+            </td>
+        </tr>
+        <tr> {# 4 #}
+            <td>{% trans %}Startdatetime{% endtrans %}</td>
+            <td>
+                <a href="#"
+                   class="sd-dogovor-date sd-editable {% if dogovor.startdatetime is empty %} editable-empty {% endif %}"
+                   data-name="startdatetimeString"
+                   data-type="text"
+                   data-pk="{{ dogovor.id }}"
+                        {% if dogovor.startdatetime %}
+                            data-value="{{ dogovor.startdatetime|date("d.m.Y") }}"
+                        {% endif %}
+                   data-original-title="{% trans %}Edit{% endtrans %}"
+                >
+                    {% if dogovor.startdatetime %}
+                        {{ dogovor.startdatetime|date("d.m.Y") }}
+                    {% else %}
+                        {% trans from 'messages' %}Enter value{% endtrans %}
+                    {% endif %}
+                </a>
+            </td>
+            <td>{% trans %}Stopdatetime{% endtrans %}</td>
+            <td>
+                <a href="#"
+                   class="sd-dogovor-date sd-editable {% if dogovor.stopdatetime is empty %} editable-empty {% endif %}"
+                   data-name="stopdatetimeString"
+                   data-type="text"
+                   data-pk="{{ dogovor.id }}"
+                        {% if dogovor.stopdatetime %}
+                            data-value="{{ dogovor.stopdatetime|date("d.m.Y") }}"
+                        {% endif %}
+                   data-original-title="{% trans %}Edit{% endtrans %}"
+                        >
+                    {% if dogovor.stopdatetime %}
+                        {{ dogovor.stopdatetime|date("d.m.Y") }}
+                    {% else %}
+                        {% trans from 'messages' %}Enter value{% endtrans %}
+                    {% endif %}
+                </a>
+            </td>
+        </tr>
+        <tr> {# 5 #}
+            <td>{% trans from 'messages' %}City{% endtrans %}</td>
+            <td>
+                <a href="#" id="cityId"
+                   data-type="select2"
+                   data-pk="{{ dogovor.id }}"
+                   data-value="{{ dogovor.cityName }}"
+                   data-placement="right"
+                   data-original-title="{% trans from 'messages' %}Enter City{% endtrans %}">
+                    {{ dogovor.cityName }}
+                </a>
+            </td>
+            <td>{% trans %}Subject{% endtrans %}</td>
+            <td>
+                <a href="#" id="subject" class="sd-editable" data-type="text" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.subject }}" data-placement="right" data-original-title="{% trans %}Enter Subject{% endtrans %}">
+                    {{ dogovor.subject }}
+                </a>
+            </td>
+        </tr>
+        <tr> {# 6 #}
+            <td>{% trans from 'messages' %}File{% endtrans %}</td>
+            <td>
+                {% if dogovor.filepath %}
+                    <a href="/uploads/dogovor/{{ dogovor.filepath }}" target="_blank">
+                        {% trans %}File{% endtrans %}
+                    </a>
+                {% endif %}
+            </td>
+            <td>{% trans %}Dogovor Type{% endtrans %}</td>
+            <td>
+                <a href="#" id="dogovorTypeId" data-type="select2" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.type }}" data-placement="right" data-original-title="{% trans %}Enter Dogovor Type{% endtrans %}">
+                    {{ dogovor.type }}
+                </a>
+            </td>
+        </tr>
+        <tr> {# 7 #}
+            <td>{% trans %}Is Active{% endtrans %}</td>
+            <td>
+                {% if dogovor.isActive %}
+                    {% set isActive ='Yes' %}
+                {% else %}
+                    {% set isActive ='No' %}
+                {% endif %}
+                <a href="#" id="isActive" data-type="select" data-pk="{{ dogovor.id }}" data-value="{{ isActive }}" data-placement="right" data-original-title="{% trans %}Is Active{% endtrans %}">
+                    {{ isActive|trans({}, 'messages') }}
+                </a>
+            </td>
+            <td>{% trans %}Mashtab{% endtrans %}</td>
+            <td>
+                <a href="#" id="mashtab" data-type="select" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.mashtab }}" data-placement="right" data-original-title="{% trans %}Enter Dogovor Mashtab{% endtrans %}">
+                    {% if (dogovor.mashtabChoices[dogovor.mashtab]) %}
+                        {{ dogovor.mashtabChoices[dogovor.mashtab] }}
+                    {% endif %}
+                </a>
+            </td>
+        </tr>
+        <tr> {# 8 #}
+            <td>{% trans %}Saller{% endtrans %}</td>
+            <td>
+                <a href="#" id="sallerId"  data-type="select2" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.sallerName }}" data-placement="right" data-original-title="{% trans %}Enter Saller{% endtrans %}">
+                    {{ dogovor.sallerName }}
+                </a>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
