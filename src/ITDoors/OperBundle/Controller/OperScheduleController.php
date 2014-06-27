@@ -277,6 +277,7 @@ class OperScheduleController extends BaseFilterController
 
             }
             //var_dump(count($infoHours));
+            $infoHours[$idCoworker.'-'.$idReplacement]['idMonthInfo'] = $coworker['idMonthInfo'];
         }
 
         return $this->render('ITDoorsOperBundle:Schedule:scheduleTable.html.twig', array(
@@ -293,7 +294,7 @@ class OperScheduleController extends BaseFilterController
             'hoursTotal' => $countHours,
             'holydaysTotalString' => $holidays,
             'dayAdvance' => $dayAdvance,
-            'dayPayment' => $dayPayment,
+            'dayPayment' => $dayPayment
         ));
 
     }
@@ -1947,7 +1948,7 @@ class OperScheduleController extends BaseFilterController
 
         ));
 
-
+        $idMonthInfo = $monthInfo->getId();
 
 
         if (isset($monthInfo)) {
@@ -2018,12 +2019,44 @@ class OperScheduleController extends BaseFilterController
             'idReplacement' => $idReplacement,
             'realSalary' => $realSalary,
             'salaryNotOfficially' => $salaryNotOfficially,
-            'totalSalary' => $totalSalary
+            'totalSalary' => $totalSalary,
+            'idMonthInfo'=> $idMonthInfo
         ));
 
         $return['success'] = 1;
 
         return new Response(json_encode($return));
+
+    }
+
+    /**
+     * @return Response
+     */
+    public function ajaxEditingSalaryAction() {
+
+        $idMonthInfo = $this->get('request')->request->get('pk');
+        $value = $this->get('request')->request->get('value');
+
+        /** @var  $monthInfoRepository \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfoRepository */
+        $monthInfoRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
+
+        $monthInfo = $monthInfoRepository->find($idMonthInfo);
+
+        $monthInfo->setSalaryNotOfficially($value);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($monthInfo);
+        $em->flush();
+
+        $result = array(
+            'id' => $idMonthInfo,
+            'value' => $value,
+            'name' => '1',
+            'text' => (string) $value
+        );
+
+        return new Response(json_encode($result));
 
     }
 }

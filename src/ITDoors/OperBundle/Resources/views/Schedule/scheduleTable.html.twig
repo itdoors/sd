@@ -206,23 +206,6 @@
                 })
             }
 
-            function updateSums(params) {
-                var sendData = {
-                    'params': params
-                }
-                $.ajax({
-                    type: 'POST',
-                    url: $('#info_input').data('url_reload_sums'),
-                    data: sendData,
-
-                    success: function(data) {
-                        alert(data);
-                    }
-
-                })
-
-            }
-
             $('#copy_etalon').die('click');
             $('#copy_etalon').live('click', function(e) {
                 $('.alert').hide();
@@ -623,7 +606,8 @@
                             'idReplacement': idReplacement,
                             'realSalary': infoHours[idCoworker~'-'~idReplacement]['realSalary'],
                             'salaryNotOfficially': infoHours[idCoworker~'-'~idReplacement]['salaryNotOfficially'],
-                            'totalSalary': infoHours[idCoworker~'-'~idReplacement]['totalSalary']
+                            'totalSalary': infoHours[idCoworker~'-'~idReplacement]['totalSalary'],
+                            'idMonthInfo': infoHours[idCoworker~'-'~idReplacement]['idMonthInfo']
                     }) }}
 
                 </tr>

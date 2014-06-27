@@ -1,5 +1,4 @@
 {% trans_default_domain 'ITDoorsOperBundle' %}
-
 <td class="sums{{ idCoworker }}{{ idReplacement }}">
     {{ sumOfficially }}
 </td>
@@ -38,9 +37,42 @@
 </td>
 
 <td class="sums{{ idCoworker }}{{ idReplacement }}">
-    {{ salaryNotOfficially }}
+
+    <a href="#" class="salary_editing{{ idCoworker }}{{ idReplacement }}" data-type="text" data-pk="{{ idMonthInfo }}" data-param='{"aaa": 1}' data-value="" data-placement="right" data-original-title="{% trans %}Input value{% endtrans %}">
+        {{ salaryNotOfficially }}
+    </a>
 
 </td>
 <td class="sums{{ idCoworker }}{{ idReplacement }}">
     {{ totalSalary }}
 </td>
+
+<script>
+    $(document).ready(function(){
+
+        $.fn.editable.defaults.inputclass = 'form-control';
+        $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
+
+        $('.salary_editing{{ idCoworker }}{{ idReplacement }}').editable({
+            url: '{{ path('it_doors_oper_schedule_ajax_editing_salary') }}'
+        });
+
+        $('.salary_editing{{ idCoworker }}{{ idReplacement }}').on('save', function(e, params) {
+            var idCoworker = {{ idCoworker }};
+            var idReplacement = {{ idReplacement }};
+            var date = $('#info_input').data('date');
+            var idDepartment = $('#info_input').data('id_department');
+
+            var params = {
+                "date": date,
+                "idCoworker": idCoworker,
+                "idReplacement": idReplacement,
+                "idDepartment": idDepartment
+            }
+            var sendData = {
+                "params": params
+            }
+            updateSums(sendData, idCoworker, idReplacement);
+        })
+    });
+</script>
