@@ -2032,8 +2032,8 @@ class OperScheduleController extends BaseFilterController
     /**
      * @return Response
      */
-    public function ajaxEditingSalaryAction() {
-
+    public function ajaxEditingSalaryAction()
+    {
         $idMonthInfo = $this->get('request')->request->get('pk');
         $value = $this->get('request')->request->get('value');
 
