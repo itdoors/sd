@@ -223,6 +223,13 @@ class OrganizationRepository extends EntityRepository
                         $sql->andWhere('users.id in (:userFilterIds)');
                         $sql->setParameter(':userFilterIds', $value);
                         break;
+                    case 'organizationEdrpou':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $sql->andWhere('o.edrpou in (:edrpou)');
+                        $sql->setParameter(':edrpou', explode(',', $value));
+                        break;
                     /*case 'users':
                         if (isset($value[0]) && !$value[0]) {
                             break;

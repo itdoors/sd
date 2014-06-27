@@ -131,7 +131,7 @@ class AjaxController extends BaseFilterController
         $result = array();
 
         foreach ($organizations as $organization) {
-            $result[] = $this->serializeObject($organization, null, 'getEdrpou');
+            $result[] = $this->serializeObject($organization, 'getEdrpou', 'getEdrpou');
         }
 
         return new Response(json_encode($result));
@@ -984,6 +984,35 @@ class AjaxController extends BaseFilterController
 
         foreach ($organizations as $organization) {
             $result[] = $this->serializeObject($organization);
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json organization object by requested id
+     *
+     * @return string
+     */
+    public function organizationByEdrpousAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $organizationsRepository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+        /** @var Organization[] $organizations */
+        $organizations = $organizationsRepository
+            ->createQueryBuilder('o')
+            ->where('o.edrpou in (:edrpou)')
+            ->setParameter(':edrpou', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($organizations as $organization) {
+            $result[] = $this->serializeObject($organization, 'getEdrpou', 'getEdrpou');
         }
 
         return new Response(json_encode($result));

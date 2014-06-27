@@ -24,7 +24,7 @@ class DogovorAdminController extends SalesAdminController
     public function newAction(Request $request)
     {
 
-        if ($this->getUser()->hasRole('ROLE_ADMIN')) {
+        if ($this->getUser()->hasRole('ROLE_DOGOVORADMIN')) {
             $form = $this->createForm('organizationDogovorAdminForm');
         } else {
             $form = $this->createForm('organizationSalesForm');

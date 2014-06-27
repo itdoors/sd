@@ -117,6 +117,10 @@ sd_common_ajax_organization_by_id:
 sd_common_ajax_organization_by_ids:
     pattern:  /ajax/organization_by_ids
     defaults: { _controller: SDCommonBundle:Ajax:organizationByIds }
+    
+sd_common_ajax_organization_by_edrpous:
+    pattern:  /ajax/organization_by_edrpous
+    defaults: { _controller: SDCommonBundle:Ajax:organizationByEdrpous }
 
 sd_common_ajax_user_by_id:
     pattern:  /ajax/user_by_id
