@@ -38,7 +38,7 @@ class DogovorService
         $em = $this->container->get('doctrine')->getManager();
 
         $directory = $this->container->getParameter('project.web.dir') . '/uploads/dogovor/';
-        
+
         echo 'find in '.$directory."\t\n";
         /** @var DogovorRepository $dogovorR */
         $dogovorR = $em->getRepository('ListsDogovorBundle:Dogovor')->findAll();
