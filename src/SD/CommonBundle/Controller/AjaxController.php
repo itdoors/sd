@@ -354,6 +354,31 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($result));
     }
+    /**
+     * Returns json city object by id
+     *
+     * @return string
+     */
+    public function scopeByIdSAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $cityList = $this->getDoctrine()
+            ->getRepository('ListsLookupBundle:Lookup')
+            ->createQueryBuilder('l')
+            ->where('l.id in (:ids)')
+            ->setParameter(':ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($cityList as $city) {
+            $result[] = $this->serializeObject($city);
+        }
+
+        return new Response(json_encode($result));
+    }
 
     /**
      * Returns json companystructure list
@@ -416,6 +441,135 @@ class AjaxController extends BaseFilterController
 
         foreach ($dogovorTypes as $object) {
             $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json dogovor type list
+     *
+     * @return string
+     */
+    public function dogovorStartdatetimeAction()
+    {
+        $dogovor = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:Dogovor')
+            ->createQueryBuilder('d')
+            ->select('d.startdatetime')
+            ->where('d.startdatetime is not NULL')
+            ->groupBy('d.startdatetime')
+            ->orderBy('d.startdatetime', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($dogovor as $object) {
+            $result[] = array(
+                    'id' => $object['startdatetime']->format('Y-m-d H:i:s'),
+                    'value' => $object['startdatetime']->format('Y-m-d H:i:s'),
+                    'name' => $object['startdatetime']->format('Y-m-d'),
+                    'text' => $object['startdatetime']->format('Y-m-d')
+                );
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json dogovor type list
+     *
+     * @return string
+     */
+    public function dogovorStartdatetimeIdSAction()
+    {
+        $searchText = $this->get('request')->query->get('id');
+        $dogovor = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:Dogovor')
+            ->createQueryBuilder('d')
+            ->select('d.startdatetime')
+            ->where('d.startdatetime is not NULL')
+            ->andWhere('d.startdatetime in (:q)')
+            ->setParameter(':q', explode(',', $searchText))
+            ->groupBy('d.startdatetime')
+            ->orderBy('d.startdatetime', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($dogovor as $object) {
+            $result[] = array(
+                    'id' => $object['startdatetime']->format('Y-m-d H:i:s'),
+                    'value' => $object['startdatetime']->format('Y-m-d H:i:s'),
+                    'name' => $object['startdatetime']->format('Y-m-d'),
+                    'text' => $object['startdatetime']->format('Y-m-d')
+                );
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json dogovor type list
+     *
+     * @return string
+     */
+    public function dogovorStopdatetimeAction()
+    {
+        $dogovor = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:Dogovor')
+            ->createQueryBuilder('d')
+            ->select('d.stopdatetime')
+            ->where('d.stopdatetime is not NULL')
+            ->groupBy('d.stopdatetime')
+            ->orderBy('d.stopdatetime', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($dogovor as $object) {
+            $result[] = array(
+                    'id' => $object['stopdatetime']->format('Y-m-d H:i:s'),
+                    'value' => $object['stopdatetime']->format('Y-m-d H:i:s'),
+                    'name' => $object['stopdatetime']->format('Y-m-d'),
+                    'text' => $object['stopdatetime']->format('Y-m-d')
+                );
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json dogovor type list
+     *
+     * @return string
+     */
+    public function dogovorStopdatetimeIdSAction()
+    {
+        $searchText = $this->get('request')->query->get('id');
+        $dateArr = explode(',', $searchText);
+        /** @var \Lists\DogovorBundle\Entity\DogovorRepository $dogovor */
+        $dogovor = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:Dogovor')
+            ->createQueryBuilder('d')
+            ->select('d.stopdatetime')
+            ->where('d.stopdatetime is not NULL')
+            ->andWhere('d.stopdatetime in (:q)')
+            ->setParameter(':q', $dateArr)
+            ->groupBy('d.stopdatetime')
+            ->orderBy('d.stopdatetime', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($dogovor as $object) {
+            $result[] = array(
+                    'id' => $object['stopdatetime']->format('Y-m-d H:i:s'),
+                    'value' => $object['stopdatetime']->format('Y-m-d H:i:s'),
+                    'name' => $object['stopdatetime']->format('Y-m-d'),
+                    'text' => $object['stopdatetime']->format('Y-m-d')
+                );
         }
 
         return new Response(json_encode($result));

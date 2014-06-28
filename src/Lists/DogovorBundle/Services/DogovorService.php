@@ -38,6 +38,8 @@ class DogovorService
         $em = $this->container->get('doctrine')->getManager();
 
         $directory = $this->container->getParameter('project.web.dir') . '/uploads/dogovor/';
+
+        echo 'find in '.$directory."\t\n";
         /** @var DogovorRepository $dogovorR */
         $dogovorR = $em->getRepository('ListsDogovorBundle:Dogovor')->findAll();
 
@@ -61,7 +63,7 @@ class DogovorService
             if (is_file($directory . $dogovor->getFilepath())) {
                 $countOk++;
                 $date = date("d.m.Y H:i:s.", filemtime($directory . $dogovor->getFilepath()));
-                $dogovor->setCreateDateTime(new \DateTime($date));
+                $dogovor->setCreateTime(new \DateTime($date));
                 $em->persist($dogovor);
                 $em->flush();
             } else {
@@ -69,6 +71,6 @@ class DogovorService
             }
         }
 
-        return 'ok: ' . $countOk . ' error: ' . $countErr;
+        return 'ok: ' . $countOk . "\t\n" .' errors: ' . $countErr;
     }
 }

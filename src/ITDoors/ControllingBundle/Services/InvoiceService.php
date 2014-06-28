@@ -218,7 +218,7 @@ class InvoiceService
                 $dogovoradd = $em->getRepository('ListsDogovorBundle:Dogovor')
                     ->findOneBy(array(
                     'number' => $invoice->dogovorNumber,
-                    'startdatetime' => new \DateTime($invoice->dogovorDate),
+//                    'startdatetime' => new \DateTime($invoice->dogovorDate),
                     'customerId' => $customerfind->getId(),
                     'performerId' => $performerfind->getId()
                 ));
