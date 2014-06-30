@@ -202,8 +202,8 @@ class DogovorRepository extends EntityRepository
                         break;
                     case 'dateRange':
                         $dateArr = explode('-', $value);
-                            $dateStart = new \DateTime(str_replace('.','-', $dateArr[0]));
-                            $dateStop = new \DateTime(str_replace('.','-', $dateArr[1]));
+                            $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
+                            $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));
                             $sql
                                 ->andWhere("d.createDateTime BETWEEN :datestart AND :datestop")
                                 ->setParameter(':datestart', $dateStart)
