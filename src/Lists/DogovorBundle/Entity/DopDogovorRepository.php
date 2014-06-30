@@ -171,6 +171,7 @@ class DopDogovorRepository extends EntityRepository
     public function processBaseQuery($sql)
     {
         $sql
+            ->leftJoin('dd.dogovor', 'dogovor')
             ->leftJoin('dd.user', 'creator')
             ->leftJoin('dd.saller', 'saller');
     }
@@ -202,11 +203,20 @@ class DopDogovorRepository extends EntityRepository
                     continue;
                 }
                 switch ($key) {
-                    case 'startdatetime':
+                    case 'dogovorType':
                         $ids = explode(',', $value);
                         $sql
-                            ->andWhere("dd.startdatetime in (:datestart)")
-                            ->setParameter(':datestart', $ids);
+                            ->andWhere("dogovor.dogovorTypeId in (:dogovorTypeId)")
+                            ->setParameter(':dogovorTypeId', $ids);
+                        break;
+                    case 'dateRange':
+                        $dateArr = explode('-', $value);
+                            $dateStart = new \DateTime(str_replace('.','-', $dateArr[0]));
+                            $dateStop = new \DateTime(str_replace('.','-', $dateArr[1]));
+                            $sql
+                                ->andWhere("dd.createDateTime BETWEEN :datestart AND :datestop")
+                                ->setParameter(':datestart', $dateStart)
+                                ->setParameter(':datestop', $dateStop);
                         break;
                 }
             }
