@@ -42,13 +42,8 @@
             $('.daterangepicker').daterangepicker(
                     {
                         ranges: {
-                            'Сегодня': [moment(), moment()],
-                            'Вчера': [moment().subtract('days', 1), moment().subtract('days', 1)],
-                            'Последняя неделя': [moment().subtract('days', 6), moment()],
-                            'Последние 30 дней': [moment().subtract('days', 29), moment()],
-                            'Текущий месяц': [moment().startOf('month'), moment().endOf('month')],
-                            'Предыдущий месяц': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-                        },
+                            'Текущий месяц': [moment().startOf('month'), moment().endOf('month')]
+                           },
                         startDate: moment().subtract('days', 29),
                         endDate: moment(),
                         format: 'YYYY.MM.DD',
