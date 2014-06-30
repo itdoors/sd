@@ -1,6 +1,7 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
+    - { resource: @BCCCronManagerBundle/Resources/config/assetic.yml }
 
 parameters:
     security.encoder.digest.class: SD\UserBundle\Security\MessageDigestPasswordEncoder
@@ -16,8 +17,6 @@ parameters:
     ajax.paginator.namespace.oper.department.coworkers: "oper.paginator.department.coworkers"
     ajax.namespace.oper.department.schedule: "oper.department.schedule"
     ajax.filter.namespace.report.activity: "report.activity"
-    project.dir: '/var/www/vhosts/itdoors.com.ua/subdomains/t/sd'
-    #project.dir: '/var/www/vhosts/itdoors.com.ua/subdomains/deploy_sd/current'
     project.web.dir: '%project.dir%/web'
     log.file.path: "%project.dir%/log.txt"
     1C.file.path: "%project.dir%/app/share/1c/debt/"
@@ -25,7 +24,7 @@ parameters:
     upload.file.path: "%project.dir%/web/uploads/files/"
     userprofiles.file.path: "/uploads/userprofiles/"
     email.from: "noreply@griffin.ua"
-    name.from: "ITDOORS"
+    name.from: "ImpelNET"
 
 framework:
     #esi:             ~
@@ -117,6 +116,7 @@ tss_automailer:
 swiftmailer:
     transport: %mailer_transport%
     host:      %mailer_host%
+    port:      %mailer_port%
     username:  %mailer_user%
     password:  %mailer_password%
     spool:     

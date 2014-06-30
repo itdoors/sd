@@ -23,7 +23,7 @@ class ParserInvoiceCommand extends ContainerAwareCommand
     {
         $this
             ->setName('it:doors:invoice-parser')
-            ->setDescription('parser invoices');
+            ->setDescription('Parser invoices');
     }
 
     /**

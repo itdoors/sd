@@ -23,7 +23,7 @@ class GetCreateDateInFilesCommand extends ContainerAwareCommand
     {
         $this
             ->setName('lists:dogovor:update:createdate')
-            ->setDescription('Get create date in files for dogovor');
+            ->setDescription('Get create date in files for dogovor and dop_dogovor');
     }
 
     /**

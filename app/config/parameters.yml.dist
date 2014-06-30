@@ -8,7 +8,9 @@ parameters:
     database_password: postgres
     mailer_transport: smtp
     mailer_host: 127.0.0.1
+    mailer_post: 465
     mailer_user: null
     mailer_password: null
     locale: en
     secret: 53391534dallas53391534
+    project.dir: /var/www/sd

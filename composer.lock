@@ -1,10 +1,101 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "d85cd9746f1fb9bd914f16f4df210899",
+    "hash": "37c07ad3bc780a749e5e28600ba7a6d2",
     "packages": [
+        {
+            "name": "bcc/cron-manager-bundle",
+            "version": "dev-master",
+            "target-dir": "BCC/CronManagerBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/michelsalib/BCCCronManagerBundle.git",
+                "reference": "4eda5bdcce7c594e9232d4535305884d5f0adeab"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/michelsalib/BCCCronManagerBundle/zipball/4eda5bdcce7c594e9232d4535305884d5f0adeab",
+                "reference": "4eda5bdcce7c594e9232d4535305884d5f0adeab",
+                "shasum": ""
+            },
+            "require": {
+                "components/jquery": "1.*",
+                "symfony/assetic-bundle": "~2",
+                "symfony/symfony": "~2",
+                "twbs/bootstrap": "~3"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "BCC\\CronManagerBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michel Salib",
+                    "email": "michelsalib@hotmail.com",
+                    "homepage": "http://www.michelsalib.com"
+                }
+            ],
+            "description": "A cron table manager bundle for Symfony2",
+            "homepage": "http://github.com/michelsalib/BCCCronManagerBundle",
+            "keywords": [
+                "cron management"
+            ],
+            "time": "2014-04-17 16:26:19"
+        },
+        {
+            "name": "components/jquery",
+            "version": "1.11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/components/jquery.git",
+                "reference": "c20fd94f83db26dfdce5f37ce5d6cbe0e907a05b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/components/jquery/zipball/c20fd94f83db26dfdce5f37ce5d6cbe0e907a05b",
+                "reference": "c20fd94f83db26dfdce5f37ce5d6cbe0e907a05b",
+                "shasum": ""
+            },
+            "require": {
+                "robloach/component-installer": "*"
+            },
+            "type": "component",
+            "extra": {
+                "component": {
+                    "scripts": [
+                        "jquery.js"
+                    ],
+                    "files": [
+                        "jquery.min.js",
+                        "jquery-migrate.js",
+                        "jquery-migrate.min.js"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "John Resig",
+                    "email": "jeresig@gmail.com",
+                    "homepage": "http://ejohn.org/"
+                }
+            ],
+            "description": "jQuery JavaScript Library",
+            "homepage": "http://jquery.com",
+            "time": "2014-01-24 21:17:36"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.1.2",
@@ -1084,6 +1175,50 @@
             "time": "2012-12-21 11:40:51"
         },
         {
+            "name": "robloach/component-installer",
+            "version": "0.0.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/RobLoach/component-installer.git",
+                "reference": "1864f25db21fc173e02a359f646acd596c1b0460"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/RobLoach/component-installer/zipball/1864f25db21fc173e02a359f646acd596c1b0460",
+                "reference": "1864f25db21fc173e02a359f646acd596c1b0460",
+                "shasum": ""
+            },
+            "require": {
+                "kriswallsmith/assetic": "1.*",
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "composer/composer": "1.*"
+            },
+            "type": "composer-installer",
+            "extra": {
+                "class": "ComponentInstaller\\Installer"
+            },
+            "autoload": {
+                "psr-0": {
+                    "ComponentInstaller": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rob Loach",
+                    "email": "robloach@gmail.com",
+                    "homepage": "http://robloach.net"
+                }
+            ],
+            "description": "Allows installation of Components via Composer.",
+            "time": "2013-08-31 23:46:48"
+        },
+        {
             "name": "sensio/distribution-bundle",
             "version": "v2.3.4",
             "target-dir": "Sensio/Bundle/DistributionBundle",
@@ -1178,17 +1313,17 @@
         },
         {
             "name": "sensio/generator-bundle",
-            "version": "v2.3.4",
+            "version": "v2.3.5",
             "target-dir": "Sensio/Bundle/GeneratorBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioGeneratorBundle.git",
-                "reference": "4a7b126e9c22f858e3584b19ddce6e5bdd7677ee"
+                "reference": "8b7a33aa3d22388443b6de0b0cf184122e9f60d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioGeneratorBundle/zipball/4a7b126e9c22f858e3584b19ddce6e5bdd7677ee",
-                "reference": "4a7b126e9c22f858e3584b19ddce6e5bdd7677ee",
+                "url": "https://api.github.com/repos/sensiolabs/SensioGeneratorBundle/zipball/8b7a33aa3d22388443b6de0b0cf184122e9f60d2",
+                "reference": "8b7a33aa3d22388443b6de0b0cf184122e9f60d2",
                 "shasum": ""
             },
             "require": {
@@ -1218,11 +1353,13 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 }
             ],
             "description": "This bundle generates code for you",
-            "time": "2013-08-21 18:09:35"
+            "time": "2014-04-28 14:01:06"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -1621,12 +1758,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/radutopala/TSSAutomailerBundle.git",
-                "reference": "a39d62f5c4ff3c623e8162cbb0463a39307e93ef"
+                "reference": "0a01d22a9be2952ce77f3fae4c6608cc042bfc80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/radutopala/TSSAutomailerBundle/zipball/a39d62f5c4ff3c623e8162cbb0463a39307e93ef",
-                "reference": "a39d62f5c4ff3c623e8162cbb0463a39307e93ef",
+                "url": "https://api.github.com/repos/radutopala/TSSAutomailerBundle/zipball/0a01d22a9be2952ce77f3fae4c6608cc042bfc80",
+                "reference": "0a01d22a9be2952ce77f3fae4c6608cc042bfc80",
                 "shasum": ""
             },
             "require": {
@@ -1662,7 +1799,58 @@
                 "swift",
                 "swiftmailer"
             ],
-            "time": "2014-06-03 06:10:31"
+            "time": "2014-06-24 16:17:26"
+        },
+        {
+            "name": "twbs/bootstrap",
+            "version": "v3.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twbs/bootstrap.git",
+                "reference": "c068162161154a4b85110ea1e7dd3d7897ce2b72"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/c068162161154a4b85110ea1e7dd3d7897ce2b72",
+                "reference": "c068162161154a4b85110ea1e7dd3d7897ce2b72",
+                "shasum": ""
+            },
+            "replace": {
+                "twitter/bootstrap": "self.version"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jacob Thornton",
+                    "email": "jacobthornton@gmail.com"
+                },
+                {
+                    "name": "Mark Otto",
+                    "email": "markdotto@gmail.com"
+                }
+            ],
+            "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+            "homepage": "http://getbootstrap.com",
+            "keywords": [
+                "JS",
+                "css",
+                "framework",
+                "front-end",
+                "less",
+                "mobile-first",
+                "responsive",
+                "web"
+            ],
+            "time": "2014-06-26 16:36:48"
         },
         {
             "name": "twig/extensions",
@@ -1779,7 +1967,8 @@
     "stability-flags": {
         "friendsofsymfony/user-bundle": 20,
         "knplabs/knp-paginator-bundle": 20,
-        "tss/automailer-bundle": 20
+        "tss/automailer-bundle": 20,
+        "bcc/cron-manager-bundle": 20
     },
     "platform": {
         "php": ">=5.3.3"

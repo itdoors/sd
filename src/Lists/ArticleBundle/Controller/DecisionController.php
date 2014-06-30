@@ -11,7 +11,7 @@ use Lists\ArticleBundle\Entity\ArticleRepository;
 use Lists\ArticleBundle\Entity\Vote;
 use Lists\ArticleBundle\Entity\Ration;
 use SD\UserBundle\Entity\User;
-
+use Sbk\Bundle\CronBundle\Cron\Task;
 /**
  * Class SolutionsController
  */
@@ -167,6 +167,10 @@ class DecisionController extends BaseController
                     );
                 }
                 $connection->commit();
+                $cronManager = $this->container->get('sbk_cron.manager');
+//                $task = Task::class();
+//                $task->setCommand('*/5 * * * * php cd /var/www/sd app/console swiftmailer:spool:send --env=prod');
+//                $cronManager->forkTask($task);
             } catch (\Exception $e) {
                 $connection->rollBack();
                 $em->close();
