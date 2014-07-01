@@ -1,7 +1,7 @@
 parameters:
-#    it_doors_cron.example.class: ITDoors\CronBundle\Example
+    lists_article.service.class: Lists\ArticleBundle\Services\ArticleService
 
 services:
-#    it_doors_cron.example:
-#        class: %it_doors_cron.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    lists_article.service:
+        class: %lists_article.service.class%
+        arguments: [@service_container]

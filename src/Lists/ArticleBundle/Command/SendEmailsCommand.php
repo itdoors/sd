@@ -4,7 +4,7 @@
  * Command class for parser
  */
 
-namespace ITDoors\CronBundle\Command;
+namespace Lists\ArticleBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,7 +15,7 @@ use Symfony\Component\Console\Input\InputArgument;
 /**
  * CronDeleteCommand
  */
-class CronDeleteCommand extends ContainerAwareCommand
+class SendEmailsCommand extends ContainerAwareCommand
 {
 
     /**
@@ -24,10 +24,10 @@ class CronDeleteCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('it:doors:cron:delete')
-            ->setDescription('Cron delete command')
+            ->setName('lists:article:send:for')
+            ->setDescription('Send emails party')
              ->setDefinition(array(
-                new InputArgument('comment', InputArgument::REQUIRED, 'The comment cron')
+                new InputArgument('id', InputArgument::REQUIRED, 'The id article')
             ));
     }
 
@@ -39,15 +39,13 @@ class CronDeleteCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $comment = $input->getArgument('comment');
-        $res = '';
-        $cm = new CronManager();
-        foreach ($cm->get() as $key => $val){
-            if($val->getComment() == $comment){
-                $cm->remove($key);
-                $res = 'Remove: '.$key;
-            }
-        }
+        $id = $input->getArgument('id');
+
+        $output->writeln($id);
+        $service = $this->getContainer()->get('lists_article.service');
+
+        $res = $service->sendEmails($id);
+
         $output->writeln($res);
     }
 }

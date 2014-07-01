@@ -169,12 +169,43 @@ class DecisionController extends BaseController
                 }
                 $connection->commit();
                 
+                // send
                 $cm = new CronManager();
                 $cron = new Cron();
                 $directory = $this->container->getParameter('project.dir');
                 $comment = uniqid();
                 $cron->setComment($comment);
+                if (!is_dir($directory.'/app/logs/cron')) {
+                    mkdir($directory.'/app/logs/cron', 0777);
+                }
+                $cron->setLogFile($directory.'/app/logs/cron/log'.$comment.'.php');
+                $cron->setErrorFile($directory.'/app/logs/cron/err'.$comment.'.php');
                 $cron->setCommand('cd '.$directory. ' && app/console swiftmailer:spool:send --env=prod && app/console it:doors:cron:delete '.$comment);
+                $cm->add($cron);
+                
+                // send for 15 min
+                $comment = uniqid();
+                $cron->setComment($comment);
+                if (!is_dir($directory.'/app/logs/cron')) {
+                    mkdir($directory.'/app/logs/cron', 0777);
+                }
+                $date =  date('d.m.Y H:i', $party->getDateUnpublick()->getTimestamp());
+                
+                $date = mktime(
+                    date('H', $party->getDateUnpublick()->getTimestamp()),
+                    date('i', $party->getDateUnpublick()->getTimestamp())-15,
+                    0,
+                    date('m', $party->getDateUnpublick()->getTimestamp()),
+                    date('d', $party->getDateUnpublick()->getTimestamp())
+                );
+                
+                $cron->setMinute(date('i', $date));
+                $cron->setHour(date('H', $date));
+                $cron->setDayOfMonth(date('d', $date));
+                $cron->setMonth(date('m', $date));
+                $cron->setLogFile($directory.'/app/logs/cron/log'.$comment.'.php');
+                $cron->setErrorFile($directory.'/app/logs/cron/err'.$comment.'.php');
+                $cron->setCommand('cd '.$directory. ' app/console lists:article:send:for '. $party->getId() . ' && app/console swiftmailer:spool:send --env=prod && app/console it:doors:cron:delete '.$comment);
                 $cm->add($cron);
                 
             } catch (\Exception $e) {
