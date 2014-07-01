@@ -92,6 +92,8 @@ class VoteRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      * 
+     * @param integer $id
+     * 
      * @return array
      */
     public function getVoitesFor15($id)
@@ -110,7 +112,7 @@ class VoteRepository extends EntityRepository
             ->andwhere('v.modelName = :text')
             ->andwhere('v.value is NULL')
             ->andwhere('v.dateCreate is NULL')
-            ->setParameter(':id', (int)$id)
+            ->setParameter(':id', $id)
             ->setParameter(':text', 'article')
             ->orderBy('v.dateCreate', 'DESC')
             ->getQuery()

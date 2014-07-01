@@ -71,8 +71,9 @@ class CronController extends ManagerCron
     /**
      * Edit a cron
      *
-     * @param $id The line of the cron in the cron table
-     * @return \Symfony\Bundle\FrameworkBundle\Controller\RedirectResponse|\Symfony\Bundle\FrameworkBundle\Controller\Response
+     * @param integer $id The line of the cron in the cron table
+     * 
+     * @return RedirectResponse|Response
      */
     public function editAction($id)
     {
@@ -103,7 +104,8 @@ class CronController extends ManagerCron
     /**
      * Wake up a cron from the cron table
      *
-     * @param $id The line of the cron in the cron table
+     * @param integer $id The line of the cron in the cron table
+     * 
      * @return \Symfony\Bundle\FrameworkBundle\Controller\RedirectResponse
      */
     public function wakeupAction($id)
@@ -123,7 +125,8 @@ class CronController extends ManagerCron
     /**
      * Suspend a cron from the cron table
      *
-     * @param $id The line of the cron in the cron table
+     * @param integer $id The line of the cron in the cron table
+     * 
      * @return \Symfony\Bundle\FrameworkBundle\Controller\RedirectResponse
      */
     public function suspendAction($id)
@@ -143,7 +146,8 @@ class CronController extends ManagerCron
     /**
      * Remove a cron from the cron table
      *
-     * @param $id The line of the cron in the cron table
+     * @param integer $id The line of the cron in the cron table
+     * 
      * @return RedirectResponse
      */
     public function removeAction($id)
@@ -161,8 +165,9 @@ class CronController extends ManagerCron
     /**
      * Gets a log file
      *
-     * @param $id The line of the cron in the cron table
-     * @param $type The type of file, log or error
+     * @param integer $id   The line of the cron in the cron table
+     * @param string  $type The type of file, log or error
+     * 
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function fileAction($id, $type)
@@ -182,8 +187,9 @@ class CronController extends ManagerCron
     /**
      * Adds a flash to the flash bag where flashes are array of messages
      *
-     * @param $type
-     * @param $message
+     * @param string $type
+     * @param string $message
+     * 
      * @return mixed
      */
     private function addFlash($type, $message)

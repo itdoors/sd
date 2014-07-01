@@ -46,31 +46,34 @@ class ArticleService
 
         $party =  $em->getRepository('ListsArticleBundle:Article')
             ->find($id);
-        
+
         $emailTo = $this->container->getParameter('email.from');
         $nameTo = $this->container->getParameter('name.from');
-        
         $email = $this->get('it_doors_email.service');
-        
+
         foreach ($articles as $article) {
             echo $article['firstName'] . "\t\n";
 
             $email->send(
-                array($emailTo => $nameTo), 'decision-making', array(
-                'users' => array(
-                    $article['email']
-                ),
-                'variables' => array(
-                    '${lastName}$' => $article['lastName'],
-                    '${firstName}$' => $article['firstName'],
-                    '${middleName}$' => $article['middleName'],
-                    '${id}$' =>
-                    '<a href="' . $this->generateUrl(
-                        'list_article_vote_decision_show', array('id' => $id), true
+                array($emailTo => $nameTo),
+                'decision-making',
+                array(
+                    'users' => array(
+                        $article['email']
+                    ),
+                    'variables' => array(
+                        '${lastName}$' => $article['lastName'],
+                        '${firstName}$' => $article['firstName'],
+                        '${middleName}$' => $article['middleName'],
+                        '${id}$' =>
+                        '<a href="' . $this->generateUrl(
+                            'list_article_vote_decision_show',
+                            array('id' => $id),
+                            true
+                        )
+                        . '">' . $id . '</a>',
+                        '${dateUnpublic}$' => date('d.m.Y H:i', $party->getDateUnpublick()->getTimestamp()),
                     )
-                    . '">' . $id . '</a>',
-                    '${dateUnpublic}$' => date('d.m.Y H:i', $party->getDateUnpublick()->getTimestamp()),
-                )
                 )
             );
         }
