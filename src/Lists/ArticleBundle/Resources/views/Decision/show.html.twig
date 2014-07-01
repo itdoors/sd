@@ -140,7 +140,7 @@
                                             <td>{{ itm.dateCreate == '' ? '' : itm.dateCreate | date('d.m.Y H:i') }}</td>
                                             <td>
                                                 {% if itm.value is null %}
-                                                    <span class="label label-warning">{{ 'No answer'|trans }}}</span>
+                                                    <span class="label label-warning">{{ 'No answer'|trans }}</span>
                                                 {% else %}
                                                     {% if itm.value == 0 %}
                                                         <span class="label label-danger">{{ 'Deflecting'|trans }}</span>

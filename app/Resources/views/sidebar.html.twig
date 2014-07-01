@@ -516,9 +516,9 @@
                 path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_stuff')
                 or
                 (
-                    app.request.attributes.get('_route_params') is not empty 
-                    and
                     app.request.attributes.get('_route_params').id is defined
+                    and
+                    app.request.attributes.get('_route_params').id | number_format(0)
                     and
                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_show',app.request.attributes.get('_route_params'))
                 )
