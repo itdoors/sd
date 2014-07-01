@@ -13,6 +13,7 @@ use Lists\ArticleBundle\Entity\Ration;
 use SD\UserBundle\Entity\User;
 use BCC\CronManagerBundle\Manager\CronManager;
 use BCC\CronManagerBundle\Manager\Cron;
+
 /**
  * Class SolutionsController
  */
@@ -145,9 +146,7 @@ class DecisionController extends BaseController
 
                     $email = $this->get('it_doors_email.service');
                     $email->send(
-                        array($emailTo => $nameTo),
-                        'decision-making',
-                        array(
+                        array($emailTo => $nameTo), 'decision-making', array(
                         'users' => array(
                             $user->getEmail()
                         ),
@@ -156,11 +155,9 @@ class DecisionController extends BaseController
                             '${firstName}$' => $user->getFirstName(),
                             '${middleName}$' => $user->getMiddleName(),
                             '${id}$' =>
-                                '<a href="' . $this->generateUrl(
-                                    'list_article_vote_decision_show',
-                                    array('id' => $party->getId()),
-                                    true
-                                )
+                            '<a href="' . $this->generateUrl(
+                                'list_article_vote_decision_show', array('id' => $party->getId()), true
+                            )
                             . '">' . $party->getId() . '</a>',
                             '${dateUnpublic}$' => date('d.m.Y H:i', $party->getDateUnpublick()->getTimestamp()),
                         )
@@ -168,46 +165,38 @@ class DecisionController extends BaseController
                     );
                 }
                 $connection->commit();
-                
+
                 // send
                 $cm = new CronManager();
                 $cron = new Cron();
                 $directory = $this->container->getParameter('project.dir');
                 $comment = uniqid();
                 $cron->setComment($comment);
-                if (!is_dir($directory.'/app/logs/cron')) {
-                    mkdir($directory.'/app/logs/cron', 0777);
+                if (!is_dir($directory . '/app/logs/cron')) {
+                    mkdir($directory . '/app/logs/cron', 0777);
                 }
-                $cron->setLogFile($directory.'/app/logs/cron/log'.$comment.'.php');
-                $cron->setErrorFile($directory.'/app/logs/cron/err'.$comment.'.php');
-                $cron->setCommand('cd '.$directory. ' && app/console swiftmailer:spool:send --env=prod && app/console it:doors:cron:delete '.$comment);
+                $cron->setLogFile($directory . '/app/logs/cron/log' . $comment . '.php');
+                $cron->setErrorFile($directory . '/app/logs/cron/err' . $comment . '.php');
+                $cron->setCommand('cd ' . $directory . ' && app/console swiftmailer:spool:send --env=prod && app/console it:doors:cron:delete ' . $comment);
                 $cm->add($cron);
-                
+
                 // send for 15 min
                 $comment = uniqid();
                 $cron->setComment($comment);
-                if (!is_dir($directory.'/app/logs/cron')) {
-                    mkdir($directory.'/app/logs/cron', 0777);
-                }
-                $date =  date('d.m.Y H:i', $party->getDateUnpublick()->getTimestamp());
-                
                 $date = mktime(
-                    date('H', $party->getDateUnpublick()->getTimestamp()),
-                    date('i', $party->getDateUnpublick()->getTimestamp())-15,
-                    0,
-                    date('m', $party->getDateUnpublick()->getTimestamp()),
-                    date('d', $party->getDateUnpublick()->getTimestamp())
+                    date('H', $party->getDateUnpublick()->getTimestamp()), date('i', $party->getDateUnpublick()->getTimestamp()) - 15, 0, date('m', $party->getDateUnpublick()->getTimestamp()), date('d', $party->getDateUnpublick()->getTimestamp())
                 );
-                
+
                 $cron->setMinute(date('i', $date));
                 $cron->setHour(date('H', $date));
                 $cron->setDayOfMonth(date('d', $date));
                 $cron->setMonth(date('m', $date));
-                $cron->setLogFile($directory.'/app/logs/cron/log'.$comment.'.php');
-                $cron->setErrorFile($directory.'/app/logs/cron/err'.$comment.'.php');
-                $cron->setCommand('cd '.$directory. ' app/console lists:article:send:for '. $party->getId() . ' && app/console swiftmailer:spool:send --env=prod && app/console it:doors:cron:delete '.$comment);
+                $cron->setLogFile($directory . '/app/logs/cron/log' . $comment . '.php');
+                $cron->setErrorFile($directory . '/app/logs/cron/err' . $comment . '.php');
+                $cron->setCommand('cd ' . $directory . ' app/console lists:article:send:for '
+                    . $party->getId() 
+                    . ' && app/console swiftmailer:spool:send --env=prod && app/console it:doors:cron:delete ' . $comment);
                 $cm->add($cron);
-                
             } catch (\Exception $e) {
                 $connection->rollBack();
                 $em->close();

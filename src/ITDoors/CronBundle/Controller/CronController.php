@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 class CronController extends ManagerCron
 {
+
     /**
      * Displays the current crons and a form to add a new one.
      *
@@ -30,9 +31,9 @@ class CronController extends ManagerCron
         $form = $this->createForm(new CronType(), new Cron());
 
         return $this->render('ITDoorsCronBundle:Cron:index.html.twig', array(
-            'crons' => $cm->get(),
-            'raw'   => $cm->getRaw(),
-            'form'  => $form->createView(),
+                'crons' => $cm->get(),
+                'raw' => $cm->getRaw(),
+                'form' => $form->createView(),
         ));
     }
 
@@ -62,9 +63,9 @@ class CronController extends ManagerCron
         }
 
         return $this->render('ITDoorsCronBundle:Cron:index.html.twig', array(
-            'crons' => $cm->get(),
-            'raw'   => $cm->getRaw(),
-            'form'  => $form->createView(),
+                'crons' => $cm->get(),
+                'raw' => $cm->getRaw(),
+                'form' => $form->createView(),
         ));
     }
 
@@ -96,7 +97,7 @@ class CronController extends ManagerCron
         }
 
         return $this->render('ITDoorsCronBundle:Cron:edit.html.twig', array(
-            'form'  => $form->createView(),
+                'form' => $form->createView(),
         ));
     }
 
@@ -172,13 +173,14 @@ class CronController extends ManagerCron
         $cron = $crons[$id];
 
         $data = array();
-        $data['file'] =  ($type == 'log') ? $cron->getLogFile(): $cron->getErrorFile();
+        $data['file'] = ($type == 'log') ? $cron->getLogFile() : $cron->getErrorFile();
         $data['content'] = \file_get_contents($data['file']);
 
         $serializer = new Serializer(array(), array('json' => new JsonEncoder()));
 
         return new Response($serializer->serialize($data, 'json'));
     }
+
     /**
      * Adds a flash to the flash bag where flashes are array of messages
      *
