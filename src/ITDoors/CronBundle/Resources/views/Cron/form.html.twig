@@ -1,5 +1,5 @@
+{% trans_default_domain 'ITDoorsCronBundle' %}
 {% form_theme form 'BCCCronManagerBundle:Form:fields.html.twig' %}
-
 <div class="row">
     <em class="span">
         {{ 'Keep in mind that cron user is %user% and its root directory is %root%.' | trans({'%user%': '<strong>'~wwwUser.name~'</strong>', '%root%': '<strong>'~wwwUser.dir~'</strong>'}, 'BCCCronManagerBundle') | raw }}
@@ -19,49 +19,49 @@
     <div class="col-xs-1 {{ form.minute.vars.errors ? 'error' : ''}}">
         {{ form_widget(form.minute, {'attr':{
                 'class': 'time-input form-control ',
-                'data-original-title': 'Minute' | trans ({}, 'BCCCronManagerBundle')
+                'data-original-title': 'Minute'
             }})
         }}
     </div>
     <div class="col-xs-1 {{ form.hour.vars.errors ? 'error' : ''}}">
         {{ form_widget(form.hour, {'attr':{
                 'class': 'time-input form-control ',
-                'data-original-title': 'Hour' | trans ({}, 'BCCCronManagerBundle')
+                'data-original-title': 'Hour'
             }})
         }}
     </div>
     <div class="col-xs-1 {{ form.dayOfMonth.vars.errors ? 'error' : ''}}">
         {{ form_widget(form.dayOfMonth, {'attr':{
                 'class': 'time-input form-control ',
-                'data-original-title': 'Day Of Month' | trans ({}, 'BCCCronManagerBundle')
+                'data-original-title': 'Day Of Month'
             }})
         }}
     </div>
     <div class="col-xs-1 {{ form.month.vars.errors ? 'error' : ''}}">
         {{ form_widget(form.month, {'attr':{
                 'class': 'time-input form-control ',
-                'data-original-title': 'Month' | trans ({}, 'BCCCronManagerBundle')
+                'data-original-title': 'Month'
             }})
         }}
     </div>
     <div class="col-xs-1 {{ form.dayOfWeek.vars.errors ? 'error' : ''}}">
         {{ form_widget(form.dayOfWeek, {'attr':{
                 'class': 'time-input form-control ',
-                'data-original-title': 'Day Of Week' | trans ({}, 'BCCCronManagerBundle')
+                'data-original-title': 'Day Of Week'
             }})
         }}
     </div>
-    <div class="btn-group pull-right time-menu" data-original-title="{{ 'Time Presets' | trans({}, 'BCCCronManagerBundle') }}">
+    <div class="btn-group pull-right time-menu" data-original-title="{{ 'Time Presets' }}">
         <span class="btn btn-default dropdown-toggle" data-toggle="dropdown">
             <span class="glyphicon glyphicon-search"></span>
             <span class="caret"></span>
         </span>
         <ul class="dropdown-menu">
-            <li><a class="time-preset" href="#" id="hourly">{{ 'Hourly' | trans({}, 'BCCCronManagerBundle') }}</a></li>
-            <li><a class="time-preset" href="#" id="daily">{{ 'Daily' | trans({}, 'BCCCronManagerBundle') }}</a></li>
-            <li><a class="time-preset" href="#" id="weekly">{{ 'Weekly' | trans({}, 'BCCCronManagerBundle') }}</a></li>
-            <li><a class="time-preset" href="#" id="monthly">{{ 'Monthly' | trans({}, 'BCCCronManagerBundle') }}</a></li>
-            <li><a class="time-preset" href="#" id="yearly">{{ 'Yearly' | trans({}, 'BCCCronManagerBundle') }}</a></li>
+            <li><a class="time-preset" href="#" id="hourly">{{ 'Hourly' }}</a></li>
+            <li><a class="time-preset" href="#" id="daily">{{ 'Daily' }}</a></li>
+            <li><a class="time-preset" href="#" id="weekly">{{ 'Weekly' }}</a></li>
+            <li><a class="time-preset" href="#" id="monthly">{{ 'Monthly' }}</a></li>
+            <li><a class="time-preset" href="#" id="yearly">{{ 'Yearly' }}</a></li>
         </ul>
     </div>
 </div>
