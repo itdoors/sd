@@ -52,6 +52,7 @@ class DepartmentPeopleRepository extends EntityRepository
     {
         $query = $this->createQueryBuilder('dp')
             ->select('dp.id as id')
+            ->addSelect('dp.isGph as gph')
             ->addSelect('i.firstName')
             ->addSelect('i.lastName')
             ->addSelect('i.middleName')
