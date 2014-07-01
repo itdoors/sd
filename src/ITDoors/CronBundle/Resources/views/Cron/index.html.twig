@@ -1,0 +1,149 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ITDoorsCronBundle' %}
+{% block title %}{% trans %}List of cron command{% endtrans %} {% endblock %}
+{% block page_title %}
+<h3 class="page-title">
+        {% trans %}Cron <small>list of commands</small>{% endtrans %}
+</h3>
+{% endblock %}
+
+{% block page_breadcrumbs %}
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+         <i class="fa fa-home"></i>
+         <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        <i class="fa fa-angle-right"></i>
+    </li>
+    <li>
+        <a href="{{ path('it_doors_cron_index') }}" title="{% trans %}Cron{% endtrans %}">{% trans %}Cron{% endtrans %}</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datepicker/css/datepicker.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script src="{{ asset('templates/metronic/plugins/bootstrap/js/bootstrap.min.js')}}" type="text/javascript"></script>
+{% endblock %}
+
+
+
+
+
+
+{% block body %}
+    <section id="existing-crons">
+        {% for index, cron in crons %}
+            <div class="row">
+                <div class="span2">
+                    <span class="label label-{% if cron.status == 'error' %}important{% elseif cron.status == 'unknown' %}warning{%else%}success{% endif %}">
+                        {{ cron.status }}
+                    </span>
+                </div>
+                <h3 class="span{% if cron.suspended %} muted{% endif %}">
+                    {{ cron.expression }} {{ cron.command }}
+                </h3>
+                <button class="btn btn-default pull-right" data-toggle="collapse" data-target="#cron-{{ index }}"><i class="icon-search"></i>{{ 'Details' }}</button>
+            </div>
+            <div class="collapse in" id="cron-{{ index }}">
+                <table class="table table-striped" >
+                    <tr>
+                        <th class="span2" style="color: #808080;"><i class="icon-time"></i>{{ 'Last Run' }}</th>
+                        <td colspan="2">{{ cron.lastRunTime ? cron.lastRunTime | date : 'Unknown' }}</td>
+                    </tr>
+                    {% if cron.comment %}
+                        <tr>
+                            <th style="color: #049cdb;"><i class="icon-comment"></i>{{ 'Comment' }}</th>
+                            <td colspan="2">{{ cron.comment }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if cron.logFile %}
+                        <tr>
+                            <th style="color: #46a546;"><i class="icon-file"></i>{{ 'Log File' }}</th>
+                            <td>{{ cron.logFile }}</td>
+                            <td>
+                                {% if cron.logSize %}
+                                    <a class="btn btn-default btn-info pull-right modal-link"
+                                            href="{{ path('it_doors_cron_file', {'id':index, 'type': 'log'}) }}">
+                                        <i class="icon-search icon-white"></i>
+                                        {{ 'Log File' | trans({}, 'BCCCronManagerBundle') }}
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
+                    {% if cron.errorFile %}
+                        <tr>
+                            <th style="color: #9d261d;"><i class="icon-file"></i>{{ 'Error File' | trans({}, 'BCCCronManagerBundle') }}</th>
+                            <td>{{ cron.errorFile }}</td>
+                            <td>
+                                {% if cron.errorSize %}
+                                    <a class="btn btn-default btn-info pull-right modal-link"
+                                            href="{{ path('BCCCronManagerBundle_file', {'id':index, 'type': 'error'}) }}">
+                                        <i class="icon-search icon-white"></i>
+                                        {{ 'Error file' | trans({}, 'BCCCronManagerBundle') }}
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <th style="color: #808080;"><i class="icon-cog"></i>{{ 'Raw cron' | trans({}, 'BCCCronManagerBundle') }}</th>
+                        <td colspan="2"><pre>{{ cron }}</pre></td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td colspan="2">
+                            <span class="pull-right">
+                                <a class="btn btn-default btn-primary"
+                                   href="{{ path('it_doors_cron_edit', {'id':index}) }}">
+                                    <i class="icon-edit icon-white"></i>
+                                    {{ 'Edit' | trans({}, 'BCCCronManagerBundle') }}
+                                </a>
+                                {% if cron.suspended %}
+                                    <a class="btn btn-default btn-success"
+                                       href="{{ path('it_doors_cron_wakeup', {'id':index}) }}">
+                                        <i class="icon-play icon-white"></i>
+                                        {{ 'Wake up' }}
+                                    </a>
+                                {% else %}
+                                    <a class="btn btn-default btn-warning"
+                                       href="{{ path('it_doors_cron_suspend', {'id':index}) }}">
+                                        <i class="icon-pause icon-white"></i>
+                                        {{ 'Suspend' }}
+                                    </a>
+                                {% endif %}
+                                <a class="btn btn-default btn-danger"
+                                   href="{{ path('it_doors_cron_remove', {'id':index}) }}">
+                                    <i class="icon-trash icon-white"></i>
+                                    {{ 'Remove' }}
+                                </a>
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            {{ not loop.last ? '<hr/>' : '' }}
+        {% endfor %}
+    </section>
+    <section id="add-cron">
+        <div class="page-header">
+            <h2>{{ 'Add a cron' | trans({}, 'BCCCronManagerBundle') }}</h2>
+        </div>
+        <form role="form" method="post" action="{{ path('it_doors_cron_add') }}">
+            {% include 'ITDoorsCronBundle:Cron:form.html.twig' with {'form': form} %}
+            <input type="submit" class="btn btn-success btn-lg" value="{{ 'Add' | trans({}, 'BCCCronManagerBundle') }}"/>
+        </form>
+    </section>
+    <section id="raw-crons">
+        <div class="page-header">
+            <h2>{{ 'Cron table' | trans({}, 'BCCCronManagerBundle') }}</h2>
+        </div>
+        <pre>{{ raw }}</pre>
+    </section>
+{% endblock %}

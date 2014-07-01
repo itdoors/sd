@@ -1,0 +1,7 @@
+parameters:
+#    it_doors_cron.example.class: ITDoors\CronBundle\Example
+
+services:
+#    it_doors_cron.example:
+#        class: %it_doors_cron.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

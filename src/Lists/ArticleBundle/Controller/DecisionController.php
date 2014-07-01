@@ -11,7 +11,8 @@ use Lists\ArticleBundle\Entity\ArticleRepository;
 use Lists\ArticleBundle\Entity\Vote;
 use Lists\ArticleBundle\Entity\Ration;
 use SD\UserBundle\Entity\User;
-use Sbk\Bundle\CronBundle\Cron\Task;
+use BCC\CronManagerBundle\Manager\CronManager;
+use BCC\CronManagerBundle\Manager\Cron;
 /**
  * Class SolutionsController
  */
@@ -167,10 +168,15 @@ class DecisionController extends BaseController
                     );
                 }
                 $connection->commit();
-                $cronManager = $this->container->get('sbk_cron.manager');
-//                $task = Task::class();
-//                $task->setCommand('*/5 * * * * php cd /var/www/sd app/console swiftmailer:spool:send --env=prod');
-//                $cronManager->forkTask($task);
+                
+                $cm = new CronManager();
+                $cron = new Cron();
+                $directory = $this->container->getParameter('project.dir');
+                $comment = uniqid();
+                $cron->setComment($comment);
+                $cron->setCommand('cd '.$directory. ' && app/console swiftmailer:spool:send --env=prod && app/console it:doors:cron:delete '.$comment);
+                $cm->add($cron);
+                
             } catch (\Exception $e) {
                 $connection->rollBack();
                 $em->close();

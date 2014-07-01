@@ -1,7 +1,6 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
-    - { resource: @BCCCronManagerBundle/Resources/config/assetic.yml }
 
 parameters:
     security.encoder.digest.class: SD\UserBundle\Security\MessageDigestPasswordEncoder
