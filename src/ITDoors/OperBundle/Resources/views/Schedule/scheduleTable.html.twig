@@ -116,7 +116,9 @@
                 <div id="infoUserTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
                 </div>
                 <br>
+                {% if canEdit %}
                 <a class="btn red left_float" id="delete_user_button">{% trans %}Delete{% endtrans %}</a>
+                {% endif %}
                 <a class="btn green right_float" data-dismiss="modal" aria-hidden="true">{% trans %}Exit{% endtrans %}</a>
                 <br>
             </div>
@@ -452,15 +454,17 @@
         })
     </script>
 
-    <a class="btn green" style="float: right; margin-bottom: 20px;" id="copy_etalon">Скопировать из выбранных</a>
-    <a class="btn blue" style="float: right; margin-right: 20px;" id="add_coworker_button">{% trans %}Add coworker{% endtrans %}</a>
+    {% if canEdit %}
+        <a class="btn green" style="float: right; margin-bottom: 20px;" id="copy_etalon">Скопировать из выбранных</a>
+        <a class="btn blue" style="float: right; margin-right: 20px;" id="add_coworker_button">{% trans %}Add coworker{% endtrans %}</a>
 
-    <a class="btn green" style="float: right; margin-bottom: 20px; margin-right: 20px;"
-       id="copy-to-next-month"
-       data-text="{% trans %}Copy to the next month success{% endtrans %}"
-    >
-        {% trans %}Copy to the next month{% endtrans %}
-    </a>
+        <a class="btn green" style="float: right; margin-bottom: 20px; margin-right: 20px;"
+           id="copy-to-next-month"
+           data-text="{% trans %}Copy to the next month success{% endtrans %}"
+        >
+            {% trans %}Copy to the next month{% endtrans %}
+        </a>
+    {% endif %}
 
     <table style="width: 35%;">
         <tr>
@@ -549,7 +553,7 @@
                         {% endif %}
                     <td>
                         {% if coworker.mpkName is not empty %}
-                            ({{ coworker.mpkName }})
+                            {{ coworker.mpkName }}
                         {% endif %}
                     </td>
 
@@ -609,7 +613,8 @@
                             'realSalary': infoHours[idCoworker~'-'~idReplacement]['realSalary'],
                             'salaryNotOfficially': infoHours[idCoworker~'-'~idReplacement]['salaryNotOfficially'],
                             'totalSalary': infoHours[idCoworker~'-'~idReplacement]['totalSalary'],
-                            'idMonthInfo': infoHours[idCoworker~'-'~idReplacement]['idMonthInfo']
+                            'idMonthInfo': infoHours[idCoworker~'-'~idReplacement]['idMonthInfo'],
+                            'canEdit': canEdit
                     }) }}
 
                 </tr>
