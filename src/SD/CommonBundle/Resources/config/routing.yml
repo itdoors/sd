@@ -138,6 +138,11 @@ sd_common_ajax_scope_by_id:
     pattern:  /ajax/scope_by_id
     defaults: { _controller: SDCommonBundle:Ajax:scopeById }
     
+    
+sd_common_ajax_scope_by_ids:
+    pattern:  /ajax/scope_by_ids
+    defaults: { _controller: SDCommonBundle:Ajax:scopeByIdS }
+    
 sd_common_ajax_organization_type:
     pattern:  /ajax/organization_type
     defaults: { _controller: SDCommonBundle:Ajax:organizationType }
@@ -145,6 +150,22 @@ sd_common_ajax_organization_type:
 sd_common_ajax_dogovor_type:
     pattern:  /ajax/dogovor_type
     defaults: { _controller: SDCommonBundle:Ajax:dogovorType }
+
+sd_common_ajax_dogovor_startdatetime:
+    pattern:  /ajax/dogovor_startdatetime
+    defaults: { _controller: SDCommonBundle:Ajax:dogovorStartdatetime }
+
+sd_common_ajax_dogovor_stopdatetime:
+    pattern:  /ajax/dogovor_stopdatetime
+    defaults: { _controller: SDCommonBundle:Ajax:dogovorStopdatetime }
+
+sd_common_ajax_dogovor_startdatetime_by_ids:
+    pattern:  /ajax/dogovor_startdatetime_ids
+    defaults: { _controller: SDCommonBundle:Ajax:dogovorStartdatetimeIdS }
+
+sd_common_ajax_dogovor_stopdatetime_by_ids:
+    pattern:  /ajax/dogovor_stopdatetime_ids
+    defaults: { _controller: SDCommonBundle:Ajax:dogovorStopdatetimeIdS }
 
 sd_common_ajax_organization_group:
     pattern:  /ajax/organization_group

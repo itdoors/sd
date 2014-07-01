@@ -33,6 +33,7 @@
 {% endif %}
 
 {% if shown %}
+        {% if canEdit %}
         <td align="center">
             <i class="fa fa-edit action_button editButton" data-not_officially="{{ oneDayTime.notOfficially }}"
                title="{% trans %}Edit{% endtrans %}"></i>
@@ -49,5 +50,6 @@
             <i class="fa fa-times action_button cancelButton notDisplayed"
                title="{% trans %}Cancel{% endtrans %}"></i>
         </td>
+        {% endif %}
     </tr>
 {% endif %}

@@ -480,30 +480,30 @@ class DopDogovor
     /**
      * @var \DateTime
      */
-    private $createTime;
+    private $createDateTime;
 
 
     /**
-     * Set createTime
+     * Set createDateTime
      *
-     * @param \DateTime $createTime
+     * @param \DateTime $createDateTime
      * 
      * @return DopDogovor
      */
-    public function setCreateTime($createTime)
+    public function setCreateDateTime($createDateTime)
     {
-        $this->createTime = $createTime;
+        $this->createDateTime = $createDateTime;
 
         return $this;
     }
 
     /**
-     * Get createTime
+     * Get createDateTime
      *
      * @return \DateTime 
      */
-    public function getCreateTime()
+    public function getCreateDateTime()
     {
-        return $this->createTime;
+        return $this->createDateTime;
     }
 }

@@ -188,9 +188,10 @@ class DogovorRepository extends EntityRepository
 
                         break;
                     case 'dogovorType':
+                        $ids = explode(',', $value);
                         $sql
-                            ->andWhere("d.dogovorTypeId = :dogovorTypeId")
-                            ->setParameter(':dogovorTypeId', $value);
+                            ->andWhere("d.dogovorTypeId in (:dogovorTypeId)")
+                            ->setParameter(':dogovorTypeId', $ids);
                         break;
                     case 'number':
                         $value = trim($value);
@@ -199,6 +200,16 @@ class DogovorRepository extends EntityRepository
                             ->andWhere("d.number LIKE :number")
                             ->setParameter(':number', "{$value}%");
                         break;
+                    case 'dateRange':
+                        $dateArr = explode('-', $value);
+                            $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
+                            $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));
+                            $sql
+                                ->andWhere("d.createDateTime BETWEEN :datestart AND :datestop")
+                                ->setParameter(':datestart', $dateStart)
+                                ->setParameter(':datestop', $dateStop);
+                        break;
+
                 }
             }
         }

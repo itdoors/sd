@@ -296,6 +296,8 @@
         {% if is_granted('ROLE_DOGOVORADMIN') %}
             <li{% if 
                    
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_made_index')
+                     or
                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_index')
                      or
                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_admin_organization_index')
@@ -350,6 +352,12 @@
                         <a href="{{ path('lists_dogovor_dogovor_index') }}" title="{% trans %}Dogovor List{% endtrans %}">
                             <i class="fa fa-comments"></i>
                             {% trans %}My Dogovor{% endtrans %}
+                        </a>
+                    </li>
+                    <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_made_index') %} class="active"{% endif %}>
+                        <a href="{{ path('lists_dogovor_made_index') }}" title="{% trans %}Made agreement{% endtrans %}">
+                            <i class="fa fa-comments"></i>
+                            {% trans %}Made agreement{% endtrans %}
                         </a>
                     </li>
                     <li >
@@ -508,9 +516,9 @@
                 path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_stuff')
                 or
                 (
-                    app.request.attributes.get('_route_params') is not empty 
-                    and
                     app.request.attributes.get('_route_params').id is defined
+                    and
+                    app.request.attributes.get('_route_params').id | number_format(0)
                     and
                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_show',app.request.attributes.get('_route_params'))
                 )

@@ -40,3 +40,12 @@ lists_dopdogovor_ajax_element:
 lists_dogovor_department_list:
     pattern:  /lists/dogovor/department/list/{dogovorId}
     defaults: { _controller: ListsDogovorBundle:DogovorDepartment:list }
+    
+
+lists_dogovor_made_index:
+    pattern:  /lists/dogovor/made/index
+    defaults: { _controller: ListsDogovorBundle:DogovorMade:index }
+
+lists_dogovor_made_list:
+    pattern:  /lists/dogovor/made/list
+    defaults: { _controller: ListsDogovorBundle:DogovorMade:list }

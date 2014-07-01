@@ -54,7 +54,7 @@
                     </td>
                     <td>
                         {% if item.dateUnpublick|date('U') > ''|date('U') %}
-                            {{ 'Not completed'|trans }}
+                            <span class="label label-warning">{{ 'Not completed'|trans }}</span>
                         {% else %}
                             {% if item.value == 1 %}
                                 <span class="label label-success">{{ 'Received'|trans }}</span>

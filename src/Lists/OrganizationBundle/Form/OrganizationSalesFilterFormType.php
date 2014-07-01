@@ -49,7 +49,7 @@ class OrganizationSalesFilterFormType extends AbstractType
                         'width' => '250px',
                         'multiple' => 'multiple'
                     )),
-                    'placeholder' => 'Enter City',
+                    'placeholder' => 'Enter City'
                 )
             ))
             ->add('scope', 'text', array(

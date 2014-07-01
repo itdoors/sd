@@ -102,6 +102,15 @@
                 {% endif %}
             </td>
         </tr>
+
+        {% if person.0.gph %}
+            <tr>
+                <td>{% trans %}Type of working{% endtrans %}</td>
+                <td>{% trans %}GPH{% endtrans %}</td>
+                <td colspan="2"></td>
+            </tr>
+        {% endif %}
+
         <tr>
             <td>
                 {% trans %}Phone{% endtrans %}
