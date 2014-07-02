@@ -1,16 +1,20 @@
 <!-- BEGIN SIDEBAR -->
+<div class="page-sidebar-wrapper">
+
 <div class="page-sidebar navbar-collapse collapse">
-    <!-- BEGIN SIDEBAR MENU -->        
-    <ul class="page-sidebar-menu">
-        <li>
-            <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-            <div class="sidebar-toggler hidden-phone"></div>
-            <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-        </li>
+    <!-- BEGIN SIDEBAR MENU -->
+    <ul class="page-sidebar-menu" data-auto-scroll="true" data-slide-speed="200">
+
+    <li class="sidebar-toggler-wrapper">
+        <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+        <div class="sidebar-toggler">
+        </div>
+        <!-- END SIDEBAR TOGGLER BUTTON -->
+    </li>
         {% include 'sidebar_search.html.twig' %}
         <li class="start{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_dashboard_homepage') %} active{% endif %}">
             <a href="{{ path('sd_dashboard_homepage') }}">
-                <i class="fa fa-home"></i> 
+                <i class="icon-home"></i>
                 <span class="title">{% trans %}Dashboard{% endtrans %}</span>
                 <span class="selected"></span>
             </a>
@@ -32,26 +36,26 @@
                     )
                 %} class="active"{% endif %}>
                 <a href="javascript:;">
-                    <i class="fa fa-money"></i> 
+                    <i class="icon-handbag"></i>
                     <span class="title">{% trans %}My Sales{% endtrans %}</span>
                     <span class="arrow "></span>
                 </a>
                 <ul class="sub-menu">
                     <li>
                         <a href="{{ path('lists_sales_handling_index') }}" title="{% trans %}My Handlings{% endtrans %}">
-                            <i class="fa fa-comments"></i>
+                            <i class="icon-pencil"></i>
                             {% trans %}My Handlings{% endtrans %}
                         </a>
                     </li>
                     <li>
                         <a href="{{ path('lists_sales_contact_index') }}" title="{% trans %}My Contacts{% endtrans %}">
-                            <i class="fa fa-envelope"></i>
+                            <i class="icon-basket"></i>
                             {% trans %}My Contacts{% endtrans %}
                         </a>
                     </li>
                     <li>
                         <a href="{{ path('lists_sales_organization_index') }}" title="{% trans %}My Organizations{% endtrans %}">
-                            <i class="fa fa-building"></i>
+                            <i class="icon-tag"></i>
                             {% trans %}My Organizations{% endtrans %}
                         </a>
                     </li>				
@@ -103,7 +107,7 @@
         {% if is_granted('ROLE_SALESDISPATCHER') %}
             <li class="">
                 <a href="javascript:;">
-                    <i class="fa fa-sitemap"></i> 
+                    <i class="icon-pencil"></i>
                     <span class="title">{% trans %}Sales Dispatcher{% endtrans %}</span>
                     <span class="arrow "></span>
                 </a>
@@ -155,7 +159,7 @@
         {% if is_granted('ROLE_SALESADMIN') %}
             <li class="">
                 <a href="javascript:;">
-                    <i class="fa fa-tachometer"></i>
+                    <i class="icon-pencil"></i>
                     <span class="title">{% trans %}Sales Admin short{% endtrans %}</span>
                     <span class="arrow "></span>
                 </a>
@@ -205,7 +209,7 @@
             </li>
             <li class="">
                 <a href="javascript:;">
-                    <i class="fa fa-tachometer"></i>
+                    <i class="icon-pencil"></i>
                     <span class="title">{% trans %}Sales Admin report{% endtrans %}</span>
                     <span class="arrow "></span>
                 </a>
@@ -246,7 +250,7 @@
         {% if is_granted('ROLE_INTRANET') %}
             <li class="">
                 <a href="javascript:;">
-                    <i class="fa fa-suitcase"></i> 
+                    <i class="icon-pencil"></i>
                     <span class="title">{% trans %}Intranet{% endtrans %}</span>
                     <span class="arrow "></span>
                 </a>
@@ -325,7 +329,7 @@
                     )
                 %} class="active"{% endif %}>
                 <a href="javascript:;">
-                    <i class="fa fa-money"></i>
+                    <i class="icon-pencil"></i>
                     <span class="title">{% trans %}My Dogovor{% endtrans %}</span>
                     <span class="arrow "></span>
                 </a>
@@ -395,7 +399,7 @@
         <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_oper_homepage') 
             %} class="active"{% endif %}>
             <a href="javascript:;">
-                <i class="fa fa-money"></i>
+                <i class="icon-pencil"></i>
                 <span class="title">{% trans %}Opermanager{% endtrans %}</span>
                 <span class="arrow "></span>
             </a>
@@ -437,7 +441,7 @@
                             path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_admin_organization_new')
                     %} class="active"{% endif %}>
                     <a href="javascript:;">
-                        <i class="fa fa-tachometer"></i>
+                        <i class="icon-pencil"></i>
                         <span class="title">{% trans %}Debtors{% endtrans %}</span>
                         <span class="arrow "></span>
                     </a>
@@ -524,7 +528,7 @@
                 )
                 %} class="active"{% endif %}>
                 <a href="{{ path('sd_user_stuff') }}">
-                    <i class="fa fa-user"></i>
+                    <i class="icon-pencil"></i>
                     <span class="title">{% trans %}Stuff{% endtrans %}</span>
                 </a>
             </li>
@@ -548,7 +552,7 @@
                     )
                 %} class="active"{% endif %}>
                 <a href="javascript:;">
-                    <i class="fa fa-money"></i>
+                    <i class="icon-pencil"></i>
                     <span class="title">{% trans %}Vote{% endtrans %}</span>
                     <span class="arrow "></span>
                 </a>
@@ -581,3 +585,4 @@
         <!-- END SIDEBAR MENU -->
     </div>
     <!-- END SIDEBAR -->
+</div>

@@ -5,10 +5,10 @@
         SD.select2('#' + '{{ form.vars.name }}' + '_saller');
 
         $('.date-picker').datepicker({
-            rtl: App.isRTL(),
+            rtl: Metronic.isRTL(),
             autoclose: true,
             format: "dd.mm.yyyy",
-            pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
+            pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
             language: 'ru',
             startView: 'decade',
             weekStart: 1
