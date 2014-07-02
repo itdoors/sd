@@ -141,7 +141,8 @@ class ArticleService
                     color: #fff;
                     text-align: center;
                     white-space: nowrap;
-                    vertical-align: baseline;display: inline">'.$this->get('translator')->trans('Deflecting', array(), 'ListsArticleBundle').'</span>';
+                    vertical-align: baseline;display: inline">'.
+                    $this->get('translator')->trans('Deflecting', array(), 'ListsArticleBundle').'</span>';
         } elseif ($status == 1) {
             $status = '<span style="
                     background-color: #45b6af;
