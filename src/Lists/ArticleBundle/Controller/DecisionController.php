@@ -113,6 +113,7 @@ class DecisionController extends BaseController
             try {
                 $formData = $request->request->get($form->getName());
 
+                /** @var Article $party */
                 $party = $form->getData();
                 if ($this->getUser()->hasRole('ROLE_ARTICLEADMIN')) {
                     $user = $em->getRepository('SDUserBundle:User')->find($party->getUserId());

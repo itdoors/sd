@@ -78,9 +78,12 @@ class VoteController extends BaseController
                 ->add('value', 'choice', array(
                     'attr' => array(
                         'class' => 'itdoors-select2 can-be-reseted submit-field control-label col-md-3',
-                        'placeholder' => 'Vote'
+                        'placeholder' => 'Vote',
+                        'required' => 'required',
+                        'data-empty' => $this->get('translator')->trans('Select rating', array(), 'ListsArticleBundle')
                     ),
                     'choices' => array(
+                        '' => $this->get('translator')->trans('Select rating', array(), 'ListsArticleBundle'),
                         '1' => '1',
                         '2' => '2',
                         '3' => '3',
