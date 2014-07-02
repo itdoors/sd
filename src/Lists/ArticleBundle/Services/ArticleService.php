@@ -156,7 +156,7 @@ class ArticleService
                     $this->get('translator')->trans('Accept', array(), 'ListsArticleBundle').'</span>';
         } elseif ($status == 2) {
             $status = '<span style="
-                    background-color: #99;
+                    background-color: #999;
                     font-size: 12px;
                     padding: 3px 6px 3px 6px;
                     line-height: 1;
