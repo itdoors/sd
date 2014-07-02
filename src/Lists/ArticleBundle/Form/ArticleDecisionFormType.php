@@ -37,11 +37,7 @@ class ArticleDecisionFormType extends AbstractType
         $builder
             ->add('dateUnpublick', 'text', array())
             ->add('title', 'text', array())
-            ->add('text', 'textarea', array(
-                'attr' => array(
-                    'required' => false
-                )
-            ));
+            ->add('text', 'textarea', array( ));
 
         $builder->add('users', 'text', array(
                 'mapped' => false,
@@ -73,6 +69,10 @@ class ArticleDecisionFormType extends AbstractType
                 if (in_array($data->getUserId(), explode(',', $formData['users']))) {
                     $msg = $translator->trans("You can not add website", array(), 'ListsArticleBundle');
                     $form->get('users')->addError(new FormError($msg));
+                }
+                if (empty($data->getText()) || $data->getText() === '<p><br></p>') {
+                    $msg = $translator->trans("Enter description of the solution", array(), 'ListsArticleBundle');
+                    $form->get('text')->addError(new FormError($msg));
                 }
                 $dateTime = new \DateTime($data->getDateUnpublick());
                 if ($dateTime->getTimestamp() < time()) {
