@@ -39,17 +39,16 @@ class ResultSolutionsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $id = $input->getArgument('id');
-        
+
         $service = $this->getContainer()->get('lists_article.service');
         $status = $service->resultSolutions($id);
-        
-        
+
         if ($status === 0) {
             $status = 'Declined';
         } elseif ($status === 1) {
             $status = 'Received';
         } elseif ($status === 2) {
-            $status = '50/50';            
+            $status = '50/50';
         }
         $res = 'Status for: ' . $id . ' = ' . $status;
         $output->writeln($res);

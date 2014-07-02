@@ -96,8 +96,6 @@ class VoteRepository extends EntityRepository
      * 
      * @param integer $id Article.id
      * 
-     * @param integer $id
-     * 
      * @return array
      */
     public function getVoitesFor15($id)

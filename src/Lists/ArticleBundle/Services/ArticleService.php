@@ -98,7 +98,7 @@ class ArticleService
         );
         $cm->add($cron);
     }
-    
+
     /**
      * resultSolutions
      * 
@@ -114,23 +114,23 @@ class ArticleService
         $article = $em->getRepository('ListsArticleBundle:Article')->find($id);
         /** @var VoteRepository $vote */
         $vote = $em->getRepository('ListsArticleBundle:Vote')->getVoteForArticleDecision($id);
-     
-        if ( $vote['count0'] > $vote['count1']) {
+
+        if ($vote['count0'] > $vote['count1']) {
             $status = 0;
         } elseif ($vote['count0'] === $vote['count1']) {
             $status = 2;
-        }else{
+        } else {
             $status = 1;
         }
 
-        if($article->getDateUnpublick()->getTimestamp() <= time()){
+        if ($article->getDateUnpublick()->getTimestamp() <= time()) {
             $ration = new Ration();
             $ration->setValue($status);
             $ration->setArticle($article);
 
             $em->persist($ration);
             $em->flush();
-        }else{
+        } else {
             $status = 'Not completed';
             // result
             $cm = new CronManager();
@@ -150,6 +150,7 @@ class ArticleService
             );
             $cm->add($cron);
         }
+
         return $status;
     }
 }

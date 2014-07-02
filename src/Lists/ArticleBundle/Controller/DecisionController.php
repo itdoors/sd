@@ -145,21 +145,25 @@ class DecisionController extends BaseController
 
                     $email = $this->get('it_doors_email.service');
                     $email->send(
-                        array($emailTo => $nameTo), 'decision-making', array(
-                        'users' => array(
-                            $user->getEmail()
-                        ),
-                        'variables' => array(
-                            '${lastName}$' => $user->getLastName(),
-                            '${firstName}$' => $user->getFirstName(),
-                            '${middleName}$' => $user->getMiddleName(),
-                            '${id}$' =>
-                            '<a href="' . $this->generateUrl(
-                                'list_article_vote_decision_show', array('id' => $party->getId()), true
+                        array($emailTo => $nameTo),
+                        'decision-making',
+                        array(
+                            'users' => array(
+                                $user->getEmail()
+                            ),
+                            'variables' => array(
+                                '${lastName}$' => $user->getLastName(),
+                                '${firstName}$' => $user->getFirstName(),
+                                '${middleName}$' => $user->getMiddleName(),
+                                '${id}$' =>
+                                '<a href="' . $this->generateUrl(
+                                    'list_article_vote_decision_show',
+                                    array('id' => $party->getId()),
+                                    true
+                                )
+                                . '">' . $party->getId() . '</a>',
+                                '${dateUnpublic}$' => date('d.m.Y H:i', $party->getDateUnpublick()->getTimestamp()),
                             )
-                            . '">' . $party->getId() . '</a>',
-                            '${dateUnpublic}$' => date('d.m.Y H:i', $party->getDateUnpublick()->getTimestamp()),
-                        )
                         )
                     );
                 }
@@ -191,7 +195,7 @@ class DecisionController extends BaseController
                     date('m', $party->getDatePublick()->getTimestamp()),
                     date('d', $party->getDatePublick()->getTimestamp()),
                     date('y', $party->getDatePublick()->getTimestamp())
-                    );
+                );
                 $dateUnpublick = mktime(
                     date('H', $party->getDateUnpublick()->getTimestamp()),
                     date('i', $party->getDateUnpublick()->getTimestamp())-16,
@@ -219,7 +223,7 @@ class DecisionController extends BaseController
                     );
                     $cm->add($cron);
                 }
-                
+
                 // result
                 $cm = new CronManager();
                 $cron = new Cron();
