@@ -37,7 +37,11 @@ class ArticleDecisionFormType extends AbstractType
         $builder
             ->add('dateUnpublick', 'text', array())
             ->add('title', 'text', array())
-            ->add('text', 'textarea', array());
+            ->add('text', 'textarea', array(
+                'attr' => array(
+                    'required' => false
+                )
+            ));
 
         $builder->add('users', 'text', array(
                 'mapped' => false,
