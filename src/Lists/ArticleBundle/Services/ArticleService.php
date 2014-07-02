@@ -56,10 +56,10 @@ class ArticleService
         $email = $this->container->get('it_doors_email.service');
 
         $url = $this->container->get('router')->generate(
-                            'list_article_vote_decision_show',
-                            array('id' => $id),
-                            true
-                        );
+            'list_article_vote_decision_show',
+            array('id' => $id),
+            true
+        );
         foreach ($partys as $party) {
             echo $party['firstName'] . "\t\n";
 
@@ -127,10 +127,10 @@ class ArticleService
         $email = $this->container->get('it_doors_email.service');
 
         $url = $this->container->get('router')->generate(
-                            'list_article_vote_decision_show',
-                            array('id' => $id),
-                            true
-                        );
+            'list_article_vote_decision_show',
+            array('id' => $id),
+            true
+        );
         foreach ($partys as $party) {
             echo $party['firstName'] . "\t\n";
 
@@ -171,7 +171,6 @@ class ArticleService
         $cm->add($cron);
     }
 
-    
     /**
      * resultSolutions
      * 

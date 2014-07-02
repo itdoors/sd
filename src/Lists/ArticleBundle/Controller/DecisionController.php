@@ -145,7 +145,7 @@ class DecisionController extends BaseController
                     $nameTo = $this->container->getParameter('name.from');
 
                     $email = $this->get('it_doors_email.service');
-                    
+
                     $url = $this->generateUrl(
                         'list_article_vote_decision_show',
                         array('id' => $party->getId()),

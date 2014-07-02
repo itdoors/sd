@@ -83,7 +83,13 @@ class EmailService
                 ->setTo($email);
             if (array_key_exists('variables', $to)) {
                 $message->setBody($this->changeOfVariables($templateEmail->getText(), $to['variables']), 'text/html');
-                $message->setSubject($this->changeOfVariables($templateEmail->getSubject(), $to['variables']), 'text/html');
+                $message->setSubject(
+                    $this->changeOfVariables(
+                        $templateEmail->getSubject(),
+                        $to['variables']
+                    ),
+                    'text/html'
+                );
             } else {
                 $message->setBody($templateEmail->getSubject());
                 $message->setBody($templateEmail->getText(), 'text/html');
@@ -92,10 +98,6 @@ class EmailService
                 $this->addFiles($message, $to['files']);
             }
             $mailer->send($message);
-
-//            $result[$email] = $em->getRepository('TSSAutomailerBundle:Automailer')
-//                ->findOneBy(array('id' => 'DESC'))
-//                ->getId();
             $result[$email] = true;
         }
 
