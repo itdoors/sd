@@ -107,8 +107,8 @@ class DecisionController extends BaseController
 
             $em = $this->getDoctrine()->getManager();
             /** @var Connection $connection */
-            $connection = $this->getDoctrine()->getConnection();
-            $connection->beginTransaction();
+//            $connection = $this->getDoctrine()->getConnection();
+//            $connection->beginTransaction();
 
             try {
                 $formData = $request->request->get($form->getName());
@@ -171,7 +171,7 @@ class DecisionController extends BaseController
                         )
                     );
                 }
-                $connection->commit();
+//                $connection->commit();
 
                 // send
                 $cm = new CronManager();
@@ -237,7 +237,7 @@ class DecisionController extends BaseController
                 $cm->add($cron);
 
             } catch (\Exception $e) {
-                $connection->rollBack();
+//                $connection->rollBack();
                 $em->close();
                 throw $e;
             }
