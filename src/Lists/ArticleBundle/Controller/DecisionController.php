@@ -208,7 +208,7 @@ class DecisionController extends BaseController
                     $cron->setErrorFile($directory.'/app/logs/cron/err'.$comment.'.php');
                     $cron->setCommand(
                         'cd '.$directory .
-                        ' app/console lists:article:send:only:15 '. $party->getId() .
+                        ' && app/console lists:article:send:only:15 '. $party->getId() .
                         ' && app/console it:doors:cron:delete ' . $comment
                     );
                     $cm->add($cron);
@@ -231,7 +231,7 @@ class DecisionController extends BaseController
                 $cron->setErrorFile($directory.'/app/logs/cron/err'.$comment.'.php');
                 $cron->setCommand(
                     'cd ' . $directory .
-                    ' && lists:article:result:solution ' . $party->getId() .
+                    ' && app/console lists:article:result:solution ' . $party->getId() .
                     ' && app/console it:doors:cron:delete ' . $comment
                 );
                 $cm->add($cron);
