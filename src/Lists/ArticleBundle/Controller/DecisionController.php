@@ -107,8 +107,8 @@ class DecisionController extends BaseController
 
             $em = $this->getDoctrine()->getManager();
             /** @var Connection $connection */
-            $connection = $this->getDoctrine()->getConnection();
-            $connection->beginTransaction();
+//            $connection = $this->getDoctrine()->getConnection();
+//            $connection->beginTransaction();
 
             try {
                 $formData = $request->request->get($form->getName());
@@ -145,6 +145,12 @@ class DecisionController extends BaseController
                     $nameTo = $this->container->getParameter('name.from');
 
                     $email = $this->get('it_doors_email.service');
+
+                    $url = $this->generateUrl(
+                        'list_article_vote_decision_show',
+                        array('id' => $party->getId()),
+                        true
+                    );
                     $email->send(
                         array($emailTo => $nameTo),
                         'decision-making',
@@ -153,22 +159,19 @@ class DecisionController extends BaseController
                                 $user->getEmail()
                             ),
                             'variables' => array(
-                                '${lastName}$' => $user->getLastName(),
-                                '${firstName}$' => $user->getFirstName(),
-                                '${middleName}$' => $user->getMiddleName(),
-                                '${id}$' =>
-                                '<a href="' . $this->generateUrl(
-                                    'list_article_vote_decision_show',
-                                    array('id' => $party->getId()),
-                                    true
-                                )
-                                . '">' . $party->getId() . '</a>',
+                                '${lastName}$' => $party->getUser()->getLastName(),
+                                '${firstName}$' => $party->getUser()->getFirstName(),
+                                '${middleName}$' => $party->getUser()->getMiddleName(),
+                                '${id}$' => $party->getId(),
+                                '${datePublic}$' => date('d.m.Y H:i', $party->getDatePublick()->getTimestamp()),
                                 '${dateUnpublic}$' => date('d.m.Y H:i', $party->getDateUnpublick()->getTimestamp()),
+                                '${title}$' => '<a href="' . $url . '">' . $party->getTitle() . '</a>',
+                                '${url}$' => '<a href="' . $url . '">' . $url . '</a>',
                             )
                         )
                     );
                 }
-                $connection->commit();
+//                $connection->commit();
 
                 // send
                 $cm = new CronManager();
@@ -189,22 +192,8 @@ class DecisionController extends BaseController
                 $cm->add($cron);
 
                 // send for 15 min
-                $datePublich = mktime(
-                    date('H', $party->getDatePublick()->getTimestamp()),
-                    date('i', $party->getDatePublick()->getTimestamp()),
-                    date('s', $party->getDatePublick()->getTimestamp()),
-                    date('m', $party->getDatePublick()->getTimestamp()),
-                    date('d', $party->getDatePublick()->getTimestamp()),
-                    date('y', $party->getDatePublick()->getTimestamp())
-                );
-                $dateUnpublick = mktime(
-                    date('H', $party->getDateUnpublick()->getTimestamp()),
-                    date('i', $party->getDateUnpublick()->getTimestamp())-16,
-                    0,
-                    date('m', $party->getDateUnpublick()->getTimestamp()),
-                    date('d', $party->getDateUnpublick()->getTimestamp()),
-                    date('y', $party->getDateUnpublick()->getTimestamp())
-                );
+                $datePublich = $party->getDatePublick()->getTimestamp();
+                $dateUnpublick = $party->getDateUnpublick()->getTimestamp()-900;
 
                 if ($datePublich < $dateUnpublick) {
                     $cm = new CronManager();
@@ -219,7 +208,7 @@ class DecisionController extends BaseController
                     $cron->setErrorFile($directory.'/app/logs/cron/err'.$comment.'.php');
                     $cron->setCommand(
                         'cd '.$directory .
-                        ' app/console lists:article:send:only:15 '. $party->getId() .
+                        ' && app/console lists:article:send:only:15 '. $party->getId() .
                         ' && app/console it:doors:cron:delete ' . $comment
                     );
                     $cm->add($cron);
@@ -234,21 +223,21 @@ class DecisionController extends BaseController
                 if (!is_dir($directory.'/app/logs/cron')) {
                     mkdir($directory.'/app/logs/cron', 0777);
                 }
-                $cron->setMinute(date('i', $party->getDateUnpublick()->format('i')));
-                $cron->setHour(date('H', $party->getDateUnpublick()->format('H')));
-                $cron->setDayOfMonth(date('d', $party->getDateUnpublick()->format('d')));
-                $cron->setMonth(date('m', $party->getDateUnpublick()->format('m')));
+                $cron->setMinute($party->getDateUnpublick()->format('i'));
+                $cron->setHour($party->getDateUnpublick()->format('H'));
+                $cron->setDayOfMonth($party->getDateUnpublick()->format('d'));
+                $cron->setMonth($party->getDateUnpublick()->format('m'));
                 $cron->setLogFile($directory.'/app/logs/cron/log'.$comment.'.php');
                 $cron->setErrorFile($directory.'/app/logs/cron/err'.$comment.'.php');
                 $cron->setCommand(
                     'cd ' . $directory .
-                    ' && lists:article:result:solution ' . $party->getId() .
+                    ' && app/console lists:article:result:solution ' . $party->getId() .
                     ' && app/console it:doors:cron:delete ' . $comment
                 );
                 $cm->add($cron);
 
             } catch (\Exception $e) {
-                $connection->rollBack();
+//                $connection->rollBack();
                 $em->close();
                 throw $e;
             }

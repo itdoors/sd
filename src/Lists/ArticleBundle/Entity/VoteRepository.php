@@ -79,6 +79,7 @@ class VoteRepository extends EntityRepository
             ->addSelect('u.firstName')
             ->addSelect('u.lastName')
             ->addSelect('u.middleName')
+            ->addSelect('u.email')
             ->innerjoin('v.user', 'u')
             ->where('v.modelId = :id')
             ->andwhere('v.modelName = :text')

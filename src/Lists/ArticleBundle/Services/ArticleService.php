@@ -55,6 +55,11 @@ class ArticleService
         $nameTo = $this->container->getParameter('name.from');
         $email = $this->container->get('it_doors_email.service');
 
+        $url = $this->container->get('router')->generate(
+            'list_article_vote_decision_show',
+            array('id' => $id),
+            true
+        );
         foreach ($partys as $party) {
             echo $party['firstName'] . "\t\n";
 
@@ -66,17 +71,84 @@ class ArticleService
                         $party['email']
                     ),
                     'variables' => array(
-                        '${lastName}$' => $party['lastName'],
-                        '${firstName}$' => $party['firstName'],
-                        '${middleName}$' => $party['middleName'],
-                        '${id}$' =>
-                        '<a href="' . $this->container->get('router')->generate(
-                            'list_article_vote_decision_show',
-                            array('id' => $id),
-                            true
-                        )
-                        . '">' . $id . '</a>',
+                        '${lastName}$' => $article->getUser()->getLastName(),
+                        '${firstName}$' => $article->getUser()->getFirstName(),
+                        '${middleName}$' => $article->getUser()->getMiddleName(),
+                        '${id}$' => $id,
+                        '${url}$' => '<a href="' . $url  . '">' . $url . '</a>',
                         '${dateUnpublic}$' => date('d.m.Y H:i', $article->getDateUnpublick()->getTimestamp()),
+                        '${datePublic}$' => date('d.m.Y H:i', $article->getDatePublick()->getTimestamp()),
+                        '${title}$' => '<a href="' . $url  . '">' . $article->getTitle() . '</a>',
+                    )
+                )
+            );
+        }
+        $cm = new CronManager();
+        $cron = new Cron();
+        $directory = $this->container->getParameter('project.dir');
+        $comment = uniqid();
+        $cron->setComment($comment);
+        if (!is_dir($directory.'/app/logs/cron')) {
+            mkdir($directory.'/app/logs/cron', 0777);
+        }
+        $cron->setLogFile($directory.'/app/logs/cron/log'.$comment.'.php');
+        $cron->setErrorFile($directory.'/app/logs/cron/err'.$comment.'.php');
+        $cron->setCommand(
+            'cd ' . $directory .
+            ' && app/console swiftmailer:spool:send --env=prod' .
+            ' && app/console it:doors:cron:delete ' . $comment
+        );
+        $cm->add($cron);
+    }
+
+    /**
+     * get files and update create date in dogovor and dopdogovor
+     * 
+     * @param integer $id
+     * 
+     * @return string
+     */
+    public function sendEmailsResult($id)
+    {
+
+        /** @var EntityManager $em */
+        $em = $this->container->get('doctrine')->getManager();
+
+        /** @var VoteRepository $partys */
+        $partys = $em->getRepository('ListsArticleBundle:Vote')
+            ->getVoites($id);
+
+        /** @var ArticleRepository $article */
+        $article =  $em->getRepository('ListsArticleBundle:Article')
+            ->find($id);
+
+        $emailTo = $this->container->getParameter('email.from');
+        $nameTo = $this->container->getParameter('name.from');
+        $email = $this->container->get('it_doors_email.service');
+
+        $url = $this->container->get('router')->generate(
+            'list_article_vote_decision_show',
+            array('id' => $id),
+            true
+        );
+        foreach ($partys as $party) {
+            echo $party['firstName'] . "\t\n";
+
+            $email->send(
+                array($emailTo => $nameTo),
+                'decision-result',
+                array(
+                    'users' => array(
+                        $party['email']
+                    ),
+                    'variables' => array(
+                        '${lastName}$' => $article->getUser()->getLastName(),
+                        '${firstName}$' => $article->getUser()->getFirstName(),
+                        '${middleName}$' => $article->getUser()->getMiddleName(),
+                        '${id}$' => $id,
+                        '${url}$' => '<a href="' . $url  . '">' . $url . '</a>',
+                        '${datePublic}$' => date('d.m.Y H:i', $article->getDatePublick()->getTimestamp()),
+                        '${title}$' => '<a href="' . $url  . '">' . $article->getTitle() . '</a>',
                     )
                 )
             );
@@ -130,6 +202,7 @@ class ArticleService
 
             $em->persist($ration);
             $em->flush();
+            $this->sendEmailsResult($id);
         } else {
             $status = 'Not completed';
             // result

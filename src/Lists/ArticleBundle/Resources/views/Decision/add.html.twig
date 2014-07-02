@@ -140,7 +140,7 @@
             </div>
             <div class="form-body">
                 <div class="form-group">
-                    <label class="required control-label col-md-3">{% trans %}Description of the solution{% endtrans%}</label>
+                    <label class="control-label col-md-3">{% trans %}Description of the solution{% endtrans%}</label>
                     <div class="col-md-9">
                         {{ form_widget(form.text, {'attr' : {'id' : 'select2','class' : 'form-control textear-edit', 'placeholder': "Description of the solution"| trans}}) }}
                         {% if form.text.vars.errors|length %}{{ form_errors(form.text) }}{% endif %}
