@@ -326,11 +326,13 @@
                 {{ include(
                 'ITDoorsOperBundle:Schedule:scheduleInfoUserBasicAccrual.html.twig', {
                 'accruals': accrual,
-                'code' : 'oz'
+                'code' : 'oz',
+                'canEdit': canEdit
                     })
                 }}
             </div>
             <br>
+            {% if canEdit %}
             <div style="text-align:center;">
                 <div id="add_form_accrual_officially" class="notDisplayed" data-type="officially" style="border:1px solid green; padding:5px;">
                     Выберите тип:
@@ -363,17 +365,20 @@
                 </a>
 
             </div>
+            {% endif %}
         </td>
         <td colspan="2" align="center">
             <div id="holder_notOfficially">
             {{ include(
             'ITDoorsOperBundle:Schedule:scheduleInfoUserBasicAccrual.html.twig', {
             'accruals': accrual,
-            'code' : 'uu'
+            'code' : 'uu',
+            'canEdit' : canEdit
             })
             }}
             </div>
             <br>
+            {% if canEdit %}
             <div style="text-align:center;">
                 <div id="add_form_accrual_notOfficially" class="notDisplayed" data-type="notOfficially" style="border:1px solid green; padding:5px;">
                     Выберите тип:
@@ -405,6 +410,7 @@
                     {% trans %}Add{% endtrans %}
                 </a>
             </div>
+            {% endif %}
         </td>
     </tr>
 

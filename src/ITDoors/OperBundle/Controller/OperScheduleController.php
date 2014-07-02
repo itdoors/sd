@@ -280,6 +280,8 @@ class OperScheduleController extends BaseFilterController
             $infoHours[$idCoworker.'-'.$idReplacement]['idMonthInfo'] = $coworker['idMonthInfo'];
         }
 
+        $canEdit  =  $this->checkIfCanEdit();
+
         return $this->render('ITDoorsOperBundle:Schedule:scheduleTable.html.twig', array(
             'days'=> $days,
             'coworkers' => $coworkers,
@@ -294,7 +296,8 @@ class OperScheduleController extends BaseFilterController
             'hoursTotal' => $countHours,
             'holydaysTotalString' => $holidays,
             'dayAdvance' => $dayAdvance,
-            'dayPayment' => $dayPayment
+            'dayPayment' => $dayPayment,
+            'canEdit' => $canEdit
         ));
 
     }
@@ -390,6 +393,7 @@ class OperScheduleController extends BaseFilterController
         }
         $mpk = $departmentPeople->getMpks();
 
+        $canEdit  =  $this->checkIfCanEdit();
         $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleDay.html.twig', array(
             'coworkerDayTime' => $coworkerDayTime,
             'date' => $date,
@@ -404,7 +408,8 @@ class OperScheduleController extends BaseFilterController
             'status' => $status,
             'stringDay' => $stringDay,
             'fio' => $fio,
-            'mpk' => $mpk
+            'mpk' => $mpk,
+            'canEdit' => $canEdit
         ));
         $return['success'] = 1;
 
@@ -638,10 +643,11 @@ class OperScheduleController extends BaseFilterController
      *
      * @return Response
      */
-    public function scheduleTableRowAction($oneDayTime)
+    public function scheduleTableRowAction($oneDayTime, $canEdit)
     {
         return $this->render('ITDoorsOperBundle:Schedule:scheduleDayTableRow.html.twig', array(
-            'oneDayTime'=> $oneDayTime
+            'oneDayTime' => $oneDayTime,
+            'canEdit' => $canEdit
         ));
     }
 
@@ -1534,14 +1540,15 @@ class OperScheduleController extends BaseFilterController
             array('period' => 'DESC')
         );
 
-
+        $canEdit  =  $this->checkIfCanEdit();
         $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleInfoUserBasic.html.twig', array(
           'coworker'=> $info,
           'accrual' => $onceOnlyAccrual,
           'planned' => $plannedAccrual,
           'idCoworker' => $idCoworker,
           'idReplacement' => $idReplacement,
-          'idDepartment' => $idDepartment
+          'idDepartment' => $idDepartment,
+          'canEdit' => $canEdit
         ));
 
 
@@ -2008,7 +2015,7 @@ class OperScheduleController extends BaseFilterController
         }
 
         $totalSalary = $salaryOfficially + $salaryNotOfficially;
-
+        $canEdit  =  $this->checkIfCanEdit();
         $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleTableSums.html.twig', array(
             'sumOfficially' => $officiallyTotal,
             'sumNotOfficially' => $notOfficiallyTotal,
@@ -2020,7 +2027,8 @@ class OperScheduleController extends BaseFilterController
             'realSalary' => $realSalary,
             'salaryNotOfficially' => $salaryNotOfficially,
             'totalSalary' => $totalSalary,
-            'idMonthInfo'=> $idMonthInfo
+            'idMonthInfo'=> $idMonthInfo,
+            'canEdit' => $canEdit
         ));
 
         $return['success'] = 1;
@@ -2058,5 +2066,14 @@ class OperScheduleController extends BaseFilterController
 
         return new Response(json_encode($result));
 
+    }
+
+    /**
+     * @return bool
+     */
+    private function checkIfCanEdit() {
+        $canEdit  =  !$this->getUser()->hasRole('ROLE_SUPERVISOR');
+
+        return $canEdit;
     }
 }

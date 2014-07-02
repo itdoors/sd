@@ -573,7 +573,7 @@
 
 </script>
 
-
+{% if canEdit %}
 <div>
     <a class="btn purple {% if status != 'ok' %}notDisplayed{% endif %}" id="add_button">{% trans %}Add{% endtrans %}</a>
 <li class="btn-group" style="float: right; ">
@@ -682,7 +682,7 @@
 <div class="alert alert-success notDisplayed" id="copy_finished">
     <strong>{% trans %}Success{% endtrans %}</strong> {% trans %}All dates where copied{% endtrans %}
 </div>
-
+{% endif %}
 
 
 
@@ -750,7 +750,9 @@
             <th>{% trans %}Day kind{% endtrans %}</th>
             <th>{% trans %}Evening kind{% endtrans %}</th>
             <th>{% trans %}Night kind{% endtrans %}</th>
-            <th></th>
+            {% if canEdit %}
+                <th></th>
+            {% endif %}
         </tr>
     </thead>
     <tbody id="tbody_content">
@@ -758,7 +760,8 @@
         {% for oneDayTime in coworkerDayTime %}
 
             {{ render(controller('ITDoorsOperBundle:OperSchedule:scheduleTableRow', {
-            'oneDayTime': oneDayTime
+            'oneDayTime': oneDayTime,
+            'canEdit': canEdit
             })) }}
 
         {% endfor %}
@@ -773,7 +776,9 @@
             <th>{% trans %}Day kind{% endtrans %}</th>
             <th>{% trans %}Evening kind{% endtrans %}</th>
             <th>{% trans %}Night kind{% endtrans %}</th>
-            <th></th>
+            {% if canEdit %}
+                <th></th>
+            {% endif %}
         </tr>
     </tfoot>
 </table>
