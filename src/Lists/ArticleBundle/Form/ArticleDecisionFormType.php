@@ -70,7 +70,7 @@ class ArticleDecisionFormType extends AbstractType
                     $msg = $translator->trans("You can not add website", array(), 'ListsArticleBundle');
                     $form->get('users')->addError(new FormError($msg));
                 }
-                if (empty($data->getText()) || $data->getText() === '<p><br></p>') {
+                if (!$data->getText() || $data->getText() === '<p><br></p>') {
                     $msg = $translator->trans("Enter description of the solution", array(), 'ListsArticleBundle');
                     $form->get('text')->addError(new FormError($msg));
                 }
