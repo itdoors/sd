@@ -24,17 +24,17 @@
 {% block css_page_level_plugin %}
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
-    <link rel="stylesheet" type="text/css" hrefasset('metronic/assets/global/plugins/ugins/select2/select2.css')}} " />
-    <link rel="stylesheet" type="text/css"asset('metronic/assets/global/plugins/ic/plugins/bootstrap-datepicker/css/datepicker.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/css/datepicker.css')}} " />
 {% endblock %}
 
 {% block js_page_level_plugins %}
     {{ parent() }}
-    <script type="text/javasasset('metronic/assets/global/plugins/etronic/plugins/select2/select2.min.js') }}"></script>
-    <script type="text/asset('metronic/assets/global/plugins/tes/metronic/plugins/data-tables/jquery.dataTables.min.js') }}"></script>
-    <script type="asset('metronic/assets/global/plugins/emplates/metronic/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
-    <script tasset('metronic/assets/global/plugins/et('templates/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
-    <scrasset('metronic/assets/global/plugins/{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
 {% endblock %}
 
 {% block body %}
