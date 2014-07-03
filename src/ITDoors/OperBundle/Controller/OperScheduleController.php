@@ -625,8 +625,11 @@ class OperScheduleController extends BaseFilterController
         $em->persist($newTime);
         $em->flush();
 
+        $canEdit = $this->checkIfCanEdit();
+
         $return['html'] .= $this->renderView('ITDoorsOperBundle:Schedule:scheduleDayTableRow.html.twig', array(
-            'oneDayTime'=> $newTime
+            'oneDayTime'=> $newTime,
+            'canEdit' =>$canEdit
         ));
 
 
