@@ -84,7 +84,11 @@
                 </div>
             </div>
 			<!-- END LOGO -->
-			{% include 'menu_horizonal.html.twig' %}
+            <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+            <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
+            </a>
+
+            {% include 'menu_horizonal.html.twig' %}
 
 		</div>
 		<!-- END TOP NAVIGATION BAR -->
@@ -92,7 +96,7 @@
 	<!-- END HEADER -->
 	<div class="clearfix"></div>
 	<!-- BEGIN CONTAINER -->
-	<div class="page-container">
+	<div class="page-container row-fluid" >
 		{% include 'sidebar.html.twig' %} 
 		<!-- BEGIN PAGE -->
         <div class="page-content-wrapper">
