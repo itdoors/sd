@@ -15,3 +15,5 @@ parameters:
     locale: en
     secret: 53391534dallas53391534
     project.dir: /var/www/sd
+    router.request_context.host: sd.griffin.ua
+    router.request_context.scheme: http

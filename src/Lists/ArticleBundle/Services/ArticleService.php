@@ -105,10 +105,11 @@ class ArticleService
      * get files and update create date in dogovor and dopdogovor
      * 
      * @param integer $id
+     * @param integer $status
      * 
      * @return string
      */
-    public function sendEmailsResult($id)
+    public function sendEmailsResult($id, $status)
     {
 
         /** @var EntityManager $em */
@@ -131,6 +132,119 @@ class ArticleService
             array('id' => $id),
             true
         );
+        if ($status == 0) {
+            $status = '<span style="
+                    background-color: #f3565d;
+                    font-size: 12px;
+                    padding: 3px 6px 3px 6px;
+                    line-height: 1;
+                    color: #fff;
+                    text-align: center;
+                    white-space: nowrap;
+                    vertical-align: baseline;display: inline">'.
+                    $this->container->get('translator')->trans('Deflecting', array(), 'ListsArticleBundle').'</span>';
+        } elseif ($status == 1) {
+            $status = '<span style="
+                    background-color: #45b6af;
+                    font-size: 12px;
+                    padding: 3px 6px 3px 6px;
+                    line-height: 1;
+                    color: #fff;
+                    text-align: center;
+                    white-space: nowrap;
+                    vertical-align: baseline;
+                    display: inline">'.
+                    $this->container->get('translator')->trans('Accept', array(), 'ListsArticleBundle').'</span>';
+        } elseif ($status == 2) {
+            $status = '<span style="
+                    background-color: #999;
+                    font-size: 12px;
+                    padding: 3px 6px 3px 6px;
+                    line-height: 1;
+                    color: #fff;
+                    text-align: center;
+                    white-space: nowrap;
+                    vertical-align: baseline;display: inline">50/50</span>';
+        }
+        $table = '
+            <table style="text-align:center;">
+                <thead>
+                    <tr>
+                        <th width="5%" rowspan="1" colspan="1">
+                            №
+                        </th>
+                        <th width="5%" tabindex="0" rowspan="1" colspan="1">
+                            '.$this->container->get('translator')->trans('Autor', array(), 'ListsArticleBundle').'
+                        </th>
+                        <th width="5%" rowspan="1" colspan="1">
+                          '.$this->container->get('translator')->trans('Date decision', array(), 'ListsArticleBundle').'
+                        </th>
+                        <th width="5%" tabindex="0" rowspan="1" colspan="1">
+                           '.$this->container->get('translator')->trans('Decision', array(), 'ListsArticleBundle').'
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>';
+        $i = 1;
+        foreach ($partys as $key => $party) {
+            $table .= '
+                <tr>
+                <td>' . $i++ . '</td>
+                <td>' . $party['lastName']. ' ' . $party['firstName']. ' ' . $party['middleName']. '</td>
+                <td>' . (empty($party['dateCreate']) ? '' : $party['dateCreate']->format('d.m.Y H:i')) . '</td>
+                <td>';
+            if ($party['value'] === null) {
+                $table .= '<span style="
+                    background-color: #fcb322;
+                    font-size: 12px;
+                    padding: 3px 6px 3px 6px;
+                    line-height: 1;
+                    color: #fff;
+                    text-align: center;
+                    white-space: nowrap;
+                    vertical-align: baseline;display: inline">'.
+                    $this->container->get('translator')->trans(
+                        'No answer',
+                        array(),
+                        'ListsArticleBundle'
+                    ).'</span>';
+            } elseif ($party['value'] == 0) {
+                $table .= '<span style="
+                    background-color:#f3565d;
+                    font-size: 12px;
+                    padding: 3px 6px 3px 6px;
+                    line-height: 1;
+                    color: #fff;
+                    text-align: center;
+                    white-space: nowrap;
+                    vertical-align: baseline;display: inline">'.
+                    $this->container->get('translator')->trans(
+                        'Deflecting',
+                        array(),
+                        'ListsArticleBundle'
+                    ).'</span>';
+            } else {
+                $table .= '<span style="
+                    background-color: #45b6af;
+                    font-size: 12px;
+                    padding: 3px 6px 3px 6px;
+                    line-height: 1;
+                    color: #fff;
+                    text-align: center;
+                    white-space: nowrap;
+                    vertical-align: baseline;
+                    display: inline">'.
+                    $this->container->get('translator')->trans(
+                        'Accept',
+                        array(),
+                        'ListsArticleBundle'
+                    ).'</span>';
+            }
+            $table .= '</td>'
+                . '</tr>';
+
+        }
+        $table .= ' </tbody></table>';
         foreach ($partys as $party) {
             echo $party['firstName'] . "\t\n";
 
@@ -148,7 +262,10 @@ class ArticleService
                         '${id}$' => $id,
                         '${url}$' => '<a href="' . $url  . '">' . $url . '</a>',
                         '${datePublic}$' => date('d.m.Y H:i', $article->getDatePublick()->getTimestamp()),
+                        '${dateUnpublic}$' => date('d.m.Y H:i', $article->getDateUnpublick()->getTimestamp()),
                         '${title}$' => '<a href="' . $url  . '">' . $article->getTitle() . '</a>',
+                        '${table}$' => $table,
+                        '${status}$' => $status,
                     )
                 )
             );
@@ -202,7 +319,7 @@ class ArticleService
 
             $em->persist($ration);
             $em->flush();
-            $this->sendEmailsResult($id);
+            $this->sendEmailsResult($id, $status);
         } else {
             $status = 'Not completed';
             // result
