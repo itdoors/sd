@@ -59,28 +59,22 @@ class VoteController extends BaseController
             $rationResult = $vR->getVoteForArticle($id);
             if (!empty($rationResult['countVote'])) {
                 $rationResult['average'] =  round($rationResult['sumVote'] / $rationResult['countVote'], 2);
-                $ratValue = round(
-                    (
-                        $rationResult['countVote'] *
-                        $rationResult['average'] -
-                        $rationResult['average']
-                    )+1,
-                    2
-                );
+                $ratValue = $article['value'];
             }
         }
         $formView = false;
-
         if (!$voteValue) {
             $vote = new Vote();
-            //$router = $this->get('router');
             $form = $this->createFormBuilder($vote)
                 ->add('value', 'choice', array(
                     'attr' => array(
                         'class' => 'itdoors-select2 can-be-reseted submit-field control-label col-md-3',
-                        'placeholder' => 'Vote'
+                        'placeholder' => 'Vote',
+                        'required' => 'required',
+                        'data-empty' => $this->get('translator')->trans('Select rating', array(), 'ListsArticleBundle')
                     ),
                     'choices' => array(
+                        '' => $this->get('translator')->trans('Select rating', array(), 'ListsArticleBundle'),
                         '1' => '1',
                         '2' => '2',
                         '3' => '3',
@@ -93,12 +87,8 @@ class VoteController extends BaseController
             $form->handleRequest($request);
 
             if ($form->isValid()) {
-
-                $em = $this->getDoctrine()->getManager();
-
                 /** @var Connection $connection */
                 $connection = $this->getDoctrine()->getConnection();
-
                 $connection->beginTransaction();
 
                 try {
@@ -121,8 +111,9 @@ class VoteController extends BaseController
                     }
 
                     if (in_array($value, array(1, 2, 3, 4, 5))) {
-                        $rationResult['sumVote'] += $value;
-                        $rationResult['countVote'] += 1;
+
+                        $rationResult['sumVote'] = $rationResult['sumVote']+$value;
+                        $rationResult['countVote'] = $rationResult['countVote']+1;
                         $rationResult['average'] = round($rationResult['sumVote']  / $rationResult['countVote'], 2);
                         $ratValue = round(
                             (

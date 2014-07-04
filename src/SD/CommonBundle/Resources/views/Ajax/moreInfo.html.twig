@@ -16,10 +16,10 @@
                 input.attr('readonly', 'readonly');
 
                 input.datepicker({
-                    rtl: App.isRTL(),
+                    rtl: Metronic.isRTL(),
                     autoclose: true,
                     format: "dd.mm.yyyy",
-                    pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
+                    pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
                     language: 'ru',
                     weekStart: 1
                 });

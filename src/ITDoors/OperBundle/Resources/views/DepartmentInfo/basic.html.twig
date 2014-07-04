@@ -163,8 +163,10 @@
                        ">
                         {% if department.0.statusDate is not empty %}
                             {{ department.0.statusDate|date('d-m-Y') }}
+{#
                         {% else %}
                             {% trans %}Not defined{% endtrans %}
+#}
                         {% endif %}
                     </a>
                 </td>

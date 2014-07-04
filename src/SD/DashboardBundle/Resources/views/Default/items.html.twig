@@ -93,10 +93,6 @@
     {{ include('SDCalendarBundle:Dashboard:filterColors.html.twig') }}
 {%  endif %}
 
-{{ include('SDCalendarBundle::base.html.twig', {
-    url: path('sd_calendar_' ~ masterRoleRoute ~ '_handling_message')
-}) }}
-                    
 {% if debitors %}
     <div class="portlet box blue">
         <div class="portlet-title">
@@ -123,7 +119,11 @@
         </div>
     </div>
 {% endif %}
-    
+
+{{ include('SDCalendarBundle::base.html.twig', {
+    url: path('sd_calendar_' ~ masterRoleRoute ~ '_handling_message')
+}) }}
+                        
 {% if isCrm %}
     {{ render(controller('ListsHandlingBundle:' ~ masterRole ~ ':List')) }}
 {% endif %}

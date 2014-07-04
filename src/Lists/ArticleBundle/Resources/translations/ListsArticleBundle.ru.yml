@@ -36,6 +36,7 @@ Participants: Участники
 
 Header: Заголовок
 Description of the solution: Описание решения
+Enter description of the solution: Введите описание решения
 
 Accept: Принимаю
 Deflecting: Отклоняю
@@ -55,3 +56,4 @@ Date can not be less than the start date of: Дата окончания не м
 
 Your not decision in need date: Вы не оставили решение в указанный срок
 Term stop: Срок окончания
+Select rating: Выберите оценку

@@ -24,8 +24,8 @@ class SendEmailsCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('lists:article:send:for')
-            ->setDescription('Send emails party')
+            ->setName('lists:article:send:only:15')
+            ->setDescription('Send email party only 15 minytes. Email template: "decision-making-only-15-minutes" ')
              ->setDefinition(array(
                 new InputArgument('id', InputArgument::REQUIRED, 'The id article')
             ));
@@ -40,12 +40,8 @@ class SendEmailsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $id = $input->getArgument('id');
-
-        $output->writeln($id);
         $service = $this->getContainer()->get('lists_article.service');
-
         $res = $service->sendEmails($id);
-
         $output->writeln($res);
     }
 }

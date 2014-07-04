@@ -26,9 +26,9 @@ class CronDeleteCommand extends ContainerAwareCommand
         $this
             ->setName('it:doors:cron:delete')
             ->setDescription('Cron delete command')
-             ->setDefinition(array(
+            ->setDefinition(array(
                 new InputArgument('comment', InputArgument::REQUIRED, 'The comment cron')
-            ));
+        ));
     }
 
     /**
@@ -42,10 +42,10 @@ class CronDeleteCommand extends ContainerAwareCommand
         $comment = $input->getArgument('comment');
         $res = '';
         $cm = new CronManager();
-        foreach ($cm->get() as $key => $val){
-            if($val->getComment() == $comment){
+        foreach ($cm->get() as $key => $val) {
+            if ($val->getComment() == $comment) {
                 $cm->remove($key);
-                $res = 'Remove: '.$key;
+                $res = 'Remove: ' . $key;
             }
         }
         $output->writeln($res);

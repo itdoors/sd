@@ -8,10 +8,10 @@
             emptytext: '{% trans from 'messages' %}Enter value{% endtrans %}',
             clear: '{% trans from 'ITDoorsControllingBundle' %}clear{% endtrans %}<i class="icon-remove fa fa-times" style="font-size:12px"></i>',
             datepicker: {
-                rtl: App.isRTL(),
+                rtl: Metronic.isRTL(),
                 autoclose: true,
                 format: "dd.mm.yyyy",
-                pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
+                pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
                 language: "{{ app.request.locale }}",
                 startView: 'month',
                 weekStart: 1

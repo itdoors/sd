@@ -625,8 +625,11 @@ class OperScheduleController extends BaseFilterController
         $em->persist($newTime);
         $em->flush();
 
+        $canEdit = $this->checkIfCanEdit();
+
         $return['html'] .= $this->renderView('ITDoorsOperBundle:Schedule:scheduleDayTableRow.html.twig', array(
-            'oneDayTime'=> $newTime
+            'oneDayTime'=> $newTime,
+            'canEdit' =>$canEdit
         ));
 
 
@@ -640,6 +643,7 @@ class OperScheduleController extends BaseFilterController
      * Render one row of the table in schedule of one day
      *
      * @param mixed[] $oneDayTime
+     * @param boolean $canEdit
      *
      * @return Response
      */
@@ -2071,7 +2075,8 @@ class OperScheduleController extends BaseFilterController
     /**
      * @return bool
      */
-    private function checkIfCanEdit() {
+    private function checkIfCanEdit()
+    {
         $canEdit  =  !$this->getUser()->hasRole('ROLE_SUPERVISOR');
 
         return $canEdit;
