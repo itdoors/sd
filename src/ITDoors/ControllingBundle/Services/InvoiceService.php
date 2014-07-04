@@ -195,6 +195,21 @@ class InvoiceService
         $dogovorfind = $em->getRepository('ListsDogovorBundle:Dogovor')
             ->findOneBy(array('dogovorGuid' => $invoice->dogovorGuid));
 
+        /** @var Organization  $customerfind */
+        $customerfind = $em->getRepository('ListsOrganizationBundle:Organization')
+            ->findOneBy(array('edrpou' => $invoice->customerEdrpou));
+
+        /** @var Organization  $performerfind */
+        $performerfind = $em->getRepository('ListsOrganizationBundle:Organization')
+            ->findOneBy(array('edrpou' => $invoice->performerEdrpou));
+
+        if ($customerfind) {
+            $invoiceNew->setCustomer($customerfind);
+        }
+        if ($performerfind) {
+            $invoiceNew->setPerformer($performerfind);
+        }
+
         if ($dogovorfind) {
             $invoiceNew->setDogovor($dogovorfind);
             $em->persist($invoiceNew);
@@ -203,22 +218,13 @@ class InvoiceService
                 $this->addReaspon($invoiceNew);
             }
         } else {
-
-            /** @var Organization  $customerfind */
-            $customerfind = $em->getRepository('ListsOrganizationBundle:Organization')
-                ->findOneBy(array('edrpou' => $invoice->customerEdrpou));
-
-            /** @var Organization  $performerfind */
-            $performerfind = $em->getRepository('ListsOrganizationBundle:Organization')
-                ->findOneBy(array('edrpou' => $invoice->performerEdrpou));
-
             if ($customerfind && $performerfind) {
 
                 /** @var Dogovor  $dogovoradd */
                 $dogovoradd = $em->getRepository('ListsDogovorBundle:Dogovor')
                     ->findOneBy(array(
                     'number' => $invoice->dogovorNumber,
-//                    'startdatetime' => new \DateTime($invoice->dogovorDate),
+                    'startdatetime' => new \DateTime($invoice->dogovorDate),
                     'customerId' => $customerfind->getId(),
                     'performerId' => $performerfind->getId()
                 ));
@@ -253,9 +259,6 @@ class InvoiceService
                     return false;
                 }
             } else {
-                $em->persist($invoiceNew);
-                $em->flush();
-                $em->refresh($invoiceNew);
 
                 if (!$customerfind && $performerfind) {
                     $error = 'dogovor not found and customer';
@@ -264,6 +267,9 @@ class InvoiceService
                 } else {
                     $error = 'dogovor not found and customer and  performer';
                 }
+                $em->persist($invoiceNew);
+                $em->flush();
+                $em->refresh($invoiceNew);
                 $this->addCronError($invoiceNew, 'error', $error, json_encode($invoice));
             }
         }

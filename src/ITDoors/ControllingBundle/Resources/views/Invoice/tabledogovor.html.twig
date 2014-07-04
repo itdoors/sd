@@ -54,6 +54,11 @@
                 <td></td>
             </tr>
             <tr>
+                <td>{% trans %}Delay{% endtrans %} </td>
+                <td>{{ entitie.paymentDeferment }}</td>
+                <td>{{ entitie.delayDays }}</td>
+            </tr>
+            <tr>
                 <td>{% trans %}Status{% endtrans %} </td>
                 <td>
                     {% if entitie.isActive %}

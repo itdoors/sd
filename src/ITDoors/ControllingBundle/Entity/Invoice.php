@@ -902,4 +902,120 @@ class Invoice
     {
         return $this->dogovorAct;
     }
+    /**
+     * @var integer
+     */
+    private $customerId;
+
+    /**
+     * @var integer
+     */
+    private $performerId;
+
+    /**
+     * @var \Lists\OrganizationBundle\Entity\Organization
+     */
+    private $customer;
+
+    /**
+     * @var \Lists\OrganizationBundle\Entity\Organization
+     */
+    private $performer;
+
+
+    /**
+     * Set customerId
+     *
+     * @param integer $customerId
+     * 
+     * @return Invoice
+     */
+    public function setCustomerId($customerId)
+    {
+        $this->customerId = $customerId;
+
+        return $this;
+    }
+
+    /**
+     * Get customerId
+     *
+     * @return integer 
+     */
+    public function getCustomerId()
+    {
+        return $this->customerId;
+    }
+
+    /**
+     * Set performerId
+     *
+     * @param integer $performerId
+     * 
+     * @return Invoice
+     */
+    public function setPerformerId($performerId)
+    {
+        $this->performerId = $performerId;
+
+        return $this;
+    }
+
+    /**
+     * Get performerId
+     *
+     * @return integer 
+     */
+    public function getPerformerId()
+    {
+        return $this->performerId;
+    }
+
+    /**
+     * Set customer
+     *
+     * @param \Lists\OrganizationBundle\Entity\Organization $customer
+     * 
+     * @return Invoice
+     */
+    public function setCustomer(\Lists\OrganizationBundle\Entity\Organization $customer = null)
+    {
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * Get customer
+     *
+     * @return \Lists\OrganizationBundle\Entity\Organization 
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * Set performer
+     *
+     * @param \Lists\OrganizationBundle\Entity\Organization $performer
+     * 
+     * @return Invoice
+     */
+    public function setPerformer(\Lists\OrganizationBundle\Entity\Organization $performer = null)
+    {
+        $this->performer = $performer;
+
+        return $this;
+    }
+
+    /**
+     * Get performer
+     *
+     * @return \Lists\OrganizationBundle\Entity\Organization 
+     */
+    public function getPerformer()
+    {
+        return $this->performer;
+    }
 }

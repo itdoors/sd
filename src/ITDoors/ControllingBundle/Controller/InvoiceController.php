@@ -188,7 +188,7 @@ class InvoiceController extends BaseFilterController
         /** @var InvoiceMessage $messages */
         $messages = $this->getDoctrine()
             ->getRepository('ITDoorsControllingBundle:InvoiceMessage')
-            ->getInvoiceMessages((int) $invoiceid);
+            ->getInvoiceMessages($invoiceid);
 
         return $this->render('ITDoorsControllingBundle:Invoice:lastaction.html.twig', array(
                 'messages' => $messages,
