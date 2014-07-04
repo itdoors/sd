@@ -1940,6 +1940,16 @@ class OperScheduleController extends BaseFilterController
         $idDepartment = $params['idDepartment'];
         $idReplacement = $params['idReplacement'];
 
+        $info = $this->getSumsCoworker($date, $idCoworker, $idReplacement, $idDepartment);
+        $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleTableSums.html.twig', $info);
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
+
+    private function getSumsCoworker($date, $idCoworker, $idReplacement, $idDepartment)
+    {
         list($year, $month) = explode('-', $date);
 
         /** @var $grafikRepository \Lists\GrafikBundle\Entity\GrafikRepository   */
@@ -2020,7 +2030,7 @@ class OperScheduleController extends BaseFilterController
 
         $totalSalary = $salaryOfficially + $salaryNotOfficially;
         $canEdit  =  $this->checkIfCanEdit();
-        $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleTableSums.html.twig', array(
+        $return = array(
             'sumOfficially' => $officiallyTotal,
             'sumNotOfficially' => $notOfficiallyTotal,
             'plannedAccrual' => $plannedAccrualValue,
@@ -2033,14 +2043,35 @@ class OperScheduleController extends BaseFilterController
             'totalSalary' => $totalSalary,
             'idMonthInfo'=> $idMonthInfo,
             'canEdit' => $canEdit
-        ));
+        );
 
-        $return['success'] = 1;
-
-        return new Response(json_encode($return));
-
+        return $return;
     }
 
+    private function getSumsSalary($idDepartment, $date)
+    {
+        $totalSalary = 0;
+        list($year, $month) = explode('-', $date);
+        /** @var  $monthInfoRepository \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfoRepository */
+        $monthInfoRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
+
+        $monthInfos = $monthInfoRepository->findBy(array(
+            'year' => $year,
+            'month' => $month,
+            'department' => $idDepartment
+        ));
+        
+        /** @var  $monthInfo \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfo */
+        foreach ($monthInfos as $monthInfo) {
+            $idCoworker = $monthInfo->getDepartmentPeopleId();
+            $idReplacement = $monthInfo->getReplacementId();
+            $info = $this->getSumsCoworker($date, $idCoworker, $idReplacement, $idDepartment);
+
+            $totalSalary += $info['totalSalary'];
+        }
+
+    }
     /**
      * @return Response
      */
