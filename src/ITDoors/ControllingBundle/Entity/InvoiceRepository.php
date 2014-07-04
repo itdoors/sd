@@ -92,8 +92,8 @@ class InvoiceRepository extends EntityRepository
 
         $res
             ->leftJoin('i.dogovor', 'd')
-            ->leftJoin('d.customer', 'customer')
-            ->leftJoin('d.performer', 'performer')
+            ->leftJoin('i.customer', 'customer')
+            ->leftJoin('i.performer', 'performer')
             ->leftJoin('performer.city', 'c')
             ->leftJoin('c.region', 'r')
             ->leftJoin('i.messages', 'h')
@@ -618,8 +618,7 @@ class InvoiceRepository extends EntityRepository
                     ->addSelect('c_city.name as cityName')
                     ->addSelect('type.title as customerType')
                     ->addSelect('c_group.name as groupName')
-                    ->leftJoin('i.dogovor', 'd')
-                    ->leftJoin('d.customer', 'customer')
+                    ->leftJoin('i.customer', 'customer')
                     ->leftJoin('customer.creator', 'creator')
                     ->leftJoin('customer.scope', 'lookup')
                     ->leftJoin('customer.organizationType', 'type')
