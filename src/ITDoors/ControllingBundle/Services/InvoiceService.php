@@ -115,13 +115,14 @@ class InvoiceService
      */
     private function saveinvoice($invoice)
     {
+        $invoice = trim($invoice);
         $em = $this->container->get('doctrine')->getManager();
         $invoiceNew = $em->getRepository('ITDoorsControllingBundle:Invoice')
             ->findOneBy(array('invoiceId' => $invoice->invoiceId));
         if (!$invoiceNew) {
             $invoiceNew = new Invoice();
             $invoiceNew->setCourt(0);
-            $invoiceNew->setInvoiceId($invoice->invoiceId);
+            $invoiceNew->setInvoiceId(trim($invoice->invoiceId));
             if (!empty($invoice->dateFact) && $invoice->dateFact != 'null') {
                 $invoiceNew->setDateFact(new \DateTime($invoice->dateFact));
             }
@@ -139,9 +140,9 @@ class InvoiceService
         $invoiceNew->setDogovorActNote($invoice->dogovorActNote);
         $invoiceNew->setDogovorActName($invoice->dogovorActName);
         $invoiceNew->setCustomerName($invoice->customerName);
-        $invoiceNew->setCustomerEdrpou($invoice->customerEdrpou);
+        $invoiceNew->setCustomerEdrpou(trim($invoice->customerEdrpou));
         $invoiceNew->setPerformerName($invoice->performerName);
-        $invoiceNew->setPerformerEdrpou($invoice->performerEdrpou);
+        $invoiceNew->setPerformerEdrpou(trim($invoice->performerEdrpou));
 
         if (!empty($invoice->delayDate) && $invoice->delayDate != 'null') {
             $invoiceNew->setDelayDate(new \DateTime($invoice->delayDate));
@@ -193,15 +194,15 @@ class InvoiceService
 
         /** @var Dogovor  $dogovorfind */
         $dogovorfind = $em->getRepository('ListsDogovorBundle:Dogovor')
-            ->findOneBy(array('dogovorGuid' => $invoice->dogovorGuid));
+            ->findOneBy(array('dogovorGuid' => trim($invoice->dogovorGuid)));
 
         /** @var Organization  $customerfind */
         $customerfind = $em->getRepository('ListsOrganizationBundle:Organization')
-            ->findOneBy(array('edrpou' => $invoice->customerEdrpou));
+            ->findOneBy(array('edrpou' => trim($invoice->customerEdrpou)));
 
         /** @var Organization  $performerfind */
         $performerfind = $em->getRepository('ListsOrganizationBundle:Organization')
-            ->findOneBy(array('edrpou' => $invoice->performerEdrpou));
+            ->findOneBy(array('edrpou' => trim($invoice->performerEdrpou)));
 
         if ($customerfind) {
             $invoiceNew->setCustomer($customerfind);
@@ -232,7 +233,7 @@ class InvoiceService
                 if ($dogovoradd) {
 
                     // подтвердить связь и 1С
-                    $dogovoradd->setDogovorGuid($invoice->dogovorGuid);
+                    $dogovoradd->setDogovorGuid(trim($invoice->dogovorGuid));
                     $em->persist($dogovoradd);
 
                     $invoiceNew->setDogovor($dogovoradd);
