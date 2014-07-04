@@ -396,7 +396,7 @@
                         url: url,
                         data: sendData,
                         success: function(data) {
-                            alert(data);
+                            //alert(data);
                             data = JSON.parse(data);
 
                             if (data.success == 0) {
@@ -453,51 +453,65 @@
             })
         })
     </script>
+    <div class="row">
+        <div class="col-md-2">
+                <strong>
+                    <span style="color: #333333;">{% trans %}Current month{% endtrans %}:</span>
+                </strong>
+                    {{ monthName|trans }} {{ year }}
+                    <br>
+                <strong>
+                    <span style="color: #333333;">{% trans %}Number workdays{% endtrans %}:</span>
+                </strong>
+                {{ workDaysTotal }}
+                <br>
+                <strong>
+                    <span style="color: #333333;">{% trans %}Number hours{% endtrans %}:</span>
+                </strong>
+                {{ hoursTotal }}
+                <br>
+                <strong>
+                    <span style="color: #333333;">{% trans %}Holidays{% endtrans %}:</span>
+                </strong>
+                {{ holydaysTotalString }}
+                <br>
+        </div>
+        <div class="col-md-3">
+            <strong>
+                <span style="color: #333333;">{% trans %}Day advance{% endtrans %}:</span>
+            </strong>
 
-    {% if canEdit %}
-        <a class="btn green" style="float: right; margin-bottom: 20px;" id="copy_etalon">Скопировать из выбранных</a>
-        <a class="btn blue" style="float: right; margin-right: 20px;" id="add_coworker_button">{% trans %}Add coworker{% endtrans %}</a>
+            {% if dayAdvance is not empty %}
+                {{ dayAdvance|date('d-m-Y') }}
+            {% else %}
+                {% trans %}Not defined{% endtrans %}
+            {% endif %}
+            <br>
+            <strong>
+                <span style="color: #333333;">{% trans %}Day payment{% endtrans %}:</span>
+            </strong>
 
-        <a class="btn green" style="float: right; margin-bottom: 20px; margin-right: 20px;"
-           id="copy-to-next-month"
-           data-text="{% trans %}Copy to the next month success{% endtrans %}"
-        >
-            {% trans %}Copy to the next month{% endtrans %}
-        </a>
-    {% endif %}
+            {% if dayPayment is not empty %}
+                {{ dayPayment|date('d-m-Y') }}
+            {% else %}
+                {% trans %}Not defined{% endtrans %}
+            {% endif %}
+            <br>
+        </div>
+        <div class="col-md-7">
+            {% if canEdit %}
+                <a class="btn green" style="margin-bottom: 10px;" id="copy_etalon">Скопировать из выбранных</a>
+                <a class="btn blue" style="margin-bottom: 10px;" id="add_coworker_button">{% trans %}Add coworker{% endtrans %}</a>
 
-    <table style="width: 35%;">
-        <tr>
-            <td style="color: #333333; font-weight: bold;">{% trans %}Current month{% endtrans %}</td>
-            <td>{{ monthName|trans }} {{ year }}</td>
-            <td style="color: #333333; font-weight: bold;"><strong>{% trans %}Number workdays{% endtrans %}</strong></td>
-            <td>{{ workDaysTotal }}</td>
-        </tr>
-        <tr>
-            <td style="color: #333333; font-weight: bold;"><strong>{% trans %}Number hours{% endtrans %}</strong></td>
-            <td>{{ hoursTotal }}</td>
-            <td style="color: #333333; font-weight: bold;"><strong>{% trans %}Holidays{% endtrans %}</strong></td>
-            <td>{{ holydaysTotalString }}</td>
-        </tr>
-        <tr>
-            <td style="color: #333333; font-weight: bold;"><strong>{% trans %}Day advance{% endtrans %}</strong></td>
-            <td>
-                {% if dayAdvance is not empty %}
-                    {{ dayAdvance|date('d-m-Y') }}
-                {% else %}
-                    {% trans %}Not defined{% endtrans %}
-                {% endif %}
-            </td>
-            <td style="color: #333333; font-weight: bold;"><strong>{% trans %}Day payment{% endtrans %}</strong></td>
-            <td>
-                {% if dayPayment is not empty %}
-                    {{ dayPayment|date('d-m-Y') }}
-                {% else %}
-                    {% trans %}Not defined{% endtrans %}
-                {% endif %}
-            </td>
-        </tr>
-    </table>
+                <a class="btn green" style="margin-bottom: 10px;"
+                   id="copy-to-next-month"
+                   data-text="{% trans %}Copy to the next month success{% endtrans %}"
+                        >
+                    {% trans %}Copy to the next month{% endtrans %}
+                </a>
+            {% endif %}
+        </div>
+    </div>
 
     <div class="clear"></div>
 <div id="shedule_table" style="width: 100%;  margin-bottom: 15px;">
