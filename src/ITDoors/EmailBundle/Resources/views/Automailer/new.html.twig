@@ -23,14 +23,14 @@
 {% block css_page_level_plugin %}
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.css') }}">
-    <link rel="stylesheet" type="text/css" hrefasset('metronic/assets/global/plugins/ugins/dropzone/css/dropzone.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/dropzone/css/dropzone.css') }}">
 {% endblock %}
 
 {% block js_page_level_plugins %}
     {{ parent() }}
-    <script type="text/javascriptasset('metronic/assets/global/plugins/ic/plugins/bootstrap-summernote/summernote.min.js') }}"></script>
-    <script type="text/javasasset('metronic/assets/global/plugins/etronic/plugins/bootstrap-summernote/lang/summernote-ru-RU.js') }}"></script>
-    <script type="text/asset('metronic/assets/global/plugins/tes/metronic/plugins/dropzone/dropzone.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/lang/summernote-ru-RU.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/dropzone/dropzone.js') }}"></script>
 {% endblock %}
 {% block body %}
     <script>

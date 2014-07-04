@@ -25,8 +25,8 @@
 
 {% block js_page_level_plugins %}
     {{ parent() }}
-    <script type="text/javascript" srcasset('metronic/assets/global/plugins/ugins/jquery-multi-select/js/jquery.multi-select.js') }}"></script>
-    <script type="text/javascriptasset('metronic/assets/global/plugins/ic/plugins/jquery-multi-select/js/jquery.quicksearch.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-multi-select/js/jquery.quicksearch.js') }}"></script>
     <script type="text/javascript">
         $(document).ready(function(){
             $('#teamForm_users').multiSelect({
