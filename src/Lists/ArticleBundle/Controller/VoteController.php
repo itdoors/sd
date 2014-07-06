@@ -111,7 +111,13 @@ class VoteController extends BaseController
                     }
 
                     if (in_array($value, array(1, 2, 3, 4, 5))) {
-
+                        if (!$rationResult) {
+                            $rationResult = $vR->getVoteForArticle($id);
+                            if (!empty($rationResult['countVote'])) {
+                                $rationResult['average'] =  round($rationResult['sumVote'] / $rationResult['countVote'], 2);
+                                $ratValue = $article['value'];
+                            }
+                        }
                         $rationResult['sumVote'] = $rationResult['sumVote']+$value;
                         $rationResult['countVote'] = $rationResult['countVote']+1;
                         $rationResult['average'] = round($rationResult['sumVote']  / $rationResult['countVote'], 2);
