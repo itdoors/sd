@@ -7,8 +7,8 @@ use Symfony\Component\DependencyInjection\Container;
 /**
  * Class AccessService
  */
-
-class AccessService {
+class AccessService
+{
     /** @var Container $container */
     protected $container;
 
