@@ -47,7 +47,9 @@ class PrivateController extends SalesController
                     'title' => $this->getEventTitle($handlingMessage),
                     'start' => $this->getEventStart($handlingMessage)->format('Y-m-d H:i:s'),
                     'url' => $this->getEventUrl($handlingMessage),
-                    'className' => $this->getEventCssClass($handlingMessage)
+                    'className' => $this->getEventCssClass($handlingMessage),
+                    'allDay' => false,
+                    'end' => '2014-07-07 23:00:00'
                 );
             }
         }
