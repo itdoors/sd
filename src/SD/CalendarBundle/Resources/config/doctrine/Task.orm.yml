@@ -1,0 +1,43 @@
+SD\CalendarBundle\Entity\Task:
+    type:  entity
+    table: task
+    repositoryClass: SD\CalendarBundle\Entity\TaskRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+    fields:
+        userId:
+            type: integer
+            table: user_id
+        createDateTime:
+            type: datetime
+            nullable: true
+            column: create_date_time
+        type:
+            type: string
+            length: 128
+            nullable: true
+        startDateTime:
+            type: datetime
+            nullable: true
+            column: start_date_time
+        stopDateTime:
+            type: datetime
+            nullable: true
+            column: stop_date_time
+        title:
+            type: string
+            nullable: true
+            length: 255
+    manyToOne:
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
