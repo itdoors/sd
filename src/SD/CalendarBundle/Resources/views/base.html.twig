@@ -6,7 +6,7 @@
             header: {
                 left:   'title',
                 center: '',
-                right:  'today month prev,next'
+                right:  'today, month, prev, next, agendaDay'
             },
             firstDay: 1,
             events: {
@@ -28,7 +28,9 @@
 
             },
             monthNames: ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],
+            monthNamesShort: ["Янв.","Фев.","Мар.","Апр.","Май","Июн.","Июл.","Авг.","Сен.","Окт.","Ноя.","Дек."],
             dayNamesShort: ["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
+            dayNames: ['Воскресенье','Понедельник','Вторник','Среда','Четвер','Пятница','Суббота'],
             buttonText: {
                 prev: "&nbsp;&#9668;&nbsp;",
                 next: "&nbsp;&#9658;&nbsp;",
@@ -39,11 +41,15 @@
                 week: "Неделя",
                 day: "День"
             },
+            titleFormat: {
+		month: 'MMMM yyyy',
+		week: "MMM d[ yyyy]{ '&#8212;'[ MMM] d yyyy}",
+		day: 'dddd d MMM yyyy'
+            },
+            axisFormat: 'HH',
+            allDayText: 'Весь день',
             eventMouseover: function(event, jsEvent, view) {
                 $(this).attr('title', event.hover_title);
-                //console.log(event);
-               // console.log(this);
-                //$(this).append('<div title=\"'+event.title+'\" class=\"hover-end\">'+event.title+'</div>');
             }
         });
     });
@@ -52,7 +58,12 @@
 <div class="portlet box blue calendar">
     <div class="portlet-title">
         <div class="caption">
-            <i class="fa fa-calendar"></i> Мой Календарь
+            <i class="fa fa-calendar"></i>
+            {% if text is defined  %}
+                {{ text }}
+            {% else %}
+                {% trans from 'messages' %}My Calendar{% endtrans%}
+            {% endif %}
         </div>
     </div>
     <div class="portlet-body light-grey">

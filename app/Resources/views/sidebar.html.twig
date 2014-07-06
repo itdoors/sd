@@ -157,13 +157,23 @@
             </li>
         {% endif %}
         {% if is_granted('ROLE_SALESADMIN') %}
-            <li class="">
+            <li{% if
+                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_calendar_shared_index')
+                        %} class="active"{% endif %}>
                 <a href="javascript:;">
                     <i class="icon-pencil"></i>
                     <span class="title">{% trans %}Sales Admin short{% endtrans %}</span>
                     <span class="arrow "></span>
                 </a>
                 <ul class="sub-menu">
+                    <li{% if
+                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_calendar_shared_index')
+                        %} class="active"{% endif %}>
+                        <a href="{{ path('sd_calendar_shared_index') }}" title="{% trans %}Shared calendar{% endtrans %}">
+                            <i class="fa fa-calendar"></i>
+                            {% trans %}Shared calendar{% endtrans %}
+                        </a>
+                    </li>
                     <li>
                         <a href="{{ path('lists_sales_admin_handling_index') }}" title="{% trans %}Projects{% endtrans %}">
                             <i class="fa fa-comments"></i>

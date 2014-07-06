@@ -95,6 +95,11 @@ class HandlingMessageViewRepository extends EntityRepository
             ->setParameter(':startTimestamp', $dateTimeFrom->setTimestamp($startTimestamp), Type::DATETIME)
             ->setParameter(':endTimestamp', $dateTimeTo->setTimestamp($endTimestamp), Type::DATETIME);
 
+        if (isset($filters['type'])) {
+            $sql
+                ->andWhere('hmv.typeName in (:types)')
+                ->setParameter(':types', explode(',', $filters['type']));
+        }
         if ($userIds && sizeof($userIds)) {
             $sql
                 ->andWhere('hmv.userId in (:userIds)')

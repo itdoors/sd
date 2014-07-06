@@ -14,23 +14,27 @@ SD\CalendarBundle\Entity\Task:
         createDateTime:
             type: datetime
             nullable: true
-            column: create_date_time
-        type:
+            column: createdatetime
+        taskType:
             type: string
             length: 128
             nullable: true
+            column: task_type
         startDateTime:
             type: datetime
             nullable: true
-            column: start_date_time
+            column: startdatetime
         stopDateTime:
             type: datetime
             nullable: true
-            column: stop_date_time
+            column: stopdatetime
         title:
             type: string
-            nullable: true
+            nullable: false
             length: 255
+        description:
+            type: text
+            nullable: true
     manyToOne:
         user:
             targetEntity: SD\UserBundle\Entity\User
