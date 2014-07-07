@@ -281,7 +281,10 @@ class OperScheduleController extends BaseFilterController
         }
 
         $canEdit  =  $this->checkIfCanEdit();
-
+        $infoSalary = $this->getSumsSalary($idDepartment, $year.'-'.$monthShow);
+        $totalSalary = $infoSalary['totalSalary'];
+        $salaryNotOfficially = $infoSalary['salaryNotOfficially'];
+        $salaryOfficially = $infoSalary['salaryOfficially'];
         return $this->render('ITDoorsOperBundle:Schedule:scheduleTable.html.twig', array(
             'days'=> $days,
             'coworkers' => $coworkers,
@@ -297,7 +300,10 @@ class OperScheduleController extends BaseFilterController
             'holydaysTotalString' => $holidays,
             'dayAdvance' => $dayAdvance,
             'dayPayment' => $dayPayment,
-            'canEdit' => $canEdit
+            'canEdit' => $canEdit,
+            'totalSalary' => $totalSalary,
+            'salaryOfficially' => $salaryOfficially,
+            'salaryNotOfficially' => $salaryNotOfficially
         ));
 
     }
@@ -1940,6 +1946,18 @@ class OperScheduleController extends BaseFilterController
         $idDepartment = $params['idDepartment'];
         $idReplacement = $params['idReplacement'];
 
+        $info = $this->getSumsCoworker($date, $idCoworker, $idReplacement, $idDepartment);
+        $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleTableSums.html.twig', $info);
+        $infoSalary = $this->getSumsSalary($idDepartment, $date);
+        $return += $infoSalary;
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
+
+    private function getSumsCoworker($date, $idCoworker, $idReplacement, $idDepartment)
+    {
         list($year, $month) = explode('-', $date);
 
         /** @var $grafikRepository \Lists\GrafikBundle\Entity\GrafikRepository   */
@@ -2020,7 +2038,7 @@ class OperScheduleController extends BaseFilterController
 
         $totalSalary = $salaryOfficially + $salaryNotOfficially;
         $canEdit  =  $this->checkIfCanEdit();
-        $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleTableSums.html.twig', array(
+        $return = array(
             'sumOfficially' => $officiallyTotal,
             'sumNotOfficially' => $notOfficiallyTotal,
             'plannedAccrual' => $plannedAccrualValue,
@@ -2033,14 +2051,59 @@ class OperScheduleController extends BaseFilterController
             'totalSalary' => $totalSalary,
             'idMonthInfo'=> $idMonthInfo,
             'canEdit' => $canEdit
-        ));
+        );
 
-        $return['success'] = 1;
-
-        return new Response(json_encode($return));
-
+        return $return;
     }
 
+    private function getSumsSalary($idDepartment, $date)
+    {
+        $totalSalary = 0;
+        $salaryNotOfficially = 0;
+        $salaryOfficially = 0;
+        list($year, $month) = explode('-', $date);
+
+        $departmentPeopleRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
+
+        $departmentPeoples = $departmentPeopleRepository->findBy(
+            array(
+                'department' => $idDepartment,
+            )
+        );
+
+
+        /** @var  $monthInfoRepository \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfoRepository */
+        $monthInfoRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
+
+        foreach ($departmentPeoples as $departmentPeople) {
+            $monthInfos = $monthInfoRepository->findBy(array(
+                'year' => $year,
+                'month' => $month,
+                'departmentPeople' => $departmentPeople
+            ));
+
+            /** @var  $monthInfo \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfo */
+            foreach ($monthInfos as $monthInfo) {
+                $idCoworker = $monthInfo->getDepartmentPeopleId();
+                $idReplacement = $monthInfo->getReplacementId();
+                $info = $this->getSumsCoworker($date, $idCoworker, $idReplacement, $idDepartment);
+
+                $totalSalary += $info['totalSalary'];
+                $salaryNotOfficially += $info['salaryNotOfficially'];
+                $salaryOfficially += $info['salaryOfficially'];
+            }
+        }
+
+        $return = array(
+            'totalSalary' => $totalSalary,
+            'salaryNotOfficially' => $salaryNotOfficially,
+            'salaryOfficially' => $salaryOfficially
+        );
+        return $return;
+
+    }
     /**
      * @return Response
      */

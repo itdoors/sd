@@ -158,6 +158,9 @@
 
                     $('.sums'+idCoworker+idReplacement).remove();
                     $('#row'+idCoworker+idReplacement).append(data.html);
+                    $('#total_salary').html(data.totalSalary);
+                    $('#salary_not_officially').html(data.salaryNotOfficially);
+                    $('#salary_officially').html(data.salaryOfficially);
                     //href.html(data.html);
                 }
             }
@@ -497,6 +500,25 @@
                 {% trans %}Not defined{% endtrans %}
             {% endif %}
             <br>
+
+            <strong>
+                <span style="color: #333333;">{% trans %}Total{% endtrans %} {% trans %}Real salary{% endtrans %}:</span>
+            </strong>
+                <span id="total_salary">{{ totalSalary }}</span>
+            <br>
+
+            <strong>
+                <span style="color: #333333;">{% trans %}Total{% endtrans %} {% trans %}Not Official salary{% endtrans %}:</span>
+            </strong>
+            <span id="salary_not_officially">{{ salaryNotOfficially }}</span>
+            <br>
+
+            <strong>
+                <span style="color: #333333;">{% trans %}Total{% endtrans %} {% trans %}Official salary{% endtrans %}:</span>
+            </strong>
+            <span id="salary_officially">{{ salaryOfficially }}</span>
+            <br>
+
         </div>
         <div class="col-md-7">
             {% if canEdit %}
