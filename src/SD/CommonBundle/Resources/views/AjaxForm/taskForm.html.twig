@@ -26,20 +26,24 @@
                 }) }}
                 <div class="row">
                      <div class="form-group col-md-6">
-                        {{ form_label(form.startDateTime, 'Date start'|, {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.startDateTime, {'attr' : {'class' : 'form-control datatime-picker', 'placeholder': 'Enter date start'} } ) }}
+                        {{ form_label(form.startDateTime, 'Date start'|trans({}, 'SDCalendarBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.startDateTime, {'attr' : {'class' : 'form-control datatime-picker', 'placeholder': 'Enter date start'|trans({}, 'SDCalendarBundle')} } ) }}
+                        <span class="help-block">{{ form_errors(form.startDateTime) }}</span>
                     </div>
                      <div class="form-group col-md-6">
-                        {{ form_label(form.startDateTime, 'Date stop', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.stopDateTime, {'attr' : {'class' : 'form-control datatime-picker', 'placeholder': 'Enter date stop'} } ) }}
+                        {{ form_label(form.startDateTime, 'Date stop'|trans({}, 'SDCalendarBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.stopDateTime, {'attr' : {'class' : 'form-control datatime-picker', 'placeholder': 'Enter date stop'|trans({}, 'SDCalendarBundle')} } ) }}
+                        <span class="help-block">{{ form_errors(form.stopDateTime) }}</span>
                     </div>
                     <div class="form-group col-md-12">
-                        {{ form_label(form.title, 'Title', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.title, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter title'} } ) }}
+                        {{ form_label(form.title, 'Title'|trans({}, 'SDCalendarBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.title, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter title'|trans({}, 'SDCalendarBundle')} } ) }}
+                        <span class="help-block">{{ form_errors(form.title) }}</span>
                     </div>
                     <div class="form-group col-md-12">
-                        {{ form_label(form.description, 'Description', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.description, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter description'} } ) }}
+                        {{ form_label(form.description, 'Description'|trans({}, 'SDCalendarBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.description, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter description'|trans({}, 'SDCalendarBundle')} } ) }}
+                        <span class="help-block">{{ form_errors(form.description) }}</span>
                     </div>
                    
                     {#<div class="form-group col-md-2">
@@ -75,8 +79,8 @@
                     
                 
                 <div class="modal-footer" style="border: none;">
-                    <button type="button" class="btn default" data-dismiss="modal">{% trans %}Cancel{% endtrans %}</button>
-                    <button type="button" class="btn blue">{% trans %}Save{% endtrans %}</button>
+                    <button type="submit" class="btn default" data-dismiss="modal">{% trans %}Cancel{% endtrans %}</button>
+                    <button type="submit" class="btn blue">{% trans %}Save{% endtrans %}</button>
                 </div>
                 </div>
              </div>

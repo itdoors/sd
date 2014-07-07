@@ -50,6 +50,15 @@
             allDayText: 'Весь день',
             eventMouseover: function(event, jsEvent, view) {
                 $(this).attr('title', event.hover_title);
+                $(this).attr('data-id', event.data_id);
+              
+            },
+            eventClick: function(event, element) {
+
+               // alert('ok');
+
+                //$('#calendar').fullCalendar('updateEvent', event);
+
             }
         });
     });
@@ -67,7 +76,6 @@
         </div>
     </div>
     <div class="portlet-body light-grey">
-        <div id="calendar" class="fc fc-ltr">
-        </div>
+        <div id="calendar" class="fc fc-ltr"></div>
     </div>
 </div>

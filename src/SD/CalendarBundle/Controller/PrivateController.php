@@ -14,6 +14,17 @@ class PrivateController extends SalesController
     protected $baseTemplate = 'Private';
 
     /**
+     * Renders template holder for calendar
+     *
+     * @return string
+     */
+    public function indexAction()
+    {
+        return $this->render('SDCalendarBundle::base.html.twig', array(
+            'url' => $this->get('router')->generate('sd_calendar_private_handling_message')
+        ));
+    }
+    /**
      * Returns events depending on userIds and userRoles
      *
      * @param int[]  $userIds
@@ -48,8 +59,7 @@ class PrivateController extends SalesController
                     'start' => $this->getEventStart($handlingMessage)->format('Y-m-d H:i:s'),
                     'url' => $this->getEventUrl($handlingMessage),
                     'className' => $this->getEventCssClass($handlingMessage),
-                    'allDay' => false,
-                    'end' => '2014-07-07 23:00:00'
+//                    'allDay' => false,s
                 );
             }
         }
@@ -70,6 +80,22 @@ class PrivateController extends SalesController
         }
 
         /** get task */
+        $task = $em->getRepository('SDCalendarBundle:Task')->findAll();
+        foreach ($task as $val) {
+            $events[] = array(
+                'hover_title' => '',
+                'modal' => 'on',
+                'data_id' => 'la'.$val->getId(),
+                'title' => $val->getTitle(). ' ('. $val->getStartDateTime()->format('H:i'). ')',
+                'start' => $val->getStartDateTime()->format('Y-m-d H:i:s'),
+                'end' => $val->getStopDateTime()->format('Y-m-d H:i:s'),
+                'allDay' => false
+//                'url' => $this->generateUrl('list_article_vote_decision_show', array(
+//                            'id' => $val->getId()
+//                    )
+//                )
+                );
+        }
         return $events;
     }
 }

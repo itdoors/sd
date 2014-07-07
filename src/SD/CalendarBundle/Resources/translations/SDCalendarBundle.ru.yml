@@ -10,3 +10,12 @@ Past event: Прошедшее
 Select type active: Выберите тип активности
 
 Date start: Дата начала
+Date stop: Дата окончания
+Enter date start: Введите дату начала
+Enter date stop: Введите дату окончания
+Title: Название
+Description: Описание
+Enter title: Введите название
+Enter description: Введите описание
+
+Start date can't be greater then stop date: Дата начала не может быть больше даты окончание

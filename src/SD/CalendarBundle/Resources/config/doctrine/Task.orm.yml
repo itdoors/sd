@@ -10,7 +10,7 @@ SD\CalendarBundle\Entity\Task:
     fields:
         userId:
             type: integer
-            table: user_id
+            column: user_id
         createDateTime:
             type: datetime
             nullable: true

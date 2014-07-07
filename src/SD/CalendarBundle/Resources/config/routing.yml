@@ -2,6 +2,9 @@
 sd_calendar_private_handling_message:
     pattern:  sd/calendar/ajax/private/handlind_message
     defaults: { _controller: SDCalendarBundle:Private:HandlingMessage }
+sd_calendar_private_index:
+    pattern:  sd/calendar/ajax/private/index
+    defaults: { _controller: SDCalendarBundle:Private:Index }
 # shared calendar
 sd_calendar_shared_index:
     pattern:  sd/calendar/shared/index

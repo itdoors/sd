@@ -1719,6 +1719,34 @@ class AjaxController extends BaseFilterController
 
         return true;
     }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function taskFormSave(Form $form, $user, $request)
+    {
+        /** @var Task $data */
+        $data = $form->getData();
+
+        $formData = $request->request->get($form->getName());
+        $data->setUser($user);
+        $data->setTaskType('personal');
+        $data->setCreateDateTime(new \DateTime());
+        $data->setStartDateTime(new \DateTime($formData['startDateTime']));
+        $data->setStopDateTime(new \DateTime($formData['stopDateTime']));
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
     /**
      * Saves {formName}Save after valid ajax validation
      *
