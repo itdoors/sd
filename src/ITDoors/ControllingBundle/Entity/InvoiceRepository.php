@@ -534,6 +534,9 @@ class InvoiceRepository extends EntityRepository
                 );
                 $entitie
                     ->Select('mc.id as id')
+                    ->addSelect('o.firstName as firstNameOwner')
+                    ->addSelect('o.lastName as lastNameOwner')
+                    ->addSelect('o.middleName as middleNameOwner')
                     ->addSelect('mc.firstName')
                     ->addSelect('mc.lastName')
                     ->addSelect('mc.middleName')
@@ -546,6 +549,7 @@ class InvoiceRepository extends EntityRepository
                     ->leftJoin('i.dogovor', 'd')
                     ->leftJoin('d.customer', 'customer')
                     ->leftJoin('Lists\ContactBundle\Entity\ModelContact', 'mc', 'WITH', $subQueryCase)
+                    ->leftJoin('mc.owner', 'o')
                     ->where('i.id = :invoiceid')
                     ->setParameter(':invoiceid', (int) $invoiceid)
                     ->setParameter(':text', 'organization');

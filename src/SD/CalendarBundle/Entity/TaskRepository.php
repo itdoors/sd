@@ -28,10 +28,10 @@ class TaskRepository extends EntityRepository
             ->addSelect('t.stopDateTime')
 
             ->where('t.userId = :userid')
-            ->where('t.taskType = :type')
-//                
+            ->andWhere('t.taskType = :types')
+
             ->setParameter(':userid', $userId)
-            ->setParameter(':type', $type)
+            ->setParameter(':types', $type)
                 
             ->getQuery()
             ->getResult();

@@ -28,6 +28,7 @@
                     <th>{% trans %}Mobile{% endtrans %}</th>
                     <th>{% trans %}Email{% endtrans %}</th>
                     <th>{% trans %}Birthday{% endtrans %}</th>
+                    <th>{% trans %}Owner{% endtrans %}</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,7 +42,8 @@
                         <td>{{ item.phone1 }}</td>
                         <td>{{ item.phone2 }}</td>
                         <td>{{ item.email }}</td>
-                        <td>{{item.birthday is empty ? '' : item.birthday|date("d.M.y") }}</td>
+                        <td>{{ item.birthday is empty ? '' : item.birthday|date("d.M.y") }}</td>
+                        <td>{{ item.firstNameOwner }} {{ item.lastNameOwner }} {{ item.middleNameOwner }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
