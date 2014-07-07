@@ -567,3 +567,12 @@ UPDATE "public".lookup SET "group" = 'organization_sign' WHERE id = 61;
 UPDATE "public".lookup SET "group" = 'organization_sign' WHERE id = 60;
 --test   -----------------------------------------------
 --stagin -----------------------------------------------
+
+-- task
+CREATE TABLE task (id SERIAL NOT NULL, user_id INT DEFAULT NULL, userId INT NOT NULL, createdatetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, task_type VARCHAR(128) DEFAULT NULL, startdatetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, stopdatetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL, title VARCHAR(255) NOT NULL, description TEXT DEFAULT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_527EDB25A76ED395 ON task (user_id);
+ALTER TABLE task ADD CONSTRAINT FK_527EDB25A76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+--test   -----------------------------------------------
+--stagin -----------------------------------------------
+
+
