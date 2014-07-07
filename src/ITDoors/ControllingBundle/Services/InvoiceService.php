@@ -40,10 +40,10 @@ class InvoiceService
     private function findFile($directory)
     {
         /** @var EntityManager $em */
-        $em = $this->container->get('doctrine')->getManager();
+//        $em = $this->container->get('doctrine')->getManager();
 
         /** @var InvoicecronRepository $invoicecron */
-        $invoicecron = $em->getRepository('ITDoorsControllingBundle:Invoicecron');
+//        $invoicecron = $em->getRepository('ITDoorsControllingBundle:Invoicecron');
 
         $fileName = false;
 
