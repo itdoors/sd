@@ -324,7 +324,7 @@ var SD = (function() {
 
     // wrapper function to  un-block element(finish loading)
     SD.prototype.unblockUI = function (el, clean) {
-        el.css('position', '');
+       // el.css('position', '');
         el.css('zoom', '');
         el.unblock();
     };

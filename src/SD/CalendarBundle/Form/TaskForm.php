@@ -40,8 +40,14 @@ class TaskForm extends AbstractType
         $builder
             ->add('title')
             ->add('description')
-            ->add('startDateTime', 'text')
-            ->add('stopDateTime', 'text');
+            ->add('startDateTime', 'datetime', array(
+                'widget' => 'single_text',
+                'format' => 'dd.MM.yyyy HH:mm:ss'
+            ))
+            ->add('stopDateTime', 'datetime', array(
+                'widget' => 'single_text',
+                'format' => 'dd.MM.yyyy HH:mm:ss'
+            ));
         
          $builder->addEventListener(
             FormEvents::POST_SUBMIT,
@@ -52,9 +58,16 @@ class TaskForm extends AbstractType
                 $form = $event->getForm();
 
                 $translator = $container->get('translator');
-                $dataStart = new \DateTime($data->getStartDateTime());
-                $dataStop = new \DateTime($data->getStopDateTime());
-                if ($dataStart->format('U') >= $dataStop->format('U')) {
+//                $dataStart = new \DateTime($data->getStartDateTime());
+//                $dataStop = new \DateTime($data->getStopDateTime());
+//                if ($dataStart->format('U') >= $dataStop->format('U')) {
+//                    $msgString = "Start date can't be greater then stop date";
+//
+//                    $msg = $translator->trans($msgString, array(), 'SDCalendarBundle');
+//
+//                    $form->addError(new FormError($msg));
+//                }
+                if ($data->getStartDateTime()->format('U') >= $data->getStopDateTime()->format('U')) {
                     $msgString = "Start date can't be greater then stop date";
 
                     $msg = $translator->trans($msgString, array(), 'SDCalendarBundle');
@@ -66,13 +79,14 @@ class TaskForm extends AbstractType
 
     }
 
-    /**
+      /**
      * @param OptionsResolverInterface $resolver
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'SD\CalendarBundle\Entity\Task'
+            'data_class' => 'SD\CalendarBundle\Entity\Task',
+            'translation_domain' => 'ListsContactBundle'
         ));
     }
 

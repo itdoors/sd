@@ -29,6 +29,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
 use ITDoors\AjaxBundle\Controller\BaseFilterController;
 use Lists\CompanystructureBundle\Entity\Companystructure;
 use SD\UserBundle\Entity\Usercontactinfo;
+use SD\CalendarBundle\Entity\Task;
 
 /**
  * AjaxController class.
@@ -48,7 +49,8 @@ class AjaxController extends BaseFilterController
         'User' => 'SDUserBundle:User',
         'Dogovor' => 'ListsDogovorBundle:Dogovor',
         'DopDogovor' => 'ListsDogovorBundle:DopDogovor',
-        'Email' => 'ITDoorsEmailBundle:Email'
+        'Email' => 'ITDoorsEmailBundle:Email',
+        'Task' => 'SDCalendarBundle:Task'
     );
 
     /**
@@ -1733,11 +1735,15 @@ class AjaxController extends BaseFilterController
     {
         /** @var Task $data */
         $data = $form->getData();
+        
+        if (!$data->getId()) {
+           $data->setCreateDateTime(new \DateTime());
+           $data->setUser($user);
+        }
 
         $formData = $request->request->get($form->getName());
-        $data->setUser($user);
+        
         $data->setTaskType('personal');
-        $data->setCreateDateTime(new \DateTime());
         $data->setStartDateTime(new \DateTime($formData['startDateTime']));
         $data->setStopDateTime(new \DateTime($formData['stopDateTime']));
 
