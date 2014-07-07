@@ -28,7 +28,7 @@ class OperDepartmentInfoController extends BaseFilterController
         $accessService = $this->get('access.service');
         $access = $accessService -> checkAccessToDepartment($id);
         if (!$access) {
-            //return $this->redirect($this->generateUrl('it_doors_oper_homepage'));
+            return $this->redirect($this->generateUrl('it_doors_oper_homepage'));
         }
 
 

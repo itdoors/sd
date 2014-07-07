@@ -3621,6 +3621,7 @@ class AjaxController extends BaseFilterController
         $repository = $this->getDoctrine()
             ->getRepository('ListsMpkBundle:Mpk');
 
+        //var_dump($id);
         $objects= $repository->getDepartmentPeopleQueryMpk($searchText, $id);
 
         $result = array();
