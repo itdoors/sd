@@ -602,6 +602,28 @@ class AjaxController extends BaseFilterController
     }
 
     /**
+     * Returns json organization group list
+     *
+     * @return string
+     */
+    public function organizationLookupAction()
+    {
+        $lookup = $this->getDoctrine()
+            ->getRepository('ListsLookupBundle:Lookup')
+                ->getLookupsGroup('organization_sign')
+                ->getQuery()
+                ->getResult();
+
+        $result = array();
+
+        foreach ($lookup as $organization) {
+            $result[] = $this->serializeObject($organization);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
      * Returns json organization list for contacts query
      *
      * @return string
