@@ -44,10 +44,14 @@ class MpkRepository extends EntityRepository
             ->where('lower(m.name) LIKE :q')
             ->setParameter(':q', mb_strtolower($q, 'UTF-8') . '%');
 
-        if ($id) {
+        if ($id != NULL || $id !== false) {
             if (is_array($id)) {
-                $sql->andWhere('m.department IN (:department)')
-                    ->setParameter(':department', $id);
+                if (count($id)>0) {
+                    $sql->andWhere('m.department IN (:department)')
+                        ->setParameter(':department', $id);
+                } else {
+                    return array();
+                }
             } else {
                 $sql->andWhere('m.department = :department')
                     ->setParameter(':department', $id);
