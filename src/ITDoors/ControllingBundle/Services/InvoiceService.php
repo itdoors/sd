@@ -215,7 +215,7 @@ class InvoiceService
             $invoiceNew->setDogovor($dogovorfind);
             $em->persist($invoiceNew);
             $em->flush();
-            if (!$invoiceFind) {
+            if (!$invoiceFind && $invoiceNew->getDogovorId()) {
                 $this->addReaspon($invoiceNew);
             }
         } else {
@@ -314,13 +314,13 @@ class InvoiceService
         $em = $this->container->get('doctrine')->getManager();
 
         $companystructs = $em->getRepository('ListsDogovorBundle:DogovorCompanystructure')
-            ->findBy(array('dogovorId' => trim($invoice->getDogovorId())));
+            ->findBy(array('dogovorId' => $invoice->getDogovorId()));
 
         foreach ($companystructs as $company) {
 
             $invoicecompany = new InvoiceCompanystructure();
             $invoicecompany->setInvoice($invoice);
-            $invoicecompany->setCompanystructureId($company->getCompanystructureId());
+            $invoicecompany->setCompanystructure($company->getc\CompanyStructures());
 
             $em->persist($invoicecompany);
             $em->flush();
