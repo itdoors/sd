@@ -80,15 +80,15 @@ class PrivateController extends SalesController
         }
 
         /** get task */
-        $task = $em->getRepository('SDCalendarBundle:Task')->findAll();
+        $task = $em->getRepository('SDCalendarBundle:Task')->getPersonalTask($this->getUser()->getId(), 'personal');
         foreach ($task as $val) {
             $events[] = array(
                 'hover_title' => '',
                 'modal' => 'on',
-                'data_id' => 'la'.$val->getId(),
-                'title' => $val->getTitle(). ' ('. $val->getStartDateTime()->format('H:i'). ')',
-                'start' => $val->getStartDateTime()->format('Y-m-d H:i:s'),
-                'end' => $val->getStopDateTime()->format('Y-m-d H:i:s'),
+                'data_id' => 'la'.$val['id'],
+                'title' => $val['title']. ' ('. $val['startDateTime']->format('H:i'). ')',
+                'start' => $val['startDateTime']->format('Y-m-d H:i:s'),
+                'end' => $val['stopDateTime']->format('Y-m-d H:i:s'),
                 'allDay' => false
 //                'url' => $this->generateUrl('list_article_vote_decision_show', array(
 //                            'id' => $val->getId()

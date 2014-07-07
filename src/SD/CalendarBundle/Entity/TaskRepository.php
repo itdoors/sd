@@ -12,4 +12,21 @@ use Doctrine\ORM\EntityRepository;
  */
 class TaskRepository extends EntityRepository
 {
+    public function getPersonalTask ($userId, $type)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('t.id')
+            ->addSelect('t.title')
+            ->addSelect('t.startDateTime')
+            ->addSelect('t.stopDateTime')
+
+            ->where('t.userId = :userid')
+//            ->where('t.taskType = :type')
+//                
+            ->setParameter(':userid', $userId)
+//            ->setParameter(':type', $type)
+                
+            ->getQuery()
+            ->getResult();
+    }
 }
