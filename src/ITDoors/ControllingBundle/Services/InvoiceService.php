@@ -118,53 +118,53 @@ class InvoiceService
         $invoice = trim($invoice);
         $em = $this->container->get('doctrine')->getManager();
         $invoiceNew = $em->getRepository('ITDoorsControllingBundle:Invoice')
-            ->findOneBy(array('invoiceId' => $invoice->invoiceId));
+            ->findOneBy(array('invoiceId' => trim($invoice->invoiceId)));
         if (!$invoiceNew) {
             $invoiceNew = new Invoice();
             $invoiceNew->setCourt(0);
             $invoiceNew->setInvoiceId(trim($invoice->invoiceId));
             if (!empty($invoice->dateFact) && $invoice->dateFact != 'null') {
-                $invoiceNew->setDateFact(new \DateTime($invoice->dateFact));
+                $invoiceNew->setDateFact(new \DateTime(trim($invoice->dateFact)));
             }
         } else {
             if (!empty($invoice->dateFact) && $invoice->dateFact != 'null') {
-                $invoiceNew->setDateFact(new \DateTime($invoice->dateFact));
+                $invoiceNew->setDateFact(new \DateTime(trim($invoice->dateFact)));
             } else {
                 $invoiceNew->setDateFact(null);
             }
         }
 
-        $invoiceNew->setDogovorGuid($invoice->dogovorGuid);
-        $invoiceNew->setDogovorNumber($invoice->dogovorNumber);
-        $invoiceNew->setDogovorName($invoice->dogovorName);
-        $invoiceNew->setDogovorActNote($invoice->dogovorActNote);
-        $invoiceNew->setDogovorActName($invoice->dogovorActName);
-        $invoiceNew->setCustomerName($invoice->customerName);
+        $invoiceNew->setDogovorGuid(trim($invoice->dogovorGuid));
+        $invoiceNew->setDogovorNumber(trim($invoice->dogovorNumber));
+        $invoiceNew->setDogovorName(trim($invoice->dogovorName));
+        $invoiceNew->setDogovorActNote(trim($invoice->dogovorActNote));
+        $invoiceNew->setDogovorActName(trim($invoice->dogovorActName));
+        $invoiceNew->setCustomerName(trim($invoice->customerName));
         $invoiceNew->setCustomerEdrpou(trim($invoice->customerEdrpou));
-        $invoiceNew->setPerformerName($invoice->performerName);
+        $invoiceNew->setPerformerName(trim($invoice->performerName));
         $invoiceNew->setPerformerEdrpou(trim($invoice->performerEdrpou));
 
         if (!empty($invoice->delayDate) && $invoice->delayDate != 'null') {
-            $invoiceNew->setDelayDate(new \DateTime($invoice->delayDate));
+            $invoiceNew->setDelayDate(new \DateTime(trim($invoice->delayDate)));
         }
         if (is_numeric($invoice->delayDays)) {
             $invoiceNew->setDelayDays((int) $invoice->delayDays);
         }
         if (in_array($invoice->delayDaysType, array('Б', 'К', 'б', 'к'))) {
-            $invoiceNew->setDelayDaysType($invoice->delayDaysType);
+            $invoiceNew->setDelayDaysType(trim($invoice->delayDaysType));
         }
         if (!empty($invoice->dogovorDate) && $invoice->dogovorDate != 'null') {
-            $invoiceNew->setDogovorDate(new \DateTime($invoice->dogovorDate));
+            $invoiceNew->setDogovorDate(new \DateTime(trim($invoice->dogovorDate)));
         }
         if (!empty($invoice->date) && $invoice->date != 'null') {
-            $invoiceNew->setDate(new \DateTime($invoice->date));
+            $invoiceNew->setDate(new \DateTime(trim($invoice->date)));
         } else {
             $this->addCronError(false, 'error data', 'date', json_encode($invoice));
 
             return false;
         }
         if (is_numeric($invoice->sum)) {
-            $invoiceNew->setSum($invoice->sum);
+            $invoiceNew->setSum(trim($invoice->sum));
         } else {
             $this->addCronError(false, 'error data', 'sum', json_encode($invoice));
 
@@ -314,7 +314,7 @@ class InvoiceService
         $em = $this->container->get('doctrine')->getManager();
 
         $companystructs = $em->getRepository('ListsDogovorBundle:DogovorCompanystructure')
-            ->findBy(array('dogovorId' => $invoice->getDogovorId()));
+            ->findBy(array('dogovorId' => trim($invoice->getDogovorId())));
 
         foreach ($companystructs as $company) {
 
