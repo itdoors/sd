@@ -5,10 +5,11 @@
             $('.datatime-picker').datetimepicker({
                         rtl: Metronic.isRTL(),
                         autoclose: true,
-                        format: "dd.mm.yyyy hh:ii",
+                        format: "dd.mm.yyyy hh:ii:ss",
                         pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
                         language: 'ru',
-                        weekStart: 1
+                        weekStart: 1,
+                        startDate: new Date()
                     });
         });
     </script>
@@ -70,11 +71,13 @@
                 </div>#}
 
                
-
-                <input type="hidden" name="formName" value="{{ formName }}">
-                <input type="hidden" name="postFunction" value="{{ postFunction }}">
-                <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
-                <input type="hidden" name="targetId" value="{{ targetId }}">
+                    <input type="hidden" name="formName" value="{{ formName }}">
+                    <input type="hidden" name="postFunction" value="{{ postFunction }}">
+                    <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
+                    <input type="hidden" name="targetId" value="{{ targetId }}">
+                    <input type="hidden" name="model" value="{{ model }}">
+                    <input type="hidden" name="modelId" value="{{ modelId }}">
+                    
                 <div class="form-group col-md-12">
                     
                 

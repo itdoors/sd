@@ -54,13 +54,16 @@
               
             },
             eventClick: function(event, element) {
-
-console.log(event);
-console.log(element);
-               // alert('ok');
-
-                //$('#calendar').fullCalendar('updateEvent', event);
-
+                 $(this).attr('id', 'managers_list_new');
+                 $(this).addClass('ajax-form');
+                 $(this).attr('data-toggle', 'modal');
+                 $(this).attr('data-target_holder', 'taskFormTpl');
+                 $(this).attr('data-post_target_id', 'ModelContact'+event.id);
+                 $(this).attr('data-post_function', 'updateList');
+                 $(this).attr('data-post_target_id', 'calendarBlock');
+                 $(this).attr('data-form_name', 'taskForm');
+                 $(this).attr('data-model', 'Task');
+                 $(this).attr('data-model-id', event.data_id);
             }
         });
     });

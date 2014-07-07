@@ -85,15 +85,12 @@ class PrivateController extends SalesController
             $events[] = array(
                 'hover_title' => '',
                 'modal' => 'on',
-                'data_id' => 'la'.$val['id'],
+                'data_id' => $val['id'],
                 'title' => $val['title']. ' ('. $val['startDateTime']->format('H:i'). ')',
                 'start' => $val['startDateTime']->format('Y-m-d H:i:s'),
                 'end' => $val['stopDateTime']->format('Y-m-d H:i:s'),
-                'allDay' => false
-//                'url' => $this->generateUrl('list_article_vote_decision_show', array(
-//                            'id' => $val->getId()
-//                    )
-//                )
+                'allDay' => false,
+                'url' => '#create_task'
                 );
         }
         return $events;
