@@ -285,6 +285,7 @@ class OperScheduleController extends BaseFilterController
         $totalSalary = $infoSalary['totalSalary'];
         $salaryNotOfficially = $infoSalary['salaryNotOfficially'];
         $salaryOfficially = $infoSalary['salaryOfficially'];
+
         return $this->render('ITDoorsOperBundle:Schedule:scheduleTable.html.twig', array(
             'days'=> $days,
             'coworkers' => $coworkers,
@@ -2056,6 +2057,12 @@ class OperScheduleController extends BaseFilterController
         return $return;
     }
 
+    /**
+     * @param integer $idDepartment
+     * @param string  $date
+     *
+     * @return array
+     */
     private function getSumsSalary($idDepartment, $date)
     {
         $totalSalary = 0;
@@ -2101,8 +2108,8 @@ class OperScheduleController extends BaseFilterController
             'salaryNotOfficially' => $salaryNotOfficially,
             'salaryOfficially' => $salaryOfficially
         );
-        return $return;
 
+        return $return;
     }
     /**
      * @return Response
