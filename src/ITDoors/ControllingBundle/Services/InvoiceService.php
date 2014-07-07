@@ -51,11 +51,11 @@ class InvoiceService
         if ($dh) {
             while (($file = readdir($dh)) !== false) {
                 if (filetype($directory . $file) == 'file') {
-                    $findfile = $invoicecron->findBy(array('reason' => $file));
-                    if (!$findfile) {
+//                    $findfile = $invoicecron->findBy(array('reason' => $file));
+//                    if (!$findfile) {
                         $fileName = $file;
                         continue;
-                    }
+//                    }
                 }
             }
             closedir($dh);
@@ -320,7 +320,7 @@ class InvoiceService
 
             $invoicecompany = new InvoiceCompanystructure();
             $invoicecompany->setInvoice($invoice);
-            $invoicecompany->setCompanystructure($company->getc\CompanyStructures());
+            $invoicecompany->setCompanystructure($company->getCompanyStructures());
 
             $em->persist($invoicecompany);
             $em->flush();
