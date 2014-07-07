@@ -115,7 +115,7 @@ class InvoiceService
      */
     private function saveinvoice($invoice)
     {
-        $invoice = trim($invoice);
+        $invoice = $invoice;
         $em = $this->container->get('doctrine')->getManager();
         $invoiceNew = $em->getRepository('ITDoorsControllingBundle:Invoice')
             ->findOneBy(array('invoiceId' => trim($invoice->invoiceId)));
