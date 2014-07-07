@@ -281,7 +281,10 @@ class OperScheduleController extends BaseFilterController
         }
 
         $canEdit  =  $this->checkIfCanEdit();
-
+        $infoSalary = $this->getSumsSalary($idDepartment, $year.'-'.$monthShow);
+        $totalSalary = $infoSalary['totalSalary'];
+        $salaryNotOfficially = $infoSalary['salaryNotOfficially'];
+        $salaryOfficially = $infoSalary['salaryOfficially'];
         return $this->render('ITDoorsOperBundle:Schedule:scheduleTable.html.twig', array(
             'days'=> $days,
             'coworkers' => $coworkers,
@@ -297,7 +300,10 @@ class OperScheduleController extends BaseFilterController
             'holydaysTotalString' => $holidays,
             'dayAdvance' => $dayAdvance,
             'dayPayment' => $dayPayment,
-            'canEdit' => $canEdit
+            'canEdit' => $canEdit,
+            'totalSalary' => $totalSalary,
+            'salaryOfficially' => $salaryOfficially,
+            'salaryNotOfficially' => $salaryNotOfficially
         ));
 
     }
@@ -1942,6 +1948,8 @@ class OperScheduleController extends BaseFilterController
 
         $info = $this->getSumsCoworker($date, $idCoworker, $idReplacement, $idDepartment);
         $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleTableSums.html.twig', $info);
+        $infoSalary = $this->getSumsSalary($idDepartment, $date);
+        $return += $infoSalary;
 
         $return['success'] = 1;
 
@@ -2051,25 +2059,49 @@ class OperScheduleController extends BaseFilterController
     private function getSumsSalary($idDepartment, $date)
     {
         $totalSalary = 0;
+        $salaryNotOfficially = 0;
+        $salaryOfficially = 0;
         list($year, $month) = explode('-', $date);
+
+        $departmentPeopleRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
+
+        $departmentPeoples = $departmentPeopleRepository->findBy(
+            array(
+                'department' => $idDepartment,
+            )
+        );
+
+
         /** @var  $monthInfoRepository \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfoRepository */
         $monthInfoRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
 
-        $monthInfos = $monthInfoRepository->findBy(array(
-            'year' => $year,
-            'month' => $month,
-            'department' => $idDepartment
-        ));
-        
-        /** @var  $monthInfo \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfo */
-        foreach ($monthInfos as $monthInfo) {
-            $idCoworker = $monthInfo->getDepartmentPeopleId();
-            $idReplacement = $monthInfo->getReplacementId();
-            $info = $this->getSumsCoworker($date, $idCoworker, $idReplacement, $idDepartment);
+        foreach ($departmentPeoples as $departmentPeople) {
+            $monthInfos = $monthInfoRepository->findBy(array(
+                'year' => $year,
+                'month' => $month,
+                'departmentPeople' => $departmentPeople
+            ));
 
-            $totalSalary += $info['totalSalary'];
+            /** @var  $monthInfo \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfo */
+            foreach ($monthInfos as $monthInfo) {
+                $idCoworker = $monthInfo->getDepartmentPeopleId();
+                $idReplacement = $monthInfo->getReplacementId();
+                $info = $this->getSumsCoworker($date, $idCoworker, $idReplacement, $idDepartment);
+
+                $totalSalary += $info['totalSalary'];
+                $salaryNotOfficially += $info['salaryNotOfficially'];
+                $salaryOfficially += $info['salaryOfficially'];
+            }
         }
+
+        $return = array(
+            'totalSalary' => $totalSalary,
+            'salaryNotOfficially' => $salaryNotOfficially,
+            'salaryOfficially' => $salaryOfficially
+        );
+        return $return;
 
     }
     /**
