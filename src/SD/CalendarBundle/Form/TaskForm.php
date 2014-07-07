@@ -19,7 +19,9 @@ class TaskForm extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('date');
+            ->add('description')
+            ->add('startDateTime', 'text')
+            ->add('stopDateTime', 'text');
 
     }
 

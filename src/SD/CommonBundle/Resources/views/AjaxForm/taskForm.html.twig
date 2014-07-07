@@ -1,5 +1,17 @@
 {% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
 
+    <script>
+        $(document).ready(function(){
+            $('.datatime-picker').datetimepicker({
+                        rtl: Metronic.isRTL(),
+                        autoclose: true,
+                        format: "dd.mm.yyyy hh:ii",
+                        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+                        language: 'ru',
+                        weekStart: 1
+                    });
+        });
+    </script>
             <div class="portlet-body">
                 {{ form_errors(form) }}
                  {{ form_start(form, {
@@ -13,11 +25,21 @@
                     }
                 }) }}
                 <div class="row">
-                     <div class="form-group col-md-12">
-                        {{ form_widget(form.date, {'attr' : {'class' : 'form-control', 'placeholder': 'Event name'} } ) }}
+                     <div class="form-group col-md-6">
+                        {{ form_label(form.startDateTime, 'Date start'|, {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.startDateTime, {'attr' : {'class' : 'form-control datatime-picker', 'placeholder': 'Enter date start'} } ) }}
+                    </div>
+                     <div class="form-group col-md-6">
+                        {{ form_label(form.startDateTime, 'Date stop', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.stopDateTime, {'attr' : {'class' : 'form-control datatime-picker', 'placeholder': 'Enter date stop'} } ) }}
                     </div>
                     <div class="form-group col-md-12">
-                        {{ form_widget(form.title, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter task'} } ) }}
+                        {{ form_label(form.title, 'Title', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.title, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter title'} } ) }}
+                    </div>
+                    <div class="form-group col-md-12">
+                        {{ form_label(form.description, 'Description', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.description, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter description'} } ) }}
                     </div>
                    
                     {#<div class="form-group col-md-2">
@@ -49,11 +71,15 @@
                 <input type="hidden" name="postFunction" value="{{ postFunction }}">
                 <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
                 <input type="hidden" name="targetId" value="{{ targetId }}">
-                <div class="modal-footer">
-                        <button type="button" class="btn default" data-dismiss="modal">{% trans %}Cancel{% endtrans %}</button>
-                        <button type="button" class="btn blue">{% trans %}Save{% endtrans %}</button>
-                    </div>
-                 </div>
+                <div class="form-group col-md-12">
+                    
+                
+                <div class="modal-footer" style="border: none;">
+                    <button type="button" class="btn default" data-dismiss="modal">{% trans %}Cancel{% endtrans %}</button>
+                    <button type="button" class="btn blue">{% trans %}Save{% endtrans %}</button>
+                </div>
+                </div>
+             </div>
                 {{ form_end(form) }}
            
             </div>
