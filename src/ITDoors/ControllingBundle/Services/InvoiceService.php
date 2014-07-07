@@ -51,11 +51,11 @@ class InvoiceService
         if ($dh) {
             while (($file = readdir($dh)) !== false) {
                 if (filetype($directory . $file) == 'file') {
-                    $findfile = $invoicecron->findBy(array('reason' => $file));
-                    if (!$findfile) {
+//                    $findfile = $invoicecron->findBy(array('reason' => $file));
+//                    if (!$findfile) {
                         $fileName = $file;
                         continue;
-                    }
+//                    }
                 }
             }
             closedir($dh);
@@ -215,7 +215,7 @@ class InvoiceService
             $invoiceNew->setDogovor($dogovorfind);
             $em->persist($invoiceNew);
             $em->flush();
-            if (!$invoiceFind) {
+            if (!$invoiceFind && $invoiceNew->getDogovorId()) {
                 $this->addReaspon($invoiceNew);
             }
         } else {
@@ -314,13 +314,13 @@ class InvoiceService
         $em = $this->container->get('doctrine')->getManager();
 
         $companystructs = $em->getRepository('ListsDogovorBundle:DogovorCompanystructure')
-            ->findBy(array('dogovorId' => trim($invoice->getDogovorId())));
+            ->findBy(array('dogovorId' => $invoice->getDogovorId()));
 
         foreach ($companystructs as $company) {
 
             $invoicecompany = new InvoiceCompanystructure();
             $invoicecompany->setInvoice($invoice);
-            $invoicecompany->setCompanystructureId($company->getCompanystructureId());
+            $invoicecompany->setCompanystructure($company->getCompanyStructures());
 
             $em->persist($invoicecompany);
             $em->flush();
