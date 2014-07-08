@@ -401,6 +401,42 @@ class OperScheduleController extends BaseFilterController
         $mpk = $departmentPeople->getMpks();
 
         $canEdit  =  $this->checkIfCanEdit();
+
+        $coworkersAll = $departmentPeopleRepository->getOrderedPeopleFromDepartment($idDepartment);
+        /** @var  $coworkersOne \Lists\DepartmentBundle\Entity\departmentPeople */
+        foreach ($coworkersAll as $key => $departmentPeople) {
+            if ($departmentPeople['dismissalDateNotOfficially'] != null
+                && $departmentPeople['dismissalDateNotOfficially'] < new \DateTime($year.'-'.$month)) {
+                unset($coworkersAll[$key]);
+            }
+        }
+        $coopration = array();
+        $coopration['exists'] = false;
+        if (isset($infoDay[0])) {
+            $departmentPeopleCooperation = $departmentPeopleRepository->find($infoDay[0]['departmentPeopleCooperationId']);
+            //$departmentPoopleCooperation = $grafik->getDepartmentPeopleCooperation();
+
+            $idCooperatinon = $departmentPeopleCooperation->getId();
+
+            if ($idCooperatinon) {
+                $coopration['exists'] = true;
+                $fioCooperation = '';
+                $percentCooperation = $infoDay[0]['percentCooperation'];
+                if ($departmentPeopleCooperation->getIndividual()) {
+                    $individualCooperation = $departmentPeopleCooperation->getIndividual();
+                    $fioCooperation = $individualCooperation->getLastName().' '.
+                        $individualCooperation->getFirstName().' '.$individualCooperation->getMiddleName();
+                } else {
+                    $fioCooperation = $departmentPeopleCooperation->getLastName().' '.
+                        $departmentPeopleCooperation->getFirstName().' '.$departmentPeopleCooperation->getMiddleName();
+                }
+                $mpkCooperation = $departmentPeopleCooperation->getMpks();
+                $coopration['percent'] = $percentCooperation;
+                $coopration['fio'] = $fioCooperation;
+                $coopration['mpk'] = $mpkCooperation;
+            }
+        }
+
         $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleDay.html.twig', array(
             'coworkerDayTime' => $coworkerDayTime,
             'date' => $date,
@@ -416,7 +452,9 @@ class OperScheduleController extends BaseFilterController
             'stringDay' => $stringDay,
             'fio' => $fio,
             'mpk' => $mpk,
-            'canEdit' => $canEdit
+            'canEdit' => $canEdit,
+            'filterCoworkers' => $coworkersAll,
+            'cooperation' => $coopration
         ));
         $return['success'] = 1;
 
@@ -977,6 +1015,13 @@ class OperScheduleController extends BaseFilterController
         $grafik->setTotalNight(0);
         $grafik->setTotalNightNotOfficially(0);
 
+        $departmentPeopleZero  = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople')
+            ->find(0);
+        $grafik->setDepartmentPeopleCooperation($departmentPeopleZero);
+        $grafik->setDepartmentPeopleCooperationId(0);
+        $grafik->setPercentCooperation(0);
+
 
         if ($status == 'fired') {
             $grafik->setIsFired(true);
@@ -1444,12 +1489,12 @@ class OperScheduleController extends BaseFilterController
             ));
             if (count($copyGrafiks) > 0) {
                 foreach ($copyGrafiks as $copyGrafik) {
-                    $cloneGrafikTime = clone $copyGrafik;
-                    $cloneGrafikTime->setDepartmentPeople($departmentPeople);
-                    $cloneGrafikTime->setDepartmentPeopleId($idCopy);
-                    $cloneGrafikTime->setDepartmentPeopleReplacement($departmentPeopleReplacement);
+                    $cloneGrafik = clone $copyGrafik;
+                    $cloneGrafik->setDepartmentPeople($departmentPeople);
+                    $cloneGrafik->setDepartmentPeopleId($idCopy);
+                    $cloneGrafik->setDepartmentPeopleReplacement($departmentPeopleReplacement);
 
-                    $em->persist($cloneGrafikTime);
+                    $em->persist($cloneGrafik);
                 }
             }
             $em->flush();
@@ -2140,6 +2185,91 @@ class OperScheduleController extends BaseFilterController
 
         return new Response(json_encode($result));
 
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function changeCooperationAction(Request $request)
+    {
+        $idDepartment = $request->request->get('idDepartment');
+        $date = $request->request->get('date');
+        $idCoworker = $request->request->get('idCoworker');
+        $idCooperation  = $request->request->get('idCooperation');
+        $idReplacement = $request->request->get('idReplacement');
+        $percent = $request->request->get('percent');
+
+        $percent = str_replace('%', '', $percent);
+        $percent = str_replace(',', '.', $percent);
+
+        list($year, $month, $day) = explode('-', $date);
+
+        $result = $this->checkErrorsForPeriods($date, false);
+
+        if ($result['success'] == 0) {
+            return new Response(json_encode($result));
+        }
+
+        $departmentPeopleRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
+
+        $departmentPeopleReplacement = $departmentPeopleRepository
+            ->find($idReplacement);
+
+        $departmentPeople = $departmentPeopleRepository
+            ->find($idCoworker);
+
+        $departmentPeopleCooperation = $departmentPeopleRepository
+            ->find($idCooperation);
+
+        $department =  $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:Departments')
+            ->find($idDepartment);
+
+        /** @var $grafikRepository \Lists\GrafikBundle\Entity\GrafikRepository   */
+        $grafikRepository = $this->getDoctrine()
+            ->getRepository('ListsGrafikBundle:Grafik');
+
+        /** @var  $grafik \Lists\GrafikBundle\Entity\Grafik */
+        $grafik = $grafikRepository->findOneBy(array(
+            'department' => $idDepartment,
+            'departmentPeople' => $idCoworker,
+            'year' => $year,
+            'month' => $month,
+            'day' => $day,
+            'departmentPeopleReplacement' => $departmentPeopleReplacement
+        ));
+
+        if (!$grafik) {
+            $grafik = new Grafik();
+
+            $grafik->setDay($day);
+            $grafik->setMonth($month);
+            $grafik->setYear($year);
+            $grafik->setDepartmentPeople($departmentPeople);
+            $grafik->setDepartment($department);
+            $grafik->setReplacementType('r');
+            $grafik->setDepartmentId($idDepartment);
+            $grafik->setDepartmentPeopleId($idCoworker);
+            $grafik->setDepartmentPeopleReplacement($departmentPeopleReplacement);
+            $grafik->setDepartmentPeopleReplacementId($idReplacement);
+
+        }
+
+
+        $grafik->setDepartmentPeopleCooperation($departmentPeopleCooperation);
+        $grafik->setPercentCooperation($percent);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($grafik);
+        $em->flush();
+
+        $result = array();
+
+        $result['success'] = 1;
+
+        return new Response(json_encode($result));
     }
 
     /**

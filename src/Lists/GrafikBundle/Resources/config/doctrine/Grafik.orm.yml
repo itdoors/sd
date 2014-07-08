@@ -34,6 +34,14 @@ Lists\GrafikBundle\Entity\Grafik:
             nullable: false
             column: replacement_type
     fields:
+        departmentPeopleCooperationId:
+            type: bigint
+            column: department_people_cooperation_id
+            nullable: true
+        percentCooperation:
+            type: float
+            nullable: true
+            column: percent_cooperation
         fromTime:
             type: time
             nullable: true
@@ -115,6 +123,15 @@ Lists\GrafikBundle\Entity\Grafik:
             inversedBy: null
             joinColumns:
                 department_people_replacement_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        departmentPeopleCooperation:
+            targetEntity: Lists\DepartmentBundle\Entity\DepartmentPeople
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                department_people_cooperation_id:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }

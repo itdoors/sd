@@ -555,12 +555,18 @@
                             $('#status_name_holder').removeClass('notDisplayed');
 
                             $('#status_name').html(message);
+                            $('#has_cooperation_block').hide();
+                            $('#has_not_cooperation_block').hide();
 
                         } else {
                             $('#tbody_content').html('');
                             $('#add_button').removeClass('notDisplayed');
                             $('#one_day_table').removeClass('notDisplayed');
                             $('#status_name_holder').addClass('notDisplayed');
+
+                            $('#has_cooperation_block').hide();
+                            $('#has_not_cooperation_block').hide();
+                            $('#has_not_cooperation_block').show();
                         }
                     }
 
@@ -568,6 +574,143 @@
             })
 
         })
+
+        function changeCooperateButtonValue() {
+            var options = {};
+            if ($("#cooperate_button").html() == '{% trans %}Cancel{% endtrans %}') {
+                $( "#cooperation_holder" ).hide( 'blind', options, 500 );
+                $("#cooperate_button").html('{% trans %}Add cooperation{% endtrans %}');
+                $(this).removeClass('red');
+                $(this).addClass('yellow')
+
+            } else {
+                $( "#cooperation_holder" ).show( 'blind', options, 500 );
+                $("#cooperate_button").html('{% trans %}Cancel{% endtrans %}');
+                $(this).removeClass('yellow');
+                $(this).addClass('red');
+            }
+        }
+
+        function str_replace(search, replace, subject) {
+            return subject.split(search).join(replace);
+        }
+
+        $('#cooperate_button_submit').die('click');
+        $('#cooperate_button_submit').live('click', function(e) {
+            var idCoworker = $('#info_one_day').data('id_coworker');
+            var idReplacement = $('#info_one_day').data('id_replacement');
+
+            var idCooperation = $('#coworker_list option:selected').val();
+            var date = $('#info_one_day').data('date')
+            var idDepartment = $('#info_one_day').data('id_department');
+            var url = $('#info_one_day').data('url_change_cooperation');
+
+            var percent = $('#percent_cooperation').val();
+            percent = str_replace(',' ,'.' ,percent);
+            percent = parseFloat(percent);
+            if (!percent) {
+                percent = 0;
+            }
+            if (idCooperation == idCoworker) {
+                alert($('#info_one_day').data('message_cooperation_error'));
+            } else if (percent<1 || percent>50) {
+                alert($('#info_one_day').data('message_percent_error'));
+            } else {
+
+                var sendData = {
+                    'idCoworker': idCoworker,
+                    'idDepartment': idDepartment,
+                    'date': date,
+                    'idCooperation': idCooperation,
+                    'idReplacement': idReplacement,
+                    'percent': percent
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: sendData,
+                    beforeSend: function() {
+                        //ITDoorsAjax.blockUI($('#add_div'));
+                    },
+                    success: function(data) {
+                        data = JSON.parse(data);
+                        if (data.success == 0) {
+                            if (data.error == 'advance_passed') {
+                                $('#advance_error').show( 'blind', {}, 500 );
+                            }
+                            if (data.error == 'payment_passed') {
+                                $('#payment_error').show( 'blind', {}, 500 );
+                            }
+                        } else {
+                            var fio_mpk_cooperation = $('#coworker_list option:selected').html() +' ['+percent+'%]';
+                            $('#fio_mpk_cooperation').html(fio_mpk_cooperation);
+                            $('#has_cooperation_block').show();
+                            $('#has_not_cooperation_block').hide();
+                        }
+                    }
+
+                })
+            }
+        })
+
+        $('#delete_cooperate_button').die('click');
+        $('#delete_cooperate_button').live('click', function(e) {
+            var idCoworker = $('#info_one_day').data('id_coworker');
+            var idReplacement = $('#info_one_day').data('id_replacement');
+
+            var date = $('#info_one_day').data('date')
+            var idDepartment = $('#info_one_day').data('id_department');
+            var url = $('#info_one_day').data('url_change_cooperation');
+
+            var sendData = {
+                'idCoworker': idCoworker,
+                'idDepartment': idDepartment,
+                'date': date,
+                'idCooperation': 0,
+                'idReplacement': idReplacement,
+                'percent': 0
+            }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                beforeSend: function() {
+                    //ITDoorsAjax.blockUI($('#add_div'));
+                },
+                success: function(data) {
+                    data = JSON.parse(data);
+                    if (data.success == 0) {
+                        if (data.error == 'advance_passed') {
+                            $('#advance_error').show( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'payment_passed') {
+                            $('#payment_error').show( 'blind', {}, 500 );
+                        }
+                    } else {
+                        $('#has_cooperation_block').hide();
+                        $('#has_not_cooperation_block').show();
+                    }
+                }
+
+            })
+        });
+
+        $('#cooperate_button').die('click');
+        $('#cooperate_button').live('click', function(e) {
+            e.preventDefault();
+            changeCooperateButtonValue()
+            if ($(this).hasClass('yellow')) {
+                $(this).removeClass('yellow');
+                $(this).addClass('red')
+
+            } else {
+                $(this).removeClass('red');
+                $(this).addClass('yellow')
+            }
+        })
+
+        $('#coworker_list').select2();
 
     })
 
@@ -718,10 +861,49 @@
         /*width: 25px;*/
     }
 </style>
+
 {% if mpk is not empty %}
     ({{ mpk }})
 {% endif %}
 {{ fio }}
+
+    <span id="has_cooperation_block" {% if cooperation.exists==false %}class="notDisplayed"{% endif %}>
+        <u>{% trans %}Cooperate{% endtrans %}</u>
+        <span id="fio_mpk_cooperation">
+            {% if cooperation.exists %}
+                {% if cooperation.mpk is not empty %}
+                    ({{ cooperation.mpk }})
+                {% endif %}
+                {{ cooperation.fio }} [{{ cooperation.percent }}%]
+            {% endif %}
+        </span>
+        {% if canEdit %}
+            <a class="btn red " style="margin: 0px 10px 0px 10px;" id="delete_cooperate_button">{% trans %}Delete cooperation{% endtrans %}</a>
+        {% endif %}
+    </span>
+    <span id="has_not_cooperation_block" {% if cooperation.exists %}class="notDisplayed"{% endif %}>
+        {% if canEdit %}
+            <a class="btn yellow " style="margin: 0px 10px 0px 10px;" id="cooperate_button">{% trans %}Add cooperation{% endtrans %}</a>
+            <div id="cooperation_holder" class="notDisplayed">
+                <br>
+                {% trans %}Cooperate coworker{% endtrans %}:
+                <select id="coworker_list" style="width: 300px;">
+                    {% for filterCoworker in filterCoworkers %}
+                        <option value="{{ filterCoworker.id }}">
+                            {% if filterCoworker.mpkName is not empty %}
+                                ({{ filterCoworker.mpkName }})
+                            {% endif %}
+                            {{ filterCoworker.lastName }} {{ filterCoworker.firstName }} {{ filterCoworker.middleName }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <input type="text" id="percent_cooperation" placeholder="{% trans %}Value{% endtrans %} (%)" size="10" style="margin-left: 5px;">
+                <a class="btn blue" style="margin: 0px 10px 0px 10px;" id="cooperate_button_submit">{% trans %}Add{% endtrans %}</a>
+            </div>
+        {% endif %}
+    </span>
+
+
 <div id="status_name_holder" style="margin-bottom: 150px; text-align: center;" class="{% if status == 'ok' %}notDisplayed{% endif %}">
     <h1>
         {% trans %}Status{% endtrans %}: <span id="status_name"
@@ -786,4 +968,11 @@
        data-id_table_href ="{{ idLink }}"
        data-url_copy = "{{ path('it_doors_oper_schedule_copy_month_dates') }}"
        data-id_replacement="{{ idReplacement }}"
-       data-header="{{ day }} {{ monthName|trans }} {{ year }} - {{ stringDay|trans }} ">
+       data-header="{{ day }} {{ monthName|trans }} {{ year }} - {{ stringDay|trans }} "
+       data-id_coworker="{{ idCoworker }}"
+       data-date="{{ date }}"
+       data-id_department="{{ idDepartment }}"
+       data-message_cooperation_error = "{% trans %}Self cooperation not allowed{% endtrans %}"
+       data-url_change_cooperation= "{{ path('it_doors_oper_schedule_change_cooperation') }}"
+       data-message_percent_error = "{% trans %}Allowed percent range{% endtrans %}: 1%-50%"
+        >

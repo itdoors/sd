@@ -105,3 +105,7 @@ it_doors_oper_schedule_ajax_editing_salary:
 it_doors_oper_dogovor:
     pattern:  /oper/dogovor/info/{id}
     defaults: { _controller: ITDoorsOperBundle:OperDogovor:index }
+
+it_doors_oper_schedule_change_cooperation:
+    pattern:  /oper/schedule/change/cooperation
+    defaults: { _controller: ITDoorsOperBundle:OperSchedule:changeCooperation }
