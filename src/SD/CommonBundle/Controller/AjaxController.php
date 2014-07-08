@@ -3174,6 +3174,130 @@ class AjaxController extends BaseFilterController
     }
 
     /**
+     * Saves dop dogovor ajax form
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function dopDogovorEditFormSave($form, $user, $request)
+    {
+        $data = $form->getData();
+
+        if (!$data->getId()) {
+            $data->setUser($user);
+        }
+
+        $dogovorId = $data->getDogovorId();
+
+        $dogovor = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:Dogovor')
+            ->find($dogovorId);
+
+        $data->setDogovor($dogovor);
+        $data->setCreateDateTime(new \DateTime(date('Y-m-d H:i:s')));
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
+
+    /**
+     * Saves dop dogovor ajax form
+     *
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function dogovorUploadAction(Request $request)
+    {
+        $result = array();
+        $dogovorId = $request->query->get('id');
+
+        $em = $this->getDoctrine()->getManager();
+        $dogovor = $em
+            ->getRepository('ListsDogovorBundle:Dogovor')
+            ->find($dogovorId);
+
+        $result['id'] = $dogovor->getId();
+        if (!$dogovor) {
+            $result['error'] = 'Dogovor not found';
+        }
+        $file = $request->files->get('dogovor');
+
+        if ($file) {
+            $directory = $this->container->getParameter('project.web.dir'). '/uploads/dogovor/';
+            if (!is_dir($directory)) {
+                mkdir($directory.'old', 0777);
+            }
+            if (is_file($directory.$dogovor->getFilepath()) && rename($directory.$dogovor->getFilepath(), $directory.'old/'.$dogovorId.'_'.$dogovor->getFilepath())) {
+
+            } else {
+                $result['error'] = 'File move error';
+            }
+            $dogovor->setFile($file);
+            $dogovor->upload();
+            $result['file'] = $dogovor->getFilepath();
+        } else {
+            $result['error'] = 'File not found';
+        }
+
+        $em->persist($dogovor);
+        $em->flush();
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Saves dop dogovor ajax form
+     *
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function dopDogovorUploadAction(Request $request)
+    {
+        $result = array();
+        $dopDogovorId = $request->query->get('id');
+
+        $em = $this->getDoctrine()->getManager();
+        $dopDogovor = $em
+            ->getRepository('ListsDogovorBundle:DopDogovor')
+            ->find($dopDogovorId);
+
+        if (!$dopDogovor) {
+            $result['error'] = 'Dop dogovor not found';
+        }
+        $file = $request->files->get('dopdogovor');
+
+        if ($file) {
+            $directory = $this->container->getParameter('project.web.dir'). '/uploads/dogovor/';
+            if (!is_dir($directory)) {
+                mkdir($directory.'old', 0777);
+            }
+            if (is_file($directory.$dopDogovor->getFilepath()) && rename($directory.$dopDogovor->getFilepath(), $directory.'old/'.$dopDogovorId.'_'.$dopDogovor->getFilepath())) {
+
+            } else {
+                $result['error'] = 'File move error';
+            }
+            $dopDogovor->setFile($file);
+            $dopDogovor->upload();
+            $result['file'] = $dopDogovor->getFilepath();
+        } else {
+            $result['error'] = 'File not found';
+        }
+
+        $em->persist($dopDogovor);
+        $em->flush();
+
+        return new Response(json_encode($result));
+    }
+
+    /**
      * Process default to Dogovor Department form
      *
      * @param Form    $form
