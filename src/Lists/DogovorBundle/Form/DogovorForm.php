@@ -47,8 +47,7 @@ class DogovorForm extends AbstractType
 
         $builder
             ->add('customer', 'hidden_entity', array(
-                'entity' => 'ListsOrganizationBundle:Organization',
-                'required' => true,
+                'entity' => 'ListsOrganizationBundle:Organization'
             ))
             ->add('performer', 'hidden_entity', array(
                 'entity' => 'ListsOrganizationBundle:Organization',

@@ -9,13 +9,23 @@
             url: '{{ path('sd_common_ajax_dogovor_save') }}'
         });
 
-        $('#organizationId, #customerId, #performerId').editable({
+        $('#customerId, #performerId').editable({
             url: '{{ path('sd_common_ajax_dogovor_save') }}',
             source: '{{ path('sd_common_ajax_organization') }}',
             select2: {
                 placeholder: '{% trans %}Select Organization{% endtrans %}',
                 minimumInputLength: 2,
                 width: 250
+            }
+        });
+        $('#organizationId').editable({
+            url: '{{ path('sd_common_ajax_dogovor_save') }}',
+            source: '{{ path('sd_common_ajax_organization') }}',
+            select2: {
+                placeholder: '{% trans %}Select Organization{% endtrans %}',
+                minimumInputLength: 2,
+                width: 250,
+                allowClear: true
             }
         });
 
