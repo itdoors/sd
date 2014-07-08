@@ -3217,12 +3217,12 @@ class AjaxController extends BaseFilterController
     {
         $result = array();
         $dogovorId = $request->query->get('id');
-                
+
         $em = $this->getDoctrine()->getManager();
         $dogovor = $em
             ->getRepository('ListsDogovorBundle:Dogovor')
             ->find($dogovorId);
-        
+
         $result['id'] = $dogovor->getId();
         if (!$dogovor) {
             $result['error'] = 'Dogovor not found';
@@ -3231,23 +3231,21 @@ class AjaxController extends BaseFilterController
 
         if ($file) {
             $directory = $this->container->getParameter('project.web.dir'). '/uploads/dogovor/';
-            if(!is_dir($directory)) {
+            if (!is_dir($directory)) {
                 mkdir($directory.'old', 0777);
             }
-            if(is_file($directory.$dogovor->getFilepath()) && rename($directory.$dogovor->getFilepath(), $directory.'old/'.$dogovorId.'_'.$dogovor->getFilepath())) {
-                
-               
+            if (is_file($directory.$dogovor->getFilepath()) && rename($directory.$dogovor->getFilepath(), $directory.'old/'.$dogovorId.'_'.$dogovor->getFilepath())) {
+
             } else {
                 $result['error'] = 'File move error';
             }
             $dogovor->setFile($file);
             $dogovor->upload();
             $result['file'] = $dogovor->getFilepath();
-        }else{
+        } else {
             $result['error'] = 'File not found';
         }
 
-        
         $em->persist($dogovor);
         $em->flush();
 
@@ -3265,12 +3263,12 @@ class AjaxController extends BaseFilterController
     {
         $result = array();
         $dopDogovorId = $request->query->get('id');
-                
+
         $em = $this->getDoctrine()->getManager();
         $dopDogovor = $em
             ->getRepository('ListsDogovorBundle:DopDogovor')
             ->find($dopDogovorId);
-        
+
         if (!$dopDogovor) {
             $result['error'] = 'Dop dogovor not found';
         }
@@ -3278,23 +3276,21 @@ class AjaxController extends BaseFilterController
 
         if ($file) {
             $directory = $this->container->getParameter('project.web.dir'). '/uploads/dogovor/';
-            if(!is_dir($directory)) {
+            if (!is_dir($directory)) {
                 mkdir($directory.'old', 0777);
             }
-            if(is_file($directory.$dopDogovor->getFilepath()) && rename($directory.$dopDogovor->getFilepath(), $directory.'old/'.$dopDogovorId.'_'.$dopDogovor->getFilepath())) {
-                
-               
+            if (is_file($directory.$dopDogovor->getFilepath()) && rename($directory.$dopDogovor->getFilepath(), $directory.'old/'.$dopDogovorId.'_'.$dopDogovor->getFilepath())) {
+
             } else {
                 $result['error'] = 'File move error';
             }
             $dopDogovor->setFile($file);
             $dopDogovor->upload();
             $result['file'] = $dopDogovor->getFilepath();
-        }else{
+        } else {
             $result['error'] = 'File not found';
         }
 
-        
         $em->persist($dopDogovor);
         $em->flush();
 
