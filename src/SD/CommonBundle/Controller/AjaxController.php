@@ -1096,6 +1096,10 @@ class AjaxController extends BaseFilterController
     {
         $value = '';
 
+        if ($item['organizationEdrpou']) {
+            $value .= $item['organizationEdrpou'] . ' | ';
+        }
+        
         if ($item['organizationName']) {
             $value .= $item['organizationName'];
         }

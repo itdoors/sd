@@ -275,6 +275,7 @@ class OrganizationRepository extends EntityRepository
     {
         $sql = $this->createQueryBuilder('o')
             ->select('DISTINCT(o.id) as organizationId')
+            ->addSelect('o.edrpou as organizationEdrpou')
             ->addSelect('o.name as organizationName')
             ->addSelect('o.shortname as organizationShortName')
             ->addSelect(
