@@ -38,7 +38,7 @@ class DashboardCalendarFilterType extends AbstractType
     {
         /** @var CalendarService $cs*/
         $cs = $this->container->get('sd_calendar.service');
-        
+
         /** @var HandlingMessageTypeRepository $hmt*/
         $hmt = $this->container->get('lists_handling.message.type.repository');
 
@@ -62,16 +62,16 @@ class DashboardCalendarFilterType extends AbstractType
                 ),
 
             ));
-        
-        $choice_hmt = array();
+
+        $choiceHmt = array();
         $items = $hmt->getList();
         foreach ($items as $item) {
-            $choice_hmt[$item->getName()] = $item->getName();
+            $choiceHmt[$item->getName()] = $item->getName();
         }
         //HandlingMessageType
         $builder
             ->add('type', 'choice', array(
-                'choices' => $choice_hmt,
+                'choices' => $choiceHmt,
                 'empty_value' => '',
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted',

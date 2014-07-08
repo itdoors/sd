@@ -13,7 +13,6 @@ use Doctrine\ORM\EntityRepository;
 class TaskRepository extends EntityRepository
 {
     /**
-     * 
      * @param integer $userId
      * @param string  $type
      * 
@@ -32,7 +31,7 @@ class TaskRepository extends EntityRepository
 
             ->setParameter(':userid', $userId)
             ->setParameter(':types', $type)
-                
+
             ->getQuery()
             ->getResult();
     }

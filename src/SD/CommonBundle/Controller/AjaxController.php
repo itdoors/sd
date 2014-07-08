@@ -1735,14 +1735,14 @@ class AjaxController extends BaseFilterController
     {
         /** @var Task $data */
         $data = $form->getData();
-        
+
         if (!$data->getId()) {
            $data->setCreateDateTime(new \DateTime());
            $data->setUser($user);
         }
 
         $formData = $request->request->get($form->getName());
-        
+
         $data->setTaskType('personal');
         $data->setStartDateTime(new \DateTime($formData['startDateTime']));
         $data->setStopDateTime(new \DateTime($formData['stopDateTime']));

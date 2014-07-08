@@ -69,12 +69,13 @@ class Task
      * Set userId
      *
      * @param integer $userId
+     * 
      * @return Task
      */
     public function setUserId($userId)
     {
         $this->userId = $userId;
-    
+
         return $this;
     }
 
@@ -92,12 +93,13 @@ class Task
      * Set createDateTime
      *
      * @param \DateTime $createDateTime
+     * 
      * @return Task
      */
     public function setCreateDateTime($createDateTime)
     {
         $this->createDateTime = $createDateTime;
-    
+
         return $this;
     }
 
@@ -115,12 +117,13 @@ class Task
      * Set taskType
      *
      * @param string $taskType
+     * 
      * @return Task
      */
     public function setTaskType($taskType)
     {
         $this->taskType = $taskType;
-    
+
         return $this;
     }
 
@@ -138,12 +141,13 @@ class Task
      * Set startDateTime
      *
      * @param \DateTime $startDateTime
+     * 
      * @return Task
      */
     public function setStartDateTime($startDateTime)
     {
         $this->startDateTime = $startDateTime;
-    
+
         return $this;
     }
 
@@ -161,12 +165,13 @@ class Task
      * Set stopDateTime
      *
      * @param \DateTime $stopDateTime
+     * 
      * @return Task
      */
     public function setStopDateTime($stopDateTime)
     {
         $this->stopDateTime = $stopDateTime;
-    
+
         return $this;
     }
 
@@ -184,12 +189,13 @@ class Task
      * Set title
      *
      * @param string $title
+     * 
      * @return Task
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
@@ -207,12 +213,13 @@ class Task
      * Set description
      *
      * @param string $description
+     * 
      * @return Task
      */
     public function setDescription($description)
     {
         $this->description = $description;
-    
+
         return $this;
     }
 
@@ -230,12 +237,13 @@ class Task
      * Set user
      *
      * @param \SD\UserBundle\Entity\User $user
+     * 
      * @return Task
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 

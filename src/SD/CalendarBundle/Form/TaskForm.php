@@ -36,7 +36,7 @@ class TaskForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $container = $this->container;
-        
+
         $builder
             ->add('title')
             ->add('description')
@@ -48,8 +48,8 @@ class TaskForm extends AbstractType
                 'widget' => 'single_text',
                 'format' => 'dd.MM.yyyy HH:mm:ss'
             ));
-        
-         $builder->addEventListener(
+
+        $builder->addEventListener(
             FormEvents::POST_SUBMIT,
             function (FormEvent $event) use ($container) {
                 /** @var Task $data */
@@ -58,15 +58,7 @@ class TaskForm extends AbstractType
                 $form = $event->getForm();
 
                 $translator = $container->get('translator');
-//                $dataStart = new \DateTime($data->getStartDateTime());
-//                $dataStop = new \DateTime($data->getStopDateTime());
-//                if ($dataStart->format('U') >= $dataStop->format('U')) {
-//                    $msgString = "Start date can't be greater then stop date";
-//
-//                    $msg = $translator->trans($msgString, array(), 'SDCalendarBundle');
-//
-//                    $form->addError(new FormError($msg));
-//                }
+
                 if ($data->getStartDateTime()->format('U') >= $data->getStopDateTime()->format('U')) {
                     $msgString = "Start date can't be greater then stop date";
 
@@ -76,7 +68,6 @@ class TaskForm extends AbstractType
                 }
             }
         );
-
     }
 
       /**

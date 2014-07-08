@@ -66,7 +66,8 @@ class PrivateController extends SalesController
 
         /** get article */
         $em = $this->getDoctrine()->getManager();
-        $decision = $em->getRepository('ListsArticleBundle:Article')->getDecisionForCalendar($this->getUser()->getId());
+        $decision = $em->getRepository('ListsArticleBundle:Article')
+                ->getDecisionForCalendar($this->getUser()->getId());
         foreach ($decision as $val) {
             $events[] = array(
                 'hover_title' => '',
@@ -93,6 +94,7 @@ class PrivateController extends SalesController
                 'url' => '#create_task'
                 );
         }
+
         return $events;
     }
 }
