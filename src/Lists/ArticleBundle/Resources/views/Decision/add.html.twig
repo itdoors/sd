@@ -155,6 +155,7 @@
                     <div class="col-md-9">
                         {{ form_widget(form.users, {'attr' : {'id' : 'select2','class' : 'form-control', 'placeholder': "Participants"| trans}}) }}
                         {% if form.users.vars.errors|length %}{{ form_errors(form.users) }}{% endif %}
+                        <span class="help-block">{% trans %}Selected users will be sent a notification{% endtrans %}</span>
                     </div>
                 </div>
             </div>
