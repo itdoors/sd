@@ -4,6 +4,7 @@ parameters:
     lists_dogovor.dogovor.form.class: Lists\DogovorBundle\Form\DogovorForm
     lists_dogovor.dogovor.department.form.class: Lists\DogovorBundle\Form\DogovorDepartmentForm
     lists_dogovor.dopdogovor.form.class: Lists\DogovorBundle\Form\DopDogovorForm
+    lists_dogovor.dopdogovoredit.form.class: Lists\DogovorBundle\Form\DopDogovorEditForm
     lists_dogovor.dogovor.history.form.class: Lists\DogovorBundle\Form\DogovorHistoryForm
 
     lists_dogovor.repository.class: Lists\DogovorBundle\Entity\DogovorRepository
@@ -76,6 +77,12 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: dopDogovorForm }
+            
+    lists_dogovor.form.dopDogovorEditForm:
+        class: %lists_dogovor.dopdogovoredit.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: dopDogovorEditForm }
 
     lists_dogovor.form.dogovorHistoryForm:
         class: %lists_dogovor.dogovor.history.form.class%

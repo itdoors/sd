@@ -3,7 +3,7 @@
        data-toggle="modal"
        href="#form_modal_dop_dogovor"
        data-target_holder="dopDogovorFormTpl"
-       data-form_name="dopDogovorForm"
+       data-form_name="dopDogovorEditForm"
        data-post_function="updateList"
        data-post_target_id="dop-dogovor-element-{{ item.id }}"
        data-default='{"dogovorId":{{ item.dogovorId }} }'
@@ -28,10 +28,10 @@
 <td>{{ item.creatorFullName }}</td>
 <td>{{ item.sallerFullName }}</td>
 <td>{{ item.total }}</td>
-<td>
+<td class="see-document-{{ item.id }}">
     {% if item.filepath %}
         <a href="/uploads/dogovor/{{ item.filepath }}" target="_blank">
-            {% trans %}File{% endtrans %}
+            {% trans from 'messages' %}See document{% endtrans %}
         </a>
     {% endif %}
 </td>
