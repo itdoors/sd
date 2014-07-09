@@ -590,13 +590,13 @@ class InvoiceRepository extends EntityRepository
             case 'responsible':
                 $entitie
                     ->Select('c.name')
-                    ->addSelect('c.mpk')
                     ->addSelect('ic.id')
                     ->addSelect('i.id as invoiceId')
                     ->leftJoin('i.invoicecompanystructure', 'ic')
                     ->leftJoin('ic.companystructure', 'c')
                     ->where('i.id = :invoiceid')
-                    ->setParameter(':invoiceid', (int) $invoiceid);
+                    ->setParameter(':invoiceid', (int) $invoiceid)
+                    ->orderBy('c.name');
                 $entitie = $entitie->getQuery()
                     ->getResult();
                 break;

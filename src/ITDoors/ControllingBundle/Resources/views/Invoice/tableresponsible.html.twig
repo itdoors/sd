@@ -19,7 +19,7 @@
                 <thead>
                     <tr  role="row" class="heading">
                         <td class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">{% trans %}Name{% endtrans %}</td>          
-                        <td class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">{% trans %}MPK{% endtrans %}</td>          
+                        {#<td class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">{% trans %}MPK{% endtrans %}</td>  #}        
                         <td class="sorting_disabled" role="columnheader" rowspan="1" colspan="1"></td>          
                     </tr>
                 </thead>
@@ -27,7 +27,7 @@
                     {% for responsible in entitie %}
                             <tr>
                                 <td> {{ responsible.name }}</td>          
-                                <td> {{ responsible.mpk }}</td>          
+                                {#<td> {{ responsible.mpk }}</td>#}      
                                 <td>
                                     {% if  responsible.id is not empty %}
                                     <a
