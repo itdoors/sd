@@ -92,9 +92,10 @@
                        data-post_function="updateList"
                        data-post_target_id="datatable_ajax"
                        ></a><br>
-                    {% for responsible in responsibles[entity.id] %}
+                    {% set responsibles = entity.responsibles|split(',') %}
+                    {% for responsible in responsibles %}
                     <a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">
-                            {{ responsible.companystructure.name }}
+                        {{ responsible }}
                     </a>
                     <br>
                     {% endfor %}

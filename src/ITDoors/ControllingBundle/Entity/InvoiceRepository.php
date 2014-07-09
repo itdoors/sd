@@ -41,7 +41,7 @@ class InvoiceRepository extends EntityRepository
             ->addSelect('i.court')
             ->addSelect('i.id')
             ->addSelect('i.invoiceId')
-            ->addSelect('i.date ')
+            ->addSelect('i.date')
             ->addSelect('i.dogovorActName')
             ->addSelect('i.dogovorActDate')
             ->addSelect('i.delayDate')
@@ -50,6 +50,18 @@ class InvoiceRepository extends EntityRepository
             ->addSelect('i.dogovorActOriginal')
             ->addSelect('i.dateEnd')
             ->addSelect('i.dateFact')
+            ->addSelect(
+                "array_to_string(
+                  ARRAY(
+                          SELECT
+                            cs.name
+                          FROM
+                            ITDoorsControllingBundle:InvoiceCompanystructure ics
+                          LEFT JOIN ics.companystructure  cs
+                          WHERE ics.invoiceId = i.id
+                      ), ','
+                 ) as responsibles"
+            )
             ->addSelect('customer.name as customerName')
             ->addSelect('performer.name as performerName')
             ->addSelect('r.name as regionName')
@@ -153,6 +165,30 @@ class InvoiceRepository extends EntityRepository
                 ->orderBy('i.performerEdrpou', 'DESC')->getQuery();
     }
 
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @return mixed[]
+     */
+    public function getForExel()
+    {
+        $res = $this->createQueryBuilder('i');
+
+        /** select */
+        $this->selectInvoicePeriod($res);
+        /** join */
+        $this->joinInvoicePeriod($res);
+
+        $date = date('Y-m-d');
+        $res->andWhere(":date -  i.delayDate >= :periodmin");
+
+        $res->setParameter(':periodmin', 0)->setParameter(':date', $date);
+
+        return $res
+                ->orderBy('i.performerEdrpou', 'DESC')
+                ->getQuery()
+                ->getResult();
+    }
     /**
      * Returns results for interval future invoice
      *

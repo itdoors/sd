@@ -36,6 +36,27 @@
 {% block body %}
 <div class="row">
     <div class="col-md-12">
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="actions">
+                    <div class="btn-group">
+                        <a class="btn default yellow-stripe" href="{{ path('it_doors_controlling_invoice_export_exel')}}"{# data-toggle="dropdown"#}>
+                            <i class="fa fa-share"></i>
+                            <span class="hidden-480">{% trans %}Export to Excel{% endtrans %}</span>
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        {#<ul class="dropdown-menu pull-right">
+                                <li>
+                                        <a href="{{ path('it_doors_controlling_invoice_export_exel')}}">
+                                                 Export to Excel
+                                        </a>
+                                </li>
+                                <li class="divider"></li>
+                        </ul>#}
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="tabbable tabbable-custom boxless">
              {{ ajax_tab_render( tabs, tab, namespace) }}
             <div class="tab-content ajax-tab-holder" id="datatable_ajax" data-url="{{ url('it_doors_controlling_invoice_show', { period: tab }) }}">
