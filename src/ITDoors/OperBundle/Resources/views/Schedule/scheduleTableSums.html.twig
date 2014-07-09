@@ -37,10 +37,13 @@
 </td>
 
 <td class="sums{{ idCoworker }}{{ idReplacement }}">
-
+    {% if canEdit %}
     <a href="#" class="salary_editing{{ idCoworker }}{{ idReplacement }}" data-type="text" data-pk="{{ idMonthInfo }}" data-param='{"aaa": 1}' data-value="" data-placement="right" data-original-title="{% trans %}Input value{% endtrans %}">
         {{ salaryNotOfficially }}
     </a>
+    {% else %}
+        {{ salaryNotOfficially }}
+    {% endif %}
 
 </td>
 <td class="sums{{ idCoworker }}{{ idReplacement }}">

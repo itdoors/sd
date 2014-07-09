@@ -39,5 +39,7 @@ security:
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/dashboard/vote/add/party, role: ROLE_ARTICLEADMIN }
+        - { path: ^/cron-manager, role: ROLE_CRONADMIN }
         - { path: ^/lists/competitors/organization/new, roles: 'ROLE_INTRANETADMIN, ROLE_DOGOVORADMIN' }
+        - { path: ^/sd/calendar/shared, role: ROLE_SALESADMIN }
         

@@ -24,6 +24,12 @@
     });
 </script>
 
+<style>
+    .fixer{
+        min-width: 200px;
+    }
+
+</style>
 <div class="row ">
 	<div class="col-md-12">
 		<div class="portlet box yellow">
@@ -47,7 +53,7 @@
                     <div class="form-group col-md-3">
                         {#{{ form_label(filterForm.city, 'Enter City', {'attr': {'class': 'sr-only'}}) }}#}
                         {{ form_widget(filterForm.organization, {'attr': {
-                            'class': 'form-control select2 input-middle',
+                            'class': 'form-control select2 input-middle fixer',
                             'placeholder': 'Enter Organization',
                             'data-url': path('sd_common_ajax_organization_for_contacts'),
                             'data-url-by-id': path('sd_common_ajax_organization_by_ids')
@@ -56,7 +62,7 @@
                     <div class="form-group col-md-3">
                         {#{{ form_label(filterForm.city, 'Enter City', {'attr': {'class': 'sr-only'}}) }}#}
                         {{ form_widget(filterForm.customer, {'attr': {
-                            'class': 'form-control select2 input-middle',
+                            'class': 'form-control select2 input-middle fixer',
                             'placeholder': 'Enter Customer',
                             'data-url': path('sd_common_ajax_organization_for_contacts'),
                             'data-url-by-id': path('sd_common_ajax_organization_by_ids')
@@ -65,7 +71,7 @@
                     <div class="form-group col-md-3">
                         {#{{ form_label(filterForm.city, 'Enter City', {'attr': {'class': 'sr-only'}}) }}#}
                         {{ form_widget(filterForm.performer, {'attr': {
-                            'class': 'form-control select2 input-middle',
+                            'class': 'form-control select2 input-middle fixer',
                             'placeholder': 'Enter Performer',
                             'data-url': path('sd_common_ajax_organization_for_contacts'),
                             'data-url-by-id': path('sd_common_ajax_organization_by_ids')
@@ -75,19 +81,19 @@
                 <div class="row">
                     <div class="form-group col-md-3">
                         {{ form_widget(filterForm.prolongation, {'attr': {
-                            'class': 'form-control select2 input-middle',
+                            'class': 'form-control select2 input-middle fixer',
                             'placeholder': 'Prolongation',
                         }}) }}
                     </div>
                     <div class="form-group col-md-3">
                         {{ form_widget(filterForm.dogovorType, {'attr': {
-                            'class': 'form-control select2',
+                            'class': 'form-control select2 fixer',
                             'placeholder': 'Dogovor Type',
                         }}) }}
                     </div>
                     <div class="form-group col-md-3">
                         {{ form_widget(filterForm.number, {'attr': {
-                            'class': 'form-control',
+                            'class': 'form-control fixer',
                             'placeholder': 'Enter Number',
                         }}) }}
                     </div>

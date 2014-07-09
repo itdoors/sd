@@ -8,10 +8,10 @@
         });
 
         $('.date-picker').datepicker({
-            rtl: App.isRTL(),
+            rtl: Metronic.isRTL(),
             autoclose: true,
             format: "dd.m.yyyy",
-            pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
+            pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
             language: 'ru',
             endDate: new Date(),
             weekStart: 1

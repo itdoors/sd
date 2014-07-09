@@ -712,4 +712,94 @@ class Grafik
     {
         $this->id = null;
     }
+
+    /**
+     * @var \Lists\DepartmentBundle\Entity\DepartmentPeople
+     */
+    private $departmentPeopleCooperation;
+
+
+    /**
+     * Set departmentPeopleCooperation
+     *
+     * @param \Lists\DepartmentBundle\Entity\DepartmentPeople $departmentPeopleCooperation
+     *
+     * @return Grafik
+     */
+    public function setDepartmentPeopleCooperation(\Lists\DepartmentBundle\Entity\DepartmentPeople $departmentPeopleCooperation = null)
+    {
+        $this->departmentPeopleCooperation = $departmentPeopleCooperation;
+
+        return $this;
+    }
+
+    /**
+     * Get departmentPeopleCooperation
+     *
+     * @return \Lists\DepartmentBundle\Entity\DepartmentPeople 
+     */
+    public function getDepartmentPeopleCooperation()
+    {
+        return $this->departmentPeopleCooperation;
+    }
+
+    /**
+     * @var integer
+     */
+    private $departmentPeopleCooperationId;
+
+
+    /**
+     * Set departmentPeopleCooperationId
+     *
+     * @param integer $departmentPeopleCooperationId
+     *
+     * @return Grafik
+     */
+    public function setDepartmentPeopleCooperationId($departmentPeopleCooperationId)
+    {
+        $this->departmentPeopleCooperationId = $departmentPeopleCooperationId;
+
+        return $this;
+    }
+
+    /**
+     * Get departmentPeopleCooperationId
+     *
+     * @return integer 
+     */
+    public function getDepartmentPeopleCooperationId()
+    {
+        return $this->departmentPeopleCooperationId;
+    }
+
+    /**
+     * @var float
+     */
+    private $percentCooperation;
+
+
+    /**
+     * Set percentCooperation
+     *
+     * @param float $percentCooperation
+     *
+     * @return Grafik
+     */
+    public function setPercentCooperation($percentCooperation)
+    {
+        $this->percentCooperation = $percentCooperation;
+
+        return $this;
+    }
+
+    /**
+     * Get percentCooperation
+     *
+     * @return float 
+     */
+    public function getPercentCooperation()
+    {
+        return $this->percentCooperation;
+    }
 }

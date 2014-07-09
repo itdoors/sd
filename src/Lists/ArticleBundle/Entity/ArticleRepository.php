@@ -217,7 +217,6 @@ class ArticleRepository extends EntityRepository
     {
         return $res
                 ->andwhere('a.datePublick < :date')
-                ->andWhere('a.dateUnpublick > :date or a.dateUnpublick is NULL')
                 ->andWhere('a.type = :type')
                 ->setParameter(':type', 'decision')
                 ->setParameter(':date', date('Y-m-d H:i:s'));

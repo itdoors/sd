@@ -29,6 +29,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
 use ITDoors\AjaxBundle\Controller\BaseFilterController;
 use Lists\CompanystructureBundle\Entity\Companystructure;
 use SD\UserBundle\Entity\Usercontactinfo;
+use SD\CalendarBundle\Entity\Task;
 
 /**
  * AjaxController class.
@@ -48,7 +49,8 @@ class AjaxController extends BaseFilterController
         'User' => 'SDUserBundle:User',
         'Dogovor' => 'ListsDogovorBundle:Dogovor',
         'DopDogovor' => 'ListsDogovorBundle:DopDogovor',
-        'Email' => 'ITDoorsEmailBundle:Email'
+        'Email' => 'ITDoorsEmailBundle:Email',
+        'Task' => 'SDCalendarBundle:Task'
     );
 
     /**
@@ -602,6 +604,28 @@ class AjaxController extends BaseFilterController
     }
 
     /**
+     * Returns json organization group list
+     *
+     * @return string
+     */
+    public function organizationLookupAction()
+    {
+        $lookup = $this->getDoctrine()
+            ->getRepository('ListsLookupBundle:Lookup')
+                ->getLookupsGroup('organization_sign')
+                ->getQuery()
+                ->getResult();
+
+        $result = array();
+
+        foreach ($lookup as $organization) {
+            $result[] = $this->serializeObject($organization);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
      * Returns json organization list for contacts query
      *
      * @return string
@@ -1071,6 +1095,10 @@ class AjaxController extends BaseFilterController
     public function processOrganizationForJson(&$item)
     {
         $value = '';
+
+        if ($item['organizationEdrpou']) {
+            $value .= $item['organizationEdrpou'] . ' | ';
+        }
 
         if ($item['organizationName']) {
             $value .= $item['organizationName'];
@@ -1690,6 +1718,38 @@ class AjaxController extends BaseFilterController
         $data->setNote($formData['note']);
 
         $data->setCreatedate(new \DateTime());
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function taskFormSave(Form $form, $user, $request)
+    {
+        /** @var Task $data */
+        $data = $form->getData();
+
+        if (!$data->getId()) {
+           $data->setCreateDateTime(new \DateTime());
+           $data->setUser($user);
+        }
+
+        $formData = $request->request->get($form->getName());
+
+        $data->setTaskType('personal');
+        $data->setStartDateTime(new \DateTime($formData['startDateTime']));
+        $data->setStopDateTime(new \DateTime($formData['stopDateTime']));
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
@@ -3108,13 +3168,137 @@ class AjaxController extends BaseFilterController
             ->find($dogovorId);
 
         $data->setDogovor($dogovor);
-        $data->setCreateTime(new \DateTime(date('Y-m-d H:i:s')));
+        $data->setCreateDateTime(new \DateTime(date('Y-m-d H:i:s')));
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
         $em->flush();
 
         return true;
+    }
+
+    /**
+     * Saves dop dogovor ajax form
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function dopDogovorEditFormSave($form, $user, $request)
+    {
+        $data = $form->getData();
+
+        if (!$data->getId()) {
+            $data->setUser($user);
+        }
+
+        $dogovorId = $data->getDogovorId();
+
+        $dogovor = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:Dogovor')
+            ->find($dogovorId);
+
+        $data->setDogovor($dogovor);
+        $data->setCreateDateTime(new \DateTime(date('Y-m-d H:i:s')));
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
+
+    /**
+     * Saves dop dogovor ajax form
+     *
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function dogovorUploadAction(Request $request)
+    {
+        $result = array();
+        $dogovorId = $request->query->get('id');
+
+        $em = $this->getDoctrine()->getManager();
+        $dogovor = $em
+            ->getRepository('ListsDogovorBundle:Dogovor')
+            ->find($dogovorId);
+
+        $result['id'] = $dogovor->getId();
+        if (!$dogovor) {
+            $result['error'] = 'Dogovor not found';
+        }
+        $file = $request->files->get('dogovor');
+
+        if ($file) {
+            $directory = $this->container->getParameter('project.web.dir'). '/uploads/dogovor/';
+            if (!is_dir($directory)) {
+                mkdir($directory.'old', 0777);
+            }
+            if (is_file($directory.$dogovor->getFilepath()) && rename($directory.$dogovor->getFilepath(), $directory.'old/'.$dogovorId.'_'.$dogovor->getFilepath())) {
+
+            } else {
+                $result['error'] = 'File move error';
+            }
+            $dogovor->setFile($file);
+            $dogovor->upload();
+            $result['file'] = $dogovor->getFilepath();
+        } else {
+            $result['error'] = 'File not found';
+        }
+
+        $em->persist($dogovor);
+        $em->flush();
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Saves dop dogovor ajax form
+     *
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function dopDogovorUploadAction(Request $request)
+    {
+        $result = array();
+        $dopDogovorId = $request->query->get('id');
+
+        $em = $this->getDoctrine()->getManager();
+        $dopDogovor = $em
+            ->getRepository('ListsDogovorBundle:DopDogovor')
+            ->find($dopDogovorId);
+
+        if (!$dopDogovor) {
+            $result['error'] = 'Dop dogovor not found';
+        }
+        $file = $request->files->get('dopdogovor');
+
+        if ($file) {
+            $directory = $this->container->getParameter('project.web.dir'). '/uploads/dogovor/';
+            if (!is_dir($directory)) {
+                mkdir($directory.'old', 0777);
+            }
+            if (is_file($directory.$dopDogovor->getFilepath()) && rename($directory.$dopDogovor->getFilepath(), $directory.'old/'.$dopDogovorId.'_'.$dopDogovor->getFilepath())) {
+
+            } else {
+                $result['error'] = 'File move error';
+            }
+            $dopDogovor->setFile($file);
+            $dopDogovor->upload();
+            $result['file'] = $dopDogovor->getFilepath();
+        } else {
+            $result['error'] = 'File not found';
+        }
+
+        $em->persist($dopDogovor);
+        $em->flush();
+
+        return new Response(json_encode($result));
     }
 
     /**
@@ -3571,6 +3755,7 @@ class AjaxController extends BaseFilterController
         $repository = $this->getDoctrine()
             ->getRepository('ListsMpkBundle:Mpk');
 
+        //var_dump($id);
         $objects= $repository->getDepartmentPeopleQueryMpk($searchText, $id);
 
         $result = array();

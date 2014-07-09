@@ -40,10 +40,10 @@ class InvoiceService
     private function findFile($directory)
     {
         /** @var EntityManager $em */
-        $em = $this->container->get('doctrine')->getManager();
+//        $em = $this->container->get('doctrine')->getManager();
 
         /** @var InvoicecronRepository $invoicecron */
-        $invoicecron = $em->getRepository('ITDoorsControllingBundle:Invoicecron');
+//        $invoicecron = $em->getRepository('ITDoorsControllingBundle:Invoicecron');
 
         $fileName = false;
 
@@ -51,11 +51,11 @@ class InvoiceService
         if ($dh) {
             while (($file = readdir($dh)) !== false) {
                 if (filetype($directory . $file) == 'file') {
-                    $findfile = $invoicecron->findBy(array('reason' => $file));
-                    if (!$findfile) {
+//                    $findfile = $invoicecron->findBy(array('reason' => $file));
+//                    if (!$findfile) {
                         $fileName = $file;
                         continue;
-                    }
+//                    }
                 }
             }
             closedir($dh);
@@ -115,55 +115,56 @@ class InvoiceService
      */
     private function saveinvoice($invoice)
     {
+        $invoice = $invoice;
         $em = $this->container->get('doctrine')->getManager();
         $invoiceNew = $em->getRepository('ITDoorsControllingBundle:Invoice')
-            ->findOneBy(array('invoiceId' => $invoice->invoiceId));
+            ->findOneBy(array('invoiceId' => trim($invoice->invoiceId)));
         if (!$invoiceNew) {
             $invoiceNew = new Invoice();
             $invoiceNew->setCourt(0);
-            $invoiceNew->setInvoiceId($invoice->invoiceId);
+            $invoiceNew->setInvoiceId(trim($invoice->invoiceId));
             if (!empty($invoice->dateFact) && $invoice->dateFact != 'null') {
-                $invoiceNew->setDateFact(new \DateTime($invoice->dateFact));
+                $invoiceNew->setDateFact(new \DateTime(trim($invoice->dateFact)));
             }
         } else {
             if (!empty($invoice->dateFact) && $invoice->dateFact != 'null') {
-                $invoiceNew->setDateFact(new \DateTime($invoice->dateFact));
+                $invoiceNew->setDateFact(new \DateTime(trim($invoice->dateFact)));
             } else {
                 $invoiceNew->setDateFact(null);
             }
         }
 
-        $invoiceNew->setDogovorGuid($invoice->dogovorGuid);
-        $invoiceNew->setDogovorNumber($invoice->dogovorNumber);
-        $invoiceNew->setDogovorName($invoice->dogovorName);
-        $invoiceNew->setDogovorActNote($invoice->dogovorActNote);
-        $invoiceNew->setDogovorActName($invoice->dogovorActName);
-        $invoiceNew->setCustomerName($invoice->customerName);
-        $invoiceNew->setCustomerEdrpou($invoice->customerEdrpou);
-        $invoiceNew->setPerformerName($invoice->performerName);
-        $invoiceNew->setPerformerEdrpou($invoice->performerEdrpou);
+        $invoiceNew->setDogovorGuid(trim($invoice->dogovorGuid));
+        $invoiceNew->setDogovorNumber(trim($invoice->dogovorNumber));
+        $invoiceNew->setDogovorName(trim($invoice->dogovorName));
+        $invoiceNew->setDogovorActNote(trim($invoice->dogovorActNote));
+        $invoiceNew->setDogovorActName(trim($invoice->dogovorActName));
+        $invoiceNew->setCustomerName(trim($invoice->customerName));
+        $invoiceNew->setCustomerEdrpou(trim($invoice->customerEdrpou));
+        $invoiceNew->setPerformerName(trim($invoice->performerName));
+        $invoiceNew->setPerformerEdrpou(trim($invoice->performerEdrpou));
 
         if (!empty($invoice->delayDate) && $invoice->delayDate != 'null') {
-            $invoiceNew->setDelayDate(new \DateTime($invoice->delayDate));
+            $invoiceNew->setDelayDate(new \DateTime(trim($invoice->delayDate)));
         }
         if (is_numeric($invoice->delayDays)) {
             $invoiceNew->setDelayDays((int) $invoice->delayDays);
         }
         if (in_array($invoice->delayDaysType, array('Б', 'К', 'б', 'к'))) {
-            $invoiceNew->setDelayDaysType($invoice->delayDaysType);
+            $invoiceNew->setDelayDaysType(trim($invoice->delayDaysType));
         }
         if (!empty($invoice->dogovorDate) && $invoice->dogovorDate != 'null') {
-            $invoiceNew->setDogovorDate(new \DateTime($invoice->dogovorDate));
+            $invoiceNew->setDogovorDate(new \DateTime(trim($invoice->dogovorDate)));
         }
         if (!empty($invoice->date) && $invoice->date != 'null') {
-            $invoiceNew->setDate(new \DateTime($invoice->date));
+            $invoiceNew->setDate(new \DateTime(trim($invoice->date)));
         } else {
             $this->addCronError(false, 'error data', 'date', json_encode($invoice));
 
             return false;
         }
         if (is_numeric($invoice->sum)) {
-            $invoiceNew->setSum($invoice->sum);
+            $invoiceNew->setSum(trim($invoice->sum));
         } else {
             $this->addCronError(false, 'error data', 'sum', json_encode($invoice));
 
@@ -193,32 +194,38 @@ class InvoiceService
 
         /** @var Dogovor  $dogovorfind */
         $dogovorfind = $em->getRepository('ListsDogovorBundle:Dogovor')
-            ->findOneBy(array('dogovorGuid' => $invoice->dogovorGuid));
+            ->findOneBy(array('dogovorGuid' => trim($invoice->dogovorGuid)));
+
+        /** @var Organization  $customerfind */
+        $customerfind = $em->getRepository('ListsOrganizationBundle:Organization')
+            ->findOneBy(array('edrpou' => trim($invoice->customerEdrpou)));
+
+        /** @var Organization  $performerfind */
+        $performerfind = $em->getRepository('ListsOrganizationBundle:Organization')
+            ->findOneBy(array('edrpou' => trim($invoice->performerEdrpou)));
+
+        if ($customerfind) {
+            $invoiceNew->setCustomer($customerfind);
+        }
+        if ($performerfind) {
+            $invoiceNew->setPerformer($performerfind);
+        }
 
         if ($dogovorfind) {
             $invoiceNew->setDogovor($dogovorfind);
             $em->persist($invoiceNew);
             $em->flush();
-            if (!$invoiceFind) {
+            if (!$invoiceFind && $invoiceNew->getDogovorId()) {
                 $this->addReaspon($invoiceNew);
             }
         } else {
-
-            /** @var Organization  $customerfind */
-            $customerfind = $em->getRepository('ListsOrganizationBundle:Organization')
-                ->findOneBy(array('edrpou' => $invoice->customerEdrpou));
-
-            /** @var Organization  $performerfind */
-            $performerfind = $em->getRepository('ListsOrganizationBundle:Organization')
-                ->findOneBy(array('edrpou' => $invoice->performerEdrpou));
-
             if ($customerfind && $performerfind) {
 
                 /** @var Dogovor  $dogovoradd */
                 $dogovoradd = $em->getRepository('ListsDogovorBundle:Dogovor')
                     ->findOneBy(array(
                     'number' => $invoice->dogovorNumber,
-//                    'startdatetime' => new \DateTime($invoice->dogovorDate),
+                    'startdatetime' => new \DateTime($invoice->dogovorDate),
                     'customerId' => $customerfind->getId(),
                     'performerId' => $performerfind->getId()
                 ));
@@ -226,7 +233,7 @@ class InvoiceService
                 if ($dogovoradd) {
 
                     // подтвердить связь и 1С
-                    $dogovoradd->setDogovorGuid($invoice->dogovorGuid);
+                    $dogovoradd->setDogovorGuid(trim($invoice->dogovorGuid));
                     $em->persist($dogovoradd);
 
                     $invoiceNew->setDogovor($dogovoradd);
@@ -253,9 +260,6 @@ class InvoiceService
                     return false;
                 }
             } else {
-                $em->persist($invoiceNew);
-                $em->flush();
-                $em->refresh($invoiceNew);
 
                 if (!$customerfind && $performerfind) {
                     $error = 'dogovor not found and customer';
@@ -264,6 +268,9 @@ class InvoiceService
                 } else {
                     $error = 'dogovor not found and customer and  performer';
                 }
+                $em->persist($invoiceNew);
+                $em->flush();
+                $em->refresh($invoiceNew);
                 $this->addCronError($invoiceNew, 'error', $error, json_encode($invoice));
             }
         }
@@ -313,7 +320,7 @@ class InvoiceService
 
             $invoicecompany = new InvoiceCompanystructure();
             $invoicecompany->setInvoice($invoice);
-            $invoicecompany->setCompanystructureId($company->getCompanystructureId());
+            $invoicecompany->setCompanystructure($company->getCompanyStructures());
 
             $em->persist($invoicecompany);
             $em->flush();

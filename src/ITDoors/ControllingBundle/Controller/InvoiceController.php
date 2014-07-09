@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 use ITDoors\ControllingBundle\Services\InvoiceService;
 use Knp\Bundle\PaginatorBundle\KnpPaginatorBundle;
 use Doctrine\ORM\EntityManager;
+use PHPExcel_Style_Border;
+use PHPExcel_Style_Alignment;
 
 /**
  * InvoiceController
@@ -86,18 +88,10 @@ class InvoiceController extends BaseFilterController
         $entities->setHint($this->paginator . '.count', $count);
         $pagination = $paginator->paginate($entities, $page, 20);
 
-        $responsibles = array();
-        foreach ($pagination as $val) {
-            /** @var InvoiceCompanystructure */
-            $responsibles[$val['id']] = $em
-                ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
-                ->findBy(array('invoiceId' => $val['id']));
-        }
 
         return $this->render('ITDoorsControllingBundle:Invoice:show.html.twig', array(
                 'period' => $period,
                 'entities' => $pagination,
-                'responsibles' => $responsibles,
                 'namespasePagin' => $namespasePagin
         ));
     }
@@ -188,7 +182,7 @@ class InvoiceController extends BaseFilterController
         /** @var InvoiceMessage $messages */
         $messages = $this->getDoctrine()
             ->getRepository('ITDoorsControllingBundle:InvoiceMessage')
-            ->getInvoiceMessages((int) $invoiceid);
+            ->getInvoiceMessages($invoiceid);
 
         return $this->render('ITDoorsControllingBundle:Invoice:lastaction.html.twig', array(
                 'messages' => $messages,
@@ -306,5 +300,156 @@ class InvoiceController extends BaseFilterController
                 'namespace' => $namespaceTab
         ));
 
+    }
+
+    /**
+     *  expectedpayshowAction
+     * 
+     * 
+     * @return render Description
+     */
+    public function exportExelAction()
+    {
+        /** @var Translator $translator */
+        $translator = $this->container->get('translator');
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var InvoiceRepository $invoices */
+        $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')->getForExel();
+
+         // ask the service for a Excel5
+       $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+
+       $phpExcelObject->getProperties()->setCreator("DebtControll")
+           ->setLastModifiedBy("Giulio De Donato")
+           ->setTitle("Invoice debitor")
+           ->setSubject("Invoice debitor")
+           ->setDescription("Invoice debitor")
+           ->setKeywords("Invoice debitor")
+           ->setCategory("Invoice debitor");
+       $phpExcelObject->setActiveSheetIndex(0)
+          ->setCellValue('A1', $translator->trans('№', array(), 'ITDoorsControllingBundle'))
+          ->setCellValue('B1', $translator->trans('Date', array(), 'ITDoorsControllingBundle'))
+          ->setCellValue('C1', $translator->trans('Customer', array(), 'ITDoorsControllingBundle'))
+          ->setCellValue('D1', $translator->trans('Performer', array(), 'ITDoorsControllingBundle'))
+          ->setCellValue('E1', $translator->trans('Invoice amount', array(), 'ITDoorsControllingBundle'))
+          ->setCellValue('F1', $translator->trans('№ ABP/BH', array(), 'ITDoorsControllingBundle'))
+          ->setCellValue('G1', $translator->trans('Date ABP/BH', array(), 'ITDoorsControllingBundle'))
+          ->setCellValue('H1', $translator->trans('Responsible', array(), 'ITDoorsControllingBundle'))
+          ->setCellValue('I1', $translator->trans('№ contract', array(), 'ITDoorsControllingBundle'))
+          ->setCellValue('J1', $translator->trans('Date contract', array(), 'ITDoorsControllingBundle'))
+          ->setCellValue('K1', $translator->trans('Deferment', array(), 'ITDoorsControllingBundle'))
+          ->setCellValue('L1', $translator->trans('Original ABP/BN', array(), 'ITDoorsControllingBundle'))
+          ->setCellValue('M1', $translator->trans('Notes', array(), 'ITDoorsControllingBundle'))
+          ->setCellValue('N1', $translator->trans('Expected date of Payment', array(), 'ITDoorsControllingBundle'))
+          ->setCellValue('O1', $translator->trans('Fact date of payment', array(), 'ITDoorsControllingBundle'))
+          ->setCellValue('P1', $translator->trans('Status', array(), 'ITDoorsControllingBundle'));
+       $phpExcelObject->getActiveSheet()->getRowDimension('1') ->setRowHeight(40);
+       $str = 1;
+
+        foreach ($invoices as $invoice) {
+            ++$str;
+            $col = 0;
+
+            $phpExcelObject->getActiveSheet()->getDefaultRowDimension($str)->setRowHeight(40);
+            $phpExcelObject->getActiveSheet()->getDefaultRowDimension($str)->setRowHeight(-1);
+
+            $phpExcelObject->getActiveSheet()
+                    ->setCellValueByColumnAndRow($col, $str, $invoice['invoiceId'])
+                    ->setCellValueByColumnAndRow(++$col, $str, !$invoice['date']  ? '' :  $invoice['date']->format('d.m.Y'))
+                    ->setCellValueByColumnAndRow(++$col, $str, $invoice['customerName'])
+                    ->setCellValueByColumnAndRow(++$col, $str, $invoice['performerName'])
+                    ->setCellValueByColumnAndRow(++$col, $str, $invoice['sum'])
+                    ->setCellValueByColumnAndRow(++$col, $str, $invoice['dogovorActName'])
+                    ->setCellValueByColumnAndRow(++$col, $str, !$invoice['dogovorActDate']  ? '' :  $invoice['dogovorActDate']->format('d.m.Y'))
+                    ->setCellValueByColumnAndRow(++$col, $str, $invoice['responsibles'])
+                    ->setCellValueByColumnAndRow(++$col, $str, $invoice['dogovorNumber'])
+                    ->setCellValueByColumnAndRow(++$col, $str, !$invoice['dogovorStartDatetime']  ? '' :  $invoice['dogovorStartDatetime']->format('d.m.Y'))
+                    ->setCellValueByColumnAndRow(++$col, $str, !$invoice['delayDate']  ? '' :  $invoice['delayDate']->format('d.m.Y') . ' ('.$invoice['delayDays'].')')
+                    ->setCellValueByColumnAndRow(++$col, $str, $invoice['dogovorActOriginal'])
+                    ->setCellValueByColumnAndRow(++$col, $str, !$invoice['descriptiondate'] ? '' :  $invoice['descriptiondate']->format('d.m.Y'). ' ('.$invoice['description'].')')
+                    ->setCellValueByColumnAndRow(++$col, $str, !$invoice['dateEnd'] ? '' :  $invoice['dateEnd']->format('d.m.Y'))
+                    ->setCellValueByColumnAndRow(++$col, $str, !$invoice['dateFact'] ? '' :  $invoice['dateFact']->format('d.m.Y'))
+                    ->setCellValueByColumnAndRow(++$col, $str, !$invoice['court'] ? '' :  $invoice['court']->format('d.m.Y'));
+        }
+        $phpExcelObject->getActiveSheet()->getStyle('A2:P'.$str)->getAlignment()->setWrapText(true);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('A')->setWidth(13);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('B')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('E')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('F')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('G')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('H')->setWidth(14);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('I')->setWidth(14);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('J')->setWidth(14);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('K')->setWidth(14);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('L')->setWidth(14);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('M')->setWidth(14);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('N')->setWidth(10);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('O')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('P')->setWidth(10);
+
+        $styleArray = array(
+            'borders' => array(
+                'outline' => array(
+                       'style' => PHPExcel_Style_Border::BORDER_DOUBLE,
+                       'color' => array('argb' => '000000'),
+                ),
+                'inside' => array(
+                       'style' => PHPExcel_Style_Border::BORDER_THIN,
+                       'color' => array('argb' => '000000'),
+                )
+            ),
+        );
+
+        $phpExcelObject->getActiveSheet()->getStyle('A1:P'.$str)->applyFromArray($styleArray);
+
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('A2:P'.$str)
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('A1:P1')
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('A1:P1')
+            ->getAlignment()
+            ->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('C2:D'.$str)
+            ->getAlignment()
+            ->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('C2:D'.$str)
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+        $phpExcelObject->getActiveSheet()->freezePane('Q2');
+
+//        $phpExcelObject->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+//        $phpExcelObject->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+//        $phpExcelObject->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $phpExcelObject->getActiveSheet()->getStyle('A1:P'.$str)->getAlignment()->setWrapText(true);
+//        $phpExcelObject->getActiveSheet()->getRowDimension(8)->setRowHeight(-1);
+//        $phpExcelObject->getActiveSheet()->getStyle('A8')->getAlignment()->setWrapText(true);
+        $phpExcelObject->getActiveSheet()->setShowGridLines(false);//off line
+        $phpExcelObject->getActiveSheet()->setTitle('Invoice');
+       // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+       $phpExcelObject->setActiveSheetIndex(0);
+
+        // create the writer
+        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        // create the response
+        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+        // adding headers
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Content-Disposition', 'attachment;filename=debtControll.xls');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+
+        return $response;
     }
 }

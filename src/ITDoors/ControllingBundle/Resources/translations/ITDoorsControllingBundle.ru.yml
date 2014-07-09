@@ -1,11 +1,14 @@
 Customer: Заказчик
 Performer: Исполнитель
-Add rerformer: Добавить отвественого
+Add rerformer: Добавить ответственого
 Invoice amount: Сумма счета
 № and date invoice: № и дата счета
 № and date ABP/BH: № и дата<br>АВР/РП
+Date ABP/BH: Дата АВР/РП
 Agency: Представительство
 № and date contract: № и дата<br> договора
+Date contract: Дата договора
+№ contract: № договора
 Deferment: Отстрочка
 Original ABP/BH: Оригинал<br> АВР/РП
 Original ABP/BN: Оригинал АВР/РП
@@ -13,6 +16,8 @@ Notes: Примечания
 Add: Добавить
 Expected date of payment:  Ожидаемая<br> дата оплаты
 The actual date of payment: Фактическая<br> дата оплаты
+Expected date of Payment:  Ожидаемая дата оплаты
+Fact date of payment: Фактическая дата оплаты
 pay: Оплаченые
 on: есть
 off: нет
@@ -33,9 +38,9 @@ days: Дней
 Count: Количество
 For more information: Дополнительные сведения
 Number evidence: Номер свидетельства
-Responsible: Отвественный
-Add responsible: Добавить отвественого
-Select responsible:  Выберите отвественого
+Responsible: Ответственный
+Add responsible: Добавить ответственого
+Select responsible:  Выберите ответственого
 Create New Contact: Создать контакт
 Dogovor: Договор
 Contacts client: Контакты клиента

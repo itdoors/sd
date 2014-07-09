@@ -200,18 +200,16 @@ class DogovorRepository extends EntityRepository
                             ->andWhere("d.number LIKE :number")
                             ->setParameter(':number', "{$value}%");
                         break;
-                    case 'startdatetime':
-                        $ids = explode(',', $value);
-                        $sql
-                            ->andWhere("d.startdatetime in (:datestart)")
-                            ->setParameter(':datestart', $ids);
+                    case 'dateRange':
+                        $dateArr = explode('-', $value);
+                            $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
+                            $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));
+                            $sql
+                                ->andWhere("d.createDateTime BETWEEN :datestart AND :datestop")
+                                ->setParameter(':datestart', $dateStart)
+                                ->setParameter(':datestop', $dateStop);
                         break;
-                    case 'stopdatetime':
-                        $ids = explode(',', $value);
-                        $sql
-                            ->andWhere("d.stopdatetime in (:datestop)")
-                            ->setParameter(':datestop', $ids);
-                        break;
+
                 }
             }
         }

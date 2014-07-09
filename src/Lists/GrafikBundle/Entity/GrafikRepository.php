@@ -103,6 +103,8 @@ class GrafikRepository extends EntityRepository
         $result = $this->createQueryBuilder('t')
             ->select('t.total as total')
             ->addSelect('t.totalNotOfficially as totalNotOfficially')
+            ->addSelect('t.departmentPeopleCooperationId')
+            ->addSelect('t.percentCooperation')
             ->addSelect('t.isSick as isSick')
             ->addSelect('t.isSkip as isSkip')
             ->addSelect('t.isFired as isFired')

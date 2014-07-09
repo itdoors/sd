@@ -53,36 +53,11 @@ class DogovorMadeFilterForm extends AbstractType
                     'placeholder' => 'Enter Dogovor Type'
                 )
             ))
-            ->add('startdatetime', 'text', array(
+            ->add('dateRange', 'text', array(
                 'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url' => $router->generate('sd_common_ajax_dogovor_startdatetime'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_dogovor_startdatetime_by_ids'),
                     'empty_value' =>  '',
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-params' => json_encode(array(
-                        'minimumInputLength' => 0,
-                        'allowClear' => true,
-                        'width' => '250px',
-                        'multiple' => true
-                    )),
-                    'placeholder' => 'Enter Startdatetime'
-                )
-            ))
-            ->add('stopdatetime', 'text', array(
-                'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url' => $router->generate('sd_common_ajax_dogovor_stopdatetime'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_dogovor_stopdatetime_by_ids'),
-                    'empty_value' =>  '',
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-params' => json_encode(array(
-                        'minimumInputLength' => 0,
-                        'allowClear' => true,
-                        'width' => '250px',
-                        'multiple' => true
-                    )),
-                    'placeholder' => 'Enter Stopdatetime'
+                    'class' => 'daterangepicker input-daterange',
+                    'placeholder' => 'Enter date range'
                 )
             ));
 

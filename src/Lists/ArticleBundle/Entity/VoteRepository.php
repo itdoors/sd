@@ -36,6 +36,7 @@ class VoteRepository extends EntityRepository
 
         return $res;
     }
+
     /**
      * Returns results for interval future invoice
      * 
@@ -78,9 +79,42 @@ class VoteRepository extends EntityRepository
             ->addSelect('u.firstName')
             ->addSelect('u.lastName')
             ->addSelect('u.middleName')
+            ->addSelect('u.email')
             ->innerjoin('v.user', 'u')
             ->where('v.modelId = :id')
             ->andwhere('v.modelName = :text')
+            ->setParameter(':id', $id)
+            ->setParameter(':text', 'article')
+            ->orderBy('v.dateCreate', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        return $res;
+    }
+
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @param integer $id Article.id
+     * 
+     * @return array
+     */
+    public function getVoitesFor15($id)
+    {
+        $sql = $this->createQueryBuilder('v');
+
+        $res = $sql
+            ->select('v.value')
+            ->addSelect('v.dateCreate')
+            ->addSelect('u.firstName')
+            ->addSelect('u.lastName')
+            ->addSelect('u.middleName')
+            ->addSelect('u.email')
+            ->innerjoin('v.user', 'u')
+            ->where('v.modelId = :id')
+            ->andwhere('v.modelName = :text')
+            ->andwhere('v.value is NULL')
+            ->andwhere('v.dateCreate is NULL')
             ->setParameter(':id', $id)
             ->setParameter(':text', 'article')
             ->orderBy('v.dateCreate', 'DESC')

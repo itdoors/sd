@@ -59,6 +59,21 @@
                    >
                     {% trans %}Create contact{% endtrans %} <i class="fa fa-comments"></i>
                 </a>
+                <div id="form_modal_contact" class="modal fade" role="basic" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                <h4 class="modal-title">{% trans from 'ListsContactBundle' %}New Contact{% endtrans %}</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div id="modelContactFormTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                </div>
             {% endif %}
         </div>
     </div>
@@ -69,34 +84,8 @@
             };
         });
     </script>
-    <div id="form_modal_contact" class="modal fade" role="basic" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">{% trans from 'ListsContactBundle' %}New Contact{% endtrans %}</h4>
-                </div>
-                <div class="modal-body">
-                    <div id="modelContactFormTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
-                    </div>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-    </div>
-    {% if masterRole == 'SalesAdmin' %}
-        {{ ajax_filter_render('dashboardCalendarFilterType', ajax_filter_namespace_dashboard_calendar, {
-        '#calendar': 'SD.updateCalendar'
-        }) }}
-    {%  endif %}
-
-    {{ include('SDCalendarBundle:Dashboard:filterColors.html.twig') }}
 {%  endif %}
 
-{{ include('SDCalendarBundle::base.html.twig', {
-    url: path('sd_calendar_' ~ masterRoleRoute ~ '_handling_message')
-}) }}
-                    
 {% if debitors %}
     <div class="portlet box blue">
         <div class="portlet-title">
@@ -123,7 +112,48 @@
         </div>
     </div>
 {% endif %}
-    
+
+ </a>
+ 
+ <div class="table-toolbar">
+        <div class="btn-group">
+            <a id="managers_list_new" 
+               class="btn green ajax-form"
+                data-toggle="modal"
+                href="#create_task"
+                data-target_holder="taskFormTpl"
+                data-form_name="taskForm"
+                data-post_function="updateList"
+                data-post_target_id="calendarBlock"
+                >
+                {% trans %}Create task{% endtrans %} <i class="fa fa-plus"></i>
+            </a>
+        </div>
+        <div id="create_task" class="modal fade" role="basic" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title">{% trans %}Create task{% endtrans %}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="taskFormTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}"></div>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+        </div>
+    </div>
+                    
+{{ include('SDCalendarBundle:Dashboard:filterColors.html.twig') }}
+
+<div id="calendarBlock" data-url="{{ path('sd_calendar_private_index') }}">
+{{ render(controller('SDCalendarBundle:Private:Index')) }}
+    {#{ include('SDCalendarBundle::base.html.twig', {
+        url: path('sd_calendar_private_handling_message')
+    }) }#}
+    </div>
+
 {% if isCrm %}
     {{ render(controller('ListsHandlingBundle:' ~ masterRole ~ ':List')) }}
 {% endif %}

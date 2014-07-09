@@ -21,7 +21,9 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "knplabs/knp-paginator-bundle": "dev-master",
-        "tss/automailer-bundle": "dev-master"
+        "tss/automailer-bundle": "dev-master",
+        "bcc/cron-manager-bundle": "dev-master",
+        "liuggio/excelbundle": "~2.0"
     },
     "scripts": {
         "post-install-cmd": [

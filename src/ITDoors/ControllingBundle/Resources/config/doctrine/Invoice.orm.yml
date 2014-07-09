@@ -79,6 +79,10 @@ ITDoors\ControllingBundle\Entity\Invoice:
         dogovorActOriginal:
             type: boolean
             column: dogovor_act_original
+        customerId:
+            nullable: true
+            type: integer
+            column: customer_id
         customerName:
             nullable: true
             type: string
@@ -89,6 +93,10 @@ ITDoors\ControllingBundle\Entity\Invoice:
             type: string
             length: 255
             column: customer_edrpou
+        performerId:
+            nullable: true
+            type: integer
+            column: performer_id
         performerName:
             nullable: true
             type: string
@@ -107,6 +115,18 @@ ITDoors\ControllingBundle\Entity\Invoice:
             inversedBy: null
             joinColumn:
                 name: dogovor_id
+                referencedColumnName: id
+        customer:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            inversedBy: null
+            joinColumn:
+                name: customer_id
+                referencedColumnName: id
+        performer:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            inversedBy: null
+            joinColumn:
+                name: performer_id
                 referencedColumnName: id
     oneToMany:
         messages:

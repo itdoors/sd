@@ -198,9 +198,9 @@ class OrganizationRepository extends EntityRepository
                 switch ($key) {
                     case 'organization':
                         $sql
-                            ->andWhere("o.id = :organizationId");
+                            ->andWhere("o.id in (:organizationId)");
 
-                        $sql->setParameter(':organizationId', $value);
+                        $sql->setParameter(':organizationId', explode(',', $value));
                         break;
                     case 'scope':
                         if (isset($value[0]) && !$value[0]) {
@@ -275,6 +275,7 @@ class OrganizationRepository extends EntityRepository
     {
         $sql = $this->createQueryBuilder('o')
             ->select('DISTINCT(o.id) as organizationId')
+            ->addSelect('o.edrpou as organizationEdrpou')
             ->addSelect('o.name as organizationName')
             ->addSelect('o.shortname as organizationShortName')
             ->addSelect(

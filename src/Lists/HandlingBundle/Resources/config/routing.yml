@@ -199,3 +199,7 @@ lists_handling_competitor_list:
 lists_handling_competitor_form:
     pattern:  /lists/sales/handling/competitor/{handlingId}
     defaults: { _controller: ListsHandlingBundle:Competitor:form }
+
+lists_private_handling_show:
+    pattern:  /lists/private/handling/show/{id}
+    defaults: { _controller: ListsHandlingBundle:Sales:show }

@@ -26,15 +26,15 @@
 
 {% block css_page_level_plugin %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
-    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
 
 {% endblock %}
 
 {% block js_page_level_plugins %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
 
 {% endblock %}
 
@@ -54,6 +54,11 @@
                                 <li>
                                     <i class="fa fa-user"></i>
                                     {{item.lastName}} {{item.firstName}} {{item.middleName}}
+                                </li>
+                                <li>
+                                    {% trans %}Term stop{% endtrans %}:
+                                    <i class="fa fa-calendar"></i>
+                                    {{ item.dateUnpublick == '' ? '' : item.dateUnpublick | date('d-m-Y H:i')}}
                                 </li>
                             </ul>
                         </div>
@@ -100,7 +105,11 @@
                     {% endif %}
                     {% if vote %}
                         <div class=" form-actions">
-                            {% trans %}Your decision{% endtrans %} <b>{{ vote.0.value == 0 ? 'Deflecting'|trans : 'Accept'|trans }}</b> {{ '(' ~ vote.0.date | date('d.m.Y H:i') ~ ')'}}                            
+                            {% if vote.0.date is empty %}
+                                {% trans %}Your not decision in need date{% endtrans %}
+                            {% else %}
+                                {% trans %}Your decision{% endtrans %} <b>{{ vote.0.value == 0 ? 'Deflecting'|trans : 'Accept'|trans }}</b> {{ '(' ~ vote.0.date | date('d.m.Y H:i') ~ ')'}}                            
+                            {% endif %}
                         </div>
                     {% endif %}
 
@@ -131,7 +140,7 @@
                                             <td>{{ itm.dateCreate == '' ? '' : itm.dateCreate | date('d.m.Y H:i') }}</td>
                                             <td>
                                                 {% if itm.value is null %}
-                                                    {{ 'No answer'|trans }}
+                                                    <span class="label label-warning">{{ 'No answer'|trans }}</span>
                                                 {% else %}
                                                     {% if itm.value == 0 %}
                                                         <span class="label label-danger">{{ 'Deflecting'|trans }}</span>

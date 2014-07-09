@@ -116,7 +116,9 @@
                 <div id="infoUserTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
                 </div>
                 <br>
+                {% if canEdit %}
                 <a class="btn red left_float" id="delete_user_button">{% trans %}Delete{% endtrans %}</a>
+                {% endif %}
                 <a class="btn green right_float" data-dismiss="modal" aria-hidden="true">{% trans %}Exit{% endtrans %}</a>
                 <br>
             </div>
@@ -130,7 +132,7 @@
 #}
 
 {#
-<script src="{{ asset('/bundles/itdoorsoper/js/data-tables/jquery.dataTables.js')}}"></script>
+<script src="{{ asset('/bundles/itdoorsoper/js/datatables/media/js/jquery.dataTables.js')}}"></script>
 <script src="{{ asset('/bundles/itdoorsoper/js/data-tables/dataTables.fixedColumns.js')}}"></script>
 <script src="{{ asset('/bundles/itdoorsoper/js/multiDatepicker/js/jquery.ui.core.js')}}"></script>
 <script src="{{ asset('/bundles/itdoorsoper/js/multiDatepicker/js/jquery.ui.datepicker.js')}}"></script>
@@ -156,6 +158,9 @@
 
                     $('.sums'+idCoworker+idReplacement).remove();
                     $('#row'+idCoworker+idReplacement).append(data.html);
+                    $('#total_salary').html(data.totalSalary);
+                    $('#salary_not_officially').html(data.salaryNotOfficially);
+                    $('#salary_officially').html(data.salaryOfficially);
                     //href.html(data.html);
                 }
             }
@@ -207,6 +212,72 @@
 
                 })
             }
+
+            $('#delete_selected_coworkers_button').die('click');
+            $('#delete_selected_coworkers_button').live('click', function(e) {
+                var checkboxes = $('.checkbox_copy');
+                var atLeastOneChecked = false;
+                var counter = 0;
+                for (var i=0; i<checkboxes.length; i++) {
+                    if (checkboxes[i].checked) {
+                        counter++;
+                        if(counter == 1) {
+                            atLeastOneChecked = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (counter<1) {
+                    alert('Выберите хотя бы одного сотрудника')
+                } else {
+                    var message = '{% trans %}Do you confirm deleting{% endtrans %}?'
+                    if (confirm(message)) {
+                        counterSuccess = 0;
+                        var error = false;
+                        for (var i=0; i<checkboxes.length; i++) {
+                            if (checkboxes[i].checked) {
+                                var idCoworker = checkboxes[i].value;
+                                var idReplacement = $(checkboxes[i]).data('id_replacement')
+
+                                var url = $('#info_input').data('url_delete_users');
+                                var date = $('#info_input').data('date');
+
+                                var sendData = {
+                                    'idCoworker': idCoworker,
+                                    'idReplacement': idReplacement,
+                                    //'idDepartment': idDepartment,
+                                    'date': date
+                                }
+
+                                $.ajax({
+                                    type: 'POST',
+                                    url: url,
+                                    data: sendData,
+                                    success: function(data) {
+                                        counterSuccess++;
+/*
+                                        //alert(data);
+                                        data = JSON.parse(data);
+
+                                        if (data.success == 1) {
+                                        } else {
+                                            //alert(data)
+                                        }
+*/
+                                        if (counter == counterSuccess) {
+                                            $( "#schedule_block" ).trigger( "click" );
+                                        }
+                                    }
+
+                                })
+                            }
+                        }
+
+                    }
+
+                }
+            });
 
             $('#copy_etalon').die('click');
             $('#copy_etalon').live('click', function(e) {
@@ -394,7 +465,7 @@
                         url: url,
                         data: sendData,
                         success: function(data) {
-                            alert(data);
+                            //alert(data);
                             data = JSON.parse(data);
 
                             if (data.success == 0) {
@@ -451,49 +522,87 @@
             })
         })
     </script>
+    <div class="row">
+        <div class="col-md-2">
+                <strong>
+                    <span style="color: #333333;">{% trans %}Current month{% endtrans %}:</span>
+                </strong>
+                    {{ monthName|trans }} {{ year }}
+                    <br>
+                <strong>
+                    <span style="color: #333333;">{% trans %}Number workdays{% endtrans %}:</span>
+                </strong>
+                {{ workDaysTotal }}
+                <br>
+                <strong>
+                    <span style="color: #333333;">{% trans %}Number hours{% endtrans %}:</span>
+                </strong>
+                {{ hoursTotal }}
+                <br>
+                <strong>
+                    <span style="color: #333333;">{% trans %}Holidays{% endtrans %}:</span>
+                </strong>
+                {{ holydaysTotalString }}
+                <br>
+        </div>
+        <div class="col-md-3">
+            <strong>
+                <span style="color: #333333;">{% trans %}Day advance{% endtrans %}:</span>
+            </strong>
 
-    <a class="btn green" style="float: right; margin-bottom: 20px;" id="copy_etalon">Скопировать из выбранных</a>
-    <a class="btn blue" style="float: right; margin-right: 20px;" id="add_coworker_button">{% trans %}Add coworker{% endtrans %}</a>
+            {% if dayAdvance is not empty %}
+                {{ dayAdvance|date('d-m-Y') }}
+            {% else %}
+                {% trans %}Not defined{% endtrans %}
+            {% endif %}
+            <br>
+            <strong>
+                <span style="color: #333333;">{% trans %}Day payment{% endtrans %}:</span>
+            </strong>
 
-    <a class="btn green" style="float: right; margin-bottom: 20px; margin-right: 20px;"
-       id="copy-to-next-month"
-       data-text="{% trans %}Copy to the next month success{% endtrans %}"
-    >
-        {% trans %}Copy to the next month{% endtrans %}
-    </a>
+            {% if dayPayment is not empty %}
+                {{ dayPayment|date('d-m-Y') }}
+            {% else %}
+                {% trans %}Not defined{% endtrans %}
+            {% endif %}
+            <br>
 
-    <table style="width: 35%;">
-        <tr>
-            <td style="color: #333333; font-weight: bold;">{% trans %}Current month{% endtrans %}</td>
-            <td>{{ monthName|trans }} {{ year }}</td>
-            <td style="color: #333333; font-weight: bold;"><strong>{% trans %}Number workdays{% endtrans %}</strong></td>
-            <td>{{ workDaysTotal }}</td>
-        </tr>
-        <tr>
-            <td style="color: #333333; font-weight: bold;"><strong>{% trans %}Number hours{% endtrans %}</strong></td>
-            <td>{{ hoursTotal }}</td>
-            <td style="color: #333333; font-weight: bold;"><strong>{% trans %}Holidays{% endtrans %}</strong></td>
-            <td>{{ holydaysTotalString }}</td>
-        </tr>
-        <tr>
-            <td style="color: #333333; font-weight: bold;"><strong>{% trans %}Day advance{% endtrans %}</strong></td>
-            <td>
-                {% if dayAdvance is not empty %}
-                    {{ dayAdvance|date('d-m-Y') }}
-                {% else %}
-                    {% trans %}Not defined{% endtrans %}
-                {% endif %}
-            </td>
-            <td style="color: #333333; font-weight: bold;"><strong>{% trans %}Day payment{% endtrans %}</strong></td>
-            <td>
-                {% if dayPayment is not empty %}
-                    {{ dayPayment|date('d-m-Y') }}
-                {% else %}
-                    {% trans %}Not defined{% endtrans %}
-                {% endif %}
-            </td>
-        </tr>
-    </table>
+            <strong>
+                <span style="color: #333333;">{% trans %}Total{% endtrans %} {% trans %}Real salary{% endtrans %}:</span>
+            </strong>
+                <span id="total_salary">{{ totalSalary }}</span>
+            <br>
+
+            <strong>
+                <span style="color: #333333;">{% trans %}Total{% endtrans %} {% trans %}Not Official salary{% endtrans %}:</span>
+            </strong>
+            <span id="salary_not_officially">{{ salaryNotOfficially }}</span>
+            <br>
+
+            <strong>
+                <span style="color: #333333;">{% trans %}Total{% endtrans %} {% trans %}Official salary{% endtrans %}:</span>
+            </strong>
+            <span id="salary_officially">{{ salaryOfficially }}</span>
+            <br>
+
+        </div>
+        <div class="col-md-5">
+            {% if canEdit %}
+                <a class="btn green" style="margin-bottom: 10px;" id="copy_etalon">Скопировать из выбранных</a>
+                <a class="btn blue" style="margin-bottom: 10px;" id="add_coworker_button">{% trans %}Add coworker{% endtrans %}</a>
+
+                <a class="btn green" style="margin-bottom: 10px;"
+                   id="copy-to-next-month"
+                   data-text="{% trans %}Copy to the next month success{% endtrans %}"
+                        >
+                    {% trans %}Copy to the next month{% endtrans %}
+                </a>
+
+                <a class="btn red" style="margin-bottom: 10px;" id="delete_selected_coworkers_button">{% trans %}Delete selected coworkers{% endtrans %}</a>
+
+            {% endif %}
+        </div>
+    </div>
 
     <div class="clear"></div>
 <div id="shedule_table" style="width: 100%;  margin-bottom: 15px;">
@@ -549,7 +658,7 @@
                         {% endif %}
                     <td>
                         {% if coworker.mpkName is not empty %}
-                            ({{ coworker.mpkName }})
+                            {{ coworker.mpkName }}
                         {% endif %}
                     </td>
 
@@ -609,7 +718,8 @@
                             'realSalary': infoHours[idCoworker~'-'~idReplacement]['realSalary'],
                             'salaryNotOfficially': infoHours[idCoworker~'-'~idReplacement]['salaryNotOfficially'],
                             'totalSalary': infoHours[idCoworker~'-'~idReplacement]['totalSalary'],
-                            'idMonthInfo': infoHours[idCoworker~'-'~idReplacement]['idMonthInfo']
+                            'idMonthInfo': infoHours[idCoworker~'-'~idReplacement]['idMonthInfo'],
+                            'canEdit': canEdit
                     }) }}
 
                 </tr>
@@ -654,7 +764,8 @@
        data-url_user_info="{{ path('it_doors_oper_schedule_show_user_basic_table') }}"
        data-url_reload_sums="{{ path('it_doors_oper_schedule_sums_table') }}"
        data-day_advane="{{ dayAdvance|date('Y-m-d') }}"
-       data-day_payment="{{ dayPayment|date('Y-m-d') }}">
+       data-day_payment="{{ dayPayment|date('Y-m-d') }}"
+       data-url_delete_users="{{ path('it_doors_oper_schedule_delete_user') }}">
 <script src="{{ asset('bundles/itdoorsoper/js/fixedHederColumn/jquery.fixedheadertable.js')}}" ></script>
 <link rel="stylesheet" type="text/css" href="{{ asset('bundles/itdoorsoper/js/fixedHederColumn/defaultTheme.css')}}" />
 

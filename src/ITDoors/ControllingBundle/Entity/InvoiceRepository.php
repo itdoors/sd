@@ -41,7 +41,7 @@ class InvoiceRepository extends EntityRepository
             ->addSelect('i.court')
             ->addSelect('i.id')
             ->addSelect('i.invoiceId')
-            ->addSelect('i.date ')
+            ->addSelect('i.date')
             ->addSelect('i.dogovorActName')
             ->addSelect('i.dogovorActDate')
             ->addSelect('i.delayDate')
@@ -50,6 +50,18 @@ class InvoiceRepository extends EntityRepository
             ->addSelect('i.dogovorActOriginal')
             ->addSelect('i.dateEnd')
             ->addSelect('i.dateFact')
+            ->addSelect(
+                "array_to_string(
+                  ARRAY(
+                          SELECT
+                            cs.name
+                          FROM
+                            ITDoorsControllingBundle:InvoiceCompanystructure ics
+                          LEFT JOIN ics.companystructure  cs
+                          WHERE ics.invoiceId = i.id
+                      ), ','
+                 ) as responsibles"
+            )
             ->addSelect('customer.name as customerName')
             ->addSelect('performer.name as performerName')
             ->addSelect('r.name as regionName')
@@ -92,8 +104,8 @@ class InvoiceRepository extends EntityRepository
 
         $res
             ->leftJoin('i.dogovor', 'd')
-            ->leftJoin('d.customer', 'customer')
-            ->leftJoin('d.performer', 'performer')
+            ->leftJoin('i.customer', 'customer')
+            ->leftJoin('i.performer', 'performer')
             ->leftJoin('performer.city', 'c')
             ->leftJoin('c.region', 'r')
             ->leftJoin('i.messages', 'h')
@@ -153,6 +165,30 @@ class InvoiceRepository extends EntityRepository
                 ->orderBy('i.performerEdrpou', 'DESC')->getQuery();
     }
 
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @return mixed[]
+     */
+    public function getForExel()
+    {
+        $res = $this->createQueryBuilder('i');
+
+        /** select */
+        $this->selectInvoicePeriod($res);
+        /** join */
+        $this->joinInvoicePeriod($res);
+
+        $date = date('Y-m-d');
+        $res->andWhere(":date -  i.delayDate >= :periodmin");
+
+        $res->setParameter(':periodmin', 0)->setParameter(':date', $date);
+
+        return $res
+                ->orderBy('i.performerEdrpou', 'DESC')
+                ->getQuery()
+                ->getResult();
+    }
     /**
      * Returns results for interval future invoice
      *
@@ -534,6 +570,9 @@ class InvoiceRepository extends EntityRepository
                 );
                 $entitie
                     ->Select('mc.id as id')
+                    ->addSelect('o.firstName as firstNameOwner')
+                    ->addSelect('o.lastName as lastNameOwner')
+                    ->addSelect('o.middleName as middleNameOwner')
                     ->addSelect('mc.firstName')
                     ->addSelect('mc.lastName')
                     ->addSelect('mc.middleName')
@@ -546,6 +585,7 @@ class InvoiceRepository extends EntityRepository
                     ->leftJoin('i.dogovor', 'd')
                     ->leftJoin('d.customer', 'customer')
                     ->leftJoin('Lists\ContactBundle\Entity\ModelContact', 'mc', 'WITH', $subQueryCase)
+                    ->leftJoin('mc.owner', 'o')
                     ->where('i.id = :invoiceid')
                     ->setParameter(':invoiceid', (int) $invoiceid)
                     ->setParameter(':text', 'organization');
@@ -561,6 +601,7 @@ class InvoiceRepository extends EntityRepository
                     ->addSelect('d.startdatetime')
                     ->addSelect('d.stopdatetime')
                     ->addSelect('d.prolongation')
+                    ->addSelect('d.paymentDeferment')
                     ->addSelect('d.prolongationDate')
                     ->addSelect('d.isActive')
                     ->addSelect('d.subject')
@@ -569,6 +610,7 @@ class InvoiceRepository extends EntityRepository
                     ->addSelect('i.dogovorName')
                     ->addSelect('i.dogovorDate')
                     ->addSelect('i.dogovorNumber')
+                    ->addSelect('i.delayDays')
                     ->addSelect('i.customerName as customerName_1c')
                     ->addSelect('i.performerName as performerName_1c')
                     ->leftJoin('i.dogovor', 'd')
@@ -584,13 +626,13 @@ class InvoiceRepository extends EntityRepository
             case 'responsible':
                 $entitie
                     ->Select('c.name')
-                    ->addSelect('c.mpk')
                     ->addSelect('ic.id')
                     ->addSelect('i.id as invoiceId')
                     ->leftJoin('i.invoicecompanystructure', 'ic')
                     ->leftJoin('ic.companystructure', 'c')
                     ->where('i.id = :invoiceid')
-                    ->setParameter(':invoiceid', (int) $invoiceid);
+                    ->setParameter(':invoiceid', (int) $invoiceid)
+                    ->orderBy('c.name');
                 $entitie = $entitie->getQuery()
                     ->getResult();
                 break;
@@ -616,8 +658,7 @@ class InvoiceRepository extends EntityRepository
                     ->addSelect('c_city.name as cityName')
                     ->addSelect('type.title as customerType')
                     ->addSelect('c_group.name as groupName')
-                    ->leftJoin('i.dogovor', 'd')
-                    ->leftJoin('d.customer', 'customer')
+                    ->leftJoin('i.customer', 'customer')
                     ->leftJoin('customer.creator', 'creator')
                     ->leftJoin('customer.scope', 'lookup')
                     ->leftJoin('customer.organizationType', 'type')

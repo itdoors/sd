@@ -17,6 +17,12 @@
             source: '{{ path('sd_common_ajax_organization_type') }}',
             emptytext: '{% trans %}Enter value{% endtrans %}'
         });
+        
+        $('#organizationSignId').editable({
+            url: '{{ path('sd_common_ajax_organization_save') }}',
+            source: '{{ path('sd_common_ajax_organization_lookup') }}',
+            emptytext: '{% trans %}Enter value{% endtrans %}'
+        });
 
         $('#groupId').editable({
             url: '{{ path('sd_common_ajax_organization_save') }}',
@@ -86,6 +92,15 @@
                 </a>
             </td>
             <td><span class="text-muted">{% trans %}Select organization type{% endtrans %}</span></td>
+        </tr>
+        <tr>
+            <td>{% trans %}Organization lookup{% endtrans %}</td>
+            <td>
+                <a href="#" id="organizationSignId" data-type="select" data-pk="{{ organization.id }}" data-value="{{ organization.scopeId }}" data-original-title="{% trans %}Select lookup{% endtrans %}">
+                    {{ organization.lookup }}
+                </a>
+            </td>
+            <td><span class="text-muted">{% trans %}Select lookup{% endtrans %}</td>
         </tr>
         <tr>
             <td>{% trans %}Scope{% endtrans %}</td>

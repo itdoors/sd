@@ -71,9 +71,8 @@ class SalesController extends BaseFilterController
             $handlingMessagesViewRepository = $this->get('lists_handling.message.view.repository');
 
             $filters = $this->getFilters($this->container->getParameter('ajax.filter.namespace.dashboard.calendar'));
-
             $handlingMessages = $handlingMessagesViewRepository
-                ->getAllMessages($userIds, $startTimestamp, $endTimestamp, $filters);
+                ->getAllMessages($userIds, $startTimestamp, $endTimestamp, $filters['filter']);
 
             foreach ($handlingMessages as $handlingMessage) {
                 $events[] = array(

@@ -6,7 +6,7 @@
             header: {
                 left:   'title',
                 center: '',
-                right:  'today month prev,next'
+                right:  'today, month, prev, next, agendaDay'
             },
             firstDay: 1,
             events: {
@@ -28,7 +28,9 @@
 
             },
             monthNames: ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],
+            monthNamesShort: ["Янв.","Фев.","Мар.","Апр.","Май","Июн.","Июл.","Авг.","Сен.","Окт.","Ноя.","Дек."],
             dayNamesShort: ["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
+            dayNames: ['Воскресенье','Понедельник','Вторник','Среда','Четвер','Пятница','Суббота'],
             buttonText: {
                 prev: "&nbsp;&#9668;&nbsp;",
                 next: "&nbsp;&#9658;&nbsp;",
@@ -39,26 +41,46 @@
                 week: "Неделя",
                 day: "День"
             },
+            titleFormat: {
+		month: 'MMMM yyyy',
+		week: "MMM d[ yyyy]{ '&#8212;'[ MMM] d yyyy}",
+		day: 'dddd d MMM yyyy'
+            },
+            axisFormat: 'HH',
+            allDayText: 'Весь день',
             eventMouseover: function(event, jsEvent, view) {
                 $(this).attr('title', event.hover_title);
-                //console.log(event);
-               // console.log(this);
-                //$(this).append('<div title=\"'+event.title+'\" class=\"hover-end\">'+event.title+'</div>');
+                $(this).attr('data-id', event.data_id);
+              
+            },
+            eventClick: function(event, element) {
+                 $(this).attr('id', 'managers_list_new');
+                 $(this).addClass('ajax-form');
+                 $(this).attr('data-toggle', 'modal');
+                 $(this).attr('data-target_holder', 'taskFormTpl');
+                 $(this).attr('data-post_target_id', 'ModelContact'+event.id);
+                 $(this).attr('data-post_function', 'updateList');
+                 $(this).attr('data-post_target_id', 'calendarBlock');
+                 $(this).attr('data-form_name', 'taskForm');
+                 $(this).attr('data-model', 'Task');
+                 $(this).attr('data-model-id', event.data_id);
             }
         });
     });
 </script>
 
-<div class="col-md-12 col-sm-12">
-    <div class="portlet box blue calendar">
-        <div class="portlet-title">
-            <div class="caption">
-                <i class="fa fa-calendar"></i> Мой Календарь
-            </div>
+<div class="portlet box blue calendar">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="fa fa-calendar"></i>
+            {% if text is defined  %}
+                {{ text }}
+            {% else %}
+                {% trans from 'messages' %}My Calendar{% endtrans%}
+            {% endif %}
         </div>
-        <div class="portlet-body light-grey">
-            <div id="calendar" class="fc fc-ltr">
-            </div>
-        </div>
+    </div>
+    <div class="portlet-body light-grey">
+        <div id="calendar" class="fc fc-ltr"></div>
     </div>
 </div>

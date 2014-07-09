@@ -22,7 +22,10 @@ class OperInfoController extends BaseFilterController
      */
     public function indexAction()
     {
-        $this->addToSessionValues('idDepartment', $this->getAllowedDepartmentsId(), 'param', 'oper.bundle.department');
+        /** @var AccessService $accessService */
+        $accessService = $this->get('access.service');
+
+        $this->addToSessionValues('idDepartment', $accessService->getAllowedDepartmentsId(), 'param', 'oper.bundle.department');
 
         return $this->render('ITDoorsOperBundle:Patterns:index.html.twig', array(
 
@@ -49,10 +52,13 @@ class OperInfoController extends BaseFilterController
         $repository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments');
 
-        $query = $repository->getFilteredDepartments($filters, $this->getAllowedDepartmentsId());
+        /** @var AccessService $accessService */
+        $accessService = $this->get('access.service');
+
+        $query = $repository->getFilteredDepartments($filters, $accessService->getAllowedDepartmentsId());
 
         $countDepartments = $repository
-            ->getFilteredDepartments($filters, $this->getAllowedDepartmentsId(), "count")
+            ->getFilteredDepartments($filters, $accessService->getAllowedDepartmentsId(), "count")
             ->getSingleScalarResult();
 
         $query->setHint('knp_paginator.count', $countDepartments);
@@ -87,12 +93,15 @@ class OperInfoController extends BaseFilterController
         $departmentsRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments');
 
-        $query = $departmentsRepository->getFilteredDepartments($filters, $this->getAllowedDepartmentsId());
+        /** @var AccessService $accessService */
+        $accessService = $this->get('access.service');
+
+        $query = $departmentsRepository->getFilteredDepartments($filters, $accessService->getAllowedDepartmentsId());
 
         $paginator  = $this->get('knp_paginator');
 
         $countDepartments = $departmentsRepository
-            ->getFilteredDepartments($filters, $this->getAllowedDepartmentsId(), "count")
+            ->getFilteredDepartments($filters, $accessService->getAllowedDepartmentsId(), "count")
             ->getSingleScalarResult();
 
         $query->setHint('knp_paginator.count', $countDepartments);
@@ -106,65 +115,6 @@ class OperInfoController extends BaseFilterController
         return $this->render('ITDoorsOperBundle:Parts:department.html.twig', array(
             'pagination' => $pagination
         ));
-    }
-
-    /**
-     * @return array|bool
-     */
-    private function getAllowedDepartmentsId()
-    {
-        $idUser = $this->getUser()->getId();
-        $checkOper =  $this->getUser()->hasRole('ROLE_OPER');
-
-        $checkSuperviser =  $this->getUser()->hasRole('ROLE_SUPERVISOR');
-
-        if ($checkSuperviser) {
-
-            return false;
-        } elseif ($checkOper) {
-
-            /** @var  $stuff \SD\UserBundle\Entity\Stuff */
-            $stuff = $this->getDoctrine()
-                ->getRepository('SDUserBundle:Stuff')
-                ->findOneBy(array('user' => $idUser));
-
-            if (!$stuff) {
-                return array();
-            }
-
-
-            $stuffDepartments = $this->getDoctrine()
-                ->getRepository('SDUserBundle:StuffDepartments')
-                ->findBy(array('stuff' => $stuff));
-
-            if (count($stuffDepartments) == 0 || !$stuffDepartments) {
-                return array();
-            }
-
-            if (!is_array($stuffDepartments)) {
-                $stuffDepartments = array($stuffDepartments);
-            }
-
-            $idDepartmentsAllowed = array();
-
-            /** @var  $stuffDepartment \SD\UserBundle\Entity\StuffDepartments */
-            foreach ($stuffDepartments as $stuffDepartment) {
-                $departmentsAllowed = $stuffDepartment->getDepartments();
-
-                if (count($departmentsAllowed) == 0) {
-                    return array();
-                }
-                if (!is_array($departmentsAllowed)) {
-                    $departmentsAllowed = array($departmentsAllowed);
-                }
-
-                foreach ($departmentsAllowed as $departmentAllowed) {
-                    $idDepartmentsAllowed[] = $departmentAllowed->getId();
-                }
-            }
-
-            return $idDepartmentsAllowed;
-        }
     }
 
 /*    public function updateAccrualsTaskAction()

@@ -24,6 +24,15 @@ class OperDepartmentInfoController extends BaseFilterController
      */
     public function indexAction($id)
     {
+        /** @var AccessService $accessService */
+        $accessService = $this->get('access.service');
+        $access = $accessService -> checkAccessToDepartment($id);
+        if (!$access) {
+            //return $this->redirect($this->generateUrl('it_doors_oper_homepage'));
+        }
+
+
+
         $this->addToSessionValues('idDepartment', $id, 'param', 'oper.bundle.department');
 
         $repository = $this->getDoctrine()

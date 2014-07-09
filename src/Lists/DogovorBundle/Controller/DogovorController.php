@@ -79,7 +79,7 @@ class DogovorController extends BaseController
             }
 
             $object->setUser($user);
-            $object->setCreateDate(new \DateTime(date('Y-m-d')));
+            $object->setCreateDateTime(new \DateTime(date('Y-m-d')));
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($object);

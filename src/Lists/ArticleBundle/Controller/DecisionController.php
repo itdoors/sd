@@ -11,6 +11,8 @@ use Lists\ArticleBundle\Entity\ArticleRepository;
 use Lists\ArticleBundle\Entity\Vote;
 use Lists\ArticleBundle\Entity\Ration;
 use SD\UserBundle\Entity\User;
+use BCC\CronManagerBundle\Manager\CronManager;
+use BCC\CronManagerBundle\Manager\Cron;
 
 /**
  * Class SolutionsController
@@ -105,13 +107,13 @@ class DecisionController extends BaseController
 
             $em = $this->getDoctrine()->getManager();
             /** @var Connection $connection */
-            $connection = $this->getDoctrine()->getConnection();
-
-            $connection->beginTransaction();
+//            $connection = $this->getDoctrine()->getConnection();
+//            $connection->beginTransaction();
 
             try {
                 $formData = $request->request->get($form->getName());
 
+                /** @var Article $party */
                 $party = $form->getData();
                 if ($this->getUser()->hasRole('ROLE_ARTICLEADMIN')) {
                     $user = $em->getRepository('SDUserBundle:User')->find($party->getUserId());
@@ -143,32 +145,99 @@ class DecisionController extends BaseController
                     $nameTo = $this->container->getParameter('name.from');
 
                     $email = $this->get('it_doors_email.service');
+
+                    $url = $this->generateUrl(
+                        'list_article_vote_decision_show',
+                        array('id' => $party->getId()),
+                        true
+                    );
                     $email->send(
                         array($emailTo => $nameTo),
                         'decision-making',
                         array(
-                        'users' => array(
-                            $user->getEmail()
-                        ),
-                        'variables' => array(
-                            '${lastName}$' => $user->getLastName(),
-                            '${firstName}$' => $user->getFirstName(),
-                            '${middleName}$' => $user->getMiddleName(),
-                            '${id}$' =>
-                                '<a href="' . $this->generateUrl(
-                                    'list_article_vote_decision_show',
-                                    array('id' => $party->getId()),
-                                    true
-                                )
-                            . '">' . $party->getId() . '</a>',
-                            '${dateUnpublic}$' => date('d.m.Y H:i', $party->getDateUnpublick()->getTimestamp()),
-                        )
+                            'users' => array(
+                                $user->getEmail()
+                            ),
+                            'variables' => array(
+                                '${lastName}$' => $party->getUser()->getLastName(),
+                                '${firstName}$' => $party->getUser()->getFirstName(),
+                                '${middleName}$' => $party->getUser()->getMiddleName(),
+                                '${id}$' => $party->getId(),
+                                '${datePublic}$' => date('d.m.Y H:i', $party->getDatePublick()->getTimestamp()),
+                                '${dateUnpublic}$' => date('d.m.Y H:i', $party->getDateUnpublick()->getTimestamp()),
+                                '${title}$' => '<a href="' . $url . '">' . $party->getTitle() . '</a>',
+                                '${url}$' => '<a href="' . $url . '">' . $url . '</a>',
+                            )
                         )
                     );
                 }
-                $connection->commit();
+//                $connection->commit();
+
+                // send
+                $cm = new CronManager();
+                $cron = new Cron();
+                $directory = $this->container->getParameter('project.dir');
+                $comment = uniqid();
+                $cron->setComment($comment);
+                if (!is_dir($directory . '/app/logs/cron')) {
+                    mkdir($directory . '/app/logs/cron', 0777);
+                }
+                $cron->setLogFile($directory.'/app/logs/cron/log'.$comment.'.php');
+                $cron->setErrorFile($directory.'/app/logs/cron/err'.$comment.'.php');
+                $cron->setCommand(
+                    'cd ' . $directory .
+                    ' && app/console swiftmailer:spool:send --env=prod' .
+                    ' && app/console it:doors:cron:delete ' . $comment
+                );
+                $cm->add($cron);
+
+                // send for 15 min
+                $datePublich = $party->getDatePublick()->getTimestamp();
+                $dateUnpublick = $party->getDateUnpublick()->getTimestamp()-900;
+
+                if ($datePublich < $dateUnpublick) {
+                    $cm = new CronManager();
+                    $cron = new Cron();
+                    $comment = uniqid();
+                    $cron->setComment($comment);
+                    $cron->setMinute(date('i', $dateUnpublick));
+                    $cron->setHour(date('H', $dateUnpublick));
+                    $cron->setDayOfMonth(date('d', $dateUnpublick));
+                    $cron->setMonth(date('m', $dateUnpublick));
+                    $cron->setLogFile($directory.'/app/logs/cron/log'.$comment.'.php');
+                    $cron->setErrorFile($directory.'/app/logs/cron/err'.$comment.'.php');
+                    $cron->setCommand(
+                        'cd '.$directory .
+                        ' && app/console lists:article:send:only:15 '. $party->getId() .
+                        ' && app/console it:doors:cron:delete ' . $comment
+                    );
+                    $cm->add($cron);
+                }
+
+                // result
+                $cm = new CronManager();
+                $cron = new Cron();
+                $directory = $this->container->getParameter('project.dir');
+                $comment = uniqid();
+                $cron->setComment($comment);
+                if (!is_dir($directory.'/app/logs/cron')) {
+                    mkdir($directory.'/app/logs/cron', 0777);
+                }
+                $cron->setMinute($party->getDateUnpublick()->format('i'));
+                $cron->setHour($party->getDateUnpublick()->format('H'));
+                $cron->setDayOfMonth($party->getDateUnpublick()->format('d'));
+                $cron->setMonth($party->getDateUnpublick()->format('m'));
+                $cron->setLogFile($directory.'/app/logs/cron/log'.$comment.'.php');
+                $cron->setErrorFile($directory.'/app/logs/cron/err'.$comment.'.php');
+                $cron->setCommand(
+                    'cd ' . $directory .
+                    ' && app/console lists:article:result:solution ' . $party->getId() .
+                    ' && app/console it:doors:cron:delete ' . $comment
+                );
+                $cm->add($cron);
+
             } catch (\Exception $e) {
-                $connection->rollBack();
+//                $connection->rollBack();
                 $em->close();
                 throw $e;
             }

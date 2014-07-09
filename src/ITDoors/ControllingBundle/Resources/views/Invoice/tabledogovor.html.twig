@@ -4,7 +4,7 @@
         <tbody>
             <tr>
                 <td></td>
-                <td>{% trans %}DebitControll{% endtrans %}</td>
+                <td>{% trans %}DebtControll{% endtrans %}</td>
                 <td>{% trans %}1C{% endtrans %}</td>
             </tr>
             <tr>
@@ -52,6 +52,11 @@
                 <td>{% trans %}Prolongation Date{% endtrans %} </td>
                 <td>{{ entitie.prolongationDate is empty ? '' : entitie.prolongationDate|date('d.m.Y') }}</td>
                 <td></td>
+            </tr>
+            <tr>
+                <td>{% trans %}Delay{% endtrans %} </td>
+                <td>{{ entitie.paymentDeferment }}</td>
+                <td>{{ entitie.delayDays }}</td>
             </tr>
             <tr>
                 <td>{% trans %}Status{% endtrans %} </td>

@@ -1,0 +1,32 @@
+it_doors_cron_index:
+    path:     /
+    defaults: { _controller: ITDoorsCronBundle:Cron:index }
+    
+it_doors_cron_add:
+    path:     /add
+    defaults: { _controller: ITDoorsCronBundle:Cron:add }
+    requirements: 
+        _method: POST
+
+it_doors_cron_edit:
+    path:     /{id}/edit
+    defaults: { _controller: ITDoorsCronBundle:Cron:edit }
+    
+it_doors_cron_remove:
+    path:     /{id}/remove
+    defaults: { _controller: ITDoorsCronBundle:Cron:remove }
+      
+it_doors_cron_wakeup:
+    path:     /{id}/wakeup
+    defaults: { _controller: ITDoorsCronBundle:Cron:wakeup }
+    
+it_doors_cron_suspend:
+    path:     /{id}/suspend
+    defaults: { _controller: ITDoorsCronBundle:Cron:suspend }
+    
+it_doors_cron_file:
+    path:     /{id}/file/{type}
+    defaults: { _controller: ITDoorsCronBundle:Cron:file }
+    requirements: 
+        type: log|error
+        

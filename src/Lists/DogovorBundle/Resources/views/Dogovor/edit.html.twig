@@ -9,13 +9,23 @@
             url: '{{ path('sd_common_ajax_dogovor_save') }}'
         });
 
-        $('#organizationId, #customerId, #performerId').editable({
+        $('#customerId, #performerId').editable({
             url: '{{ path('sd_common_ajax_dogovor_save') }}',
             source: '{{ path('sd_common_ajax_organization') }}',
             select2: {
                 placeholder: '{% trans %}Select Organization{% endtrans %}',
                 minimumInputLength: 2,
                 width: 250
+            }
+        });
+        $('#organizationId').editable({
+            url: '{{ path('sd_common_ajax_dogovor_save') }}',
+            source: '{{ path('sd_common_ajax_organization') }}',
+            select2: {
+                placeholder: '{% trans %}Select Organization{% endtrans %}',
+                minimumInputLength: 2,
+                width: 250,
+                allowClear: true
             }
         });
 
@@ -62,10 +72,10 @@
                 input.attr('readonly', 'readonly');
 
                 input.datepicker({
-                    rtl: App.isRTL(),
+                    rtl: Metronic.isRTL(),
                     autoclose: true,
                     format: "dd.mm.yyyy",
-                    pickerPosition: (App.isRTL() ? "bottom-right" : "bottom-left"),
+                    pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
                     language: 'ru',
                     startView: 'decade',
                     //endDate: new Date(),
@@ -210,9 +220,40 @@
             <td>
                 {% if dogovor.filepath %}
                     <a href="/uploads/dogovor/{{ dogovor.filepath }}" target="_blank">
-                        {% trans %}File{% endtrans %}
+                        {% trans %}See document{% endtrans %}
                     </a>
                 {% endif %}
+                <script>
+                    $(document).ready(function(){
+                        $(function () {
+                            $('#fileupload').fileupload({
+                               
+                            dataType: 'json',
+                            fail: function (e, data) {
+                                alert('Error upload');
+                            },
+                            done: function (e, data) {
+                                $(this).parents('td').find('a').remove();
+                                $(this).parents('td').prepend('<a target="_blank" href="/uploads/dogovor/'+data.result.file+'">{% trans %}See document{% endtrans %}</a>');
+                                alert('{% trans %}Document is uploaded{% endtrans %}');
+                                $.each(data.result.files, function (index, file) {
+                                   // $('<p/>').text(file.name).appendTo('#files');
+                                   
+                                });
+                            },
+                            add: function (e, data) {
+                                if(confirm('{% trans %}Upload a new document? The old document will be removed.{% endtrans %}')){data.submit();}
+                            }
+                            }).prop('disabled', !$.support.fileInput)
+                                .parent().addClass($.support.fileInput ? undefined : 'disabled');
+                        });
+                    });
+                </script>
+                <span class="btn btn-success fileinput-button">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    <span>{% trans %}Upload new document{% endtrans %}</span>
+                    <input id="fileupload" type="file" name="dogovor" data-url="{{ path('sd_common_ajax_dogovor_upload_file', {'id': dogovor.id}) }}">
+                </span>
             </td>
             <td>{% trans %}Dogovor Type{% endtrans %}</td>
             <td>

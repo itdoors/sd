@@ -1,3 +1,7 @@
+it_doors_cron:
+    resource: "@ITDoorsCronBundle/Resources/config/routing.yml"
+    prefix:   /cron-manager
+
 lists_article:
     resource: "@ListsArticleBundle/Resources/config/routing.yml"
     prefix:   /

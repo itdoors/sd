@@ -217,3 +217,28 @@ Payment passed: Дата зарплаты уже прошла
 Advance passed: Дата аванса уже прошла
 
 Input value: Введите значение
+
+Total: Всего
+
+With prolongation: C пролонгацией
+Name doc: Название
+Number: Номер
+Start date: Дата заключения
+End date: Дата окончания
+Subject: Предмет
+Type dogovor: Тип договора
+User created: Кто создал
+User sold: Кто продал
+Scale: Маштаб
+Payment deferment: Отсрочка начислений
+File: Файл
+Activation date: Дата активации
+Yes: Да
+No: Нет
+
+Delete selected coworkers: Удалить выбранных
+Cooperate coworker: Совмещает сотрудника
+Add cooperation: Добавить совмещение
+Delete cooperation: Удалить совмещение
+Cooperate: Совмещает
+Allowed percent range: Разрешенный диапазон

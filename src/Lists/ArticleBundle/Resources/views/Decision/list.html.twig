@@ -53,11 +53,13 @@
                         {% endfor %}
                     </td>
                     <td>
-                        {% if item.dateUnpublick|date('U') > ''|date('U') %}
-                            {{ 'Not completed'|trans }}
+                        {% if item.value is null  %}
+                            <span class="label label-warning">{{ 'Not completed'|trans }}</span>
                         {% else %}
                             {% if item.value == 1 %}
                                 <span class="label label-success">{{ 'Received'|trans }}</span>
+                            {% elseif item.value == 2 %}
+                                <span class="label label-default">50/50</span>
                             {% else %}
                                 <span class="label label-danger">{{ 'Declined'|trans }}</span>
                             {% endif %}

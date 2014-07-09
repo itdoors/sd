@@ -36,6 +36,7 @@ Participants: Участники
 
 Header: Заголовок
 Description of the solution: Описание решения
+Enter description of the solution: Введите описание решения
 
 Accept: Принимаю
 Deflecting: Отклоняю
@@ -52,3 +53,9 @@ All participants: Всего участников
 All decision: Всего решений
 No answer: Нет ответа
 Date can not be less than the start date of: Дата окончания не может быть меньше даты создания
+
+Your not decision in need date: Вы не оставили решение в указанный срок
+Term stop: Срок окончания
+Select rating: Выберите оценку
+
+Selected users will be sent a notification: Выбранным пользователям будут отправлены уведомления

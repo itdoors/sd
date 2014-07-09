@@ -102,6 +102,14 @@ sd_common_ajax_dogovor_save:
     pattern:  /ajax/dogovor/save
     defaults: { _controller: SDCommonBundle:Ajax:dogovorSave }
 
+sd_common_ajax_dogovor_upload_file:
+    pattern:  /ajax/dogovor/upload
+    defaults: { _controller: SDCommonBundle:Ajax:dogovorUpload }
+
+sd_common_ajax_dopdogovor_upload_file:
+    pattern:  /ajax/dopdogovor/upload
+    defaults: { _controller: SDCommonBundle:Ajax:dopDogovorUpload }
+
 sd_common_ajax_handling_more_info_save:
     pattern:  /ajax/handling/more/info/save
     defaults: { _controller: SDCommonBundle:Ajax:handlingMoreInfoSave }
@@ -170,6 +178,10 @@ sd_common_ajax_dogovor_stopdatetime_by_ids:
 sd_common_ajax_organization_group:
     pattern:  /ajax/organization_group
     defaults: { _controller: SDCommonBundle:Ajax:organizationGroup }
+
+sd_common_ajax_organization_lookup:
+    pattern:  /ajax/organization_lookup
+    defaults: { _controller: SDCommonBundle:Ajax:organizationLookup }
 
 sd_common_ajax_handling_status:
     pattern:  /ajax/handling_status
