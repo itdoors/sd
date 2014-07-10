@@ -771,11 +771,6 @@ class Invoice
     private $dogovorActCount;
 
     /**
-     * @var string
-     */
-    private $dogovorActNote;
-
-    /**
      * Set dogovorActSumma
      *
      * @param float $dogovorActSumma
@@ -819,30 +814,6 @@ class Invoice
     public function getDogovorActCount()
     {
         return $this->dogovorActCount;
-    }
-
-    /**
-     * Set dogovorActNote
-     *
-     * @param string $dogovorActNote
-     * 
-     * @return Invoice
-     */
-    public function setDogovorActNote($dogovorActNote)
-    {
-        $this->dogovorActNote = $dogovorActNote;
-
-        return $this;
-    }
-
-    /**
-     * Get dogovorActNote
-     *
-     * @return string 
-     */
-    public function getDogovorActNote()
-    {
-        return $this->dogovorActNote;
     }
 
     /**
@@ -1017,5 +988,34 @@ class Invoice
     public function getPerformer()
     {
         return $this->performer;
+    }
+    /**
+     * @var string
+     */
+    private $bank;
+
+
+    /**
+     * Set bank
+     *
+     * @param string $bank
+     * 
+     * @return Invoice
+     */
+    public function setBank($bank)
+    {
+        $this->bank = $bank;
+
+        return $this;
+    }
+
+    /**
+     * Get bank
+     *
+     * @return string 
+     */
+    public function getBank()
+    {
+        return $this->bank;
     }
 }

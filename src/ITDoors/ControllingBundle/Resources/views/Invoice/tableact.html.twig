@@ -40,7 +40,7 @@
                 <td>{{ act.summa|number_format(2, ',', ' ')}}</td>
                 <td>{{ act.count}}</td>
                 <td>{% if entitie.dogovorActOriginal is not empty %}{% trans %}on{% endtrans %}{% else %}{% trans %}off{% endtrans %}{% endif %}</td>
-                <td>{{ entitie.dogovorActNote}}</td>
+                <td>{{ act.note }}</td>
             </tr>
             {% endfor %}
         </tbody>

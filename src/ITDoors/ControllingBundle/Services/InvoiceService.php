@@ -137,7 +137,7 @@ class InvoiceService
         $invoiceNew->setDogovorGuid(trim($invoice->dogovorGuid));
         $invoiceNew->setDogovorNumber(trim($invoice->dogovorNumber));
         $invoiceNew->setDogovorName(trim($invoice->dogovorName));
-        $invoiceNew->setDogovorActNote(trim($invoice->dogovorActNote));
+        $invoiceNew->setBank(trim($invoice->bank));
         $invoiceNew->setDogovorActName(trim($invoice->dogovorActName));
         $invoiceNew->setCustomerName(trim($invoice->customerName));
         $invoiceNew->setCustomerEdrpou(trim($invoice->customerEdrpou));

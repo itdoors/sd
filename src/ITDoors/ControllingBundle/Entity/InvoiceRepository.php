@@ -42,6 +42,7 @@ class InvoiceRepository extends EntityRepository
             ->addSelect('i.id')
             ->addSelect('i.invoiceId')
             ->addSelect('i.date')
+            ->addSelect('i.bank')
             ->addSelect('i.dogovorActName')
             ->addSelect('i.dogovorActDate')
             ->addSelect('i.delayDate')
@@ -525,7 +526,6 @@ class InvoiceRepository extends EntityRepository
                 $entitie
                     ->select('i.dogovorAct')
                     ->addSelect('i.dogovorActDate')
-                    ->addSelect('i.dogovorActNote')
                     ->addSelect('i.dogovorActName')
                     ->addSelect('i.dogovorActOriginal')
                     ->where('i.id = :invoiceid')
