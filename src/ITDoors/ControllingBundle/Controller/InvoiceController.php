@@ -383,9 +383,9 @@ class InvoiceController extends BaseFilterController
         $phpExcelObject->getActiveSheet()->getColumnDimension('F')->setWidth(12);
         $phpExcelObject->getActiveSheet()->getColumnDimension('G')->setWidth(12);
         $phpExcelObject->getActiveSheet()->getColumnDimension('H')->setWidth(14);
-        $phpExcelObject->getActiveSheet()->getColumnDimension('I')->setWidth(14);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('I')->setWidth(16);
         $phpExcelObject->getActiveSheet()->getColumnDimension('J')->setWidth(14);
-        $phpExcelObject->getActiveSheet()->getColumnDimension('K')->setWidth(14);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('K')->setWidth(15);
         $phpExcelObject->getActiveSheet()->getColumnDimension('L')->setWidth(14);
         $phpExcelObject->getActiveSheet()->getColumnDimension('M')->setWidth(14);
         $phpExcelObject->getActiveSheet()->getColumnDimension('N')->setWidth(10);
@@ -427,7 +427,7 @@ class InvoiceController extends BaseFilterController
             ->getStyle('C2:D'.$str)
             ->getAlignment()
             ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-        $phpExcelObject->getActiveSheet()->freezePane('Q2');
+        $phpExcelObject->getActiveSheet()->freezePane('AB2');
 
 //        $phpExcelObject->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
 //        $phpExcelObject->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
