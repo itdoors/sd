@@ -27,6 +27,7 @@ class DopDogovorRepository extends EntityRepository
         $query = $this->createQueryBuilder('dd')
             ->select('dd.id as id')
             ->addSelect('dd.number as number')
+            ->addSelect('dd.createDateTime')
             ->addSelect('dd.subject as subject')
             ->addSelect('dd.dogovorId as dogovorId')
             ->addSelect('dd.dopDogovorType as dopDogovorType')

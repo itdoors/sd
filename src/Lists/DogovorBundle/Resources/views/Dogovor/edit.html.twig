@@ -109,6 +109,12 @@
 <div class="col-md-12">
     <table id="dogovor" class="table table-bordered table-striped">
         <tbody>
+        <tr> {# 0 #}
+            <td>{% trans %}Date create{% endtrans %}</td>
+            <td>{{ dogovor.createDateTime|date('H:i d.m.Y') }}</td>
+            <td>{% trans %}Creator{% endtrans %}</td>
+            <td>{{ dogovor.creatorFirstName }} {{ dogovor.creatorLastName }} {{ dogovor.creatorMiddleName }}</td>
+        </tr>
         <tr> {# 1 #}
             <td style="width:15%">{% trans %}ID{% endtrans %}</td>
             <td style="width:35%">{{ dogovor.id }}</td>
