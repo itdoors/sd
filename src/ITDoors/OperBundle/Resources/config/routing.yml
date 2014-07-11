@@ -109,3 +109,11 @@ it_doors_oper_dogovor:
 it_doors_oper_schedule_change_cooperation:
     pattern:  /oper/schedule/change/cooperation
     defaults: { _controller: ITDoorsOperBundle:OperSchedule:changeCooperation }
+
+it_doors_oper_coworker:
+    pattern:  /oper/coworker
+    defaults: { _controller: ITDoorsOperBundle:OperCoworkerInfo:index }
+
+it_doors_oper_coworker_table:
+    pattern:  /oper/coworker/table
+    defaults: { _controller: ITDoorsOperBundle:OperCoworkerInfo:coworkerTable }

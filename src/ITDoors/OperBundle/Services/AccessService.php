@@ -109,4 +109,15 @@ class AccessService
 
         return false;
     }
+
+    /**
+     * @return bool
+     */
+    public function checkIfCanEdit()
+    {
+        $canEdit  =  !$this->container->get('security.context')->getToken()->getUser()->hasRole('ROLE_SUPERVISOR');
+
+        return $canEdit;
+    }
+
 } 
