@@ -16,10 +16,10 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
     const REPLACEMENT_TYPE_SUBSTITUTION = 's';
 
     /**
-     * @param integer $idDepartment
-     * @param integer $month
-     * @param integer $year
-     * @param array   $filters
+     * @param integer|array $idDepartment
+     * @param integer       $month
+     * @param integer       $year
+     * @param array         $filters
      *
      * @return \Doctrine\ORM\Query
      */
@@ -36,6 +36,8 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
             ->addSelect('i.lastName')
             ->addSelect('i.middleName')
             ->addSelect('dp.admissionDate')
+            ->addSelect('dp.id as idCoworker')
+            ->addSelect('d.id as idDepartment')
             ->addSelect('dp.dismissalDate')
             ->addSelect('dp.admissionDateNotOfficially')
             ->addSelect('dp.dismissalDateNotOfficially')
@@ -49,10 +51,19 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
             ->leftJoin('dpmi.departmentPeople', 'dp')
             ->leftJoin('dp.department', 'd')
             ->leftJoin('dp.individual', 'i')
-            ->leftJoin('dp.mpks', 'm')
-            ->where('d.id = :idDepartment')
-            ->setParameter(':idDepartment', $idDepartment)
-            ->andWhere('dpmi.year = :year')
+            ->leftJoin('dp.mpks', 'm');
+            if (is_array($idDepartment)) {
+                if (count($idDepartment)) {
+                    $sql = $sql->where('d.id IN (:idDepartment)')
+                        ->setParameter(':idDepartment', $idDepartment);
+                } else {
+                    $sql = $sql->where('1 = 2');
+                }
+            } else {
+                $sql = $sql->where('d.id = :idDepartment')
+                    ->setParameter(':idDepartment', $idDepartment);
+            }
+            $sql = $sql->andWhere('dpmi.year = :year')
             ->setParameter(':year', $year)
             ->andWhere('dpmi.month = :month')
             ->setParameter(':month', $month);

@@ -706,6 +706,7 @@
                                 </a>
                             </td>
                     {% endfor %}
+{#
                     {{ include(
                         'ITDoorsOperBundle:Schedule:scheduleTableSums.html.twig', {
                             'sumOfficially': infoHours[idCoworker~'-'~idReplacement]['officially'],
@@ -721,6 +722,7 @@
                             'idMonthInfo': infoHours[idCoworker~'-'~idReplacement]['idMonthInfo'],
                             'canEdit': canEdit
                     }) }}
+#}
 
                 </tr>
         {% endfor %}

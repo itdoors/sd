@@ -1696,9 +1696,11 @@ class OperScheduleController extends BaseFilterController
             'departmentPeopleMonthInfo'=>$monthInfo->getId()
         ));
 
+        $canEdit = $this->checkIfCanEdit();
         $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleInfoUserBasicAccrual.html.twig', array(
             'accruals'=> $onceOnlyAccrual,
-            'code' => $code
+            'code' => $code,
+            'canEdit' => $canEdit
         ));
 
         $return['success'] = 1;
@@ -2002,6 +2004,30 @@ class OperScheduleController extends BaseFilterController
         return new Response(json_encode($return));
     }
 
+    /**
+     * @param string  $date
+     * @param integer $idCoworker
+     * @param integer $idReplacement
+     * @param integer $idDepartment
+     * 
+     * @return Response
+     */
+    public function getRowSumsRenderedAction($date, $idCoworker, $idReplacement, $idDepartment)
+    {
+        $info = $this->getSumsCoworker($date, $idCoworker, $idReplacement, $idDepartment);
+        $return  = $this->renderView('ITDoorsOperBundle:Schedule:scheduleTableSums.html.twig', $info);
+
+        return new Response($return);
+    }
+
+    /**
+     * @param string  $date
+     * @param integer $idCoworker
+     * @param integer $idReplacement
+     * @param integer $idDepartment
+     *
+     * @return array
+     */
     private function getSumsCoworker($date, $idCoworker, $idReplacement, $idDepartment)
     {
         list($year, $month) = explode('-', $date);
@@ -2096,7 +2122,8 @@ class OperScheduleController extends BaseFilterController
             'salaryNotOfficially' => $salaryNotOfficially,
             'totalSalary' => $totalSalary,
             'idMonthInfo'=> $idMonthInfo,
-            'canEdit' => $canEdit
+            'canEdit' => $canEdit,
+            'idDepartment' => $idDepartment
         );
 
         return $return;
