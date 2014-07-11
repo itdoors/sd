@@ -56,7 +56,7 @@ class OperCoworkerInfoController extends BaseFilterController
         /** @var AccessService $accessService */
         $accessService = $this->get('access.service');
         $allowedDepartments = $accessService->getAllowedDepartmentsId();
-        $allowedDepartments = array(2111);
+        //$allowedDepartments = array(2111);
 
         $this->addToSessionValues('idDepartment', $allowedDepartments, 'param', 'oper.bundle.department');
 

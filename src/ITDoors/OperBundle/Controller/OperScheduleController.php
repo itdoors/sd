@@ -2009,7 +2009,7 @@ class OperScheduleController extends BaseFilterController
      * @param integer $idCoworker
      * @param integer $idReplacement
      * @param integer $idDepartment
-     * 
+     *
      * @return Response
      */
     public function getRowSumsRenderedAction($date, $idCoworker, $idReplacement, $idDepartment)
