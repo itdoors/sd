@@ -39,23 +39,14 @@ class InvoiceService
      */
     private function findFile($directory)
     {
-        /** @var EntityManager $em */
-//        $em = $this->container->get('doctrine')->getManager();
-
-        /** @var InvoicecronRepository $invoicecron */
-//        $invoicecron = $em->getRepository('ITDoorsControllingBundle:Invoicecron');
-
         $fileName = false;
 
         $dh = opendir($directory);
         if ($dh) {
             while (($file = readdir($dh)) !== false) {
                 if (filetype($directory . $file) == 'file') {
-//                    $findfile = $invoicecron->findBy(array('reason' => $file));
-//                    if (!$findfile) {
-                        $fileName = $file;
-                        continue;
-//                    }
+                    $fileName = $file;
+                    continue;
                 }
             }
             closedir($dh);
@@ -137,7 +128,7 @@ class InvoiceService
         $invoiceNew->setDogovorGuid(trim($invoice->dogovorGuid));
         $invoiceNew->setDogovorNumber(trim($invoice->dogovorNumber));
         $invoiceNew->setDogovorName(trim($invoice->dogovorName));
-        $invoiceNew->setDogovorActNote(trim($invoice->dogovorActNote));
+        $invoiceNew->setBank(trim($invoice->bank));
         $invoiceNew->setDogovorActName(trim($invoice->dogovorActName));
         $invoiceNew->setCustomerName(trim($invoice->customerName));
         $invoiceNew->setCustomerEdrpou(trim($invoice->customerEdrpou));

@@ -172,72 +172,18 @@ class DecisionController extends BaseController
                     );
                 }
 //                $connection->commit();
-
-                // send
-                $cm = new CronManager();
-                $cron = new Cron();
-                $directory = $this->container->getParameter('project.dir');
-                $comment = uniqid();
-                $cron->setComment($comment);
-                if (!is_dir($directory . '/app/logs/cron')) {
-                    mkdir($directory . '/app/logs/cron', 0777);
-                }
-                $cron->setLogFile($directory.'/app/logs/cron/log'.$comment.'.php');
-                $cron->setErrorFile($directory.'/app/logs/cron/err'.$comment.'.php');
-                $cron->setCommand(
-                    'cd ' . $directory .
-                    ' && app/console swiftmailer:spool:send --env=prod' .
-                    ' && app/console it:doors:cron:delete ' . $comment
-                );
-                $cm->add($cron);
-
+                $cron = $this->container->get('it_doors_cron.service');
+                $cron->addSendEmails();
                 // send for 15 min
                 $datePublich = $party->getDatePublick()->getTimestamp();
                 $dateUnpublick = $party->getDateUnpublick()->getTimestamp()-900;
-
                 if ($datePublich < $dateUnpublick) {
-                    $cm = new CronManager();
-                    $cron = new Cron();
-                    $comment = uniqid();
-                    $cron->setComment($comment);
-                    $cron->setMinute(date('i', $dateUnpublick));
-                    $cron->setHour(date('H', $dateUnpublick));
-                    $cron->setDayOfMonth(date('d', $dateUnpublick));
-                    $cron->setMonth(date('m', $dateUnpublick));
-                    $cron->setLogFile($directory.'/app/logs/cron/log'.$comment.'.php');
-                    $cron->setErrorFile($directory.'/app/logs/cron/err'.$comment.'.php');
-                    $cron->setCommand(
-                        'cd '.$directory .
-                        ' && app/console lists:article:send:only:15 '. $party->getId() .
-                        ' && app/console it:doors:cron:delete ' . $comment
-                    );
-                    $cm->add($cron);
+                    $cron->sendOnly15ArticleDecision($party->getId(), $dateUnpublick);
                 }
-
                 // result
-                $cm = new CronManager();
-                $cron = new Cron();
-                $directory = $this->container->getParameter('project.dir');
-                $comment = uniqid();
-                $cron->setComment($comment);
-                if (!is_dir($directory.'/app/logs/cron')) {
-                    mkdir($directory.'/app/logs/cron', 0777);
-                }
-                $cron->setMinute($party->getDateUnpublick()->format('i'));
-                $cron->setHour($party->getDateUnpublick()->format('H'));
-                $cron->setDayOfMonth($party->getDateUnpublick()->format('d'));
-                $cron->setMonth($party->getDateUnpublick()->format('m'));
-                $cron->setLogFile($directory.'/app/logs/cron/log'.$comment.'.php');
-                $cron->setErrorFile($directory.'/app/logs/cron/err'.$comment.'.php');
-                $cron->setCommand(
-                    'cd ' . $directory .
-                    ' && app/console lists:article:result:solution ' . $party->getId() .
-                    ' && app/console it:doors:cron:delete ' . $comment
-                );
-                $cm->add($cron);
+                $cron->sendResultArticleDecision($party->getId(), $party->getDateUnpublick());
 
             } catch (\Exception $e) {
-//                $connection->rollBack();
                 $em->close();
                 throw $e;
             }
@@ -335,6 +281,11 @@ class DecisionController extends BaseController
                         if (!$user->hasRole('ROLE_ARTICLEADMIN')) {
                             $rationResult = false;
                         }
+                    }
+                    $countLast = $vR->countLast($id);
+                    if ($countLast == 0) {
+                        $cron = $this->container->get('it_doors_cron.service');
+                        $cron->sendResultArticleDecision($id);
                     }
                     $connection->commit();
                 } catch (\Exception $e) {

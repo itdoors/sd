@@ -112,13 +112,15 @@
 		</div>
 	</div>
 	<!--row-->
-    {{  include(
-        'ListsHandlingBundle:' ~ baseTemplate ~ ':messages.html.twig',
-        {
-            handling: handling,
-        }
-        )
-    }}
+        <div class="row">
+        {{  include(
+            'ListsHandlingBundle:' ~ baseTemplate ~ ':messages.html.twig',
+            {
+                handling: handling,
+            }
+            )
+        }}
+        </div>
 {#    {{ form(handlingMessageForm) }}#}
 
 {% endblock body %}

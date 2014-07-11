@@ -1,5 +1,29 @@
 <div id="contact_list" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'contacts' }) }}">
 {% trans_default_domain 'ITDoorsControllingBundle' %}
+<script>
+    $(document).ready(function(){
+        $('input[name="emailsForSed[]"]').on('click', function(){
+            var _this = this;
+             $.ajax({
+                type: 'POST',
+                url: "{{ path('it_doors_controlling_invoice_send_email') }}",
+                data: 'idModelContact='+$(_this).data('modelid')+'&isSend='+$(_this).prop('checked')+'&idIsSend='+$(_this).data('idisiend'),
+                beforeSend: function() {
+                    //selfClass.blockUI(target);
+                },
+                success: function(response) {
+                    response = jQuery.parseJSON(response);
+                    $(_this).data('idisiend', response.id );
+                    alert('{% trans %}Changes are saved{% endtrans %}');
+                    //target.html(response);
+                    //selfClass.unblockUI(target);
+                }
+            });
+        });
+
+    });
+</script>
+
 <div class="col-md-12">
     <div class="table-toolbar">
         <div class="btn-group" style="margin-bottom: 10px;">
@@ -27,10 +51,12 @@
                     <th>{% trans %}Phone{% endtrans %}</th>
                     <th>{% trans %}Mobile{% endtrans %}</th>
                     <th>{% trans %}Email{% endtrans %}</th>
+                    <th>{% trans %}Send email{% endtrans %}</th>
                     <th>{% trans %}Birthday{% endtrans %}</th>
                     <th>{% trans %}Owner{% endtrans %}</th>
                 </tr>
             </thead>
+            {% if entitie[0].id is not null %}
             <tbody>
                 {% for item in  entitie %}
                     <tr>
@@ -42,11 +68,13 @@
                         <td>{{ item.phone1 }}</td>
                         <td>{{ item.phone2 }}</td>
                         <td>{{ item.email }}</td>
+                        <td>{% if item.email is not null %}<input data-modelid="{{ item.id }}" data-idisiend="{{ item.idIsSend }}" type="checkbox" name="emailsForSed[]" class="allEmailsForSend" value="1"{% if item.isSend %} checked{% endif %}>{% endif %}</td>
                         <td>{{ item.birthday is empty ? '' : item.birthday|date("d.M.y") }}</td>
                         <td>{{ item.firstNameOwner }} {{ item.lastNameOwner }} {{ item.middleNameOwner }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
+            {% endif %}
         </table>
     </div>
 </div>

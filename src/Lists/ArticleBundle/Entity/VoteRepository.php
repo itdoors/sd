@@ -36,6 +36,29 @@ class VoteRepository extends EntityRepository
 
         return $res;
     }
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @param integer $id Article.id
+     * 
+     * @return array
+     */
+    public function countLast($id)
+    {
+        $sql = $this->createQueryBuilder('v');
+
+        $res = $sql
+            ->select('COUNT(v.id) as countVote')
+            ->where('v.modelId = :id')
+            ->andwhere('v.modelName = :text')
+            ->andwhere('v.value is NULL')
+            ->setParameter(':id', $id)
+            ->setParameter(':text', 'article')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $res;
+    }
 
     /**
      * Returns results for interval future invoice

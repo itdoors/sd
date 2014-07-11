@@ -83,22 +83,9 @@ class ArticleService
                 )
             );
         }
-        $cm = new CronManager();
-        $cron = new Cron();
-        $directory = $this->container->getParameter('project.dir');
-        $comment = uniqid();
-        $cron->setComment($comment);
-        if (!is_dir($directory.'/app/logs/cron')) {
-            mkdir($directory.'/app/logs/cron', 0777);
-        }
-        $cron->setLogFile($directory.'/app/logs/cron/log'.$comment.'.php');
-        $cron->setErrorFile($directory.'/app/logs/cron/err'.$comment.'.php');
-        $cron->setCommand(
-            'cd ' . $directory .
-            ' && app/console swiftmailer:spool:send --env=prod' .
-            ' && app/console it:doors:cron:delete ' . $comment
-        );
-        $cm->add($cron);
+
+        $cron = $this->getContainer()->get('it_doors_cron.service');
+        $cron->addSendEmails;
     }
 
     /**
@@ -270,22 +257,8 @@ class ArticleService
                 )
             );
         }
-        $cm = new CronManager();
-        $cron = new Cron();
-        $directory = $this->container->getParameter('project.dir');
-        $comment = uniqid();
-        $cron->setComment($comment);
-        if (!is_dir($directory.'/app/logs/cron')) {
-            mkdir($directory.'/app/logs/cron', 0777);
-        }
-        $cron->setLogFile($directory.'/app/logs/cron/log'.$comment.'.php');
-        $cron->setErrorFile($directory.'/app/logs/cron/err'.$comment.'.php');
-        $cron->setCommand(
-            'cd ' . $directory .
-            ' && app/console swiftmailer:spool:send --env=prod' .
-            ' && app/console it:doors:cron:delete ' . $comment
-        );
-        $cm->add($cron);
+        $cron = $this->getContainer()->get('it_doors_cron.service');
+        $cron->addSendEmails;
     }
 
     /**
