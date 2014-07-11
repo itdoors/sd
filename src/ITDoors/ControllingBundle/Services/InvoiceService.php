@@ -39,23 +39,14 @@ class InvoiceService
      */
     private function findFile($directory)
     {
-        /** @var EntityManager $em */
-//        $em = $this->container->get('doctrine')->getManager();
-
-        /** @var InvoicecronRepository $invoicecron */
-//        $invoicecron = $em->getRepository('ITDoorsControllingBundle:Invoicecron');
-
         $fileName = false;
 
         $dh = opendir($directory);
         if ($dh) {
             while (($file = readdir($dh)) !== false) {
                 if (filetype($directory . $file) == 'file') {
-//                    $findfile = $invoicecron->findBy(array('reason' => $file));
-//                    if (!$findfile) {
-                        $fileName = $file;
-                        continue;
-//                    }
+                    $fileName = $file;
+                    continue;
                 }
             }
             closedir($dh);

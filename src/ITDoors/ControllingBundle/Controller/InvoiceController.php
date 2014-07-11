@@ -13,6 +13,8 @@ use Knp\Bundle\PaginatorBundle\KnpPaginatorBundle;
 use Doctrine\ORM\EntityManager;
 use PHPExcel_Style_Border;
 use PHPExcel_Style_Alignment;
+use Symfony\Component\HttpFoundation\Request;
+use Lists\ContactBundle\Entity\ModelContactSendEmail;
 
 /**
  * InvoiceController
@@ -353,8 +355,8 @@ class InvoiceController extends BaseFilterController
             ++$str;
             $col = 0;
 
-            $phpExcelObject->getActiveSheet()->getDefaultRowDimension($str)->setRowHeight(40);
-            $phpExcelObject->getActiveSheet()->getDefaultRowDimension($str)->setRowHeight(-1);
+//            $phpExcelObject->getActiveSheet()->getDefaultRowDimension($str)->setRowHeight(40);
+//            $phpExcelObject->getActiveSheet()->getDefaultRowDimension($str)->setRowHeight(-1);
 
             $phpExcelObject->getActiveSheet()
                     ->setCellValueByColumnAndRow($col, $str, $invoice['invoiceId'])
@@ -451,5 +453,40 @@ class InvoiceController extends BaseFilterController
         $response->headers->set('Cache-Control', 'maxage=1');
 
         return $response;
+    }
+
+    /**
+     *  sendEmailChangeAction
+     * 
+     * @param Request $request Description
+     * 
+     * @return render Description
+     */
+    public function sendEmailChangeAction(Request $request)
+    {
+        $idModelContact = $request->request->get('idModelContact');
+        $idIsSend = $request->request->get('idIsSend');
+        $isSend = $request->request->get('isSend');
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        $sendEmail = false;
+        if ($idIsSend) {
+            /** @var ModelContactSendEmail $sendEmail */
+            $sendEmail = $em->getRepository('ListsContactBundle:ModelContactSendEmail')->find($idIsSend);
+        }
+        if (!$sendEmail) {
+            /** @var ModelContact $modelContact */
+            $modelContact = $em->getRepository('ListsContactBundle:ModelContact')->find($idModelContact);
+            $sendEmail = new ModelContactSendEmail();
+            $sendEmail->setModelContact($modelContact);
+        }
+        $sendEmail->setIsSend($isSend);
+
+        $em->persist($sendEmail);
+        $em->flush();
+
+        return new Response(json_encode(array('id' => $sendEmail->getId())));
     }
 }
