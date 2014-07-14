@@ -345,7 +345,7 @@ class InvoiceService
                     ->getUsersForSendEmail($customerId);
                 foreach ($templates as $template) {
                     foreach ($mc as $user) {
-                        $email->send(
+                        $idEmail = $email->send(
                             array($emailTo => $nameTo),
                             $template,
                             array(
