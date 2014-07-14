@@ -1,7 +1,9 @@
 {% trans_default_domain 'ITDoorsOperBundle' %}
+{% if sumOfficially is defined %}
 <td class="sums{{ idCoworker }}{{ idReplacement }}">
     {{ sumOfficially }}
 </td>
+{% endif %}
 <td class="sums{{ idCoworker }}{{ idReplacement }}">
     {% if accrual['officially']['plus'] > 0 %}
         <span style="color: green">+ {{ accrual['officially']['plus'] }}</span>
@@ -16,10 +18,11 @@
 <td class="sums{{ idCoworker }}{{ idReplacement }}">
     {{ salaryOfficially }}
 </td>
-
+{% if sumNotOfficially is defined %}
 <td class="sums{{ idCoworker }}{{ idReplacement }}">
     {{ sumNotOfficially }}
 </td>
+{% endif %}
 
 <td class="sums{{ idCoworker }}{{ idReplacement }}">
     {{ plannedAccrual }}
@@ -64,7 +67,7 @@
             var idCoworker = {{ idCoworker }};
             var idReplacement = {{ idReplacement }};
             var date = $('#info_input').data('date');
-            var idDepartment = $('#info_input').data('id_department');
+            var idDepartment = {% if idDepartment is defined %}{{ idDepartment }}{% else %}$('#info_input').data('id_department'){% endif %};
 
             var params = {
                 "date": date,
