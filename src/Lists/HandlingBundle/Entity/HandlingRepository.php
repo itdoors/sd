@@ -115,7 +115,7 @@ class HandlingRepository extends BaseRepository
     public function processCount($sql)
     {
         $sql
-            ->select('COUNT(h.id) as handlingcount');
+            ->select('COUNT(DISTINCT h.id) as handlingcount');
 
     }
 
