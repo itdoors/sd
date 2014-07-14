@@ -39,12 +39,15 @@
 {% block body %}
     <div class="row">
         <div class="col-md-12">
-            <p>{% trans %}Notice all departments{% endtrans %}</p>
+            <p>{% trans %}Notice all coworkers{% endtrans %}</p>
 
             {{ ajax_filter_render('ScheduleFilterFormType', ajax_namespace_oper_department_schedule, {
             'coworker_list': 'ITDoorsAjax.updateList'
             }) }}
 
+{#
+            {{ base_table_render(data, options) }}
+#}
             <div id="coworker_list" data-url="{{ path('it_doors_oper_coworker_table')}}">
                 {{ render(controller('ITDoorsOperBundle:OperCoworkerInfo:coworkerTable', {
 
