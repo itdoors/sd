@@ -280,11 +280,7 @@ class SalesController extends BaseController
             ->getAlignment()
             ->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
         $phpExcelObject->getActiveSheet()
-            ->getStyle('C2:D'.$str)
-            ->getAlignment()
-            ->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
-        $phpExcelObject->getActiveSheet()
-            ->getStyle('C2:D'.$str)
+            ->getStyle('B2:G'.$str)
             ->getAlignment()
             ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
         $phpExcelObject->getActiveSheet()->freezePane('AB2');
