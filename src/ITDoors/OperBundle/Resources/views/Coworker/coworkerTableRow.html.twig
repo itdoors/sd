@@ -1,3 +1,4 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
 <td>
     <a  class="btn green button_wide more-info"
             data-toggle="modal"
@@ -13,7 +14,7 @@
     <a class="fio"
        data-params='{"idCoworker": {{ coworker.id }}, "idDepartment":{{ coworker.idDepartment }}, "idLink": "fio_{{ coworker.id }}", "idReplacement": {{ coworker.replacementId }} }'
             >
-        {% trans %}Accrual{% endtrans %}
+        {% trans %}View{% endtrans %}
     </a>
 </td>
 <td>{% if coworker.replacementId>0 %}
