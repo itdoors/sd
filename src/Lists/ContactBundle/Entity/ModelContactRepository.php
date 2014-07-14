@@ -317,7 +317,7 @@ class ModelContactRepository extends EntityRepository
     /**
      * Returns organization ids with in one organization group
      *
-     * @param int $organizationId
+     * @param integer $organizationId
      *
      * @return mixed
      */
@@ -326,5 +326,29 @@ class ModelContactRepository extends EntityRepository
         return $this->getEntityManager()
             ->getRepository('ListsOrganizationBundle:Organization')
             ->getIdsInGroup($organizationId);
+    }
+
+    /**
+     * Returns organization ids with in one organization group
+     *
+     * @param integer $organizationId
+     *
+     * @return mixed
+     */
+    public function getUsersForSendEmail($organizationId)
+    {
+        return  $sql = $this->createQueryBuilder('mc')
+                ->select('mc.email')
+                ->addSelect('mc.lastName')
+                ->addSelect('mc.firstName')
+                ->addSelect('mc.middleName')
+                ->innerJoin('mc.sendEmail', 'mcse')
+                ->where('mc.modelName = :name')
+                ->andWhere('mc.modelId = :id')
+                ->andWhere('mcse.isSend = :status')
+                ->setParameter(':status', TRUE)
+                ->setParameter(':name', 'organization')
+                ->setParameter(':id', $organizationId)
+                ->getQuery()->getResult();
     }
 }

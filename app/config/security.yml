@@ -41,5 +41,9 @@ security:
         - { path: ^/dashboard/vote/add/party, role: ROLE_ARTICLEADMIN }
         - { path: ^/cron-manager, role: ROLE_CRONADMIN }
         - { path: ^/lists/competitors/organization/new, roles: 'ROLE_INTRANETADMIN, ROLE_DOGOVORADMIN' }
+        - { path: ^/email/history, roles: 'ROLE_SALESADMIN, ROLE_CONTROLLING' }
+        - { path: ^/email/list, roles: 'ROLE_SALESADMIN, ROLE_CONTROLLING' }
+        - { path: ^/email/show, roles: 'ROLE_SALESADMIN, ROLE_CONTROLLING' }
+        - { path: ^/email, role: ROLE_SALESADMIN }
         - { path: ^/sd/calendar/shared, role: ROLE_SALESADMIN }
         

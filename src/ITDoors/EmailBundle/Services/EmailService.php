@@ -37,9 +37,12 @@ class EmailService
      * @param string $template alias
      * @param array  $to       to
      * 
+     * 
+     * $emailTo = $this->container->getParameter('email.from');
+       $nameTo = $this->container->getParameter('name.from');
      * $email = $this->get('it_doors_email.service');
      * $status = $email->send(
-     *       array('senj1@mail.ru' => 'ITDoors'),
+     *       array($emailTo => $nameTo),
      *            'alias',
      *             array(
      *                 'users' => array(
@@ -76,7 +79,7 @@ class EmailService
         if (!array_key_exists('users', $to)) {
             return false;
         }
-        $result = array();
+        $result = null;
         foreach ($to['users'] as $email) {
             $message = Swift_Message::newInstance()
                 ->setFrom($from)
@@ -98,7 +101,7 @@ class EmailService
                 $this->addFiles($message, $to['files']);
             }
             $mailer->send($message);
-            $result[$email] = true;
+            $result = $message->getId();
         }
 
         return $result;

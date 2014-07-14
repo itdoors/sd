@@ -18,7 +18,9 @@
             <th>{% trans %}Createdat{% endtrans %}</th>
             <th>{% trans %}Sentat{% endtrans %}</th>
             <th>{% trans %}Status{% endtrans %}</th>
+            {% if is_granted('ROLE_SALESADMIN') %}
             <th>{% trans %}Actions{% endtrans %}</th>
+            {% endif %}
         </tr>
         </thead>
         <tbody>
@@ -43,6 +45,7 @@
                             {% trans %}In send{% endtrans %}
                         {% endif %}
                     </td>
+                    {% if is_granted('ROLE_SALESADMIN') %}
                     <td>
 
                         <a href="{{ path('automailer_show', { 'id': entity.id }) }}"
@@ -62,6 +65,7 @@
                            data-params='{"model":"Automailer","id":{{ entity.id }}}'
                            ></a>
                     </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </tbody>

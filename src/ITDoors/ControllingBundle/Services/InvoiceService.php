@@ -19,6 +19,10 @@ class InvoiceService
      * @var Container $container
      */
     protected $container;
+    
+    protected $messageTemplate;
+    
+    protected $arrCostumersForSendMessages;
 
     /**
      * __construct
@@ -80,7 +84,11 @@ class InvoiceService
             switch (json_last_error()) {
                 case JSON_ERROR_NONE:
                     $this->addCronError(0, 'start parser', $file, 'parser file');
+                    $this->arrCostumersForSendMessages = array();
                     $this->savejson($json->invoice);
+                    // поставить письма в очередь
+                    // запустить крон для отправки
+                    
                     $this->addCronError(0, 'stop parser', $file, 'parser file');
                     if (!is_dir($directory.'old')) {
                         mkdir($directory.'old', 0700);
@@ -100,7 +108,7 @@ class InvoiceService
     /**
      * saveinvoice
      * 
-     * @param abject $invoice
+     * @param object $invoice
      * 
      * @return Invoice|boolean
      */
@@ -111,17 +119,58 @@ class InvoiceService
         $invoiceNew = $em->getRepository('ITDoorsControllingBundle:Invoice')
             ->findOneBy(array('invoiceId' => trim($invoice->invoiceId)));
         if (!$invoiceNew) {
+            
             $invoiceNew = new Invoice();
             $invoiceNew->setCourt(0);
             $invoiceNew->setInvoiceId(trim($invoice->invoiceId));
             if (!empty($invoice->dateFact) && $invoice->dateFact != 'null') {
                 $invoiceNew->setDateFact(new \DateTime(trim($invoice->dateFact)));
+            } else {
+                $this->messageTemplate = 'invoice-not-pay';
             }
         } else {
             if (!empty($invoice->dateFact) && $invoice->dateFact != 'null') {
                 $invoiceNew->setDateFact(new \DateTime(trim($invoice->dateFact)));
+   
+                $this->messageTemplate = 'invoice-pay';
+                
+//                $emailTo = $this->container->getParameter('email.from');
+//                $nameTo = $this->container->getParameter('name.from');
+//
+//                $email = $this->get('it_doors_email.service');
+//
+//                $url = $this->generateUrl(
+//                    'invoice-pay',
+//                    array('id' => $party->getId()),
+//                    true
+//                );
+//                $email->send(
+//                    array($emailTo => $nameTo),
+//                    'decision-making',
+//                    array(
+//                        'users' => array(
+//                            $user->getEmail()
+//                        ),
+//                        'variables' => array(
+//                            '${lastName}$' => $party->getUser()->getLastName(),
+//                            '${firstName}$' => $party->getUser()->getFirstName(),
+//                            '${middleName}$' => $party->getUser()->getMiddleName(),
+//                            '${id}$' => $party->getId(),
+//                            '${datePublic}$' => date('d.m.Y H:i', $party->getDatePublick()->getTimestamp()),
+//                            '${dateUnpublic}$' => date('d.m.Y H:i', $party->getDateUnpublick()->getTimestamp()),
+//                            '${title}$' => '<a href="' . $url . '">' . $party->getTitle() . '</a>',
+//                            '${url}$' => '<a href="' . $url . '">' . $url . '</a>',
+//                        )
+//                    )
+//                );
             } else {
                 $invoiceNew->setDateFact(null);
+                $this->messageTemplate = 'invoice-not-pay';
+                // 1 отпавка писма прострочка 5 дней
+                // 2 отпавка писма прострочка 5 дней
+                // 3 отпавка писма прострочка 5 дней (предупреждение)
+                // 4 отпавка писма прострочка 10 дней (повестка в суд)
+                // 5 отпавка писма прострочка 5 дней (в суде)
             }
         }
 
@@ -197,6 +246,12 @@ class InvoiceService
 
         if ($customerfind) {
             $invoiceNew->setCustomer($customerfind);
+            if (!is_array($this->arrCostumersForSendMessages[$customerfind])) {
+                $this->arrCostumersForSendMessages[$customerfind] = array();
+            }
+            if ($this->messageTemplate && !is_array($this->arrCostumersForSendMessages[$customerfind][$this->messageTemplate] )) {
+                $this->arrCostumersForSendMessages[$customerfind][$this->messageTemplate]  = array();
+            }
         }
         if ($performerfind) {
             $invoiceNew->setPerformer($performerfind);
@@ -247,16 +302,16 @@ class InvoiceService
                     $em->flush();
                     $em->refresh($invoiceNew);
                     $this->addCronError($invoiceNew, 'error', 'dogovor not found', json_encode($invoice));
-
-                    return false;
                 }
             } else {
 
                 if (!$customerfind && $performerfind) {
+                    $this->messageTemplate = false;
                     $error = 'dogovor not found and customer';
                 } elseif (!$performerfind && $customerfind) {
                     $error = 'dogovor not found and performer';
                 } else {
+                    $this->messageTemplate = false;
                     $error = 'dogovor not found and customer and  performer';
                 }
                 $em->persist($invoiceNew);
@@ -265,12 +320,60 @@ class InvoiceService
                 $this->addCronError($invoiceNew, 'error', $error, json_encode($invoice));
             }
         }
+        if ($this->messageTemplate) {
+            $this->arrCostumersForSendMessages[$invoiceNew->getCustomer()][$this->messageTemplate][] = $invoiceNew->getId();
+        }
+    }
+
+    /**
+     *  sendEmails
+     */
+    private function sendEmails()
+    {
+        if (count($this->arrCostumersForSendMessages) > 0) {
+            
+            $em = $this->container->get('doctrine')->getManager();
+            
+            $emailTo = $this->container->getParameter('email.from');
+            $nameTo = $this->container->getParameter('name.from');
+
+            $email = $this->get('it_doors_email.service');
+            
+            foreach ($this->arrCostumersForSendMessages as $customerId => $templates) {
+                /** @var ModelContactRepository  $mc */
+                $mc = $em->getRepository('ListsContactBundle:ModelContact')
+                    ->getUsersForSendEmail($customerId);
+                foreach ($templates as $template) {
+                    foreach ($mc as $user) {
+                        $email->send(
+                            array($emailTo => $nameTo),
+                            $template,
+                            array(
+                                'users' => array(
+                                    $user['email']
+                                ),
+                                'variables' => array(
+                                    '${lastName}$' => $user['lastName'],
+                                    '${firstName}$' => $user['firstName'],
+                                    '${middleName}$' => $user['middleName'],
+                                    '${number}$' => '',
+                                    '${date}$' => '',
+                                    '${performer}$' => '',
+                                    '${table}$' => ''
+                                )
+                            )
+                        );
+                    }
+                }
+            }
+        }
+        
     }
 
     /**
      *  savejson
      *
-     * @param object $json Description
+     * @param object $json
      * 
      * @return boolen
      */
@@ -279,6 +382,7 @@ class InvoiceService
         foreach ($json as $key => $invoice) {
 
             $invoiceFind = true;
+            $this->messageTemplate = false;
             $invoiceNew = $this->saveinvoice($invoice);
 
             if (!$invoiceNew) {
@@ -292,6 +396,7 @@ class InvoiceService
 
             unset($json[$key]);
         }
+        $this->sendEmails();
     }
 
     /**

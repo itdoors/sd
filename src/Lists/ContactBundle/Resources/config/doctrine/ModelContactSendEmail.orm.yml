@@ -17,12 +17,13 @@ Lists\ContactBundle\Entity\ModelContactSendEmail:
             type: integer
             nullable: true
             column: model_contact_id
-    manyToOne:
+    oneToOne:
         modelContact:
             targetEntity: ModelContact
-            inversedBy: null
-            joinColumn:
-                name: model_contact_id
-                referencedColumnName: id
+            inversedBy: ration
+            joinColumns:
+                model_contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
     lifecycleCallbacks:
             prePersist: [ doOnPrePersist ]
