@@ -268,7 +268,7 @@ class SalesController extends BaseController
         $phpExcelObject->getActiveSheet()->getStyle('A1:G'.$str)->applyFromArray($styleArray);
 
         $phpExcelObject->getActiveSheet()
-            ->getStyle('A2:G'.$str)
+            ->getStyle('A2:A'.$str)
             ->getAlignment()
             ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
         $phpExcelObject->getActiveSheet()
