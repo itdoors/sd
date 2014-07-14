@@ -20,9 +20,9 @@
 <td>{{ item.dogovorProlongationDate == '' ? '' : item.dogovorProlongationDate|date('d.m.Y') }}</td>
 <td>
     {% if item.dogovorIsActive %}
-        {% trans from 'messages'%}Active{% endtrans %}
+        <span class="label label-success">{% trans from 'messages'%}Active{% endtrans %}</span>
     {% else %}
-        {% trans from 'messages'%}Not Active{% endtrans %}
+        <span class="label label-default">{% trans from 'messages'%}Not Active{% endtrans %}</span>
     {% endif %}
 </td>
 <td>{{ item.dogovorSubject|e }}</td>

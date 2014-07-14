@@ -87,8 +87,8 @@
                                 'method' : 'POST'
                             }
                         }) }}
-                            <div class="form-body form-actions">
-                                <div class="form-group">
+                            <div class="form-body form-actions well">
+                                <div class="form-group well">
                                     <div class="form-group col-md-2" style="margin-top: 7px;">
                                         {% trans %}Your decision{% endtrans %}:
                                     </div>
@@ -102,9 +102,8 @@
                                 {{ form_end(form) }}
                             </div>
                         </div>
-                    {% endif %}
-                    {% if vote %}
-                        <div class=" form-actions">
+                    {% elseif vote %}
+                        <div class="well">
                             {% if vote.0.date is empty %}
                                 {% trans %}Your not decision in need date{% endtrans %}
                             {% else %}
@@ -154,11 +153,11 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class=" form-actions">
-                            <div class="col-md-12 blog-tag-data-inner">
+                        <div class="well">
+                            <div class="">
                                 {% trans %}All participants{% endtrans %}: {{ rationResult.countVote }}
                             </div>
-                            <div class="col-md-12 blog-tag-data-inner">
+                            <div class="">
                                 {% trans %}All decision{% endtrans %}: {{ rationResult.count0 + rationResult.count1 }} ( {% trans %}Accept{% endtrans %} : {{ rationResult.count1 }},  {% trans %}Deflecting{% endtrans %} : {{ rationResult.count0 }} )
                             </div>
                         </div>

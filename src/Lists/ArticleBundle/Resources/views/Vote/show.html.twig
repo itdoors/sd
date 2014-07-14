@@ -82,8 +82,8 @@
                                 'method' : 'POST'
                             }
                         }) }}
-                            <div class="form-body form-actions">
-                                <div class="form-group">
+                            <div class="form-body form-actions well">
+                                <div class="form-group well">
                                     <div class="form-group col-md-2" style="margin-top: 7px;">
                                         {% trans %}Enter vote{% endtrans %}:
                                     </div>
@@ -100,7 +100,7 @@
                         </div>
                     {% endif %}
                     {% if vote %}
-                        <div class=" form-actions">
+                        <div class="well">
                             {% trans %}Your vote{% endtrans %} {{ vote.0.value }} {{ '(' ~ vote.0.date | date('d.m.Y H:i') ~ ')'}}                            
                         </div>
                     {% endif %}
@@ -136,14 +136,14 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class=" form-actions">
-                            <div class="col-md-12 blog-tag-data-inner">
+                        <div class="well">
+                            <div class="">
                                 {% trans %}Average rating{% endtrans %}: {{ rationResult.average }}
                             </div>
-                            <div class="col-md-12 blog-tag-data-inner">
+                            <div class="">
                                 {% trans %}Count vote{% endtrans %}: {{ rationResult.countVote }}
                             </div>
-                            <div class="col-md-12 blog-tag-data-inner">
+                            <div class="">
                                 {% trans %}Ration{% endtrans %}: {{ ratValue }}
                             </div>
                         </div>

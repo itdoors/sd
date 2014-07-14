@@ -55,6 +55,37 @@ class HandlingRepository extends BaseRepository
 
         return $query;
     }
+    /**
+     * @param int[]   $userIds
+     * @param mixed[] $filters
+     *
+     * @return Query
+     */
+    public function getAllForExport($userIds, $filters)
+    {
+        if (!is_array($userIds) && $userIds) {
+            $userIds = array($userIds);
+        }
+
+        /** @var \Doctrine\ORM\QueryBuilder $sql */
+        $sql = $this->createQueryBuilder('h');
+
+        $this->processSelectForUser($sql);
+
+        $this->processBaseQuery($sql);
+
+        if (sizeof($userIds)) {
+            $this->processUserQuery($sql, $userIds);
+        }
+
+        $this->processFilters($sql, $filters);
+
+        $sql->addOrderBy('users.id', 'DESC');
+
+        $query = $sql->getQuery()->getResult();
+
+        return $query;
+    }
 
     /**
      * Processes sql query. adding select
@@ -106,6 +137,47 @@ class HandlingRepository extends BaseRepository
                    ) as serviceList"
             );
     }
+    /**
+     * Processes sql query. adding select
+     *
+     * @param \Doctrine\ORM\QueryBuilder $sql
+     */
+    public function processSelectForUser($sql)
+    {
+        $sql
+            ->select('h.id')
+            //->addSelect('(SELECT COUNT(uh.handling_id) FROM SDModelBundle:HandlingUser uh WHERE uh.user_id == users.id) as countProject')
+            ->addSelect('h.id as handlingId')
+            ->addSelect('o.name as organizationName')
+            ->addSelect('h.createdate as handlingCreatedate')
+            ->addSelect('h.lastHandlingDate as handlingLastHandlingDate')
+            ->addSelect('h.nextHandlingDate as handlingNextHandlingDate')
+            ->addSelect('city.name as cityName')
+            ->addSelect('scope.name as scopeName')
+            ->addSelect('h.serviceOffered as handlingServiceOffered')
+            ->addSelect('h.chance as handlingChance')
+            ->addSelect('status.name as statusName')
+            ->addSelect('status.percentageString as percentageString')
+            ->addSelect('status.progress as progress')
+            ->addSelect('result.percentageString as resultPercentageString')
+            ->addSelect('result.progress as resultProgress')
+            ->addSelect("users.firstName")
+            ->addSelect("users.lastName")
+            ->addSelect("users.middleName")
+            ->addSelect(
+                "
+                  array_to_string(
+                     ARRAY(
+                        SELECT
+                          hs.name
+                        FROM
+                          ListsHandlingBundle:HandlingService hs
+                        LEFT JOIN hs.handlings handlings
+                        WHERE h.id = handlings.id
+                     ), ','
+                   ) as serviceList"
+            );
+    }
 
     /**
      * Processes sql query. adding select
@@ -115,7 +187,7 @@ class HandlingRepository extends BaseRepository
     public function processCount($sql)
     {
         $sql
-            ->select('COUNT(h.id) as handlingcount');
+            ->select('COUNT(DISTINCT h.id) as handlingcount');
 
     }
 

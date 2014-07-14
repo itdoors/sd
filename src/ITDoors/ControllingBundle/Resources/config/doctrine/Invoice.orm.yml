@@ -69,9 +69,8 @@ ITDoors\ControllingBundle\Entity\Invoice:
         dogovorAct:
             type: text
             column: dogovor_act
-        dogovorActNote:
+        bank:
             type: text
-            column: dogovor_act_note
         dogovorActDate:
             type: date
             nullable: true

@@ -3189,10 +3189,9 @@ class AjaxController extends BaseFilterController
     public function dopDogovorEditFormSave($form, $user, $request)
     {
         $data = $form->getData();
-
-        if (!$data->getId()) {
-            $data->setUser($user);
-        }
+//        if (!$data->getId()) {
+//            $data->setUser($user);
+//        }
 
         $dogovorId = $data->getDogovorId();
 
@@ -3201,7 +3200,7 @@ class AjaxController extends BaseFilterController
             ->find($dogovorId);
 
         $data->setDogovor($dogovor);
-        $data->setCreateDateTime(new \DateTime(date('Y-m-d H:i:s')));
+//        $data->setCreateDateTime(new \DateTime(date('Y-m-d H:i:s')));
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
