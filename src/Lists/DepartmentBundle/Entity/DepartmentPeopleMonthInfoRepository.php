@@ -20,10 +20,11 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
      * @param integer       $month
      * @param integer       $year
      * @param array         $filters
+     * @param array         $orders
      *
      * @return \Doctrine\ORM\Query
      */
-    public function getFilteredCoworkers($idDepartment, $month, $year, $filters = array())
+    public function getFilteredCoworkers($idDepartment, $month, $year, $filters = array(), $orders = array())
     {
         $sql = $this->createQueryBuilder('dpmi')
             ->select('dpmi.departmentPeopleId as id')
@@ -95,7 +96,30 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
             }
         }
 
-        $sql->orderBy('i.lastName', "ASC");
+        if (sizeof($orders)) {
+
+            foreach ($orders as $key => $value) {
+                if (!$value) {
+                    continue;
+                }
+                switch ($key) {
+                    case 'mpk':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $sql->orderBy('m.name', $value);
+                        break;
+                    case 'lastName':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $sql->orderBy('i.lastName', $value);
+                        break;
+                }
+            }
+        }
+
+        //$sql->orderBy('i.lastName', "ASC");
         $query = $sql->getQuery();
 
         return $query;
