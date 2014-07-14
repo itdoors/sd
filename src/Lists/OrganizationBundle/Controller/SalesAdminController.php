@@ -3,6 +3,8 @@
 namespace Lists\OrganizationBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use PHPExcel_Style_Border;
+use PHPExcel_Style_Alignment;
 
 /**
  * Class SalesAdminController
@@ -70,5 +72,30 @@ class SalesAdminController extends SalesDispatcherController
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
         ));
+    }
+    /**
+     * Renders organizationUsers list
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function exportExcelAction()
+    {
+        $namespase = $this->filterNamespace;
+        $filters = $this->getFilters($namespase);
+        if (empty($filters)) {
+            $filters['isFired'] = 'No fired';
+            $this->setFilters($namespase, $filters);
+        }
+
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $organizationsRepository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+       /** @var \Doctrine\ORM\Query */
+        $organizations = $organizationsRepository->getAllForSalesQuery(null, $filters)->getResult();
+
+        $response = $this->exportToExcelAction($organizations);
+
+        return $response;
     }
 }

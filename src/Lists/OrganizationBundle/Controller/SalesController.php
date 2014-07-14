@@ -4,6 +4,8 @@ namespace Lists\OrganizationBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use ITDoors\AjaxBundle\Controller\BaseFilterController as BaseController;
+use PHPExcel_Style_Border;
+use PHPExcel_Style_Alignment;
 
 /**
  * Class SalesController
@@ -167,5 +169,137 @@ class SalesController extends BaseController
                 'organizationUsers' => $organizationUsers,
                 'organizationId' => $organizationId
             ));
+    }
+    /**
+     * Renders organizationUsers list
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function exportExcelAction()
+    {
+        $namespase = $this->filterNamespace;
+        $filters = $this->getFilters($namespase);
+        if (empty($filters)) {
+            $filters['isFired'] = 'No fired';
+            $this->setFilters($namespase, $filters);
+        }
+
+        /** @var \SD\UserBundle\Entity\User $user*/
+        $user = $this->getUser();
+
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $organizationsRepository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+        /** @var \Doctrine\ORM\Query */
+        $organizations = $organizationsRepository->getAllForSalesQuery($user->getId(), $filters)->getResult();
+
+        $response = $this->exportToExcelAction($organizations);
+
+        return $response;
+    }
+     /**
+     * Renders organizationUsers list
+     *
+      * @param array $organizations
+      * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function exportToExcelAction($organizations)
+    {
+        /** @var Translator $translator */
+        $translator = $this->container->get('translator');
+
+         // ask the service for a Excel5
+       $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+
+       $phpExcelObject->getProperties()->setCreator("DebtControll")
+           ->setLastModifiedBy("Giulio De Donato")
+           ->setTitle("Organization")
+           ->setSubject("Organization")
+           ->setDescription("Organizations list")
+           ->setKeywords("Organization")
+           ->setCategory("Organization");
+       $phpExcelObject->setActiveSheetIndex(0)
+          ->setCellValue('A1', $translator->trans('ID', array(), 'ListsOrganizationBundle'))
+          ->setCellValue('B1', $translator->trans('Name', array(), 'ListsOrganizationBundle'))
+          ->setCellValue('C1', $translator->trans('Edrpou', array(), 'ListsOrganizationBundle'))
+          ->setCellValue('D1', $translator->trans('City', array(), 'ListsOrganizationBundle'))
+          ->setCellValue('E1', $translator->trans('Region', array(), 'ListsOrganizationBundle'))
+          ->setCellValue('F1', $translator->trans('Scope', array(), 'ListsOrganizationBundle'))
+          ->setCellValue('G1', $translator->trans('Managers', array(), 'ListsOrganizationBundle'));
+       $phpExcelObject->getActiveSheet()->getRowDimension('1') ->setRowHeight(40);
+       $str = 1;
+
+        foreach ($organizations as $organization) {
+            ++$str;
+            $col = 0;
+            $phpExcelObject->getActiveSheet()
+                    ->setCellValueByColumnAndRow($col, $str, $organization['organizationId'])
+                    ->setCellValueByColumnAndRow(++$col, $str, $organization['organizationName'])
+                    ->setCellValueByColumnAndRow(++$col, $str, $organization['edrpou'])
+                    ->setCellValueByColumnAndRow(++$col, $str, $organization['cityName'])
+                    ->setCellValueByColumnAndRow(++$col, $str, $organization['regionName'])
+                    ->setCellValueByColumnAndRow(++$col, $str, $organization['scopeName'])
+                    ->setCellValueByColumnAndRow(++$col, $str, $organization['fullNames']);
+        }
+        $phpExcelObject->getActiveSheet()->getStyle('A2:G'.$str)->getAlignment()->setWrapText(true);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('A')->setWidth(13);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('B')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('E')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('F')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('G')->setWidth(12);
+
+        $styleArray = array(
+            'borders' => array(
+                'outline' => array(
+                       'style' => PHPExcel_Style_Border::BORDER_DOUBLE,
+                       'color' => array('argb' => '000000'),
+                ),
+                'inside' => array(
+                       'style' => PHPExcel_Style_Border::BORDER_THIN,
+                       'color' => array('argb' => '000000'),
+                )
+            ),
+        );
+
+        $phpExcelObject->getActiveSheet()->getStyle('A1:G'.$str)->applyFromArray($styleArray);
+
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('A2:G'.$str)
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('A1:G1')
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('A1:G1')
+            ->getAlignment()
+            ->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('C2:D'.$str)
+            ->getAlignment()
+            ->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('C2:D'.$str)
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+        $phpExcelObject->getActiveSheet()->freezePane('AB2');
+
+        $phpExcelObject->getActiveSheet()->getStyle('A1:G'.$str)->getAlignment()->setWrapText(true);
+        $phpExcelObject->getActiveSheet()->setShowGridLines(false);//off line
+        $phpExcelObject->getActiveSheet()->setTitle('Organization');
+        $phpExcelObject->setActiveSheetIndex(0);
+        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Content-Disposition', 'attachment;filename=organizations.xls');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+
+        return $response;
     }
 }
