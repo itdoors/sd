@@ -179,10 +179,13 @@ class InvoiceRepository extends EntityRepository
 
         /** select */
         $this->selectInvoicePeriod($res);
+        $res->addSelect('i.dogovorNumber');
+        $res->addSelect('i.dogovorDate');
         /** join */
         $this->joinInvoicePeriod($res);
         /** where */
-        $res->andWhere('i.id in :ids')->setParameter(':ids', $invoiceIds);
+        $res->andWhere('i.id in (:ids)')
+                ->setParameter(':ids', $invoiceIds);
 
         return $res
                 ->orderBy('i.performerEdrpou', 'DESC')->getQuery()->getResult();

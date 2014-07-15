@@ -8,6 +8,7 @@ use ITDoors\ControllingBundle\Entity\Invoicecron;
 use ITDoors\ControllingBundle\Entity\InvoicecronRepository;
 use ITDoors\ControllingBundle\Entity\Invoice;
 use Symfony\Component\BrowserKit\Response;
+use ITDoors\ControllingBundle\Entity\InvoiceMessage;
 
 /**
  * Invoice Service class
@@ -241,11 +242,11 @@ class InvoiceService
 
         if ($customerfind) {
             $invoiceNew->setCustomer($customerfind);
-            if (!is_array($this->arrCostumersForSendMessages[$customerfind])) {
-                $this->arrCostumersForSendMessages[$customerfind] = array();
+            if (!array_key_exists($customerfind->getId(), $this->arrCostumersForSendMessages)) {
+                $this->arrCostumersForSendMessages[$customerfind->getId()] = array();
             }
-            if ($this->messageTemplate && !is_array($this->arrCostumersForSendMessages[$customerfind][$this->messageTemplate] )) {
-                $this->arrCostumersForSendMessages[$customerfind][$this->messageTemplate]  = array();
+            if ($this->messageTemplate && !array_key_exists($this->messageTemplate, $this->arrCostumersForSendMessages[$customerfind->getId()] )) {
+                $this->arrCostumersForSendMessages[$customerfind->getId()][$this->messageTemplate]  = array();
             }
         }
         if ($performerfind) {
@@ -316,7 +317,7 @@ class InvoiceService
             }
         }
         if ($this->messageTemplate) {
-            $this->arrCostumersForSendMessages[$invoiceNew->getCustomer()][$this->messageTemplate][] = $invoiceNew->getId();
+            $this->arrCostumersForSendMessages[$invoiceNew->getCustomer()->getId()][$this->messageTemplate][] = $invoiceNew->getId();
         }
     }
 
@@ -329,25 +330,38 @@ class InvoiceService
             
             $em = $this->container->get('doctrine')->getManager();
             
+            /** @var Translator $translator */
+            $translator = $this->container->get('translator');
+            
             $emailTo = $this->container->getParameter('email.from');
             $nameTo = $this->container->getParameter('name.from');
 
-            $email = $this->get('it_doors_email.service');
+            $email = $this->container->get('it_doors_email.service');
             
+//            var_dump($this->arrCostumersForSendMessages);
             foreach ($this->arrCostumersForSendMessages as $customerId => $templates) {
                 /** @var ModelContactRepository  $contacts */
                 $contacts = $em->getRepository('ListsContactBundle:ModelContact')
                     ->getUsersForSendEmail($customerId);
                 
+                
                 foreach ($templates as $template => $invoiceIds) {
                     /** @var InvoiceRepository  $invoices */
                     $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')
-                        ->getInvoiceIds($customerId);
-                    $table = '<table><tr><td>ID</td></tr>';
+                        ->getInvoiceIds($invoiceIds);
+                    
+                    $table = '<table><tr>'
+                            . '<td>'.$translator->trans('№', array(), 'ITDoorsControllingBundle').'</td>'
+                            . '<td>'.$translator->trans('Date', array(), 'ITDoorsControllingBundle').'</td>'
+                            . '</tr>';
                     foreach ($invoices as $invoice) {
-                        $table = '<tr><td>'.$invoice['id'].'</td></tr>';
+                        $table .= '<tr>'
+                                . '<td>'.$invoice['invoiceId'].'</td>'
+                                . '<td>'.$invoice['date']->format('d.m.Y').'</td>'
+                                . '</tr>';
                     }
                     $table .= '</table>';
+                    
                     foreach ($contacts as $user) {
                         $idEmail = $email->send(
                             array($emailTo => $nameTo),
@@ -367,6 +381,12 @@ class InvoiceService
                                 )
                             )
                         );
+                        $message = new InvoiceMessage();
+                        $message->setContactId($user['id']);
+                        $message->setUserId(0);
+                        $message->setCreatedate(new \DateTime());
+                        $message->setNote('Send <a href="'.$idEmail.'">email</a>');
+                        
                     }
                 }
             }

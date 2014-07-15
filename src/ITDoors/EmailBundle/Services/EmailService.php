@@ -7,6 +7,7 @@ use ITDoors\EmailBundle\Entity\Email;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_Attachment;
+use TSS\AutomailerBundle\Entity\Automailer;
 
 /**
  * Email Service class
@@ -101,7 +102,13 @@ class EmailService
                 $this->addFiles($message, $to['files']);
             }
             $mailer->send($message);
-            $result = $message->getId();
+
+            $mailer = $em->getRepository('TSSAutomailerBundle:Automailer')
+                    ->createQueryBuilder('a')
+                    ->orderBy('a.id', 'DESC')
+                    ->getQuery()
+                    ->getResult();
+            $result = $mailer[0]->getId();
         }
 
         return $result;

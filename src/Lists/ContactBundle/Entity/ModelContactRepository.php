@@ -339,6 +339,7 @@ class ModelContactRepository extends EntityRepository
     {
         return  $sql = $this->createQueryBuilder('mc')
                 ->select('mc.email')
+                ->addSelect('mc.id')
                 ->addSelect('mc.lastName')
                 ->addSelect('mc.firstName')
                 ->addSelect('mc.middleName')
