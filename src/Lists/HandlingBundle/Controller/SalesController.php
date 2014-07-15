@@ -906,6 +906,13 @@ class SalesController extends BaseController
           ->setCellValue('I1', $translator->trans('Chance', array(), 'ListsHandlingBundle'))
           ->setCellValue('J1', $translator->trans('Status', array(), 'ListsHandlingBundle'));
        $phpExcelObject->getActiveSheet()->getRowDimension('1') ->setRowHeight(40);
+        $link_style_array = [
+            'font'  => [
+              'color' => ['rgb' => '0000FF'],
+              'underline' => 'single'
+            ]
+          ];
+              
        $str = 1;
        $menager = '';
        $columnA = '';
@@ -927,11 +934,18 @@ class SalesController extends BaseController
                     ->setCellValueByColumnAndRow(++$col, $str, $handling['handlingId']);
 
             $phpExcelObject->getActiveSheet()->getCellByColumnAndRow($col, $str)->getHyperlink()
+                    ->setUrl('http://sd.griffin.ua//lists/salesadmin/handling/show/'.$handling['handlingId']);
+            $phpExcelObject->getActiveSheet()->getCellByColumnAndRow($col, $str)->getHyperlink()
                     ->setUrl($this->generateUrl('lists_' . $this->baseRoutePrefix . '_handling_show', array('id' => $handling['handlingId']), true));
-            $phpExcelObject->getActiveSheet()
-                    ->setCellValueByColumnAndRow(++$col, $str, $handling['organizationName']);
+
+//            $phpExcelObject->getActiveSheet()
+//                    ->setCellValueByColumnAndRow(++$col, $str, $handling['organizationName']);
+            if ($handling['organizationId']) {
+//            $phpExcelObject->getActiveSheet()->getCellByColumnAndRow($col, $str)->getHyperlink()
+//                    ->setUrl('http://sd.griffin.ua/lists/salesadmin/organization/show/'.$handling['organizationId']);
             $phpExcelObject->getActiveSheet()->getCellByColumnAndRow($col, $str)->getHyperlink()
                     ->setUrl($this->generateUrl('lists_' . $this->baseRoutePrefix . '_organization_show', array('id' => $handling['organizationId']), true));
+            }
             $phpExcelObject->getActiveSheet()
                     ->setCellValueByColumnAndRow(++$col, $str, !$handling['handlingCreatedate'] ? '' : $handling['handlingCreatedate']->format('d.m.y'))
                     ->setCellValueByColumnAndRow(++$col, $str, !$handling['handlingLastHandlingDate'] ? '' : $handling['handlingLastHandlingDate']->format('d.m.y, H:i'))
@@ -945,6 +959,7 @@ class SalesController extends BaseController
                     )
                 ->setCellValueByColumnAndRow(++$col, $str, $handling['statusName']);
         }
+        $phpExcelObject->getActiveSheet()->getStyle('B2:C'.$str)->applyFromArray($link_style_array);
         $phpExcelObject->getActiveSheet()->getStyle('A2:J'.$str)->getAlignment()->setWrapText(true);
         $phpExcelObject->getActiveSheet()->getColumnDimension('A')->setWidth(13);
         $phpExcelObject->getActiveSheet()->getColumnDimension('B')->setWidth(12);
