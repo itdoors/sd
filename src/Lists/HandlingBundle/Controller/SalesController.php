@@ -922,13 +922,17 @@ class SalesController extends BaseController
             }
             $phpExcelObject->getActiveSheet()->mergeCells('A'.$strStartMerge.':A'.$str);
 
-            $url = $this->generateUrl('lists_' . $this->baseRoutePrefix . '_handling_show', array('id' => $handling['handlingId']), true);
             $phpExcelObject->getActiveSheet()
                     ->setCellValueByColumnAndRow($col, $str, $columnA)
                     ->setCellValueByColumnAndRow(++$col, $str, $handling['handlingId']);
-            $phpExcelObject->getActiveSheet()->getCellByColumnAndRow($col, $str)->getHyperlink()->setUrl($url);
+
+            $phpExcelObject->getActiveSheet()->getCellByColumnAndRow($col, $str)->getHyperlink()
+                    ->setUrl($this->generateUrl('lists_' . $this->baseRoutePrefix . '_handling_show', array('id' => $handling['handlingId']), true));
             $phpExcelObject->getActiveSheet()
-                    ->setCellValueByColumnAndRow(++$col, $str, $handling['organizationName'])
+                    ->setCellValueByColumnAndRow(++$col, $str, $handling['organizationName']);
+            $phpExcelObject->getActiveSheet()->getCellByColumnAndRow($col, $str)->getHyperlink()
+                    ->setUrl($this->generateUrl('lists_' . $this->baseRoutePrefix . '_organization_show', array('id' => $handling['organizationId']), true));
+            $phpExcelObject->getActiveSheet()
                     ->setCellValueByColumnAndRow(++$col, $str, !$handling['handlingCreatedate'] ? '' : $handling['handlingCreatedate']->format('d.m.y'))
                     ->setCellValueByColumnAndRow(++$col, $str, !$handling['handlingLastHandlingDate'] ? '' : $handling['handlingLastHandlingDate']->format('d.m.y, H:i'))
                     ->setCellValueByColumnAndRow(++$col, $str, $handling['cityName'])

@@ -149,6 +149,7 @@ class HandlingRepository extends BaseRepository
             //->addSelect('(SELECT COUNT(uh.handling_id) FROM SDModelBundle:HandlingUser uh WHERE uh.user_id == users.id) as countProject')
             ->addSelect('h.id as handlingId')
             ->addSelect('o.name as organizationName')
+            ->addSelect('o.id as organizationId')
             ->addSelect('h.createdate as handlingCreatedate')
             ->addSelect('h.lastHandlingDate as handlingLastHandlingDate')
             ->addSelect('h.nextHandlingDate as handlingNextHandlingDate')
