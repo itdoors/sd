@@ -33,9 +33,11 @@
 {% block body %}
     <div class="row">
         <div class="col-md-12">
+            {% if is_granted('ROLE_SALESADMIN') %}
             <div class="btn-group">
                 <a href="{{ path('automailer_new') }}" clas="fa fa-plus" title="{% trans %}Create email{% endtrans %}">{% trans %}Create email{% endtrans %}</a>
             </div>
+            {% endif %}
             <div id="messages_list" data-url="{{ path('it_doors_automailer_list') }}">   
                 {{ render(controller('ITDoorsEmailBundle:Automailer:list')) }}
             </div>

@@ -8,6 +8,7 @@ use ITDoors\ControllingBundle\Entity\Invoicecron;
 use ITDoors\ControllingBundle\Entity\InvoicecronRepository;
 use ITDoors\ControllingBundle\Entity\Invoice;
 use Symfony\Component\BrowserKit\Response;
+use ITDoors\ControllingBundle\Entity\InvoiceMessage;
 
 /**
  * Invoice Service class
@@ -19,6 +20,10 @@ class InvoiceService
      * @var Container $container
      */
     protected $container;
+    
+    protected $messageTemplate;
+    
+    protected $arrCostumersForSendMessages;
 
     /**
      * __construct
@@ -80,7 +85,11 @@ class InvoiceService
             switch (json_last_error()) {
                 case JSON_ERROR_NONE:
                     $this->addCronError(0, 'start parser', $file, 'parser file');
+                    $this->arrCostumersForSendMessages = array();
                     $this->savejson($json->invoice);
+                    // поставить письма в очередь
+                    // запустить крон для отправки
+                    
                     $this->addCronError(0, 'stop parser', $file, 'parser file');
                     if (!is_dir($directory.'old')) {
                         mkdir($directory.'old', 0700);
@@ -100,7 +109,7 @@ class InvoiceService
     /**
      * saveinvoice
      * 
-     * @param abject $invoice
+     * @param object $invoice
      * 
      * @return Invoice|boolean
      */
@@ -111,17 +120,28 @@ class InvoiceService
         $invoiceNew = $em->getRepository('ITDoorsControllingBundle:Invoice')
             ->findOneBy(array('invoiceId' => trim($invoice->invoiceId)));
         if (!$invoiceNew) {
+            
             $invoiceNew = new Invoice();
             $invoiceNew->setCourt(0);
             $invoiceNew->setInvoiceId(trim($invoice->invoiceId));
             if (!empty($invoice->dateFact) && $invoice->dateFact != 'null') {
                 $invoiceNew->setDateFact(new \DateTime(trim($invoice->dateFact)));
+            } else {
+                $this->messageTemplate = 'invoice-not-pay';
             }
         } else {
             if (!empty($invoice->dateFact) && $invoice->dateFact != 'null') {
+                if (!$invoiceNew->getDateFact()) {
+                    $this->messageTemplate = 'invoice-pay';
+                }
                 $invoiceNew->setDateFact(new \DateTime(trim($invoice->dateFact)));
             } else {
                 $invoiceNew->setDateFact(null);
+                $date = date('Y-m-d');
+                $days = (strtotime($date)-strtotime($invoiceNew->getDelayDate()->format('Y-m-d')))/24/3600;
+                if (in_array($days, array(0))) {
+                    $this->messageTemplate = 'invoice-not-pay';
+                }
             }
         }
 
@@ -197,11 +217,17 @@ class InvoiceService
 
         if ($customerfind) {
             $invoiceNew->setCustomer($customerfind);
+            if (!array_key_exists($customerfind->getId(), $this->arrCostumersForSendMessages)) {
+                $this->arrCostumersForSendMessages[$customerfind->getId()] = array();
+            }
+            if ($this->messageTemplate && !array_key_exists($this->messageTemplate, $this->arrCostumersForSendMessages[$customerfind->getId()] )) {
+                $this->arrCostumersForSendMessages[$customerfind->getId()][$this->messageTemplate]  = array();
+            }
         }
         if ($performerfind) {
             $invoiceNew->setPerformer($performerfind);
         }
-
+            
         if ($dogovorfind) {
             $invoiceNew->setDogovor($dogovorfind);
             $em->persist($invoiceNew);
@@ -247,16 +273,16 @@ class InvoiceService
                     $em->flush();
                     $em->refresh($invoiceNew);
                     $this->addCronError($invoiceNew, 'error', 'dogovor not found', json_encode($invoice));
-
-                    return false;
                 }
             } else {
 
                 if (!$customerfind && $performerfind) {
+                    $this->messageTemplate = false;
                     $error = 'dogovor not found and customer';
                 } elseif (!$performerfind && $customerfind) {
                     $error = 'dogovor not found and performer';
                 } else {
+                    $this->messageTemplate = false;
                     $error = 'dogovor not found and customer and  performer';
                 }
                 $em->persist($invoiceNew);
@@ -265,12 +291,104 @@ class InvoiceService
                 $this->addCronError($invoiceNew, 'error', $error, json_encode($invoice));
             }
         }
+        if ($this->messageTemplate && $invoiceNew->getDogovorNumber()) {
+            if (!array_key_exists($invoiceNew->getDogovorNumber(), $this->arrCostumersForSendMessages[$customerfind->getId()][$this->messageTemplate] )) {
+                $this->arrCostumersForSendMessages[$invoiceNew->getCustomer()->getId()][$this->messageTemplate][$invoiceNew->getDogovorNumber()] = array();
+            }
+            $this->arrCostumersForSendMessages[$invoiceNew->getCustomer()->getId()][$this->messageTemplate][$invoiceNew->getDogovorNumber()][] = $invoiceNew->getId();
+        }
+    }
+
+    /**
+     *  sendEmails
+     */
+    private function sendEmails()
+    {
+        if (count($this->arrCostumersForSendMessages) > 0) {
+            
+            $em = $this->container->get('doctrine')->getManager();
+            
+            /** @var Translator $translator */
+            $translator = $this->container->get('translator');
+            
+            /** @var User  $userRobot */
+            $userRobot = $em->getRepository('SDUserBundle:User')->find(0);
+            
+            $emailTo = $this->container->getParameter('email.from');
+            $nameTo = $this->container->getParameter('name.from');
+
+            $email = $this->container->get('it_doors_email.service');
+
+            foreach ($this->arrCostumersForSendMessages as $customerId => $templates) {
+                /** @var ModelContactRepository  $contacts */
+                $contacts = $em->getRepository('ListsContactBundle:ModelContact')
+                    ->getUsersForSendEmail($customerId);
+
+                foreach ($templates as $template => $dogovors) {
+                    foreach ($dogovors as $invoiceIds) {
+                        /** @var InvoiceRepository  $invoices */
+                        $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')
+                            ->getInvoiceIds($invoiceIds);
+
+                        $table = '<table style="width:100%;text-align:center"><tr>'
+                                . '<td>'.$translator->trans('№', array(), 'ITDoorsControllingBundle').'</td>'
+                                . '<td>'.$translator->trans('Date', array(), 'ITDoorsControllingBundle').'</td>'
+                                . '<td>'.$translator->trans('Invoice amount', array(), 'ITDoorsControllingBundle').'</td>'
+                                . '</tr>';
+                        $dogovors = array();
+                        foreach ($invoices as $invoice) {
+                            $table .= '<tr>'
+                                    . '<td>'.$invoice['invoiceId'].'</td>'
+                                    . '<td>'.$invoice['date']->format('d.m.Y').'</td>'
+                                    . '<td>'.$invoice['sum'].'</td>'
+                                    . '</tr>';
+                        }
+                        $table .= '</table>';
+
+                        foreach ($contacts as $user) {
+                            $idEmail = $email->send(
+                                array($emailTo => $nameTo),
+                                $template,
+                                array(
+                                    'users' => array(
+                                        $user['email']
+                                    ),
+                                    'variables' => array(
+                                        '${lastName}$' => $user['lastName'],
+                                        '${firstName}$' => $user['firstName'],
+                                        '${middleName}$' => $user['middleName'],
+                                        '${number}$' => $invoice['dogovorNumber'],
+                                        '${date}$' => (!$invoice['dogovorDate'] ? '' : $invoice['dogovorDate']->format('d.m.Y')),
+                                        '${performer}$' => $invoice['performerName'],
+                                        '${table}$' => $table
+                                    )
+                                )
+                            );
+                            /** @var ModelContact  $modelContact */
+                            $modelContact = $em->getRepository('ListsContactBundle:ModelContact')->find($user['id']);
+                            foreach ($invoices as $invoice) {
+                                $message = new InvoiceMessage();
+                                $message->setContact($modelContact);
+                                $message->setUser($userRobot);
+                                $message->setCreatedate(new \DateTime());
+                                $message->setNote($translator->trans('Send', array(), 'ITDoorsControllingBundle').' <a href="'.$this->container->get('router')->generate('automailer_show', array('id' =>$idEmail)).'">email</a>');
+                                $invoicef = $em->getRepository('ITDoorsControllingBundle:Invoice')->find($invoice['id']);
+                                $message->setInvoice($invoicef);
+                                $em->persist($message);
+                                $em->flush();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
     }
 
     /**
      *  savejson
      *
-     * @param object $json Description
+     * @param object $json
      * 
      * @return boolen
      */
@@ -279,6 +397,7 @@ class InvoiceService
         foreach ($json as $key => $invoice) {
 
             $invoiceFind = true;
+            $this->messageTemplate = false;
             $invoiceNew = $this->saveinvoice($invoice);
 
             if (!$invoiceNew) {
@@ -292,6 +411,7 @@ class InvoiceService
 
             unset($json[$key]);
         }
+        $this->sendEmails();
     }
 
     /**
