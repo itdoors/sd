@@ -166,11 +166,6 @@ class InvoiceService
             } else {
                 $invoiceNew->setDateFact(null);
                 $this->messageTemplate = 'invoice-not-pay';
-                // 1 отпавка писма прострочка 5 дней
-                // 2 отпавка писма прострочка 5 дней
-                // 3 отпавка писма прострочка 5 дней (предупреждение)
-                // 4 отпавка писма прострочка 10 дней (повестка в суд)
-                // 5 отпавка писма прострочка 5 дней (в суде)
             }
         }
 
@@ -340,11 +335,20 @@ class InvoiceService
             $email = $this->get('it_doors_email.service');
             
             foreach ($this->arrCostumersForSendMessages as $customerId => $templates) {
-                /** @var ModelContactRepository  $mc */
-                $mc = $em->getRepository('ListsContactBundle:ModelContact')
+                /** @var ModelContactRepository  $contacts */
+                $contacts = $em->getRepository('ListsContactBundle:ModelContact')
                     ->getUsersForSendEmail($customerId);
-                foreach ($templates as $template) {
-                    foreach ($mc as $user) {
+                
+                foreach ($templates as $template => $invoiceIds) {
+                    /** @var InvoiceRepository  $invoices */
+                    $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')
+                        ->getInvoiceIds($customerId);
+                    $table = '<table><tr><td>ID</td></tr>';
+                    foreach ($invoices as $invoice) {
+                        $table = '<tr><td>'.$invoice['id'].'</td></tr>';
+                    }
+                    $table .= '</table>';
+                    foreach ($contacts as $user) {
                         $idEmail = $email->send(
                             array($emailTo => $nameTo),
                             $template,
@@ -359,7 +363,7 @@ class InvoiceService
                                     '${number}$' => '',
                                     '${date}$' => '',
                                     '${performer}$' => '',
-                                    '${table}$' => ''
+                                    '${table}$' => $table
                                 )
                             )
                         );

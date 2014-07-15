@@ -145,9 +145,9 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
-     * @param int $periodmin Description
+     * @param integer $periodmin Description
      * 
-     * @param int $periodmax 0 - no restrictions
+     * @param integer $periodmax 0 - no restrictions
      *
      * @return mixed[]
      */
@@ -164,6 +164,28 @@ class InvoiceRepository extends EntityRepository
 
         return $res
                 ->orderBy('i.performerEdrpou', 'DESC')->getQuery();
+    }
+
+    /**
+     * Returns results for interval future invoice
+     *
+     * @param array $invoiceIds
+     *
+     * @return mixed[]
+     */
+    public function getInvoiceIds($invoiceIds)
+    {
+        $res = $this->createQueryBuilder('i');
+
+        /** select */
+        $this->selectInvoicePeriod($res);
+        /** join */
+        $this->joinInvoicePeriod($res);
+        /** where */
+        $res->andWhere('i.id in :ids')->setParameter(':ids', $invoiceIds);
+
+        return $res
+                ->orderBy('i.performerEdrpou', 'DESC')->getQuery()->getResult();
     }
 
     /**
