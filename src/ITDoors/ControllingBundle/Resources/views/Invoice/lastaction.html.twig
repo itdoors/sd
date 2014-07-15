@@ -7,6 +7,6 @@
             </div>
             <div class="tools"><a class="collapse" href="" title="Фильтры"></a></div>
         </div>
-        <div class="portlet-body">{{messag.note}} </div>
+        <div class="portlet-body">{{ messag.note|raw('html') }} </div>
     </div>
 {% endfor%}

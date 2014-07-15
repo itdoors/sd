@@ -181,6 +181,7 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoicePeriod($res);
         $res->addSelect('i.dogovorNumber');
         $res->addSelect('i.dogovorDate');
+        $res->addSelect('i.performerName');
         /** join */
         $this->joinInvoicePeriod($res);
         /** where */
