@@ -86,10 +86,7 @@ class InvoiceService
                 case JSON_ERROR_NONE:
                     $this->addCronError(0, 'start parser', $file, 'parser file');
                     $this->arrCostumersForSendMessages = array();
-                    $this->savejson($json->invoice);
-                    // поставить письма в очередь
-                    // запустить крон для отправки
-                    
+                    $this->savejson($json->invoice);                    
                     $this->addCronError(0, 'stop parser', $file, 'parser file');
                     if (!is_dir($directory.'old')) {
                         mkdir($directory.'old', 0700);
@@ -412,6 +409,8 @@ class InvoiceService
             unset($json[$key]);
         }
         $this->sendEmails();
+        $cron = $this->container->get('it_doors_cron.service');
+        $cron->addSendEmails();
     }
 
     /**
