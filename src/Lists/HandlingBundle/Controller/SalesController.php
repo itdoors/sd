@@ -905,14 +905,14 @@ class SalesController extends BaseController
           ->setCellValue('H1', $translator->trans('ServiceOffered', array(), 'ListsHandlingBundle'))
           ->setCellValue('I1', $translator->trans('Chance', array(), 'ListsHandlingBundle'))
           ->setCellValue('J1', $translator->trans('Status', array(), 'ListsHandlingBundle'));
-       $phpExcelObject->getActiveSheet()->getRowDimension('1') ->setRowHeight(40);
-        $link_style_array = [
+        $phpExcelObject->getActiveSheet()->getRowDimension('1') ->setRowHeight(40);
+        $linkStyleArray = [
             'font'  => [
               'color' => ['rgb' => '0000FF'],
               'underline' => 'single'
             ]
           ];
-              
+
        $str = 1;
        $menager = '';
        $columnA = '';
@@ -959,7 +959,7 @@ class SalesController extends BaseController
                     )
                 ->setCellValueByColumnAndRow(++$col, $str, $handling['statusName']);
         }
-        $phpExcelObject->getActiveSheet()->getStyle('B2:C'.$str)->applyFromArray($link_style_array);
+        $phpExcelObject->getActiveSheet()->getStyle('B2:C'.$str)->applyFromArray($linkStyleArray);
         $phpExcelObject->getActiveSheet()->getStyle('A2:J'.$str)->getAlignment()->setWrapText(true);
         $phpExcelObject->getActiveSheet()->getColumnDimension('A')->setWidth(13);
         $phpExcelObject->getActiveSheet()->getColumnDimension('B')->setWidth(12);
