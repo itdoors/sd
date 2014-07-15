@@ -77,7 +77,7 @@
                     });
                 });
             </script>
-
+            {% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
             {% if form.vars.valid %}
             {% else %}
                 <div class="alert alert-danger">
