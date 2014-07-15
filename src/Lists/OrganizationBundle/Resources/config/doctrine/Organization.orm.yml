@@ -26,7 +26,7 @@ Lists\OrganizationBundle\Entity\Organization:
             nullable: true
         shortname:
             type: string
-            length: 255
+            length: 50
             fixed: false
             nullable: true
         isSmeta:
