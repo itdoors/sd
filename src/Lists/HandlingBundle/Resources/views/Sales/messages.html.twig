@@ -2,8 +2,8 @@
 <script>
     $(document).ready(function(){
         $('button#managers_list_new').on('click', function() {
-            var $target = $('html,body');
-            $target.animate({scrollTop: $target.height()}, 1000);
+            var $target = $(this);
+            $('html, body').animate({scrollTop: $target.offset().top-$target.height()}, 1000);
         });
     });
 </script>
