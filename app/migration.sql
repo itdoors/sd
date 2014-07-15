@@ -576,7 +576,6 @@ ALTER TABLE task ADD CONSTRAINT FK_527EDB25A76ED395 FOREIGN KEY (user_id) REFERE
 --stagin -----------------------------------------------
 
 -- task
-ALTER TABLE invoice DROP dogovor_act_note;
 ALTER TABLE invoice RENAME COLUMN dogovor_act_note TO bank;
 --test   -----------------------------------------------
 --stagin -----------------------------------------------

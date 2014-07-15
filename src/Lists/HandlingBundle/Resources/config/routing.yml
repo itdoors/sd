@@ -56,6 +56,10 @@ lists_sales_report_index:
     pattern:  /lists/sales/repost
     defaults: { _controller: ListsHandlingBundle:Sales:reportList }
 
+lists_sales_handling_export_excel:
+    pattern:  /lists/sales/handling/export/excel
+    defaults: { _controller: ListsHandlingBundle:Sales:exportExcel }
+
 #SALES DISPATCHER ROUTES
 
 lists_sales_dispatcher_handling_index:
@@ -149,7 +153,6 @@ lists_sales_admin_tender_index:
     pattern:  /lists/salesadmin/tender
     defaults: { _controller: ListsHandlingBundle:SalesAdmin:tenderList }
 
-
 lists_sales_admin_handling_add_organization_filter:
     pattern:  /lists/salesadmin/handling/add_organization_filter/{organizationId}
     defaults: { _controller: ListsHandlingBundle:SalesAdmin:addOrganizationFilter }
@@ -174,6 +177,10 @@ lists_sales_admin_report_advanced_range:
     pattern:  /lists/salesadmin/report/advanced/range
     defaults: { _controller: ListsHandlingBundle:SalesAdmin:reportAdvancedRange }
 
+lists_sales_admin_handling_export_excel:
+    pattern:  /lists/salesadmin/handling/export/excel
+    defaults: { _controller: ListsHandlingBundle:SalesAdmin:exportExcel }
+    
 lists_salesadmin_handling_close:
     pattern:  /lists/salesadmin/handling/close/{id}
     defaults: { _controller: ListsHandlingBundle:SalesAdmin:close }

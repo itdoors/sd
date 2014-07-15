@@ -22,13 +22,70 @@ class OperCoworkerInfoController extends BaseFilterController
      */
     public function indexAction()
     {
+        //////////////////////////
+        $data[0]['number'] = 1;
+        $data[0]['city'] = 'Kiev';
+        $data[0]['visited'] = true;
+        $data[0]['cityId'] = 22;
+
+        $data[1]['number'] = 2;
+        $data[1]['city'] = 'Paris';
+        $data[1]['visited'] = false;
+        $data[1]['cityId'] = 25;
+
+        $data[2]['number'] = 3;
+        $data[2]['city'] = 'Sochi';
+        $data[2]['visited'] = true;
+        $data[2]['cityId'] = 23;
+
+        $data[3]['number'] = 4;
+        $data[3]['city'] = 'Odessa';
+        $data[3]['visited'] = true;
+        $data[3]['cityId'] = 27;
+
+        $data[4]['number'] = 5;
+        $data[4]['city'] = 'Khmelnitskiy';
+        $data[4]['visited'] = false;
+        $data[4]['cityId'] = 28;
+
+        $options = array();
+        //$options['show'] = array('number', 'city', 'visited');
+        $options['visited']['type'] = 'checkbox';
+        $options['visited']['param'] = array(
+            'checked' => 'value',
+            'pattern' => '/oleoleole/',
+            'index' => 'cityId',
+            'class' => 'cool aha'
+        );
+
+        $options['city']['type'] = 'text';
+        $options['city']['param'] = array(
+            'ordering' => true
+        );
+
+        $year = intval(date('Y'));
+        $month = intval(date('m'));
+
+        $filterNamespace = $this->container->getParameter($this->getNamespace());
+        $filters = $this->getFilters($filterNamespace);
+
+        if (!array_key_exists('year', $filters) || $filters['year'] == null || $filters['year'] == '') {
+            $this->addToFilters('year', $year, $filterNamespace);
+        }
+        if (!array_key_exists('month', $filters) || $filters['month'] == null || $filters['month'] == '') {
+            $this->addToFilters('month', $month, $filterNamespace);
+        }
+        //////////////////////////
+
         /** @var AccessService $accessService */
         $accessService = $this->get('access.service');
         $allowedDepartments = $accessService->getAllowedDepartmentsId();
-
         $this->addToSessionValues('idDepartment', $allowedDepartments, 'param', 'oper.bundle.department');
 
-        return $this->render('ITDoorsOperBundle:Coworker:index.html.twig');
+        return $this->render('ITDoorsOperBundle:Coworker:index.html.twig', array(
+            'data' => $data,
+            'options' => $options
+        ));
     }
 
     /**
@@ -57,7 +114,6 @@ class OperCoworkerInfoController extends BaseFilterController
         $accessService = $this->get('access.service');
         $allowedDepartments = $accessService->getAllowedDepartmentsId();
         //$allowedDepartments = array(2111);
-
         $this->addToSessionValues('idDepartment', $allowedDepartments, 'param', 'oper.bundle.department');
 
 
@@ -65,7 +121,9 @@ class OperCoworkerInfoController extends BaseFilterController
         $monthInfoRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
 
-        $query = $monthInfoRepository->getFilteredCoworkers($allowedDepartments, $month, $year, $filters);
+        $orders = $this->getOrdering($filterNamespace);
+
+        $query = $monthInfoRepository->getFilteredCoworkers($allowedDepartments, $month, $year, $filters, $orders);
 
         $coworkers = $query->getResult();
         $infoSumSalary = array();

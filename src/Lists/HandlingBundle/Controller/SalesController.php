@@ -13,6 +13,8 @@ use Lists\OrganizationBundle\Entity\Organization;
 use Lists\HandlingBundle\Entity\Handling;
 use Lists\HandlingBundle\Entity\HandlingMessage;
 use Lists\ContactBundle\Entity\ModelContactRepository;
+use PHPExcel_Style_Border;
+use PHPExcel_Style_Alignment;
 
 /**
  * Class SalesController
@@ -844,5 +846,161 @@ class SalesController extends BaseController
         $handling = $session->get($this->wizardHandlingNamespace);
 
         return $handling ? $handling : null;
+    }
+
+    /**
+     * Renders organizationUsers list
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function exportExcelAction()
+    {
+         // Get organization filter
+        $filters = $this->getFilters();
+
+        /** @var HandlingRepository $handlingRepository */
+        $handlingRepository = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling');
+
+        /** @var \SD\UserBundle\Entity\User $user */
+        $user = $this->getUser();
+
+        /** @var \Doctrine\ORM\Query $handlingQuery */
+        $handlingQuery = $handlingRepository->getAllForExport($user->getId(), $filters);
+
+        $response = $this->exportToExcelAction($handlingQuery);
+
+        return $response;
+    }
+    /**
+     * Renders organizationUsers list
+     *
+      * @param array $handlings
+      * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function exportToExcelAction($handlings)
+    {
+        /** @var Translator $translator */
+        $translator = $this->container->get('translator');
+
+         // ask the service for a Excel5
+       $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+
+       $phpExcelObject->getProperties()->setCreator("DebtControll")
+           ->setLastModifiedBy("Giulio De Donato")
+           ->setTitle("Handling")
+           ->setSubject("Handling")
+           ->setDescription("Handling list")
+           ->setKeywords("Handling")
+           ->setCategory("Handling");
+       $phpExcelObject->setActiveSheetIndex(0)
+          ->setCellValue('A1', $translator->trans('Managers', array(), 'ListsHandlingBundle'))
+          ->setCellValue('B1', $translator->trans('ID', array(), 'ListsHandlingBundle'))
+          ->setCellValue('C1', $translator->trans('Name', array(), 'ListsHandlingBundle'))
+          ->setCellValue('D1', $translator->trans('Createdatetime', array(), 'ListsHandlingBundle'))
+          ->setCellValue('E1', $translator->trans('LastHandlingDate', array(), 'ListsHandlingBundle'))
+          ->setCellValue('F1', $translator->trans('City', array(), 'ListsHandlingBundle'))
+          ->setCellValue('G1', $translator->trans('Scope', array(), 'ListsHandlingBundle'))
+          ->setCellValue('H1', $translator->trans('ServiceOffered', array(), 'ListsHandlingBundle'))
+          ->setCellValue('I1', $translator->trans('Chance', array(), 'ListsHandlingBundle'))
+          ->setCellValue('J1', $translator->trans('Status', array(), 'ListsHandlingBundle'));
+       $phpExcelObject->getActiveSheet()->getRowDimension('1') ->setRowHeight(40);
+       $str = 1;
+       $menager = '';
+       $columnA = '';
+       $strStartMerge = 0;
+        foreach ($handlings as $handling) {
+             ++$str;
+            $col = 0;
+
+            if ($menager != $handling['firstName'].' '.$handling['lastName'].' '.$handling['middleName']) {
+                $menager = $columnA = $handling['firstName'].' '.$handling['lastName'].' '.$handling['middleName'];
+                $strStartMerge = $str;
+            } else {
+                $columnA = '';
+            }
+            $phpExcelObject->getActiveSheet()->mergeCells('A'.$strStartMerge.':A'.$str);
+
+            $phpExcelObject->getActiveSheet()
+                    ->setCellValueByColumnAndRow($col, $str, $columnA)
+                    ->setCellValueByColumnAndRow(++$col, $str, $handling['handlingId']);
+
+            $phpExcelObject->getActiveSheet()->getCellByColumnAndRow($col, $str)->getHyperlink()
+                    ->setUrl($this->generateUrl('lists_' . $this->baseRoutePrefix . '_handling_show', array('id' => $handling['handlingId']), true));
+            $phpExcelObject->getActiveSheet()
+                    ->setCellValueByColumnAndRow(++$col, $str, $handling['organizationName']);
+            $phpExcelObject->getActiveSheet()->getCellByColumnAndRow($col, $str)->getHyperlink()
+                    ->setUrl($this->generateUrl('lists_' . $this->baseRoutePrefix . '_organization_show', array('id' => $handling['organizationId']), true));
+            $phpExcelObject->getActiveSheet()
+                    ->setCellValueByColumnAndRow(++$col, $str, !$handling['handlingCreatedate'] ? '' : $handling['handlingCreatedate']->format('d.m.y'))
+                    ->setCellValueByColumnAndRow(++$col, $str, !$handling['handlingLastHandlingDate'] ? '' : $handling['handlingLastHandlingDate']->format('d.m.y, H:i'))
+                    ->setCellValueByColumnAndRow(++$col, $str, $handling['cityName'])
+                    ->setCellValueByColumnAndRow(++$col, $str, $handling['scopeName'])
+                    ->setCellValueByColumnAndRow(++$col, $str, $handling['handlingServiceOffered'])
+                    ->setCellValueByColumnAndRow(
+                        ++$col,
+                        $str,
+                        $handling['resultPercentageString'] ? $handling['resultPercentageString'] :$handling['percentageString']
+                    )
+                ->setCellValueByColumnAndRow(++$col, $str, $handling['statusName']);
+        }
+        $phpExcelObject->getActiveSheet()->getStyle('A2:J'.$str)->getAlignment()->setWrapText(true);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('A')->setWidth(13);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('B')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('E')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('F')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('G')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('H')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('I')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('J')->setWidth(12);
+
+        $styleArray = array(
+            'borders' => array(
+                'outline' => array(
+                       'style' => PHPExcel_Style_Border::BORDER_DOUBLE,
+                       'color' => array('argb' => '000000'),
+                ),
+                'inside' => array(
+                       'style' => PHPExcel_Style_Border::BORDER_THIN,
+                       'color' => array('argb' => '000000'),
+                )
+            ),
+        );
+
+        $phpExcelObject->getActiveSheet()->getStyle('A1:J'.$str)->applyFromArray($styleArray);
+
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('A2:A'.$str)
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('A1:J1')
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('A1:J1')
+            ->getAlignment()
+            ->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('B2:J'.$str)
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+        $phpExcelObject->getActiveSheet()->freezePane('AB2');
+
+        $phpExcelObject->getActiveSheet()->getStyle('A1:J'.$str)->getAlignment()->setWrapText(true);
+        $phpExcelObject->getActiveSheet()->setShowGridLines(false);//off line
+        $phpExcelObject->getActiveSheet()->setTitle('Handling');
+        $phpExcelObject->setActiveSheetIndex(0);
+        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Content-Disposition', 'attachment;filename=handling.xls');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+
+        return $response;
     }
 }

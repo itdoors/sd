@@ -105,10 +105,18 @@
         <th>{% trans %}Accruals{% endtrans %}</th>
         <th>{% trans %}P/z{% endtrans %}</th>
         <th>{% trans %}Id{% endtrans %}</th>
-        <th>{% trans %}Mpk{% endtrans %}</th>
+        <th>{% trans %}Mpk{% endtrans %}
+            {{ ajax_ordering('mpk', ajax_namespace_oper_department_schedule, {
+            'coworker_list': 'ITDoorsAjax.updateList'
+            }) }}
+        </th>
         <th>{% trans %}DRFO{% endtrans %}</th>
         <th>{% trans %}Passport{% endtrans %}</th>
-        <th>{% trans %}Surname{% endtrans %}</th>
+        <th>{% trans %}Surname{% endtrans %}
+            {{ ajax_ordering('lastName', ajax_namespace_oper_department_schedule, {
+            'coworker_list': 'ITDoorsAjax.updateList'
+            }) }}
+        </th>
         <th>{% trans %}Name{% endtrans %}</th>
         <th>{% trans %}Middle Name{% endtrans %}</th>
         <th>{% trans %}Date accepted{% endtrans %}</th>

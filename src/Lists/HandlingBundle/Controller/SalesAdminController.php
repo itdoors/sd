@@ -218,4 +218,25 @@ class SalesAdminController extends SalesController
                 'baseTemplate' => $this->baseTemplate,
             ));
     }
+     /**
+     * Renders organizationUsers list
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function exportExcelAction()
+    {
+         // Get organization filter
+        $filters = $this->getFilters();
+
+        /** @var HandlingRepository $handlingRepository */
+        $handlingRepository = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling');
+
+        /** @var \Doctrine\ORM\Query $handlingQuery */
+        $handlingQuery = $handlingRepository->getAllForExport(null, $filters);
+
+        $response = $this->exportToExcelAction($handlingQuery);
+
+        return $response;
+    }
 }
