@@ -29,9 +29,35 @@
 {% endblock %}
 
 {% block body %}
+    {{ form_start(userForm, {
+        'action' : path('it_doors_ajax_filter'),
+        'attr' : {
+            'method' : 'POST',
+            'class' : 'ajax-filter-form',
+            'novalidate': 'novalidate'
+        }
+    }) }}
+    <div class="col-md-6">
+        <div class="form-group">
+            {{ form_label(userForm.user, 'Select user'|trans , {'attr': {'class': 'control-label'}}) }}
+            {{ form_widget(userForm.user, {'attr': {'class': 'form-control', 'placeholder': 'Enter user'}}) }}
+            <span class="help-block">{% trans %}Select user for set organizarions{% endtrans %}</span>
+            {{ form_errors(userForm.user) }}
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            {{ form_widget(userForm.submit, { 'label': 'Select'|trans({}, 'messages'), 'attr': {'class': 'btn blue'} } ) }}
+        </div>
+    </div>
+
+    <input type="hidden" name="formAlias" value="{{ userForm.vars.name }}">
+    <input type="hidden" name="reset" value="0" class="ajax-form-reset-field">
+    {{ form_end(userForm) }}       
+                
     <script>
         $(document).ready(function(){
-           $('#organizationUserForm_user').select2({
+           $('#organizationUserFilterForm_user').select2({
                 minimumInputLength: 2,
                 ajax: {
                     url: '{{ path('sd_common_ajax_user') }}',
@@ -47,16 +73,16 @@
                         };
                     }
                 }
-            });
+            }).on("select2-selecting", function(e) {
+            //alert(e.object.text);
+          //log("selecting val=" + e.val + " choice=" + e.object.text);
+        });
         });
     </script>
-     <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                {{ form_label(userForm.user, 'Select user'|trans , {'attr': {'class': 'control-label'}}) }}
-                {{ form_widget(userForm.user, {'attr': {'class': 'form-control', 'placeholder': 'Enter user'}}) }}
-                <span class="help-block">{% trans %}Select user for set organizarions{% endtrans %}</span>
-                {{ form_errors(userForm.user) }}
+    <div class="row">
+        <div class="col-md-12">
+            <div id="datatable_ajax"  data-url="{{ url('sd_user_stufflist') }}">
+                {#{ render(controller('SDUserBundle:' ~ baseTemplate ~ ':stufflist')) }#}
             </div>
         </div>
     </div>

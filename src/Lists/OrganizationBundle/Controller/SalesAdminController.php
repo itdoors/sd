@@ -107,7 +107,7 @@ class SalesAdminController extends SalesDispatcherController
      */
     public function organizationTransferAction(Request $request)
     {
-         $form = $this->createForm('organizationUserForm');
+         $form = $this->createForm('organizationUserFilterForm');
 
         $form->handleRequest($request);
 

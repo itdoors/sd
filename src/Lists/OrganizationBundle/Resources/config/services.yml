@@ -5,6 +5,7 @@ parameters:
     lists_organization.form.sales.class: Lists\OrganizationBundle\Form\OrganizationSalesFormType
     lists_organization.form.dogovoradmin.class: Lists\OrganizationBundle\Form\OrganizationDogovorAdminFormType
     lists_organization.form.user.class: Lists\OrganizationBundle\Form\OrganizationUserFormType
+    lists_organization.form.user.filter.class: Lists\OrganizationBundle\Form\OrganizationUserFilterFormType
     lists_organization.form.child.class: Lists\OrganizationBundle\Form\OrganizationChildForm
 
     lists_organization.edrpou.validator.class: Lists\OrganizationBundle\Validator\UniqueEdrpouValidator
@@ -48,6 +49,12 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: organizationUserForm }
+            
+    lists_organization.form.organizationUserFilterForm:
+        class: %lists_organization.form.user.filter.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: organizationUserFilterForm }
 
     lists_organization.form.organizationChildForm:
         class: %lists_organization.form.child.class%
