@@ -81,6 +81,7 @@ class AccessService
                     $idDepartmentsAllowed[] = $departmentAllowed->getId();
                 }
             }
+            $idDepartmentsAllowed = array_unique($idDepartmentsAllowed);
 
             return $idDepartmentsAllowed;
         } else {

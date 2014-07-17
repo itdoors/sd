@@ -14,7 +14,7 @@ class DepartmentPeopleRepository extends EntityRepository
 {
 
     /**
-     * @param integer $idDepartment
+     * @param integer|array $idDepartment
      *
      * @return array
      */
@@ -30,12 +30,17 @@ class DepartmentPeopleRepository extends EntityRepository
 
             ->leftJoin('dp.department', 'd')
             ->leftJoin('dp.individual', 'i')
-            ->leftJoin('dp.mpks', 'm')
+            ->leftJoin('dp.mpks', 'm');
 
-            ->andWhere('d.id = :id')
-            ->setParameter(':id', $idDepartment)
+        if (is_array($idDepartment)) {
+            $result = $result->andWhere('d.id IN (:id)')
+                ->setParameter(':id', $idDepartment);
+        } else {
+            $result = $result->andWhere('d.id = :id')
+            ->setParameter(':id', $idDepartment);
+        }
 
-            ->orderBy('i.lastName')
+        $result = $result->orderBy('i.lastName')
             //->orderBy('m.name')
 
             ->getQuery()

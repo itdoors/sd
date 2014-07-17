@@ -34,6 +34,7 @@
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
+    <script src="{{ asset('bundles/itdoorsoper/js/tabs_department_info.js')}}" ></script>
 {% endblock %}
 
 {% block body %}
@@ -41,18 +42,31 @@
         <div class="col-md-12">
             <p>{% trans %}Notice all coworkers{% endtrans %}</p>
 
-            {{ ajax_filter_render('ScheduleFilterFormType', ajax_namespace_oper_department_schedule, {
-            'coworker_list': 'ITDoorsAjax.updateList'
-            }) }}
+            <div class="tabbable tabbable-custom boxless">
+                <ul class="nav nav-tabs" id="ajax_tabs">
+                    <li class="active"><a href="#tab_3" data-toggle="tab" data-block="tab_content" data-url="{{ url('it_doors_oper_coworker_index') }}">{% trans %}Co-workers{% endtrans %}</a></li>
+                    <li ><a id="schedule_block" href="#tab_3" data-block="tab_content" data-url="{{ url('it_doors_oper_coworker_schedule_index') }}" data-toggle="tab">{% trans %}Schedule{% endtrans %}</a></li>
+                </ul>
+                <div class="tab-content" id="tab_content">
+                    {{ ajax_filter_render('ScheduleFilterFormType', ajax_namespace_oper_department_schedule, {
+                    'coworker_list': 'ITDoorsAjax.updateList'
+                    }) }}
+
+                    <div id="coworker_list" data-url="{{ path('it_doors_oper_coworker_table')}}">
+                        {{ render(controller('ITDoorsOperBundle:OperCoworkerInfo:coworkerTable', {
+
+                        })) }}
+                    </div>
+                </div>
+            </div>
 
 {#
-            {{ base_table_render(data, options) }}
-#}
-            <div id="coworker_list" data-url="{{ path('it_doors_oper_coworker_table')}}">
-                {{ render(controller('ITDoorsOperBundle:OperCoworkerInfo:coworkerTable', {
+            <div id="base_table_test" data-url="{{ path('it_doors_oper_coworker_test_table')}}">
+                {{ render(controller('ITDoorsOperBundle:OperCoworkerInfo:testTableRender', {
 
                 })) }}
             </div>
+#}
         </div>
     </div>
 {% endblock body %}

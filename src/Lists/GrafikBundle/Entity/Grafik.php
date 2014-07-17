@@ -802,4 +802,32 @@ class Grafik
     {
         return $this->percentCooperation;
     }
+    /**
+     * @var boolean
+     */
+    private $isOwnVacation;
+
+
+    /**
+     * Set isOwnVacation
+     *
+     * @param boolean $isOwnVacation
+     * @return Grafik
+     */
+    public function setIsOwnVacation($isOwnVacation)
+    {
+        $this->isOwnVacation = $isOwnVacation;
+    
+        return $this;
+    }
+
+    /**
+     * Get isOwnVacation
+     *
+     * @return boolean 
+     */
+    public function getIsOwnVacation()
+    {
+        return $this->isOwnVacation;
+    }
 }

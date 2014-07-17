@@ -1,4 +1,5 @@
 {% trans_default_domain 'ITDoorsOperBundle' %}
+{% if not departmentIsArray %}
 <div id="form_modal_copy" class="modal fade" role="basic" aria-hidden="true">
     <div class="modal-dialog" style="width: 350px;">
         <div class="modal-content">
@@ -104,6 +105,7 @@
         <!-- /.modal-content -->
     </div>
 </div>
+{% endif %}
 
 <div id="form_modal_info_user" class="modal fade" role="basic" aria-hidden="true">
     <div class="modal-dialog" style="">
@@ -116,7 +118,7 @@
                 <div id="infoUserTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
                 </div>
                 <br>
-                {% if canEdit %}
+                {% if canEdit and not departmentIsArray %}
                 <a class="btn red left_float" id="delete_user_button">{% trans %}Delete{% endtrans %}</a>
                 {% endif %}
                 <a class="btn green right_float" data-dismiss="modal" aria-hidden="true">{% trans %}Exit{% endtrans %}</a>
@@ -140,7 +142,12 @@
 <script src="{{ asset('/bundles/itdoorsoper/js/multiDatepicker/jquery-ui.multidatespicker.js')}}"></script>
 #}
 
-<div id ="schedule_content" data-url="{{ path('it_doors_oper_schedule_table', {'id': idDepartment}) }}" >
+<div id ="schedule_content"
+     {% if not departmentIsArray %}
+         data-url="{{ path('it_doors_oper_schedule_table', {'id': idDepartment}) }}"
+     {% else  %}
+         data-url="{{ path('it_doors_oper_schedule_table', {'id': 0}) }}"
+     {% endif %}>
 
     <script>
 
@@ -212,6 +219,7 @@
 
                 })
             }
+        {% if not departmentIsArray %}
 
             $('#delete_selected_coworkers_button').die('click');
             $('#delete_selected_coworkers_button').live('click', function(e) {
@@ -278,6 +286,7 @@
 
                 }
             });
+
 
             $('#copy_etalon').die('click');
             $('#copy_etalon').live('click', function(e) {
@@ -519,7 +528,8 @@
                     }
 
                 })
-            })
+            });
+        {% endif %}
         })
     </script>
     <div class="row">
@@ -587,7 +597,7 @@
 
         </div>
         <div class="col-md-5">
-            {% if canEdit %}
+            {% if canEdit and not departmentIsArray %}
                 <a class="btn green" style="margin-bottom: 10px;" id="copy_etalon">Скопировать из выбранных</a>
                 <a class="btn blue" style="margin-bottom: 10px;" id="add_coworker_button">{% trans %}Add coworker{% endtrans %}</a>
 
@@ -646,7 +656,7 @@
                     </td>
                     <td id="fio_{{ idCoworker }}">
                         <a class="fio"
-                           data-params='{"idCoworker": {{ idCoworker }}, "idDepartment":{{ idDepartment }}, "idLink": "fio_{{ idCoworker }}", "idReplacement": {{ idReplacement }} }'
+                           data-params='{"idCoworker": {{ idCoworker }}, "idDepartment":{{ coworker.idDepartment }}, "idLink": "fio_{{ idCoworker }}", "idReplacement": {{ idReplacement }} }'
                            >
                             {{ coworker.lastName }} {{ coworker.firstName }} {{ coworker.middleName }}
                         </a>
@@ -673,7 +683,7 @@
                             data-toggle="modal"
                             href="#form_modal_more_info"
                             data-target_holder="moreInfoTpl"
-                            data-params='{"date":"{{ dayInfo.date }}", "idCoworker": {{ idCoworker }}, "idDepartment":{{ idDepartment }}, "idLink": "link{{ day }}{{ idCoworker }}{{ coworker.replacementId }}", "idReplacement": {{ coworker.replacementId }}}'
+                            data-params='{"date":"{{ dayInfo.date }}", "idCoworker": {{ idCoworker }}, "idDepartment":{{ coworker.idDepartment }}, "idLink": "link{{ day }}{{ idCoworker }}{{ coworker.replacementId }}", "idReplacement": {{ coworker.replacementId }}}'
 
                             data-url-more-info="{{ url('it_doors_oper_schedule_day_info') }}"
                                 >
@@ -719,7 +729,8 @@
                             'salaryNotOfficially': infoHours[idCoworker~'-'~idReplacement]['salaryNotOfficially'],
                             'totalSalary': infoHours[idCoworker~'-'~idReplacement]['totalSalary'],
                             'idMonthInfo': infoHours[idCoworker~'-'~idReplacement]['idMonthInfo'],
-                            'canEdit': canEdit
+                            'canEdit': canEdit,
+                            'idDepartment': coworker.idDepartment
                     }) }}
 
                 </tr>
@@ -758,7 +769,9 @@
        data-url_reload_href="{{ path('it_doors_oper_schedule_one_day_total') }}"
        data-url_copy_etalon="{{ path('it_doors_oper_schedule_copy_by_etalon') }}"
        data-url_add_user="{{ path('it_doors_oper_schedule_add_user') }}"
+        {% if not departmentIsArray %}
        data-id_department="{{ idDepartment }}"
+       {% endif %}
        data-date = "{{ year }}-{{ month }}"
        data-url_copy_to_next_month = "{{ path('it_doors_oper_copy_to_next_month') }}"
        data-url_user_info="{{ path('it_doors_oper_schedule_show_user_basic_table') }}"
