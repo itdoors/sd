@@ -30,6 +30,7 @@ use ITDoors\AjaxBundle\Controller\BaseFilterController;
 use Lists\CompanystructureBundle\Entity\Companystructure;
 use SD\UserBundle\Entity\Usercontactinfo;
 use SD\CalendarBundle\Entity\Task;
+use Lists\HandlingBundle\Entity\HandlingUser;
 
 /**
  * AjaxController class.
@@ -1461,6 +1462,7 @@ class AjaxController extends BaseFilterController
         );
 
         if ($form->isValid()) {
+
             $method = $formName . 'Save';
 
             $user = $this->getUser();
@@ -1860,23 +1862,158 @@ class AjaxController extends BaseFilterController
      *
      * @return boolean
      */
-    public function handlingUserFormSave($form, $user, $request)
+    public function handlingUserSalesAdminFormSave($form, $user, $request)
     {
         $data = $form->getData();
-
-        $object = $this->getDoctrine()
-            ->getRepository('ListsHandlingBundle:Handling')
-            ->find($data['handlingId']);
-
+        
+        $em = $this->getDoctrine()->getManager();
+       
         $user = $this->getDoctrine()
             ->getRepository('SDUserBundle:User')
             ->find($data['user']);
+        $handling = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling')
+            ->find($data['handlingId']);
+        
+        $lookupMPId = $this->getDoctrine()
+            ->getRepository('ListsLookupBundle:Lookup')->getOnlyManagerProjectId();
+        
+        $lookup = $this->getDoctrine()
+                ->getRepository('ListsLookupBundle:Lookup')
+                ->find($lookupMPId);
+        
+        $mainManager = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingUser')
+            ->findOneBy(array(
+                'handlingId' => $data['handlingId'],
+                'lookupId' => $lookupMPId,
+                ));
+        
+        if ($this->getUser()->hasRole('ROLE_SALESADMIN')) {
+            if (!$mainManager) {
+                $mainManager = $this->getDoctrine()
+                    ->getRepository('ListsHandlingBundle:HandlingUser')
+                    ->findOneBy(array(
+                        'handlingId' => $data['handlingId'],
+                        'userId' => $data['user'],
+                    ));
+                if (!$mainManager) {
+                    $mainManager = new HandlingUser();
+                    $mainManager->setUser($user);
+                    $mainManager->setHandling($handling);
+                    $mainManager->setPart(100);
+                    $mainManager->setLookup($lookup);
+                } else {
+                    $mainManager->setLookup($lookup);
+                    $mainManager->setPart(100);
+                }
+            } else {
+                $oldManager = $this->getDoctrine()
+                    ->getRepository('ListsHandlingBundle:HandlingUser')
+                    ->findOneBy(array(
+                        'handlingId' => $data['handlingId'],
+                        'userId' => $user->getId(),
+                        ));
+                if ($oldManager) {
+                    $part = $mainManager->getPart()+$oldManager->getPart();
+                    $em->remove($oldManager);
+                    if ($part > 100) {
+                        $part = 100;
+                    }
+                    $mainManager->setPart($part);
+                }
+                $mainManager->setUser($user);
+                
+            }
+            $em->persist($mainManager);
+            $em->flush();
 
-        $object->addUser($user);
-
+            return true;
+        } 
+    }
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function handlingUserFormSave($form, $user, $request)
+    {
+        
+        $data = $form->getData();
+        
         $em = $this->getDoctrine()->getManager();
+       
+        $user = $this->getDoctrine()
+            ->getRepository('SDUserBundle:User')
+            ->find((int)$data['user']);
+        $handling = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling')
+            ->find((int)$data['handlingId']);
+        
+        $lookupMPId = $this->getDoctrine()
+            ->getRepository('ListsLookupBundle:Lookup')->getOnlyManagerProjectId();
+        
+        $mainManager = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingUser')
+            ->findOneBy(array(
+                'handlingId' => (int)$data['handlingId'],
+                'lookupId' => $lookupMPId,
+                ));
+        $lookupId = $this->getDoctrine()
+            ->getRepository('ListsLookupBundle:Lookup')->getOnlyManagerId();
+
+        if (!$mainManager || $this->getUser()->getId() != $mainManager->getUser()->getId()) {
+            return false;
+        }
+            $lookup = $this->getDoctrine()
+                ->getRepository('ListsLookupBundle:Lookup')
+                ->find($lookupId);
+        
+        $object = new HandlingUser();
+
+        $part = $mainManager->getPart()-(int)$data['part'];
+        $mainManager->setPart($part);
+
+        $object->setUser($user);
+        $object->setHandling($handling);
+        $object->setPart((int)$data['part']);
+        $object->setLookup($lookup);
+        
+        $email = $this->get('it_doors_email.service');
+        $url = $this->generateUrl(
+            'lists_sales_handling_show',
+            array('id' => $handling->getId()),
+            true
+        );
+        $email->send(
+            null,
+            'manager-add-in-project',
+            array(
+                'users' => array(
+                    $user->getEmail()
+                ),
+                'variables' => array(
+                    '${lastName}$' => $mainManager->getUser()->getLastName(),
+                    '${firstName}$' => $mainManager->getUser()->getFirstName(),
+                    '${middleName}$' => $mainManager->getUser()->getMiddleName(),
+                    '${part}$' => (int)$data['part'],
+                    '${id}$' => $handling->getId(),
+                    '${url}$' => '<a href="' . $url . '">' . $url . '</a>',
+                )
+            )
+        );
+//        $cron = $this->container->get('it_doors_cron.service');
+//        $cron->addSendEmails();
+
+        
         $em->persist($object);
+        $em->persist($mainManager);
         $em->flush();
+        $em->refresh($mainManager);
 
         return true;
     }
@@ -2156,21 +2293,49 @@ class AjaxController extends BaseFilterController
      */
     public function handlingUserDelete($params)
     {
-        $handlingId = $params['handlingId'];
-        $userId = $params['userId'];
+        $handlingUserId = $params['handlingUserId'];
 
         $object = $this->getDoctrine()
-            ->getRepository('ListsHandlingBundle:Handling')
-            ->find($handlingId);
-
-        $user = $this->getDoctrine()
-            ->getRepository('SDUserBundle:User')
-            ->find($userId);
-
-        $object->removeUser($user);
-
+            ->getRepository('ListsHandlingBundle:HandlingUser')
+            ->find($handlingUserId);
+        
+        $lookupId = $this->getDoctrine()
+            ->getRepository('ListsLookupBundle:Lookup')->getOnlyManagerProjectId();
+        
+        $mainManager = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingUser')
+            ->findOneBy(array(
+                'handlingId' => $object->getHandlingId(),
+                'lookupId' => $lookupId,
+                ));
+        if ($mainManager->getUser()->getId() != $this->getUser()->getId()) {
+            return false;
+        }
+        $part = $mainManager->getPart()+$object->getPart();
+        $mainManager->setPart($part);
+        
+        $email = $this->get('it_doors_email.service');
+        $email->send(
+            null,
+            'manager-delete-of-project',
+            array(
+                'users' => array(
+                    $object->getUser()->getEmail()
+                ),
+                'variables' => array(
+                    '${lastName}$' => $mainManager->getUser()->getLastName(),
+                    '${firstName}$' => $mainManager->getUser()->getFirstName(),
+                    '${middleName}$' => $mainManager->getUser()->getMiddleName(),
+                    '${part}$' => $object->getPart(),
+                    '${id}$' => $object->getHandlingId()
+                )
+            )
+        );
+//        $cron = $this->container->get('it_doors_cron.service');
+//        $cron->addSendEmails();
         $em = $this->getDoctrine()->getManager();
-        $em->persist($object);
+        $em->persist($mainManager);
+        $em->remove($object);
         $em->flush();
     }
 
@@ -2352,6 +2517,132 @@ class AjaxController extends BaseFilterController
             $return['handling']['progress'] = null;
             $return['handling']['progressString'] = null;
         }
+
+        return new Response(json_encode($return));
+    }
+    /**
+     * Saves object to db
+     *
+     * @return mixed[]
+     */
+    public function handlingUserPartChangeAction()
+    {
+        $translator = $this->get('translator');
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = (int)$this->get('request')->request->get('value');
+
+        $methodSet = 'set' . ucfirst($name);
+
+        /** @var HandlingUser $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingUser')
+            ->find($pk);
+
+        if (!$value) {
+            $methodGet = 'get' . ucfirst($name);
+            $type = gettype($object->$methodGet());
+
+            if (in_array($type, array('integer'))) {
+                $value = null;
+            }
+        }
+        $lookupMPId = $this->getDoctrine()
+            ->getRepository('ListsLookupBundle:Lookup')->getOnlyManagerProjectId();
+
+        $mainManager = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingUser')
+            ->findOneBy(array(
+                'handlingId' => $object->getHandlingId(),
+                'lookupId' => $lookupMPId,
+                ));
+        if (!$mainManager || $this->getUser()->getId() != $mainManager->getUser()->getId()) {
+            $return = array(
+                'success' => 0,
+                'handlingUser' => array(
+                    'id' => $object->getId(),
+                    'error' => 'no access',
+                    'value' => $object->getPart()
+                )
+            );
+
+            return new Response(json_encode($return));
+        }elseif ($mainManager->getPart() < $value) {
+            $return = array(
+                'success' => 0,
+                'handlingUser' => array(
+                    'id' => $object->getId(),
+                    'error' => 'max '.$mainManager->getPart(),
+                    'value' => $object->getPart()
+                )
+            );
+
+            return new Response(json_encode($return));
+        }
+        $part = $mainManager->getPart()+$object->getPart()-$value;
+        $mainManager->setPart($part);
+
+        $object->$methodSet($value);
+
+        $validator = $this->get('validator');
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
+        $errors = $validator->validate($object, array('edit'));
+
+        if (sizeof($errors)) {
+            $return = $this->getFirstError($errors);
+
+            return new Response($return, 406);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+        $em->persist($mainManager);
+
+        try {
+            $em->flush();
+
+            $em->refresh($object);
+            $email = $this->get('it_doors_email.service');
+            $url = $this->generateUrl(
+                'lists_sales_handling_show',
+                array('id' => $object->getHandlingId()),
+                true
+            );
+            $email->send(
+                null,
+                'manager-change-part-in-project',
+                array(
+                    'users' => array(
+                        $object->getUser()->getEmail()
+                    ),
+                    'variables' => array(
+                        '${lastName}$' => $mainManager->getUser()->getLastName(),
+                        '${firstName}$' => $mainManager->getUser()->getFirstName(),
+                        '${middleName}$' => $mainManager->getUser()->getMiddleName(),
+                        '${part}$' => $value,
+                        '${id}$' => $object->getHandlingId(),
+                        '${url}$' => '<a href="' . $url . '">' . $url . '</a>',
+                    )
+                )
+            );
+//        $cron = $this->container->get('it_doors_cron.service');
+//        $cron->addSendEmails();
+        } catch (\ErrorException $e) {
+            $return = array('msg' => $translator->trans('Wrong input data'));
+
+            return new Response(json_encode($return));
+        }
+
+        $return = array(
+            'success' => 1,
+            'handlingUser' => array(
+                'id' => $object->getId(),
+                'managerPart' => $part,
+                'value' => $value
+            )
+        );
 
         return new Response(json_encode($return));
     }

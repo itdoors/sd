@@ -79,23 +79,6 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * Get users by handling
-     *
-     * @param int $handlingId
-     *
-     * @return Query
-     */
-    public function getHandlingUsersQuery($handlingId)
-    {
-        return $this->createQueryBuilder('u')
-                ->select('u', 'stuff')
-                ->innerJoin('u.stuff', 'stuff')
-                ->innerJoin('u.handlings', 'handlings')
-                ->where('handlings.id = :handlingId')
-                ->setParameter(':handlingId', $handlingId);
-    }
-
-    /**
      * Processes sql query. adding select
      *
      * @param QueryBuilder $sql

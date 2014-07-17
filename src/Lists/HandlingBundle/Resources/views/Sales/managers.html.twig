@@ -6,6 +6,7 @@
         <p>{% trans %}Managers on handling{% endtrans %}</p>
         <div class="table-toolbar">
             <div class="btn-group" style="margin-bottom:10px;">
+                {% if handling.managerProject is not empty %}
                 <button id="managers_list_new" class="btn green ajax-form"
                         data-target_holder="managerFormTpl"
                         data-form_name="handlingUserForm"
@@ -15,6 +16,7 @@
                 >
                     {% trans %}Add Manager{% endtrans %} <i class="fa fa-plus"></i>
                 </button>
+                {% endif %}
             </div>
             <div style="display: none" id="managerFormTpl">
             </div>

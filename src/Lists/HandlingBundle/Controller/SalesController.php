@@ -276,16 +276,29 @@ class SalesController extends BaseController
      */
     public function handlingUsersAction($handlingId)
     {
-        /** @var \SD\UserBundle\Entity\UserRepository $ur*/
-        $ur = $this->container->get('sd_user.repository');
+         /** @var \Lists\HandlingBundle\Entity\HandlingUserRepository $handlingUser */
+        $handlingUser = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingUser');
 
-        $handlingUsers = $ur->getHandlingUsersQuery($handlingId)
+        $handlingUsers = $handlingUser->getHandlingUsersQuery($handlingId)
             ->getQuery()
             ->getResult();
+        
+        $lookupId = $this->getDoctrine()
+            ->getRepository('ListsLookupBundle:Lookup')->getOnlyManagerProjectId();
+        
+        $mainManager = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingUser')
+            ->findOneBy(array(
+                'handlingId' => $handlingId,
+                'lookupId' => $lookupId,
+                'userId' => $this->getUser()->getId(),
+                ));
 
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate. ':handlingUsers.html.twig', array(
                 'handlingUsers' => $handlingUsers,
-                'handlingId' => $handlingId
+                'handlingId' => $handlingId,
+                'mainManager' => $mainManager
             ));
     }
 

@@ -60,13 +60,14 @@ SD\UserBundle\Entity\User:
         organizations:
             targetEntity: Lists\OrganizationBundle\Entity\Organization
             mappedBy: users
-        handlings:
-            targetEntity: Lists\HandlingBundle\Entity\Handling
-            mappedBy: users
         teams:
             targetEntity: Lists\TeamBundle\Entity\Team
             mappedBy: users
     oneToOne:
         stuff:
             targetEntity: Stuff
+            mappedBy: user
+    oneToMany:
+        handlingUsers:
+            targetEntity: Lists\HandlingBundle\Entity\HandlingUser
             mappedBy: user

@@ -60,6 +60,11 @@ class EmailService
      */
     public function send($from, $template, $to)
     {
+        if (!$from) {
+            $emailFrom = $this->container->getParameter('email.from');
+            $nameFrom = $this->container->getParameter('name.from');
+            $from = array($emailFrom => $nameFrom);
+        }
         /** @var EntityManager $em */
         $em = $this->container->get('doctrine')->getManager();
 

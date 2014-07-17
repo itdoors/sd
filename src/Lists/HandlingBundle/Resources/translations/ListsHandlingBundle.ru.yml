@@ -156,6 +156,7 @@ Contacts on handling: Контактные лица в проекте
 
 Managers: Менеджеры
 Manager: Менеджер
+Manager project: Менеджер проекта
 Enter Manager: Введите менеджера
 Managers on handling: Менеджеры, имеющие доступ к проекту
 
@@ -165,11 +166,11 @@ Creating Handling: Создание обращения
 
 General information: Основная информация
 
+Role: Роль
 
+Appoint a manager: Назначить менеджером
 
-
-
-
+Mast be integer number: Должно быть целое число
 
 Filters: Фильтры
 Clear Filter: Очистить
@@ -223,3 +224,9 @@ Count employees: Кол-во сотрудников
 
 Launch date: Дата запуска
 Add manager in project: Добавить менеджера в проект
+Add manager project in project: Добавить менеджера проекта в проект
+
+Enter share: Введите процент участия
+Percentage of participation: Процент участия
+
+This user is already a manager: Этот пользователь уже является менеджером

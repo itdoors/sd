@@ -316,41 +316,41 @@ class User extends BaseUser
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
-    private $handlings;
-
-    /**
-     * Add handlings
-     *
-     * @param \Lists\HandlingBundle\Entity\Handling $handlings
-     *
-     * @return User
-     */
-    public function addHandling(\Lists\HandlingBundle\Entity\Handling $handlings)
-    {
-        $this->handlings[] = $handlings;
-
-        return $this;
-    }
-
-    /**
-     * Remove handlings
-     *
-     * @param \Lists\HandlingBundle\Entity\Handling $handlings
-     */
-    public function removeHandling(\Lists\HandlingBundle\Entity\Handling $handlings)
-    {
-        $this->handlings->removeElement($handlings);
-    }
-
-    /**
-     * Get handlings
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getHandlings()
-    {
-        return $this->handlings;
-    }
+//    private $handlings;
+//
+//    /**
+//     * Add handlings
+//     *
+//     * @param \Lists\HandlingBundle\Entity\Handling $handlings
+//     *
+//     * @return User
+//     */
+//    public function addHandling(\Lists\HandlingBundle\Entity\Handling $handlings)
+//    {
+//        $this->handlings[] = $handlings;
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * Remove handlings
+//     *
+//     * @param \Lists\HandlingBundle\Entity\Handling $handlings
+//     */
+//    public function removeHandling(\Lists\HandlingBundle\Entity\Handling $handlings)
+//    {
+//        $this->handlings->removeElement($handlings);
+//    }
+//
+//    /**
+//     * Get handlings
+//     *
+//     * @return \Doctrine\Common\Collections\Collection
+//     */
+//    public function getHandlings()
+//    {
+//        return $this->handlings;
+//    }
 
     /**
      * Returns user full name
@@ -506,5 +506,44 @@ class User extends BaseUser
     public function getUsercontactinfo()
     {
         return $this->usercontactinfo;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $handlingUsers;
+
+
+    /**
+     * Add handlingUsers
+     *
+     * @param \Lists\HandlingBundle\Entity\HandlingUser $handlingUsers
+     * 
+     * @return User
+     */
+    public function addHandlingUser(\Lists\HandlingBundle\Entity\HandlingUser $handlingUsers)
+    {
+        $this->handlingUsers[] = $handlingUsers;
+
+        return $this;
+    }
+
+    /**
+     * Remove handlingUsers
+     *
+     * @param \Lists\HandlingBundle\Entity\HandlingUser $handlingUsers
+     */
+    public function removeHandlingUser(\Lists\HandlingBundle\Entity\HandlingUser $handlingUsers)
+    {
+        $this->handlingUsers->removeElement($handlingUsers);
+    }
+
+    /**
+     * Get handlingUsers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getHandlingUsers()
+    {
+        return $this->handlingUsers;
     }
 }

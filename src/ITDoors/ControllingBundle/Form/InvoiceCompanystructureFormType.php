@@ -45,33 +45,6 @@ class InvoiceCompanystructureFormType extends AbstractType
         $builder
             ->add('create', 'submit')
             ->add('cancel', 'button');
-
-//        $builder->addEventListener(
-//            FormEvents::PRE_SUBMIT,
-//            function (FormEvent $event) use ($container) {
-//                $data = $event->getData();
-//
-//                $form = $event->getForm();
-//            }
-//        );
-//
-//        $builder->addEventListener(
-//            FormEvents::PRE_SUBMIT,
-//            function (FormEvent $event) use ($container) {
-//                $data = $event->getData();
-//
-//                $form = $event->getForm();
-//            }
-//        );
-//
-//        $builder->addEventListener(
-//            FormEvents::PRE_SUBMIT,
-//            function (FormEvent $event) use ($container) {
-//                $data = $event->getData();
-//
-//                $form = $event->getForm();
-//            }
-//        );
     }
 
     /**
