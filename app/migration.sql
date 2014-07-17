@@ -594,14 +594,16 @@ INSERT INTO "public".email ("alias", subject, text) VALUES ('invoice-pay', 'Сч
 --test   ++++++++++++++++++++++++++++++++++++++++++
 --stagin ----------------------------------------------
 
-CREATE TABLE organization_manager (id BIGSERIAL NOT NULL, organization_id INT NOT NULL, user_id INT NOT NULL, PRIMARY KEY(id));
-CREATE UNIQUE INDEX UNIQ_37F6ADFA32C8A3DE ON organization_manager (organization_id);
-CREATE UNIQUE INDEX UNIQ_37F6ADFAA76ED395 ON organization_manager (user_id);
-ALTER TABLE organization_manager ADD CONSTRAINT FK_37F6ADFA32C8A3DE FOREIGN KEY (organization_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE organization_manager ADD CONSTRAINT FK_37F6ADFAA76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-INSERT INTO "public".lookup (lukey, "name", "group") VALUES ('manager_organization', 'Менеджер органицазии', 'manager_role_organization');
-ALTER TABLE organization_manager ADD lookup_id INT NOT NULL;
-ALTER TABLE organization_manager ADD CONSTRAINT FK_37F6ADFA8955C49D FOREIGN KEY (lookup_id) REFERENCES lookup (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE organization_user ADD lookup_id INT DEFAULT NULL;
+ALTER TABLE organization_user ALTER organization_id TYPE INT;
+ALTER TABLE organization_user ALTER organization_id DROP DEFAULT;
+ALTER TABLE organization_user ALTER user_id TYPE INT;
+ALTER TABLE organization_user ALTER user_id DROP DEFAULT;
+ALTER TABLE organization_user ADD CONSTRAINT FK_B49AE8D48955C49D FOREIGN KEY (lookup_id) REFERENCES lookup (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE organization_user ADD CONSTRAINT FK_B49AE8D432C8A3DE FOREIGN KEY (organization_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE organization_user ADD CONSTRAINT FK_B49AE8D4A76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_B49AE8D48955C49D ON organization_user (lookup_id);
 
+INSERT INTO "public".lookup (lukey, "name", "group") VALUES ('manager_organization', 'Менеджер органицазии', 'manager_role_organization');
 --test   -----------------------------
 --stagin -----------------------------

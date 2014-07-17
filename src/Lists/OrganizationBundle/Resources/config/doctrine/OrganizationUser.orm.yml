@@ -21,11 +21,21 @@ Lists\OrganizationBundle\Entity\OrganizationUser:
             type: integer
             nullable: false
             column: lookup_id
-    oneToMany:
+    manyToOne:
+        lookup:
+            targetEntity: Lists\LookupBundle\Entity\Lookup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                lookup_id:
+                    referencedColumnName: id
+            orphanRemoval: false
         organization:
             targetEntity: Organization
             cascade: {  }
-            inversedBy: null
+            mappedBy: null
+            inversedBy: organizationUsers
             joinColumns:
                 organization_id:
                     referencedColumnName: id
@@ -33,17 +43,10 @@ Lists\OrganizationBundle\Entity\OrganizationUser:
         user:
             targetEntity: SD\UserBundle\Entity\User
             cascade: {  }
-            inversedBy: null
+            mappedBy: null
+            inversedBy: organizationUsers
             joinColumns:
                 user_id:
-                    referencedColumnName: id
-            orphanRemoval: false
-        lookup:
-            targetEntity: Lists\LookupBundle\Entity\Lookup
-            cascade: {  }
-            inversedBy: null
-            joinColumns:
-                lookup_id:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks:

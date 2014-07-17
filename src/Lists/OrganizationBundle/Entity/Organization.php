@@ -995,4 +995,42 @@ class Organization
     {
         return $this->lookup;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $organizationUsers;
+
+
+    /**
+     * Add organizationUsers
+     *
+     * @param \Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers
+     * @return Organization
+     */
+    public function addOrganizationUser(\Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers)
+    {
+        $this->organizationUsers[] = $organizationUsers;
+    
+        return $this;
+    }
+
+    /**
+     * Remove organizationUsers
+     *
+     * @param \Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers
+     */
+    public function removeOrganizationUser(\Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers)
+    {
+        $this->organizationUsers->removeElement($organizationUsers);
+    }
+
+    /**
+     * Get organizationUsers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOrganizationUsers()
+    {
+        return $this->organizationUsers;
+    }
 }

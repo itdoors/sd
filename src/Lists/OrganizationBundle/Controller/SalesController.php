@@ -97,7 +97,6 @@ class SalesController extends BaseController
 
             $user = $this->getUser();
 
-            $organization->addUser($user);
             $organization->setCreator($user);
 
             

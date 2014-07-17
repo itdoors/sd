@@ -104,9 +104,9 @@ lists_sales_admin_organization_ajax_users:
     pattern:  /lists/salesadmin/organization/ajax/users/{organizationId}
     defaults: { _controller: ListsOrganizationBundle:SalesAdmin:organizationUsers }
 
-lists_sales_admin_organization_less_manager:
-    pattern:  /lists/salesadmin/organization/less/manager
-    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:organizationLessManager }
+lists_sales_admin_organization_transfer:
+    pattern:  /lists/salesadmin/organization/transfer
+    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:organizationTransfer }
 
 lists_sales_admin_organization_export_excel:
     pattern:  /lists/salesadmin/organization/export/excel

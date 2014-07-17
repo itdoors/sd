@@ -151,7 +151,8 @@ class OrganizationRepository extends EntityRepository
             ->leftJoin('o.city', 'c')
             ->leftJoin('c.region', 'r')
             ->leftJoin('o.scope', 'scope')
-            ->leftJoin('o.users', 'users')
+            ->leftJoin('o.organizationUsers', 'oUser')
+            ->leftJoin('oUser.user', 'users')
             ->leftJoin('o.creator', 'creator')
             ->andWhere('o.parent_id is null');
 
@@ -292,7 +293,8 @@ class OrganizationRepository extends EntityRepository
                      ) as fullNames
                     "
             )
-            ->leftJoin('o.users', 'users')
+            ->leftJoin('o.organizationUsers', 'oUser')
+            ->leftJoin('oUser.user', 'users')
             ->where('lower(o.name) LIKE :q OR lower(o.shortname) LIKE :q')
             ->andWhere('o.parent_id is null')
             ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%')

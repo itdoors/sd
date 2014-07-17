@@ -158,7 +158,9 @@
         {% endif %}
         {% if is_granted('ROLE_SALESADMIN') %}
             <li{% if
-                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_calendar_shared_index')
+                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_calendar_shared_index')
+                        or
+                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_sales_admin_organization_transfer')
                         %} class="active"{% endif %}>
                 <a href="javascript:;">
                     <i class="icon-pencil"></i>
@@ -192,8 +194,10 @@
                             {% trans %}Organizations{% endtrans %}
                         </a>
                     </li>				
-                    <li>
-                        <a href="{{ path('lists_sales_admin_organization_less_manager') }}" title="{% trans %}Transfer organizations{% endtrans %}">
+                    <li{% if
+                             path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_sales_admin_organization_transfer')
+                        %} class="active"{% endif %}>
+                        <a href="{{ path('lists_sales_admin_organization_transfer') }}" title="{% trans %}Transfer organizations{% endtrans %}">
                             <i class="fa fa-building"></i>
                             {% trans %}Transfer organizations{% endtrans %}
                         </a>

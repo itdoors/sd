@@ -98,4 +98,16 @@ class SalesAdminController extends SalesDispatcherController
 
         return $response;
     }
+    /**
+     * Renders organization list
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function organizationTransferAction()
+    {
+        
+        return $this->render('ListsOrganizationBundle:SalesAdmin:organizationTransfer.html.twig', array(
+
+        ));
+    }
 }

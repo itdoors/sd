@@ -160,17 +160,20 @@ Lists\OrganizationBundle\Entity\Organization:
         children:
             targetEntity: Organization
             mappedBy: parent
+        organizationUsers:
+            targetEntity: OrganizationUser
+            mappedBy: organization
     manyToMany:
-        users:
-            targetEntity: SD\UserBundle\Entity\User
-            inversedBy: organizations
-            joinTable:
-              name: organization_user
-              joinColumns:
-                organization_id:
-                  referencedColumnName: id
-              inverseJoinColumns:
-                user_id:
-                  referencedColumnName: id
+#        users:
+#            targetEntity: SD\UserBundle\Entity\User
+#            inversedBy: organizations
+#            joinTable:
+#              name: organization_user
+#              joinColumns:
+#                organization_id:
+#                  referencedColumnName: id
+#              inverseJoinColumns:
+#                user_id:
+#                  referencedColumnName: id
     lifecycleCallbacks:
             prePersist: [ doOnPrePersist ]
