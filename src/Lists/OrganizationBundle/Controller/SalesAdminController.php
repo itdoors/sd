@@ -101,13 +101,43 @@ class SalesAdminController extends SalesDispatcherController
     /**
      * Renders organization list
      * 
+     * @param Request $request
+     * 
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function organizationTransferAction()
+    public function organizationTransferAction(Request $request)
     {
+         $form = $this->createForm('organizationUserForm');
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            /** @var \Lists\OrganizationBundle\Entity\Organization $organization */
+            $organization = $form->getData();
+
+            $user = $this->getUser();
+
+            $organization->setCreator($user);
+
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($organization);
+            $em->flush();
+            
+            $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_organization'));
+            $manager = new OrganizationManager();
+            $manager->setOrganization($organization);
+            $manager->setUser($user);
+            $manager->setLookup($lookup);
+            $em->persist($manager);
+            $em->flush();
+            return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_organization_show', array(
+                'id' => $organization->getId()
+            )));
+        }
         
         return $this->render('ListsOrganizationBundle:SalesAdmin:organizationTransfer.html.twig', array(
-
+                'userForm' => $form->createView(),
         ));
     }
 }

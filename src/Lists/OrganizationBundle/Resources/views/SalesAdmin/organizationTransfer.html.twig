@@ -31,7 +31,7 @@
 {% block body %}
     <script>
         $(document).ready(function(){
-           $('#userFrom').select2({
+           $('#organizationUserForm_user').select2({
                 minimumInputLength: 2,
                 ajax: {
                     url: '{{ path('sd_common_ajax_user') }}',
@@ -50,7 +50,14 @@
             });
         });
     </script>
-    <div class="form-group col-md-3">
-        <input id="userFrom" class="form-control">
+     <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                {{ form_label(userForm.user, 'Select user'|trans , {'attr': {'class': 'control-label'}}) }}
+                {{ form_widget(userForm.user, {'attr': {'class': 'form-control', 'placeholder': 'Enter user'}}) }}
+                <span class="help-block">{% trans %}Select user for set organizarions{% endtrans %}</span>
+                {{ form_errors(userForm.user) }}
+            </div>
+        </div>
     </div>
 {% endblock body %}
