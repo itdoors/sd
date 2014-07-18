@@ -21,6 +21,7 @@ parameters:
     lists_handling.message.service.class: Lists\HandlingBundle\Services\HandlingMessageService
     lists_handling.competitor.service.class: Lists\HandlingBundle\Services\HandlingCompetitorService
     lists_handling.dogovor.service.class: Lists\HandlingBundle\Services\HandlingDogovorService
+    lists_handling.user.service.class: Lists\HandlingBundle\Services\HandlingUserService
 
     lists_handling.message.type.repository.class: Lists\HandlingBundle\Entity\HandlingMessageTypeRepository
     lists_handling.message.type.repository.entity: Lists\HandlingBundle\Entity\HandlingMessageType
@@ -60,6 +61,10 @@ services:
 
     lists_handling.dogovor.service:
         class: %lists_handling.dogovor.service.class%
+        arguments: [ @service_container ]
+
+    lists_handling.user.service:
+        class: %lists_handling.user.service.class%
         arguments: [ @service_container ]
 
     handling.competitor.service:

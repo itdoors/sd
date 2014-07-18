@@ -3,8 +3,10 @@
 namespace Lists\OrganizationBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use PHPExcel_Style_Border;
 use PHPExcel_Style_Alignment;
+use Lists\OrganizationBundle\Entity\OrganizationUser;
 
 /**
  * Class SalesAdminController
@@ -107,37 +109,87 @@ class SalesAdminController extends SalesDispatcherController
      */
     public function organizationTransferAction(Request $request)
     {
-         $form = $this->createForm('organizationUserFilterForm');
-
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            /** @var \Lists\OrganizationBundle\Entity\Organization $organization */
-            $organization = $form->getData();
-
-            $user = $this->getUser();
-
-            $organization->setCreator($user);
-
-            
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($organization);
-            $em->flush();
-            
-            $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_organization'));
-            $manager = new OrganizationManager();
-            $manager->setOrganization($organization);
-            $manager->setUser($user);
-            $manager->setLookup($lookup);
-            $em->persist($manager);
-            $em->flush();
-            return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_organization_show', array(
-                'id' => $organization->getId()
-            )));
-        }
+        $namespase = $this->filterNamespace.'ForUser';
         
         return $this->render('ListsOrganizationBundle:SalesAdmin:organizationTransfer.html.twig', array(
-                'userForm' => $form->createView(),
+                'namespase' => $namespase,
         ));
+    }
+    /**
+     * Renders organization list
+     * 
+     * @param Request $request
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function organizationForUserAction(Request $request)
+    {
+        $namespase = $this->filterNamespace.'ForUser';
+        $filters = $this->getFilters($namespase);
+        
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $organizationsRepository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+        
+        if (empty($filters)) {
+            $filters['isFired'] = 'No fired';
+            $this->setFilters($namespase, $filters);
+            $organizationsQuery = array();
+        } else {
+            /** @var \Doctrine\ORM\Query */
+            $organizationsQuery = $organizationsRepository->getAllForManagerQuery(null, $filters)->getResult();
+        }
+
+        return $this->render('ListsOrganizationBundle:SalesAdmin:organizationForUser.html.twig', array(
+            'pagination' => $organizationsQuery
+        ));
+    }
+    /**
+     * Renders organization list
+     * 
+     * @param Request $request
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function organizationTransferForUserAction(Request $request)
+    {
+        $namespase = $this->filterNamespace.'ForUser';
+        $filters = $this->getFilters($namespase);
+        
+        $userIdOld = $filters['user'];
+        $userId = $request->get('userId');
+        $organizationIds = $request->get('organizations');
+        
+        $em = $this->getDoctrine()->getManager();
+        /** @var \SD\UserBundle\Entity\User $u */
+        $u = $this->getDoctrine()->getRepository('SDUserBundle:User')->find($userId);
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationUserRepository $oU */
+        $oU = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:OrganizationUser');
+        
+        $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_organization'));
+        
+        foreach ($organizationIds as $organizationId) {
+            $organizationUser = $oU->findOneBy(array(
+                'organizationId' => $organizationId,
+                'userId' => $userIdOld,
+                    ));
+            if (!$organizationUser) {
+                $organization = $this->getDoctrine()
+                    ->getRepository('ListsOrganizationBundle:Organization')->find($organizationId);
+                $organizationUser = new OrganizationUser();
+                $organizationUser->setLookup($lookup);
+                $organizationUser->setOrganization($organization);
+            }
+            $organizationUser->setUser($u);
+            $em->persist($organizationUser);
+            
+            $serviceHandlingUser = $this->container->get('lists_handling.user.service');
+            $serviceHandlingUser->changeManagerProject($organizationId, $userId);
+        }
+        $em->flush();
+
+        $result = array('success' => true);
+        return new Response(json_encode($result));
     }
 }

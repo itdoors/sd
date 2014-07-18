@@ -108,6 +108,14 @@ lists_sales_admin_organization_transfer:
     pattern:  /lists/salesadmin/organization/transfer
     defaults: { _controller: ListsOrganizationBundle:SalesAdmin:organizationTransfer }
 
+lists_sales_admin_organization_for_user:
+    pattern:  /lists/salesadmin/organization/for/user
+    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:organizationForUser }
+
+lists_sales_admin_organization_transfer_for_user:
+    pattern:  /lists/salesadmin/organization/transfer/for/user
+    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:organizationTransferForUser }
+
 lists_sales_admin_organization_export_excel:
     pattern:  /lists/salesadmin/organization/export/excel
     defaults: { _controller: ListsOrganizationBundle:SalesAdmin:exportExcel }

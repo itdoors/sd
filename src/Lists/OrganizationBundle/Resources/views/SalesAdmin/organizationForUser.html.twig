@@ -1,63 +1,42 @@
-{% extends "::base.html.twig" %}
 {% trans_default_domain 'ListsOrganizationBundle' %}
-{% block title %}{% trans %}List of rganizations{% endtrans %} {% endblock %}
-{% block page_breadcrumbs %}
-    <ul class="page-breadcrumb breadcrumb">
-        <li>
-            <i class="fa fa-home"></i>
-            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
-            <i class="fa fa-angle-right"></i>
-        </li>
-        <li><a href="" title="{% trans %}Transfer organizations{% endtrans %}">{% trans %}Transfer organizations{% endtrans %}</a></li>
-    </ul>
-{% endblock %}
-{% block page_title %}
-    <h3 class="page-title">
-        {% trans %}Organization <small>list of organization</small>{% endtrans %}
-    </h3>
-{% endblock %}
-
-
-{% block css_page_level_plugin %}
-    {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
-{% endblock %}
-
-{% block js_page_level_plugins %}
-    {{ parent() }}
-    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
-{% endblock %}
-
-{% block body %}
-    {{ form_start(userForm, {
-        'action' : path('it_doors_ajax_filter'),
-        'attr' : {
-            'method' : 'POST',
-            'class' : 'ajax-filter-form',
-            'novalidate': 'novalidate'
-        }
-    }) }}
-    <div class="col-md-6">
-        <div class="form-group">
-            {{ form_label(userForm.user, 'Select user'|trans , {'attr': {'class': 'control-label'}}) }}
-            {{ form_widget(userForm.user, {'attr': {'class': 'form-control', 'placeholder': 'Enter user'}}) }}
-            <span class="help-block">{% trans %}Select user for set organizarions{% endtrans %}</span>
-            {{ form_errors(userForm.user) }}
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            {{ form_widget(userForm.submit, { 'label': 'Select'|trans({}, 'messages'), 'attr': {'class': 'btn blue'} } ) }}
-        </div>
-    </div>
-
-    <input type="hidden" name="formAlias" value="{{ userForm.vars.name }}">
-    <input type="hidden" name="reset" value="0" class="ajax-form-reset-field">
-    {{ form_end(userForm) }}       
-                
-    <script>
-        $(document).ready(function(){
-           $('#organizationUserFilterForm_user').select2({
+<script>
+    $(document).ready(function(){
+        $('#TransferSubmit').on('click', function(){
+           var organizations = $('input[name="organizations[]"]:checked').map(function(){
+                    return $(this).val();
+                }).toArray();
+            var userOldId = $('#organizationUserFilterForm_user').val();
+            var userId = $('#userTo').val();
+            var blockupdate = $('#datatable_ajax');
+             $.ajax({
+                type: 'POST',
+                url: "{{ url('lists_sales_admin_organization_transfer_for_user') }}",
+                dataType: 'json',
+                data: {
+                    organizations: organizations,
+                    userId: userId,
+                    userOldId: userOldId
+                },
+                beforeSend: function() {
+                    ITDoorsAjax.blockUI(blockupdate);
+                },
+                success: function(json) {
+                    ITDoorsAjax.unblockUI(blockupdate);
+                    if (json.success) {
+                        $.ajax({
+                        type: 'POST',
+                        url: blockupdate.data('url'),
+                        success: function(response) {
+                            blockupdate.html(response);
+                            ITDoorsAjax.unblockUI(blockupdate);
+                        }
+                    });
+                    }
+                }
+            });
+        });
+        $('#userTo').select2({
+                width: '200px',
                 minimumInputLength: 2,
                 ajax: {
                     url: '{{ path('sd_common_ajax_user') }}',
@@ -73,17 +52,35 @@
                         };
                     }
                 }
-            }).on("select2-selecting", function(e) {
-            //alert(e.object.text);
-          //log("selecting val=" + e.val + " choice=" + e.object.text);
-        });
-        });
-    </script>
-    <div class="row">
-        <div class="col-md-12">
-            <div id="datatable_ajax"  data-url="{{ url('sd_user_stufflist') }}">
-                {#{ render(controller('SDUserBundle:' ~ baseTemplate ~ ':stufflist')) }#}
-            </div>
-        </div>
-    </div>
-{% endblock body %}
+            });
+    });
+</script>
+<div class="table-responsive col-md-12">
+    <table class="table table-striped table-bordered table-advance table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans %}ID{% endtrans %} </th>
+                <th>{% trans %}Name{% endtrans %} </th>
+                <th>{% trans %}Edrpou{% endtrans %} </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in pagination %}
+                <tr {% if loop.index is odd %}class="color"{% endif %}>
+                    <td><input type="checkbox" name="organizations[]" value="{{ item.organizationId|e }}"></td>
+                    <td><a target="_blank"
+                            href="{{ path('lists_sales_admin_organization_show', { id: item.organizationId }) }}">
+                            {{ item.organizationId|e }}
+                        </a></td>
+                    <td>{{ item.organizationName|e }}</td>
+                    <td>{{ item.edrpou|e }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="table-responsive col-md-6">
+    <input id="userTo" value="">
+    <button type="submit" id="TransferSubmit" name="organizationUserFilterForm[submit]" class="btn blue">{%trans%}Transfer{% endtrans %}</button>
+</div>

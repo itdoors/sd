@@ -18,6 +18,40 @@ class OrganizationRepository extends EntityRepository
      *
      * @return \Doctrine\ORM\Query
      */
+    public function getAllForManagerQuery($userIds, $filters)
+    {
+        if (!is_array($userIds) && $userIds) {
+            $userIds = array($userIds);
+        }
+
+        /** @var \Doctrine\ORM\QueryBuilder $sql*/
+        $sql = $this->createQueryBuilder('o');
+
+        $this->processSelect($sql);
+
+        $this->processBaseQuery($sql);
+        $sql->where('o.organizationSignId != 61 or o.organizationSignId is NULL')
+                ->andWhere('lookup.lukey = :lukey')
+                ->setParameter(':lukey', 'manager_organization');
+
+        if (sizeof($userIds)) {
+            $this->processUserQuery($sql, $userIds);
+        }
+
+        $this->processFilters($sql, $filters);
+
+        $this->processOrdering($sql);
+
+        $query = $sql->getQuery();
+
+        return $query;
+    }
+    /**
+     * @param int[]   $userIds
+     * @param mixed[] $filters
+     *
+     * @return \Doctrine\ORM\Query
+     */
     public function getAllForSalesQuery($userIds, $filters)
     {
         if (!is_array($userIds) && $userIds) {
@@ -153,6 +187,7 @@ class OrganizationRepository extends EntityRepository
             ->leftJoin('o.scope', 'scope')
             ->leftJoin('o.organizationUsers', 'oUser')
             ->leftJoin('oUser.user', 'users')
+            ->leftJoin('oUser.lookup', 'lookup')
             ->leftJoin('o.creator', 'creator')
             ->andWhere('o.parent_id is null');
 
@@ -224,6 +259,13 @@ class OrganizationRepository extends EntityRepository
                         $sql->andWhere('users.id in (:userFilterIds)');
                         $sql->setParameter(':userFilterIds', $value);
                         break;
+                    case 'user':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $sql->andWhere('users.id in (:userFilterIds)');
+                        $sql->setParameter(':userFilterIds', $value);
+                        break;
                     case 'organizationEdrpou':
                         if (isset($value[0]) && !$value[0]) {
                             break;
@@ -287,7 +329,7 @@ class OrganizationRepository extends EntityRepository
                             CONCAT(CONCAT(u.lastName, ' '), u.firstName)
                           FROM
                             SDUserBundle:User u
-                          LEFT JOIN u.organizations ou
+                          LEFT JOIN u.organizationUsers ou
                           WHERE ou.id = o.id
                        ), ', '
                      ) as fullNames
