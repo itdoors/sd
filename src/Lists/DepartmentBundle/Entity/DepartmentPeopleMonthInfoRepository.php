@@ -113,13 +113,14 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
                         if (isset($value[0]) && !$value[0]) {
                             break;
                         }
-                        $sql->orderBy('i.lastName', $value);
+                        $sql->addOrderBy('i.lastName', $value);
                         break;
                 }
             }
         }
 
         //$sql->orderBy('i.lastName', "ASC");
+        //$sql = $sql->setMaxResults(70);
         $query = $sql->getQuery();
 
         return $query;

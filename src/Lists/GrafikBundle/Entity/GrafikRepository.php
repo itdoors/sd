@@ -30,16 +30,22 @@ class GrafikRepository extends EntityRepository
             ->addSelect('t.isSkip as isSkip')
             ->addSelect('t.isFired as isFired')
             ->addSelect('t.isVacation as isVacation')
+            ->addSelect('t.isOwnVacation as isOwnVacation')
             ->addSelect('t.totalNotOfficially as totalNotOfficially')
             ->leftJoin('t.department', 'd')
             ->leftJoin('t.departmentPeople', 'dp')
             ->andWhere('t.month = :month')
             ->setParameter('month', $month)
             ->andWhere('t.year = :year')
-            ->setParameter(':year', $year)
-            ->andWhere('d.id = :idDepartment')
-            ->setParameter(':idDepartment', $idDepartment)
-            ->andWhere('dp.id = :idCoworker')
+            ->setParameter(':year', $year);
+        if (is_array($idDepartment)) {
+            $result = $result->andWhere('d.id IN (:idDepartment)')
+                ->setParameter(':idDepartment', $idDepartment);
+        } else {
+            $result = $result->andWhere('d.id = :idDepartment')
+                ->setParameter(':idDepartment', $idDepartment);
+        }
+        $result = $result->andWhere('dp.id = :idCoworker')
             ->setParameter(':idCoworker', $idCoworker)
             ->andWhere('t.departmentPeopleReplacement = :idReplacement')
             ->setParameter(':idReplacement', $idReplacement)
@@ -109,6 +115,7 @@ class GrafikRepository extends EntityRepository
             ->addSelect('t.isSkip as isSkip')
             ->addSelect('t.isFired as isFired')
             ->addSelect('t.isVacation as isVacation')
+            ->addSelect('t.isOwnVacation as isOwnVacation')
             ->leftJoin('t.department', 'd')
             ->leftJoin('t.departmentPeople', 'dp')
             ->andWhere('t.departmentPeopleReplacement = :idReplacement')
@@ -177,10 +184,15 @@ class GrafikRepository extends EntityRepository
             ->andWhere('t.month = :month')
             ->setParameter(':month', $month)
             ->andWhere('t.year = :year')
-            ->setParameter(':year', $year)
-            ->andWhere('d.id = :idDepartment')
-            ->setParameter(':idDepartment', $idDepartment)
-            ->andWhere('dp.id = :idCoworker')
+            ->setParameter(':year', $year);
+        if (is_array($idDepartment)) {
+            $result = $result->andWhere('d.id IN (:id)')
+                ->setParameter(':id', $idDepartment);
+        } else {
+            $result = $result->andWhere('d.id = :id')
+                ->setParameter(':id', $idDepartment);
+        }
+            $result = $result->andWhere('dp.id = :idCoworker')
             ->setParameter(':idCoworker', $idCoworker)
             ->getQuery()
             ->getSingleScalarResult();
@@ -208,10 +220,15 @@ class GrafikRepository extends EntityRepository
             ->andWhere('t.month = :month')
             ->setParameter(':month', $month)
             ->andWhere('t.year = :year')
-            ->setParameter(':year', $year)
-            ->andWhere('d.id = :idDepartment')
-            ->setParameter(':idDepartment', $idDepartment)
-            ->andWhere('dp.id = :idCoworker')
+            ->setParameter(':year', $year);
+        if (is_array($idDepartment)) {
+            $result = $result->andWhere('d.id IN (:id)')
+                ->setParameter(':id', $idDepartment);
+        } else {
+            $result = $result->andWhere('d.id = :id')
+                ->setParameter(':id', $idDepartment);
+        }
+            $result = $result->andWhere('dp.id = :idCoworker')
             ->setParameter(':idCoworker', $idCoworker)
             ->getQuery()
             ->getSingleScalarResult();

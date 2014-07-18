@@ -22,46 +22,6 @@ class OperCoworkerInfoController extends BaseFilterController
      */
     public function indexAction()
     {
-        //////////////////////////
-        $data[0]['number'] = 1;
-        $data[0]['city'] = 'Kiev';
-        $data[0]['visited'] = true;
-        $data[0]['cityId'] = 22;
-
-        $data[1]['number'] = 2;
-        $data[1]['city'] = 'Paris';
-        $data[1]['visited'] = false;
-        $data[1]['cityId'] = 25;
-
-        $data[2]['number'] = 3;
-        $data[2]['city'] = 'Sochi';
-        $data[2]['visited'] = true;
-        $data[2]['cityId'] = 23;
-
-        $data[3]['number'] = 4;
-        $data[3]['city'] = 'Odessa';
-        $data[3]['visited'] = true;
-        $data[3]['cityId'] = 27;
-
-        $data[4]['number'] = 5;
-        $data[4]['city'] = 'Khmelnitskiy';
-        $data[4]['visited'] = false;
-        $data[4]['cityId'] = 28;
-
-        $options = array();
-        //$options['show'] = array('number', 'city', 'visited');
-        $options['visited']['type'] = 'checkbox';
-        $options['visited']['param'] = array(
-            'checked' => 'value',
-            'pattern' => '/oleoleole/',
-            'index' => 'cityId',
-            'class' => 'cool aha'
-        );
-
-        $options['city']['type'] = 'text';
-        $options['city']['param'] = array(
-            'ordering' => true
-        );
 
         $year = intval(date('Y'));
         $month = intval(date('m'));
@@ -83,8 +43,6 @@ class OperCoworkerInfoController extends BaseFilterController
         $this->addToSessionValues('idDepartment', $allowedDepartments, 'param', 'oper.bundle.department');
 
         return $this->render('ITDoorsOperBundle:Coworker:index.html.twig', array(
-            'data' => $data,
-            'options' => $options
         ));
     }
 
@@ -113,6 +71,7 @@ class OperCoworkerInfoController extends BaseFilterController
         /** @var AccessService $accessService */
         $accessService = $this->get('access.service');
         $allowedDepartments = $accessService->getAllowedDepartmentsId();
+
         //$allowedDepartments = array(2111);
         $this->addToSessionValues('idDepartment', $allowedDepartments, 'param', 'oper.bundle.department');
 
@@ -126,23 +85,108 @@ class OperCoworkerInfoController extends BaseFilterController
         $query = $monthInfoRepository->getFilteredCoworkers($allowedDepartments, $month, $year, $filters, $orders);
 
         $coworkers = $query->getResult();
-        $infoSumSalary = array();
+
+/*        $infoSumSalary = array();
         $commonService = $this->get('common_oper.service');
+
         foreach ($coworkers as $coworker) {
             $id = $coworker['id'];
             $replacementId = $coworker['replacementId'];
             $idDepartment = $coworker['idDepartment'];
-            $infoSumSalary['coworker_'.$id] = $commonService->getSumsCoworker($year.'-'.$month, $id, $replacementId, $idDepartment);
+            //$infoSumSalary['coworker_'.$id] = $commonService->getSumsCoworker($year.'-'.$month, $id, $replacementId, $idDepartment);
 
-        }
+        }*/
+
         $canEdit = $accessService->checkIfCanEdit();
 
         return $this->render('ITDoorsOperBundle:Coworker:coworkerTable.html.twig', array(
             'coworkers' => $coworkers,
             'month' => $month,
             'year' => $year,
-            'infoSumSalary' => $infoSumSalary,
+            //'infoSumSalary' => $infoSumSalary,
             'canEdit' => $canEdit
+        ));
+
+    }
+
+    /**
+     * @return Response
+     */
+    public function coworkerIndexAction()
+    {
+        return $this->render('ITDoorsOperBundle:Coworker:coworker.html.twig', array(
+        ));
+    }
+
+    /**
+     * @return Response
+     */
+    public function scheduleIndexAction()
+    {
+        return $this->render('ITDoorsOperBundle:Coworker:schedule.html.twig', array(
+        ));
+    }
+
+
+    /**
+     * @return Response
+     */
+    public function testTableRenderAction () {
+        //////////////////////////
+        $data[0]['number'] = 1;
+        $data[0]['city'] = 'Kiev';
+        $data[0]['visited'] = true;
+        $data[0]['cityId'] = 22;
+
+        $data[1]['number'] = 2;
+        $data[1]['city'] = 'Paris';
+        $data[1]['visited'] = false;
+        $data[1]['cityId'] = 25;
+
+        $data[2]['number'] = 3;
+        $data[2]['city'] = 'Sochi';
+        $data[2]['visited'] = true;
+        $data[2]['cityId'] = 23;
+
+        $data[3]['number'] = 4;
+        $data[3]['city'] = 'Odessa';
+        $data[3]['visited'] = true;
+        $data[3]['cityId'] = 27;
+
+        $data[4]['number'] = 5;
+        $data[4]['city'] = 'Khmelnitskiy';
+        $data[4]['visited'] = false;
+        $data[4]['cityId'] = 28;
+
+/*        $departmentPeopleRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
+
+        $dps = $departmentPeopleRepository->findBy(array(
+            'department' => 2111
+        ));
+        foreach ($dps as $dp) {
+            $data[] = get_object_vars($dp);
+        }*/
+
+        $options = array();
+        //$options['show'] = array('number', 'city', 'visited');
+        $options['visited']['type'] = 'checkbox';
+        $options['visited']['param'] = array(
+            'checked' => 'value',
+            'pattern' => '/oleoleole/',
+            'index' => 'cityId',
+            'class' => 'cool aha',
+            'data' => array('pk' =>5, 'city'=> 'olena')
+        );
+
+        $options['city']['type'] = 'text';
+        $options['city']['param'] = array(
+            'ordering' => true
+        );
+
+        return $this->render('ITDoorsOperBundle:Coworker:testTable.html.twig', array(
+            'options' => $options,
+            'data' => $data
         ));
 
     }

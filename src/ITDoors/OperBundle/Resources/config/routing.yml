@@ -117,3 +117,15 @@ it_doors_oper_coworker:
 it_doors_oper_coworker_table:
     pattern:  /oper/coworker/table
     defaults: { _controller: ITDoorsOperBundle:OperCoworkerInfo:coworkerTable }
+
+it_doors_oper_coworker_test_table:
+    pattern:  /oper/coworker/test/table
+    defaults: { _controller: ITDoorsOperBundle:OperCoworkerInfo:testTableRender }
+
+it_doors_oper_coworker_index:
+    pattern:  /oper/coworker/index
+    defaults: { _controller: ITDoorsOperBundle:OperCoworkerInfo:coworkerIndex }
+
+it_doors_oper_coworker_schedule_index:
+    pattern:  /oper/coworker/schedule/index
+    defaults: { _controller: ITDoorsOperBundle:OperCoworkerInfo:scheduleIndex }

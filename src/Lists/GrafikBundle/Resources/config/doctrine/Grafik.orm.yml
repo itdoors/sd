@@ -61,6 +61,10 @@ Lists\GrafikBundle\Entity\Grafik:
             type: boolean
             nullable: true
             column: is_skip
+        isOwnVacation:
+            type: boolean
+            nullable: true
+            column: is_own_vacation
         isFired:
             type: boolean
             nullable: true
