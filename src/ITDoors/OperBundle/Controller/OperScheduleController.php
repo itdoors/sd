@@ -182,7 +182,9 @@ class OperScheduleController extends BaseFilterController
         $monthInfoRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
 
-        $query = $monthInfoRepository->getFilteredCoworkers($idDepartment, $month, $year, $filters);
+        $orders = $this->getOrdering($filterNamespace);
+
+        $query = $monthInfoRepository->getFilteredCoworkers($idDepartment, $month, $year, $filters, $orders);
 
         $coworkers = $query->getResult();
 

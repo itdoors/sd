@@ -1,5 +1,5 @@
 {{ ajax_filter_render('ScheduleFilterFormType', ajax_namespace_oper_department_schedule, {
-'coworker_list': 'ITDoorsAjax.updateList'
+'schedule_content': 'ITDoorsAjax.updateList'
 }) }}
 
 <div id="form_modal_more_info" class="modal fade" role="basic" aria-hidden="true">
@@ -24,11 +24,11 @@
 </div>
 
 
-
-{{ render(controller('ITDoorsOperBundle:OperSchedule:scheduleTable', {
-'id': 0
-})) }}
-
+<div id="total_schedule">
+    {{ render(controller('ITDoorsOperBundle:OperSchedule:scheduleTable', {
+    'id': 0
+    })) }}
+</div>
 
 <script src="{{ asset('bundles/itdoorsajax/js/jquery.forms.js') }}" type="text/javascript"></script>
 <script src="{{ asset('bundles/itdoorsajax/js/itdoors.ajax.js?v=1.01') }}" type="text/javascript"></script>

@@ -621,9 +621,18 @@
             <tr style="background-color: #ffffff">
                 <th>{#{% trans %}Copy{% endtrans %}#}</th>
                 <th>#</th>
-                <th>{% trans %}Fio{% endtrans %}</th>
+                <th>{% trans %}Fio{% endtrans %}
+                    {{ ajax_ordering('lastName', ajax_namespace_oper_department_schedule, {
+                    'schedule_content': 'ITDoorsAjax.updateList'
+                    }) }}
+                </th>
                 <th>{% trans %}P/z{% endtrans %}</th>
-                <th>{% trans %}Mpk{% endtrans %}</th>
+                <th>
+                    {% trans %}Mpk{% endtrans %}
+                    {{ ajax_ordering('mpk', ajax_namespace_oper_department_schedule, {
+                    'schedule_content': 'ITDoorsAjax.updateList'
+                    }) }}
+                </th>
                 {% for dayInfo in dateInfo %}
                     <th>
                         {{ dayInfo.day }}

@@ -217,8 +217,13 @@ class DepartmentPeopleRepository extends EntityRepository
             ->setParameter(':q1', mb_strtolower($q, 'UTF-8') . '%');
 
         if ($idDepartment) {
-            $sql->andWhere('d.id = :department')
-                ->setParameter(':department', $idDepartment);
+            if (is_array($idDepartment)) {
+                $sql->andWhere('d.id IN (:department)')
+                    ->setParameter(':department', $idDepartment);
+            } else {
+                $sql->andWhere('d.id = :department')
+                    ->setParameter(':department', $idDepartment);
+            }
         }
 
         if (sizeof($filters)) {
