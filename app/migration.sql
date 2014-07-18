@@ -619,5 +619,8 @@ ALTER TABLE organization_user ADD CONSTRAINT FK_B49AE8D4A76ED395 FOREIGN KEY (us
 CREATE INDEX IDX_B49AE8D48955C49D ON organization_user (lookup_id);
 
 INSERT INTO "public".lookup (lukey, "name", "group") VALUES ('manager_organization', 'Менеджер органицазии', 'manager_role_organization');
+
+ALTER TABLE grafik ADD COLUMN is_own_vacation boolean;
+ALTER TABLE grafik ALTER COLUMN is_own_vacation SET DEFAULT false;
 --test   -----------------------------
 --stagin -----------------------------
