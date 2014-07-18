@@ -11,22 +11,10 @@
     <tbody>
     {% for item in organizationUsers %}
         <tr>
-            <td>{{ item.fullName }}</td>
-            <td>
-                {% if item.stuff %}
-                    {{ item.stuff.mobilephone }}
-                {% endif %}
-            </td>
+            <td>{{ item.firstName }} {{ item.lastName }}</td>
+            <td>{{ item.mobilephone }}</td>
             <td>{{ item.email }}</td>
-            <td>
-                <a
-                    class="ajax-delete"
-                    href="javascript:;"
-                    data-params='{"model":"OrganizationUser","organizationId":{{ organizationId }},"userId":{{ item.id }}}'
-                >
-                    {% trans %}Delete{% endtrans %}
-                </a>
-            </td>
+            <td>{{ item.name }}</td>
         </tr>
     {% endfor %}
     </tbody>

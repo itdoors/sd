@@ -76,8 +76,8 @@ class SalesAdminController extends SalesDispatcherController
         ));
     }
     /**
-     * Renders organizationUsers list
-     *
+     * exportExcelAction
+     * 
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function exportExcelAction()

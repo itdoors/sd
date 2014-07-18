@@ -276,7 +276,7 @@ class SalesController extends BaseController
      */
     public function handlingUsersAction($handlingId)
     {
-         /** @var \Lists\HandlingBundle\Entity\HandlingUserRepository $handlingUser */
+        /** @var \Lists\HandlingBundle\Entity\HandlingUserRepository $handlingUser */
         $handlingUser = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingUser');
 
@@ -284,14 +284,13 @@ class SalesController extends BaseController
             ->getQuery()
             ->getResult();
 
-        $lookupId = $this->getDoctrine()
-            ->getRepository('ListsLookupBundle:Lookup')->getOnlyManagerProjectId();
+        $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_project'));
 
         $mainManager = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingUser')
             ->findOneBy(array(
                 'handlingId' => $handlingId,
-                'lookupId' => $lookupId,
+                'lookupId' => $lookup->getId(),
                 'userId' => $this->getUser()->getId(),
                 ));
 

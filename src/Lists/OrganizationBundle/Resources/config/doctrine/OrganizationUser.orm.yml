@@ -21,9 +21,6 @@ Lists\OrganizationBundle\Entity\OrganizationUser:
             type: integer
             nullable: false
             column: lookup_id
-        part:
-            type: integer
-            nullable: false
     manyToOne:
         lookup:
             targetEntity: Lists\LookupBundle\Entity\Lookup

@@ -31,6 +31,7 @@ use Lists\CompanystructureBundle\Entity\Companystructure;
 use SD\UserBundle\Entity\Usercontactinfo;
 use SD\CalendarBundle\Entity\Task;
 use Lists\HandlingBundle\Entity\HandlingUser;
+use Lists\OrganizationBundle\Entity\OrganizationUser;
 
 /**
  * AjaxController class.
@@ -1530,60 +1531,9 @@ class AjaxController extends BaseFilterController
     {
         $data = $form->getData();
 
-        $em = $this->getDoctrine()->getManager();
-
-        $user = $this->getDoctrine()
-            ->getRepository('SDUserBundle:User')
-            ->find($data['user']);
-
-        $organization = $this->getDoctrine()
-            ->getRepository('ListsOrganizationBundle:Organization')
-            ->find($data['organizationId']);
-
-        $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_organization'));
-        $managerOrganization = $this->getDoctrine()
-            ->getRepository('ListsOrganizationBundle:OrganizationUser')
-            ->findOneBy(array(
-                'organizationId' => $data['organizationId'],
-                'lookupId' => $lookup->getId(),
-                ));
         if ($this->getUser()->hasRole('ROLE_SALESADMIN')) {
-            if (!$managerOrganization) {
-                $managerOrganization = $this->getDoctrine()
-                    ->getRepository('ListsOrganizationBundle:OrganizationUser')
-                    ->findOneBy(array(
-                        'organizationId' => $data['organizationId'],
-                        'userId' => $data['user'],
-                    ));
-                if (!$managerOrganization) {
-                    $managerOrganization = new OrganizationUser();
-                    $managerOrganization->setUser($user);
-                    $managerOrganization->setOrganization($organization);
-                    $managerOrganization->setPart(100);
-                    $managerOrganization->setLookup($lookup);
-                } else {
-                    $managerOrganization->setLookup($lookup);
-                    $managerOrganization->setPart(100);
-                }
-            } else {
-                $oldManager = $this->getDoctrine()
-                    ->getRepository('ListsOrganizationBundle:OrganizationUser')
-                    ->findOneBy(array(
-                        'organizationId' => $data['organizationId'],
-                        'userId' => $user->getId(),
-                        ));
-                if ($oldManager) {
-                    $part = $managerOrganization->getPart()+$oldManager->getPart();
-                    $em->remove($oldManager);
-                    if ($part > 100) {
-                        $part = 100;
-                    }
-                    $managerOrganization->setPart($part);
-                }
-                $managerOrganization->setUser($user);
-            }
-            $em->persist($managerOrganization);
-            $em->flush();
+            $serviceOrganizationUser = $this->container->get('lists_organization.user.service');
+            $serviceOrganizationUser->changeManagerOrganizationProject($data['organizationId'], $data['user']);
 
             return true;
         }
@@ -1937,61 +1887,9 @@ class AjaxController extends BaseFilterController
     {
         $data = $form->getData();
 
-        $em = $this->getDoctrine()->getManager();
-
-        $user = $this->getDoctrine()
-            ->getRepository('SDUserBundle:User')
-            ->find($data['user']);
-        $handling = $this->getDoctrine()
-            ->getRepository('ListsHandlingBundle:Handling')
-            ->find($data['handlingId']);
-        $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_project'));
-
-        $mainManager = $this->getDoctrine()
-            ->getRepository('ListsHandlingBundle:HandlingUser')
-            ->findOneBy(array(
-                'handlingId' => $data['handlingId'],
-                'lookupId' => $lookup->getId(),
-                ));
-
         if ($this->getUser()->hasRole('ROLE_SALESADMIN')) {
-            if (!$mainManager) {
-                $mainManager = $this->getDoctrine()
-                    ->getRepository('ListsHandlingBundle:HandlingUser')
-                    ->findOneBy(array(
-                        'handlingId' => $data['handlingId'],
-                        'userId' => $data['user'],
-                    ));
-                if (!$mainManager) {
-                    $mainManager = new HandlingUser();
-                    $mainManager->setUser($user);
-                    $mainManager->setHandling($handling);
-                    $mainManager->setPart(100);
-                    $mainManager->setLookup($lookup);
-                } else {
-                    $mainManager->setLookup($lookup);
-                    $mainManager->setPart(100);
-                }
-            } else {
-                $oldManager = $this->getDoctrine()
-                    ->getRepository('ListsHandlingBundle:HandlingUser')
-                    ->findOneBy(array(
-                        'handlingId' => $data['handlingId'],
-                        'userId' => $user->getId(),
-                        ));
-                if ($oldManager) {
-                    $part = $mainManager->getPart()+$oldManager->getPart();
-                    $em->remove($oldManager);
-                    if ($part > 100) {
-                        $part = 100;
-                    }
-                    $mainManager->setPart($part);
-                }
-                $mainManager->setUser($user);
-
-            }
-            $em->persist($mainManager);
-            $em->flush();
+            $serviceHandlingUser = $this->container->get('lists_handling.user.service');
+            $serviceHandlingUser->changeManagerProjectOne($data['handlingId'], $data['user']);
 
             return true;
         }

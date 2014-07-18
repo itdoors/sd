@@ -43,23 +43,71 @@ class HandlingUserService
         /** @var Handling $handlings */
         $handlings = $em->getRepository('ListsHandlingBundle:Handling')
                 ->findBy(array('organization_id' => $organizationId));
-        /** @var Lookup $lookup */
-         $lookup = $em->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager_organization'));
-        /** @var User $user */
-         $user = $em->getRepository('SDUserBundle:User')->find($userId);
-
-        foreach ($handlings as $h) {
-            $handlingUser = $em->getRepository('ListsHandlingBundle:HandlingUser')
-                ->findOneBy(array('handlingId' => $h->getId()));
-            if (!$handlingUser) {
-                $handlingUser = new HandlingUser();
-                $handlingUser->setHandling($h);
-                $handlingUser->setLookup($lookup);
-                $handlingUser->setPart(100);
-            }
-            $handlingUser->setUser($user);
-            $em->persist($handlingUser);
+        foreach ($handlings as $handling) {
+            $this->changeManagerProjectOne($handling->getId(), $userId);
         }
+    }
+    /**
+     * Save form
+     *
+     * @param integer $handlingId
+     * @param integer $userId
+     */
+    public function changeManagerProjectOne($handlingId, $userId)
+    {
+        /** @var EntityManager $em */
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        $user = $em->getRepository('SDUserBundle:User')->find($userId);
+        $handling = $em->getRepository('ListsHandlingBundle:Handling')->find($handlingId);
+
+        $lookup = $em->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_project'));
+
+        $mainManager = $em
+            ->getRepository('ListsHandlingBundle:HandlingUser')
+            ->findOneBy(array(
+                'handlingId' => $handlingId,
+                'lookupId' => $lookup->getId(),
+                ));
+
+        if (!$mainManager) {
+            $mainManager = $em
+                ->getRepository('ListsHandlingBundle:HandlingUser')
+                ->findOneBy(array(
+                    'handlingId' => $handlingId,
+                    'userId' => $userId,
+                ));
+            if (!$mainManager) {
+                $mainManager = new HandlingUser();
+                $mainManager->setUser($user);
+                $mainManager->setHandling($handling);
+                $mainManager->setPart(100);
+                $mainManager->setLookup($lookup);
+            } else {
+                $mainManager->setLookup($lookup);
+                $mainManager->setPart(100);
+            }
+        } else {
+            $oldManager = $em
+                ->getRepository('ListsHandlingBundle:HandlingUser')
+                ->findOneBy(array(
+                    'handlingId' => $handlingId,
+                    'userId' => $userId,
+                    ));
+            if ($oldManager) {
+                $part = $mainManager->getPart()+$oldManager->getPart();
+                $em->remove($oldManager);
+                if ($part > 100) {
+                    $part = 100;
+                }
+                $mainManager->setPart($part);
+            } else {
+                if ($mainManager->getPart() === null) {
+                    $mainManager->setPart(100);
+                }
+            }
+            $mainManager->setUser($user);
+        }
+        $em->persist($mainManager);
         $em->flush();
     }
 }

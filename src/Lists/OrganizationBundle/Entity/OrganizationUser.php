@@ -205,33 +205,4 @@ class OrganizationUser
     {
         // Add your code here
     }
-    /**
-     * @var integer
-     */
-    private $part;
-
-
-    /**
-     * Set part
-     *
-     * @param integer $part
-     * 
-     * @return OrganizationUser
-     */
-    public function setPart($part)
-    {
-        $this->part = $part;
-
-        return $this;
-    }
-
-    /**
-     * Get part
-     *
-     * @return integer 
-     */
-    public function getPart()
-    {
-        return $this->part;
-    }
 }

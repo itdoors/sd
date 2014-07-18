@@ -166,16 +166,28 @@ class SalesController extends BaseController
      */
     public function organizationUsersAction($organizationId)
     {
-        /** @var \SD\UserBundle\Entity\UserRepository $ur*/
-        $ur = $this->container->get('sd_user.repository');
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationUserRepository $organizationUser */
+        $organizationUser = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:OrganizationUser');
 
-        $organizationUsers = $ur->getOrganizationUsersQuery($organizationId)
+        $organizationUsers = $organizationUser->getOrganizationUsersQuery($organizationId)
             ->getQuery()
             ->getResult();
 
+        $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_organization'));
+
+        $managerOrganization = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:OrganizationUser')
+            ->findOneBy(array(
+                'organizationId' => $organizationId,
+                'lookupId' => $lookup->getId(),
+                'userId' => $this->getUser()->getId(),
+                ));
+
         return $this->render('ListsOrganizationBundle:' . $this->baseTemplate. ':organizationUsers.html.twig', array(
                 'organizationUsers' => $organizationUsers,
-                'organizationId' => $organizationId
+                'organizationId' => $organizationId,
+                'managerOrganization' => $managerOrganization
             ));
     }
     /**
