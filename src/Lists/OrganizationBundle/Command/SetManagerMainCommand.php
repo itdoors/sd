@@ -43,61 +43,25 @@ class SetManagerMainCommand extends ContainerAwareCommand
     {
         $em = $this->getContainer()->get('doctrine')->getManager();
 
-        /** @var Lookup $lookup */
-        $lookup = $em->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager_organization'));
-        /** @var Lookup $lookupMp */
-        $lookupMp = $em->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager_project'));
-        /** @var Lookup $lookupM */
-        $lookupM = $em->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager'));
-
         $organizations = $em->getRepository('ListsOrganizationBundle:Organization')->findAll();
         foreach ($organizations as $organization) {
             echo $organization->getId()." \t\n";
             $organizationUsers = $organization->getOrganizationUsers();
-            $organizationUser = false;
+            $userId = false;
             if (count($organizationUsers) == 1) {
-                $organizationUser = $organizationUsers[0];
-                if (!$organizationUser->getLookup()) {
-                    $organizationUser->setLookup($lookup);
-                    $em->persist($organizationUser);
-                }
+                $user = $organizationUsers[0];
+                $userId = $user->getUser()->getId();
             } else if (count($organizationUsers) > 1) {
-                $organizationUser = $organizationUsers[count($organizationUsers)-1];
-                if (!$organizationUser->getLookup()) {
-                    $organizationUser->setLookup($lookup);
-                    $em->persist($organizationUser);
-                }
+                $user = $organizationUsers[count($organizationUsers)-1];
+                $userId = $user->getUser()->getId();
             } else if (count($organizationUsers) == 0 && method_exists($organization, 'getUser')) {
-                $organizationUser = new \Lists\OrganizationBundle\Entity\OrganizationUser();
-                $organizationUser->setLookup($lookup);
-                $organizationUser->setUser($organization->getUser());
-                $organizationUser->setOrganization($organization);
-                $em->persist($organizationUser);
-            } else if (!method_exists($organizationUser, 'getUser')) {
+                $userId = $organization->getUser()->getId();
+            } else if (!method_exists($organization, 'getUser')) {
                 echo 'In organization not found user creator and manager id: '.$organization->getId()."\n";
             }
-            if ($organizationUser) {
-                $handlings = $em->getRepository('ListsHandlingBundle:Handling')
-                        ->findBy(array(
-                            'organization_id' => $organizationUser->getOrganizationId()
-                        ));
-                foreach ($handlings as $handling) {
-                    $handlingUsers = $handling->getHandlingUsers();
-                    foreach ($handlingUsers as $handlingUser) {
-                        if ($handlingUser->getUserId() == $organizationUser->getUserId() && !$handlingUser->getPart()) {
-                            $handlingUser->setPart(100);
-                            $em->persist($handlingUser);
-                        }
-                        if ($handlingUser->getUserId() == $organizationUser->getUserId() && !$handlingUser->getLookup()) {
-                            $handlingUser->setLookup($lookupMp);
-                            $em->persist($handlingUser);
-                        }
-                        if ($handlingUser->getUserId() != $organizationUser->getUserId() && !$handlingUser->getLookup()) {
-                            $handlingUser->setLookup($lookupM);
-                            $em->persist($handlingUser);
-                        }
-                    }
-                }
+            if ($userId) {
+                $serviceOrganizationUser = $this->getContainer()->get('lists_organization.user.service');
+                $serviceOrganizationUser->changeManagerOrganizationProject($organization->getId(), $userId);
             }
         }
         $em->flush();
