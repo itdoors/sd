@@ -812,12 +812,13 @@ class Grafik
      * Set isOwnVacation
      *
      * @param boolean $isOwnVacation
+     *
      * @return Grafik
      */
     public function setIsOwnVacation($isOwnVacation)
     {
         $this->isOwnVacation = $isOwnVacation;
-    
+
         return $this;
     }
 

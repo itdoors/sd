@@ -131,7 +131,8 @@ class OperCoworkerInfoController extends BaseFilterController
     /**
      * @return Response
      */
-    public function testTableRenderAction () {
+    public function testTableRenderAction ()
+    {
         //////////////////////////
         $data[0]['number'] = 1;
         $data[0]['city'] = 'Kiev';
