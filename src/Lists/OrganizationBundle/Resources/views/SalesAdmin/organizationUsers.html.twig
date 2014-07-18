@@ -5,7 +5,7 @@
         <th>{% trans %}LastName, FirstName{% endtrans %}</th>
         <th>{% trans %}Mobile{% endtrans %}</th>
         <th>{% trans %}Email{% endtrans %}</th>
-        <th>{% trans %}Action{% endtrans %}</th>
+        <th>{% trans %}Role{% endtrans %}</th>
     </tr>
     </thead>
     <tbody>
@@ -17,9 +17,7 @@
                     {{ item.stuff.mobilephone }}
                 {% endif %}
             </td>
-            <td>
-                {{ item.email }}
-            </td>
+            <td>{{ item.email }}</td>
             <td>
                 <a
                     class="ajax-delete"
