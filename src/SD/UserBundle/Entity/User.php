@@ -432,6 +432,41 @@ class User extends BaseUser
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
+    private $handlingUsers;
+
+
+    /**
+     * Add handlingUsers
+     *
+     * @param \Lists\HandlingBundle\Entity\HandlingUser $handlingUsers
+     * 
+     * @return User
+     */
+    public function addHandlingUser(\Lists\HandlingBundle\Entity\HandlingUser $handlingUsers)
+    {
+        $this->handlingUsers[] = $handlingUsers;
+
+        return $this;
+    }
+
+    /**
+     * Remove handlingUsers
+     *
+     * @param \Lists\HandlingBundle\Entity\HandlingUser $handlingUsers
+     */
+    public function removeHandlingUser(\Lists\HandlingBundle\Entity\HandlingUser $handlingUsers)
+    {
+        $this->handlingUsers->removeElement($handlingUsers);
+    }
+
+    /**
+     * Get handlingUsers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getHandlingUsers()
+    {
+        return $this->handlingUsers;
     private $organizationUsers;
 
 

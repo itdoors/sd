@@ -1,0 +1,89 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsOrganizationBundle' %}
+{% block title %}{% trans %}List of rganizations{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li><a href="" title="{% trans %}Transfer organizations{% endtrans %}">{% trans %}Transfer organizations{% endtrans %}</a></li>
+    </ul>
+{% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Organization <small>list of organization</small>{% endtrans %}
+    </h3>
+{% endblock %}
+
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    {{ form_start(userForm, {
+        'action' : path('it_doors_ajax_filter'),
+        'attr' : {
+            'method' : 'POST',
+            'class' : 'ajax-filter-form',
+            'novalidate': 'novalidate'
+        }
+    }) }}
+    <div class="col-md-6">
+        <div class="form-group">
+            {{ form_label(userForm.user, 'Select user'|trans , {'attr': {'class': 'control-label'}}) }}
+            {{ form_widget(userForm.user, {'attr': {'class': 'form-control', 'placeholder': 'Enter user'}}) }}
+            <span class="help-block">{% trans %}Select user for set organizarions{% endtrans %}</span>
+            {{ form_errors(userForm.user) }}
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            {{ form_widget(userForm.submit, { 'label': 'Select'|trans({}, 'messages'), 'attr': {'class': 'btn blue'} } ) }}
+        </div>
+    </div>
+
+    <input type="hidden" name="formAlias" value="{{ userForm.vars.name }}">
+    <input type="hidden" name="reset" value="0" class="ajax-form-reset-field">
+    {{ form_end(userForm) }}       
+                
+    <script>
+        $(document).ready(function(){
+           $('#organizationUserFilterForm_user').select2({
+                minimumInputLength: 2,
+                ajax: {
+                    url: '{{ path('sd_common_ajax_user') }}',
+                    dataType: 'json',
+                    data: function (term, page) {
+                        return {
+                            query: term
+                        };
+                    },
+                    results: function (data, page) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            }).on("select2-selecting", function(e) {
+            //alert(e.object.text);
+          //log("selecting val=" + e.val + " choice=" + e.object.text);
+        });
+        });
+    </script>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="datatable_ajax"  data-url="{{ url('sd_user_stufflist') }}">
+                {#{ render(controller('SDUserBundle:' ~ baseTemplate ~ ':stufflist')) }#}
+            </div>
+        </div>
+    </div>
+{% endblock body %}

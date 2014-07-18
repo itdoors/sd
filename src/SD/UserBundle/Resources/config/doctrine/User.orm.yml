@@ -67,4 +67,6 @@ SD\UserBundle\Entity\User:
     oneToMany:
         organizationUsers:
             targetEntity: Lists\OrganizationBundle\Entity\OrganizationUser
+        handlingUsers:
+            targetEntity: Lists\HandlingBundle\Entity\HandlingUser
             mappedBy: user

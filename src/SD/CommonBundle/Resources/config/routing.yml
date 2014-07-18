@@ -98,6 +98,10 @@ sd_common_ajax_handling_save:
     pattern:  /ajax/handling/save
     defaults: { _controller: SDCommonBundle:Ajax:handlingSave }
 
+sd_common_ajax_handling_user_part_change:
+    pattern:  /ajax/handling/user/part
+    defaults: { _controller: SDCommonBundle:Ajax:handlingUserPartChange }
+    
 sd_common_ajax_dogovor_save:
     pattern:  /ajax/dogovor/save
     defaults: { _controller: SDCommonBundle:Ajax:dogovorSave }

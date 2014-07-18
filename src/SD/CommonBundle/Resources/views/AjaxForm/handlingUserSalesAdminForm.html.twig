@@ -2,7 +2,7 @@
 <script type="text/javascript">
 
     $(document).ready(function(){
-        $('#handlingUserForm_user').select2({
+        $('#handlingUserSalesAdminForm_user').select2({
             minimumInputLength: 2,
             ajax: {
                 url: '{{ path('sd_common_ajax_user') }}',
@@ -29,7 +29,7 @@
             <div class="portlet-title">
                 <div class="caption">
                     <i class="fa fa-edit"></i>
-                    {% trans %}Add manager in project{% endtrans %}
+                    {% trans %}Add manager project in project{% endtrans %}
                 </div>
             </div>
             <div class="portlet-body">
@@ -53,14 +53,9 @@
                     </div>
                     {% endif %}
                     <div class="form-group">
-                        {{ form_label(form.user, 'Manager', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.user, {'attr' : {'class' : 'form-control', 'placeholder': "Manager" }}) }}
-                        <span class="help-block">После добавления пользователя, он получет доступ к проекту, контактам.</span>
-                    </div>
-                    <div class="form-group">
-                        {{ form_label(form.part, 'Percentage of participation', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.part, {'attr' : {'class' : 'form-control', 'placeholder': "Percentage of participation" }}) }}
-                        <span class="help-block">{% trans %}Enter share{% endtrans %}</span>
+                        {{ form_label(form.user, 'Manager project', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.user, {'attr' : {'class' : 'form-control', 'placeholder': "Manager project" }}) }}
+                        <span class="help-block"></span>
                     </div>
                     <input type="hidden" name="formName" value="{{ formName }}">
                     <input type="hidden" name="postFunction" value="{{ postFunction }}">
