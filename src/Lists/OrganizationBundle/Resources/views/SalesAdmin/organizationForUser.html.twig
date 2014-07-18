@@ -5,7 +5,6 @@
            var organizations = $('input[name="organizations[]"]:checked').map(function(){
                     return $(this).val();
                 }).toArray();
-            var userOldId = $('#organizationUserFilterForm_user').val();
             var userId = $('#userTo').val();
             var blockupdate = $('#datatable_ajax');
              $.ajax({
@@ -14,8 +13,7 @@
                 dataType: 'json',
                 data: {
                     organizations: organizations,
-                    userId: userId,
-                    userOldId: userOldId
+                    userId: userId
                 },
                 beforeSend: function() {
                     ITDoorsAjax.blockUI(blockupdate);
@@ -31,6 +29,8 @@
                             ITDoorsAjax.unblockUI(blockupdate);
                         }
                     });
+                    }else if(json.error){
+                        alert(json.error);
                     }
                 }
             });

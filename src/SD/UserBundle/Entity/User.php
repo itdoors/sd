@@ -476,12 +476,13 @@ class User extends BaseUser
      * Add organizationUsers
      *
      * @param \Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers
+     * 
      * @return User
      */
     public function addOrganizationUser(\Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers)
     {
         $this->organizationUsers[] = $organizationUsers;
-    
+
         return $this;
     }
 

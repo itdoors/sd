@@ -8,9 +8,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Class OrganizationUserFormType
+ * Class OrganizationUserSalesAdminFormType
  */
-class OrganizationUserFormType extends AbstractType
+class organizationUserSalesAdminFormType extends AbstractType
 {
     /**
      * @var Container $container
@@ -55,6 +55,6 @@ class OrganizationUserFormType extends AbstractType
      */
     public function getName()
     {
-        return 'organizationUserForm';
+        return 'organizationUserSalesAdminForm';
     }
 }

@@ -110,7 +110,7 @@ class SalesAdminController extends SalesDispatcherController
     public function organizationTransferAction(Request $request)
     {
         $namespase = $this->filterNamespace.'ForUser';
-        
+
         return $this->render('ListsOrganizationBundle:SalesAdmin:organizationTransfer.html.twig', array(
                 'namespase' => $namespase,
         ));
@@ -126,11 +126,11 @@ class SalesAdminController extends SalesDispatcherController
     {
         $namespase = $this->filterNamespace.'ForUser';
         $filters = $this->getFilters($namespase);
-        
+
         /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
         $organizationsRepository = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization');
-        
+
         if (empty($filters)) {
             $filters['isFired'] = 'No fired';
             $this->setFilters($namespase, $filters);
@@ -155,20 +155,23 @@ class SalesAdminController extends SalesDispatcherController
     {
         $namespase = $this->filterNamespace.'ForUser';
         $filters = $this->getFilters($namespase);
-        
+
         $userIdOld = $filters['user'];
         $userId = $request->get('userId');
         $organizationIds = $request->get('organizations');
-        
+
+        if (empty($userIdOld) || empty($userId) || empty($organizationIds)) {
+            return new Response(json_encode(array('error' => 'error data')));
+        }
         $em = $this->getDoctrine()->getManager();
         /** @var \SD\UserBundle\Entity\User $u */
         $u = $this->getDoctrine()->getRepository('SDUserBundle:User')->find($userId);
         /** @var \Lists\OrganizationBundle\Entity\OrganizationUserRepository $oU */
         $oU = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:OrganizationUser');
-        
+
         $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_organization'));
-        
+
         foreach ($organizationIds as $organizationId) {
             $organizationUser = $oU->findOneBy(array(
                 'organizationId' => $organizationId,
@@ -183,13 +186,14 @@ class SalesAdminController extends SalesDispatcherController
             }
             $organizationUser->setUser($u);
             $em->persist($organizationUser);
-            
+
             $serviceHandlingUser = $this->container->get('lists_handling.user.service');
             $serviceHandlingUser->changeManagerProject($organizationId, $userId);
         }
         $em->flush();
 
         $result = array('success' => true);
+
         return new Response(json_encode($result));
     }
 }

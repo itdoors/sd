@@ -283,10 +283,10 @@ class SalesController extends BaseController
         $handlingUsers = $handlingUser->getHandlingUsersQuery($handlingId)
             ->getQuery()
             ->getResult();
-        
+
         $lookupId = $this->getDoctrine()
             ->getRepository('ListsLookupBundle:Lookup')->getOnlyManagerProjectId();
-        
+
         $mainManager = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingUser')
             ->findOneBy(array(

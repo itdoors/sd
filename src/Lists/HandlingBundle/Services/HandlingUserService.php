@@ -3,19 +3,17 @@
 namespace Lists\HandlingBundle\Services;
 
 use Doctrine\ORM\EntityManager;
-use Lists\DogovorBundle\Entity\Dogovor;
-use Lists\DogovorBundle\Entity\DogovorRepository;
 use Lists\HandlingBundle\Entity\Handling;
-use Lists\HandlingBundle\Entity\HandlingDogovor;
+use Lists\HandlingBundle\Entity\HandlingUser;
 use Lists\HandlingBundle\Entity\HandlingRepository;
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\Form\Form;
-use Symfony\Component\HttpFoundation\Request;
+use Lists\LookupBundle\Entity\Lookup;
+use SD\UserBundle\Entity\User;
 
 /**
- * HandlingDogovorService class
+ * HandlingUserService class
  */
-class HandlingDogovorService
+class HandlingUserService
 {
     /**
      * @var Container $container
@@ -33,46 +31,35 @@ class HandlingDogovorService
     }
 
     /**
-     * Add form defaults depending on defaults)
-     *
-     * @param Form    $form
-     * @param mixed[] $defaults
-     */
-    public function addFormDefaults(Form $form, $defaults)
-    {
-
-    }
-
-    /**
      * Save form
      *
-     * @param Form    $form
-     * @param Request $request
-     * @param mixed[] $params
+     * @param integer $organizationId
+     * @param integer $userId
      */
-    public function saveForm(Form $form, Request $request, $params)
+    public function changeManagerProject($organizationId, $userId)
     {
-        $data = $form->getData();
-
-        $handlingDogovor = new HandlingDogovor();
-
-        /** @var DogovorRepository $dr */
-        $dr = $this->container->get('lists_dogovor.repository');
-        /** @var HandlingRepository $hr */
-        $hr = $this->container->get('handling.repository');
-
-        /** @var Dogovor $dogovor */
-        $dogovor = $dr->find($data['dogovorId']);
-        /** @var Handling $handling */
-        $handling = $hr->find($data['handlingId']);
-
-        $handlingDogovor->setDogovor($dogovor);
-        $handlingDogovor->setHandling($handling);
-
         /** @var EntityManager $em */
         $em = $this->container->get('doctrine.orm.entity_manager');
+        /** @var Handling $handlings */
+        $handlings = $em->getRepository('ListsHandlingBundle:Handling')
+                ->findBy(array('organization_id' => $organizationId));
+        /** @var Lookup $lookup */
+         $lookup = $em->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager_organization'));
+        /** @var User $user */
+         $user = $em->getRepository('SDUserBundle:User')->find($userId);
 
-        $em->persist($handlingDogovor);
+        foreach ($handlings as $h) {
+            $handlingUser = $em->getRepository('ListsHandlingBundle:HandlingUser')
+                ->findOneBy(array('handlingId' => $h->getId()));
+            if (!$handlingUser) {
+                $handlingUser = new HandlingUser();
+                $handlingUser->setHandling($h);
+                $handlingUser->setLookup($lookup);
+                $handlingUser->setPart(100);
+            }
+            $handlingUser->setUser($user);
+            $em->persist($handlingUser);
+        }
         $em->flush();
     }
 }

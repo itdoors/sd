@@ -41,41 +41,41 @@ class SetManagerMainCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $em = $this->getContainer()->get('doctrine')->getManager();
-        
-        $lookupId = $em
-            ->getRepository('ListsLookupBundle:Lookup')->getOnlyManagerProjectId();
-        $lookupIdM = $em
-            ->getRepository('ListsLookupBundle:Lookup')->getManagerProjectId();
-
-        $lookup = $em
-            ->getRepository('ListsLookupBundle:Lookup')
-            ->find($lookupId);
-        $lookupm = $em
-            ->getRepository('ListsLookupBundle:Lookup')
-            ->find($lookupIdM);
-        
-        $handlings = $em->getRepository('ListsHandlingBundle:Handling')->findAll();
-        foreach ($handlings as $handling) {
-            $userId = $handling->getUser()->getId();
-            $handlingUsers = $handling->getHandlingUsers();
-            foreach ($handlingUsers as $handlingUser) {
-                if($handlingUser->getUserId() == $userId && !$handlingUser->getPart()) {
-                    $handlingUser->setPart(100);
-                    $em->persist($handlingUser);
-                }
-                if($handlingUser->getUserId() == $userId && !$handlingUser->getLookup()) {
-                    $handlingUser->setLookup($lookup);
-                    $em->persist($handlingUser);
-                }
-                if($handlingUser->getUserId() != $userId && !$handlingUser->getLookup()) {
-                    $handlingUser->setLookup($lookupm);
-                    $em->persist($handlingUser);
-                }
-            }
-        }
-        $em->flush();
-        $output->writeln('and');
+//        $em = $this->getContainer()->get('doctrine')->getManager();
+//        
+//        $lookupId = $em
+//            ->getRepository('ListsLookupBundle:Lookup')->getOnlyManagerProjectId();
+//        $lookupIdM = $em
+//            ->getRepository('ListsLookupBundle:Lookup')->getManagerProjectId();
+//
+//        $lookup = $em
+//            ->getRepository('ListsLookupBundle:Lookup')
+//            ->find($lookupId);
+//        $lookupm = $em
+//            ->getRepository('ListsLookupBundle:Lookup')
+//            ->find($lookupIdM);
+//        
+//        $handlings = $em->getRepository('ListsHandlingBundle:Handling')->findAll();
+//        foreach ($handlings as $handling) {
+//            $userId = $handling->getUser()->getId();
+//            $handlingUsers = $handling->getHandlingUsers();
+//            foreach ($handlingUsers as $handlingUser) {
+//                if($handlingUser->getUserId() == $userId && !$handlingUser->getPart()) {
+//                    $handlingUser->setPart(100);
+//                    $em->persist($handlingUser);
+//                }
+//                if($handlingUser->getUserId() == $userId && !$handlingUser->getLookup()) {
+//                    $handlingUser->setLookup($lookup);
+//                    $em->persist($handlingUser);
+//                }
+//                if($handlingUser->getUserId() != $userId && !$handlingUser->getLookup()) {
+//                    $handlingUser->setLookup($lookupm);
+//                    $em->persist($handlingUser);
+//                }
+//            }
+//        }
+//        $em->flush();
+//        $output->writeln('and');
     }
 
 }

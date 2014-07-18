@@ -46,13 +46,13 @@ class HandlingUserFormType extends AbstractType
             function (FormEvent $event) use ($container) {
                 $em = $this->container->get('doctrine')->getManager();
                 $translator = $container->get('translator');
-                
+
                 $data = $event->getData();
 
                 $form = $event->getForm();
 
                 $part = $data['part'];
-                
+
                 $lookupId = $em
                     ->getRepository('ListsLookupBundle:Lookup')->getOnlyManagerProjectId();
 
@@ -62,14 +62,14 @@ class HandlingUserFormType extends AbstractType
                         'handlingId' => $data['handlingId'],
                         'lookupId' => $lookupId,
                         ));
-                
+
                 $isManager = $em
                     ->getRepository('ListsHandlingBundle:HandlingUser')
                     ->findOneBy(array(
                         'handlingId' => $data['handlingId'],
                         'userId' => $data['user'],
                         ));
-                if (!is_int((int)$part)) {
+                if (!is_int((int) $part)) {
                     $msgString = "Mast be integer number";
                     $msg = $translator->trans($msgString, array(), 'ListsHandlingBundle');
                     $form->addError(new FormError($msg));
@@ -77,7 +77,7 @@ class HandlingUserFormType extends AbstractType
                     $msgString = "Max. 100";
                     $msg = $translator->trans($msgString, array(), 'ListsHandlingBundle');
                     $form->addError(new FormError($msg));
-                }elseif ($mainManager && $part > $mainManager->getPart()) {
+                } elseif ($mainManager && $part > $mainManager->getPart()) {
                     $msgString = "Max. ".$mainManager->getPart();
                     $msg = $translator->trans($msgString, array(), 'ListsHandlingBundle');
                     $form->addError(new FormError($msg));

@@ -1141,12 +1141,13 @@ class Handling
      * Add handlingUsers
      *
      * @param \Lists\HandlingBundle\Entity\HandlingUser $handlingUsers
+     * 
      * @return Handling
      */
     public function addHandlingUser(\Lists\HandlingBundle\Entity\HandlingUser $handlingUsers)
     {
         $this->handlingUsers[] = $handlingUsers;
-    
+
         return $this;
     }
 

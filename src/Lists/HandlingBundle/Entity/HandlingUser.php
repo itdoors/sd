@@ -49,12 +49,13 @@ class HandlingUser
      * Set part
      *
      * @param integer $part
+     * 
      * @return HandlingUser
      */
     public function setPart($part)
     {
         $this->part = $part;
-    
+
         return $this;
     }
 
@@ -72,12 +73,13 @@ class HandlingUser
      * Set handling
      *
      * @param \Lists\HandlingBundle\Entity\Handling $handling
+     * 
      * @return HandlingUser
      */
     public function setHandling(\Lists\HandlingBundle\Entity\Handling $handling = null)
     {
         $this->handling = $handling;
-    
+
         return $this;
     }
 
@@ -95,12 +97,13 @@ class HandlingUser
      * Set lookup
      *
      * @param \Lists\LookupBundle\Entity\Lookup $lookup
+     * 
      * @return HandlingUser
      */
     public function setLookup(\Lists\LookupBundle\Entity\Lookup $lookup = null)
     {
         $this->lookup = $lookup;
-    
+
         return $this;
     }
 
@@ -118,12 +121,13 @@ class HandlingUser
      * Set user
      *
      * @param \SD\UserBundle\Entity\User $user
+     * 
      * @return HandlingUser
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 
@@ -148,17 +152,18 @@ class HandlingUser
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Add users
      *
      * @param \Lists\HandlingBundle\Entity\Handling $users
+     * 
      * @return HandlingUser
      */
     public function addUser(\Lists\HandlingBundle\Entity\Handling $users)
     {
         $this->users[] = $users;
-    
+
         return $this;
     }
 
@@ -201,12 +206,13 @@ class HandlingUser
      * Set userId
      *
      * @param integer $userId
+     * 
      * @return HandlingUser
      */
     public function setUserId($userId)
     {
         $this->userId = $userId;
-    
+
         return $this;
     }
 
@@ -224,12 +230,13 @@ class HandlingUser
      * Set lookupId
      *
      * @param integer $lookupId
+     * 
      * @return HandlingUser
      */
     public function setLookupId($lookupId)
     {
         $this->lookupId = $lookupId;
-    
+
         return $this;
     }
 
@@ -247,12 +254,13 @@ class HandlingUser
      * Set handlingId
      *
      * @param integer $handlingId
+     * 
      * @return HandlingUser
      */
     public function setHandlingId($handlingId)
     {
         $this->handlingId = $handlingId;
-    
+
         return $this;
     }
 

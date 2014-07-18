@@ -40,7 +40,7 @@ class LookupRepository extends EntityRepository
     {
         return $this->getLookupByLukeyQuery(self::KEY__MANAGER_PROJECT)->select('l.id')->getQuery()->getSingleScalarResult();
     }
-    
+
     /**
      * Returns choices for scope
      *

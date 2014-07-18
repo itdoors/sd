@@ -99,11 +99,10 @@ class SalesController extends BaseController
 
             $organization->setCreator($user);
 
-            
             $em = $this->getDoctrine()->getManager();
             $em->persist($organization);
             $em->flush();
-            
+
             $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_organization'));
             $manager = new OrganizationManager();
             $manager->setOrganization($organization);
@@ -111,6 +110,7 @@ class SalesController extends BaseController
             $manager->setLookup($lookup);
             $em->persist($manager);
             $em->flush();
+
             return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_organization_show', array(
                 'id' => $organization->getId()
             )));

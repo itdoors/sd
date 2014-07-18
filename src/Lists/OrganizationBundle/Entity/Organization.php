@@ -1005,12 +1005,13 @@ class Organization
      * Add organizationUsers
      *
      * @param \Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers
+     * 
      * @return Organization
      */
     public function addOrganizationUser(\Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers)
     {
         $this->organizationUsers[] = $organizationUsers;
-    
+
         return $this;
     }
 

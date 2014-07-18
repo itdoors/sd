@@ -59,12 +59,13 @@ class OrganizationUser
      * Set organizationId
      *
      * @param integer $organizationId
+     * 
      * @return OrganizationUser
      */
     public function setOrganizationId($organizationId)
     {
         $this->organizationId = $organizationId;
-    
+
         return $this;
     }
 
@@ -82,12 +83,13 @@ class OrganizationUser
      * Set userId
      *
      * @param integer $userId
+     * 
      * @return OrganizationUser
      */
     public function setUserId($userId)
     {
         $this->userId = $userId;
-    
+
         return $this;
     }
 
@@ -105,12 +107,13 @@ class OrganizationUser
      * Set lookupId
      *
      * @param integer $lookupId
+     * 
      * @return OrganizationUser
      */
     public function setLookupId($lookupId)
     {
         $this->lookupId = $lookupId;
-    
+
         return $this;
     }
 
@@ -128,12 +131,13 @@ class OrganizationUser
      * Set lookup
      *
      * @param \Lists\LookupBundle\Entity\Lookup $lookup
+     * 
      * @return OrganizationUser
      */
     public function setLookup(\Lists\LookupBundle\Entity\Lookup $lookup = null)
     {
         $this->lookup = $lookup;
-    
+
         return $this;
     }
 
@@ -151,12 +155,13 @@ class OrganizationUser
      * Set organization
      *
      * @param \Lists\OrganizationBundle\Entity\Organization $organization
+     * 
      * @return OrganizationUser
      */
     public function setOrganization(\Lists\OrganizationBundle\Entity\Organization $organization = null)
     {
         $this->organization = $organization;
-    
+
         return $this;
     }
 
@@ -174,12 +179,13 @@ class OrganizationUser
      * Set user
      *
      * @param \SD\UserBundle\Entity\User $user
+     * 
      * @return OrganizationUser
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 
@@ -198,5 +204,34 @@ class OrganizationUser
     public function doOnPrePersist()
     {
         // Add your code here
+    }
+    /**
+     * @var integer
+     */
+    private $part;
+
+
+    /**
+     * Set part
+     *
+     * @param integer $part
+     * 
+     * @return OrganizationUser
+     */
+    public function setPart($part)
+    {
+        $this->part = $part;
+
+        return $this;
+    }
+
+    /**
+     * Get part
+     *
+     * @return integer 
+     */
+    public function getPart()
+    {
+        return $this->part;
     }
 }

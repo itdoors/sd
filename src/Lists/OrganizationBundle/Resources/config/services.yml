@@ -5,6 +5,7 @@ parameters:
     lists_organization.form.sales.class: Lists\OrganizationBundle\Form\OrganizationSalesFormType
     lists_organization.form.dogovoradmin.class: Lists\OrganizationBundle\Form\OrganizationDogovorAdminFormType
     lists_organization.form.user.class: Lists\OrganizationBundle\Form\OrganizationUserFormType
+    lists_organization.form.user.sales.admin.class: Lists\OrganizationBundle\Form\OrganizationUserSalesAdminFormType
     lists_organization.form.user.filter.class: Lists\OrganizationBundle\Form\OrganizationUserFilterFormType
     lists_organization.form.child.class: Lists\OrganizationBundle\Form\OrganizationChildForm
 
@@ -49,6 +50,13 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: organizationUserForm }
+            
+    lists_organization.form.organizationUserSalesAdminForm:
+        class: %lists_organization.form.user.sales.admin.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: organizationUserSalesAdminForm }
+            
             
     lists_organization.form.organizationUserFilterForm:
         class: %lists_organization.form.user.filter.class%
