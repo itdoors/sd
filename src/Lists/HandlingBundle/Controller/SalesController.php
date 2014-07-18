@@ -335,7 +335,7 @@ class SalesController extends BaseController
         $isPost = $request->getMethod() == 'POST';
 
         $initSelection = array();
-
+        $noAccess = false;
         if ($isPost) {
             $organization = array();
 
@@ -344,8 +344,28 @@ class SalesController extends BaseController
 
             $this->setWizardOrganization($organization);
 
-            if ($this->isValidWizardOrganization()) {
+            /** @var Lookup $lookup */
+            $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager_organization'));
+            
+            $managerOrganization = $this->getDoctrine()
+                    ->getRepository('ListsOrganizationBundle:OrganizationUser')
+                    ->findOneBy(array(
+                        'organizationId' => $organization['organizationId'],
+                        'lookupId' => $lookup->getId(),
+                        )
+                    );
+            $organizationUser = $this->getDoctrine()
+                    ->getRepository('ListsOrganizationBundle:OrganizationUser')
+                    ->findOneBy(array(
+                        'organizationId' => $organization['organizationId'],
+                        'userId' => $this->getUser()->getId(),
+                        )
+                    );
+
+            if ($this->isValidWizardOrganization() && $organizationUser) {
                 return $this->redirect($this->generateUrl('lists_sales_handling_create_step2'));
+            } else if (!$organizationUser) {
+                $noAccess = 'Вы не можете создать проект по данной организации обратитесь к менеджеру организации ФИО телефон емейл.';
             }
         }
 
@@ -359,7 +379,8 @@ class SalesController extends BaseController
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate. ':step1.html.twig', array(
                 'baseTemplate' => $this->baseTemplate,
                 'baseRoutePrefix' => $this->baseRoutePrefix,
-                'initSelection' => $initSelection
+                'initSelection' => $initSelection,
+                'noAccess' => $noAccess
             ));
     }
 
