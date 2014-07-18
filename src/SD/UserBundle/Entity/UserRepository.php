@@ -73,9 +73,28 @@ class UserRepository extends EntityRepository
         return $this->createQueryBuilder('u')
                 ->select('u', 'stuff')
                 ->innerJoin('u.stuff', 'stuff')
-                ->innerJoin('u.organizations', 'organizations')
+                ->innerJoin('u.organizationUsers', 'organizationUsers')
+                ->innerJoin('organizationUsers.organization', 'organizations')
                 ->where('organizations.id = :organizationId')
                 ->setParameter(':organizationId', $organizationId);
+    }
+
+    /**
+     * Get users by handling
+     *
+     * @param int $handlingId
+     *
+     * @return Query
+     */
+    public function getHandlingUsersQuery($handlingId)
+    {
+        return $this->createQueryBuilder('u')
+                ->select('u', 'stuff', 'handlings')
+                ->innerJoin('u.stuff', 'stuff')
+                ->innerJoin('u.handlingUsers', 'handlingUsers')
+                ->innerJoin('handlingUsers.handling', 'handlings')
+                ->where('handlings.id = :handlingId')
+                ->setParameter(':handlingId', $handlingId);
     }
 
     /**

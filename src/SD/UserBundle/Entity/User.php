@@ -467,6 +467,8 @@ class User extends BaseUser
     public function getHandlingUsers()
     {
         return $this->handlingUsers;
+    }
+
     private $organizationUsers;
 
 

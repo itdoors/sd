@@ -3,7 +3,7 @@
 /**
  * Command class for deleting handling
  */
-namespace Lists\HandlingBundle\Command;
+namespace Lists\OrganizationBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
