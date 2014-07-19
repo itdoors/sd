@@ -346,7 +346,7 @@ class SalesController extends BaseController
 
             /** @var Lookup $lookup */
             $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager_organization'));
-            
+
             $managerOrganization = $this->getDoctrine()
                     ->getRepository('ListsOrganizationBundle:OrganizationUser')
                     ->findOneBy(array(
@@ -365,7 +365,17 @@ class SalesController extends BaseController
             if ($this->isValidWizardOrganization() && $organizationUser) {
                 return $this->redirect($this->generateUrl('lists_sales_handling_create_step2'));
             } else if (!$organizationUser) {
-                $noAccess = 'Вы не можете создать проект по данной организации обратитесь к менеджеру организации ФИО телефон емейл.';
+                $noAccess = 'Вы не можете создать проект по данной организации обратитесь к менеджеру организации';
+                if (method_exists($managerOrganization, 'getUser')) {
+                    $user = $managerOrganization->getUser();
+                    $noAccess .= $user->getFirstName().' '.$user->getLastName().' '.$user->getMiddleName();
+                    if (method_exists($user, 'getStaff')) {
+                        $noAccess .= ' '.$user->getStaff()->getMobilephone();
+                    }
+                    $noAccess .= ' '.$user->getEmail();
+                } else {
+                    $noAccess .= ' (менеджер не найден, обратитесь пожалуйста к разрабочикам)';
+                }
             }
         }
 
