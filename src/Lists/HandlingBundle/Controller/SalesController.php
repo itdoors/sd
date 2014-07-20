@@ -513,10 +513,11 @@ class SalesController extends BaseController
                 $organizationUsers = $organization->getUsers();
 
                 $userExist = false;
-
-                foreach ($organizationUsers as $organizationUser) {
-                    if ($organizationUser->getId() == $user->getId()) {
-                        $userExist = true;
+                if (is_array($organizationUsers)) {
+                    foreach ($organizationUsers as $organizationUser) {
+                        if ($organizationUser->getId() == $user->getId()) {
+                            $userExist = true;
+                        }
                     }
                 }
 
