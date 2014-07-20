@@ -47,7 +47,7 @@ class SetManagerMainCommand extends ContainerAwareCommand
 
         /** @var Lookup $lookup */
         $lookup = $em->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager_organization'));
-                
+
         $organizations = $em->getRepository('ListsOrganizationBundle:Organization')->findAll();
         foreach ($organizations as $organization) {
             echo $organization->getId()." \t\n";
@@ -66,10 +66,10 @@ class SetManagerMainCommand extends ContainerAwareCommand
             }
             if ($userId) {
                 $organizationId = $organization->getId();
-                
+
                 /** @var Organization $organization */
                 $organization = $em->getRepository('ListsHandlingBundle:Handling')->find($organizationId);
-                
+
                 /** @var User $user */
                 $user = $em->getRepository('SDUserBundle:User')->find($userId);
 
@@ -106,7 +106,7 @@ class SetManagerMainCommand extends ContainerAwareCommand
                     $managerOrganization->setUser($user);
                 }
                 $em->persist($managerOrganization);
-                
+
                 /** @var Handling $handlings */
                 $handlings = $em->getRepository('ListsHandlingBundle:Handling')
                         ->findBy(array('organization_id' => $organizationId));
