@@ -11,6 +11,7 @@ use Lists\HandlingBundle\Entity\HandlingResult;
 use Lists\ContactBundle\Entity\ModelContact;
 use Lists\OrganizationBundle\Entity\Organization;
 use Lists\HandlingBundle\Entity\Handling;
+use Lists\HandlingBundle\Entity\HandlingUser;
 use Lists\HandlingBundle\Entity\HandlingMessage;
 use Lists\ContactBundle\Entity\ModelContactRepository;
 use PHPExcel_Style_Border;
@@ -164,10 +165,17 @@ class SalesController extends BaseController
             $object->setUser($user);
             $object->setCreatedatetime(new \DateTime());
             $object->setOrganization($organization);
-            $object->addUser($user);
-
+            
+            $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_project'));
+            $manager = new HandlingUser();
+            $manager->setUser($user);
+            $manager->setLookup($lookup);
+            $manager->setPart(100);
+            $manager->setHandling($object);
+            
             $em = $this->getDoctrine()->getManager();
             $em->persist($object);
+            $em->persist($manager);
             $em->flush();
 
             return $this->redirect($this->generateUrl('lists_sales_handling_show', array(

@@ -1968,8 +1968,8 @@ class AjaxController extends BaseFilterController
                 )
             )
         );
-//        $cron = $this->container->get('it_doors_cron.service');
-//        $cron->addSendEmails();
+        $cron = $this->container->get('it_doors_cron.service');
+        $cron->addSendEmails();
 
         $em->persist($object);
         $em->persist($mainManager);
@@ -2292,8 +2292,8 @@ class AjaxController extends BaseFilterController
                 )
             )
         );
-//        $cron = $this->container->get('it_doors_cron.service');
-//        $cron->addSendEmails();
+        $cron = $this->container->get('it_doors_cron.service');
+        $cron->addSendEmails();
         $em = $this->getDoctrine()->getManager();
         $em->persist($mainManager);
         $em->remove($object);
@@ -2588,8 +2588,8 @@ class AjaxController extends BaseFilterController
                     )
                 )
             );
-//        $cron = $this->container->get('it_doors_cron.service');
-//        $cron->addSendEmails();
+        $cron = $this->container->get('it_doors_cron.service');
+        $cron->addSendEmails();
         } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
