@@ -1,0 +1,57 @@
+ITDoors\HistoryBundle\Entity\History:
+    type: entity
+    table: history
+    repositoryClass: ITDoors\HistoryBundle\Entity\HistoryRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        modelName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: model_name
+        modelId:
+            type: bigint
+            nullable: true
+            column: model_id
+        fieldName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: field_name
+        oldValue:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: old_value
+        value:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        createdatetime:
+            type: datetime
+            nullable: true
+        more:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+    manyToOne:
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

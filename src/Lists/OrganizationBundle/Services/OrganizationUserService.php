@@ -8,6 +8,7 @@ use Lists\LookupBundle\Entity\Lookup;
 use SD\UserBundle\Entity\User;
 use Lists\OrganizationBundle\Entity\Organization;
 use Lists\OrganizationBundle\Entity\OrganizationUser;
+use ITDoors\HistoryBundle\Entity\History;
 
 /**
  * OrganizationUserService class
@@ -40,7 +41,8 @@ class OrganizationUserService
         /** @var EntityManager $em */
         $em = $this->container->get('doctrine.orm.entity_manager');
         /** @var Organization $organization */
-        $organization = $em->getRepository('ListsHandlingBundle:Handling')->find($organizationId);
+        $organization = $em->getRepository('ListsOrganizationBundle:Organization')->find($organizationId);
+
         /** @var Lookup $lookup */
         $lookup = $em->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager_organization'));
         /** @var User $user */
@@ -76,7 +78,21 @@ class OrganizationUserService
             if ($oldManager) {
                 $em->remove($oldManager);
             }
+            /** @var User $authUser */
+            $authUser = $this->container->get('security.context')->getToken()->getUser();
+
+            $history = new History();
+            $history->setCreatedatetime(new \DateTime());
+            $history->setFieldName('user_id');
+            $history->setModelName('organization_user');
+            $history->setModelId($managerOrganization->getId());
+            $history->setUser($authUser);
+            $history->setOldValue($managerOrganization->getUserId());
+            $history->setValue($user->getId());
+            $em->persist($history);
+
             $managerOrganization->setUser($user);
+            
         }
         $em->persist($managerOrganization);
 

@@ -9,6 +9,7 @@ use Lists\HandlingBundle\Entity\HandlingRepository;
 use Symfony\Component\DependencyInjection\Container;
 use Lists\LookupBundle\Entity\Lookup;
 use SD\UserBundle\Entity\User;
+use ITDoors\HistoryBundle\Entity\History;
 
 /**
  * HandlingUserService class
@@ -105,6 +106,19 @@ class HandlingUserService
                     $mainManager->setPart(100);
                 }
             }
+            /** @var User $authUser */
+            $authUser = $this->container->get('security.context')->getToken()->getUser();
+
+            $history = new History();
+            $history->setCreatedatetime(new \DateTime());
+            $history->setFieldName('user_id');
+            $history->setModelName('handling_user');
+            $history->setModelId($mainManager->getId());
+            $history->setUser($authUser);
+            $history->setOldValue($mainManager->getUserId());
+            $history->setValue($user->getId());
+            $em->persist($history);
+            
             $mainManager->setUser($user);
         }
         $em->persist($mainManager);
