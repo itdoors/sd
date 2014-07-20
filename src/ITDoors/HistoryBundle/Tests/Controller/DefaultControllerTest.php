@@ -4,8 +4,14 @@ namespace ITDoors\HistoryBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * DefaultControllerTest
+ */
 class DefaultControllerTest extends WebTestCase
 {
+    /**
+     * testIndex
+     */
     public function testIndex()
     {
         $client = static::createClient();

@@ -118,7 +118,7 @@ class HandlingUserService
             $history->setOldValue($mainManager->getUserId());
             $history->setValue($user->getId());
             $em->persist($history);
-            
+
             $mainManager->setUser($user);
         }
         $em->persist($mainManager);

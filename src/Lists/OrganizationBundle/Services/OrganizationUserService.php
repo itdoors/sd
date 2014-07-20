@@ -92,7 +92,6 @@ class OrganizationUserService
             $em->persist($history);
 
             $managerOrganization->setUser($user);
-            
         }
         $em->persist($managerOrganization);
 

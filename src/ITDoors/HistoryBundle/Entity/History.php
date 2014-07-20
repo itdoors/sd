@@ -69,12 +69,13 @@ class History
      * Set modelName
      *
      * @param string $modelName
+     * 
      * @return History
      */
     public function setModelName($modelName)
     {
         $this->modelName = $modelName;
-    
+
         return $this;
     }
 
@@ -92,12 +93,13 @@ class History
      * Set modelId
      *
      * @param integer $modelId
+     * 
      * @return History
      */
     public function setModelId($modelId)
     {
         $this->modelId = $modelId;
-    
+
         return $this;
     }
 
@@ -115,12 +117,13 @@ class History
      * Set fieldName
      *
      * @param string $fieldName
+     * 
      * @return History
      */
     public function setFieldName($fieldName)
     {
         $this->fieldName = $fieldName;
-    
+
         return $this;
     }
 
@@ -138,12 +141,13 @@ class History
      * Set oldValue
      *
      * @param string $oldValue
+     * 
      * @return History
      */
     public function setOldValue($oldValue)
     {
         $this->oldValue = $oldValue;
-    
+
         return $this;
     }
 
@@ -161,12 +165,13 @@ class History
      * Set value
      *
      * @param string $value
+     * 
      * @return History
      */
     public function setValue($value)
     {
         $this->value = $value;
-    
+
         return $this;
     }
 
@@ -184,12 +189,13 @@ class History
      * Set createdatetime
      *
      * @param \DateTime $createdatetime
+     * 
      * @return History
      */
     public function setCreatedatetime($createdatetime)
     {
         $this->createdatetime = $createdatetime;
-    
+
         return $this;
     }
 
@@ -207,12 +213,13 @@ class History
      * Set more
      *
      * @param string $more
+     * 
      * @return History
      */
     public function setMore($more)
     {
         $this->more = $more;
-    
+
         return $this;
     }
 
@@ -230,12 +237,13 @@ class History
      * Set user
      *
      * @param \SD\UserBundle\Entity\User $user
+     * 
      * @return History
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 
