@@ -114,12 +114,12 @@ class SetManagerMainCommand extends ContainerAwareCommand
                     $handlingId = $handling->getId();
                     $user = $em->getRepository('SDUserBundle:User')->find($userId);
 
-                    $lookup = $em->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_project'));
+                    $lookupMP = $em->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_project'));
 
                     $mainManager = $em
                         ->getRepository('ListsHandlingBundle:HandlingUser')
                         ->findOneBy(array(
-                            'handlingId' => $handlingId,
+                            'handlingId' => $lookupMP,
                             'lookupId' => $lookup->getId(),
                             ));
 
@@ -135,9 +135,9 @@ class SetManagerMainCommand extends ContainerAwareCommand
                             $mainManager->setUser($user);
                             $mainManager->setHandling($handling);
                             $mainManager->setPart(100);
-                            $mainManager->setLookup($lookup);
+                            $mainManager->setLookup($lookupMP);
                         } else {
-                            $mainManager->setLookup($lookup);
+                            $mainManager->setLookup($lookupMP);
                             $mainManager->setPart(100);
                         }
                     } else {
