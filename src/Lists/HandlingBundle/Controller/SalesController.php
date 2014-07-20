@@ -165,14 +165,14 @@ class SalesController extends BaseController
             $object->setUser($user);
             $object->setCreatedatetime(new \DateTime());
             $object->setOrganization($organization);
-            
+
             $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_project'));
             $manager = new HandlingUser();
             $manager->setUser($user);
             $manager->setLookup($lookup);
             $manager->setPart(100);
             $manager->setHandling($object);
-            
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($object);
             $em->persist($manager);
