@@ -40,9 +40,9 @@ class SDAccess
         $user = $this->container->get('security.context')->getToken()->getUser();
 
         // FOR SALES ADMIN
-        if ($user->hasRole('ROLE_SALESADMIN')) {
-            return true;
-        }
+//        if ($user->hasRole('ROLE_SALESADMIN')) {
+//            return true;
+//        }
 
         // FOR DOGOVOR ADMIN
         if ($user->hasRole('ROLE_DOGOVORADMIN')) {
@@ -68,7 +68,6 @@ class SDAccess
                 $userIds = array($user->getId());
             }
         }
-
         if (!sizeof($userIds)) {
             return false;
         }
@@ -78,8 +77,12 @@ class SDAccess
             ->createQueryBuilder('o')
             ->leftJoin('o.organizationUsers', 'oUsers')
             ->leftJoin('oUsers.user', 'users')
+            ->leftJoin('oUsers.lookup', 'lookup')
             ->where('o.id  = :organizationId')
+            ->andWhere('lookup.lukey = :lukey')
+            ->andWhere('lookup.id is not NULL')
             ->andWhere('users.id in (:usersId)')
+            ->setParameter(':lukey', 'manager_organization')
             ->setParameter(':organizationId', $organizationId)
             ->setParameter(':usersId', $userIds)
             ->getQuery()

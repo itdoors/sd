@@ -60,7 +60,19 @@ class SalesController extends BaseController
             20
         );
 
-        $canAddNew = $this->getFilterValueByKey('organization_id') ? true : false;
+        $canAddNew = $this->getFilterValueByKey('organization_id', false);
+
+        if ($canAddNew) {
+            $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_organization'));
+            $managerOrganization = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:OrganizationUser')
+            ->findOneBy(array(
+                'organizationId' => $canAddNew,
+                'lookupId' => $lookup->getId(),
+                'userId' => $this->getUser()->getId(),
+                ));
+            $canAddNew = $managerOrganization ? true : false ;
+        }
 
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':index.html.twig', array(
             'pagination' => $pagination,

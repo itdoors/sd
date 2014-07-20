@@ -110,6 +110,7 @@ class HandlingRepository extends BaseRepository
             ->addSelect('status.progress as progress')
             ->addSelect('result.percentageString as resultPercentageString')
             ->addSelect('result.progress as resultProgress')
+            ->addSelect('lookup.lukey as lukey')
             ->addSelect(
                 "
                 array_to_string(
@@ -206,7 +207,8 @@ class HandlingRepository extends BaseRepository
             ->leftJoin('h.status', 'status')
             ->leftJoin('h.result', 'result')
             ->leftJoin('h.handlingUsers', 'handlingUsers')
-            ->leftJoin('handlingUsers.user', 'users');
+            ->leftJoin('handlingUsers.user', 'users')
+            ->leftJoin('handlingUsers.lookup', 'lookup');
 
     }
 
