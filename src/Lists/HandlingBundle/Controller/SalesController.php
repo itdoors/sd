@@ -381,20 +381,22 @@ class SalesController extends BaseController
                         'userId' => $this->getUser()->getId(),
                         )
                     );
+             /** @var Translator $translator */
+            $translator = $this->container->get('translator');
 
             if ($this->isValidWizardOrganization() && $organizationUser) {
                 return $this->redirect($this->generateUrl('lists_sales_handling_create_step2'));
             } else if (!$organizationUser) {
-                $noAccess = 'Вы не можете создать проект по данной организации обратитесь к менеджеру организации';
+                $noAccess = $translator->trans('You can not create a project for the organization refer to', array(), 'ListsHandlingBundle');
                 if (method_exists($managerOrganization, 'getUser')) {
                     $user = $managerOrganization->getUser();
-                    $noAccess .= $user->getFirstName().' '.$user->getLastName().' '.$user->getMiddleName();
+                    $noAccess .= ' '.$translator->trans('менеджеру организации', array(), 'ListsHandlingBundle').' '.$user->getFirstName().' '.$user->getLastName().' '.$user->getMiddleName();
                     if (method_exists($user, 'getStaff')) {
                         $noAccess .= ' '.$user->getStaff()->getMobilephone();
                     }
                     $noAccess .= ' '.$user->getEmail();
                 } else {
-                    $noAccess .= ' (менеджер не найден, обратитесь пожалуйста к разрабочикам)';
+                    $noAccess .= ' '.$translator->trans('администратору отдела продаж', array(), 'ListsHandlingBundle');
                 }
             }
         }
