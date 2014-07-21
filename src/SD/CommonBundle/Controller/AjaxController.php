@@ -797,6 +797,32 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($result));
     }
+    /**
+     * Returns json users list
+     *
+     * @return string
+     */
+    public function userAllStuffAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        /** @var \SD\UserBundle\Entity\UserRepository $repository */
+        $repository = $this->container->get('sd_user.repository');
+
+        $objects = $repository->getAllUsersStuff()
+            ->andWhere('lower(u.firstName) LIKE :q OR lower(u.lastName) LIKE :q')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
 
     /**
      * Returns json users list
@@ -2227,22 +2253,22 @@ class AjaxController extends BaseFilterController
      */
     public function organizationUserDelete($params)
     {
-        $organizationId = $params['organizationId'];
-        $userId = $params['userId'];
+        $organizationId = $params['organizationUserId'];
 
-        $organization = $this->getDoctrine()
-            ->getRepository('ListsOrganizationBundle:Organization')
+        $organizationUser = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:OrganizationUser')
             ->find($organizationId);
 
-        $user = $this->getDoctrine()
-            ->getRepository('SDUserBundle:User')
-            ->find($userId);
+        /** @var Lookup $lookup */
+        $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager_organization'));
 
-        $organization->removeUser($user);
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($organization);
-        $em->flush();
+        if ((!$organizationUser->getLookup() || $organizationUser->getLookup()->getId() != $lookup->getId()) && $this->getUser()->hasRole('ROLE_SALESADMIN')) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($organizationUser);
+            $em->flush();
+        }
+        return false;
+        
     }
 
     /**
@@ -2299,7 +2325,6 @@ class AjaxController extends BaseFilterController
         $em->remove($object);
         $em->flush();
     }
-
 
     /**
      * Deletes {entityName}Delete instance

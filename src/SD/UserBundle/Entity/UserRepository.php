@@ -27,6 +27,18 @@ class UserRepository extends EntityRepository
                 ->innerJoin('u.stuff', 'stuff')
                 ->orderBy('u.lastName', 'ASC');
     }
+    /**
+     * Get Only stuff
+     *
+     * @return Query
+     */
+    public function getAllUsersStuff()
+    {
+        return $this->createQueryBuilder('u')
+                ->select('u', 'stuff')
+                ->leftJoin('u.stuff', 'stuff')
+                ->orderBy('u.lastName', 'ASC');
+    }
 
     /**
      * Get Only stuff

@@ -57,6 +57,10 @@ sd_common_ajax_form:
 sd_common_ajax_user:
     pattern:  /ajax/user
     defaults: { _controller: SDCommonBundle:Ajax:user }
+    
+sd_common_ajax_user_all_stuff:
+    pattern:  /ajax/user/all/stuff
+    defaults: { _controller: SDCommonBundle:Ajax:userAllStuff }
 
 sd_common_ajax_user_fio:
     pattern:  /ajax/user/fio
