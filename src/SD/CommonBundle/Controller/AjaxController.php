@@ -2267,8 +2267,8 @@ class AjaxController extends BaseFilterController
             $em->remove($organizationUser);
             $em->flush();
         }
+
         return false;
-        
     }
 
     /**
