@@ -149,7 +149,12 @@
                                     <div class="progress-bar progress-bar-success" style="width: 25%;"></div>
                                 </div>
                                 <div class="tab-content">
-
+                                    {% if noAccess %}
+                                    <div class="alert alert-success" style="color: white;background-color: #d84a38;">
+                                        <button class="close" data-dismiss="alert"></button>
+                                        {{noAccess}}
+                                    </div>
+                                    {% endif %}
                                     <div class="alert alert-success display-none" id="inform-exist-organization">
                                         <button class="close" data-dismiss="alert"></button>
                                         {% trans %}<strong>Note</strong> Select exist organization{% endtrans %} <strong>%organization%</strong>

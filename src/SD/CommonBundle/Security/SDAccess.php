@@ -68,7 +68,6 @@ class SDAccess
                 $userIds = array($user->getId());
             }
         }
-
         if (!sizeof($userIds)) {
             return false;
         }
@@ -76,9 +75,14 @@ class SDAccess
         $organizationUsers = $this->container->get('doctrine.orm.entity_manager')
             ->getRepository('ListsOrganizationBundle:Organization')
             ->createQueryBuilder('o')
-            ->leftJoin('o.users', 'users')
+            ->leftJoin('o.organizationUsers', 'oUsers')
+            ->leftJoin('oUsers.user', 'users')
+            ->leftJoin('oUsers.lookup', 'lookup')
             ->where('o.id  = :organizationId')
+            ->andWhere('lookup.lukey = :lukey')
+            ->andWhere('lookup.id is not NULL')
             ->andWhere('users.id in (:usersId)')
+            ->setParameter(':lukey', 'manager_organization')
             ->setParameter(':organizationId', $organizationId)
             ->setParameter(':usersId', $userIds)
             ->getQuery()
@@ -146,7 +150,8 @@ class SDAccess
         $handlingUsers = $this->container->get('doctrine.orm.entity_manager')
             ->getRepository('ListsHandlingBundle:Handling')
             ->createQueryBuilder('h')
-            ->leftJoin('h.users', 'users')
+            ->leftJoin('h.handlingUsers', 'hu')
+            ->leftJoin('hu.user', 'users')
             ->where('h.id  = :handlingId')
             ->andWhere('users.id in (:usersId)')
             ->setParameter(':handlingId', $handlingId)

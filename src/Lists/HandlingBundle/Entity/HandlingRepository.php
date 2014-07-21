@@ -55,6 +55,37 @@ class HandlingRepository extends BaseRepository
 
         return $query;
     }
+    /**
+     * @param int[]   $userIds
+     * @param mixed[] $filters
+     *
+     * @return Query
+     */
+    public function getAllForExport($userIds, $filters)
+    {
+        if (!is_array($userIds) && $userIds) {
+            $userIds = array($userIds);
+        }
+
+        /** @var \Doctrine\ORM\QueryBuilder $sql */
+        $sql = $this->createQueryBuilder('h');
+
+        $this->processSelectForUser($sql);
+
+        $this->processBaseQuery($sql);
+
+        if (sizeof($userIds)) {
+            $this->processUserQuery($sql, $userIds);
+        }
+
+        $this->processFilters($sql, $filters);
+
+        $sql->addOrderBy('users.id', 'DESC');
+
+        $query = $sql->getQuery()->getResult();
+
+        return $query;
+    }
 
     /**
      * Processes sql query. adding select
@@ -79,6 +110,7 @@ class HandlingRepository extends BaseRepository
             ->addSelect('status.progress as progress')
             ->addSelect('result.percentageString as resultPercentageString')
             ->addSelect('result.progress as resultProgress')
+            ->addSelect('lookup.lukey as lukey')
             ->addSelect(
                 "
                 array_to_string(
@@ -87,11 +119,53 @@ class HandlingRepository extends BaseRepository
                             CONCAT(CONCAT(u.lastName, ' '), u.firstName)
                         FROM
                             SDUserBundle:User u
-                        LEFT JOIN u.handlings hu
-                        WHERE hu.id = h.id
+                        LEFT JOIN u.handlingUsers hu
+                        WHERE hu.handlingId = h.id
                     ), ','
                 ) as fullNames"
             )
+            ->addSelect(
+                "
+                  array_to_string(
+                     ARRAY(
+                        SELECT
+                          hs.name
+                        FROM
+                          ListsHandlingBundle:HandlingService hs
+                        LEFT JOIN hs.handlings handlings
+                        WHERE h.id = handlings.id
+                     ), ','
+                   ) as serviceList"
+            );
+    }
+    /**
+     * Processes sql query. adding select
+     *
+     * @param \Doctrine\ORM\QueryBuilder $sql
+     */
+    public function processSelectForUser($sql)
+    {
+        $sql
+            ->select('h.id')
+            //->addSelect('(SELECT COUNT(uh.handling_id) FROM SDModelBundle:HandlingUser uh WHERE uh.user_id == users.id) as countProject')
+            ->addSelect('h.id as handlingId')
+            ->addSelect('o.name as organizationName')
+            ->addSelect('o.id as organizationId')
+            ->addSelect('h.createdate as handlingCreatedate')
+            ->addSelect('h.lastHandlingDate as handlingLastHandlingDate')
+            ->addSelect('h.nextHandlingDate as handlingNextHandlingDate')
+            ->addSelect('city.name as cityName')
+            ->addSelect('scope.name as scopeName')
+            ->addSelect('h.serviceOffered as handlingServiceOffered')
+            ->addSelect('h.chance as handlingChance')
+            ->addSelect('status.name as statusName')
+            ->addSelect('status.percentageString as percentageString')
+            ->addSelect('status.progress as progress')
+            ->addSelect('result.percentageString as resultPercentageString')
+            ->addSelect('result.progress as resultProgress')
+            ->addSelect('users.firstName')
+            ->addSelect('users.lastName')
+            ->addSelect('users.middleName')
             ->addSelect(
                 "
                   array_to_string(
@@ -115,7 +189,7 @@ class HandlingRepository extends BaseRepository
     public function processCount($sql)
     {
         $sql
-            ->select('COUNT(h.id) as handlingcount');
+            ->select('COUNT(DISTINCT h.id) as handlingcount');
 
     }
 
@@ -132,7 +206,9 @@ class HandlingRepository extends BaseRepository
             ->leftJoin('o.scope', 'scope')
             ->leftJoin('h.status', 'status')
             ->leftJoin('h.result', 'result')
-            ->leftJoin('h.users', 'users');
+            ->leftJoin('h.handlingUsers', 'handlingUsers')
+            ->leftJoin('handlingUsers.user', 'users')
+            ->leftJoin('handlingUsers.lookup', 'lookup');
 
     }
 
@@ -277,6 +353,23 @@ class HandlingRepository extends BaseRepository
             ->addSelect('result.slug as resultSlug')
             ->addSelect('result.percentageString as resultPercentageString')
             ->addSelect('result.progress as resultProgress')
+            ->addSelect('
+                (
+                SELECT
+                    hu.userId
+                FROM
+                    ListsHandlingBundle:HandlingUser hu
+                WHERE hu.handlingId = h.id
+                AND hu.lookupId = (
+                    SELECT
+                        l.id
+                    FROM
+                        ListsLookupBundle:Lookup l
+                    WHERE l.lukey = :lukey
+                    )
+                )
+
+                 as managerProject')
             ->leftJoin('h.organization', 'o')
             ->leftJoin('h.type', 'type')
             ->leftJoin('h.status', 'status')
@@ -285,6 +378,7 @@ class HandlingRepository extends BaseRepository
             ->leftJoin('h.closer', 'closer')
             ->where('h.id = :id')
             ->setParameter(':id', $id)
+            ->setParameter(':lukey', 'manager_project')
             ->getQuery()
             ->getSingleResult();
     }

@@ -1,7 +1,7 @@
 parameters:
-    lists_article.service.class: Lists\ArticleBundle\Services\ArticleService
+    it_doors_cron.service.class: ITDoors\CronBundle\Services\CronService
 
 services:
-    lists_article.service:
-        class: %lists_article.service.class%
+    it_doors_cron.service:
+        class: %it_doors_cron.service.class%
         arguments: [@service_container]

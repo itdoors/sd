@@ -6,7 +6,7 @@ use ITDoors\AjaxBundle\Controller\BaseFilterController;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * OperInfoController class
+ * OperDepartmentInfoController class
  *
  * Default controller for oper page
  */

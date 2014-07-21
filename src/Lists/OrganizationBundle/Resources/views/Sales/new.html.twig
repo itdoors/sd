@@ -88,9 +88,9 @@
                     <h3 class="form-section">{% trans %}General information{% endtrans %}</h3>
                     <div class="row">
                         <div class="col-md-6
-                                                {% if filterForm.name.vars.errors|length %}
-                                                    has-error
-                                                {% endif %}">
+                                {% if filterForm.name.vars.errors|length %}
+                                    has-error
+                                {% endif %}">
                             <div class="form-group">
                                 {{ form_label(filterForm.name, 'Organization name'|trans ~ ' *', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.name, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter organization name'}}) }}

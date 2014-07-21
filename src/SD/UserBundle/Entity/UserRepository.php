@@ -27,6 +27,18 @@ class UserRepository extends EntityRepository
                 ->innerJoin('u.stuff', 'stuff')
                 ->orderBy('u.lastName', 'ASC');
     }
+    /**
+     * Get Only stuff
+     *
+     * @return Query
+     */
+    public function getAllUsersStuff()
+    {
+        return $this->createQueryBuilder('u')
+                ->select('u', 'stuff')
+                ->leftJoin('u.stuff', 'stuff')
+                ->orderBy('u.lastName', 'ASC');
+    }
 
     /**
      * Get Only stuff
@@ -73,7 +85,8 @@ class UserRepository extends EntityRepository
         return $this->createQueryBuilder('u')
                 ->select('u', 'stuff')
                 ->innerJoin('u.stuff', 'stuff')
-                ->innerJoin('u.organizations', 'organizations')
+                ->innerJoin('u.organizationUsers', 'organizationUsers')
+                ->innerJoin('organizationUsers.organization', 'organizations')
                 ->where('organizations.id = :organizationId')
                 ->setParameter(':organizationId', $organizationId);
     }
@@ -88,9 +101,10 @@ class UserRepository extends EntityRepository
     public function getHandlingUsersQuery($handlingId)
     {
         return $this->createQueryBuilder('u')
-                ->select('u', 'stuff')
+                ->select('u', 'stuff', 'handlings')
                 ->innerJoin('u.stuff', 'stuff')
-                ->innerJoin('u.handlings', 'handlings')
+                ->innerJoin('u.handlingUsers', 'handlingUsers')
+                ->innerJoin('handlingUsers.handling', 'handlings')
                 ->where('handlings.id = :handlingId')
                 ->setParameter(':handlingId', $handlingId);
     }

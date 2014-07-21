@@ -57,6 +57,10 @@ sd_common_ajax_form:
 sd_common_ajax_user:
     pattern:  /ajax/user
     defaults: { _controller: SDCommonBundle:Ajax:user }
+    
+sd_common_ajax_user_all_stuff:
+    pattern:  /ajax/user/all/stuff
+    defaults: { _controller: SDCommonBundle:Ajax:userAllStuff }
 
 sd_common_ajax_user_fio:
     pattern:  /ajax/user/fio
@@ -98,6 +102,10 @@ sd_common_ajax_handling_save:
     pattern:  /ajax/handling/save
     defaults: { _controller: SDCommonBundle:Ajax:handlingSave }
 
+sd_common_ajax_handling_user_part_change:
+    pattern:  /ajax/handling/user/part
+    defaults: { _controller: SDCommonBundle:Ajax:handlingUserPartChange }
+    
 sd_common_ajax_dogovor_save:
     pattern:  /ajax/dogovor/save
     defaults: { _controller: SDCommonBundle:Ajax:dogovorSave }

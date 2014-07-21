@@ -1,0 +1,28 @@
+Lists\ContactBundle\Entity\ModelContactSendEmail:
+    type: entity
+    table: model_contact_send_email
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        isSend:
+            type: boolean
+            nullable: false
+            default: false
+            column: is_send
+        modelContactId:
+            type: integer
+            nullable: true
+            column: model_contact_id
+    manyToOne:
+        modelContact:
+            targetEntity: ModelContact
+            inversedBy: null
+            joinColumn:
+                name: model_contact_id
+                referencedColumnName: id
+    lifecycleCallbacks:
+            prePersist: [ doOnPrePersist ]

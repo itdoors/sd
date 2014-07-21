@@ -1,4 +1,12 @@
 {% trans_default_domain 'ListsHandlingBundle' %}
+<script>
+    $(document).ready(function(){
+        $('button#managers_list_new').on('click', function() {
+            var $target = $(this);
+            $('html, body').animate({scrollTop: $target.offset().top-$target.height()}, 1000);
+        });
+    });
+</script>
 <div class="tab-pane" id="tab_1">
     <div class="col-md-12">
         <h3>{% trans %}Messages{% endtrans %}</h3>

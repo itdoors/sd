@@ -66,6 +66,17 @@ class OperScheduleController extends BaseFilterController
     public function scheduleTableAction($id)
     {
         $idDepartment = $id;
+        if ($id == 0) {
+            /** @var AccessService $accessService */
+            $accessService = $this->get('access.service');
+            $idDepartment = $accessService->getAllowedDepartmentsId();
+        }
+        if (is_array($idDepartment)) {
+            $departmentIsArray = true;
+        } else {
+            $departmentIsArray = false;
+        }
+
 
         $filterNamespace = $this->container->getParameter($this->getNamespace());
         $filters = $this->getFilters($filterNamespace);
@@ -146,19 +157,22 @@ class OperScheduleController extends BaseFilterController
                 }
             }
         }
-        /** @var  $monthInfoRepository \Lists\DepartmentBundle\Entity\departmentPeopleRepository */
+        /** @var  $departmentPeopleRepository \Lists\DepartmentBundle\Entity\departmentPeopleRepository */
         $departmentPeopleRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeople');
 
-        $coworkersAll = $departmentPeopleRepository->getOrderedPeopleFromDepartment($idDepartment);
-        /** @var  $coworkersOne \Lists\DepartmentBundle\Entity\departmentPeople */
-        foreach ($coworkersAll as $key => $departmentPeople) {
-            if ($departmentPeople['dismissalDateNotOfficially'] != null
-                && $departmentPeople['dismissalDateNotOfficially'] < new \DateTime($year.'-'.$month)) {
-                unset($coworkersAll[$key]);
+        if (!$departmentIsArray) {
+            $coworkersAll = $departmentPeopleRepository->getOrderedPeopleFromDepartment($idDepartment);
+            /** @var  $coworkersOne \Lists\DepartmentBundle\Entity\departmentPeople */
+            foreach ($coworkersAll as $key => $departmentPeople) {
+                if ($departmentPeople['dismissalDateNotOfficially'] != null
+                    && $departmentPeople['dismissalDateNotOfficially'] < new \DateTime($year.'-'.$month)) {
+                    unset($coworkersAll[$key]);
+                }
             }
+        } else {
+            $coworkersAll = array();
         }
-
 
         /** @var $grafikRepository \Lists\GrafikBundle\Entity\GrafikRepository   */
         $grafikRepository = $this->getDoctrine()
@@ -168,7 +182,9 @@ class OperScheduleController extends BaseFilterController
         $monthInfoRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
 
-        $query = $monthInfoRepository->getFilteredCoworkers($idDepartment, $month, $year, $filters);
+        $orders = $this->getOrdering($filterNamespace);
+
+        $query = $monthInfoRepository->getFilteredCoworkers($idDepartment, $month, $year, $filters, $orders);
 
         $coworkers = $query->getResult();
 
@@ -260,6 +276,9 @@ class OperScheduleController extends BaseFilterController
                 if ($infoDay['isVacation']) {
                     $status = 'vacation';
                 }
+                if ($infoDay['isOwnVacation']) {
+                    $status = 'ownVacation';
+                }
                 if ($infoDay['isSkip']) {
                     $status = 'skip';
                 }
@@ -286,6 +305,7 @@ class OperScheduleController extends BaseFilterController
         $salaryNotOfficially = $infoSalary['salaryNotOfficially'];
         $salaryOfficially = $infoSalary['salaryOfficially'];
 
+
         return $this->render('ITDoorsOperBundle:Schedule:scheduleTable.html.twig', array(
             'days'=> $days,
             'coworkers' => $coworkers,
@@ -304,7 +324,8 @@ class OperScheduleController extends BaseFilterController
             'canEdit' => $canEdit,
             'totalSalary' => $totalSalary,
             'salaryOfficially' => $salaryOfficially,
-            'salaryNotOfficially' => $salaryNotOfficially
+            'salaryNotOfficially' => $salaryNotOfficially,
+            'departmentIsArray' => $departmentIsArray
         ));
 
     }
@@ -370,6 +391,9 @@ class OperScheduleController extends BaseFilterController
         if (isset($infoDay[0])) {
             if ($infoDay[0]['isVacation']) {
                 $status = 'vacation';
+            }
+            if ($infoDay[0]['isOwnVacation']) {
+                $status = 'ownVacation';
             }
             if ($infoDay[0]['isSkip']) {
                 $status = 'skip';
@@ -898,6 +922,9 @@ class OperScheduleController extends BaseFilterController
             if ($infoDay[0]['isVacation']) {
                 $status = 'vacation';
             }
+            if ($infoDay[0]['isOwnVacation']) {
+                $status = 'ownVacation';
+            }
             if ($infoDay[0]['isSkip']) {
                 $status = 'skip';
             }
@@ -1035,6 +1062,10 @@ class OperScheduleController extends BaseFilterController
         if ($status == 'sick') {
             $grafik->setIsSick(true);
         }
+        if ($status == 'ownVacation') {
+            $grafik->setIsOwnVacation(true);
+        }
+
         $em->persist($grafik);
         $em->flush();
 
@@ -1696,9 +1727,11 @@ class OperScheduleController extends BaseFilterController
             'departmentPeopleMonthInfo'=>$monthInfo->getId()
         ));
 
+        $canEdit = $this->checkIfCanEdit();
         $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleInfoUserBasicAccrual.html.twig', array(
             'accruals'=> $onceOnlyAccrual,
-            'code' => $code
+            'code' => $code,
+            'canEdit' => $canEdit
         ));
 
         $return['success'] = 1;
@@ -2002,6 +2035,30 @@ class OperScheduleController extends BaseFilterController
         return new Response(json_encode($return));
     }
 
+    /**
+     * @param string  $date
+     * @param integer $idCoworker
+     * @param integer $idReplacement
+     * @param integer $idDepartment
+     *
+     * @return Response
+     */
+    public function getRowSumsRenderedAction($date, $idCoworker, $idReplacement, $idDepartment)
+    {
+        $info = $this->getSumsCoworker($date, $idCoworker, $idReplacement, $idDepartment);
+        $return  = $this->renderView('ITDoorsOperBundle:Schedule:scheduleTableSums.html.twig', $info);
+
+        return new Response($return);
+    }
+
+    /**
+     * @param string  $date
+     * @param integer $idCoworker
+     * @param integer $idReplacement
+     * @param integer $idDepartment
+     *
+     * @return array
+     */
     private function getSumsCoworker($date, $idCoworker, $idReplacement, $idDepartment)
     {
         list($year, $month) = explode('-', $date);
@@ -2096,7 +2153,8 @@ class OperScheduleController extends BaseFilterController
             'salaryNotOfficially' => $salaryNotOfficially,
             'totalSalary' => $totalSalary,
             'idMonthInfo'=> $idMonthInfo,
-            'canEdit' => $canEdit
+            'canEdit' => $canEdit,
+            'idDepartment' => $idDepartment
         );
 
         return $return;
@@ -2277,7 +2335,7 @@ class OperScheduleController extends BaseFilterController
      */
     private function checkIfCanEdit()
     {
-        $canEdit  =  !$this->getUser()->hasRole('ROLE_SUPERVISOR');
+        $canEdit = !$this->getUser()->hasRole('ROLE_SUPERVISOR');
 
         return $canEdit;
     }

@@ -48,6 +48,7 @@ class AppKernel extends Kernel
             new BCC\CronManagerBundle\BCCCronManagerBundle(),
             new ITDoors\CronBundle\ITDoorsCronBundle(),
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
+            new ITDoors\HistoryBundle\ITDoorsHistoryBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

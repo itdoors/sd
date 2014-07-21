@@ -42,6 +42,7 @@ class InvoiceRepository extends EntityRepository
             ->addSelect('i.id')
             ->addSelect('i.invoiceId')
             ->addSelect('i.date')
+            ->addSelect('i.bank')
             ->addSelect('i.dogovorActName')
             ->addSelect('i.dogovorActDate')
             ->addSelect('i.delayDate')
@@ -525,7 +526,6 @@ class InvoiceRepository extends EntityRepository
                 $entitie
                     ->select('i.dogovorAct')
                     ->addSelect('i.dogovorActDate')
-                    ->addSelect('i.dogovorActNote')
                     ->addSelect('i.dogovorActName')
                     ->addSelect('i.dogovorActOriginal')
                     ->where('i.id = :invoiceid')
@@ -568,6 +568,9 @@ class InvoiceRepository extends EntityRepository
                     $entitie->expr()->eq('mc.modelId', 'customer.id'),
                     $entitie->expr()->eq('mc.modelName', ':text')
                 );
+                $subQuerySendEmail =  $entitie->expr()->andx(
+                    $entitie->expr()->eq('mc.id', 'mcsm.modelContactId')
+                );
                 $entitie
                     ->Select('mc.id as id')
                     ->addSelect('o.firstName as firstNameOwner')
@@ -580,11 +583,13 @@ class InvoiceRepository extends EntityRepository
                     ->addSelect('mc.phone1')
                     ->addSelect('mc.phone2')
                     ->addSelect('mc.email')
+                    ->addSelect('mcsm.isSend')
+                    ->addSelect('mcsm.id as idIsSend')
                     ->addSelect('mc.birthday')
                     ->addSelect('customer.id as customerId')
-                    ->leftJoin('i.dogovor', 'd')
-                    ->leftJoin('d.customer', 'customer')
+                    ->leftJoin('i.customer', 'customer')
                     ->leftJoin('Lists\ContactBundle\Entity\ModelContact', 'mc', 'WITH', $subQueryCase)
+                    ->leftJoin('Lists\ContactBundle\Entity\ModelContactSendEmail', 'mcsm', 'WITH', $subQuerySendEmail)
                     ->leftJoin('mc.owner', 'o')
                     ->where('i.id = :invoiceid')
                     ->setParameter(':invoiceid', (int) $invoiceid)

@@ -47,6 +47,17 @@ class DopDogovorEditForm extends AbstractType
                 'widget' => 'single_text',
                 'format' => 'dd.MM.yyyy'
             ))
+            ->add('createDateTime', 'datetime', array(
+                 'widget' => 'single_text',
+            'format' => 'H:mm dd.MM.yyyy',
+            'required' => false,
+            'disabled' => true
+            ))
+            ->add('user', 'text', array(
+                'data_class' => 'SD\UserBundle\Entity\User',
+                'required' => false,
+                'disabled' => true
+            ))
             ->add('subject')
             ->add('isActive')
             ->add('total')

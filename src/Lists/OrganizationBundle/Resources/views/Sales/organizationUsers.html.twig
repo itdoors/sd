@@ -5,20 +5,32 @@
         <th>{% trans %}LastName, FirstName{% endtrans %}</th>
         <th>{% trans %}Mobile{% endtrans %}</th>
         <th>{% trans %}Email{% endtrans %}</th>
+        <th>{% trans %}Role{% endtrans %}</th>
+         {% if managerOrganization %}
+        <th>{% trans %}Action{% endtrans %}</th> {# Поле для действий #}
+        {% endif %}
     </tr>
     </thead>
     <tbody>
     {% for item in organizationUsers %}
         <tr>
-            <td>{{ item.fullName }}</td>
+            <td>{{ item.firstName }} {{ item.lastName }}</td>
+            <td>{{ item.mobilephone }}</td>
+            <td>{{ item.email }}</td>
+            <td>{{ item.name }}</td>
+              {% if managerOrganization %}
             <td>
-                {% if item.stuff %}
-                    {{ item.stuff.mobilephone }}
+                {% if item.lukey != 'manager_organization' and item.userId != app.user.id  %}
+                <a
+                    class="ajax-delete"
+                    href="javascript:;"
+                    data-params='{"model":"OrganizationUser","organizationUserId":{{ item.id }}}'
+                >
+                    {% trans %}Delete{% endtrans %}
+                </a>
                 {% endif %}
             </td>
-            <td>
-                {{ item.email }}
-            </td>
+             {% endif %}
         </tr>
     {% endfor %}
     </tbody>

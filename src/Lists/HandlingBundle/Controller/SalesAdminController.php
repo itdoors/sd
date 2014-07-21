@@ -198,9 +198,6 @@ class SalesAdminController extends SalesController
         $handlingRepository = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:Handling');
 
-        /** @var \SD\UserBundle\Entity\User $user */
-        $user = $this->getUser();
-
         $filters['progressNOT'] = 100;
         $filters['chanceNOT'] = array(0, 100);
         $filters['isClosed'] = 'FALSE';
@@ -217,5 +214,26 @@ class SalesAdminController extends SalesController
                 'baseRoutePrefix' => $this->baseRoutePrefix,
                 'baseTemplate' => $this->baseTemplate,
             ));
+    }
+     /**
+     * Renders organizationUsers list
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function exportExcelAction()
+    {
+         // Get organization filter
+        $filters = $this->getFilters();
+
+        /** @var HandlingRepository $handlingRepository */
+        $handlingRepository = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling');
+
+        /** @var \Doctrine\ORM\Query $handlingQuery */
+        $handlingQuery = $handlingRepository->getAllForExport(null, $filters);
+
+        $response = $this->exportToExcelAction($handlingQuery);
+
+        return $response;
     }
 }
