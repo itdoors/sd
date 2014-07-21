@@ -329,8 +329,8 @@ class OrganizationRepository extends EntityRepository
                             CONCAT(CONCAT(u.lastName, ' '), u.firstName)
                           FROM
                             SDUserBundle:User u
-                          LEFT JOIN u.organizationUsers ou
-                          WHERE ou.id = o.id
+                          INNER JOIN u.organizationUsers ou
+                          WHERE ou.organizationId = o.id
                        ), ', '
                      ) as fullNames
                     "
