@@ -245,8 +245,12 @@
                         var error = false;
                         for (var i=0; i<checkboxes.length; i++) {
                             if (checkboxes[i].checked) {
+
                                 var idCoworker = checkboxes[i].value;
-                                var idReplacement = $(checkboxes[i]).data('id_replacement')
+                                var idReplacement = $(checkboxes[i]).data('id_replacement');
+                                var replacementType = $(checkboxes[i]).data('replacement_type');
+                                console.log(replacementType);
+                                var idDepartment =  $('#info_input').data('id_department');
 
                                 var url = $('#info_input').data('url_delete_users');
                                 var date = $('#info_input').data('date');
@@ -254,7 +258,8 @@
                                 var sendData = {
                                     'idCoworker': idCoworker,
                                     'idReplacement': idReplacement,
-                                    //'idDepartment': idDepartment,
+                                    'idDepartment': idDepartment,
+                                    'replacementType': replacementType,
                                     'date': date
                                 }
 
@@ -658,14 +663,15 @@
                 {% set counter = counter + 1 %}
                 {% set idCoworker = coworker.id %}
                 {% set idReplacement = coworker.replacementId %}
+                {% set replacementType = coworker.replacementType %}
                 <tr id="row{{ idCoworker }}{{ idReplacement }}">
-                    <td><input class="checkbox_copy" type="checkbox" value="{{ idCoworker }}" data-id_replacement="{{ idReplacement }}"></td>
+                    <td><input class="checkbox_copy" type="checkbox" value="{{ idCoworker }}" data-id_replacement="{{ idReplacement }}" data-replacement_type="{{ replacementType }}"></td>
                     <td>
                         {{ counter }}
                     </td>
                     <td id="fio_{{ idCoworker }}">
                         <a class="fio"
-                           data-params='{"idCoworker": {{ idCoworker }}, "idDepartment":{{ coworker.idDepartment }}, "idLink": "fio_{{ idCoworker }}", "idReplacement": {{ idReplacement }} }'
+                           data-params='{"idCoworker": {{ idCoworker }}, "idDepartment":{{ coworker.idDepartment }}, "idLink": "fio_{{ idCoworker }}", "idReplacement": {{ idReplacement }}, "replacementType": "{{ replacementType }}" }'
                            >
                             {{ coworker.lastName }} {{ coworker.firstName }} {{ coworker.middleName }}
                         </a>

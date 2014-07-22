@@ -32,6 +32,7 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
             ->addSelect('dpmi.realSalary')
             ->addSelect('dpmi.salaryNotOfficially')
             ->addSelect('dpmi.salaryOfficially')
+            ->addSelect('dpmi.replacementType')
             ->addSelect('dpr.id as replacementId')
             ->addSelect('i.firstName')
             ->addSelect('i.lastName')
@@ -48,27 +49,32 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
             ->addSelect('i.birthday')
             ->addSelect('i.passport')
             ->addSelect('m.name as mpkName')
+            ->addSelect('o.shortname as organizationShortName')
+            ->addSelect('o.name as organizationName')
             ->leftJoin('dpmi.departmentPeopleReplacement', 'dpr')
             ->leftJoin('dpmi.departmentPeople', 'dp')
             ->leftJoin('dp.department', 'd')
+            ->leftJoin('d.organization', 'o')
             ->leftJoin('dp.individual', 'i')
             ->leftJoin('dp.mpks', 'm');
-            if (is_array($idDepartment)) {
-                if (count($idDepartment)) {
-                    $sql = $sql->where('d.id IN (:idDepartment)')
-                        ->setParameter(':idDepartment', $idDepartment);
-                } else {
-                    $sql = $sql->where('1 = 2');
-                }
-            } else {
-                $sql = $sql->where('d.id = :idDepartment')
+
+        if (is_array($idDepartment)) {
+            if (count($idDepartment)) {
+                $sql = $sql->where('d.id IN (:idDepartment)')
                     ->setParameter(':idDepartment', $idDepartment);
+            } else {
+                $sql = $sql->where('1 = 2');
             }
-            $sql = $sql->andWhere('dpmi.year = :year')
+        } else {
+            $sql = $sql->where('d.id = :idDepartment')
+                ->setParameter(':idDepartment', $idDepartment);
+        }
+
+        $sql->andWhere('dpmi.year = :year')
             ->setParameter(':year', $year)
             ->andWhere('dpmi.month = :month')
             ->setParameter(':month', $month);
-            //->groupBy('g.departmentPeopleId')
+        //->groupBy('g.departmentPeopleId')
 
 
         if (sizeof($filters)) {

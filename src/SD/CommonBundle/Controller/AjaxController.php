@@ -9,7 +9,7 @@ use Lists\DogovorBundle\Entity\DogovorDepartmentRepository;
 use Lists\DogovorBundle\Entity\DogovorHistory;
 use Lists\DogovorBundle\Entity\DopDogovor;
 use Lists\DogovorBundle\Entity\DopDogovorRepository;
-use Lists\HandlingBundle\EntidogovorTypety\Handling;
+use Lists\HandlingBundle\Entity\Handling;
 use Lists\HandlingBundle\Entity\HandlingMessage;
 use Lists\HandlingBundle\Entity\HandlingRepository;
 use Lists\LookupBundle\Entity\LookupRepository;
@@ -2983,11 +2983,12 @@ class AjaxController extends BaseFilterController
 
         $userIds[$creator->getId()] = $creator->getId();
 
-        $users = $handling->getUsers();
+        /** @var HandlingUser[] $users */
+        $users = $handling->getHandlingUsers();
 
         if ($users) {
             foreach ($users as $user) {
-                $userIds[$user->getId()] = $user->getId();
+                $userIds[$user->getUserId()] = $user->getUserId();
             }
         }
 
