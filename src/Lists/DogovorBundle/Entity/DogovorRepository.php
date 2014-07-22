@@ -209,6 +209,11 @@ class DogovorRepository extends EntityRepository
                                 ->setParameter(':datestart', $dateStart)
                                 ->setParameter(':datestop', $dateStop);
                         break;
+                    case 'subject':
+                            $sql
+                                ->andWhere("d.subject LIKE :subject")
+                                ->setParameter(':subject', "{$value}%");
+                        break;
 
                 }
             }

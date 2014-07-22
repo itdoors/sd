@@ -9,7 +9,7 @@ use Lists\DogovorBundle\Entity\DogovorDepartmentRepository;
 use Lists\DogovorBundle\Entity\DogovorHistory;
 use Lists\DogovorBundle\Entity\DopDogovor;
 use Lists\DogovorBundle\Entity\DopDogovorRepository;
-use Lists\HandlingBundle\Entity\Handling;
+use Lists\HandlingBundle\EntidogovorTypety\Handling;
 use Lists\HandlingBundle\Entity\HandlingMessage;
 use Lists\HandlingBundle\Entity\HandlingRepository;
 use Lists\LookupBundle\Entity\LookupRepository;
@@ -449,6 +449,39 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($result));
     }
+
+    /**
+     * Returns json dogovor type list
+     *
+     * @return string
+     */
+//    public function dogovorSubjectAction()
+//    {
+//         $searchText = $this->get('request')->query->get('query');
+//         
+//         $dogovor = $this->getDoctrine()
+//            ->getRepository('ListsDogovorBundle:Dogovor')
+//            ->createQueryBuilder('d')
+//            ->select('d.subject')
+//            ->addSelect('d.id')
+//            ->where('d.subject LIKE :subject')
+//            ->setParameter(':subject', "{$searchText}%")
+//            ->getQuery()
+//            ->getResult();
+//
+//        $result = array();
+//
+//        foreach ($dogovor as $object) {
+//            $result[] = array(
+//                    'id' => $object['subject'],
+//                    'value' => $object['subject'],
+//                    'name' => $object['subject'],
+//                    'text' => $object['subject']
+//                );
+//        }
+//
+//        return new Response(json_encode($result));
+//    }
 
     /**
      * Returns json dogovor type list
