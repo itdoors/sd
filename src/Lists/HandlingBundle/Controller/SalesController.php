@@ -363,20 +363,20 @@ class SalesController extends BaseController
             /** @var Lookup $lookup */
             $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager_organization'));
 
-            $managerOrganization = $this->getDoctrine()
+            $managerOrganization = $organization['organizationId'] ? $this->getDoctrine()
                     ->getRepository('ListsOrganizationBundle:OrganizationUser')
                     ->findOneBy(array(
                         'organizationId' => $organization['organizationId'],
                         'lookupId' => $lookup->getId(),
                         )
-                    );
-            $organizationUser = $this->getDoctrine()
+                    ) : null;
+            $organizationUser = $organization['organizationId'] ? $this->getDoctrine()
                     ->getRepository('ListsOrganizationBundle:OrganizationUser')
                     ->findOneBy(array(
                         'organizationId' => $organization['organizationId'],
                         'userId' => $this->getUser()->getId(),
                         )
-                    );
+                    ) : null;
              /** @var Translator $translator */
             $translator = $this->container->get('translator');
 

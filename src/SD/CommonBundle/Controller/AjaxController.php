@@ -2985,8 +2985,10 @@ class AjaxController extends BaseFilterController
 
         $users = $handling->getUsers();
 
-        foreach ($users as $user) {
-            $userIds[$user->getId()] = $user->getId();
+        if ($users) {
+            foreach ($users as $user) {
+                $userIds[$user->getId()] = $user->getId();
+            }
         }
 
         $organizationId = $handling->getOrganizationId();
