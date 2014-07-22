@@ -436,7 +436,7 @@ class OperScheduleController extends BaseFilterController
         }
         $coopration = array();
         $coopration['exists'] = false;
-        if (isset($infoDay[0])) {
+        if (isset($infoDay[0]) && $infoDay[0]['departmentPeopleCooperationId']) {
             $departmentPeopleCooperation = $departmentPeopleRepository->find($infoDay[0]['departmentPeopleCooperationId']);
             //$departmentPoopleCooperation = $grafik->getDepartmentPeopleCooperation();
 
