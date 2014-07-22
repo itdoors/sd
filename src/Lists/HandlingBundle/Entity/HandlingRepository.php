@@ -47,9 +47,13 @@ class HandlingRepository extends BaseRepository
 
         $this->processOrdering($sql);
 
-        $query = $sql->andWhere("lookup.lukey = 'manager_organization' or lookup.lukey is NULL")->getQuery();
+        $query = $sql
+//                ->andWhere("lookup.lukey = 'manager_organization' or lookup.lukey is NULL")
+                ->getQuery();
 
-        $count = $sqlCount->andWhere("lookup.lukey = 'manager_organization' or lookup.lukey is NULL")->getQuery()->getSingleScalarResult();
+        $count = $sqlCount
+//                ->andWhere("lookup.lukey = 'manager_organization' or lookup.lukey is NULL")
+                ->getQuery()->getSingleScalarResult();
 
         $query->setHint('knp_paginator.count', $count);
 
@@ -95,7 +99,8 @@ class HandlingRepository extends BaseRepository
     public function processSelect($sql)
     {
         $sql
-            ->select('DISTINCT (h.id) as handlingId')
+            ->distinct(true)
+            ->select('h.id as handlingId')
             ->addSelect('o.name as organizationName')
             ->addSelect('h.createdate as handlingCreatedate')
             ->addSelect('h.lastHandlingDate as handlingLastHandlingDate')
@@ -109,7 +114,6 @@ class HandlingRepository extends BaseRepository
             ->addSelect('status.progress as progress')
             ->addSelect('result.percentageString as resultPercentageString')
             ->addSelect('result.progress as resultProgress')
-            ->addSelect('lookup.lukey as lukey')
             ->addSelect(
                 "
                 array_to_string(
@@ -145,8 +149,8 @@ class HandlingRepository extends BaseRepository
     public function processSelectForUser($sql)
     {
         $sql
-            ->select('DISTINCT (h.id) ')
-            ->addSelect('h.id as handlingId')
+            ->distinct()
+            ->select('h.id as handlingId')
             ->addSelect('o.name as organizationName')
             ->addSelect('o.id as organizationId')
             ->addSelect('h.createdate as handlingCreatedate')
