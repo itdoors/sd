@@ -5,30 +5,16 @@
         <th>{% trans %}LastName, FirstName{% endtrans %}</th>
         <th>{% trans %}Mobile{% endtrans %}</th>
         <th>{% trans %}Email{% endtrans %}</th>
-        <th>{% trans %}Action{% endtrans %}</th>
+        <th>{% trans %}Role{% endtrans %}</th>
     </tr>
     </thead>
     <tbody>
     {% for item in organizationUsers %}
         <tr>
-            <td>{{ item.fullName }}</td>
-            <td>
-                {% if item.stuff %}
-                    {{ item.stuff.mobilephone }}
-                {% endif %}
-            </td>
-            <td>
-                {{ item.email }}
-            </td>
-            <td>
-                <a
-                    class="ajax-delete"
-                    href="javascript:;"
-                    data-params='{"model":"OrganizationUser","organizationId":{{ organizationId }},"userId":{{ item.id }}}'
-                >
-                    {% trans %}Delete{% endtrans %}
-                </a>
-            </td>
+            <td>{{ item.firstName }} {{ item.lastName }}</td>
+            <td>{{ item.mobilephone }}</td>
+            <td>{{ item.email }}</td>
+            <td>{{ item.name }}</td>
         </tr>
     {% endfor %}
     </tbody>

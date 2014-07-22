@@ -56,6 +56,10 @@ lists_sales_report_index:
     pattern:  /lists/sales/repost
     defaults: { _controller: ListsHandlingBundle:Sales:reportList }
 
+lists_sales_handling_for_organization:
+    pattern:  /lists/sales/handling/for/organization/{id}
+    defaults: { _controller: ListsHandlingBundle:Sales:forOrganization }
+    
 lists_sales_handling_export_excel:
     pattern:  /lists/sales/handling/export/excel
     defaults: { _controller: ListsHandlingBundle:Sales:exportExcel }

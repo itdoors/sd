@@ -5,7 +5,6 @@ namespace Lists\HandlingBundle\Controller;
 use ITDoors\CommonBundle\Services\BaseService;
 use Lists\HandlingBundle\Entity\HandlingRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
 use Lists\HandlingBundle\Entity\HandlingResult;
 use Lists\ContactBundle\Entity\ModelContact;
@@ -92,7 +91,6 @@ class SalesController extends BaseController
      */
     public function listAction()
     {
-        // Get organization filter
         /** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
         $handlingRepository = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:Handling');
@@ -108,8 +106,6 @@ class SalesController extends BaseController
         $handlingQuery = $handlingRepository->getAllForSalesQuery($user->getId(), $filters);
 
         $pagination = $handlingQuery->getResult();
-
-        /** @var \Knp\Component\Pager\Paginator $paginator */
 
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':list.html.twig', array(
                 'pagination' => $pagination,
@@ -1083,5 +1079,26 @@ class SalesController extends BaseController
         $response->headers->set('Cache-Control', 'maxage=1');
 
         return $response;
+    }
+    /**
+     * Executes list action for dashboard
+     *
+     * @param integer $id Organization.id
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function forOrganizationAction($id)
+    {
+        /** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
+        $handlingRepository = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling');
+
+        /** @var \Doctrine\ORM\Query $handlings */
+        $handlings = $handlingRepository->getForOrganization($id);
+
+        return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':forOrganization.html.twig', array(
+                'handlings' => $handlings,
+                'baseRoutePrefix' => $this->baseRoutePrefix,
+            ));
     }
 }

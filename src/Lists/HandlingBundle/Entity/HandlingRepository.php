@@ -831,4 +831,27 @@ class HandlingRepository extends BaseRepository
 
         return $sql->getQuery()->getResult();
     }
+    /**
+     * @param integer $id Organization.id
+     *
+     * @return Query
+     */
+    public function getForOrganization($id)
+    {
+        /** @var \Doctrine\ORM\QueryBuilder $sql */
+        $sql = $this->createQueryBuilder('h');
+
+        $this->processSelect($sql);
+
+        $this->processBaseQuery($sql);
+        
+        $this->processOrdering($sql);
+
+        $query = $sql
+                ->andWhere("h.organization_id = :organizationId")
+                ->setParameter(':organizationId', $id)
+                ->getQuery()->getResult();
+
+        return $query;
+    }
 }
