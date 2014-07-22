@@ -28,6 +28,11 @@
 </td>
 <td>
     {{ coworker.mpkName }}
+    {% if coworker.organizationShortName %}
+        <br />({{ coworker.organizationShortName }})
+    {% elseif coworker.organizationName %}
+        <br />({{ coworker.organizationName }})
+    {% endif %}
 </td>
 <td>
     {{ coworker.drfo }}
@@ -67,10 +72,10 @@
 </td>
 
 {{ render(controller('ITDoorsOperBundle:OperSchedule:getRowSumsRendered', {
-'date': date,
-'idCoworker': coworker.idCoworker,
-'idReplacement': coworker.replacementId,
-'idDepartment': coworker.idDepartment,
+    'date': date,
+    'idCoworker': coworker.idCoworker,
+    'idReplacement': coworker.replacementId,
+    'idDepartment': coworker.idDepartment,
 })) }}
 
 {#

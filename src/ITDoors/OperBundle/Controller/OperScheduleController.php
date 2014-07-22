@@ -4,6 +4,7 @@ namespace ITDoors\OperBundle\Controller;
 
 use ITDoors\AjaxBundle\Controller\BaseFilterController;
 use ITDoors\OperBundle\Services\ScheduleService;
+use Lists\DepartmentBundle\Entity\DepartmentPeopleMonthInfoRepository;
 use Lists\GrafikBundle\Entity\GrafikTime;
 use Lists\GrafikBundle\Entity\Grafik;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +27,6 @@ class OperScheduleController extends BaseFilterController
      *
      * @return mixed[]
      */
-
     public function indexAction($id)
     {
 
@@ -1549,7 +1549,9 @@ class OperScheduleController extends BaseFilterController
         $idCoworker =  $params['idCoworker'];
         $idDepartment = $params['idDepartment'];
         $idReplacement = $params['idReplacement'];
-        $replacementType = $params['replacementType'];
+        $replacementType = isset($params['replacementType'])
+                           ? $params['replacementType']
+                           : DepartmentPeopleMonthInfoRepository::REPLACEMENT_TYPE_REPLACEMENT;
 
         list($year, $month) = explode('-', $date);
 
@@ -1570,8 +1572,13 @@ class OperScheduleController extends BaseFilterController
             $fio = $departmentPeople->getLastName().' '.
                 $departmentPeople->getFirstName().' '.$departmentPeople->getMiddleName();
         }
+
+        // Get Organiation Name
+        $organizationName = $departmentPeople->getOrganizationName();
+
         $info['id'] = $departmentPeople->getId();
         $info['mpk'] = $departmentPeople->getMpks();
+        $info['organizationName'] = $organizationName;
         $info['fio'] = $fio;
         $info['dateAcceptedOfficially'] = $departmentPeople->getAdmissionDate();
         $info['dateAcceptedNotOfficially'] = $departmentPeople->getAdmissionDateNotOfficially();
@@ -1601,7 +1608,7 @@ class OperScheduleController extends BaseFilterController
             'departmentPeople' => $departmentPeople->getId(),
             'year' => $year,
             'month' => $month,
-            'replacementType' => 'r',
+            'replacementType' => DepartmentPeopleMonthInfoRepository::REPLACEMENT_TYPE_REPLACEMENT,
             //'departmentPeopleReplacement' => 0
 
         ));

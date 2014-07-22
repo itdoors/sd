@@ -250,7 +250,11 @@
 <table  class="table table-bordered table-striped">
     <tr>
         <td width="25%">{% trans %}Mpk{% endtrans %}</td>
-        <td width="25%">{{ coworker.mpk }}
+        <td width="25%">
+            {{ coworker.mpk }}
+            {% if coworker.organizationName is defined and coworker.organizationName %}
+                <br />({{ coworker.organizationName }})
+            {% endif %}
 {#
             {% if coworker.mpk|length>0 %}
                 {% for mpk in  coworker.mpk%}
@@ -269,7 +273,9 @@
     {% if coworker.change %}
         <tr>
             <td>{% trans %}Substituting{% endtrans %}</td>
-            <td>{{ coworker.changeMpk }}</td>
+            <td>
+                {{ coworker.changeMpk }}
+            </td>
             <td colspan="2">{{ coworker.changeFio }}</td>
         </tr>
     {% endif %}
