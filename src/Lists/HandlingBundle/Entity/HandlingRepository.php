@@ -844,7 +844,7 @@ class HandlingRepository extends BaseRepository
         $this->processSelect($sql);
 
         $this->processBaseQuery($sql);
-        
+
         $this->processOrdering($sql);
 
         $query = $sql
