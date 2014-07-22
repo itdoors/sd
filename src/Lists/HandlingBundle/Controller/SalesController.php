@@ -951,33 +951,40 @@ class SalesController extends BaseController
         $translator = $this->container->get('translator');
 
          // ask the service for a Excel5
-       $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
 
-       $phpExcelObject->getProperties()->setCreator("DebtControll")
-           ->setLastModifiedBy("Giulio De Donato")
-           ->setTitle("Handling")
-           ->setSubject("Handling")
-           ->setDescription("Handling list")
-           ->setKeywords("Handling")
-           ->setCategory("Handling");
-       $phpExcelObject->setActiveSheetIndex(0)
-          ->setCellValue('A1', $translator->trans('Managers', array(), 'ListsHandlingBundle'))
-          ->setCellValue('B1', $translator->trans('ID', array(), 'ListsHandlingBundle'))
-          ->setCellValue('C1', $translator->trans('Name', array(), 'ListsHandlingBundle'))
-          ->setCellValue('D1', $translator->trans('Createdatetime', array(), 'ListsHandlingBundle'))
-          ->setCellValue('E1', $translator->trans('LastHandlingDate', array(), 'ListsHandlingBundle'))
-          ->setCellValue('F1', $translator->trans('City', array(), 'ListsHandlingBundle'))
-          ->setCellValue('G1', $translator->trans('Scope', array(), 'ListsHandlingBundle'))
-          ->setCellValue('H1', $translator->trans('ServiceOffered', array(), 'ListsHandlingBundle'))
-          ->setCellValue('I1', $translator->trans('Chance', array(), 'ListsHandlingBundle'))
-          ->setCellValue('J1', $translator->trans('Status', array(), 'ListsHandlingBundle'));
-        $phpExcelObject->getActiveSheet()->getRowDimension('1') ->setRowHeight(40);
-        $linkStyleArray = [
-            'font'  => [
-              'color' => ['rgb' => '0000FF'],
-              'underline' => 'single'
+        $phpExcelObject->getProperties()->setCreator("DebtControll")
+            ->setLastModifiedBy("Giulio De Donato")
+            ->setTitle("Handling")
+            ->setSubject("Handling")
+            ->setDescription("Handling list")
+            ->setKeywords("Handling")
+            ->setCategory("Handling");
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->setCellValue('A1', $translator->trans('Managers', array(), 'ListsHandlingBundle'))
+            ->setCellValue('B1', $translator->trans('ID', array(), 'ListsHandlingBundle'))
+            ->setCellValue('C1', $translator->trans('Name', array(), 'ListsHandlingBundle'))
+            ->setCellValue('D1', $translator->trans('Createdatetime', array(), 'ListsHandlingBundle'))
+            ->setCellValue('E1', $translator->trans('LastHandlingDate', array(), 'ListsHandlingBundle'))
+            ->setCellValue('F1', $translator->trans('City', array(), 'ListsHandlingBundle'))
+            ->setCellValue('G1', $translator->trans('Scope', array(), 'ListsHandlingBundle'))
+            ->setCellValue('H1', $translator->trans('ServiceOffered', array(), 'ListsHandlingBundle'))
+            ->setCellValue('I1', $translator->trans('Chance', array(), 'ListsHandlingBundle'))
+            ->setCellValue('J1', $translator->trans('Status', array(), 'ListsHandlingBundle'));
+        $phpExcelObject->getActiveSheet()->getRowDimension('1')->setRowHeight(40);
+        /*$linkStyleArray = [
+            'font' => [
+                'color' => ['rgb' => '0000FF'],
+                'underline' => 'single'
             ]
-          ];
+        ];*/
+
+        $linkStyleArray = array(
+            'font' => array(
+                'color' => array('rgb' => '0000FF'),
+                'underline' => 'single'
+            )
+        );
 
        $str = 1;
        $menager = '';
