@@ -32,6 +32,7 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
             ->addSelect('dpmi.realSalary')
             ->addSelect('dpmi.salaryNotOfficially')
             ->addSelect('dpmi.salaryOfficially')
+            ->addSelect('dpmi.replacementType')
             ->addSelect('dpr.id as replacementId')
             ->addSelect('i.firstName')
             ->addSelect('i.lastName')

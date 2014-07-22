@@ -1549,6 +1549,7 @@ class OperScheduleController extends BaseFilterController
         $idCoworker =  $params['idCoworker'];
         $idDepartment = $params['idDepartment'];
         $idReplacement = $params['idReplacement'];
+        $replacementType = $params['replacementType'];
 
         list($year, $month) = explode('-', $date);
 
@@ -1629,13 +1630,14 @@ class OperScheduleController extends BaseFilterController
 
         $canEdit  =  $this->checkIfCanEdit();
         $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleInfoUserBasic.html.twig', array(
-          'coworker'=> $info,
-          'accrual' => $onceOnlyAccrual,
-          'planned' => $plannedAccrual,
-          'idCoworker' => $idCoworker,
-          'idReplacement' => $idReplacement,
-          'idDepartment' => $idDepartment,
-          'canEdit' => $canEdit
+            'coworker'=> $info,
+            'accrual' => $onceOnlyAccrual,
+            'planned' => $plannedAccrual,
+            'idCoworker' => $idCoworker,
+            'idReplacement' => $idReplacement,
+            'idDepartment' => $idDepartment,
+            'canEdit' => $canEdit,
+            'replacementType' => $replacementType
         ));
 
 
@@ -1888,38 +1890,27 @@ class OperScheduleController extends BaseFilterController
         $idCoworker = $request->request->get('idCoworker');
         $date = $request->request->get('date');
         $idCoworkerReplacement =  $request->request->get('idReplacement');
+        $idDepartment =  $request->request->get('idDepartment');
+        $replacementType =  $request->request->get('replacementType');
 
         //var_dump($idCoworker, $date, $idCoworkerReplacement);
         list($year, $month) = explode('-', $date);
 
-        $departmentPeopleRepository = $this->getDoctrine()
-            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
-
-        /** @var  $departmentPeople \Lists\DepartmentBundle\Entity\DepartmentPeople */
-        $departmentPeople = $departmentPeopleRepository->find($idCoworker);
-
-        /** @var  $monthInfoRepository \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfoRepository */
-        $monthInfoRepository = $this->getDoctrine()
-            ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
-
-        $departmentPeopleReplacement = $departmentPeopleRepository->find($idCoworkerReplacement);
-
-        $monthInfo = $monthInfoRepository->findOneBy(array(
-            'departmentPeople' => $departmentPeople,
-            'month' => $month,
+        $options = array(
             'year' => $year,
-            'departmentPeopleReplacement' => $departmentPeopleReplacement,
-            'departmentPeopleId'=> $idCoworker,
-            'replacementType' =>'r'
-        ));
+            'month' => $month,
+            'departmentId' => $idDepartment,
+            'departmentPeopleId' => $idCoworker,
+            'replacementId' => $idCoworkerReplacement,
+            'replacementType' => $replacementType
+        );
 
+        /** @var ScheduleService $scheduleService */
+        $scheduleService = $this->get('schedule.service');
 
+        $scheduleService->deleteUserFromGrafik($options);
 
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($monthInfo);
-        $em->flush();
-
-        $return['success'] = 1;
+        $return['success'] = $scheduleService ? 1 : 0;
 
         return new Response(json_encode($return));
     }
