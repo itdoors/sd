@@ -455,6 +455,39 @@ class AjaxController extends BaseFilterController
      *
      * @return string
      */
+//    public function dogovorSubjectAction()
+//    {
+//         $searchText = $this->get('request')->query->get('query');
+//         
+//         $dogovor = $this->getDoctrine()
+//            ->getRepository('ListsDogovorBundle:Dogovor')
+//            ->createQueryBuilder('d')
+//            ->select('d.subject')
+//            ->addSelect('d.id')
+//            ->where('d.subject LIKE :subject')
+//            ->setParameter(':subject', "{$searchText}%")
+//            ->getQuery()
+//            ->getResult();
+//
+//        $result = array();
+//
+//        foreach ($dogovor as $object) {
+//            $result[] = array(
+//                    'id' => $object['subject'],
+//                    'value' => $object['subject'],
+//                    'name' => $object['subject'],
+//                    'text' => $object['subject']
+//                );
+//        }
+//
+//        return new Response(json_encode($result));
+//    }
+
+    /**
+     * Returns json dogovor type list
+     *
+     * @return string
+     */
     public function dogovorStartdatetimeAction()
     {
         $dogovor = $this->getDoctrine()
@@ -2950,11 +2983,12 @@ class AjaxController extends BaseFilterController
 
         $userIds[$creator->getId()] = $creator->getId();
 
-        $users = $handling->getUsers();
+        /** @var HandlingUser[] $users */
+        $users = $handling->getHandlingUsers();
 
         if ($users) {
             foreach ($users as $user) {
-                $userIds[$user->getId()] = $user->getId();
+                $userIds[$user->getUserId()] = $user->getUserId();
             }
         }
 

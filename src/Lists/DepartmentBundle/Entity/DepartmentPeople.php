@@ -1103,4 +1103,24 @@ class DepartmentPeople
     {
         return $this->isGph;
     }
+
+    /**
+     * @return string
+     */
+    public function getOrganizationName()
+    {
+        $department = $this->getDepartment();
+
+        if (!$department) {
+            return '';
+        }
+
+        $organization = $department->getOrganization();
+
+        if (!$organization) {
+            return '';
+        }
+
+        return $organization->getName();
+    }
 }

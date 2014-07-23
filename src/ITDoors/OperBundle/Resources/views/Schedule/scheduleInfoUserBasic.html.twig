@@ -7,14 +7,16 @@
         $('#delete_user_button').live('click', function(e) {
             var idCoworker = $('#info_input_user_basic').data('id_coworker');
             var idReplacement = $('#info_input_user_basic').data('id_replacement');
-            //var idDepartment = $('#info_input_user_basic').data('id_department');
+            var idDepartment = $('#info_input_user_basic').data('id_department');
+            var replacementType = $('#info_input_user_basic').data('replacement_type');
             var url = $('#info_input_user_basic').data('url_delete_user');
             var date = $('#info_input').data('date');
 
             var sendData = {
                 'idCoworker': idCoworker,
                 'idReplacement': idReplacement,
-                //'idDepartment': idDepartment,
+                'idDepartment': idDepartment,
+                'replacementType': replacementType,
                 'date': date
             }
 
@@ -248,7 +250,11 @@
 <table  class="table table-bordered table-striped">
     <tr>
         <td width="25%">{% trans %}Mpk{% endtrans %}</td>
-        <td width="25%">{{ coworker.mpk }}
+        <td width="25%">
+            {{ coworker.mpk }}
+            {% if coworker.organizationName is defined and coworker.organizationName %}
+                <br />({{ coworker.organizationName }})
+            {% endif %}
 {#
             {% if coworker.mpk|length>0 %}
                 {% for mpk in  coworker.mpk%}
@@ -267,7 +273,9 @@
     {% if coworker.change %}
         <tr>
             <td>{% trans %}Substituting{% endtrans %}</td>
-            <td>{{ coworker.changeMpk }}</td>
+            <td>
+                {{ coworker.changeMpk }}
+            </td>
             <td colspan="2">{{ coworker.changeFio }}</td>
         </tr>
     {% endif %}
@@ -458,5 +466,6 @@
        data-url_delete_user = "{{ path('it_doors_oper_schedule_delete_user') }}"
        data-id_coworker="{{ idCoworker }}"
        data-id_replacement = "{{ idReplacement }}"
+       data-replacement_type = "{{ replacementType }}"
        data-id_department="{{ idDepartment }}"
         >

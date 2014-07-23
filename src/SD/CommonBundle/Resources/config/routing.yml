@@ -167,6 +167,10 @@ sd_common_ajax_dogovor_type:
     pattern:  /ajax/dogovor_type
     defaults: { _controller: SDCommonBundle:Ajax:dogovorType }
 
+#sd_common_ajax_dogovor_subject:
+#    pattern:  /ajax/dogovor_subject
+#    defaults: { _controller: SDCommonBundle:Ajax:dogovorSubject }
+
 sd_common_ajax_dogovor_startdatetime:
     pattern:  /ajax/dogovor_startdatetime
     defaults: { _controller: SDCommonBundle:Ajax:dogovorStartdatetime }

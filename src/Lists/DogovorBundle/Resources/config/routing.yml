@@ -27,6 +27,10 @@ lists_dogovor_ajax_element:
     pattern:  /lists/dogovor/ajax/element/{id}
     defaults: { _controller: ListsDogovorBundle:Dogovor:element }
 
+lists_dogovor_list_for_organization:
+    pattern:  /lists/dogovor/for/organization/{id}
+    defaults: { _controller: ListsDogovorBundle:Dogovor:forOrganization }
+
 #DOP DOGOVOR ROUTE
 lists_dogovor_dopdogovor_list:
     pattern:  /lists/dogovor/dopdogovor/list/{dogovorId}
