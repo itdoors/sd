@@ -9,7 +9,7 @@ use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
 use Lists\HandlingBundle\Entity\HandlingResult;
 use Lists\ContactBundle\Entity\ModelContact;
 use Lists\OrganizationBundle\Entity\Organization;
-use Lists\HandlingBundle\Entity\Handling;
+use Lists\OrganizationBundle\Entity\OrganizationUser;
 use Lists\HandlingBundle\Entity\HandlingUser;
 use Lists\HandlingBundle\Entity\HandlingMessage;
 use Lists\ContactBundle\Entity\ModelContactRepository;
@@ -363,24 +363,34 @@ class SalesController extends BaseController
             /** @var Lookup $lookup */
             $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager_organization'));
 
-            $managerOrganization = $organization['organizationId'] ? $this->getDoctrine()
+            $managerOrganization =
+                    is_numeric($organization['organizationId'])
+                    ?
+                    $this->getDoctrine()
                     ->getRepository('ListsOrganizationBundle:OrganizationUser')
                     ->findOneBy(array(
                         'organizationId' => $organization['organizationId'],
                         'lookupId' => $lookup->getId(),
                         )
-                    ) : null;
-            $organizationUser = $organization['organizationId'] ? $this->getDoctrine()
+                    )
+                    :
+                    null;
+            $organizationUser =
+                    is_numeric($organization['organizationId'])
+                    ?
+                    $this->getDoctrine()
                     ->getRepository('ListsOrganizationBundle:OrganizationUser')
                     ->findOneBy(array(
                         'organizationId' => $organization['organizationId'],
                         'userId' => $this->getUser()->getId(),
                         )
-                    ) : null;
+                    )
+                    :
+                    null;
              /** @var Translator $translator */
             $translator = $this->container->get('translator');
 
-            if ($this->isValidWizardOrganization() && $organizationUser) {
+            if ($this->isValidWizardOrganization() && ($organizationUser || !$managerOrganization)) {
                 return $this->redirect($this->generateUrl('lists_sales_handling_create_step2'));
             } else if (!$organizationUser) {
                 $noAccess = $translator->trans('You can not create a project for the organization refer to', array(), 'ListsHandlingBundle');
@@ -470,6 +480,9 @@ class SalesController extends BaseController
 
             try {
                 if ($this->isNewWizardOrganization()) {
+                    /** @var Lookup $lookup */
+                    $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager_organization'));
+
                     $organization = new Organization();
                     $organization->setCreator($user);
                     $organization->setCreatedatetime(new \DateTime());
@@ -481,6 +494,13 @@ class SalesController extends BaseController
                     $em->flush();
 
                     $em->refresh($organization);
+
+                    $organizationUser = new OrganizationUser();
+                    $organizationUser->setLookup($lookup);
+                    $organizationUser->setOrganization($organization);
+                    $organizationUser->setUser($user);
+                    $em->persist($organizationUser);
+                    $em->flush();
 
                     $organizationId = $organization->getId();
 
