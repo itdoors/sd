@@ -37,7 +37,7 @@
             });
         });
 
-        $('.itdoors-editable').on('save', function(e, params) {
+        $('.itdoors-editable, .itdoors-editable-competitor').on('save', function(e, params) {
             var response = JSON.parse(params.response);
 
             var target = $(this).parents('tr').find('.service-cover-id');
