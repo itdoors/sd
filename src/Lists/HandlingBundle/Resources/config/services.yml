@@ -32,6 +32,9 @@ parameters:
     lists_handling.repository.class: Lists\HandlingBundle\Entity\HandlingRepository
     lists_handling.repository.entity: Lists\HandlingBundle\Entity\Handling
 
+    lists_handling.service.repository.class: Lists\HandlingBundle\Entity\HandlingServiceRepository
+    lists_handling.service.repository.entity: Lists\HandlingBundle\Entity\HandlingService
+
     lists_handling.competitor.repository.class: Lists\HandlingBundle\Entity\HandlingCompetitorRepository
     lists_handling.competitor.repository.entity: Lists\HandlingBundle\Entity\HandlingCompetitor
 
@@ -47,6 +50,15 @@ services:
 
     handling.repository:
         alias: lists_handling.repository
+
+    lists_handling.service.repository:
+        class: %lists_handling.service.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_handling.service.repository.entity% ]
+
+    handling.service.repository:
+        alias: lists_handling.service.repository
 
     lists_handling.message.service:
         class: %lists_handling.message.service.class%

@@ -1,0 +1,12 @@
+<div id="service-cover-list" data-url="{{ path('lists_sales_organization_service_cover_list', {
+    organizationId: organizationId
+}) }}">
+    {{ render(controller('ListsOrganizationBundle:ServiceCover:List', {
+        organizationId: organizationId
+    })) }}
+</div>
+<div id="service-cover-form">
+    {{ render(controller('ListsOrganizationBundle:ServiceCover:Form', {
+        organizationId: organizationId
+    })) }}
+</div>

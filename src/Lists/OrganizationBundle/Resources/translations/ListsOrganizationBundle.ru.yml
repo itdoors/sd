@@ -162,3 +162,23 @@ This user is already a manager: Этот пользователь уже явл�
 
 Change part: Процент участия
 Dogovors: Договора
+serviceName: Услуга
+Is interested: Заинтересованы
+Is working: Работаем
+Evaluation: Оценка
+Competitor: Конкурент
+End date: Дата окончания
+Responsible: Ответственный
+Description: Примечание
+Actions: Действия
+Add service cover: Добавить
+Service cant be empty: Заполните поле "Услуга"
+Enter Description: Примечание
+Enter Responsible: Ответственный
+Enter Competitor: Конкурент
+Enter End Date: Дата окончания
+Enter Is interested: Заинтересованы?
+Enter Is working: Работаем?
+Evaluation: Оценка
+Enter Service: Услуга
+Service cover: Покрытие услугами
