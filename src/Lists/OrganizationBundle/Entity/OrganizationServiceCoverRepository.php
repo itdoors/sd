@@ -22,6 +22,7 @@ class OrganizationServiceCoverRepository extends EntityRepository
         return $this->createQueryBuilder('osc')
             ->select('osc.id')
             ->addSelect('service.name as serviceName')
+            ->addSelect('service.id as serviceId')
             ->addSelect('osc.isInterested')
             ->addSelect('osc.isWorking')
             ->addSelect('osc.evaluation')
@@ -29,11 +30,57 @@ class OrganizationServiceCoverRepository extends EntityRepository
             ->addSelect('osc.description')
             ->addSelect('osc.endDate')
             ->addSelect('competitor.name as competitorName')
+            ->addSelect('competitor.id as competitorId')
             ->leftJoin('osc.service', 'service')
             ->leftJoin('osc.competitor', 'competitor')
             ->where('osc.organizationId = :organizationId')
             ->setParameter(':organizationId', $organizationId)
             ->getQuery()
             ->getArrayResult();
+    }
+
+    /**
+     * @param int $organizationId
+     *
+     * @return mixed[]
+     */
+    public function getFormattedByOrganizationId($organizationId)
+    {
+        $serviceCovers = $this->getByOrganizationId($organizationId);
+
+        $result = array();
+
+        foreach ($serviceCovers as $serviceCover) {
+            if (!isset($result[$serviceCover['serviceId']])) {
+                $result[$serviceCover['serviceId']] = $serviceCover;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param int    $serviceId
+     * @param string $serviceName
+     * @param int    $organizationId
+     *
+     * @return mixed[]
+     */
+    public function getEmptyServiceCover($serviceId, $serviceName, $organizationId)
+    {
+        return array(
+            'id' => 0,
+            'serviceId' => $serviceId,
+            'serviceName' => $serviceName,
+            'organizationId' => $organizationId,
+            'isInterested' => '',
+            'isWorking' => '',
+            'evaluation' => '',
+            'responsible' => '',
+            'description' => '',
+            'endDate' => '',
+            'competitorId' => '',
+            'competitorName' => ''
+        );
     }
 }

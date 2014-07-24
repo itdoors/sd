@@ -23,13 +23,11 @@ Lists\OrganizationBundle\Entity\OrganizationServiceCover:
             column: competitor_id
         isInterested:
             type: boolean
-            nullable: false
-            default: false
+            nullable: true
             column: is_interested
         isWorking:
             type: boolean
-            nullable: false
-            default: false
+            nullable: true
             column: is_working
         evaluation:
             type: integer

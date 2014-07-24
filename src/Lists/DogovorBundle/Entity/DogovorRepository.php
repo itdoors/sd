@@ -86,8 +86,11 @@ class DogovorRepository extends EntityRepository
             ->addSelect('d.prolongationDate as dogovorProlongationDate')
             ->addSelect('d.prolongation as dogovorProlongation')
             ->addSelect('o.name as organizationName')
+            ->addSelect('o.id as organizationId')
             ->addSelect('customer.name as customerName')
+            ->addSelect('customer.id as customerId')
             ->addSelect('performer.name as performerName')
+            ->addSelect('performer.id as performerId')
             ->addSelect('d.isActive as dogovorIsActive')
             ->addSelect('d.subject as dogovorSubject')
             ->addSelect('type.name as dogovorType');
@@ -329,40 +332,33 @@ class DogovorRepository extends EntityRepository
             ->getQuery()->getResult();
 
         return $query;
-//            ->select('d.id as id')
-//            ->addSelect('d.createDateTime')
-//            ->addSelect('d.number as number')
-//            ->addSelect('d.subject as subject')
-//            ->addSelect('d.filepath as filepath')
-//            ->addSelect('d.prolongation as prolongation')
-//            ->addSelect('d.prolongationTerm as prolongationTerm')
-//            ->addSelect('d.startdatetime as startdatetime')
-//            ->addSelect('d.stopdatetime as stopdatetime')
-//            ->addSelect('d.isActive as isActive')
-//            ->addSelect('d.mashtab as mashtab')
-//            ->addSelect('dogovorType.name as type')
-//            ->addSelect('customer.id as customerId')
-//            ->addSelect('performer.id as performerId')
-//            ->addSelect('organization.id as organizationId')
-//            ->addSelect('city.id as cityId')
-//            ->addSelect('customer.name as customerName')
-//            ->addSelect('performer.name as performerName')
-//            ->addSelect("CONCAT(CONCAT(saller.lastName, ' '), saller.firstName) as sallerName")
-//            ->addSelect('organization.name as organizationName')
-//            ->addSelect('city.name as cityName')
-//            ->addSelect('creator.firstName as creatorFirstName')
-//            ->addSelect('creator.lastName as creatorLastName')
-//            ->addSelect('creator.middleName as creatorMiddleName')
-//            ->leftJoin('d.saller', 'saller')
-//            ->leftJoin('d.customer', 'customer')
-//            ->leftJoin('d.performer', 'performer')
-//            ->leftJoin('d.organization', 'organization')
-//            ->leftJoin('d.city', 'city')
-//            ->leftJoin('d.user', 'creator')
-//            ->leftJoin('d.dogovorType', 'dogovorType')
-//            
-//            ->getQuery()
-//            ->getResult();
     }
 
+    /**
+     * Return dogovor show info by id
+     *
+     * @param integer $id Organization.id
+     *
+     * @return mixed[]
+     */
+    public function getDogovorByOrganizationCustomerPerformerId($id)
+    {
+        /** @var \Doctrine\ORM\QueryBuilder $sql*/
+        $sql = $this->createQueryBuilder('d');
+
+        $this->processSelect($sql);
+
+        $this->processBaseQuery($sql);
+
+        $this->processOrdering($sql);
+
+        $sql
+            ->where('d.organizationId = :oId or d.customerId = :oId or d.performerId = :oId')
+            ->setParameter(':oId', $id);
+
+        $query = $sql
+            ->getQuery()->getResult();
+
+        return $query;
+    }
 }

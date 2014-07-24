@@ -31,7 +31,8 @@ class ModelContactOrganizationUserFormType extends ModelContactOrganizationFormT
             ->add('position')
             ->add('birthday', 'birthday', array(
                 'widget' => 'single_text',
-                'format' => 'dd.M.yyyy'
+                'format' => 'dd.MM.yyyy',
+                'years' => range(1900, date('Y'))
             ))
             ->add('email');
 

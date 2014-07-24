@@ -159,7 +159,7 @@ class DogovorController extends BaseController
         /** @var DogovorRepository $dr */
         $dr = $this->get('lists_dogovor.repository');
 
-        $dogovors = $dr->getDogovorByOrganizationId($id);
+        $dogovors = $dr->getDogovorByOrganizationCustomerPerformerId($id);
 
         return $this->render('ListsDogovorBundle:Dogovor:forOrganization.html.twig', array(
             'dogovors' => $dogovors

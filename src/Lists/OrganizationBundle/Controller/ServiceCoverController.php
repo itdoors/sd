@@ -3,6 +3,9 @@
 namespace Lists\OrganizationBundle\Controller;
 
 use ITDoors\AjaxBundle\Controller\BaseFilterController;
+use ITDoors\CommonBundle\Services\BaseService;
+use Lists\HandlingBundle\Entity\HandlingService;
+use Lists\HandlingBundle\Entity\HandlingServiceRepository;
 use Lists\OrganizationBundle\Entity\OrganizationServiceCoverRepository;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -35,19 +38,41 @@ class ServiceCoverController extends BaseFilterController
      */
     public function listAction($organizationId)
     {
-        /** @var OrganizationServiceCoverRepository $organizationRepository */
-        $organizationRepository = $this->get('organization.service_cover.repository');
+        /** @var OrganizationServiceCoverRepository $oscr */
+        $oscr = $this->get('organization.service_cover.repository');
+        /** @var HandlingServiceRepository $handlingServiceRepository */
+        $handlingServiceRepository = $this->get('handling.service.repository');
+        /** @var BaseService $baseService */
+        $baseService = $this->get('itdoors_common.base.service');
 
-        $serviceCovers = $organizationRepository->getByOrganizationId($organizationId);
+        $serviceCovers = $oscr->getFormattedByOrganizationId($organizationId);
 
         $options = array();
         $options['id']['type'] = 'text';
         $options['organizationName']['type'] = 'text';
 
+        /** @var HandlingService[] $allServices */
+        $allServices = $handlingServiceRepository->findAll();
+
+        foreach ($allServices as $service) {
+            if (!isset($serviceCovers[$service->getId()])) {
+                $emptyCover = $oscr->getEmptyServiceCover($service->getId(), $service->getName(), $organizationId);
+                $serviceCovers[$service->getId()] = $emptyCover;
+            }
+        }
+
+        $select2Competitor = array(
+            'minimumInputLength' => 2
+        );
+
         return $this->render('ListsOrganizationBundle:ServiceCover:list.html.twig', array(
             'organizationId' => $organizationId,
             'serviceCovers' => $serviceCovers,
-            'options' => $options
+            'options' => $options,
+            'allServices' => $allServices,
+            'boolChoices' => json_encode($baseService->getYesNoChoices()),
+            'numberChoices' => json_encode($baseService->getNumberChoices(1, 10)),
+            'select2Competitor' => json_encode($select2Competitor)
         ));
     }
 
