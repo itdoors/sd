@@ -111,9 +111,9 @@
         <tbody>
         <tr> {# 0 #}
             <td>{% trans %}Date create{% endtrans %}</td>
-            <td>{{ dogovor.createDateTime|date('H:i d.m.Y') }}</td>
+            <td>{{ dogovor.createDateTime|date('d.m.Y H:i') }}</td>
             <td>{% trans %}Creator{% endtrans %}</td>
-            <td>{{ dogovor.creatorFirstName }} {{ dogovor.creatorLastName }} {{ dogovor.creatorMiddleName }}</td>
+            <td>{{ dogovor.creatorLastName }} {{ dogovor.creatorFirstName }} {{ dogovor.creatorMiddleName }}</td>
         </tr>
         <tr> {# 1 #}
             <td style="width:15%">{% trans %}ID{% endtrans %}</td>
