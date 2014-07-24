@@ -4388,6 +4388,12 @@ class AjaxController extends BaseFilterController
             /*$object->setIsInterested(false);
             $object->setIsWorking(false);*/
             $object->setCreator($this->getUser());
+
+            if ($name == 'competitorId' && $value) {
+                /** @var Organization $competitor */
+                $competitor = $or->find($value);
+                $object->setCompetitor($competitor);
+            }
         }
 
         if (!$value) {
