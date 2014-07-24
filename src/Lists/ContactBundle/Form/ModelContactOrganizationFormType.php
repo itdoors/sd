@@ -52,7 +52,8 @@ class ModelContactOrganizationFormType extends AbstractType
             ->add('birthday', 'birthday', array(
                 'widget' => 'single_text',
                 'format' => 'dd.MM.yyyy',
-                'years' => range(1900, date('Y'))
+                'years' => range(1900, date('Y')),
+                'required' => false,
             ))
             ->add('email')
             ->add('type', null, array(
