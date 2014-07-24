@@ -29,7 +29,6 @@ CREATE TABLE team_user (handling_id BIGINT NOT NULL, user_id INT NOT NULL, PRIMA
 CREATE INDEX IDX_5C7222325AB3F1F ON team_user (handling_id);
 CREATE INDEX IDX_5C722232A76ED395 ON team_user (user_id);
 
-
 sha1
 067f9c5e718c84cf425b381589155fb3
 aeb5dd988fb28afc8383576de15e800762bf8df0
@@ -624,3 +623,13 @@ ALTER TABLE grafik ADD COLUMN is_own_vacation boolean;
 ALTER TABLE grafik ALTER COLUMN is_own_vacation SET DEFAULT false;
 --test   -----------------------------
 --stagin -----------------------------
+
+
+---task-856-organizaton-service_cover
+CREATE TABLE organization_service_cover (id BIGSERIAL NOT NULL, organization_id INT DEFAULT NULL, service_id INT DEFAULT NULL, is_interested BOOLEAN NOT NULL, is_working BOOLEAN NOT NULL, end_date DATE DEFAULT NULL, responsible TEXT DEFAULT NULL, description TEXT DEFAULT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_390A9CB232C8A3DE ON organization_service_cover (organization_id);
+CREATE INDEX IDX_390A9CB2ED5CA9E6 ON organization_service_cover (service_id);
+ALTER TABLE organization_service_cover ADD CONSTRAINT FK_390A9CB232C8A3DE FOREIGN KEY (organization_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE organization_service_cover ADD CONSTRAINT FK_390A9CB2ED5CA9E6 FOREIGN KEY (service_id) REFERENCES handling_service (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+++++task-856-organizaton-service_cover staging  +++++++++
+++++task-856-organizaton-service_cover prod     +++++++++

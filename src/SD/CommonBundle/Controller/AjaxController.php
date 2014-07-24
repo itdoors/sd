@@ -17,6 +17,7 @@ use Lists\ContactBundle\Entity\ModelContact;
 use Lists\ContactBundle\Entity\ModelContactRepository;
 use Lists\OrganizationBundle\Entity\Organization;
 use Lists\HandlingBundle\Entity\HandlingMoreInfo;
+use Lists\OrganizationBundle\Entity\OrganizationServiceCover;
 use SD\UserBundle\Entity\UserRepository;
 use SD\UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -2225,6 +2226,28 @@ class AjaxController extends BaseFilterController
         /** @var InvoiceCompanystructure $object */
         $object = $this->getDoctrine()
             ->getRepository('SDUserBundle:Usercontactinfo')
+            ->find($id);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function organizationServiceCoverDelete($params)
+    {
+        $id = $params['id'];
+
+        /** @var OrganizationServiceCover $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:OrganizationServiceCover')
             ->find($id);
 
         /** @var EntityManager $em */
