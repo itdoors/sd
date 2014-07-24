@@ -2,6 +2,7 @@
 
 namespace Lists\ContactBundle\Form;
 
+use Lists\ContactBundle\Entity\ModelContact;
 use Lists\ContactBundle\Entity\ModelContactLevelRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -11,6 +12,7 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Class ModelContactOrganizationFormType
@@ -68,6 +70,22 @@ class ModelContactOrganizationFormType extends AbstractType
             ->add('add', 'submit')
             ->add('cancel', 'button');
 
+        $builder->addEventListener(
+            FormEvents::PRE_SUBMIT,
+            function (FormEvent $event) use ($container) {
+                /** @var ModelContact $data */
+                /*$data = $event->getData();
+
+                if ($data['birthday']) {
+                    // Super hack)
+                    if (sizeof($data['birthday']) < 5) {
+                        $birthday = date('d.m.Y', $data['birthday']);
+                        $data['birthday'] = $birthday;
+                        $event->setData($data);
+                    }
+                }*/
+            }
+        );
         $builder->addEventListener(
             FormEvents::POST_SUBMIT,
             function (FormEvent $event) use ($container) {

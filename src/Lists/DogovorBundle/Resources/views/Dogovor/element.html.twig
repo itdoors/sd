@@ -5,9 +5,27 @@
     </a>
 </td>
 <td>{{ item.dogovorNumber|e }}</td>
-<td>{{ item.organizationName|e }}</td>
-<td>{{ item.customerName|e }}</td>
-<td>{{ item.performerName|e }}</td>
+<td>
+    {% if item.organizationId %}
+        <a href="{{ path('lists_sales_organization_show', { id: item.organizationId }) }}">
+            {{ item.organizationName|e }}
+        </a>
+    {% endif %}
+</td>
+<td>
+    {% if item.customerId %}
+        <a href="{{ path('lists_sales_organization_show', { id: item.customerId }) }}">
+            {{ item.customerName|e }}
+        </a>
+    {% endif %}
+</td>
+<td>
+    {% if item.performerId %}
+        <a href="{{ path('lists_sales_organization_show', { id: item.performerId }) }}">
+            {{ item.performerName|e }}
+        </a>
+    {% endif %}
+</td>
 <td>{{ item.dogovorStartdatetime == '' ? '' : item.dogovorStartdatetime|date('d.m.Y') }}</td>
 <td>{{ item.dogovorStopdatetime == '' ? '' : item.dogovorStopdatetime|date('d.m.Y') }}</td>
 <td>

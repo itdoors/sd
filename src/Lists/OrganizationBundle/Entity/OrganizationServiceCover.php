@@ -74,12 +74,13 @@ class OrganizationServiceCover
      * Set serviceId
      *
      * @param integer $serviceId
+     *
      * @return OrganizationServiceCover
      */
     public function setServiceId($serviceId)
     {
         $this->serviceId = $serviceId;
-    
+
         return $this;
     }
 
@@ -97,12 +98,13 @@ class OrganizationServiceCover
      * Set organizationId
      *
      * @param integer $organizationId
+     *
      * @return OrganizationServiceCover
      */
     public function setOrganizationId($organizationId)
     {
         $this->organizationId = $organizationId;
-    
+
         return $this;
     }
 
@@ -120,12 +122,13 @@ class OrganizationServiceCover
      * Set isInterested
      *
      * @param boolean $isInterested
+     *
      * @return OrganizationServiceCover
      */
     public function setIsInterested($isInterested)
     {
         $this->isInterested = $isInterested;
-    
+
         return $this;
     }
 
@@ -143,12 +146,13 @@ class OrganizationServiceCover
      * Set isWorking
      *
      * @param boolean $isWorking
+     *
      * @return OrganizationServiceCover
      */
     public function setIsWorking($isWorking)
     {
         $this->isWorking = $isWorking;
-    
+
         return $this;
     }
 
@@ -166,12 +170,13 @@ class OrganizationServiceCover
      * Set endDate
      *
      * @param \DateTime $endDate
+     *
      * @return OrganizationServiceCover
      */
     public function setEndDate($endDate)
     {
         $this->endDate = $endDate;
-    
+
         return $this;
     }
 
@@ -189,12 +194,13 @@ class OrganizationServiceCover
      * Set responsible
      *
      * @param string $responsible
+     *
      * @return OrganizationServiceCover
      */
     public function setResponsible($responsible)
     {
         $this->responsible = $responsible;
-    
+
         return $this;
     }
 
@@ -212,12 +218,13 @@ class OrganizationServiceCover
      * Set description
      *
      * @param string $description
+     *
      * @return OrganizationServiceCover
      */
     public function setDescription($description)
     {
         $this->description = $description;
-    
+
         return $this;
     }
 
@@ -235,12 +242,13 @@ class OrganizationServiceCover
      * Set organization
      *
      * @param \Lists\OrganizationBundle\Entity\Organization $organization
+     *
      * @return OrganizationServiceCover
      */
     public function setOrganization(\Lists\OrganizationBundle\Entity\Organization $organization = null)
     {
         $this->organization = $organization;
-    
+
         return $this;
     }
 
@@ -345,12 +353,13 @@ class OrganizationServiceCover
      * Set competitor
      *
      * @param \Lists\OrganizationBundle\Entity\Organization $competitor
+     *
      * @return OrganizationServiceCover
      */
     public function setCompetitor(\Lists\OrganizationBundle\Entity\Organization $competitor = null)
     {
         $this->competitor = $competitor;
-    
+
         return $this;
     }
 
@@ -384,7 +393,7 @@ class OrganizationServiceCover
     public function setCreatorId($creatorId)
     {
         $this->creatorId = $creatorId;
-    
+
         return $this;
     }
 
@@ -408,7 +417,7 @@ class OrganizationServiceCover
     public function setCreator(\SD\UserBundle\Entity\User $creator = null)
     {
         $this->creator = $creator;
-    
+
         return $this;
     }
 
@@ -420,5 +429,17 @@ class OrganizationServiceCover
     public function getCreator()
     {
         return $this->creator;
+    }
+
+    /**
+     * Sets endDate from endDateString
+     *
+     * @param string $endDateString
+     */
+    public function setEndDateString($endDateString)
+    {
+        if ($endDateString) {
+            $this->setEndDate(new \DateTime($endDateString));
+        }
     }
 }

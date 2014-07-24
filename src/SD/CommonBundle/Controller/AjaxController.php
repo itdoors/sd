@@ -12,11 +12,14 @@ use Lists\DogovorBundle\Entity\DopDogovorRepository;
 use Lists\HandlingBundle\Entity\Handling;
 use Lists\HandlingBundle\Entity\HandlingMessage;
 use Lists\HandlingBundle\Entity\HandlingRepository;
+use Lists\HandlingBundle\Entity\HandlingService;
+use Lists\HandlingBundle\Entity\HandlingServiceRepository;
 use Lists\LookupBundle\Entity\LookupRepository;
 use Lists\ContactBundle\Entity\ModelContact;
 use Lists\ContactBundle\Entity\ModelContactRepository;
 use Lists\OrganizationBundle\Entity\Organization;
 use Lists\HandlingBundle\Entity\HandlingMoreInfo;
+use Lists\OrganizationBundle\Entity\OrganizationRepository;
 use Lists\OrganizationBundle\Entity\OrganizationServiceCover;
 use SD\UserBundle\Entity\UserRepository;
 use SD\UserBundle\Entity\User;
@@ -4332,5 +4335,101 @@ class AjaxController extends BaseFilterController
         }
 
         return new Response(json_encode($result));
+    }
+
+    /**
+     * Saves object to db
+     *
+     * @param int $organizationId
+     * @param int $serviceId
+     *
+     * @return mixed[]
+     */
+    public function organizationServiceCoverSaveAction($organizationId, $serviceId)
+    {
+        $translator = $this->get('translator');
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        $methodSet = 'set' . ucfirst($name);
+
+        // Get data by $organization && $serviceId
+
+        if ($pk) {
+            /** @var OrganizationServiceCover $object */
+            $object = $this->getDoctrine()
+                ->getRepository('ListsOrganizationBundle:OrganizationServiceCover')
+                ->find($pk);
+        } else {
+            $object = $this->getDoctrine()
+                ->getRepository('ListsOrganizationBundle:OrganizationServiceCover')
+                ->findOneBy(array(
+                    'organizationId' => $organizationId,
+                    'serviceId' => $serviceId
+                ));
+        }
+
+        if (!$object) {
+            /** @var OrganizationRepository $or */
+            $or = $this->container->get('organization.repository');
+            /** @var HandlingServiceRepository $hr */
+            $hsr = $this->container->get('handling.service.repository');
+
+            /** @var Organization $organization */
+            $organization = $or->find($organizationId);
+            /** @var HandlingService $handlingService */
+            $handlingService = $hsr->find($serviceId);
+
+            $object = new OrganizationServiceCover();
+            $object->setOrganization($organization);
+            $object->setService($handlingService);
+            /*$object->setIsInterested(false);
+            $object->setIsWorking(false);*/
+            $object->setCreator($this->getUser());
+        }
+
+        if (!$value) {
+            $methodGet = 'get' . ucfirst($name);
+            $type = gettype($object->$methodGet());
+
+            if (in_array($type, array('integer'))) {
+                $value = null;
+            }
+        }
+
+        $object->$methodSet($value);
+
+        $validator = $this->get('validator');
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
+        $errors = $validator->validate($object, array('edit'));
+
+        if (sizeof($errors)) {
+            $return = $this->getFirstError($errors);
+
+            return new Response($return, 406);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+
+        try {
+            $em->flush();
+
+            $em->refresh($object);
+        } catch (\ErrorException $e) {
+            $return = array('msg' => $translator->trans('Wrong input data'));
+
+            return new Response(json_encode($return));
+        }
+
+        $return = array(
+            'success' => 1,
+            'id' =>  $object->getId()
+        );
+
+        return new Response(json_encode($return));
     }
 }
