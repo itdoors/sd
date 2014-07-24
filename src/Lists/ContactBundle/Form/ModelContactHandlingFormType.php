@@ -29,7 +29,11 @@ class ModelContactHandlingFormType extends AbstractType
             ->add('phone1')
             ->add('phone2')
             ->add('position')
-            ->add('birthday', 'birthday')
+            ->add('birthday', 'birthday', array(
+                'widget' => 'single_text',
+                'format' => 'dd.MM.yyyy',
+                'years' => range(1900, date('Y'))
+            ))
             ->add('email');
 
         $builder
