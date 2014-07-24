@@ -86,8 +86,11 @@ class DogovorRepository extends EntityRepository
             ->addSelect('d.prolongationDate as dogovorProlongationDate')
             ->addSelect('d.prolongation as dogovorProlongation')
             ->addSelect('o.name as organizationName')
+            ->addSelect('o.id as organizationId')
             ->addSelect('customer.name as customerName')
+            ->addSelect('customer.id as customerId')
             ->addSelect('performer.name as performerName')
+            ->addSelect('performer.id as performerId')
             ->addSelect('d.isActive as dogovorIsActive')
             ->addSelect('d.subject as dogovorSubject')
             ->addSelect('type.name as dogovorType');

@@ -2,11 +2,13 @@
 
 namespace Lists\OrganizationBundle\Controller;
 
+use Lists\OrganizationBundle\Entity\OrganizationServiceCoverRepository;
 use Symfony\Component\HttpFoundation\Request;
 use ITDoors\AjaxBundle\Controller\BaseFilterController as BaseController;
 use PHPExcel_Style_Border;
 use PHPExcel_Style_Alignment;
 use Lists\OrganizationBundle\Entity\OrganizationManager;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class SalesController

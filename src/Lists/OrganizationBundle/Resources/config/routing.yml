@@ -35,6 +35,12 @@ lists_sales_organization_export_excel:
     pattern:  /lists/sales/organization/export/excel
     defaults: { _controller: ListsOrganizationBundle:Sales:exportExcel }
 
+lists_sales_organization_service_cover_list:
+    pattern:  /lists/sales/organization/service/cover/list/{organizationId}
+    defaults: { _controller: ListsOrganizationBundle:ServiceCover:list }
+    methods:   [GET, POST]
+
+
 #SALES DISPATCHER ROUTES
 
 lists_sales_dispatcher_organization_index:

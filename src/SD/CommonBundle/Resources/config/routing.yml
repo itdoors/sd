@@ -298,3 +298,7 @@ sd_common_ajax_schedule_grafik_people:
 sd_common_ajax_invoice_save:
     pattern:  /ajax/invoice/save
     defaults: { _controller: SDCommonBundle:Ajax:invoiceSave }
+
+sd_common_ajax_organization_service_cover_save:
+    pattern:  /ajax/organization_service_cove/save/{organizationId}/{serviceId}
+    defaults: { _controller: SDCommonBundle:Ajax:organizationServiceCoverSave }
