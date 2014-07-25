@@ -24,6 +24,13 @@ class SalesAdminController extends SalesController
         $organizationContacts = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
             ->getMyOrganizationsContacts(null, $organizationId);
 
+        if ($organizationId) {
+            $departmentContacts = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
+                ->getMyDepartmentByOrganizationContacts($organizationId);
+        } else {
+            $departmentContacts = array();
+        }
+
         if (!$organizationId) {
             /** @var \Knp\Component\Pager\Paginator $paginator */
             $paginator  = $this->get('knp_paginator');
@@ -41,7 +48,8 @@ class SalesAdminController extends SalesController
                 'pagination' => $pagination,
                 'organizationId' => $organizationId,
                 'baseTemplate' => $this->baseTemplate,
-                'baseRoutePrefix' => $this->baseRoutePrefix
+                'baseRoutePrefix' => $this->baseRoutePrefix,
+                'departmentContacts' => $departmentContacts
             ));
     }
 }
