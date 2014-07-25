@@ -134,6 +134,54 @@ class OrganizationRepository extends EntityRepository
 
         return $query;
     }
+    /**
+     * @param integer $userIds
+     * @param integer $signId
+     * @param mixed[] $filters
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getContractor($userIds, $signId, $filters)
+    {
+        if (!is_array($userIds) && $userIds) {
+            $userIds = array($userIds);
+        }
+
+        /** @var \Doctrine\ORM\QueryBuilder $sql*/
+        $sql = $this->createQueryBuilder('o');
+
+        /** @var \Doctrine\ORM\QueryBuilder $sqlCount */
+        $sqlCount = $this->createQueryBuilder('o');
+
+        $this->processSelect($sql);
+        $this->processCount($sqlCount);
+
+        $this->processBaseQuery($sql);
+        $sql
+                ->where('o.organizationSignId = :organizationSignId')
+                ->setParameter(':organizationSignId', $signId);
+        $this->processBaseQuery($sqlCount);
+        $sqlCount->where('o.organizationSignId = :organizationSignId')
+                ->setParameter(':organizationSignId', $signId);
+
+        if (sizeof($userIds)) {
+            $this->processUserQuery($sql, $userIds);
+            $this->processUserQuery($sqlCount, $userIds);
+        }
+
+        $this->processFilters($sql, $filters);
+        $this->processFilters($sqlCount, $filters);
+
+        $this->processOrdering($sql);
+
+        $query = $sql->getQuery();
+
+        $count = $sqlCount->getQuery()->getSingleScalarResult();
+
+        $query->setHint('knp_paginator.count', $count);
+
+        return $query;
+    }
 
     /**
      * Processes sql query. adding select

@@ -39,8 +39,6 @@ lists_sales_organization_service_cover_list:
     pattern:  /lists/sales/organization/service/cover/list/{organizationId}
     defaults: { _controller: ListsOrganizationBundle:ServiceCover:list }
     methods:   [GET, POST]
-
-
 #SALES DISPATCHER ROUTES
 
 lists_sales_dispatcher_organization_index:
@@ -74,7 +72,6 @@ lists_sales_dispatcher_organization_ajax_index:
 lists_sales_dispatcher_organization_ajax_users:
     pattern:  /lists/salesdispatcher/organization/ajax/users/{organizationId}
     defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:organizationUsers }
-
 
 #SALES ADMIN ROUTES
 
@@ -125,7 +122,6 @@ lists_sales_admin_organization_transfer_for_user:
 lists_sales_admin_organization_export_excel:
     pattern:  /lists/salesadmin/organization/export/excel
     defaults: { _controller: ListsOrganizationBundle:SalesAdmin:exportExcel }
-
 
 # Dogovor Admin route
 lists_dogovor_admin_organization_index:
@@ -189,3 +185,22 @@ lists_competitors_organization_filter:
 lists_organization_export_excel:
     pattern:  /lists/organization/export/excel
     defaults: { _controller: ListsOrganizationBundle:Sales:exportExcel }
+    
+# Contractor
+lists_contractor_index:
+    pattern:  /lists/contractor/index
+    defaults: { _controller: ListsOrganizationBundle:Contractor:index }
+    
+lists_contractor_index_list:
+    pattern:  /lists/contractor/index/list
+    defaults: { _controller: ListsOrganizationBundle:Contractor:list }
+    
+lists_contractor_new:
+    pattern:  /lists/contractor/new
+    defaults: { _controller: ListsOrganizationBundle:Contractor:new }
+    
+lists_contractor_show:
+    pattern:  /lists/contractor/show/{id}
+    defaults: { _controller: ListsOrganizationBundle:Contractor:show }
+
+    

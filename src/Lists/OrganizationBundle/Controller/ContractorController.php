@@ -6,14 +6,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Lists\OrganizationBundle\Controller\SalesController;
 
 /**
- * Class SalesController
+ * Class ContractorController
  */
-class CompetitorsController extends SalesController
+class ContractorController extends SalesController
 {
 
-    protected $filterNamespace = 'organization.competitors.filters';
-    protected $baseRoutePrefix = 'competitors';
-    protected $baseTemplate = 'Competitors';
+    protected $filterNamespace = 'organization.contractor.filters';
+    protected $baseRoutePrefix = 'contractor';
+    protected $baseTemplate = 'Contractor';
 
     /**
      * @return \Symfony\Component\HttpFoundation\Response
@@ -23,7 +23,7 @@ class CompetitorsController extends SalesController
         $namespase = $this->filterNamespace;
         $filter = $this->filterFormName;
 
-        return $this->render('ListsOrganizationBundle:Competitors:index.html.twig', array(
+        return $this->render('ListsOrganizationBundle:Contractor:index.html.twig', array(
                 'namespase' => $namespase,
                 'filter' => $filter,
                 'baseTemplate' => $this->baseTemplate,
@@ -51,8 +51,13 @@ class CompetitorsController extends SalesController
         $organizationsRepository = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization');
 
+        /** @var Lookup $lookup */
+        $lookup = $this->getDoctrine()
+                ->getRepository('ListsLookupBundle:Lookup')
+                ->findOneBy(array('lukey' => 'organization_sign_contractor'));
+
         /** @var \Doctrine\ORM\Query */
-        $organizationsQuery = $organizationsRepository->getCompetitors(null, $filters);
+        $organizationsQuery = $organizationsRepository->getContractor(null, $lookup->getId(), $filters);
 
         /** @var \Knp\Component\Pager\Paginator $paginator */
         $paginator = $this->get('knp_paginator');
@@ -63,7 +68,7 @@ class CompetitorsController extends SalesController
             20
         );
 
-        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':list.html.twig', array(
+        return $this->render('ListsOrganizationBundle:Contractor:list.html.twig', array(
                 'pagination' => $pagination,
                 'namespase' => $namespase,
                 'baseTemplate' => $this->baseTemplate,
@@ -95,14 +100,17 @@ class CompetitorsController extends SalesController
 
             $em = $this->getDoctrine()->getManager();
 
-            $lookup = $em->getRepository('ListsLookupBundle:Lookup')
-                ->find(61);
+            /** @var Lookup $lookup */
+            $lookup = $em
+                ->getRepository('ListsLookupBundle:Lookup')
+                ->findOneBy(array('lukey' => 'organization_sign_contractor'));
+
             $organization->setLookup($lookup);
 
             $em->persist($organization);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_organization_show', array(
+            return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_show', array(
                         'id' => $organization->getId()
             )));
         }
