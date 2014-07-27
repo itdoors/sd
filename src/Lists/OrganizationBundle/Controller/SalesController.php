@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use ITDoors\AjaxBundle\Controller\BaseFilterController as BaseController;
 use PHPExcel_Style_Border;
 use PHPExcel_Style_Alignment;
-use Lists\OrganizationBundle\Entity\OrganizationManager;
+use Lists\OrganizationBundle\Entity\OrganizationUser;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -106,7 +106,7 @@ class SalesController extends BaseController
             $em->flush();
 
             $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_organization'));
-            $manager = new OrganizationManager();
+            $manager = new OrganizationUser();
             $manager->setOrganization($organization);
             $manager->setUser($user);
             $manager->setLookup($lookup);

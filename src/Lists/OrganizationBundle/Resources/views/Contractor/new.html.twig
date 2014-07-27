@@ -21,22 +21,24 @@
 {% block css_page_level_plugin %}
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css')}} " />
 {% endblock %}
 
 {% block js_page_level_plugins %}
     {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
 {% endblock %}
 
 {% block body %}
     <script>
         $(document).ready(function(){
-            $('#organizationSalesForm_organizationType, #organizationSalesForm_scope, #organizationSalesForm_city').select2({
+            $('#organizationSalesForm_organizationType, #organizationSalesForm_city').select2({
                 allowClear: true
             });
-        });
-
-        $(document).ready(function(){
+            $('#organizationSalesForm_scope').select2({
+                allowClear: true
+            });
 
             $('#organizationSalesForm_name, #organizationSalesForm_shortname').select2({
                 minimumInputLength: 2,
@@ -59,7 +61,7 @@
                         };
                     }
                 }
-            })
+            });
         });
     </script>
     <div class="row">
@@ -119,7 +121,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 {{ form_label(filterForm.organizationType, 'Organization type', {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(filterForm.organizationType, {'attr': {'class': 'form-control select2me', 'placeholder':'Select organization type'}}) }}
+                                {{ form_widget(filterForm.organizationType, {'attr': {'class': 'form-control select2me', 'data-required': '1', 'placeholder':'Select organization type'}}) }}
                                 <span class="help-block">{% trans %}Select organization type{% endtrans %}</span>
                             </div>
                         </div>
@@ -128,7 +130,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 {{ form_label(filterForm.scope, 'Scope', {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(filterForm.scope, {'attr': {'class': 'form-control select2me','placeholder': 'Select Organization scope'}}) }}
+                                {{ form_widget(filterForm.scope, {'attr': {'class': 'form-control select2me', 'data-required': '1', 'placeholder': 'Select Organization scope'}}) }}
                                 <span class="help-block">{% trans %}Select Organization scope{% endtrans %}</span>
                             </div>
                         </div>

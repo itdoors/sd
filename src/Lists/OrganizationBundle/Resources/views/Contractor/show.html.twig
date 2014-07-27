@@ -24,6 +24,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/jquery-file-upload/css/style.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/jquery-file-upload/css/jquery.fileupload.css')}}"/>
 {% endblock %}
 
 {% block js_page_level_plugins %}
@@ -34,6 +36,9 @@
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-file-upload/js/vendor/jquery.ui.widget.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-file-upload/js/jquery.iframe-transport.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-file-upload/js/jquery.fileupload.js')}}"></script>
 {% endblock %}
 
 {% block body %}
@@ -47,7 +52,7 @@
 					<li><a href="#tab_2" data-toggle="tab">{% trans %}Contacts{% endtrans %}</a></li>
 					<li><a href="#tab_3" data-toggle="tab">{% trans %}Contracts{% endtrans %}</a></li>
 					<li><a href="#tab_4" data-toggle="tab">{% trans %}Dogovors{% endtrans %}</a></li>
-					<li><a href="#tab_5" data-toggle="tab">{% trans %}CVED{% endtrans %}</a></li>
+					<li><a href="#tab_5" data-toggle="tab">{% trans %}COEA{% endtrans %}</a></li>
 				</ul>
 				<div class="tab-content">
                     <div class="tab-pane active" id="tab_0">
@@ -81,8 +86,52 @@
                     }}
 					<!--tabpane-->
 					<div class="tab-pane" id="tab_3"></div>
-					<div class="tab-pane" id="tab_4">Договора в разработке</div>
-					<div class="tab-pane" id="tab_5">КВЕД в разработке</div>
+                                        <div class="tab-pane" id="tab_4">
+                                            <script>
+                                                $(document).ready(function(){
+                                                    $(function () {
+                                                        $('#fileupload').fileupload({
+
+                                                        dataType: 'json',
+                                                        fail: function (e, data) {
+                                                            alert('Error upload');
+                                                        },
+                                                        done: function (e, data) {
+                                                            ITDoorsAjax.updateList('updateListDogovors');
+                                                        }
+                                                        }).prop('disabled', !$.support.fileInput)
+                                                            .parent().addClass($.support.fileInput ? undefined : 'disabled');
+                                                    });
+                                                });
+                                            </script>
+                                            <span class="btn btn-success fileinput-button">
+                                                <i class="glyphicon glyphicon-plus"></i>
+                                                <span>{% trans %}Add document{% endtrans %}</span>
+                                                <input id="fileupload" type="file" name="dogovor" data-url="{{ path('sd_common_ajax_contractor_upload_file', {'id': organization.id}) }}">
+                                            </span>
+                                            <div data-url="{{ path('lists_contractor_show_list_dogovor', { id:organization.id } )}}" id="updateListDogovors">
+                                                {{ render(controller('ListsOrganizationBundle:Contractor:listDogovor', { id:organization.id })) }}
+                                            </div>
+                                        </div>
+					<div class="tab-pane" id="tab_5">
+                                            <div class="table-toolbar">
+                                                <div class="btn-group">
+                                                    <button id="managers_list_new" class="btn green ajax-form"
+                                                            data-target_holder="coeaFormTpl"
+                                                            data-form_name="coeaForm"
+                                                            data-default='{"organizationId":"{{ organization.id }}"}'
+                                                            data-post_function="updateList"
+                                                            data-post_target_id="updateListCoea"
+                                                            >
+                                                                    {% trans %}Add scope{% endtrans %} <i class="fa fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                                <div style="display: none" id="coeaFormTpl"></div>
+                                            </div>
+                                            <div data-url="{{ path('lists_contractor_show_list_coea', { id:organization.id } )}}" id="updateListCoea">
+                                                {{ render(controller('ListsOrganizationBundle:Contractor:listCoea', { id:organization.id })) }}
+                                            </div>
+                                        </div>
 					<!--tabpane-->
 				</div>
 				<!--tab-content-->

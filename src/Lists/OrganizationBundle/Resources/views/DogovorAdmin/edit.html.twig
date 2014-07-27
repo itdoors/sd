@@ -39,7 +39,10 @@
         $('#scopeId').editable({
             url: '{{ path('sd_common_ajax_organization_save') }}',
             emptytext: '{% trans %}Enter value{% endtrans %}',
-            source: '{{ path('sd_common_ajax_scope') }}'
+            source: '{{ path('sd_common_ajax_scope') }}',
+            select2: {
+                multiple: true
+             }
         });
 
         $('#cityId').editable({
@@ -48,11 +51,12 @@
             emptytext: '{% trans %}Enter value{% endtrans %}',
             select2: {
                 placeholder: '{% trans %}Enter Organization Site{% endtrans %}',
-                minimumInputLength: 2,
-                width: 250
+                minimumInputLength: 0,
+                width: 250,
+                multiple: true
             }
         });
-    })
+    });
 
 </script>
 

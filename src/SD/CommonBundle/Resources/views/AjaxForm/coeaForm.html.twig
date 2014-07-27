@@ -1,0 +1,59 @@
+{% trans_default_domain 'ListOrganizationBundle' %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#organizationUserForm_scope').select2({
+            minimumInputLength: 0,
+            ajax: {
+                url: '{{ path('sd_common_ajax_scope') }}',
+                dataType: 'json',
+                data: function(term, page) {
+                    return {
+                        query: term
+                    };
+                },
+                results: function(data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+    });
+</script>
+<div class="row ">
+    <div class="col-md-12">
+        <div class="portlet box yellow">
+            <div class="portlet-title">
+                <div class="caption"><i class="fa fa-edit"></i>
+                    {% trans %}Add scope{% endtrans %}
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row ">
+                    {{ form_start(form, {
+                        'action' : path('sd_common_ajax_form'),
+                        'attr' : {
+                            'method' : 'POST',
+                            'class' : 'ajax-form-entity',
+                            'data-post_function': postFunction,
+                            'data-post_target_id': postTargetId,
+                            'data-target_id': targetId
+                        }
+                    }) }}
+                        <div class="form-group col-md-12">
+                            {{ form_widget(form.scope, {'attr' : {'class' : 'form-control'}}) }}
+                        </div>
+                        <div class="form-group col-md-12">
+                            {{ form_widget(form.add, { 'label': 'Scope'| trans, 'attr': {'class': 'btn green'} } ) }}
+                        </div>
+
+                        <input type="hidden" name="formName" value="{{ formName }}">
+                        <input type="hidden" name="postFunction" value="{{ postFunction }}">
+                        <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
+                        <input type="hidden" name="targetId" value="{{ targetId }}">
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -188,4 +188,13 @@ List of contractors: Список подрядчиков
 Add contractor: Добавить подрядчика
 Create contractor: Создание подрядчика
 Contractor <small>create contractor</small>: Подрядчики <small>create подрядчика</small>
-CVED: КВЭД
+COEA: КВЭД
+Type: Тип
+Date: Дата
+File: Файл
+Add document: Добавить документ
+See document: Просмотерть документ
+Upload new document: Загрузить новый документ
+Enter type: Введите тип
+Upload a new document? The old document will be removed.: Загрузить новый документ? Старый будет удален.
+Add scope: Добавить деятельность

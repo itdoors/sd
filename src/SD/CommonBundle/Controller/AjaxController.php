@@ -23,7 +23,6 @@ use Lists\OrganizationBundle\Entity\OrganizationRepository;
 use Lists\OrganizationBundle\Entity\OrganizationServiceCover;
 use SD\UserBundle\Entity\UserRepository;
 use SD\UserBundle\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Form;
@@ -36,6 +35,7 @@ use SD\UserBundle\Entity\Usercontactinfo;
 use SD\CalendarBundle\Entity\Task;
 use Lists\HandlingBundle\Entity\HandlingUser;
 use Lists\OrganizationBundle\Entity\OrganizationUser;
+use Lists\OrganizationBundle\Entity\Coea;
 
 /**
  * AjaxController class.
@@ -1581,6 +1581,37 @@ class AjaxController extends BaseFilterController
 
         return true;
     }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function coeaFormSave($form, $user, $request)
+    {
+        $data = $form->getData();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $organization = $em->getRepository('ListsOrganizationBundle:Organization')
+                ->find($data['organizationId']);
+
+        $scope = $em->getRepository('ListsLookupBundle:Lookup')
+                ->find($data['scope']);
+
+        $coea = new Coea();
+        $coea->setOrganization($organization);
+        $coea->setScope($scope);
+
+        $em->persist($coea);
+        $em->flush();
+
+        return true;
+    }
     /**
      * Saves {formName}Save after valid ajax validation
      *
@@ -2439,6 +2470,46 @@ class AjaxController extends BaseFilterController
         /** @var DopDogovor $object */
         $object = $this->getDoctrine()
             ->getRepository('ListsDogovorBundle:DopDogovor')
+            ->find($id);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function dogovorDelete($params)
+    {
+        $id = $params['id'];
+
+        /** @var Dogovor $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:Dogovor')
+            ->find($id);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function coeaDelete($params)
+    {
+        $id = $params['id'];
+
+        /** @var Coea $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Coea')
             ->find($id);
 
         $em = $this->getDoctrine()->getManager();
@@ -3590,6 +3661,49 @@ class AjaxController extends BaseFilterController
 
         $em->persist($dogovor);
         $em->flush();
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Saves dop dogovor ajax form
+     *
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function contractorUploadAction(Request $request)
+    {
+        $result = array();
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $organizationId = $request->query->get('id');
+        $organization = $em
+            ->getRepository('ListsOrganizationBundle:Organization')
+            ->find($organizationId);
+        $organizationUser = $em
+            ->getRepository('ListsOrganizationBundle:OrganizationUser')
+            ->findOneBy(array(
+                'organizationId' => $organizationId,
+                'userId' => $user->getId(),
+            ));
+        if ($organizationUser) {
+            $dogovor = new Dogovor();
+            $dogovor->setOrganization($organization);
+            $dogovor->setUser($user);
+            $dogovor->setCreateDateTime(new \DateTime());
+            $dogovor->setStartdatetime(new \DateTime());
+            $file = $request->files->get('dogovor');
+            if ($file) {
+                $dogovor->setFile($file);
+                $dogovor->upload();
+            } else {
+                $result['error'] = 'File not found';
+            }
+            $em->persist($dogovor);
+            $em->flush();
+        } else {
+            $result['error'] = 'No access';
+        }
 
         return new Response(json_encode($result));
     }

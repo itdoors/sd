@@ -1,0 +1,83 @@
+{% trans_default_domain 'ListsOrganizationBundle' %}
+<script>
+    $(document).ready(function(){
+         $('.dogovorTypeId').editable({
+            url: '{{ path('sd_common_ajax_dogovor_save') }}',
+            source: '{{ path('sd_common_ajax_dogovor_type') }}',
+            select2: {
+                placeholder: '{% trans %}Select type{% endtrans %}',
+                minimumInputLength: 0,
+                width: 250
+            }
+        });
+        $(function () {
+            $('.fileupload').fileupload({
+
+            dataType: 'json',
+            fail: function (e, data) {
+                alert('Error upload');
+            },
+            done: function (e, data) {
+                $(this).parents('td').find('a').remove();
+                $(this).parents('td').prepend('<a target="_blank" href="/uploads/dogovor/'+data.result.file+'">{% trans %}See document{% endtrans %}</a>');
+                alert('{% trans %}Document is uploaded{% endtrans %}');
+                $.each(data.result.files, function (index, file) {
+                   // $('<p/>').text(file.name).appendTo('#files');
+
+                });
+            },
+            add: function (e, data) {
+                if(confirm('{% trans %}Upload a new document? The old document will be removed.{% endtrans %}')){data.submit();}
+            }
+            }).prop('disabled', !$.support.fileInput)
+                .parent().addClass($.support.fileInput ? undefined : 'disabled');
+        });
+    });
+</script>
+    <div class="table-responsive table-scrollable">
+        <table class="table table-striped table-bordered table-advance table-hover">
+            <thead>
+            <tr>
+                <th>{% trans %}ID{% endtrans %} </th>
+                <th>{% trans %}Type{% endtrans %} </th>
+                <th>{% trans %}Date{% endtrans %} </th>
+                <th>{% trans %}Creator{% endtrans %} </th>
+                <th>{% trans %}File{% endtrans %} </th>
+                <th>{% trans %}Actions{% endtrans %} </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in dogovors %}
+                <tr {% if loop.index is odd %}class="color"{% endif %}>
+                   <td>{{ item.id }}</td>
+                   <td>
+                        <a href="#" id="dogovorTypeId" class="dogovorTypeId" data-type="select2" data-pk="{{ item.id }}" data-value="{{ item.type }}" data-placement="right" data-original-title="{% trans %}Enter type{% endtrans %}">
+                            {{ item.type }}
+                        </a>
+                   </td>
+                   <td>{{ item.createDateTime |date('d.m.Y H:i') }}</td>
+                   <td>{{ item.firstName }} {{ item.lastName }} {{ item.middleName }}</td>
+                   <td>
+                        {% if item.filepath %}
+                            <a href="/uploads/dogovor/{{ item.filepath }}" target="_blank">
+                                {% trans %}See document{% endtrans %}
+                            </a>
+                        {% endif %}
+                <span class="btn btn-success fileinput-button">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    <span>{% trans %}Upload new document{% endtrans %}</span>
+                    <input class="fileupload" type="file" name="dogovor" data-url="{{ path('sd_common_ajax_dogovor_upload_file', {'id': item.id}) }}">
+                </span>
+                   </td>
+                   <td>
+                       <a class="ajax-delete fa fa-trash-o"
+                            title="{% trans %}Delete{% endtrans %}"
+                            href="javascript:;"
+                            data-params='{"model":"Dogovor","id":{{ item.id }}}'
+                        ></a>
+                   </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>

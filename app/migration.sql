@@ -633,3 +633,12 @@ ALTER TABLE organization_service_cover ADD CONSTRAINT FK_390A9CB232C8A3DE FOREIG
 ALTER TABLE organization_service_cover ADD CONSTRAINT FK_390A9CB2ED5CA9E6 FOREIGN KEY (service_id) REFERENCES handling_service (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ++++task-856-organizaton-service_cover staging  +++++++++
 ++++task-856-organizaton-service_cover prod     +++++++++
+
+CREATE TABLE coea (id BIGSERIAL NOT NULL, scope_id INT NOT NULL, organization_id INT NOT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_6963C5C0682B5931 ON coea (scope_id);
+CREATE INDEX IDX_6963C5C032C8A3DE ON coea (organization_id);
+ALTER TABLE coea ADD CONSTRAINT FK_6963C5C0682B5931 FOREIGN KEY (scope_id) REFERENCES lookup (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE coea ADD CONSTRAINT FK_6963C5C032C8A3DE FOREIGN KEY (organization_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+-- staging ---------------------
+-- prod ------------------------

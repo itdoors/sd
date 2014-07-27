@@ -4,6 +4,7 @@ namespace Lists\OrganizationBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Lists\OrganizationBundle\Controller\SalesController;
+use Lists\OrganizationBundle\Entity\OrganizationUser;
 
 /**
  * Class ContractorController
@@ -95,7 +96,6 @@ class ContractorController extends SalesController
 
             $user = $this->getUser();
 
-            $organization->addUser($user);
             $organization->setCreator($user);
 
             $em = $this->getDoctrine()->getManager();
@@ -108,6 +108,13 @@ class ContractorController extends SalesController
             $organization->setLookup($lookup);
 
             $em->persist($organization);
+            $lookupM = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_organization'));
+            $manager = new OrganizationUser();
+            $manager->setOrganization($organization);
+            $manager->setUser($user);
+            $manager->setLookup($lookupM);
+            $em->persist($manager);
+
             $em->flush();
 
             return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_show', array(
@@ -142,6 +149,44 @@ class ContractorController extends SalesController
         return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':organizationUsers.html.twig', array(
                 'organizationUsers' => $organizationUsers,
                 'organizationId' => $organizationId
+        ));
+    }
+
+    /**
+     * @param integer $id
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listCoeaAction($id)
+    {
+        /** @var Coea $coea */
+        $coea = $this->getDoctrine()
+                ->getRepository('ListsOrganizationBundle:Coea');
+
+        $coeas = $coea->getCoeaForContractorId($id);
+
+        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':listCoea.html.twig', array(
+            'coea' => $coeas,
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix
+        ));
+    }
+    /**
+     * @param integer $id
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listDogovorAction($id)
+    {
+        /** @var DogovorRepository $dr */
+        $dr = $this->get('lists_dogovor.repository');
+
+        $dogovors = $dr->getDogovorsForContractorId($id);
+
+        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':listDogovor.html.twig', array(
+            'dogovors' => $dogovors,
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix
         ));
     }
 }

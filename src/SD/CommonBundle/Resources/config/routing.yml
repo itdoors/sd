@@ -118,6 +118,10 @@ sd_common_ajax_dopdogovor_upload_file:
     pattern:  /ajax/dopdogovor/upload
     defaults: { _controller: SDCommonBundle:Ajax:dopDogovorUpload }
 
+sd_common_ajax_contractor_upload_file:
+    pattern:  /ajax/contractor/upload
+    defaults: { _controller: SDCommonBundle:Ajax:contractorUpload }
+
 sd_common_ajax_handling_more_info_save:
     pattern:  /ajax/handling/more/info/save
     defaults: { _controller: SDCommonBundle:Ajax:handlingMoreInfoSave }

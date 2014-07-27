@@ -1034,4 +1034,43 @@ class Organization
     {
         return $this->organizationUsers;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $coeas;
+
+
+    /**
+     * Add coeas
+     *
+     * @param \Lists\OrganizationBundle\Entity\Coea $coeas
+     * 
+     * @return Organization
+     */
+    public function addCoea(\Lists\OrganizationBundle\Entity\Coea $coeas)
+    {
+        $this->coeas[] = $coeas;
+
+        return $this;
+    }
+
+    /**
+     * Remove coeas
+     *
+     * @param \Lists\OrganizationBundle\Entity\Coea $coeas
+     */
+    public function removeCoea(\Lists\OrganizationBundle\Entity\Coea $coeas)
+    {
+        $this->coeas->removeElement($coeas);
+    }
+
+    /**
+     * Get coeas
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCoeas()
+    {
+        return $this->coeas;
+    }
 }
