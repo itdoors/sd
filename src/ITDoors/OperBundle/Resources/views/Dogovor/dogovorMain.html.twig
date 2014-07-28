@@ -69,7 +69,7 @@
                 <td>{{ dogovor.summMonthVat }}</td>
 #}
                 <td>
-                    <a href="/uploads/dogovor/{{ dogovor.filepath }}" >{% trans %}File{% endtrans %}</a>
+                    <a href="/uploads/dogovor/{{ dogovor.filepath }}" target="_blank">{% trans %}File{% endtrans %}</a>
                 </td>
             </tr>
                 {% set headerDone = false %}
@@ -127,7 +127,7 @@
                                         <td>{{ dopDogovor.total }}</td>
 #}
                                         <td>
-                                            <a href="/uploads/dogovor/{{ dopDogovor.filepath }}" >{% trans %}File{% endtrans %}</a>
+                                            <a href="/uploads/dogovor/{{ dopDogovor.filepath }}" target="_blank">{% trans %}File{% endtrans %}</a>
                                         </td>
                                     </tr>
                     {% endif %}
