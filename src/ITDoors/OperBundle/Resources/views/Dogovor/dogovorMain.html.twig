@@ -6,7 +6,11 @@
             <th>{% trans %}Id{% endtrans %}</th>
             <th>{% trans %}With prolongation{% endtrans %}</th>
             <th>{% trans %}Organization{% endtrans %}</th>
+            <th>{% trans %}Customer{% endtrans %}</th>
+            <th>{% trans %}Performer{% endtrans %}</th>
+{#
             <th>{% trans %}Name doc{% endtrans %}</th>
+#}
             <th>{% trans %}Number{% endtrans %}</th>
             <th>{% trans %}Start date{% endtrans %}</th>
             <th>{% trans %}End date{% endtrans %}</th>
@@ -14,10 +18,12 @@
             <th>{% trans %}Subject{% endtrans %}</th>
             <th>{% trans %}Status{% endtrans %}</th>
             <th>{% trans %}Type dogovor{% endtrans %}</th>
+{#
             <th>{% trans %}User created{% endtrans %}</th>
             <th>{% trans %}User sold{% endtrans %}</th>
             <th>{% trans %}Payment deferment{% endtrans %}</th>
             <th>{% trans %}Sum{% endtrans %}</th>
+#}
             <th>{% trans %}File{% endtrans %}</th>
         </tr>
     </thead>
@@ -35,7 +41,11 @@
                     {% endif %}
                 </td>
                 <td>{{ dogovor.organization }}</td>
+                <td>{{ dogovor.customer }}</td>
+                <td>{{ dogovor.performer }}</td>
+{#
                 <td>{{ dogovor.name }}</td>
+#}
                 <td>{{ dogovor.number }}</td>
                 <td>{{ dogovor.startdatetime|date('d-m-Y') }}</td>
                 <td>{{ dogovor.stopdatetime|date('d-m-Y') }}</td>
@@ -48,6 +58,7 @@
                         {% trans %}Not active{% endtrans %}
                     {% endif %}
                 <td>{{ dogovor.dogovorType }}</td>
+{#
                 <td>{{ dogovor.user }}</td>
                 <td>{% if dogovor.saller is not empty %}
                         {{ dogovor.saller }}
@@ -56,6 +67,7 @@
 
                 <td>{{ dogovor.paymentDeferment }}</td>
                 <td>{{ dogovor.summMonthVat }}</td>
+#}
                 <td>
                     <a href="/uploads/dogovor/{{ dogovor.filepath }}" >{% trans %}File{% endtrans %}</a>
                 </td>
@@ -68,7 +80,7 @@
                         {% if headerDone == false %}
                         <tr>
                             <td></td>
-                            <td colspan="16">{% trans %}List of dopDogovors for dogovor{% endtrans %}:{{ dogovor.id }}</td>
+                            <td colspan="14">{% trans %}List of dopDogovors for dogovor{% endtrans %}:{{ dogovor.id }}</td>
                         </tr>
                         <tr>
                             <td></td>
@@ -83,9 +95,11 @@
                                         <th>{% trans %}Activation date{% endtrans %}</th>
                                         <th>{% trans %}Subject{% endtrans %}</th>
                                         <th>{% trans %}Status{% endtrans %}</th>
+{#
                                         <th>{% trans %}User created{% endtrans %}</th>
                                         <th>{% trans %}User sold{% endtrans %}</th>
                                         <th>{% trans %}Sum{% endtrans %}</th>
+#}
                                         <th>{% trans %}File{% endtrans %}</th>
                                     </tr>
                                     </thead>
@@ -107,9 +121,11 @@
                                             {% endif %}
 
                                         </td>
+{#
                                         <td>{{ dopDogovor.user }}</td>
                                         <td>{{ dopDogovor.saller }}</td>
                                         <td>{{ dopDogovor.total }}</td>
+#}
                                         <td>
                                             <a href="/uploads/dogovor/{{ dopDogovor.filepath }}" >{% trans %}File{% endtrans %}</a>
                                         </td>
