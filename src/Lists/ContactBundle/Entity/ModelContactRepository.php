@@ -380,4 +380,30 @@ class ModelContactRepository extends EntityRepository
         return $sql
             ->getResult();
     }
+
+    /**
+     * GetMyContactsByDepartmentId
+     *
+     * @param int $departmentId
+     *
+     * @return Query
+     */
+    public function getMyContactsByDepartmentId($departmentId)
+    {
+        $sql = $this->createQueryBuilder('mc')
+            ->select('mc')
+            ->addSelect("mc.modelId as departmentId")
+            ->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as creatorFullName")
+            ->addSelect("CONCAT(CONCAT(owner.lastName, ' '), owner.firstName) as ownerFullName")
+            ->addSelect("owner.id as ownerId")
+            ->leftJoin('mc.user', 'u')
+            ->leftJoin('mc.owner', 'owner')
+            ->where('mc.modelName = :modelName')
+            ->andWhere('mc.modelId = :modelId')
+            ->setParameter(':modelName', self::MODEL_DEPARTMENT)
+            ->setParameter('modelId', $departmentId);
+
+        return $sql
+            ->getQuery();
+    }
 }

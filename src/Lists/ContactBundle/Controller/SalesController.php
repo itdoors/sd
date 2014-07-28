@@ -4,6 +4,7 @@ namespace Lists\ContactBundle\Controller;
 
 use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
 use Lists\ContactBundle\Entity\ModelContactRepository;
+use Lists\DepartmentBundle\Entity\Departments;
 
 /**
  * Class SalesController
@@ -63,6 +64,43 @@ class SalesController extends BaseController
         } else {
             $pagination = $organizationContacts->getResult();
         }
+
+        return $this->render('ListsContactBundle:' . $this->baseTemplate . ':organization.html.twig', array(
+            'pagination' => $pagination,
+            'organizationId' => $organizationId,
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix,
+            'departmentContacts' => $departmentContacts
+        ));
+    }
+
+    /**
+     * @param int $departmentId
+     * @param int $organizationId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function departmentAction($departmentId, $organizationId)
+    {
+        $this->refreshFiltersIfAjax();
+
+        if (!$organizationId) {
+            /** @var Departments $department */
+            $department = $this->getDoctrine()->getRepository('ListsDepartmentBundle:Departments')
+                ->find($departmentId);
+
+            $organizationId = $department->getOrganizationId();
+        }
+
+        if ($organizationId && $departmentId) {
+            $departmentContacts = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
+                ->getMyContactsByDepartmentId($departmentId)
+                ->getResult();
+        } else {
+            $departmentContacts = array();
+        }
+
+        $pagination = array();
 
         return $this->render('ListsContactBundle:' . $this->baseTemplate . ':organization.html.twig', array(
             'pagination' => $pagination,
