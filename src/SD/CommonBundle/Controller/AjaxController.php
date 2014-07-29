@@ -17,6 +17,7 @@ use Lists\HandlingBundle\Entity\HandlingServiceRepository;
 use Lists\LookupBundle\Entity\LookupRepository;
 use Lists\ContactBundle\Entity\ModelContact;
 use Lists\ContactBundle\Entity\ModelContactRepository;
+use Lists\OrganizationBundle\Entity\KvedOrganization;
 use Lists\OrganizationBundle\Entity\Organization;
 use Lists\HandlingBundle\Entity\HandlingMoreInfo;
 use Lists\OrganizationBundle\Entity\OrganizationRepository;
@@ -1612,6 +1613,38 @@ class AjaxController extends BaseFilterController
 
         return true;
     }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function kvedFormSave($form, $user, $request)
+    {
+        $data = $form->getData();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $organization = $em->getRepository('ListsOrganizationBundle:Organization')
+            ->find($data['organizationId']);
+
+        $kved = $em->getRepository('ListsOrganizationBundle:Kved')
+            ->find($data['kved']);
+
+        $kvedOrganization = new KvedOrganization();
+        $kvedOrganization->setOrganization($organization);
+        $kvedOrganization->setKved($kved);
+
+        $em->persist($kvedOrganization);
+        $em->flush();
+
+        return true;
+    }
+
     /**
      * Saves {formName}Save after valid ajax validation
      *
@@ -2511,6 +2544,31 @@ class AjaxController extends BaseFilterController
         $object = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Coea')
             ->find($id);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function kvedDelete($params)
+    {
+        $kved = $params['id'];
+        $organization = $params['organization'];
+        var_dump($kved,$organization); die();
+        /** @var Coea $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:KvedOrganization')
+            ->findOneBy(array(
+                'kved' => $kved,
+                'organization' => $organization
+            ));
 
         $em = $this->getDoctrine()->getManager();
         $em->remove($object);

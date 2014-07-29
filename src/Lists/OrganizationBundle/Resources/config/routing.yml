@@ -211,4 +211,7 @@ lists_contractor_show_list_coea:
     pattern:  /lists/contractor/show/list/coea/{id}
     defaults: { _controller: ListsOrganizationBundle:Contractor:listCoea }
 
+lists_contractor_show_list_kved:
+    pattern:  /lists/contractor/show/list/kved/{id}
+    defaults: { _controller: ListsOrganizationBundle:Contractor:listKved }
     

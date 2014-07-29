@@ -166,6 +166,9 @@ Lists\OrganizationBundle\Entity\Organization:
         organizationUsers:
             targetEntity: OrganizationUser
             mappedBy: organization
+#        kvedOrganizations:
+#            targetEntity: kvedOrganization
+#            mappedBy: organization
     manyToMany:
 #        users:
 #            targetEntity: SD\UserBundle\Entity\User

@@ -171,6 +171,39 @@ class ContractorController extends SalesController
             'baseRoutePrefix' => $this->baseRoutePrefix
         ));
     }
+
+    /**
+     * @param integer $id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listKvedAction($id) {
+        /** @var Kved $kved */
+        $kvedOrganizationRepo = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:KvedOrganization');
+
+        $kvedOrganizations = $kvedOrganizationRepo->findBy(array(
+            'organization' => $id
+        ));
+
+        $kveds = array();
+
+        foreach ($kvedOrganizations as $kvedOrganization) {
+            $kved = $kvedOrganization->getKved();
+            $kveds[] = $kved;
+        }
+
+        //$kveds = $kved->getCoeaForContractorId($id);
+
+        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':listKved.html.twig', array(
+            'kveds' => $kveds,
+            'organizationId' => $id,
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix
+        ));
+    }
+
+
     /**
      * @param integer $id
      * 

@@ -642,3 +642,54 @@ ALTER TABLE coea ADD CONSTRAINT FK_6963C5C032C8A3DE FOREIGN KEY (organization_id
 
 -- staging ---------------------
 -- prod ------------------------
+
+
+---task-800.801,802 kved
+CREATE SEQUENCE kved_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 2
+  CACHE 1;
+CREATE SEQUENCE kved_organization_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 3
+  CACHE 1;
+CREATE TABLE kved
+(
+  id bigint NOT NULL DEFAULT nextval('kved_id_seq'::regclass),
+  code character varying(10),
+  name character varying(255),
+  description character varying(255),
+  parent_id bigint,
+  CONSTRAINT kved_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+COMMENT ON TABLE kved
+  IS 'классификация видов економической деятельности';
+
+CREATE TABLE kved_organization
+(
+  id bigint NOT NULL DEFAULT nextval('kved_organization_id_seq'::regclass),
+  kved_id bigint,
+  organization_id bigint,
+  CONSTRAINT kved_organization_pkey PRIMARY KEY (id),
+  CONSTRAINT kved_organization_kved_id_fkey FOREIGN KEY (kved_id)
+      REFERENCES kved (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT kved_organization_organization_id_fkey FOREIGN KEY (organization_id)
+      REFERENCES organization (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+COMMENT ON TABLE kved_organization
+  IS 'Связка организаций с КВЕД';
+
+-- staging ---------------------
+-- prod ------------------------

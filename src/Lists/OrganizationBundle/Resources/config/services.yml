@@ -10,6 +10,7 @@ parameters:
     lists_organization.form.user.filter.class: Lists\OrganizationBundle\Form\OrganizationUserFilterFormType
     lists_organization.form.child.class: Lists\OrganizationBundle\Form\OrganizationChildForm
     lists_organization.form.coea.class: Lists\OrganizationBundle\Form\CoeaFormType
+    lists_organization.form.kved.class: Lists\OrganizationBundle\Form\KvedFormType
     
 
     lists_organization.edrpou.validator.class: Lists\OrganizationBundle\Validator\UniqueEdrpouValidator
@@ -87,6 +88,12 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: coeaForm }
+
+    lists_organization.form.kvedForm:
+        class: %lists_organization.form.kved.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: kvedForm }
 
     unique_event_date_validator:
         class: %lists_organization.edrpou.validator.class%
