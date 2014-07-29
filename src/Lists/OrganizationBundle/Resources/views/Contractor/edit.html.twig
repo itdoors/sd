@@ -1,11 +1,12 @@
 {% trans_default_domain 'ListsOrganizationBundle' %}
+<script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
 
 <script type="text/javascript">
 
     $(document).ready(function(){
 
-        //$.fn.editable.defaults.inputclass = 'form-control';
-        //$.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
+        $.fn.editable.defaults.inputclass = 'form-control';
+        $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
 
         $('#name, #shortname, #address, #mailingAddress, #physicalAddress, #site, #phone, #edrpou, #inn, #certificate, #shortDescription').editable({
             url: '{{ path('sd_common_ajax_organization_save') }}',
