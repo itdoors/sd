@@ -187,7 +187,7 @@ class ContractorController extends SalesController
         $organization = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization')
             ->find($id);
-
+        echo 'sdf';
         $kvedOrganizations = $kvedOrganizationRepo->findBy(array(
             'organization' => $organization
         ));
