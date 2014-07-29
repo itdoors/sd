@@ -8,6 +8,10 @@ lists_sales_contact_ajax_organization:
     pattern:  /lists/sales/contact/ajax/organization/{organizationId}
     defaults: { _controller: ListsContactBundle:Sales:organization }
 
+lists_sales_contact_ajax_department:
+    pattern:  /lists/oper/department/contacts/{departmentId}/{organizationId}
+    defaults: { _controller: ListsContactBundle:Sales:department, organizationId: 0 }
+
 lists_sales_contact_ajax_organization_element:
     pattern:  /lists/sales/contact/ajax/organization_element/{id}/{organizationId}
     defaults: { _controller: ListsContactBundle:Sales:organizationElement, organizationId: 0 }
