@@ -2561,8 +2561,7 @@ class AjaxController extends BaseFilterController
     {
         $kved = $params['id'];
         $organization = $params['organization'];
-        var_dump($kved,$organization); die();
-        /** @var Coea $object */
+
         $object = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:KvedOrganization')
             ->findOneBy(array(
