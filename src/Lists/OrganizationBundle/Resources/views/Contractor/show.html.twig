@@ -94,18 +94,6 @@
                                         <div class="tab-pane" id="tab_4">
                                             <script>
                                                 $(document).ready(function(){
-                                                    Metronic.init(); // init metronic core components
-                                                    Layout.init(); // init current layout
-
-                                                    SD.init({
-                                                        ajaxFormUrl: '{{ path('sd_common_ajax_form') }}',
-                                                        ajaxDeleteUrl: '{{ path('sd_common_ajax_delete') }}',
-                                                        assetsDir: '{{ asset('') }}'
-                                                    });
-                                                    ITDoorsAjax.init({
-                                                        assetsDir: '{{ asset('') }}'
-                                                    });
-
                                                     $(function () {
                                                         $('#fileupload').fileupload({
 
