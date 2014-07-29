@@ -179,7 +179,7 @@ class ContractorController extends SalesController
      */
 
     public function listKvedAction($id) {
-        die('sdf');
+
         /** @var Kved $kved */
         $kvedOrganizationRepo = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:KvedOrganization');
@@ -190,12 +190,13 @@ class ContractorController extends SalesController
 
         $kveds = array();
 
+        die('sdf');
+
         foreach ($kvedOrganizations as $kvedOrganization) {
             $kved = $kvedOrganization->getKved();
             $kveds[] = $kved;
         }
 
-        //$kveds = $kved->getCoeaForContractorId($id);
 
         return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':listKved.html.twig', array(
             'kveds' => $kveds,
