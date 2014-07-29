@@ -142,5 +142,29 @@
 		</div>
 	</div>
 	<!--row-->
+    <script>
+        jQuery(document).ready(function() {
+            Metronic.init(); // init metronic core components
+            Layout.init(); // init current layout
+
+            SD.init({
+                ajaxFormUrl: '{{ path('sd_common_ajax_form') }}',
+                ajaxDeleteUrl: '{{ path('sd_common_ajax_delete') }}',
+                assetsDir: '{{ asset('') }}'
+            });
+            ITDoorsAjax.init({
+                assetsDir: '{{ asset('') }}'
+            });
+            //Index.initJQVMAP(); // init index page's custom scripts
+            //Index.initCalendar(); // init index page's custom scripts
+            //Index.initCharts(); // init index page's custom scripts
+            //Index.initChat();
+            //Index.initMiniCharts();
+            //Index.initDashboardDaterange();
+            //Index.initIntro();
+            //Tasks.initDashboardWidget();
+        });
+    </script>
+
 
 {% endblock body %}
