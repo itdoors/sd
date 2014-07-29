@@ -179,10 +179,10 @@ class ContractorController extends SalesController
      */
 
     public function listKvedAction($id) {
-
+        die('sdf');
         $kvedOrganizationRepo = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:KvedOrganization');
-        die('sdf');
+
         $organization = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization')
             ->find($id);
