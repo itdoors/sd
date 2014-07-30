@@ -1,0 +1,51 @@
+Lists\DocumentBundle\Entity\Documents:
+    type: entity
+    table: documents
+    repositoryClass: Lists\DocumentBundle\Entity\DocumentsRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 100
+            fixed: false
+            nullable: false
+        datetime:
+            type: datetime
+            nullable: true
+        createdatetime:
+            type: datetime
+            nullable: true
+        filepath:
+            type: string
+            length: 100
+            fixed: false
+            nullable: false
+        userId:
+            type: bigint
+            nullable: false
+            column: user_id
+    manyToOne:
+        documentsType:
+            targetEntity: Lists\DocumentBundle\Entity\DocumentsType
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                documentstype_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

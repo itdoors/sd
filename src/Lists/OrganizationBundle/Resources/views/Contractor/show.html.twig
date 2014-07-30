@@ -109,8 +109,8 @@
                                                 <span>{% trans %}Add document{% endtrans %}</span>
                                                 <input id="fileupload" type="file" name="dogovor" data-url="{{ path('sd_common_ajax_contractor_upload_file', {'id': organization.id}) }}">
                                             </span>
-                                            <div data-url="{{ path('lists_contractor_show_list_dogovor', { id:organization.id } )}}" id="updateListDogovors">
-                                                {{ render(controller('ListsOrganizationBundle:Contractor:listDogovor', { id:organization.id })) }}
+                                            <div data-url="{{ path('lists_contractor_show_list_document', { id:organization.id } )}}" id="updateListDogovors">
+                                                {{ render(controller('ListsOrganizationBundle:Contractor:listDocument', { id:organization.id })) }}
                                             </div>
                                         </div>
 					<div class="tab-pane" id="tab_5">

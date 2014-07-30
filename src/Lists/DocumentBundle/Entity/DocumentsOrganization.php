@@ -1,13 +1,13 @@
 <?php
 
-namespace Lists\OrganizationBundle\Entity;
+namespace Lists\DocumentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * KvedOrganization
+ * DocumentsOrganization
  */
-class KvedOrganization
+class DocumentsOrganization
 {
     /**
      * @var integer
@@ -20,9 +20,9 @@ class KvedOrganization
     private $organization;
 
     /**
-     * @var \Lists\OrganizationBundle\Entity\Kved
+     * @var \Lists\DocumentBundle\Entity\Documents
      */
-    private $kved;
+    private $documents;
 
 
     /**
@@ -39,7 +39,7 @@ class KvedOrganization
      * Set organization
      *
      * @param \Lists\OrganizationBundle\Entity\Organization $organization
-     * @return KvedOrganization
+     * @return DocumentsOrganization
      */
     public function setOrganization(\Lists\OrganizationBundle\Entity\Organization $organization = null)
     {
@@ -59,26 +59,26 @@ class KvedOrganization
     }
 
     /**
-     * Set kved
+     * Set documents
      *
-     * @param \Lists\OrganizationBundle\Entity\Kved $kved
-     * @return KvedOrganization
+     * @param \Lists\DocumentBundle\Entity\Documents $documents
+     * @return DocumentsOrganization
      */
-    public function setKved(\Lists\OrganizationBundle\Entity\Kved $kved = null)
+    public function setDocuments(\Lists\DocumentBundle\Entity\Documents $documents = null)
     {
-        $this->kved = $kved;
+        $this->documents = $documents;
     
         return $this;
     }
 
     /**
-     * Get kved
+     * Get documents
      *
-     * @return \Lists\OrganizationBundle\Entity\Kved 
+     * @return \Lists\DocumentBundle\Entity\Documents 
      */
-    public function getKved()
+    public function getDocuments()
     {
-        return $this->kved;
+        return $this->documents;
     }
     /**
      * @ORM\PrePersist

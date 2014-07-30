@@ -225,4 +225,39 @@ class ContractorController extends SalesController
             'baseRoutePrefix' => $this->baseRoutePrefix
         ));
     }
+
+    /**
+     * @param integer $id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listDocumentAction($id)
+    {
+        /** @var DogovorRepository $dr */
+        $documentsOrganizationRepo = $this->getDoctrine()
+            ->getRepository('ListsDocumentBundle:DocumentsOrganization');
+
+        $organization = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization')
+            ->find($id);
+
+        $documentsOrganization = $documentsOrganizationRepo->findBy(array(
+            'organization' => $organization
+        ));
+
+        $docs = array();
+
+        foreach ($documentsOrganization as $documentOrganization) {
+            $doc = $documentOrganization->getDocuments();
+            $docs[] = $doc;
+        }
+
+        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':listDocument.html.twig', array(
+            'documents' => $docs,
+            'organizationId' => $id,
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix
+        ));
+    }
+
 }

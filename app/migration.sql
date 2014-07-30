@@ -693,3 +693,25 @@ COMMENT ON TABLE kved_organization
 
 -- staging ---------------------
 -- prod ------------------------
+
+CREATE SEQUENCE documents_organization_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 3
+  CACHE 1;
+CREATE TABLE documents_organization
+(
+  id bigint NOT NULL DEFAULT nextval('documents_organization_id_seq'::regclass),
+  documents_id bigint NOT NULL,
+  organization_id bigint NOT NULL,
+  CONSTRAINT documents_organization_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+COMMENT ON TABLE documents_organization
+  IS 'Связка документов с организациями';
+
+-- staging ---------------------
+-- prod ------------------------

@@ -203,10 +203,13 @@ lists_contractor_show:
     pattern:  /lists/contractor/show/{id}
     defaults: { _controller: ListsOrganizationBundle:Contractor:show }
     
+lists_contractor_show_list_document:
+    pattern:  /lists/contractor/show/list/document/{id}
+    defaults: { _controller: ListsOrganizationBundle:Contractor:listDocument }
+
 lists_contractor_show_list_dogovor:
     pattern:  /lists/contractor/show/list/dogovor/{id}
     defaults: { _controller: ListsOrganizationBundle:Contractor:listDogovor }
-    
 lists_contractor_show_list_coea:
     pattern:  /lists/contractor/show/list/coea/{id}
     defaults: { _controller: ListsOrganizationBundle:Contractor:listCoea }

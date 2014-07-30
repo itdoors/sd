@@ -1,22 +1,8 @@
 {% trans_default_domain 'ListOrganizationBundle' %}
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#organizationUserForm_scope').select2({
+        $('#kvedForm_kved').select2({
             minimumInputLength: 0,
-            ajax: {
-                url: '{{ path('sd_common_ajax_scope') }}',
-                dataType: 'json',
-                data: function(term, page) {
-                    return {
-                        query: term
-                    };
-                },
-                results: function(data, page) {
-                    return {
-                        results: data
-                    };
-                }
-            }
         });
     });
 </script>
