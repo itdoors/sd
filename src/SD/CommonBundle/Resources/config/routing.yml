@@ -277,6 +277,10 @@ sd_common_ajax_editable_department:
     pattern: /ajax/editable/department
     defaults: { _controller: SDCommonBundle:Ajax:editableDepartment }
 
+sd_common_ajax_document_date:
+    pattern: /ajax/document/date
+    defaults: { _controller: SDCommonBundle:Ajax:documentDate}
+
 sd_common_ajax_oper_department_mpk:
     pattern: /ajax/oper/department/mpk
     defaults: { _controller: SDCommonBundle:Ajax:departmentPeopleMpk }

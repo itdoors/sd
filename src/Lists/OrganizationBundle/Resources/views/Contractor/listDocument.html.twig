@@ -5,7 +5,22 @@
 
 <script>
     $(document).ready(function(){
-         $('.documentTypeId').editable({
+
+        $('.fileDate').editable({
+            clear: '{% trans from 'ITDoorsControllingBundle' %}clear{% endtrans %}<i class="icon-remove fa fa-times" style="font-size:12px"></i>',
+            type: 'date',
+            url: '{{ path('sd_common_ajax_document_date') }}',
+            datepicker: {
+                autoclose: true,
+                format: "dd-mm-yyyy",
+                language: "en",
+                startView: 'month',
+                weekStart: 1
+            }
+        });
+
+
+        $('.documentTypeId').editable({
             url: '{{ path('sd_common_ajax_document_type_save') }}',
             source: '{{ path('sd_common_ajax_document_type') }}',
             select2: {
@@ -59,12 +74,20 @@
                         <a href="#" id="documentTypeId" class="documentTypeId" data-type="select2" data-pk="{{ item.id }}" data-value="{{ item.documentsType }}" data-placement="right" data-original-title="{% trans %}Enter type{% endtrans %}">
                             {{ item.documentsType }}
                         </a>
+
                    </td>
-                   <td>{{ item.createDateTime |date('d.m.Y H:i') }}</td>
+                   <td>
+                       <a href="#" class="fileDate" data-type="date" data-pk="{{ item.id }}"
+                          data-original-title="{% trans %}Enter Status Date{% endtrans %}"
+                          data-format="dd-mm-yyyy"
+                          data-date="{{ item.datetime|date('d.m.Y') }}">
+                           {{ item.datetime|date('d.m.Y') }}
+                       </a>
+                   </td>
                    <td>{{ item.user.firstName }} {{ item.user.lastName }} {{ item.user.middleName }}</td>
                    <td>
                         {% if item.filepath %}
-                            <a href="/uploads/dogovor/{{ item.filepath }}" target="_blank">
+                            <a href="/uploads/document/{{ item.filepath }}" target="_blank">
                                 {% trans %}See document{% endtrans %}
                             </a>
                         {% endif %}

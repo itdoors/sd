@@ -4312,6 +4312,30 @@ class AjaxController extends BaseFilterController
     }
 
     /**
+     * Function to change document date (ajax-editable)
+     *
+     * @return mixed[]
+     */
+    public function documentDateAction() {
+        $pk = $this->get('request')->request->get('pk');
+        //$name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        $object = $this->getDoctrine()
+            ->getRepository('ListsDocumentBundle:Documents')
+            ->find($pk);
+        $value = new \DateTime($value);
+        $object->setDatetime($value);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+        $em->flush();
+
+        $return = array();
+
+        return new Response(json_encode($return));
+    }
+    /**
      * Function to handle the ajax queries from editable elements
      *
      * @return mixed[]
