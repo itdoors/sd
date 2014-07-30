@@ -3883,7 +3883,7 @@ class AjaxController extends BaseFilterController
         $document = new Documents();
             $document->setUser($user);
             $document->setUserId($user->getId());
-            $document->setDatetime(new \DateTime());
+            $document->setDatetime(null);
             $document->setCreateDateTime(new \DateTime());
             $document->setDocumentsType($documentType);
             //$document->setStartdatetime(new \DateTime());

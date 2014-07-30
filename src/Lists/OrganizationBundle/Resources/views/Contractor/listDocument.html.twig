@@ -60,6 +60,7 @@
                 <th>{% trans %}ID{% endtrans %} </th>
                 <th>{% trans %}Type{% endtrans %} </th>
                 <th>{% trans %}Date{% endtrans %} </th>
+                <th>{% trans %}Date created{% endtrans %} </th>
                 <th>{% trans %}Creator{% endtrans %} </th>
                 <th>{% trans %}File{% endtrans %} </th>
                 <th>{% trans %}Actions{% endtrans %} </th>
@@ -74,15 +75,21 @@
                         <a href="#" id="documentTypeId" class="documentTypeId" data-type="select2" data-pk="{{ item.id }}" data-value="{{ item.documentsType }}" data-placement="right" data-original-title="{% trans %}Enter type{% endtrans %}">
                             {{ item.documentsType }}
                         </a>
-
                    </td>
                    <td>
+                       {% set datetime = 'Enter value' %}
+                       {% if item.datetime is not empty %}
+                        {% set datetime = item.datetime|date('d.m.Y') %}
+                       {% endif %}
                        <a href="#" class="fileDate" data-type="date" data-pk="{{ item.id }}"
                           data-original-title="{% trans %}Enter Status Date{% endtrans %}"
                           data-format="dd-mm-yyyy"
-                          data-date="{{ item.datetime|date('d.m.Y') }}">
-                           {{ item.datetime|date('d.m.Y') }}
+                          data-date="{{ datetime }}">
+                           {{ datetime }}
                        </a>
+                   </td>
+                   <td>
+                       {{ item.createdatetime|date('d.m.Y') }}
                    </td>
                    <td>{{ item.user.firstName }} {{ item.user.lastName }} {{ item.user.middleName }}</td>
                    <td>
