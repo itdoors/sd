@@ -30,9 +30,9 @@
 
 {% block body %}
 
-    {#{ ajax_filter_render(filter, namespase, {
+    {{  ajax_filter_render(filter, namespase, {
         'datatable_ajax': 'ITDoorsAjax.updateList'
-    }) }#}
+    }) }}
     <div class="table-toolbar">
         <div class="btn-group">
             <a class="btn green" id="add_organization" href="{{ path('lists_' ~ baseRoutePrefix ~ '_new') }}">

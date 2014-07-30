@@ -300,6 +300,13 @@ class OrganizationRepository extends EntityRepository
                         $sql->andWhere('c.id in (:cityIds)');
                         $sql->setParameter(':cityIds', $value);
                         break;
+                    case 'region':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $sql->andWhere('r.id in (:regionIds)');
+                        $sql->setParameter(':regionIds', $value);
+                        break;
                     case 'users':
                         if (isset($value[0]) && !$value[0]) {
                             break;

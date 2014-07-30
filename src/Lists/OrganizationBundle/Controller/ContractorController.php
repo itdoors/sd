@@ -16,6 +16,9 @@ class ContractorController extends SalesController
     protected $baseRoutePrefix = 'contractor';
     protected $baseTemplate = 'Contractor';
 
+    protected $filterFormName = 'organizationContractorFilterFormType';
+
+
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
