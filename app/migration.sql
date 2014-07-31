@@ -691,8 +691,8 @@ WITH (
 COMMENT ON TABLE kved_organization
   IS 'Связка организаций с КВЕД';
 
--- staging ---------------------
--- prod ------------------------
+-- staging ++++++++++++++++++++
+-- prod +++++++++++++++++++++++
 
 CREATE SEQUENCE documents_organization_id_seq
   INCREMENT 1
@@ -713,5 +713,5 @@ WITH (
 COMMENT ON TABLE documents_organization
   IS 'Связка документов с организациями';
 
--- staging ---------------------
--- prod ------------------------
+-- staging ++++++++++++++++++++++
+-- prod +++++++++++++++++++++++++
