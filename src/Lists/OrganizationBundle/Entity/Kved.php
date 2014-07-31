@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Kved
 {
-    
+
     /**
      * @var integer
      */
@@ -47,7 +47,7 @@ class Kved
     {
         $this->kvedOrganizations = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
@@ -62,12 +62,13 @@ class Kved
      * Set code
      *
      * @param string $code
+     *
      * @return Kved
      */
     public function setCode($code)
     {
         $this->code = $code;
-    
+
         return $this;
     }
 
@@ -85,12 +86,13 @@ class Kved
      * Set name
      *
      * @param string $name
+     *
      * @return Kved
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
@@ -108,12 +110,13 @@ class Kved
      * Set description
      *
      * @param string $description
+     *
      * @return Kved
      */
     public function setDescription($description)
     {
         $this->description = $description;
-    
+
         return $this;
     }
 
@@ -131,12 +134,13 @@ class Kved
      * Set parentId
      *
      * @param integer $parentId
+     *
      * @return Kved
      */
     public function setParentId($parentId)
     {
         $this->parentId = $parentId;
-    
+
         return $this;
     }
 
@@ -154,12 +158,13 @@ class Kved
      * Add kvedOrganizations
      *
      * @param \Lists\OrganizationBundle\Entity\kvedOrganization $kvedOrganizations
+     *
      * @return Kved
      */
     public function addKvedOrganization(\Lists\OrganizationBundle\Entity\kvedOrganization $kvedOrganizations)
     {
         $this->kvedOrganizations[] = $kvedOrganizations;
-    
+
         return $this;
     }
 
@@ -182,6 +187,7 @@ class Kved
     {
         return $this->kvedOrganizations;
     }
+
     /**
      * @ORM\PrePersist
      */
@@ -189,6 +195,7 @@ class Kved
     {
         // Add your code here
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
@@ -208,7 +215,8 @@ class Kved
     /**
      * @return string
      */
-    public function __toString() {
+    public function __toString()
+    {
 
         return '('.$this->code.') '.$this->name;
     }

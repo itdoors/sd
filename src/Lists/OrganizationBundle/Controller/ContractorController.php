@@ -181,7 +181,8 @@ class ContractorController extends SalesController
      * @return \Symfony\Component\HttpFoundation\Response
      */
 
-    public function listKvedAction($id) {
+    public function listKvedAction($id)
+    {
         $kvedOrganizationRepo = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:KvedOrganization');
 

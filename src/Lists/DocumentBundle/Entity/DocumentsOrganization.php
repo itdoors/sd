@@ -39,12 +39,13 @@ class DocumentsOrganization
      * Set organization
      *
      * @param \Lists\OrganizationBundle\Entity\Organization $organization
+     *
      * @return DocumentsOrganization
      */
     public function setOrganization(\Lists\OrganizationBundle\Entity\Organization $organization = null)
     {
         $this->organization = $organization;
-    
+
         return $this;
     }
 
@@ -62,12 +63,13 @@ class DocumentsOrganization
      * Set documents
      *
      * @param \Lists\DocumentBundle\Entity\Documents $documents
+     *
      * @return DocumentsOrganization
      */
     public function setDocuments(\Lists\DocumentBundle\Entity\Documents $documents = null)
     {
         $this->documents = $documents;
-    
+
         return $this;
     }
 
