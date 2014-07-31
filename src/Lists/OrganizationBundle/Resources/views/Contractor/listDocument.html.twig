@@ -77,7 +77,7 @@
                         </a>
                    </td>
                    <td>
-                       {% set datetime = 'Enter value' %}
+                       {% set datetime = ('Enter value')|trans %}
                        {% if item.datetime is not empty %}
                         {% set datetime = item.datetime|date('d.m.Y') %}
                        {% endif %}

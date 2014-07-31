@@ -60,12 +60,13 @@ class Documents
      * Set name
      *
      * @param string $name
+     *
      * @return Documents
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
@@ -83,12 +84,13 @@ class Documents
      * Set datetime
      *
      * @param \DateTime $datetime
+     *
      * @return Documents
      */
     public function setDatetime($datetime)
     {
         $this->datetime = $datetime;
-    
+
         return $this;
     }
 
@@ -106,12 +108,13 @@ class Documents
      * Set createdatetime
      *
      * @param \DateTime $createdatetime
+     *
      * @return Documents
      */
     public function setCreatedatetime($createdatetime)
     {
         $this->createdatetime = $createdatetime;
-    
+
         return $this;
     }
 
@@ -129,12 +132,13 @@ class Documents
      * Set filepath
      *
      * @param string $filepath
+     *
      * @return Documents
      */
     public function setFilepath($filepath)
     {
         $this->filepath = $filepath;
-    
+
         return $this;
     }
 
@@ -152,12 +156,13 @@ class Documents
      * Set userId
      *
      * @param integer $userId
+     *
      * @return Documents
      */
     public function setUserId($userId)
     {
         $this->userId = $userId;
-    
+
         return $this;
     }
 
@@ -175,12 +180,13 @@ class Documents
      * Set documentsType
      *
      * @param \Lists\DocumentBundle\Entity\DocumentsType $documentsType
+     *
      * @return Documents
      */
     public function setDocumentsType(\Lists\DocumentBundle\Entity\DocumentsType $documentsType = null)
     {
         $this->documentsType = $documentsType;
-    
+
         return $this;
     }
 
@@ -203,12 +209,13 @@ class Documents
      * Set user
      *
      * @param \SD\UserBundle\Entity\User $user
+     *
      * @return Documents
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 

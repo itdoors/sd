@@ -24,12 +24,13 @@ class DocumentsClaim
      * Set claimId
      *
      * @param integer $claimId
+     *
      * @return DocumentsClaim
      */
     public function setClaimId($claimId)
     {
         $this->claimId = $claimId;
-    
+
         return $this;
     }
 
@@ -47,12 +48,13 @@ class DocumentsClaim
      * Set documents
      *
      * @param \Lists\DocumentBundle\Entity\Documents $documents
+     *
      * @return DocumentsClaim
      */
     public function setDocuments(\Lists\DocumentBundle\Entity\Documents $documents = null)
     {
         $this->documents = $documents;
-    
+
         return $this;
     }
 

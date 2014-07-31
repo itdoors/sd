@@ -4316,7 +4316,8 @@ class AjaxController extends BaseFilterController
      *
      * @return mixed[]
      */
-    public function documentDateAction() {
+    public function documentDateAction()
+    {
         $pk = $this->get('request')->request->get('pk');
         //$name = $this->get('request')->request->get('name');
         $value = $this->get('request')->request->get('value');

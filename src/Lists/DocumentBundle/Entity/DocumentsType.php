@@ -39,12 +39,13 @@ class DocumentsType
      * Set name
      *
      * @param string $name
+     *
      * @return DocumentsType
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
@@ -62,12 +63,13 @@ class DocumentsType
      * Set dockey
      *
      * @param string $dockey
+     *
      * @return DocumentsType
      */
     public function setDockey($dockey)
     {
         $this->dockey = $dockey;
-    
+
         return $this;
     }
 
@@ -83,6 +85,8 @@ class DocumentsType
 
     /**
      * toString menthod
+     *
+     * @return string
      */
     public function __toString()
     {

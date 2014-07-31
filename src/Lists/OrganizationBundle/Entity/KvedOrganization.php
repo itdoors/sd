@@ -39,12 +39,13 @@ class KvedOrganization
      * Set organization
      *
      * @param \Lists\OrganizationBundle\Entity\Organization $organization
+     *
      * @return KvedOrganization
      */
     public function setOrganization(\Lists\OrganizationBundle\Entity\Organization $organization = null)
     {
         $this->organization = $organization;
-    
+
         return $this;
     }
 
@@ -62,12 +63,13 @@ class KvedOrganization
      * Set kved
      *
      * @param \Lists\OrganizationBundle\Entity\Kved $kved
+     *
      * @return KvedOrganization
      */
     public function setKved(\Lists\OrganizationBundle\Entity\Kved $kved = null)
     {
         $this->kved = $kved;
-    
+
         return $this;
     }
 
@@ -80,6 +82,7 @@ class KvedOrganization
     {
         return $this->kved;
     }
+
     /**
      * @ORM\PrePersist
      */
