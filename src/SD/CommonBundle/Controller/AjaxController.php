@@ -1764,7 +1764,7 @@ class AjaxController extends BaseFilterController
         $data = $form->getData();
 
         $formData = $request->request->get($form->getName());
-
+        var_dump($formData['test']); die();
         $handlingId = $data->getHandlingId();
 
         /** @var \Lists\HandlingBundle\Entity\Handling $handling */

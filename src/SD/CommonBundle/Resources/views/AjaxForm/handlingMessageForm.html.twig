@@ -15,6 +15,23 @@
         });
 
         $('#handlingMessageForm_next_is_business_trip').uniform();
+
+        $('#' + '{{ form.vars.name }}' + '_type').die('click');
+        $('#' + '{{ form.vars.name }}' + '_type').live('click', function(e){
+            var option =$('#' + '{{ form.vars.name }}' + '_type option:selected').val();
+            var labelDescription = $('#label_description').find('label')[0];
+            var textareaDescription = $('#' + '{{ form.vars.name }}' + '_description');
+            if (option == 3) {
+                labelDescription.innerHTML="{% trans %}Audit protocol{% endtrans %}";
+                textareaDescription.attr("placeholder", "{% trans %}Audit protocol{% endtrans %}");
+            } else if (option == 2) {
+                labelDescription.innerHTML="{% trans %}Audit protocol{% endtrans %}";
+                textareaDescription.attr("placeholder", "{% trans %}Audit protocol{% endtrans %}");
+            } else {
+                labelDescription.innerHTML="{% trans %}Description{% endtrans %}";
+                textareaDescription.attr("placeholder", "{% trans %}Description{% endtrans %}");
+            }
+        })
     })
 
     SD.select2('#' + '{{ form.vars.name }}' + '_user', {
@@ -50,6 +67,7 @@
                         'data-target_id': targetId
                 }
                 }) }}
+                <input name="{{ form.vars.name }}[test]" type="text" value="ah">
                 <div class="row">
                     <div class="col-md-4">
                         <div class="panel panel-default">
@@ -90,8 +108,12 @@
                                     {{ form_widget(form.contact, {'attr' : {'class' : 'form-control', 'placeholder': 'Select Contact Person'} } ) }}
                                 </div>
                                 <div class="form-group">
-                                    {{ form_label(form.description, 'Description', {'attr': {'class': 'control-label'}}) }}
-                                    {{ form_widget(form.description, {'attr' : {'class' : 'form-control', 'placeholder': 'Description'} } ) }}
+                                    <span id="label_description">
+                                        {{ form_label(form.description, 'Description', {'attr': {'class': 'control-label'}}) }}
+                                    </span>
+                                    <span id="input_description">
+                                        {{ form_widget(form.description, {'attr' : {'class' : 'form-control', 'placeholder': 'Description'} } ) }}
+                                    </span>
                                 </div>
                                 <div class="form-group">
                                     {{ form_label(form.filename, 'Filename', {'attr': {'class': 'control-label'}}) }}
