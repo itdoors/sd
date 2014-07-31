@@ -845,4 +845,99 @@ class ScheduleService
 
         return false;
     }
+
+    /**
+     * @param mixed[] $options
+     *
+     * @return bool
+     */
+    public function deleteUserFromGrafik($options)
+    {
+        // Department People Month Info Copy
+        $conn = $this->em->getConnection();
+        //$conn->beginTransaction();
+
+        $params = array(
+            ':year' => $options['year'],
+            ':month' => $options['month'],
+            ':department_id' => $options['departmentId'],
+            ':department_people_id' => $options['departmentPeopleId'],
+            ':department_people_replacement_id' => $options['replacementId'],
+            ':replacement_type' => $options['replacementType'],
+        );
+
+        $queryGrafikTime = $this->deleteGrafikTimeDataQuery();
+        $stmt = $conn->prepare($queryGrafikTime);
+        $stmt->execute($params);
+
+        $queryGrafik= $this->deleteGrafikDataQuery();
+        $stmt = $conn->prepare($queryGrafik);
+        $stmt->execute($params);
+
+        unset($params[':department_id']);
+        $queryMonthInfo= $this->deleteMonthInfoDataQuery();
+        $stmt = $conn->prepare($queryMonthInfo);
+        $stmt->execute($params);
+
+        return true;
+    }
+
+    /**
+     * @return string
+     */
+    public function deleteGrafikDataQuery()
+    {
+        $query = "
+            delete
+            from
+                grafik
+            where
+                year = :year and
+                month = :month and
+                department_people_id = :department_people_id and
+                department_people_replacement_id = :department_people_replacement_id and
+                department_id = :department_id and
+                replacement_type = :replacement_type";
+
+        return $query;
+    }
+
+    /**
+     * @return string
+     */
+    public function deleteGrafikTimeDataQuery()
+    {
+        $query = "
+            delete
+            from
+                grafik_time
+            where
+                year = :year and
+                month = :month and
+                department_people_id = :department_people_id and
+                department_people_replacement_id = :department_people_replacement_id and
+                department_id = :department_id and
+                replacement_type = :replacement_type";
+
+        return $query;
+    }
+
+    /**
+     * @return string
+     */
+    public function deleteMonthInfoDataQuery()
+    {
+        $query = "
+            delete
+            from
+                department_people_month_info
+            where
+                year = :year and
+                month = :month and
+                department_people_id = :department_people_id and
+                department_people_replacement_id = :department_people_replacement_id and
+                replacement_type = :replacement_type";
+
+        return $query;
+    }
 }

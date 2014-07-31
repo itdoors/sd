@@ -45,6 +45,7 @@ class DogovorFilterForm extends AbstractType
         $builder
             ->add('number')
             ->add('organization', 'hidden')
+            ->add('subject', 'text')
             ->add('customer', 'hidden')
             ->add('performer', 'hidden')
             ->add('prolongation', 'choice', array(

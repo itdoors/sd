@@ -48,7 +48,7 @@
                     {{ form_label(form.text, 'Text', {'attr': {'class': 'control-label'}}) }}
                     {{ form_widget(form.text, {'attr' : {'style' :'height:200px','class' : 'textear-edit form-control', 'placeholder': 'Text'} } ) }}
                 </div>
-            </div>
+            
         <input type="hidden" name="formName" value="{{ formName }}">
         <input type="hidden" name="postFunction" value="{{ postFunction }}">
         <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
@@ -60,6 +60,7 @@
         <div class="form-actions">
             {{ form_widget(form.create, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
             {{ form_widget(form.cancel, { 'label': 'Cancel', 'attr': {'class': 'btn default sd-cancel-btn', 'data-dismiss':'modal'} } ) }}
+        </div>
         </div>
         {{ form_end(form) }}
     </div>

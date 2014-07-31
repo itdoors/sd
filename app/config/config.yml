@@ -16,6 +16,7 @@ parameters:
     ajax.paginator.namespace.oper.department.coworkers: "oper.paginator.department.coworkers"
     ajax.namespace.oper.department.schedule: "oper.department.schedule"
     ajax.filter.namespace.report.activity: "report.activity"
+    ajax.filter.namespace.organziation.service.cover: "organziation.service.cover"
     project.web.dir: '%project.dir%/web'
     log.file.path: "%project.dir%/log.txt"
     1C.file.path: "%project.dir%/app/share/1c/debt/"
@@ -63,6 +64,7 @@ twig:
         ajax_paginator_namespace_oper_department_coworkers: %ajax.paginator.namespace.oper.department.coworkers%
         ajax_namespace_oper_department_schedule: %ajax.namespace.oper.department.schedule%
         ajax_filter_namespace_report_activity: %ajax.filter.namespace.report.activity%
+        ajax_namespace_organziation_service_cover: %ajax.filter.namespace.organziation.service.cover%
 
         userprofiles_url: %userprofiles.file.path%
 # Assetic Configuration

@@ -147,4 +147,22 @@ class DogovorController extends BaseController
             'baseRoutePrefix' => $this->baseRoutePrefix
         ));
     }
+    /**
+     * Renders single element of dogovor list
+     *
+     * @param integer $id Organization.id
+     *
+     * @return string
+     */
+    public function forOrganizationAction($id)
+    {
+        /** @var DogovorRepository $dr */
+        $dr = $this->get('lists_dogovor.repository');
+
+        $dogovors = $dr->getDogovorByOrganizationCustomerPerformerId($id);
+
+        return $this->render('ListsDogovorBundle:Dogovor:forOrganization.html.twig', array(
+            'dogovors' => $dogovors
+        ));
+    }
 }

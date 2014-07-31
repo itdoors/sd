@@ -18,6 +18,40 @@ class OrganizationRepository extends EntityRepository
      *
      * @return \Doctrine\ORM\Query
      */
+    public function getAllForManagerQuery($userIds, $filters)
+    {
+        if (!is_array($userIds) && $userIds) {
+            $userIds = array($userIds);
+        }
+
+        /** @var \Doctrine\ORM\QueryBuilder $sql*/
+        $sql = $this->createQueryBuilder('o');
+
+        $this->processSelect($sql);
+
+        $this->processBaseQuery($sql);
+        $sql->where('o.organizationSignId != 61 or o.organizationSignId is NULL')
+                ->andWhere('lookup.lukey = :lukey')
+                ->setParameter(':lukey', 'manager_organization');
+
+        if (sizeof($userIds)) {
+            $this->processUserQuery($sql, $userIds);
+        }
+
+        $this->processFilters($sql, $filters);
+
+        $this->processOrdering($sql);
+
+        $query = $sql->getQuery();
+
+        return $query;
+    }
+    /**
+     * @param int[]   $userIds
+     * @param mixed[] $filters
+     *
+     * @return \Doctrine\ORM\Query
+     */
     public function getAllForSalesQuery($userIds, $filters)
     {
         if (!is_array($userIds) && $userIds) {
@@ -100,6 +134,54 @@ class OrganizationRepository extends EntityRepository
 
         return $query;
     }
+    /**
+     * @param integer $userIds
+     * @param integer $signId
+     * @param mixed[] $filters
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getContractor($userIds, $signId, $filters)
+    {
+        if (!is_array($userIds) && $userIds) {
+            $userIds = array($userIds);
+        }
+
+        /** @var \Doctrine\ORM\QueryBuilder $sql*/
+        $sql = $this->createQueryBuilder('o');
+
+        /** @var \Doctrine\ORM\QueryBuilder $sqlCount */
+        $sqlCount = $this->createQueryBuilder('o');
+
+        $this->processSelect($sql);
+        $this->processCount($sqlCount);
+
+        $this->processBaseQuery($sql);
+        $sql
+                ->where('o.organizationSignId = :organizationSignId')
+                ->setParameter(':organizationSignId', $signId);
+        $this->processBaseQuery($sqlCount);
+        $sqlCount->where('o.organizationSignId = :organizationSignId')
+                ->setParameter(':organizationSignId', $signId);
+
+        if (sizeof($userIds)) {
+            $this->processUserQuery($sql, $userIds);
+            $this->processUserQuery($sqlCount, $userIds);
+        }
+
+        $this->processFilters($sql, $filters);
+        $this->processFilters($sqlCount, $filters);
+
+        $this->processOrdering($sql);
+
+        $query = $sql->getQuery();
+
+        $count = $sqlCount->getQuery()->getSingleScalarResult();
+
+        $query->setHint('knp_paginator.count', $count);
+
+        return $query;
+    }
 
     /**
      * Processes sql query. adding select
@@ -123,8 +205,8 @@ class OrganizationRepository extends EntityRepository
                         CONCAT(CONCAT(u.lastName, ' '), u.firstName)
                       FROM
                         SDUserBundle:User u
-                      LEFT JOIN u.organizations ou
-                      WHERE ou.id = o.id
+                     LEFT JOIN u.organizationUsers ou
+                        WHERE ou.organizationId = o.id
                    ), ','
                  ) as fullNames"
             );
@@ -151,7 +233,9 @@ class OrganizationRepository extends EntityRepository
             ->leftJoin('o.city', 'c')
             ->leftJoin('c.region', 'r')
             ->leftJoin('o.scope', 'scope')
-            ->leftJoin('o.users', 'users')
+            ->leftJoin('o.organizationUsers', 'oUser')
+            ->leftJoin('oUser.user', 'users')
+            ->leftJoin('oUser.lookup', 'lookup')
             ->leftJoin('o.creator', 'creator')
             ->andWhere('o.parent_id is null');
 
@@ -216,7 +300,21 @@ class OrganizationRepository extends EntityRepository
                         $sql->andWhere('c.id in (:cityIds)');
                         $sql->setParameter(':cityIds', $value);
                         break;
+                    case 'region':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $sql->andWhere('r.id in (:regionIds)');
+                        $sql->setParameter(':regionIds', $value);
+                        break;
                     case 'users':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $sql->andWhere('users.id in (:userFilterIds)');
+                        $sql->setParameter(':userFilterIds', $value);
+                        break;
+                    case 'user':
                         if (isset($value[0]) && !$value[0]) {
                             break;
                         }
@@ -286,13 +384,14 @@ class OrganizationRepository extends EntityRepository
                             CONCAT(CONCAT(u.lastName, ' '), u.firstName)
                           FROM
                             SDUserBundle:User u
-                          LEFT JOIN u.organizations ou
-                          WHERE ou.id = o.id
+                          INNER JOIN u.organizationUsers ou
+                          WHERE ou.organizationId = o.id
                        ), ', '
                      ) as fullNames
                     "
             )
-            ->leftJoin('o.users', 'users')
+            ->leftJoin('o.organizationUsers', 'oUser')
+            ->leftJoin('oUser.user', 'users')
             ->where('lower(o.name) LIKE :q OR lower(o.shortname) LIKE :q')
             ->andWhere('o.parent_id is null')
             ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%')

@@ -1,0 +1,71 @@
+Lists\OrganizationBundle\Entity\OrganizationServiceCover:
+    type: entity
+    table: organization_service_cover
+    repositoryClass: Lists\OrganizationBundle\Entity\OrganizationServiceCoverRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        serviceId:
+            type: integer
+            nullable: true
+            column: service_id
+        organizationId:
+            type: integer
+            nullable: true
+            column: organization_id
+        competitorId:
+            type: integer
+            nullable: true
+            column: competitor_id
+        isInterested:
+            type: boolean
+            nullable: true
+            column: is_interested
+        isWorking:
+            type: boolean
+            nullable: true
+            column: is_working
+        evaluation:
+            type: integer
+            nullable: ture
+            column: evaluation
+        endDate:
+            type: date
+            nullable: true
+            column: end_date
+        responsible:
+            type: text
+            nullable: true
+        description:
+            type: text
+            nullable: true
+        creatorId:
+            type: integer
+            nulllable: false
+            column: creator_id
+    manyToOne:
+        organization:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            joinColumn:
+                name: organization_id
+                referencedColumnName: id
+        competitor:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            joinColumn:
+                name: competitor_id
+                referencedColumnName: id
+        service:
+            targetEntity: Lists\HandlingBundle\Entity\HandlingService
+            joinColumn:
+                name: service_id
+                referencedColumnName: id
+        creator:
+            targetEntity: SD\UserBundle\Entity\User
+            joinColumns:
+                creator_id:
+                    referencedColumnName: id
+            orphanRemoval: false

@@ -46,6 +46,7 @@
 					<li><a href="#tab_1" data-toggle="tab">{% trans %}Managers{% endtrans %}</a></li>
 					<li><a href="#tab_2" data-toggle="tab">{% trans %}Contacts{% endtrans %}</a></li>
 					<li><a href="#tab_3" data-toggle="tab">{% trans %}Contracts{% endtrans %}</a></li>
+                    <li><a href="#tab_6" data-toggle="tab">{% trans %}Service cover{% endtrans %}</a></li>
 				</ul>
 				<div class="tab-content">
                     <div class="tab-pane active" id="tab_0">
@@ -81,6 +82,12 @@
 					<div class="tab-pane" id="tab_3">
 					</div>
 					<!--tabpane-->
+                    <div class="tab-pane" id="tab_6">
+                        {{ render(controller('ListsOrganizationBundle:ServiceCover:Index', {
+                        organizationId: organization.id
+                        })) }}
+                    </div>
+                    <!--tabpane-->
 				</div>
 				<!--tab-content-->
 			</div>

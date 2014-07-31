@@ -16,14 +16,15 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
     const REPLACEMENT_TYPE_SUBSTITUTION = 's';
 
     /**
-     * @param integer $idDepartment
-     * @param integer $month
-     * @param integer $year
-     * @param array   $filters
+     * @param integer|array $idDepartment
+     * @param integer       $month
+     * @param integer       $year
+     * @param array         $filters
+     * @param array         $orders
      *
      * @return \Doctrine\ORM\Query
      */
-    public function getFilteredCoworkers($idDepartment, $month, $year, $filters = array())
+    public function getFilteredCoworkers($idDepartment, $month, $year, $filters = array(), $orders = array())
     {
         $sql = $this->createQueryBuilder('dpmi')
             ->select('dpmi.departmentPeopleId as id')
@@ -31,11 +32,14 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
             ->addSelect('dpmi.realSalary')
             ->addSelect('dpmi.salaryNotOfficially')
             ->addSelect('dpmi.salaryOfficially')
+            ->addSelect('dpmi.replacementType')
             ->addSelect('dpr.id as replacementId')
             ->addSelect('i.firstName')
             ->addSelect('i.lastName')
             ->addSelect('i.middleName')
             ->addSelect('dp.admissionDate')
+            ->addSelect('dp.id as idCoworker')
+            ->addSelect('d.id as idDepartment')
             ->addSelect('dp.dismissalDate')
             ->addSelect('dp.admissionDateNotOfficially')
             ->addSelect('dp.dismissalDateNotOfficially')
@@ -45,18 +49,32 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
             ->addSelect('i.birthday')
             ->addSelect('i.passport')
             ->addSelect('m.name as mpkName')
+            ->addSelect('o.shortname as organizationShortName')
+            ->addSelect('o.name as organizationName')
             ->leftJoin('dpmi.departmentPeopleReplacement', 'dpr')
             ->leftJoin('dpmi.departmentPeople', 'dp')
             ->leftJoin('dp.department', 'd')
+            ->leftJoin('d.organization', 'o')
             ->leftJoin('dp.individual', 'i')
-            ->leftJoin('dp.mpks', 'm')
-            ->where('d.id = :idDepartment')
-            ->setParameter(':idDepartment', $idDepartment)
-            ->andWhere('dpmi.year = :year')
+            ->leftJoin('dp.mpks', 'm');
+
+        if (is_array($idDepartment)) {
+            if (count($idDepartment)) {
+                $sql = $sql->where('d.id IN (:idDepartment)')
+                    ->setParameter(':idDepartment', $idDepartment);
+            } else {
+                $sql = $sql->where('1 = 2');
+            }
+        } else {
+            $sql = $sql->where('d.id = :idDepartment')
+                ->setParameter(':idDepartment', $idDepartment);
+        }
+
+        $sql->andWhere('dpmi.year = :year')
             ->setParameter(':year', $year)
             ->andWhere('dpmi.month = :month')
             ->setParameter(':month', $month);
-            //->groupBy('g.departmentPeopleId')
+        //->groupBy('g.departmentPeopleId')
 
 
         if (sizeof($filters)) {
@@ -84,7 +102,31 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
             }
         }
 
-        $sql->orderBy('i.lastName', "ASC");
+        if (sizeof($orders)) {
+
+            foreach ($orders as $key => $value) {
+                if (!$value) {
+                    continue;
+                }
+                switch ($key) {
+                    case 'mpk':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $sql->orderBy('m.name', $value);
+                        break;
+                    case 'lastName':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $sql->addOrderBy('i.lastName', $value);
+                        break;
+                }
+            }
+        }
+
+        //$sql->orderBy('i.lastName', "ASC");
+        //$sql = $sql->setMaxResults(70);
         $query = $sql->getQuery();
 
         return $query;

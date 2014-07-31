@@ -59,6 +59,8 @@
                 </th><th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
                 {% trans %}Responsible{% endtrans %}
                 </th><th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                {% trans %}Bank{% endtrans %}
+                </th><th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
                 {% trans %}№ and date contract{% endtrans %}
                 </th><th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
                 {% trans %}Deferment{% endtrans %}
@@ -100,6 +102,7 @@
                     <br>
                     {% endfor %}
                 </td>
+                <td class="">{{ entity.bank }}</td>
                 <td class="">
                     <a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">
                         {{ entity.dogovorNumber }}
@@ -118,7 +121,7 @@
                        data-post_function="updateList"
                        data-post_target_id="datatable_ajax"
                        ></a>
-                    {{ entity.descriptiondate is empty ? '' : '('~entity.descriptiondate |date("d.m.y")~')'}} {{ entity.description }}
+                       {{ entity.descriptiondate is empty ? '' : '('~entity.descriptiondate |date("d.m.y")~')'}} {{ entity.description |raw('html') }}
                 </td>
                 <td class="">
                     <a href="#" 

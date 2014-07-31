@@ -1,0 +1,195 @@
+<?php
+
+namespace Lists\DocumentBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Documents
+ */
+class Documents
+{
+    /**
+     * @var integer
+     */
+    private $id;
+
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var \DateTime
+     */
+    private $datetime;
+
+    /**
+     * @var \DateTime
+     */
+    private $createdatetime;
+
+    /**
+     * @var string
+     */
+    private $filepath;
+
+    /**
+     * @var integer
+     */
+    private $userId;
+
+    /**
+     * @var \Lists\DocumentBundle\Entity\DocumentsType
+     */
+    private $documentsType;
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Documents
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set datetime
+     *
+     * @param \DateTime $datetime
+     * @return Documents
+     */
+    public function setDatetime($datetime)
+    {
+        $this->datetime = $datetime;
+    
+        return $this;
+    }
+
+    /**
+     * Get datetime
+     *
+     * @return \DateTime 
+     */
+    public function getDatetime()
+    {
+        return $this->datetime;
+    }
+
+    /**
+     * Set createdatetime
+     *
+     * @param \DateTime $createdatetime
+     * @return Documents
+     */
+    public function setCreatedatetime($createdatetime)
+    {
+        $this->createdatetime = $createdatetime;
+    
+        return $this;
+    }
+
+    /**
+     * Get createdatetime
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedatetime()
+    {
+        return $this->createdatetime;
+    }
+
+    /**
+     * Set filepath
+     *
+     * @param string $filepath
+     * @return Documents
+     */
+    public function setFilepath($filepath)
+    {
+        $this->filepath = $filepath;
+    
+        return $this;
+    }
+
+    /**
+     * Get filepath
+     *
+     * @return string 
+     */
+    public function getFilepath()
+    {
+        return $this->filepath;
+    }
+
+    /**
+     * Set userId
+     *
+     * @param integer $userId
+     * @return Documents
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+    
+        return $this;
+    }
+
+    /**
+     * Get userId
+     *
+     * @return integer 
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
+     * Set documentsType
+     *
+     * @param \Lists\DocumentBundle\Entity\DocumentsType $documentsType
+     * @return Documents
+     */
+    public function setDocumentsType(\Lists\DocumentBundle\Entity\DocumentsType $documentsType = null)
+    {
+        $this->documentsType = $documentsType;
+    
+        return $this;
+    }
+
+    /**
+     * Get documentsType
+     *
+     * @return \Lists\DocumentBundle\Entity\DocumentsType 
+     */
+    public function getDocumentsType()
+    {
+        return $this->documentsType;
+    }
+}

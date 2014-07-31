@@ -1,0 +1,96 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
+<td>
+    <a  class="btn green button_wide more-info"
+            data-toggle="modal"
+            href="#form_modal_more_info"
+            data-target_holder="moreInfoTpl"
+            data-params='{"id":5}'
+            data-url-more-info="{{ url('it_doors_oper_department_info_coworker_table', { 'id': coworker.id }) }}"
+            >
+        {{ counter }}
+    </a>
+</td>
+<td id="fio_{{ coworker.id }}">
+    <a class="fio"
+       data-params='{"idCoworker": {{ coworker.id }}, "idDepartment":{{ coworker.idDepartment }}, "idLink": "fio_{{ coworker.id }}", "idReplacement": {{ coworker.replacementId }} }'
+            >
+        {% trans %}View{% endtrans %}
+    </a>
+</td>
+<td>{% if coworker.replacementId>0 %}
+        З
+    {% else %}
+        П
+    {% endif %}
+</td>
+<td>
+    {{ coworker.idCoworker }}
+</td>
+<td>
+    {{ coworker.mpkName }}
+    {% if coworker.organizationShortName %}
+        <br />({{ coworker.organizationShortName }})
+    {% elseif coworker.organizationName %}
+        <br />({{ coworker.organizationName }})
+    {% endif %}
+</td>
+<td>
+    {{ coworker.drfo }}
+</td>
+<td>
+    {{ coworker.passport }}
+</td>
+<td>
+    {{ coworker.lastName }}
+</td>
+<td>
+    {{ coworker.firstName }}
+</td>
+<td>
+    {{ coworker.middleName }}
+</td>
+<td>
+    {% if coworker.admissionDate  %}
+        {{ coworker.admissionDate|date("d-m-Y") }}
+    {% endif %}
+</td>
+<td>
+    {% if coworker.dismissalDate  %}
+        {{ coworker.dismissalDate|date("d-m-Y") }}
+    {% endif %}
+</td>
+<td>
+    {% if coworker.admissionDateNotOfficially  %}
+        {{ coworker.admissionDateNotOfficially|date("d-m-Y") }}
+    {% endif %}
+
+</td>
+<td>
+    {% if coworker.dismissalDateNotOfficially  %}
+        {{ coworker.dismissalDateNotOfficially|date("d-m-Y") }}
+    {% endif %}
+</td>
+
+{{ render(controller('ITDoorsOperBundle:OperSchedule:getRowSumsRendered', {
+    'date': date,
+    'idCoworker': coworker.idCoworker,
+    'idReplacement': coworker.replacementId,
+    'idDepartment': coworker.idDepartment,
+})) }}
+
+{#
+{{ include(
+    'ITDoorsOperBundle:Schedule:scheduleTableSums.html.twig', {
+    'plannedAccrual': infoSumSalary['coworker_'~coworker.idCoworker]['plannedAccrual'],
+    'accrual': infoSumSalary['coworker_'~coworker.idCoworker]['accrual'],
+    'salaryOfficially': infoSumSalary['coworker_'~coworker.idCoworker]['salaryOfficially'],
+    'idCoworker': coworker.idCoworker,
+    'idReplacement': coworker.replacementId,
+    'realSalary': infoSumSalary['coworker_'~coworker.idCoworker]['realSalary'],
+    'salaryNotOfficially': infoSumSalary['coworker_'~coworker.idCoworker]['salaryNotOfficially'],
+    'totalSalary': infoSumSalary['coworker_'~coworker.idCoworker]['totalSalary'],
+    'idMonthInfo': infoSumSalary['coworker_'~coworker.idCoworker]['idMonthInfo'],
+    'canEdit': canEdit,
+    'idDepartment': coworker.idDepartment,
+}) }}
+#}

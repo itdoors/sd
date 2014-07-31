@@ -995,4 +995,82 @@ class Organization
     {
         return $this->lookup;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $organizationUsers;
+
+
+    /**
+     * Add organizationUsers
+     *
+     * @param \Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers
+     * 
+     * @return Organization
+     */
+    public function addOrganizationUser(\Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers)
+    {
+        $this->organizationUsers[] = $organizationUsers;
+
+        return $this;
+    }
+
+    /**
+     * Remove organizationUsers
+     *
+     * @param \Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers
+     */
+    public function removeOrganizationUser(\Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers)
+    {
+        $this->organizationUsers->removeElement($organizationUsers);
+    }
+
+    /**
+     * Get organizationUsers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOrganizationUsers()
+    {
+        return $this->organizationUsers;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $coeas;
+
+
+    /**
+     * Add coeas
+     *
+     * @param \Lists\OrganizationBundle\Entity\Coea $coeas
+     * 
+     * @return Organization
+     */
+    public function addCoea(\Lists\OrganizationBundle\Entity\Coea $coeas)
+    {
+        $this->coeas[] = $coeas;
+
+        return $this;
+    }
+
+    /**
+     * Remove coeas
+     *
+     * @param \Lists\OrganizationBundle\Entity\Coea $coeas
+     */
+    public function removeCoea(\Lists\OrganizationBundle\Entity\Coea $coeas)
+    {
+        $this->coeas->removeElement($coeas);
+    }
+
+    /**
+     * Get coeas
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCoeas()
+    {
+        return $this->coeas;
+    }
 }

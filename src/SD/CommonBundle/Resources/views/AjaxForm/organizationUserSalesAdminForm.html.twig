@@ -1,0 +1,62 @@
+{% trans_default_domain 'SDUserBundle' %}
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        $('#organizationUserSalesAdminForm_user').select2({
+            minimumInputLength: 2,
+            ajax: {
+                url: '{{ path('sd_common_ajax_user') }}',
+                dataType: 'json',
+                data: function(term, page) {
+                    return {
+                        query: term
+                    };
+                },
+                results: function(data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+    });
+
+</script>
+
+<div class="row ">
+    <div class="col-md-12">
+        <div class="portlet box yellow">
+            <div class="portlet-title">
+                <div class="caption"><i class="fa fa-edit"></i>
+                    {% trans %}Add manager{% endtrans %}
+                </div>
+            </div>
+            <div class="portlet-body">
+                {{ form_start(form, {
+                    'action' : path('sd_common_ajax_form'),
+                    'attr' : {
+                        'method' : 'POST',
+                        'class' : 'ajax-form-entity',
+                        'data-post_function': postFunction,
+                        'data-post_target_id': postTargetId,
+                        'data-target_id': targetId
+                    }
+                }) }}
+                <div class="panel-body">
+                    <div class="form-group col-md-12">
+                        {{ form_widget(form.user, {'attr' : {'class' : 'form-control'}}) }}
+                    </div>
+                    <div class="form-group col-md-12">
+                        {{ form_widget(form.add, { 'label': 'Add manager'| trans, 'attr': {'class': 'btn green'} } ) }}
+                    </div>
+
+                    <input type="hidden" name="formName" value="{{ formName }}">
+                    <input type="hidden" name="postFunction" value="{{ postFunction }}">
+                    <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
+                    <input type="hidden" name="targetId" value="{{ targetId }}">
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>

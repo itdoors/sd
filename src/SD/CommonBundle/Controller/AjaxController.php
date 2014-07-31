@@ -3,6 +3,8 @@
 namespace SD\CommonBundle\Controller;
 
 use Lists\DepartmentBundle\Entity\DepartmentsRepository;
+use Lists\DocumentBundle\Entity\Documents;
+use Lists\DocumentBundle\Entity\DocumentsOrganization;
 use Lists\DogovorBundle\Entity\Dogovor;
 use Lists\DogovorBundle\Entity\DogovorDepartment;
 use Lists\DogovorBundle\Entity\DogovorDepartmentRepository;
@@ -12,14 +14,18 @@ use Lists\DogovorBundle\Entity\DopDogovorRepository;
 use Lists\HandlingBundle\Entity\Handling;
 use Lists\HandlingBundle\Entity\HandlingMessage;
 use Lists\HandlingBundle\Entity\HandlingRepository;
+use Lists\HandlingBundle\Entity\HandlingService;
+use Lists\HandlingBundle\Entity\HandlingServiceRepository;
 use Lists\LookupBundle\Entity\LookupRepository;
 use Lists\ContactBundle\Entity\ModelContact;
 use Lists\ContactBundle\Entity\ModelContactRepository;
+use Lists\OrganizationBundle\Entity\KvedOrganization;
 use Lists\OrganizationBundle\Entity\Organization;
 use Lists\HandlingBundle\Entity\HandlingMoreInfo;
+use Lists\OrganizationBundle\Entity\OrganizationRepository;
+use Lists\OrganizationBundle\Entity\OrganizationServiceCover;
 use SD\UserBundle\Entity\UserRepository;
 use SD\UserBundle\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Form;
@@ -30,6 +36,9 @@ use ITDoors\AjaxBundle\Controller\BaseFilterController;
 use Lists\CompanystructureBundle\Entity\Companystructure;
 use SD\UserBundle\Entity\Usercontactinfo;
 use SD\CalendarBundle\Entity\Task;
+use Lists\HandlingBundle\Entity\HandlingUser;
+use Lists\OrganizationBundle\Entity\OrganizationUser;
+use Lists\OrganizationBundle\Entity\Coea;
 
 /**
  * AjaxController class.
@@ -449,6 +458,59 @@ class AjaxController extends BaseFilterController
     }
 
     /**
+     * Returns json document type list
+     *
+     * @return string
+     */
+    public function documentTypeAction()
+    {
+        $documentTypes = $this->getDoctrine()
+            ->getRepository('ListsDocumentBundle:DocumentsType')
+            ->findAll();
+
+        $result = array();
+
+        foreach ($documentTypes as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json dogovor type list
+     *
+     * @return string
+     */
+//    public function dogovorSubjectAction()
+//    {
+//         $searchText = $this->get('request')->query->get('query');
+//         
+//         $dogovor = $this->getDoctrine()
+//            ->getRepository('ListsDogovorBundle:Dogovor')
+//            ->createQueryBuilder('d')
+//            ->select('d.subject')
+//            ->addSelect('d.id')
+//            ->where('d.subject LIKE :subject')
+//            ->setParameter(':subject', "{$searchText}%")
+//            ->getQuery()
+//            ->getResult();
+//
+//        $result = array();
+//
+//        foreach ($dogovor as $object) {
+//            $result[] = array(
+//                    'id' => $object['subject'],
+//                    'value' => $object['subject'],
+//                    'name' => $object['subject'],
+//                    'text' => $object['subject']
+//                );
+//        }
+//
+//        return new Response(json_encode($result));
+//    }
+
+    /**
      * Returns json dogovor type list
      *
      * @return string
@@ -782,6 +844,32 @@ class AjaxController extends BaseFilterController
         $repository = $this->container->get('sd_user.repository');
 
         $objects = $repository->getOnlyStuff()
+            ->andWhere('lower(u.firstName) LIKE :q OR lower(u.lastName) LIKE :q')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json users list
+     *
+     * @return string
+     */
+    public function userAllStuffAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        /** @var \SD\UserBundle\Entity\UserRepository $repository */
+        $repository = $this->container->get('sd_user.repository');
+
+        $objects = $repository->getAllUsersStuff()
             ->andWhere('lower(u.firstName) LIKE :q OR lower(u.lastName) LIKE :q')
             ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
             ->getQuery()
@@ -1461,6 +1549,7 @@ class AjaxController extends BaseFilterController
         );
 
         if ($form->isValid()) {
+
             $method = $formName . 'Save';
 
             $user = $this->getUser();
@@ -1514,6 +1603,89 @@ class AjaxController extends BaseFilterController
         $em->flush();
 
         return true;
+    }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function coeaFormSave($form, $user, $request)
+    {
+        $data = $form->getData();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $organization = $em->getRepository('ListsOrganizationBundle:Organization')
+                ->find($data['organizationId']);
+
+        $scope = $em->getRepository('ListsLookupBundle:Lookup')
+                ->find($data['scope']);
+
+        $coea = new Coea();
+        $coea->setOrganization($organization);
+        $coea->setScope($scope);
+
+        $em->persist($coea);
+        $em->flush();
+
+        return true;
+    }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function kvedFormSave($form, $user, $request)
+    {
+        $data = $form->getData();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $organization = $em->getRepository('ListsOrganizationBundle:Organization')
+            ->find($data['organizationId']);
+
+        $kved = $em->getRepository('ListsOrganizationBundle:Kved')
+            ->find($data['kved']);
+
+        $kvedOrganization = new KvedOrganization();
+        $kvedOrganization->setOrganization($organization);
+        $kvedOrganization->setKved($kved);
+
+        $em->persist($kvedOrganization);
+        $em->flush();
+
+        return true;
+    }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function organizationUserSalesAdminFormSave($form, $user, $request)
+    {
+        $data = $form->getData();
+
+        if ($this->getUser()->hasRole('ROLE_SALESADMIN')) {
+            $serviceOrganizationUser = $this->container->get('lists_organization.user.service');
+            $serviceOrganizationUser->changeManagerOrganizationProject($data['organizationId'], $data['user']);
+
+            return true;
+        }
     }
 
     /**
@@ -1860,23 +2032,98 @@ class AjaxController extends BaseFilterController
      *
      * @return boolean
      */
+    public function handlingUserSalesAdminFormSave($form, $user, $request)
+    {
+        $data = $form->getData();
+
+        if ($this->getUser()->hasRole('ROLE_SALESADMIN')) {
+            $serviceHandlingUser = $this->container->get('lists_handling.user.service');
+            $serviceHandlingUser->changeManagerProjectOne($data['handlingId'], $data['user']);
+
+            return true;
+        }
+    }
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
     public function handlingUserFormSave($form, $user, $request)
     {
         $data = $form->getData();
 
-        $object = $this->getDoctrine()
-            ->getRepository('ListsHandlingBundle:Handling')
-            ->find($data['handlingId']);
+        $em = $this->getDoctrine()->getManager();
 
         $user = $this->getDoctrine()
             ->getRepository('SDUserBundle:User')
-            ->find($data['user']);
+            ->find((int) $data['user']);
+        $handling = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling')
+            ->find((int) $data['handlingId']);
 
-        $object->addUser($user);
+        $lookupMPId = $this->getDoctrine()
+            ->getRepository('ListsLookupBundle:Lookup')->getOnlyManagerProjectId();
 
-        $em = $this->getDoctrine()->getManager();
+        $mainManager = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingUser')
+            ->findOneBy(array(
+                'handlingId' => (int) $data['handlingId'],
+                'lookupId' => $lookupMPId,
+                ));
+        $lookupId = $this->getDoctrine()
+            ->getRepository('ListsLookupBundle:Lookup')->getOnlyManagerId();
+
+        if (!$mainManager || $this->getUser()->getId() != $mainManager->getUser()->getId()) {
+            return false;
+        }
+            $lookup = $this->getDoctrine()
+                ->getRepository('ListsLookupBundle:Lookup')
+                ->find($lookupId);
+
+        $object = new HandlingUser();
+
+        $part = $mainManager->getPart()-(int) $data['part'];
+        $mainManager->setPart($part);
+
+        $object->setUser($user);
+        $object->setHandling($handling);
+        $object->setPart((int) $data['part']);
+        $object->setLookup($lookup);
+
+        $email = $this->get('it_doors_email.service');
+        $url = $this->generateUrl(
+            'lists_sales_handling_show',
+            array('id' => $handling->getId()),
+            true
+        );
+        $email->send(
+            null,
+            'manager-add-in-project',
+            array(
+                'users' => array(
+                    $user->getEmail()
+                ),
+                'variables' => array(
+                    '${lastName}$' => $mainManager->getUser()->getLastName(),
+                    '${firstName}$' => $mainManager->getUser()->getFirstName(),
+                    '${middleName}$' => $mainManager->getUser()->getMiddleName(),
+                    '${part}$' => (int) $data['part'],
+                    '${id}$' => $handling->getId(),
+                    '${url}$' => '<a href="' . $url . '">' . $url . '</a>',
+                )
+            )
+        );
+        $cron = $this->container->get('it_doors_cron.service');
+        $cron->addSendEmails();
+
         $em->persist($object);
+        $em->persist($mainManager);
         $em->flush();
+        $em->refresh($mainManager);
 
         return true;
     }
@@ -2083,6 +2330,28 @@ class AjaxController extends BaseFilterController
      *
      * @return void
      */
+    public function organizationServiceCoverDelete($params)
+    {
+        $id = $params['id'];
+
+        /** @var OrganizationServiceCover $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:OrganizationServiceCover')
+            ->find($id);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
     public function emailDelete($params)
     {
         $id = $params['id'];
@@ -2129,22 +2398,22 @@ class AjaxController extends BaseFilterController
      */
     public function organizationUserDelete($params)
     {
-        $organizationId = $params['organizationId'];
-        $userId = $params['userId'];
+        $organizationId = $params['organizationUserId'];
 
-        $organization = $this->getDoctrine()
-            ->getRepository('ListsOrganizationBundle:Organization')
+        $organizationUser = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:OrganizationUser')
             ->find($organizationId);
 
-        $user = $this->getDoctrine()
-            ->getRepository('SDUserBundle:User')
-            ->find($userId);
+        /** @var Lookup $lookup */
+        $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager_organization'));
 
-        $organization->removeUser($user);
+        if ((!$organizationUser->getLookup() || $organizationUser->getLookup()->getId() != $lookup->getId()) && $this->getUser()->hasRole('ROLE_SALESADMIN')) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($organizationUser);
+            $em->flush();
+        }
 
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($organization);
-        $em->flush();
+        return false;
     }
 
     /**
@@ -2156,24 +2425,51 @@ class AjaxController extends BaseFilterController
      */
     public function handlingUserDelete($params)
     {
-        $handlingId = $params['handlingId'];
-        $userId = $params['userId'];
+        $handlingUserId = $params['handlingUserId'];
 
         $object = $this->getDoctrine()
-            ->getRepository('ListsHandlingBundle:Handling')
-            ->find($handlingId);
+            ->getRepository('ListsHandlingBundle:HandlingUser')
+            ->find($handlingUserId);
 
-        $user = $this->getDoctrine()
-            ->getRepository('SDUserBundle:User')
-            ->find($userId);
+        $lookupId = $this->getDoctrine()
+            ->getRepository('ListsLookupBundle:Lookup')->getOnlyManagerProjectId();
 
-        $object->removeUser($user);
+        $mainManager = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingUser')
+            ->findOneBy(array(
+                'handlingId' => $object->getHandlingId(),
+                'lookupId' => $lookupId,
+                ));
+        if ($mainManager->getUser()->getId() != $this->getUser()->getId()) {
+            return false;
+        }
+        $part = $mainManager->getPart()+$object->getPart();
+        $mainManager->setPart($part);
 
+        $email = $this->get('it_doors_email.service');
+        $email->send(
+            null,
+            'manager-delete-of-project',
+            array(
+                'users' => array(
+                    $object->getUser()->getEmail()
+                ),
+                'variables' => array(
+                    '${lastName}$' => $mainManager->getUser()->getLastName(),
+                    '${firstName}$' => $mainManager->getUser()->getFirstName(),
+                    '${middleName}$' => $mainManager->getUser()->getMiddleName(),
+                    '${part}$' => $object->getPart(),
+                    '${id}$' => $object->getHandlingId()
+                )
+            )
+        );
+        $cron = $this->container->get('it_doors_cron.service');
+        $cron->addSendEmails();
         $em = $this->getDoctrine()->getManager();
-        $em->persist($object);
+        $em->persist($mainManager);
+        $em->remove($object);
         $em->flush();
     }
-
 
     /**
      * Deletes {entityName}Delete instance
@@ -2230,6 +2526,94 @@ class AjaxController extends BaseFilterController
         $object = $this->getDoctrine()
             ->getRepository('ListsDogovorBundle:DopDogovor')
             ->find($id);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function dogovorDelete($params)
+    {
+        $id = $params['id'];
+
+        /** @var Dogovor $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:Dogovor')
+            ->find($id);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function coeaDelete($params)
+    {
+        $id = $params['id'];
+
+        /** @var Coea $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Coea')
+            ->find($id);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function kvedDelete($params)
+    {
+        $kved = $params['id'];
+        $organization = $params['organization'];
+
+        $object = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:KvedOrganization')
+            ->findOneBy(array(
+                'kved' => $kved,
+                'organization' => $organization
+            ));
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function documentDelete($params)
+    {
+        $document = $params['id'];
+        $organization = $params['organization'];
+
+        $object = $this->getDoctrine()
+            ->getRepository('ListsDocumentBundle:DocumentsOrganization')
+            ->findOneBy(array(
+                'documents' => $document,
+                'organization' => $organization
+            ));
 
         $em = $this->getDoctrine()->getManager();
         $em->remove($object);
@@ -2355,6 +2739,132 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($return));
     }
+    /**
+     * Saves object to db
+     *
+     * @return mixed[]
+     */
+    public function handlingUserPartChangeAction()
+    {
+        $translator = $this->get('translator');
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = (int) $this->get('request')->request->get('value');
+
+        $methodSet = 'set' . ucfirst($name);
+
+        /** @var HandlingUser $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingUser')
+            ->find($pk);
+
+        if (!$value) {
+            $methodGet = 'get' . ucfirst($name);
+            $type = gettype($object->$methodGet());
+
+            if (in_array($type, array('integer'))) {
+                $value = null;
+            }
+        }
+        $lookupMPId = $this->getDoctrine()
+            ->getRepository('ListsLookupBundle:Lookup')->getOnlyManagerProjectId();
+
+        $mainManager = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingUser')
+            ->findOneBy(array(
+                'handlingId' => $object->getHandlingId(),
+                'lookupId' => $lookupMPId,
+                ));
+        if (!$mainManager || $this->getUser()->getId() != $mainManager->getUser()->getId()) {
+            $return = array(
+                'success' => 0,
+                'handlingUser' => array(
+                    'id' => $object->getId(),
+                    'error' => 'no access',
+                    'value' => $object->getPart()
+                )
+            );
+
+            return new Response(json_encode($return));
+        } elseif ($mainManager->getPart() < $value) {
+            $return = array(
+                'success' => 0,
+                'handlingUser' => array(
+                    'id' => $object->getId(),
+                    'error' => 'max '.$mainManager->getPart(),
+                    'value' => $object->getPart()
+                )
+            );
+
+            return new Response(json_encode($return));
+        }
+        $part = $mainManager->getPart()+$object->getPart()-$value;
+        $mainManager->setPart($part);
+
+        $object->$methodSet($value);
+
+        $validator = $this->get('validator');
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
+        $errors = $validator->validate($object, array('edit'));
+
+        if (sizeof($errors)) {
+            $return = $this->getFirstError($errors);
+
+            return new Response($return, 406);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+        $em->persist($mainManager);
+
+        try {
+            $em->flush();
+
+            $em->refresh($object);
+            $email = $this->get('it_doors_email.service');
+            $url = $this->generateUrl(
+                'lists_sales_handling_show',
+                array('id' => $object->getHandlingId()),
+                true
+            );
+            $email->send(
+                null,
+                'manager-change-part-in-project',
+                array(
+                    'users' => array(
+                        $object->getUser()->getEmail()
+                    ),
+                    'variables' => array(
+                        '${lastName}$' => $mainManager->getUser()->getLastName(),
+                        '${firstName}$' => $mainManager->getUser()->getFirstName(),
+                        '${middleName}$' => $mainManager->getUser()->getMiddleName(),
+                        '${part}$' => $value,
+                        '${id}$' => $object->getHandlingId(),
+                        '${url}$' => '<a href="' . $url . '">' . $url . '</a>',
+                    )
+                )
+            );
+        $cron = $this->container->get('it_doors_cron.service');
+        $cron->addSendEmails();
+        } catch (\ErrorException $e) {
+            $return = array('msg' => $translator->trans('Wrong input data'));
+
+            return new Response(json_encode($return));
+        }
+
+        $return = array(
+            'success' => 1,
+            'handlingUser' => array(
+                'id' => $object->getId(),
+                'managerPart' => $part,
+                'value' => $value
+            )
+        );
+
+        return new Response(json_encode($return));
+    }
 
     /**
      * Saves object to db
@@ -2398,6 +2908,46 @@ class AjaxController extends BaseFilterController
                 return new Response($return, 406);
             }
         }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+
+        try {
+            $em->flush();
+        } catch (\ErrorException $e) {
+            $return = array('msg' => $translator->trans('Wrong input data'));
+
+            return new Response(json_encode($return));
+        }
+
+        $return = array('success' => 1);
+
+        return new Response(json_encode($return));
+    }
+
+    /**
+     * Saves object to db
+     *
+     * @return mixed[]
+     */
+    public function documentTypeSaveAction()
+    {
+        $translator = $this->get('translator');
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        /** @var \Lists\DocumentBundle\Entity\Documents $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ListsDocumentBundle:Documents')
+            ->find($pk);
+
+        $type = $this->getDoctrine()
+            ->getRepository('ListsDocumentBundle:DocumentsType')
+            ->find($value);
+
+        $object->setDocumentsType($type);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($object);
@@ -2673,10 +3223,13 @@ class AjaxController extends BaseFilterController
 
         $userIds[$creator->getId()] = $creator->getId();
 
-        $users = $handling->getUsers();
+        /** @var HandlingUser[] $users */
+        $users = $handling->getHandlingUsers();
 
-        foreach ($users as $user) {
-            $userIds[$user->getId()] = $user->getId();
+        if ($users) {
+            foreach ($users as $user) {
+                $userIds[$user->getUserId()] = $user->getUserId();
+            }
         }
 
         $organizationId = $handling->getOrganizationId();
@@ -3189,10 +3742,9 @@ class AjaxController extends BaseFilterController
     public function dopDogovorEditFormSave($form, $user, $request)
     {
         $data = $form->getData();
-
-        if (!$data->getId()) {
-            $data->setUser($user);
-        }
+//        if (!$data->getId()) {
+//            $data->setUser($user);
+//        }
 
         $dogovorId = $data->getDogovorId();
 
@@ -3201,7 +3753,7 @@ class AjaxController extends BaseFilterController
             ->find($dogovorId);
 
         $data->setDogovor($dogovor);
-        $data->setCreateDateTime(new \DateTime(date('Y-m-d H:i:s')));
+//        $data->setCreateDateTime(new \DateTime(date('Y-m-d H:i:s')));
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
@@ -3252,6 +3804,106 @@ class AjaxController extends BaseFilterController
 
         $em->persist($dogovor);
         $em->flush();
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Saves document
+     *
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function documentUploadAction(Request $request)
+    {
+        $result = array();
+        $documentId = $request->query->get('id');
+
+        $em = $this->getDoctrine()->getManager();
+        $document = $em
+            ->getRepository('ListsDocumentBundle:Documents')
+            ->find($documentId);
+
+        $result['id'] = $document->getId();
+        if (!$document) {
+            $result['error'] = 'Dogovor not found';
+        }
+        $file = $request->files->get('dogovor');
+
+        if ($file) {
+            $directory = $this->container->getParameter('project.web.dir'). '/uploads/document/';
+            if (!is_dir($directory.'/old')) {
+                mkdir($directory.'/old', 0777, true);
+            }
+            if (is_file($directory.$document->getFilepath()) && rename($directory.$document->getFilepath(), $directory.'old/'.$documentId.'_'.$document->getFilepath())) {
+
+            } else {
+                $result['error'] = 'File move error';
+            }
+            $document->setFile($file);
+            $document->upload();
+            $result['file'] = $document->getFilepath();
+        } else {
+            $result['error'] = 'File not found';
+        }
+
+        $em->persist($document);
+        $em->flush();
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Saves dop dogovor ajax form
+     *
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function contractorUploadAction(Request $request)
+    {
+        $result = array();
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $organizationId = $request->query->get('id');
+        $organization = $em
+            ->getRepository('ListsOrganizationBundle:Organization')
+            ->find($organizationId);
+        $organizationUser = $em
+            ->getRepository('ListsOrganizationBundle:OrganizationUser')
+            ->findOneBy(array(
+                'organizationId' => $organizationId,
+                'userId' => $user->getId(),
+            ));
+        //if ($organizationUser) {
+        $documentType = $em
+            ->getRepository('ListsDocumentBundle:DocumentsType')
+            ->find(1);
+
+        $document = new Documents();
+            $document->setUser($user);
+            $document->setUserId($user->getId());
+            $document->setDatetime(null);
+            $document->setCreateDateTime(new \DateTime());
+            $document->setDocumentsType($documentType);
+            //$document->setStartdatetime(new \DateTime());
+            $file = $request->files->get('dogovor');
+            if ($file) {
+                $document->setFile($file);
+                $document->upload();
+            } else {
+                $result['error'] = 'File not found';
+            }
+            $em->persist($document);
+            $em->flush();
+            $documentOrganization = new DocumentsOrganization();
+            $documentOrganization->setOrganization($organization);
+            $documentOrganization->setDocuments($document);
+            $em->persist($documentOrganization);
+            $em->flush();
+/*        } else {
+            $result['error'] = 'No access';
+        }*/
 
         return new Response(json_encode($result));
     }
@@ -3660,6 +4312,30 @@ class AjaxController extends BaseFilterController
     }
 
     /**
+     * Function to change document date (ajax-editable)
+     *
+     * @return mixed[]
+     */
+    public function documentDateAction() {
+        $pk = $this->get('request')->request->get('pk');
+        //$name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        $object = $this->getDoctrine()
+            ->getRepository('ListsDocumentBundle:Documents')
+            ->find($pk);
+        $value = new \DateTime($value);
+        $object->setDatetime($value);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+        $em->flush();
+
+        $return = array();
+
+        return new Response(json_encode($return));
+    }
+    /**
      * Function to handle the ajax queries from editable elements
      *
      * @return mixed[]
@@ -3997,5 +4673,107 @@ class AjaxController extends BaseFilterController
         }
 
         return new Response(json_encode($result));
+    }
+
+    /**
+     * Saves object to db
+     *
+     * @param int $organizationId
+     * @param int $serviceId
+     *
+     * @return mixed[]
+     */
+    public function organizationServiceCoverSaveAction($organizationId, $serviceId)
+    {
+        $translator = $this->get('translator');
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        $methodSet = 'set' . ucfirst($name);
+
+        // Get data by $organization && $serviceId
+
+        if ($pk) {
+            /** @var OrganizationServiceCover $object */
+            $object = $this->getDoctrine()
+                ->getRepository('ListsOrganizationBundle:OrganizationServiceCover')
+                ->find($pk);
+        } else {
+            $object = $this->getDoctrine()
+                ->getRepository('ListsOrganizationBundle:OrganizationServiceCover')
+                ->findOneBy(array(
+                    'organizationId' => $organizationId,
+                    'serviceId' => $serviceId
+                ));
+        }
+
+        if (!$object) {
+            /** @var OrganizationRepository $or */
+            $or = $this->container->get('organization.repository');
+            /** @var HandlingServiceRepository $hr */
+            $hsr = $this->container->get('handling.service.repository');
+
+            /** @var Organization $organization */
+            $organization = $or->find($organizationId);
+            /** @var HandlingService $handlingService */
+            $handlingService = $hsr->find($serviceId);
+
+            $object = new OrganizationServiceCover();
+            $object->setOrganization($organization);
+            $object->setService($handlingService);
+            /*$object->setIsInterested(false);
+            $object->setIsWorking(false);*/
+            $object->setCreator($this->getUser());
+
+            if ($name == 'competitorId' && $value) {
+                /** @var Organization $competitor */
+                $competitor = $or->find($value);
+                $object->setCompetitor($competitor);
+            }
+        }
+
+        if (!$value) {
+            $methodGet = 'get' . ucfirst($name);
+            $type = gettype($object->$methodGet());
+
+            if (in_array($type, array('integer'))) {
+                $value = null;
+            }
+        }
+
+        $object->$methodSet($value);
+
+        $validator = $this->get('validator');
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
+        $errors = $validator->validate($object, array('edit'));
+
+        if (sizeof($errors)) {
+            $return = $this->getFirstError($errors);
+
+            return new Response($return, 406);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+
+        try {
+            $em->flush();
+
+            $em->refresh($object);
+        } catch (\ErrorException $e) {
+            $return = array('msg' => $translator->trans('Wrong input data'));
+
+            return new Response(json_encode($return));
+        }
+
+        $return = array(
+            'success' => 1,
+            'id' =>  $object->getId()
+        );
+
+        return new Response(json_encode($return));
     }
 }

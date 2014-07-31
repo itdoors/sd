@@ -1,6 +1,6 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'ListsOrganizationBundle' %}
-{% block title %}{% trans %}List of Organizations{% endtrans %} {% endblock %}
+{% block title %}{% trans %}List of contractors{% endtrans %} {% endblock %}
 {% block page_breadcrumbs %}
     <ul class="page-breadcrumb breadcrumb">
         <li>
@@ -8,12 +8,12 @@
             <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
             <i class="fa fa-angle-right"></i>
         </li>
-        <li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_index') }}" title="{% trans %}My Organizations{% endtrans %}">{% trans %}My Organizations{% endtrans %}</a></li>
+        <li><a href="" title="{% trans %}Contractors{% endtrans %}">{% trans %}Contractors{% endtrans %}</a></li>
     </ul>
 {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
-        {% trans %}Organization <small>list of organization</small>{% endtrans %}
+        {% trans %}Contractor <small>list of contractors</small>{% endtrans %}
     </h3>
 {% endblock %}
 
@@ -30,21 +30,20 @@
 
 {% block body %}
 
-    {{ ajax_filter_render(filter, namespase, {
+    {{  ajax_filter_render(filter, namespase, {
         'datatable_ajax': 'ITDoorsAjax.updateList'
     }) }}
-
     <div class="table-toolbar">
         <div class="btn-group">
-            <a class="btn green" id="add_organization" href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_new') }}">
-                {% trans %}Add New organization{% endtrans %} <i class="fa fa-plus"></i>
+            <a class="btn green" id="add_organization" href="{{ path('lists_' ~ baseRoutePrefix ~ '_new') }}">
+                {% trans %}Add contractor{% endtrans %} <i class="fa fa-plus"></i>
             </a>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div id="datatable_ajax"  data-url="{{ url('lists_' ~ baseRoutePrefix ~ '_organization_index_list') }}">
-                {{ render(controller('ListsOrganizationBundle:' ~ baseTemplate ~ ':list')) }}
+            <div id="datatable_ajax"  data-url="{{ url('lists_' ~ baseRoutePrefix ~ '_index_list') }}">
+                {{ render(controller('ListsOrganizationBundle:Contractor:list')) }}
             </div>
         </div>
     </div>

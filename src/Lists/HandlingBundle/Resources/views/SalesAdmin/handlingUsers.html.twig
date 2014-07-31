@@ -5,30 +5,18 @@
         <th>{% trans %}FirstName, LastName{% endtrans %}</th>
         <th>{% trans %}Mobile{% endtrans %}</th>
         <th>{% trans %}Email{% endtrans %}</th>
-        <th>{% trans %}Action{% endtrans %}</th> {# Поле для действий #}
+        <th>{% trans %}Role{% endtrans %}</th>
+        <th>{% trans %}Percentage of participation{% endtrans %}</th>
     </tr>
     </thead>
     <tbody>
     {% for item in handlingUsers %}
         <tr>
-            <td>{{ item.fullName }}</td>
-            <td>
-                {% if item.stuff %}
-                    {{ item.stuff.mobilephone }}
-                {% endif %}
-            </td>
-            <td>
-                {{ item.email }}
-            </td>
-            <td>
-                <a
-                    class="ajax-delete"
-                    href="javascript:;"
-                    data-params='{"model":"HandlingUser","handlingId":{{ handlingId }},"userId":{{ item.id }}}'
-                >
-                    {% trans %}Delete{% endtrans %}
-                </a>
-            </td>
+            <td>{{ item.firstName }} {{ item.lastName }}</td>
+            <td> {{ item.mobilephone }}</td>
+            <td>{{ item.email }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.part }}</td>
         </tr>
     {% endfor %}
     </tbody>

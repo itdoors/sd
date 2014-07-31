@@ -1,0 +1,53 @@
+Lists\OrganizationBundle\Entity\OrganizationUser:
+    type: entity
+    table: organization_user
+    repositoryClass: Lists\OrganizationBundle\Entity\OrganizationUserRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        organizationId:
+            type: integer
+            nullable: false
+            column: organization_id
+        userId:
+            type: integer
+            nullable: false
+            column: user_id
+        lookupId:
+            type: integer
+            nullable: false
+            column: lookup_id
+    manyToOne:
+        lookup:
+            targetEntity: Lists\LookupBundle\Entity\Lookup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                lookup_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        organization:
+            targetEntity: Organization
+            cascade: {  }
+            mappedBy: null
+            inversedBy: organizationUsers
+            joinColumns:
+                organization_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: organizationUsers
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks:
+            prePersist: [ doOnPrePersist ]

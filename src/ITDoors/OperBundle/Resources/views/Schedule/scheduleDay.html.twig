@@ -1,5 +1,8 @@
 {% trans_default_domain 'ITDoorsOperBundle' %}
 <script type="text/javascript" src="{{ asset('bundles/itdoorsoper/js/multiDatePicker/bootstrap-datepicker.js')}} "></script>
+<script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.js') }}"></script>
+<link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.css')}}" />
+
 <script>
     $(document).ready(function(){
         function updateTableCell(hrefId) {
@@ -309,12 +312,14 @@
                         var tempHtml = $('#tbody_content').html();
                         parent.next().remove();
                         parent.replaceWith(data.html)
+/*
                         $('.timepiker-cool').timepicker({
                             autoclose: true,
                             minuteStep: 5,
                             showSeconds: false,
                             showMeridian: false
                         });
+*/
                         updateTableCell(false)
 /*
                         editButton.removeClass('notDisplayed');
@@ -489,12 +494,14 @@
                         //alert(data.html)
                         var tempHtml = $('#tbody_content').html();
                         $('#tbody_content').html(data.html+tempHtml);
+/*
                         $('.timepiker-cool').timepicker({
                             autoclose: true,
                             minuteStep: 5,
                             showSeconds: false,
                             showMeridian: false
                         });
+*/
                         hideAddButton()
 
                         updateTableCell(false)
@@ -755,6 +762,11 @@
                 {% trans %}Vacation{% endtrans %} (в)
             </a>
         </li>
+        <li>
+            <a href="#" class="statusButton" data-status="ownVacation" data-message="{% trans %}Own vacation{% endtrans %}">
+                {% trans %}Own vacation{% endtrans %} (на)
+            </a>
+        </li>
         <li class="divider">
         </li>
         <li>
@@ -910,9 +922,12 @@
               data-sick="{% trans %}Sick{% endtrans %} (тн)"
               data-fired="{% trans %}Fired{% endtrans %} (ув)"
               data-skip="{% trans %}Skip{% endtrans %} (пр)"
-              date-vacation="{% trans %}Vacation{% endtrans %} (в)">
+              date-vacation="{% trans %}Vacation{% endtrans %} (в)"
+              date-own_vacation="{% trans %}Own vacation{% endtrans %} (на)">
             {% if status == 'vacation' %}
                 {% trans %}Vacation{% endtrans %}
+            {% elseif status == 'ownVacation' %}
+                {% trans %}Own vacation{% endtrans %}
             {% elseif status == 'sick' %}
                 {% trans %}Sick{% endtrans %}
             {% elseif status == 'skip' %}

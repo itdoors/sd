@@ -146,3 +146,62 @@ Select lookup: Выберите вид
 
 Organization with edrpou: Организация с ЕДРПОУ
 already exists: уже существует
+
+Transfer organizations: Перенос организаций
+Select user: Выберите пользователя
+Enter user: Введите пользователя
+Select user for set organizarions: Выберите пользователя для просмотра его организаций
+Transfer: Перенести
+already exists: уже существует
+
+Role: Роль
+Enter share: Введите процент участия
+Percentage of participation: Процент участия
+
+This user is already a manager: Этот пользователь уже является менеджером
+
+Change part: Процент участия
+Dogovors: Договора
+serviceName: Услуга
+Is interested: Заинтересованы
+Is working: Работаем
+Evaluation: Оценка
+Competitor: Конкурент
+End date: Дата окончания
+Responsible: Ответственный
+Description: Примечание
+Actions: Действия
+Add service cover: Добавить
+Service cant be empty: Заполните поле "Услуга"
+Enter Description: Примечание
+Enter Responsible: Ответственный
+Enter Competitor: Конкурент
+Enter End Date: Дата окончания
+Enter Is interested: Заинтересованы?
+Enter Is working: Работаем?
+Evaluation: Оценка
+Enter Service: Услуга
+Service cover: Покрытие услугами
+Contractors: Подрядчики
+Contractor <small>list of contractors</small>: Подрядчики <small>список подрядчиков</small>
+List of contractors: Список подрядчиков
+Add contractor: Добавить подрядчика
+Create contractor: Создание подрядчика
+Contractor <small>create contractor</small>: Подрядчики <small>create подрядчика</small>
+COEA: КВЭД
+Type: Тип
+Date: Дата
+File: Файл
+Add document: Добавить документ
+See document: Просмотерть документ
+Upload new document: Загрузить новый документ
+Enter type: Введите тип
+Upload a new document? The old document will be removed.: Загрузить новый документ? Старый будет удален.
+Add scope: Добавить деятельность
+Add kved: Добавить КВЭД
+Add: Добавить
+Code: Код
+Contractor: Подрядчик
+Show contractor: Просмотр подрядчика
+Documents: Документы
+Date created: Дата создания

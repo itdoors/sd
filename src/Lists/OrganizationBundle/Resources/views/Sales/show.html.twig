@@ -37,17 +37,19 @@
 {% endblock %}
 
 {% block body %}
-
-	<div class="row">
-		<div class="col-md-12">
-			<div class="tabbable tabbable-custom boxless">
-				<ul class="nav nav-tabs">
-					<li class="active"><a href="#tab_0" data-toggle="tab">{% trans %}Organization{% endtrans %}</a></li>
-					<li><a href="#tab_1" data-toggle="tab">{% trans %}Managers{% endtrans %}</a></li>
-					<li><a href="#tab_2" data-toggle="tab">{% trans %}Contacts{% endtrans %}</a></li>
-					<li><a href="#tab_3" data-toggle="tab">{% trans %}Contracts{% endtrans %}</a></li>
-				</ul>
-				<div class="tab-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tabbable tabbable-custom boxless">
+                <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab_0" data-toggle="tab">{% trans %}Organization{% endtrans %}</a></li>
+                        <li><a href="#tab_1" data-toggle="tab">{% trans %}Managers{% endtrans %}</a></li>
+                        <li><a href="#tab_2" data-toggle="tab">{% trans %}Contacts{% endtrans %}</a></li>
+                        <li><a href="#tab_3" data-toggle="tab">{% trans %}Contracts{% endtrans %}</a></li>
+                        <li><a href="#tab_4" data-toggle="tab">{% trans %}Dogovors{% endtrans %}</a></li>
+                        <li><a href="#tab_5" data-toggle="tab">{% trans %}Projects{% endtrans %}</a></li>
+                        <li><a href="#tab_6" data-toggle="tab">{% trans %}Service cover{% endtrans %}</a></li>
+                </ul>
+                <div class="tab-content">
                     <div class="tab-pane active" id="tab_0">
                         {{  include(
                             'ListsOrganizationBundle:' ~ baseTemplate ~ ':edit.html.twig',
@@ -77,16 +79,25 @@
                             }
                         )
                     }}
-					<!--tabpane-->
-					<div class="tab-pane" id="tab_3">
-					</div>
-					<!--tabpane-->
-				</div>
-				<!--tab-content-->
-			</div>
-			<!--tabbale-->
-		</div>
-	</div>
-	<!--row-->
-
+                    <!--tabpane-->
+                    <div class="tab-pane" id="tab_3"></div>
+                    <div class="tab-pane" id="tab_4">
+                        {{ render(controller('ListsDogovorBundle:Dogovor:forOrganization', { id:organization.id })) }}
+                    </div>
+                    <div class="tab-pane" id="tab_5">
+                        {{ render(controller('ListsHandlingBundle:Sales:forOrganization', { id:organization.id })) }}
+                    </div>
+                    <!--tabpane-->
+                    <div class="tab-pane" id="tab_6">
+                        {{ render(controller('ListsOrganizationBundle:ServiceCover:Index', {
+                            organizationId: organization.id
+                        })) }}
+                    </div>
+                    <!--tabpane-->
+                </div>
+                <!--tab-content-->
+            </div>
+            <!--tabbale-->
+        </div>
+    </div>
 {% endblock body %}

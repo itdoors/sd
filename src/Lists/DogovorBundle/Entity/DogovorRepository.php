@@ -86,8 +86,11 @@ class DogovorRepository extends EntityRepository
             ->addSelect('d.prolongationDate as dogovorProlongationDate')
             ->addSelect('d.prolongation as dogovorProlongation')
             ->addSelect('o.name as organizationName')
+            ->addSelect('o.id as organizationId')
             ->addSelect('customer.name as customerName')
+            ->addSelect('customer.id as customerId')
             ->addSelect('performer.name as performerName')
+            ->addSelect('performer.id as performerId')
             ->addSelect('d.isActive as dogovorIsActive')
             ->addSelect('d.subject as dogovorSubject')
             ->addSelect('type.name as dogovorType');
@@ -209,6 +212,11 @@ class DogovorRepository extends EntityRepository
                                 ->setParameter(':datestart', $dateStart)
                                 ->setParameter(':datestop', $dateStop);
                         break;
+                    case 'subject':
+                            $sql
+                                ->andWhere("d.subject LIKE :subject")
+                                ->setParameter(':subject', "{$value}%");
+                        break;
 
                 }
             }
@@ -226,6 +234,7 @@ class DogovorRepository extends EntityRepository
     {
         return $this->createQueryBuilder('d')
             ->select('d.id as id')
+            ->addSelect('d.createDateTime')
             ->addSelect('d.number as number')
             ->addSelect('d.subject as subject')
             ->addSelect('d.filepath as filepath')
@@ -245,11 +254,15 @@ class DogovorRepository extends EntityRepository
             ->addSelect("CONCAT(CONCAT(saller.lastName, ' '), saller.firstName) as sallerName")
             ->addSelect('organization.name as organizationName')
             ->addSelect('city.name as cityName')
+            ->addSelect('creator.firstName as creatorFirstName')
+            ->addSelect('creator.lastName as creatorLastName')
+            ->addSelect('creator.middleName as creatorMiddleName')
             ->leftJoin('d.saller', 'saller')
             ->leftJoin('d.customer', 'customer')
             ->leftJoin('d.performer', 'performer')
             ->leftJoin('d.organization', 'organization')
             ->leftJoin('d.city', 'city')
+            ->leftJoin('d.user', 'creator')
             ->leftJoin('d.dogovorType', 'dogovorType')
             ->where('d.id = :id')
             ->setParameter(':id', $id)
@@ -294,5 +307,85 @@ class DogovorRepository extends EntityRepository
             'm_local' => $this->translator->trans("Local", array(), 'ListsDogovorBundle'),
             'm_global' => $this->translator->trans("Global", array(), 'ListsDogovorBundle')
         );
+    }
+
+    /**
+     * Return dogovor show info by id
+     *
+     * @param integer $id Organization.id
+     *
+     * @return mixed[]
+     */
+    public function getDogovorByOrganizationId($id)
+    {
+        /** @var \Doctrine\ORM\QueryBuilder $sql*/
+        $sql = $this->createQueryBuilder('d');
+
+        $this->processSelect($sql);
+
+        $this->processBaseQuery($sql);
+
+        $this->processOrdering($sql);
+
+        $query = $sql->where('d.organizationId = :organizationId')
+            ->setParameter(':organizationId', $id)
+            ->getQuery()->getResult();
+
+        return $query;
+    }
+    /**
+     * Return dogovor show info by id
+     *
+     * @param integer $id Organization.id
+     *
+     * @return mixed[]
+     */
+    public function getDogovorsForContractorId($id)
+    {
+        /** @var \Doctrine\ORM\QueryBuilder $sql*/
+        $sql = $this->createQueryBuilder('d')
+                ->select('d.id')
+                ->addSelect('u.firstName')
+                ->addSelect('u.lastName')
+                ->addSelect('u.middleName')
+                ->addSelect('d.createDateTime')
+                ->addSelect('d.filepath')
+                ->addSelect('dogovorType.name as type')
+                ->leftJoin('d.user', 'u')
+                ->leftJoin('d.dogovorType', 'dogovorType')
+                ->where('d.organizationId = :organizationId')
+                ->setParameter(':organizationId', $id)
+                ->getQuery()
+                ->getResult();
+
+        return $sql;
+    }
+
+    /**
+     * Return dogovor show info by id
+     *
+     * @param integer $id Organization.id
+     *
+     * @return mixed[]
+     */
+    public function getDogovorByOrganizationCustomerPerformerId($id)
+    {
+        /** @var \Doctrine\ORM\QueryBuilder $sql*/
+        $sql = $this->createQueryBuilder('d');
+
+        $this->processSelect($sql);
+
+        $this->processBaseQuery($sql);
+
+        $this->processOrdering($sql);
+
+        $sql
+            ->where('d.organizationId = :oId or d.customerId = :oId or d.performerId = :oId')
+            ->setParameter(':oId', $id);
+
+        $query = $sql
+            ->getQuery()->getResult();
+
+        return $query;
     }
 }

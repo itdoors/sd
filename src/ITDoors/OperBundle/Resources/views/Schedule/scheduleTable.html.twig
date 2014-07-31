@@ -1,4 +1,5 @@
 {% trans_default_domain 'ITDoorsOperBundle' %}
+
 <div id="form_modal_copy" class="modal fade" role="basic" aria-hidden="true">
     <div class="modal-dialog" style="width: 350px;">
         <div class="modal-content">
@@ -35,7 +36,7 @@
         <!-- /.modal-content -->
     </div>
 </div>
-
+{% if not departmentIsArray %}
 <div id="form_modal_add" class="modal fade" role="basic" aria-hidden="true">
     <div class="modal-dialog" style="">
         <div class="modal-content">
@@ -104,6 +105,7 @@
         <!-- /.modal-content -->
     </div>
 </div>
+{% endif %}
 
 <div id="form_modal_info_user" class="modal fade" role="basic" aria-hidden="true">
     <div class="modal-dialog" style="">
@@ -116,7 +118,7 @@
                 <div id="infoUserTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
                 </div>
                 <br>
-                {% if canEdit %}
+                {% if canEdit and not departmentIsArray %}
                 <a class="btn red left_float" id="delete_user_button">{% trans %}Delete{% endtrans %}</a>
                 {% endif %}
                 <a class="btn green right_float" data-dismiss="modal" aria-hidden="true">{% trans %}Exit{% endtrans %}</a>
@@ -140,7 +142,12 @@
 <script src="{{ asset('/bundles/itdoorsoper/js/multiDatepicker/jquery-ui.multidatespicker.js')}}"></script>
 #}
 
-<div id ="schedule_content" data-url="{{ path('it_doors_oper_schedule_table', {'id': idDepartment}) }}" >
+<div id ="schedule_content"
+     {% if not departmentIsArray %}
+         data-url="{{ path('it_doors_oper_schedule_table', {'id': idDepartment}) }}"
+     {% else  %}
+         data-url="{{ path('it_doors_oper_schedule_table', {'id': 0}) }}"
+     {% endif %}>
 
     <script>
 
@@ -213,6 +220,132 @@
                 })
             }
 
+        $('#copy_etalon').die('click');
+        $('#copy_etalon').live('click', function(e) {
+            $('.alert').hide();
+            e.preventDefault();
+            var checkboxes = $('.checkbox_copy');
+            var atLeastOneChecked = false;
+            var counter = 0;
+            for (var i=0; i<checkboxes.length; i++) {
+                if (checkboxes[i].checked) {
+                    counter++;
+                    if(counter == 2) {
+                        atLeastOneChecked = true;
+                        break;
+                    }
+                }
+            }
+
+            if (counter<2) {
+                alert('Выберите хотя бы двух сотрудников')
+            } else {
+                var idCoworkers = new Array();
+                var fioCoworkers = new Array();
+                var idReplacements = new Array();
+                var idDepartments = new Array();
+                var counter = 0;
+                for (var i=0; i<checkboxes.length; i++) {
+                    if (checkboxes[i].checked) {
+                        idCoworkers[counter] = checkboxes[i].value;
+                        fioCoworkers[counter] = $('#fio_'+checkboxes[i].value).html();
+                        idReplacements[counter] = $(checkboxes[i]).data('id_replacement')
+                        idDepartments[counter] = $(checkboxes[i]).data('id_department')
+                        counter++;
+                    }
+                }
+                //alert(idReplacements)
+                showModalCopy(idCoworkers, fioCoworkers, idReplacements, idDepartments);
+            }
+
+        })
+
+        function showModalCopy(idCoworkers, fioCoworkers, idReplacements, idDepartments) {
+            $('#select_copy_etalon').html('');
+            for (var i=0; i<idCoworkers.length; i++) {
+                $('#select_copy_etalon').append('<option value="'+idCoworkers[i]+'" data-id_replacement="'+idReplacements[i]+'" data-id_department="'+idDepartments[i]+'">'+fioCoworkers[i]+'</option>');
+            }
+            $('#select_copy_etalon').select2();
+
+            $('#form_modal_copy').modal('show');
+        }
+
+        $('#submit_copy_etalon').die('click');
+        $('#submit_copy_etalon').live('click', function(e) {
+            $('.alert').hide( 'blind', {}, 500 );
+            var options = $('#select_copy_etalon').find("option");
+            var selectedCoworker;
+            var idDepartmentSelected;
+            var idReplacementSelected;
+            var ids = new Array();
+            var idsReplacement = new Array();
+            var idsDepartment = new Array();
+            var counter = 0;
+            var info = new Array();
+            for (var i=0; i<options.length; i++) {
+                if (options[i].selected) {
+                    selectedCoworker = options[i].value;
+                    idDepartmentSelected = $(options[i]).data('id_department');
+                    idReplacementSelected = $(options[i]).data('id_replacement');
+                }else {
+                    ids[counter] = options[i].value;
+                    idsReplacement[counter] = $(options[i]).data('id_replacement');
+                    idsDepartment[counter] = $(options[i]).data('id_department');
+                    counter++;
+                }
+            }
+
+            var url = $('#info_input').data('url_copy_etalon');
+            //var idDepartment = $('#info_input').data('id_department');
+            var date = $('#info_input').data('date');
+            var sendData = {
+                'ids': ids,
+                'selected': selectedCoworker,
+                'date': date,
+                'idsDepartment': idsDepartment,
+                'idsReplacement': idsReplacement,
+                'idDepartmentSelected': idDepartmentSelected,
+                'idReplacementSelected': idReplacementSelected
+            };
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data) {
+                    //alert(data);
+
+                    data = JSON.parse(data);
+                    if (data.errors == 1) {
+                        var message = '';
+                        for (var i=0; i<data.errorName.length; i++) {
+                            message += data.errorName[i] + '; ';
+                        }
+                        $('#copy_etalon_people_error').html(message);
+                        $('#copy_etalon_error').show('blind', {}, 500);
+                    } else {
+                        $('#copy_etalon_finished').show('blind', {}, 500);
+                    }
+
+                    for (var j=0; j<ids.length; j++) {
+                        for (var i=1; i<=31; i++) {
+                            var hrefId = 'link'+i+ids[j]+idsReplacement[j]+'';
+
+                            if($("#" + hrefId).length) {
+                                updateTableCell(hrefId);
+                            }
+                        }
+
+                    }
+
+
+                }
+
+            })
+
+        })
+
+        {% if not departmentIsArray %}
+
             $('#delete_selected_coworkers_button').die('click');
             $('#delete_selected_coworkers_button').live('click', function(e) {
                 var checkboxes = $('.checkbox_copy');
@@ -237,8 +370,12 @@
                         var error = false;
                         for (var i=0; i<checkboxes.length; i++) {
                             if (checkboxes[i].checked) {
+
                                 var idCoworker = checkboxes[i].value;
-                                var idReplacement = $(checkboxes[i]).data('id_replacement')
+                                var idReplacement = $(checkboxes[i]).data('id_replacement');
+                                var replacementType = $(checkboxes[i]).data('replacement_type');
+                                console.log(replacementType);
+                                var idDepartment =  $('#info_input').data('id_department');
 
                                 var url = $('#info_input').data('url_delete_users');
                                 var date = $('#info_input').data('date');
@@ -246,7 +383,8 @@
                                 var sendData = {
                                     'idCoworker': idCoworker,
                                     'idReplacement': idReplacement,
-                                    //'idDepartment': idDepartment,
+                                    'idDepartment': idDepartment,
+                                    'replacementType': replacementType,
                                     'date': date
                                 }
 
@@ -279,119 +417,7 @@
                 }
             });
 
-            $('#copy_etalon').die('click');
-            $('#copy_etalon').live('click', function(e) {
-                $('.alert').hide();
-                e.preventDefault();
-                var checkboxes = $('.checkbox_copy');
-                var atLeastOneChecked = false;
-                var counter = 0;
-                for (var i=0; i<checkboxes.length; i++) {
-                    if (checkboxes[i].checked) {
-                        counter++;
-                        if(counter == 2) {
-                            atLeastOneChecked = true;
-                            break;
-                        }
-                    }
-                }
 
-                if (counter<2) {
-                    alert('Выберите хотя бы двух сотрудников')
-                } else {
-                    var idCoworkers = new Array();
-                    var fioCoworkers = new Array();
-                    var idReplacements = new Array();
-                    var counter = 0;
-                    for (var i=0; i<checkboxes.length; i++) {
-                        if (checkboxes[i].checked) {
-                            idCoworkers[counter] = checkboxes[i].value;
-                            fioCoworkers[counter] = $('#fio_'+checkboxes[i].value).html();
-                            idReplacements[counter] = $(checkboxes[i]).data('id_replacement')
-                            counter++;
-                        }
-                    }
-                    //alert(idReplacements)
-                    showModalCopy(idCoworkers, fioCoworkers,idReplacements);
-                }
-
-            })
-
-            function showModalCopy(idCoworkers, fioCoworkers, idReplacements) {
-                $('#select_copy_etalon').html('');
-                for (var i=0; i<idCoworkers.length; i++) {
-                    $('#select_copy_etalon').append('<option value="'+idCoworkers[i]+'" data-id_replacement="'+idReplacements[i]+'">'+fioCoworkers[i]+'</option>');
-                }
-                $('#select_copy_etalon').select2();
-
-                $('#form_modal_copy').modal('show');
-            }
-
-            $('#submit_copy_etalon').die('click');
-            $('#submit_copy_etalon').live('click', function(e) {
-                $('.alert').hide( 'blind', {}, 500 );
-                var options = $('#select_copy_etalon').find("option");
-                var selectedCoworker = '';
-                var ids = new Array();
-                var idsReplacement = new Array();
-                var counter = 0;
-                var info = new Array();
-                for (var i=0; i<options.length; i++) {
-                    if (options[i].selected) {
-                        selectedCoworker = options[i].value;
-                    }else {
-                        ids[counter] = options[i].value;
-                        idsReplacement[counter] = $(options[i]).data('id_replacement');
-                        counter++;
-                    }
-                }
-
-                var url = $('#info_input').data('url_copy_etalon');
-                var idDepartment = $('#info_input').data('id_department');
-                var date = $('#info_input').data('date');
-                var sendData = {
-                    'ids': ids,
-                    'selected': selectedCoworker,
-                    'date': date,
-                    'idDepartment': idDepartment,
-                    'idsReplacement': idsReplacement
-                };
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: sendData,
-                    success: function(data) {
-                        //alert(data);
-
-                        data = JSON.parse(data);
-                        if (data.errors == 1) {
-                            var message = '';
-                            for (var i=0; i<data.errorName.length; i++) {
-                                message += data.errorName[i] + '; ';
-                            }
-                            $('#copy_etalon_people_error').html(message);
-                            $('#copy_etalon_error').show('blind', {}, 500);
-                        } else {
-                            $('#copy_etalon_finished').show('blind', {}, 500);
-                        }
-
-                        for (var j=0; j<ids.length; j++) {
-                            for (var i=1; i<=31; i++) {
-                                var hrefId = 'link'+i+ids[j]+idsReplacement[j]+'';
-
-                                if($("#" + hrefId).length) {
-                                    updateTableCell(hrefId);
-                                }
-                            }
-
-                        }
-
-
-                    }
-
-                })
-
-            })
 
             $('#add_coworker_button').die('click');
             $('#add_coworker_button').live('click', function(e) {
@@ -519,7 +545,8 @@
                     }
 
                 })
-            })
+            });
+        {% endif %}
         })
     </script>
     <div class="row">
@@ -589,6 +616,8 @@
         <div class="col-md-5">
             {% if canEdit %}
                 <a class="btn green" style="margin-bottom: 10px;" id="copy_etalon">Скопировать из выбранных</a>
+            {% endif %}
+            {% if canEdit and not departmentIsArray %}
                 <a class="btn blue" style="margin-bottom: 10px;" id="add_coworker_button">{% trans %}Add coworker{% endtrans %}</a>
 
                 <a class="btn green" style="margin-bottom: 10px;"
@@ -611,9 +640,18 @@
             <tr style="background-color: #ffffff">
                 <th>{#{% trans %}Copy{% endtrans %}#}</th>
                 <th>#</th>
-                <th>{% trans %}Fio{% endtrans %}</th>
+                <th>{% trans %}Fio{% endtrans %}
+                    {{ ajax_ordering('lastName', ajax_namespace_oper_department_schedule, {
+                    'schedule_content': 'ITDoorsAjax.updateList'
+                    }) }}
+                </th>
                 <th>{% trans %}P/z{% endtrans %}</th>
-                <th>{% trans %}Mpk{% endtrans %}</th>
+                <th>
+                    {% trans %}Mpk{% endtrans %}
+                    {{ ajax_ordering('mpk', ajax_namespace_oper_department_schedule, {
+                    'schedule_content': 'ITDoorsAjax.updateList'
+                    }) }}
+                </th>
                 {% for dayInfo in dateInfo %}
                     <th>
                         {{ dayInfo.day }}
@@ -639,14 +677,15 @@
                 {% set counter = counter + 1 %}
                 {% set idCoworker = coworker.id %}
                 {% set idReplacement = coworker.replacementId %}
+                {% set replacementType = coworker.replacementType %}
                 <tr id="row{{ idCoworker }}{{ idReplacement }}">
-                    <td><input class="checkbox_copy" type="checkbox" value="{{ idCoworker }}" data-id_replacement="{{ idReplacement }}"></td>
+                    <td><input class="checkbox_copy" type="checkbox" value="{{ idCoworker }}" data-id_replacement="{{ idReplacement }}" data-replacement_type="{{ replacementType }}" data-id_department="{{ coworker.idDepartment }}" ></td>
                     <td>
                         {{ counter }}
                     </td>
                     <td id="fio_{{ idCoworker }}">
                         <a class="fio"
-                           data-params='{"idCoworker": {{ idCoworker }}, "idDepartment":{{ idDepartment }}, "idLink": "fio_{{ idCoworker }}", "idReplacement": {{ idReplacement }} }'
+                           data-params='{"idCoworker": {{ idCoworker }}, "idDepartment":{{ coworker.idDepartment }}, "idLink": "fio_{{ idCoworker }}", "idReplacement": {{ idReplacement }}, "replacementType": "{{ replacementType }}" }'
                            >
                             {{ coworker.lastName }} {{ coworker.firstName }} {{ coworker.middleName }}
                         </a>
@@ -673,7 +712,7 @@
                             data-toggle="modal"
                             href="#form_modal_more_info"
                             data-target_holder="moreInfoTpl"
-                            data-params='{"date":"{{ dayInfo.date }}", "idCoworker": {{ idCoworker }}, "idDepartment":{{ idDepartment }}, "idLink": "link{{ day }}{{ idCoworker }}{{ coworker.replacementId }}", "idReplacement": {{ coworker.replacementId }}}'
+                            data-params='{"date":"{{ dayInfo.date }}", "idCoworker": {{ idCoworker }}, "idDepartment":{{ coworker.idDepartment }}, "idLink": "link{{ day }}{{ idCoworker }}{{ coworker.replacementId }}", "idReplacement": {{ coworker.replacementId }}}'
 
                             data-url-more-info="{{ url('it_doors_oper_schedule_day_info') }}"
                                 >
@@ -719,7 +758,8 @@
                             'salaryNotOfficially': infoHours[idCoworker~'-'~idReplacement]['salaryNotOfficially'],
                             'totalSalary': infoHours[idCoworker~'-'~idReplacement]['totalSalary'],
                             'idMonthInfo': infoHours[idCoworker~'-'~idReplacement]['idMonthInfo'],
-                            'canEdit': canEdit
+                            'canEdit': canEdit,
+                            'idDepartment': coworker.idDepartment
                     }) }}
 
                 </tr>
@@ -758,7 +798,9 @@
        data-url_reload_href="{{ path('it_doors_oper_schedule_one_day_total') }}"
        data-url_copy_etalon="{{ path('it_doors_oper_schedule_copy_by_etalon') }}"
        data-url_add_user="{{ path('it_doors_oper_schedule_add_user') }}"
+       {% if not departmentIsArray %}
        data-id_department="{{ idDepartment }}"
+       {% endif %}
        data-date = "{{ year }}-{{ month }}"
        data-url_copy_to_next_month = "{{ path('it_doors_oper_copy_to_next_month') }}"
        data-url_user_info="{{ path('it_doors_oper_schedule_show_user_basic_table') }}"

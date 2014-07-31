@@ -81,6 +81,7 @@ class AccessService
                     $idDepartmentsAllowed[] = $departmentAllowed->getId();
                 }
             }
+            $idDepartmentsAllowed = array_unique($idDepartmentsAllowed);
 
             return $idDepartmentsAllowed;
         } else {
@@ -109,4 +110,15 @@ class AccessService
 
         return false;
     }
+
+    /**
+     * @return bool
+     */
+    public function checkIfCanEdit()
+    {
+        $canEdit  =  !$this->container->get('security.context')->getToken()->getUser()->hasRole('ROLE_SUPERVISOR');
+
+        return $canEdit;
+    }
+
 } 

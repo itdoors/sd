@@ -5,14 +5,16 @@ namespace Lists\HandlingBundle\Controller;
 use ITDoors\CommonBundle\Services\BaseService;
 use Lists\HandlingBundle\Entity\HandlingRepository;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use ITDoors\CommonBundle\Controller\BaseFilterController as BaseController;
 use Lists\HandlingBundle\Entity\HandlingResult;
 use Lists\ContactBundle\Entity\ModelContact;
 use Lists\OrganizationBundle\Entity\Organization;
-use Lists\HandlingBundle\Entity\Handling;
+use Lists\OrganizationBundle\Entity\OrganizationUser;
+use Lists\HandlingBundle\Entity\HandlingUser;
 use Lists\HandlingBundle\Entity\HandlingMessage;
 use Lists\ContactBundle\Entity\ModelContactRepository;
+use PHPExcel_Style_Border;
+use PHPExcel_Style_Alignment;
 
 /**
  * Class SalesController
@@ -58,7 +60,19 @@ class SalesController extends BaseController
             20
         );
 
-        $canAddNew = $this->getFilterValueByKey('organization_id') ? true : false;
+        $canAddNew = $this->getFilterValueByKey('organization_id', false);
+
+        if ($canAddNew) {
+            $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_organization'));
+            $managerOrganization = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:OrganizationUser')
+            ->findOneBy(array(
+                'organizationId' => $canAddNew,
+                'lookupId' => $lookup->getId(),
+                'userId' => $this->getUser()->getId(),
+                ));
+            $canAddNew = $managerOrganization ? true : false ;
+        }
 
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':index.html.twig', array(
             'pagination' => $pagination,
@@ -77,7 +91,6 @@ class SalesController extends BaseController
      */
     public function listAction()
     {
-        // Get organization filter
         /** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
         $handlingRepository = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:Handling');
@@ -93,8 +106,6 @@ class SalesController extends BaseController
         $handlingQuery = $handlingRepository->getAllForSalesQuery($user->getId(), $filters);
 
         $pagination = $handlingQuery->getResult();
-
-        /** @var \Knp\Component\Pager\Paginator $paginator */
 
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':list.html.twig', array(
                 'pagination' => $pagination,
@@ -150,10 +161,17 @@ class SalesController extends BaseController
             $object->setUser($user);
             $object->setCreatedatetime(new \DateTime());
             $object->setOrganization($organization);
-            $object->addUser($user);
+
+            $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_project'));
+            $manager = new HandlingUser();
+            $manager->setUser($user);
+            $manager->setLookup($lookup);
+            $manager->setPart(100);
+            $manager->setHandling($object);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($object);
+            $em->persist($manager);
             $em->flush();
 
             return $this->redirect($this->generateUrl('lists_sales_handling_show', array(
@@ -274,16 +292,28 @@ class SalesController extends BaseController
      */
     public function handlingUsersAction($handlingId)
     {
-        /** @var \SD\UserBundle\Entity\UserRepository $ur*/
-        $ur = $this->container->get('sd_user.repository');
+        /** @var \Lists\HandlingBundle\Entity\HandlingUserRepository $handlingUser */
+        $handlingUser = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingUser');
 
-        $handlingUsers = $ur->getHandlingUsersQuery($handlingId)
+        $handlingUsers = $handlingUser->getHandlingUsersQuery($handlingId)
             ->getQuery()
             ->getResult();
 
+        $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_project'));
+
+        $mainManager = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingUser')
+            ->findOneBy(array(
+                'handlingId' => $handlingId,
+                'lookupId' => $lookup->getId(),
+                'userId' => $this->getUser()->getId(),
+                ));
+
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate. ':handlingUsers.html.twig', array(
                 'handlingUsers' => $handlingUsers,
-                'handlingId' => $handlingId
+                'handlingId' => $handlingId,
+                'mainManager' => $mainManager
             ));
     }
 
@@ -321,7 +351,7 @@ class SalesController extends BaseController
         $isPost = $request->getMethod() == 'POST';
 
         $initSelection = array();
-
+        $noAccess = false;
         if ($isPost) {
             $organization = array();
 
@@ -330,8 +360,50 @@ class SalesController extends BaseController
 
             $this->setWizardOrganization($organization);
 
-            if ($this->isValidWizardOrganization()) {
+            /** @var Lookup $lookup */
+            $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager_organization'));
+
+            $managerOrganization =
+                    is_numeric($organization['organizationId'])
+                    ?
+                    $this->getDoctrine()
+                    ->getRepository('ListsOrganizationBundle:OrganizationUser')
+                    ->findOneBy(array(
+                        'organizationId' => $organization['organizationId'],
+                        'lookupId' => $lookup->getId(),
+                        )
+                    )
+                    :
+                    null;
+            $organizationUser =
+                    is_numeric($organization['organizationId'])
+                    ?
+                    $this->getDoctrine()
+                    ->getRepository('ListsOrganizationBundle:OrganizationUser')
+                    ->findOneBy(array(
+                        'organizationId' => $organization['organizationId'],
+                        'userId' => $this->getUser()->getId(),
+                        )
+                    )
+                    :
+                    null;
+             /** @var Translator $translator */
+            $translator = $this->container->get('translator');
+
+            if ($this->isValidWizardOrganization() && ($organizationUser || !$managerOrganization)) {
                 return $this->redirect($this->generateUrl('lists_sales_handling_create_step2'));
+            } else if (!$organizationUser) {
+                $noAccess = $translator->trans('You can not create a project for the organization refer to', array(), 'ListsHandlingBundle');
+                if (method_exists($managerOrganization, 'getUser')) {
+                    $user = $managerOrganization->getUser();
+                    $noAccess .= ' '.$translator->trans('менеджеру организации', array(), 'ListsHandlingBundle').' '.$user->getFirstName().' '.$user->getLastName().' '.$user->getMiddleName();
+                    if (method_exists($user, 'getStaff')) {
+                        $noAccess .= ' '.$user->getStaff()->getMobilephone();
+                    }
+                    $noAccess .= ' '.$user->getEmail();
+                } else {
+                    $noAccess .= ' '.$translator->trans('администратору отдела продаж', array(), 'ListsHandlingBundle');
+                }
             }
         }
 
@@ -345,7 +417,8 @@ class SalesController extends BaseController
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate. ':step1.html.twig', array(
                 'baseTemplate' => $this->baseTemplate,
                 'baseRoutePrefix' => $this->baseRoutePrefix,
-                'initSelection' => $initSelection
+                'initSelection' => $initSelection,
+                'noAccess' => $noAccess
             ));
     }
 
@@ -407,6 +480,9 @@ class SalesController extends BaseController
 
             try {
                 if ($this->isNewWizardOrganization()) {
+                    /** @var Lookup $lookup */
+                    $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager_organization'));
+
                     $organization = new Organization();
                     $organization->setCreator($user);
                     $organization->setCreatedatetime(new \DateTime());
@@ -418,6 +494,13 @@ class SalesController extends BaseController
                     $em->flush();
 
                     $em->refresh($organization);
+
+                    $organizationUser = new OrganizationUser();
+                    $organizationUser->setLookup($lookup);
+                    $organizationUser->setOrganization($organization);
+                    $organizationUser->setUser($user);
+                    $em->persist($organizationUser);
+                    $em->flush();
 
                     $organizationId = $organization->getId();
 
@@ -448,10 +531,11 @@ class SalesController extends BaseController
                 $organizationUsers = $organization->getUsers();
 
                 $userExist = false;
-
-                foreach ($organizationUsers as $organizationUser) {
-                    if ($organizationUser->getId() == $user->getId()) {
-                        $userExist = true;
+                if (is_array($organizationUsers)) {
+                    foreach ($organizationUsers as $organizationUser) {
+                        if ($organizationUser->getId() == $user->getId()) {
+                            $userExist = true;
+                        }
                     }
                 }
 
@@ -844,5 +928,204 @@ class SalesController extends BaseController
         $handling = $session->get($this->wizardHandlingNamespace);
 
         return $handling ? $handling : null;
+    }
+
+    /**
+     * Renders organizationUsers list
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function exportExcelAction()
+    {
+         // Get organization filter
+        $filters = $this->getFilters();
+
+        /** @var HandlingRepository $handlingRepository */
+        $handlingRepository = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling');
+
+        /** @var \SD\UserBundle\Entity\User $user */
+        $user = $this->getUser();
+
+        /** @var \Doctrine\ORM\Query $handlingQuery */
+        $handlingQuery = $handlingRepository->getAllForExport($user->getId(), $filters);
+
+        $response = $this->exportToExcelAction($handlingQuery);
+
+        return $response;
+    }
+    /**
+     * Renders organizationUsers list
+     *
+      * @param array $handlings
+      * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function exportToExcelAction($handlings)
+    {
+        /** @var Translator $translator */
+        $translator = $this->container->get('translator');
+
+         // ask the service for a Excel5
+        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+
+        $phpExcelObject->getProperties()->setCreator("DebtControll")
+            ->setLastModifiedBy("Giulio De Donato")
+            ->setTitle("Handling")
+            ->setSubject("Handling")
+            ->setDescription("Handling list")
+            ->setKeywords("Handling")
+            ->setCategory("Handling");
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->setCellValue('A1', $translator->trans('Managers', array(), 'ListsHandlingBundle'))
+            ->setCellValue('B1', $translator->trans('ID', array(), 'ListsHandlingBundle'))
+            ->setCellValue('C1', $translator->trans('Name', array(), 'ListsHandlingBundle'))
+            ->setCellValue('D1', $translator->trans('Createdatetime', array(), 'ListsHandlingBundle'))
+            ->setCellValue('E1', $translator->trans('LastHandlingDate', array(), 'ListsHandlingBundle'))
+            ->setCellValue('F1', $translator->trans('City', array(), 'ListsHandlingBundle'))
+            ->setCellValue('G1', $translator->trans('Scope', array(), 'ListsHandlingBundle'))
+            ->setCellValue('H1', $translator->trans('ServiceOffered', array(), 'ListsHandlingBundle'))
+            ->setCellValue('I1', $translator->trans('Chance', array(), 'ListsHandlingBundle'))
+            ->setCellValue('J1', $translator->trans('Status', array(), 'ListsHandlingBundle'));
+        $phpExcelObject->getActiveSheet()->getRowDimension('1')->setRowHeight(40);
+        /*$linkStyleArray = [
+            'font' => [
+                'color' => ['rgb' => '0000FF'],
+                'underline' => 'single'
+            ]
+        ];*/
+
+        $linkStyleArray = array(
+            'font' => array(
+                'color' => array('rgb' => '0000FF'),
+                'underline' => 'single'
+            )
+        );
+
+       $str = 1;
+       $menager = '';
+       $columnA = '';
+       $strStartMerge = 0;
+        foreach ($handlings as $handling) {
+             ++$str;
+            $col = 0;
+
+            if ($menager != $handling['firstName'].' '.$handling['lastName'].' '.$handling['middleName']) {
+                $menager = $columnA = $handling['firstName'].' '.$handling['lastName'].' '.$handling['middleName'];
+                $strStartMerge = $str;
+            } else {
+                $columnA = '';
+            }
+            $phpExcelObject->getActiveSheet()->mergeCells('A'.$strStartMerge.':A'.$str);
+
+            $phpExcelObject->getActiveSheet()
+                    ->setCellValueByColumnAndRow($col, $str, $columnA)
+                    ->setCellValueByColumnAndRow(++$col, $str, $handling['handlingId']);
+
+//            $phpExcelObject->getActiveSheet()->getCellByColumnAndRow($col, $str)->getHyperlink()
+//                    ->setUrl('http://sd.griffin.ua/lists/salesadmin/handling/show/'.$handling['handlingId']);
+            $phpExcelObject->getActiveSheet()->getCellByColumnAndRow($col, $str)->getHyperlink()
+                    ->setUrl($this->generateUrl('lists_' . $this->baseRoutePrefix . '_handling_show', array('id' => $handling['handlingId']), true));
+
+            $phpExcelObject->getActiveSheet()
+                    ->setCellValueByColumnAndRow(++$col, $str, $handling['organizationName']);
+            if ($handling['organizationId']) {
+//            $phpExcelObject->getActiveSheet()->getCellByColumnAndRow($col, $str)->getHyperlink()
+//                    ->setUrl('http://sd.griffin.ua/lists/salesadmin/organization/show/'.$handling['organizationId']);
+            $phpExcelObject->getActiveSheet()->getCellByColumnAndRow($col, $str)->getHyperlink()
+                    ->setUrl($this->generateUrl('lists_' . $this->baseRoutePrefix . '_organization_show', array('id' => $handling['organizationId']), true));
+            }
+            $phpExcelObject->getActiveSheet()
+                    ->setCellValueByColumnAndRow(++$col, $str, !$handling['handlingCreatedate'] ? '' : $handling['handlingCreatedate']->format('d.m.y'))
+                    ->setCellValueByColumnAndRow(++$col, $str, !$handling['handlingLastHandlingDate'] ? '' : $handling['handlingLastHandlingDate']->format('d.m.y, H:i'))
+                    ->setCellValueByColumnAndRow(++$col, $str, $handling['cityName'])
+                    ->setCellValueByColumnAndRow(++$col, $str, $handling['scopeName'])
+                    ->setCellValueByColumnAndRow(++$col, $str, $handling['handlingServiceOffered'])
+                    ->setCellValueByColumnAndRow(
+                        ++$col,
+                        $str,
+                        $handling['resultPercentageString'] ? $handling['resultPercentageString'] :$handling['percentageString']
+                    )
+                ->setCellValueByColumnAndRow(++$col, $str, $handling['statusName']);
+        }
+        $phpExcelObject->getActiveSheet()->getStyle('B2:C'.$str)->applyFromArray($linkStyleArray);
+        $phpExcelObject->getActiveSheet()->getStyle('A2:J'.$str)->getAlignment()->setWrapText(true);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('A')->setWidth(13);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('B')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('E')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('F')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('G')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('H')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('I')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('J')->setWidth(12);
+
+        $styleArray = array(
+            'borders' => array(
+                'outline' => array(
+                       'style' => PHPExcel_Style_Border::BORDER_DOUBLE,
+                       'color' => array('argb' => '000000'),
+                ),
+                'inside' => array(
+                       'style' => PHPExcel_Style_Border::BORDER_THIN,
+                       'color' => array('argb' => '000000'),
+                )
+            ),
+        );
+
+        $phpExcelObject->getActiveSheet()->getStyle('A1:J'.$str)->applyFromArray($styleArray);
+
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('A2:A'.$str)
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('A1:J1')
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('A1:J1')
+            ->getAlignment()
+            ->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $phpExcelObject->getActiveSheet()
+            ->getStyle('B2:J'.$str)
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+        $phpExcelObject->getActiveSheet()->freezePane('AB2');
+
+        $phpExcelObject->getActiveSheet()->getStyle('A1:J'.$str)->getAlignment()->setWrapText(true);
+        $phpExcelObject->getActiveSheet()->setShowGridLines(false);//off line
+        $phpExcelObject->getActiveSheet()->setTitle('Handling');
+        $phpExcelObject->setActiveSheetIndex(0);
+        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Content-Disposition', 'attachment;filename=handling.xls');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+
+        return $response;
+    }
+    /**
+     * Executes list action for dashboard
+     *
+     * @param integer $id Organization.id
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function forOrganizationAction($id)
+    {
+        /** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
+        $handlingRepository = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling');
+
+        /** @var \Doctrine\ORM\Query $handlings */
+        $handlings = $handlingRepository->getForOrganization($id);
+
+        return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':forOrganization.html.twig', array(
+                'handlings' => $handlings,
+                'baseRoutePrefix' => $this->baseRoutePrefix,
+            ));
     }
 }

@@ -5,6 +5,9 @@
         SD.select2('#' + '{{ filterForm.vars.name }}' + '_organization', {
             multiple: true
         });
+        {#SD.select2('#' + '{{ filterForm.vars.name }}' + '_subject', {
+            multiple: true
+        });#}
         SD.select2('#' + '{{ filterForm.vars.name }}' + '_customer', {
             multiple: true
         });
@@ -77,14 +80,14 @@
                             'data-url-by-id': path('sd_common_ajax_organization_by_ids')
                         }}) }}
                     </div>
-                </div>
-                <div class="row">
                     <div class="form-group col-md-3">
                         {{ form_widget(filterForm.prolongation, {'attr': {
                             'class': 'form-control select2 input-middle fixer',
                             'placeholder': 'Prolongation',
                         }}) }}
                     </div>
+                     </div>
+                <div class="row" style="margin-top: 10px">
                     <div class="form-group col-md-3">
                         {{ form_widget(filterForm.dogovorType, {'attr': {
                             'class': 'form-control select2 fixer',
@@ -95,6 +98,14 @@
                         {{ form_widget(filterForm.number, {'attr': {
                             'class': 'form-control fixer',
                             'placeholder': 'Enter Number',
+                        }}) }}
+                    </div>
+                    <div class="form-group col-md-3">
+                        {#'data-url': path('sd_common_ajax_dogovor_subject'),#}
+                        {{ form_widget(filterForm.subject, {'attr': {
+                            'class': 'form-control fixer',
+                            
+                            'placeholder': 'Enter subject',
                         }}) }}
                     </div>
                     <div class="form-group col-md-3">

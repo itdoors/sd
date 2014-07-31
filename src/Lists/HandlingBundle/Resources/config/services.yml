@@ -7,6 +7,7 @@ parameters:
     lists_handling.message.form.class: Lists\HandlingBundle\Form\HandlingMessageFormType
     lists_handling.message.wizard.form.class: Lists\HandlingBundle\Form\HandlingMessageWizardForm
     lists_handling.form.user.class: Lists\HandlingBundle\Form\HandlingUserFormType
+    lists_handling.form.user.sales.admin.class: Lists\HandlingBundle\Form\HandlingUserSalesAdminFormType
     lists_handling.sales.form.report.class: Lists\HandlingBundle\Form\HandlingReportDateRangeForm
 
     lists_handling.competitor.form.class: Lists\HandlingBundle\Form\HandlingCompetitorType
@@ -20,6 +21,7 @@ parameters:
     lists_handling.message.service.class: Lists\HandlingBundle\Services\HandlingMessageService
     lists_handling.competitor.service.class: Lists\HandlingBundle\Services\HandlingCompetitorService
     lists_handling.dogovor.service.class: Lists\HandlingBundle\Services\HandlingDogovorService
+    lists_handling.user.service.class: Lists\HandlingBundle\Services\HandlingUserService
 
     lists_handling.message.type.repository.class: Lists\HandlingBundle\Entity\HandlingMessageTypeRepository
     lists_handling.message.type.repository.entity: Lists\HandlingBundle\Entity\HandlingMessageType
@@ -29,6 +31,9 @@ parameters:
 
     lists_handling.repository.class: Lists\HandlingBundle\Entity\HandlingRepository
     lists_handling.repository.entity: Lists\HandlingBundle\Entity\Handling
+
+    lists_handling.service.repository.class: Lists\HandlingBundle\Entity\HandlingServiceRepository
+    lists_handling.service.repository.entity: Lists\HandlingBundle\Entity\HandlingService
 
     lists_handling.competitor.repository.class: Lists\HandlingBundle\Entity\HandlingCompetitorRepository
     lists_handling.competitor.repository.entity: Lists\HandlingBundle\Entity\HandlingCompetitor
@@ -46,6 +51,15 @@ services:
     handling.repository:
         alias: lists_handling.repository
 
+    lists_handling.service.repository:
+        class: %lists_handling.service.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_handling.service.repository.entity% ]
+
+    handling.service.repository:
+        alias: lists_handling.service.repository
+
     lists_handling.message.service:
         class: %lists_handling.message.service.class%
         arguments: [ @service_container ]
@@ -59,6 +73,10 @@ services:
 
     lists_handling.dogovor.service:
         class: %lists_handling.dogovor.service.class%
+        arguments: [ @service_container ]
+
+    lists_handling.user.service:
+        class: %lists_handling.user.service.class%
         arguments: [ @service_container ]
 
     handling.competitor.service:
@@ -156,6 +174,12 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: handlingUserForm }
+            
+    lists_handling.form.handlingUserSalesAdminForm:
+        class: %lists_handling.form.user.sales.admin.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: handlingUserSalesAdminForm }
 
     lists_handling.form.report.date:
         class: %lists_handling.sales.form.report.class%

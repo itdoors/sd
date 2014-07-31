@@ -39,4 +39,8 @@ it_doors_controlling_invoice_email:
 it_doors_controlling_invoice_export_exel:
     pattern:  /controlling/invoice/export/exel
     defaults: { _controller: ITDoorsControllingBundle:Invoice:exportExel}
+        
+it_doors_controlling_invoice_send_email:
+    pattern:  /controlling/invoice/send/email
+    defaults: { _controller: ITDoorsControllingBundle:Invoice:sendEmailChange}
     

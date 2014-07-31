@@ -66,15 +66,8 @@
             }
         })
 
-        $('.date-picker').datepicker({
-            rtl: Metronic.isRTL(),
-            autoclose: true,
-            format: "dd.mm.yyyy",
-            pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
-            language: 'ru',
-            startView: 'decade',
-            endDate: new Date(),
-            weekStart: 1
+        $(".date-picker").inputmask("d.m.y", {
+            "placeholder": "*"
         });
 
         {% if form.isNew is defined %}
@@ -221,7 +214,7 @@
                             {{ form_widget(form.owner, {'attr' : {'class' : 'form-control', 'placeholder': "Owner"}}) }}
                         </div>
                     {% else %}
-                        {% if is_granted('ROLE_SALES') != true %}
+                        {% if is_granted('ROLE_SALES') != true and is_granted('ROLE_OPER') != true %}
                             <div class="form-group col-md-6" style="height: 60px;"></div>
                         {% endif %}
                     {% endif %}
@@ -243,17 +236,11 @@
                     
                     <div class="form-group col-md-6">
                         {{ form_label(form.birthday, 'Birthday', {'attr': {'class': 'control-label'}}) }}
-                        <div class="input-group input-medium date date-picker">
-                            {{ form_widget(form.birthday, {'attr': {
-                            'class': 'form-control',
-                            'data-required': '1',
+                        {{ form_widget(form.birthday, {'attr': {
+                            'class': 'form-control date-picker',
+                            'data-required': '0',
                             'placeholder': 'Enter Birthday',
-                            'readonly': 'readonly'
-                            }}) }}
-                            <span class="input-group-btn">
-                            <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
-                            </span>
-                        </div>
+                        }}) }}
                     </div>
 
                     <div class="form-group col-md-6">

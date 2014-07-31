@@ -275,84 +275,6 @@ class User extends BaseUser
     }
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $organizations;
-
-    /**
-     * Add organizations
-     *
-     * @param \Lists\OrganizationBundle\Entity\Organization $organizations
-     *
-     * @return User
-     */
-    public function addOrganization(\Lists\OrganizationBundle\Entity\Organization $organizations)
-    {
-        $this->organizations[] = $organizations;
-
-        return $this;
-    }
-
-    /**
-     * Remove organizations
-     *
-     * @param \Lists\OrganizationBundle\Entity\Organization $organizations
-     */
-    public function removeOrganization(\Lists\OrganizationBundle\Entity\Organization $organizations)
-    {
-        $this->organizations->removeElement($organizations);
-    }
-
-    /**
-     * Get organizations
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getOrganizations()
-    {
-        return $this->organizations;
-    }
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    private $handlings;
-
-    /**
-     * Add handlings
-     *
-     * @param \Lists\HandlingBundle\Entity\Handling $handlings
-     *
-     * @return User
-     */
-    public function addHandling(\Lists\HandlingBundle\Entity\Handling $handlings)
-    {
-        $this->handlings[] = $handlings;
-
-        return $this;
-    }
-
-    /**
-     * Remove handlings
-     *
-     * @param \Lists\HandlingBundle\Entity\Handling $handlings
-     */
-    public function removeHandling(\Lists\HandlingBundle\Entity\Handling $handlings)
-    {
-        $this->handlings->removeElement($handlings);
-    }
-
-    /**
-     * Get handlings
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getHandlings()
-    {
-        return $this->handlings;
-    }
-
-    /**
      * Returns user full name
      *
      * @return string
@@ -506,5 +428,81 @@ class User extends BaseUser
     public function getUsercontactinfo()
     {
         return $this->usercontactinfo;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $handlingUsers;
+
+
+    /**
+     * Add handlingUsers
+     *
+     * @param \Lists\HandlingBundle\Entity\HandlingUser $handlingUsers
+     * 
+     * @return User
+     */
+    public function addHandlingUser(\Lists\HandlingBundle\Entity\HandlingUser $handlingUsers)
+    {
+        $this->handlingUsers[] = $handlingUsers;
+
+        return $this;
+    }
+
+    /**
+     * Remove handlingUsers
+     *
+     * @param \Lists\HandlingBundle\Entity\HandlingUser $handlingUsers
+     */
+    public function removeHandlingUser(\Lists\HandlingBundle\Entity\HandlingUser $handlingUsers)
+    {
+        $this->handlingUsers->removeElement($handlingUsers);
+    }
+
+    /**
+     * Get handlingUsers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getHandlingUsers()
+    {
+        return $this->handlingUsers;
+    }
+
+    private $organizationUsers;
+
+
+    /**
+     * Add organizationUsers
+     *
+     * @param \Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers
+     * 
+     * @return User
+     */
+    public function addOrganizationUser(\Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers)
+    {
+        $this->organizationUsers[] = $organizationUsers;
+
+        return $this;
+    }
+
+    /**
+     * Remove organizationUsers
+     *
+     * @param \Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers
+     */
+    public function removeOrganizationUser(\Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers)
+    {
+        $this->organizationUsers->removeElement($organizationUsers);
+    }
+
+    /**
+     * Get organizationUsers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOrganizationUsers()
+    {
+        return $this->organizationUsers;
     }
 }

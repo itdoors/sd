@@ -15,9 +15,31 @@ use Doctrine\ORM\Query;
  */
 class LookupRepository extends EntityRepository
 {
+    const KEY__MANAGER_PROJECT = 'manager_project';
+    const KEY__MANAGER = 'manager';
     const KEY__SCOPE = 'scope';
     const KEY__DOGOVOR = 'dogovor';
     const KEY__ORGANIZATION_SIGN_COMPETITOR = 'organization_sign_competitor';
+    const GROUP__MANAGER = 'manager_role';
+
+    /**
+     * Returns choices for scope
+     *
+     * @return Query
+     */
+    public function getOnlyManagerId()
+    {
+        return $this->getLookupByLukeyQuery(self::KEY__MANAGER)->select('l.id')->getQuery()->getSingleScalarResult();
+    }
+    /**
+     * Returns choices for scope
+     *
+     * @return Query
+     */
+    public function getOnlyManagerProjectId()
+    {
+        return $this->getLookupByLukeyQuery(self::KEY__MANAGER_PROJECT)->select('l.id')->getQuery()->getSingleScalarResult();
+    }
 
     /**
      * Returns choices for scope
@@ -48,6 +70,15 @@ class LookupRepository extends EntityRepository
     {
         return $this->getLookupByLukeyQuery(self::KEY__ORGANIZATION_SIGN_COMPETITOR);
     }
+    /**
+     * Returns choices for competitor
+     *
+     * @return QueryBuilder
+     */
+    public function getManagers()
+    {
+        return $this->getLookupByGroupQuery(self::GROUP__MANAGER);
+    }
 
     /**
      * Get lookup by lukey
@@ -61,6 +92,22 @@ class LookupRepository extends EntityRepository
         $query = $this->createQueryBuilder('l')
             ->where('l.lukey = :lukey')
             ->setParameter(':lukey', $lukey)
+            ->orderBy('l.name');
+
+        return $query;
+    }
+    /**
+     * Get lookup by group
+     *
+     * @param string $group
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getLookupByGroupQuery($group)
+    {
+        $query = $this->createQueryBuilder('l')
+            ->where('l.group = :group')
+            ->setParameter(':group', $group)
             ->orderBy('l.name');
 
         return $query;
