@@ -1,0 +1,39 @@
+Lists\OrganizationBundle\Entity\Coea:
+    type: entity
+    table: coea
+    repositoryClass: Lists\OrganizationBundle\Entity\CoeaRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        organizationId:
+            type: integer
+            nullable: false
+            column: organization_id
+        scopeId:
+            type: integer
+            nullable: false
+            column: scope_id
+    manyToOne:
+        scope:
+            targetEntity: Lists\LookupBundle\Entity\Lookup
+            cascade: {}
+            mappedBy: null
+            inversedBy: null
+            joinColumn:
+                scope_id:
+                    referencedColumnName: id
+        organization:
+            targetEntity: Organization
+            cascade: {}
+            mappedBy: null
+            inversedBy: coeas
+            joinColumn:
+                organization_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks:
+            prePersist: [ doOnPrePersist ]

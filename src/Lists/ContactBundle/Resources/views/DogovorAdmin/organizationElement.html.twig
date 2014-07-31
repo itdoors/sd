@@ -1,10 +1,15 @@
-{% set canEdit = (app.user.id == item.ownerId or app.user.hasRole('ROLE_SALESADMIN')) %}
+{% if modelName is not defined %}
+    {% set modelName = 'organization' %}
+{% endif %}
+
+{% set canEdit = (app.user.id == item.ownerId or app.user.hasRole('ROLE_SALESADMIN') or app.user.hasRole('ROLE_DOGOVORADMIN')) %}
 <td {% if item.0.isShared %} style="background-color: #9BC4FA"{% endif %}>
     {% if canEdit %}
         <a id="managers_list_new" class="btn green ajax-form"
            data-toggle="modal"
            href="#form_modal_contact"
            data-target_holder="modelContactFormTpl"
+           data-default='{"modelName":"{{ modelName}}"}'
            data-form_name="modelContactOrganizationEditForm"
            data-post_function="updateList"
            data-post_target_id="ModelContact{{ item.0.id }}"

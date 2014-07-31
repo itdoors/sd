@@ -4,6 +4,7 @@ namespace Lists\OrganizationBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Lists\OrganizationBundle\Controller\SalesController;
+use Lists\OrganizationBundle\Entity\OrganizationUser;
 
 /**
  * Class SalesController
@@ -12,8 +13,6 @@ class CompetitorsController extends SalesController
 {
 
     protected $filterNamespace = 'organization.competitors.filters';
-//    protected $filterFormName = 'organizationSalesFilterForm';
-//    protected $baseRoute = 'lists_sales_organization_index';
     protected $baseRoutePrefix = 'competitors';
     protected $baseTemplate = 'Competitors';
 
@@ -92,7 +91,6 @@ class CompetitorsController extends SalesController
 
             $user = $this->getUser();
 
-            $organization->addUser($user);
             $organization->setCreator($user);
 
             $em = $this->getDoctrine()->getManager();
@@ -102,6 +100,14 @@ class CompetitorsController extends SalesController
             $organization->setLookup($lookup);
 
             $em->persist($organization);
+
+            $lookupM = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_organization'));
+            $manager = new OrganizationUser();
+            $manager->setOrganization($organization);
+            $manager->setUser($user);
+            $manager->setLookup($lookupM);
+            $em->persist($manager);
+
             $em->flush();
 
             return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_organization_show', array(

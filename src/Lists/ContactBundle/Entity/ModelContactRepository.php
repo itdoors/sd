@@ -15,6 +15,7 @@ use Doctrine\ORM\Query;
 class ModelContactRepository extends EntityRepository
 {
     const MODEL_ORGANIZATION = 'organization';
+    const MODEL_DEPARTMENT = 'departments';
     const MODEL_HANDLING = 'handling';
 
     /**
@@ -326,5 +327,83 @@ class ModelContactRepository extends EntityRepository
         return $this->getEntityManager()
             ->getRepository('ListsOrganizationBundle:Organization')
             ->getIdsInGroup($organizationId);
+    }
+
+    /**
+     * @param int $organizationId
+     * @param int $id
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getMyDepartmentByOrganizationContactsQuery($organizationId, $id = null)
+    {
+        $sql = $this->createQueryBuilder('mc')
+            ->select('mc')
+            ->addSelect("d.id as departmentId")
+            ->addSelect("d.address as departmentAddress")
+            ->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as creatorFullName")
+            ->addSelect("CONCAT(CONCAT(owner.lastName, ' '), owner.firstName) as ownerFullName")
+            ->addSelect("owner.id as ownerId")
+            ->leftJoin('mc.user', 'u')
+            ->leftJoin('mc.owner', 'owner')
+            ->leftJoin('ListsDepartmentBundle:Departments', 'd', 'WITH', 'd.id = mc.modelId')
+            ->where('mc.modelName = :modelName')
+            ->setParameter(':modelName', self::MODEL_DEPARTMENT);
+
+        if ($organizationId) {
+            $sql
+                ->andWhere('d.organizationId = :organizationId')
+                ->setParameter(':organizationId', $organizationId);
+        }
+
+        if ($id) {
+            $sql
+                ->andWhere('mc.id = :id')
+                ->setParameter(':id', $id);
+        }
+
+        return $sql
+            ->getQuery();
+    }
+
+    /**
+     * @param int $organizationId
+     * @param int $id
+     *
+     * @return mixed[]
+     */
+    public function getMyDepartmentByOrganizationContacts($organizationId, $id = null)
+    {
+        /** @var \Doctrine\ORM\Query $sql */
+        $sql = $this->getMyDepartmentByOrganizationContactsQuery($organizationId, $id);
+
+        return $sql
+            ->getResult();
+    }
+
+    /**
+     * GetMyContactsByDepartmentId
+     *
+     * @param int $departmentId
+     *
+     * @return Query
+     */
+    public function getMyContactsByDepartmentId($departmentId)
+    {
+        $sql = $this->createQueryBuilder('mc')
+            ->select('mc')
+            ->addSelect("mc.modelId as departmentId")
+            ->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as creatorFullName")
+            ->addSelect("CONCAT(CONCAT(owner.lastName, ' '), owner.firstName) as ownerFullName")
+            ->addSelect("owner.id as ownerId")
+            ->leftJoin('mc.user', 'u')
+            ->leftJoin('mc.owner', 'owner')
+            ->where('mc.modelName = :modelName')
+            ->andWhere('mc.modelId = :modelId')
+            ->setParameter(':modelName', self::MODEL_DEPARTMENT)
+            ->setParameter('modelId', $departmentId);
+
+        return $sql
+            ->getQuery();
     }
 }

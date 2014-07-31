@@ -21,10 +21,9 @@
         </li>
         {% if is_granted('ROLE_SALES') %}
             <li{% if 
-                    is_granted('ROLE_DOGOVORADMIN') != true
-                    and
-                    (
                         path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_index')
+                         or
+                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_contractor_index')
                          or
                         path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_new')
                         or
@@ -33,7 +32,7 @@
                             and
                             path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_show', app.request.attributes.get('_route_params'))
                         )
-                    )
+                    
                 %} class="active"{% endif %}>
                 <a href="javascript:;">
                     <i class="icon-handbag"></i>
@@ -100,6 +99,13 @@
                             </a>
                         </li>
                     {% endif %}
+                     <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_contractor_index')
+                    %} class="active"{% endif %}>
+                        <a href="{{ path('lists_contractor_index') }}">
+                            <i class="fa fa-money"></i>
+                            <span class="title">{% trans %}Contractors{% endtrans %}</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
         {% endif %}
@@ -417,6 +423,8 @@
             is_granted('ROLE_SUPERVISOR')
         %}
         <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_oper_homepage') 
+                or
+                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_contractor_index')
             %} class="active"{% endif %}>
             <a href="javascript:;">
                 <i class="icon-pencil"></i>
@@ -424,7 +432,9 @@
                 <span class="arrow "></span>
             </a>
             <ul  class="sub-menu">
-                <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_oper_homepage')
+                <li{% if 
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_oper_homepage')
+                                
                     %} class="active"{% endif %}>
                     <a href="{{ path('it_doors_oper_homepage') }}">
                         <i class="fa fa-money"></i>
@@ -440,6 +450,13 @@
                         </a>
                     </li>
                 {% endif %}
+                    <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_contractor_index')
+                    %} class="active"{% endif %}>
+                        <a href="{{ path('lists_contractor_index') }}">
+                            <i class="fa fa-money"></i>
+                            <span class="title">{% trans %}Contractors{% endtrans %}</span>
+                        </a>
+                    </li>
             </ul>
         </li>
         {% endif %}

@@ -110,13 +110,24 @@ sd_common_ajax_dogovor_save:
     pattern:  /ajax/dogovor/save
     defaults: { _controller: SDCommonBundle:Ajax:dogovorSave }
 
+sd_common_ajax_document_type_save:
+    pattern:  /ajax/document/type/save
+    defaults: { _controller: SDCommonBundle:Ajax:documentTypeSave }
+
 sd_common_ajax_dogovor_upload_file:
     pattern:  /ajax/dogovor/upload
     defaults: { _controller: SDCommonBundle:Ajax:dogovorUpload }
 
+sd_common_ajax_document_upload_file:
+    pattern:  /ajax/document/upload
+    defaults: { _controller: SDCommonBundle:Ajax:documentUpload }
 sd_common_ajax_dopdogovor_upload_file:
     pattern:  /ajax/dopdogovor/upload
     defaults: { _controller: SDCommonBundle:Ajax:dopDogovorUpload }
+
+sd_common_ajax_contractor_upload_file:
+    pattern:  /ajax/contractor/upload
+    defaults: { _controller: SDCommonBundle:Ajax:contractorUpload }
 
 sd_common_ajax_handling_more_info_save:
     pattern:  /ajax/handling/more/info/save
@@ -167,6 +178,9 @@ sd_common_ajax_dogovor_type:
     pattern:  /ajax/dogovor_type
     defaults: { _controller: SDCommonBundle:Ajax:dogovorType }
 
+sd_common_ajax_document_type:
+    pattern:  /ajax/document/type
+    defaults: { _controller: SDCommonBundle:Ajax:documentType }
 #sd_common_ajax_dogovor_subject:
 #    pattern:  /ajax/dogovor_subject
 #    defaults: { _controller: SDCommonBundle:Ajax:dogovorSubject }
@@ -262,6 +276,10 @@ sd_common_ajax_self_organization:
 sd_common_ajax_editable_department:
     pattern: /ajax/editable/department
     defaults: { _controller: SDCommonBundle:Ajax:editableDepartment }
+
+sd_common_ajax_document_date:
+    pattern: /ajax/document/date
+    defaults: { _controller: SDCommonBundle:Ajax:documentDate}
 
 sd_common_ajax_oper_department_mpk:
     pattern: /ajax/oper/department/mpk
