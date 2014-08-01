@@ -18,20 +18,53 @@
 
         $('#' + '{{ form.vars.name }}' + '_type').die('click');
         $('#' + '{{ form.vars.name }}' + '_type').live('click', function(e){
-            var option =$('#' + '{{ form.vars.name }}' + '_type option:selected').val();
+            var option =$('#' + '{{ form.vars.name }}' + '_type option:selected').val(); //options of type
             var labelDescription = $('#label_description').find('label')[0];
             var textareaDescription = $('#' + '{{ form.vars.name }}' + '_description');
+            var otherPersonsSelect =  $('#contact_many_holder');
+            var insidePersonsSelect = $('#usersFromOurSide_holder');
+            var contacts = $('#contact_holder');
             if (option == 3) {
                 labelDescription.innerHTML="{% trans %}Audit protocol{% endtrans %}";
                 textareaDescription.attr("placeholder", "{% trans %}Audit protocol{% endtrans %}");
+                otherPersonsSelect.show();
+                insidePersonsSelect.show();
+                $('#name').prop('selectedIndex',0);
+                contacts.hide();
             } else if (option == 2) {
                 labelDescription.innerHTML="{% trans %}Audit protocol{% endtrans %}";
                 textareaDescription.attr("placeholder", "{% trans %}Audit protocol{% endtrans %}");
+                otherPersonsSelect.show();
+                insidePersonsSelect.show();
+                contacts.hide();
             } else {
                 labelDescription.innerHTML="{% trans %}Description{% endtrans %}";
                 textareaDescription.attr("placeholder", "{% trans %}Description{% endtrans %}");
+                $('#' + '{{ form.vars.name }}' + '_contactMany').select2('data', null);
+                $('#' + '{{ form.vars.name }}' + '_usersFromOurSide').select2('data', null);
+                otherPersonsSelect.hide();
+                insidePersonsSelect.hide();
+                contacts.show();
             }
         })
+
+        $('#' + '{{ form.vars.name }}' + '_contactMany').attr("multiple", true);
+
+        $('#' + '{{ form.vars.name }}' + '_contactMany').select2({
+            //multiple: true
+        });
+
+        $('#' + '{{ form.vars.name }}' + '_contactMany').select2('data', null);
+        $('#contact_many_holder').hide();
+
+        $('#' + '{{ form.vars.name }}' + '_usersFromOurSide').attr("multiple", true);
+
+        $('#' + '{{ form.vars.name }}' + '_usersFromOurSide').select2({
+            //multiple: true
+        });
+
+        $('#' + '{{ form.vars.name }}' + '_usersFromOurSide').select2('data', null);
+        $('#usersFromOurSide_holder').hide();
     })
 
     SD.select2('#' + '{{ form.vars.name }}' + '_user', {
@@ -67,7 +100,6 @@
                         'data-target_id': targetId
                 }
                 }) }}
-                <input name="{{ form.vars.name }}[test]" type="text" value="ah">
                 <div class="row">
                     <div class="col-md-4">
                         <div class="panel panel-default">
@@ -104,8 +136,22 @@
                                 <div class="form-group">
                                     {# Контактное лицо - с кем уже  контактировали.
                                     #}
-                                    {{ form_label(form.contact, 'Contact Person', {'attr': {'class': 'control-label'}}) }}
-                                    {{ form_widget(form.contact, {'attr' : {'class' : 'form-control', 'placeholder': 'Select Contact Person'} } ) }}
+                                    <span id="contact_holder">
+                                        {{ form_label(form.contact, 'Contact Person', {'attr': {'class': 'control-label'}}) }}
+                                        {{ form_widget(form.contact, {'attr' : {'class' : 'form-control', 'placeholder': 'Select Contact Person'} } ) }}
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    <span id="usersFromOurSide_holder">
+                                        {{ form_label(form.usersFromOurSide, 'Persons from our side', {'attr': {'class': 'control-label'}}) }}
+                                        {{ form_widget(form.usersFromOurSide, {'attr' : {'class' : 'form-control', 'placeholder': 'Select persons from our side'} } ) }}
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    <span id="contact_many_holder">
+                                        {{ form_label(form.contactMany, 'Persons from their side', {'attr': {'class': 'control-label'}}) }}
+                                        {{ form_widget(form.contactMany, {'attr' : {'class' : 'form-control', 'placeholder': 'Select persons from their side'} } ) }}
+                                    </span>
                                 </div>
                                 <div class="form-group">
                                     <span id="label_description">
