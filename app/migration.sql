@@ -715,3 +715,60 @@ COMMENT ON TABLE documents_organization
 
 -- staging ++++++++++++++++++++++
 -- prod +++++++++++++++++++++++++
+
+---task-handling form upgrade
+CREATE SEQUENCE handling_message_model_contact_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 6
+  CACHE 1;
+CREATE SEQUENCE handling_message_handling_user_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 5
+  CACHE 1;
+
+CREATE TABLE handling_message_handling_user
+(
+  id bigint NOT NULL DEFAULT nextval('handling_message_handling_user_id_seq'::regclass),
+  handling_user_id bigint NOT NULL,
+  handling_message_id bigint NOT NULL,
+  CONSTRAINT handling_message_user_pkey PRIMARY KEY (id),
+  CONSTRAINT handling_message_handling_user_handling_message_id_fkey FOREIGN KEY (handling_message_id)
+      REFERENCES handling_message (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT handling_message_handling_user_handling_user_id_fkey FOREIGN KEY (handling_user_id)
+      REFERENCES handling_user (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+
+COMMENT ON TABLE handling_message_handling_user
+  IS 'Связка пользователей с активностью';
+
+
+CREATE TABLE handling_message_model_contact
+(
+  id bigint NOT NULL DEFAULT nextval('handling_message_model_contact_id_seq'::regclass),
+  handling_message_id bigint,
+  model_contact_id bigint,
+  CONSTRAINT handling_message_model_contact_pkey PRIMARY KEY (id),
+  CONSTRAINT handling_message_model_contact_handling_message_id_fkey FOREIGN KEY (handling_message_id)
+      REFERENCES handling_message (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT handling_message_model_contact_model_contact_id_fkey FOREIGN KEY (model_contact_id)
+      REFERENCES model_contact (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+
+COMMENT ON TABLE handling_message_model_contact
+  IS 'связка активности с контактами';
+-- staging ----------------------
+-- prod -------------------------
