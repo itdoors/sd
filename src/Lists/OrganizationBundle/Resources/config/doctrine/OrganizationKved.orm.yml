@@ -1,7 +1,7 @@
-Lists\OrganizationBundle\Entity\Coea:
+Lists\OrganizationBundle\Entity\OrganizationKved:
     type: entity
-    table: coea
-    repositoryClass: Lists\OrganizationBundle\Entity\CoeaRepository
+    table: organization_kved
+    repositoryClass: Lists\OrganizationBundle\Entity\OrganizationKvedRepository
     fields:
         id:
             id: true
@@ -13,27 +13,25 @@ Lists\OrganizationBundle\Entity\Coea:
             type: integer
             nullable: false
             column: organization_id
-        scopeId:
+        kvedId:
             type: integer
             nullable: false
-            column: scope_id
+            column: kved_id
     manyToOne:
-        scope:
-            targetEntity: Lists\LookupBundle\Entity\Lookup
+        kved:
+            targetEntity: Lists\KvedBundle\Entity\Kved
             cascade: {}
             mappedBy: null
             inversedBy: null
             joinColumn:
-                scope_id:
+                kved_id:
                     referencedColumnName: id
         organization:
             targetEntity: Organization
             cascade: {}
             mappedBy: null
-            inversedBy: coeas
+            inversedBy: kveds
             joinColumn:
                 organization_id:
                     referencedColumnName: id
             orphanRemoval: false
-    lifecycleCallbacks:
-            prePersist: [ doOnPrePersist ]

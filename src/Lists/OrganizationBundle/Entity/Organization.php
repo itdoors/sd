@@ -1073,4 +1073,42 @@ class Organization
     {
         return $this->coeas;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $kveds;
+
+
+    /**
+     * Add kveds
+     *
+     * @param \Lists\OrganizationBundle\Entity\OrganizationKved $kveds
+     * @return Organization
+     */
+    public function addKved(\Lists\OrganizationBundle\Entity\OrganizationKved $kveds)
+    {
+        $this->kveds[] = $kveds;
+    
+        return $this;
+    }
+
+    /**
+     * Remove kveds
+     *
+     * @param \Lists\OrganizationBundle\Entity\OrganizationKved $kveds
+     */
+    public function removeKved(\Lists\OrganizationBundle\Entity\OrganizationKved $kveds)
+    {
+        $this->kveds->removeElement($kveds);
+    }
+
+    /**
+     * Get kveds
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getKveds()
+    {
+        return $this->kveds;
+    }
 }

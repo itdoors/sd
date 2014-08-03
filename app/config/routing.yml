@@ -1,3 +1,7 @@
+lists_kved:
+    resource: "@ListsKvedBundle/Resources/config/routing.yml"
+    prefix:   /
+
 it_doors_history:
     resource: "@ITDoorsHistoryBundle/Resources/config/routing.yml"
     prefix:   /

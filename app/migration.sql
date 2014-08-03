@@ -642,3 +642,8 @@ ALTER TABLE coea ADD CONSTRAINT FK_6963C5C032C8A3DE FOREIGN KEY (organization_id
 
 -- staging ---------------------
 -- prod ------------------------
+CREATE TABLE kved (id BIGSERIAL NOT NULL, parent_id INT DEFAULT NULL, code VARCHAR(10) NOT NULL, name VARCHAR(255) NOT NULL, description TEXT NOT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_CF4A815F727ACA70 ON kved (parent_id);
+ALTER TABLE kved ADD CONSTRAINT FK_CF4A815F727ACA70 FOREIGN KEY (parent_id) REFERENCES kved (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+-- staging ---------------------
+-- prod ------------------------

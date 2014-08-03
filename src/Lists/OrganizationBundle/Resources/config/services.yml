@@ -9,7 +9,7 @@ parameters:
     lists_organization.form.user.sales.admin.class: Lists\OrganizationBundle\Form\OrganizationUserSalesAdminFormType
     lists_organization.form.user.filter.class: Lists\OrganizationBundle\Form\OrganizationUserFilterFormType
     lists_organization.form.child.class: Lists\OrganizationBundle\Form\OrganizationChildForm
-    lists_organization.form.coea.class: Lists\OrganizationBundle\Form\CoeaFormType
+    lists_organization.form.organization.kved.class: Lists\OrganizationBundle\Form\OrganizationKvedFormType
     
 
     lists_organization.edrpou.validator.class: Lists\OrganizationBundle\Validator\UniqueEdrpouValidator
@@ -82,11 +82,11 @@ services:
         tags:
             - { name: form.type, alias: organizationChildForm }
 
-    lists_organization.form.coeaForm:
-        class: %lists_organization.form.coea.class%
+    lists_organization.form.OrganizationKvedForm:
+        class: %lists_organization.form.organization.kved.class%
         arguments: [@service_container]
         tags:
-            - { name: form.type, alias: coeaForm }
+            - { name: form.type, alias: organizationKvedForm }
 
     unique_event_date_validator:
         class: %lists_organization.edrpou.validator.class%

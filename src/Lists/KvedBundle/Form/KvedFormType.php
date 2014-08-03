@@ -1,6 +1,6 @@
 <?php
 
-namespace Lists\OrganizationBundle\Form;
+namespace Lists\KvedBundle\Form;
 
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\AbstractType;
@@ -8,9 +8,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Class CoeaFormType
+ * Class KvedFormType
  */
-class CoeaFormType extends AbstractType
+class KvedFormType extends AbstractType
 {
     /**
      * @var Container $container
@@ -31,18 +31,16 @@ class CoeaFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-         /** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
-        $lr = $this->container->get('lists_lookup.repository');
-
         $builder
-            ->add('scope', 'entity', array(
-                'class'=>'Lists\LookupBundle\Entity\Lookup',
-                'property'=>'name',
-                'empty_value' => '',
-                'query_builder' => $lr->getOnlyScopeQuery()
-            ))
-            ->add('organizationId', 'hidden')
-            ->add('add', 'submit');
+            ->add('parent', 'entity', array(
+                'class' => 'Lists\KvedBundle\Entity\Kved',
+                'empty_value' => ''
+                ))
+            ->add('code', 'text')
+            ->add('name', 'text')
+            ->add('description')
+            ->add('save', 'submit')
+            ->add('cancel', 'submit');
     }
 
     /**
@@ -51,10 +49,10 @@ class CoeaFormType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => null,
+            'data_class' => 'Lists\KvedBundle\Entity\Kved',
             'validation_groups' => false,
             'csrf_protection' => false,
-            'translation_domain' => 'ListsOrganizationBundle'
+            'translation_domain' => 'ListsKvedBundle'
         ));
     }
 
@@ -63,6 +61,6 @@ class CoeaFormType extends AbstractType
      */
     public function getName()
     {
-        return 'coeaForm';
+        return 'kvedForm';
     }
 }
