@@ -160,6 +160,9 @@ Lists\OrganizationBundle\Entity\Organization:
         children:
             targetEntity: Organization
             mappedBy: parent
+        coeas:
+            targetEntity: Coea
+            mappedBy: organization
         organizationUsers:
             targetEntity: OrganizationUser
             mappedBy: organization

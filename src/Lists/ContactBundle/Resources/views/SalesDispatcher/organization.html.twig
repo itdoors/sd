@@ -74,6 +74,27 @@
                 }}
             </tr>
             {% endfor %}
+            {% if departmentContacts is defined %}
+                {% for item in departmentContacts %}
+                    <tr id="ModelContact{{ item.0.id }}"
+                            data-url="{{ path('lists_' ~ baseRoutePrefix ~ '_contact_ajax_department_organization_element', {
+                            id: item.0.id,
+                            organizationId: organizationId,
+                        }) }}"
+                            >
+                        {{  include(
+                        'ListsContactBundle:' ~ baseTemplate ~ ':organizationElement.html.twig',
+                            {
+                                item: item,
+                                baseRoutePrefix: baseRoutePrefix,
+                                organizationId: organizationId,
+                                modelName: 'departments'
+                            }
+                        )
+                        }}
+                    </tr>
+                {% endfor %}
+            {% endif %}
             </tbody>
         </table>
     </div>

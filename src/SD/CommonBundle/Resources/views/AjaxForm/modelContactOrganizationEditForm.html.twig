@@ -214,7 +214,7 @@
                             {{ form_widget(form.owner, {'attr' : {'class' : 'form-control', 'placeholder': "Owner"}}) }}
                         </div>
                     {% else %}
-                        {% if is_granted('ROLE_SALES') != true %}
+                        {% if is_granted('ROLE_SALES') != true and is_granted('ROLE_OPER') != true %}
                             <div class="form-group col-md-6" style="height: 60px;"></div>
                         {% endif %}
                     {% endif %}

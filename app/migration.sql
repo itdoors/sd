@@ -633,3 +633,85 @@ ALTER TABLE organization_service_cover ADD CONSTRAINT FK_390A9CB232C8A3DE FOREIG
 ALTER TABLE organization_service_cover ADD CONSTRAINT FK_390A9CB2ED5CA9E6 FOREIGN KEY (service_id) REFERENCES handling_service (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ++++task-856-organizaton-service_cover staging  +++++++++
 ++++task-856-organizaton-service_cover prod     +++++++++
+
+CREATE TABLE coea (id BIGSERIAL NOT NULL, scope_id INT NOT NULL, organization_id INT NOT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_6963C5C0682B5931 ON coea (scope_id);
+CREATE INDEX IDX_6963C5C032C8A3DE ON coea (organization_id);
+ALTER TABLE coea ADD CONSTRAINT FK_6963C5C0682B5931 FOREIGN KEY (scope_id) REFERENCES lookup (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE coea ADD CONSTRAINT FK_6963C5C032C8A3DE FOREIGN KEY (organization_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+-- staging ---------------------
+-- prod ------------------------
+
+
+---task-800.801,802 kved
+CREATE SEQUENCE kved_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 2
+  CACHE 1;
+CREATE SEQUENCE kved_organization_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 3
+  CACHE 1;
+CREATE TABLE kved
+(
+  id bigint NOT NULL DEFAULT nextval('kved_id_seq'::regclass),
+  code character varying(10),
+  name character varying(255),
+  description character varying(255),
+  parent_id bigint,
+  CONSTRAINT kved_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+COMMENT ON TABLE kved
+  IS 'классификация видов економической деятельности';
+
+CREATE TABLE kved_organization
+(
+  id bigint NOT NULL DEFAULT nextval('kved_organization_id_seq'::regclass),
+  kved_id bigint,
+  organization_id bigint,
+  CONSTRAINT kved_organization_pkey PRIMARY KEY (id),
+  CONSTRAINT kved_organization_kved_id_fkey FOREIGN KEY (kved_id)
+      REFERENCES kved (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT kved_organization_organization_id_fkey FOREIGN KEY (organization_id)
+      REFERENCES organization (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+COMMENT ON TABLE kved_organization
+  IS 'Связка организаций с КВЕД';
+
+-- staging ++++++++++++++++++++
+-- prod +++++++++++++++++++++++
+
+CREATE SEQUENCE documents_organization_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 3
+  CACHE 1;
+CREATE TABLE documents_organization
+(
+  id bigint NOT NULL DEFAULT nextval('documents_organization_id_seq'::regclass),
+  documents_id bigint NOT NULL,
+  organization_id bigint NOT NULL,
+  CONSTRAINT documents_organization_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+COMMENT ON TABLE documents_organization
+  IS 'Связка документов с организациями';
+
+-- staging ++++++++++++++++++++++
+-- prod +++++++++++++++++++++++++

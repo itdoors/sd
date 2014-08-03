@@ -35,6 +35,31 @@ class OperDogovorController extends BaseFilterController
         $dogovorsDepartment = $dogovorDepartmentRepository->findBy(array(
             'department' => $idDepartment,
         ));
+
+        $checkedForParent = array();
+        /** @var  $dogovorDepartment \Lists\DogovorBundle\Entity\DogovorDepartment */
+        foreach ($dogovorsDepartment as $dogovorDepartment) {
+            $dopDogovor = $dogovorDepartment->getDopDogovorId();
+            $parent = $dogovorDepartment->getDogovorId();
+            //var_dump($dopDogovor); die();//var_dump($parent);
+            if ($dopDogovor != null && !in_array($parent, $checkedForParent)) {
+                $checkedForParent[] = $parent;
+                $hasParent = false;
+                foreach ($dogovorsDepartment as $checkingDogovorDepartment) {
+                    if ($parent == $checkingDogovorDepartment->getDogovorId() && $checkingDogovorDepartment->getDopDogovorId() == null) {
+                        $hasParent = true;
+                        break;
+                    }
+                }
+                if (!$hasParent) {
+                    $dogovorsDepartment = array_merge($dogovorsDepartment,
+                        $dogovorDepartmentRepository->findBy(array(
+                        'dogovor' => $parent,
+                        'dopDogovor' => null
+                    )));
+                }
+            }
+        }
         /*
         $infoDogovors = array();
 

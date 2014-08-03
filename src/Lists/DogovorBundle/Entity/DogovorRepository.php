@@ -333,6 +333,33 @@ class DogovorRepository extends EntityRepository
 
         return $query;
     }
+    /**
+     * Return dogovor show info by id
+     *
+     * @param integer $id Organization.id
+     *
+     * @return mixed[]
+     */
+    public function getDogovorsForContractorId($id)
+    {
+        /** @var \Doctrine\ORM\QueryBuilder $sql*/
+        $sql = $this->createQueryBuilder('d')
+                ->select('d.id')
+                ->addSelect('u.firstName')
+                ->addSelect('u.lastName')
+                ->addSelect('u.middleName')
+                ->addSelect('d.createDateTime')
+                ->addSelect('d.filepath')
+                ->addSelect('dogovorType.name as type')
+                ->leftJoin('d.user', 'u')
+                ->leftJoin('d.dogovorType', 'dogovorType')
+                ->where('d.organizationId = :organizationId')
+                ->setParameter(':organizationId', $id)
+                ->getQuery()
+                ->getResult();
+
+        return $sql;
+    }
 
     /**
      * Return dogovor show info by id

@@ -3,12 +3,16 @@ parameters:
     lists_organization.sales.dispatcher.filter.form.class: Lists\OrganizationBundle\Form\OrganizationSalesDispatcherFilterFormType
     lists_organization.sales.admin.filter.form.class: Lists\OrganizationBundle\Form\OrganizationSalesAdminFilterFormType
     lists_organization.form.sales.class: Lists\OrganizationBundle\Form\OrganizationSalesFormType
+    lists_organization.form.contractor.class: Lists\OrganizationBundle\Form\OrganizationContractorFilterFormType
     lists_organization.form.dogovoradmin.class: Lists\OrganizationBundle\Form\OrganizationDogovorAdminFormType
     lists_organization.form.user.class: Lists\OrganizationBundle\Form\OrganizationUserFormType
     lists_organization.service.cover.form.class: Lists\OrganizationBundle\Form\OrganizationServiceCoverType
     lists_organization.form.user.sales.admin.class: Lists\OrganizationBundle\Form\OrganizationUserSalesAdminFormType
     lists_organization.form.user.filter.class: Lists\OrganizationBundle\Form\OrganizationUserFilterFormType
     lists_organization.form.child.class: Lists\OrganizationBundle\Form\OrganizationChildForm
+    lists_organization.form.coea.class: Lists\OrganizationBundle\Form\CoeaFormType
+    lists_organization.form.kved.class: Lists\OrganizationBundle\Form\KvedFormType
+    
 
     lists_organization.edrpou.validator.class: Lists\OrganizationBundle\Validator\UniqueEdrpouValidator
 
@@ -46,6 +50,12 @@ services:
         tags:
             - { name: form.type, alias: organizationSalesForm }
 
+    lists_organization.form.organizationContractorFilterForm:
+        class: %lists_organization.form.contractor.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: organizationContractorFilterFormType }
+
     lists_organization.form.organizationDogovorAdminForm:
         class: %lists_organization.form.dogovoradmin.class%
         arguments: [@service_container]
@@ -79,6 +89,18 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: organizationChildForm }
+
+    lists_organization.form.coeaForm:
+        class: %lists_organization.form.coea.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: coeaForm }
+
+    lists_organization.form.kvedForm:
+        class: %lists_organization.form.kved.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: kvedForm }
 
     unique_event_date_validator:
         class: %lists_organization.edrpou.validator.class%

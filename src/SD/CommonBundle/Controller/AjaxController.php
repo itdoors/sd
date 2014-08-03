@@ -3,6 +3,8 @@
 namespace SD\CommonBundle\Controller;
 
 use Lists\DepartmentBundle\Entity\DepartmentsRepository;
+use Lists\DocumentBundle\Entity\Documents;
+use Lists\DocumentBundle\Entity\DocumentsOrganization;
 use Lists\DogovorBundle\Entity\Dogovor;
 use Lists\DogovorBundle\Entity\DogovorDepartment;
 use Lists\DogovorBundle\Entity\DogovorDepartmentRepository;
@@ -17,13 +19,13 @@ use Lists\HandlingBundle\Entity\HandlingServiceRepository;
 use Lists\LookupBundle\Entity\LookupRepository;
 use Lists\ContactBundle\Entity\ModelContact;
 use Lists\ContactBundle\Entity\ModelContactRepository;
+use Lists\OrganizationBundle\Entity\KvedOrganization;
 use Lists\OrganizationBundle\Entity\Organization;
 use Lists\HandlingBundle\Entity\HandlingMoreInfo;
 use Lists\OrganizationBundle\Entity\OrganizationRepository;
 use Lists\OrganizationBundle\Entity\OrganizationServiceCover;
 use SD\UserBundle\Entity\UserRepository;
 use SD\UserBundle\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Form;
@@ -36,6 +38,7 @@ use SD\UserBundle\Entity\Usercontactinfo;
 use SD\CalendarBundle\Entity\Task;
 use Lists\HandlingBundle\Entity\HandlingUser;
 use Lists\OrganizationBundle\Entity\OrganizationUser;
+use Lists\OrganizationBundle\Entity\Coea;
 
 /**
  * AjaxController class.
@@ -448,6 +451,26 @@ class AjaxController extends BaseFilterController
         $result = array();
 
         foreach ($dogovorTypes as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json document type list
+     *
+     * @return string
+     */
+    public function documentTypeAction()
+    {
+        $documentTypes = $this->getDoctrine()
+            ->getRepository('ListsDocumentBundle:DocumentsType')
+            ->findAll();
+
+        $result = array();
+
+        foreach ($documentTypes as $object) {
             $result[] = $this->serializeObject($object);
         }
 
@@ -1581,6 +1604,69 @@ class AjaxController extends BaseFilterController
 
         return true;
     }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function coeaFormSave($form, $user, $request)
+    {
+        $data = $form->getData();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $organization = $em->getRepository('ListsOrganizationBundle:Organization')
+                ->find($data['organizationId']);
+
+        $scope = $em->getRepository('ListsLookupBundle:Lookup')
+                ->find($data['scope']);
+
+        $coea = new Coea();
+        $coea->setOrganization($organization);
+        $coea->setScope($scope);
+
+        $em->persist($coea);
+        $em->flush();
+
+        return true;
+    }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function kvedFormSave($form, $user, $request)
+    {
+        $data = $form->getData();
+
+        $em = $this->getDoctrine()->getManager();
+
+        $organization = $em->getRepository('ListsOrganizationBundle:Organization')
+            ->find($data['organizationId']);
+
+        $kved = $em->getRepository('ListsOrganizationBundle:Kved')
+            ->find($data['kved']);
+
+        $kvedOrganization = new KvedOrganization();
+        $kvedOrganization->setOrganization($organization);
+        $kvedOrganization->setKved($kved);
+
+        $em->persist($kvedOrganization);
+        $em->flush();
+
+        return true;
+    }
+
     /**
      * Saves {formName}Save after valid ajax validation
      *
@@ -2445,6 +2531,94 @@ class AjaxController extends BaseFilterController
         $em->remove($object);
         $em->flush();
     }
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function dogovorDelete($params)
+    {
+        $id = $params['id'];
+
+        /** @var Dogovor $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:Dogovor')
+            ->find($id);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function coeaDelete($params)
+    {
+        $id = $params['id'];
+
+        /** @var Coea $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Coea')
+            ->find($id);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function kvedDelete($params)
+    {
+        $kved = $params['id'];
+        $organization = $params['organization'];
+
+        $object = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:KvedOrganization')
+            ->findOneBy(array(
+                'kved' => $kved,
+                'organization' => $organization
+            ));
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function documentDelete($params)
+    {
+        $document = $params['id'];
+        $organization = $params['organization'];
+
+        $object = $this->getDoctrine()
+            ->getRepository('ListsDocumentBundle:DocumentsOrganization')
+            ->findOneBy(array(
+                'documents' => $document,
+                'organization' => $organization
+            ));
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
 
     /**
      * Deletes {entityName}Delete instance
@@ -2734,6 +2908,46 @@ class AjaxController extends BaseFilterController
                 return new Response($return, 406);
             }
         }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+
+        try {
+            $em->flush();
+        } catch (\ErrorException $e) {
+            $return = array('msg' => $translator->trans('Wrong input data'));
+
+            return new Response(json_encode($return));
+        }
+
+        $return = array('success' => 1);
+
+        return new Response(json_encode($return));
+    }
+
+    /**
+     * Saves object to db
+     *
+     * @return mixed[]
+     */
+    public function documentTypeSaveAction()
+    {
+        $translator = $this->get('translator');
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        /** @var \Lists\DocumentBundle\Entity\Documents $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ListsDocumentBundle:Documents')
+            ->find($pk);
+
+        $type = $this->getDoctrine()
+            ->getRepository('ListsDocumentBundle:DocumentsType')
+            ->find($value);
+
+        $object->setDocumentsType($type);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($object);
@@ -3595,6 +3809,106 @@ class AjaxController extends BaseFilterController
     }
 
     /**
+     * Saves document
+     *
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function documentUploadAction(Request $request)
+    {
+        $result = array();
+        $documentId = $request->query->get('id');
+
+        $em = $this->getDoctrine()->getManager();
+        $document = $em
+            ->getRepository('ListsDocumentBundle:Documents')
+            ->find($documentId);
+
+        $result['id'] = $document->getId();
+        if (!$document) {
+            $result['error'] = 'Dogovor not found';
+        }
+        $file = $request->files->get('dogovor');
+
+        if ($file) {
+            $directory = $this->container->getParameter('project.web.dir'). '/uploads/document/';
+            if (!is_dir($directory.'/old')) {
+                mkdir($directory.'/old', 0777, true);
+            }
+            if (is_file($directory.$document->getFilepath()) && rename($directory.$document->getFilepath(), $directory.'old/'.$documentId.'_'.$document->getFilepath())) {
+
+            } else {
+                $result['error'] = 'File move error';
+            }
+            $document->setFile($file);
+            $document->upload();
+            $result['file'] = $document->getFilepath();
+        } else {
+            $result['error'] = 'File not found';
+        }
+
+        $em->persist($document);
+        $em->flush();
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Saves dop dogovor ajax form
+     *
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function contractorUploadAction(Request $request)
+    {
+        $result = array();
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+        $organizationId = $request->query->get('id');
+        $organization = $em
+            ->getRepository('ListsOrganizationBundle:Organization')
+            ->find($organizationId);
+        $organizationUser = $em
+            ->getRepository('ListsOrganizationBundle:OrganizationUser')
+            ->findOneBy(array(
+                'organizationId' => $organizationId,
+                'userId' => $user->getId(),
+            ));
+        //if ($organizationUser) {
+        $documentType = $em
+            ->getRepository('ListsDocumentBundle:DocumentsType')
+            ->find(1);
+
+        $document = new Documents();
+            $document->setUser($user);
+            $document->setUserId($user->getId());
+            $document->setDatetime(null);
+            $document->setCreateDateTime(new \DateTime());
+            $document->setDocumentsType($documentType);
+            //$document->setStartdatetime(new \DateTime());
+            $file = $request->files->get('dogovor');
+            if ($file) {
+                $document->setFile($file);
+                $document->upload();
+            } else {
+                $result['error'] = 'File not found';
+            }
+            $em->persist($document);
+            $em->flush();
+            $documentOrganization = new DocumentsOrganization();
+            $documentOrganization->setOrganization($organization);
+            $documentOrganization->setDocuments($document);
+            $em->persist($documentOrganization);
+            $em->flush();
+/*        } else {
+            $result['error'] = 'No access';
+        }*/
+
+        return new Response(json_encode($result));
+    }
+
+    /**
      * Saves dop dogovor ajax form
      *
      * @param Request $request
@@ -3997,6 +4311,31 @@ class AjaxController extends BaseFilterController
         return new Response(json_encode($result));
     }
 
+    /**
+     * Function to change document date (ajax-editable)
+     *
+     * @return mixed[]
+     */
+    public function documentDateAction()
+    {
+        $pk = $this->get('request')->request->get('pk');
+        //$name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        $object = $this->getDoctrine()
+            ->getRepository('ListsDocumentBundle:Documents')
+            ->find($pk);
+        $value = new \DateTime($value);
+        $object->setDatetime($value);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+        $em->flush();
+
+        $return = array();
+
+        return new Response(json_encode($return));
+    }
     /**
      * Function to handle the ajax queries from editable elements
      *

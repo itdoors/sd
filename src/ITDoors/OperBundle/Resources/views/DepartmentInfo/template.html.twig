@@ -63,6 +63,7 @@
                     <li><a href="#tab_3" data-toggle="tab">{% trans %}Final result{% endtrans %}</a></li>
                     <li><a href="#tab_3" data-toggle="tab">{% trans %}Resposible{% endtrans %}</a></li>
                     <li><a href="#tab_3" data-toggle="tab" data-block="tab_content" data-url="{{ url('it_doors_oper_department_info_coworkers', {'id' : idDepartment}) }}">{% trans %}Co-workers{% endtrans %}</a></li>
+                    <li><a href="#tab_4" data-toggle="tab" data-block="tab_content" data-url="{{ url('lists_sales_contact_ajax_department', {'departmentId' : idDepartment}) }}">{% trans %}Contacts{% endtrans %}</a></li>
                 </ul>
                 <div class="tab-content" id="tab_content">
                     {{ render(controller('ITDoorsOperBundle:OperDepartmentInfo:basic', {
