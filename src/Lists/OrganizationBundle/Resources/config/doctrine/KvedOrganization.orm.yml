@@ -1,0 +1,32 @@
+Lists\OrganizationBundle\Entity\KvedOrganization:
+    type: entity
+    table: kved_organization
+    repositoryClass: Lists\OrganizationBundle\Entity\KvedOrganizationRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        organization:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            cascade: {  }
+            #mappedBy: null
+            #inversedBy: kvedOrganizations
+            joinColumns:
+                organization_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        kved:
+            targetEntity: Lists\OrganizationBundle\Entity\Kved
+            cascade: {  }
+            #mappedBy: Kved
+            #inversedBy: kvedOrganizations
+            joinColumns:
+                kved_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks:
+            prePersist: [ doOnPrePersist ]

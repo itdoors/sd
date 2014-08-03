@@ -16,6 +16,9 @@ class ContractorController extends SalesController
     protected $baseRoutePrefix = 'contractor';
     protected $baseTemplate = 'Contractor';
 
+    protected $filterFormName = 'organizationContractorFilterFormType';
+
+
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -204,6 +207,43 @@ class ContractorController extends SalesController
             'baseRoutePrefix' => $this->baseRoutePrefix
         ));
     }
+
+    /**
+     * @param integer $id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+
+    public function listKvedAction($id)
+    {
+        $kvedOrganizationRepo = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:KvedOrganization');
+
+        $organization = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization')
+            ->find($id);
+
+        $kvedOrganizations = $kvedOrganizationRepo->findBy(array(
+            'organization' => $organization
+        ));
+
+        $kveds = array();
+
+        foreach ($kvedOrganizations as $kvedOrganization) {
+            $kved = $kvedOrganization->getKved();
+            $kveds[] = $kved;
+        }
+
+
+        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':listKved.html.twig', array(
+            'kveds' => $kveds,
+            'organizationId' => $id,
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix
+        ));
+    }
+
+
     /**
      * @param integer $id
      * 
@@ -222,4 +262,39 @@ class ContractorController extends SalesController
             'baseRoutePrefix' => $this->baseRoutePrefix
         ));
     }
+
+    /**
+     * @param integer $id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listDocumentAction($id)
+    {
+        /** @var DogovorRepository $dr */
+        $documentsOrganizationRepo = $this->getDoctrine()
+            ->getRepository('ListsDocumentBundle:DocumentsOrganization');
+
+        $organization = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization')
+            ->find($id);
+
+        $documentsOrganization = $documentsOrganizationRepo->findBy(array(
+            'organization' => $organization
+        ));
+
+        $docs = array();
+
+        foreach ($documentsOrganization as $documentOrganization) {
+            $doc = $documentOrganization->getDocuments();
+            $docs[] = $doc;
+        }
+
+        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':listDocument.html.twig', array(
+            'documents' => $docs,
+            'organizationId' => $id,
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix
+        ));
+    }
+
 }

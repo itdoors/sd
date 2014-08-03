@@ -642,8 +642,141 @@ ALTER TABLE coea ADD CONSTRAINT FK_6963C5C032C8A3DE FOREIGN KEY (organization_id
 
 -- staging ---------------------
 -- prod ------------------------
+<<<<<<< HEAD
 CREATE TABLE kved (id BIGSERIAL NOT NULL, parent_id INT DEFAULT NULL, code VARCHAR(10) NOT NULL, name VARCHAR(255) NOT NULL, description TEXT NOT NULL, PRIMARY KEY(id));
 CREATE INDEX IDX_CF4A815F727ACA70 ON kved (parent_id);
 ALTER TABLE kved ADD CONSTRAINT FK_CF4A815F727ACA70 FOREIGN KEY (parent_id) REFERENCES kved (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 -- staging ---------------------
 -- prod ------------------------
+=======
+
+
+---task-800.801,802 kved
+CREATE SEQUENCE kved_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 2
+  CACHE 1;
+CREATE SEQUENCE kved_organization_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 3
+  CACHE 1;
+CREATE TABLE kved
+(
+  id bigint NOT NULL DEFAULT nextval('kved_id_seq'::regclass),
+  code character varying(10),
+  name character varying(255),
+  description character varying(255),
+  parent_id bigint,
+  CONSTRAINT kved_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+COMMENT ON TABLE kved
+  IS 'классификация видов економической деятельности';
+
+CREATE TABLE kved_organization
+(
+  id bigint NOT NULL DEFAULT nextval('kved_organization_id_seq'::regclass),
+  kved_id bigint,
+  organization_id bigint,
+  CONSTRAINT kved_organization_pkey PRIMARY KEY (id),
+  CONSTRAINT kved_organization_kved_id_fkey FOREIGN KEY (kved_id)
+      REFERENCES kved (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT kved_organization_organization_id_fkey FOREIGN KEY (organization_id)
+      REFERENCES organization (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+COMMENT ON TABLE kved_organization
+  IS 'Связка организаций с КВЕД';
+
+-- staging ++++++++++++++++++++
+-- prod +++++++++++++++++++++++
+
+CREATE SEQUENCE documents_organization_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 3
+  CACHE 1;
+CREATE TABLE documents_organization
+(
+  id bigint NOT NULL DEFAULT nextval('documents_organization_id_seq'::regclass),
+  documents_id bigint NOT NULL,
+  organization_id bigint NOT NULL,
+  CONSTRAINT documents_organization_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+COMMENT ON TABLE documents_organization
+  IS 'Связка документов с организациями';
+
+-- staging ++++++++++++++++++++++
+-- prod +++++++++++++++++++++++++
+
+---task-handling form upgrade
+CREATE SEQUENCE handling_message_model_contact_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 6
+  CACHE 1;
+CREATE SEQUENCE handling_message_handling_user_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 5
+  CACHE 1;
+
+CREATE TABLE handling_message_handling_user
+(
+  id bigint NOT NULL DEFAULT nextval('handling_message_handling_user_id_seq'::regclass),
+  handling_user_id bigint NOT NULL,
+  handling_message_id bigint NOT NULL,
+  CONSTRAINT handling_message_user_pkey PRIMARY KEY (id),
+  CONSTRAINT handling_message_handling_user_handling_message_id_fkey FOREIGN KEY (handling_message_id)
+      REFERENCES handling_message (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT handling_message_handling_user_handling_user_id_fkey FOREIGN KEY (handling_user_id)
+      REFERENCES handling_user (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+
+COMMENT ON TABLE handling_message_handling_user
+  IS 'Связка пользователей с активностью';
+
+
+CREATE TABLE handling_message_model_contact
+(
+  id bigint NOT NULL DEFAULT nextval('handling_message_model_contact_id_seq'::regclass),
+  handling_message_id bigint,
+  model_contact_id bigint,
+  CONSTRAINT handling_message_model_contact_pkey PRIMARY KEY (id),
+  CONSTRAINT handling_message_model_contact_handling_message_id_fkey FOREIGN KEY (handling_message_id)
+      REFERENCES handling_message (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT handling_message_model_contact_model_contact_id_fkey FOREIGN KEY (model_contact_id)
+      REFERENCES model_contact (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+
+COMMENT ON TABLE handling_message_model_contact
+  IS 'связка активности с контактами';
+-- staging ----------------------
+-- prod -------------------------
+>>>>>>> cd91a306f2804c018be700627ffcbd7eb65b1165

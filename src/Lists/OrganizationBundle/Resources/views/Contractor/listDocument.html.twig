@@ -1,0 +1,118 @@
+{% trans_default_domain 'ListsOrganizationBundle' %}
+<script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-file-upload/js/vendor/jquery.ui.widget.js')}}"></script>
+<script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-file-upload/js/jquery.iframe-transport.js')}}"></script>
+<script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-file-upload/js/jquery.fileupload.js')}}"></script>
+
+<script>
+    $(document).ready(function(){
+
+        $('.fileDate').editable({
+            clear: '{% trans from 'ITDoorsControllingBundle' %}clear{% endtrans %}<i class="icon-remove fa fa-times" style="font-size:12px"></i>',
+            type: 'date',
+            url: '{{ path('sd_common_ajax_document_date') }}',
+            datepicker: {
+                autoclose: true,
+                format: "dd-mm-yyyy",
+                language: "ru",
+                startView: 'month',
+                weekStart: 1
+            }
+        });
+
+
+        $('.documentTypeId').editable({
+            url: '{{ path('sd_common_ajax_document_type_save') }}',
+            source: '{{ path('sd_common_ajax_document_type') }}',
+            select2: {
+                placeholder: '{% trans %}Select type{% endtrans %}',
+                minimumInputLength: 0,
+                width: 250
+            }
+        });
+        $(function () {
+            $('.fileupload').fileupload({
+
+            dataType: 'json',
+            fail: function (e, data) {
+                alert('Error upload');
+            },
+            done: function (e, data) {
+                $(this).parents('td').find('a').remove();
+                $(this).parents('td').prepend('<a target="_blank" href="/uploads/dogovor/'+data.result.file+'">{% trans %}See document{% endtrans %}</a>');
+                alert('{% trans %}Document is uploaded{% endtrans %}');
+                $.each(data.result.files, function (index, file) {
+                   // $('<p/>').text(file.name).appendTo('#files');
+
+                });
+            },
+            add: function (e, data) {
+                if(confirm('{% trans %}Upload a new document? The old document will be removed.{% endtrans %}')){data.submit();}
+            }
+            }).prop('disabled', !$.support.fileInput)
+                .parent().addClass($.support.fileInput ? undefined : 'disabled');
+        });
+    });
+</script>
+    <div class="table-responsive table-scrollable">
+        <table class="table table-striped table-bordered table-advance table-hover">
+            <thead>
+            <tr>
+                <th>{% trans %}ID{% endtrans %} </th>
+                <th>{% trans %}Type{% endtrans %} </th>
+                <th>{% trans %}Date{% endtrans %} </th>
+                <th>{% trans %}Date created{% endtrans %} </th>
+                <th>{% trans %}Creator{% endtrans %} </th>
+                <th>{% trans %}File{% endtrans %} </th>
+                <th>{% trans %}Actions{% endtrans %} </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in documents %}
+                <tr {% if loop.index is odd %}class="color"{% endif %}>
+                   <td>{{ item.id }}</td>
+
+                   <td>
+                        <a href="#" id="documentTypeId" class="documentTypeId" data-type="select2" data-pk="{{ item.id }}" data-value="{{ item.documentsType }}" data-placement="right" data-original-title="{% trans %}Enter type{% endtrans %}">
+                            {{ item.documentsType }}
+                        </a>
+                   </td>
+                   <td>
+                       {% set datetime = ('Enter value')|trans %}
+                       {% if item.datetime is not empty %}
+                        {% set datetime = item.datetime|date('d.m.Y') %}
+                       {% endif %}
+                       <a href="#" class="fileDate" data-type="date" data-pk="{{ item.id }}"
+                          data-original-title="{% trans %}Enter date{% endtrans %}"
+                          data-format="dd-mm-yyyy"
+                          data-date="{{ datetime }}">
+                           {{ datetime }}
+                       </a>
+                   </td>
+                   <td>
+                       {{ item.createdatetime|date('d.m.Y') }}
+                   </td>
+                   <td>{{ item.user.firstName }} {{ item.user.lastName }} {{ item.user.middleName }}</td>
+                   <td>
+                        {% if item.filepath %}
+                            <a href="/uploads/document/{{ item.filepath }}" target="_blank">
+                                {% trans %}See document{% endtrans %}
+                            </a>
+                        {% endif %}
+                <span class="btn btn-success fileinput-button">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    <span>{% trans %}Upload new document{% endtrans %}</span>
+                    <input class="fileupload" type="file" name="dogovor" data-url="{{ path('sd_common_ajax_document_upload_file', {'id': item.id}) }}">
+                </span>
+                   </td>
+                   <td>
+                       <a class="ajax-delete fa fa-trash-o"
+                            title="{% trans %}Delete{% endtrans %}"
+                            href="javascript:;"
+                            data-params='{"model":"document","id":{{ item.id }}, "organization":{{ organizationId }}}'
+                        ></a>
+                   </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>

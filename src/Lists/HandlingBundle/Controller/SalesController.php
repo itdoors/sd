@@ -275,10 +275,33 @@ class SalesController extends BaseController
 
         $messages = $messagesRepository->getMessagesByHandlingId($handlingId);
 
+        $usersFromTheirSide = array();
+        $usersFromOurSide = array();
+        foreach ($messages as $message) {
+            $usersFromTheirSideTemp = $this->getDoctrine()
+                ->getRepository('ListsHandlingBundle:HandlingMessageModelContact')
+                ->findBy(array(
+                    'handlingMessage' => $message
+                ));
+
+            $usersFromTheirSide['message'.$message->getId()] = $usersFromTheirSideTemp;
+
+            $usersFromOurSideTemp = $this->getDoctrine()
+                ->getRepository('ListsHandlingBundle:HandlingMessageHandlingUser')
+                ->findBy(array(
+                    'handlingMessage' => $message
+                ));
+
+            $usersFromOurSide['message'.$message->getId()] = $usersFromOurSideTemp;
+
+        }
+
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':messagesList.html.twig', array(
             'messages' => $messages,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
+            'usersFromTheirSide' => $usersFromTheirSide,
+            'usersFromOurSide' => $usersFromOurSide,
         ));
 
     }

@@ -11,7 +11,20 @@
             <div class="tools"><a class="collapse" href="" title="{% trans %}Roll Up{% endtrans %}"></a></div>
         </div>
         <div class="portlet-body">
-            {{ item.description }} <br />
+            {{ item.description }} <br /><br>
+            {% if usersFromOurSide['message'~item.id] is not empty%}
+                {% trans %}Persons from our side{% endtrans %}: <br>
+                {% for person in usersFromOurSide['message'~item.id] %}
+                    &#9679; {{ person.handlingUser.user.fullName }}<br>
+                {% endfor %}
+            {% endif %}
+            <br>
+            {% if usersFromTheirSide['message'~item.id] is not empty%}
+                {% trans %}Persons from their side{% endtrans %}: <br>
+                {% for person in usersFromTheirSide['message'~item.id] %}
+                    &#9679; {{ person.modelContact.fullName }}<br>
+                {% endfor %}
+            {% endif %}
             {% if item.filepath %}
                 <div class="panel panel-default">
                     <div class="panel-heading">{% trans %}Attached Files{% endtrans %}</div>

@@ -449,6 +449,7 @@
                             <span class="title">{% trans %}Coworkers{% endtrans %}</span>
                         </a>
                     </li>
+                {% endif %}
                     <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_contractor_index')
                     %} class="active"{% endif %}>
                         <a href="{{ path('lists_contractor_index') }}">
@@ -456,7 +457,6 @@
                             <span class="title">{% trans %}Contractors{% endtrans %}</span>
                         </a>
                     </li>
-                {% endif %}
             </ul>
         </li>
         {% endif %}

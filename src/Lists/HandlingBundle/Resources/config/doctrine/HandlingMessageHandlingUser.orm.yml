@@ -1,0 +1,30 @@
+Lists\HandlingBundle\Entity\HandlingMessageHandlingUser:
+    type: entity
+    table: handling_message_handling_user
+    repositoryClass: Lists\HandlingBundle\Entity\HandlingMessageHandlingUserRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        handlingUser:
+            targetEntity: Lists\HandlingBundle\Entity\HandlingUser
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                handling_user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        handlingMessage:
+            targetEntity: Lists\HandlingBundle\Entity\HandlingMessage
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                handling_message_id:
+                    referencedColumnName: id
+            orphanRemoval: false

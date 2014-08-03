@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 lists_kved:
     resource: "@ListsKvedBundle/Resources/config/routing.yml"
+=======
+lists_document:
+    resource: "@ListsDocumentBundle/Resources/config/routing.yml"
+>>>>>>> cd91a306f2804c018be700627ffcbd7eb65b1165
     prefix:   /
 
 it_doors_history:
