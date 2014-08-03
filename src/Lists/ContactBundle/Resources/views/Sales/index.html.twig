@@ -36,8 +36,52 @@
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-switch/static/js/bootstrap-switch.min.js')}} "></script>
     <script type="text/javascript" src="{{ asset('templates/core/plugins/jquery-tmpl/jquery.tmpl.min.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('templates/sipml/sipml-api.js')}} "></script>
 {% endblock %}
 {% block body %}
+
+<script type="text/javascript">
+    var callSession;
+
+    $(document).ready(function(){
+        SIPml.init(
+                function(e){
+                    var stack =  new SIPml.Stack({
+                        realm: '95.67.67.170',
+                        impi: '8005',
+                        impu: 'sip:8005@95.67.67.170',
+                        password: 'itdoors25',
+                        websocket_proxy_url: 'ws://95.67.67.170:10060/ws', // optional
+                        outbound_proxy_url: 'udp://95.67.67.170:5060', // optional
+                        enable_rtcweb_breaker: true, // optional
+                        events_listener: { events: 'started', listener: function(e){
+                            callSession = stack.newSession('call-audiovideo', {
+                                video_local: document.getElementById('video-local'),
+                                video_remote: document.getElementById('video-remote'),
+                                audio_remote: document.getElementById('audio-remote')
+                            });
+
+                        }
+                        }
+                    });
+                    stack.start();
+                }
+        );
+
+        $('.call-btn').live('click', function(e) {
+            e.preventDefault();
+            var phone = $(this).data('phone');
+            var pattern = new RegExp("(?:\([2-9]\d{2}\)\ ?|[2-9]\d{2}(?:\-?|\ ?))[2-9]\d{2}[- ]?\d{4}");
+
+            callSession.call('0636821588');
+
+            /*if (pattern.test(phone.trim())) {
+
+                //callSession.call(phone.trim());
+            }*/
+        });
+    });
+</script>
 <div class="row">
     <div class="col-md-12">
         <p>{% trans %}Contacts on contacts{% endtrans %}</p>
@@ -92,4 +136,7 @@
         </div>
     </div>
 </div>
+    <audio id="audio_remote" autoplay="autoplay" />
+    <video id="video_remote" class="video" height="100%" width="100%" style="opacity: 0; background-color: #000000; -webkit-transition-property: opacity; -webkit-transition-duration: 2s;" autoplay="autoplay"> </video>
+    <video id="video_local" class="video" height="72px" width="88px" style="opacity: 0; margin-top: -80px; margin-left: 5px; background-color: #000000; -webkit-transition-property: opacity; -webkit-transition-duration: 2s;" muted="true" autoplay="autoplay"> </video>
 {% endblock body %}
