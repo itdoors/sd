@@ -13,9 +13,13 @@ use Lists\DogovorBundle\Entity\DopDogovor;
 use Lists\DogovorBundle\Entity\DopDogovorRepository;
 use Lists\HandlingBundle\Entity\Handling;
 use Lists\HandlingBundle\Entity\HandlingMessage;
+use Lists\HandlingBundle\Entity\HandlingMessageHandlingUser;
+use Lists\HandlingBundle\Entity\HandlingMessageModelContact;
 use Lists\HandlingBundle\Entity\HandlingRepository;
 use Lists\HandlingBundle\Entity\HandlingService;
 use Lists\HandlingBundle\Entity\HandlingServiceRepository;
+use Lists\HandlingBundle\Entity\HandlingUserRepository;
+use Lists\HandlingBundle\ListsHandlingBundle;
 use Lists\LookupBundle\Entity\LookupRepository;
 use Lists\ContactBundle\Entity\ModelContact;
 use Lists\ContactBundle\Entity\ModelContactRepository;
@@ -1764,7 +1768,6 @@ class AjaxController extends BaseFilterController
         $data = $form->getData();
 
         $formData = $request->request->get($form->getName());
-        var_dump($formData['test']); die();
         $handlingId = $data->getHandlingId();
 
         /** @var \Lists\HandlingBundle\Entity\Handling $handling */
@@ -1790,7 +1793,42 @@ class AjaxController extends BaseFilterController
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
-        // $em->flush();
+        $em->flush();
+        $em->refresh($data);
+
+        if (isset($formData['usersFromOurSide'])) {
+            //$usersFromOurSide = explode(',', $formData['usersFromOurSide']);
+            $usersFromOurSide = $formData['usersFromOurSide'];
+            if (count($usersFromOurSide)) {
+                foreach ($usersFromOurSide as $userFromOurSide) {
+                    $handlingUser = $this->getDoctrine()
+                        ->getRepository('ListsHandlingBundle:HandlingUser')
+                        ->find($userFromOurSide);
+                    $handlingMessageHandlingUser = new HandlingMessageHandlingUser();
+                    $handlingMessageHandlingUser->setHandlingMessage($data);
+                    $handlingMessageHandlingUser->setHandlingUser($handlingUser);
+                    $em->persist($handlingMessageHandlingUser);
+                }
+
+            }
+        }
+        if (isset($formData['contactMany'])) {
+            //$usersFromTheirSide = explode(',', $formData['contactMany']);
+            $usersFromTheirSide = $formData['contactMany'];
+            if (count($usersFromTheirSide)) {
+                foreach ($usersFromTheirSide as $userFromTheirSide) {
+                    $modelContact = $this->getDoctrine()
+                        ->getRepository('ListsContactBundle:ModelContact')
+                        ->find($userFromTheirSide);
+                    $handlingMessageModelContact = new HandlingMessageModelContact();
+                    $handlingMessageModelContact->setHandlingMessage($data);
+                    $handlingMessageModelContact->setModelContact($modelContact);
+                    $em->persist($handlingMessageModelContact);
+                }
+
+            }
+        }
+
         // Insert future
         $type = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingMessageType')
@@ -3249,6 +3287,45 @@ class AjaxController extends BaseFilterController
                         ->setParameter(':modelId', $organizationId)
                         ->setParameter(':ownerIds', $userIds);
                 }
+            ));
+
+        $form
+            ->add('usersFromOurSide', 'entity', array(
+                'class' => 'ListsHandlingBundle:HandlingUser',
+                'empty_value' => '',
+                'required' => false,
+                'multiple' => true,
+                'mapped' => false,
+                'query_builder' => function (HandlingUserRepository $repository) use ($handlingId) {
+                        return $repository->createQueryBuilder('hu')
+                            ->innerJoin('hu.handling', 'h')
+                            ->leftJoin('hu.lookup', 'l')
+                            ->innerJoin('hu.user', 'u')
+                            ->innerJoin('u.stuff', 's')
+                            ->where('h.id = :handlingId')
+                            ->setParameter(':handlingId', $handlingId);
+
+
+                    }
+            ));
+
+        $form
+            ->add('contactMany', 'entity', array(
+                'class' => 'ListsContactBundle:ModelContact',
+                'empty_value' => '',
+                'required' => false,
+                'mapped' => false,
+                'multiple' => true,
+                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
+                        return $repository->createQueryBuilder('mc')
+                            ->leftJoin('mc.owner', 'owner')
+                            ->where('mc.modelName = :modelName')
+                            ->andWhere('mc.modelId = :modelId')
+                            ->andWhere('owner.id in (:ownerIds)')
+                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                            ->setParameter(':modelId', $organizationId)
+                            ->setParameter(':ownerIds', $userIds);
+                    }
             ));
 
          $form
