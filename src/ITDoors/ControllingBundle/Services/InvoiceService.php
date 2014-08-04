@@ -557,26 +557,4 @@ class InvoiceService
 
         return $tabs;
     }
-
-    /**
-     * @return Response
-     */
-    public function sendMail()
-    {
-        /** @var EntityManager $em */
-        $em = $this->container->get('doctrine')->getManager();
-
-        /** @var InvoiceRepository $invoice */
-        $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
-
-        $message = \Swift_Message::newInstance()
-            ->setSubject('Hello Email')
-            ->setFrom('send@example.com')
-            ->setTo('senj@mail.ru')
-            ->setBody('You should see me from the profiler!');
-
-        $this->container->get('mailer')->send($message);
-
-        return new Response('send');
-    }
 }
