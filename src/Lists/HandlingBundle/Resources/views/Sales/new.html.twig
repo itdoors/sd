@@ -81,11 +81,13 @@
 
 
                 <div class="form-body">
-                    <div class="alert alert-danger display-hide">
+                    {% if  form_errors(form) %}
+                    <div class="alert alert-danger">
                         <button class="close" data-close="alert"></button>
                         {% trans %}You have some form errors. Please check below.{% endtrans %}
                         {{ form_errors(form) }}
                     </div>
+                    {% endif %}
                     <h3 class="form-section">{% trans %}General information{% endtrans %}</h3>
                     <div class="row">
                         <div class="col-md-6
@@ -131,7 +133,7 @@
 							{% endif %}">
 							{# Тип обращения #}
                             <div class="form-group">
-                                {{ form_label(form.type, 'Handling Type *', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_label(form.type, 'Handling Type'|trans ~ ' *', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(form.type, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter Handling Type'}}) }}
 								{% if form.type.vars.errors|length %}
 									{{ form_errors(form.name) }}
@@ -151,16 +153,7 @@
                         <!--/span-->
                     </div>
                     <!--/row-->
-					<div class="row">
-                        <div class="col-md-6">
-							{# Предлагаемые услуги #}
-                            <div class="form-group">
-                                {{ form_label(form.serviceOffered, 'Enter Service', {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(form.serviceOffered, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter Service offered'}}) }}
-								<span class="help-block">{% trans %}Enter Service offered{% endtrans %}"</span>
-                            </div>
-                        </div>
-                        <!--/span-->
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
 								{{ form_label(form.description, 'Notice', {'attr': {'class': 'control-label'}}) }}
@@ -168,38 +161,40 @@
 								<span class="help-block">{% trans %}Enter Notice{% endtrans %}"</span>
                             </div>
                         </div>
-                        <!--/span-->
-                    </div>
-                    <!--/row-->
-					<div class="row">
                         <div class="col-md-6">
 							{# Бюджет - сюда нужно money control #}
                             <div class="form-group">
                                 {{ form_label(form.budget, 'Budget without VAT', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(form.budget, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Budget without VAT'}}) }}
-								<span class="help-block">{% trans %}Enter Budget without VAT{% endtrans %}"</span>
+								<span class="help-block">{% trans %}Enter Budget without VAT{% endtrans %}</span>
                             </div>
                         </div>
-                        <!--/span-->
+                    </div>
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
 								{{ form_label(form.status, 'Status', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(form.status, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter Status'}}) }}
-								<span class="help-block">{% trans %}Enter Status{% endtrans %}"</span>
+								<span class="help-block">{% trans %}Enter Status{% endtrans %}</span>
                             </div>
                         </div>
-                        <!--/span-->
-                    </div>
-                    <!--/row-->
-					<div class="row">
                         <div class="col-md-6">
 							{# Square - control with numeric validation #}
-                            <div class="form-group">
+                            <div class="form-group{% if form.square.vars.errors|length %}
+							    has-error
+							{% endif %}">
                                 {{ form_label(form.square, 'Square', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(form.square, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Square'}}) }}
-								<span class="help-block">{% trans %}Enter Square{% endtrans %}"</span>
+                                {% if form.square.vars.errors|length %}
+                                        {{ form_errors(form.square) }}
+                                {% else %}
+                                        <span class="help-block">{% trans %}Enter Square{% endtrans %}</span>
+                                {% endif %}
+                                
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <!--/span-->
                         <div class="col-md-6">
                             <div class="form-group">
@@ -208,10 +203,6 @@
 								<span class="help-block">{% trans %}Enter Status Description{% endtrans %}"</span>
                             </div>
                         </div>
-                        <!--/span-->
-                    </div>
-					<!--/row-->
-					<div class="row">
                         <div class="col-md-6">
 							{# Chance - control with numeric validation and procents #}
                             <div class="form-group">
@@ -220,6 +211,8 @@
 								<span class="help-block">{% trans %}Enter Chance{% endtrans %}"</span>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <!--/span-->
                         <div class="col-md-6">
                             <div class="form-group">
@@ -228,22 +221,20 @@
 								<span class="help-block">{% trans %}Enter Result{% endtrans %}"</span>
                             </div>
                         </div>
-                        <!--/span-->
-                    </div>
-                    <!--/row-->
-					<div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                {{ form_label(form.handlingServices, 'Services', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_label(form.handlingServices, 'Services'|trans, {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(form.handlingServices, {'attr': {
                                     'class': 'form-control select2',
                                     'data-required': '1',
                                     'placeholder': 'Result Description',
                                     'multiple': 'multiple'
                                 }}) }}
-                                <span class="help-block">{% trans %}Enter Services{% endtrans %}"</span>
+                                <span class="help-block">{% trans %}Enter services{% endtrans %}</span>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <!--/span-->
                         <div class="col-md-6">
                             <div class="form-group">
@@ -252,9 +243,6 @@
 								<span class="help-block">{% trans %}Enter Result Description{% endtrans %}"</span>
                             </div>
                         </div>
-                        <!--/span-->
-                    </div>
-                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 {{ form_widget(form.create, { 'label': 'Create', 'attr': {'class': 'btn green'}} ) }}
