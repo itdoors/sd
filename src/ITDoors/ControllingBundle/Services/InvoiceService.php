@@ -117,17 +117,19 @@ class InvoiceService
             $invoiceNew->setInvoiceId(trim($invoice->invoiceId));
             if ($invoice->dateFact != 'null') {
                 $summa = 0;
+                $dateFact = null;
                 foreach ($invoice->dateFact as $pay) {
+                    $dateFact = new \DateTime(trim($pay->date));
                     $payments = new InvoicePayments();
                     $payments->setInvoice($invoiceNew);
-                    $payments->setDate(new \DateTime(trim($pay->date)));
+                    $payments->setDate($dateFact);
                     $payments->setSumma(trim($pay->summa));
                     $em->persist($payments);
                     $summa += trim($pay->summa);
                 }
                 
-                if ($summa == $invoice->sum) {
-                    $invoiceNew->setDateFact(new \DateTime(trim($invoice->dateFact)));
+                if ($summa >= $invoice->sum && $dateFact != null) {
+                    $invoiceNew->setDateFact($dateFact);
                 }
             }
         } else {
@@ -137,17 +139,20 @@ class InvoiceService
                     $em->remove($payOld);
                 }
                 $summa = 0;
+                $dateFact = null;
                 foreach ($invoice->dateFact as $pay) {
+                    $dateFact = new \DateTime(trim($pay->date));
                     $payments = new InvoicePayments();
                     $payments->setInvoice($invoiceNew);
-                    $payments->setDate(new \DateTime(trim($pay->date)));
+                    $payments->setDate($dateFact);
                     $payments->setSumma(trim($pay->summa));
                     $em->persist($payments);
                     $summa += trim($pay->summa);
+                    
                 }
 
-                if ($summa == $invoice->sum) {
-                    $invoiceNew->setDateFact(new \DateTime(trim($invoice->dateFact)));
+                if ($summa >= $invoice->sum && $dateFact != null) {
+                    $invoiceNew->setDateFact($dateFact);
                 }
             } else {
                 $invoiceNew->setDateFact(null);
