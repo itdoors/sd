@@ -10,12 +10,7 @@ parameters:
     lists_organization.form.user.sales.admin.class: Lists\OrganizationBundle\Form\OrganizationUserSalesAdminFormType
     lists_organization.form.user.filter.class: Lists\OrganizationBundle\Form\OrganizationUserFilterFormType
     lists_organization.form.child.class: Lists\OrganizationBundle\Form\OrganizationChildForm
-<<<<<<< HEAD
-    lists_organization.form.organization.kved.class: Lists\OrganizationBundle\Form\OrganizationKvedFormType
-=======
-    lists_organization.form.coea.class: Lists\OrganizationBundle\Form\CoeaFormType
     lists_organization.form.kved.class: Lists\OrganizationBundle\Form\KvedFormType
->>>>>>> cd91a306f2804c018be700627ffcbd7eb65b1165
     
 
     lists_organization.edrpou.validator.class: Lists\OrganizationBundle\Validator\UniqueEdrpouValidator
@@ -93,12 +88,6 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: organizationChildForm }
-
-    lists_organization.form.OrganizationKvedForm:
-        class: %lists_organization.form.organization.kved.class%
-        arguments: [@service_container]
-        tags:
-            - { name: form.type, alias: organizationKvedForm }
 
     lists_organization.form.kvedForm:
         class: %lists_organization.form.kved.class%

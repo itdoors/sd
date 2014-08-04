@@ -160,9 +160,6 @@ Lists\OrganizationBundle\Entity\Organization:
         children:
             targetEntity: Organization
             mappedBy: parent
-        kveds:
-            targetEntity: OrganizationKved
-            mappedBy: organization
         organizationUsers:
             targetEntity: OrganizationUser
             mappedBy: organization

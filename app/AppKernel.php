@@ -49,11 +49,7 @@ class AppKernel extends Kernel
             new ITDoors\CronBundle\ITDoorsCronBundle(),
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
             new ITDoors\HistoryBundle\ITDoorsHistoryBundle(),
-<<<<<<< HEAD
-            new Lists\KvedBundle\ListsKvedBundle(),
-=======
             new Lists\DocumentBundle\ListsDocumentBundle(),
->>>>>>> cd91a306f2804c018be700627ffcbd7eb65b1165
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
