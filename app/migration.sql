@@ -750,7 +750,7 @@ WITH (
 
 COMMENT ON TABLE handling_message_model_contact
   IS 'связка активности с контактами';
--- staging ----------------------
+-- staging ++++++++++++++++++++++++
 -- prod -------------------------
 
 CREATE TABLE invoice_payments (id SERIAL NOT NULL, invoice_id INT NOT NULL, summa DOUBLE PRECISION NOT NULL, date DATE NOT NULL, PRIMARY KEY(id));
@@ -759,5 +759,5 @@ ALTER TABLE invoice_payments ADD CONSTRAINT FK_7AFAC16A2989F1FD FOREIGN KEY (inv
 INSERT INTO "public".lookup (lukey, "name", "group") 
 	VALUES ('organization_sign_contractor', 'Подрядчики', 'organization_sign_contractor');
 
--- staging ----------------------
+-- staging ++++++++++++++++++++++++
 -- prod -------------------------
