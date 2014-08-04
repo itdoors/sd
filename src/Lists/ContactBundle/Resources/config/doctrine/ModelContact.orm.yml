@@ -117,5 +117,9 @@ Lists\ContactBundle\Entity\ModelContact:
                 level_id:
                     referencedColumnName: id
             orphanRemoval: false
+    oneToOne:
+        sendEmail:
+            targetEntity: ModelContactSendEmail
+            mappedBy: modelContact
     lifecycleCallbacks:
             prePersist: [ doOnPrePersist ]
