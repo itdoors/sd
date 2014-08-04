@@ -1018,4 +1018,42 @@ class Invoice
     {
         return $this->bank;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $payments;
+
+
+    /**
+     * Add payments
+     *
+     * @param \ITDoors\ControllingBundle\Entity\InvoicePayments $payments
+     * @return Invoice
+     */
+    public function addPayment(\ITDoors\ControllingBundle\Entity\InvoicePayments $payments)
+    {
+        $this->payments[] = $payments;
+    
+        return $this;
+    }
+
+    /**
+     * Remove payments
+     *
+     * @param \ITDoors\ControllingBundle\Entity\InvoicePayments $payments
+     */
+    public function removePayment(\ITDoors\ControllingBundle\Entity\InvoicePayments $payments)
+    {
+        $this->payments->removeElement($payments);
+    }
+
+    /**
+     * Get payments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPayments()
+    {
+        return $this->payments;
+    }
 }

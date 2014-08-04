@@ -63,6 +63,9 @@ class InvoiceRepository extends EntityRepository
                       ), ','
                  ) as responsibles"
             )
+            ->addSelect(
+                " (SELECT SUM(p.summa)  FROM  ITDoorsControllingBundle:InvoicePayments p WHERE p.invoiceId = i.id) as paymentsSumma"
+            )
             ->addSelect('customer.name as customerName')
             ->addSelect('performer.name as performerName')
             ->addSelect('r.name as regionName')
@@ -674,8 +677,17 @@ class InvoiceRepository extends EntityRepository
                 $entitie = $entitie->getQuery()
                     ->getSingleResult();
                 break;
-            case 'history':
-                $entitie = '';
+            case 'payments':
+                 $entitie
+                    ->Select('ip.summa')
+                    ->addSelect('ip.date')
+                    ->leftJoin('i.payments', 'ip')
+                    ->where('i.id = :invoiceid')
+                    ->andWhere('ip.summa is not NULL')
+                    ->setParameter(':invoiceid', (int) $invoiceid)
+                    ->orderBy('ip.date');
+                $entitie = $entitie->getQuery()
+                    ->getResult();
                 break;
         }
 

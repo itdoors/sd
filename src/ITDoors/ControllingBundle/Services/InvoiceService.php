@@ -8,6 +8,7 @@ use ITDoors\ControllingBundle\Entity\Invoicecron;
 use ITDoors\ControllingBundle\Entity\InvoicecronRepository;
 use ITDoors\ControllingBundle\Entity\Invoice;
 use Symfony\Component\BrowserKit\Response;
+use ITDoors\ControllingBundle\Entity\InvoicePayments;
 
 /**
  * Invoice Service class
@@ -114,14 +115,48 @@ class InvoiceService
             $invoiceNew = new Invoice();
             $invoiceNew->setCourt(0);
             $invoiceNew->setInvoiceId(trim($invoice->invoiceId));
-            if (!empty($invoice->dateFact) && $invoice->dateFact != 'null') {
-                $invoiceNew->setDateFact(new \DateTime(trim($invoice->dateFact)));
+            if ($invoice->dateFact != 'null') {
+                $summa = 0;
+                foreach ($invoice->dateFact as $pay) {
+                    $payments = new InvoicePayments();
+                    $payments->setInvoice($invoiceNew);
+                    $payments->setDate(new \DateTime(trim($pay->date)));
+                    $payments->setSumma(trim($pay->summa));
+                    $em->persist($payments);
+                    $summa += trim($pay->summa);
+                }
+                
+                if ($summa === $invoice->sum) {
+                    $invoiceNew->setDateFact(new \DateTime(trim($invoice->dateFact)));
+                }
             }
         } else {
-            if (!empty($invoice->dateFact) && $invoice->dateFact != 'null') {
-                $invoiceNew->setDateFact(new \DateTime(trim($invoice->dateFact)));
+            if ($invoice->dateFact != 'null') {
+                if ($invoice->dateFact != 'null') {
+                    $paymentsOld = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')->findBy(array('invoiceId' => $invoiceNew->getId()));
+                    foreach ($paymentsOld as $payOld) {
+                        $em->remove($payOld);
+                    }
+                    $summa = 0;
+                    foreach ($invoice->dateFact as $pay) {
+                        $payments = new InvoicePayments();
+                        $payments->setInvoice($invoiceNew);
+                        $payments->setDate(new \DateTime(trim($pay->date)));
+                        $payments->setSumma(trim($pay->summa));
+                        $em->persist($payments);
+                        $summa += trim($pay->summa);
+                    }
+
+                    if ($summa === $invoice->sum) {
+                        $invoiceNew->setDateFact(new \DateTime(trim($invoice->dateFact)));
+                    }
+                }
             } else {
                 $invoiceNew->setDateFact(null);
+                $paymentsOld = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')->findBy(array('invoiceId' => $invoiceNew->getId()));
+                foreach ($paymentsOld as $payOld) {
+                    $em->remove($payOld);
+                }
             }
         }
 
@@ -393,6 +428,12 @@ class InvoiceService
             'tab' => 'customer',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
             'text' => $translator->trans('Customer')
+        );
+        $tabs['payments'] = array(
+            'blockupdate' => 'ajax-tab-holder',
+            'tab' => 'payments',
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
+            'text' => $translator->trans('Payments')
         );
 //        $tabs['history'] = array(
 //            'blockupdate' => 'ajax-tab-holder',
