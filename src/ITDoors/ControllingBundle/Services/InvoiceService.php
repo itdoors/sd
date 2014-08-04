@@ -21,7 +21,9 @@ class InvoiceService
      * @var Container $container
      */
     protected $container;
-
+    
+    protected $messageTemplate;
+    
     protected $arrCostumersForSendMessages;
     /**
      * __construct
@@ -83,6 +85,7 @@ class InvoiceService
             switch (json_last_error()) {
                 case JSON_ERROR_NONE:
                     $this->addCronError(0, 'start parser', $file, 'parser file');
+                    $this->arrCostumersForSendMessages = array();
                     $this->savejson($json->invoice);
                     $this->addCronError(0, 'stop parser', $file, 'parser file');
                     if (!is_dir($directory.'old')) {
@@ -117,6 +120,7 @@ class InvoiceService
             $invoiceNew = new Invoice();
             $invoiceNew->setCourt(0);
             $invoiceNew->setInvoiceId(trim($invoice->invoiceId));
+
             if ($invoice->dateFact != 'null') {
                 $summa = 0;
                 $dateFact = null;
@@ -133,6 +137,8 @@ class InvoiceService
                 if ($summa >= $invoice->sum && $dateFact != null) {
                     $invoiceNew->setDateFact($dateFact);
                 }
+            } else {
+                $this->messageTemplate = 'invoice-not-pay';
             }
         } else {
             if ($invoice->dateFact != 'null') {
@@ -152,11 +158,20 @@ class InvoiceService
                     $summa += trim($pay->summa);
                 }
 
+                if (!$invoiceNew->getDateFact()) {
+                    $this->messageTemplate = 'invoice-pay';
+                }
+
                 if ($summa >= $invoice->sum && $dateFact != null) {
                     $invoiceNew->setDateFact($dateFact);
                 }
             } else {
                 $invoiceNew->setDateFact(null);
+                $date = date('Y-m-d');
+                $days = (strtotime($date)-strtotime($invoiceNew->getDelayDate()->format('Y-m-d')))/24/3600;
+                if (in_array($days, array(0))) {
+                    $this->messageTemplate = 'invoice-not-pay';
+                }
                 $paymentsOld = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')->findBy(array('invoiceId' => $invoiceNew->getId()));
                 foreach ($paymentsOld as $payOld) {
                     $em->remove($payOld);
@@ -236,6 +251,12 @@ class InvoiceService
 
         if ($customerfind) {
             $invoiceNew->setCustomer($customerfind);
+            if (!array_key_exists($customerfind->getId(), $this->arrCostumersForSendMessages)) {
+                $this->arrCostumersForSendMessages[$customerfind->getId()] = array();
+            }
+            if ($this->messageTemplate && !array_key_exists($this->messageTemplate, $this->arrCostumersForSendMessages[$customerfind->getId()] )) {
+                $this->arrCostumersForSendMessages[$customerfind->getId()][$this->messageTemplate]  = array();
+            }
         }
         if ($performerfind) {
             $invoiceNew->setPerformer($performerfind);
@@ -292,10 +313,12 @@ class InvoiceService
             } else {
 
                 if (!$customerfind && $performerfind) {
+                    $this->messageTemplate = false;
                     $error = 'dogovor not found and customer';
                 } elseif (!$performerfind && $customerfind) {
                     $error = 'dogovor not found and performer';
                 } else {
+                    $this->messageTemplate = false;
                     $error = 'dogovor not found and customer and  performer';
                 }
                 $em->persist($invoiceNew);
@@ -303,6 +326,12 @@ class InvoiceService
                 $em->refresh($invoiceNew);
                 $this->addCronError($invoiceNew, 'error', $error, json_encode($invoice));
             }
+        }
+        if ($this->messageTemplate && $invoiceNew->getDogovorNumber()) {
+            if (!array_key_exists($invoiceNew->getDogovorNumber(), $this->arrCostumersForSendMessages[$customerfind->getId()][$this->messageTemplate] )) {
+                $this->arrCostumersForSendMessages[$invoiceNew->getCustomer()->getId()][$this->messageTemplate][$invoiceNew->getDogovorNumber()] = array();
+            }
+            $this->arrCostumersForSendMessages[$invoiceNew->getCustomer()->getId()][$this->messageTemplate][$invoiceNew->getDogovorNumber()][] = $invoiceNew->getId();
         }
     }
 
@@ -318,6 +347,7 @@ class InvoiceService
         foreach ($json as $key => $invoice) {
 
             $invoiceFind = true;
+            $this->messageTemplate = false;
             $invoiceNew = $this->saveinvoice($invoice);
 
             if (!$invoiceNew) {
