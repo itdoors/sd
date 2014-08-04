@@ -64,7 +64,11 @@ class InvoiceRepository extends EntityRepository
                  ) as responsibles"
             )
             ->addSelect(
-                " (SELECT SUM(p.summa)  FROM  ITDoorsControllingBundle:InvoicePayments p WHERE p.invoiceId = i.id) as paymentsSumma"
+                "("
+                . "SELECT SUM(paymens.summa)"
+                . " FROM  ITDoorsControllingBundle:InvoicePayments paymens"
+                . " WHERE paymens.invoiceId = i.id"
+                . ") as paymentsSumma"
             )
             ->addSelect('customer.name as customerName')
             ->addSelect('performer.name as performerName')
@@ -184,14 +188,7 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoicePeriod($res);
         $res->addSelect('i.dogovorNumber');
         $res->addSelect('i.dogovorDate')
-            ->addSelect('i.performerName')
-            ->addSelect(
-                "("
-                . "SELECT SUM(p.summa)"
-                . " FROM  ITDoorsControllingBundle:InvoicePayments p"
-                . " WHERE p.invoiceId = i.id)"
-                . " as paymentsSumma"
-            );
+            ->addSelect('i.performerName');
         /** join */
         $this->joinInvoicePeriod($res);
         /** where */
