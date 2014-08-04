@@ -126,30 +126,28 @@ class InvoiceService
                     $summa += trim($pay->summa);
                 }
                 
-                if ($summa === $invoice->sum) {
+                if ($summa == $invoice->sum) {
                     $invoiceNew->setDateFact(new \DateTime(trim($invoice->dateFact)));
                 }
             }
         } else {
             if ($invoice->dateFact != 'null') {
-                if ($invoice->dateFact != 'null') {
-                    $paymentsOld = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')->findBy(array('invoiceId' => $invoiceNew->getId()));
-                    foreach ($paymentsOld as $payOld) {
-                        $em->remove($payOld);
-                    }
-                    $summa = 0;
-                    foreach ($invoice->dateFact as $pay) {
-                        $payments = new InvoicePayments();
-                        $payments->setInvoice($invoiceNew);
-                        $payments->setDate(new \DateTime(trim($pay->date)));
-                        $payments->setSumma(trim($pay->summa));
-                        $em->persist($payments);
-                        $summa += trim($pay->summa);
-                    }
+                $paymentsOld = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')->findBy(array('invoiceId' => $invoiceNew->getId()));
+                foreach ($paymentsOld as $payOld) {
+                    $em->remove($payOld);
+                }
+                $summa = 0;
+                foreach ($invoice->dateFact as $pay) {
+                    $payments = new InvoicePayments();
+                    $payments->setInvoice($invoiceNew);
+                    $payments->setDate(new \DateTime(trim($pay->date)));
+                    $payments->setSumma(trim($pay->summa));
+                    $em->persist($payments);
+                    $summa += trim($pay->summa);
+                }
 
-                    if ($summa === $invoice->sum) {
-                        $invoiceNew->setDateFact(new \DateTime(trim($invoice->dateFact)));
-                    }
+                if ($summa == $invoice->sum) {
+                    $invoiceNew->setDateFact(new \DateTime(trim($invoice->dateFact)));
                 }
             } else {
                 $invoiceNew->setDateFact(null);
@@ -435,12 +433,6 @@ class InvoiceService
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
             'text' => $translator->trans('Payments')
         );
-//        $tabs['history'] = array(
-//            'blockupdate' => 'ajax-tab-holder',
-//            'tab' => 'history',
-//            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
-//            'text' => $translator->trans('History')
-//        );
 
         return $tabs;
     }
