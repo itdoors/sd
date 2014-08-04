@@ -23,7 +23,6 @@ class OperCoworkerInfoController extends BaseFilterController
      */
     public function indexAction()
     {
-
         $year = intval(date('Y'));
         $month = intval(date('m'));
 
@@ -43,7 +42,11 @@ class OperCoworkerInfoController extends BaseFilterController
         $allowedDepartments = $accessService->getAllowedDepartmentsId();
         $this->addToSessionValues('idDepartment', $allowedDepartments, 'param', 'oper.bundle.department');
 
+        $user = $this->getUser();
+        $checkSupervisor =  $user->hasRole('ROLE_SUPERVISOR');
+
         return $this->render('ITDoorsOperBundle:Coworker:index.html.twig', array(
+            'supervisor' => $checkSupervisor
         ));
     }
 
@@ -115,7 +118,11 @@ class OperCoworkerInfoController extends BaseFilterController
      */
     public function coworkerIndexAction()
     {
+        $user = $this->getUser();
+        $checkSupervisor =  $user->hasRole('ROLE_SUPERVISOR');
+
         return $this->render('ITDoorsOperBundle:Coworker:coworker.html.twig', array(
+            'supervisor' => $checkSupervisor
         ));
     }
 
@@ -124,7 +131,15 @@ class OperCoworkerInfoController extends BaseFilterController
      */
     public function scheduleIndexAction()
     {
+        $checkSupervisor = $this->getUser()->hasRole('ROLE_SUPERVISOR');
+
+        $coworkerSupervisorPage = false;
+        if ($checkSupervisor) {
+            $coworkerSupervisorPage = true;
+        }
+
         return $this->render('ITDoorsOperBundle:Coworker:schedule.html.twig', array(
+            'coworkerSupervisorPage' => $coworkerSupervisorPage
         ));
     }
 
@@ -160,7 +175,8 @@ class OperCoworkerInfoController extends BaseFilterController
         $data[4]['visited'] = false;
         $data[4]['cityId'] = 28;
 
-/*        $departmentPeopleRepository = $this->getDoctrine()
+/*
+        $departmentPeopleRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeople');
 
         $dps = $departmentPeopleRepository->findBy(array(
@@ -168,7 +184,8 @@ class OperCoworkerInfoController extends BaseFilterController
         ));
         foreach ($dps as $dp) {
             $data[] = get_object_vars($dp);
-        }*/
+        }
+*/
 
         $options = array();
         //$options['show'] = array('number', 'city', 'visited');

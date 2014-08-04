@@ -39,7 +39,7 @@ class HandlingMessageModelContact
      * Set modelContact
      *
      * @param \Lists\ContactBundle\Entity\ModelContact $modelContact
-     * 
+     *
      * @return HandlingMessageModelContact
      */
     public function setModelContact(\Lists\ContactBundle\Entity\ModelContact $modelContact = null)
@@ -63,7 +63,7 @@ class HandlingMessageModelContact
      * Set handlingMessage
      *
      * @param \Lists\HandlingBundle\Entity\HandlingMessage $handlingMessage
-     * 
+     *
      * @return HandlingMessageModelContact
      */
     public function setHandlingMessage(\Lists\HandlingBundle\Entity\HandlingMessage $handlingMessage = null)

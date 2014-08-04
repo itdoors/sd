@@ -48,23 +48,14 @@
                     <li ><a id="schedule_block" href="#tab_3" data-block="tab_content" data-url="{{ url('it_doors_oper_coworker_schedule_index') }}" data-toggle="tab">{% trans %}Schedule{% endtrans %}</a></li>
                 </ul>
                 <div class="tab-content" id="tab_content">
-                    {% if supervisor %}
-                        {% set filterName = 'ScheduleSupervisorFilterFormType' %}
-                    {% else %}
-                        {% set filterName = 'ScheduleFilterFormType' %}
-                    {% endif %}
-                    {{ ajax_filter_render(filterName, ajax_namespace_oper_department_schedule, {
+                    {{ ajax_filter_render('ScheduleFilterFormType', ajax_namespace_oper_department_schedule, {
                     'coworker_list': 'ITDoorsAjax.updateList'
                     }) }}
 
                     <div id="coworker_list" data-url="{{ path('it_doors_oper_coworker_table')}}">
+                        {{ render(controller('ITDoorsOperBundle:OperCoworkerInfo:coworkerTable', {
 
-                        {% if not supervisor %}
-                            {{ render(controller('ITDoorsOperBundle:OperCoworkerInfo:coworkerTable', {
-
-                            })) }}
-                        {% endif %}
-
+                        })) }}
                     </div>
                 </div>
             </div>

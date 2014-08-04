@@ -457,6 +457,15 @@
                             <span class="title">{% trans %}Contractors{% endtrans %}</span>
                         </a>
                     </li>
+                {% if is_granted('ROLE_SUPERVISOR') %}
+                    <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_oper_supervisor_coworkers')
+                    %} class="active"{% endif %}>
+                        <a href="{{ path('it_doors_oper_supervisor_coworkers') }}">
+                            <i class="fa fa-money"></i>
+                            <span class="title">{% trans %}Supervisor coworkers{% endtrans %}</span>
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
         </li>
         {% endif %}

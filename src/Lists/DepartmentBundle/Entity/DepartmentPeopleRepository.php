@@ -66,15 +66,19 @@ class DepartmentPeopleRepository extends EntityRepository
             ->addSelect('dp.admissionDateNotOfficially')
             ->addSelect('dp.dismissalDateNotOfficially')
             ->addSelect('dp.drfo')
+            ->addSelect('o.name as organizationName')
             ->addSelect('i.tin')
             ->addSelect('i.address')
             ->addSelect('i.phone')
             ->addSelect('i.birthday')
             ->addSelect('i.passport')
             ->addSelect('m.name as mpkName')
+            ->addSelect('ompk.name as selfOrganizationName')
             ->leftJoin('dp.department', 'd')
             ->leftJoin('dp.individual', 'i')
-            ->leftJoin('dp.mpks', 'm');
+            ->leftJoin('dp.mpks', 'm')
+            ->leftJoin('d.organization', 'o')
+            ->leftJoin('m.organization', 'ompk');
 
         return $query;
     }
