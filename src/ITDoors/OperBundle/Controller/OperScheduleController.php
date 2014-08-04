@@ -1589,7 +1589,12 @@ class OperScheduleController extends BaseFilterController
         $info['id'] = $departmentPeople->getId();
         $info['mpk'] = $departmentPeople->getMpks();
         $info['organizationName'] = $organizationName;
-        $info['fio'] = $fio;
+        if ($departmentPeople->getMpks()->getOrganization()) {
+            $info['selfOrganizationName'] = $departmentPeople->getMpks()->getOrganization()->getName();
+        } else {
+            $info['selfOrganizationName'] = '';
+        }
+            $info['fio'] = $fio;
         $info['dateAcceptedOfficially'] = $departmentPeople->getAdmissionDate();
         $info['dateAcceptedNotOfficially'] = $departmentPeople->getAdmissionDateNotOfficially();
         $info['dateFiredOfficially'] = $departmentPeople->getDismissalDate();

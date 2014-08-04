@@ -3306,7 +3306,7 @@ class AjaxController extends BaseFilterController
                             ->setParameter(':handlingId', $handlingId);
 
 
-                    }
+                }
             ));
 
         $form
@@ -3325,7 +3325,7 @@ class AjaxController extends BaseFilterController
                             ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
                             ->setParameter(':modelId', $organizationId)
                             ->setParameter(':ownerIds', $userIds);
-                    }
+                }
             ));
 
          $form

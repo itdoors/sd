@@ -698,6 +698,14 @@
                     <td>
                         {% if coworker.mpkName is not empty %}
                             {{ coworker.mpkName }}
+                            (
+                                {% if coworker.organizationShortName %}
+                                    {{ coworker.organizationShortName }}
+                                {% else %}
+                                    {{ coworker.organizationName }}
+                                {% endif %}
+
+                            )
                         {% endif %}
                     </td>
 
