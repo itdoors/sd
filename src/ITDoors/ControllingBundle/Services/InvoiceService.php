@@ -22,6 +22,7 @@ class InvoiceService
      */
     protected $container;
 
+    protected $arrCostumersForSendMessages;
     /**
      * __construct
      *
