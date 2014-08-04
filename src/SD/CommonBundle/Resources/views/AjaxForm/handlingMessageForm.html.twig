@@ -21,6 +21,7 @@
             var option =$('#' + '{{ form.vars.name }}' + '_type option:selected').val();
             var labelDescription = $('#label_description').find('label')[0];
             var textareaDescription = $('#' + '{{ form.vars.name }}' + '_description');
+            var insidePeople  = $('#' + '{{ form.vars.name }}' + '_description');
             if (option == 3) {
                 labelDescription.innerHTML="{% trans %}Audit protocol{% endtrans %}";
                 textareaDescription.attr("placeholder", "{% trans %}Audit protocol{% endtrans %}");
