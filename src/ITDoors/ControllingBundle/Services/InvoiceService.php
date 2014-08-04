@@ -127,7 +127,7 @@ class InvoiceService
                     $em->persist($payments);
                     $summa += trim($pay->summa);
                 }
-                
+
                 if ($summa >= $invoice->sum && $dateFact != null) {
                     $invoiceNew->setDateFact($dateFact);
                 }
@@ -148,7 +148,6 @@ class InvoiceService
                     $payments->setSumma(trim($pay->summa));
                     $em->persist($payments);
                     $summa += trim($pay->summa);
-                    
                 }
 
                 if ($summa >= $invoice->sum && $dateFact != null) {

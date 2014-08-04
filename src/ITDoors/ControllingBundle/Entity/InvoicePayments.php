@@ -49,12 +49,13 @@ class InvoicePayments
      * Set invoiceId
      *
      * @param integer $invoiceId
+     * 
      * @return InvoicePayments
      */
     public function setInvoiceId($invoiceId)
     {
         $this->invoiceId = $invoiceId;
-    
+
         return $this;
     }
 
@@ -72,12 +73,13 @@ class InvoicePayments
      * Set summa
      *
      * @param float $summa
+     * 
      * @return InvoicePayments
      */
     public function setSumma($summa)
     {
         $this->summa = $summa;
-    
+
         return $this;
     }
 
@@ -95,12 +97,13 @@ class InvoicePayments
      * Set date
      *
      * @param \DateTime $date
+     * 
      * @return InvoicePayments
      */
     public function setDate($date)
     {
         $this->date = $date;
-    
+
         return $this;
     }
 
@@ -118,12 +121,13 @@ class InvoicePayments
      * Set invoice
      *
      * @param \ITDoors\ControllingBundle\Entity\Invoice $invoice
+     * 
      * @return InvoicePayments
      */
     public function setInvoice(\ITDoors\ControllingBundle\Entity\Invoice $invoice = null)
     {
         $this->invoice = $invoice;
-    
+
         return $this;
     }
 

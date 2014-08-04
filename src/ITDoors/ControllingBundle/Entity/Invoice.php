@@ -1028,12 +1028,13 @@ class Invoice
      * Add payments
      *
      * @param \ITDoors\ControllingBundle\Entity\InvoicePayments $payments
+     * 
      * @return Invoice
      */
     public function addPayment(\ITDoors\ControllingBundle\Entity\InvoicePayments $payments)
     {
         $this->payments[] = $payments;
-    
+
         return $this;
     }
 

@@ -39,12 +39,13 @@ class HandlingMessageHandlingUser
      * Set handlingUser
      *
      * @param \Lists\HandlingBundle\Entity\HandlingUser $handlingUser
+     * 
      * @return HandlingMessageHandlingUser
      */
     public function setHandlingUser(\Lists\HandlingBundle\Entity\HandlingUser $handlingUser = null)
     {
         $this->handlingUser = $handlingUser;
-    
+
         return $this;
     }
 
@@ -62,12 +63,13 @@ class HandlingMessageHandlingUser
      * Set handlingMessage
      *
      * @param \Lists\HandlingBundle\Entity\HandlingMessage $handlingMessage
+     * 
      * @return HandlingMessageHandlingUser
      */
     public function setHandlingMessage(\Lists\HandlingBundle\Entity\HandlingMessage $handlingMessage = null)
     {
         $this->handlingMessage = $handlingMessage;
-    
+
         return $this;
     }
 

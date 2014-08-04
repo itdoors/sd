@@ -135,11 +135,11 @@
                             <div class="form-group">
                                 {{ form_label(form.type, 'Handling Type'|trans ~ ' *', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(form.type, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter Handling Type'}}) }}
-								{% if form.type.vars.errors|length %}
-									{{ form_errors(form.name) }}
-								{% else %}
-									<span class="help-block">{% trans %}Enter Handling Type{% endtrans %}"</span>
-								{% endif %}
+                                {% if form.type.vars.errors|length %}
+                                        {{ form_errors(form.name) }}
+                                {% else %}
+                                        <span class="help-block">{% trans %}Enter Handling Type{% endtrans %}"</span>
+                                {% endif %}
                             </div>
                         </div>
                         <!--/span-->
