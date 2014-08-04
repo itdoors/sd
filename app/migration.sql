@@ -617,7 +617,7 @@ ALTER TABLE organization_user ADD CONSTRAINT FK_B49AE8D432C8A3DE FOREIGN KEY (or
 ALTER TABLE organization_user ADD CONSTRAINT FK_B49AE8D4A76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 CREATE INDEX IDX_B49AE8D48955C49D ON organization_user (lookup_id);
 
-INSERT INTO "public".lookup (lukey, "name", "group") VALUES ('manager_organization', 'Менеджер органицазии', 'manager_role_organization');
+INSERT INTO "public".lookup (lukey, "name", "group") VALUES ('manager_organization', 'Менеджер организации', 'manager_role_organization');
 
 ALTER TABLE grafik ADD COLUMN is_own_vacation boolean;
 ALTER TABLE grafik ALTER COLUMN is_own_vacation SET DEFAULT false;
@@ -759,5 +759,71 @@ ALTER TABLE invoice_payments ADD CONSTRAINT FK_7AFAC16A2989F1FD FOREIGN KEY (inv
 INSERT INTO "public".lookup (lukey, "name", "group") 
 	VALUES ('organization_sign_contractor', 'Подрядчики', 'organization_sign_contractor');
 
+CREATE TABLE organization_service_cover
+(
+  id bigserial NOT NULL,
+  organization_id integer,
+  service_id integer,
+  is_interested boolean,
+  is_working boolean,
+  end_date date,
+  responsible text,
+  description text,
+  evaluation integer,
+  competitor_id integer,
+  creator_id integer NOT NULL,
+  CONSTRAINT organization_service_cover_pkey PRIMARY KEY (id),
+  CONSTRAINT fk_390a9cb232c8a3de FOREIGN KEY (organization_id)
+      REFERENCES organization (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_390a9cb261220ea6 FOREIGN KEY (creator_id)
+      REFERENCES fos_user (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_390a9cb278a5d405 FOREIGN KEY (competitor_id)
+      REFERENCES organization (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_390a9cb2ed5ca9e6 FOREIGN KEY (service_id)
+      REFERENCES handling_service (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+
+-- Index: idx_390a9cb232c8a3de
+
+-- DROP INDEX idx_390a9cb232c8a3de;
+
+CREATE INDEX idx_390a9cb232c8a3de
+  ON organization_service_cover
+  USING btree
+  (organization_id);
+
+-- Index: idx_390a9cb261220ea6
+
+-- DROP INDEX idx_390a9cb261220ea6;
+
+CREATE INDEX idx_390a9cb261220ea6
+  ON organization_service_cover
+  USING btree
+  (creator_id);
+
+-- Index: idx_390a9cb278a5d405
+
+-- DROP INDEX idx_390a9cb278a5d405;
+
+CREATE INDEX idx_390a9cb278a5d405
+  ON organization_service_cover
+  USING btree
+  (competitor_id);
+
+-- Index: idx_390a9cb2ed5ca9e6
+
+-- DROP INDEX idx_390a9cb2ed5ca9e6;
+
+CREATE INDEX idx_390a9cb2ed5ca9e6
+  ON organization_service_cover
+  USING btree
+  (service_id);
 -- staging ----------------------
 -- prod -------------------------
