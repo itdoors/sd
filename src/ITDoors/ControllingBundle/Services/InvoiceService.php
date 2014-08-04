@@ -598,7 +598,7 @@ class InvoiceService
                             $table .= '<tr>'
                                     . '<td>'.$invoice['invoiceId'].'</td>'
                                     . '<td>'.$invoice['date']->format('d.m.Y').'</td>'
-                                    . '<td>'.$invoice['sum'].'</td>'
+                                    . '<td>'.$invoice['sum']-$invoice['paymentsSumma'].'</td>'
                                     . '</tr>';
                         }
                         $table .= '</table>';

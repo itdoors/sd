@@ -171,6 +171,34 @@ class InvoiceRepository extends EntityRepository
 
     /**
      * Returns results for interval future invoice
+     *
+     * @param array $invoiceIds
+     *
+     * @return mixed[]
+     */
+    public function getInvoiceIds($invoiceIds)
+    {
+        $res = $this->createQueryBuilder('i');
+
+        /** select */
+        $this->selectInvoicePeriod($res);
+        $res->addSelect('i.dogovorNumber');
+        $res->addSelect('i.dogovorDate')
+            ->addSelect('i.performerName')
+         ->addSelect(
+                " (SELECT SUM(p.summa)  FROM  ITDoorsControllingBundle:InvoicePayments p WHERE p.invoiceId = i.id) as paymentsSumma"
+            );
+        /** join */
+        $this->joinInvoicePeriod($res);
+        /** where */
+        $res->andWhere('i.id in (:ids)')
+                ->setParameter(':ids', $invoiceIds);
+
+        return $res
+                ->orderBy('i.performerEdrpou', 'DESC')->getQuery()->getResult();
+    }
+    /**
+     * Returns results for interval future invoice
      * 
      * @return mixed[]
      */
