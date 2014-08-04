@@ -9,6 +9,7 @@ use ITDoors\ControllingBundle\Entity\InvoicecronRepository;
 use ITDoors\ControllingBundle\Entity\Invoice;
 use Symfony\Component\BrowserKit\Response;
 use ITDoors\ControllingBundle\Entity\InvoicePayments;
+use ITDoors\ControllingBundle\Entity\InvoiceMessage;
 
 /**
  * Invoice Service class

@@ -185,8 +185,12 @@ class InvoiceRepository extends EntityRepository
         $res->addSelect('i.dogovorNumber');
         $res->addSelect('i.dogovorDate')
             ->addSelect('i.performerName')
-         ->addSelect(
-                " (SELECT SUM(p.summa)  FROM  ITDoorsControllingBundle:InvoicePayments p WHERE p.invoiceId = i.id) as paymentsSumma"
+            ->addSelect(
+                "("
+                    . "SELECT SUM(p.summa)"
+                    . " FROM  ITDoorsControllingBundle:InvoicePayments p"
+                    . " WHERE p.invoiceId = i.id)"
+                    . " as paymentsSumma"
             );
         /** join */
         $this->joinInvoicePeriod($res);
