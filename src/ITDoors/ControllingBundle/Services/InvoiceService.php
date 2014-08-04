@@ -567,15 +567,15 @@ class InvoiceService
     private function sendEmails()
     {
         if (count($this->arrCostumersForSendMessages) > 0) {
-            
+
             $em = $this->container->get('doctrine')->getManager();
-            
+
             /** @var Translator $translator */
             $translator = $this->container->get('translator');
-            
+
             /** @var User  $userRobot */
             $userRobot = $em->getRepository('SDUserBundle:User')->find(0);
-            
+
             $emailTo = $this->container->getParameter('email.from');
             $nameTo = $this->container->getParameter('name.from');
 
@@ -644,7 +644,5 @@ class InvoiceService
                 }
             }
         }
-        
     }
-    
 }

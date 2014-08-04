@@ -187,10 +187,10 @@ class InvoiceRepository extends EntityRepository
             ->addSelect('i.performerName')
             ->addSelect(
                 "("
-                    . "SELECT SUM(p.summa)"
-                    . " FROM  ITDoorsControllingBundle:InvoicePayments p"
-                    . " WHERE p.invoiceId = i.id)"
-                    . " as paymentsSumma"
+                . "SELECT SUM(p.summa)"
+                . " FROM  ITDoorsControllingBundle:InvoicePayments p"
+                . " WHERE p.invoiceId = i.id)"
+                . " as paymentsSumma"
             );
         /** join */
         $this->joinInvoicePeriod($res);

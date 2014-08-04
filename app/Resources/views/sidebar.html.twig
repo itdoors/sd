@@ -88,7 +88,7 @@
                                 path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_new')
                                 or
                                 (
-                                    app.request.attributes.get('_route_params') is not empty
+                                    app.request.attributes.get('_route_params').id is defined
                                     and
                                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_competitors_organization_show',app.request.attributes.get('_route_params'))
                                 )
