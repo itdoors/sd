@@ -330,6 +330,9 @@ class InvoiceService
 
             unset($json[$key]);
         }
+        $this->sendEmails();
+        $cron = $this->container->get('it_doors_cron.service');
+        $cron->addSendEmails();
     }
 
     /**
