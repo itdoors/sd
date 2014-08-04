@@ -624,26 +624,6 @@ ALTER TABLE grafik ALTER COLUMN is_own_vacation SET DEFAULT false;
 --test   -----------------------------
 --stagin -----------------------------
 
-
----task-856-organizaton-service_cover
-/*CREATE TABLE organization_service_cover (id BIGSERIAL NOT NULL, organization_id INT DEFAULT NULL, service_id INT DEFAULT NULL, is_interested BOOLEAN NOT NULL, is_working BOOLEAN NOT NULL, end_date DATE DEFAULT NULL, responsible TEXT DEFAULT NULL, description TEXT DEFAULT NULL, PRIMARY KEY(id));
-CREATE INDEX IDX_390A9CB232C8A3DE ON organization_service_cover (organization_id);
-CREATE INDEX IDX_390A9CB2ED5CA9E6 ON organization_service_cover (service_id);
-ALTER TABLE organization_service_cover ADD CONSTRAINT FK_390A9CB232C8A3DE FOREIGN KEY (organization_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE organization_service_cover ADD CONSTRAINT FK_390A9CB2ED5CA9E6 FOREIGN KEY (service_id) REFERENCES handling_service (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-++++task-856-organizaton-service_cover staging  +++++++++
-++++task-856-organizaton-service_cover prod     +++++++++
-
-CREATE TABLE coea (id BIGSERIAL NOT NULL, scope_id INT NOT NULL, organization_id INT NOT NULL, PRIMARY KEY(id));
-CREATE INDEX IDX_6963C5C0682B5931 ON coea (scope_id);
-CREATE INDEX IDX_6963C5C032C8A3DE ON coea (organization_id);
-ALTER TABLE coea ADD CONSTRAINT FK_6963C5C0682B5931 FOREIGN KEY (scope_id) REFERENCES lookup (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE coea ADD CONSTRAINT FK_6963C5C032C8A3DE FOREIGN KEY (organization_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-*/
--- staging ---------------------
--- prod ------------------------
-
-
 ---task-800.801,802 kved
 CREATE SEQUENCE kved_id_seq
   INCREMENT 1
@@ -776,5 +756,8 @@ COMMENT ON TABLE handling_message_model_contact
 CREATE TABLE invoice_payments (id SERIAL NOT NULL, invoice_id INT NOT NULL, summa DOUBLE PRECISION NOT NULL, date DATE NOT NULL, PRIMARY KEY(id));
 CREATE INDEX IDX_7AFAC16A2989F1FD ON invoice_payments (invoice_id);
 ALTER TABLE invoice_payments ADD CONSTRAINT FK_7AFAC16A2989F1FD FOREIGN KEY (invoice_id) REFERENCES invoice (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+INSERT INTO "public".lookup (lukey, "name", "group") 
+	VALUES ('organization_sign_contractor', 'Подрядчики', 'organization_sign_contractor');
+
 -- staging ----------------------
 -- prod -------------------------

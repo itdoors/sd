@@ -15,6 +15,7 @@ use Lists\HandlingBundle\Entity\HandlingMessage;
 use Lists\ContactBundle\Entity\ModelContactRepository;
 use PHPExcel_Style_Border;
 use PHPExcel_Style_Alignment;
+use Lists\HandlingBundle\Entity\Handling;
 
 /**
  * Class SalesController
@@ -844,7 +845,16 @@ class SalesController extends BaseController
                 }
                 //$handling->setS($handling->getResult());
 
+                $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_project'));
+                $manager = new HandlingUser();
+                $manager->setUser($user);
+                $manager->setLookup($lookup);
+                $manager->setPart(100);
+                $manager->setHandling($newHandling);
+
                 $em->persist($newHandling);
+                $em->persist($manager);
+
 
                 $em->flush();
 
