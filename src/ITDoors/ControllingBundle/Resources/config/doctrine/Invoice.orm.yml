@@ -134,3 +134,6 @@ ITDoors\ControllingBundle\Entity\Invoice:
         invoicecompanystructure:
             targetEntity: ITDoors\ControllingBundle\Entity\InvoiceCompanystructure
             mappedBy: invoice
+        payments:
+            targetEntity: InvoicePayments
+            mappedBy: invoice

@@ -1,0 +1,24 @@
+{% trans_default_domain 'ITDoorsControllingBundle' %}
+<div class="col-md-12">
+    <table id="handling" class="table table-bordered table-striped">
+        <tbody>
+             {% if entitie %}
+                <tr>
+                    <td>{% trans %}Summa{% endtrans %}</td>          
+                    <td>{% trans %}Date{% endtrans %}</td>          
+                </tr>
+                {% for item in  entitie %}
+                <tr>
+                    <td>{{ item.summa|number_format(2, ',', ' ') }}</td>
+                    <td>{{ item.date | date('d.m.Y') }}</td>       
+                </tr>
+            {% endfor %}
+            {% else %}
+                <tr>
+                    <td>{% trans %}No payments{% endtrans %}</td>       
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    
+</div>
