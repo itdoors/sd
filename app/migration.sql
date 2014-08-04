@@ -756,5 +756,8 @@ COMMENT ON TABLE handling_message_model_contact
 CREATE TABLE invoice_payments (id SERIAL NOT NULL, invoice_id INT NOT NULL, summa DOUBLE PRECISION NOT NULL, date DATE NOT NULL, PRIMARY KEY(id));
 CREATE INDEX IDX_7AFAC16A2989F1FD ON invoice_payments (invoice_id);
 ALTER TABLE invoice_payments ADD CONSTRAINT FK_7AFAC16A2989F1FD FOREIGN KEY (invoice_id) REFERENCES invoice (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+INSERT INTO "public".lookup (lukey, "name", "group") 
+	VALUES ('organization_sign_contractor', 'Подрядчики', 'organization_sign_contractor');
+
 -- staging ----------------------
 -- prod -------------------------
