@@ -138,6 +138,8 @@
     </tr>
     </thead>
     <tbody>
+    {{ coworkers|length }}
+{#
         {% set counter = 0 %}
         {% for coworker in coworkers %}
             {% set counter = counter + 1 %}
@@ -153,6 +155,7 @@
                 }}
             </tr>
         {% endfor %}
+#}
     </tbody>
 
 
