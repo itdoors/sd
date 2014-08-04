@@ -71,12 +71,11 @@ class OperScheduleController extends BaseFilterController
             $accessService = $this->get('access.service');
             $idDepartment = $accessService->getAllowedDepartmentsId();
         }
-        if (is_array($idDepartment)) {
+        if (is_array($idDepartment) || $idDepartment === false) {
             $departmentIsArray = true;
         } else {
             $departmentIsArray = false;
         }
-
 
         $filterNamespace = $this->container->getParameter($this->getNamespace());
         $filters = $this->getFilters($filterNamespace);
@@ -197,6 +196,7 @@ class OperScheduleController extends BaseFilterController
 
             $idReplacement = $coworker['replacementId'];
 
+            $idDepartment = $coworker['idDepartment'];
 
             $infoHoursCoworker = $grafikRepository->getCoworkerHoursMonthInfo(
                 $year,
@@ -299,12 +299,12 @@ class OperScheduleController extends BaseFilterController
             $infoHours[$idCoworker.'-'.$idReplacement]['idMonthInfo'] = $coworker['idMonthInfo'];
         }
 
-        $canEdit  =  $this->checkIfCanEdit();
+        $canEdit = $this->checkIfCanEdit();
         $infoSalary = $this->getSumsSalary($idDepartment, $year.'-'.$monthShow);
         $totalSalary = $infoSalary['totalSalary'];
         $salaryNotOfficially = $infoSalary['salaryNotOfficially'];
         $salaryOfficially = $infoSalary['salaryOfficially'];
-
+        $idDepartment = $id;
 
         return $this->render('ITDoorsOperBundle:Schedule:scheduleTable.html.twig', array(
             'days'=> $days,
