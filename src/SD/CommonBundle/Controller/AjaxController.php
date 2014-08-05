@@ -2291,6 +2291,7 @@ class AjaxController extends BaseFilterController
         $data = $form->getData();
 
         $data->setUser($user);
+        $data->setOwner($user);
         $data->setCreatedatetime(new \DateTime());
 
         $em = $this->getDoctrine()->getManager();

@@ -10,6 +10,53 @@
         $(".date-picker").inputmask("d.m.y", {
             "placeholder": "*"
         });
+         $('#modelContactHandlingForm_type').select2({
+            allowClear: true
+        });
+
+        $('#modelContactHandlingForm_level').select2({
+            allowClear: true
+        });
+        $('#modelContactHandlingForm_phone1, #modelContactHandlingForm_phone2').select2({
+            minimumInputLength: 2,
+            allowClear: true,
+            ajax: {
+                url: '{{ path('sd_common_ajax_contact_phone') }}',
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        query: term,
+                        organizationId: $('#modelContactHandlingForm_modelId').val()
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+
+        $('#modelContactHandlingForm_email').select2({
+            minimumInputLength: 2,
+            allowClear: true,
+            ajax: {
+                url: '{{ path('sd_common_ajax_contact_email') }}',
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        query: term,
+                        organizationId: $('#modelContactHandlingForm_modelId').val()
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
+
 
 
         {% if form.modelId.vars.block_prefixes.1 != 'hidden' %}
@@ -47,6 +94,20 @@
             </div>
             <div class="portlet-body">
 
+                {% if form.vars.valid is sameas(false) %}
+                    <div class="alert alert-danger">
+                        <button class="close" data-close="alert"></button>
+                        {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                        {{ form_errors(form) }}
+                        {% if form.phone1.vars.errors|length %}
+                            {{ form_errors(form.phone1) }}
+                        {% endif %}
+                        {% if form.level.vars.errors|length %}
+                            {{ form_errors(form.level) }}
+                        {% endif %}
+                    </div>
+                {% endif %}
+                
                 {{ form_start(form, {
                         'action' : path('sd_common_ajax_form'),
                         'attr' : {
@@ -57,7 +118,7 @@
                         'data-target_id': targetId
                     }
                 }) }}
-
+                    
                 {% if form.modelId.vars.block_prefixes.1 != 'hidden' %}
                     <div class="form-group col-md-3">
                         {{ form_widget(form.modelId, {'attr' : {'class' : 'form-control', 'placeholder': "Organization" }}) }}
@@ -99,7 +160,14 @@
                     <div class="form-group col-md-3">
                         {{ form_widget(form.email, {'attr' : {'class' : 'form-control', 'placeholder': "Email"}}) }}
                     </div>
-
+                    <div class="form-group col-md-3">
+                        {{ form_widget(form.level, {'attr' : {'class' : 'form-control', 'placeholder': "Contact level"}}) }}
+                    </div>
+                    <div class="form-group col-md-3">
+                        {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': "Contact type"}}) }}
+                    </div>
+                </div>
+                <div class=" row">
                     <div class="form-group col-md-2">
                         {{ form_widget(form.add, { 'label': 'Save', 'attr': {'class': 'btn green'} } ) }}
                     </div>
