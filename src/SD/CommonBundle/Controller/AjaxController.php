@@ -2124,7 +2124,6 @@ class AjaxController extends BaseFilterController
                 ->getRepository('ListsLookupBundle:Lookup')
                 ->find($lookupId);
 
-            
         $history = new History();
         $history->setCreatedatetime(new \DateTime());
         $history->setFieldName('user_id');
@@ -2135,7 +2134,7 @@ class AjaxController extends BaseFilterController
         $history->setValue($user->getId());
         $history->setMore('add manager');
         $em->persist($history);
-        
+
         $object = new HandlingUser();
 
         $part = $mainManager->getPart()-(int) $data['part'];
@@ -2817,7 +2816,7 @@ class AjaxController extends BaseFilterController
         $history->setValue($value);
         $history->setMore('change '.$name);
         $em->persist($history);
-        
+
         if (!$value) {
             $methodGet = 'get' . ucfirst($name);
             $type = gettype($object->$methodGet());
