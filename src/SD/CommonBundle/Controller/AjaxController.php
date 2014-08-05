@@ -2798,12 +2798,26 @@ class AjaxController extends BaseFilterController
         $value = (int) $this->get('request')->request->get('value');
 
         $methodSet = 'set' . ucfirst($name);
+        $methodGet = 'get' . ucfirst($name);
 
         /** @var HandlingUser $object */
         $object = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingUser')
             ->find($pk);
 
+        $em = $this->getDoctrine()->getManager();
+
+        $history = new History();
+        $history->setCreatedatetime(new \DateTime());
+        $history->setFieldName($name);
+        $history->setModelName('handling_user');
+        $history->setModelId($pk);
+        $history->setUser($this->getUser());
+        $history->setOldValue($object->$methodGet);
+        $history->setValue($value);
+        $history->setMore('change '.$name);
+        $em->persist($history);
+        
         if (!$value) {
             $methodGet = 'get' . ucfirst($name);
             $type = gettype($object->$methodGet());
@@ -2860,7 +2874,6 @@ class AjaxController extends BaseFilterController
             return new Response($return, 406);
         }
 
-        $em = $this->getDoctrine()->getManager();
         $em->persist($object);
         $em->persist($mainManager);
 
