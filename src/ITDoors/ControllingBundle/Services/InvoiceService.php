@@ -344,8 +344,9 @@ class InvoiceService
      */
     private function savejson($json)
     {
+        $count = count($json);
         foreach ($json as $key => $invoice) {
-
+            echo ($count-$key-1)."\n";
             $invoiceFind = true;
             $this->messageTemplate = false;
             $invoiceNew = $this->saveinvoice($invoice);
@@ -361,9 +362,12 @@ class InvoiceService
 
             unset($json[$key]);
         }
+        echo 'try add send email'."\n";
         $this->sendEmails();
+        echo 'try add cron'."\n";
         $cron = $this->container->get('it_doors_cron.service');
         $cron->addSendEmails();
+        echo 'add cron successfully'."\n";
     }
 
     /**
@@ -639,6 +643,7 @@ class InvoiceService
                         $table .= '</table>';
 
                         foreach ($contacts as $user) {
+                            echo "send email for ".$user['email']."\n";
                             $idEmail = $email->send(
                                 array($emailTo => $nameTo),
                                 $template,
