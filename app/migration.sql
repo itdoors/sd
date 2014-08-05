@@ -828,3 +828,6 @@ CREATE INDEX idx_390a9cb2ed5ca9e6
   (service_id);
 -- staging ----------------------
 -- prod -------------------------
+ALTER TABLE model_contact ALTER phone1 DROP NOT NULL;
+-- staging ----------------------
+-- prod -------------------------
