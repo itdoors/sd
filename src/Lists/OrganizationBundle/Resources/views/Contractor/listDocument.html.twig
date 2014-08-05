@@ -82,7 +82,7 @@
                         {% set datetime = item.datetime|date('d.m.Y') %}
                        {% endif %}
                        <a href="#" class="fileDate" data-type="date" data-pk="{{ item.id }}"
-                          data-original-title="{% trans %}Enter Status Date{% endtrans %}"
+                          data-original-title="{% trans %}Enter date{% endtrans %}"
                           data-format="dd-mm-yyyy"
                           data-date="{{ datetime }}">
                            {{ datetime }}
