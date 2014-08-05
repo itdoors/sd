@@ -47,7 +47,8 @@ class ModelContactHandlingFormType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Lists\ContactBundle\Entity\ModelContact'
+            'data_class' => 'Lists\ContactBundle\Entity\ModelContact',
+            'translation_domain' => 'ListsContactBundle'
         ));
     }
 
