@@ -51,12 +51,18 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
             ->addSelect('m.name as mpkName')
             ->addSelect('o.shortname as organizationShortName')
             ->addSelect('o.name as organizationName')
+            ->addSelect('ompk.name as selfOrganizationName')
             ->leftJoin('dpmi.departmentPeopleReplacement', 'dpr')
             ->leftJoin('dpmi.departmentPeople', 'dp')
             ->leftJoin('dp.department', 'd')
             ->leftJoin('d.organization', 'o')
             ->leftJoin('dp.individual', 'i')
-            ->leftJoin('dp.mpks', 'm');
+            ->leftJoin('dp.mpks', 'm')
+            ->leftJoin('m.organization', 'ompk')
+            ->leftJoin('d.opermanager', 'u')
+            ->leftJoin('d.city', 'c')
+            ->leftJoin('c.region', 'r');
+
 
         if (is_array($idDepartment)) {
             if (count($idDepartment)) {
@@ -65,6 +71,8 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
             } else {
                 $sql = $sql->where('1 = 2');
             }
+        } elseif ($idDepartment === false) {
+            //$sql = $sql->where('1 = 2');
         } else {
             $sql = $sql->where('d.id = :idDepartment')
                 ->setParameter(':idDepartment', $idDepartment);
@@ -98,6 +106,21 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
                         $sql->andWhere('i.id  in (:idsUser)');
                         $sql->setParameter(':idsUser', explode(',', $value));
                         break;
+                    case 'region':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $sql->andWhere('r.id in (:idsRegion)');
+                        $sql->setParameter(':idsRegion', explode(',', $value));
+                        break;
+                    case 'opermanager':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $sql->andWhere('u.id in (:idsUser)');
+                        $sql->setParameter(':idsUser', explode(',', $value));
+                        break;
+
                 }
             }
         }

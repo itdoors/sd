@@ -63,6 +63,13 @@ class InvoiceRepository extends EntityRepository
                       ), ','
                  ) as responsibles"
             )
+            ->addSelect(
+                "("
+                . "SELECT SUM(paymens.summa)"
+                . " FROM  ITDoorsControllingBundle:InvoicePayments paymens"
+                . " WHERE paymens.invoiceId = i.id"
+                . ") as paymentsSumma"
+            )
             ->addSelect('customer.name as customerName')
             ->addSelect('performer.name as performerName')
             ->addSelect('r.name as regionName')
@@ -166,6 +173,31 @@ class InvoiceRepository extends EntityRepository
                 ->orderBy('i.performerEdrpou', 'DESC')->getQuery();
     }
 
+    /**
+     * Returns results for interval future invoice
+     *
+     * @param array $invoiceIds
+     *
+     * @return mixed[]
+     */
+    public function getInvoiceIds($invoiceIds)
+    {
+        $res = $this->createQueryBuilder('i');
+
+        /** select */
+        $this->selectInvoicePeriod($res);
+        $res->addSelect('i.dogovorNumber');
+        $res->addSelect('i.dogovorDate')
+            ->addSelect('i.performerName');
+        /** join */
+        $this->joinInvoicePeriod($res);
+        /** where */
+        $res->andWhere('i.id in (:ids)')
+                ->setParameter(':ids', $invoiceIds);
+
+        return $res
+                ->orderBy('i.performerEdrpou', 'DESC')->getQuery()->getResult();
+    }
     /**
      * Returns results for interval future invoice
      * 
@@ -674,8 +706,17 @@ class InvoiceRepository extends EntityRepository
                 $entitie = $entitie->getQuery()
                     ->getSingleResult();
                 break;
-            case 'history':
-                $entitie = '';
+            case 'payments':
+                 $entitie
+                    ->Select('ip.summa')
+                    ->addSelect('ip.date')
+                    ->leftJoin('i.payments', 'ip')
+                    ->where('i.id = :invoiceid')
+                    ->andWhere('ip.summa is not NULL')
+                    ->setParameter(':invoiceid', (int) $invoiceid)
+                    ->orderBy('ip.date');
+                $entitie = $entitie->getQuery()
+                    ->getResult();
                 break;
         }
 
