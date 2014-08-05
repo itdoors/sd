@@ -1,0 +1,24 @@
+
+
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <td>{% trans %}Title{% endtrans %}</td>
+        <td colspan="3">{{ task.title }}</td>
+    </tr>
+    <tr>
+        <td>{% trans %}Date started{% endtrans %}</td>
+        <td colspan="3">{{ task.startDateTime|date('d.m.Y') }}</td>
+    </tr>
+    <tr>
+        <td>{% trans %}Date ended{% endtrans %}</td>
+        <td colspan="3">{{ task.stopDateTime|date('d.m.Y') }}</td>
+    </tr>
+    <tr>
+        <td>{% trans %}Description{% endtrans %}</td>
+        <td colspan="3">{{ task.description }}</td>
+    </tr>
+</table>
+
+<input type="hidden" id="task_modal_id_holder" data-id="{{ task.id }}"
+        >

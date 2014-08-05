@@ -1958,6 +1958,7 @@ class AjaxController extends BaseFilterController
         $formData = $request->request->get($form->getName());
 
         $data->setTaskType('personal');
+        $data->setIsDone(false);
         $data->setStartDateTime(new \DateTime($formData['startDateTime']));
         $data->setStopDateTime(new \DateTime($formData['stopDateTime']));
 
