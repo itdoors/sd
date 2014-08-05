@@ -42,7 +42,7 @@ use SD\UserBundle\Entity\Usercontactinfo;
 use SD\CalendarBundle\Entity\Task;
 use Lists\HandlingBundle\Entity\HandlingUser;
 use Lists\OrganizationBundle\Entity\OrganizationUser;
-use Lists\OrganizationBundle\Entity\Coea;
+use ITDoors\HistoryBundle\Entity\History;
 
 /**
  * AjaxController class.
@@ -2094,6 +2094,8 @@ class AjaxController extends BaseFilterController
     {
         $data = $form->getData();
 
+        $authUser = $user;
+
         $em = $this->getDoctrine()->getManager();
 
         $user = $this->getDoctrine()
@@ -2122,6 +2124,18 @@ class AjaxController extends BaseFilterController
                 ->getRepository('ListsLookupBundle:Lookup')
                 ->find($lookupId);
 
+            
+        $history = new History();
+        $history->setCreatedatetime(new \DateTime());
+        $history->setFieldName('user_id');
+        $history->setModelName('handling_user');
+        $history->setModelId($handling->getId());
+        $history->setUser($authUser);
+        $history->setOldValue(null);
+        $history->setValue($user->getId());
+        $history->setMore('add manager');
+        $em->persist($history);
+        
         $object = new HandlingUser();
 
         $part = $mainManager->getPart()-(int) $data['part'];
@@ -2466,9 +2480,22 @@ class AjaxController extends BaseFilterController
     {
         $handlingUserId = $params['handlingUserId'];
 
+        $em = $this->getDoctrine()->getManager();
+
         $object = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingUser')
             ->find($handlingUserId);
+
+        $history = new History();
+        $history->setCreatedatetime(new \DateTime());
+        $history->setFieldName('user_id');
+        $history->setModelName('handling_user');
+        $history->setModelId($object->getId());
+        $history->setUser($this->getUser());
+        $history->setOldValue($object->getUser()->getId());
+        $history->setValue(null);
+        $history->setMore('remove manager');
+        $em->persist($history);
 
         $lookupId = $this->getDoctrine()
             ->getRepository('ListsLookupBundle:Lookup')->getOnlyManagerProjectId();
@@ -2504,7 +2531,6 @@ class AjaxController extends BaseFilterController
         );
         $cron = $this->container->get('it_doors_cron.service');
         $cron->addSendEmails();
-        $em = $this->getDoctrine()->getManager();
         $em->persist($mainManager);
         $em->remove($object);
         $em->flush();
