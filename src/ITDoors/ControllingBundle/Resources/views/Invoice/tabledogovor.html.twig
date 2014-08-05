@@ -9,7 +9,7 @@
             </tr>
             <tr>
                 <td>{% trans %}ID{% endtrans %} </td>
-                <td><a href="{{ path('lists_dogovor_dogovor_show', { id: entitie.id }) }}">{{ entitie.id }}</a></td>
+                <td>{% if entitie.id %}<a href="{{ path('lists_dogovor_dogovor_show', { id: entitie.id }) }}">{{ entitie.id }}</a>{% endif %}</td>
                 <td></td>
             </tr>
             <tr>
