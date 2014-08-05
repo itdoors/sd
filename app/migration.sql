@@ -751,7 +751,7 @@ WITH (
 COMMENT ON TABLE handling_message_model_contact
   IS 'связка активности с контактами';
 -- staging ++++++++++++++++++++++++
--- prod -------------------------
+-- prod +++++++++++++++++++++++++++
 
 CREATE TABLE invoice_payments (id SERIAL NOT NULL, invoice_id INT NOT NULL, summa DOUBLE PRECISION NOT NULL, date DATE NOT NULL, PRIMARY KEY(id));
 CREATE INDEX IDX_7AFAC16A2989F1FD ON invoice_payments (invoice_id);
@@ -760,6 +760,9 @@ INSERT INTO "public".lookup (lukey, "name", "group")
 	VALUES ('organization_sign_contractor', 'Подрядчики', 'organization_sign_contractor');
 
 -- staging ++++++++++++++++++++++++
+-- prod +++++++++++++++++++++++++++
+
+
 CREATE TABLE organization_service_cover
 (
   id bigserial NOT NULL,
@@ -827,7 +830,14 @@ CREATE INDEX idx_390a9cb2ed5ca9e6
   USING btree
   (service_id);
 -- staging ----------------------
--- prod -------------------------
+-- prod ++++++++++++++++++++++++
 ALTER TABLE model_contact ALTER phone1 DROP NOT NULL;
+-- staging ----------------------
+-- prod ++++++++++++++++++++++++++++
+
+
+ALTER TABLE task ADD COLUMN is_done boolean;
+ALTER TABLE task ALTER COLUMN is_done SET DEFAULT false;
+COMMENT ON COLUMN task.is_done IS 'Выполнен ли таск';
 -- staging ----------------------
 -- prod -------------------------

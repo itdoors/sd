@@ -1,0 +1,9 @@
+<div class="col-md-6">
+    {{ render(controller('SDCalendarBundle:Private:Index')) }}
+    {#{ include('SDCalendarBundle::base.html.twig', {
+        url: path('sd_calendar_private_handling_message')
+    }) }#}
+</div>
+<div class="col-md-6">
+    {{ render(controller('SDCalendarBundle:Private:task')) }}
+</div>
