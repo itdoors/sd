@@ -27,8 +27,7 @@ class ModelContactHandlingFormType extends AbstractType
 
     }
     /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
+     *  {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -64,9 +63,8 @@ class ModelContactHandlingFormType extends AbstractType
             ))
             ->add('email');
 
-        $builder
-            ->add('add', 'submit');
-         $builder->addEventListener(
+        $builder->add('add', 'submit');
+        $builder->addEventListener(
             FormEvents::POST_SUBMIT,
             function (FormEvent $event) use ($container) {
                 $data = $event->getData();
