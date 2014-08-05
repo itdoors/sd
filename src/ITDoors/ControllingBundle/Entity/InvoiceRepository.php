@@ -580,6 +580,7 @@ class InvoiceRepository extends EntityRepository
                 $entitie
                     ->select('i.sum')
                     ->addSelect('i.id')
+                    ->addSelect('i.bank')
                     ->addSelect('i.invoiceId')
                     ->addSelect('i.date ')
                     ->addSelect('i.dateEnd')
