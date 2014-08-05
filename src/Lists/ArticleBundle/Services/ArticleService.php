@@ -308,7 +308,7 @@ class ArticleService
             $cron->setErrorFile($directory.'/app/logs/cron/err'.$comment.'.php');
             $cron->setCommand(
                 'cd ' . $directory .
-                ' && lists:article:result:solution ' . $party->getId() .
+                ' && lists:article:result:solution ' . $article->getId() .
                 ' && app/console it:doors:cron:delete ' . $comment
             );
             $cm->add($cron);
