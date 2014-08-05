@@ -10,7 +10,6 @@ parameters:
     lists_organization.form.user.sales.admin.class: Lists\OrganizationBundle\Form\OrganizationUserSalesAdminFormType
     lists_organization.form.user.filter.class: Lists\OrganizationBundle\Form\OrganizationUserFilterFormType
     lists_organization.form.child.class: Lists\OrganizationBundle\Form\OrganizationChildForm
-    lists_organization.form.coea.class: Lists\OrganizationBundle\Form\CoeaFormType
     lists_organization.form.kved.class: Lists\OrganizationBundle\Form\KvedFormType
     
 
@@ -89,12 +88,6 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: organizationChildForm }
-
-    lists_organization.form.coeaForm:
-        class: %lists_organization.form.coea.class%
-        arguments: [@service_container]
-        tags:
-            - { name: form.type, alias: coeaForm }
 
     lists_organization.form.kvedForm:
         class: %lists_organization.form.kved.class%

@@ -1,13 +1,22 @@
-{{ ajax_filter_render('ScheduleFilterFormType', ajax_namespace_oper_department_schedule, {
-'coworker_list': 'ITDoorsAjax.updateList'
-}) }}
-
+{% if supervisor %}
+    {% set filterName = 'ScheduleSupervisorFilterFormType' %}
+{% else %}
+    {% set filterName = 'ScheduleFilterFormType' %}
+{% endif %}
+                    {{ ajax_filter_render(filterName, ajax_namespace_oper_department_schedule, {
+                    'coworker_list': 'ITDoorsAjax.updateList'
+                    }) }}
 
 <div id="coworker_list" data-url="{{ path('it_doors_oper_coworker_table')}}">
-    {{ render(controller('ITDoorsOperBundle:OperCoworkerInfo:coworkerTable', {
 
-    })) }}
+    {% if not supervisor %}
+        {{ render(controller('ITDoorsOperBundle:OperCoworkerInfo:coworkerTable', {
+
+        })) }}
+    {% endif %}
+
 </div>
+
 
 
 <script src="{{ asset('bundles/itdoorsajax/js/jquery.forms.js') }}" type="text/javascript"></script>

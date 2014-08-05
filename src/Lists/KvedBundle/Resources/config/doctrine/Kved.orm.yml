@@ -1,0 +1,33 @@
+Lists\KvedBundle\Entity\Kved:
+    type: entity
+    table: kved
+    repositoryClass: Lists\KvedBundle\Entity\KvedRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        parentId:
+            nullable: true
+            type: integer
+            column: parent_id
+        code:
+            nullable: false
+            type: string
+            length: 10
+        name:
+            nullable: false
+            type: string
+            length: 255
+        description:
+            type: text
+    manyToOne:
+        parent:
+            targetEntity: Kved
+            inversedBy: children
+    oneToMany:
+        children:
+            targetEntity: Kved
+            mappedBy: parent

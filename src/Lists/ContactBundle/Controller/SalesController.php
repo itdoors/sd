@@ -102,9 +102,10 @@ class SalesController extends BaseController
 
         $pagination = array();
 
-        return $this->render('ListsContactBundle:' . $this->baseTemplate . ':organization.html.twig', array(
+        return $this->render('ListsContactBundle:' . $this->baseTemplate . ':handlingList.html.twig', array(
             'pagination' => $pagination,
             'organizationId' => $organizationId,
+            'departmentId' => $departmentId,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
             'departmentContacts' => $departmentContacts

@@ -640,14 +640,14 @@
             <tr style="background-color: #ffffff">
                 <th>{#{% trans %}Copy{% endtrans %}#}</th>
                 <th>#</th>
-                <th>{% trans %}Fio{% endtrans %}
+                <th>{% trans %}Fio{% endtrans %}<br>
                     {{ ajax_ordering('lastName', ajax_namespace_oper_department_schedule, {
                     'schedule_content': 'ITDoorsAjax.updateList'
                     }) }}
                 </th>
                 <th>{% trans %}P/z{% endtrans %}</th>
                 <th>
-                    {% trans %}Mpk{% endtrans %}
+                    {% trans %}Mpk{% endtrans %}<br>
                     {{ ajax_ordering('mpk', ajax_namespace_oper_department_schedule, {
                     'schedule_content': 'ITDoorsAjax.updateList'
                     }) }}
@@ -698,6 +698,14 @@
                     <td>
                         {% if coworker.mpkName is not empty %}
                             {{ coworker.mpkName }}
+                            (
+                                {% if coworker.organizationShortName %}
+                                    {{ coworker.organizationShortName }}
+                                {% else %}
+                                    {{ coworker.organizationName }}
+                                {% endif %}
+
+                            )
                         {% endif %}
                     </td>
 

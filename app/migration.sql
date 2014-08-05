@@ -617,32 +617,12 @@ ALTER TABLE organization_user ADD CONSTRAINT FK_B49AE8D432C8A3DE FOREIGN KEY (or
 ALTER TABLE organization_user ADD CONSTRAINT FK_B49AE8D4A76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 CREATE INDEX IDX_B49AE8D48955C49D ON organization_user (lookup_id);
 
-INSERT INTO "public".lookup (lukey, "name", "group") VALUES ('manager_organization', 'Менеджер органицазии', 'manager_role_organization');
+INSERT INTO "public".lookup (lukey, "name", "group") VALUES ('manager_organization', 'Менеджер организации', 'manager_role_organization');
 
 ALTER TABLE grafik ADD COLUMN is_own_vacation boolean;
 ALTER TABLE grafik ALTER COLUMN is_own_vacation SET DEFAULT false;
 --test   -----------------------------
 --stagin -----------------------------
-
-
----task-856-organizaton-service_cover
-CREATE TABLE organization_service_cover (id BIGSERIAL NOT NULL, organization_id INT DEFAULT NULL, service_id INT DEFAULT NULL, is_interested BOOLEAN NOT NULL, is_working BOOLEAN NOT NULL, end_date DATE DEFAULT NULL, responsible TEXT DEFAULT NULL, description TEXT DEFAULT NULL, PRIMARY KEY(id));
-CREATE INDEX IDX_390A9CB232C8A3DE ON organization_service_cover (organization_id);
-CREATE INDEX IDX_390A9CB2ED5CA9E6 ON organization_service_cover (service_id);
-ALTER TABLE organization_service_cover ADD CONSTRAINT FK_390A9CB232C8A3DE FOREIGN KEY (organization_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE organization_service_cover ADD CONSTRAINT FK_390A9CB2ED5CA9E6 FOREIGN KEY (service_id) REFERENCES handling_service (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-++++task-856-organizaton-service_cover staging  +++++++++
-++++task-856-organizaton-service_cover prod     +++++++++
-
-CREATE TABLE coea (id BIGSERIAL NOT NULL, scope_id INT NOT NULL, organization_id INT NOT NULL, PRIMARY KEY(id));
-CREATE INDEX IDX_6963C5C0682B5931 ON coea (scope_id);
-CREATE INDEX IDX_6963C5C032C8A3DE ON coea (organization_id);
-ALTER TABLE coea ADD CONSTRAINT FK_6963C5C0682B5931 FOREIGN KEY (scope_id) REFERENCES lookup (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE coea ADD CONSTRAINT FK_6963C5C032C8A3DE FOREIGN KEY (organization_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-
--- staging ---------------------
--- prod ------------------------
-
 
 ---task-800.801,802 kved
 CREATE SEQUENCE kved_id_seq
@@ -715,3 +695,139 @@ COMMENT ON TABLE documents_organization
 
 -- staging ++++++++++++++++++++++
 -- prod +++++++++++++++++++++++++
+
+---task-handling form upgrade
+CREATE SEQUENCE handling_message_model_contact_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 6
+  CACHE 1;
+CREATE SEQUENCE handling_message_handling_user_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 5
+  CACHE 1;
+
+CREATE TABLE handling_message_handling_user
+(
+  id bigint NOT NULL DEFAULT nextval('handling_message_handling_user_id_seq'::regclass),
+  handling_user_id bigint NOT NULL,
+  handling_message_id bigint NOT NULL,
+  CONSTRAINT handling_message_user_pkey PRIMARY KEY (id),
+  CONSTRAINT handling_message_handling_user_handling_message_id_fkey FOREIGN KEY (handling_message_id)
+      REFERENCES handling_message (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT handling_message_handling_user_handling_user_id_fkey FOREIGN KEY (handling_user_id)
+      REFERENCES handling_user (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+
+COMMENT ON TABLE handling_message_handling_user
+  IS 'Связка пользователей с активностью';
+
+
+CREATE TABLE handling_message_model_contact
+(
+  id bigint NOT NULL DEFAULT nextval('handling_message_model_contact_id_seq'::regclass),
+  handling_message_id bigint,
+  model_contact_id bigint,
+  CONSTRAINT handling_message_model_contact_pkey PRIMARY KEY (id),
+  CONSTRAINT handling_message_model_contact_handling_message_id_fkey FOREIGN KEY (handling_message_id)
+      REFERENCES handling_message (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT handling_message_model_contact_model_contact_id_fkey FOREIGN KEY (model_contact_id)
+      REFERENCES model_contact (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+
+COMMENT ON TABLE handling_message_model_contact
+  IS 'связка активности с контактами';
+-- staging ++++++++++++++++++++++++
+-- prod -------------------------
+
+CREATE TABLE invoice_payments (id SERIAL NOT NULL, invoice_id INT NOT NULL, summa DOUBLE PRECISION NOT NULL, date DATE NOT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_7AFAC16A2989F1FD ON invoice_payments (invoice_id);
+ALTER TABLE invoice_payments ADD CONSTRAINT FK_7AFAC16A2989F1FD FOREIGN KEY (invoice_id) REFERENCES invoice (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+INSERT INTO "public".lookup (lukey, "name", "group") 
+	VALUES ('organization_sign_contractor', 'Подрядчики', 'organization_sign_contractor');
+
+-- staging ++++++++++++++++++++++++
+CREATE TABLE organization_service_cover
+(
+  id bigserial NOT NULL,
+  organization_id integer,
+  service_id integer,
+  is_interested boolean,
+  is_working boolean,
+  end_date date,
+  responsible text,
+  description text,
+  evaluation integer,
+  competitor_id integer,
+  creator_id integer NOT NULL,
+  CONSTRAINT organization_service_cover_pkey PRIMARY KEY (id),
+  CONSTRAINT fk_390a9cb232c8a3de FOREIGN KEY (organization_id)
+      REFERENCES organization (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_390a9cb261220ea6 FOREIGN KEY (creator_id)
+      REFERENCES fos_user (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_390a9cb278a5d405 FOREIGN KEY (competitor_id)
+      REFERENCES organization (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_390a9cb2ed5ca9e6 FOREIGN KEY (service_id)
+      REFERENCES handling_service (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+
+-- Index: idx_390a9cb232c8a3de
+
+-- DROP INDEX idx_390a9cb232c8a3de;
+
+CREATE INDEX idx_390a9cb232c8a3de
+  ON organization_service_cover
+  USING btree
+  (organization_id);
+
+-- Index: idx_390a9cb261220ea6
+
+-- DROP INDEX idx_390a9cb261220ea6;
+
+CREATE INDEX idx_390a9cb261220ea6
+  ON organization_service_cover
+  USING btree
+  (creator_id);
+
+-- Index: idx_390a9cb278a5d405
+
+-- DROP INDEX idx_390a9cb278a5d405;
+
+CREATE INDEX idx_390a9cb278a5d405
+  ON organization_service_cover
+  USING btree
+  (competitor_id);
+
+-- Index: idx_390a9cb2ed5ca9e6
+
+-- DROP INDEX idx_390a9cb2ed5ca9e6;
+
+CREATE INDEX idx_390a9cb2ed5ca9e6
+  ON organization_service_cover
+  USING btree
+  (service_id);
+-- staging ----------------------
+-- prod -------------------------
+ALTER TABLE model_contact ALTER phone1 DROP NOT NULL;
+-- staging ----------------------
+-- prod -------------------------

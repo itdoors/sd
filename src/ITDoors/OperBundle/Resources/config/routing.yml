@@ -129,3 +129,7 @@ it_doors_oper_coworker_index:
 it_doors_oper_coworker_schedule_index:
     pattern:  /oper/coworker/schedule/index
     defaults: { _controller: ITDoorsOperBundle:OperCoworkerInfo:scheduleIndex }
+
+it_doors_oper_supervisor_coworkers:
+    pattern:  /oper/supervisor/coworkers/index
+    defaults: { _controller: ITDoorsOperBundle:OperSupervisorInfo:index }

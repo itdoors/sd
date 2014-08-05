@@ -1,4 +1,10 @@
-{{ ajax_filter_render('ScheduleFilterFormType', ajax_namespace_oper_department_schedule, {
+{% if coworkerSupervisorPage %}
+    {% set filterName = 'ScheduleSupervisorFilterFormType'  %}
+{% else %}
+    {% set filterName = 'ScheduleFilterFormType'  %}
+{% endif %}
+
+{{ ajax_filter_render(filterName, ajax_namespace_oper_department_schedule, {
 'schedule_content': 'ITDoorsAjax.updateList'
 }) }}
 

@@ -72,7 +72,6 @@ class HandlingSalesFormType extends AbstractType
                             ->orderBy('s.sortorder', 'ASC');
                 }
             ))
-            ->add('serviceOffered')
             ->add('budget')
             ->add('square')
             ->add('chance')
