@@ -21,9 +21,9 @@ class InvoiceService
      * @var Container $container
      */
     protected $container;
-    
+
     protected $messageTemplate;
-    
+
     protected $arrCostumersForSendMessages;
     /**
      * __construct
@@ -254,7 +254,7 @@ class InvoiceService
             if (!array_key_exists($customerfind->getId(), $this->arrCostumersForSendMessages)) {
                 $this->arrCostumersForSendMessages[$customerfind->getId()] = array();
             }
-            if ($this->messageTemplate && !array_key_exists($this->messageTemplate, $this->arrCostumersForSendMessages[$customerfind->getId()] )) {
+            if ($this->messageTemplate && !array_key_exists($this->messageTemplate, $this->arrCostumersForSendMessages[$customerfind->getId()])) {
                 $this->arrCostumersForSendMessages[$customerfind->getId()][$this->messageTemplate]  = array();
             }
         }
@@ -328,7 +328,7 @@ class InvoiceService
             }
         }
         if ($this->messageTemplate && $invoiceNew->getDogovorNumber()) {
-            if (!array_key_exists($invoiceNew->getDogovorNumber(), $this->arrCostumersForSendMessages[$customerfind->getId()][$this->messageTemplate] )) {
+            if (!array_key_exists($invoiceNew->getDogovorNumber(), $this->arrCostumersForSendMessages[$customerfind->getId()][$this->messageTemplate])) {
                 $this->arrCostumersForSendMessages[$invoiceNew->getCustomer()->getId()][$this->messageTemplate][$invoiceNew->getDogovorNumber()] = array();
             }
             $this->arrCostumersForSendMessages[$invoiceNew->getCustomer()->getId()][$this->messageTemplate][$invoiceNew->getDogovorNumber()][] = $invoiceNew->getId();

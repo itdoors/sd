@@ -84,7 +84,7 @@ class HandlingRepository extends BaseRepository
 
         $this->processFilters($sql, $filters);
 
-        $sql->addOrderBy('users.id', 'DESC');
+        $sql->addSelect('users.id as usersId')->addOrderBy('users.id', 'DESC');
 
         $query = $sql->getQuery()->getResult();
 

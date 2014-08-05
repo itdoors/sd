@@ -425,7 +425,7 @@ class ModelContactRepository extends EntityRepository
                 ->where('mc.modelName = :name')
                 ->andWhere('mc.modelId = :id')
                 ->andWhere('mcse.isSend = :status')
-                ->setParameter(':status', TRUE)
+                ->setParameter(':status', true)
                 ->setParameter(':name', 'organization')
                 ->setParameter(':id', $organizationId)
                 ->getQuery()->getResult();

@@ -2589,26 +2589,6 @@ class AjaxController extends BaseFilterController
         $em->remove($object);
         $em->flush();
     }
-    /**
-     * Deletes {entityName}Delete instance
-     *
-     * @param mixed[] $params
-     *
-     * @return void
-     */
-    public function coeaDelete($params)
-    {
-        $id = $params['id'];
-
-        /** @var Coea $object */
-        $object = $this->getDoctrine()
-            ->getRepository('ListsOrganizationBundle:Coea')
-            ->find($id);
-
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($object);
-        $em->flush();
-    }
 
     /**
      * Deletes {entityName}Delete instance

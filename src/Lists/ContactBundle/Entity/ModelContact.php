@@ -702,12 +702,13 @@ class ModelContact
      * Set sendEmail
      *
      * @param \Lists\ContactBundle\Entity\ModelContactSendEmail $sendEmail
+     * 
      * @return ModelContact
      */
     public function setSendEmail(\Lists\ContactBundle\Entity\ModelContactSendEmail $sendEmail = null)
     {
         $this->sendEmail = $sendEmail;
-    
+
         return $this;
     }
 
