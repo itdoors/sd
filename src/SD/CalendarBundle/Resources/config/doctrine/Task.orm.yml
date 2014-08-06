@@ -49,3 +49,12 @@ SD\CalendarBundle\Entity\Task:
                 user_id:
                     referencedColumnName: id
             orphanRemoval: false
+        performer:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                performer_id:
+                    referencedColumnName: id
+            orphanRemoval: false

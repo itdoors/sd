@@ -285,4 +285,32 @@ class Task
     {
         return $this->isDone;
     }
+    /**
+     * @var \SD\UserBundle\Entity\User
+     */
+    private $performer;
+
+
+    /**
+     * Set performer
+     *
+     * @param \SD\UserBundle\Entity\User $performer
+     * @return Task
+     */
+    public function setPerformer(\SD\UserBundle\Entity\User $performer = null)
+    {
+        $this->performer = $performer;
+    
+        return $this;
+    }
+
+    /**
+     * Get performer
+     *
+     * @return \SD\UserBundle\Entity\User 
+     */
+    public function getPerformer()
+    {
+        return $this->performer;
+    }
 }

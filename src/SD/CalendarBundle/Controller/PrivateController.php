@@ -33,14 +33,18 @@ class PrivateController extends SalesController
     public function taskAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $tasksDone = $em->getRepository('SDCalendarBundle:Task')->
+        $taskRepo = $em->getRepository('SDCalendarBundle:Task');
+        $tasksDone = $taskRepo->
             getPersonalTaskDone($this->getUser()->getId(), 'personal');
-        $tasksOpen = $em->getRepository('SDCalendarBundle:Task')->
+        $tasksOpen = $taskRepo->
             getFivePersonalTaskOpen($this->getUser()->getId(), 'personal');
+        $tasksCreated = $taskRepo->
+            getFivePersonalTaskCreated($this->getUser()->getId(), 'personal');
 
         return $this->render('SDCalendarBundle:Task:tasks.html.twig', array(
             'tasksDone' => $tasksDone,
-            'tasksOpen' => $tasksOpen
+            'tasksOpen' => $tasksOpen,
+            'tasksCreated' => $tasksCreated
         ));
     }
 
