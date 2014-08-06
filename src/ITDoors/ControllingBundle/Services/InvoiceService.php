@@ -201,6 +201,9 @@ class InvoiceService
         if (!empty($invoice->dogovorDate) && $invoice->dogovorDate != 'null') {
             $invoiceNew->setDogovorDate(new \DateTime(trim($invoice->dogovorDate)));
         }
+        if (!empty($invoice->dogovorActDate) && $invoice->dogovorActDate != 'null') {
+            $invoiceNew->setDogovorActDate(new \DateTime(trim($invoice->dogovorActDate)));
+        }
         if (!empty($invoice->date) && $invoice->date != 'null') {
             $invoiceNew->setDate(new \DateTime(trim($invoice->date)));
         } else {

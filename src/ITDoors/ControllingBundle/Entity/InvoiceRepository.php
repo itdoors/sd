@@ -170,7 +170,7 @@ class InvoiceRepository extends EntityRepository
         $this->whereInvoicePeriod($res, $periodmin, $periodmax);
 
         return $res
-                ->orderBy('i.performerEdrpou', 'DESC')->getQuery();
+                ->orderBy('i.customerName', 'ASC')->getQuery();
     }
 
     /**
@@ -341,7 +341,9 @@ class InvoiceRepository extends EntityRepository
 
         return $res
                 ->andWhere("i.court = :id")
-                ->setParameter(':id', $id)->getQuery();
+                ->setParameter(':id', $id)
+                ->orderBy('i.customerName', 'ASC')
+                ->getQuery();
     }
 
     /**

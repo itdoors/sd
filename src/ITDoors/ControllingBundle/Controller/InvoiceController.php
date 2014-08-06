@@ -13,6 +13,7 @@ use Knp\Bundle\PaginatorBundle\KnpPaginatorBundle;
 use Doctrine\ORM\EntityManager;
 use PHPExcel_Style_Border;
 use PHPExcel_Style_Alignment;
+use PHPExcel_Style_Fill;
 use Symfony\Component\HttpFoundation\Request;
 use Lists\ContactBundle\Entity\ModelContactSendEmail;
 
@@ -355,6 +356,12 @@ class InvoiceController extends BaseFilterController
             ++$str;
             $col = 0;
 
+            if ($str%2 == 0) {
+                $phpExcelObject->getActiveSheet()->getStyle('A'.$str.':P'.$str)->getFill()
+                ->applyFromArray(array('type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array('rgb' => 'f5f5f5')
+                ));
+            }
 //            $phpExcelObject->getActiveSheet()->getDefaultRowDimension($str)->setRowHeight(40);
 //            $phpExcelObject->getActiveSheet()->getDefaultRowDimension($str)->setRowHeight(-1);
 
@@ -435,6 +442,10 @@ class InvoiceController extends BaseFilterController
 //        $phpExcelObject->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
 //        $phpExcelObject->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
         $phpExcelObject->getActiveSheet()->getStyle('A1:P'.$str)->getAlignment()->setWrapText(true);
+        $phpExcelObject->getActiveSheet()->getStyle('A1:P1')->getFill()
+            ->applyFromArray(array('type' => PHPExcel_Style_Fill::FILL_SOLID,
+            'startcolor' => array('rgb' => 'eeeeee')
+            ));
 //        $phpExcelObject->getActiveSheet()->getRowDimension(8)->setRowHeight(-1);
 //        $phpExcelObject->getActiveSheet()->getStyle('A8')->getAlignment()->setWrapText(true);
         $phpExcelObject->getActiveSheet()->setShowGridLines(false);//off line

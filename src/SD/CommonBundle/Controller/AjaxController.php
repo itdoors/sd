@@ -3473,6 +3473,7 @@ class AjaxController extends BaseFilterController
                 return $repository->createQueryBuilder('c')
                     ->leftJoin('c.invoicecompanystructure', 'idc')
                     ->where('(idc.invoiceId is NULL OR idc.invoiceId <> :invoiceId)')
+                    ->orderBy('c.name')
                     ->setParameter(':invoiceId', $invoiceId);
                 }
             ));
