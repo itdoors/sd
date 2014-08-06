@@ -295,12 +295,13 @@ class Task
      * Set performer
      *
      * @param \SD\UserBundle\Entity\User $performer
+     * 
      * @return Task
      */
     public function setPerformer(\SD\UserBundle\Entity\User $performer = null)
     {
         $this->performer = $performer;
-    
+
         return $this;
     }
 
