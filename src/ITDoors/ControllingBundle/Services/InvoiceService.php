@@ -158,7 +158,7 @@ class InvoiceService
                     $summa += trim($pay->summa);
                 }
 
-                if (!$invoiceNew->getDateFact()) {
+                if ($summa != 0) {
                     $this->messageTemplate = 'invoice-pay';
                 }
 
