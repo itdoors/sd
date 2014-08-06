@@ -1,3 +1,4 @@
+{% trans_default_domain 'SDCalendarBundle' %}
 <div id="form_modal_task" class="modal fade" role="basic" aria-hidden="true">
     <div class="modal-dialog" style="">
         <div class="modal-content">
@@ -8,9 +9,6 @@
             <div class="modal-body">
                 <div id="more_info_task" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
                 </div>
-
-                <br>
-                <a class="btn green" data-dismiss="modal" aria-hidden="true">{% trans %}Exit{% endtrans %}</a>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -26,7 +24,7 @@
             setDoneTask(self.data('id'));
 
         })
-            $('.task-title').die('click');
+        $('.task-title').die('click');
         $('.task-title').live('click', function(e) {
             var self = $(this);
             $('#more_info_task').html('');
@@ -57,7 +55,8 @@
 
         })
 
-        $('#form_modal_task').on('hidden.bs.modal', function () {
+        $('#task_set_viewed').die('click');
+        $('#task_set_viewed').live('click', function(e) {
             var id = $('#task_modal_id_holder').data('id');
             setDoneTask(id);
         })
@@ -122,11 +121,14 @@
 <div class="portlet box green-haze tasks-widget">
     <div class="portlet-title">
         <div class="caption">
-            <i class="fa fa-check"></i>Tasks
+            <i class="fa fa-check"></i>
+            {% trans %}Tasks{% endtrans %}
         </div>
         <div class="tools">
+{#
             <a href="" class="reload">
             </a>
+#}
         </div>
     </div>
     <div class="portlet-body">

@@ -1,5 +1,4 @@
-
-
+{% trans_default_domain 'SDCalendarBundle' %}
 
 <table class="table table-bordered table-striped">
     <tr>
@@ -7,11 +6,11 @@
         <td colspan="3">{{ task.title }}</td>
     </tr>
     <tr>
-        <td>{% trans %}Date started{% endtrans %}</td>
+        <td>{% trans %}Date start{% endtrans %}</td>
         <td colspan="3">{{ task.startDateTime|date('d.m.Y') }}</td>
     </tr>
     <tr>
-        <td>{% trans %}Date ended{% endtrans %}</td>
+        <td>{% trans %}Date stop{% endtrans %}</td>
         <td colspan="3">{{ task.stopDateTime|date('d.m.Y') }}</td>
     </tr>
     <tr>
@@ -22,3 +21,8 @@
 
 <input type="hidden" id="task_modal_id_holder" data-id="{{ task.id }}"
         >
+
+<a class="btn green" data-dismiss="modal" aria-hidden="true">{% trans %}Exit{% endtrans %}</a>
+{% if not task.isDone %}
+<a id="task_set_viewed" class="btn green" data-dismiss="modal" aria-hidden="true" style="float: right;">{% trans %}Set viewed{% endtrans %}</a>
+{% endif %}
