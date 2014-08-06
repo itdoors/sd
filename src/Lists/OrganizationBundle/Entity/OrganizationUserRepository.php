@@ -29,7 +29,7 @@ class OrganizationUserRepository extends EntityRepository
                 ->addSelect('l.lukey')
                 ->addSelect('ou.userId')
                 ->innerJoin('ou.organization', 'o')
-                ->leftJoin('ou.lookup', 'l')
+                ->leftJoin('ou.role', 'l')
                 ->innerJoin('ou.user', 'u')
                 ->innerJoin('u.stuff', 's')
                 ->where('o.id = :organizationId')

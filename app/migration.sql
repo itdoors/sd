@@ -850,3 +850,10 @@ ALTER TABLE task
       ON UPDATE NO ACTION ON DELETE NO ACTION;
 -- staging ----------------------
 -- prod -------------------------
+ALTER TABLE organization_user ADD role_id INT DEFAULT NULL;
+ALTER TABLE organization_user DROP lookup_id;
+DROP INDEX idx_b49ae8d48955c49d;
+ALTER TABLE organization_user ADD CONSTRAINT FK_B49AE8D4D60322AC FOREIGN KEY (role_id) REFERENCES lookup (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_B49AE8D4D60322AC ON organization_user (role_id);
+-- staging ----------------------
+-- prod -------------------------

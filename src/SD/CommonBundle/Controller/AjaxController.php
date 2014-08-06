@@ -2573,7 +2573,7 @@ class AjaxController extends BaseFilterController
         /** @var Lookup $lookup */
         $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager_organization'));
 
-        if ((!$organizationUser->getLookup() || $organizationUser->getLookup()->getId() != $lookup->getId()) && $this->getUser()->hasRole('ROLE_SALESADMIN')) {
+        if ((!$organizationUser->getRole() || $organizationUser->getRole()->getId() != $lookup->getId()) && $this->getUser()->hasRole('ROLE_SALESADMIN')) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($organizationUser);
             $em->flush();
