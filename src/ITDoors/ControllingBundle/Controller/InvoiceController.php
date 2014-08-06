@@ -32,6 +32,8 @@ class InvoiceController extends BaseFilterController
     /** @var KnpPaginatorBundle $paginator */
     protected $paginator = 'knp_paginator';
 
+    protected $filterFormName = 'invoiceFilterForm';
+
     /**
      * @var Container
      *
@@ -40,6 +42,8 @@ class InvoiceController extends BaseFilterController
     public function indexAction()
     {
         $filterNamespace = $this->container->getParameter($this->getNamespace());
+
+        $filter = $this->filterFormName;
 
         $period = $this->getTab($filterNamespace);
         if (!$period) {
@@ -53,6 +57,7 @@ class InvoiceController extends BaseFilterController
 
         return $this->render('ITDoorsControllingBundle:Invoice:index.html.twig', array(
                 'tabs' => $tabs,
+                'filter' => $filter,
                 'tab' => $period,
                 'namespace' => $filterNamespace
         ));
@@ -69,6 +74,12 @@ class InvoiceController extends BaseFilterController
     {
         $filterNamespace = $this->container->getParameter($this->getNamespace());
 
+        $filters = $this->getFilters($filterNamespace);
+        if (empty($filters)) {
+            $filters['isFired'] = 'No fired';
+            $this->setFilters($filterNamespace, $filters);
+        }
+
         $period = $this->getTab($filterNamespace);
 
         /** @var EntityManager $em */
@@ -77,7 +88,7 @@ class InvoiceController extends BaseFilterController
         /** @var InvoiceRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
 
-        $result = $invoice->getEntittyCountSum($period);
+        $result = $invoice->getEntittyCountSum($period, $filters);
         $entities = $result['entities'];
         $count = $result['count'];
 

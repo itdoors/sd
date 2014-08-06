@@ -209,6 +209,60 @@ class AjaxController extends BaseFilterController
     }
 
     /**
+     * Returns json organization list for contacts query
+     *
+     * @return string
+     */
+    public function invoiceInvoiceIdAction()
+    {
+        $searchTextQ = $this->get('request')->query->get('q');
+        $searchTextQuery = $this->get('request')->query->get('query');
+
+        $searchText = $searchTextQ ? $searchTextQ : $searchTextQuery;
+
+        /** @var \ITDoors\ControllingBundle\Entity\InvoiceRepository $invoiceRepository */
+        $invoiceRepository = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice');
+
+        $invoices = $invoiceRepository->getSearchInvoiceIdQuery($searchText);
+
+        $result = array();
+
+        foreach ($invoices as $invoice) {
+            $result[] = $this->serializeArray($invoice, 'id', 'invoiceId');
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json organization list for contacts query
+     *
+     * @return string
+     */
+    public function invoiceDogovorActNameAction()
+    {
+        $searchTextQ = $this->get('request')->query->get('q');
+        $searchTextQuery = $this->get('request')->query->get('query');
+
+        $searchText = $searchTextQ ? $searchTextQ : $searchTextQuery;
+
+        /** @var \ITDoors\ControllingBundle\Entity\InvoiceRepository $invoiceRepository */
+        $invoiceRepository = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice');
+
+        $invoices = $invoiceRepository->getSearchDogovorActNameQuery($searchText);
+
+        $result = array();
+
+        foreach ($invoices as $invoice) {
+            $result[] = $this->serializeArray($invoice, 'dogovorActName', 'dogovorActName');
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
      * Returns json organization list for wizard
      *
      * @return string
@@ -1258,6 +1312,65 @@ class AjaxController extends BaseFilterController
 
         foreach ($organizations as $organization) {
             $result[] = $this->serializeObject($organization);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json organization object by requested id
+     *
+     * @return string
+     */
+    public function invoiceByIdSAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        /** @var \ITDoors\ControllingBundle\Entity\InvoiceRepository $invoiceRepository */
+        $invoiceRepository = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice');
+
+        /** @var Invoice[] $invoices */
+        $invoices = $invoiceRepository
+            ->createQueryBuilder('i')
+            ->where("i.id in (:ids)")
+            ->setParameter(':ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($invoices as $invoice) {
+            $result[] = $this->serializeObject($invoice);
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json organization object by requested id
+     *
+     * @return string
+     */
+    public function invoiceByDogovorActNamesAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        /** @var \ITDoors\ControllingBundle\Entity\InvoiceRepository $invoiceRepository */
+        $invoiceRepository = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice');
+
+        /** @var Invoice[] $invoices */
+        $invoices = $invoiceRepository
+            ->createQueryBuilder('i')
+            ->where('i.dogovorActName in (:ids)')
+            ->setParameter(':ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($invoices as $invoice) {
+            $result[] = $this->serializeObject($invoice, 'getDogovorActName', 'getDogovorActName');
         }
 
         return new Response(json_encode($result));
