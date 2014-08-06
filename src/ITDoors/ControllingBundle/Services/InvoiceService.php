@@ -518,6 +518,32 @@ class InvoiceService
 
         return $tabs;
     }
+    /**
+     * Returns results for interval future invoice
+     *
+     * @var Container
+     * 
+     * @return array
+     */
+    public function getTabsEmptyData()
+    {
+        $translator = $this->container->get('translator');
+        $tabs = array();
+        $tabs['delay'] = array(
+            'blockupdate' => 'ajax-tab-holder-1',
+            'tab' => 'delay',
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_data_show'),
+            'text' => $translator->trans('Delay')
+        );
+        $tabs['act'] = array(
+            'blockupdate' => 'ajax-tab-holder-1',
+            'tab' => 'act',
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_data_show'),
+            'text' => $translator->trans('Existence act')
+        );
+
+        return $tabs;
+    }
 
     /**
      * Returns results for interval future invoice

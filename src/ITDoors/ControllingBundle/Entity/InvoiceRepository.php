@@ -409,6 +409,60 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
+     * @param string $type
+     * 
+     * @return mixed[]
+     */
+    public function getInvoiceEmptyData($type)
+    {
+        $res = $this->createQueryBuilder('i');
+        /** select */
+        $this->selectInvoicePeriod($res);
+        /** join */
+        $this->joinInvoicePeriod($res);
+        /** where */
+        switch ($type) {
+            case 'delay':
+                $res = $res->andWhere("i.delayDays is NULL or i.delayDays = 0")
+                    ->orderBy('i.dateEnd', 'DESC');
+                break;
+            case 'act':
+                $res = $res->andWhere("i.dogovorActOriginal = :boolen")
+                   ->setParameter(':boolen', false, \PDO::PARAM_BOOL)
+                    ->orderBy('i.dateEnd', 'DESC');
+                break;
+        }
+
+        return $res->getQuery();
+    }
+    /**
+     * Returns results for interval future invoice
+     *
+     * @param string $type
+     * 
+     * @return mixed[]
+     */
+    public function getInvoiceEmptyDataCount($type)
+    {
+        $res = $this->createQueryBuilder('i');
+        /** select */
+        $this->selectInvoicePeriodCount($res);
+        /** where */
+        switch ($type) {
+            case 'delay':
+                $res = $res->andWhere("i.delayDays is NULL or i.delayDays = 0");
+                break;
+            case 'act':
+                $res = $res->andWhere("i.dogovorActOriginal = :boolen")
+                    ->setParameter(':boolen', false, \PDO::PARAM_BOOL);
+                break;
+        }
+
+        return $res->getQuery()->getSingleScalarResult();
+    }
+    /**
+     * Returns results for interval future invoice
+     *
      * @param date $date Description
      * 
      * @return mixed[]
@@ -537,6 +591,14 @@ class InvoiceRepository extends EntityRepository
                 $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d')+1, date('Y')));
                 $result['entities'] = $this->getInvoiceWhen($date);
                 $result['count'] = $this->getInvoiceWhenCount($date);
+                break;
+            case 'delay':
+                $result['entities'] = $this->getInvoiceEmptyData('delay');
+                $result['count'] = $this->getInvoiceEmptyDataCount('delay');
+                break;
+            case 'act':
+                $result['entities'] = $this->getInvoiceEmptyData('act');
+                $result['count'] = $this->getInvoiceEmptyDataCount('act');
                 break;
         }
 

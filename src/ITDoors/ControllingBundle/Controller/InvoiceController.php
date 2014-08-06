@@ -257,6 +257,29 @@ class InvoiceController extends BaseFilterController
                 'namespace' => $namespaceTab
         ));
     }
+    /**
+     *  expectedpayAction
+     * 
+     * @return render Description
+     */
+    public function expecteddataAction()
+    {
+        $filterNamespace = $this->container->getParameter($this->getNamespace());
+        $namespaceTab = $filterNamespace . 'expecteddata';
+        $tab = $this->getTab($namespaceTab);
+        if (!$tab) {
+            $tab = 'delay';
+            $this->setTab($namespaceTab, $tab);
+        }
+        $service = $this->container->get($this->service);
+        $tabs = $service->getTabsEmptyData();
+
+        return $this->render('ITDoorsControllingBundle:Invoice:expecteddata.html.twig', array(
+                'tabs' => $tabs,
+                'tab' => $tab,
+                'namespace' => $namespaceTab
+        ));
+    }
 
     /**
      *  expectedpayshowAction
@@ -297,6 +320,53 @@ class InvoiceController extends BaseFilterController
         }
 
         return $this->render('ITDoorsControllingBundle:Invoice:expectedpayshow.html.twig', array(
+                'period' => $tab,
+                'entities' => $pagination,
+                'responsibles' => $responsibles,
+                'namespace' => $namespaceTab
+        ));
+
+    }
+
+    /**
+     *  expectedpayshowAction
+     * 
+     * @return render Description
+     */
+    public function expecteddatashowAction()
+    {
+        $filterNamespace = $this->container->getParameter($this->getNamespace());
+        $namespaceTab = $filterNamespace . 'expecteddata';
+        $tab = $this->getTab($namespaceTab);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var InvoiceRepository $invoice */
+        $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
+
+        $result = $invoice->getEntittyCountSum($tab);
+        $entities = $result['entities'];
+        $count = $result['count'];
+
+        $page = $this->getPaginator($namespaceTab);
+        if (!$page) {
+            $page = 1;
+        }
+
+        $paginator = $this->container->get($this->paginator);
+        $entities->setHint($this->paginator . '.count', $count);
+        $pagination = $paginator->paginate($entities, $page, 10);
+
+        $responsibles = array();
+        foreach ($pagination as $val) {
+            /** @var InvoiceCompanystructure */
+            $responsibles[$val['id']] = $em
+                ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
+                ->findBy(array('invoiceId' => $val['id']));
+        }
+
+        return $this->render('ITDoorsControllingBundle:Invoice:expecteddatashow.html.twig', array(
                 'period' => $tab,
                 'entities' => $pagination,
                 'responsibles' => $responsibles,
