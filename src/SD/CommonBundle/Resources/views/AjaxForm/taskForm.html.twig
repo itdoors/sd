@@ -11,6 +11,7 @@
                         weekStart: 1,
                         startDate: new Date()
                     });
+            $('#' + '{{ form.vars.name }}' + '_performer').select2();
         });
     </script>
             <div class="portlet-body">
@@ -46,7 +47,11 @@
                         {{ form_widget(form.description, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter description'|trans({}, 'SDCalendarBundle')} } ) }}
                         <span class="help-block">{{ form_errors(form.description) }}</span>
                     </div>
-                   
+                    <div class="form-group col-md-12">
+                        {{ form_label(form.performer, 'Performer'|trans({}, 'SDCalendarBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.performer, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter performer'|trans({}, 'SDCalendarBundle')} } ) }}
+                        <span class="help-block">{{ form_errors(form.performer) }}</span>
+                    </div>
                     {#<div class="form-group col-md-2">
                         {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': 'Handling tye'} } ) }}
                     </div>

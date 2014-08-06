@@ -841,3 +841,12 @@ ALTER TABLE task ALTER COLUMN is_done SET DEFAULT false;
 COMMENT ON COLUMN task.is_done IS 'Выполнен ли таск';
 -- staging ----------------------
 -- prod -------------------------
+
+ALTER TABLE task ADD COLUMN performer_id bigint;
+COMMENT ON COLUMN task.performer_id IS 'Исполнитель';
+ALTER TABLE task
+  ADD CONSTRAINT task_performer_id_fkey FOREIGN KEY (performer_id)
+      REFERENCES fos_user (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
+-- staging ----------------------
+-- prod -------------------------

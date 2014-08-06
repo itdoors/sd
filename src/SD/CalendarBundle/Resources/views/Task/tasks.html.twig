@@ -157,6 +157,14 @@
                         'tasksDone': tasksDone
                     }) }}
                 </span>
+
+                <span id="created_task_holder">
+                    {{ include('SDCalendarBundle:Task:tasksCreated.html.twig', {
+                        'tasksCreated': tasksCreated
+                    }) }}
+                </span>
+
+
                     <!-- END START TASK LIST -->
 
             <div class="task-footer" style="height: 20px;">

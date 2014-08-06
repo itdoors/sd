@@ -51,8 +51,8 @@ class TaskRepository extends EntityRepository
             ->addSelect('t.startDateTime')
             ->addSelect('t.stopDateTime')
             ->addSelect('t.isDone')
-
-            ->where('t.userId = :userid')
+            ->leftJoin('t.performer', 'p')
+            ->where('p.id = :userid')
             ->andWhere('t.taskType = :types')
             ->andWhere('t.isDone = :isDone')
 
@@ -73,6 +73,34 @@ class TaskRepository extends EntityRepository
      * @return array
      */
     public function getFivePersonalTaskOpen ($userId, $type)
+    {
+        return $this->createQueryBuilder('t')
+            ->select('t.id')
+            ->addSelect('t.title')
+            ->addSelect('t.startDateTime')
+            ->addSelect('t.stopDateTime')
+            ->addSelect('t.isDone')
+
+            ->leftJoin('t.performer', 'p')
+            ->where('p.id = :userid')
+            ->andWhere('t.taskType = :types')
+            ->andWhere('t.isDone = :isDone')
+
+            ->setParameter(':userid', $userId)
+            ->setParameter(':types', $type)
+            ->setParameter(':isDone', false, \PDO::PARAM_BOOL)
+            ->orderBy('t.id', 'desc')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param integer $userId
+     * @param string  $type
+     *
+     * @return array
+     */
+    public function getFivePersonalTaskCreated ($userId, $type)
     {
         return $this->createQueryBuilder('t')
             ->select('t.id')
