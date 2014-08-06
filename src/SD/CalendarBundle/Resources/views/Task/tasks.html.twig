@@ -1,0 +1,176 @@
+<div id="form_modal_task" class="modal fade" role="basic" aria-hidden="true">
+    <div class="modal-dialog" style="">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">{% trans %}Task viewing{% endtrans %}</h4>
+            </div>
+            <div class="modal-body">
+                <div id="more_info_task" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
+                </div>
+
+                <br>
+                <a class="btn green" data-dismiss="modal" aria-hidden="true">{% trans %}Exit{% endtrans %}</a>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function(){
+        $('.task-input').die('click');
+        $('.task-input').live('click', function(e) {
+            var self = $(this);
+            setDoneTask(self.data('id'));
+
+        })
+            $('.task-title').die('click');
+        $('.task-title').live('click', function(e) {
+            var self = $(this);
+            $('#more_info_task').html('');
+            var url = $('#more_info_tasks').data('url_show_task');
+            var id = $(this).data('id');
+
+            var sendData = {
+                'id': id
+            };
+            ITDoorsAjax.blockUI(self);
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data) {
+                    //alert(data);
+                    ITDoorsAjax.unblockUI(self);
+                    data = JSON.parse(data);
+                    $('#more_info_task').html(data.html);
+                    $('#form_modal_task').modal('show');
+                },
+                error: function (e) {
+                    alert('error');
+                    ITDoorsAjax.unblockUI($(this));
+                }
+            })
+
+        })
+
+        $('#form_modal_task').on('hidden.bs.modal', function () {
+            var id = $('#task_modal_id_holder').data('id');
+            setDoneTask(id);
+        })
+
+        function setDoneTask(id) {
+            var url = $('#more_info_tasks').data('url_set_done_task');
+            var dataType = $('#task_'+id).data('type');
+            if (dataType == 'open') {
+                var sendData = {
+                    'id': id
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: sendData,
+                    success: function(data) {
+                        //alert(data);
+                        data = JSON.parse(data);
+                        if (data.success != 1) {
+
+                        } else {
+                            var liTask = $('#task_'+id).hide();
+                            updateViewedTasks();
+                        }
+                    },
+                    error: function (e) {
+                        alert('error');
+                    }
+                })
+            }
+        }
+
+        function updateViewedTasks() {
+            var url = $('#more_info_tasks').data('url_viewed_tasks');
+
+            var sendData = {};
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data) {
+                    //alert(data);
+                    $('#viewed_task_holder').html(data);
+                },
+                error: function (e) {
+                    alert('error');
+                }
+            })
+        }
+
+    })
+
+</script>
+
+<style>
+    .task-title{
+        cursor: pointer;
+    }
+</style>
+
+<div class="portlet box green-haze tasks-widget">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="fa fa-check"></i>Tasks
+        </div>
+        <div class="tools">
+            <a href="" class="reload">
+            </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="task-content" style="min-height: 300px;">
+{#
+            <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 305px;"><div class="scroller" style="overflow: hidden; width: auto; height: 305px;" data-always-visible="1" data-rail-visible1="1" data-initialized="1">
+#}
+                    <!-- START TASK LIST -->
+                    <ul class="task-list">
+                        {% for task in tasksOpen %}
+                            <li id="task_{{ task.id }}" data-type="open">
+                                <div class="task-checkbox">
+                                    <input type="hidden" value="1" name="test">
+                                    <div class="checker"><span><input type="checkbox" class="task-input" data-id="{{ task.id }}"></span></div>
+                                </div>
+                                <div class="task-title" data-id="{{ task.id }}">
+                                <span class="task-title-sp">
+                                    {{ task.title }} ({{ task.startDateTime|date('d.m.Y') }} - {{ task.stopDateTime|date('d.m.Y') }})
+                                </span>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                <span id="viewed_task_holder">
+                    {{ include('SDCalendarBundle:Task:tasksDone.html.twig', {
+                        'tasksDone': tasksDone
+                    }) }}
+                </span>
+                    <!-- END START TASK LIST -->
+
+            <div class="task-footer" style="height: 20px;">
+{#
+                <div class="btn-arrow-link pull-right">
+                    <a href="#">See All Records</a>
+                    <i class="icon-arrow-right"></i>
+                </div>
+#}
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="more_info_tasks"
+        data-url_show_task="{{ path('sd_tasks_modal_content') }}"
+        data-url_set_done_task="{{ path('sd_tasks_set_done') }}"
+        data-url_viewed_tasks="{{ path('sd_tasks_done') }}"
+>

@@ -1,5 +1,15 @@
 {% trans_default_domain 'ITDoorsControllingBundle' %}
 {% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        $('#invoiceCompanystructureForm_companystructure').select2({
+            minimumInputLength: 0
+        });
+    });
+
+</script>
+
 <div class="row">
     <div class="col-md-12">
         <div class="portlet box green">

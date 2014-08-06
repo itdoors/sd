@@ -81,6 +81,39 @@ class ContractorController extends SalesController
     }
 
     /**
+     * Executes show action
+     *
+     * @param int $id
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function showAction($id)
+    {
+        if (!$this->getUser()->hasRole('ROLE_OPER')) {
+            $this->get('sd.security_access')->hasAccessToOrganizationAndThrowException($id);
+        }
+        /** @var \Lists\OrganizationBundle\Entity\Organization $organization */
+        $organization= $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization')
+            ->find($id);
+
+        if ($organization->getParent()) {
+            return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_organization_show', array(
+                    'id' => $organization->getParentId()
+                )));
+        }
+
+        $managerForm = $this->createForm('organizationUserForm');
+
+        return $this->render('ListsOrganizationBundle:' . $this->baseTemplate. ':show.html.twig', array(
+            'organization' => $organization,
+            'filterFormName' => $this->filterFormName,
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix,
+            'managerForm' => $managerForm->createView()
+        ));
+    }
+    /**
      * Executes new action
      *
      * @param Request $request

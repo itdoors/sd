@@ -406,4 +406,28 @@ class ModelContactRepository extends EntityRepository
         return $sql
             ->getQuery();
     }
+    /**
+     * Returns organization ids with in one organization group
+     *
+     * @param integer $organizationId
+     *
+     * @return mixed
+     */
+    public function getUsersForSendEmail($organizationId)
+    {
+        return  $sql = $this->createQueryBuilder('mc')
+                ->select('mc.email')
+                ->addSelect('mc.id')
+                ->addSelect('mc.lastName')
+                ->addSelect('mc.firstName')
+                ->addSelect('mc.middleName')
+                ->innerJoin('mc.sendEmail', 'mcse')
+                ->where('mc.modelName = :name')
+                ->andWhere('mc.modelId = :id')
+                ->andWhere('mcse.isSend = :status')
+                ->setParameter(':status', true)
+                ->setParameter(':name', 'organization')
+                ->setParameter(':id', $organizationId)
+                ->getQuery()->getResult();
+    }
 }

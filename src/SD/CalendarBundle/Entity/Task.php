@@ -256,4 +256,33 @@ class Task
     {
         return $this->user;
     }
+    /**
+     * @var boolean
+     */
+    private $isDone;
+
+
+    /**
+     * Set isDone
+     *
+     * @param boolean $isDone
+     *
+     * @return Task
+     */
+    public function setIsDone($isDone)
+    {
+        $this->isDone = $isDone;
+
+        return $this;
+    }
+
+    /**
+     * Get isDone
+     *
+     * @return boolean 
+     */
+    public function getIsDone()
+    {
+        return $this->isDone;
+    }
 }

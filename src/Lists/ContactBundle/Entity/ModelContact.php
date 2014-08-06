@@ -692,4 +692,33 @@ class ModelContact
     {
         return $this->level;
     }
+    /**
+     * @var \Lists\ContactBundle\Entity\ModelContactSendEmail
+     */
+    private $sendEmail;
+
+
+    /**
+     * Set sendEmail
+     *
+     * @param \Lists\ContactBundle\Entity\ModelContactSendEmail $sendEmail
+     * 
+     * @return ModelContact
+     */
+    public function setSendEmail(\Lists\ContactBundle\Entity\ModelContactSendEmail $sendEmail = null)
+    {
+        $this->sendEmail = $sendEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get sendEmail
+     *
+     * @return \Lists\ContactBundle\Entity\ModelContactSendEmail 
+     */
+    public function getSendEmail()
+    {
+        return $this->sendEmail;
+    }
 }

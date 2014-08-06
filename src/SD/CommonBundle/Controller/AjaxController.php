@@ -42,7 +42,7 @@ use SD\UserBundle\Entity\Usercontactinfo;
 use SD\CalendarBundle\Entity\Task;
 use Lists\HandlingBundle\Entity\HandlingUser;
 use Lists\OrganizationBundle\Entity\OrganizationUser;
-use Lists\OrganizationBundle\Entity\Coea;
+use ITDoors\HistoryBundle\Entity\History;
 
 /**
  * AjaxController class.
@@ -1958,6 +1958,7 @@ class AjaxController extends BaseFilterController
         $formData = $request->request->get($form->getName());
 
         $data->setTaskType('personal');
+        $data->setIsDone(false);
         $data->setStartDateTime(new \DateTime($formData['startDateTime']));
         $data->setStopDateTime(new \DateTime($formData['stopDateTime']));
 
@@ -2094,6 +2095,8 @@ class AjaxController extends BaseFilterController
     {
         $data = $form->getData();
 
+        $authUser = $user;
+
         $em = $this->getDoctrine()->getManager();
 
         $user = $this->getDoctrine()
@@ -2121,6 +2124,17 @@ class AjaxController extends BaseFilterController
             $lookup = $this->getDoctrine()
                 ->getRepository('ListsLookupBundle:Lookup')
                 ->find($lookupId);
+
+        $history = new History();
+        $history->setCreatedatetime(new \DateTime());
+        $history->setFieldName('user_id');
+        $history->setModelName('handling_user');
+        $history->setModelId($handling->getId());
+        $history->setUser($authUser);
+        $history->setOldValue(null);
+        $history->setValue($user->getId());
+        $history->setMore('add manager');
+        $em->persist($history);
 
         $object = new HandlingUser();
 
@@ -2291,6 +2305,7 @@ class AjaxController extends BaseFilterController
         $data = $form->getData();
 
         $data->setUser($user);
+        $data->setOwner($user);
         $data->setCreatedatetime(new \DateTime());
 
         $em = $this->getDoctrine()->getManager();
@@ -2465,9 +2480,22 @@ class AjaxController extends BaseFilterController
     {
         $handlingUserId = $params['handlingUserId'];
 
+        $em = $this->getDoctrine()->getManager();
+
         $object = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingUser')
             ->find($handlingUserId);
+
+        $history = new History();
+        $history->setCreatedatetime(new \DateTime());
+        $history->setFieldName('user_id');
+        $history->setModelName('handling_user');
+        $history->setModelId($object->getId());
+        $history->setUser($this->getUser());
+        $history->setOldValue($object->getUser()->getId());
+        $history->setValue(null);
+        $history->setMore('remove manager');
+        $em->persist($history);
 
         $lookupId = $this->getDoctrine()
             ->getRepository('ListsLookupBundle:Lookup')->getOnlyManagerProjectId();
@@ -2503,7 +2531,6 @@ class AjaxController extends BaseFilterController
         );
         $cron = $this->container->get('it_doors_cron.service');
         $cron->addSendEmails();
-        $em = $this->getDoctrine()->getManager();
         $em->persist($mainManager);
         $em->remove($object);
         $em->flush();
@@ -2583,26 +2610,6 @@ class AjaxController extends BaseFilterController
         /** @var Dogovor $object */
         $object = $this->getDoctrine()
             ->getRepository('ListsDogovorBundle:Dogovor')
-            ->find($id);
-
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($object);
-        $em->flush();
-    }
-    /**
-     * Deletes {entityName}Delete instance
-     *
-     * @param mixed[] $params
-     *
-     * @return void
-     */
-    public function coeaDelete($params)
-    {
-        $id = $params['id'];
-
-        /** @var Coea $object */
-        $object = $this->getDoctrine()
-            ->getRepository('ListsOrganizationBundle:Coea')
             ->find($id);
 
         $em = $this->getDoctrine()->getManager();
@@ -2791,11 +2798,25 @@ class AjaxController extends BaseFilterController
         $value = (int) $this->get('request')->request->get('value');
 
         $methodSet = 'set' . ucfirst($name);
+        $methodGet = 'get' . ucfirst($name);
 
         /** @var HandlingUser $object */
         $object = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingUser')
             ->find($pk);
+
+        $em = $this->getDoctrine()->getManager();
+
+        $history = new History();
+        $history->setCreatedatetime(new \DateTime());
+        $history->setFieldName($name);
+        $history->setModelName('handling_user');
+        $history->setModelId($pk);
+        $history->setUser($this->getUser());
+        $history->setOldValue($object->$methodGet);
+        $history->setValue($value);
+        $history->setMore('change '.$name);
+        $em->persist($history);
 
         if (!$value) {
             $methodGet = 'get' . ucfirst($name);
@@ -2853,7 +2874,6 @@ class AjaxController extends BaseFilterController
             return new Response($return, 406);
         }
 
-        $em = $this->getDoctrine()->getManager();
         $em->persist($object);
         $em->persist($mainManager);
 
@@ -3306,7 +3326,7 @@ class AjaxController extends BaseFilterController
                             ->setParameter(':handlingId', $handlingId);
 
 
-                    }
+                }
             ));
 
         $form
@@ -3325,7 +3345,7 @@ class AjaxController extends BaseFilterController
                             ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
                             ->setParameter(':modelId', $organizationId)
                             ->setParameter(':ownerIds', $userIds);
-                    }
+                }
             ));
 
          $form

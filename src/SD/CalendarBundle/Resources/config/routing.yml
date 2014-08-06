@@ -33,3 +33,14 @@ sd_calendar_salesadmin_handling_message:
     pattern:  sd/calendar/ajax/salesadmin/handlind_message
     defaults: { _controller: SDCalendarBundle:SalesAdmin:HandlingMessage }
 
+sd_tasks_modal_content:
+    pattern:  sd/tasks/modal/content
+    defaults: { _controller: SDCalendarBundle:Private:oneTaskAjax }
+
+sd_tasks_set_done:
+    pattern:  sd/tasks/set/done
+    defaults: { _controller: SDCalendarBundle:Private:setDoneTask }
+
+sd_tasks_done:
+    pattern:  sd/tasks/done
+    defaults: { _controller: SDCalendarBundle:Private:tasksDone }

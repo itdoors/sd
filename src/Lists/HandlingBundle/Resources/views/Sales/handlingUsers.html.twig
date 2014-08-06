@@ -16,6 +16,29 @@
                     $('#managerProjectPart').text(response.handlingUser.managerPart);
                 }
             });
+        $('.ajax-delete-and-update').on('click', function(e) {
+            e.preventDefault();
+
+            if (!confirm('{% trans %}Delete manager{% endtrans %}?'))
+            {
+                return;
+            }
+
+            var parentElement = $(this).parents('tr');
+            var params = $(this).data('params');
+            parentElement.css('opacity', '0.5');
+
+            $.ajax({
+                url: '{{ path('sd_common_ajax_delete') }}',
+                type: 'POST',
+                data: {
+                    params: params
+                },
+                success: function(response) {
+                    ITDoorsAjax.updateList('managers_list');
+                }
+            });
+        });
     });
 </script>
 <table class="table table-striped table-hover table-bordered">
@@ -59,7 +82,7 @@
             <td>
                 {% if item.lukey != 'manager_project' and item.userId != app.user.id  %}
                 <a
-                    class="ajax-delete"
+                    class="ajax-delete-and-update"
                     href="javascript:;"
                     data-params='{"model":"HandlingUser","handlingUserId":{{ item.id }}}'
                 >

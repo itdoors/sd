@@ -35,6 +35,10 @@ SD\CalendarBundle\Entity\Task:
         description:
             type: text
             nullable: true
+        isDone:
+            type: boolean
+            nullable: true
+            column: is_done
     manyToOne:
         user:
             targetEntity: SD\UserBundle\Entity\User
