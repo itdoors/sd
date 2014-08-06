@@ -402,7 +402,28 @@ class InvoiceRepository extends EntityRepository
         /** where */
         $res = $res->andWhere("i.dateFact is not NULL")
             ->andWhere("i.dateFact >= :date")->setParameter(':date', $date)
-            ->orderBy('i.dateEnd', 'DESC');
+            ->orderBy('i.customerName', 'ASC');
+
+        return $res->getQuery();
+    }
+    /**
+     * Returns results for interval future invoice
+     *
+     * @return mixed[]
+     */
+    public function getInvoiceFlow()
+    {
+        $date = date('Y-m-d');
+        $res = $this->createQueryBuilder('i');
+        /** select */
+        $this->selectInvoicePeriod($res);
+        /** join */
+        $this->joinInvoicePeriod($res);
+        /** where */
+        $res = $res
+            ->andWhere("i.dateFact is NULL")
+            ->andWhere("i.delayDate >= :date")->setParameter(':date', $date)
+            ->orderBy('i.customerName', 'ASC');
 
         return $res->getQuery();
     }
@@ -500,6 +521,24 @@ class InvoiceRepository extends EntityRepository
 
         return $res->getQuery()->getResult();
     }
+    /**
+     * Returns results for interval future invoice
+     *
+     * @return mixed[]
+     */
+    public function getInvoiceFlowSum()
+    {
+        $date = date('Y-m-d');
+        $res = $this->createQueryBuilder('i');
+        /** select */
+        $this->selectInvoiceSum($res);
+        /** join */
+        $this->joinInvoicePeriod($res);
+        /** where */
+        $res = $res->andWhere("i.dateFact is NULL")->andWhere("i.delayDate >= :date")->setParameter(':date', $date);
+
+        return $res->getQuery()->getResult();
+    }
 
     /**
      * Returns results for interval future invoice
@@ -517,6 +556,26 @@ class InvoiceRepository extends EntityRepository
         $rescount = $rescount
             ->andWhere("i.dateFact is not NULL")
             ->andWhere("i.dateFact >= :date")
+            ->setParameter(':date', $date);
+
+        return $rescount->getQuery()->getSingleScalarResult();
+    }
+    /**
+     * Returns results for interval future invoice
+     *
+     * @return mixed[]
+     */
+    public function getInvoiceFlowCount()
+    {
+        $date = date('Y-m-d');
+        $rescount = $this->createQueryBuilder('i');
+
+        /** select */
+        $this->selectInvoicePeriodCount($rescount);
+        /** where */
+        $rescount = $rescount
+            ->andWhere("i.dateFact is NULL")
+            ->andWhere("i.delayDate >= :date")
             ->setParameter(':date', $date);
 
         return $rescount->getQuery()->getSingleScalarResult();
@@ -581,6 +640,10 @@ class InvoiceRepository extends EntityRepository
             case 'pay':
                 $result['entities'] = $this->getInvoicePay();
                 $result['count'] = $this->getInvoicePayCount();
+                break;
+            case 'flow':
+                $result['entities'] = $this->getInvoiceFlow();
+                $result['count'] = $this->getInvoiceFlowCount();
                 break;
             case 'today':
                 $date = date('Y-m-d');
