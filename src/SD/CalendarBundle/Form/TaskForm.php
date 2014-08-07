@@ -33,6 +33,8 @@ class TaskForm extends AbstractType
     /**
      * @param FormBuilderInterface $builder
      * @param array                $options
+     * 
+     * @return mixed
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -55,7 +57,7 @@ class TaskForm extends AbstractType
                         return $repository->createQueryBuilder('u')
                             ->where('u.id = :user')
                             ->setParameter(':user', $userId);
-                    }
+                }
             ));
         } else {
             //$companyStructure = $stuff->getCompanystructure();
@@ -67,7 +69,7 @@ class TaskForm extends AbstractType
                             ->innerJoin('u.stuff', 's');
 /*                            ->where('st.companyStructure = :companyStructure')
                             ->setParameter(':companyStructure', $companyStructure);*/
-                    }
+                }
             ));
 
         }
