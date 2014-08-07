@@ -150,12 +150,13 @@ class InvoicePayments
      * Set bank
      *
      * @param string $bank
+     * 
      * @return InvoicePayments
      */
     public function setBank($bank)
     {
         $this->bank = $bank;
-    
+
         return $this;
     }
 
