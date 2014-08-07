@@ -670,26 +670,15 @@ class InvoiceService
                         $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')
                             ->getInvoiceIds($invoiceIds);
 
-                        $table = '<table style="width:100%;text-align:center"><tbody><tr>'
-                                . '<td>'.$translator->trans('№', array(), 'ITDoorsControllingBundle').'</td>'
-                                . '<td>'.$translator->trans('Date', array(), 'ITDoorsControllingBundle').'</td>'
-                                . '<td>'.$translator->trans('Invoice amount', array(), 'ITDoorsControllingBundle').'</td>'
-                                . '</tr>';
-                        $dogovors = array();
-                        foreach ($invoices as $invoice) {
-                            $table .= '<tr>'
-                                    . '<td>'.$invoice['invoiceId'].'</td>'
-                                    . '<td>'.$invoice['date']->format('d.m.Y').'</td>'
-                                    . '<td>'.($template == 'invoice-not-pay' ? number_format($invoice['sum'] - $invoice['paymentsSumma'], 2, ',', ' ') : $invoice['paymentsSumma']).'</td>'
-                                    . '</tr>';
-                        }
-                        $table .= '</tbody></table>';
-//                        $table =  new \Symfony\Component\HttpFoundation\Response("ITDoorsControllingBundle:Invoice:tableForEmail.html.twig", array(
-//                        'invoices' => $invoices,
-//                        'template' => $template
-//                    ));
+                        $tableHTML =  $this->container->get('templating')->render("ITDoorsControllingBundle:Invoice:tableForEmail.html.twig", array(
+                        'invoices' => $invoices,
+                        'template' => $template
+                    ));
 
                         foreach ($contacts as $user) {
+                            if (empty($user['email'])) {
+                                continue;
+                            }
                             echo "send email for ".$user['email']."\n\n";
                             $idEmail = $email->send(
                                 array($emailTo => $nameTo),
@@ -705,7 +694,7 @@ class InvoiceService
                                         '${number}$' => $invoices[0]['dogovorNumber'],
                                         '${date}$' => (!$invoices[0]['dogovorDate'] ? '' : $invoices[0]['dogovorDate']->format('d.m.Y')),
                                         '${performer}$' => $invoices[0]['performerName'],
-                                        '${table}$' => $table
+                                        '${table}$' => $tableHTML
                                     )
                                 )
                             );
