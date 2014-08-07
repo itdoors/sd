@@ -637,6 +637,7 @@ class InvoiceService
      */
     private function sendEmails()
     {
+        var_dump($this->arrCostumersForSendMessages);echo "\n";
         if (count($this->arrCostumersForSendMessages) > 0) {
 
             $em = $this->container->get('doctrine')->getManager();
