@@ -5,11 +5,13 @@
              {% if entitie %}
                 <tr>
                     <td>{% trans %}Summa{% endtrans %}</td>          
+                    <td>{% trans %}Bank{% endtrans %}</td>          
                     <td>{% trans %}Date{% endtrans %}</td>          
                 </tr>
                 {% for item in  entitie %}
                 <tr>
                     <td>{{ item.summa|number_format(2, ',', ' ') }}</td>
+                    <td>{{ item.bank }}</td>
                     <td>{{ item.date | date('d.m.Y') }}</td>       
                 </tr>
             {% endfor %}

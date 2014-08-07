@@ -935,6 +935,7 @@ class InvoiceRepository extends EntityRepository
                  $entitie
                     ->Select('ip.summa')
                     ->addSelect('ip.date')
+                    ->addSelect('ip.bank')
                     ->leftJoin('i.payments', 'ip')
                     ->where('i.id = :invoiceid')
                     ->andWhere('ip.summa is not NULL')

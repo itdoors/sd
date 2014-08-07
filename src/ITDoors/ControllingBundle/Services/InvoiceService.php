@@ -129,6 +129,7 @@ class InvoiceService
                     $payments->setInvoice($invoiceNew);
                     $payments->setDate($dateFact);
                     $payments->setSumma(trim($pay->summa));
+                    $payments->setBank(trim($pay->bank));
                     $em->persist($payments);
                     $summa += trim($pay->summa);
                 }
@@ -155,6 +156,7 @@ class InvoiceService
                     $payments->setInvoice($invoiceNew);
                     $payments->setDate($dateFact);
                     $payments->setSumma(trim($pay->summa));
+                    $payments->setBank(trim($pay->bank));
                     $em->persist($payments);
                     $summa += trim($pay->summa);
 
