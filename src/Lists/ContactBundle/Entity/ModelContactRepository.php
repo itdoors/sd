@@ -134,7 +134,7 @@ class ModelContactRepository extends EntityRepository
      * Processes sql query. adding organization query
      *
      * @param \Doctrine\ORM\QueryBuilder $sql
-     * @param int                        $organizationId
+     * @param integer                    $organizationId
      */
     public function processOrganizationQuery($sql, $organizationId)
     {
@@ -405,5 +405,29 @@ class ModelContactRepository extends EntityRepository
 
         return $sql
             ->getQuery();
+    }
+    /**
+     * Returns organization ids with in one organization group
+     *
+     * @param integer $organizationId
+     *
+     * @return mixed
+     */
+    public function getUsersForSendEmail($organizationId)
+    {
+        return  $sql = $this->createQueryBuilder('mc')
+                ->select('mc.email')
+                ->addSelect('mc.id')
+                ->addSelect('mc.lastName')
+                ->addSelect('mc.firstName')
+                ->addSelect('mc.middleName')
+                ->innerJoin('mc.sendEmail', 'mcse')
+                ->where('mc.modelName = :name')
+                ->andWhere('mc.modelId = :id')
+                ->andWhere('mcse.isSend = :status')
+                ->setParameter(':status', 1)
+                ->setParameter(':name', 'organization')
+                ->setParameter(':id', $organizationId)
+                ->getQuery()->getResult();
     }
 }

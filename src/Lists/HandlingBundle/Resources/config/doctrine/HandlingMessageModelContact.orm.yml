@@ -1,0 +1,30 @@
+Lists\HandlingBundle\Entity\HandlingMessageModelContact:
+    type: entity
+    table: handling_message_model_contact
+    repositoryClass: Lists\HandlingBundle\Entity\HandlingMessageModelContactRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        modelContact:
+            targetEntity: Lists\ContactBundle\Entity\ModelContact
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                model_contact_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        handlingMessage:
+            targetEntity: Lists\HandlingBundle\Entity\HandlingMessage
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                handling_message_id:
+                    referencedColumnName: id
+            orphanRemoval: false

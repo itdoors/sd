@@ -21,8 +21,12 @@
                 {% trans %}Mpk{% endtrans %}
             </td>
             <td>
-                {{ person.0.mpkName }}
+                {{ person.0.mpkName }} ({{ person.0.organizationName }})
             </td>
+        </tr>
+        <tr>
+            <td>{% trans %}Self organization{% endtrans %}</td>
+            <td colspan="2">{{ person.0.selfOrganizationName }}</td>
         </tr>
         <tr>
             <td>

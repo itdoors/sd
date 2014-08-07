@@ -15,6 +15,7 @@ use Lists\HandlingBundle\Entity\HandlingMessage;
 use Lists\ContactBundle\Entity\ModelContactRepository;
 use PHPExcel_Style_Border;
 use PHPExcel_Style_Alignment;
+use Lists\HandlingBundle\Entity\Handling;
 
 /**
  * Class SalesController
@@ -68,7 +69,7 @@ class SalesController extends BaseController
             ->getRepository('ListsOrganizationBundle:OrganizationUser')
             ->findOneBy(array(
                 'organizationId' => $canAddNew,
-                'lookupId' => $lookup->getId(),
+                'roleId' => $lookup->getId(),
                 'userId' => $this->getUser()->getId(),
                 ));
             $canAddNew = $managerOrganization ? true : false ;
@@ -275,10 +276,33 @@ class SalesController extends BaseController
 
         $messages = $messagesRepository->getMessagesByHandlingId($handlingId);
 
+        $usersFromTheirSide = array();
+        $usersFromOurSide = array();
+        foreach ($messages as $message) {
+            $usersFromTheirSideTemp = $this->getDoctrine()
+                ->getRepository('ListsHandlingBundle:HandlingMessageModelContact')
+                ->findBy(array(
+                    'handlingMessage' => $message
+                ));
+
+            $usersFromTheirSide['message'.$message->getId()] = $usersFromTheirSideTemp;
+
+            $usersFromOurSideTemp = $this->getDoctrine()
+                ->getRepository('ListsHandlingBundle:HandlingMessageHandlingUser')
+                ->findBy(array(
+                    'handlingMessage' => $message
+                ));
+
+            $usersFromOurSide['message'.$message->getId()] = $usersFromOurSideTemp;
+
+        }
+
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':messagesList.html.twig', array(
             'messages' => $messages,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
+            'usersFromTheirSide' => $usersFromTheirSide,
+            'usersFromOurSide' => $usersFromOurSide,
         ));
 
     }
@@ -370,7 +394,7 @@ class SalesController extends BaseController
                     ->getRepository('ListsOrganizationBundle:OrganizationUser')
                     ->findOneBy(array(
                         'organizationId' => $organization['organizationId'],
-                        'lookupId' => $lookup->getId(),
+                        'roleId' => $lookup->getId(),
                         )
                     )
                     :
@@ -821,7 +845,16 @@ class SalesController extends BaseController
                 }
                 //$handling->setS($handling->getResult());
 
+                $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_project'));
+                $manager = new HandlingUser();
+                $manager->setUser($user);
+                $manager->setLookup($lookup);
+                $manager->setPart(100);
+                $manager->setHandling($newHandling);
+
                 $em->persist($newHandling);
+                $em->persist($manager);
+
 
                 $em->flush();
 

@@ -24,6 +24,88 @@ class PrivateController extends SalesController
             'url' => $this->get('router')->generate('sd_calendar_private_handling_message')
         ));
     }
+
+    /**
+     * Renders tasks
+     *
+     * @return string
+     */
+    public function taskAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $taskRepo = $em->getRepository('SDCalendarBundle:Task');
+        $tasksDone = $taskRepo->
+            getPersonalTaskDone($this->getUser()->getId(), 'personal');
+        $tasksOpen = $taskRepo->
+            getFivePersonalTaskOpen($this->getUser()->getId(), 'personal');
+        $tasksCreated = $taskRepo->
+            getFivePersonalTaskCreated($this->getUser()->getId(), 'personal');
+
+        return $this->render('SDCalendarBundle:Task:tasks.html.twig', array(
+            'tasksDone' => $tasksDone,
+            'tasksOpen' => $tasksOpen,
+            'tasksCreated' => $tasksCreated
+        ));
+    }
+
+    /**
+     * Renders done tasks
+     *
+     * @return string
+     */
+    public function tasksDoneAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $tasksDone = $em->getRepository('SDCalendarBundle:Task')->
+            getPersonalTaskDone($this->getUser()->getId(), 'personal');
+
+        return $this->render('SDCalendarBundle:Task:tasksDone.html.twig', array(
+            'tasksDone' => $tasksDone
+        ));
+    }
+
+    /**
+     * Update task. Make it done/viewed
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function setDoneTaskAction(Request $request)
+    {
+        $id = $request->request->get('id');
+        $em = $this->getDoctrine()->getManager();
+        $task = $em->getRepository('SDCalendarBundle:Task')->find($id);
+        $task->setIsDone(true);
+        $em->persist($task);
+        $em->flush();
+        $return = array();
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
+
+    /**
+     * Renders modal inner html for one task
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function oneTaskAjaxAction(Request $request)
+    {
+        $id = $request->request->get('id');
+        $em = $this->getDoctrine()->getManager();
+        $task = $em->getRepository('SDCalendarBundle:Task')->find($id);
+
+        $return = array();
+        $return['html'] = $this->renderView('SDCalendarBundle:Task:taskModal.html.twig', array(
+            'task' => $task
+        ));
+
+        return new Response(json_encode($return));
+    }
+
     /**
      * Returns events depending on userIds and userRoles
      *

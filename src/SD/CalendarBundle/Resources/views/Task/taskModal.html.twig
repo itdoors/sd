@@ -1,0 +1,36 @@
+{% trans_default_domain 'SDCalendarBundle' %}
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <td>{% trans %}Title{% endtrans %}</td>
+        <td colspan="3">{{ task.title }}</td>
+    </tr>
+    <tr>
+        <td>{% trans %}Date start{% endtrans %}</td>
+        <td colspan="3">{{ task.startDateTime|date('d.m.Y') }}</td>
+    </tr>
+    <tr>
+        <td>{% trans %}Date stop{% endtrans %}</td>
+        <td colspan="3">{{ task.stopDateTime|date('d.m.Y') }}</td>
+    </tr>
+    <tr>
+        <td>{% trans %}Description{% endtrans %}</td>
+        <td colspan="3">{{ task.description }}</td>
+    </tr>
+    <tr>
+        <td>{% trans %}Creator{% endtrans %}</td>
+        <td colspan="3">{{ task.user }}</td>
+    </tr>
+    <tr>
+        <td>{% trans %}Performer{% endtrans %}</td>
+        <td colspan="3">{{ task.performer }}</td>
+    </tr>
+</table>
+
+<input type="hidden" id="task_modal_id_holder" data-id="{{ task.id }}"
+        >
+
+<a class="btn green" data-dismiss="modal" aria-hidden="true">{% trans %}Exit{% endtrans %}</a>
+{% if not task.isDone and task.performer.id == task.userId %}
+<a id="task_set_viewed" class="btn green" data-dismiss="modal" aria-hidden="true" style="float: right;">{% trans %}Set viewed{% endtrans %}</a>
+{% endif %}

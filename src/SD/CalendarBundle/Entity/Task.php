@@ -256,4 +256,62 @@ class Task
     {
         return $this->user;
     }
+    /**
+     * @var boolean
+     */
+    private $isDone;
+
+
+    /**
+     * Set isDone
+     *
+     * @param boolean $isDone
+     *
+     * @return Task
+     */
+    public function setIsDone($isDone)
+    {
+        $this->isDone = $isDone;
+
+        return $this;
+    }
+
+    /**
+     * Get isDone
+     *
+     * @return boolean 
+     */
+    public function getIsDone()
+    {
+        return $this->isDone;
+    }
+    /**
+     * @var \SD\UserBundle\Entity\User
+     */
+    private $performer;
+
+
+    /**
+     * Set performer
+     *
+     * @param \SD\UserBundle\Entity\User $performer
+     * 
+     * @return Task
+     */
+    public function setPerformer(\SD\UserBundle\Entity\User $performer = null)
+    {
+        $this->performer = $performer;
+
+        return $this;
+    }
+
+    /**
+     * Get performer
+     *
+     * @return \SD\UserBundle\Entity\User 
+     */
+    public function getPerformer()
+    {
+        return $this->performer;
+    }
 }

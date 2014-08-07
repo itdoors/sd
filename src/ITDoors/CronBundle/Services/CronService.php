@@ -39,6 +39,7 @@ class CronService
         $directory = $this->container->getParameter('project.dir');
         $comment = uniqid();
         $cron->setComment($comment);
+
         if (!is_dir($directory.'/app/logs/cron')) {
             mkdir($directory.'/app/logs/cron', 0777);
         }

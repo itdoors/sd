@@ -1,0 +1,22 @@
+{% trans_default_domain 'SDCalendarBundle' %}
+{% if tasksCreated|length %}
+    <br>
+    <h4 style="text-align: center">{% trans %}Created{% endtrans %}</h4>
+    <hr>
+    <ul class="task-list">
+        {% for task in tasksCreated %}
+            <li id="task_{{ task.id }}" data-type="created">
+                <div class="task-checkbox">
+                    <input type="hidden" value="1" name="test">
+                    <div class="checker">&#9679;</div>
+                </div>
+                <div class="task-title" data-id="{{ task.id }}">
+                <span class="task-title-sp" style="color: #777777">
+                    {{ task.title }} ({{ task.startDateTime|date('d.m.Y') }} - {{ task.stopDateTime|date('d.m.Y') }})
+                </span>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endif %}

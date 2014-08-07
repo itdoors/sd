@@ -13,9 +13,13 @@ use Lists\DogovorBundle\Entity\DopDogovor;
 use Lists\DogovorBundle\Entity\DopDogovorRepository;
 use Lists\HandlingBundle\Entity\Handling;
 use Lists\HandlingBundle\Entity\HandlingMessage;
+use Lists\HandlingBundle\Entity\HandlingMessageHandlingUser;
+use Lists\HandlingBundle\Entity\HandlingMessageModelContact;
 use Lists\HandlingBundle\Entity\HandlingRepository;
 use Lists\HandlingBundle\Entity\HandlingService;
 use Lists\HandlingBundle\Entity\HandlingServiceRepository;
+use Lists\HandlingBundle\Entity\HandlingUserRepository;
+use Lists\HandlingBundle\ListsHandlingBundle;
 use Lists\LookupBundle\Entity\LookupRepository;
 use Lists\ContactBundle\Entity\ModelContact;
 use Lists\ContactBundle\Entity\ModelContactRepository;
@@ -38,7 +42,7 @@ use SD\UserBundle\Entity\Usercontactinfo;
 use SD\CalendarBundle\Entity\Task;
 use Lists\HandlingBundle\Entity\HandlingUser;
 use Lists\OrganizationBundle\Entity\OrganizationUser;
-use Lists\OrganizationBundle\Entity\Coea;
+use ITDoors\HistoryBundle\Entity\History;
 
 /**
  * AjaxController class.
@@ -199,6 +203,60 @@ class AjaxController extends BaseFilterController
             $this->processOrganizationForJson($organization);
 
             $result[] = $this->serializeArray($organization, 'organizationId');
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json organization list for contacts query
+     *
+     * @return string
+     */
+    public function invoiceInvoiceIdAction()
+    {
+        $searchTextQ = $this->get('request')->query->get('q');
+        $searchTextQuery = $this->get('request')->query->get('query');
+
+        $searchText = $searchTextQ ? $searchTextQ : $searchTextQuery;
+
+        /** @var \ITDoors\ControllingBundle\Entity\InvoiceRepository $invoiceRepository */
+        $invoiceRepository = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice');
+
+        $invoices = $invoiceRepository->getSearchInvoiceIdQuery($searchText);
+
+        $result = array();
+
+        foreach ($invoices as $invoice) {
+            $result[] = $this->serializeArray($invoice, 'id', 'invoiceId');
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json organization list for contacts query
+     *
+     * @return string
+     */
+    public function invoiceDogovorActNameAction()
+    {
+        $searchTextQ = $this->get('request')->query->get('q');
+        $searchTextQuery = $this->get('request')->query->get('query');
+
+        $searchText = $searchTextQ ? $searchTextQ : $searchTextQuery;
+
+        /** @var \ITDoors\ControllingBundle\Entity\InvoiceRepository $invoiceRepository */
+        $invoiceRepository = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice');
+
+        $invoices = $invoiceRepository->getSearchDogovorActNameQuery($searchText);
+
+        $result = array();
+
+        foreach ($invoices as $invoice) {
+            $result[] = $this->serializeArray($invoice, 'dogovorActName', 'dogovorActName');
         }
 
         return new Response(json_encode($result));
@@ -1258,6 +1316,65 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($result));
     }
+
+    /**
+     * Returns json organization object by requested id
+     *
+     * @return string
+     */
+    public function invoiceByIdSAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        /** @var \ITDoors\ControllingBundle\Entity\InvoiceRepository $invoiceRepository */
+        $invoiceRepository = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice');
+
+        /** @var Invoice[] $invoices */
+        $invoices = $invoiceRepository
+            ->createQueryBuilder('i')
+            ->where("i.id in (:ids)")
+            ->setParameter(':ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($invoices as $invoice) {
+            $result[] = $this->serializeObject($invoice);
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json organization object by requested id
+     *
+     * @return string
+     */
+    public function invoiceByDogovorActNamesAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        /** @var \ITDoors\ControllingBundle\Entity\InvoiceRepository $invoiceRepository */
+        $invoiceRepository = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice');
+
+        /** @var Invoice[] $invoices */
+        $invoices = $invoiceRepository
+            ->createQueryBuilder('i')
+            ->where('i.dogovorActName in (:ids)')
+            ->setParameter(':ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($invoices as $invoice) {
+            $result[] = $this->serializeObject($invoice, 'getDogovorActName', 'getDogovorActName');
+        }
+
+        return new Response(json_encode($result));
+    }
     /**
      * Returns json organization object by requested id
      *
@@ -1764,7 +1881,6 @@ class AjaxController extends BaseFilterController
         $data = $form->getData();
 
         $formData = $request->request->get($form->getName());
-
         $handlingId = $data->getHandlingId();
 
         /** @var \Lists\HandlingBundle\Entity\Handling $handling */
@@ -1790,7 +1906,42 @@ class AjaxController extends BaseFilterController
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
-        // $em->flush();
+        $em->flush();
+        $em->refresh($data);
+
+        if (isset($formData['usersFromOurSide'])) {
+            //$usersFromOurSide = explode(',', $formData['usersFromOurSide']);
+            $usersFromOurSide = $formData['usersFromOurSide'];
+            if (count($usersFromOurSide)) {
+                foreach ($usersFromOurSide as $userFromOurSide) {
+                    $handlingUser = $this->getDoctrine()
+                        ->getRepository('ListsHandlingBundle:HandlingUser')
+                        ->find($userFromOurSide);
+                    $handlingMessageHandlingUser = new HandlingMessageHandlingUser();
+                    $handlingMessageHandlingUser->setHandlingMessage($data);
+                    $handlingMessageHandlingUser->setHandlingUser($handlingUser);
+                    $em->persist($handlingMessageHandlingUser);
+                }
+
+            }
+        }
+        if (isset($formData['contactMany'])) {
+            //$usersFromTheirSide = explode(',', $formData['contactMany']);
+            $usersFromTheirSide = $formData['contactMany'];
+            if (count($usersFromTheirSide)) {
+                foreach ($usersFromTheirSide as $userFromTheirSide) {
+                    $modelContact = $this->getDoctrine()
+                        ->getRepository('ListsContactBundle:ModelContact')
+                        ->find($userFromTheirSide);
+                    $handlingMessageModelContact = new HandlingMessageModelContact();
+                    $handlingMessageModelContact->setHandlingMessage($data);
+                    $handlingMessageModelContact->setModelContact($modelContact);
+                    $em->persist($handlingMessageModelContact);
+                }
+
+            }
+        }
+
         // Insert future
         $type = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingMessageType')
@@ -1920,6 +2071,7 @@ class AjaxController extends BaseFilterController
         $formData = $request->request->get($form->getName());
 
         $data->setTaskType('personal');
+        $data->setIsDone(false);
         $data->setStartDateTime(new \DateTime($formData['startDateTime']));
         $data->setStopDateTime(new \DateTime($formData['stopDateTime']));
 
@@ -2056,6 +2208,8 @@ class AjaxController extends BaseFilterController
     {
         $data = $form->getData();
 
+        $authUser = $user;
+
         $em = $this->getDoctrine()->getManager();
 
         $user = $this->getDoctrine()
@@ -2083,6 +2237,17 @@ class AjaxController extends BaseFilterController
             $lookup = $this->getDoctrine()
                 ->getRepository('ListsLookupBundle:Lookup')
                 ->find($lookupId);
+
+        $history = new History();
+        $history->setCreatedatetime(new \DateTime());
+        $history->setFieldName('user_id');
+        $history->setModelName('handling_user');
+        $history->setModelId($handling->getId());
+        $history->setUser($authUser);
+        $history->setOldValue(null);
+        $history->setValue($user->getId());
+        $history->setMore('add manager');
+        $em->persist($history);
 
         $object = new HandlingUser();
 
@@ -2253,6 +2418,7 @@ class AjaxController extends BaseFilterController
         $data = $form->getData();
 
         $data->setUser($user);
+        $data->setOwner($user);
         $data->setCreatedatetime(new \DateTime());
 
         $em = $this->getDoctrine()->getManager();
@@ -2407,7 +2573,7 @@ class AjaxController extends BaseFilterController
         /** @var Lookup $lookup */
         $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager_organization'));
 
-        if ((!$organizationUser->getLookup() || $organizationUser->getLookup()->getId() != $lookup->getId()) && $this->getUser()->hasRole('ROLE_SALESADMIN')) {
+        if ((!$organizationUser->getRole() || $organizationUser->getRole()->getId() != $lookup->getId()) && $this->getUser()->hasRole('ROLE_SALESADMIN')) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($organizationUser);
             $em->flush();
@@ -2427,9 +2593,22 @@ class AjaxController extends BaseFilterController
     {
         $handlingUserId = $params['handlingUserId'];
 
+        $em = $this->getDoctrine()->getManager();
+
         $object = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingUser')
             ->find($handlingUserId);
+
+        $history = new History();
+        $history->setCreatedatetime(new \DateTime());
+        $history->setFieldName('user_id');
+        $history->setModelName('handling_user');
+        $history->setModelId($object->getId());
+        $history->setUser($this->getUser());
+        $history->setOldValue($object->getUser()->getId());
+        $history->setValue(null);
+        $history->setMore('remove manager');
+        $em->persist($history);
 
         $lookupId = $this->getDoctrine()
             ->getRepository('ListsLookupBundle:Lookup')->getOnlyManagerProjectId();
@@ -2465,7 +2644,6 @@ class AjaxController extends BaseFilterController
         );
         $cron = $this->container->get('it_doors_cron.service');
         $cron->addSendEmails();
-        $em = $this->getDoctrine()->getManager();
         $em->persist($mainManager);
         $em->remove($object);
         $em->flush();
@@ -2545,26 +2723,6 @@ class AjaxController extends BaseFilterController
         /** @var Dogovor $object */
         $object = $this->getDoctrine()
             ->getRepository('ListsDogovorBundle:Dogovor')
-            ->find($id);
-
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($object);
-        $em->flush();
-    }
-    /**
-     * Deletes {entityName}Delete instance
-     *
-     * @param mixed[] $params
-     *
-     * @return void
-     */
-    public function coeaDelete($params)
-    {
-        $id = $params['id'];
-
-        /** @var Coea $object */
-        $object = $this->getDoctrine()
-            ->getRepository('ListsOrganizationBundle:Coea')
             ->find($id);
 
         $em = $this->getDoctrine()->getManager();
@@ -2753,11 +2911,25 @@ class AjaxController extends BaseFilterController
         $value = (int) $this->get('request')->request->get('value');
 
         $methodSet = 'set' . ucfirst($name);
+        $methodGet = 'get' . ucfirst($name);
 
         /** @var HandlingUser $object */
         $object = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingUser')
             ->find($pk);
+
+        $em = $this->getDoctrine()->getManager();
+
+        $history = new History();
+        $history->setCreatedatetime(new \DateTime());
+        $history->setFieldName($name);
+        $history->setModelName('handling_user');
+        $history->setModelId($pk);
+        $history->setUser($this->getUser());
+        $history->setOldValue($object->$methodGet);
+        $history->setValue($value);
+        $history->setMore('change '.$name);
+        $em->persist($history);
 
         if (!$value) {
             $methodGet = 'get' . ucfirst($name);
@@ -2815,7 +2987,6 @@ class AjaxController extends BaseFilterController
             return new Response($return, 406);
         }
 
-        $em = $this->getDoctrine()->getManager();
         $em->persist($object);
         $em->persist($mainManager);
 
@@ -3251,6 +3422,43 @@ class AjaxController extends BaseFilterController
                 }
             ));
 
+        $form
+            ->add('usersFromOurSide', 'entity', array(
+                'class' => 'ListsHandlingBundle:HandlingUser',
+                'empty_value' => '',
+                'required' => false,
+                'multiple' => true,
+                'mapped' => false,
+                'query_builder' => function (HandlingUserRepository $repository) use ($handlingId) {
+                        return $repository->createQueryBuilder('hu')
+                            ->innerJoin('hu.handling', 'h')
+                            ->leftJoin('hu.lookup', 'l')
+                            ->innerJoin('hu.user', 'u')
+                            ->innerJoin('u.stuff', 's')
+                            ->where('h.id = :handlingId')
+                            ->setParameter(':handlingId', $handlingId);
+                }
+            ));
+
+        $form
+            ->add('contactMany', 'entity', array(
+                'class' => 'ListsContactBundle:ModelContact',
+                'empty_value' => '',
+                'required' => false,
+                'mapped' => false,
+                'multiple' => true,
+                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
+                        return $repository->createQueryBuilder('mc')
+                            ->leftJoin('mc.owner', 'owner')
+                            ->where('mc.modelName = :modelName')
+                            ->andWhere('mc.modelId = :modelId')
+                            ->andWhere('owner.id in (:ownerIds)')
+                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                            ->setParameter(':modelId', $organizationId)
+                            ->setParameter(':ownerIds', $userIds);
+                }
+            ));
+
          $form
             ->add('contactnext', 'entity', array(
                 'class' => 'ListsContactBundle:ModelContact',
@@ -3376,6 +3584,7 @@ class AjaxController extends BaseFilterController
                 return $repository->createQueryBuilder('c')
                     ->leftJoin('c.invoicecompanystructure', 'idc')
                     ->where('(idc.invoiceId is NULL OR idc.invoiceId <> :invoiceId)')
+                    ->orderBy('c.name')
                     ->setParameter(':invoiceId', $invoiceId);
                 }
             ));

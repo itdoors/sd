@@ -617,32 +617,12 @@ ALTER TABLE organization_user ADD CONSTRAINT FK_B49AE8D432C8A3DE FOREIGN KEY (or
 ALTER TABLE organization_user ADD CONSTRAINT FK_B49AE8D4A76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 CREATE INDEX IDX_B49AE8D48955C49D ON organization_user (lookup_id);
 
-INSERT INTO "public".lookup (lukey, "name", "group") VALUES ('manager_organization', 'Менеджер органицазии', 'manager_role_organization');
+INSERT INTO "public".lookup (lukey, "name", "group") VALUES ('manager_organization', 'Менеджер организации', 'manager_role_organization');
 
 ALTER TABLE grafik ADD COLUMN is_own_vacation boolean;
 ALTER TABLE grafik ALTER COLUMN is_own_vacation SET DEFAULT false;
 --test   -----------------------------
 --stagin -----------------------------
-
-
----task-856-organizaton-service_cover
-CREATE TABLE organization_service_cover (id BIGSERIAL NOT NULL, organization_id INT DEFAULT NULL, service_id INT DEFAULT NULL, is_interested BOOLEAN NOT NULL, is_working BOOLEAN NOT NULL, end_date DATE DEFAULT NULL, responsible TEXT DEFAULT NULL, description TEXT DEFAULT NULL, PRIMARY KEY(id));
-CREATE INDEX IDX_390A9CB232C8A3DE ON organization_service_cover (organization_id);
-CREATE INDEX IDX_390A9CB2ED5CA9E6 ON organization_service_cover (service_id);
-ALTER TABLE organization_service_cover ADD CONSTRAINT FK_390A9CB232C8A3DE FOREIGN KEY (organization_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE organization_service_cover ADD CONSTRAINT FK_390A9CB2ED5CA9E6 FOREIGN KEY (service_id) REFERENCES handling_service (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-++++task-856-organizaton-service_cover staging  +++++++++
-++++task-856-organizaton-service_cover prod     +++++++++
-
-CREATE TABLE coea (id BIGSERIAL NOT NULL, scope_id INT NOT NULL, organization_id INT NOT NULL, PRIMARY KEY(id));
-CREATE INDEX IDX_6963C5C0682B5931 ON coea (scope_id);
-CREATE INDEX IDX_6963C5C032C8A3DE ON coea (organization_id);
-ALTER TABLE coea ADD CONSTRAINT FK_6963C5C0682B5931 FOREIGN KEY (scope_id) REFERENCES lookup (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE coea ADD CONSTRAINT FK_6963C5C032C8A3DE FOREIGN KEY (organization_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-
--- staging ---------------------
--- prod ------------------------
-
 
 ---task-800.801,802 kved
 CREATE SEQUENCE kved_id_seq
@@ -715,3 +695,169 @@ COMMENT ON TABLE documents_organization
 
 -- staging ++++++++++++++++++++++
 -- prod +++++++++++++++++++++++++
+
+---task-handling form upgrade
+CREATE SEQUENCE handling_message_model_contact_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 6
+  CACHE 1;
+CREATE SEQUENCE handling_message_handling_user_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 5
+  CACHE 1;
+
+CREATE TABLE handling_message_handling_user
+(
+  id bigint NOT NULL DEFAULT nextval('handling_message_handling_user_id_seq'::regclass),
+  handling_user_id bigint NOT NULL,
+  handling_message_id bigint NOT NULL,
+  CONSTRAINT handling_message_user_pkey PRIMARY KEY (id),
+  CONSTRAINT handling_message_handling_user_handling_message_id_fkey FOREIGN KEY (handling_message_id)
+      REFERENCES handling_message (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT handling_message_handling_user_handling_user_id_fkey FOREIGN KEY (handling_user_id)
+      REFERENCES handling_user (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+
+COMMENT ON TABLE handling_message_handling_user
+  IS 'Связка пользователей с активностью';
+
+
+CREATE TABLE handling_message_model_contact
+(
+  id bigint NOT NULL DEFAULT nextval('handling_message_model_contact_id_seq'::regclass),
+  handling_message_id bigint,
+  model_contact_id bigint,
+  CONSTRAINT handling_message_model_contact_pkey PRIMARY KEY (id),
+  CONSTRAINT handling_message_model_contact_handling_message_id_fkey FOREIGN KEY (handling_message_id)
+      REFERENCES handling_message (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT handling_message_model_contact_model_contact_id_fkey FOREIGN KEY (model_contact_id)
+      REFERENCES model_contact (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+
+COMMENT ON TABLE handling_message_model_contact
+  IS 'связка активности с контактами';
+-- staging ++++++++++++++++++++++++
+-- prod +++++++++++++++++++++++++++
+
+CREATE TABLE invoice_payments (id SERIAL NOT NULL, invoice_id INT NOT NULL, summa DOUBLE PRECISION NOT NULL, date DATE NOT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_7AFAC16A2989F1FD ON invoice_payments (invoice_id);
+ALTER TABLE invoice_payments ADD CONSTRAINT FK_7AFAC16A2989F1FD FOREIGN KEY (invoice_id) REFERENCES invoice (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+INSERT INTO "public".lookup (lukey, "name", "group") 
+	VALUES ('organization_sign_contractor', 'Подрядчики', 'organization_sign_contractor');
+
+-- staging ++++++++++++++++++++++++
+-- prod +++++++++++++++++++++++++++
+
+
+CREATE TABLE organization_service_cover
+(
+  id bigserial NOT NULL,
+  organization_id integer,
+  service_id integer,
+  is_interested boolean,
+  is_working boolean,
+  end_date date,
+  responsible text,
+  description text,
+  evaluation integer,
+  competitor_id integer,
+  creator_id integer NOT NULL,
+  CONSTRAINT organization_service_cover_pkey PRIMARY KEY (id),
+  CONSTRAINT fk_390a9cb232c8a3de FOREIGN KEY (organization_id)
+      REFERENCES organization (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_390a9cb261220ea6 FOREIGN KEY (creator_id)
+      REFERENCES fos_user (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_390a9cb278a5d405 FOREIGN KEY (competitor_id)
+      REFERENCES organization (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_390a9cb2ed5ca9e6 FOREIGN KEY (service_id)
+      REFERENCES handling_service (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+
+-- Index: idx_390a9cb232c8a3de
+
+-- DROP INDEX idx_390a9cb232c8a3de;
+
+CREATE INDEX idx_390a9cb232c8a3de
+  ON organization_service_cover
+  USING btree
+  (organization_id);
+
+-- Index: idx_390a9cb261220ea6
+
+-- DROP INDEX idx_390a9cb261220ea6;
+
+CREATE INDEX idx_390a9cb261220ea6
+  ON organization_service_cover
+  USING btree
+  (creator_id);
+
+-- Index: idx_390a9cb278a5d405
+
+-- DROP INDEX idx_390a9cb278a5d405;
+
+CREATE INDEX idx_390a9cb278a5d405
+  ON organization_service_cover
+  USING btree
+  (competitor_id);
+
+-- Index: idx_390a9cb2ed5ca9e6
+
+-- DROP INDEX idx_390a9cb2ed5ca9e6;
+
+CREATE INDEX idx_390a9cb2ed5ca9e6
+  ON organization_service_cover
+  USING btree
+  (service_id);
+-- staging ----------------------
+-- prod ++++++++++++++++++++++++
+ALTER TABLE model_contact ALTER phone1 DROP NOT NULL;
+-- staging ----------------------
+-- prod ++++++++++++++++++++++++++++
+
+
+ALTER TABLE task ADD COLUMN is_done boolean;
+ALTER TABLE task ALTER COLUMN is_done SET DEFAULT false;
+COMMENT ON COLUMN task.is_done IS 'Выполнен ли таск';
+-- staging ----------------------
+-- prod +++++++++++++++++++++++++
+
+ALTER TABLE task ADD COLUMN performer_id bigint;
+COMMENT ON COLUMN task.performer_id IS 'Исполнитель';
+ALTER TABLE task
+  ADD CONSTRAINT task_performer_id_fkey FOREIGN KEY (performer_id)
+      REFERENCES fos_user (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
+-- staging ----------------------
+-- prod +++++++++++++++++++++++++
+ALTER TABLE organization_user RENAME COLUMN lookup_id TO role_id;
+DROP INDEX idx_b49ae8d48955c49d;
+ALTER TABLE organization_user ADD CONSTRAINT FK_B49AE8D4D60322AC FOREIGN KEY (role_id) REFERENCES lookup (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_B49AE8D4D60322AC ON organization_user (role_id);
+-- staging ----------------------
+-- prod +++++++++++++++++++++++++
+UPDATE "public".email SET "text" = '<table> <tbody><tr>  <td align="center" valign="top">    <table align="center" style="width: 100%;background: #1f1f1f;">     <tbody><tr>      <td style="text-align: center;" align="center">       <table style="width: 585px;margin: 0 auto;text-align: inherit;" align="center">        <tbody><tr>         <td>           <table style="display: block;padding: 0px;width: 100%;position: relative;vertical-align: top;text-align: left; ">           <tbody><tr>            <td style="padding: 10px 20px 0px 0px; position: relative;;vertical-align: middle;">              <table style="width: 280px;">               <tbody><tr>                <td style="padding: 0px 0px 10px;vertical-align: middle;"> <a href="http://www.griffin.ua" style="background-image: url(http://sd.griffin.ua/templates/core/img/logo-small-gray.png);outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;width: auto;height: auto;max-width: none !important;float: left;clear: both;display: block;width: 104px;cursor: pointer;height: 14px;"> </a>                                                         </td>                                                     </tr>                                                 </tbody></table>                                              </td>                                             <td style="padding-right: 0px;padding: 10px 20px 0px 0px; position: relative;vertical-align: middle;">                                                 <table style="width: 280px;">                                                     <tbody><tr>                                                         <td>                                                             <table align="right" style="float: right;vertical-align: top; text-align: left;">                                                                 <tbody><tr>                                                                     <td style="padding-top: 0;padding-bottom: 0;vertical-align: middle;padding: 0 2px !important;width: auto !important;">                                                                   <a href="//www.facebook.com/pages/%D0%98%D0%BC%D0%BF%D0%B5%D0%BB-%D0%93%D1%80%D0%B8%D1%84%D1%84%D0%B8%D0%BD/191430010917393" style="background-image: url(http://sd.griffin.ua/templates/core/img/socialmedia/facebook.png);outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;width: auto;height: auto;max-width: none !important;float: left;clear: both;display: block;width: 30px;height: 30px;background-repeat: no-repeat;cursor: pointer;">                                                                  </a> </td>                                                                     <td class="vertical-middle" style="padding-top: 0;padding-bottom: 0;vertical-align: middle;padding: 0 2px !important;width: auto !important;">                                                                    <a href="https://twitter.com/ImpelGriffin" style="background-image: url(http://sd.griffin.ua/templates/core/img/socialmedia/twit.png);outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;width: auto;height: auto;max-width: none !important;float: left;clear: both;display: block;width: 30px;height: 30px;background-repeat: no-repeat;cursor: pointer;">                                                              </a>                                                      </td>                                                                     <td class="vertical-middle" style="padding-top: 0;padding-bottom: 0;vertical-align: middle;padding: 0 2px !important;width: auto !important;"> <a href="https://plus.google.com/+GriffinUa/posts" style="background-image: url(http://sd.griffin.ua/templates/core/img/socialmedia/google.png);outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;width: auto;height: auto;max-width: none !important;float: left;clear: both;display: block;width: 30px;height: 30px;background-repeat: no-repeat;cursor: pointer;">                                                                                                                                 </a>                                                         </td>                                                                     <td class="vertical-middle" style="padding-top: 0;padding-bottom: 0;vertical-align: middle;padding: 0 2px !important;width: auto !important;">                                                               <a href="http://www.linkedin.com/company/impel-griffin?trk=company_name" style="background-image: url(http://sd.griffin.ua/templates/core/img/socialmedia/in.png);outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;width: auto;height: auto;max-width: none !important;float: left;clear: both;display: block;width: 30px;height: 30px;background-repeat: no-repeat;cursor: pointer;">                                                                </a>                                                                </td>                                                                     <td class="vertical-middle" style="padding-top: 0;padding-bottom: 0;vertical-align: middle;padding: 0 2px !important;width: auto !important;">                                                                 <a href="http://vk.com/impelgriffin" style="background-image: url(http://sd.griffin.ua/templates/core/img/socialmedia/vk.png);outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;width: auto;height: auto;max-width: none !important;float: left;clear: both;display: block;width: 30px;height: 30px;background-repeat: no-repeat;cursor: pointer;">                                                                                                                                  </a>                                                            </td>                                                                     <td class="vertical-middle" style="padding-top: 0;padding-bottom: 0;vertical-align: middle;padding: 0 2px !important;width: auto !important;">                                                              <a href="https://www.youtube.com/user/impelgriffin/" style="background-image: url(http://sd.griffin.ua/templates/core/img/socialmedia/youtube.png);outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;width: auto;height: auto;max-width: none !important;float: left;clear: both;display: block;width: 30px;height: 30px;background-repeat: no-repeat;cursor: pointer;">                                                                                                                                   </a>                                                             </td>                                                          </tr>                                                             </tbody></table>                                                         </td>                                                     </tr>                                                 </tbody></table>                                             </td>                                         </tr>                                     </tbody></table>                                 </td>                             </tr>                         </tbody></table>                     </td>                 </tr>             </tbody></table>             <div style="text-align: left;"><br></div><br><table align="center" style="width: 580px; margin: 0 auto; text-align: inherit;">                 <tbody><tr>                     <td style="background: #fff; padding: 15px !important;">                         <table style="padding: 0px; width: 100%; position: relative;display: block;">                             <tbody><tr>                                 <td style="padding: 10px 20px 0px 0px; position: relative;"><h4 style="display: block; margin: 5px 0 15px 0;">${lastName}$ <span style="color: inherit; line-height: 1.1; text-align: inherit; background-color: transparent;">${firstName}$ </span><span style="color: inherit; line-height: 1.1; text-align: inherit; background-color: transparent;">${middleName}$</span><span style="color: inherit; line-height: 1.1; text-align: inherit; background-color: transparent;">. </span></h4><h4 style="display: block; margin: 5px 0 15px 0;"><span style="color: inherit; line-height: 1.1; text-align: inherit; background-color: transparent;">Согласно условий Договора № ${number}$ от ${date}$г. от Вас на компанию ${performer}$  должна была поступить оплата счетов по суммам указаным ниже:</span></h4><div><span style="line-height: 14.300000190734863px;">${table}$</span></div><div><span style="line-height: 14.300000190734863px;"><br></span></div><div><span style="line-height: 14.300000190734863px;">Просьба в ближайшее время осуществить оплату. Спасибо. Удачного рабочего дня.</span></div><div><span style="line-height: 14.300000190734863px;"><br></span></div>                                                                                                                      </td>                 </tr>             </tbody></table>             <table align="center" style="width: 100%;background: #2f2f2f;">                 <tbody><tr>                     <td align="center" style="vertical-align: middle;color: #fff;text-align: center;">                         <table style="width: 590px;margin: 0 auto;text-align: inherit;" align="center">                             <tbody><tr>                                 <td>                                     <table style="display: block;padding: 0px; width: 100%; position: relative;vertical-align: top; text-align: left;">                                         <tbody><tr>                                             <td style="vertical-align: middle;color: #fff;padding: 10px 20px 0px 0px;text-align: left;"><span style="font-size:12px;"><i>Это письмо автоматически создано системой ImpelNET. Отвечать на него нет необходимости.</i></span>                                             </td>                                         </tr>                                     </tbody></table>                                     <table style="     display: block; ">                                         <tbody><tr>                                             <td style="vertical-align: middle;color: #fff;">                                                 <table class="four columns">                                                     <tbody><tr>                                                         <td style="padding-top: 0;padding-bottom: 0;vertical-align: middle;color: #fff;">  (c) Impel Griffin Group 1995-2014   </td>                                                     </tr>                                                 </tbody></table>                                             </td>                                             <td style="vertical-align: middle;color: #fff;">                                                 <table style="width: 340px;">                                                     <tbody><tr>                                                         <td class="vertical-middle align-reverse" style="padding-top: 0;padding-bottom: 0;vertical-align: middle;text-align: right;color: #fff;"> <a href="http://www.griffin.ua" style="     cursor: pointer; cursor;     color: #fff; " pointer"="">                                                                 О нас</a>                                                         </td>                                                     </tr>                                                 </tbody></table>                                             </td>                                         </tr>                                     </tbody></table>                                 </td>                             </tr>                         </tbody></table>                     </td>                 </tr>             </tbody></table>         </td>     </tr> </tbody></table></td></tr></tbody></table>' WHERE alias = 'invoice-not-pay';
+UPDATE "public".email SET "text" = '<table> <tbody><tr>  <td align="center" valign="top">    <table align="center" style="width: 100%;background: #1f1f1f;">     <tbody><tr>      <td style="text-align: center;" align="center">       <table style="width: 585px;margin: 0 auto;text-align: inherit;" align="center">        <tbody><tr>         <td>           <table style="display: block;padding: 0px;width: 100%;position: relative;vertical-align: top;text-align: left; ">           <tbody><tr>            <td style="padding: 10px 20px 0px 0px; position: relative;;vertical-align: middle;">              <table style="width: 280px;">               <tbody><tr>                <td style="padding: 0px 0px 10px;vertical-align: middle;"> <a href="http://www.griffin.ua" style="background-image: url(http://sd.griffin.ua/templates/core/img/logo-small-gray.png);outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;width: auto;height: auto;max-width: none !important;float: left;clear: both;display: block;width: 104px;cursor: pointer;height: 14px;"> </a>                                                         </td>                                                     </tr>                                                 </tbody></table>                                              </td>                                             <td style="padding-right: 0px;padding: 10px 20px 0px 0px; position: relative;vertical-align: middle;">                                                 <table style="width: 280px;">                                                     <tbody><tr>                                                         <td>                                                             <table align="right" style="float: right;vertical-align: top; text-align: left;">                                                                 <tbody><tr>                                                                     <td style="padding-top: 0;padding-bottom: 0;vertical-align: middle;padding: 0 2px !important;width: auto !important;">                                                                   <a href="//www.facebook.com/pages/%D0%98%D0%BC%D0%BF%D0%B5%D0%BB-%D0%93%D1%80%D0%B8%D1%84%D1%84%D0%B8%D0%BD/191430010917393" style="background-image: url(http://sd.griffin.ua/templates/core/img/socialmedia/facebook.png);outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;width: auto;height: auto;max-width: none !important;float: left;clear: both;display: block;width: 30px;height: 30px;background-repeat: no-repeat;cursor: pointer;">                                                                  </a> </td>                                                                     <td class="vertical-middle" style="padding-top: 0;padding-bottom: 0;vertical-align: middle;padding: 0 2px !important;width: auto !important;">                                                                    <a href="https://twitter.com/ImpelGriffin" style="background-image: url(http://sd.griffin.ua/templates/core/img/socialmedia/twit.png);outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;width: auto;height: auto;max-width: none !important;float: left;clear: both;display: block;width: 30px;height: 30px;background-repeat: no-repeat;cursor: pointer;">                                                              </a>                                                      </td>                                                                     <td class="vertical-middle" style="padding-top: 0;padding-bottom: 0;vertical-align: middle;padding: 0 2px !important;width: auto !important;"> <a href="https://plus.google.com/+GriffinUa/posts" style="background-image: url(http://sd.griffin.ua/templates/core/img/socialmedia/google.png);outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;width: auto;height: auto;max-width: none !important;float: left;clear: both;display: block;width: 30px;height: 30px;background-repeat: no-repeat;cursor: pointer;">                                                                                                                                 </a>                                                         </td>                                                                     <td class="vertical-middle" style="padding-top: 0;padding-bottom: 0;vertical-align: middle;padding: 0 2px !important;width: auto !important;">                                                               <a href="http://www.linkedin.com/company/impel-griffin?trk=company_name" style="background-image: url(http://sd.griffin.ua/templates/core/img/socialmedia/in.png);outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;width: auto;height: auto;max-width: none !important;float: left;clear: both;display: block;width: 30px;height: 30px;background-repeat: no-repeat;cursor: pointer;">                                                                </a>                                                                </td>                                                                     <td class="vertical-middle" style="padding-top: 0;padding-bottom: 0;vertical-align: middle;padding: 0 2px !important;width: auto !important;">                                                                 <a href="http://vk.com/impelgriffin" style="background-image: url(http://sd.griffin.ua/templates/core/img/socialmedia/vk.png);outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;width: auto;height: auto;max-width: none !important;float: left;clear: both;display: block;width: 30px;height: 30px;background-repeat: no-repeat;cursor: pointer;">                                                                                                                                  </a>                                                            </td>                                                                     <td class="vertical-middle" style="padding-top: 0;padding-bottom: 0;vertical-align: middle;padding: 0 2px !important;width: auto !important;">                                                              <a href="https://www.youtube.com/user/impelgriffin/" style="background-image: url(http://sd.griffin.ua/templates/core/img/socialmedia/youtube.png);outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;width: auto;height: auto;max-width: none !important;float: left;clear: both;display: block;width: 30px;height: 30px;background-repeat: no-repeat;cursor: pointer;">                                                                                                                                   </a>                                                             </td>                                                          </tr>                                                             </tbody></table>                                                         </td>                                                     </tr>                                                 </tbody></table>                                             </td>                                         </tr>                                     </tbody></table>                                 </td>                             </tr>                         </tbody></table>                     </td>                 </tr>             </tbody></table>             <div style="text-align: left;"><br></div><br><table align="center" style="width: 580px; margin: 0 auto; text-align: inherit;">                 <tbody><tr>                     <td style="background: #fff; padding: 15px !important;">                         <table style="padding: 0px; width: 100%; position: relative;display: block;">                             <tbody><tr>                                 <td style="padding: 10px 20px 0px 0px; position: relative;"><h4 style="display: block; margin: 5px 0 15px 0;">${lastName}$ <span style="color: inherit; line-height: 1.1; text-align: inherit; background-color: transparent;">${firstName}$ </span><span style="color: inherit; line-height: 1.1; text-align: inherit; background-color: transparent;">${middleName}$</span><span style="color: inherit; line-height: 1.1; text-align: inherit; background-color: transparent;">. </span></h4><h4 style="display: block; margin: 5px 0 15px 0;"><span style="color: inherit; line-height: 1.1; text-align: inherit; background-color: transparent;">Согласно условий Договора № ${number}$ от ${date}$г. от Вас на компанию ${performer}$ поступила оплата счетов по суммам указаным ниже:</span></h4><div><span style="line-height: 14.300000190734863px;">${table}$</span></div><div><span style="line-height: 14.300000190734863px;"><br></span></div><div><span style="line-height: 14.300000190734863px;"> Спасибо. Удачного рабочего дня.</span></div><div><span style="line-height: 14.300000190734863px;"><br></span></div>                                                                                                                      </td>                 </tr>             </tbody></table>             <table align="center" style="width: 100%;background: #2f2f2f;">                 <tbody><tr>                     <td align="center" style="vertical-align: middle;color: #fff;text-align: center;">                         <table style="width: 590px;margin: 0 auto;text-align: inherit;" align="center">                             <tbody><tr>                                 <td>                                     <table style="display: block;padding: 0px; width: 100%; position: relative;vertical-align: top; text-align: left;">                                         <tbody><tr>                                             <td style="vertical-align: middle;color: #fff;padding: 10px 20px 0px 0px;text-align: left;"><span style="font-size:12px;"><i>Это письмо автоматически создано системой ImpelNET. Отвечать на него нет необходимости.</i></span>                                             </td>                                         </tr>                                     </tbody></table>                                     <table style="     display: block; ">                                         <tbody><tr>                                             <td style="vertical-align: middle;color: #fff;">                                                 <table class="four columns">                                                     <tbody><tr>                                                         <td style="padding-top: 0;padding-bottom: 0;vertical-align: middle;color: #fff;">  (c) Impel Griffin Group 1995-2014   </td>                                                     </tr>                                                 </tbody></table>                                             </td>                                             <td style="vertical-align: middle;color: #fff;">                                                 <table style="width: 340px;">                                                     <tbody><tr>                                                         <td class="vertical-middle align-reverse" style="padding-top: 0;padding-bottom: 0;vertical-align: middle;text-align: right;color: #fff;"> <a href="http://www.griffin.ua" style="     cursor: pointer; cursor;     color: #fff; " pointer"="">                                                                 О нас</a>                                                         </td>                                                     </tr>                                                 </tbody></table>                                             </td>                                         </tr>                                     </tbody></table>                                 </td>                             </tr>                         </tbody></table>                     </td>                 </tr>             </tbody></table>         </td>     </tr> </tbody></table></td></tr></tbody></table>' WHERE alias = 'invoice-pay';
+
+-- staging ----------------------
+-- prod ++++++++++++++++++++++++

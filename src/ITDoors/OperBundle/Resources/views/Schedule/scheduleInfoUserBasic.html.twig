@@ -281,6 +281,11 @@
     {% endif %}
 
     <tr>
+        <td>{% trans %}Self organization{% endtrans %}</td>
+        <td colspan="3">{{ coworker.selfOrganizationName }}</td>
+    </tr>
+
+    <tr>
         <td colspan="2" align="center">{% trans %}Officially{% endtrans %}</td>
         <td colspan="2" align="center">{% trans %}NotOfficially{% endtrans %}</td>
     </tr>
