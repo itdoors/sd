@@ -165,40 +165,43 @@ class InvoiceRepository extends EntityRepository
                 }
                 switch ($key) {
                     case 'customer':
-                        $sql
-                            ->andWhere("customer.id in (:customerIds)");
-
-                        $sql->setParameter(':customerIds', explode(',', $value));
+                        $arr = explode(',', $value);
+                        $sql->andWhere("customer.id in (:customerIds)");
+                        $sql->setParameter(':customerIds', $arr);
                         break;
                     case 'performer':
                         if (isset($value[0]) && !$value[0]) {
                             break;
                         }
+                        $arr = explode(',', $value);
                         $sql->andWhere('performer.id in (:performerIds)');
-                        $sql->setParameter(':performerIds', $value);
+                        $sql->setParameter(':performerIds', $arr);
                         break;
                     case 'invoiceId':
                         if (isset($value[0]) && !$value[0]) {
                             break;
                         }
+                        $arr = explode(',', $value);
                         $sql->andWhere('i.id in (:ids)');
-                        $sql->setParameter(':ids', $value);
+                        $sql->setParameter(':ids', $arr);
                         break;
                     case 'dogovorActName':
                         if (isset($value[0]) && !$value[0]) {
                             break;
                         }
+                        $arr = explode(',', $value);
                         $sql->andWhere("i.dogovorActName in (:dogovorActNames)");
-                        $sql->setParameter(':dogovorActNames', $value);
+                        $sql->setParameter(':dogovorActNames', $arr);
                         break;
                     case 'companystructure':
                         if (isset($value[0]) && !$value[0]) {
                             break;
                         }
+                        $arr = explode(',', $value);
                         $sql->leftJoin('i.invoicecompanystructure', 'ics_fil');
                         $sql->leftJoin('ics_fil.companystructure', 'cs_fil');
                         $sql->andWhere("cs_fil.id in (:companystructures)");
-                        $sql->setParameter(':companystructures', $value);
+                        $sql->setParameter(':companystructures', $arr);
                         break;
                 }
             }
