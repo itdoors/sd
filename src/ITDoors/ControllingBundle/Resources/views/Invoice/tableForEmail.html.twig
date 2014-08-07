@@ -1,9 +1,9 @@
 {% trans_default_domain 'ITDoorsControllingBundle' %}
-<table style="width:100%;text-align:center">
+<table style="width:100%;text-align:center;border: 1px double #eee">
     <tbody>
         <tr>
-            <td>№</td>
-            <td>{% trans %}Date{% endtrans %}</td>
+            <td>{% trans %}№ invoice{% endtrans %}</td>
+            <td>{% trans %}Date invoice{% endtrans %}</td>
             <td>{% trans %}Invoice amount{% endtrans %}</td>
         </tr>
         {% for invoice in invoices %}

@@ -16,6 +16,8 @@ ITDoors\ControllingBundle\Entity\InvoicePayments:
             length: 20
         date:
             type: date
+        bank:
+            type: text
     manyToOne:
         invoice:
             targetEntity: Invoice

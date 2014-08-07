@@ -140,4 +140,32 @@ class InvoicePayments
     {
         return $this->invoice;
     }
+    /**
+     * @var string
+     */
+    private $bank;
+
+
+    /**
+     * Set bank
+     *
+     * @param string $bank
+     * @return InvoicePayments
+     */
+    public function setBank($bank)
+    {
+        $this->bank = $bank;
+    
+        return $this;
+    }
+
+    /**
+     * Get bank
+     *
+     * @return string 
+     */
+    public function getBank()
+    {
+        return $this->bank;
+    }
 }
