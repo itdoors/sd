@@ -3437,8 +3437,6 @@ class AjaxController extends BaseFilterController
                             ->innerJoin('u.stuff', 's')
                             ->where('h.id = :handlingId')
                             ->setParameter(':handlingId', $handlingId);
-
-
                 }
             ));
 
