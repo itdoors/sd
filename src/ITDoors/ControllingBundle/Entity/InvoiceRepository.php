@@ -816,7 +816,10 @@ class InvoiceRepository extends EntityRepository
             case 'contacts':
                 $subQueryCase =  $entitie->expr()->andx(
                     $entitie->expr()->eq('mc.modelId', 'customer.id'),
-                    $entitie->expr()->eq('mc.modelName', ':text')
+                    $entitie->expr()->orX(
+                        $entitie->expr()->eq('mc.modelName', ':text'),
+                        $entitie->expr()->eq('mc.modelName', ':textdepartments')
+                    )
                 );
                 $subQuerySendEmail =  $entitie->expr()->andx(
                     $entitie->expr()->eq('mc.id', 'mcsm.modelContactId')
@@ -843,7 +846,8 @@ class InvoiceRepository extends EntityRepository
                     ->leftJoin('mc.owner', 'o')
                     ->where('i.id = :invoiceid')
                     ->setParameter(':invoiceid', (int) $invoiceid)
-                    ->setParameter(':text', 'organization');
+                    ->setParameter(':text', 'organization')
+                    ->setParameter(':textdepartments', 'departments');
                 $entitie = $entitie->getQuery()
                     ->getResult();
                 break;
