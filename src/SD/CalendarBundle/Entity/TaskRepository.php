@@ -111,11 +111,11 @@ class TaskRepository extends EntityRepository
 
             ->where('t.userId = :userid')
             ->andWhere('t.taskType = :types')
-            ->andWhere('t.isDone = :isDone')
+            //->andWhere('t.isDone = :isDone')
 
             ->setParameter(':userid', $userId)
             ->setParameter(':types', $type)
-            ->setParameter(':isDone', false, \PDO::PARAM_BOOL)
+            //->setParameter(':isDone', false, \PDO::PARAM_BOOL)
             ->orderBy('t.id', 'desc')
             ->getQuery()
             ->getResult();
