@@ -59,10 +59,8 @@ class InvoiceService
         return $fileName;
     }
 
-    /**
-     * @var Container
-     * 
-     * @return mixed[]
+    /** 
+     * @return string
      */
     public function parserFile()
     {
@@ -70,7 +68,7 @@ class InvoiceService
 
         if (!is_dir($directory)) {
             $this->addCronError(0, 'ok', 'directory not found', $directory);
-
+            echo 'Directory not found: ';
             return $directory;
         }
         $file = $this->findFile($directory);
@@ -93,12 +91,13 @@ class InvoiceService
                     rename($directory.$file, $directory.'old/'.$file);
                     break;
                 default:
+                    echo json_last_error();
                     $this->addCronError(0, 'FATAL ERROR', $file, json_last_error());
             }
         } else {
             $this->addCronError(0, 'ok', 'file not found', 'new file not found');
 
-            return 'File not found';
+            return 'File not found in derictory '."\n".$directory;
         }
     }
 
@@ -347,7 +346,7 @@ class InvoiceService
     }
 
     /**
-     *  savejson
+     * savejson
      *
      * @param object $json Description
      * 
@@ -357,7 +356,7 @@ class InvoiceService
     {
         $count = count($json);
         foreach ($json as $key => $invoice) {
-            echo ($count-$key-1)."\n";
+            echo ($count-$key)."\n";
             $invoiceFind = true;
             $this->messageTemplate = false;
             $invoiceNew = $this->saveinvoice($invoice);
@@ -373,12 +372,12 @@ class InvoiceService
 
             unset($json[$key]);
         }
-        echo 'try add send email'."\n";
+        echo 'try add email for send'."\n";
         $this->sendEmails();
-        echo 'try add cron'."\n";
+        echo 'try add cron for send email'."\n";
         $cron = $this->container->get('it_doors_cron.service');
         $cron->addSendEmails();
-        echo 'add cron successfully'."\n";
+        echo 'cron successfully'."\n";
     }
 
     /**
