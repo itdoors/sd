@@ -1,4 +1,5 @@
 SD\UserBundle\Entity\Stuff:
+    repositoryClass: SD\UserBundle\Entity\StuffRepository
     type: entity
     table: stuff
     fields:
