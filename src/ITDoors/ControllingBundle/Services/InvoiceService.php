@@ -157,12 +157,11 @@ class InvoiceService
                     $payments->setSumma(trim($pay->summa));
                     $em->persist($payments);
                     $summa += trim($pay->summa);
-                    
-                    
+
                     $days = (strtotime($date)-strtotime($pay->date))/24/3600;
-                    
+
                     if (in_array($days, array(1))) {
-                       $sendEmailPay = TRUE;
+                       $sendEmailPay = true;
                     }
                 }
                 if ($sendEmailPay) {
