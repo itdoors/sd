@@ -20,7 +20,7 @@ Lists\ContactBundle\Entity\ModelContactSendEmail:
     manyToOne:
         modelContact:
             targetEntity: ModelContact
-            inversedBy: null
+            inversedBy: sendEmail
             joinColumn:
                 name: model_contact_id
                 referencedColumnName: id

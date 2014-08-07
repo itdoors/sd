@@ -1,0 +1,176 @@
+{% trans_default_domain 'ITDoorsControllingBundle' %}
+<script>
+    $(document).ready(function() {
+        $('.datesave').editable({
+            type: 'date',
+            name: 'DateEnd',
+            url: '{{ path('sd_common_ajax_invoice_save') }}',
+            emptytext: '{% trans from 'messages' %}Enter value{% endtrans %}',
+            clear: '{% trans from 'ITDoorsControllingBundle' %}clear{% endtrans %}<i class="icon-remove fa fa-times" style="font-size:12px"></i>',
+            datepicker: {
+                rtl: Metronic.isRTL(),
+                autoclose: true,
+                format: "dd.mm.yyyy",
+                pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+                language: "{{ app.request.locale }}",
+                startView: 'month',
+                weekStart: 1
+            }
+        });
+        $('.status-edit').editable({
+            url: '{{ path('sd_common_ajax_invoice_save') }}',
+            source: [
+                {value: 1, text: '{% trans %}In coutr{% endtrans %}'},
+                {value: 0, text: '{% trans %}Not in coutr{% endtrans %}'}
+            ],
+            select2: {
+                placeholder: '{% trans %}Select Organization{% endtrans %}',
+                minimumInputLength: 2,
+                width: 250
+            }
+        });
+    });
+</script>
+<div class="navigation">
+    {{ ajax_paginator_render(
+            entities, namespace, {
+                    'datatable_ajax_1': 'ITDoorsAjax.updateList'
+                }
+            )
+    }}
+</div>
+<div class="table-scrollable">
+    <table class="table table-striped table-bordered table-hover dataTable" aria-describedby="datatable_ajax_info">
+        <thead>
+            <tr role="row" class="heading">
+                <th width="5%" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}№ and date invoice{% endtrans %}
+                </th>
+                <th width="5%" role="columnheader" rowspan="1" colspan="1">
+                    {% trans %}Customer{% endtrans %}
+                </th>
+                <th width="5%" role="columnheader" rowspan="1" colspan="1">
+                    {% trans %}Performer{% endtrans %}
+                </th>
+                <th width="5%" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}Invoice amount{% endtrans %}
+                </th><th width="5%" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}№ and date ABP/BH{% endtrans %}
+                </th><th width="10%"  role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}Responsible{% endtrans %}
+                </th><th width="10%" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}№ and date contract{% endtrans %}
+                </th><th width="10%" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}Deferment{% endtrans %}
+                </th><th width="10%" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}Original ABP/BH{% endtrans %}
+                </th><th width="10%" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}Notes{% endtrans %}
+                </th><th width="10%" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}Expected date of payment{% endtrans %}
+                </th><th width="10%" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}The actual date of payment{% endtrans %}
+                </th><th width="10%" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}Status{% endtrans %}
+                </th></tr>
+        </thead>
+        <tbody role="alert" aria-live="polite" aria-relevant="all">
+            {% for entity in entities %}
+                <tr class="{{ cycle(['odd', 'even'], entity.invoiceId) }}">
+                    <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceId }}</a> {{ entity.date is empty ? '' : entity.date|date("d.m.y") }}</td>
+                    <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.customerName }}</a></td>
+                    <td class="">{{ entity.performerName }}</td>
+                    <td class="">{{ entity.sum|number_format(2, ',', ' ')  }}</td>
+                    <td class="">{{ entity.dogovorActName }} {{ entity.dogovorActDate is empty ? '' : entity.dogovorActDate|date("d.m.y") }}</td>
+                    <td class="">
+                        <a id="managers_list_new" class="fa ajax-form fa-plus" title="{% trans %}Add note{% endtrans %}"
+                           data-toggle="modal"
+                           href="#form_modal"
+                           data-target_holder="invoiceMessageFormTpl"
+                           data-default='{"invoiceId":"{{ entity.id }}"}'
+                           data-form_name="invoiceCompanystructureForm"
+                           data-post_function="updateList"
+                           data-post_target_id="datatable_ajax_2"
+                           ></a><br>
+                        {% for responsible in responsibles[entity.id] %}
+                            <a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">
+                                {{ responsible.companystructure.name }}
+                            </a>
+                            <br>
+                        {% endfor %}
+                    </td>
+                    <td class="">
+                        <a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">
+                            {{ entity.dogovorNumber }}
+                        </a>
+                        {{ entity.dogovorStartDatetime is empty ? '' :  entity.dogovorStartDatetime|date("d.m.y") }}
+                    </td>
+                    <td class="">{{ entity.delayDate is empty ? '' :  entity.delayDate|date("d.m.y")  }} {% if entity.delayDays is not empty %} ({{ entity.delayDays}} {{ entity.delayDaysType }}) {% endif %}</td>
+                    <td class="">{% if entity.dogovorActOriginal is not empty %}{% trans %}on{% endtrans %}{% else %}{% trans %}off{% endtrans %}{% endif %}</td>
+                    <td class="">
+                        <a id="managers_list_new" class="fa ajax-form fa-plus" title="{% trans %}Add note{% endtrans %}"
+                           data-toggle="modal"
+                           href="#form_modal"
+                           data-target_holder="invoiceMessageFormTpl"
+                           data-default='{"invoice_id":"{{ entity.id }}"}'
+                           data-form_name="invoiceMessageForm"
+                           data-post_function="updateList"
+                           data-post_target_id="datatable_ajax_2"
+                           ></a>
+                        {{ entity.descriptiondate is empty ? '' : '('~entity.descriptiondate |date("d.m.y")~')'}} {{ entity.description }}
+                    </td>
+                    <td class="">
+                        <a href="#" 
+                           class="datesave fa fa-plus" data-pk="{{ entity.id }}"
+                           data-original-title="{% trans %}Select data{% endtrans %}"
+                           data-date="{{entity.dateEnd|date("d.m.Y")}}"
+                           data-format="dd.mm.yyyy"> 
+                            {{ entity.dateEnd is empty ? '' : entity.dateEnd|date("d.m.Y") }}
+                        </a>
+                    </td>
+                    <td class="">{{ entity.dateFact is empty ? '' : entity.dateFact|date("d.m.Y") }}</td>
+                    <td class="">
+                        <a href="#" 
+                           id="court" 
+                           class="status-edit" 
+                           data-type="select" 
+                           data-pk="{{ entity.id }}"
+                           data-value="{{ entity.court }}" 
+                           data-placement="right" 
+                           data-original-title="{% trans %}Select status{% endtrans %}">
+                            {% if entity.court ==  true %}
+                                {% trans %}In coutr{% endtrans %}
+                            {% else%}
+                                {% trans %}Not in coutr{% endtrans %}
+                            {% endif%}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<div class="navigation">
+    {{ ajax_paginator_render(
+            entities, namespace, {
+                    'datatable_ajax_1': 'ITDoorsAjax.updateList'
+                }
+            )
+    }}
+</div>
+
+{# modal window #}
+<div id="form_modal" class="modal fade" role="basic" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <div id="invoiceMessageFormTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>

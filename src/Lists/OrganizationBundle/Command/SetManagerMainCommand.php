@@ -77,7 +77,7 @@ class SetManagerMainCommand extends ContainerAwareCommand
                     ->getRepository('ListsOrganizationBundle:OrganizationUser')
                     ->findOneBy(array(
                         'organizationId' => $organizationId,
-                        'lookupId' => $lookup->getId()
+                        'roleId' => $lookup->getId()
                         ));
 
                 if (!$managerOrganization) {
@@ -120,7 +120,7 @@ class SetManagerMainCommand extends ContainerAwareCommand
                         ->getRepository('ListsHandlingBundle:HandlingUser')
                         ->findOneBy(array(
                             'handlingId' => $lookupMP,
-                            'lookupId' => $lookup->getId(),
+                            'roleId' => $lookup->getId(),
                             ));
 
                     if (!$mainManager) {

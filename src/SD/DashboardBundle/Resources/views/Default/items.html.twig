@@ -95,8 +95,8 @@
             <a class="collapse" href="javascript:;"></a>
             <a class="reload" href="javascript:;"></a>
         </div>
-        <div class="portlet-body" id="datatable_ajax" data-url="{{ url('it_doors_controlling_invoice_list') }}">
-            {{ render(controller('ITDoorsControllingBundle:Invoice:List')) }}
+        <div class="portlet-body" id="datatable_ajax" data-url="{{ url('it_doors_controlling_invoice_expected_data') }}">
+            {{ render(controller('ITDoorsControllingBundle:Invoice:Expecteddata')) }}
         </div>
     </div>
     <div class="portlet box blue">
@@ -146,14 +146,16 @@
     </div>
                     
 {{ include('SDCalendarBundle:Dashboard:filterColors.html.twig') }}
-
-<div id="calendarBlock" data-url="{{ path('sd_calendar_private_index') }}">
-{{ render(controller('SDCalendarBundle:Private:Index')) }}
-    {#{ include('SDCalendarBundle::base.html.twig', {
-        url: path('sd_calendar_private_handling_message')
-    }) }#}
+<div>
+    <div class="row" id="calendarBlock" data-url="{{ path('sd_dashboard_calendar_task') }}">
+            {{ render(controller('SDDashboardBundle:Default:generateTasksCalendar')) }}
     </div>
-
+</div>
+<script>
+    jQuery(document).ready(function() {
+        Tasks.initDashboardWidget();
+    });
+</script>
 {% if isCrm %}
     {{ render(controller('ListsHandlingBundle:' ~ masterRole ~ ':List')) }}
 {% endif %}

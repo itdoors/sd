@@ -10,9 +10,17 @@ it_doors_controlling_invoice_expected_pay:
     pattern:  /controlling/invoice/expectedpay
     defaults: { _controller: ITDoorsControllingBundle:Invoice:expectedpay }
     
+it_doors_controlling_invoice_expected_data:
+    pattern:  /controlling/invoice/expecteddata
+    defaults: { _controller: ITDoorsControllingBundle:Invoice:expecteddata }
+    
 it_doors_controlling_invoice_expected_pay_show:
     pattern:  /controlling/invoice/expectedpayshow
     defaults: { _controller: ITDoorsControllingBundle:Invoice:expectedpayshow }
+    
+it_doors_controlling_invoice_expected_data_show:
+    pattern:  /controlling/invoice/expecteddatashow
+    defaults: { _controller: ITDoorsControllingBundle:Invoice:expecteddatashow }
 
 it_doors_controlling_invoice_show:
     pattern:  /controlling/show

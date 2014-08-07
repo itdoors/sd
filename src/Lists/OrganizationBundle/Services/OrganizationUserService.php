@@ -52,7 +52,7 @@ class OrganizationUserService
             ->getRepository('ListsOrganizationBundle:OrganizationUser')
             ->findOneBy(array(
                 'organizationId' => $organizationId,
-                'lookupId' => $lookup->getId()
+                'roleId' => $lookup->getId()
                 ));
 
         if (!$managerOrganization) {
@@ -67,7 +67,7 @@ class OrganizationUserService
                 $managerOrganization->setUser($user);
                 $managerOrganization->setOrganization($organization);
             }
-            $managerOrganization->setLookup($lookup);
+            $managerOrganization->setRole($lookup);
         } else {
             $oldManager = $em
                 ->getRepository('ListsOrganizationBundle:OrganizationUser')

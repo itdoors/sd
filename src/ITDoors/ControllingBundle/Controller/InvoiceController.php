@@ -13,6 +13,7 @@ use Knp\Bundle\PaginatorBundle\KnpPaginatorBundle;
 use Doctrine\ORM\EntityManager;
 use PHPExcel_Style_Border;
 use PHPExcel_Style_Alignment;
+use PHPExcel_Style_Fill;
 use Symfony\Component\HttpFoundation\Request;
 use Lists\ContactBundle\Entity\ModelContactSendEmail;
 
@@ -31,6 +32,8 @@ class InvoiceController extends BaseFilterController
     /** @var KnpPaginatorBundle $paginator */
     protected $paginator = 'knp_paginator';
 
+    protected $filterFormName = 'invoiceFilterForm';
+
     /**
      * @var Container
      *
@@ -39,6 +42,8 @@ class InvoiceController extends BaseFilterController
     public function indexAction()
     {
         $filterNamespace = $this->container->getParameter($this->getNamespace());
+
+        $filter = $this->filterFormName;
 
         $period = $this->getTab($filterNamespace);
         if (!$period) {
@@ -52,6 +57,7 @@ class InvoiceController extends BaseFilterController
 
         return $this->render('ITDoorsControllingBundle:Invoice:index.html.twig', array(
                 'tabs' => $tabs,
+                'filter' => $filter,
                 'tab' => $period,
                 'namespace' => $filterNamespace
         ));
@@ -68,6 +74,12 @@ class InvoiceController extends BaseFilterController
     {
         $filterNamespace = $this->container->getParameter($this->getNamespace());
 
+        $filters = $this->getFilters($filterNamespace);
+        if (empty($filters)) {
+            $filters['isFired'] = 'No fired';
+            $this->setFilters($filterNamespace, $filters);
+        }
+
         $period = $this->getTab($filterNamespace);
 
         /** @var EntityManager $em */
@@ -76,7 +88,7 @@ class InvoiceController extends BaseFilterController
         /** @var InvoiceRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
 
-        $result = $invoice->getEntittyCountSum($period);
+        $result = $invoice->getEntittyCountSum($period, $filters);
         $entities = $result['entities'];
         $count = $result['count'];
 
@@ -256,6 +268,29 @@ class InvoiceController extends BaseFilterController
                 'namespace' => $namespaceTab
         ));
     }
+    /**
+     *  expectedpayAction
+     * 
+     * @return render Description
+     */
+    public function expecteddataAction()
+    {
+        $filterNamespace = $this->container->getParameter($this->getNamespace());
+        $namespaceTab = $filterNamespace . 'expecteddata';
+        $tab = $this->getTab($namespaceTab);
+        if (!$tab) {
+            $tab = 'delay';
+            $this->setTab($namespaceTab, $tab);
+        }
+        $service = $this->container->get($this->service);
+        $tabs = $service->getTabsEmptyData();
+
+        return $this->render('ITDoorsControllingBundle:Invoice:expecteddata.html.twig', array(
+                'tabs' => $tabs,
+                'tab' => $tab,
+                'namespace' => $namespaceTab
+        ));
+    }
 
     /**
      *  expectedpayshowAction
@@ -296,6 +331,53 @@ class InvoiceController extends BaseFilterController
         }
 
         return $this->render('ITDoorsControllingBundle:Invoice:expectedpayshow.html.twig', array(
+                'period' => $tab,
+                'entities' => $pagination,
+                'responsibles' => $responsibles,
+                'namespace' => $namespaceTab
+        ));
+
+    }
+
+    /**
+     *  expectedpayshowAction
+     * 
+     * @return render Description
+     */
+    public function expecteddatashowAction()
+    {
+        $filterNamespace = $this->container->getParameter($this->getNamespace());
+        $namespaceTab = $filterNamespace . 'expecteddata';
+        $tab = $this->getTab($namespaceTab);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var InvoiceRepository $invoice */
+        $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
+
+        $result = $invoice->getEntittyCountSum($tab);
+        $entities = $result['entities'];
+        $count = $result['count'];
+
+        $page = $this->getPaginator($namespaceTab);
+        if (!$page) {
+            $page = 1;
+        }
+
+        $paginator = $this->container->get($this->paginator);
+        $entities->setHint($this->paginator . '.count', $count);
+        $pagination = $paginator->paginate($entities, $page, 10);
+
+        $responsibles = array();
+        foreach ($pagination as $val) {
+            /** @var InvoiceCompanystructure */
+            $responsibles[$val['id']] = $em
+                ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
+                ->findBy(array('invoiceId' => $val['id']));
+        }
+
+        return $this->render('ITDoorsControllingBundle:Invoice:expecteddatashow.html.twig', array(
                 'period' => $tab,
                 'entities' => $pagination,
                 'responsibles' => $responsibles,
@@ -355,6 +437,12 @@ class InvoiceController extends BaseFilterController
             ++$str;
             $col = 0;
 
+            if ($str%2 == 0) {
+                $phpExcelObject->getActiveSheet()->getStyle('A'.$str.':P'.$str)->getFill()
+                ->applyFromArray(array('type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'startcolor' => array('rgb' => 'f5f5f5')
+                ));
+            }
 //            $phpExcelObject->getActiveSheet()->getDefaultRowDimension($str)->setRowHeight(40);
 //            $phpExcelObject->getActiveSheet()->getDefaultRowDimension($str)->setRowHeight(-1);
 
@@ -435,6 +523,10 @@ class InvoiceController extends BaseFilterController
 //        $phpExcelObject->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
 //        $phpExcelObject->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
         $phpExcelObject->getActiveSheet()->getStyle('A1:P'.$str)->getAlignment()->setWrapText(true);
+        $phpExcelObject->getActiveSheet()->getStyle('A1:P1')->getFill()
+            ->applyFromArray(array('type' => PHPExcel_Style_Fill::FILL_SOLID,
+            'startcolor' => array('rgb' => 'eeeeee')
+            ));
 //        $phpExcelObject->getActiveSheet()->getRowDimension(8)->setRowHeight(-1);
 //        $phpExcelObject->getActiveSheet()->getStyle('A8')->getAlignment()->setWrapText(true);
         $phpExcelObject->getActiveSheet()->setShowGridLines(false);//off line

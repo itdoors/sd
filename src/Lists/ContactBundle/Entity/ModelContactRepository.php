@@ -134,7 +134,7 @@ class ModelContactRepository extends EntityRepository
      * Processes sql query. adding organization query
      *
      * @param \Doctrine\ORM\QueryBuilder $sql
-     * @param int                        $organizationId
+     * @param integer                    $organizationId
      */
     public function processOrganizationQuery($sql, $organizationId)
     {
@@ -425,7 +425,7 @@ class ModelContactRepository extends EntityRepository
                 ->where('mc.modelName = :name')
                 ->andWhere('mc.modelId = :id')
                 ->andWhere('mcse.isSend = :status')
-                ->setParameter(':status', true)
+                ->setParameter(':status', 1)
                 ->setParameter(':name', 'organization')
                 ->setParameter(':id', $organizationId)
                 ->getQuery()->getResult();

@@ -17,18 +17,18 @@ Lists\OrganizationBundle\Entity\OrganizationUser:
             type: integer
             nullable: false
             column: user_id
-        lookupId:
+        roleId:
             type: integer
             nullable: false
-            column: lookup_id
+            column: role_id
     manyToOne:
-        lookup:
+        role:
             targetEntity: Lists\LookupBundle\Entity\Lookup
             cascade: {  }
             mappedBy: null
             inversedBy: null
             joinColumns:
-                lookup_id:
+                role_id:
                     referencedColumnName: id
             orphanRemoval: false
         organization:

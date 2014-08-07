@@ -40,6 +40,10 @@ class TaskForm extends AbstractType
         $builder
             ->add('title')
             ->add('description')
+            ->add('performer', 'entity', array(
+                'class' => 'SD\UserBundle\Entity\User',
+                'empty_value' => ''
+            ))
             ->add('startDateTime', 'datetime', array(
                 'widget' => 'single_text',
                 'format' => 'dd.MM.yyyy HH:mm:ss'

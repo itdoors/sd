@@ -25,16 +25,6 @@ class OrganizationUser
     private $userId;
 
     /**
-     * @var integer
-     */
-    private $lookupId;
-
-    /**
-     * @var \Lists\LookupBundle\Entity\Lookup
-     */
-    private $lookup;
-
-    /**
      * @var \Lists\OrganizationBundle\Entity\Organization
      */
     private $organization;
@@ -43,7 +33,6 @@ class OrganizationUser
      * @var \SD\UserBundle\Entity\User
      */
     private $user;
-
 
     /**
      * Get id
@@ -104,54 +93,6 @@ class OrganizationUser
     }
 
     /**
-     * Set lookupId
-     *
-     * @param integer $lookupId
-     * 
-     * @return OrganizationUser
-     */
-    public function setLookupId($lookupId)
-    {
-        $this->lookupId = $lookupId;
-
-        return $this;
-    }
-
-    /**
-     * Get lookupId
-     *
-     * @return integer 
-     */
-    public function getLookupId()
-    {
-        return $this->lookupId;
-    }
-
-    /**
-     * Set lookup
-     *
-     * @param \Lists\LookupBundle\Entity\Lookup $lookup
-     * 
-     * @return OrganizationUser
-     */
-    public function setLookup(\Lists\LookupBundle\Entity\Lookup $lookup = null)
-    {
-        $this->lookup = $lookup;
-
-        return $this;
-    }
-
-    /**
-     * Get lookup
-     *
-     * @return \Lists\LookupBundle\Entity\Lookup 
-     */
-    public function getLookup()
-    {
-        return $this->lookup;
-    }
-
-    /**
      * Set organization
      *
      * @param \Lists\OrganizationBundle\Entity\Organization $organization
@@ -204,5 +145,63 @@ class OrganizationUser
     public function doOnPrePersist()
     {
         // Add your code here
+    }
+    /**
+     * @var integer
+     */
+    private $roleId;
+
+    /**
+     * @var \Lists\LookupBundle\Entity\Lookup
+     */
+    private $role;
+
+
+    /**
+     * Set roleId
+     *
+     * @param integer $roleId
+     * 
+     * @return OrganizationUser
+     */
+    public function setRoleId($roleId)
+    {
+        $this->roleId = $roleId;
+
+        return $this;
+    }
+
+    /**
+     * Get roleId
+     *
+     * @return integer 
+     */
+    public function getRoleId()
+    {
+        return $this->roleId;
+    }
+
+    /**
+     * Set role
+     *
+     * @param \Lists\LookupBundle\Entity\Lookup $role
+     * 
+     * @return OrganizationUser
+     */
+    public function setRole(\Lists\LookupBundle\Entity\Lookup $role = null)
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * Get role
+     *
+     * @return \Lists\LookupBundle\Entity\Lookup 
+     */
+    public function getRole()
+    {
+        return $this->role;
     }
 }

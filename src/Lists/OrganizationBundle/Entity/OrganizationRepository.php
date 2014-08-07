@@ -31,7 +31,7 @@ class OrganizationRepository extends EntityRepository
 
         $this->processBaseQuery($sql);
         $sql->where('o.organizationSignId != 61 or o.organizationSignId is NULL')
-                ->andWhere('lookup.lukey = :lukey')
+                ->andWhere('role.lukey = :lukey')
                 ->setParameter(':lukey', 'manager_organization');
 
         if (sizeof($userIds)) {
@@ -235,7 +235,7 @@ class OrganizationRepository extends EntityRepository
             ->leftJoin('o.scope', 'scope')
             ->leftJoin('o.organizationUsers', 'oUser')
             ->leftJoin('oUser.user', 'users')
-            ->leftJoin('oUser.lookup', 'lookup')
+            ->leftJoin('oUser.role', 'role')
             ->leftJoin('o.creator', 'creator')
             ->andWhere('o.parent_id is null');
 
@@ -467,7 +467,7 @@ class OrganizationRepository extends EntityRepository
     public function searchSelfOrganization($q)
     {
         $sql = $this->createQueryBuilder('o')
-            ->leftJoin('o.lookup', 'l')
+            ->leftJoin('o.role', 'l')
             ->where('lower(o.name) LIKE :q')
             ->setParameter(':q', '%'. mb_strtolower($q, 'UTF-8') . '%')
             ->andWhere('l.lukey = :key')

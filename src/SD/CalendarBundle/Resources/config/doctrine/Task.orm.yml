@@ -35,6 +35,10 @@ SD\CalendarBundle\Entity\Task:
         description:
             type: text
             nullable: true
+        isDone:
+            type: boolean
+            nullable: true
+            column: is_done
     manyToOne:
         user:
             targetEntity: SD\UserBundle\Entity\User
@@ -43,5 +47,14 @@ SD\CalendarBundle\Entity\Task:
             inversedBy: null
             joinColumns:
                 user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        performer:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                performer_id:
                     referencedColumnName: id
             orphanRemoval: false

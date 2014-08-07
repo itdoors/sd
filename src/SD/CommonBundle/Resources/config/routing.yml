@@ -144,7 +144,7 @@ sd_common_ajax_organization_by_id:
 sd_common_ajax_organization_by_ids:
     pattern:  /ajax/organization_by_ids
     defaults: { _controller: SDCommonBundle:Ajax:organizationByIds }
-    
+
 sd_common_ajax_organization_by_edrpous:
     pattern:  /ajax/organization_by_edrpous
     defaults: { _controller: SDCommonBundle:Ajax:organizationByEdrpous }
@@ -320,3 +320,20 @@ sd_common_ajax_invoice_save:
 sd_common_ajax_organization_service_cover_save:
     pattern:  /ajax/organization_service_cove/save/{organizationId}/{serviceId}
     defaults: { _controller: SDCommonBundle:Ajax:organizationServiceCoverSave }
+
+
+sd_common_ajax_invoice_invoice_id:
+    pattern:  /ajax/invoice/invoice/id
+    defaults: { _controller: SDCommonBundle:Ajax:invoiceInvoiceId }
+    
+sd_common_ajax_invoice_dogovor_act_name:
+    pattern:  /ajax/invoice/dogovor/act/name
+    defaults: { _controller: SDCommonBundle:Ajax:invoiceDogovorActName }
+
+sd_common_ajax_invoice_by_dogovor_act_names:
+    pattern:  /ajax/invoice_by_dogovor_act_names
+    defaults: { _controller: SDCommonBundle:Ajax:invoiceByDogovorActNames }
+
+sd_common_ajax_invoice_by_ids:
+    pattern:  /ajax/invoice_by_ids
+    defaults: { _controller: SDCommonBundle:Ajax:invoiceByIds }

@@ -24,6 +24,7 @@ class CompanystructureRepository extends EntityRepository
         $sql = $this->createQueryBuilder('c')
             ->where('lower(c.name) LIKE :q')
             ->setParameter(':q', mb_strtolower($q, 'UTF-8') . '%')
+            ->orderBy('c.name')
             ->getQuery();
 
         return $sql->getResult();
