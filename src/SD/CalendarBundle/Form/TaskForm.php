@@ -2,6 +2,7 @@
 
 namespace SD\CalendarBundle\Form;
 
+use SD\UserBundle\SDUserBundle;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -35,15 +36,48 @@ class TaskForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
         $container = $this->container;
 
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        $userId = $user->getId();
+        /** @var \SD\UserBundle\Entity\Stuff $stuff */
+        $stuff = $container->get("doctrine")->getRepository('SDUserBundle:Stuff')
+            ->findBy(array(
+                'user' => $user
+            ));
+
+        if (!$stuff) {
+            $builder->add('performer', 'entity', array(
+                'class' => 'SD\UserBundle\Entity\User',
+                'empty_value' => '',
+                'query_builder' => function (\SD\UserBundle\Entity\UserRepository $repository) use ($userId) {
+                        return $repository->createQueryBuilder('u')
+                            ->where('u.id = :user')
+                            ->setParameter(':user', $userId);
+                    }
+            ));
+        } else {
+            //$companyStructure = $stuff->getCompanystructure();
+            $builder->add('performer', 'entity', array(
+                'class' => 'SD\UserBundle\Entity\User',
+                'empty_value' => '',
+                'query_builder' => function (\SD\UserBundle\Entity\UserRepository $repository) {
+                        return $repository->createQueryBuilder('u')
+                            ->innerJoin('u.stuff', 's');
+/*                            ->where('st.companyStructure = :companyStructure')
+                            ->setParameter(':companyStructure', $companyStructure);*/
+                    }
+            ));
+
+        }
+/*        $builder->add('performer', 'entity', array(
+            'class' => 'SD\UserBundle\Entity\User',
+            'empty_value' => ''
+        ));*/
         $builder
             ->add('title')
             ->add('description')
-            ->add('performer', 'entity', array(
-                'class' => 'SD\UserBundle\Entity\User',
-                'empty_value' => ''
-            ))
             ->add('startDateTime', 'datetime', array(
                 'widget' => 'single_text',
                 'format' => 'dd.MM.yyyy HH:mm:ss'
