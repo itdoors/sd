@@ -147,6 +147,8 @@ class InvoiceService
                 }
                 $summa = 0;
                 $dateFact = null;
+                $sendEmailPay = false;
+                $date = date('Y-m-d');
                 foreach ($invoice->dateFact as $pay) {
                     $dateFact = new \DateTime(trim($pay->date));
                     $payments = new InvoicePayments();
@@ -155,9 +157,15 @@ class InvoiceService
                     $payments->setSumma(trim($pay->summa));
                     $em->persist($payments);
                     $summa += trim($pay->summa);
+                    
+                    
+                    $days = (strtotime($date)-strtotime($pay->date))/24/3600;
+                    
+                    if (in_array($days, array(1))) {
+                       $sendEmailPay = TRUE;
+                    }
                 }
-
-                if ($summa != 0) {
+                if ($sendEmailPay) {
                     $this->messageTemplate = 'invoice-pay';
                 }
 
@@ -165,10 +173,10 @@ class InvoiceService
                     $invoiceNew->setDateFact($dateFact);
                 }
             } else {
-                $invoiceNew->setDateFact(null);
                 $date = date('Y-m-d');
+                $invoiceNew->setDateFact(null);
                 $days = (strtotime($date)-strtotime($invoiceNew->getDelayDate()->format('Y-m-d')))/24/3600;
-                if (in_array($days, array(0))) {
+                if (in_array($days, array(1))) {
                     $this->messageTemplate = 'invoice-not-pay';
                 }
                 $paymentsOld = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')->findBy(array('invoiceId' => $invoiceNew->getId()));
@@ -637,7 +645,6 @@ class InvoiceService
      */
     private function sendEmails()
     {
-        var_dump($this->arrCostumersForSendMessages);echo "\n";
         if (count($this->arrCostumersForSendMessages) > 0) {
 
             $em = $this->container->get('doctrine')->getManager();
@@ -664,7 +671,7 @@ class InvoiceService
                         $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')
                             ->getInvoiceIds($invoiceIds);
 
-                        $table = '<table style="width:100%;text-align:center"><tr>'
+                        $table = '<table style="width:100%;text-align:center"><tbody><tr>'
                                 . '<td>'.$translator->trans('№', array(), 'ITDoorsControllingBundle').'</td>'
                                 . '<td>'.$translator->trans('Date', array(), 'ITDoorsControllingBundle').'</td>'
                                 . '<td>'.$translator->trans('Invoice amount', array(), 'ITDoorsControllingBundle').'</td>'
@@ -674,13 +681,17 @@ class InvoiceService
                             $table .= '<tr>'
                                     . '<td>'.$invoice['invoiceId'].'</td>'
                                     . '<td>'.$invoice['date']->format('d.m.Y').'</td>'
-                                    . '<td>'.$invoice['sum']-$invoice['paymentsSumma'].'</td>'
+                                    . '<td>'.($template == 'invoice-not-pay' ? number_format($invoice['sum'] - $invoice['paymentsSumma'], 2, ',', ' ') : $invoice['paymentsSumma']).'</td>'
                                     . '</tr>';
                         }
-                        $table .= '</table>';
+                        $table .= '</tbody></table>';
+//                        $table =  new \Symfony\Component\HttpFoundation\Response("ITDoorsControllingBundle:Invoice:tableForEmail.html.twig", array(
+//                        'invoices' => $invoices,
+//                        'template' => $template
+//                    ));
 
                         foreach ($contacts as $user) {
-                            echo "send email for ".$user['email']."\n";
+                            echo "send email for ".$user['email']."\n\n";
                             $idEmail = $email->send(
                                 array($emailTo => $nameTo),
                                 $template,
@@ -692,9 +703,9 @@ class InvoiceService
                                         '${lastName}$' => $user['lastName'],
                                         '${firstName}$' => $user['firstName'],
                                         '${middleName}$' => $user['middleName'],
-                                        '${number}$' => $invoice['dogovorNumber'],
-                                        '${date}$' => (!$invoice['dogovorDate'] ? '' : $invoice['dogovorDate']->format('d.m.Y')),
-                                        '${performer}$' => $invoice['performerName'],
+                                        '${number}$' => $invoices[0]['dogovorNumber'],
+                                        '${date}$' => (!$invoices[0]['dogovorDate'] ? '' : $invoices[0]['dogovorDate']->format('d.m.Y')),
+                                        '${performer}$' => $invoices[0]['performerName'],
                                         '${table}$' => $table
                                     )
                                 )
