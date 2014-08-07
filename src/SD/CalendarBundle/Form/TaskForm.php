@@ -66,9 +66,11 @@ class TaskForm extends AbstractType
                 'empty_value' => '',
                 'query_builder' => function (\SD\UserBundle\Entity\UserRepository $repository) {
                         return $repository->createQueryBuilder('u')
-                            ->innerJoin('u.stuff', 's');
-/*                            ->where('st.companyStructure = :companyStructure')
-                            ->setParameter(':companyStructure', $companyStructure);*/
+                            ->innerJoin('u.stuff', 's')
+                            ->where('u.isFired = false')
+                            ->orWhere('u.isFired is NULL')
+                            ->orderBy('u.lastName', 'asc');
+                            //->setParameter(':fired', true, \PDO::PARAM_BOOL);
                 }
             ));
 
