@@ -1,0 +1,3 @@
+sd_task_homepage:
+    path:     /tasks
+    defaults: { _controller: SDTaskBundle:Task:index }

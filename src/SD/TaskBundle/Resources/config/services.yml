@@ -1,0 +1,7 @@
+parameters:
+#    sd_task.example.class: SD\TaskBundle\Example
+
+services:
+#    sd_task.example:
+#        class: %sd_task.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
