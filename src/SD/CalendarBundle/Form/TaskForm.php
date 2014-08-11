@@ -82,6 +82,7 @@ class TaskForm extends AbstractType
         $builder
             ->add('title')
             ->add('description')
+
             ->add('startDateTime', 'datetime', array(
                 'widget' => 'single_text',
                 'format' => 'dd.MM.yyyy HH:mm:ss'
