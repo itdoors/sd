@@ -516,6 +516,14 @@
                             </a>
                         </li>
                         <li{% if 
+                                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_controlling_invoice_analytic')
+                            %} class="active"{% endif %}>
+                            <a href="{{ path('it_doors_controlling_invoice_analytic') }}" title="{% trans %}Analytics{% endtrans %}">
+                                <i class="fa fa-comments"></i>
+                                {% trans %}Invoices{% endtrans %}
+                            </a>
+                        </li>
+                        <li{% if 
                                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_dogovor_index')
                                     or
                                     (
