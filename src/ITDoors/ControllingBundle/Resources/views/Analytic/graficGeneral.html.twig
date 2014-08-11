@@ -1,0 +1,149 @@
+{% trans_default_domain 'ITDoorsControllingBundle' %}
+<script>
+    $(document).ready(function(){
+         function chart5() {
+                var d1 = [[10, 1], [20, 2], [30, 3], [40, 4], [500, 5]];
+                /*var d1 = [];
+                for (var i = 0; i <= 10; i += 1)
+                    d1.push([i, parseInt(Math.random() * 30)]);
+*/
+                var d2 = [[4.25, 1], [10, 2], [15, 3], [15, 4], [15, 5]];
+                /*var d2 = [];
+                for (var i = 0; i <= 10; i += 1)
+                    d2.push([i, parseInt(Math.random() * 30)]);
+
+                var d3 = [];
+                for (var i = 0; i <= 10; i += 1)
+                    d3.push([i, parseInt(Math.random() * 30)]);
+*/
+                var stack = 0,
+                    bars = true,
+                    lines = false,
+                    steps = false;
+
+                function plotWithOptions() {
+                    $.plot($("#chart_5"), 
+
+                        [{
+                            label: "Общие платежи",
+                            data: d1,
+                            lines: {
+                                lineWidth: 1,
+                            },
+                            shadowSize: 0
+                        }, {
+                            label: "Простроченые платежи",
+                            data: d2,
+                            lines: {
+                                lineWidth: 1,
+                            },
+                            shadowSize: 0
+                        }/*, {
+                            label: "profit",
+                            data: d3,
+                            lines: {
+                                lineWidth: 1,
+                            },
+                            shadowSize: 0
+                        }*/]
+
+                        , {
+                            series: {
+                                /*pie: { 
+                                    show: true,
+                                    radius: 1,
+                                    label: {
+                                        show: true,
+                                        radius: 1,
+                                        formatter: function(label, series){
+                                            return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+                                        },
+                                        background: { opacity: 0.8 }
+                                    }
+                                },*/
+                                stack: stack,
+                                lines: {
+                                    show: lines,
+                                    fill: true,
+                                    steps: steps,
+                                    lineWidth: 0, // in pixels
+                                },
+                                bars: {
+                                    show: bars,
+                                    barWidth: 0.5,
+                                    lineWidth: 0, // in pixels
+                                    shadowSize: 0,
+                                    align: 'left'
+                                }
+                            },
+                            bars:{
+                                horizontal:true,
+                                barWidth:0.5,
+                                lineWidth: 0, // in pixels
+                                shadowSize: 0,
+                                align: 'left'
+                            },
+                            grid: {
+                                tickColor: "#eee",
+                                borderColor: "#eee",
+                                borderWidth: 1
+                            },
+                            colors: ["#808080", "#d84a38"]
+                        }                       
+                    );
+                }   
+
+              /*  $(".stackControls input").click(function (e) {
+                    e.preventDefault();
+                    stack = $(this).val() == "With stacking" ? true : null;
+                    plotWithOptions();
+                });
+                $(".graphControls input").click(function (e) {
+                    e.preventDefault();
+                    bars = $(this).val().indexOf("Bars") != -1;
+                    lines = $(this).val().indexOf("Lines") != -1;
+                    steps = $(this).val().indexOf("steps") != -1;
+                    plotWithOptions();
+                });*/
+
+                plotWithOptions();
+            }
+            chart5();
+    })
+</script>
+<div class="portlet box yellow">
+						<div class="portlet-title">
+							<div class="caption">
+								<i class="fa fa-gift"></i>Stack Chart Controls
+							</div>
+							<div class="tools">
+								<a href="javascript:;" class="collapse">
+								</a>
+								<a href="#portlet-config" data-toggle="modal" class="config">
+								</a>
+								<a href="javascript:;" class="reload">
+								</a>
+								<a href="javascript:;" class="remove">
+								</a>
+							</div>
+						</div>
+						<div class="portlet-body">
+							<div id="chart_5" style="height: 350px; padding: 0px; position: relative;"></div>
+							{#<div class="btn-toolbar">
+								<div class="btn-group stackControls">
+									<input type="button" class="btn blue" value="With stacking">
+									<input type="button" class="btn red" value="Without stacking">
+								</div>
+								<div class="space5">
+								</div>
+								<div class="btn-group graphControls">
+									<input type="button" class="btn" value="Bars">
+									<input type="button" class="btn" value="Lines">
+									<input type="button" class="btn" value="Lines with steps">
+								</div>
+							</div>#}
+						</div>
+					</div>
+                                                 {% for  item in entities %}
+         {{ item.id}} - {{ item.edrpou}} - {{ item.customerName }} - {{ item.paymentsSumma }} - {{ item.allSumma }}<br>
+    {% endfor %}

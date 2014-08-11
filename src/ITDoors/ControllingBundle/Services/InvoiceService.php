@@ -533,6 +533,38 @@ class InvoiceService
      * 
      * @return array
      */
+    public function getTabsInvoiceGrafics()
+    {
+        $translator = $this->container->get('translator');
+        $tabs = array();
+        $tabs['general'] = array(
+            'blockupdate' => 'ajax-tab-holder',
+            'tab' => 'general',
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_grafic_general'),
+            'text' => $translator->trans('General')
+        );
+        $tabs['withoutacts'] = array(
+            'blockupdate' => 'ajax-tab-holder',
+            'tab' => 'withoutacts',
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_grafic_withoutacts'),
+            'text' => $translator->trans('Without acts')
+        );
+        $tabs['individual'] = array(
+            'blockupdate' => 'ajax-tab-holder',
+            'tab' => 'individual',
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_grafic_individual'),
+            'text' => $translator->trans('Individual')
+        );
+
+        return $tabs;
+    }
+    /**
+     * Returns results for interval future invoice
+     *
+     * @var Container
+     * 
+     * @return array
+     */
     public function getTabsEmptyData()
     {
         $translator = $this->container->get('translator');

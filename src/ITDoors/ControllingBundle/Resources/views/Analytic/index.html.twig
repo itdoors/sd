@@ -42,8 +42,8 @@
             <div class="portlet-title">
                 <div class="actions">
                     <div class="btn-group">
-                        <a class="btn default yellow-stripe" href="{{ path('it_doors_controlling_invoice_export_exel')}}"{# data-toggle="dropdown"#}>
-                           {# <i class="fa fa-share"></i>
+                        <a class="btn default yellow-stripe" href="{{ path('it_doors_controlling_invoice_export_exel')}}">
+                            <i class="fa fa-share"></i>
                             <span class="hidden-480">{% trans %}Export to Excel{% endtrans %}</span>
                             <i class="fa fa-angle-down"></i>
                         </a>
@@ -53,13 +53,13 @@
         </div>
         {{ ajax_filter_render(filter, namespace, {
             'datatable_ajax': 'ITDoorsAjax.updateList'
-        }) }}
+        }) }}#}
         <div class="tabbable tabbable-custom boxless">
              {{ ajax_tab_render( tabs, tab, namespace) }}
-            <div class="tab-content ajax-tab-holder" id="datatable_ajax" data-url="{{ url('it_doors_controlling_invoice_show', { period: tab }) }}">
-                 {{ render(controller('ITDoorsControllingBundle:Invoice:show')) }}
+            <div class="tab-content ajax-tab-holder" id="datatable_ajax" data-url="{{ tabs[tab].url }}">
+                 {{ render(controller('ITDoorsControllingBundle:Analytic:grafic'~tab | title)) }}
             </div>
-        </div>#}
+        </div>
     </div>
 </div>
 {% endblock body %}

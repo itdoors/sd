@@ -493,4 +493,40 @@ class OrganizationRepository extends EntityRepository
 
         return $sql->getResult();
     }
+
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @return mixed[]
+     */
+    public function getForInvoice()
+    {
+         $res = $this->createQueryBuilder('o')
+            ->select('o.id')
+            ->addSelect('o.edrpou')
+            ->addSelect(
+                "(
+                SELECT SUM(paymens.summa)
+                FROM  ITDoorsControllingBundle:Invoice  i_paymens
+                LEFT JOIN  ITDoorsControllingBundle:InvoicePayments paymens
+                WHERE paymens.invoiceId = i_paymens.id
+                AND i_paymens.customerId = o.id
+                )as paymentsSumma"
+            )
+            ->addSelect(
+                '(
+                  SELECT SUM(i_s.sum)
+                  FROM  ITDoorsControllingBundle:Invoice  i_s
+                  WHERE i_s.customerId = o.id
+                 ) as allSumma'
+            )
+            ->addSelect('o.name as customerName')
+            ->where('o.id in (
+                    SELECT DISTINCT(i.customerId) 
+                    FROM  ITDoorsControllingBundle:Invoice i
+                    )')
+            ->getQuery()->getResult();
+
+        return $res;
+    }
 }

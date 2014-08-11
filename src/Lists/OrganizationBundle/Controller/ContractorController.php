@@ -148,7 +148,7 @@ class ContractorController extends SalesController
             $manager = new OrganizationUser();
             $manager->setOrganization($organization);
             $manager->setUser($user);
-            $manager->setLookup($lookupM);
+            $manager->setRole($lookupM);
             $em->persist($manager);
 
             $em->flush();

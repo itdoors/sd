@@ -527,12 +527,12 @@ class InvoiceRepository extends EntityRepository
         switch ($type) {
             case 'delay':
                 $res = $res->andWhere("i.delayDays is NULL or i.delayDays = 0")
-                    ->orderBy('i.dateEnd', 'DESC');
+                    ->orderBy('i.performerName', 'DESC');
                 break;
             case 'act':
                 $res = $res->andWhere("i.dogovorActOriginal = :boolen")
                    ->setParameter(':boolen', false, \PDO::PARAM_BOOL)
-                    ->orderBy('i.dateEnd', 'DESC');
+                    ->orderBy('i.performerName', 'DESC');
                 break;
         }
 
@@ -759,6 +759,44 @@ class InvoiceRepository extends EntityRepository
         }
 
         return $result;
+    }
+
+    /**
+     * Returns results for interval future invoice
+     *
+     * @param array  $filters
+     * 
+     * @return mixed[]
+     */
+    public function getForAnalytic($filters=array())
+    {
+         $res = $this->createQueryBuilder('i')
+            ->select('i.id')
+            ->addSelect('i.sum as allSumma')
+            ->addSelect('i.delayDate')
+            ->addSelect('customer.edrpou')
+            ->addSelect(
+                "("
+                . "SELECT SUM(paymens.summa)"
+                . " FROM  ITDoorsControllingBundle:InvoicePayments paymens"
+                . " WHERE paymens.invoiceId = i.id"
+                . " GROUP BY i.customerEdrpou"
+                . ")as paymentsSumma"
+            )
+//            ->addSelect(
+//                "("
+//                . "SELECT SUM(i.sum)"
+//                . " FROM  ITDoorsControllingBundle:Invoice is"
+//                . " WHERE is.id = i.id"
+//                . ") as paymentsSumma"
+//            )
+            ->addSelect('customer.name as customerName')
+            ->addSelect('customer.id as customerId')
+            ->leftJoin('i.customer', 'customer')
+            ->orderBy('customer.name, i.delayDate')
+            ->getQuery()->getResult();
+
+        return $res;
     }
 
     /**

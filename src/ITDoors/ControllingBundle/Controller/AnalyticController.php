@@ -41,72 +41,123 @@ class AnalyticController extends BaseFilterController
      */
     public function indexAction()
     {
-        $filterNamespace = $this->container->getParameter($this->getNamespace());
-
-        $filter = $this->filterFormName;
+        $filterNamespace = $this->container->getParameter($this->getNamespace()).'Grafic';
 
         $period = $this->getTab($filterNamespace);
         if (!$period) {
-            $period = 30;
+            $period = 'general';
             $this->setTab($filterNamespace, $period);
         }
 
         $service = $this->container->get($this->service);
 
-        $tabs = $service->getTabsInvoices();
+        $tabs = $service->getTabsInvoiceGrafics();
 
-        return $this->render('ITDoorsControllingBundle:Analitic:index.html.twig', array(
+        return $this->render('ITDoorsControllingBundle:Analytic:index.html.twig', array(
                 'tabs' => $tabs,
-                'filter' => $filter,
                 'tab' => $period,
                 'namespace' => $filterNamespace
         ));
     }
 
     /**
-     *  showAction
+     *  greficGeneralAction
      * 
      * @var Container
      * 
      * @return Response
      */
-    public function showAction()
+    public function graficGeneralAction()
     {
-        $filterNamespace = $this->container->getParameter($this->getNamespace());
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var OrganizationRepository $organization */
+        $organization = $em->getRepository('ListsOrganizationBundle:Organization');
+
+        $entities = $organization->getForInvoice();
+
+
+        return $this->render('ITDoorsControllingBundle:Analytic:graficGeneral.html.twig', array(
+//                'period' => $period,
+                'entities' => $entities,
+//                'namespasePagin' => $namespasePagin
+        ));
+    }
+    /**
+     *  greficGeneralAction
+     * 
+     * @var Container
+     * 
+     * @return Response
+     */
+    public function graficWithoutactsAction()
+    {
+//        $filterNamespace = $this->container->getParameter($this->getNamespace()).'Grafic';
+//
+//        $filters = $this->getFilters($filterNamespace);
+//        if (empty($filters)) {
+//            $filters['isFired'] = 'No fired';
+//            $this->setFilters($filterNamespace, $filters);
+//        }
+//
+//        $period = $this->getTab($filterNamespace);
+//
+//        /** @var EntityManager $em */
+//        $em = $this->getDoctrine()->getManager();
+//
+//        /** @var InvoiceRepository $invoice */
+//        $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
+//
+//        $result = $invoice->getEntittyCountSum($period, $filters);
+//        $entities = $result['entities'];
+//        $count = $result['count'];
+//
+//        $namespasePagin = $filterNamespace.'P'.$period;
+//        $page = $this->getPaginator($namespasePagin);
+//        if (!$page) {
+//            $page = 1;
+//        }
+//
+//        $paginator = $this->container->get($this->paginator);
+//        $entities->setHint($this->paginator . '.count', $count);
+//        $pagination = $paginator->paginate($entities, $page, 20);
+
+
+        return $this->render('ITDoorsControllingBundle:Analytic:graficGeneral.html.twig', array(
+//                'period' => $period,
+//                'entities' => $pagination,
+//                'namespasePagin' => $namespasePagin
+        ));
+    }
+    /**
+     *  greficGeneralAction
+     * 
+     * @var Container
+     * 
+     * @return Response
+     */
+    public function graficIndividualAction()
+    {
+        $filterNamespace = $this->container->getParameter($this->getNamespace()).'GraficIndividual';
 
         $filters = $this->getFilters($filterNamespace);
         if (empty($filters)) {
             $filters['isFired'] = 'No fired';
             $this->setFilters($filterNamespace, $filters);
         }
-
-        $period = $this->getTab($filterNamespace);
-
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
         /** @var InvoiceRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
 
-        $result = $invoice->getEntittyCountSum($period, $filters);
-        $entities = $result['entities'];
-        $count = $result['count'];
+        $result = $invoice->getForAnalytic($filters);
 
-        $namespasePagin = $filterNamespace.'P'.$period;
-        $page = $this->getPaginator($namespasePagin);
-        if (!$page) {
-            $page = 1;
-        }
-
-        $paginator = $this->container->get($this->paginator);
-        $entities->setHint($this->paginator . '.count', $count);
-        $pagination = $paginator->paginate($entities, $page, 20);
-
-
-        return $this->render('ITDoorsControllingBundle:Invoice:show.html.twig', array(
-                'period' => $period,
-                'entities' => $pagination,
-                'namespasePagin' => $namespasePagin
+        return $this->render('ITDoorsControllingBundle:Analytic:graficIndividual.html.twig', array(
+//                'period' => $period,
+                'entities' => $result,
+//                'namespasePagin' => $namespasePagin
         ));
     }
 
