@@ -861,3 +861,6 @@ UPDATE "public".email SET "text" = '<table> <tbody><tr>  <td align="center" vali
 ALTER TABLE invoice_payments ADD bank TEXT DEFAULT NULL;
 -- staging ----------------------
 -- prod ++++++++++++++++++++++++
+ALTER TABLE task ADD COLUMN handling_message_id bigint;
+-- staging ----------------------
+-- prod ++++++++++++++++++++++++
