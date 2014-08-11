@@ -314,4 +314,33 @@ class Task
     {
         return $this->performer;
     }
+    /**
+     * @var \Lists\HandlingBundle\Entity\HandlingMessage
+     */
+    private $handlingMessage;
+
+
+    /**
+     * Set handlingMessage
+     *
+     * @param \Lists\HandlingBundle\Entity\HandlingMessage $handlingMessage
+     *
+     * @return Task
+     */
+    public function setHandlingMessage(\Lists\HandlingBundle\Entity\HandlingMessage $handlingMessage = null)
+    {
+        $this->handlingMessage = $handlingMessage;
+
+        return $this;
+    }
+
+    /**
+     * Get handlingMessage
+     *
+     * @return \Lists\HandlingBundle\Entity\HandlingMessage 
+     */
+    public function getHandlingMessage()
+    {
+        return $this->handlingMessage;
+    }
 }

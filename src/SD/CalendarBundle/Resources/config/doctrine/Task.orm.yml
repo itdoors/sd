@@ -58,3 +58,12 @@ SD\CalendarBundle\Entity\Task:
                 performer_id:
                     referencedColumnName: id
             orphanRemoval: false
+        handlingMessage:
+            targetEntity: Lists\HandlingBundle\Entity\HandlingMessage
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                handling_message_id:
+                    referencedColumnName: id
+            orphanRemoval: false
