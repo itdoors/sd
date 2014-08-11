@@ -5,6 +5,7 @@ parameters:
     itdoors_controlling.message.form.class: ITDoors\ControllingBundle\Form\InvoiceMessageFormType
     itdoors_controlling.company.form.class: ITDoors\ControllingBundle\Form\InvoiceCompanystructureFormType
     some.extension: ITDoors\ControllingBundle\Twig\Extension\VarsExtension
+    itdoors_controlling.invoice.filter.form.class: ITDoors\ControllingBundle\Form\InvoiceFilterFormType
 
 services:
     it_doors_controlling.repository:
@@ -33,4 +34,10 @@ services:
         class: %itdoors_controlling.company.form.class%
         arguments: [@service_container]
         tags:
-            - { name: form.type, alias: invoiceCompanystructureForm }
+            - { name: form.type, alias: invoiceCompanystructureForm }        
+
+    itdoors_controlling.form.invoiceFilterForm:
+        class: %itdoors_controlling.invoice.filter.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: invoiceFilterForm }

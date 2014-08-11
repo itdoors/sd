@@ -7,7 +7,6 @@ use Doctrine\ORM\EntityManager;
 use ITDoors\ControllingBundle\Entity\Invoicecron;
 use ITDoors\ControllingBundle\Entity\InvoicecronRepository;
 use ITDoors\ControllingBundle\Entity\Invoice;
-use Symfony\Component\BrowserKit\Response;
 use ITDoors\ControllingBundle\Entity\InvoicePayments;
 use ITDoors\ControllingBundle\Entity\InvoiceMessage;
 
@@ -148,6 +147,8 @@ class InvoiceService
                 }
                 $summa = 0;
                 $dateFact = null;
+                $sendEmailPay = false;
+                $date = date('Y-m-d');
                 foreach ($invoice->dateFact as $pay) {
                     $dateFact = new \DateTime(trim($pay->date));
                     $payments = new InvoicePayments();
@@ -156,9 +157,14 @@ class InvoiceService
                     $payments->setSumma(trim($pay->summa));
                     $em->persist($payments);
                     $summa += trim($pay->summa);
-                }
 
-                if (!$invoiceNew->getDateFact()) {
+                    $days = (strtotime($date)-strtotime($pay->date))/24/3600;
+
+                    if (in_array($days, array(1))) {
+                       $sendEmailPay = true;
+                    }
+                }
+                if ($sendEmailPay) {
                     $this->messageTemplate = 'invoice-pay';
                 }
 
@@ -166,10 +172,10 @@ class InvoiceService
                     $invoiceNew->setDateFact($dateFact);
                 }
             } else {
-                $invoiceNew->setDateFact(null);
                 $date = date('Y-m-d');
+                $invoiceNew->setDateFact(null);
                 $days = (strtotime($date)-strtotime($invoiceNew->getDelayDate()->format('Y-m-d')))/24/3600;
-                if (in_array($days, array(0))) {
+                if (in_array($days, array(1))) {
                     $this->messageTemplate = 'invoice-not-pay';
                 }
                 $paymentsOld = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')->findBy(array('invoiceId' => $invoiceNew->getId()));
@@ -200,6 +206,9 @@ class InvoiceService
         }
         if (!empty($invoice->dogovorDate) && $invoice->dogovorDate != 'null') {
             $invoiceNew->setDogovorDate(new \DateTime(trim($invoice->dogovorDate)));
+        }
+        if (!empty($invoice->dogovorActDate) && $invoice->dogovorActDate != 'null') {
+            $invoiceNew->setDogovorActDate(new \DateTime(trim($invoice->dogovorActDate)));
         }
         if (!empty($invoice->date) && $invoice->date != 'null') {
             $invoiceNew->setDate(new \DateTime(trim($invoice->date)));
@@ -515,6 +524,32 @@ class InvoiceService
 
         return $tabs;
     }
+    /**
+     * Returns results for interval future invoice
+     *
+     * @var Container
+     * 
+     * @return array
+     */
+    public function getTabsEmptyData()
+    {
+        $translator = $this->container->get('translator');
+        $tabs = array();
+        $tabs['delay'] = array(
+            'blockupdate' => 'ajax-tab-holder-1',
+            'tab' => 'delay',
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_data_show'),
+            'text' => $translator->trans('Delay')
+        );
+        $tabs['act'] = array(
+            'blockupdate' => 'ajax-tab-holder-1',
+            'tab' => 'act',
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_data_show'),
+            'text' => $translator->trans('Existence act')
+        );
+
+        return $tabs;
+    }
 
     /**
      * Returns results for interval future invoice
@@ -593,6 +628,14 @@ class InvoiceService
             'text' => $translator->trans('pay')
             .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
+        $summa = $invoice->getInvoiceFlowSum();
+        $tabs[] = array(
+            'blockupdate' => 'ajax-tab-holder',
+            'tab' => 'flow',
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_show'),
+            'text' => $translator->trans('Flow')
+            .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
+        );
 
         return $tabs;
     }
@@ -627,23 +670,16 @@ class InvoiceService
                         $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')
                             ->getInvoiceIds($invoiceIds);
 
-                        $table = '<table style="width:100%;text-align:center"><tr>'
-                                . '<td>'.$translator->trans('№', array(), 'ITDoorsControllingBundle').'</td>'
-                                . '<td>'.$translator->trans('Date', array(), 'ITDoorsControllingBundle').'</td>'
-                                . '<td>'.$translator->trans('Invoice amount', array(), 'ITDoorsControllingBundle').'</td>'
-                                . '</tr>';
-                        $dogovors = array();
-                        foreach ($invoices as $invoice) {
-                            $table .= '<tr>'
-                                    . '<td>'.$invoice['invoiceId'].'</td>'
-                                    . '<td>'.$invoice['date']->format('d.m.Y').'</td>'
-                                    . '<td>'.$invoice['sum']-$invoice['paymentsSumma'].'</td>'
-                                    . '</tr>';
-                        }
-                        $table .= '</table>';
+                        $tableHTML =  $this->container->get('templating')->render("ITDoorsControllingBundle:Invoice:tableForEmail.html.twig", array(
+                        'invoices' => $invoices,
+                        'template' => $template
+                    ));
 
                         foreach ($contacts as $user) {
-                            echo "send email for ".$user['email']."\n";
+                            if (empty($user['email'])) {
+                                continue;
+                            }
+                            echo "send email for ".$user['email']."\n\n";
                             $idEmail = $email->send(
                                 array($emailTo => $nameTo),
                                 $template,
@@ -655,10 +691,10 @@ class InvoiceService
                                         '${lastName}$' => $user['lastName'],
                                         '${firstName}$' => $user['firstName'],
                                         '${middleName}$' => $user['middleName'],
-                                        '${number}$' => $invoice['dogovorNumber'],
-                                        '${date}$' => (!$invoice['dogovorDate'] ? '' : $invoice['dogovorDate']->format('d.m.Y')),
-                                        '${performer}$' => $invoice['performerName'],
-                                        '${table}$' => $table
+                                        '${number}$' => $invoices[0]['dogovorNumber'],
+                                        '${date}$' => (!$invoices[0]['dogovorDate'] ? '' : $invoices[0]['dogovorDate']->format('d.m.Y')),
+                                        '${performer}$' => $invoices[0]['performerName'],
+                                        '${table}$' => $tableHTML
                                     )
                                 )
                             );

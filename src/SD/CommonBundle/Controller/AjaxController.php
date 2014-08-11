@@ -209,6 +209,60 @@ class AjaxController extends BaseFilterController
     }
 
     /**
+     * Returns json organization list for contacts query
+     *
+     * @return string
+     */
+    public function invoiceInvoiceIdAction()
+    {
+        $searchTextQ = $this->get('request')->query->get('q');
+        $searchTextQuery = $this->get('request')->query->get('query');
+
+        $searchText = $searchTextQ ? $searchTextQ : $searchTextQuery;
+
+        /** @var \ITDoors\ControllingBundle\Entity\InvoiceRepository $invoiceRepository */
+        $invoiceRepository = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice');
+
+        $invoices = $invoiceRepository->getSearchInvoiceIdQuery($searchText);
+
+        $result = array();
+
+        foreach ($invoices as $invoice) {
+            $result[] = $this->serializeArray($invoice, 'id', 'invoiceId');
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * Returns json organization list for contacts query
+     *
+     * @return string
+     */
+    public function invoiceDogovorActNameAction()
+    {
+        $searchTextQ = $this->get('request')->query->get('q');
+        $searchTextQuery = $this->get('request')->query->get('query');
+
+        $searchText = $searchTextQ ? $searchTextQ : $searchTextQuery;
+
+        /** @var \ITDoors\ControllingBundle\Entity\InvoiceRepository $invoiceRepository */
+        $invoiceRepository = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice');
+
+        $invoices = $invoiceRepository->getSearchDogovorActNameQuery($searchText);
+
+        $result = array();
+
+        foreach ($invoices as $invoice) {
+            $result[] = $this->serializeArray($invoice, 'dogovorActName', 'dogovorActName');
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
      * Returns json organization list for wizard
      *
      * @return string
@@ -1262,6 +1316,65 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($result));
     }
+
+    /**
+     * Returns json organization object by requested id
+     *
+     * @return string
+     */
+    public function invoiceByIdSAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        /** @var \ITDoors\ControllingBundle\Entity\InvoiceRepository $invoiceRepository */
+        $invoiceRepository = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice');
+
+        /** @var Invoice[] $invoices */
+        $invoices = $invoiceRepository
+            ->createQueryBuilder('i')
+            ->where("i.id in (:ids)")
+            ->setParameter(':ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($invoices as $invoice) {
+            $result[] = $this->serializeObject($invoice);
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json organization object by requested id
+     *
+     * @return string
+     */
+    public function invoiceByDogovorActNamesAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        /** @var \ITDoors\ControllingBundle\Entity\InvoiceRepository $invoiceRepository */
+        $invoiceRepository = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:Invoice');
+
+        /** @var Invoice[] $invoices */
+        $invoices = $invoiceRepository
+            ->createQueryBuilder('i')
+            ->where('i.dogovorActName in (:ids)')
+            ->setParameter(':ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($invoices as $invoice) {
+            $result[] = $this->serializeObject($invoice, 'getDogovorActName', 'getDogovorActName');
+        }
+
+        return new Response(json_encode($result));
+    }
     /**
      * Returns json organization object by requested id
      *
@@ -1795,6 +1908,27 @@ class AjaxController extends BaseFilterController
         $em->persist($data);
         $em->flush();
         $em->refresh($data);
+
+        if (isset($formData['usersFromOurSide']) || isset($formData['contactMany'])) {
+            //specially for kiwa
+            $user = $data->getUser();
+            $performer = $this->getDoctrine()
+                ->getRepository('SDUserBundle:User')
+                ->find(362);
+
+            $task = new \SD\CalendarBundle\Entity\Task();
+            $task->setCreateDateTime(new \DateTime());
+            $task->setStartDateTime($data->getCreatedate());
+            $task->setStopDateTime($data->getCreatedate());
+            $task->setTitle($data->getType()->getName().': '.$user->getFullname());
+            $task->setUser($user);
+            $task->setPerformer($performer);
+            $task->setHandlingMessage($data);
+            $task->setIsDone(false);
+            $task->setTaskType('personal');
+            $em->persist($task);
+            $em->flush();
+        }
 
         if (isset($formData['usersFromOurSide'])) {
             //$usersFromOurSide = explode(',', $formData['usersFromOurSide']);
@@ -2460,7 +2594,7 @@ class AjaxController extends BaseFilterController
         /** @var Lookup $lookup */
         $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager_organization'));
 
-        if ((!$organizationUser->getLookup() || $organizationUser->getLookup()->getId() != $lookup->getId()) && $this->getUser()->hasRole('ROLE_SALESADMIN')) {
+        if ((!$organizationUser->getRole() || $organizationUser->getRole()->getId() != $lookup->getId()) && $this->getUser()->hasRole('ROLE_SALESADMIN')) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($organizationUser);
             $em->flush();
@@ -3324,8 +3458,6 @@ class AjaxController extends BaseFilterController
                             ->innerJoin('u.stuff', 's')
                             ->where('h.id = :handlingId')
                             ->setParameter(':handlingId', $handlingId);
-
-
                 }
             ));
 
@@ -3473,6 +3605,7 @@ class AjaxController extends BaseFilterController
                 return $repository->createQueryBuilder('c')
                     ->leftJoin('c.invoicecompanystructure', 'idc')
                     ->where('(idc.invoiceId is NULL OR idc.invoiceId <> :invoiceId)')
+                    ->orderBy('c.name')
                     ->setParameter(':invoiceId', $invoiceId);
                 }
             ));

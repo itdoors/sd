@@ -103,7 +103,12 @@ class EmailService
                 $this->addFiles($message, $to['files']);
             }
             $mailer->send($message);
-            $result[$email] = true;
+            $mailer = $em->getRepository('TSSAutomailerBundle:Automailer')
+                    ->createQueryBuilder('a')
+                    ->orderBy('a.id', 'DESC')
+                    ->getQuery()
+                    ->getResult();
+            $result = $mailer[0]->getId();
         }
 
         return $result;

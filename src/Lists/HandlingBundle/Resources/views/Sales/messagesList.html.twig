@@ -1,6 +1,7 @@
     {% trans_default_domain 'ListsHandlingBundle' %}
 	{% for item in messages %}
-    <div class="portlet box {% if item.isFutureMessage %}red{% else %}yellow{% endif %}">
+    <div class="portlet box {% if item.isFutureMessage %}red{% else %}yellow{% endif %}"
+         id="handling_message_{{ item.id }}">
         <div class="portlet-title">
             <div class="caption">
                 {{ item.createdate|date('d.m.Y, H:i') }} ({{  item.createdatetime|date('d.m.Y, H:i')}}) | {{ item.type }} | {{ item.contact }} | {{ item.user }}
@@ -10,7 +11,7 @@
             </div>
             <div class="tools"><a class="collapse" href="" title="{% trans %}Roll Up{% endtrans %}"></a></div>
         </div>
-        <div class="portlet-body">
+        <div class="portlet-body" >
             {{ item.description }} <br /><br>
             {% if usersFromOurSide['message'~item.id] is not empty%}
                 {% trans %}Persons from our side{% endtrans %}: <br>

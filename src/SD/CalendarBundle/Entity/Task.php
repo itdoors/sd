@@ -295,12 +295,13 @@ class Task
      * Set performer
      *
      * @param \SD\UserBundle\Entity\User $performer
+     * 
      * @return Task
      */
     public function setPerformer(\SD\UserBundle\Entity\User $performer = null)
     {
         $this->performer = $performer;
-    
+
         return $this;
     }
 
@@ -312,5 +313,34 @@ class Task
     public function getPerformer()
     {
         return $this->performer;
+    }
+    /**
+     * @var \Lists\HandlingBundle\Entity\HandlingMessage
+     */
+    private $handlingMessage;
+
+
+    /**
+     * Set handlingMessage
+     *
+     * @param \Lists\HandlingBundle\Entity\HandlingMessage $handlingMessage
+     *
+     * @return Task
+     */
+    public function setHandlingMessage(\Lists\HandlingBundle\Entity\HandlingMessage $handlingMessage = null)
+    {
+        $this->handlingMessage = $handlingMessage;
+
+        return $this;
+    }
+
+    /**
+     * Get handlingMessage
+     *
+     * @return \Lists\HandlingBundle\Entity\HandlingMessage 
+     */
+    public function getHandlingMessage()
+    {
+        return $this->handlingMessage;
     }
 }

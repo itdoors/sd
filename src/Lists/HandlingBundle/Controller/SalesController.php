@@ -69,7 +69,7 @@ class SalesController extends BaseController
             ->getRepository('ListsOrganizationBundle:OrganizationUser')
             ->findOneBy(array(
                 'organizationId' => $canAddNew,
-                'lookupId' => $lookup->getId(),
+                'roleId' => $lookup->getId(),
                 'userId' => $this->getUser()->getId(),
                 ));
             $canAddNew = $managerOrganization ? true : false ;
@@ -394,7 +394,7 @@ class SalesController extends BaseController
                     ->getRepository('ListsOrganizationBundle:OrganizationUser')
                     ->findOneBy(array(
                         'organizationId' => $organization['organizationId'],
-                        'lookupId' => $lookup->getId(),
+                        'roleId' => $lookup->getId(),
                         )
                     )
                     :
