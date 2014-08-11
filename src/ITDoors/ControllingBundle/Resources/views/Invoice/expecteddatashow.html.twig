@@ -117,7 +117,7 @@
                            data-post_function="updateList"
                            data-post_target_id="datatable_ajax_2"
                            ></a>
-                        {{ entity.descriptiondate is empty ? '' : '('~entity.descriptiondate |date("d.m.y")~')'}} {{ entity.description }}
+                        {{ entity.descriptiondate is empty ? '' : '('~entity.descriptiondate |date("d.m.y")~')'}} {{ entity.description  | raw('html')}}
                     </td>
                     <td class="">
                         <a href="#" 
