@@ -37,12 +37,24 @@ class TaskForm extends AbstractType
     {
         $container = $this->container;
 
+        $userId =
         $builder
             ->add('title')
             ->add('description')
             ->add('performer', 'entity', array(
                 'class' => 'SD\UserBundle\Entity\User',
-                'empty_value' => ''
+                'empty_value' => '',
+                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
+                        return $repository->createQueryBuilder('mc')
+                            ->leftJoin('mc.owner', 'owner')
+                            ->where('mc.modelName = :modelName')
+                            ->andWhere('mc.modelId = :modelId')
+                            ->andWhere('owner.id in (:ownerIds)')
+                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                            ->setParameter(':modelId', $organizationId)
+                            ->setParameter(':ownerIds', $userIds);
+                    }
+
             ))
             ->add('startDateTime', 'datetime', array(
                 'widget' => 'single_text',
