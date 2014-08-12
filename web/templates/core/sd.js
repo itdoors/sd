@@ -42,6 +42,7 @@ var SD = (function() {
 
         var target;
 
+        $('.' + selfSD.params.ajaxFormClass).die('click');
         $('.' + selfSD.params.ajaxFormClass).live('click', function(e){
             e.preventDefault();
 
