@@ -715,12 +715,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "ef7ca325929ff102fff521653a2e3b88c7a40361"
+                "reference": "27a84cec3ea4daa32cd6fe308c0847ca9644f588"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/ef7ca325929ff102fff521653a2e3b88c7a40361",
-                "reference": "ef7ca325929ff102fff521653a2e3b88c7a40361",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/27a84cec3ea4daa32cd6fe308c0847ca9644f588",
+                "reference": "27a84cec3ea4daa32cd6fe308c0847ca9644f588",
                 "shasum": ""
             },
             "require": {
@@ -761,13 +761,12 @@
                     "email": "stof@notk.org"
                 },
                 {
-                    "name": "Thibault Duplessis",
-                    "email": "thibault.duplessis@gmail.com",
-                    "homepage": "http://ornicar.github.com"
-                },
-                {
                     "name": "FriendsOfSymfony Community",
                     "homepage": "https://github.com/friendsofsymfony/FOSUserBundle/contributors"
+                },
+                {
+                    "name": "Thibault Duplessis",
+                    "email": "thibault.duplessis@gmail.com"
                 }
             ],
             "description": "Symfony FOSUserBundle",
@@ -775,7 +774,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2014-07-09 10:33:42"
+            "time": "2014-08-04 23:04:17"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -1603,20 +1602,22 @@
         },
         {
             "name": "symfony/icu",
-            "version": "v1.0.1",
+            "version": "v1.2.2",
             "target-dir": "Symfony/Component/Icu",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Icu.git",
-                "reference": "fdba214b1e087c149843bde976263c53ac10c975"
+                "reference": "d4d85d6055b87f394d941b45ddd3a9173e1e3d2a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Icu/zipball/fdba214b1e087c149843bde976263c53ac10c975",
-                "reference": "fdba214b1e087c149843bde976263c53ac10c975",
+                "url": "https://api.github.com/repos/symfony/Icu/zipball/d4d85d6055b87f394d941b45ddd3a9173e1e3d2a",
+                "reference": "d4d85d6055b87f394d941b45ddd3a9173e1e3d2a",
                 "shasum": ""
             },
             "require": {
+                "ext-intl": "*",
+                "lib-icu": ">=4.4",
                 "php": ">=5.3.3",
                 "symfony/intl": "~2.3"
             },
@@ -1646,7 +1647,7 @@
                 "icu",
                 "intl"
             ],
-            "time": "2013-10-04 09:12:07"
+            "time": "2014-07-25 09:58:17"
         },
         {
             "name": "symfony/monolog-bundle",

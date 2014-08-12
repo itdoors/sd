@@ -1,0 +1,16 @@
+<table class="table table-striped table-hover table-bordered" id="graffic_table" cellpadding="0" cellspacing="0">
+    <thead>
+        <th>
+            id
+        </th>
+    </thead>
+    <tbody>
+        {% for taskUserRole in tasksUserRole %}
+        <tr>
+            <td>
+                {{ taskUserRole.task.title }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

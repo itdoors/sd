@@ -1,0 +1,28 @@
+SD\TaskBundle\Entity\TaskEndDate:
+    type:  entity
+    table: task_end_date
+    repositoryClass: SD\TaskBundle\Entity\TaskEndDateRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+    fields:
+        changeDateTime:
+            type: datetime
+            nullable: false
+            column: createdatetime
+        endDateTime:
+            type: datetime
+            nullable: false
+            column: startdatetime
+    manyToOne:
+        task:
+            targetEntity: SD\TaskBundle\Entity\Task
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                task_id:
+                    referencedColumnName: id
+            orphanRemoval: false

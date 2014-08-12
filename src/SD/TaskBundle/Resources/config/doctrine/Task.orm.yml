@@ -1,33 +1,21 @@
-SD\CalendarBundle\Entity\Task:
+SD\TaskBundle\Entity\Task:
     type:  entity
     table: task
-    repositoryClass: SD\CalendarBundle\Entity\TaskRepository
+    repositoryClass: SD\TaskBundle\Entity\TaskRepository
     id:
         id:
             type: integer
             generator:
                 strategy: IDENTITY
     fields:
-        userId:
-            type: integer
-            column: user_id
         createDateTime:
             type: datetime
             nullable: true
             column: createdatetime
-        taskType:
-            type: string
-            length: 128
-            nullable: true
-            column: task_type
         startDateTime:
             type: datetime
             nullable: true
             column: startdatetime
-        stopDateTime:
-            type: datetime
-            nullable: true
-            column: stopdatetime
         title:
             type: string
             nullable: false
@@ -35,12 +23,8 @@ SD\CalendarBundle\Entity\Task:
         description:
             type: text
             nullable: true
-        isDone:
-            type: boolean
-            nullable: true
-            column: is_done
     manyToOne:
-        user:
+        author:
             targetEntity: SD\UserBundle\Entity\User
             cascade: {  }
             mappedBy: null
@@ -49,12 +33,21 @@ SD\CalendarBundle\Entity\Task:
                 user_id:
                     referencedColumnName: id
             orphanRemoval: false
-        performer:
-            targetEntity: SD\UserBundle\Entity\User
+        stage:
+            targetEntity: SD\TaskBundle\Entity\Stage
             cascade: {  }
             mappedBy: null
             inversedBy: null
             joinColumns:
-                performer_id:
+                stage_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        type:
+            targetEntity: SD\TaskBundle\Entity\TaskType
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                task_type_id:
                     referencedColumnName: id
             orphanRemoval: false

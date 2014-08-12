@@ -10,4 +10,25 @@ class TaskController extends Controller
     {
         return $this->render('SDTaskBundle:Task:index.html.twig');
     }
+
+
+
+    public function taskTableAction() {
+        $user = $this->getUser();
+
+        $tasksUserRole = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:TaskUserRole')
+            ->findBy(
+                array(
+                    'user' => $user
+                )
+            );
+
+        return $this->render('SDTaskBundle:Task:tableTasks.html.twig',
+            array(
+              'tasksUserRole' => $tasksUserRole
+            )
+        );
+
+    }
 }

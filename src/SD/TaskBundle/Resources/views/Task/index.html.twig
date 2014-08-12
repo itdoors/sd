@@ -47,12 +47,10 @@
                     <li ><a id="schedule_block" href="#tab_3" data-block="tab_content" data-url="{#{{ url('it_doors_oper_coworker_schedule_index') }}#}" data-toggle="tab">{% trans %}Documents{% endtrans %}</a></li>
                 </ul>
                 <div class="tab-content" id="tab_content">
-                    <div id="coworker_list" data-url="{#{{ path('it_doors_oper_coworker_table')}}#}">
-{#
-                        {{ render(controller('ITDoorsOperBundle:OperCoworkerInfo:coworkerTable', {
+                    <div id="tasks_list" data-url="{#{{ path('it_doors_oper_coworker_table')}}#}">
 
-                        })) }}
-#}
+                        {{ render(controller('SDTaskBundle:Task:taskTable')) }}
+
                     </div>
                 </div>
             </div>
