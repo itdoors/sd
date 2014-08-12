@@ -82,7 +82,7 @@ class SDAccess
             ->createQueryBuilder('o')
             ->leftJoin('o.organizationUsers', 'oUsers')
             ->leftJoin('oUsers.user', 'users')
-            ->leftJoin('oUsers.lookup', 'lookup')
+            ->leftJoin('oUsers.role', 'lookup')
             ->where('o.id  = :organizationId')
             ->andWhere('lookup.lukey = :lukey')
             ->andWhere('lookup.id is not NULL')

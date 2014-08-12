@@ -109,7 +109,7 @@ class SalesController extends BaseController
             $manager = new OrganizationUser();
             $manager->setOrganization($organization);
             $manager->setUser($user);
-            $manager->setLookup($lookup);
+            $manager->setRole($lookup);
             $em->persist($manager);
             $em->flush();
 
