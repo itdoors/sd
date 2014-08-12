@@ -97,10 +97,11 @@ class PrivateController extends SalesController
         $id = $request->request->get('id');
         $em = $this->getDoctrine()->getManager();
         $task = $em->getRepository('SDCalendarBundle:Task')->find($id);
-
+        $userId = $this->getUser()->getId();
         $return = array();
         $return['html'] = $this->renderView('SDCalendarBundle:Task:taskModal.html.twig', array(
-            'task' => $task
+            'task' => $task,
+            'userId' => $userId
         ));
 
         return new Response(json_encode($return));
