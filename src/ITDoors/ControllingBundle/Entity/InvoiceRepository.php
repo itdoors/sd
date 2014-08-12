@@ -794,6 +794,7 @@ class InvoiceRepository extends EntityRepository
             ->addSelect('customer.id as customerId')
             ->leftJoin('i.customer', 'customer')
             ->orderBy('customer.name, i.delayDate')
+                 ->setMaxResults(50)
             ->getQuery()->getResult();
 
         return $res;
