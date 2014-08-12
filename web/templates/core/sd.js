@@ -42,6 +42,7 @@ var SD = (function() {
 
         var target;
 
+        $('.' + selfSD.params.ajaxFormClass).die('click');
         $('.' + selfSD.params.ajaxFormClass).live('click', function(e){
             e.preventDefault();
 
@@ -117,6 +118,7 @@ var SD = (function() {
             })
         })
 
+        $('.' + selfSD.params.ajaxFormEntityClass).die('submit');
         $('.' + selfSD.params.ajaxFormEntityClass).live('submit', function(e){
 
             e.preventDefault();
@@ -272,6 +274,7 @@ var SD = (function() {
     {
         var selfSD = this;
 
+        $('.' + this.params.ajaxDeleteClass).die('click');
         $('.' + this.params.ajaxDeleteClass).live('click', function(e) {
             e.preventDefault();
 

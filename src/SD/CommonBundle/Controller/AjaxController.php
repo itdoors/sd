@@ -1909,6 +1909,27 @@ class AjaxController extends BaseFilterController
         $em->flush();
         $em->refresh($data);
 
+        if (isset($formData['usersFromOurSide']) || isset($formData['contactMany'])) {
+            //specially for kiwa
+            $user = $data->getUser();
+            $performer = $this->getDoctrine()
+                ->getRepository('SDUserBundle:User')
+                ->find(362);
+
+            $task = new \SD\CalendarBundle\Entity\Task();
+            $task->setCreateDateTime(new \DateTime());
+            $task->setStartDateTime($data->getCreatedate());
+            $task->setStopDateTime($data->getCreatedate());
+            $task->setTitle($data->getType()->getName().': '.$user->getFullname());
+            $task->setUser($user);
+            $task->setPerformer($performer);
+            $task->setHandlingMessage($data);
+            $task->setIsDone(false);
+            $task->setTaskType('personal');
+            $em->persist($task);
+            $em->flush();
+        }
+
         if (isset($formData['usersFromOurSide'])) {
             //$usersFromOurSide = explode(',', $formData['usersFromOurSide']);
             $usersFromOurSide = $formData['usersFromOurSide'];
@@ -3574,7 +3595,7 @@ class AjaxController extends BaseFilterController
         $repository = $this->getDoctrine()->getRepository('ListsCompanystructureBundle:Companystructure');
 
         $form
-            ->add('companystructure', 'entity', array(
+            ->add('companystructure', 'companystructure_tree', array(
                 'class' => 'ListsCompanystructureBundle:Companystructure',
                 'empty_value' => '',
                 'required' => false,

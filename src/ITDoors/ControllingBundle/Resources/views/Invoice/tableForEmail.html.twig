@@ -1,16 +1,16 @@
 {% trans_default_domain 'ITDoorsControllingBundle' %}
-<table style="width:100%;text-align:center">
+<table style="width:100%;text-align:center;border-collapse: collapse;border: 1px double #eee">
     <tbody>
         <tr>
-            <td>№</td>
-            <td>{% trans %}Date{% endtrans %}</td>
-            <td>{% trans %}Invoice amount{% endtrans %}</td>
+            <td style="border: 1px double #eee">{% trans %}№ invoice{% endtrans %}</td>
+            <td style="border: 1px double #eee">{% trans %}Date invoice{% endtrans %}</td>
+            <td style="border: 1px double #eee">{% trans %}Invoice amount{% endtrans %}</td>
         </tr>
         {% for invoice in invoices %}
         <tr>
-            <td>{{ invoice.invoiceId }}</td>
-            <td>{{invoice.date |date('d.m.Y') }}</td>
-            <td>{{ template == 'invoice-not-pay' ? (invoice.sum - invoice.paymentsSumma)| number_format(2, ',', ' ') : invoice.paymentsSumma| number_format(2, ',', ' ')}}</td>
+            <td style="border: 1px double #eee">{{ invoice.invoiceId }}</td>
+            <td style="border: 1px double #eee">{{invoice.date |date('d.m.Y') }}</td>
+            <td style="border: 1px double #eee">{{ template == 'invoice-not-pay' ? (invoice.sum - invoice.paymentsSumma)| number_format(2, ',', ' ') : invoice.paymentsSumma| number_format(2, ',', ' ')}}</td>
         </tr>
         {% endfor %}
     </tbody>

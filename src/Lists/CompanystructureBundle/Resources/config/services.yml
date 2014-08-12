@@ -2,6 +2,11 @@ parameters:
 #    lists_companystructure.example.class: Lists\CompanystructureBundle\Example
 
 services:
+    lists_companystructure.form.type.companystructure_tree:
+        class: Lists\CompanystructureBundle\Form\Tree\CompanystructureTreeType
+        arguments: [ @doctrine ]
+        tags:
+            - { name: form.type, alias: companystructure_tree }
 #    lists_companystructure.example:
 #        class: %lists_companystructure.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
