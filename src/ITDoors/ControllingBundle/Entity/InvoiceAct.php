@@ -22,7 +22,7 @@ class InvoiceAct
     /**
      * @var string
      */
-    private $name;
+    private $number;
 
     /**
      * @var \DateTime
@@ -35,11 +35,23 @@ class InvoiceAct
     private $original;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $detals;
+
+    /**
      * @var \ITDoors\ControllingBundle\Entity\Invoice
      */
     private $invoice;
 
-
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->detals = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -74,26 +86,26 @@ class InvoiceAct
     }
 
     /**
-     * Set name
+     * Set number
      *
-     * @param string $name
+     * @param string $number
      * @return InvoiceAct
      */
-    public function setName($name)
+    public function setNumber($number)
     {
-        $this->name = $name;
+        $this->number = $number;
     
         return $this;
     }
 
     /**
-     * Get name
+     * Get number
      *
      * @return string 
      */
-    public function getName()
+    public function getNumber()
     {
-        return $this->name;
+        return $this->number;
     }
 
     /**
@@ -140,6 +152,39 @@ class InvoiceAct
     public function getOriginal()
     {
         return $this->original;
+    }
+
+    /**
+     * Add detals
+     *
+     * @param \ITDoors\ControllingBundle\Entity\InvoiceActDetal $detals
+     * @return InvoiceAct
+     */
+    public function addDetal(\ITDoors\ControllingBundle\Entity\InvoiceActDetal $detals)
+    {
+        $this->detals[] = $detals;
+    
+        return $this;
+    }
+
+    /**
+     * Remove detals
+     *
+     * @param \ITDoors\ControllingBundle\Entity\InvoiceActDetal $detals
+     */
+    public function removeDetal(\ITDoors\ControllingBundle\Entity\InvoiceActDetal $detals)
+    {
+        $this->detals->removeElement($detals);
+    }
+
+    /**
+     * Get detals
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDetals()
+    {
+        return $this->detals;
     }
 
     /**

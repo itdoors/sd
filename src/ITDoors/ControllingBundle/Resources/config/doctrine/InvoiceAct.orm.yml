@@ -1,4 +1,4 @@
-# src/ITDoors/ControllingBundle/Resources/config/doctrine/InvoicePayments.orm.yml
+# src/ITDoors/ControllingBundle/Resources/config/doctrine/InvoiceAct.orm.yml
 ITDoors\ControllingBundle\Entity\InvoiceAct:
     type: entity
     table: invoice_act
@@ -11,11 +11,11 @@ ITDoors\ControllingBundle\Entity\InvoiceAct:
         invoiceId:
             type: integer
             column: invoice_id
-        name:
+        number:
             type: string
             length: 512
         date:
-            type: date
+            type: datetime
         original:
             type: boolean
     manyToOne:
@@ -25,3 +25,7 @@ ITDoors\ControllingBundle\Entity\InvoiceAct:
             joinColumn:
                 name: invoice_id
                 referencedColumnName: id
+    oneToMany:
+        detals:
+            targetEntity: InvoiceActDetal
+            mappedBy: act

@@ -61,9 +61,6 @@ ITDoors\ControllingBundle\Entity\Invoice:
             type: datetime
             nullable: true
             column: dogovor_date
-        dogovorAct:
-            type: text
-            column: dogovor_act
         bank:
             type: text
         customerId:

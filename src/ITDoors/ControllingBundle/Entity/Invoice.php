@@ -674,35 +674,6 @@ class Invoice
     }
 
     /**
-     * @var string
-     */
-    private $dogovorAct;
-
-
-    /**
-     * Set dogovorAct
-     *
-     * @param string $dogovorAct
-     * 
-     * @return Invoice
-     */
-    public function setDogovorAct($dogovorAct)
-    {
-        $this->dogovorAct = $dogovorAct;
-
-        return $this;
-    }
-
-    /**
-     * Get dogovorAct
-     *
-     * @return string 
-     */
-    public function getDogovorAct()
-    {
-        return $this->dogovorAct;
-    }
-    /**
      * @var integer
      */
     private $customerId;
