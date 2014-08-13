@@ -1,0 +1,181 @@
+{% trans_default_domain 'ITDoorsControllingBundle' %}
+<script>
+    function showTooltip(x, y, contents) {
+        $('<div id="tooltip">' + contents + '</div>').css({
+                position: 'absolute',
+                display: 'none',
+                top: y + 5,
+                left: x -50 ,
+                border: '1px solid #333',
+                padding: '4px',
+                color: '#fff',
+                'border-radius': '3px',
+                'background-color': '#333',
+                opacity: 0.80
+            }).appendTo("body").fadeIn(200);
+    }
+        
+    function chart(pageviews, visitors, id) {
+
+        $.plot($("#chart_"+id), [
+                {
+                    data: pageviews,
+                    label: "Общий долг",
+                    lines: {
+                        lineWidth: 1
+                    },
+                    shadowSize: 0
+
+                }, {
+                    data: visitors,
+                    label: "Простроченый долг",
+                    lines: {
+                        lineWidth: 1
+                    },
+                    shadowSize: 0
+                }
+            ], {
+                series: {
+                    lines: {
+                        show: true,
+                        lineWidth: 1,
+                        fill: true,
+                        fillColor: {
+                            colors: [{
+                                    opacity: 0.05
+                                }, {
+                                    opacity: 0.01
+                                }
+                            ]
+                        }
+                    },
+                    points: {
+                        show: true,
+                        radius: 3,
+                        lineWidth: 1
+                    },
+                    shadowSize: 1
+                },
+                grid: {
+                    hoverable: true,
+                    clickable: true,
+                    tickColor: "#eee",
+                    borderColor: "#eee",
+                    borderWidth: 1
+                },
+                colors: ["#808080", "#d84a38", "#52e136"],
+                 legend: {
+                    show: true,
+                    sorted: null    // default to no legend sorting
+                },
+                xaxis: {
+                    mode: "categories",
+                    tickLength: 0,
+                    //ticks: 10,
+                    //tickDecimals: 0,
+                    tickColor: "#eee",
+                    alignTicksWithAxis: 10
+                },
+                yaxis: {
+                    ticks: 10,
+                    tickDecimals: 0,
+                    tickColor: "#eee"
+                }
+                
+            });
+
+
+        
+
+        var previousPoint = null;
+        $("#chart_"+id).bind("plothover", function (event, pos, item) {
+            $("#x").text(pos.x.toFixed(2));
+            $("#y").text(pos.y.toFixed(2));
+            if (item) {
+                if (previousPoint !== item.dataIndex) {
+                    previousPoint = item.dataIndex;
+
+                    $("#tooltip").remove();
+                    var x = item.series.data[item.datapoint[0]][0],
+                        y = item.datapoint[1].toFixed(2);
+
+                    showTooltip(item.pageX, item.pageY, item.series.label + " " + x + " - " + y);
+                }
+            } else {
+                $("#tooltip").remove();
+                previousPoint = null;
+            }
+        });
+    }
+</script>
+<div class="navigation">
+    {{ ajax_paginator_render(
+            entities, namespasePagin, {
+                    'datatable_ajax': 'ITDoorsAjax.updateList'
+                }
+            )
+    }}
+</div>
+    {% if entities | length %}
+    {% set last = false %}
+    {% set customerId = null %}
+    {% for  key,item in entities %}
+        {% if customerId !=  item.customerId %}
+            {% if customerId is not null %}
+                    chart(pageviews, visitors, {{ last.customerId }});
+                });
+            </script>
+            <div class="portlet box red">
+                <div class="portlet-title">
+                        <div class="caption">
+                                <i class="fa fa-gift"></i>{{ last.customerName }}
+                        </div>
+                        <div class="tools">
+                                <a href="javascript:;" class="collapse"></a>
+                                <a href="javascript:;" class="reload"></a>
+                                <a href="javascript:;" class="remove"></a>
+                        </div>
+                </div>
+                <div class="portlet-body">
+                    <div id="chart_{{ last.customerId }}" class="chart" style="padding: 0px; position: relative;"></div>
+                </div>
+            </div>
+            {% endif %}
+            {% set customerId = item.customerId %}
+            <script>
+                $(document).ready(function(){
+                var pageviews = [[0, 0]];
+                var visitors = [[0, 0]];
+        {% endif %}
+                pageviews.push(['{{item.delayDate|date('d.m.Y')}}', {{ item.allSumma }}]);
+                visitors.push(['{{item.delayDate|date('d.m.Y')}}', {{ item.allSumma-item.paymentsSumma | number_format(2) }}]);
+        {% set last = item %}
+    {% endfor %}
+
+                chart(pageviews, visitors, {{ last.customerId }});
+            });
+        </script>
+        <div class="portlet box red">
+            <div class="portlet-title">
+                    <div class="caption">
+                            <i class="fa fa-gift"></i>{{ last.customerName }}
+                    </div>
+                    <div class="tools">
+                            <a href="javascript:;" class="collapse"></a>
+                            <a href="javascript:;" class="reload"></a>
+                            <a href="javascript:;" class="remove"></a>
+                    </div>
+            </div>
+            <div class="portlet-body">
+                <div id="chart_{{ last.customerId }}" class="chart" style="padding: 0px; position: relative;"></div>
+            </div>
+        </div>
+    <div class="navigation">
+        {{ ajax_paginator_render(
+                entities, namespasePagin, {
+                        'datatable_ajax': 'ITDoorsAjax.updateList'
+                    }
+                )
+        }}
+    </div>
+{% endif %}

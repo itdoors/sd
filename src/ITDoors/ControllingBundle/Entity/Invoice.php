@@ -84,21 +84,6 @@ class Invoice
     /**
      * @var string
      */
-    private $dogovorActName;
-
-    /**
-     * @var \DateTime
-     */
-    private $dogovorActDate;
-
-    /**
-     * @var boolean
-     */
-    private $dogovorActOriginal;
-
-    /**
-     * @var string
-     */
     private $customerName;
 
     /**
@@ -462,78 +447,6 @@ class Invoice
     }
 
     /**
-     * Set dogovorActName
-     *
-     * @param string $dogovorActName
-     * 
-     * @return Invoice
-     */
-    public function setDogovorActName($dogovorActName)
-    {
-        $this->dogovorActName = $dogovorActName;
-
-        return $this;
-    }
-
-    /**
-     * Get dogovorActName
-     *
-     * @return string 
-     */
-    public function getDogovorActName()
-    {
-        return $this->dogovorActName;
-    }
-
-    /**
-     * Set dogovorActDate
-     *
-     * @param \DateTime $dogovorActDate
-     * 
-     * @return Invoice
-     */
-    public function setDogovorActDate($dogovorActDate)
-    {
-        $this->dogovorActDate = $dogovorActDate;
-
-        return $this;
-    }
-
-    /**
-     * Get dogovorActDate
-     *
-     * @return \DateTime 
-     */
-    public function getDogovorActDate()
-    {
-        return $this->dogovorActDate;
-    }
-
-    /**
-     * Set dogovorActOriginal
-     *
-     * @param boolean $dogovorActOriginal
-     * 
-     * @return Invoice
-     */
-    public function setDogovorActOriginal($dogovorActOriginal)
-    {
-        $this->dogovorActOriginal = $dogovorActOriginal;
-
-        return $this;
-    }
-
-    /**
-     * Get dogovorActOriginal
-     *
-     * @return boolean 
-     */
-    public function getDogovorActOriginal()
-    {
-        return $this->dogovorActOriginal;
-    }
-
-    /**
      * Set customerName
      *
      * @param string $customerName
@@ -761,90 +674,6 @@ class Invoice
     }
 
     /**
-     * @var float
-     */
-    private $dogovorActSumma;
-
-    /**
-     * @var float
-     */
-    private $dogovorActCount;
-
-    /**
-     * Set dogovorActSumma
-     *
-     * @param float $dogovorActSumma
-     * 
-     * @return Invoice
-     */
-    public function setDogovorActSumma($dogovorActSumma)
-    {
-        $this->dogovorActSumma = $dogovorActSumma;
-
-        return $this;
-    }
-
-    /**
-     * Get dogovorActSumma
-     *
-     * @return float 
-     */
-    public function getDogovorActSumma()
-    {
-        return $this->dogovorActSumma;
-    }
-
-    /**
-     * @param integer $dogovorActCount
-     *
-     * @return $this
-     */
-    public function setDogovorActCount($dogovorActCount)
-    {
-        $this->dogovorActCount = $dogovorActCount;
-
-        return $this;
-    }
-
-    /**
-     * Get dogovorActCount
-     *
-     * @return float 
-     */
-    public function getDogovorActCount()
-    {
-        return $this->dogovorActCount;
-    }
-
-    /**
-     * @var string
-     */
-    private $dogovorActMPK;
-
-    /**
-     * Set dogovorActMPK
-     *
-     * @param string $dogovorActMPK
-     * 
-     * @return Invoice
-     */
-    public function setDogovorActMPK($dogovorActMPK)
-    {
-        $this->dogovorActMPK = $dogovorActMPK;
-
-        return $this;
-    }
-
-    /**
-     * Get dogovorActMPK
-     *
-     * @return string 
-     */
-    public function getDogovorActMPK()
-    {
-        return $this->dogovorActMPK;
-    }
-    /**
      * @var string
      */
     private $dogovorAct;
@@ -1056,5 +885,43 @@ class Invoice
     public function getPayments()
     {
         return $this->payments;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $acts;
+
+
+    /**
+     * Add acts
+     *
+     * @param \ITDoors\ControllingBundle\Entity\InvoiceAct $acts
+     * @return Invoice
+     */
+    public function addAct(\ITDoors\ControllingBundle\Entity\InvoiceAct $acts)
+    {
+        $this->acts[] = $acts;
+    
+        return $this;
+    }
+
+    /**
+     * Remove acts
+     *
+     * @param \ITDoors\ControllingBundle\Entity\InvoiceAct $acts
+     */
+    public function removeAct(\ITDoors\ControllingBundle\Entity\InvoiceAct $acts)
+    {
+        $this->acts->removeElement($acts);
+    }
+
+    /**
+     * Get acts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getActs()
+    {
+        return $this->acts;
     }
 }

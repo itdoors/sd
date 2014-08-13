@@ -93,40 +93,17 @@ class AnalyticController extends BaseFilterController
      */
     public function graficWithoutactsAction()
     {
-//        $filterNamespace = $this->container->getParameter($this->getNamespace()).'Grafic';
-//
-//        $filters = $this->getFilters($filterNamespace);
-//        if (empty($filters)) {
-//            $filters['isFired'] = 'No fired';
-//            $this->setFilters($filterNamespace, $filters);
-//        }
-//
-//        $period = $this->getTab($filterNamespace);
-//
-//        /** @var EntityManager $em */
-//        $em = $this->getDoctrine()->getManager();
-//
-//        /** @var InvoiceRepository $invoice */
-//        $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
-//
-//        $result = $invoice->getEntittyCountSum($period, $filters);
-//        $entities = $result['entities'];
-//        $count = $result['count'];
-//
-//        $namespasePagin = $filterNamespace.'P'.$period;
-//        $page = $this->getPaginator($namespasePagin);
-//        if (!$page) {
-//            $page = 1;
-//        }
-//
-//        $paginator = $this->container->get($this->paginator);
-//        $entities->setHint($this->paginator . '.count', $count);
-//        $pagination = $paginator->paginate($entities, $page, 20);
+          /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
 
+        /** @var OrganizationRepository $organization */
+        $organization = $em->getRepository('ListsOrganizationBundle:Organization');
+
+        $entities = $organization->getForInvoiceAct();
 
         return $this->render('ITDoorsControllingBundle:Analytic:graficGeneral.html.twig', array(
 //                'period' => $period,
-//                'entities' => $pagination,
+                'entities' => $entities,
 //                'namespasePagin' => $namespasePagin
         ));
     }
@@ -138,6 +115,24 @@ class AnalyticController extends BaseFilterController
      * @return Response
      */
     public function graficIndividualAction()
+    {
+        $filterNamespace = $this->container->getParameter($this->getNamespace()).'GraficIndividual';
+
+        $filter = $this->filterFormName;
+        
+        return $this->render('ITDoorsControllingBundle:Analytic:graficIndividual.html.twig', array(
+                'filter' => $filter,
+                'namespace' => $filterNamespace
+        ));
+    }
+    /**
+     *  greficGeneralAction
+     * 
+     * @var Container
+     * 
+     * @return Response
+     */
+    public function graficIndividualListsAction()
     {
         $filterNamespace = $this->container->getParameter($this->getNamespace()).'GraficIndividual';
 
@@ -153,11 +148,23 @@ class AnalyticController extends BaseFilterController
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
 
         $result = $invoice->getForAnalytic($filters);
+        $entities = $result['entities'];
+        $count = $result['count'];
+        
+        $namespasePagin = $filterNamespace.'P';
+        $page = $this->getPaginator($namespasePagin);
+        if (!$page) {
+            $page = 1;
+        }
 
-        return $this->render('ITDoorsControllingBundle:Analytic:graficIndividual.html.twig', array(
-//                'period' => $period,
-                'entities' => $result,
-//                'namespasePagin' => $namespasePagin
+        $paginator = $this->container->get($this->paginator);
+        $entities->setHint($this->paginator . '.count', $count);
+        $pagination = $paginator->paginate($entities, $page, 50);
+        
+        return $this->render('ITDoorsControllingBundle:Analytic:graficIndividualLists.html.twig', array(
+                'entities' => $pagination,
+                'namespace' => $filterNamespace,
+                'namespasePagin' => $namespasePagin
         ));
     }
 

@@ -43,12 +43,9 @@ class InvoiceRepository extends EntityRepository
             ->addSelect('i.invoiceId')
             ->addSelect('i.date')
             ->addSelect('i.bank')
-            ->addSelect('i.dogovorActName')
-            ->addSelect('i.dogovorActDate')
             ->addSelect('i.delayDate')
             ->addSelect('i.delayDays')
             ->addSelect('i.delayDaysType')
-            ->addSelect('i.dogovorActOriginal')
             ->addSelect('i.dateEnd')
             ->addSelect('i.dateFact')
             ->addSelect(
@@ -174,6 +171,65 @@ class InvoiceRepository extends EntityRepository
                             break;
                         }
                         $arr = explode(',', $value);
+                        $sql->andWhere('performer.id in (:performerIds)');
+                        $sql->setParameter(':performerIds', $arr);
+                        break;
+                    case 'invoiceId':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $arr = explode(',', $value);
+                        $sql->andWhere('i.id in (:ids)');
+                        $sql->setParameter(':ids', $arr);
+                        break;
+                    case 'dogovorActName':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $arr = explode(',', $value);
+                        $sql->andWhere("i.dogovorActName in (:dogovorActNames)");
+                        $sql->setParameter(':dogovorActNames', $arr);
+                        break;
+                    case 'companystructure':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $arr = explode(',', $value);
+                        $sql->leftJoin('i.invoicecompanystructure', 'ics_fil');
+                        $sql->leftJoin('ics_fil.companystructure', 'cs_fil');
+                        $sql->andWhere("cs_fil.id in (:companystructures)");
+                        $sql->setParameter(':companystructures', $arr);
+                        break;
+                }
+            }
+        }
+    }
+    /**
+     * Processes sql query depending on filters
+     *
+     * @param \Doctrine\ORM\QueryBuilder $sql
+     * @param mixed[]                    $filters
+     */
+    public function processFiltersJoin(\Doctrine\ORM\QueryBuilder $sql, $filters)
+    {
+        if (sizeof($filters)) {
+
+            foreach ($filters as $key => $value) {
+                if (!$value) {
+                    continue;
+                }
+                switch ($key) {
+                    case 'customer':
+                        $arr = explode(',', $value);
+                        $sql->andWhere("customer.id in (:customerIds)");
+                        $sql->setParameter(':customerIds', $arr);
+                        break;
+                    case 'performer':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $arr = explode(',', $value);
+                        $sql->leftJoin('i.performer', 'performer');
                         $sql->andWhere('performer.id in (:performerIds)');
                         $sql->setParameter(':performerIds', $arr);
                         break;
@@ -773,6 +829,7 @@ class InvoiceRepository extends EntityRepository
          $res = $this->createQueryBuilder('i')
             ->select('i.id')
             ->addSelect('i.sum as allSumma')
+            ->addSelect('i.invoiceId')
             ->addSelect('i.delayDate')
             ->addSelect('customer.edrpou')
             ->addSelect(
@@ -780,24 +837,23 @@ class InvoiceRepository extends EntityRepository
                 . "SELECT SUM(paymens.summa)"
                 . " FROM  ITDoorsControllingBundle:InvoicePayments paymens"
                 . " WHERE paymens.invoiceId = i.id"
-                . " GROUP BY i.customerEdrpou"
                 . ")as paymentsSumma"
             )
-//            ->addSelect(
-//                "("
-//                . "SELECT SUM(i.sum)"
-//                . " FROM  ITDoorsControllingBundle:Invoice is"
-//                . " WHERE is.id = i.id"
-//                . ") as paymentsSumma"
-//            )
             ->addSelect('customer.name as customerName')
             ->addSelect('customer.id as customerId')
             ->leftJoin('i.customer', 'customer')
-            ->orderBy('customer.name, i.delayDate')
-                 ->setMaxResults(50)
-            ->getQuery()->getResult();
+            ->orderBy('customer.name, i.delayDate');
 
-        return $res;
+        $resCount = $this->createQueryBuilder('i')
+                ->select('COUNT(i.customerId)')
+                ->leftJoin('i.customer', 'customer');
+
+        $this->processFiltersJoin($res, $filters);
+        $this->processFiltersJoin($resCount, $filters);
+        $result['entities'] = $res->getQuery();
+        $result['count'] = $resCount->getQuery()->getSingleScalarResult();
+
+        return $result;
     }
 
     /**

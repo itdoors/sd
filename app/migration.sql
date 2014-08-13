@@ -864,3 +864,8 @@ ALTER TABLE invoice_payments ADD bank TEXT DEFAULT NULL;
 ALTER TABLE task ADD COLUMN handling_message_id bigint;
 -- staging ----------------------
 -- prod ++++++++++++++++++++++++
+ALTER TABLE invoice DROP dogovor_act_name;
+ALTER TABLE invoice DROP dogovor_act_date;
+ALTER TABLE invoice DROP dogovor_act_original;
+-- staging ----------------------
+-- prod ----------------------

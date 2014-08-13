@@ -186,16 +186,15 @@ class InvoiceService
                 }
             }
         }
-
         $invoiceNew->setDogovorGuid(trim($invoice->dogovorGuid));
         $invoiceNew->setDogovorNumber(trim($invoice->dogovorNumber));
         $invoiceNew->setDogovorName(trim($invoice->dogovorName));
         $invoiceNew->setBank(trim($invoice->bank));
-        $invoiceNew->setDogovorActName(trim($invoice->dogovorActName));
         $invoiceNew->setCustomerName(trim($invoice->customerName));
         $invoiceNew->setCustomerEdrpou(trim($invoice->customerEdrpou));
         $invoiceNew->setPerformerName(trim($invoice->performerName));
         $invoiceNew->setPerformerEdrpou(trim($invoice->performerEdrpou));
+        $invoiceNew->setDogovorAct(json_encode($invoice->dogovorAct));
 
         if (!empty($invoice->delayDate) && $invoice->delayDate != 'null') {
             $invoiceNew->setDelayDate(new \DateTime(trim($invoice->delayDate)));
@@ -209,9 +208,6 @@ class InvoiceService
         if (!empty($invoice->dogovorDate) && $invoice->dogovorDate != 'null') {
             $invoiceNew->setDogovorDate(new \DateTime(trim($invoice->dogovorDate)));
         }
-        if (!empty($invoice->dogovorActDate) && $invoice->dogovorActDate != 'null') {
-            $invoiceNew->setDogovorActDate(new \DateTime(trim($invoice->dogovorActDate)));
-        }
         if (!empty($invoice->date) && $invoice->date != 'null') {
             $invoiceNew->setDate(new \DateTime(trim($invoice->date)));
         } else {
@@ -223,20 +219,6 @@ class InvoiceService
             $invoiceNew->setSum(trim($invoice->sum));
         } else {
             $this->addCronError(false, 'error data', 'sum', json_encode($invoice));
-
-            return false;
-        }
-        if (!empty($invoice->dogovorAct)) {
-            $invoiceNew->setDogovorAct(json_encode($invoice->dogovorAct));
-        } else {
-            $this->addCronError(false, 'error data', 'dogovorAct', json_encode($invoice));
-
-            return false;
-        }
-        if (in_array($invoice->dogovorActOriginal, array('0', '1'))) {
-            $invoiceNew->setDogovorActOriginal($invoice->dogovorActOriginal);
-        } else {
-            $this->addCronError(false, 'error data', 'dogovorActOriginal', json_encode($invoice));
 
             return false;
         }
