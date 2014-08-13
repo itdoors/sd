@@ -1357,12 +1357,12 @@ class AjaxController extends BaseFilterController
 
         /** @var \ITDoors\ControllingBundle\Entity\InvoiceRepository $invoiceRepository */
         $invoiceRepository = $this->getDoctrine()
-            ->getRepository('ITDoorsControllingBundle:Invoice');
+            ->getRepository('ITDoorsControllingBundle:InvoiceAct');
 
-        /** @var Invoice[] $invoices */
+        /** @var InvoiceAct[] $invoices */
         $invoices = $invoiceRepository
-            ->createQueryBuilder('i')
-            ->where('i.dogovorActName in (:ids)')
+            ->createQueryBuilder('ia')
+            ->where('ia.number in (:ids)')
             ->setParameter(':ids', $ids)
             ->getQuery()
             ->getResult();
@@ -1370,7 +1370,7 @@ class AjaxController extends BaseFilterController
         $result = array();
 
         foreach ($invoices as $invoice) {
-            $result[] = $this->serializeObject($invoice, 'getDogovorActName', 'getDogovorActName');
+            $result[] = $this->serializeObject($invoice, 'getNumber', 'getNumber');
         }
 
         return new Response(json_encode($result));

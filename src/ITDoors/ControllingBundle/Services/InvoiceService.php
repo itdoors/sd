@@ -136,7 +136,9 @@ class InvoiceService
                     $payments->setInvoice($invoiceNew);
                     $payments->setDate($dateFact);
                     $payments->setSumma(trim($pay->summa));
-                    $payments->setBank(trim($pay->bank));
+                    if ($pay->bank != 'null') {
+                        $payments->setBank(trim($pay->bank));
+                    }
                     $em->persist($payments);
                     $summa += trim($pay->summa);
                 }
@@ -163,7 +165,9 @@ class InvoiceService
                     $payments->setInvoice($invoiceNew);
                     $payments->setDate($dateFact);
                     $payments->setSumma(trim($pay->summa));
-                    $payments->setBank(trim($pay->bank));
+                    if ($pay->bank != 'null') {
+                        $payments->setBank(trim($pay->bank));
+                    }
                     $em->persist($payments);
                     $summa += trim($pay->summa);
 
@@ -196,7 +200,9 @@ class InvoiceService
         $invoiceNew->setDogovorGuid(trim($invoice->dogovorGuid));
         $invoiceNew->setDogovorNumber(trim($invoice->dogovorNumber));
         $invoiceNew->setDogovorName(trim($invoice->dogovorName));
-        $invoiceNew->setBank(trim($invoice->bank));
+        if ($invoice->bank != 'null') {
+            $invoiceNew->setBank(trim($invoice->bank));
+        }
         $invoiceNew->setCustomerName(trim($invoice->customerName));
         $invoiceNew->setCustomerEdrpou(trim($invoice->customerEdrpou));
         $invoiceNew->setPerformerName(trim($invoice->performerName));

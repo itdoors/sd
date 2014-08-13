@@ -61,6 +61,39 @@ class InvoiceRepository extends EntityRepository
                  ) as responsibles"
             )
             ->addSelect(
+                "array_to_string(
+                  ARRAY(
+                          SELECT
+                            i_actN.number
+                          FROM
+                            ITDoorsControllingBundle:InvoiceAct i_actN
+                          WHERE i_actN.invoiceId = i.id
+                      ), ','
+                 ) as actNumbers"
+            )
+            ->addSelect(
+                "array_to_string(
+                  ARRAY(
+                          SELECT
+                            i_actD.date
+                          FROM
+                            ITDoorsControllingBundle:InvoiceAct i_actD
+                          WHERE i_actD.invoiceId = i.id
+                      ), ','
+                 ) as actDates"
+            )
+            ->addSelect(
+                "array_to_string(
+                  ARRAY(
+                          SELECT
+                            i_actO.original
+                          FROM
+                            ITDoorsControllingBundle:InvoiceAct i_actO
+                          WHERE i_actO.invoiceId = i.id
+                      ), ','
+                 ) as actOriginals"
+            )
+            ->addSelect(
                 "("
                 . "SELECT SUM(paymens.summa)"
                 . " FROM  ITDoorsControllingBundle:InvoicePayments paymens"
@@ -183,12 +216,10 @@ class InvoiceRepository extends EntityRepository
                         $sql->setParameter(':ids', $arr);
                         break;
                     case 'dogovorActName':
-                        if (isset($value[0]) && !$value[0]) {
-                            break;
-                        }
                         $arr = explode(',', $value);
-                        $sql->andWhere("i.dogovorActName in (:dogovorActNames)");
-                        $sql->setParameter(':dogovorActNames', $arr);
+                        $sql->innerJoin('i.acts', 'i_act_number');
+                        $sql->andWhere("i_act_number.number in (:actNumbers)");
+                        $sql->setParameter(':actNumbers', $arr);
                         break;
                     case 'companystructure':
                         if (isset($value[0]) && !$value[0]) {
@@ -246,8 +277,9 @@ class InvoiceRepository extends EntityRepository
                             break;
                         }
                         $arr = explode(',', $value);
-                        $sql->andWhere("i.dogovorActName in (:dogovorActNames)");
-                        $sql->setParameter(':dogovorActNames', $arr);
+                        $sql->innerJoin('i.acts', 'searchActNumber');
+                        $sql->andWhere("searchActName.number in (:actNumbers)");
+                        $sql->setParameter(':actNumbers', $arr);
                         break;
                     case 'companystructure':
                         if (isset($value[0]) && !$value[0]) {
@@ -583,12 +615,17 @@ class InvoiceRepository extends EntityRepository
         switch ($type) {
             case 'delay':
                 $res = $res->andWhere("i.delayDays is NULL or i.delayDays = 0")
-                    ->orderBy('i.performerName', 'DESC');
+                    ->orderBy('performerName, i.id', 'DESC');
                 break;
             case 'act':
-                $res = $res->andWhere("i.dogovorActOriginal = :boolen")
-                   ->setParameter(':boolen', false, \PDO::PARAM_BOOL)
-                    ->orderBy('i.performerName', 'DESC');
+                $res = $res->andWhere("i.id in (
+                    SELECT iao.id
+                    FROM ITDoorsControllingBundle:Invoice iao
+                    INNER JOIN ITDoorsControllingBundle:InvoiceAct ia
+                    WHERE iao.id = ia.invoiceId
+                    AND ia.original = false
+                        )")
+                    ->orderBy('performerName, i.id', 'DESC');
                 break;
         }
 
@@ -612,8 +649,14 @@ class InvoiceRepository extends EntityRepository
                 $res = $res->andWhere("i.delayDays is NULL or i.delayDays = 0");
                 break;
             case 'act':
-                $res = $res->andWhere("i.dogovorActOriginal = :boolen")
-                    ->setParameter(':boolen', false, \PDO::PARAM_BOOL);
+                $res = $res->andWhere("i.id in (
+                    SELECT iao.id 
+                    FROM ITDoorsControllingBundle:Invoice iao
+                    INNER JOIN ITDoorsControllingBundle:InvoiceAct ia
+                    WHERE iao.id = ia.invoiceId
+                    AND ia.original = :boolean
+                        )")
+                    ->setParameter(':boolean', false, \PDO::PARAM_BOOL);
                 break;
         }
 
@@ -871,14 +914,19 @@ class InvoiceRepository extends EntityRepository
         switch ($tab) {
             case 'act':
                 $entitie
-                    ->select('i.dogovorAct')
-                    ->addSelect('i.dogovorActDate')
-                    ->addSelect('i.dogovorActName')
-                    ->addSelect('i.dogovorActOriginal')
+                    ->select('act.original')
+                    ->addSelect('act.date')
+                    ->addSelect('act.number')
+                    ->addSelect('detal.note')
+                    ->addSelect('detal.count')
+                    ->addSelect('detal.summa')
+                    ->addSelect('detal.mpk')
+                    ->leftJoin('i.acts', 'act')
+                    ->leftJoin('act.detals', 'detal')
                     ->where('i.id = :invoiceid')
                     ->setParameter(':invoiceid', $invoiceid);
                 $entitie = $entitie->getQuery()
-                    ->getSingleResult();
+                    ->getResult();
                 break;
             case 'invoice':
                 $subQueryCase = '
@@ -1057,7 +1105,7 @@ class InvoiceRepository extends EntityRepository
             ->select('i.invoiceId')
             ->addSelect('i.id')
             ->where('lower(i.invoiceId) LIKE :q')
-            ->setParameter(':q', mb_strtolower($q, 'UTF-8') . '%')
+            ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%')
             ->getQuery();
 
         return $sql->getResult();
@@ -1073,8 +1121,9 @@ class InvoiceRepository extends EntityRepository
     public function getSearchDogovorActNameQuery($q)
     {
         $sql = $this->createQueryBuilder('i')
-            ->select('i.dogovorActName')
-            ->where('lower(i.dogovorActName) LIKE :q')
+            ->select('act.number as dogovorActName')
+            ->leftJoin('i.acts', 'act')
+            ->where('lower(act.number) LIKE :q')
             ->setParameter(':q', mb_strtolower($q, 'UTF-8') . '%')
             ->getQuery();
 
