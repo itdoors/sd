@@ -1,16 +1,46 @@
-<table class="table table-striped table-hover table-bordered" id="graffic_table" cellpadding="0" cellspacing="0">
+
+<table class="table table-striped table-hover table-bordered" id="tasks_table" cellpadding="0" cellspacing="0">
     <thead>
-        <th>
-            id
-        </th>
+    <th>id</th>
+    <th>Title</th>
+    <th>My role</th>
+    <th>Description</th>
+    <th>End Date</th>
+    <th>Stage</th>
     </thead>
     <tbody>
-        {% for taskUserRole in tasksUserRole %}
-        <tr>
+    {% for taskUserRole in tasksUserRole %}
+        <tr >
+
+            <td>
+                <a href="#" class="btn green">{{ taskUserRole.task.id }}</a>
+            </td>
             <td>
                 {{ taskUserRole.task.title }}
+                {% if not taskUserRole.isViewed %}
+                    <span style="color: red;">(не ознакомлен)</span>
+                {% endif %}
+            </td>
+            <td>
+                {{ taskUserRole.role }}
+            </td>
+            <td>
+                {{ taskUserRole.task.description }}
+            </td>
+            <td>
+                {% for key,taskEndDate in taskUserRole.task.taskEndDates %}
+                    {% if taskUserRole.task.taskEndDates[key+1] is not defined %}
+                        <span style="color: green">{{ taskEndDate.endDatetime|date('Y-m-d H:i:s') }}</span>
+                    {% else %}
+                        <span>{{ taskEndDate.endDatetime|date('Y-m-d H:i:s') }}</span>
+                    {% endif %}
+                    <br>
+                {% endfor %}
+            </td>
+            <td>
+                {{ taskUserRole.task.stage }}
             </td>
         </tr>
-        {% endfor %}
+    {% endfor %}
     </tbody>
 </table>

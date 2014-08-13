@@ -221,4 +221,49 @@ class Task
     {
         return $this->type;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $taskEndDates;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->taskEndDates = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add taskEndDates
+     *
+     * @param \SD\TaskBundle\Entity\TaskEndDate $taskEndDates
+     * @return Task
+     */
+    public function addTaskEndDate(\SD\TaskBundle\Entity\TaskEndDate $taskEndDates)
+    {
+        $this->taskEndDates[] = $taskEndDates;
+    
+        return $this;
+    }
+
+    /**
+     * Remove taskEndDates
+     *
+     * @param \SD\TaskBundle\Entity\TaskEndDate $taskEndDates
+     */
+    public function removeTaskEndDate(\SD\TaskBundle\Entity\TaskEndDate $taskEndDates)
+    {
+        $this->taskEndDates->removeElement($taskEndDates);
+    }
+
+    /**
+     * Get taskEndDates
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTaskEndDates()
+    {
+        return $this->taskEndDates;
+    }
 }

@@ -51,3 +51,9 @@ SD\TaskBundle\Entity\Task:
                 task_type_id:
                     referencedColumnName: id
             orphanRemoval: false
+    oneToMany:
+        taskEndDates:
+            targetEntity: SD\TaskBundle\Entity\TaskEndDate
+            cascade: {  }
+            mappedBy: task
+            orphanRemoval: false

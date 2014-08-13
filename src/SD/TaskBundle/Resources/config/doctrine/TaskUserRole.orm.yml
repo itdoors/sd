@@ -7,6 +7,10 @@ SD\TaskBundle\Entity\TaskUserRole:
             type: integer
             generator:
                 strategy: IDENTITY
+    fields:
+        isViewed:
+            type: boolean
+            column: is_viewed
     manyToOne:
         task:
             targetEntity: SD\TaskBundle\Entity\Task

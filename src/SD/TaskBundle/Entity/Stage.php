@@ -109,4 +109,11 @@ class Stage
     {
         return $this->parent;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString() {
+        return $this->getName();
+    }
 }

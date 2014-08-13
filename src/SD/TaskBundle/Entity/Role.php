@@ -81,4 +81,11 @@ class Role
     {
         return $this->model;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString() {
+        return $this->name;
+    }
 }

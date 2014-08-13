@@ -21,7 +21,7 @@ SD\TaskBundle\Entity\TaskEndDate:
             targetEntity: SD\TaskBundle\Entity\Task
             cascade: {  }
             mappedBy: null
-            inversedBy: null
+            inversedBy: taskEndDates
             joinColumns:
                 task_id:
                     referencedColumnName: id

@@ -1,3 +1,7 @@
 sd_task_homepage:
     path:     /tasks
     defaults: { _controller: SDTaskBundle:Task:index }
+
+sd_task_table:
+    path:     /tasks/table
+    defaults: { _controller: SDTaskBundle:Task:taskTable }

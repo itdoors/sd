@@ -21,6 +21,9 @@ class TaskController extends Controller
             ->findBy(
                 array(
                     'user' => $user
+                ),
+                array(
+                    'isViewed' => 'ASC'
                 )
             );
 
