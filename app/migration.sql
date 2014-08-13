@@ -867,5 +867,8 @@ ALTER TABLE task ADD COLUMN handling_message_id bigint;
 ALTER TABLE invoice DROP dogovor_act_name;
 ALTER TABLE invoice DROP dogovor_act_date;
 ALTER TABLE invoice DROP dogovor_act_original;
+CREATE TABLE invoice_act (id SERIAL NOT NULL, invoice_id INT NOT NULL, name VARCHAR(512) NOT NULL, date DATE NOT NULL, original BOOLEAN NOT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_71D9A872989F1FD ON invoice_act (invoice_id);
+ALTER TABLE invoice_act ADD CONSTRAINT FK_71D9A872989F1FD FOREIGN KEY (invoice_id) REFERENCES invoice (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 -- staging ----------------------
 -- prod ----------------------
