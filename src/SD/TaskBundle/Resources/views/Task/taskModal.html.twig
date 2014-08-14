@@ -1,0 +1,48 @@
+{% trans_default_domain 'SDCalendarBundle' %}
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <td>{% trans %}Title{% endtrans %}</td>
+        <td colspan="3">{{ taskUserRole.task.title }}</td>
+    </tr>
+    <tr>
+        <td>{% trans %}Date start{% endtrans %}</td>
+        <td colspan="3">{{ taskUserRole.ttask.startDateTime|date('d.m.Y') }}</td>
+    </tr>
+    <tr>
+        <td>{% trans %}Date stop{% endtrans %}</td>
+        <td colspan="3">{{ taskUserRole.ttask.stopDateTime|date('d.m.Y') }}</td>
+    </tr>
+    <tr>
+        <td>{% trans %}Description{% endtrans %}</td>
+        <td colspan="3">{{ taskUserRole.ttask.description }}</td>
+    </tr>
+    <tr>
+        <td>{% trans %}Creator{% endtrans %}</td>
+        <td colspan="3"></td>
+    </tr>
+    <tr>
+        <td>{% trans %}Performer{% endtrans %}</td>
+        <td colspan="3"></td>
+    </tr>
+{#
+    {% if task.handlingMessage is not empty %}
+        <tr>
+            <td>{% trans %}Link{% endtrans %}</td>
+            <td colspan="3">
+                <a target="_blank" href="{{ path('lists_sales_handling_show', {'id':task.handlingMessage.handling.id}) }}#handling_message_{{ task.handlingMessage.id }}">
+                    {% trans %}Go to{% endtrans %}
+                </a>
+            </td>
+        </tr>
+    {% endif %}
+#}
+</table>
+
+<input type="hidden" id="task_modal_id_holder" data-id="{{ taskUserRole.task.id }}"
+        >
+
+<a class="btn green" data-dismiss="modal" aria-hidden="true">{% trans %}Exit{% endtrans %}</a>
+{% if not task.isDone and task.performer.id == userId %}
+<a id="task_set_viewed" class="btn green" data-dismiss="modal" aria-hidden="true" style="float: right;">{% trans %}Set viewed{% endtrans %}</a>
+{% endif %}

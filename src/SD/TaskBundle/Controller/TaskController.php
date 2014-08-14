@@ -34,4 +34,28 @@ class TaskController extends Controller
         );
 
     }
+
+
+    /**
+     * Renders modal inner html for one task
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function taskModalction(Request $request)
+    {
+        $id = $request->request->get('id');
+        $em = $this->getDoctrine()->getManager();
+        $taskUserRole = $em->getRepository('SDCalendarBundle:TaskUserRole')->find($id);
+        $userId = $this->getUser()->getId();
+        $return = array();
+        $return['html'] = $this->renderView('SDTaskBundle:Task:taskModal.html.twig', array(
+            'taskUserRole' => $taskUserRole,
+            'userId' => $userId
+        ));
+
+        return new Response(json_encode($return));
+    }
+
 }

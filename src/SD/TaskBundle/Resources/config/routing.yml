@@ -5,3 +5,7 @@ sd_task_homepage:
 sd_task_table:
     path:     /tasks/table
     defaults: { _controller: SDTaskBundle:Task:taskTable }
+
+sd_task_modal:
+    path:     /tasks/modal
+    defaults: { _controller: SDTaskBundle:Task:taskModal }

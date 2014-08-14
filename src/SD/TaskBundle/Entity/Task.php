@@ -62,52 +62,6 @@ class Task
     }
 
     /**
-     * Set createDateTime
-     *
-     * @param \DateTime $createDateTime
-     * @return Task
-     */
-    public function setCreateDateTime($createDateTime)
-    {
-        $this->createDateTime = $createDateTime;
-    
-        return $this;
-    }
-
-    /**
-     * Get createDateTime
-     *
-     * @return \DateTime 
-     */
-    public function getCreateDateTime()
-    {
-        return $this->createDateTime;
-    }
-
-    /**
-     * Set startDateTime
-     *
-     * @param \DateTime $startDateTime
-     * @return Task
-     */
-    public function setStartDateTime($startDateTime)
-    {
-        $this->startDateTime = $startDateTime;
-    
-        return $this;
-    }
-
-    /**
-     * Get startDateTime
-     *
-     * @return \DateTime 
-     */
-    public function getStartDateTime()
-    {
-        return $this->startDateTime;
-    }
-
-    /**
      * Set title
      *
      * @param string $title
@@ -265,5 +219,61 @@ class Task
     public function getTaskEndDates()
     {
         return $this->taskEndDates;
+    }
+    /**
+     * @var \DateTime
+     */
+    private $createDate;
+
+    /**
+     * @var \DateTime
+     */
+    private $startDate;
+
+
+    /**
+     * Set createDate
+     *
+     * @param \DateTime $createDate
+     * @return Task
+     */
+    public function setCreateDate($createDate)
+    {
+        $this->createDate = $createDate;
+    
+        return $this;
+    }
+
+    /**
+     * Get createDate
+     *
+     * @return \DateTime 
+     */
+    public function getCreateDate()
+    {
+        return $this->createDate;
+    }
+
+    /**
+     * Set startDate
+     *
+     * @param \DateTime $startDate
+     * @return Task
+     */
+    public function setStartDate($startDate)
+    {
+        $this->startDate = $startDate;
+    
+        return $this;
+    }
+
+    /**
+     * Get startDate
+     *
+     * @return \DateTime 
+     */
+    public function getStartDate()
+    {
+        return $this->startDate;
     }
 }

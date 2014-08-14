@@ -8,11 +8,11 @@ SD\TaskBundle\Entity\Task:
             generator:
                 strategy: IDENTITY
     fields:
-        createDateTime:
+        createDate:
             type: datetime
             nullable: true
             column: createdatetime
-        startDateTime:
+        startDate:
             type: datetime
             nullable: true
             column: startdatetime

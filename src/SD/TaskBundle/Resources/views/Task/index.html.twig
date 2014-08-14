@@ -43,14 +43,12 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">Modal Title</h4>
+                    <h4 class="modal-title">Create task</h4>
                 </div>
                 <div class="modal-body">
                     <div id="taskFormTpl"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn blue">Save changes</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -70,12 +68,13 @@
                        data-toggle="modal"
                        href="#form_modal_task"
                        data-target_holder="taskFormTpl"
-                       data-form_name="taskFrom"
+                       data-form_name="taskForm1"
                        data-post_function="updateList"
                        data-post_target_id="tasks_list"
                             >
                         {% trans %}Add New{% endtrans %} <i class="fa fa-plus"></i>
                        </a>
+                    <br><br>
                     <div id="tasks_list" data-url="{{ path('sd_task_table')}}">
 
                         {{ render(controller('SDTaskBundle:Task:taskTable')) }}

@@ -34,6 +34,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Form;
 use Doctrine\DBAL\Connection;
+use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use ITDoors\AjaxBundle\Controller\BaseFilterController;
@@ -2102,6 +2103,94 @@ class AjaxController extends BaseFilterController
 
         return true;
     }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function taskForm1Save(Form $form, $user, $request)
+    {
+        /** @var \SD\TaskBundle\Entity\Task $data */
+        $data = $form->getData();
+
+        //if (!$data->getId()) {
+        //}
+
+        $formData = $request->request->get($form->getName());
+
+        $data->setCreateDate(new \DateTime());
+        $data->setAuthor($user);
+        $data->setStartDate(new \DateTime($formData['startDate']));
+
+        $stage = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:Stage')
+            ->findOneBy(array(
+                'model' =>'task',
+                'name' => 'created'
+            ));
+
+        $data->setStage($stage);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+        //$em->refresh($data);
+        $endDate = new \SD\TaskBundle\Entity\TaskEndDate();
+        $endDate->setTask($data);
+        $endDate->setChangeDateTime(new \DateTime());
+        $endDate->setEndDateTime(new \DateTime($formData['endDate']));
+        $em->persist($endDate);
+
+        $userRepository = $this->getDoctrine()
+            ->getRepository('SDUserBundle:User');
+
+        $roleRepository = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:Role');
+
+        $performerRole = $roleRepository
+            ->findOneBy(array(
+                'name' => 'performer'
+        ));
+
+        $controllerRole  = $roleRepository
+        ->findOneBy(array(
+            'name' => 'performer'
+        ));
+
+        //var_dump($formData['performer']);die();
+        foreach ($formData['performer'] as $performer) {
+            $performer = $userRepository->find($performer);
+
+            $taskUserRole = new \SD\TaskBundle\Entity\TaskUserRole();
+            $taskUserRole->setRole($performerRole);
+            $taskUserRole->setUser($performer);
+            $taskUserRole->setTask($data);
+            $taskUserRole->setIsViewed(false);
+            $em->persist($taskUserRole);
+        }
+
+        //foreach ($formData['controller'] as $idController) {
+            $idController = $formData['controller'];
+            $controller = $userRepository->find($idController);
+
+            $taskUserRole = new \SD\TaskBundle\Entity\TaskUserRole();
+            $taskUserRole->setRole($controllerRole);
+            $taskUserRole->setUser($controller);
+            $taskUserRole->setTask($data);
+            $taskUserRole->setIsViewed(false);
+            $em->persist($taskUserRole);
+        //}
+        $em->flush();
+
+        return true;
+    }
+
+
     /**
      * Saves {formName}Save after valid ajax validation
      *

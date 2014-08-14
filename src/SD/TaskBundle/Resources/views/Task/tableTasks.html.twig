@@ -10,6 +10,7 @@
     </thead>
     <tbody>
     {% for taskUserRole in tasksUserRole %}
+        {% set stage = taskUserRole.task.stage %}
         <tr >
 
             <td>
@@ -30,7 +31,14 @@
             <td>
                 {% for key,taskEndDate in taskUserRole.task.taskEndDates %}
                     {% if taskUserRole.task.taskEndDates[key+1] is not defined %}
-                        <span style="color: green">{{ taskEndDate.endDatetime|date('Y-m-d H:i:s') }}</span>
+                        &rarr; {{ taskEndDate.endDatetime|date('Y-m-d H:i:s') }}</span>
+
+                        {% if 'now'|date('U') > taskEndDate.endDatetime|date('U') and
+                        stage != 'closed' and stage != 'done' and stage != 'stopped' %}
+                            <i class="icon-bell" style="color: red"></i>
+
+                        {% endif %}
+
                     {% else %}
                         <span>{{ taskEndDate.endDatetime|date('Y-m-d H:i:s') }}</span>
                     {% endif %}
@@ -38,7 +46,7 @@
                 {% endfor %}
             </td>
             <td>
-                {{ taskUserRole.task.stage }}
+                {{ stage }}
             </td>
         </tr>
     {% endfor %}
