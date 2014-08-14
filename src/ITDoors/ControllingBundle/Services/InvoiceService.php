@@ -618,9 +618,11 @@ class InvoiceService
      *
      * @var Container
      * 
+     * @param integer $companystryctyre
+     * 
      * @return tabs[]
      */
-    public function getTabsInvoices()
+    public function getTabsInvoices($companystryctyre)
     {
         $translator = $this->container->get('translator');
         /** @var EntityManager $em */
@@ -629,7 +631,7 @@ class InvoiceService
         /** @var InvoicecronRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
 
-        $summa = $invoice->getInvoicePeriodSum(1, 30);
+        $summa = $invoice->getInvoicePeriodSum(1, 30, $companystryctyre);
         $tabs[] = array(
             'tab' => 30,
             'blockupdate' => 'ajax-tab-holder',
@@ -637,7 +639,7 @@ class InvoiceService
             'text' => $translator->trans('from') . ' 1 ' . $translator->trans('to') . ' 30 ' . $translator->trans('day')
              .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoicePeriodSum(31, 60);
+        $summa = $invoice->getInvoicePeriodSum(31, 60, $companystryctyre);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 60,
@@ -646,7 +648,7 @@ class InvoiceService
                 ->trans('from') . ' 31 ' . $translator->trans('to') . ' 60 ' . $translator->trans('days')
             .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoicePeriodSum(61, 120);
+        $summa = $invoice->getInvoicePeriodSum(61, 120, $companystryctyre);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 120,
@@ -655,7 +657,7 @@ class InvoiceService
                 ->trans('from') . ' 61 ' . $translator->trans('to') . ' 120 ' . $translator->trans('days')
             .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoicePeriodSum(121, 180);
+        $summa = $invoice->getInvoicePeriodSum(121, 180, $companystryctyre);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 180,
@@ -665,7 +667,7 @@ class InvoiceService
                 ->trans('from') . ' 121 ' . $translator->trans('to') . ' 180 ' . $translator->trans('days')
             .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoicePeriodSum(180, 0);
+        $summa = $invoice->getInvoicePeriodSum(180, 0, $companystryctyre);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 181,
@@ -674,7 +676,7 @@ class InvoiceService
                 ->trans('from') . ' 181 ' . $translator->trans('days')
             .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoiceCourtSum();
+        $summa = $invoice->getInvoiceCourtSum($companystryctyre);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'court',
@@ -682,7 +684,7 @@ class InvoiceService
             'text' => $translator->trans('court')
             .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoicePaySum();
+        $summa = $invoice->getInvoicePaySum($companystryctyre);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'pay',
@@ -690,7 +692,7 @@ class InvoiceService
             'text' => $translator->trans('pay')
             .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoiceFlowSum();
+        $summa = $invoice->getInvoiceFlowSum($companystryctyre);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'flow',

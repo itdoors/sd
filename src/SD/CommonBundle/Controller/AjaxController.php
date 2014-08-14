@@ -2178,10 +2178,24 @@ class AjaxController extends BaseFilterController
     public function invoiceCompanystructureFormSave(Form $form, User $user, Request $request)
     {
 
+        if ($user->hasRole('ROLE_CONTROLLING_OPER')) {
+            return true;
+        }
         /** @var InvoiceCompanystructure $data */
         $data = $form->getData();
 
         $formData = $request->request->get($form->getName());
+
+        /** @var InvoiceCompanystructure $invoiceCompanystructure */
+        $invoiceCompanystructure = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
+            ->findOneBy(array(
+                'invoiceId' => $data->getInvoiceID(),
+                'companystructureId' => $formData['companystructure']
+            ));
+        if ($invoiceCompanystructure) {
+            return true;
+        }
 
         /** @var ModelContact $contact */
         $company = $this->getDoctrine()
@@ -2482,6 +2496,9 @@ class AjaxController extends BaseFilterController
      */
     public function invoiceCompanystructureDelete($params)
     {
+        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+            return false;
+        }
         $id = $params['id'];
 
         /** @var InvoiceCompanystructure $object */

@@ -110,6 +110,7 @@
                     {% endif %}
                 </td>
                 <td class="">
+                    {% if is_granted('ROLE_CONTROLLING') %}
                     <a id="managers_list_new" class="fa ajax-form fa-plus" title="{% trans %}Add note{% endtrans %}"
                        data-toggle="modal"
                        href="#form_modal"
@@ -119,6 +120,7 @@
                        data-post_function="updateList"
                        data-post_target_id="datatable_ajax"
                        ></a><br>
+                       {% endif %}
                     {% set responsibles = entity.responsibles|split(',') %}
                     {% for responsible in responsibles %}
                     <a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">
