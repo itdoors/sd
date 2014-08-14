@@ -560,7 +560,9 @@ class OrganizationRepository extends EntityRepository
             ->where('o.id in (
                     SELECT DISTINCT(i.customerId) 
                     FROM  ITDoorsControllingBundle:Invoice i
-                    WHERE i.dogovorActOriginal = false
+                    LEFT JOIN ITDoorsControllingBundle:InvoiceAct i_a
+                    WHERE i.id = i_a.invoiceId
+                    AND i_a.original = false
                     )')
             ->orderBy('allSumma')
             ->getQuery()->getResult();

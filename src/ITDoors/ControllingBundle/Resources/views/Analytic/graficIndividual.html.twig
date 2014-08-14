@@ -2,6 +2,11 @@
 {{ ajax_filter_render(filter, namespace, {
     'datatable_ajax_1': 'ITDoorsAjax.updateList'
 }) }}
+<script>
+    $(document).ready(function(){
+        ITDoorsAjax.init();
+    });
+</script>
 <div class="tab-content ajax-tab-holder-1" id="datatable_ajax_1" data-url="{{ url('it_doors_controlling_invoice_grafic_individual_lists') }}">
     {{ render(controller('ITDoorsControllingBundle:Analytic:graficIndividualLists')) }}
 </div>

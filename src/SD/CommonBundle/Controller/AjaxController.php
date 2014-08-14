@@ -240,23 +240,30 @@ class AjaxController extends BaseFilterController
      *
      * @return string
      */
-    public function invoiceDogovorActNameAction()
+    public function invoiceActNumberAction()
     {
         $searchTextQ = $this->get('request')->query->get('q');
         $searchTextQuery = $this->get('request')->query->get('query');
 
         $searchText = $searchTextQ ? $searchTextQ : $searchTextQuery;
 
-        /** @var \ITDoors\ControllingBundle\Entity\InvoiceRepository $invoiceRepository */
-        $invoiceRepository = $this->getDoctrine()
-            ->getRepository('ITDoorsControllingBundle:Invoice');
+        /** @var \ITDoors\ControllingBundle\Entity\InvoiceActRepository $invoiceActRepository */
+        $invoiceActRepository = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:InvoiceAct');
 
-        $invoices = $invoiceRepository->getSearchDogovorActNameQuery($searchText);
-
+         /** @var InvoiceAct[] $invoiceActs */
+        $invoiceActs = $invoiceActRepository
+            ->createQueryBuilder('ia')
+            ->select('ia.number')
+            ->where('lower(ia.number) LIKE :q')
+            ->setParameter(':q',  mb_strtolower($searchText, 'UTF-8') . '%')
+            ->getQuery()
+            ->getResult();
+ 
         $result = array();
 
-        foreach ($invoices as $invoice) {
-            $result[] = $this->serializeArray($invoice, 'dogovorActName', 'dogovorActName');
+        foreach ($invoiceActs as $act) {
+            $result[] = $this->serializeArray($act, 'number', 'number');
         }
 
         return new Response(json_encode($result));
@@ -1351,7 +1358,7 @@ class AjaxController extends BaseFilterController
      *
      * @return string
      */
-    public function invoiceByDogovorActNamesAction()
+    public function invoiceByActNumbersAction()
     {
         $ids = explode(',', $this->get('request')->query->get('id'));
 

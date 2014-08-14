@@ -215,7 +215,7 @@ class InvoiceRepository extends EntityRepository
                         $sql->andWhere('i.id in (:ids)');
                         $sql->setParameter(':ids', $arr);
                         break;
-                    case 'dogovorActName':
+                    case 'actNumber':
                         $arr = explode(',', $value);
                         $sql->innerJoin('i.acts', 'i_act_number');
                         $sql->andWhere("i_act_number.number in (:actNumbers)");
@@ -272,13 +272,13 @@ class InvoiceRepository extends EntityRepository
                         $sql->andWhere('i.id in (:ids)');
                         $sql->setParameter(':ids', $arr);
                         break;
-                    case 'dogovorActName':
+                    case 'actNumber':
                         if (isset($value[0]) && !$value[0]) {
                             break;
                         }
                         $arr = explode(',', $value);
-                        $sql->innerJoin('i.acts', 'searchActNumber');
-                        $sql->andWhere("searchActName.number in (:actNumbers)");
+                        $sql->innerJoin('i.acts', 'act_n');
+                        $sql->andWhere("act_n.number in (:actNumbers)");
                         $sql->setParameter(':actNumbers', $arr);
                         break;
                     case 'companystructure':
@@ -1106,25 +1106,6 @@ class InvoiceRepository extends EntityRepository
             ->addSelect('i.id')
             ->where('lower(i.invoiceId) LIKE :q')
             ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%')
-            ->getQuery();
-
-        return $sql->getResult();
-    }
-
-    /**
-     * Searches organization by $q
-     *
-     * @param string $q
-     *
-     * @return mixed[]
-     */
-    public function getSearchDogovorActNameQuery($q)
-    {
-        $sql = $this->createQueryBuilder('i')
-            ->select('act.number as dogovorActName')
-            ->leftJoin('i.acts', 'act')
-            ->where('lower(act.number) LIKE :q')
-            ->setParameter(':q', mb_strtolower($q, 'UTF-8') . '%')
             ->getQuery();
 
         return $sql->getResult();

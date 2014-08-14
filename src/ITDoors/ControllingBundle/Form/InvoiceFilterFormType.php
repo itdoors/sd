@@ -80,11 +80,11 @@ class InvoiceFilterFormType extends AbstractType
                     'placeholder' => 'Enter performer',
                 )
             ))
-            ->add('dogovorActName', 'text', array(
+            ->add('actNumber', 'text', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url' => $router->generate('sd_common_ajax_invoice_dogovor_act_name'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_invoice_by_dogovor_act_names'),
+                    'data-url' => $router->generate('sd_common_ajax_invoice_act_number'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_invoice_by_act_numbers'),
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 2,
                         'allowClear' => true,
