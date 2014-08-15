@@ -16,7 +16,7 @@ ITDoors\ControllingBundle\Entity\Invoice:
             type: float
             length: 20
         date:
-            type: date
+            type: datetime
         delayDate:
             nullable: true
             type: date

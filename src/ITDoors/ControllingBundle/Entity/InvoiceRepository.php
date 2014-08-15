@@ -963,8 +963,9 @@ class InvoiceRepository extends EntityRepository
             ->select('i.id')
             ->addSelect('i.sum as allSumma')
             ->addSelect('i.invoiceId')
+            ->addSelect("i.date")
             ->addSelect('i.delayDate')
-            ->addSelect('customer.edrpou')
+           // ->addSelect('customer.edrpou')
             ->addSelect(
                 "("
                 . "SELECT SUM(paymens.summa)"
@@ -975,8 +976,9 @@ class InvoiceRepository extends EntityRepository
             ->addSelect('customer.name as customerName')
             ->addSelect('customer.id as customerId')
             ->leftJoin('i.customer', 'customer')
-            ->orderBy('customer.name, i.delayDate');
-
+            ->orderBy('customer.name')
+            ->addOrderBy('i.date')
+;
         $resCount = $this->createQueryBuilder('i')
                 ->select('COUNT(i.customerId)')
                 ->leftJoin('i.customer', 'customer');
@@ -1200,4 +1202,32 @@ class InvoiceRepository extends EntityRepository
 
         return $sql->getResult();
     }
+    /**
+     *
+     * @param integer $customerId
+     *
+     * @return mixed[]
+     */
+    public function getForCustomer($customerId)
+    {
+        $sql = $this->createQueryBuilder('i')
+            ->select('i.date')
+            ->addSelect('i.delayDate')
+            ->addSelect('i.sum')
+            ->addSelect(
+                "(
+                SELECT SUM(paymens.summa)
+                FROM  ITDoorsControllingBundle:InvoicePayments  paymens
+                WHERE paymens.invoiceId = i.id
+                AND i.delayDate >= paymens.date
+                )as paymentsSumma"
+            )
+            ->where('i.customerId = :customerId')
+            ->setParameter('customerId',$customerId)
+            ->orderBy('i.date')
+            ->getQuery();
+
+        return $sql->getResult();
+    }
+    
 }

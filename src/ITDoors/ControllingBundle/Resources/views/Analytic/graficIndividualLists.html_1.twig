@@ -129,20 +129,11 @@
     }}
 </div>
     {% if entities | length %}
+    {% set last = false %}
+    {% set customerId = null %}
     {% for  key,item in entities %}
-        {{item.customerName}}<br>
-            {% set invoiceAs = invoices[item.id]['invoice'] %}
-            {% set invoicePs = invoices[item.id]['invoicePays'] %}
-            {% set years = invoices[item.id]['years'] %}
-            
-            {% for invoiceA in invoiceAs %}
-                {{ invoiceA.date | date('Y.m.d') }} - {{ invoiceA.sum }} - {{ invoiceA.delayDate | date('Y.m.d') }} -a <br>
-            {% endfor %}
-            
-            {% for invoiceP in invoicePs %}
-                {{ invoiceP.date | date('Y.m.d') }} {{ invoiceP.summaPay }} - p<br>
-            {% endfor %}
-            {#% if customerId is not null %}
+        {% if customerId !=  item.customerId %}
+            {% if customerId is not null %}
                 var allSum = 0;
                 var allSumm = 0;
                 for (var year in y) {
@@ -161,45 +152,13 @@
                 console.log(y);
                 console.log(sum);
                 console.log(sumd);
-                chart(pageviews, visitors, {{ last.id }});
-            });
-            </script>
-            {% endif %#}
-            <script>
-                $(document).ready(function(){
-                var pageviews = [];
-                var visitors = [];
-                var years = JSON.parse('{{ invoices[item.id]['years'] | json_encode() | raw}}');
-                var yearA = JSON.parse('{{ invoices[item.id]['invoicesA'] | json_encode() | raw}}');
-                var yearP = JSON.parse('{{ invoices[item.id]['invoicesP'] | json_encode() | raw}}');
-                var yearPR = JSON.parse('{{ invoices[item.id]['invoicesPR'] | json_encode() | raw}}');
-                var sumA = 0;
-                var sumP = 0;
-                var sumPR = 0;
-                for (var year in years) {
-                    
-                    for (var month in months) {
-                        if(yearA[year] !== undefined && yearA[year][months[month]] !== undefined) {
-                            sumA += yearA[year][months[month]];
-                        }
-                        if(yearP[year] !== undefined && yearP[year][months[month]] !== undefined) {
-                            sumP = yearP[year][months[month]];
-                        }
-                        if(yearPR[year] !== undefined && yearPR[year][months[month]] !== undefined) {
-                            sumPR += yearPR[year][months[month]];
-                        }
-                         pageviews.push([mountsShort[months[month]]+' '+year, sumA-sumP]);
-                         visitors.push([mountsShort[months[month]]+' '+year, sumPR-sumP]);
-                    }
-                }
-                        
-                chart(pageviews, visitors, {{ item.id }});
+                chart(pageviews, visitors, {{ last.customerId }});
             });
             </script>
             <div class="portlet box red">
                 <div class="portlet-title">
                         <div class="caption">
-                                <i class="fa fa-gift"></i>{{ item.customerName }}
+                                <i class="fa fa-gift"></i>{{ last.customerName }}
                         </div>
                         <div class="tools">
                                 <a href="javascript:;" class="collapse"></a>
@@ -207,10 +166,22 @@
                         </div>
                 </div>
                 <div class="portlet-body">
-                    <div id="chart_{{ item.id }}" class="chart" style="padding: 0px; position: relative;"></div>
+                    <div id="chart_{{ last.customerId }}" class="chart" style="padding: 0px; position: relative;"></div>
                 </div>
             </div>
-                {#if($.inArray('{{item.date|date('Y')}}', y) === -1) {
+            {% endif %}
+            {% set customerId = item.customerId %}
+            <script>
+                $(document).ready(function(){
+                var pageviews = [];
+                var visitors = [];
+                var y = [];
+                var sum = [];
+                var sumd = [];
+                var allsUmma = 0;
+                var delayDate = 0;
+        {% endif %}
+                if($.inArray('{{item.date|date('Y')}}', y) === -1) {
                     y.push('{{item.date|date('Y')}}');
                 }
                 
@@ -232,9 +203,44 @@
                 allsUmma = allsUmma+{{item.allSumma}};
                 delayDate = delayDate+Number({{item.paymentsSumma}});
                 sum['{{item.date|date('Y')}}']['{{item.date|date('m')}}'] = allsUmma;
-                sumd['{{item.delayDate|date('Y')}}']['{{item.delayDate|date('m')}}'] = delayDate;#}
+                sumd['{{item.delayDate|date('Y')}}']['{{item.delayDate|date('m')}}'] = delayDate;
+        {% set last = item %}
     {% endfor %}
-                 
+                  var allSum = 0;
+                        var allSumm = 0;
+                        for (var year in y) {
+                            for (var month in months) {
+                                 if(sum[y[year]][months[month]] !== undefined) {
+                                    allSum = sum[y[year]][months[month]];
+                                 }
+                                 if(sumd[y[year]] !== undefined && sumd[y[year]][months[month]] !== undefined) {
+                                    allSumm = sumd[y[year]][months[month]];
+                                 }
+                                 pageviews.push([mountsShort[months[month]]+' '+y[year], allSum-allSumm]);
+                                 visitors.push([mountsShort[months[month]]+' '+y[year], allSum-allSumm]);
+                            }
+                        }
+                        console.log('{{ last.customerName }}');
+                        console.log(y);
+                        console.log(sum);
+                        console.log(sumd);
+                        chart(pageviews, visitors, {{ last.customerId }});
+            });
+        </script>
+        <div class="portlet box red">
+            <div class="portlet-title">
+                    <div class="caption">
+                            <i class="fa fa-gift"></i>{{ last.customerName }}
+                    </div>
+                    <div class="tools">
+                            <a href="javascript:;" class="collapse"></a>
+                            <a href="javascript:;" class="remove"></a>
+                    </div>
+            </div>
+            <div class="portlet-body">
+                <div id="chart_{{ last.customerId }}" class="chart" style="padding: 0px; position: relative;"></div>
+            </div>
+        </div>
     <div class="navigation">
         {{ ajax_paginator_render(
                 entities, namespasePagin, {
