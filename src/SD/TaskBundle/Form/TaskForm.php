@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * TaskForm class
@@ -111,6 +112,7 @@ class TaskForm extends AbstractType
             ->add('description')
 
             ->add('startDate', 'datetime', array(
+                'data' => new \DateTime(),
                 'widget' => 'single_text',
                 'format' => 'dd.MM.yyyy HH:mm:ss'
             ))

@@ -1,0 +1,15 @@
+{% for key,taskEndDate in taskUserRole.task.taskEndDates %}
+    {% if taskUserRole.task.taskEndDates[key+1] is not defined %}
+        &rarr; {{ taskEndDate.endDatetime|date('d.m.Y H:i') }}</span>
+
+        {% if 'now'|date('U') > taskEndDate.endDatetime|date('U') and
+        stage != 'closed' and stage != 'done' and stage != 'stopped' %}
+            <i class="icon-bell" style="color: red" title="{% trans %}Overdue{% endtrans %}"></i>
+
+        {% endif %}
+
+    {% else %}
+        <span>{{ taskEndDate.endDatetime|date('d.m.Y H:i') }}</span>
+    {% endif %}
+    <br>
+{% endfor %}

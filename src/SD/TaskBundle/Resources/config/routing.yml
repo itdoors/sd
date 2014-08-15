@@ -9,3 +9,11 @@ sd_task_table:
 sd_task_modal:
     path:     /tasks/modal
     defaults: { _controller: SDTaskBundle:Task:taskModal }
+
+sd_task_set_viewed:
+    path:     /tasks/set/viewed
+    defaults: { _controller: SDTaskBundle:Task:setIsViewedTask }
+
+sd_task_set_stage:
+    path:     /tasks/set/stage
+    defaults: { _controller: SDTaskBundle:Task:taskStageUpdate }

@@ -1,5 +1,59 @@
 {% trans_default_domain 'SDCalendarBundle' %}
+<script>
+    $(document).ready(function(){
+        $('#task_set_viewed').die('click')
+        $('#task_set_viewed').live('click', function(e){
+            var id = $('#task_modal_info_holder').data('id');
+            var url = $('#task_modal_info_holder').data('url_task_set_viewed');
+            var sendData = {
+                'id': id
+            }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data1) {
+                    //alert(data1)
+                    data = JSON.parse(data1);
+                    if (data.success == 1) {
+                        $('#form_modal_task_view').modal('hide');
+                        $( "#task_tab_button" ).trigger( "click" );
+                    } else {
+                        //$('#copy_etalon_finished').show('blind', {}, 500);
+                    }
+                }
 
+            })
+        })
+
+        function updateTaskStage (stage) {
+            var id = $('#task_modal_info_holder').data('id');
+            var url = $('#task_modal_info_holder').data('url_task_set_stage');
+            var sendData = {
+                'id': id,
+                'stage': stage
+            }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data1) {
+                    //alert(data1)
+                    data = JSON.parse(data1);
+                    if (data.success == 1) {
+                        $('#form_modal_task_view').modal('hide');
+                        $( "#task_tab_button" ).trigger( "click" );
+                    } else {
+                        //$('#copy_etalon_finished').show('blind', {}, 500);
+                    }
+                }
+
+            })
+        }
+
+    })
+
+</script>
 <table class="table table-bordered table-striped">
     <tr>
         <td>{% trans %}Title{% endtrans %}</td>
@@ -7,42 +61,107 @@
     </tr>
     <tr>
         <td>{% trans %}Date start{% endtrans %}</td>
-        <td colspan="3">{{ taskUserRole.ttask.startDateTime|date('d.m.Y') }}</td>
+        <td colspan="3">{{ taskUserRole.task.startDate|date('d.m.Y') }}</td>
     </tr>
     <tr>
         <td>{% trans %}Date stop{% endtrans %}</td>
-        <td colspan="3">{{ taskUserRole.ttask.stopDateTime|date('d.m.Y') }}</td>
+        <td colspan="3">
+            {{ include ('SDTaskBundle:Task:taskEndDate.html.twig', {
+            'taskEndDates': taskUserRole.task.taskEndDates,
+            'stage': taskUserRole.task.stage
+            }) }}
+        </td>
     </tr>
     <tr>
         <td>{% trans %}Description{% endtrans %}</td>
-        <td colspan="3">{{ taskUserRole.ttask.description }}</td>
+        <td colspan="3">{{ taskUserRole.task.description }}</td>
     </tr>
     <tr>
         <td>{% trans %}Creator{% endtrans %}</td>
-        <td colspan="3"></td>
+        <td colspan="3">
+            {% if taskUserRoleAuthor|length %}
+                {% for author in taskUserRoleAuthor %}
+                    {{ author.user }}
+                {% endfor %}
+            {% endif %}
+        </td>
     </tr>
     <tr>
         <td>{% trans %}Performer{% endtrans %}</td>
-        <td colspan="3"></td>
-    </tr>
-{#
-    {% if task.handlingMessage is not empty %}
-        <tr>
-            <td>{% trans %}Link{% endtrans %}</td>
-            <td colspan="3">
-                <a target="_blank" href="{{ path('lists_sales_handling_show', {'id':task.handlingMessage.handling.id}) }}#handling_message_{{ task.handlingMessage.id }}">
-                    {% trans %}Go to{% endtrans %}
-                </a>
-            </td>
-        </tr>
-    {% endif %}
-#}
-</table>
+        <td colspan="3">
+            {% if taskUserRolePerformer|length %}
+                {% for performer in taskUserRolePerformer %}
+                    {{ performer.user }}
 
-<input type="hidden" id="task_modal_id_holder" data-id="{{ taskUserRole.task.id }}"
+                    {% if performer.isViewed !=true %}
+                        <span style="color: red; font-size: smaller;">{% trans %}(Not viewed){% endtrans %}</span>
+                    {% endif %}
+                    <br>
+                {% endfor %}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td>{% trans %}Controller{% endtrans %}</td>
+        <td colspan="3">
+            {% if taskUserRoleController|length %}
+                {% for controller in taskUserRoleController %}
+                    {{ controller.user }}
+                    {% if controller.isViewed !=true %}
+                        <span style="color: red; font-size: smaller;">{% trans %}(Not viewed){% endtrans %}</span>
+                    {% endif %}
+                    <br>
+                {% endfor %}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td>{% trans %}Stage{% endtrans %}</td>
+        <td colspan="3">{{ taskUserRole.task.stage }}</td>
+    </tr>
+
+    {#
+        {% if task.handlingMessage is not empty %}
+            <tr>
+                <td>{% trans %}Link{% endtrans %}</td>
+                <td colspan="3">
+                    <a target="_blank" href="{{ path('lists_sales_handling_show', {'id':task.handlingMessage.handling.id}) }}#handling_message_{{ task.handlingMessage.id }}">
+                        {% trans %}Go to{% endtrans %}
+                    </a>
+                </td>
+            </tr>
+        {% endif %}
+    #}
+</table>
+{% if taskUserRole.isViewed != true %}
+    <a id="task_set_viewed" class="btn green" style="float: right;">{% trans %}Set viewed{% endtrans %}</a>
+{% endif %}
+
+{% if taskUserRole.role == 'performer' %}
+    {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' %}
+        <a id="task_set_done" class="btn purple" style="float: left;">{% trans %}Set done{% endtrans %}</a>
+        <a id="task_change_date" class="btn red" style="float: left; margin-left: 10px;">{% trans %}Change date{% endtrans %}</a>
+    {% endif %}
+{% endif %}
+
+{% if taskUserRole.role == 'controller' %}
+    {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' %}
+        <a id="task_set_done" class="btn purple" style="float: left;">{% trans %}Close task{% endtrans %}</a>
+        <a id="task_set_done" class="btn yellow" style="float: left; margin-left: 10px;">{% trans %}Set undone{% endtrans %}</a>
+    {% endif %}
+    {% if taskUserRole.task.stage == 'checking'%}
+        <a id="task_set_done" class="btn red" style="float: left; margin-left: 10px;">{% trans %}Set done{% endtrans %}</a>
+    {% endif %}
+{% endif %}
+<br><br>
+<input type="hidden" id="task_modal_info_holder"
+       data-id="{{ taskUserRole.id }}"
+       data-url_task_set_viewed="{{ path('sd_task_set_viewed') }}"
+       data-url_task_set_stage="{{ path('sd_task_set_stage') }}"
         >
+{#
 
 <a class="btn green" data-dismiss="modal" aria-hidden="true">{% trans %}Exit{% endtrans %}</a>
 {% if not task.isDone and task.performer.id == userId %}
 <a id="task_set_viewed" class="btn green" data-dismiss="modal" aria-hidden="true" style="float: right;">{% trans %}Set viewed{% endtrans %}</a>
-{% endif %}
+{% endif %}#}

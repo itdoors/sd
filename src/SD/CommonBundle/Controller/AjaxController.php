@@ -2154,13 +2154,28 @@ class AjaxController extends BaseFilterController
 
         $performerRole = $roleRepository
             ->findOneBy(array(
-                'name' => 'performer'
+                'name' => 'performer',
+                'model' => 'task'
         ));
 
         $controllerRole  = $roleRepository
-        ->findOneBy(array(
-            'name' => 'performer'
+            ->findOneBy(array(
+                'name' => 'controller',
+                'model' => 'task'
         ));
+
+        $authorRole  = $roleRepository
+            ->findOneBy(array(
+                'name' => 'author',
+                'model' => 'task'
+            ));
+
+        $taskUserRole = new \SD\TaskBundle\Entity\TaskUserRole();
+        $taskUserRole->setRole($authorRole);
+        $taskUserRole->setUser($user);
+        $taskUserRole->setTask($data);
+        $taskUserRole->setIsViewed(true);
+        $em->persist($taskUserRole);
 
         //var_dump($formData['performer']);die();
         foreach ($formData['performer'] as $performer) {

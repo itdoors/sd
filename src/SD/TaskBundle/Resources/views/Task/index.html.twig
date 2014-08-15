@@ -60,29 +60,19 @@
         <div class="col-md-12">
             <div class="tabbable tabbable-custom boxless">
                 <ul class="nav nav-tabs" id="ajax_tabs">
-                    <li class="active"><a href="#tab_3" data-toggle="tab" data-block="tab_content" data-url="{{ path('sd_task_table')}}">{% trans %}Tasks{% endtrans %}</a></li>
+                    <li class="active"><a id="task_tab_button" href="#tab_3" data-toggle="tab" data-block="tab_content" data-url="{{ path('sd_task_table')}}">{% trans %}Tasks{% endtrans %}</a></li>
                     <li ><a id="schedule_block" href="#tab_3" data-block="tab_content" data-url="{#{{ url('it_doors_oper_coworker_schedule_index') }}#}" data-toggle="tab">{% trans %}Documents{% endtrans %}</a></li>
                 </ul>
-                <div class="tab-content" id="tab_content">
-                    <a id="managers_list_new" class="btn green ajax-form"
-                       data-toggle="modal"
-                       href="#form_modal_task"
-                       data-target_holder="taskFormTpl"
-                       data-form_name="taskForm1"
-                       data-post_function="updateList"
-                       data-post_target_id="tasks_list"
-                            >
-                        {% trans %}Add New{% endtrans %} <i class="fa fa-plus"></i>
-                       </a>
-                    <br><br>
-                    <div id="tasks_list" data-url="{{ path('sd_task_table')}}">
+                    <div class="tab-content" id="tab_content">
 
-                        {{ render(controller('SDTaskBundle:Task:taskTable')) }}
-
+                        <div id="tasks_list" data-url="{{ path('sd_task_table')}}">
+                                {{ render(controller('SDTaskBundle:Task:taskTable')) }}
+                        </div>
                     </div>
                 </div>
             </div>
-
+            <input type="hidden" id="more_info_input"
+                    data-url_task_modal="{{ path('sd_task_modal') }}">
             {#
                         <div id="base_table_test" data-url="{{ path('it_doors_oper_coworker_test_table')}}">
                             {{ render(controller('ITDoorsOperBundle:OperCoworkerInfo:testTableRender', {

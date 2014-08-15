@@ -1,3 +1,63 @@
+<script>
+    $(document).ready(function(){
+        $('.modal_task').die('click')
+        $('.modal_task').live('click', function(e){
+            var id = $(this).data('id');
+            var url = $('#more_info_input').data('url_task_modal');
+            var sendData = {
+                    'id': id
+                }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data1) {
+                    //alert(data1)
+                    data = JSON.parse(data1);
+                    if (data.success == 1) {
+                        $('#taskViewTpl').html('').html(data.html);
+                        $('#form_modal_task_view').modal('show');
+                    } else {
+                        //$('#copy_etalon_finished').show('blind', {}, 500);
+                    }
+
+
+                }
+
+            })
+        })
+
+    })
+</script>
+
+<div id="form_modal_task_view" class="modal fade" tabindex="-1" role="basic" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">View task</h4>
+            </div>
+            <div class="modal-body">
+                <div id="taskViewTpl"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+<br>
+<a id="managers_list_new" class="btn green ajax-form"
+   data-toggle="modal"
+   href="#form_modal_task"
+   data-target_holder="taskFormTpl"
+   data-form_name="taskForm1"
+   data-post_function="updateList"
+   data-post_target_id="tasks_list"
+        >
+    {% trans %}Add New{% endtrans %} <i class="fa fa-plus"></i>
+</a>
+<br><br>
 
 <table class="table table-striped table-hover table-bordered" id="tasks_table" cellpadding="0" cellspacing="0">
     <thead>
@@ -14,7 +74,8 @@
         <tr >
 
             <td>
-                <a href="#" class="btn green">{{ taskUserRole.task.id }}</a>
+                <span class="btn green modal_task" style="min-width: 50px;"
+                        data-id="{{ taskUserRole.id }}">{{ taskUserRole.id }}</span>
             </td>
             <td>
                 {{ taskUserRole.task.title }}
@@ -29,21 +90,10 @@
                 {{ taskUserRole.task.description }}
             </td>
             <td>
-                {% for key,taskEndDate in taskUserRole.task.taskEndDates %}
-                    {% if taskUserRole.task.taskEndDates[key+1] is not defined %}
-                        &rarr; {{ taskEndDate.endDatetime|date('Y-m-d H:i:s') }}</span>
-
-                        {% if 'now'|date('U') > taskEndDate.endDatetime|date('U') and
-                        stage != 'closed' and stage != 'done' and stage != 'stopped' %}
-                            <i class="icon-bell" style="color: red"></i>
-
-                        {% endif %}
-
-                    {% else %}
-                        <span>{{ taskEndDate.endDatetime|date('Y-m-d H:i:s') }}</span>
-                    {% endif %}
-                    <br>
-                {% endfor %}
+                {{ include ('SDTaskBundle:Task:taskEndDate.html.twig', {
+                    'taskEndDates': taskUserRole.task.taskEndDates,
+                    'stage': stage
+                }) }}
             </td>
             <td>
                 {{ stage }}
