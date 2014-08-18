@@ -520,7 +520,7 @@ class SalesController extends BaseController
                     $em->refresh($organization);
 
                     $organizationUser = new OrganizationUser();
-                    $organizationUser->setLookup($lookup);
+                    $organizationUser->setRole($lookup);
                     $organizationUser->setOrganization($organization);
                     $organizationUser->setUser($user);
                     $em->persist($organizationUser);
