@@ -12,3 +12,10 @@
     display: block;
     background: url('../../sipml/call.png') 100% 100% no-repeat;
 }
+
+.hangup-btn {
+    width: 48px;
+    height: 48px;
+    display: block;
+    background: url('../../sipml/hangup48.png') 100% 100% no-repeat;
+}

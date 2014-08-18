@@ -49,17 +49,26 @@
         var stack;
 
         var ringtone = document.getElementById('ringtone');
+        var ringbacktone = document.getElementById('ringbacktone');
+
+        function startRingTone() {
+            try { ringtone.play(); }
+            catch (e) { }
+        }
 
         function stopRingTone() {
             try { ringtone.pause(); }
             catch (e) { }
         }
 
-        function startRingTone() {
-            try {  }
-            catch (e) {
-                console.log(e.message);
-            }
+        function startRingbackTone() {
+            try { ringbacktone.play(); }
+            catch (e) { }
+        }
+
+        function stopRingbackTone() {
+            try { ringbacktone.pause(); }
+            catch (e) { }
         }
 
         onEventFired = function(e){
@@ -68,11 +77,23 @@
 
             switch (e.type) {
                 case "started" :
-                    callSession = stack.newSession('call-audio', {
-                        video_local: document.getElementById('video-local'),
-                        video_remote: document.getElementById('video-remote'),
-                        audio_remote: document.getElementById('audio-remote')
-                    });
+
+                    try {
+                        // LogIn (REGISTER) as soon as the stack finish starting
+                        oSipSessionRegister = this.newSession('register', {
+                            expires: 200,
+                            events_listener: { events: '*', listener: onSipEventSession },
+                            sip_caps: [
+                                { name: '+g.oma.sip-im', value: null },
+                                { name: '+audio', value: null },
+                                { name: 'language', value: '\"en,fr\"' }
+                            ]
+                        });
+                        oSipSessionRegister.register();
+                    }
+                    catch (e) {
+
+                    }
                     break;
                 case "m_permission_accepted":
                     //stopRingTone();
@@ -80,31 +101,76 @@
             }
         }
 
+        function onSipEventSession(e) {
+            tsk_utils_log_info('==session event = ' + e.type);
+
+            switch (e.type) {
+                case 'connecting': case 'connected':
+                {
+                    stopRingbackTone();
+                    stopRingTone();
+
+                    break;
+                } // 'connecting' | 'connected'
+                case 'i_ao_request':
+                {
+                    startRingbackTone();
+
+                    break;
+                } // i_ao_request
+                case 'terminating': case 'terminated':
+                {
+                    callSession = null;
+                    stopRingbackTone();
+                    stopRingTone();
+                    break;
+                }
+            }
+        }
+
         SIPml.init(
                 function(e){
                     stack =  new SIPml.Stack({
-                        realm: '95.67.67.170',
+                        //realm: '95.67.67.170',
+                        realm: '192.168.4.4',
                         impi: '8005',
-                        impu: 'sip:8005@95.67.67.170',
+                        //impu: 'sip:8005@95.67.67.170',
+                        impu: 'sip:8005@192.168.4.4',
                         password: 'itdoors25',
-                        websocket_proxy_url: 'ws://95.67.67.170:10060/ws', // optional
-                        outbound_proxy_url: 'udp://95.67.67.170:5060', // optional
+                        websocket_proxy_url: 'ws://192.168.4.4:10060/ws', // optional
+                        outbound_proxy_url: 'udp://192.168.4.4:5060', // optional
+                        ice_servers: null,
+                        enable_early_ims: true,
                         enable_rtcweb_breaker: true, // optional
-                        sip_caps: [
-                            { name: '+g.oma.sip-im' },
-                            { name: '+sip.ice' },
-                            { name: 'language', value: '\"en,fr\"' }
+                        enable_media_stream_cache: false,
+                        bandwidth: null,
+                        video_size: null,
+                        sip_headers: [
+                            { name: 'User-Agent', value: 'IM-client/OMA1.0 sipML5-v1.2014.04.18' },
+                            { name: 'Organization', value: 'Doubango Telecom' }
                         ],
-                        ice_servers: [{"url":"stun:23.21.150.121:3478"},{"url":"stun:216.93.246.18:3478"},{"url":"stun:66.228.45.110:3478"},{"url":"stun:173.194.78.127:19302"}], // optional
                         events_listener: { events: '*', listener: onEventFired }
                     });
                     stack.start();
                 }
         );
 
-
-
         $('.call-btn').live('click', function(e) {
+
+            callSession = stack.newSession('call-audio', {
+                video_local: document.getElementById('video-local'),
+                video_remote: document.getElementById('video-remote'),
+                audio_remote: document.getElementById('audio-remote'),
+                bandwidth: { audio:undefined, video:undefined },
+                video_size: { minWidth:undefined, minHeight:undefined, maxWidth:undefined, maxHeight:undefined },
+                events_listener: { events: '*', listener: onSipEventSession },
+                sip_caps: [
+                    { name: '+g.oma.sip-im' },
+                    { name: '+sip.ice' },
+                    { name: 'language', value: '\"en,fr\"' }
+                ]
+            });
+
             e.preventDefault();
             var phone = $(this).data('phone');
             var pattern = new RegExp("(?:\([2-9]\d{2}\)\ ?|[2-9]\d{2}(?:\-?|\ ?))[2-9]\d{2}[- ]?\d{4}");
@@ -113,14 +179,19 @@
 
             if (confirm('Are you sure you want to call to ' + phone.replace(/ /g, "").replace(/-/g, ""))) {
                 callSession.call(phone.replace(/ /g, "").replace(/-/g, ""));
+                $(this).parent().find('.hangup-btn').show();
+                $(this).hide();
             }
+        });
 
-            //$("#ringtone").play();
+        $('.hangup-btn').live('click', function(e) {
+            e.preventDefault();
+            if (callSession) {
+                callSession.hangup({events_listener: { events: '*', listener: onSipEventSession }});
 
-            /*if (pattern.test(phone.trim())) {
-
-                //callSession.call(phone.trim());
-            }*/
+                $(this).parent().find('.call-btn').show();
+                $(this).hide();
+            }
         });
     });
 </script>
@@ -178,11 +249,11 @@
         </div>
     </div>
 </div>
-    <audio id="audio_remote" autoplay="autoplay" />
+    <audio id="audio-remote" autoplay="autoplay" />
     <audio id="ringtone" loop src="{{ asset('templates/sipml/sounds/ringtone.wav')}}" />
     <audio id="ringbacktone" loop src="{{ asset('templates/sipml/sounds/ringbacktone.wav')}}" />
     <audio id="dtmfTone" src="{{ asset('templates/sipml/sounds/dtmf.wav')}}" />
 
-    <video id="video_remote" class="video" height="100%" width="100%" style="opacity: 0; background-color: #000000; -webkit-transition-property: opacity; -webkit-transition-duration: 2s;" autoplay="autoplay"> </video>
-    <video id="video_local" class="video" height="72px" width="88px" style="opacity: 0; margin-top: -80px; margin-left: 5px; background-color: #000000; -webkit-transition-property: opacity; -webkit-transition-duration: 2s;" muted="true" autoplay="autoplay"> </video>
+    <video id="video-remote" class="video" height="100%" width="100%" style="opacity: 0; background-color: #000000; -webkit-transition-property: opacity; -webkit-transition-duration: 2s;" autoplay="autoplay"> </video>
+    <video id="video-local" class="video" height="72px" width="88px" style="opacity: 0; margin-top: -80px; margin-left: 5px; background-color: #000000; -webkit-transition-property: opacity; -webkit-transition-duration: 2s;" muted="true" autoplay="autoplay"> </video>
 {% endblock body %}
