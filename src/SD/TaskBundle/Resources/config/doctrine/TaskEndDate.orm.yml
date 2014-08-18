@@ -26,3 +26,12 @@ SD\TaskBundle\Entity\TaskEndDate:
                 task_id:
                     referencedColumnName: id
             orphanRemoval: false
+        stage:
+            targetEntity: SD\TaskBundle\Entity\Stage
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                stage_id:
+                    referencedColumnName: id
+            orphanRemoval: false

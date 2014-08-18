@@ -2140,10 +2140,19 @@ class AjaxController extends BaseFilterController
         $em->persist($data);
         $em->flush();
         //$em->refresh($data);
+
+        $dateStage = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:Stage')
+            ->findOneBy(array(
+                'model' =>'task_end_date',
+                'name' => 'accepted'
+            ));
+
         $endDate = new \SD\TaskBundle\Entity\TaskEndDate();
         $endDate->setTask($data);
         $endDate->setChangeDateTime(new \DateTime());
         $endDate->setEndDateTime(new \DateTime($formData['endDate']));
+        $endDate->setStage($dateStage);
         $em->persist($endDate);
 
         $userRepository = $this->getDoctrine()

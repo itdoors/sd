@@ -17,3 +17,11 @@ sd_task_set_viewed:
 sd_task_set_stage:
     path:     /tasks/set/stage
     defaults: { _controller: SDTaskBundle:Task:taskStageUpdate }
+
+sd_task_change_date:
+    path:     /tasks/change/date
+    defaults: { _controller: SDTaskBundle:Task:taskChangeDateRequest }
+
+sd_task_answer_date:
+    path:     /tasks/answer/date
+    defaults: { _controller: SDTaskBundle:Task:answerDate }

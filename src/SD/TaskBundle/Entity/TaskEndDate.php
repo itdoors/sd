@@ -109,4 +109,32 @@ class TaskEndDate
     {
         return $this->task;
     }
+    /**
+     * @var \SD\TaskBundle\Entity\Stage
+     */
+    private $stage;
+
+
+    /**
+     * Set stage
+     *
+     * @param \SD\TaskBundle\Entity\Stage $stage
+     * @return TaskEndDate
+     */
+    public function setStage(\SD\TaskBundle\Entity\Stage $stage = null)
+    {
+        $this->stage = $stage;
+    
+        return $this;
+    }
+
+    /**
+     * Get stage
+     *
+     * @return \SD\TaskBundle\Entity\Stage 
+     */
+    public function getStage()
+    {
+        return $this->stage;
+    }
 }
