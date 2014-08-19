@@ -32,7 +32,7 @@ class AnalyticController extends BaseFilterController
     /** @var KnpPaginatorBundle $paginator */
     protected $paginator = 'knp_paginator';
 
-    protected $filterFormName = 'invoiceFilterForm';
+    protected $filterFormName = 'invoiceFilterForAnalyticForm';
 
     /**
      * @var Container
@@ -112,9 +112,11 @@ class AnalyticController extends BaseFilterController
      * 
      * @var Container
      * 
+     * @param boolean $ajax
+     * 
      * @return Response
      */
-    public function graficIndividualAction()
+    public function graficIndividualAction($ajax)
     {
         $filterNamespace = $this->container->getParameter($this->getNamespace()).'GraficIndividual';
 
@@ -122,6 +124,7 @@ class AnalyticController extends BaseFilterController
         
         return $this->render('ITDoorsControllingBundle:Analytic:graficIndividual.html.twig', array(
                 'filter' => $filter,
+                'ajax' => $ajax,
                 'namespace' => $filterNamespace
         ));
     }
@@ -173,8 +176,8 @@ class AnalyticController extends BaseFilterController
         $invoices = array();
         foreach ($pagination as $organization) {
             $invoices[$organization['id']] = array();
-            $invoiceAs = $invoice->getForCustomer($organization['id']);
-            $invoicePs = $invoicePay->getForCustomer($organization['id']);
+            $invoiceAs = $invoice->getForCustomer($organization['id'], $filters);
+            $invoicePs = $invoicePay->getForCustomer($organization['id'], $filters);
             $yearsA = array();
             $yearsP = array();
             $yearsPR = array();
@@ -205,7 +208,7 @@ class AnalyticController extends BaseFilterController
                 if(!array_key_exists($invoiceA['delayDate']->format('Y'), $yearsPR)) {
                     $yearsPR[$invoiceA['delayDate']->format('Y')] = array();
                 }
-                if(!array_key_exists($invoiceA['delayDate']->format('m'), $yearsPR[$invoiceA['date']->format('Y')])) {
+                if(!array_key_exists($invoiceA['delayDate']->format('m'), $yearsPR[$invoiceA['delayDate']->format('Y')])) {
                     $yearsPR[$invoiceA['delayDate']->format('Y')][$invoiceA['delayDate']->format('m')] = 0;
                 }
                 $yearsPR[$invoiceA['delayDate']->format('Y')][$invoiceA['delayDate']->format('m')]

@@ -580,7 +580,7 @@ class InvoiceService
         $tabs['individual'] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'individual',
-            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_grafic_individual'),
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_grafic_individual', array('ajax' => 'true')),
             'text' => $translator->trans('Individual')
         );
 

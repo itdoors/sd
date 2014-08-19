@@ -1205,10 +1205,11 @@ class InvoiceRepository extends EntityRepository
     /**
      *
      * @param integer $customerId
+     * @param array   $filters
      *
      * @return mixed[]
      */
-    public function getForCustomer($customerId)
+    public function getForCustomer($customerId, $filters)
     {
         $sql = $this->createQueryBuilder('i')
             ->select('i.date')
@@ -1223,11 +1224,30 @@ class InvoiceRepository extends EntityRepository
                 )as paymentsSumma"
             )
             ->where('i.customerId = :customerId')
-            ->setParameter('customerId',$customerId)
-            ->orderBy('i.date')
-            ->getQuery();
+            ->setParameter('customerId',$customerId);
+        if (sizeof($filters)) {
+            foreach ($filters as $key => $value) {
+                if (!$value) {
+                    continue;
+                }
+                switch ($key) {
+                    case 'dateRange':
+                        $dateArr = explode('-', $value);
+                        $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
+                        $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));
 
-        return $sql->getResult();
+                        $sql->andWhere('i.date BETWEEN :datestart AND :datestop')
+                            ->setParameter(':datestart', $dateStart)
+                            ->setParameter(':datestop', $dateStop);
+                        break;
+                }
+            }
+        }
+
+        return $sql
+                ->orderBy('i.date')
+                ->getQuery()
+                ->getResult();
     }
     
 }

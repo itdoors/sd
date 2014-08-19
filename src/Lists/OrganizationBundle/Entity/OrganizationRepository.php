@@ -504,6 +504,18 @@ class OrganizationRepository extends EntityRepository
          $res = $this->createQueryBuilder('o')
             ->select('o.id')
             ->addSelect('o.edrpou')
+             ->addSelect(
+                "array_to_string(
+                  ARRAY(
+                          SELECT
+                            DISTINCT(cs.name)
+                          FROM ITDoorsControllingBundle:Invoice  i_company
+                          LEFT JOIN ITDoorsControllingBundle:InvoiceCompanystructure ics WITH ics.invoiceId = i_company.id
+                          LEFT JOIN ics.companystructure  cs
+                           WHERE o.id = i_company.customerId
+                      ), ','
+                 ) as responsibles"
+            )
             ->addSelect(
                 "(
                 SELECT SUM(paymens.summa)
@@ -526,6 +538,7 @@ class OrganizationRepository extends EntityRepository
                     FROM  ITDoorsControllingBundle:Invoice i
                     )')
             ->orderBy('allSumma')
+                 //->setMaxResults(40)
             ->getQuery()->getResult();
 
         return $res;
@@ -572,17 +585,37 @@ class OrganizationRepository extends EntityRepository
                     case 'performer':
                         $arr = explode(',', $value);
                         $res->andWhere('o.id in (
-                            SELECT DISTINCT(i.customerId) 
+                            SELECT DISTINCT(i_p.customerId) 
                             FROM  ITDoorsControllingBundle:Invoice i_p
-                            WHERE i.p in (:performerIds)
+                            WHERE i_p.performerId in (:performerIds)
                             )');
                         $res->setParameter(':performerIds', $arr);
                         $resCount->andWhere('o.id in (
-                            SELECT DISTINCT(i.customerId) 
+                            SELECT DISTINCT(i_p.customerId) 
                             FROM  ITDoorsControllingBundle:Invoice i_p
-                            WHERE i.p in (:performerIds)
+                            WHERE i_p.performerId in (:performerIds)
                             )');
                         $resCount->setParameter(':performerIds', $arr);
+                        break;
+                    case 'dateRange':
+                        $dateArr = explode('-', $value);
+                        $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
+                        $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));
+
+                        $res->andWhere('o.id in (
+                            SELECT DISTINCT(i_date.customerId) 
+                            FROM  ITDoorsControllingBundle:Invoice i_date
+                            WHERE i_date.date BETWEEN :datestart AND :datestop
+                            )')
+                            ->setParameter(':datestart', $dateStart)
+                            ->setParameter(':datestop', $dateStop);
+                        $resCount->andWhere('o.id in (
+                            SELECT DISTINCT(i_date.customerId) 
+                            FROM  ITDoorsControllingBundle:Invoice i_date
+                            WHERE i_date.date BETWEEN :datestart AND :datestop
+                            )')
+                            ->setParameter(':datestart', $dateStart)
+                            ->setParameter(':datestop', $dateStop);
                         break;
 //                    case 'invoiceId':
 //                        if (isset($value[0]) && !$value[0]) {
@@ -639,6 +672,18 @@ class OrganizationRepository extends EntityRepository
                 )as paymentsSumma"
             )
             ->addSelect(
+                "array_to_string(
+                  ARRAY(
+                          SELECT
+                            DISTINCT(cs.name)
+                          FROM ITDoorsControllingBundle:Invoice  i_company
+                          LEFT JOIN ITDoorsControllingBundle:InvoiceCompanystructure ics WITH ics.invoiceId = i_company.id
+                          LEFT JOIN ics.companystructure  cs
+                           WHERE o.id = i_company.customerId
+                      ), ','
+                 ) as responsibles"
+            )
+            ->addSelect(
                 '(
                   SELECT SUM(i_s.sum)
                   FROM  ITDoorsControllingBundle:Invoice  i_s
@@ -654,7 +699,8 @@ class OrganizationRepository extends EntityRepository
                     AND i_a.original = false
                     )')
             ->orderBy('allSumma')
-            ->getQuery()->getResult();
+            ->getQuery()
+                 ->getResult();
 
         return $res;
     }

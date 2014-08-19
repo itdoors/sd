@@ -16,10 +16,11 @@ class InvoicePaymentsRepository extends EntityRepository
     /**
      *
      * @param integer $customerId
+     * @param array   $filters
      *
      * @return mixed[]
      */
-    public function getForCustomer($customerId)
+    public function getForCustomer($customerId, $filters)
     {
         $sql = $this->createQueryBuilder('ip')
             ->select('ip.date')
@@ -28,10 +29,29 @@ class InvoicePaymentsRepository extends EntityRepository
             ->innerJoin('ip.invoice', 'i')
             ->where('i.customerId = :customerId')
             ->andWhere('i.delayDate < ip.date')
-            ->setParameter('customerId',$customerId)
-            ->orderBy('ip.date')
-            ->getQuery();
+            ->setParameter('customerId',$customerId);
+        if (sizeof($filters)) {
+            foreach ($filters as $key => $value) {
+                if (!$value) {
+                    continue;
+                }
+                switch ($key) {
+                    case 'dateRange':
+                        $dateArr = explode('-', $value);
+                        $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
+                        $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));
 
-        return $sql->getResult();
+                        $sql->andWhere('i.date BETWEEN :datestart AND :datestop')
+                            ->setParameter(':datestart', $dateStart)
+                            ->setParameter(':datestop', $dateStop);
+                        break;
+                }
+            }
+        }
+
+        return $sql
+                ->orderBy('ip.date')
+                ->getQuery()
+                ->getResult();
     }
 }
