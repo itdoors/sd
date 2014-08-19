@@ -6,14 +6,19 @@
 <script>
         $(document).ready(function(){
             $('.datatime-picker').datetimepicker({
+                        minView:0,
                         rtl: Metronic.isRTL(),
                         autoclose: true,
                         format: "dd.mm.yyyy hh:ii:ss",
                         pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
                         language: 'ru',
+                        minuteStep: 30,
                         weekStart: 1,
                         startDate: new Date()
-                    });
+                    }).on('changeDate', function(ev){
+                        //.val($('.datatime-picker').val()+':00');
+                    }
+                );
 
             $('#' + '{{ form.vars.name }}' + '_performer').attr("multiple", true);
 

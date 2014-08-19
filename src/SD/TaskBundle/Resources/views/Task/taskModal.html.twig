@@ -1,4 +1,4 @@
-{% trans_default_domain 'SDCalendarBundle' %}
+{% trans_default_domain 'SDTaskBundle' %}
 {#
 <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
 <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
@@ -55,7 +55,7 @@
                 url: url,
                 data: sendData,
                 success: function(data1) {
-                    alert(data1)
+                    //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
                         update_modal();
@@ -83,7 +83,7 @@
                 url: url,
                 data: sendData,
                 success: function(data1) {
-                    alert(data1)
+                    //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
                         update_modal();
@@ -160,12 +160,41 @@
                     if (data.success == 1) {
                         holder.html(data.html);
                         ITDoorsAjax.unblockUI(holder);
+                        update_content()
                     } else {
                         //$('#copy_etalon_finished').show('blind', {}, 500);
                     }
                 }
 
             })
+
+        }
+
+        function update_content() {
+            var filter = $('#task_modal_info_holder').data('role');
+            var url = $('#more_info_input').data('url_task_table');
+            var sendData = {
+                'filter': filter
+            }
+            ITDoorsAjax.blockUI($('#tasks_list'));
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data1) {
+                    data = JSON.parse(data1);
+                    if (data.success == 1) {
+                        ITDoorsAjax.unblockUI($('#tasks_list'));
+                        $('#tasks_list').html('').html(data.html);
+                        //$('#form_modal_task_view').modal('show');
+                    } else {
+                        //$('#copy_etalon_finished').show('blind', {}, 500);
+                    }
+
+                }
+
+            })
+
 
         }
 
@@ -236,8 +265,12 @@
         </td>
     </tr>
     <tr>
+        <td>{% trans %}My role{% endtrans %}</td>
+        <td colspan="3">{{ taskUserRole.role|trans }}</td>
+    </tr>
+    <tr>
         <td>{% trans %}Stage{% endtrans %}</td>
-        <td colspan="3">{{ taskUserRole.task.stage }}</td>
+        <td colspan="3">{{ taskUserRole.task.stage|trans }}</td>
     </tr>
 
     {#
@@ -255,7 +288,7 @@
 </table>
 {% if taskUserRole.isViewed != true %}
     <a id="task_set_viewed" class="btn green" style="float: right;">{% trans %}Set viewed{% endtrans %}</a>
-{% endif %}
+{% else %}
 
 {% if taskUserRole.role == 'performer' %}
     {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'date request'%}
@@ -270,6 +303,7 @@
     {% endif %}
     {% if taskUserRole.task.stage == 'checking'%}
         <a id="task_set_done_controller" data-stage="done" class="btn red stageButton" style="float: left; margin-left: 10px;">{% trans %}Set done{% endtrans %}</a>
+        <a id="task_set_performing_controller" data-stage="performing" class="btn green stageButton" style="float: left; margin-left: 10px;">{% trans %}Re-make{% endtrans %}</a>
     {% endif %}
 
     {% if taskUserRole.task.stage == 'date request'%}
@@ -286,7 +320,7 @@
 
 {% endif %}
 
-{% if taskUserRole.task.stage != 'date request' and taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone' and taskUserRole.task.stage != 'closed' %}
+{% if taskUserRole.task.stage != 'date request' and taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone' and taskUserRole.task.stage != 'closed' and taskUserRole.task.stage != 'checking' %}
     <a id="task_change_date" data-stage="date request" class="btn red" style="float: left; margin-left: 10px;">{% trans %}Change end date{% endtrans %}</a>
     <div style="clear: both"></div>
     <div id="change_date_holder" style="display: none">
@@ -297,24 +331,24 @@
                     <a id="task_change_date_submit" data-stage="date request" class="btn blue stageButton" style="margin-left: 10px;">{% trans %}Send request{% endtrans %}</a>
         #}
         <br>
-        <a data-value="1" data-type="hour" class="btn red changeDate" style="width: 100px;">+ 1 {% trans %}hour{% endtrans %}</a>
-        <a data-value="3" data-type="hour" class="btn red changeDate" style="width: 100px;">+ 3 {% trans %}hours{% endtrans %}</a>
-        <a data-value="5" data-type="hour" class="btn red changeDate" style="width: 100px;">+ 5 {% trans %}hours{% endtrans %}</a>
-        <a data-value="12" data-type="hour" class="btn red changeDate" style="width: 100px;">+ 12 {% trans %}hours{% endtrans %}</a>
+        <a data-value="1" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}1 hour{% endtrans %}</a>
+        <a data-value="3" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}3 hours{% endtrans %}</a>
+        <a data-value="5" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}5 hours{% endtrans %}</a>
+        <a data-value="12" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}12 hours{% endtrans %}</a>
         <br><br>
-        <a data-value="1" data-type="day" class="btn blue changeDate" style="width: 100px;">+ 1 {% trans %}day{% endtrans %}</a>
-        <a data-value="2" data-type="day" class="btn blue changeDate" style="width: 100px;">+ 2 {% trans %}days{% endtrans %}</a>
-        <a data-value="3" data-type="day" class="btn blue changeDate" style="width: 100px;">+ 3 {% trans %}days{% endtrans %}</a>
-        <a data-value="5" data-type="day" class="btn blue changeDate" style="width: 100px;">+ 5 {% trans %}days{% endtrans %}</a>
+        <a data-value="1" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}1 day{% endtrans %}</a>
+        <a data-value="2" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}2 days{% endtrans %}</a>
+        <a data-value="3" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}3 days{% endtrans %}</a>
+        <a data-value="5" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}5 days{% endtrans %}</a>
         <br><br>
-        <a data-value="1" data-type="week" class="btn green changeDate" style="width: 100px;">+ 1 {% trans %}week{% endtrans %}</a>
-        <a data-value="2" data-type="week" class="btn green changeDate" style="width: 100px;">+ 2 {% trans %}weeks{% endtrans %}</a>
-        <a data-value="3" data-type="week" class="btn green changeDate" style="width: 100px;">+ 3 {% trans %}weeks{% endtrans %}</a>
-        <a data-value="1" data-type="month" class="btn green changeDate" style="width: 100px;">+ 1 {% trans %}month{% endtrans %}</a>
+        <a data-value="1" data-type="week" class="btn green changeDate" style="width: 100px;">+ {% trans %}1 week{% endtrans %}</a>
+        <a data-value="2" data-type="week" class="btn green changeDate" style="width: 100px;">+ {% trans %}2 weeks{% endtrans %}</a>
+        <a data-value="3" data-type="week" class="btn green changeDate" style="width: 100px;">+ {% trans %}3 weeks{% endtrans %}</a>
+        <a data-value="1" data-type="month" class="btn green changeDate" style="width: 100px;">+ {% trans %}1 month{% endtrans %}</a>
 
     </div>
 {% endif %}
-
+{% endif %}
 <br><br>
 <input type="hidden" id="task_modal_info_holder"
        data-id="{{ taskUserRole.id }}"
@@ -323,8 +357,8 @@
        data-url_update_modal="{{ path('sd_task_modal') }}"
        data-url_change_date="{{ path('sd_task_change_date') }}"
        data-url_answer_date="{{ path('sd_task_answer_date') }}"
-
-        >
+       data-role="{{ taskUserRole.role }}"
+    >
 {#
 
 <a class="btn green" data-dismiss="modal" aria-hidden="true">{% trans %}Exit{% endtrans %}</a>

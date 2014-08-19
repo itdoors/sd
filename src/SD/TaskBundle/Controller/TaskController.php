@@ -16,21 +16,47 @@ class TaskController extends Controller
 
 
 
-    public function taskTableAction() {
+    public function taskTableAction(Request $request = null) {
         $user = $this->getUser();
+
+        $filterArray = array(
+            'user' => $user
+        );
+
+        if ($request != null) {
+            $filter = $request->request->get('filter');
+            if ($filter != 'all' && $filter) {
+                $role = $this->getDoctrine()
+                    ->getRepository('SDTaskBundle:Role')
+                    ->findOneBy(array(
+                        'name' => $filter,
+                        'model' => 'task'
+                    ));
+                $filterArray['role'] = $role;
+            }
+        }
+
 
         $tasksUserRole = $this->getDoctrine()
             ->getRepository('SDTaskBundle:TaskUserRole')
             ->findBy(
-                array(
-                    'user' => $user
-                ),
+                $filterArray,
                 array(
                     'isViewed' => 'ASC',
                     'id' => 'DESC'
                 )
             );
 
+        if ($filter) {
+            $return = array();
+            $return['html'] = $this->renderView('SDTaskBundle:Task:tableTasks.html.twig',
+                array(
+                    'tasksUserRole' => $tasksUserRole
+                )
+            );
+            $return['success'] = 1;
+            return new Response(json_encode($return));
+        }
         return $this->render('SDTaskBundle:Task:tableTasks.html.twig',
             array(
               'tasksUserRole' => $tasksUserRole
@@ -177,8 +203,8 @@ class TaskController extends Controller
         $id = $request->request->get('id');
         $stage = $request->request->get('stage');
 
-        if ($stage == 'done' || $stage == 'undone' || $stage == 'closed') {
-            $this->endOfTask($id);
+        if ($stage == 'done' || $stage == 'undone' || $stage == 'closed' || $stage == 'checking') {
+            $this->closeDateRequest($id);
         }
         $em = $this->getDoctrine()->getManager();
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
@@ -199,7 +225,7 @@ class TaskController extends Controller
         return new Response(json_encode($return));
     }
 
-    private function endOfTask($id) {
+    private function closeDateRequest($id) {
         $em = $this->getDoctrine()->getManager();
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
         $stageRequest = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
@@ -287,6 +313,7 @@ class TaskController extends Controller
                 'name' => 'date request',
                 'model' => 'task',
             ));
+            $task ->setStage($stageDateRequest);
         }
         $newTaskEndDate->setTask($task);
         $newTaskEndDate->setChangeDateTime(new \DateTime());
@@ -295,7 +322,7 @@ class TaskController extends Controller
 
 
 
-        $task ->setStage($stageDateRequest);
+
         $em->persist($task);
         $em->flush();
 
