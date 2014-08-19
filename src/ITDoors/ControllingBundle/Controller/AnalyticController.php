@@ -140,10 +140,22 @@ class AnalyticController extends BaseFilterController
         $filterNamespace = $this->container->getParameter($this->getNamespace()).'GraficIndividual';
 
         $filters = $this->getFilters($filterNamespace);
+        $showType = null;
         if (empty($filters)) {
             $filters['isFired'] = 'No fired';
             $this->setFilters($filterNamespace, $filters);
         }
+         if (!empty($filters['dateRange'])) {
+                $dates = explode('-', $filters['dateRange']);
+                $dateFrom = new \DateTime($dates[0]);
+                $dateTo = new \DateTime($dates[1]);
+                if($dateFrom->format('mY') == $dateTo->format('mY')) {
+                    $showType = array(
+                        'year' => $dateFrom->format('Y'),
+                        'month' => $dateFrom->format('m')
+                    );
+                }
+            }
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
@@ -194,11 +206,22 @@ class AnalyticController extends BaseFilterController
                     $yearsA[$invoiceA['date']->format('Y')] = array();
                 }
                 if(!array_key_exists($invoiceA['date']->format('m'), $yearsA[$invoiceA['date']->format('Y')])) {
-                    $yearsA[$invoiceA['date']->format('Y')][$invoiceA['date']->format('m')] = 0;
+                    $yearsA[$invoiceA['date']->format('Y')][$invoiceA['date']->format('m')] = array('summaInMonth' => 0);
                 }
-                $yearsA[$invoiceA['date']->format('Y')][$invoiceA['date']->format('m')]
+                if(!array_key_exists($invoiceA['date']->format('j'), $yearsA[$invoiceA['date']->format('Y')][$invoiceA['date']->format('m')])) {
+                    $yearsA[$invoiceA['date']->format('Y')][$invoiceA['date']->format('m')][$invoiceA['date']->format('j')] = 0;
+                }
+                $yearsA[$invoiceA['date']->format('Y')][$invoiceA['date']->format('m')]['summaInMonth']
                         = 
-                        $yearsA[$invoiceA['date']->format('Y')][$invoiceA['date']->format('m')]
+                        $yearsA[$invoiceA['date']->format('Y')][$invoiceA['date']->format('m')]['summaInMonth']
+                        +
+                        ($invoiceA['sum']
+                        -
+                        $invoiceA['paymentsSumma']
+                        );
+                $yearsA[$invoiceA['date']->format('Y')][$invoiceA['date']->format('m')][$invoiceA['date']->format('j')]
+                        = 
+                        $yearsA[$invoiceA['date']->format('Y')][$invoiceA['date']->format('m')][$invoiceA['date']->format('j')]
                         +
                         ($invoiceA['sum']
                         -
@@ -209,11 +232,22 @@ class AnalyticController extends BaseFilterController
                     $yearsPR[$invoiceA['delayDate']->format('Y')] = array();
                 }
                 if(!array_key_exists($invoiceA['delayDate']->format('m'), $yearsPR[$invoiceA['delayDate']->format('Y')])) {
-                    $yearsPR[$invoiceA['delayDate']->format('Y')][$invoiceA['delayDate']->format('m')] = 0;
+                    $yearsPR[$invoiceA['delayDate']->format('Y')][$invoiceA['delayDate']->format('m')] = array('summaInMonth' => 0);
                 }
-                $yearsPR[$invoiceA['delayDate']->format('Y')][$invoiceA['delayDate']->format('m')]
+                if(!array_key_exists($invoiceA['delayDate']->format('j'), $yearsPR[$invoiceA['delayDate']->format('Y')][$invoiceA['delayDate']->format('m')])) {
+                    $yearsPR[$invoiceA['delayDate']->format('Y')][$invoiceA['delayDate']->format('m')][$invoiceA['delayDate']->format('j')] = 0;
+                }
+                $yearsPR[$invoiceA['delayDate']->format('Y')][$invoiceA['delayDate']->format('m')]['summaInMonth']
                         = 
-                        $yearsPR[$invoiceA['delayDate']->format('Y')][$invoiceA['delayDate']->format('m')]
+                        $yearsPR[$invoiceA['delayDate']->format('Y')][$invoiceA['delayDate']->format('m')]['summaInMonth']
+                        +
+                        ($invoiceA['sum']
+                        -
+                        $invoiceA['paymentsSumma']
+                        );
+                $yearsPR[$invoiceA['delayDate']->format('Y')][$invoiceA['delayDate']->format('m')][$invoiceA['delayDate']->format('j')]
+                        = 
+                        $yearsPR[$invoiceA['delayDate']->format('Y')][$invoiceA['delayDate']->format('m')][$invoiceA['delayDate']->format('j')]
                         +
                         ($invoiceA['sum']
                         -
@@ -228,11 +262,19 @@ class AnalyticController extends BaseFilterController
                     $yearsP[$invoiceP['date']->format('Y')] = array();
                 }
                 if(!array_key_exists($invoiceP['date']->format('m'), $yearsP[$invoiceP['date']->format('Y')])) {
-                    $yearsP[$invoiceP['date']->format('Y')][$invoiceP['date']->format('m')] = 0;
+                    $yearsP[$invoiceP['date']->format('Y')][$invoiceP['date']->format('m')] = array('summaInMonth' => 0);
                 }
-                $yearsP[$invoiceP['date']->format('Y')][$invoiceP['date']->format('m')]
+                if(!array_key_exists($invoiceP['date']->format('j'), $yearsP[$invoiceP['date']->format('Y')][$invoiceP['date']->format('m')])) {
+                    $yearsP[$invoiceP['date']->format('Y')][$invoiceP['date']->format('m')][$invoiceP['date']->format('j')] = 0;
+                }
+                $yearsP[$invoiceP['date']->format('Y')][$invoiceP['date']->format('m')]['summaInMonth']
                         = 
-                        $yearsP[$invoiceP['date']->format('Y')][$invoiceP['date']->format('m')]
+                        $yearsP[$invoiceP['date']->format('Y')][$invoiceP['date']->format('m')]['summaInMonth']
+                        +
+                        $invoiceP['summaPay'];
+                $yearsP[$invoiceP['date']->format('Y')][$invoiceP['date']->format('m')][$invoiceP['date']->format('j')]
+                        = 
+                        $yearsP[$invoiceP['date']->format('Y')][$invoiceP['date']->format('m')][$invoiceP['date']->format('j')]
                         +
                         $invoiceP['summaPay'];
             }
@@ -245,6 +287,7 @@ class AnalyticController extends BaseFilterController
         }
         
         return $this->render('ITDoorsControllingBundle:Analytic:graficIndividualLists.html.twig', array(
+                'showType' => $showType,
                 'entities' => $pagination,
                 'invoices' => $invoices,
                 'namespace' => $filterNamespace,

@@ -52,12 +52,11 @@
             </div>
         </div>
         {{ ajax_filter_render(filter, namespace, {
-            'datatable_ajax': 'ITDoorsAjax.updateList'
+            'datatable_ajax_tab': 'ITDoorsAjax.updateList'
         }) }}
         <div class="tabbable tabbable-custom boxless">
-             {{ ajax_tab_render( tabs, tab, namespace) }}
-            <div class="tab-content ajax-tab-holder" id="datatable_ajax" data-url="{{ url('it_doors_controlling_invoice_show', { period: tab }) }}">
-                 {{ render(controller('ITDoorsControllingBundle:Invoice:show')) }}
+            <div class="tab-content" id="datatable_ajax_tab" data-url="{{ url('it_doors_controlling_invoice_show_tab') }}">
+                 {{ render(controller('ITDoorsControllingBundle:Invoice:showtab')) }}
             </div>
         </div>
     </div>

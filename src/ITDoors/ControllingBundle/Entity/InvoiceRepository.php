@@ -48,6 +48,7 @@ class InvoiceRepository extends EntityRepository
             ->addSelect('i.delayDaysType')
             ->addSelect('i.dateEnd')
             ->addSelect('i.dateFact')
+            ->addSelect('i.customerName as invoiceCustomerName')
             ->addSelect(
                 "array_to_string(
                   ARRAY(
@@ -454,15 +455,21 @@ class InvoiceRepository extends EntityRepository
      * @param integer $periodmin Description
      * @param integer $periodmax 0 - no restrictions
      * @param integer $companystryctyre
+     * @param array   $filters
      *
      * @return float summa
      */
-    public function getInvoicePeriodSum($periodmin, $periodmax, $companystryctyre)
+    public function getInvoicePeriodSum($periodmin, $periodmax, $companystryctyre, $filters = null)
     {
         $res = $this->createQueryBuilder('i');
 
         /** select */
         $this->selectInvoiceSum($res);
+        
+        $this->joinInvoicePeriod($res);
+        
+        $this->processFilters($res, $filters);
+        
         /** where */
         $this->whereInvoicePeriod($res, $periodmin, $periodmax);
         if ($companystryctyre) {
@@ -531,10 +538,11 @@ class InvoiceRepository extends EntityRepository
      * Returns results for interval future invoice
      *
      * @param integer $companystryctyre
+     * @param array   $filters
      * 
      * @return mixed[]
      */
-    public function getInvoiceCourtSum($companystryctyre)
+    public function getInvoiceCourtSum($companystryctyre, $filters = null)
     {
         $id = 1;
 
@@ -543,6 +551,8 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoiceSum($res);
         /** join */
         $this->joinInvoicePeriod($res);
+        
+        $this->processFilters($res, $filters);
         if ($companystryctyre) {
             $res->andWhere('i_ics.companystructureId = :companystructureId')
                     ->setParameter(':companystructureId', $companystryctyre);
@@ -748,10 +758,11 @@ class InvoiceRepository extends EntityRepository
      * Returns results for interval future invoice
      *
      * @param integer $companystryctyre
+     * @param mixed   $filters
      * 
      * @return mixed[]
      */
-    public function getInvoicePaySum($companystryctyre)
+    public function getInvoicePaySum($companystryctyre, $filters = null)
     {
         $date = date('Y-m-d', time() - 2592000);
         $res = $this->createQueryBuilder('i');
@@ -759,6 +770,8 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoiceSum($res);
         /** join */
         $this->joinInvoicePeriod($res);
+        
+        $this->processFilters($res, $filters);
         /** where */
         if ($companystryctyre) {
             $res->andWhere('i_ics.companystructureId = :companystructureId')
@@ -772,10 +785,11 @@ class InvoiceRepository extends EntityRepository
      * Returns results for interval future invoice
      *
      * @param integer $companystryctyre
+     * @param mixed   $filters
      *
      * @return mixed[]
      */
-    public function getInvoiceFlowSum($companystryctyre)
+    public function getInvoiceFlowSum($companystryctyre, $filters = null)
     {
         $date = date('Y-m-d');
         $res = $this->createQueryBuilder('i');
@@ -783,6 +797,8 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoiceSum($res);
         /** join */
         $this->joinInvoicePeriod($res);
+        
+        $this->processFilters($res, $filters);
         /** where */
         if ($companystryctyre) {
             $res->andWhere('i_ics.companystructureId = :companystructureId')

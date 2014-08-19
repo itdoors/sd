@@ -25,6 +25,10 @@ it_doors_controlling_invoice_expected_data_show:
 it_doors_controlling_invoice_show:
     pattern:  /controlling/show
     defaults: { _controller: ITDoorsControllingBundle:Invoice:show }
+    
+it_doors_controlling_invoice_show_tab:
+    pattern:  /controlling/show/tab
+    defaults: { _controller: ITDoorsControllingBundle:Invoice:showtab }
         
 it_doors_controlling_invoice_invoice:
     pattern:  /controlling/invoice/{invoiceid}

@@ -1,5 +1,37 @@
 {% trans_default_domain 'ITDoorsControllingBundle' %}
 <script>
+
+    function daysInMonth(month,year) {
+        var dd = new Date(year, month, 0);
+        return dd.getDate();
+    }
+    function number_format(number, decimals, dec_point, thousands_sep) {
+            number = (number + '')
+              .replace(/[^0-9+\-Ee.]/g, '');
+            var n = !isFinite(+number) ? 0 : +number,
+              prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+              sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+              dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+              s = '',
+              toFixedFix = function(n, prec) {
+                var k = Math.pow(10, prec);
+                return '' + (Math.round(n * k) / k)
+                  .toFixed(prec);
+              };
+            // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+            s = (prec ? toFixedFix(n, prec) : '' + Math.round(n))
+              .split('.');
+            if (s[0].length > 3) {
+              s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+            }
+            if ((s[1] || '')
+              .length < prec) {
+              s[1] = s[1] || '';
+              s[1] += new Array(prec - s[1].length + 1)
+                .join('0');
+            }
+            return s.join(dec);
+    }
     function showTooltip(x, y, contents) {
         $('<div id="tooltip">' + contents + '</div>').css({
                 position: 'absolute',
@@ -17,22 +49,23 @@
         
     function chart(pageviews, visitors, id) {
 
-        $.plot($("#chart_"+id), [
+        var plot = $.plot($("#chart_"+id), [
+                {
+                    data: visitors,
+                    label: "Простроченый долг",
+                    lines: {
+                        lineWidth: 5
+                    },
+                    shadowSize: 0
+                },
                 {
                     data: pageviews,
                     label: "Общий долг",
                     lines: {
-                        lineWidth: 1
+                        lineWidth: 5
                     },
                     shadowSize: 0
 
-                }, {
-                    data: visitors,
-                    label: "Простроченый долг",
-                    lines: {
-                        lineWidth: 1
-                    },
-                    shadowSize: 0
                 }
             ], {
                 series: {
@@ -44,7 +77,7 @@
                             colors: [{
                                     opacity: 0.05
                                 }, {
-                                    opacity: 0.01
+                                    opacity: 0.06
                                 }
                             ]
                         }
@@ -63,11 +96,7 @@
                     borderColor: "#eee",
                     borderWidth: 1
                 },
-                colors: ["#808080", "#d84a38", "#52e136"],
-                 legend: {
-                    show: true,
-                    sorted: null    // default to no legend sorting
-                },
+                colors: ["#d84a38", "#615A5A", "#52e136"],
                 xaxis: {
                     mode: "categories",
                     tickLength: 0,
@@ -78,8 +107,21 @@
                 },
                 yaxis: {
                     ticks: 10,
+                    min: 0,
                     tickDecimals: 0,
                     tickColor: "#eee"
+                },
+                legend: {
+                    show: true,
+                    noColumns: 1, // number of colums in legend table
+                    labelFormatter: null, // fn: string -> string
+                    labelBoxBorderColor: "#ccc", // border color for the little label boxes
+                    container: "#legendBlock"+id, // container (as jQuery object) to put legend in, null means default on top of graph
+                    position: "left", // position of default legend container within plot
+                    margin: 10, // distance from grid edge to default legend container within plot
+                    backgroundColor: '#eee', // null means auto-detect
+                    backgroundOpacity: 0.15, // set to 0 to avoid background
+                    sorted: 'asc'    // default to no legend sorting
                 }
                 
             });
@@ -102,6 +144,23 @@
                 previousPoint = null;
             }
         });
+        
+        for (visitor in visitors) {
+             o = plot.pointOffset({ x:  visitor , y: visitors[visitor][1] });
+            $("#chart_"+id).append(
+                       '<div style="text-align:right;width:65px;position:absolute;left:' + 
+                       (o.left - 66) + 
+                       'px;top:' + (o.top-16)+ 
+                       'px;color:#000;font-size:smaller">'+number_format(visitors[visitor][1], 2, ',', ' ')+'</div>'); 
+        }
+        for (pageview in pageviews) {
+             o = plot.pointOffset({ x:  pageview , y: pageviews[pageview][1] });
+            $("#chart_"+id).append(
+                       '<div style="text-align:right;width:65px;position:absolute;left:' + 
+                       (o.left - 66) + 
+                       'px;top:' + (o.top-16)+ 
+                       'px;color:#000;font-size:smaller">'+number_format(pageviews[pageview][1], 2, ',', ' ')+'</div>'); 
+        }
     }
     var mountsShort = [];
         mountsShort['01'] = 'Янв.';
@@ -119,7 +178,6 @@
     var months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
 </script>
 
-
 <div class="navigation">
     {{ ajax_paginator_render(
             entities, namespasePagin, {
@@ -130,76 +188,70 @@
 </div>
     {% if entities | length %}
     {% for  key,item in entities %}
-        {{item.customerName}}<br>
             {% set invoiceAs = invoices[item.id]['invoice'] %}
             {% set invoicePs = invoices[item.id]['invoicePays'] %}
             {% set years = invoices[item.id]['years'] %}
-            
-            {% for invoiceA in invoiceAs %}
-                {{ invoiceA.date | date('Y.m.d') }} - {{ invoiceA.sum }} - {{ invoiceA.delayDate | date('Y.m.d') }} -a <br>
-            {% endfor %}
-            
-            {% for invoiceP in invoicePs %}
-                {{ invoiceP.date | date('Y.m.d') }} {{ invoiceP.summaPay }} - p<br>
-            {% endfor %}
-            {#% if customerId is not null %}
-                var allSum = 0;
-                var allSumm = 0;
-                for (var year in y) {
-                    for (var month in months) {
-                         if(sum[y[year]][months[month]] != undefined) {
-                            allSum = sum[y[year]][months[month]];
-                         }
-                         if(sumd[y[year]] != undefined && sumd[y[year]][months[month]] != undefined) {
-                            allSumm = sumd[y[year]][months[month]];
-                         }
-                         pageviews.push([mountsShort[months[month]]+' '+y[year], allSum-allSumm]);
-                         visitors.push([mountsShort[months[month]]+' '+y[year], allSum-allSumm]);
-                    }
-                }
-                console.log('{{ last.customerName }}');
-                console.log(y);
-                console.log(sum);
-                console.log(sumd);
-                chart(pageviews, visitors, {{ last.id }});
-            });
-            </script>
-            {% endif %#}
+
             <script>
                 $(document).ready(function(){
-                var pageviews = [];
-                var visitors = [];
-                var years = JSON.parse('{{ invoices[item.id]['years'] | json_encode() | raw}}');
-                var yearA = JSON.parse('{{ invoices[item.id]['invoicesA'] | json_encode() | raw}}');
-                var yearP = JSON.parse('{{ invoices[item.id]['invoicesP'] | json_encode() | raw}}');
-                var yearPR = JSON.parse('{{ invoices[item.id]['invoicesPR'] | json_encode() | raw}}');
-                var sumA = 0;
-                var sumP = 0;
-                var sumPR = 0;
-                for (var year in years) {
-                    
-                    for (var month in months) {
-                        if(yearA[year] !== undefined && yearA[year][months[month]] !== undefined) {
-                            sumA += yearA[year][months[month]];
+                    var pageviews = [];
+                    var visitors = [];
+                    var years = JSON.parse('{{ invoices[item.id]['years'] | json_encode() | raw }}');
+                    var yearA = JSON.parse('{{ invoices[item.id]['invoicesA'] | json_encode() | raw }}');
+                    var yearP = JSON.parse('{{ invoices[item.id]['invoicesP'] | json_encode() | raw }}');
+                    var yearPR = JSON.parse('{{ invoices[item.id]['invoicesPR'] | json_encode() | raw }}');
+                    var sumA = 0;
+                    var sumP = 0;
+                    var sumPR = 0;
+                    {% if showType %}
+                        var year = '{{showType.year}}';
+                        var month = '{{showType.month}}';
+                        console.log(year);
+                        console.log(month);
+                       
+                            var maxDay = daysInMonth(month,year);
+                             console.log(maxDay);
+                            for (i = 1; i <= maxDay; i++) {
+                               if(yearA[year] !== undefined && yearA[year][month] !== undefined &&  yearA[year][month][i] !== undefined) {
+                                   sumA += yearA[year][month][i];
+                               }
+                               if(yearP[year] !== undefined && yearP[year][month] !== undefined && yearP[year][month][i] !== undefined) {
+                                   sumP = yearP[year][month][i];
+                               }
+                               if(yearPR[year] !== undefined && yearPR[year][month] !== undefined && yearPR[year][month][i] !== undefined) {
+                                   sumPR += yearPR[year][month][i];
+                               }
+                                pageviews.push([i, sumA-sumP]);
+                                visitors.push([i, sumPR-sumP]);
+                            }
+                    {% else %}
+                        for (var year in years) {
+                            for (var month in months) {
+                                if(yearA[year] !== undefined && yearA[year][months[month]] !== undefined) {
+                                    sumA += yearA[year][months[month]]['summaInMonth'];
+                                }
+                                if(yearP[year] !== undefined && yearP[year][months[month]] !== undefined) {
+                                    sumP = yearP[year][months[month]];
+                                }
+                                if(yearPR[year] !== undefined && yearPR[year][months[month]] !== undefined) {
+                                    sumPR += yearPR[year][months[month]]['summaInMonth'];
+                                }
+                                 pageviews.push([mountsShort[months[month]]+' '+year, sumA-sumP]);
+                                 visitors.push([mountsShort[months[month]]+' '+year, sumPR-sumP]);
+                            }
                         }
-                        if(yearP[year] !== undefined && yearP[year][months[month]] !== undefined) {
-                            sumP = yearP[year][months[month]];
-                        }
-                        if(yearPR[year] !== undefined && yearPR[year][months[month]] !== undefined) {
-                            sumPR += yearPR[year][months[month]];
-                        }
-                         pageviews.push([mountsShort[months[month]]+' '+year, sumA-sumP]);
-                         visitors.push([mountsShort[months[month]]+' '+year, sumPR-sumP]);
-                    }
-                }
-                        
-                chart(pageviews, visitors, {{ item.id }});
-            });
+                    {% endif %}
+
+                    chart(pageviews, visitors, {{ item.id }});
+                });
             </script>
+            <div id="legendBlock{{ item.id }}" style="float: right;"></div>
             <div class="portlet box red">
                 <div class="portlet-title">
                         <div class="caption">
-                                <i class="fa fa-gift"></i>{{ item.customerName }}
+                                <i class="fa fa-gift"></i>
+                                {{ item.customerName }}
+                                
                         </div>
                         <div class="tools">
                                 <a href="javascript:;" class="collapse"></a>
@@ -210,31 +262,7 @@
                     <div id="chart_{{ item.id }}" class="chart" style="padding: 0px; position: relative;"></div>
                 </div>
             </div>
-                {#if($.inArray('{{item.date|date('Y')}}', y) === -1) {
-                    y.push('{{item.date|date('Y')}}');
-                }
-                
-                
-                if(sum['{{item.date|date('Y')}}']  === undefined) {
-                    sum['{{item.date|date('Y')}}'] = [];
-                }
-                if(sum['{{item.date|date('Y')}}']['{{item.date|date('m')}}']  === undefined) {
-                    sum['{{item.date|date('Y')}}']['{{item.date|date('m')}}'] = 0;
-                }
-                if(sumd['{{item.delayDate|date('Y')}}']  === undefined) {
-                    sumd['{{item.delayDate|date('Y')}}'] = [];
-                }
-                if(sumd['{{item.delayDate|date('Y')}}']['{{item.delayDate|date('m')}}']  === undefined) {
-                    sumd['{{item.delayDate|date('Y')}}']['{{item.delayDate|date('m')}}'] = [];
-                }
-                
-                
-                allsUmma = allsUmma+{{item.allSumma}};
-                delayDate = delayDate+Number({{item.paymentsSumma}});
-                sum['{{item.date|date('Y')}}']['{{item.date|date('m')}}'] = allsUmma;
-                sumd['{{item.delayDate|date('Y')}}']['{{item.delayDate|date('m')}}'] = delayDate;#}
-    {% endfor %}
-                 
+    {% endfor %}  
     <div class="navigation">
         {{ ajax_paginator_render(
                 entities, namespasePagin, {
@@ -244,6 +272,3 @@
         }}
     </div>
 {% endif %}
-{#% for  key,item in entities %}
-    {{ item.customerName }} {{item.date|date('Y')}} {{item.allSumma}} <br>
-{% endfor %#}

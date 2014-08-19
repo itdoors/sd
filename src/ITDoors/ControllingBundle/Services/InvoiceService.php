@@ -619,10 +619,11 @@ class InvoiceService
      * @var Container
      * 
      * @param integer $companystryctyre
+     * @param array   $filters
      * 
      * @return tabs[]
      */
-    public function getTabsInvoices($companystryctyre)
+    public function getTabsInvoices($companystryctyre, $filters = null)
     {
         $translator = $this->container->get('translator');
         /** @var EntityManager $em */
@@ -631,7 +632,7 @@ class InvoiceService
         /** @var InvoicecronRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
 
-        $summa = $invoice->getInvoicePeriodSum(1, 30, $companystryctyre);
+        $summa = $invoice->getInvoicePeriodSum(1, 30, $companystryctyre, $filters);
         $tabs[] = array(
             'tab' => 30,
             'blockupdate' => 'ajax-tab-holder',
@@ -639,7 +640,7 @@ class InvoiceService
             'text' => $translator->trans('from') . ' 1 ' . $translator->trans('to') . ' 30 ' . $translator->trans('day')
              .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoicePeriodSum(31, 60, $companystryctyre);
+        $summa = $invoice->getInvoicePeriodSum(31, 60, $companystryctyre, $filters);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 60,
@@ -648,7 +649,7 @@ class InvoiceService
                 ->trans('from') . ' 31 ' . $translator->trans('to') . ' 60 ' . $translator->trans('days')
             .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoicePeriodSum(61, 120, $companystryctyre);
+        $summa = $invoice->getInvoicePeriodSum(61, 120, $companystryctyre, $filters);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 120,
@@ -657,7 +658,7 @@ class InvoiceService
                 ->trans('from') . ' 61 ' . $translator->trans('to') . ' 120 ' . $translator->trans('days')
             .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoicePeriodSum(121, 180, $companystryctyre);
+        $summa = $invoice->getInvoicePeriodSum(121, 180, $companystryctyre, $filters);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 180,
@@ -667,7 +668,7 @@ class InvoiceService
                 ->trans('from') . ' 121 ' . $translator->trans('to') . ' 180 ' . $translator->trans('days')
             .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoicePeriodSum(180, 0, $companystryctyre);
+        $summa = $invoice->getInvoicePeriodSum(180, 0, $companystryctyre, $filters);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 181,
@@ -676,7 +677,7 @@ class InvoiceService
                 ->trans('from') . ' 181 ' . $translator->trans('days')
             .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoiceCourtSum($companystryctyre);
+        $summa = $invoice->getInvoiceCourtSum($companystryctyre, $filters);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'court',
@@ -684,7 +685,7 @@ class InvoiceService
             'text' => $translator->trans('court')
             .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoicePaySum($companystryctyre);
+        $summa = $invoice->getInvoicePaySum($companystryctyre, $filters);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'pay',
@@ -692,7 +693,7 @@ class InvoiceService
             'text' => $translator->trans('pay')
             .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoiceFlowSum($companystryctyre);
+        $summa = $invoice->getInvoiceFlowSum($companystryctyre, $filters);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'flow',

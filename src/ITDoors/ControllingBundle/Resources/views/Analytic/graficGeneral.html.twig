@@ -88,18 +88,18 @@
                         ((o.left - 65) > 230 ? o.left - 65 : 230) + 
                         'px;top:' + (o.top-8)+ 
                         'px;color:#666;font-size:smaller">{{ (item.allSumma-item.paymentsSumma )|number_format(2, ',', ' ') }}</div>'); 
-                 o = plot.pointOffset({ x:  {{ item.allSumma }}  , y: {{key}}});
+                 o = plot.pointOffset({ x:  {{ ( item.allSumma ? item.allSumma : 0 ) }}  , y: {{key}}});
                 $("#chart_5").append(
                         '<div style="text-align:right;width:65px;position:absolute;left:' + 
                         ((o.left - 65) > 310 ? o.left - 65 : 310) + 
                         'px;top:' + (o.top-8)+ 
-                        'px;color:#666;font-size:smaller">{{ item.allSumma |number_format(2, ',', ' ')}}</div>'); 
+                        'px;color:#666;font-size:smaller">{{ ( item.allSumma ? item.allSumma : 0 )|number_format(2, ',', ' ')}}</div>'); 
                  o = plot.pointOffset({ x:  0   , y: {{key}}});
                 $("#chart_5").append(
                         '<div style="width:100%;position:absolute;left:' + 
                         (o.left +5) + 
                         'px;top:' + (o.top+8)+ 
-                        'px;color:#666;font-size:smaller">{{ item.responsibles }}</div>'); 
+                        'px;color:#000;font-size:smaller">{{ item.responsibles }} сумма по счетам:{{ item.allSummaInvoice }}</div>'); 
            {% endfor %}
 
     }   

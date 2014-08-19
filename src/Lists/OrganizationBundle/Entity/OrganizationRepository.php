@@ -530,6 +530,15 @@ class OrganizationRepository extends EntityRepository
                   SELECT SUM(i_s.sum)
                   FROM  ITDoorsControllingBundle:Invoice  i_s
                   WHERE i_s.customerId = o.id
+                 ) as allSummaInvoice'
+            )
+            ->addSelect(
+                '(
+                  SELECT SUM(i_a_d.summa)
+                  FROM  ITDoorsControllingBundle:Invoice  i_s_ 
+                  LEFT JOIN ITDoorsControllingBundle:InvoiceAct i_a WITH i_s_.id = i_a.invoiceId
+                  LEFT JOIN ITDoorsControllingBundle:InvoiceActDetal i_a_d WITH i_a.id = i_a_d.invoiceActId
+                  WHERE i_s_.customerId = o.id
                  ) as allSumma'
             )
             ->addSelect('o.name as customerName')
@@ -688,15 +697,24 @@ class OrganizationRepository extends EntityRepository
                   SELECT SUM(i_s.sum)
                   FROM  ITDoorsControllingBundle:Invoice  i_s
                   WHERE i_s.customerId = o.id
+                 ) as allSummaInvoice'
+            )
+            ->addSelect(
+                '(
+                  SELECT SUM(i_a_d.summa)
+                  FROM  ITDoorsControllingBundle:Invoice  i_s_ 
+                  LEFT JOIN ITDoorsControllingBundle:InvoiceAct i_a WITH i_s_.id = i_a.invoiceId
+                  LEFT JOIN ITDoorsControllingBundle:InvoiceActDetal i_a_d WITH i_a.id = i_a_d.invoiceActId
+                  WHERE i_s_.customerId = o.id
                  ) as allSumma'
             )
             ->addSelect('o.name as customerName')
             ->where('o.id in (
                     SELECT DISTINCT(i.customerId) 
                     FROM  ITDoorsControllingBundle:Invoice i
-                    LEFT JOIN ITDoorsControllingBundle:InvoiceAct i_a
-                    WHERE i.id = i_a.invoiceId
-                    AND i_a.original = false
+                    LEFT JOIN ITDoorsControllingBundle:InvoiceAct i_a_
+                    WHERE i.id = i_a_.invoiceId
+                    AND i_a_.original = false
                     )')
             ->orderBy('allSumma')
             ->getQuery()

@@ -44,6 +44,12 @@ class InvoiceController extends BaseFilterController
         $filterNamespace = $this->container->getParameter($this->getNamespace());
 
         $filter = $this->filterFormName;
+        
+        $filters = $this->getFilters($filterNamespace);
+        if (empty($filters)) {
+            $filters['isFired'] = 'No fired';
+            $this->setFilters($filterNamespace, $filters);
+        }
 
         $period = $this->getTab($filterNamespace);
         if (!$period) {
@@ -56,7 +62,7 @@ class InvoiceController extends BaseFilterController
         if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
             $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
         }
-        $tabs = $service->getTabsInvoices($companystryctyre);
+        $tabs = $service->getTabsInvoices($companystryctyre, $filters);
 
         return $this->render('ITDoorsControllingBundle:Invoice:index.html.twig', array(
                 'tabs' => $tabs,
@@ -65,6 +71,44 @@ class InvoiceController extends BaseFilterController
                 'namespace' => $filterNamespace
         ));
     }
+    /**
+     * @var Container
+     *
+     * @return Response
+     */
+    public function showtabAction()
+    {
+        $filterNamespace = $this->container->getParameter($this->getNamespace());
+
+        $filter = $this->filterFormName;
+        
+        $filters = $this->getFilters($filterNamespace);
+        if (empty($filters)) {
+            $filters['isFired'] = 'No fired';
+            $this->setFilters($filterNamespace, $filters);
+        }
+
+        $period = $this->getTab($filterNamespace);
+        if (!$period) {
+            $period = 30;
+            $this->setTab($filterNamespace, $period);
+        }
+
+        $service = $this->container->get($this->service);
+        $companystryctyre = null;
+        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+            $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
+        }
+        $tabs = $service->getTabsInvoices($companystryctyre, $filters);
+
+        return $this->render('ITDoorsControllingBundle:Invoice:showtab.html.twig', array(
+                'tabs' => $tabs,
+                'filter' => $filter,
+                'tab' => $period,
+                'namespace' => $filterNamespace
+        ));
+    }
+
 
     /**
      *  showAction
@@ -187,7 +231,7 @@ class InvoiceController extends BaseFilterController
 
         $entitie = $invoice->getInfoForTab($invoiceid, $tab);
 
-        return $this->render('ITDoorsControllingBundle:Invoice:table' . $tab . '.html.twig', array(
+        return $this->render('ITDoorsControllingBundle:Invoice:tables' . $tab . '.html.twig', array(
                 'namespaceTab' => $namespaceTab,
                 'entitie' => $entitie,
                 'block' => $tab
