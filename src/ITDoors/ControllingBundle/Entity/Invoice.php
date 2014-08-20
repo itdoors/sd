@@ -867,12 +867,13 @@ class Invoice
      * Add acts
      *
      * @param \ITDoors\ControllingBundle\Entity\InvoiceAct $acts
+     * 
      * @return Invoice
      */
     public function addAct(\ITDoors\ControllingBundle\Entity\InvoiceAct $acts)
     {
         $this->acts[] = $acts;
-    
+
         return $this;
     }
 

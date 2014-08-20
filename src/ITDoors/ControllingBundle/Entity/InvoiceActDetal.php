@@ -59,12 +59,13 @@ class InvoiceActDetal
      * Set invoiceActId
      *
      * @param integer $invoiceActId
+     * 
      * @return InvoiceActDetal
      */
     public function setInvoiceActId($invoiceActId)
     {
         $this->invoiceActId = $invoiceActId;
-    
+
         return $this;
     }
 
@@ -82,12 +83,13 @@ class InvoiceActDetal
      * Set mpk
      *
      * @param string $mpk
+     * 
      * @return InvoiceActDetal
      */
     public function setMpk($mpk)
     {
         $this->mpk = $mpk;
-    
+
         return $this;
     }
 
@@ -105,12 +107,13 @@ class InvoiceActDetal
      * Set note
      *
      * @param string $note
+     * 
      * @return InvoiceActDetal
      */
     public function setNote($note)
     {
         $this->note = $note;
-    
+
         return $this;
     }
 
@@ -128,12 +131,13 @@ class InvoiceActDetal
      * Set count
      *
      * @param float $count
+     * 
      * @return InvoiceActDetal
      */
     public function setCount($count)
     {
         $this->count = $count;
-    
+
         return $this;
     }
 
@@ -151,12 +155,13 @@ class InvoiceActDetal
      * Set summa
      *
      * @param float $summa
+     * 
      * @return InvoiceActDetal
      */
     public function setSumma($summa)
     {
         $this->summa = $summa;
-    
+
         return $this;
     }
 
@@ -174,12 +179,13 @@ class InvoiceActDetal
      * Set act
      *
      * @param \ITDoors\ControllingBundle\Entity\InvoiceAct $act
+     * 
      * @return InvoiceActDetal
      */
     public function setAct(\ITDoors\ControllingBundle\Entity\InvoiceAct $act = null)
     {
         $this->act = $act;
-    
+
         return $this;
     }
 

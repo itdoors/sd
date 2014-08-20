@@ -504,7 +504,7 @@ class OrganizationRepository extends EntityRepository
          $res = $this->createQueryBuilder('o')
             ->select('o.id')
             ->addSelect('o.edrpou')
-             ->addSelect(
+            ->addSelect(
                 "array_to_string(
                   ARRAY(
                           SELECT
@@ -514,7 +514,7 @@ class OrganizationRepository extends EntityRepository
                           LEFT JOIN ics.companystructure  cs
                            WHERE o.id = i_company.customerId
                       ), ','
-                 ) as responsibles"
+                ) as responsibles"
             )
             ->addSelect(
                 "(
@@ -569,7 +569,7 @@ class OrganizationRepository extends EntityRepository
                     FROM  ITDoorsControllingBundle:Invoice i
                     )')
             ->orderBy('o.name');
-         
+
          $resCount = $this->createQueryBuilder('o')
             ->select('COUNT(o.id)')
             ->where('o.id in (
@@ -577,7 +577,7 @@ class OrganizationRepository extends EntityRepository
                     FROM  ITDoorsControllingBundle:Invoice i
                     )');
 
-         if (sizeof($filters)) {
+        if (sizeof($filters)) {
 
             foreach ($filters as $key => $value) {
                 if (!$value) {
@@ -626,38 +626,13 @@ class OrganizationRepository extends EntityRepository
                             ->setParameter(':datestart', $dateStart)
                             ->setParameter(':datestop', $dateStop);
                         break;
-//                    case 'invoiceId':
-//                        if (isset($value[0]) && !$value[0]) {
-//                            break;
-//                        }
-//                        $arr = explode(',', $value);
-//                        $sql->andWhere('i.id in (:ids)');
-//                        $sql->setParameter(':ids', $arr);
-//                        break;
-//                    case 'actNumber':
-//                        $arr = explode(',', $value);
-//                        $sql->innerJoin('i.acts', 'i_act_number');
-//                        $sql->andWhere("i_act_number.number in (:actNumbers)");
-//                        $sql->setParameter(':actNumbers', $arr);
-//                        break;
-//                    case 'companystructure':
-//                        if (isset($value[0]) && !$value[0]) {
-//                            break;
-//                        }
-//                        $arr = explode(',', $value);
-//                        $sql->leftJoin('i.invoicecompanystructure', 'ics_fil');
-//                        $sql->leftJoin('ics_fil.companystructure', 'cs_fil');
-//                        $sql->andWhere("cs_fil.id in (:companystructures)");
-//                        $sql->setParameter(':companystructures', $arr);
-//                        break;
                 }
             }
         }
-        
-         $result = array(
-                 'entity' => $res->getQuery(),
-                 'count' => $resCount->getQuery()->getSingleScalarResult()
-                 );
+        $result = array(
+            'entity' => $res->getQuery(),
+            'count' => $resCount->getQuery()->getSingleScalarResult()
+            );
 
         return $result;
     }

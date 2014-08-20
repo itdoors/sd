@@ -303,6 +303,7 @@ class InvoiceRepository extends EntityRepository
      * @param integer $periodmin
      * @param integer $periodmax
      * @param array   $filters
+     * @param integer $companystryctyre
      *
      * @return mixed[]
      */
@@ -452,8 +453,8 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
-     * @param integer $periodmin Description
-     * @param integer $periodmax 0 - no restrictions
+     * @param integer $periodmin
+     * @param integer $periodmax
      * @param integer $companystryctyre
      * @param array   $filters
      *
@@ -465,11 +466,11 @@ class InvoiceRepository extends EntityRepository
 
         /** select */
         $this->selectInvoiceSum($res);
-        
+
         $this->joinInvoicePeriod($res);
-        
+
         $this->processFilters($res, $filters);
-        
+
         /** where */
         $this->whereInvoicePeriod($res, $periodmin, $periodmax);
         if ($companystryctyre) {
@@ -551,7 +552,7 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoiceSum($res);
         /** join */
         $this->joinInvoicePeriod($res);
-        
+
         $this->processFilters($res, $filters);
         if ($companystryctyre) {
             $res->andWhere('i_ics.companystructureId = :companystructureId')
@@ -770,7 +771,7 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoiceSum($res);
         /** join */
         $this->joinInvoicePeriod($res);
-        
+
         $this->processFilters($res, $filters);
         /** where */
         if ($companystryctyre) {
@@ -797,7 +798,7 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoiceSum($res);
         /** join */
         $this->joinInvoicePeriod($res);
-        
+
         $this->processFilters($res, $filters);
         /** where */
         if ($companystryctyre) {
@@ -907,7 +908,7 @@ class InvoiceRepository extends EntityRepository
      * 
      * @return mixed[]
      */
-    public function getEntittyCountSum($period, $filters=array(), $companystryctyre)
+    public function getEntittyCountSum($period, $filters, $companystryctyre)
     {
         $result = array();
         switch ($period) {
@@ -993,8 +994,7 @@ class InvoiceRepository extends EntityRepository
             ->addSelect('customer.id as customerId')
             ->leftJoin('i.customer', 'customer')
             ->orderBy('customer.name')
-            ->addOrderBy('i.date')
-;
+            ->addOrderBy('i.date');
         $resCount = $this->createQueryBuilder('i')
                 ->select('COUNT(i.customerId)')
                 ->leftJoin('i.customer', 'customer');
@@ -1219,7 +1219,6 @@ class InvoiceRepository extends EntityRepository
         return $sql->getResult();
     }
     /**
-     *
      * @param integer $customerId
      * @param array   $filters
      *
@@ -1240,7 +1239,7 @@ class InvoiceRepository extends EntityRepository
                 )as paymentsSumma"
             )
             ->where('i.customerId = :customerId')
-            ->setParameter('customerId',$customerId);
+            ->setParameter('customerId', $customerId);
         if (sizeof($filters)) {
             foreach ($filters as $key => $value) {
                 if (!$value) {
@@ -1265,5 +1264,4 @@ class InvoiceRepository extends EntityRepository
                 ->getQuery()
                 ->getResult();
     }
-    
 }

@@ -112,7 +112,6 @@ class InvoiceService
      * saveinvoice
      * 
      * @param object $invoice
-     * @param object $em
      * 
      * @return Invoice|boolean
      */
@@ -615,8 +614,6 @@ class InvoiceService
 
     /**
      * Returns results for interval future invoice
-     *
-     * @var Container
      * 
      * @param integer $companystryctyre
      * @param array   $filters

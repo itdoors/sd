@@ -51,7 +51,7 @@ class InvoiceAct
     {
         $this->detals = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
@@ -66,12 +66,13 @@ class InvoiceAct
      * Set invoiceId
      *
      * @param integer $invoiceId
+     * 
      * @return InvoiceAct
      */
     public function setInvoiceId($invoiceId)
     {
         $this->invoiceId = $invoiceId;
-    
+
         return $this;
     }
 
@@ -89,12 +90,13 @@ class InvoiceAct
      * Set number
      *
      * @param string $number
+     * 
      * @return InvoiceAct
      */
     public function setNumber($number)
     {
         $this->number = $number;
-    
+
         return $this;
     }
 
@@ -112,12 +114,13 @@ class InvoiceAct
      * Set date
      *
      * @param \DateTime $date
+     * 
      * @return InvoiceAct
      */
     public function setDate($date)
     {
         $this->date = $date;
-    
+
         return $this;
     }
 
@@ -135,12 +138,13 @@ class InvoiceAct
      * Set original
      *
      * @param boolean $original
+     * 
      * @return InvoiceAct
      */
     public function setOriginal($original)
     {
         $this->original = $original;
-    
+
         return $this;
     }
 
@@ -158,12 +162,13 @@ class InvoiceAct
      * Add detals
      *
      * @param \ITDoors\ControllingBundle\Entity\InvoiceActDetal $detals
+     * 
      * @return InvoiceAct
      */
     public function addDetal(\ITDoors\ControllingBundle\Entity\InvoiceActDetal $detals)
     {
         $this->detals[] = $detals;
-    
+
         return $this;
     }
 
@@ -191,12 +196,13 @@ class InvoiceAct
      * Set invoice
      *
      * @param \ITDoors\ControllingBundle\Entity\Invoice $invoice
+     * 
      * @return InvoiceAct
      */
     public function setInvoice(\ITDoors\ControllingBundle\Entity\Invoice $invoice = null)
     {
         $this->invoice = $invoice;
-    
+
         return $this;
     }
 

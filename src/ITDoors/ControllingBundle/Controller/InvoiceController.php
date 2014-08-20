@@ -44,7 +44,7 @@ class InvoiceController extends BaseFilterController
         $filterNamespace = $this->container->getParameter($this->getNamespace());
 
         $filter = $this->filterFormName;
-        
+
         $filters = $this->getFilters($filterNamespace);
         if (empty($filters)) {
             $filters['isFired'] = 'No fired';
@@ -81,7 +81,7 @@ class InvoiceController extends BaseFilterController
         $filterNamespace = $this->container->getParameter($this->getNamespace());
 
         $filter = $this->filterFormName;
-        
+
         $filters = $this->getFilters($filterNamespace);
         if (empty($filters)) {
             $filters['isFired'] = 'No fired';
@@ -178,7 +178,7 @@ class InvoiceController extends BaseFilterController
         /** @var InvoiceService $service */
         $service = $this->container->get($this->service);
         $companystryctyre = null;
-         if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
             $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
         }
         $service->getTabsInvoices($companystryctyre);

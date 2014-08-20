@@ -12,9 +12,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class InvoicePaymentsRepository extends EntityRepository
 {
-    
     /**
-     *
      * @param integer $customerId
      * @param array   $filters
      *
@@ -29,7 +27,7 @@ class InvoicePaymentsRepository extends EntityRepository
             ->innerJoin('ip.invoice', 'i')
             ->where('i.customerId = :customerId')
             ->andWhere('i.delayDate < ip.date')
-            ->setParameter('customerId',$customerId);
+            ->setParameter('customerId', $customerId);
         if (sizeof($filters)) {
             foreach ($filters as $key => $value) {
                 if (!$value) {

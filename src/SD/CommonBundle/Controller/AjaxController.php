@@ -257,10 +257,10 @@ class AjaxController extends BaseFilterController
             ->createQueryBuilder('ia')
             ->select('ia.number')
             ->where('lower(ia.number) LIKE :q')
-            ->setParameter(':q',  mb_strtolower($searchText, 'UTF-8') . '%')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
             ->getQuery()
             ->getResult();
- 
+
         $result = array();
 
         foreach ($invoiceActs as $act) {
@@ -2181,7 +2181,7 @@ class AjaxController extends BaseFilterController
 
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
-        
+
         if (!$user->hasRole('ROLE_CONTROLLING')) {
             return true;
         }
@@ -2212,7 +2212,7 @@ class AjaxController extends BaseFilterController
             ->getRepository('ITDoorsControllingBundle:Invoice')
             ->find($data->getInvoiceId());
         $data->setInvoice($invoice);
-        
+
         if ($invoice->getDogovorId()) {
             /** @var Dogovor $dogovor */
             $dogovor = $em
@@ -2224,10 +2224,10 @@ class AjaxController extends BaseFilterController
                 $invoices = $em
                 ->getRepository('ITDoorsControllingBundle:Invoice')
                     ->findBy(array('dogovorId' => $invoice->getDogovorId()));
-                foreach ($invoices as $invoice_c) {
+                foreach ($invoices as $invoiceCS) {
                     $invoiceC = new \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure();
                     $invoiceC->setCompanystructure($company);
-                    $invoiceC->setInvoice($invoice_c);
+                    $invoiceC->setInvoice($invoiceCS);
                     $em->persist($invoiceC);
                 }
                 $dogovorC = new DogovorCompanystructure();
@@ -2532,13 +2532,13 @@ class AjaxController extends BaseFilterController
         $object = $em
             ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
             ->find($id);
-        
+
           /** @var Invoice $invoice */
         $invoice = $em
             ->getRepository('ITDoorsControllingBundle:Invoice')
             ->find($object->getInvoiceId());
-        
-         if ($invoice && $invoice->getDogovorId()) {
+
+        if ($invoice && $invoice->getDogovorId()) {
             /** @var Dogovor $dogovor */
             $dogovor = $em
                ->getRepository('ListsDogovorBundle:Dogovor')
@@ -2549,12 +2549,12 @@ class AjaxController extends BaseFilterController
                 $invoices = $em
                 ->getRepository('ITDoorsControllingBundle:Invoice')
                     ->findBy(array('dogovorId' => $invoice->getDogovorId()));
-                foreach ($invoices as $invoice_c) {
+                foreach ($invoices as $invoiceCS) {
                     /** @var InvoiceCompanystructure $invoiceC */
                     $invoiceC = $em
                         ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
                         ->findOneBy(array(
-                            'invoiceId' => $invoice_c->getId(),
+                            'invoiceId' => $invoiceCS->getId(),
                             'companystructureId' => $object->getCompanystructureId()
                             ));
                     $em->remove($invoiceC);
