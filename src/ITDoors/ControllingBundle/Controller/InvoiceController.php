@@ -231,7 +231,7 @@ class InvoiceController extends BaseFilterController
 
         $entitie = $invoice->getInfoForTab($invoiceid, $tab);
 
-        return $this->render('ITDoorsControllingBundle:Invoice:tables' . $tab . '.html.twig', array(
+        return $this->render('ITDoorsControllingBundle:Invoice:table' . $tab . '.html.twig', array(
                 'namespaceTab' => $namespaceTab,
                 'entitie' => $entitie,
                 'block' => $tab
