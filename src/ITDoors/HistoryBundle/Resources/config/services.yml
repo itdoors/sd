@@ -1,7 +1,8 @@
 parameters:
-#    it_doors_history.example.class: ITDoors\HistoryBundle\Example
+    it_doors_history.service.class: ITDoors\HistoryBundle\Services\HistoryService
 
 services:
-#    it_doors_history.example:
-#        class: %it_doors_history.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    it_doors_history.service:
+        class: %it_doors_history.service.class%
+        arguments: [@service_container]
+

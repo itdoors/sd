@@ -1,0 +1,11 @@
+{% trans_default_domain 'ITDoorsHistoryBundle' %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="tabbable tabbable-custom boxless">
+            <div class="tab-content" id="datatable_ajax_history" data-url="{#{ url('it_doors_controlling_invoice_show_tab') }#}">
+                 {#{ render(controller('ITDoorsControllingBundle:Invoice:showtab')) }#}
+            </div>
+        </div>
+    </div>
+</div>
