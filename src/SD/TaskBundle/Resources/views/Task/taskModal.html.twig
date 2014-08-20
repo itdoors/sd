@@ -243,7 +243,7 @@
                     {{ performer.user }}
 
                     {% if performer.isViewed !=true %}
-                        <span style="color: red; font-size: smaller;">{% trans %}(Not viewed){% endtrans %}</span>
+                        <span style="color: red; font-size: smaller;">({% trans %}Not viewed{% endtrans %})</span>
                     {% endif %}
                     <br>
                 {% endfor %}
