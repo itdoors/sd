@@ -154,7 +154,7 @@ class TaskController extends Controller
         return new Response(json_encode($return));
     }
 
-    private function checkIfCanPerform($id) {
+    private function checkIfCanPerform($id, $type = false) {
 
         $em = $this->getDoctrine()->getManager();
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
@@ -173,7 +173,7 @@ class TaskController extends Controller
             'task' => $task,
             'role'  => $performerRole
         ));
-        if($taskUserRole->getRole()->getName() != 'controller') {
+        if($taskUserRole->getRole()->getName() != 'controller' || $type) {
             $performing = true;
             foreach ($tasksUserRole as $taskPerforming) {
                 if ($taskPerforming->getIsViewed() == false) {
@@ -367,7 +367,7 @@ class TaskController extends Controller
         $em->persist($taskEndDateRequested);
         $em->flush();
 
-        $this->checkIfCanPerform($id);
+        $this->checkIfCanPerform($id, true);
 
         $return['success'] = 1;
 
