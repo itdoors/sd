@@ -1,0 +1,4 @@
+{{ ajax_tab_render( tabs, tab, namespace) }}
+<div class="tab-content ajax-tab-holder" id="datatable_ajax" data-url="{{ url('it_doors_controlling_invoice_show', { period: tab }) }}">
+     {{ render(controller('ITDoorsControllingBundle:Invoice:show')) }}
+</div>

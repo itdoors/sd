@@ -25,6 +25,10 @@ it_doors_controlling_invoice_expected_data_show:
 it_doors_controlling_invoice_show:
     pattern:  /controlling/show
     defaults: { _controller: ITDoorsControllingBundle:Invoice:show }
+    
+it_doors_controlling_invoice_show_tab:
+    pattern:  /controlling/show/tab
+    defaults: { _controller: ITDoorsControllingBundle:Invoice:showtab }
         
 it_doors_controlling_invoice_invoice:
     pattern:  /controlling/invoice/{invoiceid}
@@ -43,12 +47,34 @@ it_doors_controlling_invoice_invoice_lastaction:
 it_doors_controlling_invoice_email:
     pattern:  /controlling/invoice/email
     defaults: { _controller: ITDoorsControllingBundle:Email:index}
-        
+
 it_doors_controlling_invoice_export_exel:
     pattern:  /controlling/invoice/export/exel
     defaults: { _controller: ITDoorsControllingBundle:Invoice:exportExel}
-        
+
 it_doors_controlling_invoice_send_email:
     pattern:  /controlling/invoice/send/email
     defaults: { _controller: ITDoorsControllingBundle:Invoice:sendEmailChange}
+
+it_doors_controlling_invoice_analytic:
+    pattern:  /controlling/invoice/analytic
+    defaults: { _controller: ITDoorsControllingBundle:Analytic:index}
+
+it_doors_controlling_invoice_grafic_general:
+    pattern:  /controlling/invoice/analytic/grafic/general
+    defaults: { _controller: ITDoorsControllingBundle:Analytic:graficGeneral}
+
+it_doors_controlling_invoice_grafic_withoutacts:
+    pattern:  /controlling/invoice/analytic/grafic/withoutacts
+    defaults: { _controller: ITDoorsControllingBundle:Analytic:graficWithoutacts}
+
+it_doors_controlling_invoice_grafic_individual_lists:
+    pattern:  /controlling/invoice/analytic/grafic/individual/lists
+    defaults: { _controller: ITDoorsControllingBundle:Analytic:graficIndividualLists}
+    
+it_doors_controlling_invoice_grafic_individual:
+    pattern:  /controlling/invoice/analytic/grafic/individual/{ajax}
+    defaults: { _controller: ITDoorsControllingBundle:Analytic:graficIndividual}
+
+
     

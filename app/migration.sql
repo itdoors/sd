@@ -864,3 +864,15 @@ ALTER TABLE invoice_payments ADD bank TEXT DEFAULT NULL;
 ALTER TABLE task ADD COLUMN handling_message_id bigint;
 -- staging ----------------------
 -- prod ++++++++++++++++++++++++
+ALTER TABLE invoice DROP dogovor_act_name;
+ALTER TABLE invoice DROP dogovor_act_date;
+ALTER TABLE invoice DROP dogovor_act_original;
+ALTER TABLE invoice DROP dogovor_act;
+CREATE TABLE invoice_act (id SERIAL NOT NULL, invoice_id INT NOT NULL, number VARCHAR(512) NOT NULL, date TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, original BOOLEAN NOT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_71D9A872989F1FD ON invoice_act (invoice_id);
+CREATE TABLE invoice_act_detal (id SERIAL NOT NULL, invoice_act_id INT NOT NULL, mpk VARCHAR(512) NOT NULL, note TEXT NOT NULL, count DOUBLE PRECISION NOT NULL, summa DOUBLE PRECISION NOT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_7875F8326A93C67B ON invoice_act_detal (invoice_act_id);
+ALTER TABLE invoice_act ADD CONSTRAINT FK_71D9A872989F1FD FOREIGN KEY (invoice_id) REFERENCES invoice (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE invoice_act_detal ADD CONSTRAINT FK_7875F8326A93C67B FOREIGN KEY (invoice_act_id) REFERENCES invoice_act (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+-- staging ----------------------
+-- prod ----------------------

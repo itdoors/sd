@@ -31,16 +31,15 @@
                 <td>{% trans %}Original ABP/BN{% endtrans %}</td>
                 <td>{% trans %}Note{% endtrans %}</td>
             </tr>
-            {% set acts = entitie.dogovorAct | json_decode()  %}
-            {% for act in acts %}
+            {% for item in entitie %}
             <tr>
-                <td>{{ entitie.dogovorActName}}</td>
-                <td>{{ entitie.dogovorActDate is empty ? '' :entitie.dogovorActDate | date('d-m-Y')}}</td>
-                <td>{{ act.mpk}}</td>
-                <td>{{ act.summa|number_format(2, ',', ' ')}}</td>
-                <td>{{ act.count}}</td>
-                <td>{% if entitie.dogovorActOriginal is not empty %}{% trans %}on{% endtrans %}{% else %}{% trans %}off{% endtrans %}{% endif %}</td>
-                <td>{{ act.note }}</td>
+                <td>{{ item.number}}</td>
+                <td>{{ item.date is empty ? '' :item.date | date('d-m-Y')}}</td>
+                <td>{{ item.mpk}}</td>
+                <td>{{ item.summa|number_format(2, ',', ' ')}}</td>
+                <td>{{ item.count}}</td>
+                <td>{% if item.original is not empty %}{% trans %}on{% endtrans %}{% else %}{% trans %}off{% endtrans %}{% endif %}</td>
+                <td>{{ item.note }}</td>
             </tr>
             {% endfor %}
         </tbody>

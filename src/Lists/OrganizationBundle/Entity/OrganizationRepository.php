@@ -493,4 +493,233 @@ class OrganizationRepository extends EntityRepository
 
         return $sql->getResult();
     }
+
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @return mixed[]
+     */
+    public function getForInvoice()
+    {
+         $res = $this->createQueryBuilder('o')
+            ->select('o.id')
+            ->addSelect('o.edrpou')
+             ->addSelect(
+                "array_to_string(
+                  ARRAY(
+                          SELECT
+                            DISTINCT(cs.name)
+                          FROM ITDoorsControllingBundle:Invoice  i_company
+                          LEFT JOIN ITDoorsControllingBundle:InvoiceCompanystructure ics WITH ics.invoiceId = i_company.id
+                          LEFT JOIN ics.companystructure  cs
+                           WHERE o.id = i_company.customerId
+                      ), ','
+                 ) as responsibles"
+            )
+            ->addSelect(
+                "(
+                SELECT SUM(paymens.summa)
+                FROM  ITDoorsControllingBundle:Invoice  i_paymens
+                LEFT JOIN  ITDoorsControllingBundle:InvoicePayments paymens
+                WHERE paymens.invoiceId = i_paymens.id
+                AND i_paymens.customerId = o.id
+                )as paymentsSumma"
+            )
+            ->addSelect(
+                '(
+                  SELECT SUM(i_s.sum)
+                  FROM  ITDoorsControllingBundle:Invoice  i_s
+                  WHERE i_s.customerId = o.id
+                 ) as allSummaInvoice'
+            )
+            ->addSelect(
+                '(
+                  SELECT SUM(i_a_d.summa)
+                  FROM  ITDoorsControllingBundle:Invoice  i_s_ 
+                  LEFT JOIN ITDoorsControllingBundle:InvoiceAct i_a WITH i_s_.id = i_a.invoiceId
+                  LEFT JOIN ITDoorsControllingBundle:InvoiceActDetal i_a_d WITH i_a.id = i_a_d.invoiceActId
+                  WHERE i_s_.customerId = o.id
+                 ) as allSumma'
+            )
+            ->addSelect('o.name as customerName')
+            ->where('o.id in (
+                    SELECT DISTINCT(i.customerId) 
+                    FROM  ITDoorsControllingBundle:Invoice i
+                    )')
+            ->orderBy('allSumma')
+                 //->setMaxResults(40)
+            ->getQuery()->getResult();
+
+        return $res;
+    }
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @param array $filters
+     * 
+     * @return mixed[]
+     */
+    public function getForInvoiceAndCount($filters)
+    {
+         $res = $this->createQueryBuilder('o')
+            ->select('o.id')
+            ->addSelect('o.name as customerName')
+            ->where('o.id in (
+                    SELECT DISTINCT(i.customerId) 
+                    FROM  ITDoorsControllingBundle:Invoice i
+                    )')
+            ->orderBy('o.name');
+         
+         $resCount = $this->createQueryBuilder('o')
+            ->select('COUNT(o.id)')
+            ->where('o.id in (
+                    SELECT DISTINCT(i.customerId) 
+                    FROM  ITDoorsControllingBundle:Invoice i
+                    )');
+
+         if (sizeof($filters)) {
+
+            foreach ($filters as $key => $value) {
+                if (!$value) {
+                    continue;
+                }
+                switch ($key) {
+                    case 'customer':
+                        $arr = explode(',', $value);
+                        $res->andWhere("o.id in (:customerIds)");
+                        $res->setParameter(':customerIds', $arr);
+                        $resCount->andWhere("o.id in (:customerIds)");
+                        $resCount->setParameter(':customerIds', $arr);
+                        break;
+                    case 'performer':
+                        $arr = explode(',', $value);
+                        $res->andWhere('o.id in (
+                            SELECT DISTINCT(i_p.customerId) 
+                            FROM  ITDoorsControllingBundle:Invoice i_p
+                            WHERE i_p.performerId in (:performerIds)
+                            )');
+                        $res->setParameter(':performerIds', $arr);
+                        $resCount->andWhere('o.id in (
+                            SELECT DISTINCT(i_p.customerId) 
+                            FROM  ITDoorsControllingBundle:Invoice i_p
+                            WHERE i_p.performerId in (:performerIds)
+                            )');
+                        $resCount->setParameter(':performerIds', $arr);
+                        break;
+                    case 'dateRange':
+                        $dateArr = explode('-', $value);
+                        $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
+                        $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));
+
+                        $res->andWhere('o.id in (
+                            SELECT DISTINCT(i_date.customerId) 
+                            FROM  ITDoorsControllingBundle:Invoice i_date
+                            WHERE i_date.date BETWEEN :datestart AND :datestop
+                            )')
+                            ->setParameter(':datestart', $dateStart)
+                            ->setParameter(':datestop', $dateStop);
+                        $resCount->andWhere('o.id in (
+                            SELECT DISTINCT(i_date.customerId) 
+                            FROM  ITDoorsControllingBundle:Invoice i_date
+                            WHERE i_date.date BETWEEN :datestart AND :datestop
+                            )')
+                            ->setParameter(':datestart', $dateStart)
+                            ->setParameter(':datestop', $dateStop);
+                        break;
+//                    case 'invoiceId':
+//                        if (isset($value[0]) && !$value[0]) {
+//                            break;
+//                        }
+//                        $arr = explode(',', $value);
+//                        $sql->andWhere('i.id in (:ids)');
+//                        $sql->setParameter(':ids', $arr);
+//                        break;
+//                    case 'actNumber':
+//                        $arr = explode(',', $value);
+//                        $sql->innerJoin('i.acts', 'i_act_number');
+//                        $sql->andWhere("i_act_number.number in (:actNumbers)");
+//                        $sql->setParameter(':actNumbers', $arr);
+//                        break;
+//                    case 'companystructure':
+//                        if (isset($value[0]) && !$value[0]) {
+//                            break;
+//                        }
+//                        $arr = explode(',', $value);
+//                        $sql->leftJoin('i.invoicecompanystructure', 'ics_fil');
+//                        $sql->leftJoin('ics_fil.companystructure', 'cs_fil');
+//                        $sql->andWhere("cs_fil.id in (:companystructures)");
+//                        $sql->setParameter(':companystructures', $arr);
+//                        break;
+                }
+            }
+        }
+        
+         $result = array(
+                 'entity' => $res->getQuery(),
+                 'count' => $resCount->getQuery()->getSingleScalarResult()
+                 );
+
+        return $result;
+    }
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @return mixed[]
+     */
+    public function getForInvoiceAct()
+    {
+         $res = $this->createQueryBuilder('o')
+            ->select('o.id')
+            ->addSelect('o.edrpou')
+            ->addSelect(
+                "(
+                SELECT SUM(paymens.summa)
+                FROM  ITDoorsControllingBundle:Invoice  i_paymens
+                LEFT JOIN  ITDoorsControllingBundle:InvoicePayments paymens
+                WHERE paymens.invoiceId = i_paymens.id
+                AND i_paymens.customerId = o.id
+                )as paymentsSumma"
+            )
+            ->addSelect(
+                "array_to_string(
+                  ARRAY(
+                          SELECT
+                            DISTINCT(cs.name)
+                          FROM ITDoorsControllingBundle:Invoice  i_company
+                          LEFT JOIN ITDoorsControllingBundle:InvoiceCompanystructure ics WITH ics.invoiceId = i_company.id
+                          LEFT JOIN ics.companystructure  cs
+                           WHERE o.id = i_company.customerId
+                      ), ','
+                 ) as responsibles"
+            )
+            ->addSelect(
+                '(
+                  SELECT SUM(i_s.sum)
+                  FROM  ITDoorsControllingBundle:Invoice  i_s
+                  WHERE i_s.customerId = o.id
+                 ) as allSummaInvoice'
+            )
+            ->addSelect(
+                '(
+                  SELECT SUM(i_a_d.summa)
+                  FROM  ITDoorsControllingBundle:Invoice  i_s_ 
+                  LEFT JOIN ITDoorsControllingBundle:InvoiceAct i_a WITH i_s_.id = i_a.invoiceId
+                  LEFT JOIN ITDoorsControllingBundle:InvoiceActDetal i_a_d WITH i_a.id = i_a_d.invoiceActId
+                  WHERE i_s_.customerId = o.id
+                 ) as allSumma'
+            )
+            ->addSelect('o.name as customerName')
+            ->where('o.id in (
+                    SELECT DISTINCT(i.customerId) 
+                    FROM  ITDoorsControllingBundle:Invoice i
+                    LEFT JOIN ITDoorsControllingBundle:InvoiceAct i_a_
+                    WHERE i.id = i_a_.invoiceId
+                    AND i_a_.original = false
+                    )')
+            ->orderBy('allSumma')
+            ->getQuery()
+                 ->getResult();
+
+        return $res;
+    }
 }

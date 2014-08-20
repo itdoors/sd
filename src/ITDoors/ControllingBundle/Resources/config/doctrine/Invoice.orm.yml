@@ -16,7 +16,7 @@ ITDoors\ControllingBundle\Entity\Invoice:
             type: float
             length: 20
         date:
-            type: date
+            type: datetime
         delayDate:
             nullable: true
             type: date
@@ -61,23 +61,8 @@ ITDoors\ControllingBundle\Entity\Invoice:
             type: datetime
             nullable: true
             column: dogovor_date
-        dogovorActName:
-            type: string
-            nullable: true
-            length: 255
-            column: dogovor_act_name
-        dogovorAct:
-            type: text
-            column: dogovor_act
         bank:
             type: text
-        dogovorActDate:
-            type: date
-            nullable: true
-            column: dogovor_act_date
-        dogovorActOriginal:
-            type: boolean
-            column: dogovor_act_original
         customerId:
             nullable: true
             type: integer
@@ -136,4 +121,7 @@ ITDoors\ControllingBundle\Entity\Invoice:
             mappedBy: invoice
         payments:
             targetEntity: InvoicePayments
+            mappedBy: invoice
+        acts:
+            targetEntity: InvoiceAct
             mappedBy: invoice

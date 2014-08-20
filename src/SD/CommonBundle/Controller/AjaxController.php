@@ -43,6 +43,7 @@ use SD\CalendarBundle\Entity\Task;
 use Lists\HandlingBundle\Entity\HandlingUser;
 use Lists\OrganizationBundle\Entity\OrganizationUser;
 use ITDoors\HistoryBundle\Entity\History;
+use Lists\DogovorBundle\Entity\DogovorCompanystructure;
 
 /**
  * AjaxController class.
@@ -240,23 +241,30 @@ class AjaxController extends BaseFilterController
      *
      * @return string
      */
-    public function invoiceDogovorActNameAction()
+    public function invoiceActNumberAction()
     {
         $searchTextQ = $this->get('request')->query->get('q');
         $searchTextQuery = $this->get('request')->query->get('query');
 
         $searchText = $searchTextQ ? $searchTextQ : $searchTextQuery;
 
-        /** @var \ITDoors\ControllingBundle\Entity\InvoiceRepository $invoiceRepository */
-        $invoiceRepository = $this->getDoctrine()
-            ->getRepository('ITDoorsControllingBundle:Invoice');
+        /** @var \ITDoors\ControllingBundle\Entity\InvoiceActRepository $invoiceActRepository */
+        $invoiceActRepository = $this->getDoctrine()
+            ->getRepository('ITDoorsControllingBundle:InvoiceAct');
 
-        $invoices = $invoiceRepository->getSearchDogovorActNameQuery($searchText);
-
+         /** @var InvoiceAct[] $invoiceActs */
+        $invoiceActs = $invoiceActRepository
+            ->createQueryBuilder('ia')
+            ->select('ia.number')
+            ->where('lower(ia.number) LIKE :q')
+            ->setParameter(':q',  mb_strtolower($searchText, 'UTF-8') . '%')
+            ->getQuery()
+            ->getResult();
+ 
         $result = array();
 
-        foreach ($invoices as $invoice) {
-            $result[] = $this->serializeArray($invoice, 'dogovorActName', 'dogovorActName');
+        foreach ($invoiceActs as $act) {
+            $result[] = $this->serializeArray($act, 'number', 'number');
         }
 
         return new Response(json_encode($result));
@@ -1351,18 +1359,18 @@ class AjaxController extends BaseFilterController
      *
      * @return string
      */
-    public function invoiceByDogovorActNamesAction()
+    public function invoiceByActNumbersAction()
     {
         $ids = explode(',', $this->get('request')->query->get('id'));
 
         /** @var \ITDoors\ControllingBundle\Entity\InvoiceRepository $invoiceRepository */
         $invoiceRepository = $this->getDoctrine()
-            ->getRepository('ITDoorsControllingBundle:Invoice');
+            ->getRepository('ITDoorsControllingBundle:InvoiceAct');
 
-        /** @var Invoice[] $invoices */
+        /** @var InvoiceAct[] $invoices */
         $invoices = $invoiceRepository
-            ->createQueryBuilder('i')
-            ->where('i.dogovorActName in (:ids)')
+            ->createQueryBuilder('ia')
+            ->where('ia.number in (:ids)')
             ->setParameter(':ids', $ids)
             ->getQuery()
             ->getResult();
@@ -1370,7 +1378,7 @@ class AjaxController extends BaseFilterController
         $result = array();
 
         foreach ($invoices as $invoice) {
-            $result[] = $this->serializeObject($invoice, 'getDogovorActName', 'getDogovorActName');
+            $result[] = $this->serializeObject($invoice, 'getNumber', 'getNumber');
         }
 
         return new Response(json_encode($result));
@@ -2171,26 +2179,63 @@ class AjaxController extends BaseFilterController
     public function invoiceCompanystructureFormSave(Form $form, User $user, Request $request)
     {
 
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        
+        if (!$user->hasRole('ROLE_CONTROLLING')) {
+            return true;
+        }
         /** @var InvoiceCompanystructure $data */
         $data = $form->getData();
 
         $formData = $request->request->get($form->getName());
 
+        /** @var InvoiceCompanystructure $invoiceCompanystructure */
+        $invoiceCompanystructure = $em
+            ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
+            ->findOneBy(array(
+                'invoiceId' => $data->getInvoiceID(),
+                'companystructureId' => $formData['companystructure']
+            ));
+        if ($invoiceCompanystructure) {
+            return true;
+        }
+
         /** @var ModelContact $contact */
-        $company = $this->getDoctrine()
+        $company = $em
             ->getRepository('ListsCompanystructureBundle:Companystructure')
             ->find($formData['companystructure']);
         $data->setCompanystructure($company);
 
         /** @var Invoice $invoice */
-        $invoice = $this->getDoctrine()
+        $invoice = $em
             ->getRepository('ITDoorsControllingBundle:Invoice')
-            ->find($data->getInvoiceID());
+            ->find($data->getInvoiceId());
         $data->setInvoice($invoice);
+        
+        if ($invoice->getDogovorId()) {
+            /** @var Dogovor $dogovor */
+            $dogovor = $em
+                ->getRepository('ListsDogovorBundle:Dogovor')
+                ->find($invoice->getDogovorId());
 
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($data);
+            if ($dogovor) {
+                /** @var Invoice $invoices */
+                $invoices = $em
+                ->getRepository('ITDoorsControllingBundle:Invoice')
+                    ->findBy(array('dogovorId' => $invoice->getDogovorId()));
+                foreach ($invoices as $invoice_c) {
+                    $invoiceC = new \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure();
+                    $invoiceC->setCompanystructure($company);
+                    $invoiceC->setInvoice($invoice_c);
+                    $em->persist($invoiceC);
+                }
+                $dogovorC = new DogovorCompanystructure();
+                $dogovorC->setCompanyStructures($company);
+                $dogovorC->setDogovors($dogovor);
+                $em->persist($dogovorC);
+            }
+        }
         $em->flush();
 
         return true;
@@ -2475,16 +2520,47 @@ class AjaxController extends BaseFilterController
      */
     public function invoiceCompanystructureDelete($params)
     {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        if (!$this->getUser()->hasRole('ROLE_CONTROLLING')) {
+            return false;
+        }
         $id = $params['id'];
 
         /** @var InvoiceCompanystructure $object */
-        $object = $this->getDoctrine()
+        $object = $em
             ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
             ->find($id);
+        
+          /** @var Invoice $invoice */
+        $invoice = $em
+            ->getRepository('ITDoorsControllingBundle:Invoice')
+            ->find($object->getInvoiceId());
+        
+         if ($invoice && $invoice->getDogovorId()) {
+            /** @var Dogovor $dogovor */
+            $dogovor = $em
+               ->getRepository('ListsDogovorBundle:Dogovor')
+               ->find($invoice->getDogovorId());
 
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($object);
+            if ($dogovor) {
+                /** @var Invoice $invoices */
+                $invoices = $em
+                ->getRepository('ITDoorsControllingBundle:Invoice')
+                    ->findBy(array('dogovorId' => $invoice->getDogovorId()));
+                foreach ($invoices as $invoice_c) {
+                    /** @var InvoiceCompanystructure $invoiceC */
+                    $invoiceC = $em
+                        ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
+                        ->findOneBy(array(
+                            'invoiceId' => $invoice_c->getId(),
+                            'companystructureId' => $object->getCompanystructureId()
+                            ));
+                    $em->remove($invoiceC);
+                }
+            }
+        }
         $em->flush();
     }
 

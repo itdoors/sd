@@ -107,8 +107,10 @@ doctrine:
                         array_to_string: ITDoors\CommonBundle\DQL\ArrayToStringDQL
                         array: ITDoors\CommonBundle\DQL\ArrayDQL
                         select_next_handling_message_date: SD\CommonBundle\DQL\SelectNextHandlingMessageDateDQL
+                    #datetime_functions:
+                        #YEAR: ITDoors\CommonBundle\DQL\Year
+                        #MONTH: ITDoors\CommonBundle\DQL\Month
                     # numeric_functions:
-                    # datetime_functions:
 
 tss_automailer:
   beanstalk: true

@@ -9,6 +9,8 @@ use ITDoors\ControllingBundle\Entity\InvoicecronRepository;
 use ITDoors\ControllingBundle\Entity\Invoice;
 use ITDoors\ControllingBundle\Entity\InvoicePayments;
 use ITDoors\ControllingBundle\Entity\InvoiceMessage;
+use ITDoors\ControllingBundle\Entity\InvoiceAct;
+use ITDoors\ControllingBundle\Entity\InvoiceActDetal;
 
 /**
  * Invoice Service class
@@ -84,7 +86,9 @@ class InvoiceService
                 case JSON_ERROR_NONE:
                     $this->addCronError(0, 'start parser', $file, 'parser file');
                     $this->arrCostumersForSendMessages = array();
+                    $em = $this->container->get('doctrine')->getManager();
                     $this->savejson($json->invoice);
+                    $em->flush();
                     $this->addCronError(0, 'stop parser', $file, 'parser file');
                     if (!is_dir($directory.'old')) {
                         mkdir($directory.'old', 0700);
@@ -98,6 +102,8 @@ class InvoiceService
         } else {
             $this->addCronError(0, 'ok', 'file not found', 'new file not found');
 
+            $em->flush();
+
             return 'File not found in derictory '."\n".$directory;
         }
     }
@@ -105,7 +111,8 @@ class InvoiceService
     /**
      * saveinvoice
      * 
-     * @param abject $invoice
+     * @param object $invoice
+     * @param object $em
      * 
      * @return Invoice|boolean
      */
@@ -120,16 +127,18 @@ class InvoiceService
             $invoiceNew->setCourt(0);
             $invoiceNew->setInvoiceId(trim($invoice->invoiceId));
 
-            if ($invoice->dateFact != 'null') {
+            if (count($invoice->payments) > 0 ) {
                 $summa = 0;
                 $dateFact = null;
-                foreach ($invoice->dateFact as $pay) {
+                foreach ($invoice->payments as $pay) {
                     $dateFact = new \DateTime(trim($pay->date));
                     $payments = new InvoicePayments();
                     $payments->setInvoice($invoiceNew);
                     $payments->setDate($dateFact);
                     $payments->setSumma(trim($pay->summa));
-                    $payments->setBank(trim($pay->bank));
+                    if ($pay->bank != 'null') {
+                        $payments->setBank(trim($pay->bank));
+                    }
                     $em->persist($payments);
                     $summa += trim($pay->summa);
                 }
@@ -141,7 +150,7 @@ class InvoiceService
                 $this->messageTemplate = 'invoice-not-pay';
             }
         } else {
-            if ($invoice->dateFact != 'null') {
+            if (count($invoice->payments) > 0) {
                 $paymentsOld = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')->findBy(array('invoiceId' => $invoiceNew->getId()));
                 foreach ($paymentsOld as $payOld) {
                     $em->remove($payOld);
@@ -150,13 +159,15 @@ class InvoiceService
                 $dateFact = null;
                 $sendEmailPay = false;
                 $date = date('Y-m-d');
-                foreach ($invoice->dateFact as $pay) {
+                foreach ($invoice->payments as $pay) {
                     $dateFact = new \DateTime(trim($pay->date));
                     $payments = new InvoicePayments();
                     $payments->setInvoice($invoiceNew);
                     $payments->setDate($dateFact);
                     $payments->setSumma(trim($pay->summa));
-                    $payments->setBank(trim($pay->bank));
+                    if ($pay->bank != 'null') {
+                        $payments->setBank(trim($pay->bank));
+                    }
                     $em->persist($payments);
                     $summa += trim($pay->summa);
 
@@ -186,16 +197,19 @@ class InvoiceService
                 }
             }
         }
-
         $invoiceNew->setDogovorGuid(trim($invoice->dogovorGuid));
         $invoiceNew->setDogovorNumber(trim($invoice->dogovorNumber));
         $invoiceNew->setDogovorName(trim($invoice->dogovorName));
-        $invoiceNew->setBank(trim($invoice->bank));
-        $invoiceNew->setDogovorActName(trim($invoice->dogovorActName));
+        if ($invoice->bank != 'null') {
+            $invoiceNew->setBank(trim($invoice->bank));
+        }
         $invoiceNew->setCustomerName(trim($invoice->customerName));
         $invoiceNew->setCustomerEdrpou(trim($invoice->customerEdrpou));
         $invoiceNew->setPerformerName(trim($invoice->performerName));
         $invoiceNew->setPerformerEdrpou(trim($invoice->performerEdrpou));
+        $acts = $invoice->acts;
+        $this->addActs($invoiceNew, $acts);
+       // $invoiceNew->setDogovorAct(json_encode($invoice->dogovorAct));
 
         if (!empty($invoice->delayDate) && $invoice->delayDate != 'null') {
             $invoiceNew->setDelayDate(new \DateTime(trim($invoice->delayDate)));
@@ -208,9 +222,6 @@ class InvoiceService
         }
         if (!empty($invoice->dogovorDate) && $invoice->dogovorDate != 'null') {
             $invoiceNew->setDogovorDate(new \DateTime(trim($invoice->dogovorDate)));
-        }
-        if (!empty($invoice->dogovorActDate) && $invoice->dogovorActDate != 'null') {
-            $invoiceNew->setDogovorActDate(new \DateTime(trim($invoice->dogovorActDate)));
         }
         if (!empty($invoice->date) && $invoice->date != 'null') {
             $invoiceNew->setDate(new \DateTime(trim($invoice->date)));
@@ -226,24 +237,41 @@ class InvoiceService
 
             return false;
         }
-        if (!empty($invoice->dogovorAct)) {
-            $invoiceNew->setDogovorAct(json_encode($invoice->dogovorAct));
-        } else {
-            $this->addCronError(false, 'error data', 'dogovorAct', json_encode($invoice));
-
-            return false;
-        }
-        if (in_array($invoice->dogovorActOriginal, array('0', '1'))) {
-            $invoiceNew->setDogovorActOriginal($invoice->dogovorActOriginal);
-        } else {
-            $this->addCronError(false, 'error data', 'dogovorActOriginal', json_encode($invoice));
-
-            return false;
-        }
 
         return $invoiceNew;
     }
 
+    private function addActs($invoiceNew, $acts)
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        foreach ($acts as $act) {
+            $actFind = $em->getRepository('ITDoorsControllingBundle:InvoiceAct')
+                    ->findOneBy(array('number' => $act->actNumber));
+            if (!$actFind) {
+                $actFind = new InvoiceAct();
+                $actFind->setNumber($act->actNumber);
+                $actFind->setInvoice($invoiceNew);
+            }
+            $actFind->setDate(new \DateTime(trim($act->actDate)));
+            $actFind->setOriginal($act->actOriginal);
+            $em->persist($actFind);
+            $details = $act->actDetail;
+            $detailsFind = $em->getRepository('ITDoorsControllingBundle:InvoiceActDetal')
+                ->findBy(array('invoiceActId' => $actFind->getId()));
+            foreach ($detailsFind as $detailsFindOne) {
+                $em->remove($detailsFindOne);
+            }
+            foreach ($details as $detail) {
+                 $detalAdd = new InvoiceActDetal();
+                 $detalAdd->setAct($actFind);
+                 $detalAdd->setCount($detail->count);
+                 $detalAdd->setMpk($detail->mpk);
+                 $detalAdd->setNote($detail->note);
+                 $detalAdd->setSumma($detail->summa);
+                 $em->persist($detalAdd);
+            }
+        }
+    }
     private function findDogovor($invoiceFind, $invoice, $invoiceNew)
     {
         $em = $this->container->get('doctrine')->getManager();
@@ -276,7 +304,7 @@ class InvoiceService
         if ($dogovorfind) {
             $invoiceNew->setDogovor($dogovorfind);
             $em->persist($invoiceNew);
-            $em->flush();
+            //$em->flush();
             if (!$invoiceFind && $invoiceNew->getDogovorId()) {
                 $this->addReaspon($invoiceNew);
             }
@@ -300,8 +328,8 @@ class InvoiceService
 
                     $invoiceNew->setDogovor($dogovoradd);
                     $em->persist($invoiceNew);
-                    $em->flush();
-                    $em->refresh($invoiceNew);
+                    //$em->flush();
+                    //$em->refresh($invoiceNew);
 
                     $this->addCronError(
                         $invoiceNew,
@@ -315,8 +343,8 @@ class InvoiceService
                     }
                 } else {
                     $em->persist($invoiceNew);
-                    $em->flush();
-                    $em->refresh($invoiceNew);
+                    //$em->flush();
+                    //$em->refresh($invoiceNew);
                     $this->addCronError($invoiceNew, 'error', 'dogovor not found', json_encode($invoice));
 
                     return false;
@@ -333,12 +361,12 @@ class InvoiceService
                     $error = 'dogovor not found and customer and  performer';
                 }
                 $em->persist($invoiceNew);
-                $em->flush();
-                $em->refresh($invoiceNew);
+//                $em->flush();
+//                $em->refresh($invoiceNew);
                 $this->addCronError($invoiceNew, 'error', $error, json_encode($invoice));
             }
         }
-        if ($this->messageTemplate && $invoiceNew->getDogovorNumber()) {
+        if ($this->messageTemplate && $invoiceNew->getDogovorNumber() && method_exists($customerfind, 'getId')) {
             if (!array_key_exists($invoiceNew->getDogovorNumber(), $this->arrCostumersForSendMessages[$customerfind->getId()][$this->messageTemplate])) {
                 $this->arrCostumersForSendMessages[$invoiceNew->getCustomer()->getId()][$this->messageTemplate][$invoiceNew->getDogovorNumber()] = array();
             }
@@ -401,7 +429,7 @@ class InvoiceService
             $invoicecompany->setCompanystructure($company->getCompanyStructures());
 
             $em->persist($invoicecompany);
-            $em->flush();
+            //$em->flush();
         }
     }
 
@@ -429,7 +457,7 @@ class InvoiceService
         $error->setReason($reason);
         $error->setDescription($descript);
         $em->persist($error);
-        $em->flush();
+        //$em->flush();
 
         return true;
     }
@@ -533,6 +561,38 @@ class InvoiceService
      * 
      * @return array
      */
+    public function getTabsInvoiceGrafics()
+    {
+        $translator = $this->container->get('translator');
+        $tabs = array();
+        $tabs['general'] = array(
+            'blockupdate' => 'ajax-tab-holder',
+            'tab' => 'general',
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_grafic_general'),
+            'text' => $translator->trans('General')
+        );
+        $tabs['withoutacts'] = array(
+            'blockupdate' => 'ajax-tab-holder',
+            'tab' => 'withoutacts',
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_grafic_withoutacts'),
+            'text' => $translator->trans('Without acts')
+        );
+        $tabs['individual'] = array(
+            'blockupdate' => 'ajax-tab-holder',
+            'tab' => 'individual',
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_grafic_individual', array('ajax' => 'true')),
+            'text' => $translator->trans('Individual')
+        );
+
+        return $tabs;
+    }
+    /**
+     * Returns results for interval future invoice
+     *
+     * @var Container
+     * 
+     * @return array
+     */
     public function getTabsEmptyData()
     {
         $translator = $this->container->get('translator');
@@ -558,9 +618,12 @@ class InvoiceService
      *
      * @var Container
      * 
+     * @param integer $companystryctyre
+     * @param array   $filters
+     * 
      * @return tabs[]
      */
-    public function getTabsInvoices()
+    public function getTabsInvoices($companystryctyre, $filters = null)
     {
         $translator = $this->container->get('translator');
         /** @var EntityManager $em */
@@ -569,7 +632,7 @@ class InvoiceService
         /** @var InvoicecronRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
 
-        $summa = $invoice->getInvoicePeriodSum(1, 30);
+        $summa = $invoice->getInvoicePeriodSum(1, 30, $companystryctyre, $filters);
         $tabs[] = array(
             'tab' => 30,
             'blockupdate' => 'ajax-tab-holder',
@@ -577,7 +640,7 @@ class InvoiceService
             'text' => $translator->trans('from') . ' 1 ' . $translator->trans('to') . ' 30 ' . $translator->trans('day')
              .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoicePeriodSum(31, 60);
+        $summa = $invoice->getInvoicePeriodSum(31, 60, $companystryctyre, $filters);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 60,
@@ -586,7 +649,7 @@ class InvoiceService
                 ->trans('from') . ' 31 ' . $translator->trans('to') . ' 60 ' . $translator->trans('days')
             .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoicePeriodSum(61, 120);
+        $summa = $invoice->getInvoicePeriodSum(61, 120, $companystryctyre, $filters);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 120,
@@ -595,7 +658,7 @@ class InvoiceService
                 ->trans('from') . ' 61 ' . $translator->trans('to') . ' 120 ' . $translator->trans('days')
             .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoicePeriodSum(121, 180);
+        $summa = $invoice->getInvoicePeriodSum(121, 180, $companystryctyre, $filters);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 180,
@@ -605,7 +668,7 @@ class InvoiceService
                 ->trans('from') . ' 121 ' . $translator->trans('to') . ' 180 ' . $translator->trans('days')
             .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoicePeriodSum(180, 0);
+        $summa = $invoice->getInvoicePeriodSum(180, 0, $companystryctyre, $filters);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 181,
@@ -614,7 +677,7 @@ class InvoiceService
                 ->trans('from') . ' 181 ' . $translator->trans('days')
             .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoiceCourtSum();
+        $summa = $invoice->getInvoiceCourtSum($companystryctyre, $filters);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'court',
@@ -622,7 +685,7 @@ class InvoiceService
             'text' => $translator->trans('court')
             .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoicePaySum();
+        $summa = $invoice->getInvoicePaySum($companystryctyre, $filters);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'pay',
@@ -630,7 +693,7 @@ class InvoiceService
             'text' => $translator->trans('pay')
             .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoiceFlowSum();
+        $summa = $invoice->getInvoiceFlowSum($companystryctyre, $filters);
         $tabs[] = array(
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'flow',
@@ -711,7 +774,7 @@ class InvoiceService
                                 $invoicef = $em->getRepository('ITDoorsControllingBundle:Invoice')->find($invoice['id']);
                                 $message->setInvoice($invoicef);
                                 $em->persist($message);
-                                $em->flush();
+                                //$em->flush();
                             }
                         }
                     }

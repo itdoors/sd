@@ -326,13 +326,13 @@ sd_common_ajax_invoice_invoice_id:
     pattern:  /ajax/invoice/invoice/id
     defaults: { _controller: SDCommonBundle:Ajax:invoiceInvoiceId }
     
-sd_common_ajax_invoice_dogovor_act_name:
-    pattern:  /ajax/invoice/dogovor/act/name
-    defaults: { _controller: SDCommonBundle:Ajax:invoiceDogovorActName }
+sd_common_ajax_invoice_act_number:
+    pattern:  /ajax/invoice/act/number
+    defaults: { _controller: SDCommonBundle:Ajax:invoiceActNumber }
 
-sd_common_ajax_invoice_by_dogovor_act_names:
-    pattern:  /ajax/invoice_by_dogovor_act_names
-    defaults: { _controller: SDCommonBundle:Ajax:invoiceByDogovorActNames }
+sd_common_ajax_invoice_by_act_numbers:
+    pattern:  /ajax/invoice_by_act_numbers
+    defaults: { _controller: SDCommonBundle:Ajax:invoiceByActNumbers }
 
 sd_common_ajax_invoice_by_ids:
     pattern:  /ajax/invoice_by_ids
