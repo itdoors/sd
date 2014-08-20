@@ -173,7 +173,7 @@ class TaskController extends Controller
             'task' => $task,
             'role'  => $performerRole
         ));
-        if($taskUserRole->getRole()->getName() != 'controlling') {
+        if($taskUserRole->getRole()->getName() != 'controller') {
             $performing = true;
             foreach ($tasksUserRole as $taskPerforming) {
                 if ($taskPerforming->getIsViewed() == false) {
