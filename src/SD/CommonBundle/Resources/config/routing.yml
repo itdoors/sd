@@ -160,6 +160,10 @@ sd_common_ajax_user_by_ids:
 sd_common_ajax_city_by_id:
     pattern:  /ajax/city_by_id
     defaults: { _controller: SDCommonBundle:Ajax:cityById }
+
+sd_common_ajax_city_one_by_id:
+    pattern:  /ajax/city_one_by_id
+    defaults: { _controller: SDCommonBundle:Ajax:cityOneById }
     
 sd_common_ajax_scope_by_id:
     pattern:  /ajax/scope_by_id

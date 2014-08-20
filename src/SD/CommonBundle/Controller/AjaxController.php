@@ -409,6 +409,23 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($result));
     }
+    /**
+     * Returns json city object by id
+     *
+     * @return string
+     */
+    public function cityOneByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $city = $this->getDoctrine()
+            ->getRepository('ListsCityBundle:City')
+            ->findOneBy(array('id'=>$ids));
+
+        $result = $this->serializeObject($city);
+
+        return new Response(json_encode($result));
+    }
 
     /**
      * Returns json city object by id
