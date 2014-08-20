@@ -173,28 +173,30 @@ class TaskController extends Controller
             'task' => $task,
             'role'  => $performerRole
         ));
-
-        $performing = true;
-        foreach ($tasksUserRole as $taskPerforming) {
-            if ($taskPerforming->getIsViewed() == false) {
-                $performing = false;
-                break;
+        if($taskUserRole->getRole()->getName() != 'controlling') {
+            $performing = true;
+            foreach ($tasksUserRole as $taskPerforming) {
+                if ($taskPerforming->getIsViewed() == false) {
+                    $performing = false;
+                    break;
+                }
             }
-        }
-        if ($performing) {
-            $stagePerforming = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
-                'name' => 'performing',
-                'model'  => 'task'
-            ));
-            $task ->setStage($stagePerforming);
-            $em->persist($task);
-        } else {
-            $stageCreated = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
-                'name' => 'created',
-                'model'  => 'task'
-            ));
-            $task ->setStage($stageCreated);
-            $em->persist($task);
+
+            if ($performing) {
+                $stagePerforming = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
+                    'name' => 'performing',
+                    'model'  => 'task'
+                ));
+                $task ->setStage($stagePerforming);
+                $em->persist($task);
+            } else {
+                $stageCreated = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
+                    'name' => 'created',
+                    'model'  => 'task'
+                ));
+                $task ->setStage($stageCreated);
+                $em->persist($task);
+            }
         }
         $em->flush();
     }
