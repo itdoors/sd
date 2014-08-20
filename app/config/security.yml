@@ -31,9 +31,9 @@ security:
         - { path: ^/lists/salesadmin, role: ROLE_SALESADMIN }
         - { path: ^/lists/salesdispatcher, role: ROLE_SALESDISPATCHER }
         - { path: ^/lists/sales, role: [ROLE_SALES, ROLE_OPER] }
-        - { path: ^/lists/dogovor, roles: 'ROLE_DOGOVORADMIN, ROLE_CONTROLLING' }
+        - { path: ^/lists/dogovor, roles: 'ROLE_DOGOVORADMIN, ROLE_CONTROLLING, ROLE_CONTROLLING_OPER' }
         - { path: ^/lists/dogovor/made, role: ROLE_DOGOVORADMIN }
-        - { path: ^/lists/dogovor/admin, roles: 'ROLE_DOGOVORADMIN, ROLE_CONTROLLING' }
+        - { path: ^/lists/dogovor/admin, roles: 'ROLE_DOGOVORADMIN, ROLE_CONTROLLING, ROLE_CONTROLLING_OPER' }
         - { path: ^/$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -42,4 +42,6 @@ security:
         - { path: ^/cron-manager, role: ROLE_CRONADMIN }
         - { path: ^/lists/competitors/organization/new, roles: 'ROLE_INTRANETADMIN, ROLE_DOGOVORADMIN' }
         - { path: ^/sd/calendar/shared, role: ROLE_SALESADMIN }
+        - { path: ^/controlling, roles: 'ROLE_CONTROLLING, ROLE_CONTROLLING_OPER' }
+        - { path: ^/controlling/invoice/analytic, role: ROLE_CONTROLLING }
         

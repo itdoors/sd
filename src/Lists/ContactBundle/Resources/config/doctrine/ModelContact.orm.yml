@@ -117,7 +117,7 @@ Lists\ContactBundle\Entity\ModelContact:
                 level_id:
                     referencedColumnName: id
             orphanRemoval: false
-    oneToOne:
+    oneToMany:
         sendEmail:
             targetEntity: ModelContactSendEmail
             mappedBy: modelContact

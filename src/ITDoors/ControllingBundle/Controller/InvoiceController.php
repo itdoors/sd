@@ -45,6 +45,12 @@ class InvoiceController extends BaseFilterController
 
         $filter = $this->filterFormName;
 
+        $filters = $this->getFilters($filterNamespace);
+        if (empty($filters)) {
+            $filters['isFired'] = 'No fired';
+            $this->setFilters($filterNamespace, $filters);
+        }
+
         $period = $this->getTab($filterNamespace);
         if (!$period) {
             $period = 30;
@@ -52,8 +58,11 @@ class InvoiceController extends BaseFilterController
         }
 
         $service = $this->container->get($this->service);
-
-        $tabs = $service->getTabsInvoices();
+        $companystryctyre = null;
+        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+            $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
+        }
+        $tabs = $service->getTabsInvoices($companystryctyre, $filters);
 
         return $this->render('ITDoorsControllingBundle:Invoice:index.html.twig', array(
                 'tabs' => $tabs,
@@ -62,6 +71,44 @@ class InvoiceController extends BaseFilterController
                 'namespace' => $filterNamespace
         ));
     }
+    /**
+     * @var Container
+     *
+     * @return Response
+     */
+    public function showtabAction()
+    {
+        $filterNamespace = $this->container->getParameter($this->getNamespace());
+
+        $filter = $this->filterFormName;
+
+        $filters = $this->getFilters($filterNamespace);
+        if (empty($filters)) {
+            $filters['isFired'] = 'No fired';
+            $this->setFilters($filterNamespace, $filters);
+        }
+
+        $period = $this->getTab($filterNamespace);
+        if (!$period) {
+            $period = 30;
+            $this->setTab($filterNamespace, $period);
+        }
+
+        $service = $this->container->get($this->service);
+        $companystryctyre = null;
+        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+            $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
+        }
+        $tabs = $service->getTabsInvoices($companystryctyre, $filters);
+
+        return $this->render('ITDoorsControllingBundle:Invoice:showtab.html.twig', array(
+                'tabs' => $tabs,
+                'filter' => $filter,
+                'tab' => $period,
+                'namespace' => $filterNamespace
+        ));
+    }
+
 
     /**
      *  showAction
@@ -88,7 +135,11 @@ class InvoiceController extends BaseFilterController
         /** @var InvoiceRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
 
-        $result = $invoice->getEntittyCountSum($period, $filters);
+        $companystryctyre = null;
+        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+            $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
+        }
+        $result = $invoice->getEntittyCountSum($period, $filters, $companystryctyre);
         $entities = $result['entities'];
         $count = $result['count'];
 
@@ -126,7 +177,11 @@ class InvoiceController extends BaseFilterController
 
         /** @var InvoiceService $service */
         $service = $this->container->get($this->service);
-        $service->getTabsInvoices();
+        $companystryctyre = null;
+        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+            $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
+        }
+        $service->getTabsInvoices($companystryctyre);
 
         $filterNamespace = $this->container->getParameter($this->getNamespace());
         $namespaceTab = $filterNamespace . 'invoiceshow' . $invoiceid;
@@ -308,8 +363,11 @@ class InvoiceController extends BaseFilterController
 
         /** @var InvoiceRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
-
-        $result = $invoice->getEntittyCountSum($tab);
+        $companystryctyre = null;
+        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+            $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
+        }
+        $result = $invoice->getEntittyCountSum($tab, null, $companystryctyre);
         $entities = $result['entities'];
         $count = $result['count'];
 
@@ -355,8 +413,11 @@ class InvoiceController extends BaseFilterController
 
         /** @var InvoiceRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
-
-        $result = $invoice->getEntittyCountSum($tab);
+        $companystryctyre = null;
+        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+            $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
+        }
+        $result = $invoice->getEntittyCountSum($tab, null, $companystryctyre);
         $entities = $result['entities'];
         $count = $result['count'];
 
@@ -400,8 +461,13 @@ class InvoiceController extends BaseFilterController
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
+        $companystryctyre = null;
+        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+            $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
+        }
+
         /** @var InvoiceRepository $invoices */
-        $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')->getForExel();
+        $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')->getForExel($companystryctyre);
 
          // ask the service for a Excel5
        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
@@ -421,11 +487,11 @@ class InvoiceController extends BaseFilterController
           ->setCellValue('E1', $translator->trans('Invoice amount', array(), 'ITDoorsControllingBundle'))
           ->setCellValue('F1', $translator->trans('№ ABP/BH', array(), 'ITDoorsControllingBundle'))
           ->setCellValue('G1', $translator->trans('Date ABP/BH', array(), 'ITDoorsControllingBundle'))
-          ->setCellValue('H1', $translator->trans('Responsible', array(), 'ITDoorsControllingBundle'))
-          ->setCellValue('I1', $translator->trans('№ contract', array(), 'ITDoorsControllingBundle'))
-          ->setCellValue('J1', $translator->trans('Date contract', array(), 'ITDoorsControllingBundle'))
-          ->setCellValue('K1', $translator->trans('Deferment', array(), 'ITDoorsControllingBundle'))
-          ->setCellValue('L1', $translator->trans('Original ABP/BN', array(), 'ITDoorsControllingBundle'))
+          ->setCellValue('H1', $translator->trans('Original ABP/BN', array(), 'ITDoorsControllingBundle'))
+          ->setCellValue('I1', $translator->trans('Responsible', array(), 'ITDoorsControllingBundle'))
+          ->setCellValue('J1', $translator->trans('№ contract', array(), 'ITDoorsControllingBundle'))
+          ->setCellValue('K1', $translator->trans('Date contract', array(), 'ITDoorsControllingBundle'))
+          ->setCellValue('L1', $translator->trans('Deferment', array(), 'ITDoorsControllingBundle'))
           ->setCellValue('M1', $translator->trans('Notes', array(), 'ITDoorsControllingBundle'))
           ->setCellValue('N1', $translator->trans('Expected date of Payment', array(), 'ITDoorsControllingBundle'))
           ->setCellValue('O1', $translator->trans('Fact date of payment', array(), 'ITDoorsControllingBundle'))
@@ -445,20 +511,21 @@ class InvoiceController extends BaseFilterController
             }
 //            $phpExcelObject->getActiveSheet()->getDefaultRowDimension($str)->setRowHeight(40);
 //            $phpExcelObject->getActiveSheet()->getDefaultRowDimension($str)->setRowHeight(-1);
-
+            $invoice['actOriginals'] = str_replace('t', 'есть', $invoice['actOriginals']);
+            $invoice['actOriginals'] = str_replace('f', 'нет', $invoice['actOriginals']);
             $phpExcelObject->getActiveSheet()
                     ->setCellValueByColumnAndRow($col, $str, $invoice['invoiceId'])
                     ->setCellValueByColumnAndRow(++$col, $str, !$invoice['date']  ? '' :  $invoice['date']->format('d.m.Y'))
                     ->setCellValueByColumnAndRow(++$col, $str, $invoice['customerName'])
                     ->setCellValueByColumnAndRow(++$col, $str, $invoice['performerName'])
                     ->setCellValueByColumnAndRow(++$col, $str, $invoice['sum'])
-                    ->setCellValueByColumnAndRow(++$col, $str, $invoice['dogovorActName'])
-                    ->setCellValueByColumnAndRow(++$col, $str, !$invoice['dogovorActDate']  ? '' :  $invoice['dogovorActDate']->format('d.m.Y'))
+                    ->setCellValueByColumnAndRow(++$col, $str, $invoice['actNumbers'])
+                    ->setCellValueByColumnAndRow(++$col, $str, $invoice['actDates'])
+                    ->setCellValueByColumnAndRow(++$col, $str, $invoice['actOriginals'])
                     ->setCellValueByColumnAndRow(++$col, $str, $invoice['responsibles'])
                     ->setCellValueByColumnAndRow(++$col, $str, $invoice['dogovorNumber'])
                     ->setCellValueByColumnAndRow(++$col, $str, !$invoice['dogovorStartDatetime']  ? '' :  $invoice['dogovorStartDatetime']->format('d.m.Y'))
                     ->setCellValueByColumnAndRow(++$col, $str, !$invoice['delayDate']  ? '' :  $invoice['delayDate']->format('d.m.Y') . ' ('.$invoice['delayDays'].')')
-                    ->setCellValueByColumnAndRow(++$col, $str, $invoice['dogovorActOriginal'])
                     ->setCellValueByColumnAndRow(++$col, $str, !$invoice['descriptiondate'] ? '' :  $invoice['descriptiondate']->format('d.m.Y'). ' ('.$invoice['description'].')')
                     ->setCellValueByColumnAndRow(++$col, $str, !$invoice['dateEnd'] ? '' :  $invoice['dateEnd']->format('d.m.Y'))
                     ->setCellValueByColumnAndRow(++$col, $str, !$invoice['dateFact'] ? '' :  $invoice['dateFact']->format('d.m.Y'))

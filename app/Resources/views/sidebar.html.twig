@@ -469,9 +469,11 @@
             </ul>
         </li>
         {% endif %}
-            {% if is_granted('ROLE_CONTROLLING') %}
+            {% if is_granted('ROLE_CONTROLLING') or is_granted('ROLE_CONTROLLING_OPER') %}
                 <li{% if 
                             path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_dogovor_index')
+                            or
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_controlling_invoice_analytic')
                             or
                             path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_controlling_invoice')
                             or
@@ -515,6 +517,15 @@
                                 {% trans %}Invoices{% endtrans %}
                             </a>
                         </li>
+                         {% if is_granted('ROLE_CONTROLLING') %}
+                        <li{% if 
+                                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_controlling_invoice_analytic')
+                            %} class="active"{% endif %}>
+                            <a href="{{ path('it_doors_controlling_invoice_analytic') }}" title="{% trans %}Analytics{% endtrans %}">
+                                <i class="fa fa-comments"></i>
+                                {% trans %}Analytics{% endtrans %}
+                            </a>
+                        </li>
                         <li{% if 
                                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_dogovor_index')
                                     or
@@ -529,6 +540,7 @@
                             {% trans %}Dogovors{% endtrans %}
                         </a>
                     </li>
+                    
                         <li{% if 
                             (
                                 app.request.attributes.get('_route_params').id is defined
@@ -545,6 +557,7 @@
                                 {% trans %}Organizations{% endtrans %}
                             </a>
                         </li>
+                        {% endif %}
                     </ul>
                 </li>
             {% endif %}

@@ -8,9 +8,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Class InvoiceFilterFormType
+ * Class InvoiceFilterForAnalyticFormType
  */
-class InvoiceFilterFormType extends AbstractType
+class InvoiceFilterForAnalyticFormType extends AbstractType
 {
 
     protected $container;
@@ -38,20 +38,6 @@ class InvoiceFilterFormType extends AbstractType
         $router = $this->container->get('router');
 
         $builder
-            ->add('invoiceId', 'text', array(
-                'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url' => $router->generate('sd_common_ajax_invoice_invoice_id'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_invoice_by_ids'),
-                    'data-params' => json_encode(array(
-                        'minimumInputLength' => 2,
-                        'allowClear' => true,
-                        'width' => '250px',
-                        'multiple' => 'multiple'
-                    )),
-                    'placeholder' => 'Enter invoice number',
-                )
-            ))
             ->add('customer', 'text', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
@@ -80,32 +66,11 @@ class InvoiceFilterFormType extends AbstractType
                     'placeholder' => 'Enter performer',
                 )
             ))
-            ->add('actNumber', 'text', array(
+             ->add('dateRange', 'text', array(
                 'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url' => $router->generate('sd_common_ajax_invoice_act_number'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_invoice_by_act_numbers'),
-                    'data-params' => json_encode(array(
-                        'minimumInputLength' => 2,
-                        'allowClear' => true,
-                        'width' => '250px',
-                        'multiple' => 'multiple'
-                    )),
-                    'placeholder' => 'Enter number act',
-                )
-            ))
-            ->add('companystructure', 'text', array(
-                'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url' => $router->generate('sd_common_ajax_company_structure'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_company_structure_by_id'),
-                    'data-params' => json_encode(array(
-                        'minimumInputLength' => 0,
-                        'allowClear' => true,
-                        'width' => '250px',
-                        'multiple' => 'multiple'
-                    )),
-                    'placeholder' => 'Enter companystructure',
+                    'empty_value' =>  '',
+                    'class' => 'daterangepicker input-daterange',
+                    'placeholder' => 'Enter date range'
                 )
             ));
 
@@ -131,6 +96,6 @@ class InvoiceFilterFormType extends AbstractType
      */
     public function getName()
     {
-        return 'invoiceFilterForm';
+        return 'invoiceFilterForAnalyticForm';
     }
 }
