@@ -2187,8 +2187,9 @@ class AjaxController extends BaseFilterController
         $em->persist($taskUserRole);
 
         //var_dump($formData['performer']);die();
-        foreach ($formData['performer'] as $performer) {
-            $performer = $userRepository->find($performer);
+        //foreach ($formData['performer'] as $performer) {
+            $idPerformer = $formData['performer'];
+            $performer = $userRepository->find($idPerformer);
 
             $taskUserRole = new \SD\TaskBundle\Entity\TaskUserRole();
             $taskUserRole->setRole($performerRole);
@@ -2196,7 +2197,7 @@ class AjaxController extends BaseFilterController
             $taskUserRole->setTask($data);
             $taskUserRole->setIsViewed(false);
             $em->persist($taskUserRole);
-        }
+        //}
 
         //foreach ($formData['controller'] as $idController) {
             $idController = $formData['controller'];

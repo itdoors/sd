@@ -77,7 +77,7 @@ class TaskForm extends AbstractType
                 'mapped' => false,
                 'class' => 'SD\UserBundle\Entity\User',
                 'empty_value' => '',
-                'multiple' => true,
+                //'multiple' => true,
                 'query_builder' => function (\SD\UserBundle\Entity\UserRepository $repository) {
                         return $repository->createQueryBuilder('u')
                             ->innerJoin('u.stuff', 's')
