@@ -34,6 +34,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Form;
 use Doctrine\DBAL\Connection;
+use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use ITDoors\AjaxBundle\Controller\BaseFilterController;
@@ -2127,6 +2128,119 @@ class AjaxController extends BaseFilterController
 
         return true;
     }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function taskForm1Save(Form $form, $user, $request)
+    {
+        /** @var \SD\TaskBundle\Entity\Task $data */
+        $data = $form->getData();
+
+        //if (!$data->getId()) {
+        //}
+
+        $formData = $request->request->get($form->getName());
+
+        $data->setCreateDate(new \DateTime());
+        $data->setAuthor($user);
+        $data->setStartDate(new \DateTime($formData['startDate']));
+
+        $stage = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:Stage')
+            ->findOneBy(array(
+                'model' =>'task',
+                'name' => 'created'
+            ));
+
+        $data->setStage($stage);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+        //$em->refresh($data);
+
+        $dateStage = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:Stage')
+            ->findOneBy(array(
+                'model' =>'task_end_date',
+                'name' => 'accepted'
+            ));
+
+        $endDate = new \SD\TaskBundle\Entity\TaskEndDate();
+        $endDate->setTask($data);
+        $endDate->setChangeDateTime(new \DateTime());
+        $endDate->setEndDateTime(new \DateTime($formData['endDate']));
+        $endDate->setStage($dateStage);
+        $em->persist($endDate);
+
+        $userRepository = $this->getDoctrine()
+            ->getRepository('SDUserBundle:User');
+
+        $roleRepository = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:Role');
+
+        $performerRole = $roleRepository
+            ->findOneBy(array(
+                'name' => 'performer',
+                'model' => 'task'
+        ));
+
+        $controllerRole  = $roleRepository
+            ->findOneBy(array(
+                'name' => 'controller',
+                'model' => 'task'
+        ));
+
+        $authorRole  = $roleRepository
+            ->findOneBy(array(
+                'name' => 'author',
+                'model' => 'task'
+            ));
+
+        $taskUserRole = new \SD\TaskBundle\Entity\TaskUserRole();
+        $taskUserRole->setRole($authorRole);
+        $taskUserRole->setUser($user);
+        $taskUserRole->setTask($data);
+        $taskUserRole->setIsViewed(true);
+        $em->persist($taskUserRole);
+
+        //var_dump($formData['performer']);die();
+        //foreach ($formData['performer'] as $performer) {
+            $idPerformer = $formData['performer'];
+            $performer = $userRepository->find($idPerformer);
+
+            $taskUserRole = new \SD\TaskBundle\Entity\TaskUserRole();
+            $taskUserRole->setRole($performerRole);
+            $taskUserRole->setUser($performer);
+            $taskUserRole->setTask($data);
+            $taskUserRole->setIsViewed(false);
+            $em->persist($taskUserRole);
+        //}
+
+        //foreach ($formData['controller'] as $idController) {
+            $idController = $formData['controller'];
+            $controller = $userRepository->find($idController);
+
+            $taskUserRole = new \SD\TaskBundle\Entity\TaskUserRole();
+            $taskUserRole->setRole($controllerRole);
+            $taskUserRole->setUser($controller);
+            $taskUserRole->setTask($data);
+            $taskUserRole->setIsViewed(false);
+            $em->persist($taskUserRole);
+        //}
+        $em->flush();
+
+        return true;
+    }
+
+
     /**
      * Saves {formName}Save after valid ajax validation
      *

@@ -1,0 +1,17 @@
+SD\TaskBundle\Entity\Role:
+    type:  entity
+    table: role
+    repositoryClass: SD\TaskBundle\Entity\RoleRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: false
+            length: 255
+        model:
+            type: text
+            nullable: true

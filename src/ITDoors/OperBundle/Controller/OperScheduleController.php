@@ -247,6 +247,9 @@ class OperScheduleController extends BaseFilterController
                     'departmentPeople' => $idCoworker,
                     'code' => 'UU',
                     'isActive' => true
+                ),
+                array(
+                    'period' =>'desc'
                 )
             );
 
@@ -2137,6 +2140,9 @@ class OperScheduleController extends BaseFilterController
                 'departmentPeople' => $idCoworker,
                 'code' => 'UU',
                 'isActive' => true
+            ),
+            array(
+                'period' => 'desc'
             )
         );
 
