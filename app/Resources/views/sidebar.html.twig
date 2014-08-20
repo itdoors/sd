@@ -649,7 +649,17 @@
                     </li>
                 </ul>
             </li>
-        </ul>
+
+            <li{% if
+            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_task_homepage')
+            %} class="active"{% endif %}>
+                <a href="{{ path('sd_task_homepage') }}">
+                    <i class="icon-pencil"></i>
+                    <span class="title">{% trans %}My tasks{% endtrans %}</span>
+                </a>
+            </li>
+
+    </ul>
         <!-- END SIDEBAR MENU -->
     </div>
     <!-- END SIDEBAR -->
