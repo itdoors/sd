@@ -256,4 +256,32 @@ class History
     {
         return $this->user;
     }
+    /**
+     * @var string
+     */
+    private $action;
+
+
+    /**
+     * Set action
+     *
+     * @param string $action
+     * @return History
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+    
+        return $this;
+    }
+
+    /**
+     * Get action
+     *
+     * @return string 
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
 }

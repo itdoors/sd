@@ -44,6 +44,10 @@ ITDoors\HistoryBundle\Entity\History:
             length: 255
             fixed: false
             nullable: true
+        action:
+            type: string
+            length: 255
+            nullable: true
     manyToOne:
         user:
             targetEntity: SD\UserBundle\Entity\User
