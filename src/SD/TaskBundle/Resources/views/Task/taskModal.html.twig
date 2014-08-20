@@ -257,7 +257,7 @@
                 {% for controller in taskUserRoleController %}
                     {{ controller.user }}
                     {% if controller.isViewed !=true %}
-                        <span style="color: red; font-size: smaller;">{% trans %}(Not viewed){% endtrans %}</span>
+                        <span style="color: red; font-size: smaller;">({% trans %}Not viewed{% endtrans %})</span>
                     {% endif %}
                     <br>
                 {% endfor %}
