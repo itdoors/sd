@@ -25,6 +25,7 @@ parameters:
     userprofiles.file.path: "/uploads/userprofiles/"
     email.from: "noreply@griffin.ua"
     name.from: "ImpelNET"
+    listener.history.table: %listener.history.tables%
 
 framework:
     #esi:             ~
@@ -99,6 +100,10 @@ doctrine:
         # auto_mapping: true
         entity_managers:
             default:
+                filters:
+                    soft-deleteable:
+                        class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
+                        enabled: true
                 auto_mapping: true
                 mappings:
                     TSSAutomailerBundle: ~
@@ -149,3 +154,11 @@ services:
       class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
       tags:
          - { name: serializer.normalizer }
+         
+    gedmo.listener.softdeleteable:
+        class:        Gedmo\SoftDeleteable\SoftDeleteableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ @annotation_reader ] ]
+        

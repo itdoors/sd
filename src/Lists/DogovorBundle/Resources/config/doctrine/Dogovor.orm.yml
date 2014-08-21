@@ -2,6 +2,10 @@ Lists\DogovorBundle\Entity\Dogovor:
     type: entity
     table: dogovor
     repositoryClass: Lists\DogovorBundle\Entity\DogovorRepository
+    gedmo:
+        soft_deleteable:
+          field_name: deletedAt
+          time_aware: false
     fields:
         id:
             id: true
@@ -117,6 +121,9 @@ Lists\DogovorBundle\Entity\Dogovor:
             type: datetime
             nullable: true
             column: create_date_time
+        deletedAt:
+            type: datetime
+            nullable: true
     manyToOne:
         customer:
             targetEntity: Lists\OrganizationBundle\Entity\Organization
