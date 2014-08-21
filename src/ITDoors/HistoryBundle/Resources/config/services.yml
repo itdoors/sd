@@ -1,8 +1,30 @@
 parameters:
     it_doors_history.service.class: ITDoors\HistoryBundle\Services\HistoryService
+    it_doors_history.update.event.listener.class: ITDoors\HistoryBundle\EventListener\HistoryUpdate
+    it_doors_history.insert.event.listener.class: ITDoors\HistoryBundle\EventListener\HistoryInsert
+    it_doors_history.remove.event.listener.class: ITDoors\HistoryBundle\EventListener\HistoryRemove
 
 services:
     it_doors_history.service:
         class: %it_doors_history.service.class%
         arguments: [@service_container]
+        
+    history.update.listener:
+        class: %it_doors_history.update.event.listener.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: preUpdate }
+
+    history.insert.listener:
+        class: %it_doors_history.insert.event.listener.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+
+    history.remove.listener:
+        class: %it_doors_history.remove.event.listener.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: preRemove }
+
 

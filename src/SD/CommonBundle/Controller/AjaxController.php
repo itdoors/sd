@@ -2235,6 +2235,11 @@ class AjaxController extends BaseFilterController
                 $dogovorC->setDogovors($dogovor);
                 $em->persist($dogovorC);
             }
+        } else {
+            $invoiceC = new \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure();
+            $invoiceC->setCompanystructure($company);
+            $invoiceC->setInvoice($invoice);
+            $em->persist($invoiceC);
         }
         $em->flush();
 

@@ -266,12 +266,13 @@ class History
      * Set action
      *
      * @param string $action
+     * 
      * @return History
      */
     public function setAction($action)
     {
         $this->action = $action;
-    
+
         return $this;
     }
 
@@ -283,5 +284,34 @@ class History
     public function getAction()
     {
         return $this->action;
+    }
+    /**
+     * @var string
+     */
+    private $params;
+
+
+    /**
+     * Set params
+     *
+     * @param string $params
+     * 
+     * @return History
+     */
+    public function setParams($params)
+    {
+        $this->params = $params;
+
+        return $this;
+    }
+
+    /**
+     * Get params
+     *
+     * @return string 
+     */
+    public function getParams()
+    {
+        return $this->params;
     }
 }
