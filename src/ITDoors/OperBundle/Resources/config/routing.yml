@@ -133,3 +133,7 @@ it_doors_oper_coworker_schedule_index:
 it_doors_oper_supervisor_coworkers:
     pattern:  /oper/supervisor/coworkers/index
     defaults: { _controller: ITDoorsOperBundle:OperSupervisorInfo:index }
+
+it_doors_oper_supervisor_contacts_excel:
+    pattern:  /oper/supervisor/contacts/excel
+    defaults: { _controller: ITDoorsOperBundle:OperDepartmentInfo:getAllContactsExcel }

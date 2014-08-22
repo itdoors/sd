@@ -226,4 +226,22 @@ class OperDepartmentInfoController extends BaseFilterController
 
         return new Response(json_encode($return));
     }
+
+    /**
+     * @return Response
+     */
+    public function getAllContactsExcelAction() {
+        $contacts = $this->getDoctrine()
+            ->getRepository('ListsContactBundle:ModelContact')
+            ->getAllContacts();
+        //print_r($contacts);
+
+        $serviceExport = $this->get('itdoors_common.export.service');
+
+        $excelObject = $serviceExport->getExcel($contacts);
+
+        $response = $serviceExport->getResponse($excelObject, 'Contacts');
+
+        return $response;
+    }
 }

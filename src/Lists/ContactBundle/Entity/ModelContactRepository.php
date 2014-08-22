@@ -407,6 +407,38 @@ class ModelContactRepository extends EntityRepository
             ->getQuery();
     }
     /**
+     * getAllContacts
+     *
+     * @return Query
+     */
+    public function getAllContacts()
+    {
+        $sql = $this->createQueryBuilder('mc')
+            //->select('mc')
+            ->select("mc.modelId as departmentId")
+            ->addSelect("mc.id as id")
+            ->addSelect("CONCAT(CONCAT(CONCAT(CONCAT(mc.lastName, ' '), mc.firstName), ' '), mc.middleName) as name")
+            //->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as userName")
+            //->addSelect("CONCAT(CONCAT(owner.lastName, ' '), owner.firstName) as ownerFullName")
+            //->addSelect("mc.organizationName as organizationName")
+            ->addSelect("mc.position as position")
+            ->addSelect("CONCAT(' ',mc.phone1) as phone1")
+            ->addSelect("CONCAT(' ',mc.phone2) as phone2")
+            ->addSelect("mc.email as email")
+            //->addSelect("mc.birthday as birthday")
+            //->addSelect("mc.type as type")
+            //->addSelect("mc.level as level")
+            //->addSelect("owner.id as ownerId")
+            ->leftJoin('mc.user', 'u')
+            ->leftJoin('mc.owner', 'owner')
+            ->where('mc.modelName = :modelName')
+            ->setParameter(':modelName', self::MODEL_DEPARTMENT)
+            ;
+
+        return $sql
+            ->getQuery()->getArrayResult();
+    }
+    /**
      * Returns organization ids with in one organization group
      *
      * @param integer $organizationId
