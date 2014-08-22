@@ -74,15 +74,40 @@ class HistoryRepository extends EntityRepository
         return $res;
     }
     /**
+     * Processes sql query depending on filters
+     *
+     * @param \Doctrine\ORM\QueryBuilder $sql
+     * @param mixed[]                    $filters
+     */
+    public function processFilters(\Doctrine\ORM\QueryBuilder $sql, $filters)
+    {
+        if (sizeof($filters)) {
+
+            foreach ($filters as $key => $value) {
+                if (!$value) {
+                    continue;
+                }
+                switch ($key) {
+                    case 'action':
+                        $arr = explode(',', $value);
+                        $sql->andWhere("h.action in (:actions)");
+                        $sql->setParameter(':actions', $arr);
+                        break;
+                }
+            }
+        }
+    }
+    /**
      * getHistories
      * 
      * @param string  $modelName
      * @param integer $modelId
      * @param string  $filterNamespace
+     * @param array   $filters
      * 
      * @return type
      */
-    public function getHistories($modelName, $modelId, $filterNamespace)
+    public function getHistories($modelName, $modelId, $filterNamespace, $filters)
     {
         $res = $this->createQueryBuilder('h');
         $resCount = $this->createQueryBuilder('h');
@@ -96,6 +121,9 @@ class HistoryRepository extends EntityRepository
         /** where */
         $this->whereHistory($res, $modelName, $modelId);
         $this->whereHistory($resCount, $modelName, $modelId);
+        /** filters */
+        $this->processFilters($res, $filters);
+        $this->processFilters($resCount, $filters);
 
         $res->orderBy('h.createdatetime', 'DESC');
 

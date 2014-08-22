@@ -38,15 +38,15 @@ class HistoryUpdate
                 if (gettype($oldValue) ==  'object') {
                     if (get_class($oldValue) == 'DateTime') {
                         $oldValue = $oldValue->format('Y-m-d H:i:s');
-                    } else if (method_exists($oldValue, 'getId')) {
-                        $oldValue = $oldValue->getId();
+                    } else {
+                        $oldValue = (string) $oldValue;
                     }
                 }
                 if (gettype($value) ==  'object') {
                     if (get_class($value) == 'DateTime') {
                         $value = $value->format('Y-m-d H:i:s');
-                    } else if (method_exists($value, 'getId')) {
-                        $value = $value->getId();
+                    } else {
+                        $value = (string) $value;
                     }
                 }
                 if (!empty($oldValue) || !empty($value)) {

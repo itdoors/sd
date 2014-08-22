@@ -1,3 +1,4 @@
+{% trans_default_domain 'ITDoorsHistoryBundle' %}
 {% if showPagination == 'true' %}
 <div class="navigation">
     {{ ajax_paginator_render(
@@ -19,7 +20,7 @@
                     {% trans %}Action{% endtrans %}
                 </th>
                 <th role="columnheader" rowspan="1" colspan="1">
-                    {% trans %}FieldName{% endtrans %}
+                    {% trans %}Field name{% endtrans %}
                 </th>
                 <th role="columnheader" rowspan="1" colspan="1">
                     {% trans %}Value{% endtrans %}
@@ -33,7 +34,7 @@
         {%for entitye in entityes%}
             <tr>
                 <td>{{ entitye.firstName}} {{ entitye.lastName}}</td>
-                <td>{{ entitye.action}}</td>
+                <td>{{ entitye.action | trans({}, 'ITDoorsHistoryBundle')}}</td>
                 <td>{{ entitye.fieldName}}</td>
                 <td>{{ entitye.oldValue}} => {{ entitye.value}}</td>
                 <td>{{ entitye.createdatetime | date('H:i d.m.Y')}}</td>

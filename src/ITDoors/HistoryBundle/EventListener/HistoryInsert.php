@@ -36,6 +36,7 @@ class HistoryInsert
                     'modelId' => $entity->getId(),
                     'modelName' => $tableName,
                     'action' => 'insert',
+                    'value' => (string) $entity,
                     'params' => json_encode($changeset)
                 )
             );

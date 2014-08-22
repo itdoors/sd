@@ -1,4 +1,4 @@
-<a class="btn green" id="history-show-btn" href="#history" data-toggle="modal">
+ <a class="btn green" id="history-show-btn" href="#history" data-toggle="modal">
     <i class="fa fa-plus"></i>
     {% trans %}Show history{% endtrans %}
 </a>
@@ -12,7 +12,9 @@
     'params' : {
         'modelName' : 'organization',
         'modelId' : organization.id,
-        'pagination' : 'true'
+        'showPagination' : 'true',
+        'countPagination' : '10',
+        'showFilter' : 'true'
     },
     'target' : '#historyBlock',
     'html' : 'ITDoorsHistoryBundle:History:index.html.twig'
