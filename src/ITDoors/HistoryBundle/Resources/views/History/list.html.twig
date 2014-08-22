@@ -1,0 +1,54 @@
+{% if showPagination == 'true' %}
+<div class="navigation">
+    {{ ajax_paginator_render(
+        entityes, namespace, {
+                'datatable_ajax_history': 'ITDoorsAjax.updateList'
+            }
+        )
+    }}
+</div>
+{% endif %}
+<div class="table-scrollable">
+    <table class="table table-striped table-bordered table-hover dataTable" aria-describedby="datatable_ajax_info">
+        <thead>
+            <tr role="row" class="heading">
+                <th role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}User{% endtrans %}
+                </th>
+                <th role="columnheader" rowspan="1" colspan="1">
+                    {% trans %}Action{% endtrans %}
+                </th>
+                <th role="columnheader" rowspan="1" colspan="1">
+                    {% trans %}FieldName{% endtrans %}
+                </th>
+                <th role="columnheader" rowspan="1" colspan="1">
+                    {% trans %}Value{% endtrans %}
+                </th>
+                <th role="columnheader" rowspan="1" colspan="1">
+                    {% trans %}Date{% endtrans %}
+                </th>
+               </tr>
+        </thead>
+        <tbody role="alert" aria-live="polite" aria-relevant="all">
+        {%for entitye in entityes%}
+            <tr>
+                <td>{{ entitye.firstName}} {{ entitye.lastName}}</td>
+                <td>{{ entitye.action}}</td>
+                <td>{{ entitye.fieldName}}</td>
+                <td>{{ entitye.oldValue}} => {{ entitye.value}}</td>
+                <td>{{ entitye.createdatetime | date('H:i d.m.Y')}}</td>
+            </tr>
+        {% endfor %}
+         </tbody>
+    </table>
+</div>
+{% if showPagination == 'true' %}
+<div class="navigation">
+    {{ ajax_paginator_render(
+        entityes, namespace, {
+                'datatable_ajax_history': 'ITDoorsAjax.updateList'
+            }
+        )
+    }}
+</div>
+{% endif %}

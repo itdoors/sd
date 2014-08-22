@@ -72,4 +72,21 @@ class HistoryService
         }
         $stmt->execute($params);
     }
+    /**
+    * add
+    * 
+    * @param string  $modelName
+    * @param integer $modelId
+    * @param string  $filterNamespace
+    * 
+    * @return boolean
+    */
+    public function getHistory($modelName, $modelId, $filterNamespace)
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $historyes = $em->getRepository('ITDoorsHistoryBundle:History')
+            ->getHistories($modelName, $modelId, $filterNamespace);
+
+        return $historyes->getResult();
+    }
 }

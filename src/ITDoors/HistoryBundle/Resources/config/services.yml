@@ -3,6 +3,7 @@ parameters:
     it_doors_history.update.event.listener.class: ITDoors\HistoryBundle\EventListener\HistoryUpdate
     it_doors_history.insert.event.listener.class: ITDoors\HistoryBundle\EventListener\HistoryInsert
     it_doors_history.remove.event.listener.class: ITDoors\HistoryBundle\EventListener\HistoryRemove
+    it_doors_history.twig.history_table_extension.class: ITDoors\HistoryBundle\Twig\HistoryTableExtension
 
 services:
     it_doors_history.service:
@@ -26,5 +27,11 @@ services:
         arguments: [@service_container]
         tags:
             - { name: doctrine.event_listener, event: preRemove }
+    
+    it_doors_history.twig.history_table_extension:
+        class: %it_doors_history.twig.history_table_extension.class%
+        arguments: [@service_container]
+        tags:
+            - { name: twig.extension }
 
 
