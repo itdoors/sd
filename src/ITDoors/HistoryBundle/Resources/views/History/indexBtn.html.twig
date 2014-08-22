@@ -1,0 +1,9 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+        var $selector = $('{{ options.selector }}');
+
+        $selector.data('params', {{ options|json_encode|raw }});
+
+        ITDoorsHistory.initAjaxTableBtn($selector);
+    });
+</script>
