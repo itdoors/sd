@@ -71,6 +71,7 @@ class VoteController extends BaseController
                         'class' => 'itdoors-select2 can-be-reseted submit-field control-label col-md-3',
                         'placeholder' => 'Vote',
                         'required' => 'required',
+                        'minimumInputLength' => 0,
                         'data-empty' => $this->get('translator')->trans('Select rating', array(), 'ListsArticleBundle')
                     ),
                     'choices' => array(

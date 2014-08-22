@@ -78,14 +78,15 @@ class HistoryService
     * @param string  $modelName
     * @param integer $modelId
     * @param string  $filterNamespace
+    * @param array   $filters
     * 
     * @return boolean
     */
-    public function getHistory($modelName, $modelId, $filterNamespace)
+    public function getHistory($modelName, $modelId, $filterNamespace, $filters)
     {
         $em = $this->container->get('doctrine')->getManager();
         $historyes = $em->getRepository('ITDoorsHistoryBundle:History')
-            ->getHistories($modelName, $modelId, $filterNamespace);
+            ->getHistories($modelName, $modelId, $filterNamespace, $filters);
 
         return $historyes->getResult();
     }

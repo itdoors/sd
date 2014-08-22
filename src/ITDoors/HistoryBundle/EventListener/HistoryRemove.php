@@ -33,6 +33,7 @@ class HistoryRemove
                 array(
                     'modelId' => $entity->getId(),
                     'modelName' => $tableName,
+                    'value' => (string) $entity,
                     'action' => 'delete'
                 )
             );
