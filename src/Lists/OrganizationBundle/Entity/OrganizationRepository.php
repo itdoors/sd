@@ -184,6 +184,36 @@ class OrganizationRepository extends EntityRepository
     }
 
     /**
+     * @param integer $signId
+     *
+     * @return mixed[]
+     */
+    public function getAllContractors($signId)
+    {
+        /** @var \Doctrine\ORM\QueryBuilder $sql*/
+        $sql = $this->createQueryBuilder('o');
+
+        /** @var \Doctrine\ORM\QueryBuilder $sqlCount */
+        $sqlCount = $this->createQueryBuilder('o');
+
+        $this->processSelect($sql);
+
+        $this->processBaseQuery($sql);
+        $sql
+            ->where('o.organizationSignId = :organizationSignId')
+            ->setParameter(':organizationSignId', $signId);
+        $sqlCount->where('o.organizationSignId = :organizationSignId')
+            ->setParameter(':organizationSignId', $signId);
+
+        $this->processOrdering($sql);
+
+        $query = $sql->getQuery();
+
+        $result = $query->getArrayResult();
+
+        return $result;
+    }
+    /**
      * Processes sql query. adding select
      *
      * @param \Doctrine\ORM\QueryBuilder $sql
