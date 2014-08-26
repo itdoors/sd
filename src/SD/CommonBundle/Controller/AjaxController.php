@@ -3804,7 +3804,12 @@ class AjaxController extends BaseFilterController
     {
         $invoiceId = $defaultData['invoiceId'];
 
-        $repository = $this->getDoctrine()->getRepository('ListsCompanystructureBundle:Companystructure');
+        $repository = $this->getDoctrine()->getRepository('ListsCompanystructureBundle:Companystructure')->createQueryBuilder('c')
+                    ->leftJoin('c.invoicecompanystructure', 'idc')
+                    ->where('(idc.invoiceId is NULL OR idc.invoiceId <> :invoiceId)')
+                    ->orderBy('c.root, c.lft', 'ASC')
+                    ->setParameter(':invoiceId', $invoiceId);
+
 
         $form
             ->add('companystructure', 'companystructure_tree', array(
@@ -3817,7 +3822,7 @@ class AjaxController extends BaseFilterController
                 return $repository->createQueryBuilder('c')
                     ->leftJoin('c.invoicecompanystructure', 'idc')
                     ->where('(idc.invoiceId is NULL OR idc.invoiceId <> :invoiceId)')
-                    ->orderBy('c.name')
+                    ->orderBy('c.root, c.lft', 'ASC')
                     ->setParameter(':invoiceId', $invoiceId);
                 }
             ));
