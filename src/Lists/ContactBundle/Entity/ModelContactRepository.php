@@ -432,8 +432,7 @@ class ModelContactRepository extends EntityRepository
             ->leftJoin('mc.user', 'u')
             ->leftJoin('mc.owner', 'owner')
             ->where('mc.modelName = :modelName')
-            ->setParameter(':modelName', self::MODEL_DEPARTMENT)
-            ;
+            ->setParameter(':modelName', self::MODEL_DEPARTMENT);
 
         return $sql
             ->getQuery()->getArrayResult();
