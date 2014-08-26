@@ -17,3 +17,8 @@ parameters:
     project.dir: /var/www/sd
     router.request_context.host: sd.griffin.ua
     router.request_context.scheme: http
+    listener.history.tables:
+        - organization
+        - email
+        - handling
+        - dogovor

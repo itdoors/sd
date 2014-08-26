@@ -1,7 +1,44 @@
 parameters:
-#    it_doors_history.example.class: ITDoors\HistoryBundle\Example
+    it_doors_history.service.class: ITDoors\HistoryBundle\Services\HistoryService
+    it_doors_history.update.event.listener.class: ITDoors\HistoryBundle\EventListener\HistoryUpdate
+    it_doors_history.insert.event.listener.class: ITDoors\HistoryBundle\EventListener\HistoryInsert
+    it_doors_history.remove.event.listener.class: ITDoors\HistoryBundle\EventListener\HistoryRemove
+    it_doors_history.twig.history_table_extension.class: ITDoors\HistoryBundle\Twig\HistoryTableExtension
+    it_doors_history.filter.form.class: ITDoors\HistoryBundle\Form\HistoryFilterFormType
 
 services:
-#    it_doors_history.example:
-#        class: %it_doors_history.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    it_doors_history.service:
+        class: %it_doors_history.service.class%
+        arguments: [@service_container]
+        
+    history.update.listener:
+        class: %it_doors_history.update.event.listener.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: preUpdate }
+
+    history.insert.listener:
+        class: %it_doors_history.insert.event.listener.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+
+    history.remove.listener:
+        class: %it_doors_history.remove.event.listener.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_listener, event: preRemove }
+    
+    it_doors_history.twig.history_table_extension:
+        class: %it_doors_history.twig.history_table_extension.class%
+        arguments: [@service_container]
+        tags:
+            - { name: twig.extension }
+            
+    it_doors_history.form.historyFilterForm:
+        class: %it_doors_history.filter.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: historyFilterForm }
+
+

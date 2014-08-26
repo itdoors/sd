@@ -1,0 +1,6 @@
+it_doors_history:
+    pattern:  /itdoors/history
+    defaults: { _controller: ITDoorsHistoryBundle:History:index }
+it_doors_history_list:
+    pattern:  /itdoors/history/list
+    defaults: { _controller: ITDoorsHistoryBundle:History:list }
