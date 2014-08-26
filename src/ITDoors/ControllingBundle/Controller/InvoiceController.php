@@ -16,6 +16,7 @@ use PHPExcel_Style_Alignment;
 use PHPExcel_Style_Fill;
 use Symfony\Component\HttpFoundation\Request;
 use Lists\ContactBundle\Entity\ModelContactSendEmail;
+use Lists\CompanystructureBundle\Entity\Category;
 
 /**
  * InvoiceController
