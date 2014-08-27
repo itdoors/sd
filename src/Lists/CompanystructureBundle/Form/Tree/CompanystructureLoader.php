@@ -47,7 +47,7 @@ class CompanystructureLoader implements EntityLoaderInterface
         $level = $this->level;
         $ident = '';
         while ($level--) {
-            $ident .= ' ~ ';
+            $ident .= '&nbsp;&nbsp;&nbsp;';
         }
 
         $this->level++;

@@ -114,7 +114,16 @@ class Companystructure
      */
     public function getName()
     {
-        return $this->name;
+        return  str_repeat('&nbsp;&nbsp;&nbsp;', $this->lvl).$this->name;
+    }
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getNameForList()
+    {
+        return str_repeat('&nbsp;&nbsp;&nbsp;-', $this->lvl).$this->name;
     }
 
     /**

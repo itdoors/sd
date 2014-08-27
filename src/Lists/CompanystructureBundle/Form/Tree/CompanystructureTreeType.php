@@ -28,7 +28,7 @@ class CompanystructureTreeType extends DoctrineType
         };
 
         $resolver->setDefaults(array(
-            'property'  => 'name',
+//            'property'  => 'getNameForList',
             'loader'    => $loader,
             'class'     => 'ListsCompanystructureBundle:Companystructure',
             'attr'      => array('class' => 'input-block-level'),
