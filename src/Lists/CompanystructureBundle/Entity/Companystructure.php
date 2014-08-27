@@ -71,6 +71,7 @@ class Companystructure
     private $children;
     /**
      * @var \Doctrine\Common\Collections\Collection
+     * @ORM\ManyToMany(targetEntity="Lists\RegionBundle\Entity\Region")
      */
     private $region;
 
