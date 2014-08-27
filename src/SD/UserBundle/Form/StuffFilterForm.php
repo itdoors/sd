@@ -103,7 +103,7 @@ class StuffFilterForm extends AbstractType
                     'data-url' => $router->generate('sd_common_ajax_contact_company'),
                     'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
                     'data-params' => json_encode(array(
-                        'minimumInputLength' => 2,
+                        'minimumInputLength' => 0,
                         'allowClear' => true,
                         'width' => '200px',
                         'multiple' => 'multiple'

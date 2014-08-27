@@ -1138,6 +1138,7 @@ class AjaxController extends BaseFilterController
         $objects = $companystructure->createQueryBuilder('c')
             ->andWhere('lower(c.name) LIKE :q')
             ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->orderBy('c.root, c.lft', 'ASC')
             ->getQuery()
             ->getResult();
 

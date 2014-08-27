@@ -115,7 +115,7 @@ class Companystructure
      */
     public function getName()
     {
-        return  str_repeat('&nbsp;&nbsp;&nbsp;', $this->lvl).$this->name;
+        return  str_repeat(' - ', $this->lvl).$this->name;
     }
     /**
      * Get name
