@@ -152,6 +152,10 @@ sd_common_ajax_organization_by_edrpous:
 sd_common_ajax_user_by_id:
     pattern:  /ajax/user_by_id
     defaults: { _controller: SDCommonBundle:Ajax:userById }
+    
+sd_common_ajax_contact_company_by_ids:
+    pattern:  /ajax/contact/company_by_ids
+    defaults: { _controller: SDCommonBundle:Ajax:userStuffCompanyByIds}
 
 sd_common_ajax_user_by_ids:
     pattern:  /ajax/user_by_ids

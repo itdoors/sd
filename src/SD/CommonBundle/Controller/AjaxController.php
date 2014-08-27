@@ -1487,6 +1487,35 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($result));
     }
+    /**
+     * Returns json user object by requested id
+     *
+     * @return string
+     */
+    public function userStuffCompanyByIdsAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        /** @var \SD\UserBundle\Entity\UserRepository $repository */
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsCompanystructureBundle:Companystructure');
+
+        /** @var \SD\UserBundle\Entity\User $object */
+        $objects = $repository
+            ->createQueryBuilder('c')
+            ->where('c.id in (:ids)')
+            ->setParameter(':ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
 
     /**
      * Serialize object to json. temporary solution
