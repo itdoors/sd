@@ -123,7 +123,7 @@ class Companystructure
      */
     public function getNameForList()
     {
-        return str_repeat('&nbsp;&nbsp;&nbsp;-', $this->lvl).$this->name;
+        return str_repeat('&nbsp;&nbsp;&nbsp;', $this->lvl).$this->name;
     }
 
     /**
