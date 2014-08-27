@@ -3806,7 +3806,6 @@ class AjaxController extends BaseFilterController
 
         $repository = $this->getDoctrine()->getRepository('ListsCompanystructureBundle:Companystructure');
 
-
         $form
             ->add('companystructure', 'entity', array(
                 'class' => 'ListsCompanystructureBundle:Companystructure',
