@@ -26,12 +26,14 @@ class ContractorController extends SalesController
     {
         $namespase = $this->filterNamespace;
         $filter = $this->filterFormName;
+        $superviser = $this->getUser()->hasRole('ROLE_SUPERVISOR');
 
         return $this->render('ListsOrganizationBundle:Contractor:index.html.twig', array(
                 'namespase' => $namespase,
                 'filter' => $filter,
                 'baseTemplate' => $this->baseTemplate,
                 'baseRoutePrefix' => $this->baseRoutePrefix,
+                'supervisor' => $superviser
         ));
     }
 
@@ -71,7 +73,6 @@ class ContractorController extends SalesController
             $page,
             20
         );
-
         return $this->render('ListsOrganizationBundle:Contractor:list.html.twig', array(
                 'pagination' => $pagination,
                 'namespase' => $namespase,
@@ -311,15 +312,15 @@ class ContractorController extends SalesController
         $organizationsRepository = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization');
 
-        /** @var \Doctrine\ORM\Query */
-        $organizationsQuery = $organizationsRepository->getAllContractors($lookup->getId());
+
+        $organizations = $organizationsRepository->getAllContractors($lookup->getId());
         //print_r($contacts);
 
         $serviceExport = $this->get('itdoors_common.export.service');
 
-        $excelObject = $serviceExport->getExcel($contacts);
+        $excelObject = $serviceExport->getExcel($organizations);
 
-        $response = $serviceExport->getResponse($excelObject, 'Contacts');
+        $response = $serviceExport->getResponse($excelObject, 'Contractors');
 
         return $response;
     }

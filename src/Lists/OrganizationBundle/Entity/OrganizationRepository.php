@@ -197,7 +197,7 @@ class OrganizationRepository extends EntityRepository
         $sqlCount = $this->createQueryBuilder('o');
 
         $this->processSelect($sql);
-
+        $sql->addSelect("CONCAT(CONCAT(creator.lastName, ' '), creator.firstName) as creatorName");
         $this->processBaseQuery($sql);
         $sql
             ->where('o.organizationSignId = :organizationSignId')
