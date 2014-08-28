@@ -54,7 +54,7 @@ class Companystructure
     private $invoicecompanystructure;
 
     /**
-     * @var \SD\UserBundle\Entity\Stuff
+     * @ORM\ManyToOne(targetEntity="SD\UserBundle\Entity\Stuff", inversedBy=null)
      */
     private $stuff;
 
@@ -71,7 +71,7 @@ class Companystructure
     private $children;
     /**
      * @var \Doctrine\Common\Collections\Collection
-     * @ORM\ManyToMany(targetEntity="Lists\RegionBundle\Entity\Region")
+     * @ORM\ManyToMany(targetEntity="Lists\RegionBundle\Entity\Region",  inversedBy="companystructure")
      */
     private $region;
 
