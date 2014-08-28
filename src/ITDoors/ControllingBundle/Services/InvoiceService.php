@@ -11,7 +11,7 @@ use ITDoors\ControllingBundle\Entity\InvoicePayments;
 use ITDoors\ControllingBundle\Entity\InvoiceMessage;
 use ITDoors\ControllingBundle\Entity\InvoiceAct;
 use ITDoors\ControllingBundle\Entity\InvoiceActDetal;
-
+use ITDoors\ControllingBundle\Entity\InvoiceCompanystructure;
 /**
  * Invoice Service class
  */
