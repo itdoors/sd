@@ -42,7 +42,7 @@ class HistoryService
         } else {
             $user = $em->getRepository('SDUserBundle:User')->find(0);
         }
-        
+
         $query = "
             INSERT INTO
                 history
