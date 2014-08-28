@@ -297,4 +297,30 @@ class ContractorController extends SalesController
         ));
     }
 
+
+    /**
+     * @return Response
+     */
+    public function exportContractorsAction() {
+        /** @var Lookup $lookup */
+        $lookup = $this->getDoctrine()
+            ->getRepository('ListsLookupBundle:Lookup')
+            ->findOneBy(array('lukey' => 'organization_sign_contractor'));
+
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $organizationsRepository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+        /** @var \Doctrine\ORM\Query */
+        $organizationsQuery = $organizationsRepository->getAllContractors($lookup->getId());
+        //print_r($contacts);
+
+        $serviceExport = $this->get('itdoors_common.export.service');
+
+        $excelObject = $serviceExport->getExcel($contacts);
+
+        $response = $serviceExport->getResponse($excelObject, 'Contacts');
+
+        return $response;
+    }
 }

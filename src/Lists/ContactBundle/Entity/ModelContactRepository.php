@@ -416,6 +416,8 @@ class ModelContactRepository extends EntityRepository
         $sql = $this->createQueryBuilder('mc')
             //->select('mc')
             ->select("mc.modelId as departmentId")
+            ->addSelect("o.name as OrganizationName")
+            ->addSelect("d.name as departmentName")
             ->addSelect("mc.id as id")
             ->addSelect("CONCAT(CONCAT(CONCAT(CONCAT(mc.lastName, ' '), mc.firstName), ' '), mc.middleName) as name")
             //->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as userName")
@@ -425,12 +427,15 @@ class ModelContactRepository extends EntityRepository
             ->addSelect("CONCAT(' ',mc.phone1) as phone1")
             ->addSelect("CONCAT(' ',mc.phone2) as phone2")
             ->addSelect("mc.email as email")
-            //->addSelect("mc.birthday as birthday")
-            //->addSelect("mc.type as type")
+            ->addSelect("mc.birthday as birthday")
+            ->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as creatorName")
             //->addSelect("mc.level as level")
             //->addSelect("owner.id as ownerId")
             ->leftJoin('mc.user', 'u')
             ->leftJoin('mc.owner', 'owner')
+            ->leftJoin('ListsDepartmentBundle:Departments', 'd', 'WITH', 'd.id = mc.modelId')
+            ->leftJoin('d.organization', 'o')
+
             ->where('mc.modelName = :modelName')
             ->setParameter(':modelName', self::MODEL_DEPARTMENT);
 
