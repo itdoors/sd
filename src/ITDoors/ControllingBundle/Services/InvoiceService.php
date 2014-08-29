@@ -396,7 +396,7 @@ class InvoiceService
         foreach ($json as $key => $invoice) {
 
             echo $countInvoice." ~ ";
-            if ($countInvoice == 2000) {
+            if ($countInvoice == 1000) {
                 $em = $this->container->get('doctrine')->getManager();
                 $em->flush();
                 $em->clear();
