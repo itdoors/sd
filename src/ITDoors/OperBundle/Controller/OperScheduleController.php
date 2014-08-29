@@ -605,8 +605,8 @@ class OperScheduleController extends BaseFilterController
             ->find($idReplacement);
 
         //array of points during the day which make periods of the day(evening, night, etc)
-        $periodPoints[] = 7;
-        $periodPoints[] = 19;
+        $periodPoints[] = 6;
+        $periodPoints[] = 18;
         $periodPoints[] = 22;
         $periodPoints[] = 24;
         //foreach ($timeIn as $infoDay) {
@@ -632,6 +632,7 @@ class OperScheduleController extends BaseFilterController
         if ($hoursTo == 0 && $hoursFrom != 0) {
             $hoursTo = 24;
         }
+
         $hoursFrom += $minutesFrom/60;
         $hoursTo += $minutesTo/60;
 
