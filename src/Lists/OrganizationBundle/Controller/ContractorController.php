@@ -301,7 +301,8 @@ class ContractorController extends SalesController
     /**
      * @return Response
      */
-    public function exportContractorsAction() {
+    public function exportContractorsAction()
+    {
         /** @var Lookup $lookup */
         $lookup = $this->getDoctrine()
             ->getRepository('ListsLookupBundle:Lookup')
