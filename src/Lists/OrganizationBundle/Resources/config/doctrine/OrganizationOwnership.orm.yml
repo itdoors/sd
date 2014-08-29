@@ -1,0 +1,17 @@
+Lists\OrganizationBundle\Entity\OrganizationOwnership:
+    type: entity
+    table: organization_ownership
+    repositoryClass: Lists\OrganizationBundle\Entity\OrganizationOwnershipRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        shortname:
+            type: string
+            length: 10
+        name:
+            type: string
+            length: 255

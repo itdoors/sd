@@ -45,6 +45,10 @@ sd_common_ajax_handling_more_info:
 sd_common_ajax_city:
     pattern:  /ajax/city
     defaults: { _controller: SDCommonBundle:Ajax:city }
+    
+sd_common_ajax_ownership:
+    pattern:  /ajax/ownership
+    defaults: { _controller: SDCommonBundle:Ajax:ownership }
 
 sd_common_ajax_scope:
     pattern:  /ajax/scope
