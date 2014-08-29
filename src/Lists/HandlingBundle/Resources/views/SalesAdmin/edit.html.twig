@@ -309,9 +309,28 @@
                     <a href="#" id="isMarketing" data-type="select" data-pk="{{ handling.0.id }}" data-value="{{ isMarketing }}" data-placement="right" data-original-title="{% trans %}Is Marketing{% endtrans %}">
                         {{ isMarketing|trans({}, 'messages') }}
                     </a>
-				</td>
-				<td></td>
-				<td></td>
+                </td>
+                <td>{% trans %}Closed{% endtrans %}</td>
+                <td>
+                    {% if canEdit %}
+                        {% trans %}No{% endtrans %}
+                    {% else %}
+                        {% trans %}Yes{% endtrans %}
+                    {% endif %}
+                    {{ handling.closerFullname }}
+                    {% if handling.closedatetime %}
+                        {{ handling.closedatetime|date("d.m.y, H:i") }}
+                    {% endif %}
+                    {% if isResultClosed %}
+                        <a href="{{ path('lists_salesadmin_handling_close', { id: handling.0.id} ) }}" class="btn green">
+                            {% if canEdit %}
+                                {% trans %}Close{% endtrans %}
+                            {% else %}
+                                {% trans %}Open{% endtrans %}
+                            {% endif %}
+                        </a>
+                    {% endif %}
+                </td>
             </tr>
              {# 10 - Переходные данные - потом удалим 
             <tr>
