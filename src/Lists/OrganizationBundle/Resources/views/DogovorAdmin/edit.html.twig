@@ -56,6 +56,17 @@
                 multiple: true
             }
         });
+        $('#ownershipId').editable({
+            url: '{{ path('sd_common_ajax_organization_save') }}',
+            source: '{{ path('sd_common_ajax_ownership') }}',
+            emptytext: '{% trans %}Enter value{% endtrans %}',
+            select2: {
+                placeholder: '{% trans %}Select ownership{% endtrans %}',
+                minimumInputLength: 0,
+                width: 250,
+                allowClear: true
+            }
+        });
     });
 
 </script>
@@ -214,6 +225,15 @@
             </td>
             <td><span class="text-muted">{% trans %}Enter Organization Description{% endtrans %}</span></td>
         </tr>
+        <tr>
+                <td>{% trans %}Ownership{% endtrans %}</td>
+                <td>
+                    <a href="#" id="ownershipId" data-type="select2" data-pk="{{ organization.id }}" data-original-title="{% trans %}Ownership{% endtrans %}">
+                        {{ organization.ownership }}
+                    </a>
+                </td>
+                <td><span class="text-muted">{% trans %}Select ownership{% endtrans %}</span></td>
+            </tr>
         </tbody>
     </table>
 </div>
