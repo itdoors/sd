@@ -426,9 +426,8 @@ class InvoiceService
             }
 
             $this->findDogovor($invoiceFind, $invoice, $invoiceNew);
-
-//            $json[$key] = null;
-//            unset($json[$key]);
+            $json[$key] = null;
+            unset($json[$key]);
 //            unset($invoice);
             unset($invoiceNew);
             
