@@ -68,9 +68,12 @@ class ScheduleUpdateService
             $grafikTime = $this->container->get('doctrine')
                 ->getRepository('ListsGrafikBundle:GrafikTime')->find($grafikJoke->getId());
             $counterFlush++;
-            echo $counter."\n";
+            echo $counter.' id:'.$grafikJoke->getId()."\n";
             $counter--;
-
+            if (!$grafikTime) {
+                echo 'ERROR ERROR';
+                continue;
+            }
             $hoursFromDb = $grafikTime->getFromTime()->format("H:i");;
             $hoursToDb = $grafikTime->getToTime()->format("H:i");
 
