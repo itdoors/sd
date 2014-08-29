@@ -249,8 +249,6 @@ class TaskController extends Controller
             $em->persist($dateRequest);
             $em->flush;
         }
-
-
     }
 
     public function taskChangeDateRequestAction(Request $request) {

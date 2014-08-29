@@ -11,7 +11,9 @@
         </span>
     {% else %}
         {% if taskEndDate.stage == 'request' %}
-            <span style="color: #008000">{{ taskEndDate.endDatetime|date('d.m.Y H:i') }} (?)</span>
+            <span style="color: #008000">{{ taskEndDate.endDatetime|date('d.m.Y H:i') }}
+                <span style="color: red">(Не подтверждено)</span>
+            </span>
         {% elseif taskEndDate.stage == 'rejected'%}
             <span style="color: red; text-decoration: line-through">{{ taskEndDate.endDatetime|date('d.m.Y H:i') }}</span>
         {% else %}
