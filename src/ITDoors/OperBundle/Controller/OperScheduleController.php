@@ -247,7 +247,10 @@ class OperScheduleController extends BaseFilterController
                     'departmentPeople' => $idCoworker,
                     'code' => 'UU',
                     'isActive' => true
-                )
+                ),
+		array(
+		    'period' => 'desc'	
+		)
             );
 
             if ($plannedAccrual) {
@@ -605,8 +608,8 @@ class OperScheduleController extends BaseFilterController
             ->find($idReplacement);
 
         //array of points during the day which make periods of the day(evening, night, etc)
-        $periodPoints[] = 7;
-        $periodPoints[] = 19;
+        $periodPoints[] = 6;
+        $periodPoints[] = 18;
         $periodPoints[] = 22;
         $periodPoints[] = 24;
         //foreach ($timeIn as $infoDay) {
@@ -2137,6 +2140,9 @@ class OperScheduleController extends BaseFilterController
                 'departmentPeople' => $idCoworker,
                 'code' => 'UU',
                 'isActive' => true
+            ),
+	    array(
+	        'period' => 'desc'
             )
         );
 
