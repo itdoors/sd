@@ -274,7 +274,6 @@ class InvoiceService
             }
 //            unset($details);
         }
-        
     }
     private function findDogovor($invoiceFind, $invoice, $invoiceNew)
     {
@@ -391,7 +390,7 @@ class InvoiceService
     {
         $count = count($json);
         $countInvoice = 0;
-        $mem_start = memory_get_usage();
+        $memStart = memory_get_usage();
 
         foreach ($json as $key => $invoice) {
 
@@ -405,7 +404,7 @@ class InvoiceService
                 unset($em);
             }
             ++$countInvoice;
-            echo number_format((memory_get_usage() - $mem_start)/8000000, 0, ',', ' ') ."MB ~ Осталось: ";
+            echo number_format((memory_get_usage() - $memStart)/8000000, 0, ',', ' ') ."MB ~ Осталось: ";
             echo ($count-$key)." шт.\n";
 
             $invoiceFind = true;
@@ -424,7 +423,6 @@ class InvoiceService
             unset($json[$key]);
 //            unset($invoice);
             unset($invoiceNew);
-            
         }
         echo 'try add email for send'."\n";
         $this->sendEmails();
