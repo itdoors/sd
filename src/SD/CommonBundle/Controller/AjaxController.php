@@ -396,7 +396,14 @@ class AjaxController extends BaseFilterController
         $result = array();
 
         foreach ($objects as $object) {
-            $result[] = $this->serializeObject($object);
+            $text = $object->getShortname().' ('.$object->getName(). ')';
+            $id = $object->getId();
+            $result[] =  array(
+            'id' => $id,
+            'value' => $id,
+            'name' => $text,
+            'text' => $text
+        );
         }
 
         return new Response(json_encode($result));

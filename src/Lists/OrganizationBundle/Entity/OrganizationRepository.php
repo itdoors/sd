@@ -197,7 +197,7 @@ class OrganizationRepository extends EntityRepository
             ->addSelect('ownership.name as ownershipName')
             ->addSelect('ownership.shortname as ownershipShortname')
             ->addSelect('creator.id as creatorId')
-            ->addSelect('l.name as singleName')
+            ->addSelect('view.name as viewName')
             ->addSelect('c.name as cityName')
             ->addSelect('r.name as regionName')
             ->addSelect('scope.name as scopeName')
@@ -234,7 +234,7 @@ class OrganizationRepository extends EntityRepository
     public function processBaseQuery($sql)
     {
         $subQueryCase =  $sql->expr()->andx(
-            $sql->expr()->eq('l.id', 'o.organizationSignId')
+            $sql->expr()->eq('view.id', 'o.organizationSignId')
         );
         $sql
             ->leftJoin('o.city', 'c')
@@ -244,7 +244,7 @@ class OrganizationRepository extends EntityRepository
             ->leftJoin('oUser.user', 'users')
             ->leftJoin('oUser.role', 'role')
             ->leftJoin('o.ownership', 'ownership')
-            ->leftJoin('Lists\LookupBundle\Entity\Lookup', 'l', 'WITH', $subQueryCase)
+            ->leftJoin('Lists\LookupBundle\Entity\Lookup', 'view', 'WITH', $subQueryCase)
             ->leftJoin('o.creator', 'creator')
             ->andWhere('o.parent_id is null');
 

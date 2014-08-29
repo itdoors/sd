@@ -870,4 +870,4 @@ ALTER TABLE organization ADD CONSTRAINT FK_C1EE637C9E9FFAA0 FOREIGN KEY (ownersh
 CREATE UNIQUE INDEX UNIQ_C1EE637C9E9FFAA0 ON organization (ownership_id);
 COMMENT ON COLUMN organization.ownership_id IS 'Форма собственности организации';
 -- staging ----------------------
--- prod ----------------------
+-- prod ++++++++++++++++++++++++
