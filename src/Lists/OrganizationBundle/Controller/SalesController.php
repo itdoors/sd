@@ -249,7 +249,9 @@ class SalesController extends BaseController
           ->setCellValue('D1', $translator->trans('City', array(), 'ListsOrganizationBundle'))
           ->setCellValue('E1', $translator->trans('Region', array(), 'ListsOrganizationBundle'))
           ->setCellValue('F1', $translator->trans('Scope', array(), 'ListsOrganizationBundle'))
-          ->setCellValue('G1', $translator->trans('Managers', array(), 'ListsOrganizationBundle'));
+          ->setCellValue('G1', $translator->trans('Managers', array(), 'ListsOrganizationBundle'))
+          ->setCellValue('H1', $translator->trans('Ownership', array(), 'ListsOrganizationBundle'))
+          ->setCellValue('I1', $translator->trans('Ownership', array(), 'ListsOrganizationBundle'));
        $phpExcelObject->getActiveSheet()->getRowDimension('1') ->setRowHeight(40);
        $str = 1;
 
@@ -258,14 +260,19 @@ class SalesController extends BaseController
             $col = 0;
             $phpExcelObject->getActiveSheet()
                     ->setCellValueByColumnAndRow($col, $str, $organization['organizationId'])
-                    ->setCellValueByColumnAndRow(++$col, $str, $organization['organizationName'])
+                    ->setCellValueByColumnAndRow(++$col, $str, $organization['organizationName']);
+            $phpExcelObject->getActiveSheet()->getCellByColumnAndRow($col, $str)->getHyperlink()
+                    ->setUrl($this->generateUrl('lists_' . $this->baseRoutePrefix . '_organization_show', array('id' => $organization['organizationId']), true));
+            $phpExcelObject->getActiveSheet()
                     ->setCellValueByColumnAndRow(++$col, $str, $organization['edrpou'])
                     ->setCellValueByColumnAndRow(++$col, $str, $organization['cityName'])
                     ->setCellValueByColumnAndRow(++$col, $str, $organization['regionName'])
                     ->setCellValueByColumnAndRow(++$col, $str, $organization['scopeName'])
-                    ->setCellValueByColumnAndRow(++$col, $str, $organization['fullNames']);
+                    ->setCellValueByColumnAndRow(++$col, $str, $organization['fullNames'])
+                    ->setCellValueByColumnAndRow(++$col, $str, $organization['ownershipName'])
+                    ->setCellValueByColumnAndRow(++$col, $str, $organization['singleName']);
         }
-        $phpExcelObject->getActiveSheet()->getStyle('A2:G'.$str)->getAlignment()->setWrapText(true);
+        $phpExcelObject->getActiveSheet()->getStyle('A2:I'.$str)->getAlignment()->setWrapText(true);
         $phpExcelObject->getActiveSheet()->getColumnDimension('A')->setWidth(13);
         $phpExcelObject->getActiveSheet()->getColumnDimension('B')->setWidth(12);
         $phpExcelObject->getActiveSheet()->getColumnDimension('C')->setWidth(20);
@@ -273,6 +280,8 @@ class SalesController extends BaseController
         $phpExcelObject->getActiveSheet()->getColumnDimension('E')->setWidth(12);
         $phpExcelObject->getActiveSheet()->getColumnDimension('F')->setWidth(12);
         $phpExcelObject->getActiveSheet()->getColumnDimension('G')->setWidth(12);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('H')->setWidth(13);
+        $phpExcelObject->getActiveSheet()->getColumnDimension('I')->setWidth(13);
 
         $styleArray = array(
             'borders' => array(
@@ -287,27 +296,27 @@ class SalesController extends BaseController
             ),
         );
 
-        $phpExcelObject->getActiveSheet()->getStyle('A1:G'.$str)->applyFromArray($styleArray);
+        $phpExcelObject->getActiveSheet()->getStyle('A1:I'.$str)->applyFromArray($styleArray);
 
         $phpExcelObject->getActiveSheet()
             ->getStyle('A2:A'.$str)
             ->getAlignment()
             ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
         $phpExcelObject->getActiveSheet()
-            ->getStyle('A1:G1')
+            ->getStyle('A1:I1')
             ->getAlignment()
             ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $phpExcelObject->getActiveSheet()
-            ->getStyle('A1:G1')
+            ->getStyle('A1:I1')
             ->getAlignment()
             ->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
         $phpExcelObject->getActiveSheet()
-            ->getStyle('B2:G'.$str)
+            ->getStyle('B2:I'.$str)
             ->getAlignment()
             ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
         $phpExcelObject->getActiveSheet()->freezePane('AB2');
 
-        $phpExcelObject->getActiveSheet()->getStyle('A1:G'.$str)->getAlignment()->setWrapText(true);
+        $phpExcelObject->getActiveSheet()->getStyle('A1:I'.$str)->getAlignment()->setWrapText(true);
         $phpExcelObject->getActiveSheet()->setShowGridLines(false);//off line
         $phpExcelObject->getActiveSheet()->setTitle('Organization');
         $phpExcelObject->setActiveSheetIndex(0);

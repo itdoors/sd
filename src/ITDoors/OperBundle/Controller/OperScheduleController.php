@@ -635,6 +635,7 @@ class OperScheduleController extends BaseFilterController
         if ($hoursTo == 0 && $hoursFrom != 0) {
             $hoursTo = 24;
         }
+
         $hoursFrom += $minutesFrom/60;
         $hoursTo += $minutesTo/60;
 

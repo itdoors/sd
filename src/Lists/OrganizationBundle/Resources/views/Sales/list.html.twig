@@ -12,7 +12,10 @@
         <thead>
             <tr>
                 <th>{% trans %}ID{% endtrans %} </th>
+                <th>{% trans %}Ownership{% endtrans %} </th>
                 <th>{% trans %}Name{% endtrans %} </th>
+                <th>{% trans %}Short Name{% endtrans %} </th>
+                <th>{% trans %}Type{% endtrans %} </th>
                 <th>{% trans %}Edrpou{% endtrans %} </th>
                 <th>{% trans %}City{% endtrans %} </th>
                 <th>{% trans %}Region{% endtrans %} </th>
@@ -30,7 +33,10 @@
                             {{ item.organizationId|e }}
                         </a>
                     </td>
+                    <td>{{ item.ownershipShortname|e }}</td>
                     <td>{{ item.organizationName|e }}</td>
+                    <td>{{ item.organizationShortname|e }}</td>
+                    <td>{{ item.singleName|e }}</td>
                     <td>{{ item.edrpou|e }}</td>
                     <td>{{ item.cityName|e }}</td>
                     <td>{{ item.regionName|e }}</td>
