@@ -2274,6 +2274,7 @@
         "gedmo/doctrine-extensions": 20,
         "stof/doctrine-extensions-bundle": 20
     },
+    "prefer-stable": false,
     "platform": {
         "php": ">=5.3.3"
     },
