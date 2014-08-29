@@ -100,6 +100,7 @@ class InvoiceService
                     $this->addCronError(0, 'FATAL ERROR', $file, json_last_error());
             }
         } else {
+            $em = $this->container->get('doctrine')->getManager();
             $this->addCronError(0, 'ok', 'file not found', 'new file not found');
 
             $em->flush();
@@ -117,7 +118,6 @@ class InvoiceService
      */
     private function saveinvoice($invoice)
     {
-        $invoice = $invoice;
         $em = $this->container->get('doctrine')->getManager();
         $invoiceNew = $em->getRepository('ITDoorsControllingBundle:Invoice')
             ->findOneBy(array('invoiceId' => trim($invoice->invoiceId)));
@@ -139,6 +139,7 @@ class InvoiceService
                         $payments->setBank(trim($pay->bank));
                     }
                     $em->persist($payments);
+//                    unset($payments);
                     $summa += trim($pay->summa);
                 }
 
@@ -168,6 +169,7 @@ class InvoiceService
                         $payments->setBank(trim($pay->bank));
                     }
                     $em->persist($payments);
+//                    unset($payments);
                     $summa += trim($pay->summa);
 
                     $days = (strtotime($date)-strtotime($pay->date))/24/3600;
@@ -208,7 +210,6 @@ class InvoiceService
         $invoiceNew->setPerformerEdrpou(trim($invoice->performerEdrpou));
         $acts = $invoice->acts;
         $this->addActs($invoiceNew, $acts);
-       // $invoiceNew->setDogovorAct(json_encode($invoice->dogovorAct));
 
         if (!empty($invoice->delayDate) && $invoice->delayDate != 'null') {
             $invoiceNew->setDelayDate(new \DateTime(trim($invoice->delayDate)));
@@ -260,6 +261,7 @@ class InvoiceService
             foreach ($detailsFind as $detailsFindOne) {
                 $em->remove($detailsFindOne);
             }
+//            unset($detailsFind);
             foreach ($details as $detail) {
                  $detalAdd = new InvoiceActDetal();
                  $detalAdd->setAct($actFind);
@@ -268,8 +270,11 @@ class InvoiceService
                  $detalAdd->setNote($detail->note);
                  $detalAdd->setSumma($detail->summa);
                  $em->persist($detalAdd);
+//                 unset($detalAdd);
             }
+//            unset($details);
         }
+        
     }
     private function findDogovor($invoiceFind, $invoice, $invoiceNew)
     {
@@ -303,7 +308,6 @@ class InvoiceService
         if ($dogovorfind) {
             $invoiceNew->setDogovor($dogovorfind);
             $em->persist($invoiceNew);
-            //$em->flush();
             if (!$invoiceFind && $invoiceNew->getDogovorId()) {
                 $this->addReaspon($invoiceNew);
             }
@@ -345,6 +349,7 @@ class InvoiceService
                     //$em->flush();
                     //$em->refresh($invoiceNew);
                     $this->addCronError($invoiceNew, 'error', 'dogovor not found', json_encode($invoice));
+//                    unset($dogovoradd);
 
                     return false;
                 }
@@ -360,8 +365,6 @@ class InvoiceService
                     $error = 'dogovor not found and customer and  performer';
                 }
                 $em->persist($invoiceNew);
-//                $em->flush();
-//                $em->refresh($invoiceNew);
                 $this->addCronError($invoiceNew, 'error', $error, json_encode($invoice));
             }
         }
@@ -371,6 +374,10 @@ class InvoiceService
             }
             $this->arrCostumersForSendMessages[$invoiceNew->getCustomer()->getId()][$this->messageTemplate][$invoiceNew->getDogovorNumber()][] = $invoiceNew->getId();
         }
+//        unset($em);
+//        unset($dogovorfind);
+//        unset($customerfind);
+//        unset($performerfind);
     }
 
     /**
@@ -383,8 +390,30 @@ class InvoiceService
     private function savejson($json)
     {
         $count = count($json);
+        $countInvoice = 0;
+        $mem_start = memory_get_usage();
+//        $em = $this->container->get('doctrine')->getManager();
+
         foreach ($json as $key => $invoice) {
+            
+
+//            if ($key < 4000) {
+//                echo $key."\n";
+//                continue;
+//            }
+            echo $countInvoice." ";
+            if ($countInvoice == 1000) {
+                $em = $this->container->get('doctrine')->getManager();
+                $em->flush();
+                $em->clear();
+                $em->getConnection()->getConfiguration()->setSQLLogger(null);
+                $countInvoice = 0;
+                unset($em);
+            }
+            ++$countInvoice;
+             echo number_format(memory_get_usage() - $mem_start, 0, ',', ' ') ." ";
             echo ($count-$key)."\n";
+
             $invoiceFind = true;
             $this->messageTemplate = false;
             $invoiceNew = $this->saveinvoice($invoice);
@@ -398,7 +427,11 @@ class InvoiceService
 
             $this->findDogovor($invoiceFind, $invoice, $invoiceNew);
 
-            unset($json[$key]);
+//            $json[$key] = null;
+//            unset($json[$key]);
+//            unset($invoice);
+            unset($invoiceNew);
+            
         }
         echo 'try add email for send'."\n";
         $this->sendEmails();
@@ -430,6 +463,7 @@ class InvoiceService
             $em->persist($invoicecompany);
             //$em->flush();
         }
+//        unset($companystructs);
     }
 
     /**
@@ -457,6 +491,7 @@ class InvoiceService
         $error->setDescription($descript);
         $em->persist($error);
         //$em->flush();
+//        unset($error);
 
         return true;
     }
