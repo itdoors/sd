@@ -392,17 +392,11 @@ class InvoiceService
         $count = count($json);
         $countInvoice = 0;
         $mem_start = memory_get_usage();
-//        $em = $this->container->get('doctrine')->getManager();
 
         foreach ($json as $key => $invoice) {
-            
 
-//            if ($key < 4000) {
-//                echo $key."\n";
-//                continue;
-//            }
-            echo $countInvoice." ";
-            if ($countInvoice == 1000) {
+            echo $countInvoice." ~ ";
+            if ($countInvoice == 2000) {
                 $em = $this->container->get('doctrine')->getManager();
                 $em->flush();
                 $em->clear();
@@ -411,8 +405,8 @@ class InvoiceService
                 unset($em);
             }
             ++$countInvoice;
-             echo number_format(memory_get_usage() - $mem_start, 0, ',', ' ') ." ";
-            echo ($count-$key)."\n";
+            echo number_format((memory_get_usage() - $mem_start)/8000000, 0, ',', ' ') ."MB ~ Осталось: ";
+            echo ($count-$key)." шт.\n";
 
             $invoiceFind = true;
             $this->messageTemplate = false;
