@@ -193,7 +193,11 @@ class OrganizationRepository extends EntityRepository
         $sql
             ->select('DISTINCT(o.id) as organizationId', 'o.name as organizationName')
             ->addSelect('o.edrpou')
+            ->addSelect('o.shortname as organizationShortname')
+            ->addSelect('ownership.name as ownershipName')
+            ->addSelect('ownership.shortname as ownershipShortname')
             ->addSelect('creator.id as creatorId')
+            ->addSelect('l.name as singleName')
             ->addSelect('c.name as cityName')
             ->addSelect('r.name as regionName')
             ->addSelect('scope.name as scopeName')
@@ -229,6 +233,9 @@ class OrganizationRepository extends EntityRepository
      */
     public function processBaseQuery($sql)
     {
+        $subQueryCase =  $sql->expr()->andx(
+            $sql->expr()->eq('l.id', 'o.organizationSignId')
+        );
         $sql
             ->leftJoin('o.city', 'c')
             ->leftJoin('c.region', 'r')
@@ -236,6 +243,8 @@ class OrganizationRepository extends EntityRepository
             ->leftJoin('o.organizationUsers', 'oUser')
             ->leftJoin('oUser.user', 'users')
             ->leftJoin('oUser.role', 'role')
+            ->leftJoin('o.ownership', 'ownership')
+            ->leftJoin('Lists\LookupBundle\Entity\Lookup', 'l', 'WITH', $subQueryCase)
             ->leftJoin('o.creator', 'creator')
             ->andWhere('o.parent_id is null');
 

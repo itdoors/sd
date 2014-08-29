@@ -379,6 +379,28 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($result));
     }
+    /**
+     * Returns json ownership list depending search query
+     *
+     * @return string
+     */
+    public function ownershipAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:OrganizationOwnership');
+
+        $objects = $repository->getSearchQuery($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
 
     /**
      * Returns json city object by id
