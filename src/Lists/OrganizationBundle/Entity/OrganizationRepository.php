@@ -197,6 +197,18 @@ class OrganizationRepository extends EntityRepository
         $sqlCount = $this->createQueryBuilder('o');
 
         $this->processSelect($sql);
+        $sql->addSelect("CONCAT(CONCAT(creator.lastName, ' '), creator.firstName) as creatorName");
+        $sql->addSelect("
+                array_to_string(
+                   ARRAY(
+                        SELECT k.name FROM ListsOrganizationBundle:KvedOrganization k_o
+                        LEFT JOIN ListsOrganizationBundle:Kved k WITH k_o.kved = k
+                        WHERE k_o.organization = o
+                   ),
+                ', ') as kveds");
+        //$sql->leftJoin('ListsOrganizationBundle:KvedOrganization', 'k_o', 'WITH', 'k_o.organization = o');
+        //$sql->leftJoin('k_o.kved', 'k');
+
 
         $this->processBaseQuery($sql);
         $sql

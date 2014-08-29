@@ -418,6 +418,9 @@ class ModelContactRepository extends EntityRepository
             ->select("mc.modelId as departmentId")
             ->addSelect("o.name as OrganizationName")
             ->addSelect("d.name as departmentName")
+            ->addSelect("c.name as city")
+            ->addSelect("r.name as region")
+            ->addSelect("d.mpk as mpk")
             ->addSelect("mc.id as id")
             ->addSelect("CONCAT(CONCAT(CONCAT(CONCAT(mc.lastName, ' '), mc.firstName), ' '), mc.middleName) as name")
             //->addSelect("CONCAT(CONCAT(u.lastName, ' '), u.firstName) as userName")
@@ -435,6 +438,9 @@ class ModelContactRepository extends EntityRepository
             ->leftJoin('mc.owner', 'owner')
             ->leftJoin('ListsDepartmentBundle:Departments', 'd', 'WITH', 'd.id = mc.modelId')
             ->leftJoin('d.organization', 'o')
+            ->leftJoin('d.city', 'c')
+            ->leftJoin('c.region', 'r')
+
 
             ->where('mc.modelName = :modelName')
             ->setParameter(':modelName', self::MODEL_DEPARTMENT);

@@ -320,7 +320,8 @@
 
 {% endif %}
 
-{% if taskUserRole.task.stage != 'date request' and taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone' and taskUserRole.task.stage != 'closed' and taskUserRole.task.stage != 'checking' %}
+    {% if taskUserRole.task.stage != 'date request' and taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone' and taskUserRole.task.stage != 'closed' and taskUserRole.task.stage != 'checking'
+    and taskUserRole.role != 'author' %}
     <a id="task_change_date" data-stage="date request" class="btn red" style="float: left; margin-left: 10px;">{% trans %}Change end date{% endtrans %}</a>
     <div style="clear: both"></div>
     <div id="change_date_holder" style="display: none">
