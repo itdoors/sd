@@ -1,0 +1,18 @@
+{
+    "mongodb": {
+        "host": "127.0.0.1",
+        "port": 27017,
+        "db": "ami",
+        "collectionCalls": "calls"
+    },
+    "ami": {
+        "host": "192.168.4.4",
+        "port": "5038",
+        "user": "itdoors",
+        "password": "itdoors25",
+        "groupName": "ITDoor"
+    },
+    "socket": {
+        "listen": "8888"
+    }
+}

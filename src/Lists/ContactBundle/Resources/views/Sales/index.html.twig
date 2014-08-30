@@ -102,7 +102,8 @@
         }
 
         function onSipEventSession(e) {
-            tsk_utils_log_info('==session event = ' + e.type);
+            tsk_utils_log_info('==session event=');
+            console.log(e);
 
             switch (e.type) {
                 case 'connecting': case 'connected':
@@ -120,6 +121,7 @@
                 } // i_ao_request
                 case 'terminating': case 'terminated':
                 {
+                    console.log(e);
                     callSession = null;
                     stopRingbackTone();
                     stopRingTone();
@@ -179,6 +181,7 @@
 
             if (confirm('Are you sure you want to call to ' + phone.replace(/ /g, "").replace(/-/g, ""))) {
                 callSession.call(phone.replace(/ /g, "").replace(/-/g, ""));
+                console.log(callSession);
                 $(this).parent().find('.hangup-btn').show();
                 $(this).hide();
             }

@@ -147,3 +147,7 @@ services:
       class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
       tags:
          - { name: serializer.normalizer }
+
+ami:
+    host: %sd.host%
+    port: 8888
