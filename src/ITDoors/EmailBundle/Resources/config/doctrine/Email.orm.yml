@@ -2,6 +2,10 @@
 ITDoors\EmailBundle\Entity\Email:
     type: entity
     table: email
+    gedmo:
+        soft_deleteable:
+          field_name: deletedAt
+          time_aware: false
     repositoryClass: ITDoors\EmailBundle\Entity\EmailRepository
     id:
         id:
@@ -17,3 +21,6 @@ ITDoors\EmailBundle\Entity\Email:
             length: 255
         text:
             type: text
+        deletedAt:
+            type: datetime
+            nullable: true

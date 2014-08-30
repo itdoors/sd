@@ -121,4 +121,33 @@ class Email
     {
         return $this->getSubject();
     }
+    /**
+     * @var \DateTime
+     */
+    private $deletedAt;
+
+
+    /**
+     * Set deletedAt
+     *
+     * @param \DateTime $deletedAt
+     * 
+     * @return Email
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get deletedAt
+     *
+     * @return \DateTime 
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
 }

@@ -50,10 +50,45 @@
                 width: 250
             }
         });
-    })
+    });
 
 </script>
+     <a class="btn green" id="history-show-btn" href="#history" data-toggle="modal">
+        <i class="fa fa-plus"></i>
+        {% trans %}Show history{% endtrans %}
+    </a>
 
+    {{ history_table_render_btn({
+        'selector' : '#history-show-btn',
+        'service' : {
+            'alias' : 'it_doors_history.service',
+            'method' : 'getHistory'
+        },
+        'params' : {
+            'modelName' : 'organization',
+            'modelId' : organization.id,
+            'showPagination' : 'true',
+            'showFilter' : 'true'
+        },
+        'target' : '#historyBlock',
+        'html' : 'ITDoorsHistoryBundle:History:index.html.twig'
+    }) }}
+
+    <div id="history" class="modal fade" role="basic" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">{% trans from 'ListsHistoryBundle' %}History{% endtrans %}</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="historyBlock" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+    </div>
     <div class="col-md-12">
         <table id="user" class="table table-bordered table-striped">
             <tbody>
