@@ -98,8 +98,8 @@ doctrine:
         # path:     %database_path%
 
     orm:
+#        auto_mapping: true
         auto_generate_proxy_classes: %kernel.debug%
-        # auto_mapping: true
         entity_managers:
             default:
                 filters:
@@ -108,6 +108,12 @@ doctrine:
                         enabled: true
                 auto_mapping: true
                 mappings:
+                    gedmo_tree:
+                        type: annotation
+                        prefix: Gedmo\Tree\Entity
+                        dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity"
+                        alias: GedmoTree # this one is optional and will default to the name set for the mapping
+                        is_bundle: false
                     TSSAutomailerBundle: ~
                 dql:
                     string_functions:
@@ -118,7 +124,10 @@ doctrine:
                         #YEAR: ITDoors\CommonBundle\DQL\Year
                         #MONTH: ITDoors\CommonBundle\DQL\Month
                     # numeric_functions:
-
+stof_doctrine_extensions:
+     orm:
+        default:
+            tree: true
 tss_automailer:
   beanstalk: true
   
@@ -163,4 +172,3 @@ services:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
             - [ setAnnotationReader, [ @annotation_reader ] ]
-        

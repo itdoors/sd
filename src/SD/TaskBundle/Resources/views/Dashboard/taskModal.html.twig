@@ -297,18 +297,6 @@
 {% endif %}
 
 {% if taskUserRole.role == 'controller' %}
-    {% if taskUserRole.task.stage == 'date request'%}
-        {% if taskUserRole.isViewed != true %}
-            <div style="clear: both;"></div>
-        {% endif %}
-        <div style="clear: both;" class="alert alert-danger">
-            {% trans %}Request to change date{% endtrans %}:
-            <a data-value="1" class="btn green answerButton" style="margin-left: 10px;">{% trans %}Submit{% endtrans %}</a>
-            <a data-value="0" class="btn red answerButton" style="margin-left: 10px;">{% trans %}Reject{% endtrans %}</a>
-        </div>
-        <br>
-    {% endif %}
-
     {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'checking' or taskUserRole.task.stage == 'date request'%}
         <a id="task_set_closed" data-stage="closed" class="btn purple stageButton" style="float: left;">{% trans %}Close task{% endtrans %}</a>
         <a id="task_set_undone" data-stage="undone" class="btn yellow stageButton" style="float: left; margin-left: 10px;">{% trans %}Set undone{% endtrans %}</a>
@@ -318,11 +306,22 @@
         <a id="task_set_performing_controller" data-stage="performing" class="btn green stageButton" style="float: left; margin-left: 10px;">{% trans %}Re-make{% endtrans %}</a>
     {% endif %}
 
+    {% if taskUserRole.task.stage == 'date request'%}
+        {% if taskUserRole.isViewed != true %}
+            <div style="clear: both;"></div> <br>
+        {% endif %}
+        <div style="float: right;">
+        {% trans %}Request to change date{% endtrans %}:
+        <a data-value="1" class="btn green answerButton" style="margin-left: 10px;">{% trans %}Submit{% endtrans %}</a>
+        <a data-value="0" class="btn red answerButton" style="margin-left: 10px;">{% trans %}Reject{% endtrans %}</a>
+        </div>
+
+    {% endif %}
 
 {% endif %}
 
-{% if taskUserRole.task.stage != 'date request' and taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone' and taskUserRole.task.stage != 'closed' and taskUserRole.task.stage != 'checking'
-and taskUserRole.role != 'author' %}
+    {% if taskUserRole.task.stage != 'date request' and taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone' and taskUserRole.task.stage != 'closed' and taskUserRole.task.stage != 'checking'
+    and taskUserRole.role != 'author' %}
     <a id="task_change_date" data-stage="date request" class="btn red" style="float: left; margin-left: 10px;">{% trans %}Change end date{% endtrans %}</a>
     <div style="clear: both"></div>
     <div id="change_date_holder" style="display: none">

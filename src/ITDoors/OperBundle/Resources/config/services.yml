@@ -6,6 +6,7 @@ parameters:
     itdoors_oper.schedule.service.class: ITDoors\OperBundle\Services\ScheduleService
     itdoors_oper.access.service.class: ITDoors\OperBundle\Services\AccessService
     itdoors_oper.common_oper.service.class: ITDoors\OperBundle\Services\CommonOperService
+    itdoors_oper.schedule_update_oper.service.class: ITDoors\OperBundle\Services\ScheduleUpdateService
 
 services:
     itdoors_oper.form.DepartmentFilterFormType:
@@ -42,6 +43,14 @@ services:
 
     access.service:
         alias: itdoors_oper.access.service
+
+    itdoors_oper.schedule_update.service:
+        class: %itdoors_oper.schedule_update_oper.service.class%
+        arguments: [@service_container]
+
+    schedule_update.service:
+        alias: itdoors_oper.schedule_update.service
+
 
     itdoors_oper.common_oper.service:
         class: %itdoors_oper.common_oper.service.class%

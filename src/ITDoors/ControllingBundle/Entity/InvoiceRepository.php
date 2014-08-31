@@ -616,7 +616,7 @@ class InvoiceRepository extends EntityRepository
             $res->andWhere('i_ics.companystructureId = :companystructureId')
                     ->setParameter(':companystructureId', $companystryctyre);
         }
-        $res = $res->andWhere("i.dateFact is not NULL")
+        $res->andWhere("i.dateFact is not NULL")
             ->andWhere("i.dateFact >= :date")->setParameter(':date', $date)
             ->orderBy('i.customerName', 'ASC');
 
@@ -644,7 +644,7 @@ class InvoiceRepository extends EntityRepository
             $res->andWhere('i_ics.companystructureId = :companystructureId')
                     ->setParameter(':companystructureId', $companystryctyre);
         }
-        $res = $res
+        $res
             ->andWhere("i.dateFact is NULL")
             ->andWhere("i.delayDate >= :date")->setParameter(':date', $date)
             ->orderBy('i.customerName', 'ASC');

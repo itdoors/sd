@@ -7,11 +7,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class TaskController extends Controller
+class DashboardTaskController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('SDTaskBundle:Task:index.html.twig');
+        return $this->render('SDTaskBundle:Dashboard:index.html.twig');
     }
 
 
@@ -249,6 +249,8 @@ class TaskController extends Controller
             $em->persist($dateRequest);
             $em->flush;
         }
+
+
     }
 
     public function taskChangeDateRequestAction(Request $request) {

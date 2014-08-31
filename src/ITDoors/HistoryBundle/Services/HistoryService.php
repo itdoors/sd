@@ -37,7 +37,12 @@ class HistoryService
     {
         $em= $this->container->get('doctrine')->getManager();
         $db = $em->getConnection();
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        if ($this->container->get('security.context')->getToken()) {
+            $user = $this->container->get('security.context')->getToken()->getUser();
+        } else {
+            $user = $em->getRepository('SDUserBundle:User')->find(0);
+        }
+
         $query = "
             INSERT INTO
                 history

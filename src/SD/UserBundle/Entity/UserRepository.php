@@ -181,8 +181,25 @@ class UserRepository extends EntityRepository
                 }
                 switch ($key) {
                     case 'company':
-                        $sql->andWhere("c.id = :company");
-                        $sql->setParameter(':company', $value);
+                        $valueArr = explode(',', $value);
+                        $sql->andWhere("c.id in (:company) or c.id in 
+                                (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:company)
+                                )");
+                        $sql->setParameter(':company', $valueArr);
                         break;
                     case 'isActive':
                         $sql->andWhere("u.isBlocked = :active");

@@ -117,6 +117,9 @@ Lists\OrganizationBundle\Entity\Organization:
         deletedAt:
             type: datetime
             nullable: true
+        ownershipId:
+            nullable: true
+            column: ownership_id
     manyToOne:
         city:
             targetEntity: Lists\CityBundle\Entity\City
@@ -163,6 +166,15 @@ Lists\OrganizationBundle\Entity\Organization:
         parent:
             targetEntity: Organization
             inversedBy: children
+        ownership:
+            targetEntity: OrganizationOwnership
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                ownership_id:
+                    referencedColumnName: id
+            orphanRemoval: false
     oneToMany:
         children:
             targetEntity: Organization

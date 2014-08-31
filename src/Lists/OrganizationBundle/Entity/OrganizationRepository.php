@@ -184,6 +184,48 @@ class OrganizationRepository extends EntityRepository
     }
 
     /**
+     * @param integer $signId
+     *
+     * @return mixed[]
+     */
+    public function getAllContractors($signId)
+    {
+        /** @var \Doctrine\ORM\QueryBuilder $sql*/
+        $sql = $this->createQueryBuilder('o');
+
+        /** @var \Doctrine\ORM\QueryBuilder $sqlCount */
+        $sqlCount = $this->createQueryBuilder('o');
+
+        $this->processSelect($sql);
+        $sql->addSelect("CONCAT(CONCAT(creator.lastName, ' '), creator.firstName) as creatorName");
+        $sql->addSelect("
+                array_to_string(
+                   ARRAY(
+                        SELECT k.name FROM ListsOrganizationBundle:KvedOrganization k_o
+                        LEFT JOIN ListsOrganizationBundle:Kved k WITH k_o.kved = k
+                        WHERE k_o.organization = o
+                   ),
+                ', ') as kveds");
+        //$sql->leftJoin('ListsOrganizationBundle:KvedOrganization', 'k_o', 'WITH', 'k_o.organization = o');
+        //$sql->leftJoin('k_o.kved', 'k');
+
+
+        $this->processBaseQuery($sql);
+        $sql
+            ->where('o.organizationSignId = :organizationSignId')
+            ->setParameter(':organizationSignId', $signId);
+        $sqlCount->where('o.organizationSignId = :organizationSignId')
+            ->setParameter(':organizationSignId', $signId);
+
+        $this->processOrdering($sql);
+
+        $query = $sql->getQuery();
+
+        $result = $query->getArrayResult();
+
+        return $result;
+    }
+    /**
      * Processes sql query. adding select
      *
      * @param \Doctrine\ORM\QueryBuilder $sql
@@ -193,7 +235,11 @@ class OrganizationRepository extends EntityRepository
         $sql
             ->select('DISTINCT(o.id) as organizationId', 'o.name as organizationName')
             ->addSelect('o.edrpou')
+            ->addSelect('o.shortname as organizationShortname')
+            ->addSelect('ownership.name as ownershipName')
+            ->addSelect('ownership.shortname as ownershipShortname')
             ->addSelect('creator.id as creatorId')
+            ->addSelect('view.name as viewName')
             ->addSelect('c.name as cityName')
             ->addSelect('r.name as regionName')
             ->addSelect('scope.name as scopeName')
@@ -229,6 +275,9 @@ class OrganizationRepository extends EntityRepository
      */
     public function processBaseQuery($sql)
     {
+        $subQueryCase =  $sql->expr()->andx(
+            $sql->expr()->eq('view.id', 'o.organizationSignId')
+        );
         $sql
             ->leftJoin('o.city', 'c')
             ->leftJoin('c.region', 'r')
@@ -236,6 +285,8 @@ class OrganizationRepository extends EntityRepository
             ->leftJoin('o.organizationUsers', 'oUser')
             ->leftJoin('oUser.user', 'users')
             ->leftJoin('oUser.role', 'role')
+            ->leftJoin('o.ownership', 'ownership')
+            ->leftJoin('Lists\LookupBundle\Entity\Lookup', 'view', 'WITH', $subQueryCase)
             ->leftJoin('o.creator', 'creator')
             ->andWhere('o.parent_id is null');
 

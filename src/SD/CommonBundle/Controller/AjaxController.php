@@ -388,6 +388,35 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($result));
     }
+    /**
+     * Returns json ownership list depending search query
+     *
+     * @return string
+     */
+    public function ownershipAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:OrganizationOwnership');
+
+        $objects = $repository->getSearchQuery($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $text = $object->getShortname().' ('.$object->getName(). ')';
+            $id = $object->getId();
+            $result[] =  array(
+            'id' => $id,
+            'value' => $id,
+            'name' => $text,
+            'text' => $text
+        );
+        }
+
+        return new Response(json_encode($result));
+    }
 
     /**
      * Returns json city object by id
@@ -1138,6 +1167,7 @@ class AjaxController extends BaseFilterController
         $objects = $companystructure->createQueryBuilder('c')
             ->andWhere('lower(c.name) LIKE :q')
             ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->orderBy('c.root, c.lft', 'ASC')
             ->getQuery()
             ->getResult();
 
@@ -1474,6 +1504,35 @@ class AjaxController extends BaseFilterController
         $objects = $repository
             ->createQueryBuilder('u')
             ->where('u.id in (:ids)')
+            ->setParameter(':ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json user object by requested id
+     *
+     * @return string
+     */
+    public function userStuffCompanyByIdsAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        /** @var \SD\UserBundle\Entity\UserRepository $repository */
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsCompanystructureBundle:Companystructure');
+
+        /** @var \SD\UserBundle\Entity\User $object */
+        $objects = $repository
+            ->createQueryBuilder('c')
+            ->where('c.id in (:ids)')
             ->setParameter(':ids', $ids)
             ->getQuery()
             ->getResult();
@@ -3807,9 +3866,10 @@ class AjaxController extends BaseFilterController
         $repository = $this->getDoctrine()->getRepository('ListsCompanystructureBundle:Companystructure');
 
         $form
-            ->add('companystructure', 'companystructure_tree', array(
+            ->add('companystructure', 'entity', array(
                 'class' => 'ListsCompanystructureBundle:Companystructure',
                 'empty_value' => '',
+                'property' => 'name',
                 'required' => false,
                 'mapped' => false,
                 'query_builder' => function ($repository) use ($invoiceId, $repository) {
@@ -3817,7 +3877,7 @@ class AjaxController extends BaseFilterController
                 return $repository->createQueryBuilder('c')
                     ->leftJoin('c.invoicecompanystructure', 'idc')
                     ->where('(idc.invoiceId is NULL OR idc.invoiceId <> :invoiceId)')
-                    ->orderBy('c.name')
+                    ->orderBy('c.root, c.lft', 'ASC')
                     ->setParameter(':invoiceId', $invoiceId);
                 }
             ));
