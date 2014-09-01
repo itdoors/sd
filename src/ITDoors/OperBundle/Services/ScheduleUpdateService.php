@@ -346,7 +346,7 @@ class ScheduleUpdateService
                     }
                 }
 
-                if ($counterFlush == 2000) {
+                if ($counterFlush > 2000) {
                     $this->em->flush();
                     $this->em->clear();
                     $counterFlush = 0;
