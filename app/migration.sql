@@ -942,4 +942,13 @@ CREATE UNIQUE INDEX UNIQ_C1EE637C9E9FFAA0 ON organization (ownership_id);
 COMMENT ON COLUMN organization.ownership_id IS 'Форма собственности организации';
 -- staging +++++++
 -- prod ++++++++++++++++++++++++
+CREATE TABLE comment (id SERIAL NOT NULL, create_datetime TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
+value VARCHAR(255) NOT NULL, model VARCHAR(255) NOT NULL, modelId INT NOT NULL, addition_field VARCHAR(255)
+, PRIMARY KEY(id));
+
+ALTER TABLE comment ADD user_id INT DEFAULT NULL;
+ALTER TABLE comment ADD CONSTRAINT FK_9474526CA76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_9474526CA76ED395 ON comment (user_id)
+-- staging ------
+-- prod ------
 

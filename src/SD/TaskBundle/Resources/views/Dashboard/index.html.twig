@@ -40,13 +40,13 @@
 
                         <br>
 
-                        <div id="tasks_list" data-url="{{ path('sd_task_table')}}">
-                                {{ render(controller('SDTaskBundle:Task:taskTable')) }}
+                        <div id="tasks_list" data-url="{{ path('sd_task_table_dashboard')}}">
+                                {{ render(controller('SDTaskBundle:Task:taskTableDashboard')) }}
                         </div>
         </div>
             <input type="hidden" id="more_info_input"
                     data-url_task_modal="{{ path('sd_task_modal') }}"
-                    data-url_task_table="{{ path('sd_task_table')}}">
+                    data-url_task_table="{{ path('sd_task_table_dashboard')}}">
             {#
                         <div id="base_table_test" data-url="{{ path('it_doors_oper_coworker_test_table')}}">
                             {{ render(controller('ITDoorsOperBundle:OperCoworkerInfo:testTableRender', {
