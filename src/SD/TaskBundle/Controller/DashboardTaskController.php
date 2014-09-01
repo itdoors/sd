@@ -7,16 +7,26 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class DashboardTaskController
+ */
 class DashboardTaskController extends Controller
 {
+    /**
+     * @return Response
+     */
     public function indexAction()
     {
         return $this->render('SDTaskBundle:Dashboard:index.html.twig');
     }
 
-
-
-    public function taskTableAction(Request $request = null) {
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function taskTableAction(Request $request = null)
+    {
         $user = $this->getUser();
 
         $filterArray = array(
@@ -55,8 +65,10 @@ class DashboardTaskController extends Controller
                 )
             );
             $return['success'] = 1;
+
             return new Response(json_encode($return));
         }
+
         return $this->render('SDTaskBundle:Task:tableTasks.html.twig',
             array(
               'tasksUserRole' => $tasksUserRole
@@ -133,7 +145,11 @@ class DashboardTaskController extends Controller
         return new Response(json_encode($return));
     }
 
-
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
     public function setIsViewedTaskAction(Request $request)
     {
         $id = $request->request->get('id');
@@ -154,7 +170,12 @@ class DashboardTaskController extends Controller
         return new Response(json_encode($return));
     }
 
-    private function checkIfCanPerform($id, $type = false) {
+    /**
+     * @param int  $id
+     * @param bool $type
+     */
+    private function checkIfCanPerform($id, $type = false)
+    {
 
         $em = $this->getDoctrine()->getManager();
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
@@ -173,7 +194,7 @@ class DashboardTaskController extends Controller
             'task' => $task,
             'role'  => $performerRole
         ));
-        if($taskUserRole->getRole()->getName() != 'controller' || $type) {
+        if ($taskUserRole->getRole()->getName() != 'controller' || $type) {
             $performing = true;
             foreach ($tasksUserRole as $taskPerforming) {
                 if ($taskPerforming->getIsViewed() == false) {
@@ -201,7 +222,13 @@ class DashboardTaskController extends Controller
         $em->flush();
     }
 
-    public function taskStageUpdateAction(Request $request) {
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function taskStageUpdateAction(Request $request)
+    {
         $id = $request->request->get('id');
         $stage = $request->request->get('stage');
 
@@ -227,7 +254,11 @@ class DashboardTaskController extends Controller
         return new Response(json_encode($return));
     }
 
-    private function closeDateRequest($id) {
+    /**
+     * @param int $id
+     */
+    private function closeDateRequest($id)
+    {
         $em = $this->getDoctrine()->getManager();
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
         $stageRequest = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
@@ -249,11 +280,15 @@ class DashboardTaskController extends Controller
             $em->persist($dateRequest);
             $em->flush;
         }
-
-
     }
 
-    public function taskChangeDateRequestAction(Request $request) {
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function taskChangeDateRequestAction(Request $request)
+    {
         $id = $request->request->get('id');
         $value = $request->request->get('value');
         $type = $request->request->get('type');
@@ -331,10 +366,15 @@ class DashboardTaskController extends Controller
         $return['success'] = 1;
 
         return new Response(json_encode($return));
-
     }
 
-    public function answerDateAction (Request $request) {
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function answerDateAction (Request $request)
+    {
         $id = $request->request->get('id');
         $answer = $request->request->get('answer');
 

@@ -45,12 +45,13 @@ class TaskEndDate
      * Set changeDateTime
      *
      * @param \DateTime $changeDateTime
+     *
      * @return TaskEndDate
      */
     public function setChangeDateTime($changeDateTime)
     {
         $this->changeDateTime = $changeDateTime;
-    
+
         return $this;
     }
 
@@ -68,12 +69,13 @@ class TaskEndDate
      * Set endDateTime
      *
      * @param \DateTime $endDateTime
+     *
      * @return TaskEndDate
      */
     public function setEndDateTime($endDateTime)
     {
         $this->endDateTime = $endDateTime;
-    
+
         return $this;
     }
 
@@ -91,12 +93,13 @@ class TaskEndDate
      * Set task
      *
      * @param \SD\TaskBundle\Entity\Task $task
+     *
      * @return TaskEndDate
      */
     public function setTask(\SD\TaskBundle\Entity\Task $task = null)
     {
         $this->task = $task;
-    
+
         return $this;
     }
 
@@ -119,12 +122,13 @@ class TaskEndDate
      * Set stage
      *
      * @param \SD\TaskBundle\Entity\Stage $stage
+     *
      * @return TaskEndDate
      */
     public function setStage(\SD\TaskBundle\Entity\Stage $stage = null)
     {
         $this->stage = $stage;
-    
+
         return $this;
     }
 

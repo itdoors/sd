@@ -40,12 +40,13 @@ class Role
      * Set name
      *
      * @param string $name
+     *
      * @return Role
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
@@ -63,12 +64,13 @@ class Role
      * Set model
      *
      * @param string $model
+     *
      * @return Role
      */
     public function setModel($model)
     {
         $this->model = $model;
-    
+
         return $this;
     }
 
@@ -86,6 +88,7 @@ class Role
      * @return string
      */
     public function __toString() {
+
         return $this->name;
     }
 }

@@ -14,7 +14,11 @@ use Symfony\Component\HttpFoundation\Response;
 class OperSupervisorInfoController extends OperCoworkerInfoController
 {
 
-    public function exportExcelCoworkerAction() {
+    /**
+     * @return mixed
+     */
+    public function exportExcelCoworkerAction()
+    {
         $filterNamespace = $this->container->getParameter($this->getNamespace());
         $filters = $this->getFilters($filterNamespace);
 
@@ -47,8 +51,8 @@ class OperSupervisorInfoController extends OperCoworkerInfoController
         $coworkers = $query->getArrayResult();
 
 
-        foreach ($coworkers as $key=>$coworker) {
-            $infoSalary = $this->getSumsCoworker($year.'-'.$month, $coworker['idCoworker'],$coworker['replacementId'], $coworker['idDepartment']);
+        foreach ($coworkers as $key => $coworker) {
+            $infoSalary = $this->getSumsCoworker($year.'-'.$month, $coworker['idCoworker'], $coworker['replacementId'], $coworker['idDepartment']);
             $officiallAcrual = $infoSalary['accrual']['officially']['plus'] - $infoSalary['accrual']['officially']['minus'];
             $notOfficiallAcrual = $infoSalary['accrual']['notOfficially']['plus'] - $infoSalary['accrual']['notOfficially']['minus'];
             unset($infoSalary['accrual']);
@@ -56,7 +60,7 @@ class OperSupervisorInfoController extends OperCoworkerInfoController
             $infoSalary['notOfficiallAcrual'] = $notOfficiallAcrual;
 
 
-            $coworkers[$key] = array_merge($coworkers[$key],$infoSalary);
+            $coworkers[$key] = array_merge($coworkers[$key], $infoSalary);
             unset($coworkers[$key]['idReplacement']);
             unset($coworkers[$key]['idMonthInfo']);
             unset($coworkers[$key]['canEdit']);
