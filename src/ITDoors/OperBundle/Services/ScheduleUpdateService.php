@@ -311,7 +311,7 @@ class ScheduleUpdateService
                 $year = $grafikTime->getYear();
                 $departmentPeople = $grafikTime->getDepartmentPeople();
                 $department = $grafikTime->getDepartment();
-                $replacementType= $grafikTime->getReplacementType();
+                //$replacementType= $grafikTime->getReplacementType();
                 $idDepartment = $grafikTime->getDepartmentId();
                 $idCoworker = $grafikTime->getDepartmentPeopleId();
                 $departmentPeopleReplacement = $grafikTime->getDepartmentPeopleReplacement();
@@ -346,7 +346,7 @@ class ScheduleUpdateService
                     }
                 }
 
-                if ($counterFlush == 500) {
+                if ($counterFlush == 2000) {
                     $this->em->flush();
                     $this->em->clear();
                     $counterFlush = 0;
