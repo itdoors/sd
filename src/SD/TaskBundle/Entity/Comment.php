@@ -60,12 +60,13 @@ class Comment
      * Set createDatetime
      *
      * @param \DateTime $createDatetime
+     *
      * @return Comment
      */
     public function setCreateDatetime($createDatetime)
     {
         $this->createDatetime = $createDatetime;
-    
+
         return $this;
     }
 
@@ -83,12 +84,13 @@ class Comment
      * Set value
      *
      * @param string $value
+     *
      * @return Comment
      */
     public function setValue($value)
     {
         $this->value = $value;
-    
+
         return $this;
     }
 
@@ -106,12 +108,13 @@ class Comment
      * Set model
      *
      * @param string $model
+     *
      * @return Comment
      */
     public function setModel($model)
     {
         $this->model = $model;
-    
+
         return $this;
     }
 
@@ -129,12 +132,13 @@ class Comment
      * Set modelId
      *
      * @param integer $modelId
+     *
      * @return Comment
      */
     public function setModelId($modelId)
     {
         $this->modelId = $modelId;
-    
+
         return $this;
     }
 
@@ -152,12 +156,13 @@ class Comment
      * Set additionField
      *
      * @param string $additionField
+     *
      * @return Comment
      */
     public function setAdditionField($additionField)
     {
         $this->additionField = $additionField;
-    
+
         return $this;
     }
 
@@ -175,12 +180,13 @@ class Comment
      * Set user
      *
      * @param \SD\UserBundle\Entity\User $user
+     *
      * @return Comment
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 

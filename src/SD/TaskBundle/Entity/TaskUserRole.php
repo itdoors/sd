@@ -45,12 +45,13 @@ class TaskUserRole
      * Set task
      *
      * @param \SD\TaskBundle\Entity\Task $task
+     *
      * @return TaskUserRole
      */
     public function setTask(\SD\TaskBundle\Entity\Task $task = null)
     {
         $this->task = $task;
-    
+
         return $this;
     }
 
@@ -68,12 +69,13 @@ class TaskUserRole
      * Set role
      *
      * @param \SD\TaskBundle\Entity\Role $role
+     *
      * @return TaskUserRole
      */
     public function setRole(\SD\TaskBundle\Entity\Role $role = null)
     {
         $this->role = $role;
-    
+
         return $this;
     }
 
@@ -91,12 +93,13 @@ class TaskUserRole
      * Set user
      *
      * @param \SD\UserBundle\Entity\User $user
+     *
      * @return TaskUserRole
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 
@@ -119,12 +122,13 @@ class TaskUserRole
      * Set isViewed
      *
      * @param boolean $isViewed
+     *
      * @return TaskUserRole
      */
     public function setIsViewed($isViewed)
     {
         $this->isViewed = $isViewed;
-    
+
         return $this;
     }
 

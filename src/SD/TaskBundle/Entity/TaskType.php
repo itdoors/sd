@@ -35,12 +35,13 @@ class TaskType
      * Set name
      *
      * @param string $name
+     *
      * @return TaskType
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 

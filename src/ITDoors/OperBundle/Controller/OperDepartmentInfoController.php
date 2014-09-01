@@ -230,7 +230,8 @@ class OperDepartmentInfoController extends BaseFilterController
     /**
      * @return Response
      */
-    public function getAllContactsExcelAction() {
+    public function getAllContactsExcelAction()
+    {
         $contacts = $this->getDoctrine()
             ->getRepository('ListsContactBundle:ModelContact')
             ->getAllContacts();

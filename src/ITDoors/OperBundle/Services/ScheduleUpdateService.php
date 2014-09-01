@@ -332,7 +332,7 @@ class ScheduleUpdateService
                             'toTime' => $toTime
                         ));
                 if (count($needDeleting)>1) {
-                    foreach($needDeleting as $delete) {
+                    foreach ($needDeleting as $delete) {
                         if ($grafikTime->getId() != $delete->getId()) {
                             $deletedIds[] = $delete->getId();
                             $this->em->remove($delete);

@@ -45,12 +45,13 @@ class Stage
      * Set name
      *
      * @param string $name
+     *
      * @return Stage
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
@@ -68,12 +69,13 @@ class Stage
      * Set model
      *
      * @param string $model
+     *
      * @return Stage
      */
     public function setModel($model)
     {
         $this->model = $model;
-    
+
         return $this;
     }
 
@@ -91,12 +93,13 @@ class Stage
      * Set parent
      *
      * @param \SD\TaskBundle\Entity\Stage $parent
+     *
      * @return Stage
      */
     public function setParent(\SD\TaskBundle\Entity\Stage $parent = null)
     {
         $this->parent = $parent;
-    
+
         return $this;
     }
 
@@ -114,6 +117,7 @@ class Stage
      * @return string
      */
     public function __toString() {
+
         return $this->getName();
     }
 }
