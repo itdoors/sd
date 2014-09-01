@@ -1039,6 +1039,7 @@ class OperScheduleController extends BaseFilterController
         $grafik->setIsSick(false);
         $grafik->setIsVacation(false);
         $grafik->setIsFired(false);
+        $grafik->setIsOwnVacation(false);
         $grafik->setTotal(0);
         $grafik->setTotalNotOfficially(0);
         $grafik->setTotalDay(0);
@@ -1188,7 +1189,9 @@ class OperScheduleController extends BaseFilterController
         $em =  $this->getDoctrine()->getManager();
 
         foreach ($coworkerDayTimes as $coworkerDayTime) {
-            $em->remove($coworkerDayTime);
+            if (!is_array($coworkerDayTime)) {
+                $em->remove($coworkerDayTime);
+            }
             $em->flush();
         }
 

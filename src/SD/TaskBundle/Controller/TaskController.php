@@ -227,7 +227,29 @@ class TaskController extends Controller
      */
     public function showTaskPageAction($id)
     {
+        $em = $this->getDoctrine()->getManager();
+
         $info = $this->getTaskUserRoleInfo($id);
+
+        $commentRepository = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:Comment');
+
+        //$user = $this->getUser();
+
+        /*$task = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:Task')->find($idTask);*/
+        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
+        $idTask = $taskUserRole->getTask()->getId();
+
+        $comments = $commentRepository->findBy(array(
+            'model' => 'Task',
+            //'user' => $user,
+            'modelId' => $idTask
+        ), array(
+            'createDatetime' => 'DESC'
+        ));
+        $info['comments'] = $comments;
+
 
         return $this->render('SDTaskBundle:Task:taskPage.html.twig',
             $info

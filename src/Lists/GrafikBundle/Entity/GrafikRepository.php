@@ -193,7 +193,12 @@ class GrafikRepository extends EntityRepository
                 ->setParameter(':id', $idDepartment);
         }
             $result = $result->andWhere('dp.id = :idCoworker')
-            ->setParameter(':idCoworker', $idCoworker)
+                ->andWhere('t.isFired <> true')
+                ->andWhere('t.isOwnVacation <> true')
+                ->andWhere('t.isVacation <> true')
+                ->andWhere('t.isSick <> true')
+                ->andWhere('t.isSkip <> true')
+                ->setParameter(':idCoworker', $idCoworker)
             ->getQuery()
             ->getSingleScalarResult();
 
@@ -229,7 +234,12 @@ class GrafikRepository extends EntityRepository
                 ->setParameter(':id', $idDepartment);
         }
             $result = $result->andWhere('dp.id = :idCoworker')
-            ->setParameter(':idCoworker', $idCoworker)
+                ->andWhere('t.isFired <> true')
+                ->andWhere('t.isOwnVacation <> true')
+                ->andWhere('t.isVacation <> true')
+                ->andWhere('t.isSick <> true')
+                ->andWhere('t.isSkip <> true')
+                ->setParameter(':idCoworker', $idCoworker)
             ->getQuery()
             ->getSingleScalarResult();
 
