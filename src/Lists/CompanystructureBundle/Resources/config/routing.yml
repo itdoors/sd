@@ -1,0 +1,8 @@
+list_companystructure_employees:
+    pattern:  /list/companystructure/employees
+    defaults: { _controller: ListsCompanystructureBundle:Structure:index }
+    
+list_companystructure_employees_list:
+    pattern:  /list/companystructure/employees/list
+    defaults: { _controller: ListsCompanystructureBundle:Structure:list }
+    
