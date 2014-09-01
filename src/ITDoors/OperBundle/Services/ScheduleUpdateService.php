@@ -315,29 +315,34 @@ class ScheduleUpdateService
                 $idDepartment = $grafikTime->getDepartmentId();
                 $idCoworker = $grafikTime->getDepartmentPeopleId();
                 $departmentPeopleReplacement = $grafikTime->getDepartmentPeopleReplacement();
-                //$departmentPeopleReplacement = $grafikTime->getDepartmentPeopleReplacementId();
+                $departmentPeopleReplacementId = $grafikTime->getDepartmentPeopleReplacementId();
                 $fromTime = $grafikTime->getFromTime();
                 $toTime = $grafikTime->getToTime();
 
-
-                $needDeleting = $this->container->get('doctrine')
-                    ->getRepository('ListsGrafikBundle:GrafikTime')->findBy(
-                        array(
-                            'department' => $department,
-                            'departmentPeople' => $departmentPeople,
-                            'year' => $year,
-                            'month' => $month,
-                            'departmentPeopleReplacement' => $departmentPeopleReplacement,
-                            'fromTime' => $fromTime,
-                            'toTime' => $toTime
-                        ));
-                if (count($needDeleting)>1) {
-                    foreach($needDeleting as $delete) {
-                        if ($grafikTime->getId() != $delete->getId()) {
-                            $deletedIds[] = $delete->getId();
-                            $this->em->remove($delete);
-                            $counterFlush++;
-                        }
+                $subtimes = $this->container->get('doctrine')
+                    ->getRepository('ListsGrafikBundle:GrafikTime')
+                ->getSubtimeIds(
+                    $year,
+                    $month,
+                    $day,
+                    $idDepartment,
+                    $idCoworker,
+                    $fromTime,
+                    $toTime,
+                    $grafikTime->getId(),
+                    $departmentPeopleReplacementId
+                );
+                $currentId = $grafikTime->getId();
+                if (count($subtimes)) {
+                    foreach ($subtimes as $subtime) {
+                        if ($currentId>$subtime['id']) {
+                            $this->em->remove($grafikTimeRepository->find($subtime['id']));
+                            $deletedIds[] = $subtime['id'];
+                        } /*else {
+                            $this->em->remove($grafikTimeRepository->find($currentId));
+                            $deletedIds[] = $currentId;
+                        }*/
+                        $counterFlush++;
                     }
                 }
 
