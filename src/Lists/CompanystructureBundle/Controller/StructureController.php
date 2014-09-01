@@ -34,56 +34,131 @@ class StructureController extends BaseController
      *
      * @return string
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
-        var_dump($request->request);die;
-        $parent = $request->request->get('parent');
-
+         return $this->render('ListsCompanystructureBundle:' . $this->baseTemplate . ':list.html.twig');
+    }
+    
+    /**
+     * Renders template holder for calendar
+     *
+     * @return string
+     */
+    public function getListAction()
+    {
+        $parent = $this->get('request')->query->get('parent');
         $data = array();
 
-        $states = array(
-                "success",
-                "info",
-                "danger",
-                "warning"
-        );
-        var_dump($parent);die;
+        $repository = $this->getDoctrine()
+                ->getRepository('ListsCompanystructureBundle:Companystructure');
 
         if ($parent == "#") {
-            $objects = $this->getDoctrine()
-                ->getRepository('ListsCompanystructureBundle:Companystructure')->getRootNodes();
+            $objects = $repository->getRootNodes();
                 foreach ($objects as $object) {
+                    $name = $object->getName();
+                    if ($object->getStuff()) {
+                        $name .= $this->getText($object->getId(), $object->getStuff()->getUser());
+                    } else {
+                        $name .= $this->getText($object->getId(), null);
+                    }
                     $data[] = array(
-                            "id" => "node_".$object->getId(),  
-                            "text" => $object->getName(), 
-                            "icon" => "fa fa-folder icon-lg icon-state-" . ($states[rand(0, 3)]),
-                            "children" => true, 
+                            "id" => $object->getId(),  
+                            "text" => $name, 
+                            "icon" => "fa fa-folder icon-lg icon-state-success",
+                            "children" =>  true, 
                             "type" => "root"
                     );
                 }
         } else {
-            if (rand(1, 5) === 3) {
+            $object = $repository->find((int)$parent);
+            $childrens = $repository->getChildren($object, true);
+            if ($childrens) {
+                foreach ($childrens as $children) {
+                    $name = $children->getName();
+                    if ($children->getStuff()) {
+                        $name .= $this->getText($children->getId(), $children->getStuff()->getUser());
+                    } else {
+                        $name .= $this->getText($children->getId(), null);
+                    }
                     $data[] = array(
-                            "id" => "node_" . time() . rand(1, 100000), 
-                            "icon" => "fa fa-file fa-large icon-state-default",
-                            "text" => "No childs ", 
-                            "state" => array("disabled" => true),
-                            "children" => false
+                            "id" => $children->getId(),  
+                            "text" => $name, 
+                            "icon" => "fa fa-folder icon-lg icon-state-success",
+                            "children" =>  true,
                     );
+                }
+                $stuffRepository = $this->getDoctrine()
+                        ->getRepository('SDUserBundle:Stuff');
+                    $employees = $stuffRepository->getStuffForCompanystructure((int)$parent);
+                    foreach ($employees as $employ) {
+                        $data[] = array(
+                                "id" => 'stuff_'.$employ->getId(),  
+                                "text" => $employ->getUser()->getLastName().' '.$employ->getUser()->getFirstName(), 
+                                "icon" => "fa fa-folder icon-lg icon-state-success",
+                                "children" =>  false,
+                        );
+                    }
+            
             } else {
-		for($i = 1; $i < rand(2, 4); $i++) {
-			$data[] = array(
-				"id" => "node_" . time() . rand(1, 100000), 
-				"icon" => ( rand(0, 3) == 2 ? "fa fa-file icon-lg" : "fa fa-folder icon-lg")." icon-state-" . ($states[rand(0, 3)]),
-				"text" => "Node " . time(), 
-				"children" => ( rand(0, 3) == 2 ? false : true)
-			);
-		}
+                $stuffRepository = $this->getDoctrine()
+                    ->getRepository('SDUserBundle:Stuff');
+                $employees = $stuffRepository->getStuffForCompanystructure((int)$parent);
+                foreach ($employees as $employ) {
+                    $data[] = array(
+                            "id" => 'stuff_'.$employ->getId(),  
+                            "text" => $employ->getUser()->getLastName().' '.$employ->getUser()->getFirstName(), 
+                            "icon" => "fa fa-folder icon-lg icon-state-success",
+                            "children" =>  false,
+                    );
+                }
             }
         }
         $response = new Response(json_encode($data));
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;
+    }
+    
+    /**
+     * @param integer $companystructureId
+     * @param User    $user
+     * 
+     * @return string
+     */
+    private function getText($companystructureId, $user)
+    {
+         /** @var Translator $translator */
+        $translator = $this->get('translator');
+            
+        $name = '';
+        if ($user) {
+            $name .= ' ('.$user->getLastName().' '. $user->getFirstName();
+            if ($this->getUser()->hasRole('ROLE_HRADMIN')) {
+                $name .= '<a class="fa ajax-form fa-edit" title="'.$translator->trans('Change', array(), 'ListsComapnystructureBundle').'"
+                           data-toggle="modal"
+                           href="#form_modal"
+                           data-target_holder="stuffFormTpl"
+                           data-default=\'{"companystructureId":"'.$companystructureId.'"}\'
+                           data-form_name="companystructureStuffForm"
+                           data-post_function="updateList"
+                           data-post_target_id="table_ajax"
+                           ></a>';
+            }
+            $name .= ')';
+        } else {
+            if ($this->getUser()->hasRole('ROLE_HRADMIN')) {
+                $name .= '(<a class="fa ajax-form fa-plus" title="'.$translator->trans('Specify director', array(), 'ListsComapnystructureBundle').'"
+                           data-toggle="modal"
+                           href="#form_modal"
+                           data-target_holder="stuffFormTpl"
+                           data-default=\'{"companystructureId":"'.$companystructureId.'"}\'
+                           data-form_name="companystructureStuffForm"
+                           data-post_function="updateList"
+                           data-post_target_id="table_ajax"
+                           ></a>)';
+            }
+        }
+
+        return $name;
     }
 }

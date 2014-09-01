@@ -6,3 +6,7 @@ list_companystructure_employees_list:
     pattern:  /list/companystructure/employees/list
     defaults: { _controller: ListsCompanystructureBundle:Structure:list }
     
+list_companystructure_employees_get_list:
+    pattern:  /list/companystructure/employees/get_list
+    defaults: { _controller: ListsCompanystructureBundle:Structure:getList }
+    

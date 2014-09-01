@@ -115,7 +115,7 @@ class Companystructure
      */
     public function getName()
     {
-        return  str_repeat(' - ', $this->lvl).$this->name;
+        return  $this->name;
     }
     /**
      * Get name
@@ -410,4 +410,5 @@ class Companystructure
      * @ORM\Column(name="root", type="integer", nullable=true)
      */
     private $root;
+
 }

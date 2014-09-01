@@ -1,7 +1,9 @@
 parameters:
-#    lists_companystructure.example.class: Lists\CompanystructureBundle\Example
+    lists_companystructure.stuff.form.class: Lists\CompanystructureBundle\Form\CompanystructureStuffFormType
 
 services:
-#    lists_companystructure.example:
-#        class: %lists_companystructure.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    lists_companystructure.form.companystructureStuffForm:
+        class: %lists_companystructure.stuff.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: companystructureStuffForm }
