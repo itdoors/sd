@@ -125,3 +125,11 @@ Enter companystructure: Введите отвественного
 
 № invoice: № счета
 Date invoice: Дата счета
+Analitic: Аналитика
+Grafic of debtors: Графики дебиторов
+Invoice <small>grafic of debtors</small>:  Счета <small>графики дебиторов</small>
+Enter date range: Введите диапазон дат
+
+Group for days: Групировка по дням
+Group for months: Групировка по месяцам
+Graphik: График

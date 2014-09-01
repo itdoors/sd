@@ -212,12 +212,12 @@ class DopDogovorRepository extends EntityRepository
                         break;
                     case 'dateRange':
                         $dateArr = explode('-', $value);
-                            $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
-                            $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));
-                            $sql
-                                ->andWhere("dd.createDateTime BETWEEN :datestart AND :datestop")
-                                ->setParameter(':datestart', $dateStart)
-                                ->setParameter(':datestop', $dateStop);
+                        $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
+                        $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));
+                        $sql
+                            ->andWhere("dd.createDateTime BETWEEN :datestart AND :datestop")
+                            ->setParameter(':datestart', $dateStart)
+                            ->setParameter(':datestop', $dateStop);
                         break;
                 }
             }

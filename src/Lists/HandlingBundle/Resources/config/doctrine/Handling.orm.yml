@@ -2,6 +2,10 @@ Lists\HandlingBundle\Entity\Handling:
     type: entity
     table: handling
     repositoryClass: Lists\HandlingBundle\Entity\HandlingRepository
+    gedmo:
+        soft_deleteable:
+          field_name: deletedAt
+          time_aware: false
     fields:
         id:
             id: true
@@ -113,6 +117,9 @@ Lists\HandlingBundle\Entity\Handling:
             column: launch_date
         employees:
             type: integer
+            nullable: true
+        deletedAt:
+            type: datetime
             nullable: true
     oneToMany:
         HandlingMessages:

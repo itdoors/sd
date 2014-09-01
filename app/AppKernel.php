@@ -50,6 +50,8 @@ class AppKernel extends Kernel
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
             new ITDoors\HistoryBundle\ITDoorsHistoryBundle(),
             new Lists\DocumentBundle\ListsDocumentBundle(),
+            new SD\TaskBundle\SDTaskBundle(),
+            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

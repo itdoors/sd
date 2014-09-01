@@ -66,6 +66,15 @@
             </td>
             <td style="width:35%"><span class="text-muted">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп"</span></td>
         </tr>
+          <tr>
+            <td>{% trans %}Ownership{% endtrans %}</td>
+            <td>
+                <a href="#" id="ownershipId" data-type="select2" data-pk="{{ organization.id }}" data-original-title="{% trans %}Ownership{% endtrans %}">
+                     {% if organization.ownership %}{{ organization.ownership.shortname }} {{ '(' ~ organization.ownership ~ ')' }}{% endif%}
+                </a>
+            </td>
+            <td><span class="text-muted">{% trans %}Select ownership{% endtrans %}</span></td>
+        </tr>
         <tr>
             <td style="width:15%">{% trans %}Organization name{% endtrans %}</td>
             <td style="width:50%">
@@ -189,15 +198,6 @@
             </td>
             <td><span class="text-muted">{% trans %}Enter Organization Description{% endtrans %}</span></td>
         </tr>
-        <tr>
-                <td>{% trans %}Ownership{% endtrans %}</td>
-                <td>
-                    <a href="#" id="ownershipId" data-type="select2" data-pk="{{ organization.id }}" data-original-title="{% trans %}Ownership{% endtrans %}">
-                        {{ organization.ownership }}
-                    </a>
-                </td>
-                <td><span class="text-muted">{% trans %}Select ownership{% endtrans %}</span></td>
-            </tr>
         </tbody>
     </table>
 </div>

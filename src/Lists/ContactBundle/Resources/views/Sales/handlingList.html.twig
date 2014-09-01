@@ -33,6 +33,11 @@
                     >
                 {% trans %}Add contact{% endtrans %} <i class="fa fa-plus"></i>
             </button>
+            {% if canExport %}
+            <a href="{{ path('it_doors_oper_supervisor_contacts_excel') }}" target="_blank" class="btn purple" style="margin-left: 10px">
+                {% trans %}Export all{% endtrans %}
+            </a>
+            {% endif %}
         </div>
         <div style="display: none" id="contactsFormTpl"></div>
     </div>

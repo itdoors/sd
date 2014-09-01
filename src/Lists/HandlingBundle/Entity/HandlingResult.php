@@ -8,6 +8,7 @@ namespace Lists\HandlingBundle\Entity;
 class HandlingResult
 {
     const RESULT_CLOSED = 'closed';
+    const RESULT_COMPETITOR = 'competitor';
 
     /**
      * @var integer

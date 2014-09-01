@@ -56,14 +56,14 @@
                     {% trans %}Invoice amount{% endtrans %}
                 </th><th width="5%" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
                     {% trans %}№ and date ABP/BH{% endtrans %}
+                </th><th width="10%" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}Original ABP/BH{% endtrans %}
                 </th><th width="10%"  role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
                     {% trans %}Responsible{% endtrans %}
                 </th><th width="10%" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
                     {% trans %}№ and date contract{% endtrans %}
                 </th><th width="10%" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
                     {% trans %}Deferment{% endtrans %}
-                </th><th width="10%" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
-                    {% trans %}Original ABP/BH{% endtrans %}
                 </th><th width="10%" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
                     {% trans %}Notes{% endtrans %}
                 </th><th width="10%" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
@@ -75,14 +75,35 @@
                 </th></tr>
         </thead>
         <tbody role="alert" aria-live="polite" aria-relevant="all">
-            {% for entity in entities %}
+            {% for key,entity in entities %}
                 <tr class="{{ cycle(['odd', 'even'], entity.invoiceId) }}">
                     <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceId }}</a> {{ entity.date is empty ? '' : entity.date|date("d.m.y") }}</td>
-                    <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.customerName }}</a></td>
+                    <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceCustomerName }}</a></td>
                     <td class="">{{ entity.performerName }}</td>
                     <td class="">{{ entity.sum|number_format(2, ',', ' ')  }}</td>
-                    <td class="">{{ entity.dogovorActName }} {{ entity.dogovorActDate is empty ? '' : entity.dogovorActDate|date("d.m.y") }}</td>
                     <td class="">
+                        {% if entity.actNumbers | length %}
+                        {% set actNumbers = entity.actNumbers |split(',')%}
+                        {% set actDates = entity.actDates |split(',')%}
+                        <table>
+                        {% for key,number in actNumbers %}
+                            <tr><td>{{ number }}</td><td> ({{ actDates[key]|date("d.m.y") }})</td></tr>
+                        {% endfor %}
+                        </table>
+                        {% endif %}
+                    </td>
+                    <td class="">
+                        {% if entity.actOriginals | length %}
+                        {% set actOriginals = entity.actOriginals |split(',')%}
+                        <table>
+                        {% for original in actOriginals %}
+                            <tr><td>{% if original == 't' %}{% trans %}on {% endtrans %}{% else %}{% trans %}off{% endtrans %}{% endif %}</td></tr>
+                        {% endfor %}
+                        </table>
+                        {% endif %}
+                    </td>
+                    <td class="">
+                        {% if is_granted('ROLE_CONTROLLING') %}
                         <a id="managers_list_new" class="fa ajax-form fa-plus" title="{% trans %}Add note{% endtrans %}"
                            data-toggle="modal"
                            href="#form_modal"
@@ -92,6 +113,7 @@
                            data-post_function="updateList"
                            data-post_target_id="datatable_ajax_2"
                            ></a><br>
+                        {% endif %}
                         {% for responsible in responsibles[entity.id] %}
                             <a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">
                                 {{ responsible.companystructure.name }}
@@ -106,7 +128,6 @@
                         {{ entity.dogovorStartDatetime is empty ? '' :  entity.dogovorStartDatetime|date("d.m.y") }}
                     </td>
                     <td class="">{{ entity.delayDate is empty ? '' :  entity.delayDate|date("d.m.y")  }} {% if entity.delayDays is not empty %} ({{ entity.delayDays}} {{ entity.delayDaysType }}) {% endif %}</td>
-                    <td class="">{% if entity.dogovorActOriginal is not empty %}{% trans %}on{% endtrans %}{% else %}{% trans %}off{% endtrans %}{% endif %}</td>
                     <td class="">
                         <a id="managers_list_new" class="fa ajax-form fa-plus" title="{% trans %}Add note{% endtrans %}"
                            data-toggle="modal"

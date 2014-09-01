@@ -1179,7 +1179,10 @@ class OperScheduleController extends BaseFilterController
                 }
             } elseif (isset($founded[0]) && $founded[0]) {
                 $coworkerDayTimes[] = $founded;
-            }
+                foreach ($founded as $found) {
+                    $coworkerDayTimes[] = $found;
+                }
+	    }
         }
 
         $em =  $this->getDoctrine()->getManager();

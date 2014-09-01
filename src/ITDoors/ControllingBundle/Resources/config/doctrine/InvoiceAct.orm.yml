@@ -1,0 +1,31 @@
+# src/ITDoors/ControllingBundle/Resources/config/doctrine/InvoiceAct.orm.yml
+ITDoors\ControllingBundle\Entity\InvoiceAct:
+    type: entity
+    table: invoice_act
+    repositoryClass: ITDoors\ControllingBundle\Entity\InvoiceActRepository
+    id:
+        id:
+            type: integer
+            generator: { strategy: IDENTITY }
+    fields:
+        invoiceId:
+            type: integer
+            column: invoice_id
+        number:
+            type: string
+            length: 512
+        date:
+            type: datetime
+        original:
+            type: boolean
+    manyToOne:
+        invoice:
+            targetEntity: Invoice
+            inversedBy: acts
+            joinColumn:
+                name: invoice_id
+                referencedColumnName: id
+    oneToMany:
+        detals:
+            targetEntity: InvoiceActDetal
+            mappedBy: act

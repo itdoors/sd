@@ -23,7 +23,9 @@
         "knplabs/knp-paginator-bundle": "dev-master",
         "tss/automailer-bundle": "dev-master",
         "bcc/cron-manager-bundle": "dev-master",
-        "liuggio/excelbundle": "~2.0"
+        "liuggio/excelbundle": "~2.0",
+        "gedmo/doctrine-extensions": "2.3.*@dev",
+        "stof/doctrine-extensions-bundle": "1.1.*@dev"
     },
     "scripts": {
         "post-install-cmd": [

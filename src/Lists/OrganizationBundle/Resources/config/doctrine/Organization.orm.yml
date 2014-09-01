@@ -2,6 +2,10 @@ Lists\OrganizationBundle\Entity\Organization:
     type: entity
     table: organization
     repositoryClass: Lists\OrganizationBundle\Entity\OrganizationRepository
+    gedmo:
+        soft_deleteable:
+          field_name: deletedAt
+          time_aware: false
     fields:
         id:
             id: true
@@ -110,6 +114,9 @@ Lists\OrganizationBundle\Entity\Organization:
             type: integer
             nullable: true
             column: organization_sign_id
+        deletedAt:
+            type: datetime
+            nullable: true
         ownershipId:
             nullable: true
             column: ownership_id

@@ -190,7 +190,11 @@ lists_organization_export_excel:
 lists_contractor_index:
     pattern:  /lists/contractor/index
     defaults: { _controller: ListsOrganizationBundle:Contractor:index }
-    
+
+lists_contractor_export:
+    pattern:  /lists/contractor/export
+    defaults: { _controller: ListsOrganizationBundle:Contractor:exportContractors }
+
 lists_contractor_index_list:
     pattern:  /lists/contractor/index/list
     defaults: { _controller: ListsOrganizationBundle:Contractor:list }

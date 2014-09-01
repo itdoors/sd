@@ -247,7 +247,7 @@ class SalesController extends BaseController
 
         $canEdit = (Boolean) !$object[0]->getIsClosed();
 
-        $isResultClosed = $object['resultSlug'] == HandlingResult::RESULT_CLOSED;
+        $isResultClosed = $object['resultSlug'] == HandlingResult::RESULT_CLOSED || $object['resultSlug'] == HandlingResult::RESULT_COMPETITOR;
 
         $showMoreInfoIds = array(5,6);
 
