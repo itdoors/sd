@@ -38,7 +38,7 @@ class StructureController extends BaseController
     {
          return $this->render('ListsCompanystructureBundle:' . $this->baseTemplate . ':list.html.twig');
     }
-    
+
     /**
      * Renders template holder for calendar
      *
@@ -63,15 +63,15 @@ class StructureController extends BaseController
                         $name .= $this->getText($object->getId(), null);
                     }
                     $data[] = array(
-                            "id" => $object->getId(),  
-                            "text" => $name, 
+                            "id" => $object->getId(),
+                            "text" => $name,
                             "icon" => "fa fa-folder icon-lg icon-state-success",
-                            "children" =>  true, 
+                            "children" =>  true,
                             "type" => "root"
                     );
                 }
         } else {
-            $object = $repository->find((int)$parent);
+            $object = $repository->find((int) $parent);
             $childrens = $repository->getChildren($object, true);
             if ($childrens) {
                 foreach ($childrens as $children) {
@@ -82,40 +82,39 @@ class StructureController extends BaseController
                         $name .= $this->getText($children->getId(), null);
                     }
                     $data[] = array(
-                            "id" => $children->getId(),  
-                            "text" => $name, 
+                            "id" => $children->getId(),
+                            "text" => $name,
                             "icon" => "fa fa-folder icon-lg icon-state-success",
                             "children" =>  true,
                     );
                 }
                 $stuffRepository = $this->getDoctrine()
                         ->getRepository('SDUserBundle:Stuff');
-                    $employees = $stuffRepository->getStuffForCompanystructure((int)$parent);
+                    $employees = $stuffRepository->getStuffForCompanystructure((int) $parent);
                     foreach ($employees as $employ) {
                         $url = $router->generate(
                             'sd_user_show',
                             array('id' => $employ->getUser()->getId())
                         );
                         $data[] = array(
-                                "id" => 'stuff_'.$employ->getId(),  
-                                "text" => '<a data-href="true" href="'.$url.'">'.$employ->getUser()->getLastName().' '.$employ->getUser()->getFirstName().'</a> ('.$employ->getUser()->getPosition().')', 
+                                "id" => 'stuff_'.$employ->getId(),
+                                "text" => '<a data-href="true" href="'.$url.'">'.$employ->getUser()->getLastName().' '.$employ->getUser()->getFirstName().'</a> ('.$employ->getUser()->getPosition().')',
                                 "icon" => "fa fa-folder icon-lg icon-state-info",
                                 "children" =>  false,
                         );
                     }
-            
             } else {
                 $stuffRepository = $this->getDoctrine()
                     ->getRepository('SDUserBundle:Stuff');
-                $employees = $stuffRepository->getStuffForCompanystructure((int)$parent);
+                $employees = $stuffRepository->getStuffForCompanystructure((int) $parent);
                 foreach ($employees as $employ) {
                     $url = $router->generate(
-                            'sd_user_show',
-                            array('id' => $employ->getUser()->getId())
-                        );
+                        'sd_user_show',
+                        array('id' => $employ->getUser()->getId())
+                    );
                     $data[] = array(
-                            "id" => 'stuff_'.$employ->getId(),  
-                            "text" => '<a data-href="true" href="'.$url.'">'.$employ->getUser()->getLastName().' '.$employ->getUser()->getFirstName().'</a> ('.$employ->getUser()->getPosition().')', 
+                            "id" => 'stuff_'.$employ->getId(),
+                            "text" => '<a data-href="true" href="'.$url.'">'.$employ->getUser()->getLastName().' '.$employ->getUser()->getFirstName().'</a> ('.$employ->getUser()->getPosition().')',
                             "icon" => "fa fa-folder icon-lg icon-state-info",
                             "children" =>  false,
                     );
@@ -127,7 +126,7 @@ class StructureController extends BaseController
 
         return $response;
     }
-    
+
     /**
      * @param integer $companystructureId
      * @param User    $user
@@ -138,13 +137,13 @@ class StructureController extends BaseController
     {
          /** @var Translator $translator */
         $translator = $this->get('translator');
-            
+
         $name = '';
         if ($user) {
             $url = $this->container->get('router')->generate(
-                            'sd_user_show',
-                            array('id' => $user->getId())
-                        );
+                'sd_user_show',
+                array('id' => $user->getId())
+            );
             $name .= ' | <a data-href="true" href="'.$url.'">'.$user->getLastName().' '. $user->getFirstName() . '</a> ('.$user->getPosition().') ';
             if ($this->getUser()->hasRole('ROLE_HRADMIN')) {
                 $name .= '<a class="fa ajax-form fa-edit" title="'.$translator->trans('Change', array(), 'ListsComapnystructureBundle').'"
