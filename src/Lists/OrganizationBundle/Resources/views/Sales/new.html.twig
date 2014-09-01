@@ -87,6 +87,13 @@
                     </div>
                     <h3 class="form-section">{% trans %}General information{% endtrans %}</h3>
                     <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(filterForm.ownership, 'Ownership', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.ownership, {'attr': {'class': 'form-control select2','placeholder': 'Select ownership'}}) }}
+                                <span class="help-block">{% trans %}Select ownership{% endtrans %}</span>
+                            </div>
+                        </div>
                         <div class="col-md-6
                                 {% if filterForm.name.vars.errors|length %}
                                     has-error
@@ -106,10 +113,6 @@
                                 <span class="help-block">{% trans %}for example{% endtrans %}: Impel Griffin {% trans %}(limit 50 chars){% endtrans %}</span>
                             </div>
                         </div>
-                        <!--/span-->
-                    </div>
-                    <!--/row-->
-                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 {{ form_label(filterForm.organizationType, 'Organization type', {'attr': {'class': 'control-label'}}) }}
@@ -130,14 +133,6 @@
                                 {{ form_label(filterForm.group, 'Organization Group', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.group, {'attr': {'class': 'form-control select2','placeholder': 'Select Organization Group'}}) }}
                                 <span class="help-block">{% trans %}Select Organization Group{% endtrans %}</span>
-                            </div>
-                        </div>
-                            
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                {{ form_label(filterForm.ownership, 'Ownership', {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(filterForm.ownership, {'attr': {'class': 'form-control select2','placeholder': 'Select ownership'}}) }}
-                                <span class="help-block">{% trans %}Select ownership{% endtrans %}</span>
                             </div>
                         </div>
                         <!--/span-->
