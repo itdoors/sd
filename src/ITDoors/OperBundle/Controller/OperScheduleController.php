@@ -1165,7 +1165,7 @@ class OperScheduleController extends BaseFilterController
         //deleting old day grafik times
         $coworkerDayTimes = array();
         foreach ($dates as $dayCopy) {
-            $founded = $grafikTimeRepository->findOneBy(array(
+            $founded = $grafikTimeRepository->findBy(array(
                 'department' => $idDepartment,
                 'departmentPeople' => $idCoworker,
                 'day' => intval($dayCopy),
@@ -1173,7 +1173,11 @@ class OperScheduleController extends BaseFilterController
                 'month' => $month,
                 'departmentPeopleReplacement' => $idReplacement
             ));
-            if ($founded) {
+            if (count($founded) > 1) {
+                foreach($founded as $found) {
+                    $coworkerDayTimes[] = $found;
+                }
+            } elseif (isset($founded[0]) && $founded[0]) {
                 $coworkerDayTimes[] = $founded;
             }
         }
