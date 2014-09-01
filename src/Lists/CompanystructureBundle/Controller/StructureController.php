@@ -48,6 +48,7 @@ class StructureController extends BaseController
     {
         $parent = $this->get('request')->query->get('parent');
         $data = array();
+        $router = $this->container->get('router');
 
         $repository = $this->getDoctrine()
                 ->getRepository('ListsCompanystructureBundle:Companystructure');
@@ -91,10 +92,14 @@ class StructureController extends BaseController
                         ->getRepository('SDUserBundle:Stuff');
                     $employees = $stuffRepository->getStuffForCompanystructure((int)$parent);
                     foreach ($employees as $employ) {
+                        $url = $router->generate(
+                            'sd_user_show',
+                            array('id' => $employ->getUser()->getId())
+                        );
                         $data[] = array(
                                 "id" => 'stuff_'.$employ->getId(),  
-                                "text" => $employ->getUser()->getLastName().' '.$employ->getUser()->getFirstName(), 
-                                "icon" => "fa fa-folder icon-lg icon-state-success",
+                                "text" => '<a data-href="true" href="'.$url.'">'.$employ->getUser()->getLastName().' '.$employ->getUser()->getFirstName().'</a> ('.$employ->getUser()->getPosition().')', 
+                                "icon" => "fa fa-folder icon-lg icon-state-info",
                                 "children" =>  false,
                         );
                     }
@@ -104,10 +109,14 @@ class StructureController extends BaseController
                     ->getRepository('SDUserBundle:Stuff');
                 $employees = $stuffRepository->getStuffForCompanystructure((int)$parent);
                 foreach ($employees as $employ) {
+                    $url = $router->generate(
+                            'sd_user_show',
+                            array('id' => $employ->getUser()->getId())
+                        );
                     $data[] = array(
                             "id" => 'stuff_'.$employ->getId(),  
-                            "text" => $employ->getUser()->getLastName().' '.$employ->getUser()->getFirstName(), 
-                            "icon" => "fa fa-folder icon-lg icon-state-success",
+                            "text" => '<a data-href="true" href="'.$url.'">'.$employ->getUser()->getLastName().' '.$employ->getUser()->getFirstName().'</a> ('.$employ->getUser()->getPosition().')', 
+                            "icon" => "fa fa-folder icon-lg icon-state-info",
                             "children" =>  false,
                     );
                 }
@@ -132,7 +141,11 @@ class StructureController extends BaseController
             
         $name = '';
         if ($user) {
-            $name .= ' ('.$user->getLastName().' '. $user->getFirstName();
+            $url = $this->container->get('router')->generate(
+                            'sd_user_show',
+                            array('id' => $user->getId())
+                        );
+            $name .= ' | <a data-href="true" href="'.$url.'">'.$user->getLastName().' '. $user->getFirstName() . '</a> ('.$user->getPosition().') ';
             if ($this->getUser()->hasRole('ROLE_HRADMIN')) {
                 $name .= '<a class="fa ajax-form fa-edit" title="'.$translator->trans('Change', array(), 'ListsComapnystructureBundle').'"
                            data-toggle="modal"
@@ -144,10 +157,10 @@ class StructureController extends BaseController
                            data-post_target_id="table_ajax"
                            ></a>';
             }
-            $name .= ')';
+            $name .= '';
         } else {
             if ($this->getUser()->hasRole('ROLE_HRADMIN')) {
-                $name .= '(<a class="fa ajax-form fa-plus" title="'.$translator->trans('Specify director', array(), 'ListsComapnystructureBundle').'"
+                $name .= ' | <a class="fa ajax-form fa-plus" title="'.$translator->trans('Specify director', array(), 'ListsComapnystructureBundle').'"
                            data-toggle="modal"
                            href="#form_modal"
                            data-target_holder="stuffFormTpl"
@@ -155,7 +168,7 @@ class StructureController extends BaseController
                            data-form_name="companystructureStuffForm"
                            data-post_function="updateList"
                            data-post_target_id="table_ajax"
-                           ></a>)';
+                           ></a>';
             }
         }
 

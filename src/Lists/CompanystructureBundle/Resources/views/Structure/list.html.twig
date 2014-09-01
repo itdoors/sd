@@ -44,7 +44,9 @@
             "state" : { "key" : "demo3" }/*,
             "plugins" : [ "dnd", "state", "types" ]*/
         });
-        
+        $('a[data-href]').live('click', function(){
+            document.location.href = $(this).attr('href');
+        });
         });
     </script>
     <div class="row">
