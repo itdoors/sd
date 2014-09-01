@@ -1,6 +1,7 @@
 {% trans_default_domain 'SDTaskBundle' %}
 <script>
     $(document).ready(function(){
+/*
         $('.modal_task').die('click')
         $('.modal_task').live('click', function(e){
             var id = $(this).data('id');
@@ -27,6 +28,7 @@
 
             })
         })
+*/
 
         $('.filterButton').die('click')
         $('.filterButton').live('click', function(e){
@@ -58,7 +60,6 @@
 
     })
 </script>
-<div class="table-scrollable" style="max-height: 438px; overflow: auto;">
 <table class="table table-striped table-hover table-bordered" id="tasks_table" cellpadding="0" cellspacing="0">
     <thead>
         <th>id</th>
@@ -73,8 +74,9 @@
         {% set stage = taskUserRole.task.stage %}
         <tr>
             <td style="text-align: center; vertical-align: middle;">
-                <span class="btn green modal_task" style="min-width: 50px;"
-                        data-id="{{ taskUserRole.id }}">{{ taskUserRole.role|slice(0, 1) }}-{{ taskUserRole.task.id }}</span>
+                <a href="{{ path('sd_task_page', {'id' : taskUserRole.id }) }}" class="btn green"
+                   style="min-width: 50px;"
+                        >{{ taskUserRole.role|slice(0, 1) }}-{{ taskUserRole.task.id }}</a>
             </td>
             <td style="text-align: left; vertical-align: middle;">
                 {{ taskUserRole.task.title }}
@@ -116,4 +118,3 @@
     {% endfor %}
     </tbody>
 </table>
-</div>

@@ -4,7 +4,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">Create task</h4>
+                    <h4 class="modal-title">{% trans %}Create task{% endtrans %}</h4>
                 </div>
                 <div class="modal-body">
                     <div id="taskFormTpl1"></div>
@@ -40,13 +40,13 @@
 
                         <br>
 
-                        <div id="tasks_list" data-url="{{ path('sd_task_table')}}">
-                                {{ render(controller('SDTaskBundle:Task:taskTable')) }}
+                        <div id="tasks_list" data-url="{{ path('sd_task_table_dashboard')}}">
+                                {{ render(controller('SDTaskBundle:Task:taskTableDashboard')) }}
                         </div>
         </div>
             <input type="hidden" id="more_info_input"
                     data-url_task_modal="{{ path('sd_task_modal') }}"
-                    data-url_task_table="{{ path('sd_task_table')}}">
+                    data-url_task_table="{{ path('sd_task_table_dashboard')}}">
             {#
                         <div id="base_table_test" data-url="{{ path('it_doors_oper_coworker_test_table')}}">
                             {{ render(controller('ITDoorsOperBundle:OperCoworkerInfo:testTableRender', {

@@ -864,7 +864,6 @@ ALTER TABLE invoice_payments ADD bank TEXT DEFAULT NULL;
 ALTER TABLE task ADD COLUMN handling_message_id bigint;
 -- staging ----------------------
 -- prod ++++++++++++++++++++++++
-<<<<<<< HEAD
 ALTER TABLE invoice DROP dogovor_act_name;
 ALTER TABLE invoice DROP dogovor_act_date;
 ALTER TABLE invoice DROP dogovor_act_original;
@@ -933,16 +932,25 @@ ALTER TABLE companystructure ALTER lft DROP DEFAULT;
 ALTER TABLE companystructure ALTER lvl DROP DEFAULT;
 ALTER TABLE companystructure ALTER rgt DROP DEFAULT;
 
--- staging ----------------------
--- prod ----------------------
+-- staging ++++++++++
+-- prod ++++++++++
 
 CREATE TABLE organization_ownership (id BIGSERIAL NOT NULL, shortname VARCHAR(10) NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id));
 ALTER TABLE organization ADD ownership_id BIGINT DEFAULT NULL;
 ALTER TABLE organization ADD CONSTRAINT FK_C1EE637C9E9FFAA0 FOREIGN KEY (ownership_id) REFERENCES organization_ownership (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 CREATE UNIQUE INDEX UNIQ_C1EE637C9E9FFAA0 ON organization (ownership_id);
 COMMENT ON COLUMN organization.ownership_id IS 'Форма собственности организации';
--- staging ----------------------
+-- staging +++++++
 -- prod ++++++++++++++++++++++++
 ALTER TABLE invoice ALTER date TYPE TIMESTAMP(0) WITHOUT TIME ZONE;
 -- staging ++++++++++++++++++++
--- prod  ----------------------
+-- prod  ++++++++++++++++++++++
+CREATE TABLE comment (id SERIAL NOT NULL, create_datetime TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
+value VARCHAR(255) NOT NULL, model VARCHAR(255) NOT NULL, modelId INT NOT NULL, addition_field VARCHAR(255)
+, PRIMARY KEY(id));
+
+ALTER TABLE comment ADD user_id INT DEFAULT NULL;
+ALTER TABLE comment ADD CONSTRAINT FK_9474526CA76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_9474526CA76ED395 ON comment (user_id);
+-- staging ------
+-- prod ------

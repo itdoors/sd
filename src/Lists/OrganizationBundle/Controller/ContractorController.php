@@ -73,6 +73,7 @@ class ContractorController extends SalesController
             $page,
             20
         );
+
         return $this->render('ListsOrganizationBundle:Contractor:list.html.twig', array(
                 'pagination' => $pagination,
                 'namespase' => $namespase,

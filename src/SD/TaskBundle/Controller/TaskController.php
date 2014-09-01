@@ -2,21 +2,33 @@
 
 namespace SD\TaskBundle\Controller;
 
+use SD\TaskBundle\Entity\Comment;
 use SD\TaskBundle\Entity\TaskEndDate;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class TaskController
+ */
 class TaskController extends Controller
 {
+    /**
+     * @return Response
+     */
     public function indexAction()
     {
         return $this->render('SDTaskBundle:Task:index.html.twig');
     }
 
 
-
-    public function taskTableAction(Request $request = null) {
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function taskTableAction(Request $request = null)
+    {
         $user = $this->getUser();
 
         $filterArray = array(
@@ -55,8 +67,10 @@ class TaskController extends Controller
                 )
             );
             $return['success'] = 1;
+
             return new Response(json_encode($return));
         }
+
         return $this->render('SDTaskBundle:Task:tableTasks.html.twig',
             array(
               'tasksUserRole' => $tasksUserRole
@@ -65,6 +79,62 @@ class TaskController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function taskTableDashboardAction(Request $request = null)
+    {
+        $user = $this->getUser();
+
+        $filterArray = array(
+            'user' => $user
+        );
+
+        if ($request != null) {
+            $filter = $request->request->get('filter');
+            if ($filter != 'all' && $filter) {
+                $role = $this->getDoctrine()
+                    ->getRepository('SDTaskBundle:Role')
+                    ->findOneBy(array(
+                        'name' => $filter,
+                        'model' => 'task'
+                    ));
+                $filterArray['role'] = $role;
+            }
+        }
+
+
+        $tasksUserRole = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:TaskUserRole')
+            ->findBy(
+                $filterArray,
+                array(
+                    'isViewed' => 'ASC',
+                    'id' => 'DESC'
+                )
+            );
+
+        if ($filter) {
+            $return = array();
+            $return['html'] = $this->renderView('SDTaskBundle:Task:tableTasks.html.twig',
+                array(
+                    'tasksUserRole' => $tasksUserRole
+                )
+            );
+            $return['success'] = 1;
+
+            return new Response(json_encode($return));
+        }
+
+        return $this->render('SDTaskBundle:Dashboard:tableTasks.html.twig',
+            array(
+                'tasksUserRole' => $tasksUserRole
+            )
+        );
+
+    }
 
     /**
      * Renders modal inner html for one task
@@ -76,6 +146,23 @@ class TaskController extends Controller
     public function taskModalAction(Request $request)
     {
         $id = $request->request->get('id');
+        $return = array();
+
+        $info = $this->getTaskUserRoleInfo($id);
+
+        $return['success'] = 1;
+        $return['html'] = $this->renderView('SDTaskBundle:Task:taskModal.html.twig', $info);
+
+        return new Response(json_encode($return));
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return array
+     */
+    protected function getTaskUserRoleInfo($id)
+    {
         $em = $this->getDoctrine()->getManager();
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
         $userId = $this->getUser()->getId();
@@ -119,21 +206,65 @@ class TaskController extends Controller
                 'role' => $authorRole
             ));
 
-        $return = array();
+        $comment = $this->getLastTaskComment($taskUserRole->getTask()->getId());
 
-        $return['success'] = 1;
-        $return['html'] = $this->renderView('SDTaskBundle:Task:taskModal.html.twig', array(
+        $info = array(
             'taskUserRole' => $taskUserRole,
             'taskUserRoleController' => $taskUserRoleController,
             'taskUserRolePerformer' => $taskUserRolePerformer,
             'taskUserRoleAuthor' => $taskUserRoleAuthor,
-            'userId' => $userId
-        ));
+            'userId' => $userId,
+            'comment' => $comment
+        );
 
-        return new Response(json_encode($return));
+        return $info;
     }
 
+    /**
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function showTaskPageAction($id)
+    {
+        $info = $this->getTaskUserRoleInfo($id);
 
+        return $this->render('SDTaskBundle:Task:taskPage.html.twig',
+            $info
+        );
+    }
+
+    /**
+     * @param int $idTask
+     *
+     * @return Comment
+     */
+    protected function getLastTaskComment($idTask)
+    {
+        $commentRepository = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:Comment');
+
+        //$user = $this->getUser();
+
+        /*$task = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:Task')->find($idTask);*/
+
+        $lastComment = $commentRepository->findOneBy(array(
+            'model' => 'Task',
+            //'user' => $user,
+            'modelId' => $idTask
+        ), array(
+            'createDatetime' => 'DESC'
+        ));
+
+        return $lastComment;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
     public function setIsViewedTaskAction(Request $request)
     {
         $id = $request->request->get('id');
@@ -154,7 +285,12 @@ class TaskController extends Controller
         return new Response(json_encode($return));
     }
 
-    private function checkIfCanPerform($id, $type = false) {
+    /**
+     * @param int  $id
+     * @param bool $type
+     */
+    private function checkIfCanPerform($id, $type = false)
+    {
 
         $em = $this->getDoctrine()->getManager();
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
@@ -173,7 +309,7 @@ class TaskController extends Controller
             'task' => $task,
             'role'  => $performerRole
         ));
-        if($taskUserRole->getRole()->getName() != 'controller' || $type) {
+        if ($taskUserRole->getRole()->getName() != 'controller' || $type) {
             $performing = true;
             foreach ($tasksUserRole as $taskPerforming) {
                 if ($taskPerforming->getIsViewed() == false) {
@@ -201,7 +337,13 @@ class TaskController extends Controller
         $em->flush();
     }
 
-    public function taskStageUpdateAction(Request $request) {
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function taskStageUpdateAction(Request $request)
+    {
         $id = $request->request->get('id');
         $stage = $request->request->get('stage');
 
@@ -227,7 +369,11 @@ class TaskController extends Controller
         return new Response(json_encode($return));
     }
 
-    private function closeDateRequest($id) {
+    /**
+     * @param int $id
+     */
+    private function closeDateRequest($id)
+    {
         $em = $this->getDoctrine()->getManager();
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
         $stageRequest = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
@@ -249,11 +395,15 @@ class TaskController extends Controller
             $em->persist($dateRequest);
             $em->flush;
         }
-
-
     }
 
-    public function taskChangeDateRequestAction(Request $request) {
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function taskChangeDateRequestAction(Request $request)
+    {
         $id = $request->request->get('id');
         $value = $request->request->get('value');
         $type = $request->request->get('type');
@@ -322,9 +472,6 @@ class TaskController extends Controller
 
         $em->persist($newTaskEndDate);
 
-
-
-
         $em->persist($task);
         $em->flush();
 
@@ -334,7 +481,13 @@ class TaskController extends Controller
 
     }
 
-    public function answerDateAction (Request $request) {
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function answerDateAction (Request $request)
+    {
         $id = $request->request->get('id');
         $answer = $request->request->get('answer');
 
@@ -373,5 +526,37 @@ class TaskController extends Controller
 
         return new Response(json_encode($return));
 
+    }
+
+    /**
+     * Insert Comment
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function addCommentAction(Request $request)
+    {
+        $id = $request->request->get('id');
+        $commentValue = $request->request->get('comment');
+
+        $em = $this->getDoctrine()->getManager();
+        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
+
+        $idTask = $taskUserRole->getTask()->getId();
+        $user = $this->getUser();
+        $comment = new Comment();
+
+        $comment->setValue($commentValue);
+        $comment->setCreateDatetime(new \DateTime());
+        $comment->setModel('Task');
+        $comment->setModelId($idTask);
+        $comment->setUser($user);
+
+        $em->persist($comment);
+        $em->flush();
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
     }
 }

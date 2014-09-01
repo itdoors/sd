@@ -267,4 +267,91 @@ class ScheduleUpdateService
     }
 
 
+    /**
+     * @param int|array $months
+     * @param int       $year
+     */
+    public function scheduleFix($months, $year)
+    {
+        $this->em->getConnection()->getConfiguration()->setSQLLogger(null);
+
+        /** @var $grafikTimeRepository \Lists\GrafikBundle\Entity\GrafikTimeRepository   */
+        $grafikTimeRepository = $this->container->get('doctrine')
+            ->getRepository('ListsGrafikBundle:GrafikTime');
+
+        $grafikTimes = $grafikTimeRepository->findBy(array(
+                'month' => $months,
+                'year' => $year
+            )
+        );
+
+        $counter = count($grafikTimes);
+        echo $counter.' all'."\n";
+        echo 'starting re-count...'."\n";
+
+        $currentMonth = 0;
+        $currentDay = 0;
+        $counterFlush = 0;
+        $deletedIds = array();
+        /** @var $grafikTime \Lists\GrafikBundle\Entity\GrafikTime   */
+        foreach ($grafikTimes as $grafikJoke) {
+            if (!in_array($grafikJoke->getId(), $deletedIds)) {
+                $grafikTime = $this->container->get('doctrine')
+                    ->getRepository('ListsGrafikBundle:GrafikTime')->find($grafikJoke->getId());
+
+                echo $counter.' id:'.$grafikJoke->getId()." delete:".$counterFlush."\n";
+                $counter--;
+                if (!$grafikTime) {
+                    echo 'ERROR ERROR';
+                    continue;
+                }
+
+                $day = $grafikTime->getDay();
+                $month = $grafikTime->getMonth();
+                $year = $grafikTime->getYear();
+                $departmentPeople = $grafikTime->getDepartmentPeople();
+                $department = $grafikTime->getDepartment();
+                $replacementType= $grafikTime->getReplacementType();
+                $idDepartment = $grafikTime->getDepartmentId();
+                $idCoworker = $grafikTime->getDepartmentPeopleId();
+                $departmentPeopleReplacement = $grafikTime->getDepartmentPeopleReplacement();
+                //$departmentPeopleReplacement = $grafikTime->getDepartmentPeopleReplacementId();
+                $fromTime = $grafikTime->getFromTime();
+                $toTime = $grafikTime->getToTime();
+
+
+                $needDeleting = $this->container->get('doctrine')
+                    ->getRepository('ListsGrafikBundle:GrafikTime')->findBy(
+                        array(
+                            'department' => $department,
+                            'departmentPeople' => $departmentPeople,
+                            'year' => $year,
+                            'month' => $month,
+                            'departmentPeopleReplacement' => $departmentPeopleReplacement,
+                            'fromTime' => $fromTime,
+                            'toTime' => $toTime
+                        ));
+                if (count($needDeleting)>1) {
+                    foreach ($needDeleting as $delete) {
+                        if ($grafikTime->getId() != $delete->getId()) {
+                            $deletedIds[] = $delete->getId();
+                            $this->em->remove($delete);
+                            $counterFlush++;
+                        }
+                    }
+                }
+
+                if ($counterFlush == 500) {
+                    $this->em->flush();
+                    $this->em->clear();
+                    $counterFlush = 0;
+                }
+
+            }
+
+        }
+        $this->em->flush();
+    }
+
+
 }

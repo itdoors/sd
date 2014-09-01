@@ -65,12 +65,13 @@ class Task
      * Set title
      *
      * @param string $title
+     *
      * @return Task
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
@@ -88,12 +89,13 @@ class Task
      * Set description
      *
      * @param string $description
+     *
      * @return Task
      */
     public function setDescription($description)
     {
         $this->description = $description;
-    
+
         return $this;
     }
 
@@ -111,12 +113,13 @@ class Task
      * Set author
      *
      * @param \SD\UserBundle\Entity\User $author
+     *
      * @return Task
      */
     public function setAuthor(\SD\UserBundle\Entity\User $author = null)
     {
         $this->author = $author;
-    
+
         return $this;
     }
 
@@ -134,12 +137,13 @@ class Task
      * Set stage
      *
      * @param \SD\TaskBundle\Entity\Stage $stage
+     *
      * @return Task
      */
     public function setStage(\SD\TaskBundle\Entity\Stage $stage = null)
     {
         $this->stage = $stage;
-    
+
         return $this;
     }
 
@@ -157,12 +161,13 @@ class Task
      * Set type
      *
      * @param \SD\TaskBundle\Entity\TaskType $type
+     *
      * @return Task
      */
     public function setType(\SD\TaskBundle\Entity\TaskType $type = null)
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
@@ -187,17 +192,18 @@ class Task
     {
         $this->taskEndDates = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Add taskEndDates
      *
      * @param \SD\TaskBundle\Entity\TaskEndDate $taskEndDates
+     *
      * @return Task
      */
     public function addTaskEndDate(\SD\TaskBundle\Entity\TaskEndDate $taskEndDates)
     {
         $this->taskEndDates[] = $taskEndDates;
-    
+
         return $this;
     }
 
@@ -235,12 +241,13 @@ class Task
      * Set createDate
      *
      * @param \DateTime $createDate
+     *
      * @return Task
      */
     public function setCreateDate($createDate)
     {
         $this->createDate = $createDate;
-    
+
         return $this;
     }
 
@@ -258,12 +265,13 @@ class Task
      * Set startDate
      *
      * @param \DateTime $startDate
+     *
      * @return Task
      */
     public function setStartDate($startDate)
     {
         $this->startDate = $startDate;
-    
+
         return $this;
     }
 
