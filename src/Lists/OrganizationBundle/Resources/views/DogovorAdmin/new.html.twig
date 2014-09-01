@@ -33,10 +33,10 @@
 
     <script>
         $(document).ready(function(){
-            $('#organizationSalesForm_organizationType, #organizationSalesForm_scope, #organizationSalesForm_city').select2({
+            $('#organizationSalesForm_ownership').select2({
                 allowClear: true
             });
-
+            
             $('#organizationSalesForm_name, #organizationSalesForm_shortname').select2({
                 minimumInputLength: 2,
                 allowClear: true,
@@ -89,6 +89,13 @@
                     </div>
                     <h3 class="form-section">{% trans %}General information{% endtrans %}</h3>
                     <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(filterForm.ownership, 'Ownership', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.ownership, {'attr': {'class': 'form-control select2','placeholder': 'Select ownership'}}) }}
+                                <span class="help-block">{% trans %}Select ownership{% endtrans %}</span>
+                            </div>
+                        </div>
                         <div class="col-md-6
                             {% if filterForm.name.vars.errors|length %}
                                 has-error
@@ -108,10 +115,6 @@
                                 <span class="help-block">{% trans %}for example{% endtrans %}: Impel Griffin {% trans %}(limit 50 chars){% endtrans %}</span>
                             </div>
                         </div>
-                        <!--/span-->
-                    </div>
-                    <!--/row-->
-                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 {{ form_label(filterForm.organizationType, 'Organization type', {'attr': {'class': 'control-label'}}) }}
@@ -134,7 +137,6 @@
                                 <span class="help-block">{% trans %}Select Organization Group{% endtrans %}</span>
                             </div>
                         </div>
-                        
                         {% if filterForm.lookup is defined %}
                             <div class="col-md-6
                                 {% if filterForm.lookup.vars.errors|length %}

@@ -11,9 +11,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * ParserInvoiceCommand
+ * fixGrafiksCommand
  */
-class updateGrafiksCommand extends ContainerAwareCommand
+class fixGrafiksCommand extends ContainerAwareCommand
 {
 
     /**
