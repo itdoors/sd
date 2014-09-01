@@ -98,7 +98,7 @@ class StructureController extends BaseController
                         );
                         $data[] = array(
                                 "id" => 'stuff_'.$employ->getId(),
-                                "text" => '<a data-href="true" href="'.$url.'">'.$employ->getUser()->getLastName().' '.$employ->getUser()->getFirstName().'</a> ('.$employ->getUser()->getPosition().')',
+                                "text" => '<a data-href="true" href="'.$url.'">'.$employ->getUser()->getLastName().' '.$employ->getUser()->getFirstName().'</a>'. ($employ->getUser()->getPosition() != '' ? ' ('.$employ->getUser()->getPosition().')' : ''),
                                 "icon" => "fa fa-folder icon-lg icon-state-info",
                                 "children" =>  false,
                         );
@@ -114,7 +114,7 @@ class StructureController extends BaseController
                     );
                     $data[] = array(
                             "id" => 'stuff_'.$employ->getId(),
-                            "text" => '<a data-href="true" href="'.$url.'">'.$employ->getUser()->getLastName().' '.$employ->getUser()->getFirstName().'</a> ('.$employ->getUser()->getPosition().')',
+                            "text" => '<a data-href="true" href="'.$url.'">'.$employ->getUser()->getLastName().' '.$employ->getUser()->getFirstName().'</a>'. ($employ->getUser()->getPosition() != '' ? ' ('.$employ->getUser()->getPosition().')' : ''),
                             "icon" => "fa fa-folder icon-lg icon-state-info",
                             "children" =>  false,
                     );
@@ -144,7 +144,7 @@ class StructureController extends BaseController
                 'sd_user_show',
                 array('id' => $user->getId())
             );
-            $name .= ' | <a data-href="true" href="'.$url.'">'.$user->getLastName().' '. $user->getFirstName() . '</a> ('.$user->getPosition().') ';
+            $name .= ' | <a data-href="true" href="'.$url.'">'.$user->getLastName().' '. $user->getFirstName() . '</a>'. ($user->getPosition() != '' ? ' ('.$user->getPosition().')' : '');
             if ($this->getUser()->hasRole('ROLE_HRADMIN')) {
                 $name .= '<a class="fa ajax-form fa-edit" title="'.$translator->trans('Change', array(), 'ListsComapnystructureBundle').'"
                            data-toggle="modal"
