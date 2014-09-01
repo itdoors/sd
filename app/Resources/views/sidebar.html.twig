@@ -586,24 +586,30 @@
             {% endif %}
             <li{% if 
                 path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('list_companystructure_employees')
-               
+                or
+                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_stuff')
+                or
+                (
+                    app.request.attributes.get('_route_params').id is defined
+                    and
+                    app.request.attributes.get('_route_params').id | number_format(0)
+                    and
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_show',app.request.attributes.get('_route_params'))
+                )
                 %} class="active"{% endif %}>
                 <a href="javascript:;">
                     <i class="fa fa-tachometer"></i>
-                    <span class="title">{% trans %}Company structure{% endtrans %}</span>
+                    <span class="title">{% trans %}Impel griffin{% endtrans %}</span>
                     <span class="arrow "></span>
                 </a>
                 <ul  class="sub-menu">
                     <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('list_companystructure_employees') %} class="active"{% endif %}>
-                        <a href="{{ path('list_companystructure_employees') }}" title="{% trans %}Stuff{% endtrans %}">
+                        <a href="{{ path('list_companystructure_employees') }}" title="{% trans %}Structure company{% endtrans %}">
                             <i class="icon-pencil"></i>
-                            <span class="title">{% trans %}Stuff{% endtrans %}</span>
+                            <span class="title">{% trans %}Structure company{% endtrans %}</span>
                         </a>
                     </li>
-                </ul>
-            </li>
-           
-            <li{% if 
+                    <li{% if 
                 path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_stuff')
                 or
                 (
@@ -619,6 +625,10 @@
                     <span class="title">{% trans %}Stuff{% endtrans %}</span>
                 </a>
             </li>
+                </ul>
+            </li>
+           
+            
             <li{% if 
                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('list_article_vote_history') 
                         or
