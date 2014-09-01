@@ -199,7 +199,9 @@
                     </div>
                 </div>
                 <!--/span-->
-                <div class="col-md-4">
+                <div class="col-md-4  {% if form.launchdate.vars.errors|length %}
+                        has-error
+                    {% endif %}">
                     <div class="form-group">
                         {{ form_label(form.launchdate, 'Launch Date', {'attr': {'class': 'control-label'}}) }}
                         <div class="input-group input-medium date date-picker">
@@ -212,6 +214,9 @@
                                 <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
                             </span>
                         </div>
+                        {% if form.launchdate.vars.errors|length %}
+                            {{ form_errors(form.launchdate) }}
+                        {% endif %}
                     </div>
                 </div>
                 <!--/span-->
@@ -273,7 +278,7 @@
                             'class': 'form-control',
                             'placeholder': 'Enter City'|trans({}, 'messages'),
                             'data-url': path('sd_common_ajax_city'),
-                            'data-url-by-id': path('sd_common_ajax_city_by_id'),
+                            'data-url-by-id': path('sd_common_ajax_city_one_by_id'),
                         }}) }}
                     </div>
                 </div>
@@ -312,18 +317,30 @@
             <!--/row-->
             <h3 class="form-section">{% trans %}Total summ{% endtrans %}</h3>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4
+                    {% if form.total.vars.errors|length %}
+                        has-error
+                    {% endif %}">
                     <div class="form-group">
                         {{ form_label(form.total, 'Total summ', {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.total, {'attr': {'class': 'form-control', 'placeholder': 'Enter Total summ'}}) }}
                     </div>
+                    {% if form.total.vars.errors|length %}
+                        {{ form_errors(form.total) }}
+                    {% endif %}
                 </div>
                 <!--/span-->
-                <div class="col-md-4">
+                <div class="col-md-4
+                    {% if form.summMonthVat.vars.errors|length %}
+                        has-error
+                    {% endif %}">
                     <div class="form-group">
                         {{ form_label(form.summMonthVat, 'Summ with VAT', {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.summMonthVat, {'attr': {'class': 'form-control', 'placeholder': 'Enter Summ with VAT'}}) }}
                     </div>
+                    {% if form.summMonthVat.vars.errors|length %}
+                        {{ form_errors(form.summMonthVat) }}
+                    {% endif %}
                 </div>
                 <!--/span-->
                 <div class="col-md-4">

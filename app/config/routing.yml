@@ -1,3 +1,7 @@
+sd_task:
+    resource: "@SDTaskBundle/Resources/config/routing.yml"
+    prefix:   /
+
 lists_document:
     resource: "@ListsDocumentBundle/Resources/config/routing.yml"
     prefix:   /

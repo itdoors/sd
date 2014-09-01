@@ -1,0 +1,95 @@
+Last Events: Последние обращения
+All Events: Все обращения
+Enter Manager: Выберите менеджера
+Enter event type: Тип обращений
+Future event: Будущее
+Event overdue, next event exist: Просрочено
+Event overdue: Не завершено
+Event ok: Ок
+Past event: Прошедшее
+Select type active: Выберите тип активности
+
+Date start: Дата начала
+Date stop: Дата окончания
+Enter date start: Введите дату начала
+Enter date stop: Введите дату окончания
+Title: Название
+Description: Описание
+Enter title: Введите название
+Enter description: Введите описание
+
+Start date can't be greater then stop date: Дата начала не может быть больше даты окончание
+
+Tasks: Задачи
+Viewed: Просмотренные
+Task viewing: Просмотр задачи
+Exit: Выход
+Set viewed: Ознакомлен/-а
+
+Performer: Исполнитель
+performer: Исполнитель
+Controller: Контролирующий
+controller: Контролирующий
+Author: Автор
+author: Автор
+checking: Проверяется
+performing: Исполняется
+date request: Запрос переноса даты
+undone: Не выполнено
+done: Выполнено
+closed: Закрыто
+created: Создано
+
+End date: Дата окончания
+Description: Описание задачи
+Title: Название
+My role: Моя роль
+
+Enter performer: Введите исполнителя
+Creator: Автор
+Created: Созданные
+Go to: Перейти
+Link: Ссылка
+
+Stage: Этап
+Tasks: Задачи
+Tasks list: Список задач
+Documents: Документы
+Dashboard: Рабочий стол
+
+Add task: Создать задачу
+Request to change date: Запрос о переносе даты
+Reject: Отказать
+Submit: Подтвердить
+Set done: Уст. выполнено
+Set undone: Уст. не выполнено
+Re-make: Доработать
+Close task: Снять задачу
+Not viewed: Не ознакомлен
+Change end date: Cменить дату
+
+Date start: Дата начала
+Date stop: Дата окончания
+
+
+Overdue: Просрочено
+All: Все
+View task: Просмотр задачи
+1 hour: 1 час
+12 hours: 12 часов
+3 hours: 3 часа
+5 hours: 5 часов
+
+1 day: 1 день
+2 days: 2 дня
+3 days: 3 дня
+5 days: 5 дней
+
+1 week: 1 неделя
+2 weeks: 2 недели
+3 weeks: 3 недели
+1 month: 1 месяц
+
+Create task: Создать задачу
+Your comment: Ваш комментарий
+

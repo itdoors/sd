@@ -155,4 +155,120 @@ class DepartmentPeopleMonthInfoRepository extends EntityRepository
         return $query;
 
     }
+
+    /**
+     * @param integer|array $idDepartment
+     * @param integer       $month
+     * @param integer       $year
+     * @param array         $filters
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getFilteredCoworkersExport($idDepartment, $month, $year, $filters = array())
+    {
+        $sql = $this->createQueryBuilder('dpmi')
+            ->select('dpmi.departmentPeopleId as id')
+            ->addSelect('dpr.id as replacementId')
+
+            //->addSelect('dpmi.realSalary')
+            //->addSelect('dpmi.salaryNotOfficially')
+            //->addSelect('dpmi.salaryOfficially')
+            ->addSelect('i.lastName')
+            ->addSelect('i.firstName')
+            ->addSelect('i.middleName')
+            ->addSelect('dp.id as idCoworker')
+            ->addSelect('dpmi.replacementType')
+            ->addSelect('d.name as departmentName')
+            ->addSelect('d.id as idDepartment')
+            //->addSelect('dp.dismissalDate')
+            ->addSelect("CONCAT(dp.drfo,' ') as drfo")
+            ->addSelect('i.address')
+            ->addSelect("CONCAT(i.phone,' ') as phone")
+            ->addSelect('i.birthday')
+            ->addSelect('i.passport')
+            ->addSelect("CONCAT(m.name,' ') as mpk")
+            //->addSelect('o.shortname as organizationShortName')
+            ->addSelect('o.name as organizationName')
+            //->addSelect('ompk.name as selfOrganizationName')
+            ->leftJoin('dpmi.departmentPeopleReplacement', 'dpr')
+            ->leftJoin('dpmi.departmentPeople', 'dp')
+            ->leftJoin('dp.department', 'd')
+            ->leftJoin('d.organization', 'o')
+            ->leftJoin('dp.individual', 'i')
+            ->leftJoin('dp.mpks', 'm')
+            ->leftJoin('m.organization', 'ompk')
+            ->leftJoin('d.opermanager', 'u')
+            ->leftJoin('d.city', 'c')
+            ->leftJoin('c.region', 'r');
+
+
+        if (is_array($idDepartment)) {
+            if (count($idDepartment)) {
+                $sql = $sql->where('d.id IN (:idDepartment)')
+                    ->setParameter(':idDepartment', $idDepartment);
+            } else {
+                $sql = $sql->where('1 = 2');
+            }
+        } elseif ($idDepartment === false) {
+            //$sql = $sql->where('1 = 2');
+        } else {
+            $sql = $sql->where('d.id = :idDepartment')
+                ->setParameter(':idDepartment', $idDepartment);
+        }
+
+        $sql->andWhere('dpmi.year = :year')
+            ->setParameter(':year', $year)
+            ->andWhere('dpmi.month = :month')
+            ->setParameter(':month', $month);
+        //->groupBy('g.departmentPeopleId')
+
+
+        if (sizeof($filters)) {
+
+            foreach ($filters as $key => $value) {
+                if (!$value) {
+                    continue;
+                }
+                switch ($key) {
+                    case 'mpk':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $sql->andWhere('m.id in (:idsMpk)');
+                        $sql->setParameter(':idsMpk', explode(',', $value));
+                        break;
+                    case 'coworker':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $sql->andWhere('i.id  in (:idsUser)');
+                        $sql->setParameter(':idsUser', explode(',', $value));
+                        break;
+                    case 'region':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $sql->andWhere('r.id in (:idsRegion)');
+                        $sql->setParameter(':idsRegion', explode(',', $value));
+                        break;
+                    case 'opermanager':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        $sql->andWhere('u.id in (:idsUser)');
+                        $sql->setParameter(':idsUser', explode(',', $value));
+                        break;
+
+                }
+            }
+        }
+
+
+        //$sql->orderBy('i.lastName', "ASC");
+        //$sql = $sql->setMaxResults(70);
+        $query = $sql->getQuery();
+
+        return $query;
+
+    }
 }

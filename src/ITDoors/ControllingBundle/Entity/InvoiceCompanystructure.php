@@ -140,4 +140,15 @@ class InvoiceCompanystructure
     {
         return $this->companystructure;
     }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function addHistory()
+    {
+        $history = new \ITDoors\HistoryBundle\Entity\History();
+        $history->setModelName('InvoiceCompanystructyre');
+        $history->setModelId($this->id);
+        $history->setAction('update');
+    }
 }

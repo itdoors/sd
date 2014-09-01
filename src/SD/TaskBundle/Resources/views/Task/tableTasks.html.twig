@@ -1,0 +1,120 @@
+{% trans_default_domain 'SDTaskBundle' %}
+<script>
+    $(document).ready(function(){
+/*
+        $('.modal_task').die('click')
+        $('.modal_task').live('click', function(e){
+            var id = $(this).data('id');
+            var url = $('#more_info_input').data('url_task_modal');
+            var sendData = {
+                    'id': id
+                }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data1) {
+                    //alert(data1)
+                    data = JSON.parse(data1);
+                    if (data.success == 1) {
+                        $('#taskViewTpl').html('').html(data.html);
+                        $('#form_modal_task_view').modal('show');
+                    } else {
+                        //$('#copy_etalon_finished').show('blind', {}, 500);
+                    }
+
+
+                }
+
+            })
+        })
+*/
+
+        $('.filterButton').die('click')
+        $('.filterButton').live('click', function(e){
+            e.preventDefault();
+            var filter = $(this).data('show');
+            var url = $('#more_info_input').data('url_task_table');
+            var sendData = {
+                    'filter': filter
+                }
+            ITDoorsAjax.blockUI($('#tasks_list'));
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data1) {
+                    data = JSON.parse(data1);
+                    if (data.success == 1) {
+                        ITDoorsAjax.unblockUI($('#tasks_list'));
+                        $('#tasks_list').html('').html(data.html);
+                        //$('#form_modal_task_view').modal('show');
+                    } else {
+                        //$('#copy_etalon_finished').show('blind', {}, 500);
+                    }
+
+                }
+
+            })
+        })
+
+    })
+</script>
+<table class="table table-striped table-hover table-bordered" id="tasks_table" cellpadding="0" cellspacing="0">
+    <thead>
+        <th>id</th>
+        <th>{% trans %}Title{% endtrans %}</th>
+        <th>{% trans %}My role{% endtrans %}</th>
+        <th>{% trans %}Description{% endtrans %}</th>
+        <th>{% trans %}End date{% endtrans %}</th>
+        <th>{% trans %}Stage{% endtrans %}</th>
+    </thead>
+    <tbody>
+    {% for taskUserRole in tasksUserRole %}
+        {% set stage = taskUserRole.task.stage %}
+        <tr>
+            <td style="text-align: center; vertical-align: middle;">
+                <a href="{{ path('sd_task_page', {'id' : taskUserRole.id }) }}" class="btn green"
+                   style="min-width: 50px;"
+                        >{{ taskUserRole.role|slice(0, 1) }}-{{ taskUserRole.task.id }}</a>
+            </td>
+            <td style="text-align: left; vertical-align: middle;">
+                {{ taskUserRole.task.title }}
+                {% if not taskUserRole.isViewed %}
+                    <span style="color: red;">(не ознакомлен)</span>
+                {% endif %}
+            </td>
+            <td style="text-align: center; vertical-align: middle;">
+                {{ taskUserRole.role|trans }}
+            </td>
+            <td style="text-align: left; vertical-align: middle;">
+                {{ taskUserRole.task.description }}
+            </td>
+            <td style="text-align: right; vertical-align: middle;">
+                {{ include ('SDTaskBundle:Task:taskEndDate.html.twig', {
+                    'taskEndDates': taskUserRole.task.taskEndDates,
+                    'stage': stage
+                }) }}
+            </td>
+            <td style="text-align: center; vertical-align: middle;">
+                {% if stage == 'undone' %}
+                    {% set color = 'black' %}
+                {% elseif stage == 'performing' %}
+                    {% set color = 'gray' %}
+                {% elseif stage == 'created' %}
+                    {% set color = 'green' %}
+                {% elseif stage == 'done' %}
+                    {% set color = 'orange' %}
+                {% elseif stage == 'date request' %}
+                    {% set color = 'red' %}
+                {% elseif stage == 'closed' %}
+                    {% set color = 'blue' %}
+                {% elseif stage == 'checking' %}
+                    {% set color = '#87cefa' %}
+                {% endif %}
+                <span style="background-color: {{ color }}; color: white; padding: 5px;">{{ stage|trans }}</span>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

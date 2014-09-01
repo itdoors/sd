@@ -1,0 +1,63 @@
+{% trans_default_domain 'ITDoorsControllingBundle' %}
+{{ ajax_filter_render(filter, namespace, {
+    'datatable_ajax_1': 'ITDoorsAjax.updateList'
+}) }}
+    <script>
+        $(document).ready(function(){
+            
+            if ('{{ ajax }}' === 'true') {
+                ITDoorsAjax.init();
+            }
+
+            $('.daterangepicker').daterangepicker(
+                    {
+                        ranges: {
+                        'Текущий месяц': [moment().startOf('month'), moment().endOf('month')],
+                        'Текущий год': [moment().startOf('year'), moment().endOf('year')]
+                       },
+                       format: "DD.MM.YYYY",
+                        startDate: moment().startOf('year'),
+                        endDate: moment().endOf('year'),
+                        locale: {
+                            applyLabel: 'ОК',
+                            cancelLabel: 'Отмена',
+                            fromLabel: 'от',
+                            toLabel: 'до',
+                            customRangeLabel: 'Выбрать диапазон',
+                            daysOfWeek: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб','Вс'],
+                            monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                            firstDay: 1
+                        }
+                    }
+            );
+
+        });
+    </script>
+    <style>
+        .input-daterange{
+            outline: 0;
+            height: auto;
+            min-height: 32px;
+            padding: 6px 6px;
+            line-height: 20px;
+            font-size: 14px;
+            font-weight: normal;
+            vertical-align: top;
+            font-size: 100%;
+            color: #666;
+            outline: 0;
+            border: 0;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+            background: transparent !important;
+            border: 1px solid #e5e5e5;
+            top: 0px;
+            left: 15px;
+            width: 250px;
+            margin: 0;
+        }
+    </style>
+<div class="tab-content ajax-tab-holder-1" id="datatable_ajax_1" data-url="{{ url('it_doors_controlling_invoice_grafic_individual_lists') }}">
+    {{ render(controller('ITDoorsControllingBundle:Analytic:graficIndividualLists')) }}
+</div>

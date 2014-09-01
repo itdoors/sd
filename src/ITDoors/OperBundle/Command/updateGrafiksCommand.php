@@ -42,7 +42,7 @@ class updateGrafiksCommand extends ContainerAwareCommand
         $res = $parser->scheduleUpdate(8, 2014);
 
         $output->writeln($res);
-        
+
         $res = $parser->scheduleUpdate(7, 2014);
 
         $output->writeln($res);

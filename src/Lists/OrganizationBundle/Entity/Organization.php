@@ -1035,6 +1035,24 @@ class Organization
         return $this->organizationUsers;
     }
     /**
+     * @var \DateTime
+     */
+    private $deletedAt;
+
+
+    /**
+     * Set deletedAt
+     *
+     * @param \DateTime $deletedAt
+     * 
+     * @return Organization
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+    }
+
+    /**
      * @var \Lists\OrganizationBundle\Entity\OrganizationOwnership
      */
     private $ownership;
@@ -1055,6 +1073,15 @@ class Organization
     }
 
     /**
+     * Get deletedAt
+     *
+     * @return \DateTime 
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+     /**
      * Get ownership
      *
      * @return \Lists\OrganizationBundle\Entity\OrganizationOwnership 

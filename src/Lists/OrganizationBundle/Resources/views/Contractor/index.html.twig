@@ -38,6 +38,9 @@
             <a class="btn green" id="add_organization" href="{{ path('lists_' ~ baseRoutePrefix ~ '_new') }}">
                 {% trans %}Add contractor{% endtrans %} <i class="fa fa-plus"></i>
             </a>
+            {% if supervisor %}
+            <a class="btn yellow" style="margin-left: 10px" href="{{ path('lists_contractor_export') }}" target="_blank">{% trans %}Export{% endtrans %}</a>
+            {% endif %}
         </div>
     </div>
     <div class="row">

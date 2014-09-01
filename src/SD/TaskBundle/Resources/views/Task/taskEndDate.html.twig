@@ -1,0 +1,24 @@
+{% for key,taskEndDate in taskUserRole.task.taskEndDates %}
+    {% if taskEndDate.stage == 'accepted' %}
+        <span>{{ taskEndDate.endDatetime|date('d.m.Y H:i') }}
+
+        {% if 'now'|date('U') > taskEndDate.endDatetime|date('U')  and
+        stage != 'closed' and stage != 'done' and stage != 'undone' %}
+            <i class="icon-bell" style="color: red" title="{% trans %}Overdue{% endtrans %}"></i>
+
+        {% endif %}
+
+        </span>
+    {% else %}
+        {% if taskEndDate.stage == 'request' %}
+            <span style="color: #008000">{{ taskEndDate.endDatetime|date('d.m.Y H:i') }}
+                <span style="color: red">(Не подтверждено)</span>
+            </span>
+        {% elseif taskEndDate.stage == 'rejected'%}
+            <span style="color: red; text-decoration: line-through">{{ taskEndDate.endDatetime|date('d.m.Y H:i') }}</span>
+        {% else %}
+            <span>{{ taskEndDate.endDatetime|date('d.m.Y H:i') }}</span>
+        {% endif %}
+    {% endif %}
+    <br>
+{% endfor %}
