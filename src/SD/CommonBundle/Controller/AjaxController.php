@@ -2435,6 +2435,48 @@ class AjaxController extends BaseFilterController
 
         return true;
     }
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function companystructureStuffFormSave(Form $form, User $user, Request $request)
+    {
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        if (!$user->hasRole('ROLE_HRADMIN')) {
+            return true;
+        }
+
+        $formData = $request->request->get($form->getName());
+
+        /** @var InvoiceCompanystructure $invoiceCompanystructure */
+        $companystructure = $em
+            ->getRepository('ListsCompanystructureBundle:Companystructure')
+            ->find($formData['companystructureId']);
+        if (!$companystructure) {
+            return true;
+        }
+
+        /** @var Stuff $stuff */
+        $stuff = $em
+            ->getRepository('SDUserBundle:Stuff')
+            ->findOneBy(array('user' => $formData['user'], 'companystructureId' => $formData['companystructureId']));
+        if (!$stuff) {
+            return false;
+        }
+        $companystructure->setStuff($stuff);
+        $em->persist($companystructure);
+        $em->flush();
+
+        return true;
+    }
 
     /**
      * Saves {formName}Save after valid ajax validation
@@ -3879,6 +3921,38 @@ class AjaxController extends BaseFilterController
                     ->where('(idc.invoiceId is NULL OR idc.invoiceId <> :invoiceId)')
                     ->orderBy('c.root, c.lft', 'ASC')
                     ->setParameter(':invoiceId', $invoiceId);
+                }
+            ));
+    }
+    /**
+     * Adds children to {formName}ProcessDefaults depending on defaults in request
+     *
+     * @param Form    $form
+     * @param mixed[] $defaultData
+     * 
+     * @return QueryBuilder
+     */
+    public function companystructureStuffFormProcessDefaults(Form $form, $defaultData)
+    {
+        $companystructureId = $defaultData['companystructureId'];
+
+        $repository = $this->getDoctrine()->getRepository('SDUserBundle:User');
+
+        $form
+            ->add('user', 'entity', array(
+                'class' => 'SDUserBundle:User',
+                'empty_value' => '',
+                'required' => false,
+                'mapped' => false,
+                'query_builder' => function ($repository) use ($companystructureId, $repository) {
+
+                return $repository->createQueryBuilder('u')
+                    ->innerJoin('u.stuff', 's')
+                    ->innerJoin('s.companystructure', 'c')
+                    ->where('s.companystructure =  :companystructureId')
+                    ->andWhere('c.stuffId is null or c.stuffId != s.id')
+                    ->orderBy('u.lastName')
+                    ->setParameter(':companystructureId', $companystructureId);
                 }
             ));
     }

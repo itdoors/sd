@@ -22,3 +22,4 @@ parameters:
         - email
         - handling
         - dogovor
+        - companystructure
