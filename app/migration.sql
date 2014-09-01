@@ -943,4 +943,6 @@ CREATE UNIQUE INDEX UNIQ_C1EE637C9E9FFAA0 ON organization (ownership_id);
 COMMENT ON COLUMN organization.ownership_id IS 'Форма собственности организации';
 -- staging ----------------------
 -- prod ++++++++++++++++++++++++
-
+ALTER TABLE invoice ALTER date TYPE TIMESTAMP(0) WITHOUT TIME ZONE;
+-- staging ++++++++++++++++++++
+-- prod  ----------------------
