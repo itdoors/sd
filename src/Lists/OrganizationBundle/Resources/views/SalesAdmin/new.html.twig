@@ -33,7 +33,9 @@
 
     <script>
         $(document).ready(function(){
-
+            $('#organizationSalesForm_ownership').select2({
+                allowClear: true
+            });
             $('#organizationSalesForm_name, #organizationSalesForm_shortname').select2({
                 minimumInputLength: 2,
                 allowClear: true,
@@ -87,9 +89,9 @@
                     <h3 class="form-section">{% trans %}General information{% endtrans %}</h3>
                     <div class="row">
                         <div class="col-md-6
-							{% if filterForm.name.vars.errors|length %}
-							    has-error
-							{% endif %}">
+                                {% if filterForm.name.vars.errors|length %}
+                                    has-error
+                                {% endif %}">
                             <div class="form-group">
                                 {{ form_label(filterForm.name, 'Organization name'|trans ~ ' *', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.name, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter organization name'}}) }}
@@ -124,11 +126,18 @@
                                 <span class="help-block">{% trans %}Select Organization scope{% endtrans %}</span>
                             </div>
                         </div>
-                            <div class="col-md-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 {{ form_label(filterForm.group, 'Organization Group', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.group, {'attr': {'class': 'form-control select2me','placeholder': 'Select Organization Group'}}) }}
                                 <span class="help-block">{% trans %}Select Organization Group{% endtrans %}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(filterForm.ownership, 'Ownership', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.ownership, {'attr': {'class': 'form-control select2','placeholder': 'Select ownership'}}) }}
+                                <span class="help-block">{% trans %}Select ownership{% endtrans %}</span>
                             </div>
                         </div>
                         <!--/span-->
@@ -176,7 +185,7 @@
                         </div>
                         <!--/span-->
                     </div>
-                    <!--/row-->
+                   
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -195,7 +204,6 @@
                         </div>
                         <!--/span-->
                     </div>
-                    <!--/row-->
 
                     <h3 class="form-section">{% trans %}Сontact details{% endtrans %}</h3>
                     <div class="row">

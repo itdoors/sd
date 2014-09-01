@@ -33,7 +33,7 @@
 
     <script>
         $(document).ready(function(){
-            $('#organizationSalesForm_organizationType, #organizationSalesForm_scope, #organizationSalesForm_city, #organizationSalesForm_group').select2({
+            $('#organizationSalesForm_organizationType, #organizationSalesForm_scope, #organizationSalesForm_city, #organizationSalesForm_group, #organizationSalesForm_ownership').select2({
                 allowClear: true
             });
 
@@ -130,6 +130,14 @@
                                 {{ form_label(filterForm.group, 'Organization Group', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.group, {'attr': {'class': 'form-control select2','placeholder': 'Select Organization Group'}}) }}
                                 <span class="help-block">{% trans %}Select Organization Group{% endtrans %}</span>
+                            </div>
+                        </div>
+                            
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(filterForm.ownership, 'Ownership', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.ownership, {'attr': {'class': 'form-control select2','placeholder': 'Select ownership'}}) }}
+                                <span class="help-block">{% trans %}Select ownership{% endtrans %}</span>
                             </div>
                         </div>
                         <!--/span-->

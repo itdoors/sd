@@ -35,6 +35,11 @@ class OrganizationSalesFormType extends AbstractType
             ->add('name')
             ->add('address')
             ->add('mailingAddress')
+            ->add('ownership', 'entity', array(
+                'class'=>'Lists\OrganizationBundle\Entity\OrganizationOwnership',
+                'property'=>'shortName',
+                'empty_value' => ''
+            ))
             ->add('organizationType', 'entity', array(
                 'class'=>'Lists\OrganizationBundle\Entity\OrganizationType',
                 'property'=>'title',

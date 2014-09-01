@@ -954,3 +954,7 @@ ALTER TABLE comment ADD CONSTRAINT FK_9474526CA76ED395 FOREIGN KEY (user_id) REF
 CREATE INDEX IDX_9474526CA76ED395 ON comment (user_id);
 -- staging ------
 -- prod ------
+DROP INDEX uniq_c1ee637c9e9ffaa0;
+CREATE INDEX IDX_C1EE637C9E9FFAA0 ON organization (ownership_id);
+-- staging ------
+-- prod ------
