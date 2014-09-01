@@ -273,8 +273,8 @@
             {% endfor %}
         {% endif %}
     </div>
-    <div class="col-md-6"></div>
-    <div class="col-md-3">
+    <div class="col-md-7"></div>
+    <div class="col-md-2">
         {% trans %}End date{% endtrans %}:<br>
         {{ include ('SDTaskBundle:Task:taskEndDate.html.twig', {
         'taskEndDates': taskUserRole.task.taskEndDates,
@@ -287,8 +287,8 @@
     <div class="col-md-3">
         {% trans %}My role{% endtrans %}: {{ taskUserRole.role|trans }}
     </div>
-    <div class="col-md-6"></div>
-    <div class="col-md-3">
+    <div class="col-md-7"></div>
+    <div class="col-md-2">
         {% trans %}Stage{% endtrans %}: {{ taskUserRole.task.stage|trans }}
     </div>
 </div>
@@ -375,6 +375,70 @@
         {% endif %}
     {% endif %}
     <br><br>
+
+    {% if comments|length>0 %}
+        {% set counter = 0 %}
+        <div class="portlet" style="max-width: 900px; margin: 0px auto;">
+            <div class="portlet-title line">
+                <div class="caption">
+                    <i class="fa fa-comments"></i>{% trans %}Comments{% endtrans %}
+                </div>
+    {#
+                <div class="tools">
+                    <a href="" class="collapse">
+                    </a>
+                    <a href="#portlet-config" data-toggle="modal" class="config">
+                    </a>
+                    <a href="" class="reload">
+                    </a>
+                    <a href="" class="remove">
+                    </a>
+                </div>
+    #}
+            </div>
+            <div class="portlet-body" id="chats">
+                    <ul class="chats">
+                        {% for comment in comments %}
+                            {% if (counter % 2) == 0 %}
+                                {% set classMessage = "in" %}
+                            {% else %}
+                                {% set classMessage = "out" %}
+                            {% endif %}
+                            {% set counter = counter+1 %}
+                        <li class="{{ classMessage }}">
+                            <img class="avatar" alt="" src="{{ asset( userprofiles_url ~ comment.user.id ~ '/image29_' ~ comment.user.photo) }}"/>
+                            <div class="message">
+                                                <span class="arrow">
+                                                </span>
+                                <a href="#" class="name">
+                                    {{ comment.user }} </a>
+                                                <span class="datetime">
+                                                 {{ comment.createDatetime|date('d-m-Y H:i') }} </span>
+                                                <span class="body">
+                                                {{ comment.value }}
+                                                </span>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+    {#
+                <div class="chat-form">
+                    <div class="input-cont">
+                        <input class="form-control" type="text" placeholder="Type a message here..."/>
+                    </div>
+                    <div class="btn-cont">
+                                        <span class="arrow">
+                                        </span>
+                        <a href="" class="btn blue icn-only">
+                            <i class="fa fa-check icon-white"></i>
+                        </a>
+                    </div>
+                </div>
+    #}
+            </div>
+        </div>
+    {% endif %}
+
     <input type="hidden" id="task_modal_info_holder"
            data-id="{{ taskUserRole.id }}"
            data-url_task_set_viewed="{{ path('sd_task_set_viewed') }}"
