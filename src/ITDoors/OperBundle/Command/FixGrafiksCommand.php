@@ -11,9 +11,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * fixGrafiksCommand
+ * FixGrafiksCommand
  */
-class fixGrafiksCommand extends ContainerAwareCommand
+class FixGrafiksCommand extends ContainerAwareCommand
 {
     /**
      * configure

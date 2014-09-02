@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class SharedController extends SalesAdminController
 {
+
     protected $baseRoutePrefix = 'shared';
     protected $baseTemplate = 'Shared';
 }

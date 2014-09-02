@@ -96,7 +96,8 @@ class OperCoworkerInfoController extends BaseFilterController
           $id = $coworker['id'];
           $replacementId = $coworker['replacementId'];
           $idDepartment = $coworker['idDepartment'];
-          //$infoSumSalary['coworker_'.$id] = $commonService->getSumsCoworker($year.'-'.$month, $id, $replacementId, $idDepartment);
+          //$infoSumSalary['coworker_'.$id] =
+            $commonService->getSumsCoworker($year.'-'.$month, $id, $replacementId, $idDepartment);
 
           } */
 

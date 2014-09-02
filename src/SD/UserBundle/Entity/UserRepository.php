@@ -177,23 +177,25 @@ class UserRepository extends EntityRepository
                 switch ($key) {
                     case 'company':
                         $valueArr = explode(',', $value);
-                        $sql->andWhere("c.id in (:company) or c.id in 
+                        $sql->andWhere(
+                            "c.id in (:company) or c.id in 
                                 (
-                                SELECT
-                                    cc.id
-                                FROM
-                                    ListsCompanystructureBundle:Companystructure cp
-                                LEFT JOIN 
-                                    ListsCompanystructureBundle:Companystructure cc 
-                                WHERE
-                                    cp.root = cc.root
-                                AND
-                                    cp.lft < cc.lft
-                                AND 
-                                    cp.rgt > cc.rgt
-                                AND
-                                    cp in (:company)
-                                )");
+                                    SELECT
+                                        cc.id
+                                    FROM
+                                        ListsCompanystructureBundle:Companystructure cp
+                                    LEFT JOIN 
+                                        ListsCompanystructureBundle:Companystructure cc 
+                                    WHERE
+                                        cp.root = cc.root
+                                    AND
+                                        cp.lft < cc.lft
+                                    AND 
+                                        cp.rgt > cc.rgt
+                                    AND
+                                        cp in (:company)
+                                )"
+                        );
                         $sql->setParameter(':company', $valueArr);
                         break;
                     case 'isActive':

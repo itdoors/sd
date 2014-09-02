@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * ParserInvoiceCommand
  */
-class updateGrafiksCommand extends ContainerAwareCommand
+class UpdateGrafiksCommand extends ContainerAwareCommand
 {
     /**
      * configure

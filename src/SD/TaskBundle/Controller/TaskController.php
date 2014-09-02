@@ -49,28 +49,24 @@ class TaskController extends Controller
 
         $tasksUserRole = $this->getDoctrine()
             ->getRepository('SDTaskBundle:TaskUserRole')
-            ->findBy(
-            $filterArray, array (
-            'isViewed' => 'ASC',
-            'id' => 'DESC'
-            )
-        );
+            ->findBy($filterArray, array (
+                'isViewed' => 'ASC',
+                'id' => 'DESC'
+            ));
 
         if ($filter) {
             $return = array ();
             $return['html'] = $this->renderView('SDTaskBundle:Task:tableTasks.html.twig', array (
                 'tasksUserRole' => $tasksUserRole
-                )
-            );
+            ));
             $return['success'] = 1;
 
             return new Response(json_encode($return));
         }
 
         return $this->render('SDTaskBundle:Task:tableTasks.html.twig', array (
-                'tasksUserRole' => $tasksUserRole
-                )
-        );
+            'tasksUserRole' => $tasksUserRole
+        ));
     }
     /**
      * @param Request $request
@@ -101,28 +97,25 @@ class TaskController extends Controller
 
         $tasksUserRole = $this->getDoctrine()
             ->getRepository('SDTaskBundle:TaskUserRole')
-            ->findBy(
-            $filterArray, array (
-            'isViewed' => 'ASC',
-            'id' => 'DESC'
-            )
-        );
+            ->findBy($filterArray, array (
+                'isViewed' => 'ASC',
+                'id' => 'DESC'
+            ));
 
         if ($filter) {
             $return = array ();
-            $return['html'] = $this->renderView('SDTaskBundle:Task:tableTasks.html.twig', array (
-                'tasksUserRole' => $tasksUserRole
-                )
-            );
+            $return['html'] =
+                $this->renderView('SDTaskBundle:Task:tableTasks.html.twig', array (
+                    'tasksUserRole' => $tasksUserRole
+                ));
             $return['success'] = 1;
 
             return new Response(json_encode($return));
         }
 
         return $this->render('SDTaskBundle:Dashboard:tableTasks.html.twig', array (
-                'tasksUserRole' => $tasksUserRole
-                )
-        );
+            'tasksUserRole' => $tasksUserRole
+        ));
     }
     /**
      * Renders modal inner html for one task
@@ -179,19 +172,22 @@ class TaskController extends Controller
             array (
                 'task' => $taskUserRole->getTask(),
                 'role' => $controllerRole
-        ));
+            )
+        );
 
         $taskUserRolePerformer = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
             array (
                 'task' => $taskUserRole->getTask(),
                 'role' => $performerRole
-        ));
+            )
+        );
 
         $taskUserRoleAuthor = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
             array (
                 'task' => $taskUserRole->getTask(),
                 'role' => $authorRole
-        ));
+            )
+        );
 
         $comment = $this->getLastTaskComment($taskUserRole->getTask()->getId());
 
@@ -236,9 +232,7 @@ class TaskController extends Controller
         ));
         $info['comments'] = $comments;
 
-
-        return $this->render('SDTaskBundle:Task:taskPage.html.twig', $info
-        );
+        return $this->render('SDTaskBundle:Task:taskPage.html.twig', $info);
     }
     /**
      * @param int $idTask

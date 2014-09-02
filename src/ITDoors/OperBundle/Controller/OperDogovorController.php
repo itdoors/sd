@@ -45,7 +45,11 @@ class OperDogovorController extends BaseFilterController
                 $checkedForParent[] = $parent;
                 $hasParent = false;
                 foreach ($dogovorsDepartment as $checkingDogovorDepartment) {
-                    if ($parent == $checkingDogovorDepartment->getDogovorId() && $checkingDogovorDepartment->getDopDogovorId() == null) {
+                    if (
+                            $parent == $checkingDogovorDepartment->getDogovorId()
+                            &&
+                            $checkingDogovorDepartment->getDopDogovorId() == null
+                        ) {
                         $hasParent = true;
                         break;
                     }

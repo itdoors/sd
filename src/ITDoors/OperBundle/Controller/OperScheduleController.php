@@ -163,7 +163,11 @@ class OperScheduleController extends BaseFilterController
             $coworkersAll = $departmentPeopleRepository->getOrderedPeopleFromDepartment($idDepartment);
             /** @var  $coworkersOne \Lists\DepartmentBundle\Entity\departmentPeople */
             foreach ($coworkersAll as $key => $departmentPeople) {
-                if ($departmentPeople['dismissalDateNotOfficially'] != null && $departmentPeople['dismissalDateNotOfficially'] < new \DateTime($year . '-' . $month)) {
+                if (
+                        $departmentPeople['dismissalDateNotOfficially'] != null
+                        &&
+                        $departmentPeople['dismissalDateNotOfficially'] < new \DateTime($year . '-' . $month)
+                    ) {
                     unset($coworkersAll[$key]);
                 }
             }
@@ -197,7 +201,11 @@ class OperScheduleController extends BaseFilterController
             $idDepartment = $coworker['idDepartment'];
 
             $infoHoursCoworker = $grafikRepository->getCoworkerHoursMonthInfo(
-                $year, $month, $idDepartment, $idCoworker, $idReplacement
+                $year,
+                $month,
+                $idDepartment,
+                $idCoworker,
+                $idReplacement
             );
 
             $infoHours[$idCoworker . '-' . $idReplacement]['salaryOfficially'] = 0;
@@ -212,15 +220,27 @@ class OperScheduleController extends BaseFilterController
                 $infoHours[$idCoworker . '-' . $idReplacement]['realSalary'] = $coworker['realSalary'];
             }
 
-            $infoHours[$idCoworker . '-' . $idReplacement]['officially'] = $grafikRepository->getSumTotalOfficially(
-                $year, $month, $idDepartment, $idCoworker, $idReplacement
-            );
-            $infoHours[$idCoworker . '-' . $idReplacement]['notOfficially'] = $grafikRepository->getSumTotalNotOfficially(
-                $year, $month, $idDepartment, $idCoworker, $idReplacement
-            );
+            $infoHours[$idCoworker . '-' . $idReplacement]['officially'] =
+                $grafikRepository->getSumTotalOfficially(
+                    $year,
+                    $month,
+                    $idDepartment,
+                    $idCoworker,
+                    $idReplacement
+                );
+            $infoHours[$idCoworker . '-' . $idReplacement]['notOfficially'] =
+                $grafikRepository->getSumTotalNotOfficially(
+                    $year,
+                    $month,
+                    $idDepartment,
+                    $idCoworker,
+                    $idReplacement
+                );
 
             $infoHours[$idCoworker . '-' . $idReplacement]['accrual'] = $this->getTotalOnceOnlyAccruals(
-                $month, $year, $idCoworker
+                $month,
+                $year,
+                $idCoworker
             );
 
             $plannedAccrualRepository = $this->getDoctrine()
@@ -228,11 +248,12 @@ class OperScheduleController extends BaseFilterController
 
             $plannedAccrual = $plannedAccrualRepository->findOneBy(
                 array (
-                'departmentPeople' => $idCoworker,
-                'code' => 'UU',
-                'isActive' => true
-                ), array (
-                'period' => 'desc'
+                    'departmentPeople' => $idCoworker,
+                    'code' => 'UU',
+                    'isActive' => true
+                ),
+                array (
+                    'period' => 'desc'
                 )
             );
 
@@ -244,14 +265,18 @@ class OperScheduleController extends BaseFilterController
 
             $infoHours[$idCoworker . '-' . $idReplacement]['salaryNotOfficially'] = $coworker['salaryNotOfficially'];
             if (!$infoHours[$idCoworker . '-' . $idReplacement]['salaryNotOfficially']) {
-                $infoHours[$idCoworker . '-' . $idReplacement]['salaryNotOfficially'] = $infoHours[$idCoworker . '-' . $idReplacement]['plannedAccrual'];
+                $infoHours[$idCoworker . '-' . $idReplacement]['salaryNotOfficially'] =
+                    $infoHours[$idCoworker . '-' . $idReplacement]['plannedAccrual'];
                 $infoHours[$idCoworker . '-' . $idReplacement]['salaryNotOfficially'] +=
                     $infoHours[$idCoworker . '-' . $idReplacement]['accrual']['notOfficially']['plus'];
                 $infoHours[$idCoworker . '-' . $idReplacement]['salaryNotOfficially'] -=
                     $infoHours[$idCoworker . '-' . $idReplacement]['accrual']['notOfficially']['minus'];
             }
 
-            $infoHours[$idCoworker . '-' . $idReplacement]['totalSalary'] = $infoHours[$idCoworker . '-' . $idReplacement]['salaryOfficially'] + $infoHours[$idCoworker . '-' . $idReplacement]['salaryNotOfficially'];
+            $infoHours[$idCoworker . '-' . $idReplacement]['totalSalary'] =
+                $infoHours[$idCoworker . '-' . $idReplacement]['salaryOfficially']
+                +
+                $infoHours[$idCoworker . '-' . $idReplacement]['salaryNotOfficially'];
 
 
             foreach ($infoHoursCoworker as $infoDay) {
@@ -273,8 +298,10 @@ class OperScheduleController extends BaseFilterController
                 }
 
                 $infoHours[$idCoworker . '-' . $idReplacement . '-' . $infoDay['day']]['status'] = $status;
-                $infoHours[$idCoworker . '-' . $idReplacement . '-' . $infoDay['day']]['officially'] = $infoDay['total'];
-                $infoHours[$idCoworker . '-' . $idReplacement . '-' . $infoDay['day']]['notOfficially'] = $infoDay['totalNotOfficially'];
+                $infoHours[$idCoworker . '-' . $idReplacement . '-' . $infoDay['day']]['officially'] =
+                    $infoDay['total'];
+                $infoHours[$idCoworker . '-' . $idReplacement . '-' . $infoDay['day']]['notOfficially'] =
+                    $infoDay['totalNotOfficially'];
             }
             //var_dump(count($infoHours));
             $infoHours[$idCoworker . '-' . $idReplacement]['idMonthInfo'] = $coworker['idMonthInfo'];
@@ -337,7 +364,12 @@ class OperScheduleController extends BaseFilterController
         $year = $dateParts[0];
 
         $coworkerDayTime = $grafikTimeRepository->getCoworkerHoursDayInfo(
-            $year, $month, $day, $idDepartment, $idCoworker, $idReplacement
+            $year,
+            $month,
+            $day,
+            $idDepartment,
+            $idCoworker,
+            $idReplacement
         );
 
         //var_dump($coworkerDayTime[0]);
@@ -353,7 +385,12 @@ class OperScheduleController extends BaseFilterController
 
 
         $infoDay = $grafikRepository->getCoworkerHoursDayInfo(
-            $day, $year, $month, $idDepartment, $idCoworker, $idReplacement
+            $day,
+            $year,
+            $month,
+            $idDepartment,
+            $idCoworker,
+            $idReplacement
         );
 
         $status = 'ok';
@@ -398,14 +435,19 @@ class OperScheduleController extends BaseFilterController
         $coworkersAll = $departmentPeopleRepository->getOrderedPeopleFromDepartment($idDepartment);
         /** @var  $coworkersOne \Lists\DepartmentBundle\Entity\departmentPeople */
         foreach ($coworkersAll as $key => $departmentPeople) {
-            if ($departmentPeople['dismissalDateNotOfficially'] != null && $departmentPeople['dismissalDateNotOfficially'] < new \DateTime($year . '-' . $month)) {
+            if (
+                    $departmentPeople['dismissalDateNotOfficially'] != null
+                    &&
+                    $departmentPeople['dismissalDateNotOfficially'] < new \DateTime($year . '-' . $month)
+                ) {
                 unset($coworkersAll[$key]);
             }
         }
         $coopration = array ();
         $coopration['exists'] = false;
         if (isset($infoDay[0]) && $infoDay[0]['departmentPeopleCooperationId']) {
-            $departmentPeopleCooperation = $departmentPeopleRepository->find($infoDay[0]['departmentPeopleCooperationId']);
+            $departmentPeopleCooperation =
+                $departmentPeopleRepository->find($infoDay[0]['departmentPeopleCooperationId']);
             //$departmentPoopleCooperation = $grafik->getDepartmentPeopleCooperation();
 
             $idCooperatinon = $departmentPeopleCooperation->getId();
@@ -420,7 +462,8 @@ class OperScheduleController extends BaseFilterController
                         $individualCooperation->getFirstName() . ' ' . $individualCooperation->getMiddleName();
                 } else {
                     $fioCooperation = $departmentPeopleCooperation->getLastName() . ' ' .
-                        $departmentPeopleCooperation->getFirstName() . ' ' . $departmentPeopleCooperation->getMiddleName();
+                        $departmentPeopleCooperation->getFirstName() . ' ' .
+                        $departmentPeopleCooperation->getMiddleName();
                 }
                 $mpkCooperation = $departmentPeopleCooperation->getMpks();
                 $coopration['percent'] = $percentCooperation;
@@ -526,7 +569,15 @@ class OperScheduleController extends BaseFilterController
         list($year, $month, $day) = explode('-', $date);
 
         $havingSubtime = $grafikTimeRepository->havingSubtime(
-            $year, $month, $day, $idDepartment, $idCoworker, $fromTime, $toTime, $idTimeGrafik, $idReplacement
+            $year,
+            $month,
+            $day,
+            $idDepartment,
+            $idCoworker,
+            $fromTime,
+            $toTime,
+            $idTimeGrafik,
+            $idReplacement
         );
         if ($havingSubtime) {
             $return['success'] = 0;
@@ -536,7 +587,11 @@ class OperScheduleController extends BaseFilterController
             return new Response(json_encode($return));
         }
 
-        /*            if ($hoursFromTime > $hoursToTime || ($hoursToTime == 0 && $minutesToTime != 0 && $hoursFromTime != 0)) {
+        /*
+         *  if (
+         *  $hoursFromTime > $hoursToTime ||
+         *  ($hoursToTime == 0 && $minutesToTime != 0 && $hoursFromTime != 0)
+         * ) {
           $timeIn[0]['from'] = $fromTime;
           $timeIn[0]['to'] = $midnight;
           $timeIn[0]['date'] = $date;
@@ -746,7 +801,12 @@ class OperScheduleController extends BaseFilterController
             ->getRepository('ListsGrafikBundle:GrafikTime');
 
         $coworkerDayTimes = $grafikTimeRepository->getCoworkerHoursDayInfo(
-            $year, $month, $day, $idDepartment, $idCoworker, $idReplacement
+            $year,
+            $month,
+            $day,
+            $idDepartment,
+            $idCoworker,
+            $idReplacement
         );
         $total = 0;
         $totalDay = 0;
@@ -847,7 +907,12 @@ class OperScheduleController extends BaseFilterController
 
 
         $infoDay = $grafikRepository->getCoworkerHoursDayInfo(
-            $day, $year, $month, $idDepartment, $idCoworker, $idReplacement
+            $day,
+            $year,
+            $month,
+            $idDepartment,
+            $idCoworker,
+            $idReplacement
         );
 
         if (!isset($infoDay[0])) {
@@ -1214,7 +1279,11 @@ class OperScheduleController extends BaseFilterController
         /** @var  $departmentPeople \Lists\DepartmentBundle\Entity\DepartmentPeople */
         $departmentPeople = $departmentPeopleRepository->find($idCoworker);
         //can't person work when fired
-        if ($departmentPeople->getDismissalDateNotOfficially() != null && $departmentPeople->getDismissalDateNotOfficially() < new \DateTime($date)) {
+        if (
+                $departmentPeople->getDismissalDateNotOfficially() != null
+                &&
+                $departmentPeople->getDismissalDateNotOfficially() < new \DateTime($date)
+            ) {
 
             $return['success'] = 0;
             $return['error'] = 'fired';
@@ -1238,8 +1307,19 @@ class OperScheduleController extends BaseFilterController
               $return['error'] = 'no_official_permitted';
 
               return $return; */
-        } elseif (($departmentPeople->getAdmissionDate() != null && $departmentPeople->getAdmissionDate() > new \DateTime($date) && $officially) ||
-            ($departmentPeople->getDismissalDate() != null && $departmentPeople->getDismissalDate() < new \DateTime($date) && $officially)) {
+        } elseif (
+                    (
+                        $departmentPeople->getAdmissionDate() != null
+                        &&
+                        $departmentPeople->getAdmissionDate() > new \DateTime($date) && $officially
+                    )
+                    ||
+                    (
+                        $departmentPeople->getDismissalDate() != null
+                        &&
+                        $departmentPeople->getDismissalDate() < new \DateTime($date) && $officially
+                    )
+                ) {
 
             $return['success'] = 0;
             $return['error'] = 'no_official_permitted';
@@ -1495,7 +1575,12 @@ class OperScheduleController extends BaseFilterController
         $idCoworker = $params['idCoworker'];
         $idDepartment = $params['idDepartment'];
         $idReplacement = $params['idReplacement'];
-        $replacementType = isset($params['replacementType']) ? $params['replacementType'] : DepartmentPeopleMonthInfoRepository::REPLACEMENT_TYPE_REPLACEMENT;
+        $replacementType =
+            isset($params['replacementType'])
+            ?
+            $params['replacementType']
+            :
+            DepartmentPeopleMonthInfoRepository::REPLACEMENT_TYPE_REPLACEMENT;
 
         list($year, $month) = explode('-', $date);
 
@@ -1579,7 +1664,8 @@ class OperScheduleController extends BaseFilterController
         $plannedAccrual = $plannedAccrualRepository->findBy(
             array (
             'departmentPeople' => $idCoworker
-            ), array ('period' => 'DESC')
+            ),
+            array ('period' => 'DESC')
         );
 
         $canEdit = $this->checkIfCanEdit();
@@ -2028,14 +2114,24 @@ class OperScheduleController extends BaseFilterController
         }
 
         $officiallyTotal = $grafikRepository->getSumTotalOfficially(
-            $year, $month, $idDepartment, $idCoworker, $idReplacement
+            $year,
+            $month,
+            $idDepartment,
+            $idCoworker,
+            $idReplacement
         );
         $notOfficiallyTotal = $grafikRepository->getSumTotalNotOfficially(
-            $year, $month, $idDepartment, $idCoworker, $idReplacement
+            $year,
+            $month,
+            $idDepartment,
+            $idCoworker,
+            $idReplacement
         );
 
         $accrual = $this->getTotalOnceOnlyAccruals(
-            $month, $year, $idCoworker
+            $month,
+            $year,
+            $idCoworker
         );
 
         $plannedAccrualRepository = $this->getDoctrine()
@@ -2043,11 +2139,12 @@ class OperScheduleController extends BaseFilterController
 
         $plannedAccrual = $plannedAccrualRepository->findOneBy(
             array (
-            'departmentPeople' => $idCoworker,
-            'code' => 'UU',
-            'isActive' => true
-            ), array (
-            'period' => 'desc'
+                'departmentPeople' => $idCoworker,
+                'code' => 'UU',
+                'isActive' => true
+            ),
+            array (
+                'period' => 'desc'
             )
         );
 

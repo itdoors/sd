@@ -13,23 +13,23 @@ use Doctrine\ORM\QueryBuilder;
  */
 class HistoryRepository extends EntityRepository
 {
-     /**
+    /**
      * Processes sql query. adding select
      *
      * @param \Doctrine\ORM\QueryBuilder $sql
      */
-    public function processCount($sql)
+    public function processCount ($sql)
     {
         $sql->select('COUNT(DISTINCT h.id) as hcount');
     }
-     /**
+    /**
      * Returns results for interval future invoice
      *
      * @param QueryBuilder $res Description
      * 
      * @return QueryBuilder
      */
-    public function selectHistory(QueryBuilder $res)
+    public function selectHistory (QueryBuilder $res)
     {
         $res
             ->select('h.value')
@@ -47,7 +47,7 @@ class HistoryRepository extends EntityRepository
      * 
      * @return QueryBuilder
      */
-    public function joinHistory(QueryBuilder $res)
+    public function joinHistory (QueryBuilder $res)
     {
         $res->leftJoin('h.user', 'u');
 
@@ -62,14 +62,14 @@ class HistoryRepository extends EntityRepository
      * 
      * @return QueryBuilder
      */
-    public function whereHistory(QueryBuilder $res, $modelName, $modelId)
+    public function whereHistory (QueryBuilder $res, $modelName, $modelId)
     {
 
         $res
-                ->andWhere("h.modelName = :modelName")
-                ->setParameter(':modelName', $modelName)
-                ->andWhere("h.modelId = :modelId")
-                ->setParameter(':modelId', $modelId);
+            ->andWhere("h.modelName = :modelName")
+            ->setParameter(':modelName', $modelName)
+            ->andWhere("h.modelId = :modelId")
+            ->setParameter(':modelId', $modelId);
 
         return $res;
     }
@@ -79,7 +79,7 @@ class HistoryRepository extends EntityRepository
      * @param \Doctrine\ORM\QueryBuilder $sql
      * @param mixed[]                    $filters
      */
-    public function processFilters(\Doctrine\ORM\QueryBuilder $sql, $filters)
+    public function processFilters (\Doctrine\ORM\QueryBuilder $sql, $filters)
     {
         if (sizeof($filters)) {
 
@@ -107,7 +107,7 @@ class HistoryRepository extends EntityRepository
      * 
      * @return type
      */
-    public function getHistories($modelName, $modelId, $filterNamespace, $filters)
+    public function getHistories ($modelName, $modelId, $filterNamespace, $filters)
     {
         $res = $this->createQueryBuilder('h');
         $resCount = $this->createQueryBuilder('h');
@@ -131,9 +131,8 @@ class HistoryRepository extends EntityRepository
 
         $count = $resCount->getQuery()->getSingleScalarResult();
 
-        $query->setHint($filterNamespace.'.count', $count);
+        $query->setHint($filterNamespace . '.count', $count);
 
         return $query;
     }
-
 }

@@ -48,28 +48,24 @@ class DashboardTaskController extends Controller
 
         $tasksUserRole = $this->getDoctrine()
             ->getRepository('SDTaskBundle:TaskUserRole')
-            ->findBy(
-            $filterArray, array (
-            'isViewed' => 'ASC',
-            'id' => 'DESC'
-            )
-        );
+            ->findBy($filterArray, array (
+                'isViewed' => 'ASC',
+                'id' => 'DESC'
+            ));
 
         if ($filter) {
             $return = array ();
             $return['html'] = $this->renderView('SDTaskBundle:Task:tableTasks.html.twig', array (
                 'tasksUserRole' => $tasksUserRole
-                )
-            );
+            ));
             $return['success'] = 1;
 
             return new Response(json_encode($return));
         }
 
         return $this->render('SDTaskBundle:Task:tableTasks.html.twig', array (
-                'tasksUserRole' => $tasksUserRole
-                )
-        );
+            'tasksUserRole' => $tasksUserRole
+        ));
     }
     /**
      * Renders modal inner html for one task
@@ -106,22 +102,19 @@ class DashboardTaskController extends Controller
             'model' => 'task'
         ));
 
-        $taskUserRoleController = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
-            array (
-                'task' => $taskUserRole->getTask(),
-                'role' => $controllerRole
+        $taskUserRoleController = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(array (
+            'task' => $taskUserRole->getTask(),
+            'role' => $controllerRole
         ));
 
-        $taskUserRolePerformer = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
-            array (
-                'task' => $taskUserRole->getTask(),
-                'role' => $performerRole
+        $taskUserRolePerformer = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(array (
+            'task' => $taskUserRole->getTask(),
+            'role' => $performerRole
         ));
 
-        $taskUserRoleAuthor = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
-            array (
-                'task' => $taskUserRole->getTask(),
-                'role' => $authorRole
+        $taskUserRoleAuthor = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(array (
+            'task' => $taskUserRole->getTask(),
+            'role' => $authorRole
         ));
 
         $return = array ();

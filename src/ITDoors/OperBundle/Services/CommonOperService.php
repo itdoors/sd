@@ -69,14 +69,24 @@ class CommonOperService
         }
 
         $officiallyTotal = $grafikRepository->getSumTotalOfficially(
-            $year, $month, $idDepartment, $idCoworker, $idReplacement
+            $year,
+            $month,
+            $idDepartment,
+            $idCoworker,
+            $idReplacement
         );
         $notOfficiallyTotal = $grafikRepository->getSumTotalNotOfficially(
-            $year, $month, $idDepartment, $idCoworker, $idReplacement
+            $year,
+            $month,
+            $idDepartment,
+            $idCoworker,
+            $idReplacement
         );
 
         $accrual = $this->getTotalOnceOnlyAccruals(
-            $month, $year, $idCoworker
+            $month,
+            $year,
+            $idCoworker
         );
 
         $plannedAccrualRepository = $this->container->get('doctrine')

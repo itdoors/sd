@@ -25,7 +25,12 @@ class OperInfoController extends BaseFilterController
         /** @var AccessService $accessService */
         $accessService = $this->get('access.service');
 
-        $this->addToSessionValues('idDepartment', $accessService->getAllowedDepartmentsId(), 'param', 'oper.bundle.department');
+        $this->addToSessionValues(
+            'idDepartment',
+            $accessService->getAllowedDepartmentsId(),
+            'param',
+            'oper.bundle.department'
+        );
 
         return $this->render('ITDoorsOperBundle:Patterns:index.html.twig', array (
         ));
@@ -61,7 +66,9 @@ class OperInfoController extends BaseFilterController
 
         $query->setHint('knp_paginator.count', $countDepartments);
         $pagination = $paginator->paginate(
-            $query, $page, 20
+            $query,
+            $page,
+            20
         );
 
         return $this->render('ITDoorsOperBundle:Parts:department.html.twig', array (
@@ -101,7 +108,9 @@ class OperInfoController extends BaseFilterController
         $query->setHint('knp_paginator.count', $countDepartments);
 
         $pagination = $paginator->paginate(
-            $query, $page, 20
+            $query,
+            $page,
+            20
         );
 
         return $this->render('ITDoorsOperBundle:Parts:department.html.twig', array (

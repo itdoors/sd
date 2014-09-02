@@ -51,9 +51,16 @@ class OperSupervisorInfoController extends OperCoworkerInfoController
 
 
         foreach ($coworkers as $key => $coworker) {
-            $infoSalary = $this->getSumsCoworker($year . '-' . $month, $coworker['idCoworker'], $coworker['replacementId'], $coworker['idDepartment']);
-            $officiallAcrual = $infoSalary['accrual']['officially']['plus'] - $infoSalary['accrual']['officially']['minus'];
-            $notOfficiallAcrual = $infoSalary['accrual']['notOfficially']['plus'] - $infoSalary['accrual']['notOfficially']['minus'];
+            $infoSalary = $this->getSumsCoworker(
+                $year . '-' . $month,
+                $coworker['idCoworker'],
+                $coworker['replacementId'],
+                $coworker['idDepartment']
+            );
+            $officiallAcrual =
+                $infoSalary['accrual']['officially']['plus'] - $infoSalary['accrual']['officially']['minus'];
+            $notOfficiallAcrual =
+                $infoSalary['accrual']['notOfficially']['plus'] - $infoSalary['accrual']['notOfficially']['minus'];
             unset($infoSalary['accrual']);
             $infoSalary['officiallAcrual'] = $officiallAcrual;
             $infoSalary['notOfficiallAcrual'] = $notOfficiallAcrual;
@@ -124,14 +131,24 @@ class OperSupervisorInfoController extends OperCoworkerInfoController
         }
 
         $officiallyTotal = $grafikRepository->getSumTotalOfficially(
-            $year, $month, $idDepartment, $idCoworker, $idReplacement
+            $year,
+            $month,
+            $idDepartment,
+            $idCoworker,
+            $idReplacement
         );
         $notOfficiallyTotal = $grafikRepository->getSumTotalNotOfficially(
-            $year, $month, $idDepartment, $idCoworker, $idReplacement
+            $year,
+            $month,
+            $idDepartment,
+            $idCoworker,
+            $idReplacement
         );
 
         $accrual = $this->getTotalOnceOnlyAccruals(
-            $month, $year, $idCoworker
+            $month,
+            $year,
+            $idCoworker
         );
 
         $plannedAccrualRepository = $this->getDoctrine()
@@ -139,11 +156,12 @@ class OperSupervisorInfoController extends OperCoworkerInfoController
 
         $plannedAccrual = $plannedAccrualRepository->findOneBy(
             array (
-            'departmentPeople' => $idCoworker,
-            'code' => 'UU',
-            'isActive' => true
-            ), array (
-            'period' => 'desc'
+                'departmentPeople' => $idCoworker,
+                'code' => 'UU',
+                'isActive' => true
+            ),
+            array (
+                'period' => 'desc'
             )
         );
 

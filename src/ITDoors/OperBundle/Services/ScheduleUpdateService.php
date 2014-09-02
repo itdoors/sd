@@ -45,8 +45,7 @@ class ScheduleUpdateService
         $grafikTimes = $grafikTimeRepository->findBy(array (
             'month' => $months,
             'year' => $year
-            )
-        );
+        ));
 
         $counter = count($grafikTimes);
         echo $counter . ' all' . "\n";
@@ -179,7 +178,12 @@ class ScheduleUpdateService
             ->getRepository('ListsGrafikBundle:GrafikTime');
 
         $coworkerDayTimes = $grafikTimeRepository->getCoworkerHoursDayInfo(
-            $year, $month, $day, $idDepartment, $idCoworker, $idReplacement
+            $year,
+            $month,
+            $day,
+            $idDepartment,
+            $idCoworker,
+            $idReplacement
         );
         $total = 0;
         $totalDay = 0;
@@ -269,11 +273,11 @@ class ScheduleUpdateService
         $grafikTimeRepository = $this->container->get('doctrine')
             ->getRepository('ListsGrafikBundle:GrafikTime');
 
-        $grafikTimes = $grafikTimeRepository->findBy(array (
-            'month' => $months,
-            'year' => $year
-            )
-        );
+        $grafikTimes = $grafikTimeRepository
+            ->findBy(array (
+                'month' => $months,
+                'year' => $year
+            ));
 
         $counter = count($grafikTimes);
         echo $counter . ' all' . "\n";
@@ -312,8 +316,16 @@ class ScheduleUpdateService
                 $subtimes = $this->container->get('doctrine')
                     ->getRepository('ListsGrafikBundle:GrafikTime')
                     ->getSubtimeIds(
-                    $year, $month, $day, $idDepartment, $idCoworker, $fromTime, $toTime, $grafikTime->getId(), $departmentPeopleReplacementId
-                );
+                        $year,
+                        $month,
+                        $day,
+                        $idDepartment,
+                        $idCoworker,
+                        $fromTime,
+                        $toTime,
+                        $grafikTime->getId(),
+                        $departmentPeopleReplacementId
+                    );
                 $currentId = $grafikTime->getId();
                 if (count($subtimes)) {
                     foreach ($subtimes as $subtime) {
