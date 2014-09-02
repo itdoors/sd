@@ -1,0 +1,3 @@
+it_doors_sip_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: ITDoorsSipBundle:Default:index }

@@ -2,6 +2,8 @@ exports = module.exports = Ami;
 
 var app;
 
+var exec = require('child_process').exec;
+
 const VAR_SET_VARIABLE_ANSWEREDTIME = 'ANSWEREDTIME';
 const VAR_SET_VARIABLE_DIALSTATUS = 'DIALSTATUS';
 const VAR_SET_VARIABLE_CALLFILENAME = 'CALLFILENAME';
@@ -49,12 +51,16 @@ Ami.prototype.onDial = function(evt) {
                 app.mongodb.onUpdate
             );
         }
+
+        updateSet.event = "Dial";
+
+        app.socket.io.emit('ami_' + evt.calleridnum, updateSet);
     }
 }
 
 Ami.prototype.onVarSet = function(evt) {
-    console.log(' -------------------------------------------------- ');
-    console.log(evt.variable, ' ---- ', evt.value);
+    /*console.log(' -------------------------------------------------- ');
+    console.log(evt.variable, ' ---- ', evt.value);*/
 
     var uniqueid = evt.uniqueid;
     var updateSet = null;
@@ -65,15 +71,15 @@ Ami.prototype.onVarSet = function(evt) {
 
     switch (evt.variable) {
         case VAR_SET_VARIABLE_DIALSTATUS:
-            console.log('VAR_SET_VARIABLE_DIALSTATUS ', evt.value);
+            //console.log('VAR_SET_VARIABLE_DIALSTATUS ', evt.value);
             updateSet = { dialStatus: evt.value };
             break;
         case VAR_SET_VARIABLE_ANSWEREDTIME:
-            console.log('VAR_SET_VARIABLE_ANSWEREDTIME ', evt.value);
+            //console.log('VAR_SET_VARIABLE_ANSWEREDTIME ', evt.value);
             updateSet = { answeredTime: evt.value };
             break;
         case VAR_SET_VARIABLE_CALLFILENAME:
-            console.log('VAR_SET_VARIABLE_CALLFILENAME ', evt.value);
+            //console.log('VAR_SET_VARIABLE_CALLFILENAME ', evt.value);
             updateSet = { filename: evt.value };
             break;
     }
@@ -91,13 +97,31 @@ Ami.prototype.onVarSet = function(evt) {
 }
 
 Ami.prototype.onHangup = function(evt) {
-    /*exec('prince -v builds/pdf/book.html -o builds/pdf/book.pdf', function (error, stdout, stderr) {
-     // output is in stdout
-     });*/
-    //console.log('hangup', evt);
+
+    var foundDoc;
+
+    if (evt.uniqueid) {
+        app.mongodb.collectionCalls.findAndRemove(
+            { uniqueId: evt.uniqueid },
+            function(err, doc) {
+
+                foundDoc = doc;
+
+                console.log('Ami.prototype.onHangup was found', foundDoc);
+
+                var docJson = JSON.stringify(doc);
+
+                console.log('exec command = ', app.config.global.exec.path + ' ' + docJson);
+
+                exec(app.config.global.exec.path + ' ' + docJson, function (error, stdout, stderr) {
+                    console.log('exec std out', stdout);
+                });
+            }
+        )
+    }
 }
 
-Ami.prototype.onAll = function(evt) {
+/*Ami.prototype.onAll = function(evt) {
 
     var newDate = new Date();
     //newDate.setTime(unixtime * 1000);
@@ -107,4 +131,18 @@ Ami.prototype.onAll = function(evt) {
     console.log(' -------------------------------------------------- ');
     console.log(evt);
     console.log(' -------------------------------------------------- ');
+}*/
+
+Ami.prototype.onClientData = function(updateSet)
+{
+    //console.log(' Ami.prototype.onClientData ', updateSet);
+
+    if (updateSet) {
+        app.mongodb.collectionCalls.update(
+            { uniqueId: updateSet.uniqueId },
+            { $set: updateSet },
+            { upsert: true },
+            app.mongodb.onUpdate
+        );
+    }
 }

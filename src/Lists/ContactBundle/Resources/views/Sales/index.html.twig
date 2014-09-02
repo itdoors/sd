@@ -36,168 +36,19 @@
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-switch/static/js/bootstrap-switch.min.js')}} "></script>
     <script type="text/javascript" src="{{ asset('templates/core/plugins/jquery-tmpl/jquery.tmpl.min.js')}} "></script>
-    <script type="text/javascript" src="{{ asset('templates/sipml/sipml-api.js')}} "></script>
+{% endblock %}
+{% block js_page_init_scripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            ITDoorsSip.initIO('{{ app.user.peerId }}');
+
+            ITDoorsSip.initSIP('{{ app.user.peerId }}', '{{ app.user.peerPassword }}');
+        });
+    </script>
 {% endblock %}
 {% block body %}
 
-<script type="text/javascript">
-
-
-    $(document).ready(function(){
-
-        var callSession;
-        var stack;
-
-        var ringtone = document.getElementById('ringtone');
-        var ringbacktone = document.getElementById('ringbacktone');
-
-        function startRingTone() {
-            try { ringtone.play(); }
-            catch (e) { }
-        }
-
-        function stopRingTone() {
-            try { ringtone.pause(); }
-            catch (e) { }
-        }
-
-        function startRingbackTone() {
-            try { ringbacktone.play(); }
-            catch (e) { }
-        }
-
-        function stopRingbackTone() {
-            try { ringbacktone.pause(); }
-            catch (e) { }
-        }
-
-        onEventFired = function(e){
-
-            console.log(e.type);
-
-            switch (e.type) {
-                case "started" :
-
-                    try {
-                        // LogIn (REGISTER) as soon as the stack finish starting
-                        oSipSessionRegister = this.newSession('register', {
-                            expires: 200,
-                            events_listener: { events: '*', listener: onSipEventSession },
-                            sip_caps: [
-                                { name: '+g.oma.sip-im', value: null },
-                                { name: '+audio', value: null },
-                                { name: 'language', value: '\"en,fr\"' }
-                            ]
-                        });
-                        oSipSessionRegister.register();
-                    }
-                    catch (e) {
-
-                    }
-                    break;
-                case "m_permission_accepted":
-                    //stopRingTone();
-                    break;
-            }
-        }
-
-        function onSipEventSession(e) {
-            tsk_utils_log_info('==session event=');
-            console.log(e);
-
-            switch (e.type) {
-                case 'connecting': case 'connected':
-                {
-                    stopRingbackTone();
-                    stopRingTone();
-
-                    break;
-                } // 'connecting' | 'connected'
-                case 'i_ao_request':
-                {
-                    startRingbackTone();
-
-                    break;
-                } // i_ao_request
-                case 'terminating': case 'terminated':
-                {
-                    console.log(e);
-                    callSession = null;
-                    stopRingbackTone();
-                    stopRingTone();
-                    break;
-                }
-            }
-        }
-
-        SIPml.init(
-                function(e){
-                    stack =  new SIPml.Stack({
-                        //realm: '95.67.67.170',
-                        realm: '192.168.4.4',
-                        impi: '8005',
-                        //impu: 'sip:8005@95.67.67.170',
-                        impu: 'sip:8005@192.168.4.4',
-                        password: 'itdoors25',
-                        websocket_proxy_url: 'ws://192.168.4.4:10060/ws', // optional
-                        outbound_proxy_url: 'udp://192.168.4.4:5060', // optional
-                        ice_servers: null,
-                        enable_early_ims: true,
-                        enable_rtcweb_breaker: true, // optional
-                        enable_media_stream_cache: false,
-                        bandwidth: null,
-                        video_size: null,
-                        sip_headers: [
-                            { name: 'User-Agent', value: 'IM-client/OMA1.0 sipML5-v1.2014.04.18' },
-                            { name: 'Organization', value: 'Doubango Telecom' }
-                        ],
-                        events_listener: { events: '*', listener: onEventFired }
-                    });
-                    stack.start();
-                }
-        );
-
-        $('.call-btn').live('click', function(e) {
-
-            callSession = stack.newSession('call-audio', {
-                video_local: document.getElementById('video-local'),
-                video_remote: document.getElementById('video-remote'),
-                audio_remote: document.getElementById('audio-remote'),
-                bandwidth: { audio:undefined, video:undefined },
-                video_size: { minWidth:undefined, minHeight:undefined, maxWidth:undefined, maxHeight:undefined },
-                events_listener: { events: '*', listener: onSipEventSession },
-                sip_caps: [
-                    { name: '+g.oma.sip-im' },
-                    { name: '+sip.ice' },
-                    { name: 'language', value: '\"en,fr\"' }
-                ]
-            });
-
-            e.preventDefault();
-            var phone = $(this).data('phone');
-            var pattern = new RegExp("(?:\([2-9]\d{2}\)\ ?|[2-9]\d{2}(?:\-?|\ ?))[2-9]\d{2}[- ]?\d{4}");
-
-            //startRingTone();
-
-            if (confirm('Are you sure you want to call to ' + phone.replace(/ /g, "").replace(/-/g, ""))) {
-                callSession.call(phone.replace(/ /g, "").replace(/-/g, ""));
-                console.log(callSession);
-                $(this).parent().find('.hangup-btn').show();
-                $(this).hide();
-            }
-        });
-
-        $('.hangup-btn').live('click', function(e) {
-            e.preventDefault();
-            if (callSession) {
-                callSession.hangup({events_listener: { events: '*', listener: onSipEventSession }});
-
-                $(this).parent().find('.call-btn').show();
-                $(this).hide();
-            }
-        });
-    });
-</script>
 <div class="row">
     <div class="col-md-12">
         <p>{% trans %}Contacts on contacts{% endtrans %}</p>
@@ -252,11 +103,4 @@
         </div>
     </div>
 </div>
-    <audio id="audio-remote" autoplay="autoplay" />
-    <audio id="ringtone" loop src="{{ asset('templates/sipml/sounds/ringtone.wav')}}" />
-    <audio id="ringbacktone" loop src="{{ asset('templates/sipml/sounds/ringbacktone.wav')}}" />
-    <audio id="dtmfTone" src="{{ asset('templates/sipml/sounds/dtmf.wav')}}" />
-
-    <video id="video-remote" class="video" height="100%" width="100%" style="opacity: 0; background-color: #000000; -webkit-transition-property: opacity; -webkit-transition-duration: 2s;" autoplay="autoplay"> </video>
-    <video id="video-local" class="video" height="72px" width="88px" style="opacity: 0; margin-top: -80px; margin-left: 5px; background-color: #000000; -webkit-transition-property: opacity; -webkit-transition-duration: 2s;" muted="true" autoplay="autoplay"> </video>
 {% endblock body %}

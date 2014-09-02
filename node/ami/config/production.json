@@ -1,4 +1,9 @@
 {
+    "global": {
+        "exec": {
+            "path": "/var/www/vhosts/sd.griffin.ua/sd/app/console itdoors:sip:history"
+        }
+    },
     "mongodb": {
         "host": "127.0.0.1",
         "port": 27017,

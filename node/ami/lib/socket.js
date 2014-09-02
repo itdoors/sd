@@ -17,15 +17,15 @@ Socket.prototype.init = function()
 {
     console.log('socket init');
 
-    app.socket.io.sockets.on('connection', app.socket.onConnection)
+    app.socket.io.on('connection', app.socket.onConnection)
 }
 
 Socket.prototype.onConnection = function(socket)
 {
     console.log('Socket.onConnection');
 
-    /*socket.on('sendParams', __bind(app.sockets.onSendParams, socket));
-    socket.on('chat',               app.sockets.onChat);
+    socket.on('ami', app.ami.onClientData);
+    /*socket.on('chat',               app.sockets.onChat);
     socket.on('markIsRead',         app.sockets.onMarkIsRead);
     socket.on('events_queue',       app.sockets.onEventsQueue);
     socket.on('checkIfBusy',        app.sockets.onCheckIfBusy);

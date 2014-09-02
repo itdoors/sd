@@ -886,3 +886,7 @@ ALTER TABLE dogovor ADD deletedAt TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL;
 
 -- staging ----------------------
 -- prod ----------------------
+ALTER TABLE fos_user ADD peer_id INT DEFAULT NULL;
+ALTER TABLE fos_user ADD peer_password VARCHAR(255) DEFAULT NULL;
+-- staging ----------------------
+-- prod ----------------------
