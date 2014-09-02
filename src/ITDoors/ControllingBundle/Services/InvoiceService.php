@@ -12,6 +12,7 @@ use ITDoors\ControllingBundle\Entity\InvoiceMessage;
 use ITDoors\ControllingBundle\Entity\InvoiceAct;
 use ITDoors\ControllingBundle\Entity\InvoiceActDetal;
 use ITDoors\ControllingBundle\Entity\InvoiceCompanystructure;
+
 /**
  * Invoice Service class
  */
@@ -22,20 +23,18 @@ class InvoiceService
      * @var Container $container
      */
     protected $container;
-
     protected $messageTemplate;
-
     protected $arrCostumersForSendMessages;
+
     /**
      * __construct
      *
      * @param Container $container
      */
-    public function __construct(Container $container)
+    public function __construct (Container $container)
     {
         $this->container = $container;
     }
-
     /**
      * findFile
      * 
@@ -43,7 +42,7 @@ class InvoiceService
      * 
      * @return boolean
      */
-    private function findFile($directory)
+    private function findFile ($directory)
     {
         $fileName = false;
 
@@ -60,11 +59,10 @@ class InvoiceService
 
         return $fileName;
     }
-
-    /** 
+    /**
      * @return string
      */
-    public function parserFile()
+    public function parserFile ()
     {
         $directory = $this->container->getParameter('1C.file.path');
 
@@ -85,15 +83,15 @@ class InvoiceService
             switch (json_last_error()) {
                 case JSON_ERROR_NONE:
                     $this->addCronError(0, 'start parser', $file, 'parser file');
-                    $this->arrCostumersForSendMessages = array();
+                    $this->arrCostumersForSendMessages = array ();
                     $em = $this->container->get('doctrine')->getManager();
                     $this->savejson($json->invoice);
                     $em->flush();
                     $this->addCronError(0, 'stop parser', $file, 'parser file');
-                    if (!is_dir($directory.'old')) {
-                        mkdir($directory.'old', 0700);
+                    if (!is_dir($directory . 'old')) {
+                        mkdir($directory . 'old', 0700);
                     }
-                    rename($directory.$file, $directory.'old/'.$file);
+                    rename($directory . $file, $directory . 'old/' . $file);
                     break;
                 default:
                     echo json_last_error();
@@ -105,10 +103,9 @@ class InvoiceService
 
             $em->flush();
 
-            return 'File not found in derictory '."\n".$directory;
+            return 'File not found in derictory ' . "\n" . $directory;
         }
     }
-
     /**
      * saveinvoice
      * 
@@ -116,20 +113,20 @@ class InvoiceService
      * 
      * @return Invoice|boolean
      */
-    private function saveinvoice($invoice)
+    private function saveinvoice ($invoice)
     {
         $em = $this->container->get('doctrine')->getManager();
         $invoiceNew = $em->getRepository('ITDoorsControllingBundle:Invoice')
-            ->findOneBy(array(
-                'invoiceId' => trim($invoice->invoiceId),
-                'date' => new \DateTime(trim($invoice->date))
-                ));
+            ->findOneBy(array (
+            'invoiceId' => trim($invoice->invoiceId),
+            'date' => new \DateTime(trim($invoice->date))
+        ));
         if (!$invoiceNew) {
             $invoiceNew = new Invoice();
             $invoiceNew->setCourt(0);
             $invoiceNew->setInvoiceId(trim($invoice->invoiceId));
 
-            if (count($invoice->payments) > 0 ) {
+            if (count($invoice->payments) > 0) {
                 $summa = 0;
                 $dateFact = null;
                 foreach ($invoice->payments as $pay) {
@@ -154,7 +151,8 @@ class InvoiceService
             }
         } else {
             if (count($invoice->payments) > 0) {
-                $paymentsOld = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')->findBy(array('invoiceId' => $invoiceNew->getId()));
+                $paymentsOld = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')
+                    ->findBy(array ('invoiceId' => $invoiceNew->getId()));
                 foreach ($paymentsOld as $payOld) {
                     $em->remove($payOld);
                 }
@@ -175,10 +173,10 @@ class InvoiceService
 //                    unset($payments);
                     $summa += trim($pay->summa);
 
-                    $days = (strtotime($date)-strtotime($pay->date))/24/3600;
+                    $days = (strtotime($date) - strtotime($pay->date)) / 24 / 3600;
 
-                    if (in_array($days, array(1))) {
-                       $sendEmailPay = true;
+                    if (in_array($days, array (1))) {
+                        $sendEmailPay = true;
                     }
                 }
                 if ($sendEmailPay) {
@@ -191,11 +189,12 @@ class InvoiceService
             } else {
                 $date = date('Y-m-d');
                 $invoiceNew->setDateFact(null);
-                $days = (strtotime($date)-strtotime($invoiceNew->getDelayDate()->format('Y-m-d')))/24/3600;
-                if (in_array($days, array(1))) {
+                $days = (strtotime($date) - strtotime($invoiceNew->getDelayDate()->format('Y-m-d'))) / 24 / 3600;
+                if (in_array($days, array (1))) {
                     $this->messageTemplate = 'invoice-not-pay';
                 }
-                $paymentsOld = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')->findBy(array('invoiceId' => $invoiceNew->getId()));
+                $paymentsOld = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')
+                    ->findBy(array ('invoiceId' => $invoiceNew->getId()));
                 foreach ($paymentsOld as $payOld) {
                     $em->remove($payOld);
                 }
@@ -220,7 +219,7 @@ class InvoiceService
         if (is_numeric($invoice->delayDays)) {
             $invoiceNew->setDelayDays((int) $invoice->delayDays);
         }
-        if (in_array($invoice->delayDaysType, array('Б', 'К', 'б', 'к'))) {
+        if (in_array($invoice->delayDaysType, array ('Б', 'К', 'б', 'к'))) {
             $invoiceNew->setDelayDaysType(trim($invoice->delayDaysType));
         }
         if (!empty($invoice->dogovorDate) && $invoice->dogovorDate != 'null') {
@@ -243,13 +242,12 @@ class InvoiceService
 
         return $invoiceNew;
     }
-
-    private function addActs($invoiceNew, $acts)
+    private function addActs ($invoiceNew, $acts)
     {
         $em = $this->container->get('doctrine')->getManager();
         foreach ($acts as $act) {
             $actFind = $em->getRepository('ITDoorsControllingBundle:InvoiceAct')
-                    ->findOneBy(array('number' => $act->actNumber));
+                ->findOneBy(array ('number' => $act->actNumber));
             if (!$actFind) {
                 $actFind = new InvoiceAct();
                 $actFind->setNumber($act->actNumber);
@@ -260,47 +258,52 @@ class InvoiceService
             $em->persist($actFind);
             $details = $act->actDetail;
             $detailsFind = $em->getRepository('ITDoorsControllingBundle:InvoiceActDetal')
-                ->findBy(array('invoiceActId' => $actFind->getId()));
+                ->findBy(array ('invoiceActId' => $actFind->getId()));
             foreach ($detailsFind as $detailsFindOne) {
                 $em->remove($detailsFindOne);
             }
 //            unset($detailsFind);
             foreach ($details as $detail) {
-                 $detalAdd = new InvoiceActDetal();
-                 $detalAdd->setAct($actFind);
-                 $detalAdd->setCount($detail->count);
-                 $detalAdd->setMpk($detail->mpk);
-                 $detalAdd->setNote($detail->note);
-                 $detalAdd->setSumma($detail->summa);
-                 $em->persist($detalAdd);
+                $detalAdd = new InvoiceActDetal();
+                $detalAdd->setAct($actFind);
+                $detalAdd->setCount($detail->count);
+                $detalAdd->setMpk($detail->mpk);
+                $detalAdd->setNote($detail->note);
+                $detalAdd->setSumma($detail->summa);
+                $em->persist($detalAdd);
 //                 unset($detalAdd);
             }
 //            unset($details);
         }
     }
-    private function findDogovor($invoiceFind, $invoice, $invoiceNew)
+    private function findDogovor ($invoiceFind, $invoice, $invoiceNew)
     {
         $em = $this->container->get('doctrine')->getManager();
 
         /** @var Dogovor  $dogovorfind */
         $dogovorfind = $em->getRepository('ListsDogovorBundle:Dogovor')
-            ->findOneBy(array('dogovorGuid' => trim($invoice->dogovorGuid)));
+            ->findOneBy(array ('dogovorGuid' => trim($invoice->dogovorGuid)));
 
         /** @var Organization  $customerfind */
         $customerfind = $em->getRepository('ListsOrganizationBundle:Organization')
-            ->findOneBy(array('edrpou' => trim($invoice->customerEdrpou)));
+            ->findOneBy(array ('edrpou' => trim($invoice->customerEdrpou)));
 
         /** @var Organization  $performerfind */
         $performerfind = $em->getRepository('ListsOrganizationBundle:Organization')
-            ->findOneBy(array('edrpou' => trim($invoice->performerEdrpou)));
+            ->findOneBy(array ('edrpou' => trim($invoice->performerEdrpou)));
 
         if ($customerfind) {
             $invoiceNew->setCustomer($customerfind);
             if (!array_key_exists($customerfind->getId(), $this->arrCostumersForSendMessages)) {
-                $this->arrCostumersForSendMessages[$customerfind->getId()] = array();
+                $this->arrCostumersForSendMessages[$customerfind->getId()] = array ();
             }
-            if ($this->messageTemplate && !array_key_exists($this->messageTemplate, $this->arrCostumersForSendMessages[$customerfind->getId()])) {
-                $this->arrCostumersForSendMessages[$customerfind->getId()][$this->messageTemplate]  = array();
+            if (
+                    $this->messageTemplate && !array_key_exists(
+                        $this->messageTemplate,
+                        $this->arrCostumersForSendMessages[$customerfind->getId()]
+                    )
+                ) {
+                $this->arrCostumersForSendMessages[$customerfind->getId()][$this->messageTemplate] = array ();
             }
         }
         if ($performerfind) {
@@ -318,7 +321,7 @@ class InvoiceService
 
                 /** @var Dogovor  $dogovoradd */
                 $dogovoradd = $em->getRepository('ListsDogovorBundle:Dogovor')
-                    ->findOneBy(array(
+                    ->findOneBy(array (
                     'number' => $invoice->dogovorNumber,
                     'startdatetime' => new \DateTime($invoice->dogovorDate),
                     'customerId' => $customerfind->getId(),
@@ -371,17 +374,19 @@ class InvoiceService
             }
         }
         if ($this->messageTemplate && $invoiceNew->getDogovorNumber() && method_exists($customerfind, 'getId')) {
-            if (!array_key_exists($invoiceNew->getDogovorNumber(), $this->arrCostumersForSendMessages[$customerfind->getId()][$this->messageTemplate])) {
-                $this->arrCostumersForSendMessages[$invoiceNew->getCustomer()->getId()][$this->messageTemplate][$invoiceNew->getDogovorNumber()] = array();
+            $customerId = $invoiceNew->getCustomer()->getId();
+            $dogovorN = $invoiceNew->getDogovorNumber();
+            if (
+                    !array_key_exists(
+                        $invoiceNew->getDogovorNumber(),
+                        $this->arrCostumersForSendMessages[$customerfind->getId()][$this->messageTemplate]
+                    )
+                ) {
+                $this->arrCostumersForSendMessages[$customerId][$this->messageTemplate][$dogovorN] = array ();
             }
-            $this->arrCostumersForSendMessages[$invoiceNew->getCustomer()->getId()][$this->messageTemplate][$invoiceNew->getDogovorNumber()][] = $invoiceNew->getId();
+            $this->arrCostumersForSendMessages[$customerId][$this->messageTemplate][$dogovorN][] = $invoiceNew->getId();
         }
-//        unset($em);
-//        unset($dogovorfind);
-//        unset($customerfind);
-//        unset($performerfind);
     }
-
     /**
      * savejson
      *
@@ -389,7 +394,7 @@ class InvoiceService
      * 
      * @return boolen
      */
-    private function savejson($json)
+    private function savejson ($json)
     {
         $count = count($json);
         $countInvoice = 0;
@@ -397,7 +402,7 @@ class InvoiceService
 
         foreach ($json as $key => $invoice) {
 
-            echo $countInvoice." ~ ";
+            echo $countInvoice . " ~ ";
             if ($countInvoice == 1000) {
                 $em = $this->container->get('doctrine')->getManager();
                 $em->flush();
@@ -407,8 +412,8 @@ class InvoiceService
                 unset($em);
             }
             ++$countInvoice;
-            echo number_format((memory_get_usage() - $memStart)/8000000, 0, ',', ' ') ."MB ~ Осталось: ";
-            echo ($count-$key)." шт.\n";
+            echo number_format((memory_get_usage() - $memStart) / 8000000, 0, ',', ' ') . "MB ~ Осталось: ";
+            echo ($count - $key) . " шт.\n";
 
             $invoiceFind = true;
             $this->messageTemplate = false;
@@ -427,26 +432,25 @@ class InvoiceService
 //            unset($invoice);
             unset($invoiceNew);
         }
-        echo 'try add email for send'."\n";
+        echo 'try add email for send' . "\n";
         $this->sendEmails();
-        echo 'try add cron for send email'."\n";
+        echo 'try add cron for send email' . "\n";
         $cron = $this->container->get('it_doors_cron.service');
         $cron->addSendEmails();
-        echo 'cron successfully'."\n";
+        echo 'cron successfully' . "\n";
     }
-
     /**
      * addReaspon
      * 
      * @param Invoice $invoice
      */
-    private function addReaspon(Invoice $invoice)
+    private function addReaspon (Invoice $invoice)
     {
         /** @var EntityManager $em */
         $em = $this->container->get('doctrine')->getManager();
 
         $companystructs = $em->getRepository('ListsDogovorBundle:DogovorCompanystructure')
-            ->findBy(array('dogovorId' => $invoice->getDogovorId()));
+            ->findBy(array ('dogovorId' => $invoice->getDogovorId()));
 
         foreach ($companystructs as $company) {
 
@@ -459,7 +463,6 @@ class InvoiceService
         }
 //        unset($companystructs);
     }
-
     /**
      * addCronError
      * 
@@ -470,7 +473,7 @@ class InvoiceService
      * 
      * @return boolean
      */
-    private function addCronError($invoice, $status, $reason, $descript)
+    private function addCronError ($invoice, $status, $reason, $descript)
     {
         /** @var EntityManager $em */
         $em = $this->container->get('doctrine')->getManager();
@@ -489,7 +492,6 @@ class InvoiceService
 
         return true;
     }
-
     /**
      * Returns results for interval future invoice
      *
@@ -497,47 +499,47 @@ class InvoiceService
      * 
      * @return array
      */
-    public function getTabsInvoice()
+    public function getTabsInvoice ()
     {
         $translator = $this->container->get('translator');
-        $tabs = array();
-        $tabs['act'] = array(
+        $tabs = array ();
+        $tabs['act'] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'act',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
             'text' => $translator->trans('Act')
         );
-        $tabs['invoice'] = array(
+        $tabs['invoice'] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'invoice',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
             'text' => $translator->trans('Invoice')
         );
-        $tabs['contacts'] = array(
+        $tabs['contacts'] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'contacts',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
             'text' => $translator->trans('Contacts client')
         );
-        $tabs['dogovor'] = array(
+        $tabs['dogovor'] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'dogovor',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
             'text' => $translator->trans('Dogovor')
         );
-        $tabs['responsible'] = array(
+        $tabs['responsible'] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'responsible',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
             'text' => $translator->trans('Responsible')
         );
-        $tabs['organization'] = array(
+        $tabs['organization'] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'customer',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
             'text' => $translator->trans('Customer')
         );
-        $tabs['payments'] = array(
+        $tabs['payments'] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'payments',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_invoice_show'),
@@ -546,7 +548,6 @@ class InvoiceService
 
         return $tabs;
     }
-
     /**
      * Returns results for interval future invoice
      *
@@ -554,7 +555,7 @@ class InvoiceService
      * 
      * @return array
      */
-    public function getTabsExpectedPay()
+    public function getTabsExpectedPay ()
     {
         /** @var EntityManager $em */
         $em = $this->container->get('doctrine')->getManager();
@@ -565,15 +566,15 @@ class InvoiceService
         $summa = $invoice->getSumma(date('Y-m-d'));
 
         $translator = $this->container->get('translator');
-        $tabs = array();
-        $tabs['today'] = array(
+        $tabs = array ();
+        $tabs['today'] = array (
             'blockupdate' => 'ajax-tab-holder-2',
             'tab' => 'today',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
             'text' => $translator->trans('Today') . ' ' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
         $summa = $invoice->getSumma(date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + 1, date('Y'))));
-        $tabs['tomorrow'] = array(
+        $tabs['tomorrow'] = array (
             'blockupdate' => 'ajax-tab-holder-2',
             'tab' => 'tomorrow',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
@@ -589,26 +590,30 @@ class InvoiceService
      * 
      * @return array
      */
-    public function getTabsInvoiceGrafics()
+    public function getTabsInvoiceGrafics ()
     {
         $translator = $this->container->get('translator');
-        $tabs = array();
-        $tabs['general'] = array(
+        $tabs = array ();
+        $tabs['general'] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'general',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_grafic_general'),
             'text' => $translator->trans('General')
         );
-        $tabs['withoutacts'] = array(
+        $tabs['withoutacts'] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'withoutacts',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_grafic_withoutacts'),
             'text' => $translator->trans('Without acts')
         );
-        $tabs['individual'] = array(
+        $tabs['individual'] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'individual',
-            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_grafic_individual', array('ajax' => 'true')),
+            'url' => $this->container->get('router')
+                ->generate(
+                    'it_doors_controlling_invoice_grafic_individual',
+                    array ('ajax' => 'true')
+                ),
             'text' => $translator->trans('Individual')
         );
 
@@ -621,17 +626,17 @@ class InvoiceService
      * 
      * @return array
      */
-    public function getTabsEmptyData()
+    public function getTabsEmptyData ()
     {
         $translator = $this->container->get('translator');
-        $tabs = array();
-        $tabs['delay'] = array(
+        $tabs = array ();
+        $tabs['delay'] = array (
             'blockupdate' => 'ajax-tab-holder-1',
             'tab' => 'delay',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_data_show'),
             'text' => $translator->trans('Delay')
         );
-        $tabs['act'] = array(
+        $tabs['act'] = array (
             'blockupdate' => 'ajax-tab-holder-1',
             'tab' => 'act',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_data_show'),
@@ -640,7 +645,6 @@ class InvoiceService
 
         return $tabs;
     }
-
     /**
      * Returns results for interval future invoice
      * 
@@ -649,7 +653,7 @@ class InvoiceService
      * 
      * @return tabs[]
      */
-    public function getTabsInvoices($companystryctyre, $filters = null)
+    public function getTabsInvoices ($companystryctyre, $filters = null)
     {
         $translator = $this->container->get('translator');
         /** @var EntityManager $em */
@@ -659,81 +663,81 @@ class InvoiceService
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
 
         $summa = $invoice->getInvoicePeriodSum(1, 30, $companystryctyre, $filters);
-        $tabs[] = array(
+        $tabs[] = array (
             'tab' => 30,
             'blockupdate' => 'ajax-tab-holder',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_show'),
             'text' => $translator->trans('from') . ' 1 ' . $translator->trans('to') . ' 30 ' . $translator->trans('day')
-             .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
+            . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
         $summa = $invoice->getInvoicePeriodSum(31, 60, $companystryctyre, $filters);
-        $tabs[] = array(
+        $tabs[] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 60,
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_show'),
             'text' => $translator
                 ->trans('from') . ' 31 ' . $translator->trans('to') . ' 60 ' . $translator->trans('days')
-            .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
+            . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
         $summa = $invoice->getInvoicePeriodSum(61, 120, $companystryctyre, $filters);
-        $tabs[] = array(
+        $tabs[] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 120,
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_show'),
             'text' => $translator
                 ->trans('from') . ' 61 ' . $translator->trans('to') . ' 120 ' . $translator->trans('days')
-            .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
+            . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
         $summa = $invoice->getInvoicePeriodSum(121, 180, $companystryctyre, $filters);
-        $tabs[] = array(
+        $tabs[] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 180,
             'class' => '',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_show'),
             'text' => $translator
                 ->trans('from') . ' 121 ' . $translator->trans('to') . ' 180 ' . $translator->trans('days')
-            .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
+            . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
         $summa = $invoice->getInvoicePeriodSum(180, 0, $companystryctyre, $filters);
-        $tabs[] = array(
+        $tabs[] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 181,
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_show'),
             'text' => $translator
                 ->trans('from') . ' 181 ' . $translator->trans('days')
-            .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
+            . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
         $summa = $invoice->getInvoiceCourtSum($companystryctyre, $filters);
-        $tabs[] = array(
+        $tabs[] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'court',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_show'),
             'text' => $translator->trans('court')
-            .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
+            . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
         $summa = $invoice->getInvoicePaySum($companystryctyre, $filters);
-        $tabs[] = array(
+        $tabs[] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'pay',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_show'),
             'text' => $translator->trans('pay')
-            .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
+            . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
         $summa = $invoice->getInvoiceFlowSum($companystryctyre, $filters);
-        $tabs[] = array(
+        $tabs[] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'flow',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_show'),
             'text' => $translator->trans('Flow')
-            .'<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
+            . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
 
         return $tabs;
     }
-     /**
+    /**
      *  sendEmails
      */
-    private function sendEmails()
+    private function sendEmails ()
     {
         if (count($this->arrCostumersForSendMessages) > 0) {
 
@@ -761,29 +765,31 @@ class InvoiceService
                         $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')
                             ->getInvoiceIds($invoiceIds);
 
-                        $tableHTML =  $this->container->get('templating')->render("ITDoorsControllingBundle:Invoice:tableForEmail.html.twig", array(
-                        'invoices' => $invoices,
-                        'template' => $template
-                    ));
+                        $tableHTML = $this->container->get('templating')
+                            ->render("ITDoorsControllingBundle:Invoice:tableForEmail.html.twig", array (
+                                'invoices' => $invoices,
+                                'template' => $template
+                            ));
 
                         foreach ($contacts as $user) {
                             if (empty($user['email'])) {
                                 continue;
                             }
-                            echo "send email for ".$user['email']."\n\n";
+                            echo "send email for " . $user['email'] . "\n\n";
                             $idEmail = $email->send(
-                                array($emailTo => $nameTo),
+                                array ($emailTo => $nameTo),
                                 $template,
-                                array(
-                                    'users' => array(
+                                array (
+                                    'users' => array (
                                         $user['email']
                                     ),
-                                    'variables' => array(
+                                    'variables' => array (
                                         '${lastName}$' => $user['lastName'],
                                         '${firstName}$' => $user['firstName'],
                                         '${middleName}$' => $user['middleName'],
                                         '${number}$' => $invoices[0]['dogovorNumber'],
-                                        '${date}$' => (!$invoices[0]['dogovorDate'] ? '' : $invoices[0]['dogovorDate']->format('d.m.Y')),
+                                        '${date}$' => (!$invoices[0]['dogovorDate'] ?
+                                            '' : $invoices[0]['dogovorDate']->format('d.m.Y')),
                                         '${performer}$' => $invoices[0]['performerName'],
                                         '${table}$' => $tableHTML
                                     )
@@ -796,11 +802,21 @@ class InvoiceService
                                 $message->setContact($modelContact);
                                 $message->setUser($userRobot);
                                 $message->setCreatedate(new \DateTime());
-                                $message->setNote($translator->trans('Send', array(), 'ITDoorsControllingBundle').' <a href="'.$this->container->get('router')->generate('automailer_show', array('id' =>$idEmail)).'">email</a>');
-                                $invoicef = $em->getRepository('ITDoorsControllingBundle:Invoice')->find($invoice['id']);
+                                $message->setNote(
+                                    $translator->trans(
+                                        'Send',
+                                        array (),
+                                        'ITDoorsControllingBundle'
+                                    ) . ' <a href="' . $this->container->get('router')
+                                    ->generate(
+                                        'automailer_show',
+                                        array ('id' => $idEmail)
+                                    ) . '">email</a>'
+                                );
+                                $invoicef = $em->getRepository('ITDoorsControllingBundle:Invoice')
+                                    ->find($invoice['id']);
                                 $message->setInvoice($invoicef);
                                 $em->persist($message);
-                                //$em->flush();
                             }
                         }
                     }

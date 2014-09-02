@@ -283,5 +283,4 @@ class HandlingUser
     {
         return $this->getUser()->getFullname();
     }
-
 }

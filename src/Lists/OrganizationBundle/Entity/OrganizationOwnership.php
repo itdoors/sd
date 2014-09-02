@@ -24,17 +24,15 @@ class OrganizationOwnership
      */
     private $name;
 
-
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set shortname
      *
@@ -42,23 +40,21 @@ class OrganizationOwnership
      * 
      * @return OrganizationOwnership
      */
-    public function setShortname($shortname)
+    public function setShortname ($shortname)
     {
         $this->shortname = $shortname;
 
         return $this;
     }
-
     /**
      * Get shortname
      *
      * @return string 
      */
-    public function getShortname()
+    public function getShortname ()
     {
         return $this->shortname;
     }
-
     /**
      * Set name
      *
@@ -66,28 +62,26 @@ class OrganizationOwnership
      * 
      * @return OrganizationOwnership
      */
-    public function setName($name)
+    public function setName ($name)
     {
         $this->name = $name;
 
         return $this;
     }
-
     /**
      * Get name
      *
      * @return string 
      */
-    public function getName()
+    public function getName ()
     {
         return $this->name;
     }
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->getName();
     }
-
 }
