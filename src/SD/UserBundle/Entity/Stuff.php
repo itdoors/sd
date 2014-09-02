@@ -399,4 +399,13 @@ class Stuff
     {
         return $this->companystructureId;
     }
+    /**
+     * ToString magic method
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getId();
+    }
 }

@@ -247,7 +247,7 @@ class SalesController extends BaseController
 
         $canEdit = (Boolean) !$object[0]->getIsClosed();
 
-        $isResultClosed = $object['resultSlug'] == HandlingResult::RESULT_CLOSED;
+        $isResultClosed = $object['resultSlug'] == HandlingResult::RESULT_CLOSED || $object['resultSlug'] == HandlingResult::RESULT_COMPETITOR;
 
         $showMoreInfoIds = array(5,6);
 
@@ -1054,9 +1054,6 @@ class SalesController extends BaseController
             $phpExcelObject->getActiveSheet()
                     ->setCellValueByColumnAndRow($col, $str, $columnA)
                     ->setCellValueByColumnAndRow(++$col, $str, $handling['handlingId']);
-
-//            $phpExcelObject->getActiveSheet()->getCellByColumnAndRow($col, $str)->getHyperlink()
-//                    ->setUrl('http://sd.griffin.ua/lists/salesadmin/handling/show/'.$handling['handlingId']);
             $phpExcelObject->getActiveSheet()->getCellByColumnAndRow($col, $str)->getHyperlink()
                     ->setUrl($this->generateUrl('lists_' . $this->baseRoutePrefix . '_handling_show', array('id' => $handling['handlingId']), true));
 

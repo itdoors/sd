@@ -1,6 +1,6 @@
 SD\CalendarBundle\Entity\Task:
     type:  entity
-    table: task
+    table: task_old
     repositoryClass: SD\CalendarBundle\Entity\TaskRepository
     id:
         id:

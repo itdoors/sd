@@ -34,6 +34,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Form;
 use Doctrine\DBAL\Connection;
+use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use ITDoors\AjaxBundle\Controller\BaseFilterController;
@@ -387,6 +388,35 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($result));
     }
+    /**
+     * Returns json ownership list depending search query
+     *
+     * @return string
+     */
+    public function ownershipAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:OrganizationOwnership');
+
+        $objects = $repository->getSearchQuery($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $text = $object->getShortname().' ('.$object->getName(). ')';
+            $id = $object->getId();
+            $result[] =  array(
+            'id' => $id,
+            'value' => $id,
+            'name' => $text,
+            'text' => $text
+        );
+        }
+
+        return new Response(json_encode($result));
+    }
 
     /**
      * Returns json city object by id
@@ -406,6 +436,23 @@ class AjaxController extends BaseFilterController
         foreach ($cityList as $city) {
             $result[] = $this->serializeObject($city);
         }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json city object by id
+     *
+     * @return string
+     */
+    public function cityOneByIdAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $city = $this->getDoctrine()
+            ->getRepository('ListsCityBundle:City')
+            ->findOneBy(array('id'=>$ids));
+
+        $result = $this->serializeObject($city);
 
         return new Response(json_encode($result));
     }
@@ -1120,6 +1167,7 @@ class AjaxController extends BaseFilterController
         $objects = $companystructure->createQueryBuilder('c')
             ->andWhere('lower(c.name) LIKE :q')
             ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->orderBy('c.root, c.lft', 'ASC')
             ->getQuery()
             ->getResult();
 
@@ -1456,6 +1504,35 @@ class AjaxController extends BaseFilterController
         $objects = $repository
             ->createQueryBuilder('u')
             ->where('u.id in (:ids)')
+            ->setParameter(':ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json user object by requested id
+     *
+     * @return string
+     */
+    public function userStuffCompanyByIdsAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        /** @var \SD\UserBundle\Entity\UserRepository $repository */
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsCompanystructureBundle:Companystructure');
+
+        /** @var \SD\UserBundle\Entity\User $object */
+        $objects = $repository
+            ->createQueryBuilder('c')
+            ->where('c.id in (:ids)')
             ->setParameter(':ids', $ids)
             ->getQuery()
             ->getResult();
@@ -2110,6 +2187,119 @@ class AjaxController extends BaseFilterController
 
         return true;
     }
+
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function taskForm1Save(Form $form, $user, $request)
+    {
+        /** @var \SD\TaskBundle\Entity\Task $data */
+        $data = $form->getData();
+
+        //if (!$data->getId()) {
+        //}
+
+        $formData = $request->request->get($form->getName());
+
+        $data->setCreateDate(new \DateTime());
+        $data->setAuthor($user);
+        $data->setStartDate(new \DateTime($formData['startDate']));
+
+        $stage = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:Stage')
+            ->findOneBy(array(
+                'model' =>'task',
+                'name' => 'created'
+            ));
+
+        $data->setStage($stage);
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+        //$em->refresh($data);
+
+        $dateStage = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:Stage')
+            ->findOneBy(array(
+                'model' =>'task_end_date',
+                'name' => 'accepted'
+            ));
+
+        $endDate = new \SD\TaskBundle\Entity\TaskEndDate();
+        $endDate->setTask($data);
+        $endDate->setChangeDateTime(new \DateTime());
+        $endDate->setEndDateTime(new \DateTime($formData['endDate']));
+        $endDate->setStage($dateStage);
+        $em->persist($endDate);
+
+        $userRepository = $this->getDoctrine()
+            ->getRepository('SDUserBundle:User');
+
+        $roleRepository = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:Role');
+
+        $performerRole = $roleRepository
+            ->findOneBy(array(
+                'name' => 'performer',
+                'model' => 'task'
+        ));
+
+        $controllerRole  = $roleRepository
+            ->findOneBy(array(
+                'name' => 'controller',
+                'model' => 'task'
+        ));
+
+        $authorRole  = $roleRepository
+            ->findOneBy(array(
+                'name' => 'author',
+                'model' => 'task'
+            ));
+
+        $taskUserRole = new \SD\TaskBundle\Entity\TaskUserRole();
+        $taskUserRole->setRole($authorRole);
+        $taskUserRole->setUser($user);
+        $taskUserRole->setTask($data);
+        $taskUserRole->setIsViewed(true);
+        $em->persist($taskUserRole);
+
+        //var_dump($formData['performer']);die();
+        //foreach ($formData['performer'] as $performer) {
+            $idPerformer = $formData['performer'];
+            $performer = $userRepository->find($idPerformer);
+
+            $taskUserRole = new \SD\TaskBundle\Entity\TaskUserRole();
+            $taskUserRole->setRole($performerRole);
+            $taskUserRole->setUser($performer);
+            $taskUserRole->setTask($data);
+            $taskUserRole->setIsViewed(false);
+            $em->persist($taskUserRole);
+        //}
+
+        //foreach ($formData['controller'] as $idController) {
+            $idController = $formData['controller'];
+            $controller = $userRepository->find($idController);
+
+            $taskUserRole = new \SD\TaskBundle\Entity\TaskUserRole();
+            $taskUserRole->setRole($controllerRole);
+            $taskUserRole->setUser($controller);
+            $taskUserRole->setTask($data);
+            $taskUserRole->setIsViewed(false);
+            $em->persist($taskUserRole);
+        //}
+        $em->flush();
+
+        return true;
+    }
+
+
     /**
      * Saves {formName}Save after valid ajax validation
      *
@@ -2241,6 +2431,48 @@ class AjaxController extends BaseFilterController
             $invoiceC->setInvoice($invoice);
             $em->persist($invoiceC);
         }
+        $em->flush();
+
+        return true;
+    }
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function companystructureStuffFormSave(Form $form, User $user, Request $request)
+    {
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        if (!$user->hasRole('ROLE_HRADMIN')) {
+            return true;
+        }
+
+        $formData = $request->request->get($form->getName());
+
+        /** @var InvoiceCompanystructure $invoiceCompanystructure */
+        $companystructure = $em
+            ->getRepository('ListsCompanystructureBundle:Companystructure')
+            ->find($formData['companystructureId']);
+        if (!$companystructure) {
+            return true;
+        }
+
+        /** @var Stuff $stuff */
+        $stuff = $em
+            ->getRepository('SDUserBundle:Stuff')
+            ->findOneBy(array('user' => $formData['user'], 'companystructureId' => $formData['companystructureId']));
+        if (!$stuff) {
+            return false;
+        }
+        $companystructure->setStuff($stuff);
+        $em->persist($companystructure);
         $em->flush();
 
         return true;
@@ -3676,9 +3908,10 @@ class AjaxController extends BaseFilterController
         $repository = $this->getDoctrine()->getRepository('ListsCompanystructureBundle:Companystructure');
 
         $form
-            ->add('companystructure', 'companystructure_tree', array(
+            ->add('companystructure', 'entity', array(
                 'class' => 'ListsCompanystructureBundle:Companystructure',
                 'empty_value' => '',
+                'property' => 'name',
                 'required' => false,
                 'mapped' => false,
                 'query_builder' => function ($repository) use ($invoiceId, $repository) {
@@ -3686,8 +3919,40 @@ class AjaxController extends BaseFilterController
                 return $repository->createQueryBuilder('c')
                     ->leftJoin('c.invoicecompanystructure', 'idc')
                     ->where('(idc.invoiceId is NULL OR idc.invoiceId <> :invoiceId)')
-                    ->orderBy('c.name')
+                    ->orderBy('c.root, c.lft', 'ASC')
                     ->setParameter(':invoiceId', $invoiceId);
+                }
+            ));
+    }
+    /**
+     * Adds children to {formName}ProcessDefaults depending on defaults in request
+     *
+     * @param Form    $form
+     * @param mixed[] $defaultData
+     * 
+     * @return QueryBuilder
+     */
+    public function companystructureStuffFormProcessDefaults(Form $form, $defaultData)
+    {
+        $companystructureId = $defaultData['companystructureId'];
+
+        $repository = $this->getDoctrine()->getRepository('SDUserBundle:User');
+
+        $form
+            ->add('user', 'entity', array(
+                'class' => 'SDUserBundle:User',
+                'empty_value' => '',
+                'required' => false,
+                'mapped' => false,
+                'query_builder' => function ($repository) use ($companystructureId, $repository) {
+
+                return $repository->createQueryBuilder('u')
+                    ->innerJoin('u.stuff', 's')
+                    ->innerJoin('s.companystructure', 'c')
+                    ->where('s.companystructure =  :companystructureId')
+                    ->andWhere('c.stuffId is null or c.stuffId != s.id')
+                    ->orderBy('u.lastName')
+                    ->setParameter(':companystructureId', $companystructureId);
                 }
             ));
     }

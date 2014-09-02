@@ -110,4 +110,67 @@ class GrafikTimeRepository extends EntityRepository
 
         return $result;
     }
+
+    /**
+     * @param int    $year
+     * @param int    $month
+     * @param int    $day
+     * @param int    $idDepartment
+     * @param int    $idCoworker
+     * @param string $fromTime
+     * @param string $toTime
+     * @param int    $idTimeGrafik
+     * @param int    $idReplacement
+     *
+     * @return \Doctrine\ORM\QueryBuilder|mixed
+     */
+    public function getSubtimeIds(
+        $year,
+        $month,
+        $day,
+        $idDepartment,
+        $idCoworker,
+        $fromTime,
+        $toTime,
+        $idTimeGrafik,
+        $idReplacement
+        // @codingStandardsIgnoreStart
+    ) {
+        // @codingStandardsIgnoreEnd
+        $result = $this->createQueryBuilder('gt')
+            ->select('gt.id as id')
+            ->leftJoin('gt.department', 'd')
+            ->leftJoin('gt.departmentPeople', 'dp')
+            ->andWhere('gt.month = :month')
+            ->setParameter('month', $month)
+            ->andWhere('gt.day = :day')
+            ->setParameter('day', $day)
+            ->andWhere('gt.departmentPeopleReplacement = :idReplacement')
+            ->setParameter(':idReplacement', $idReplacement)
+            ->andWhere('gt.year = :year')
+            ->setParameter(':year', $year)
+            ->andWhere('d.id = :idDepartment')
+            ->setParameter(':idDepartment', $idDepartment)
+            ->andWhere('dp.id = :idCoworker')
+            ->setParameter(':idCoworker', $idCoworker)
+            ->andWhere(
+                '(gt.fromTime > :startTime AND gt.fromTime < :endTime)
+                OR (gt.toTime > :startTime AND gt.toTime < :endTime)
+                OR (:startTime > gt.fromTime AND :startTime < gt.toTime)
+                OR (:endTime > gt.fromTime AND :endTime < gt.toTime)
+                OR (gt.fromTime = :startTime AND gt.toTime = :endTime)'
+            )
+            ->setParameter(':startTime', $fromTime)
+            ->setParameter(':endTime', $toTime);
+
+        if ($idTimeGrafik>0) {
+            $result = $result->andWhere('gt.id != :idTimeGrafik')
+                ->setParameter(':idTimeGrafik', $idTimeGrafik);
+        }
+
+        $result = $result->getQuery()
+            ->getResult();
+
+        return $result;
+    }
 }

@@ -45,6 +45,10 @@ sd_common_ajax_handling_more_info:
 sd_common_ajax_city:
     pattern:  /ajax/city
     defaults: { _controller: SDCommonBundle:Ajax:city }
+    
+sd_common_ajax_ownership:
+    pattern:  /ajax/ownership
+    defaults: { _controller: SDCommonBundle:Ajax:ownership }
 
 sd_common_ajax_scope:
     pattern:  /ajax/scope
@@ -152,6 +156,10 @@ sd_common_ajax_organization_by_edrpous:
 sd_common_ajax_user_by_id:
     pattern:  /ajax/user_by_id
     defaults: { _controller: SDCommonBundle:Ajax:userById }
+    
+sd_common_ajax_contact_company_by_ids:
+    pattern:  /ajax/contact/company_by_ids
+    defaults: { _controller: SDCommonBundle:Ajax:userStuffCompanyByIds}
 
 sd_common_ajax_user_by_ids:
     pattern:  /ajax/user_by_ids
@@ -160,6 +168,10 @@ sd_common_ajax_user_by_ids:
 sd_common_ajax_city_by_id:
     pattern:  /ajax/city_by_id
     defaults: { _controller: SDCommonBundle:Ajax:cityById }
+
+sd_common_ajax_city_one_by_id:
+    pattern:  /ajax/city_one_by_id
+    defaults: { _controller: SDCommonBundle:Ajax:cityOneById }
     
 sd_common_ajax_scope_by_id:
     pattern:  /ajax/scope_by_id

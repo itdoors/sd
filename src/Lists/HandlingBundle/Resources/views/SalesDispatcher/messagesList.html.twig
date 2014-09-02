@@ -1,6 +1,12 @@
 {% trans_default_domain 'ListsHandlingBundle' %}
     {% for item in messages %}
-    <div class="portlet box {% if item.isFutureMessage %}red{% else %}yellow{% endif %}">
+    <div class="portlet box {% if (item.createdate | date('U')) <= ("now"|date("U")) and item.isFutureMessage %}
+                    red
+                {% elseif (item.createdate | date('U')) <= ("now"|date("U")) %}
+                    green
+                {% else %}
+                    yellow
+                {% endif %}">
         <div class="portlet-title">
             <div class="caption">
                 {{ item.createdate|date('d.m.Y, H:i') }} ({{  item.createdatetime|date('d.m.Y, H:i')}}) | {{ item.type }} | {{ item.user }}

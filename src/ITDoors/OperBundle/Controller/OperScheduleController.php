@@ -247,6 +247,9 @@ class OperScheduleController extends BaseFilterController
                     'departmentPeople' => $idCoworker,
                     'code' => 'UU',
                     'isActive' => true
+                ),
+                array(
+                    'period' =>'desc'
                 )
             );
 
@@ -605,8 +608,8 @@ class OperScheduleController extends BaseFilterController
             ->find($idReplacement);
 
         //array of points during the day which make periods of the day(evening, night, etc)
-        $periodPoints[] = 7;
-        $periodPoints[] = 19;
+        $periodPoints[] = 6;
+        $periodPoints[] = 18;
         $periodPoints[] = 22;
         $periodPoints[] = 24;
         //foreach ($timeIn as $infoDay) {
@@ -632,6 +635,7 @@ class OperScheduleController extends BaseFilterController
         if ($hoursTo == 0 && $hoursFrom != 0) {
             $hoursTo = 24;
         }
+
         $hoursFrom += $minutesFrom/60;
         $hoursTo += $minutesTo/60;
 
@@ -1035,6 +1039,7 @@ class OperScheduleController extends BaseFilterController
         $grafik->setIsSick(false);
         $grafik->setIsVacation(false);
         $grafik->setIsFired(false);
+        $grafik->setIsOwnVacation(false);
         $grafik->setTotal(0);
         $grafik->setTotalNotOfficially(0);
         $grafik->setTotalDay(0);
@@ -1161,7 +1166,7 @@ class OperScheduleController extends BaseFilterController
         //deleting old day grafik times
         $coworkerDayTimes = array();
         foreach ($dates as $dayCopy) {
-            $founded = $grafikTimeRepository->findOneBy(array(
+            $founded = $grafikTimeRepository->findBy(array(
                 'department' => $idDepartment,
                 'departmentPeople' => $idCoworker,
                 'day' => intval($dayCopy),
@@ -1169,15 +1174,21 @@ class OperScheduleController extends BaseFilterController
                 'month' => $month,
                 'departmentPeopleReplacement' => $idReplacement
             ));
-            if ($founded) {
-                $coworkerDayTimes[] = $founded;
+            if (count($founded) > 1) {
+                foreach ($founded as $found) {
+                    $coworkerDayTimes[] = $found;
+                }
+            } elseif (isset($founded[0]) && $founded[0]) {
+                $coworkerDayTimes[] = $founded[0];
             }
         }
 
         $em =  $this->getDoctrine()->getManager();
 
         foreach ($coworkerDayTimes as $coworkerDayTime) {
-            $em->remove($coworkerDayTime);
+            if (!is_array($coworkerDayTime)) {
+                $em->remove($coworkerDayTime);
+            }
             $em->flush();
         }
 
@@ -2137,6 +2148,9 @@ class OperScheduleController extends BaseFilterController
                 'departmentPeople' => $idCoworker,
                 'code' => 'UU',
                 'isActive' => true
+            ),
+            array(
+                'period' => 'desc'
             )
         );
 

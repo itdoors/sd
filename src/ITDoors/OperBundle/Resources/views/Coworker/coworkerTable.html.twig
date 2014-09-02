@@ -98,6 +98,10 @@
 
 
 </script>
+{% if not canEdit %}
+    <a class="btn green" target="_blank" href="{{ path('it_doors_oper_supervisor_coworkers_export') }}">{% trans %}Export{% endtrans %}</a>
+    <br><br>{#<button class="btn red"></button>#}
+{% endif %}
 <table class="table table-striped table-hover table-bordered">
     <thead>
     <tr>
