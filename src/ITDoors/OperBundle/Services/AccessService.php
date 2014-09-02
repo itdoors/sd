@@ -1,4 +1,5 @@
 <?php
+
 namespace ITDoors\OperBundle\Services;
 
 use Doctrine\ORM\EntityManager;
@@ -9,6 +10,7 @@ use Symfony\Component\DependencyInjection\Container;
  */
 class AccessService
 {
+
     /** @var Container $container */
     protected $container;
 
@@ -18,24 +20,22 @@ class AccessService
     /**
      * @param Container $container
      */
-    public function __construct(Container $container)
+    public function __construct (Container $container)
     {
         $this->container = $container;
         $this->em = $this->container->get('doctrine.orm.entity_manager');
     }
-
-
     /**
      * @return array|bool
      */
-    public function getAllowedDepartmentsId()
+    public function getAllowedDepartmentsId ()
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
         $idUser = $user->getId();
         //->getUser();
-        $checkOper =  $user->hasRole('ROLE_OPER');
+        $checkOper = $user->hasRole('ROLE_OPER');
 
-        $checkSuperviser =  $user->hasRole('ROLE_SUPERVISOR');
+        $checkSuperviser = $user->hasRole('ROLE_SUPERVISOR');
 
         if ($checkSuperviser) {
 
@@ -45,36 +45,36 @@ class AccessService
             /** @var  $stuff \SD\UserBundle\Entity\Stuff */
             $stuff = $this->container->get('doctrine')
                 ->getRepository('SDUserBundle:Stuff')
-                ->findOneBy(array('user' => $idUser));
+                ->findOneBy(array ('user' => $idUser));
 
             if (!$stuff) {
-                return array();
+                return array ();
             }
 
 
             $stuffDepartments = $this->container->get('doctrine')
                 ->getRepository('SDUserBundle:StuffDepartments')
-                ->findBy(array('stuff' => $stuff));
+                ->findBy(array ('stuff' => $stuff));
 
             if (count($stuffDepartments) == 0 || !$stuffDepartments) {
-                return array();
+                return array ();
             }
 
             if (!is_array($stuffDepartments)) {
-                $stuffDepartments = array($stuffDepartments);
+                $stuffDepartments = array ($stuffDepartments);
             }
 
-            $idDepartmentsAllowed = array();
+            $idDepartmentsAllowed = array ();
 
             /** @var  $stuffDepartment \SD\UserBundle\Entity\StuffDepartments */
             foreach ($stuffDepartments as $stuffDepartment) {
                 $departmentsAllowed = $stuffDepartment->getDepartments();
 
                 if (count($departmentsAllowed) == 0) {
-                    return array();
+                    return array ();
                 }
                 if (!is_array($departmentsAllowed)) {
-                    $departmentsAllowed = array($departmentsAllowed);
+                    $departmentsAllowed = array ($departmentsAllowed);
                 }
 
                 foreach ($departmentsAllowed as $departmentAllowed) {
@@ -85,16 +85,15 @@ class AccessService
 
             return $idDepartmentsAllowed;
         } else {
-            return array();
+            return array ();
         }
     }
-
     /**
      * @param integer $idDepartment
      *
      * @return bool
      */
-    public function checkAccessToDepartment($idDepartment)
+    public function checkAccessToDepartment ($idDepartment)
     {
         $access = false;
 
@@ -110,15 +109,13 @@ class AccessService
 
         return false;
     }
-
     /**
      * @return bool
      */
-    public function checkIfCanEdit()
+    public function checkIfCanEdit ()
     {
-        $canEdit  =  !$this->container->get('security.context')->getToken()->getUser()->hasRole('ROLE_SUPERVISOR');
+        $canEdit = !$this->container->get('security.context')->getToken()->getUser()->hasRole('ROLE_SUPERVISOR');
 
         return $canEdit;
     }
-
-} 
+}

@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Email
 {
+
     /**
      * @var integer
      */
@@ -29,17 +30,15 @@ class Email
      */
     private $text;
 
-
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set alias
      *
@@ -47,23 +46,21 @@ class Email
      * 
      * @return Email
      */
-    public function setAlias($alias)
+    public function setAlias ($alias)
     {
         $this->alias = $alias;
 
         return $this;
     }
-
     /**
      * Get alias
      *
      * @return string 
      */
-    public function getAlias()
+    public function getAlias ()
     {
         return $this->alias;
     }
-
     /**
      * Set subject
      *
@@ -71,23 +68,21 @@ class Email
      * 
      * @return Email
      */
-    public function setSubject($subject)
+    public function setSubject ($subject)
     {
         $this->subject = $subject;
 
         return $this;
     }
-
     /**
      * Get subject
      *
      * @return string 
      */
-    public function getSubject()
+    public function getSubject ()
     {
         return $this->subject;
     }
-
     /**
      * Set text
      *
@@ -95,37 +90,35 @@ class Email
      * 
      * @return Email
      */
-    public function setText($text)
+    public function setText ($text)
     {
         $this->text = $text;
 
         return $this;
     }
-
     /**
      * Get text
      *
      * @return string 
      */
-    public function getText()
+    public function getText ()
     {
         return $this->text;
     }
-
     /**
      * __toString
      * 
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->getSubject();
     }
+
     /**
      * @var \DateTime
      */
     private $deletedAt;
-
 
     /**
      * Set deletedAt
@@ -134,19 +127,18 @@ class Email
      * 
      * @return Email
      */
-    public function setDeletedAt($deletedAt)
+    public function setDeletedAt ($deletedAt)
     {
         $this->deletedAt = $deletedAt;
 
         return $this;
     }
-
     /**
      * Get deletedAt
      *
      * @return \DateTime 
      */
-    public function getDeletedAt()
+    public function getDeletedAt ()
     {
         return $this->deletedAt;
     }

@@ -52,7 +52,8 @@ class HandlingUserRepository extends EntityRepository
                 ->select('hu.part')
                 ->innerJoin('hu.user', 'u')
                 ->where('hu.handlingId = :handlingId')
-                ->andWhere('hu.lookupId = (
+                ->andWhere(
+                    'hu.lookupId = (
                     SELECT
                         l.id
                     FROM

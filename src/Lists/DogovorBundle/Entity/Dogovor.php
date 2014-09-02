@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class Dogovor
 {
+
     /**
      * @var integer
      */
@@ -144,11 +145,10 @@ class Dogovor
      *
      * @return integer
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set name
      *
@@ -156,23 +156,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setName($name)
+    public function setName ($name)
     {
         $this->name = $name;
 
         return $this;
     }
-
     /**
      * Get name
      *
      * @return string
      */
-    public function getName()
+    public function getName ()
     {
         return $this->name;
     }
-
     /**
      * Set startdatetime
      *
@@ -180,23 +178,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setStartdatetime($startdatetime)
+    public function setStartdatetime ($startdatetime)
     {
         $this->startdatetime = $startdatetime;
 
         return $this;
     }
-
     /**
      * Get startdatetime
      *
      * @return \DateTime
      */
-    public function getStartdatetime()
+    public function getStartdatetime ()
     {
         return $this->startdatetime;
     }
-
     /**
      * Set stopdatetime
      *
@@ -204,23 +200,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setStopdatetime($stopdatetime)
+    public function setStopdatetime ($stopdatetime)
     {
         $this->stopdatetime = $stopdatetime;
 
         return $this;
     }
-
     /**
      * Get stopdatetime
      *
      * @return \DateTime
      */
-    public function getStopdatetime()
+    public function getStopdatetime ()
     {
         return $this->stopdatetime;
     }
-
     /**
      * Set subject
      *
@@ -228,23 +222,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setSubject($subject)
+    public function setSubject ($subject)
     {
         $this->subject = $subject;
 
         return $this;
     }
-
     /**
      * Get subject
      *
      * @return string
      */
-    public function getSubject()
+    public function getSubject ()
     {
         return $this->subject;
     }
-
     /**
      * Set filepath
      *
@@ -252,23 +244,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setFilepath($filepath)
+    public function setFilepath ($filepath)
     {
         $this->filepath = $filepath;
 
         return $this;
     }
-
     /**
      * Get filepath
      *
      * @return string
      */
-    public function getFilepath()
+    public function getFilepath ()
     {
         return $this->filepath;
     }
-
     /**
      * Set isActive
      *
@@ -276,23 +266,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setIsActive($isActive)
+    public function setIsActive ($isActive)
     {
         $this->isActive = $isActive;
 
         return $this;
     }
-
     /**
      * Get isActive
      *
      * @return boolean
      */
-    public function getIsActive()
+    public function getIsActive ()
     {
         return $this->isActive;
     }
-
     /**
      * Set mashtab
      *
@@ -300,23 +288,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setMashtab($mashtab)
+    public function setMashtab ($mashtab)
     {
         $this->mashtab = $mashtab;
 
         return $this;
     }
-
     /**
      * Get mashtab
      *
      * @return string
      */
-    public function getMashtab()
+    public function getMashtab ()
     {
         return $this->mashtab;
     }
-
     /**
      * Set prolongation
      *
@@ -324,23 +310,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setProlongation($prolongation)
+    public function setProlongation ($prolongation)
     {
         $this->prolongation = $prolongation;
 
         return $this;
     }
-
     /**
      * Get prolongation
      *
      * @return boolean
      */
-    public function getProlongation()
+    public function getProlongation ()
     {
         return $this->prolongation;
     }
-
     /**
      * Set number
      *
@@ -348,23 +332,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setNumber($number)
+    public function setNumber ($number)
     {
         $this->number = $number;
 
         return $this;
     }
-
     /**
      * Get number
      *
      * @return string
      */
-    public function getNumber()
+    public function getNumber ()
     {
         return $this->number;
     }
-
     /**
      * Set total
      *
@@ -372,23 +354,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setTotal($total)
+    public function setTotal ($total)
     {
         $this->total = $total;
 
         return $this;
     }
-
     /**
      * Get total
      *
      * @return float
      */
-    public function getTotal()
+    public function getTotal ()
     {
         return $this->total;
     }
-
     /**
      * Set maturity
      *
@@ -396,23 +376,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setMaturity($maturity)
+    public function setMaturity ($maturity)
     {
         $this->maturity = $maturity;
 
         return $this;
     }
-
     /**
      * Get maturity
      *
      * @return string
      */
-    public function getMaturity()
+    public function getMaturity ()
     {
         return $this->maturity;
     }
-
     /**
      * Set completionNotice
      *
@@ -420,23 +398,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setCompletionNotice($completionNotice)
+    public function setCompletionNotice ($completionNotice)
     {
         $this->completionNotice = $completionNotice;
 
         return $this;
     }
-
     /**
      * Get completionNotice
      *
      * @return boolean
      */
-    public function getCompletionNotice()
+    public function getCompletionNotice ()
     {
         return $this->completionNotice;
     }
-
     /**
      * Set paymentDeferment
      *
@@ -444,23 +420,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setPaymentDeferment($paymentDeferment)
+    public function setPaymentDeferment ($paymentDeferment)
     {
         $this->paymentDeferment = $paymentDeferment;
 
         return $this;
     }
-
     /**
      * Get paymentDeferment
      *
      * @return integer
      */
-    public function getPaymentDeferment()
+    public function getPaymentDeferment ()
     {
         return $this->paymentDeferment;
     }
-
     /**
      * Set prolongationTerm
      *
@@ -468,23 +442,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setProlongationTerm($prolongationTerm)
+    public function setProlongationTerm ($prolongationTerm)
     {
         $this->prolongationTerm = $prolongationTerm;
 
         return $this;
     }
-
     /**
      * Get prolongationTerm
      *
      * @return string
      */
-    public function getProlongationTerm()
+    public function getProlongationTerm ()
     {
         return $this->prolongationTerm;
     }
-
     /**
      * Set launchDate
      *
@@ -492,23 +464,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setLaunchDate($launchDate)
+    public function setLaunchDate ($launchDate)
     {
         $this->launchDate = $launchDate;
 
         return $this;
     }
-
     /**
      * Get launchDate
      *
      * @return \DateTime
      */
-    public function getLaunchDate()
+    public function getLaunchDate ()
     {
         return $this->launchDate;
     }
-
     /**
      * Set summMonthVat
      *
@@ -516,23 +486,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setSummMonthVat($summMonthVat)
+    public function setSummMonthVat ($summMonthVat)
     {
         $this->summMonthVat = $summMonthVat;
 
         return $this;
     }
-
     /**
      * Get summMonthVat
      *
      * @return float
      */
-    public function getSummMonthVat()
+    public function getSummMonthVat ()
     {
         return $this->summMonthVat;
     }
-
     /**
      * Set plannedPf1
      *
@@ -540,23 +508,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setPlannedPf1($plannedPf1)
+    public function setPlannedPf1 ($plannedPf1)
     {
         $this->plannedPf1 = $plannedPf1;
 
         return $this;
     }
-
     /**
      * Get plannedPf1
      *
      * @return float
      */
-    public function getPlannedPf1()
+    public function getPlannedPf1 ()
     {
         return $this->plannedPf1;
     }
-
     /**
      * Set plannedPf1Percent
      *
@@ -564,23 +530,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setPlannedPf1Percent($plannedPf1Percent)
+    public function setPlannedPf1Percent ($plannedPf1Percent)
     {
         $this->plannedPf1Percent = $plannedPf1Percent;
 
         return $this;
     }
-
     /**
      * Get plannedPf1Percent
      *
      * @return float
      */
-    public function getPlannedPf1Percent()
+    public function getPlannedPf1Percent ()
     {
         return $this->plannedPf1Percent;
     }
-
     /**
      * Set city
      *
@@ -588,23 +552,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setCity(\Lists\CityBundle\Entity\City $city = null)
+    public function setCity (\Lists\CityBundle\Entity\City $city = null)
     {
         $this->city = $city;
 
         return $this;
     }
-
     /**
      * Get city
      *
      * @return \Lists\CityBundle\Entity\City
      */
-    public function getCity()
+    public function getCity ()
     {
         return $this->city;
     }
-
     /**
      * Set companyRole
      *
@@ -612,23 +574,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setCompanyRole(\Lists\LookupBundle\Entity\Lookup $companyRole = null)
+    public function setCompanyRole (\Lists\LookupBundle\Entity\Lookup $companyRole = null)
     {
         $this->companyRole = $companyRole;
 
         return $this;
     }
-
     /**
      * Get companyRole
      *
      * @return \Lists\LookupBundle\Entity\Lookup
      */
-    public function getCompanyRole()
+    public function getCompanyRole ()
     {
         return $this->companyRole;
     }
-
     /**
      * Set companystructure
      *
@@ -636,23 +596,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setCompanystructure(\Lists\CompanystructureBundle\Entity\Companystructure $companystructure = null)
+    public function setCompanystructure (\Lists\CompanystructureBundle\Entity\Companystructure $companystructure = null)
     {
         $this->companystructure = $companystructure;
 
         return $this;
     }
-
     /**
      * Get companystructure
      *
      * @return \Lists\CompanystructureBundle\Entity\Companystructure
      */
-    public function getCompanystructure()
+    public function getCompanystructure ()
     {
         return $this->companystructure;
     }
-
     /**
      * Set dogovorType
      *
@@ -660,23 +618,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setDogovorType(\Lists\LookupBundle\Entity\Lookup $dogovorType = null)
+    public function setDogovorType (\Lists\LookupBundle\Entity\Lookup $dogovorType = null)
     {
         $this->dogovorType = $dogovorType;
 
         return $this;
     }
-
     /**
      * Get dogovorType
      *
      * @return \Lists\LookupBundle\Entity\Lookup
      */
-    public function getDogovorType()
+    public function getDogovorType ()
     {
         return $this->dogovorType;
     }
-
     /**
      * Set organization
      *
@@ -684,23 +640,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setOrganization(\Lists\OrganizationBundle\Entity\Organization $organization = null)
+    public function setOrganization (\Lists\OrganizationBundle\Entity\Organization $organization = null)
     {
         $this->organization = $organization;
 
         return $this;
     }
-
     /**
      * Get organization
      *
      * @return \Lists\OrganizationBundle\Entity\Organization
      */
-    public function getOrganization()
+    public function getOrganization ()
     {
         return $this->organization;
     }
-
     /**
      * Set stuff
      *
@@ -708,23 +662,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setStuff(\SD\UserBundle\Entity\Stuff $stuff = null)
+    public function setStuff (\SD\UserBundle\Entity\Stuff $stuff = null)
     {
         $this->stuff = $stuff;
 
         return $this;
     }
-
     /**
      * Get stuff
      *
      * @return \SD\UserBundle\Entity\Stuff
      */
-    public function getStuff()
+    public function getStuff ()
     {
         return $this->stuff;
     }
-
     /**
      * Set user
      *
@@ -732,19 +684,18 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setUser(\SD\UserBundle\Entity\User $user = null)
+    public function setUser (\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
 
         return $this;
     }
-
     /**
      * Get user
      *
      * @return \SD\UserBundle\Entity\User
      */
-    public function getUser()
+    public function getUser ()
     {
         return $this->user;
     }
@@ -771,23 +722,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setProlongationDate($prolongationDate)
+    public function setProlongationDate ($prolongationDate)
     {
         $this->prolongationDate = $prolongationDate;
 
         return $this;
     }
-
     /**
      * Get prolongationDate
      *
      * @return \DateTime
      */
-    public function getProlongationDate()
+    public function getProlongationDate ()
     {
         return $this->prolongationDate;
     }
-
     /**
      * Set customer
      *
@@ -795,23 +744,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setCustomer(\Lists\OrganizationBundle\Entity\Organization $customer = null)
+    public function setCustomer (\Lists\OrganizationBundle\Entity\Organization $customer = null)
     {
         $this->customer = $customer;
 
         return $this;
     }
-
     /**
      * Get customer
      *
      * @return \Lists\OrganizationBundle\Entity\Organization
      */
-    public function getCustomer()
+    public function getCustomer ()
     {
         return $this->customer;
     }
-
     /**
      * Set performer
      *
@@ -819,19 +766,18 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setPerformer(\Lists\OrganizationBundle\Entity\Organization $performer = null)
+    public function setPerformer (\Lists\OrganizationBundle\Entity\Organization $performer = null)
     {
         $this->performer = $performer;
 
         return $this;
     }
-
     /**
      * Get performer
      *
      * @return \Lists\OrganizationBundle\Entity\Organization
      */
-    public function getPerformer()
+    public function getPerformer ()
     {
         return $this->performer;
     }
@@ -848,61 +794,56 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setSaller(\SD\UserBundle\Entity\User $saller = null)
+    public function setSaller (\SD\UserBundle\Entity\User $saller = null)
     {
         $this->saller = $saller;
 
         return $this;
     }
-
     /**
      * Get saller
      *
      * @return \SD\UserBundle\Entity\User
      */
-    public function getSaller()
+    public function getSaller ()
     {
         return $this->saller;
     }
-
     /**
      * getAbsolutePath
      *
      * @return null|string
      */
-    public function getAbsolutePath()
+    public function getAbsolutePath ()
     {
         return null === $this->filepath ? null : $this->getUploadRootDir() . '/' . $this->filepath;
     }
-
     /**
      * getWebPath
      *
      * @return null|string
      */
-    public function getWebPath()
+    public function getWebPath ()
     {
         return null === $this->filepath ? null : $this->getUploadDir() . '/' . $this->filepath;
     }
-
     /**
      * getUploadRootDir
      *
      * @return string
      */
-    protected function getUploadRootDir()
+    protected function getUploadRootDir ()
     {
         // the absolute directory path where uploaded
         // documents should be saved
         return __DIR__ . '/../../../../web/' . $this->getUploadDir();
     }
-
     /**
      * getUploadDir
      *
      * @return string
      */
-    protected function getUploadDir()
+    protected function getUploadDir ()
     {
         // get rid of the __DIR__ so it doesn't screw up
         // when displaying uploaded doc/image in the view.
@@ -916,25 +857,23 @@ class Dogovor
      *
      * @param UploadedFile $file
      */
-    public function setFile(UploadedFile $file = null)
+    public function setFile (UploadedFile $file = null)
     {
         $this->file = $file;
     }
-
     /**
      * Get file.
      *
      * @return UploadedFile
      */
-    public function getFile()
+    public function getFile ()
     {
         return $this->file;
     }
-
     /**
      * upload
      */
-    public function upload()
+    public function upload ()
     {
         // the file property can be empty if the field is not required
         if (null === $this->getFile()) {
@@ -983,23 +922,21 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setCustomerId($customerId)
+    public function setCustomerId ($customerId)
     {
         $this->customerId = $customerId;
 
         return $this;
     }
-
     /**
      * Get customerId
      *
      * @return integer
      */
-    public function getCustomerId()
+    public function getCustomerId ()
     {
         return $this->customerId;
     }
-
     /**
      * Set performerId
      *
@@ -1007,19 +944,18 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setPerformerId($performerId)
+    public function setPerformerId ($performerId)
     {
         $this->performerId = $performerId;
 
         return $this;
     }
-
     /**
      * Get performerId
      *
      * @return integer
      */
-    public function getPerformerId()
+    public function getPerformerId ()
     {
         return $this->performerId;
     }
@@ -1036,41 +972,38 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setOrganizationId($organizationId)
+    public function setOrganizationId ($organizationId)
     {
         $this->organizationId = $organizationId;
 
         return $this;
     }
-
     /**
      * Get organizationId
      *
      * @return integer
      */
-    public function getOrganizationId()
+    public function getOrganizationId ()
     {
         return $this->organizationId;
     }
-
     /**
      * Sets startdatetime from startdatetimeString
      *
      * @param string $startdatetimeString
      */
-    public function setStartdatetimeString($startdatetimeString)
+    public function setStartdatetimeString ($startdatetimeString)
     {
         if ($startdatetimeString) {
             $this->setStartdatetime(new \DateTime($startdatetimeString));
         }
     }
-
     /**
      * Sets stopdatetime from stopdatetimeString
      *
      * @param string $stopdatetimeString
      */
-    public function setStopdatetimeString($stopdatetimeString)
+    public function setStopdatetimeString ($stopdatetimeString)
     {
         if ($stopdatetimeString) {
             $this->setStopdatetime(new \DateTime($stopdatetimeString));
@@ -1089,19 +1022,18 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setCityId($cityId)
+    public function setCityId ($cityId)
     {
         $this->cityId = $cityId;
 
         return $this;
     }
-
     /**
      * Get cityId
      *
      * @return integer
      */
-    public function getCityId()
+    public function getCityId ()
     {
         return $this->cityId;
     }
@@ -1118,19 +1050,18 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setDogovorTypeId($dogovorTypeId)
+    public function setDogovorTypeId ($dogovorTypeId)
     {
         $this->dogovorTypeId = $dogovorTypeId;
 
         return $this;
     }
-
     /**
      * Get dogovorTypeId
      *
      * @return integer
      */
-    public function getDogovorTypeId()
+    public function getDogovorTypeId ()
     {
         return $this->dogovorTypeId;
     }
@@ -1140,7 +1071,6 @@ class Dogovor
      */
     private $sallerId;
 
-
     /**
      * Set sallerId
      *
@@ -1148,27 +1078,25 @@ class Dogovor
      *
      * @return Dogovor
      */
-    public function setSallerId($sallerId)
+    public function setSallerId ($sallerId)
     {
         $this->sallerId = $sallerId;
     }
-
     /**
      * Get sallerId
      *
      * @return integer
      */
-    public function getSallerId()
+    public function getSallerId ()
     {
         return $this->sallerId;
     }
-
     /**
      * __toString()
      * 
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->getNumber();
     }
@@ -1185,19 +1113,18 @@ class Dogovor
      * 
      * @return Dogovor
      */
-    public function setDogovorId1c($dogovorId1c)
+    public function setDogovorId1c ($dogovorId1c)
     {
         $this->dogovorId1c = $dogovorId1c;
 
         return $this;
     }
-
     /**
      * Get dogovorId1c
      *
      * @return integer 
      */
-    public function getDogovorId1c()
+    public function getDogovorId1c ()
     {
         return $this->dogovorId1c;
     }
@@ -1214,27 +1141,26 @@ class Dogovor
      * 
      * @return Dogovor
      */
-    public function setDogovorGuid($dogovorGuid)
+    public function setDogovorGuid ($dogovorGuid)
     {
         $this->dogovorGuid = $dogovorGuid;
 
         return $this;
     }
-
     /**
      * Get dogovorGuid
      *
      * @return string 
      */
-    public function getDogovorGuid()
+    public function getDogovorGuid ()
     {
         return $this->dogovorGuid;
     }
+
     /**
      * @var \DateTime
      */
     private $createDateTime;
-
 
     /**
      * Set createDateTime
@@ -1243,27 +1169,26 @@ class Dogovor
      * 
      * @return Dogovor
      */
-    public function setCreateDateTime($createDateTime)
+    public function setCreateDateTime ($createDateTime)
     {
         $this->createDateTime = $createDateTime;
 
         return $this;
     }
-
     /**
      * Get createDateTime
      *
      * @return \DateTime 
      */
-    public function getCreateDateTime()
+    public function getCreateDateTime ()
     {
         return $this->createDateTime;
     }
+
     /**
      * @var \DateTime
      */
     private $deletedAt;
-
 
     /**
      * Set deletedAt
@@ -1272,19 +1197,18 @@ class Dogovor
      * 
      * @return Dogovor
      */
-    public function setDeletedAt($deletedAt)
+    public function setDeletedAt ($deletedAt)
     {
         $this->deletedAt = $deletedAt;
 
         return $this;
     }
-
     /**
      * Get deletedAt
      *
      * @return \DateTime 
      */
-    public function getDeletedAt()
+    public function getDeletedAt ()
     {
         return $this->deletedAt;
     }

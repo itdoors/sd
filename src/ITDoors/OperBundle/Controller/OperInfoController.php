@@ -20,24 +20,27 @@ class OperInfoController extends BaseFilterController
      *
      * @return mixed[]
      */
-    public function indexAction()
+    public function indexAction ()
     {
         /** @var AccessService $accessService */
         $accessService = $this->get('access.service');
 
-        $this->addToSessionValues('idDepartment', $accessService->getAllowedDepartmentsId(), 'param', 'oper.bundle.department');
+        $this->addToSessionValues(
+            'idDepartment',
+            $accessService->getAllowedDepartmentsId(),
+            'param',
+            'oper.bundle.department'
+        );
 
-        return $this->render('ITDoorsOperBundle:Patterns:index.html.twig', array(
-
+        return $this->render('ITDoorsOperBundle:Patterns:index.html.twig', array (
         ));
     }
-
     /**
      * departmentAction
      *
      * @return mixed[]
      */
-    public function departmentAction()
+    public function departmentAction ()
     {
 
         $filterNamespace = $this->container->getParameter($this->getNamespace());
@@ -46,9 +49,9 @@ class OperInfoController extends BaseFilterController
 
         $page = 1;
         /** @var \Knp\Component\Pager\Paginator $paginator */
-        $paginator  = $this->get('knp_paginator');
+        $paginator = $this->get('knp_paginator');
 
-        /** @var  $repository \Lists\DepartmentBundle\Entity\DepartmentsRepository*/
+        /** @var  $repository \Lists\DepartmentBundle\Entity\DepartmentsRepository */
         $repository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments');
 
@@ -68,18 +71,16 @@ class OperInfoController extends BaseFilterController
             20
         );
 
-        return $this->render('ITDoorsOperBundle:Parts:department.html.twig', array(
-            'pagination' => $pagination,
+        return $this->render('ITDoorsOperBundle:Parts:department.html.twig', array (
+                'pagination' => $pagination,
         ));
-
     }
-
     /**
      * departmentTableAction
      *
      * @return mixed[]
      */
-    public function departmentTableAction()
+    public function departmentTableAction ()
     {
         $filterNamespace = $this->container->getParameter($this->getNamespace());
         $filters = $this->getFilters($filterNamespace);
@@ -89,7 +90,7 @@ class OperInfoController extends BaseFilterController
             $page = 1;
         }
 
-        /** @var  $departmentsRepository \Lists\DepartmentBundle\Entity\DepartmentsRepository*/
+        /** @var  $departmentsRepository \Lists\DepartmentBundle\Entity\DepartmentsRepository */
         $departmentsRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments');
 
@@ -98,7 +99,7 @@ class OperInfoController extends BaseFilterController
 
         $query = $departmentsRepository->getFilteredDepartments($filters, $accessService->getAllowedDepartmentsId());
 
-        $paginator  = $this->get('knp_paginator');
+        $paginator = $this->get('knp_paginator');
 
         $countDepartments = $departmentsRepository
             ->getFilteredDepartments($filters, $accessService->getAllowedDepartmentsId(), "count")
@@ -112,145 +113,144 @@ class OperInfoController extends BaseFilterController
             20
         );
 
-        return $this->render('ITDoorsOperBundle:Parts:department.html.twig', array(
-            'pagination' => $pagination
+        return $this->render('ITDoorsOperBundle:Parts:department.html.twig', array (
+                'pagination' => $pagination
         ));
     }
+    /*    public function updateAccrualsTaskAction()
+      {
+      for ($i=1; $i<=40; $i++) {
+      $counter = $i*1000;
+      $offset = ($i-1)*1000;
 
-/*    public function updateAccrualsTaskAction()
-    {
-        for ($i=1; $i<=40; $i++) {
-            $counter = $i*1000;
-            $offset = ($i-1)*1000;
+      $monthInfos = $this->getDoctrine()
+      ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo')
+      ->findBy(array(), array(), $counter, $offset);
 
-            $monthInfos = $this->getDoctrine()
-                ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo')
-                ->findBy(array(), array(), $counter, $offset);
+      $em = $this->getDoctrine()->getManager();
+      foreach ($monthInfos as $monthInfo) {
 
-            $em = $this->getDoctrine()->getManager();
-            foreach ($monthInfos as $monthInfo) {
+      $id = $monthInfo->getId();
 
-                $id = $monthInfo->getId();
+      $fineDescription = $monthInfo->getFineDescription();
+      if (!$fineDescription) {
+      $fineDescription = '';
+      }
 
-                $fineDescription = $monthInfo->getFineDescription();
-                if (!$fineDescription) {
-                    $fineDescription = '';
-                }
+      $bonusDescription = $monthInfo->getBonusDescription();
+      if (!$bonusDescription) {
+      $bonusDescription = '';
+      }
 
-                $bonusDescription = $monthInfo->getBonusDescription();
-                if (!$bonusDescription) {
-                    $bonusDescription = '';
-                }
-
-                $surchargeDescription = $monthInfo->getSurchargeDescription();
-                if (!$surchargeDescription) {
-                    $surchargeDescription = '';
-                }
-
-
-                $fineValue = $monthInfo->getFine();
-                if (!$fineValue) {
-                    $fineValue = 0;
-                }
-                $bonusValue = $monthInfo->getBonus();
-                if (!$bonusValue) {
-                    $bonusValue = 0;
-                }
-
-                $surchargeValue = $monthInfo->getSurcharge();
-                if (!$surchargeValue) {
-                    $surchargeValue = 0;
-                }
+      $surchargeDescription = $monthInfo->getSurchargeDescription();
+      if (!$surchargeDescription) {
+      $surchargeDescription = '';
+      }
 
 
-                $fineType = $monthInfo->getFineType();//a
-                if ($fineType) {
-                    $fineType = $fineType->getName();
-                }
-                $bonusType = $monthInfo->getBonusType();//b
-                if ($bonusType) {
-                    $bonusType = $bonusType->getName();
-                }
-                $surchargeType = $monthInfo->getSurchargeType();//c
-                if ($surchargeType) {
-                    $surchargeType = $surchargeType->getName();
-                }
+      $fineValue = $monthInfo->getFine();
+      if (!$fineValue) {
+      $fineValue = 0;
+      }
+      $bonusValue = $monthInfo->getBonus();
+      if (!$bonusValue) {
+      $bonusValue = 0;
+      }
 
-                $fineKey = $monthInfo->getFineTypeKey();//r,d,k
-                $bonusKey = $monthInfo->getBonusTypeKey();
-                $surchargeKey = $monthInfo->getSurchargeTypeKey();
+      $surchargeValue = $monthInfo->getSurcharge();
+      if (!$surchargeValue) {
+      $surchargeValue = 0;
+      }
 
 
-                if ($fineType != null) {
-                    $onceOnlyAccrual = new \Lists\DepartmentBundle\Entity\OnceOnlyAccrual();
-                    $onceOnlyAccrual->setDepartmentPeopleMonthInfo($monthInfo);
+      $fineType = $monthInfo->getFineType();//a
+      if ($fineType) {
+      $fineType = $fineType->getName();
+      }
+      $bonusType = $monthInfo->getBonusType();//b
+      if ($bonusType) {
+      $bonusType = $bonusType->getName();
+      }
+      $surchargeType = $monthInfo->getSurchargeType();//c
+      if ($surchargeType) {
+      $surchargeType = $surchargeType->getName();
+      }
 
-                    $mpk = $monthInfo->getDepartmentPeople()->getMpks();
-
-                    $onceOnlyAccrual->setMpk($mpk);
-                    $onceOnlyAccrual->setType('fine');
-                    $onceOnlyAccrual->setValue($fineValue);
-                    $onceOnlyAccrual->setWorkType($fineKey);
-                    $onceOnlyAccrual->setDescription($fineDescription);
-                    $onceOnlyAccrual->setIsActive(true);
-
-                    if (substr($fineType, 0, 1) == 'B') {
-                        $code = 'uu';
-                    } else {
-                        $code = 'oz';
-                    }
-                    $onceOnlyAccrual->setCode($code);
-                    $em->persist($onceOnlyAccrual);
-                    $em->flush();
-                }
-                if ($bonusType != null) {
-                    $onceOnlyAccrual = new \Lists\DepartmentBundle\Entity\OnceOnlyAccrual();
-                    $onceOnlyAccrual->setDepartmentPeopleMonthInfo($monthInfo);
-
-                    $mpk = $monthInfo->getDepartmentPeople()->getMpks();
-
-                    $onceOnlyAccrual->setMpk($mpk);
-                    $onceOnlyAccrual->setType('add');
-                    $onceOnlyAccrual->setValue($bonusValue);
-                    $onceOnlyAccrual->setWorkType($bonusKey);
-                    $onceOnlyAccrual->setDescription($bonusDescription);
-                    $onceOnlyAccrual->setIsActive(true);
-
-                    if (substr($bonusType, 0, 1) == 'B') {
-                        $code = 'uu';
-                    } else {
-                        $code = 'oz';
-                    }
-                    $onceOnlyAccrual->setCode($code);
-                    $em->persist($onceOnlyAccrual);
-                    $em->flush();
-                }
-                if ($surchargeType != null) {
-                    $onceOnlyAccrual = new \Lists\DepartmentBundle\Entity\OnceOnlyAccrual();
-                    $onceOnlyAccrual->setDepartmentPeopleMonthInfo($monthInfo);
-
-                    $mpk = $monthInfo->getDepartmentPeople()->getMpks();
-
-                    $onceOnlyAccrual->setMpk($mpk);
-                    $onceOnlyAccrual->setType('add');
-                    $onceOnlyAccrual->setValue($surchargeValue);
-                    $onceOnlyAccrual->setWorkType($surchargeKey);
-                    $onceOnlyAccrual->setDescription($surchargeDescription);
-                    $onceOnlyAccrual->setIsActive(true);
-
-                    if (substr($surchargeType, 0, 1) == 'B') {
-                        $code = 'uu';
-                    } else {
-                        $code = 'oz';
-                    }
-                    $onceOnlyAccrual->setCode($code);
-                    $em->persist($onceOnlyAccrual);
-                    $em->flush();
-                }
-
-            }
-        }
+      $fineKey = $monthInfo->getFineTypeKey();//r,d,k
+      $bonusKey = $monthInfo->getBonusTypeKey();
+      $surchargeKey = $monthInfo->getSurchargeTypeKey();
 
 
-    }*/
+      if ($fineType != null) {
+      $onceOnlyAccrual = new \Lists\DepartmentBundle\Entity\OnceOnlyAccrual();
+      $onceOnlyAccrual->setDepartmentPeopleMonthInfo($monthInfo);
+
+      $mpk = $monthInfo->getDepartmentPeople()->getMpks();
+
+      $onceOnlyAccrual->setMpk($mpk);
+      $onceOnlyAccrual->setType('fine');
+      $onceOnlyAccrual->setValue($fineValue);
+      $onceOnlyAccrual->setWorkType($fineKey);
+      $onceOnlyAccrual->setDescription($fineDescription);
+      $onceOnlyAccrual->setIsActive(true);
+
+      if (substr($fineType, 0, 1) == 'B') {
+      $code = 'uu';
+      } else {
+      $code = 'oz';
+      }
+      $onceOnlyAccrual->setCode($code);
+      $em->persist($onceOnlyAccrual);
+      $em->flush();
+      }
+      if ($bonusType != null) {
+      $onceOnlyAccrual = new \Lists\DepartmentBundle\Entity\OnceOnlyAccrual();
+      $onceOnlyAccrual->setDepartmentPeopleMonthInfo($monthInfo);
+
+      $mpk = $monthInfo->getDepartmentPeople()->getMpks();
+
+      $onceOnlyAccrual->setMpk($mpk);
+      $onceOnlyAccrual->setType('add');
+      $onceOnlyAccrual->setValue($bonusValue);
+      $onceOnlyAccrual->setWorkType($bonusKey);
+      $onceOnlyAccrual->setDescription($bonusDescription);
+      $onceOnlyAccrual->setIsActive(true);
+
+      if (substr($bonusType, 0, 1) == 'B') {
+      $code = 'uu';
+      } else {
+      $code = 'oz';
+      }
+      $onceOnlyAccrual->setCode($code);
+      $em->persist($onceOnlyAccrual);
+      $em->flush();
+      }
+      if ($surchargeType != null) {
+      $onceOnlyAccrual = new \Lists\DepartmentBundle\Entity\OnceOnlyAccrual();
+      $onceOnlyAccrual->setDepartmentPeopleMonthInfo($monthInfo);
+
+      $mpk = $monthInfo->getDepartmentPeople()->getMpks();
+
+      $onceOnlyAccrual->setMpk($mpk);
+      $onceOnlyAccrual->setType('add');
+      $onceOnlyAccrual->setValue($surchargeValue);
+      $onceOnlyAccrual->setWorkType($surchargeKey);
+      $onceOnlyAccrual->setDescription($surchargeDescription);
+      $onceOnlyAccrual->setIsActive(true);
+
+      if (substr($surchargeType, 0, 1) == 'B') {
+      $code = 'uu';
+      } else {
+      $code = 'oz';
+      }
+      $onceOnlyAccrual->setCode($code);
+      $em->persist($onceOnlyAccrual);
+      $em->flush();
+      }
+
+      }
+      }
+
+
+      } */
 }

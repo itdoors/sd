@@ -119,21 +119,19 @@ class Invoice
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct ()
     {
         $this->messages = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set invoiceId
      *
@@ -141,23 +139,21 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setInvoiceId($invoiceId)
+    public function setInvoiceId ($invoiceId)
     {
         $this->invoiceId = $invoiceId;
 
         return $this;
     }
-
     /**
      * Get invoiceId
      *
      * @return string 
      */
-    public function getInvoiceId()
+    public function getInvoiceId ()
     {
         return $this->invoiceId;
     }
-
     /**
      * Set sum
      *
@@ -165,23 +161,21 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setSum($sum)
+    public function setSum ($sum)
     {
         $this->sum = $sum;
 
         return $this;
     }
-
     /**
      * Get sum
      *
      * @return float 
      */
-    public function getSum()
+    public function getSum ()
     {
         return $this->sum;
     }
-
     /**
      * Set date
      *
@@ -189,23 +183,21 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setDate($date)
+    public function setDate ($date)
     {
         $this->date = $date;
 
         return $this;
     }
-
     /**
      * Get date
      *
      * @return \DateTime 
      */
-    public function getDate()
+    public function getDate ()
     {
         return $this->date;
     }
-
     /**
      * Set delayDate
      *
@@ -213,23 +205,21 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setDelayDate($delayDate)
+    public function setDelayDate ($delayDate)
     {
         $this->delayDate = $delayDate;
 
         return $this;
     }
-
     /**
      * Get delayDate
      *
      * @return \DateTime 
      */
-    public function getDelayDate()
+    public function getDelayDate ()
     {
         return $this->delayDate;
     }
-
     /**
      * Set delayDays
      *
@@ -237,23 +227,21 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setDelayDays($delayDays)
+    public function setDelayDays ($delayDays)
     {
         $this->delayDays = $delayDays;
 
         return $this;
     }
-
     /**
      * Get delayDays
      *
      * @return integer 
      */
-    public function getDelayDays()
+    public function getDelayDays ()
     {
         return $this->delayDays;
     }
-
     /**
      * Set delayDaysType
      *
@@ -261,23 +249,21 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setDelayDaysType($delayDaysType)
+    public function setDelayDaysType ($delayDaysType)
     {
         $this->delayDaysType = $delayDaysType;
 
         return $this;
     }
-
     /**
      * Get delayDaysType
      *
      * @return string 
      */
-    public function getDelayDaysType()
+    public function getDelayDaysType ()
     {
         return $this->delayDaysType;
     }
-
     /**
      * Set dateEnd
      *
@@ -285,23 +271,21 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setDateEnd($dateEnd)
+    public function setDateEnd ($dateEnd)
     {
         $this->dateEnd = $dateEnd;
 
         return $this;
     }
-
     /**
      * Get dateEnd
      *
      * @return \DateTime 
      */
-    public function getDateEnd()
+    public function getDateEnd ()
     {
         return $this->dateEnd;
     }
-
     /**
      * Set dateFact
      *
@@ -309,23 +293,21 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setDateFact($dateFact)
+    public function setDateFact ($dateFact)
     {
         $this->dateFact = $dateFact;
 
         return $this;
     }
-
     /**
      * Get dateFact
      *
      * @return \DateTime 
      */
-    public function getDateFact()
+    public function getDateFact ()
     {
         return $this->dateFact;
     }
-
     /**
      * Set dogovorId
      *
@@ -333,23 +315,21 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setDogovorId($dogovorId)
+    public function setDogovorId ($dogovorId)
     {
         $this->dogovorId = $dogovorId;
 
         return $this;
     }
-
     /**
      * Get dogovorId
      *
      * @return integer 
      */
-    public function getDogovorId()
+    public function getDogovorId ()
     {
         return $this->dogovorId;
     }
-
     /**
      * Set dogovorGuid
      *
@@ -357,23 +337,21 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setDogovorGuid($dogovorGuid)
+    public function setDogovorGuid ($dogovorGuid)
     {
         $this->dogovorGuid = $dogovorGuid;
 
         return $this;
     }
-
     /**
      * Get dogovorGuid
      *
      * @return string 
      */
-    public function getDogovorGuid()
+    public function getDogovorGuid ()
     {
         return $this->dogovorGuid;
     }
-
     /**
      * Set dogovorName
      *
@@ -381,23 +359,21 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setDogovorName($dogovorName)
+    public function setDogovorName ($dogovorName)
     {
         $this->dogovorName = $dogovorName;
 
         return $this;
     }
-
     /**
      * Get dogovorName
      *
      * @return string 
      */
-    public function getDogovorName()
+    public function getDogovorName ()
     {
         return $this->dogovorName;
     }
-
     /**
      * Set dogovorNumber
      *
@@ -405,23 +381,21 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setDogovorNumber($dogovorNumber)
+    public function setDogovorNumber ($dogovorNumber)
     {
         $this->dogovorNumber = $dogovorNumber;
 
         return $this;
     }
-
     /**
      * Get dogovorNumber
      *
      * @return string 
      */
-    public function getDogovorNumber()
+    public function getDogovorNumber ()
     {
         return $this->dogovorNumber;
     }
-
     /**
      * Set dogovorDate
      *
@@ -429,23 +403,21 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setDogovorDate($dogovorDate)
+    public function setDogovorDate ($dogovorDate)
     {
         $this->dogovorDate = $dogovorDate;
 
         return $this;
     }
-
     /**
      * Get dogovorDate
      *
      * @return \DateTime 
      */
-    public function getDogovorDate()
+    public function getDogovorDate ()
     {
         return $this->dogovorDate;
     }
-
     /**
      * Set customerName
      *
@@ -453,23 +425,21 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setCustomerName($customerName)
+    public function setCustomerName ($customerName)
     {
         $this->customerName = $customerName;
 
         return $this;
     }
-
     /**
      * Get customerName
      *
      * @return string 
      */
-    public function getCustomerName()
+    public function getCustomerName ()
     {
         return $this->customerName;
     }
-
     /**
      * Set customerEdrpou
      *
@@ -477,23 +447,21 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setCustomerEdrpou($customerEdrpou)
+    public function setCustomerEdrpou ($customerEdrpou)
     {
         $this->customerEdrpou = $customerEdrpou;
 
         return $this;
     }
-
     /**
      * Get customerEdrpou
      *
      * @return string 
      */
-    public function getCustomerEdrpou()
+    public function getCustomerEdrpou ()
     {
         return $this->customerEdrpou;
     }
-
     /**
      * Set performerName
      *
@@ -501,23 +469,21 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setPerformerName($performerName)
+    public function setPerformerName ($performerName)
     {
         $this->performerName = $performerName;
 
         return $this;
     }
-
     /**
      * Get performerName
      *
      * @return string 
      */
-    public function getPerformerName()
+    public function getPerformerName ()
     {
         return $this->performerName;
     }
-
     /**
      * Set performerEdrpou
      *
@@ -525,23 +491,21 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setPerformerEdrpou($performerEdrpou)
+    public function setPerformerEdrpou ($performerEdrpou)
     {
         $this->performerEdrpou = $performerEdrpou;
 
         return $this;
     }
-
     /**
      * Get performerEdrpou
      *
      * @return string 
      */
-    public function getPerformerEdrpou()
+    public function getPerformerEdrpou ()
     {
         return $this->performerEdrpou;
     }
-
     /**
      * Set court
      *
@@ -549,23 +513,21 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setCourt($court)
+    public function setCourt ($court)
     {
         $this->court = $court;
 
         return $this;
     }
-
     /**
      * Get court
      *
      * @return boolean 
      */
-    public function getCourt()
+    public function getCourt ()
     {
         return $this->court;
     }
-
     /**
      * Add messages
      *
@@ -573,33 +535,30 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function addMessage(\ITDoors\ControllingBundle\Entity\InvoiceMessage $messages)
+    public function addMessage (\ITDoors\ControllingBundle\Entity\InvoiceMessage $messages)
     {
         $this->messages[] = $messages;
 
         return $this;
     }
-
     /**
      * Remove messages
      *
      * @param \ITDoors\ControllingBundle\Entity\InvoiceMessage $messages
      */
-    public function removeMessage(\ITDoors\ControllingBundle\Entity\InvoiceMessage $messages)
+    public function removeMessage (\ITDoors\ControllingBundle\Entity\InvoiceMessage $messages)
     {
         $this->messages->removeElement($messages);
     }
-
     /**
      * Get messages
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getMessages()
+    public function getMessages ()
     {
         return $this->messages;
     }
-
     /**
      * Set dogovor
      *
@@ -607,29 +566,27 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setDogovor(\Lists\DogovorBundle\Entity\Dogovor $dogovor = null)
+    public function setDogovor (\Lists\DogovorBundle\Entity\Dogovor $dogovor = null)
     {
         $this->dogovor = $dogovor;
 
         return $this;
     }
-
     /**
      * Get dogovor
      *
      * @return \Lists\DogovorBundle\Entity\Dogovor 
      */
-    public function getDogovor()
+    public function getDogovor ()
     {
         return $this->dogovor;
     }
-
     /**
      * __toString()
      * 
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return (string) $this->getInvoiceId();
     }
@@ -646,29 +603,27 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function addInvoicecompanystructure(InvoiceCompanystructure $invoicecompanystructure)
+    public function addInvoicecompanystructure (InvoiceCompanystructure $invoicecompanystructure)
     {
         $this->invoicecompanystructure[] = $invoicecompanystructure;
 
         return $this;
     }
-
     /**
      * Remove invoicecompanystructure
      *
      * @param InvoiceCompanystructure $invoicecompanystructure
      */
-    public function removeInvoicecompanystructure(InvoiceCompanystructure $invoicecompanystructure)
+    public function removeInvoicecompanystructure (InvoiceCompanystructure $invoicecompanystructure)
     {
         $this->invoicecompanystructure->removeElement($invoicecompanystructure);
     }
-
     /**
      * Get invoicecompanystructure
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getInvoicecompanystructure()
+    public function getInvoicecompanystructure ()
     {
         return $this->invoicecompanystructure;
     }
@@ -693,7 +648,6 @@ class Invoice
      */
     private $performer;
 
-
     /**
      * Set customerId
      *
@@ -701,23 +655,21 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setCustomerId($customerId)
+    public function setCustomerId ($customerId)
     {
         $this->customerId = $customerId;
 
         return $this;
     }
-
     /**
      * Get customerId
      *
      * @return integer 
      */
-    public function getCustomerId()
+    public function getCustomerId ()
     {
         return $this->customerId;
     }
-
     /**
      * Set performerId
      *
@@ -725,23 +677,21 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setPerformerId($performerId)
+    public function setPerformerId ($performerId)
     {
         $this->performerId = $performerId;
 
         return $this;
     }
-
     /**
      * Get performerId
      *
      * @return integer 
      */
-    public function getPerformerId()
+    public function getPerformerId ()
     {
         return $this->performerId;
     }
-
     /**
      * Set customer
      *
@@ -749,23 +699,21 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setCustomer(\Lists\OrganizationBundle\Entity\Organization $customer = null)
+    public function setCustomer (\Lists\OrganizationBundle\Entity\Organization $customer = null)
     {
         $this->customer = $customer;
 
         return $this;
     }
-
     /**
      * Get customer
      *
      * @return \Lists\OrganizationBundle\Entity\Organization 
      */
-    public function getCustomer()
+    public function getCustomer ()
     {
         return $this->customer;
     }
-
     /**
      * Set performer
      *
@@ -773,27 +721,26 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setPerformer(\Lists\OrganizationBundle\Entity\Organization $performer = null)
+    public function setPerformer (\Lists\OrganizationBundle\Entity\Organization $performer = null)
     {
         $this->performer = $performer;
 
         return $this;
     }
-
     /**
      * Get performer
      *
      * @return \Lists\OrganizationBundle\Entity\Organization 
      */
-    public function getPerformer()
+    public function getPerformer ()
     {
         return $this->performer;
     }
+
     /**
      * @var string
      */
     private $bank;
-
 
     /**
      * Set bank
@@ -802,27 +749,26 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function setBank($bank)
+    public function setBank ($bank)
     {
         $this->bank = $bank;
 
         return $this;
     }
-
     /**
      * Get bank
      *
      * @return string 
      */
-    public function getBank()
+    public function getBank ()
     {
         return $this->bank;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $payments;
-
 
     /**
      * Add payments
@@ -831,37 +777,35 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function addPayment(\ITDoors\ControllingBundle\Entity\InvoicePayments $payments)
+    public function addPayment (\ITDoors\ControllingBundle\Entity\InvoicePayments $payments)
     {
         $this->payments[] = $payments;
 
         return $this;
     }
-
     /**
      * Remove payments
      *
      * @param \ITDoors\ControllingBundle\Entity\InvoicePayments $payments
      */
-    public function removePayment(\ITDoors\ControllingBundle\Entity\InvoicePayments $payments)
+    public function removePayment (\ITDoors\ControllingBundle\Entity\InvoicePayments $payments)
     {
         $this->payments->removeElement($payments);
     }
-
     /**
      * Get payments
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getPayments()
+    public function getPayments ()
     {
         return $this->payments;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $acts;
-
 
     /**
      * Add acts
@@ -870,29 +814,27 @@ class Invoice
      * 
      * @return Invoice
      */
-    public function addAct(\ITDoors\ControllingBundle\Entity\InvoiceAct $acts)
+    public function addAct (\ITDoors\ControllingBundle\Entity\InvoiceAct $acts)
     {
         $this->acts[] = $acts;
 
         return $this;
     }
-
     /**
      * Remove acts
      *
      * @param \ITDoors\ControllingBundle\Entity\InvoiceAct $acts
      */
-    public function removeAct(\ITDoors\ControllingBundle\Entity\InvoiceAct $acts)
+    public function removeAct (\ITDoors\ControllingBundle\Entity\InvoiceAct $acts)
     {
         $this->acts->removeElement($acts);
     }
-
     /**
      * Get acts
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getActs()
+    public function getActs ()
     {
         return $this->acts;
     }

@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class KvedOrganization
 {
+
     /**
      * @var integer
      */
@@ -24,17 +25,15 @@ class KvedOrganization
      */
     private $kved;
 
-
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set organization
      *
@@ -42,23 +41,21 @@ class KvedOrganization
      *
      * @return KvedOrganization
      */
-    public function setOrganization(\Lists\OrganizationBundle\Entity\Organization $organization = null)
+    public function setOrganization (\Lists\OrganizationBundle\Entity\Organization $organization = null)
     {
         $this->organization = $organization;
 
         return $this;
     }
-
     /**
      * Get organization
      *
      * @return \Lists\OrganizationBundle\Entity\Organization 
      */
-    public function getOrganization()
+    public function getOrganization ()
     {
         return $this->organization;
     }
-
     /**
      * Set kved
      *
@@ -66,27 +63,25 @@ class KvedOrganization
      *
      * @return KvedOrganization
      */
-    public function setKved(\Lists\OrganizationBundle\Entity\Kved $kved = null)
+    public function setKved (\Lists\OrganizationBundle\Entity\Kved $kved = null)
     {
         $this->kved = $kved;
 
         return $this;
     }
-
     /**
      * Get kved
      *
      * @return \Lists\OrganizationBundle\Entity\Kved 
      */
-    public function getKved()
+    public function getKved ()
     {
         return $this->kved;
     }
-
     /**
      * @ORM\PrePersist
      */
-    public function doOnPrePersist()
+    public function doOnPrePersist ()
     {
         // Add your code here
     }

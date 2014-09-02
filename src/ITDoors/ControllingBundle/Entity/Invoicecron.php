@@ -45,11 +45,10 @@ class Invoicecron
      *
      * @return integer 
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set invoiceId
      *
@@ -57,23 +56,21 @@ class Invoicecron
      * 
      * @return Invoicecron
      */
-    public function setInvoiceId($invoiceId)
+    public function setInvoiceId ($invoiceId)
     {
         $this->invoiceId = $invoiceId;
 
         return $this;
     }
-
     /**
      * Get invoiceId
      *
      * @return integer 
      */
-    public function getInvoiceId()
+    public function getInvoiceId ()
     {
         return $this->invoiceId;
     }
-
     /**
      * Set date
      *
@@ -81,23 +78,21 @@ class Invoicecron
      * 
      * @return Invoicecron
      */
-    public function setDate($date)
+    public function setDate ($date)
     {
         $this->date = $date;
 
         return $this;
     }
-
     /**
      * Get date
      *
      * @return \DateTime 
      */
-    public function getDate()
+    public function getDate ()
     {
         return $this->date;
     }
-
     /**
      * Set status
      *
@@ -105,23 +100,21 @@ class Invoicecron
      * 
      * @return Invoicecron
      */
-    public function setStatus($status)
+    public function setStatus ($status)
     {
         $this->status = $status;
 
         return $this;
     }
-
     /**
      * Get status
      *
      * @return string 
      */
-    public function getStatus()
+    public function getStatus ()
     {
         return $this->status;
     }
-
     /**
      * Set description
      *
@@ -129,23 +122,21 @@ class Invoicecron
      * 
      * @return Invoicecron
      */
-    public function setDescription($description)
+    public function setDescription ($description)
     {
         $this->description = $description;
 
         return $this;
     }
-
     /**
      * Get description
      *
      * @return string 
      */
-    public function getDescription()
+    public function getDescription ()
     {
         return $this->description;
     }
-
     /**
      * Set invoices
      *
@@ -153,19 +144,18 @@ class Invoicecron
      * 
      * @return Invoicecron
      */
-    public function setInvoices(\ITDoors\ControllingBundle\Entity\Invoice $invoices = null)
+    public function setInvoices (\ITDoors\ControllingBundle\Entity\Invoice $invoices = null)
     {
         $this->invoices = $invoices;
 
         return $this;
     }
-
     /**
      * Get invoices
      *
      * @return \ITDoors\ControllingBundle\Entity\Invoice 
      */
-    public function getInvoices()
+    public function getInvoices ()
     {
         return $this->invoices;
     }
@@ -182,19 +172,18 @@ class Invoicecron
      * 
      * @return Invoicecron
      */
-    public function setReason($reason)
+    public function setReason ($reason)
     {
         $this->reason = $reason;
 
         return $this;
     }
-
     /**
      * Get reason
      *
      * @return string 
      */
-    public function getReason()
+    public function getReason ()
     {
         return $this->reason;
     }
@@ -211,19 +200,18 @@ class Invoicecron
      * 
      * @return Invoicecron
      */
-    public function setInvoice(\ITDoors\ControllingBundle\Entity\Invoice $invoice = null)
+    public function setInvoice (\ITDoors\ControllingBundle\Entity\Invoice $invoice = null)
     {
         $this->invoice = $invoice;
 
         return $this;
     }
-
     /**
      * Get invoice
      *
      * @return \ITDoors\ControllingBundle\Entity\Invoice 
      */
-    public function getInvoice()
+    public function getInvoice ()
     {
         return $this->invoice;
     }

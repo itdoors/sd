@@ -1,4 +1,5 @@
 <?php
+
 namespace ITDoors\OperBundle\Services;
 
 use Doctrine\ORM\EntityManager;
@@ -9,6 +10,7 @@ use Symfony\Component\DependencyInjection\Container;
  */
 class CommonOperService
 {
+
     /** @var Container $container */
     protected $container;
 
@@ -18,12 +20,11 @@ class CommonOperService
     /**
      * @param Container $container
      */
-    public function __construct(Container $container)
+    public function __construct (Container $container)
     {
         $this->container = $container;
         $this->em = $this->container->get('doctrine.orm.entity_manager');
     }
-
     /**
      * @param string  $date
      * @param integer $idCoworker
@@ -32,7 +33,7 @@ class CommonOperService
      *
      * @return array
      */
-    public function getSumsCoworker($date, $idCoworker, $idReplacement, $idDepartment)
+    public function getSumsCoworker ($date, $idCoworker, $idReplacement, $idDepartment)
     {
         list($year, $month) = explode('-', $date);
 
@@ -44,13 +45,12 @@ class CommonOperService
         $monthInfoRepository = $this->container->get('doctrine')
             ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
 
-        $monthInfo = $monthInfoRepository->findOneBy(array(
+        $monthInfo = $monthInfoRepository->findOneBy(array (
             'departmentPeople' => $idCoworker,
             'year' => $year,
             'month' => $month,
             'replacementType' => 'r',
             'departmentPeopleReplacement' => $idReplacement
-
         ));
 
         $idMonthInfo = $monthInfo->getId();
@@ -93,7 +93,7 @@ class CommonOperService
             ->getRepository('ListsDepartmentBundle:PlannedAccrual');
 
         $plannedAccrual = $plannedAccrualRepository->findOneBy(
-            array(
+            array (
                 'departmentPeople' => $idCoworker,
                 'code' => 'UU',
                 'isActive' => true
@@ -115,8 +115,8 @@ class CommonOperService
         $totalSalary = $salaryOfficially + $salaryNotOfficially;
         $accessService = $this->container->get('access.service');
 
-        $canEdit  =  $accessService->checkIfCanEdit();
-        $return = array(
+        $canEdit = $accessService->checkIfCanEdit();
+        $return = array (
             'sumOfficially' => $officiallyTotal,
             'sumNotOfficially' => $notOfficiallyTotal,
             'plannedAccrual' => $plannedAccrualValue,
@@ -127,13 +127,12 @@ class CommonOperService
             'realSalary' => $realSalary,
             'salaryNotOfficially' => $salaryNotOfficially,
             'totalSalary' => $totalSalary,
-            'idMonthInfo'=> $idMonthInfo,
+            'idMonthInfo' => $idMonthInfo,
             'canEdit' => $canEdit
         );
 
         return $return;
     }
-
     /**
      * @param integer $month
      * @param integer $year
@@ -141,20 +140,19 @@ class CommonOperService
      *
      * @return mixed[]
      */
-    private function getTotalOnceOnlyAccruals($month, $year, $idCoworker)
+    private function getTotalOnceOnlyAccruals ($month, $year, $idCoworker)
     {
 
         /** @var  $monthInfoRepository \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfoRepository */
         $monthInfoRepository = $this->container->get('doctrine')
             ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
 
-        $monthInfo = $monthInfoRepository->findOneBy(array(
+        $monthInfo = $monthInfoRepository->findOneBy(array (
             'departmentPeople' => $idCoworker,
             'year' => $year,
             'month' => $month,
             'replacementType' => 'r',
             //'departmentPeopleReplacement' => 0
-
         ));
 
 
@@ -162,8 +160,8 @@ class CommonOperService
             ->getRepository('ListsDepartmentBundle:OnceOnlyAccrual');
 
 
-        $accrual['officially'] = array();
-        $accrual['notOfficially'] = array();
+        $accrual['officially'] = array ();
+        $accrual['notOfficially'] = array ();
 
         $accrual['officially']['plus'] = 0;
         $accrual['notOfficially']['plus'] = 0;
@@ -175,8 +173,8 @@ class CommonOperService
 
             return $accrual;
         }
-        $onceOnlyAccruals = $onceOnlyAccrualRepository->findBy(array(
-            'departmentPeopleMonthInfo'=>$monthInfo->getId()
+        $onceOnlyAccruals = $onceOnlyAccrualRepository->findBy(array (
+            'departmentPeopleMonthInfo' => $monthInfo->getId()
         ));
 
         foreach ($onceOnlyAccruals as $onceOnlyAccrual) {
@@ -194,5 +192,4 @@ class CommonOperService
 
         return $accrual;
     }
-
 }

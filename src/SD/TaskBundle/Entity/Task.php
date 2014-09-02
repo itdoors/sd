@@ -50,17 +50,15 @@ class Task
      */
     private $type;
 
-
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set title
      *
@@ -68,23 +66,21 @@ class Task
      *
      * @return Task
      */
-    public function setTitle($title)
+    public function setTitle ($title)
     {
         $this->title = $title;
 
         return $this;
     }
-
     /**
      * Get title
      *
      * @return string 
      */
-    public function getTitle()
+    public function getTitle ()
     {
         return $this->title;
     }
-
     /**
      * Set description
      *
@@ -92,23 +88,21 @@ class Task
      *
      * @return Task
      */
-    public function setDescription($description)
+    public function setDescription ($description)
     {
         $this->description = $description;
 
         return $this;
     }
-
     /**
      * Get description
      *
      * @return string 
      */
-    public function getDescription()
+    public function getDescription ()
     {
         return $this->description;
     }
-
     /**
      * Set author
      *
@@ -116,23 +110,21 @@ class Task
      *
      * @return Task
      */
-    public function setAuthor(\SD\UserBundle\Entity\User $author = null)
+    public function setAuthor (\SD\UserBundle\Entity\User $author = null)
     {
         $this->author = $author;
 
         return $this;
     }
-
     /**
      * Get author
      *
      * @return \SD\UserBundle\Entity\User 
      */
-    public function getAuthor()
+    public function getAuthor ()
     {
         return $this->author;
     }
-
     /**
      * Set stage
      *
@@ -140,23 +132,21 @@ class Task
      *
      * @return Task
      */
-    public function setStage(\SD\TaskBundle\Entity\Stage $stage = null)
+    public function setStage (\SD\TaskBundle\Entity\Stage $stage = null)
     {
         $this->stage = $stage;
 
         return $this;
     }
-
     /**
      * Get stage
      *
      * @return \SD\TaskBundle\Entity\Stage 
      */
-    public function getStage()
+    public function getStage ()
     {
         return $this->stage;
     }
-
     /**
      * Set type
      *
@@ -164,22 +154,22 @@ class Task
      *
      * @return Task
      */
-    public function setType(\SD\TaskBundle\Entity\TaskType $type = null)
+    public function setType (\SD\TaskBundle\Entity\TaskType $type = null)
     {
         $this->type = $type;
 
         return $this;
     }
-
     /**
      * Get type
      *
      * @return \SD\TaskBundle\Entity\TaskType 
      */
-    public function getType()
+    public function getType ()
     {
         return $this->type;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
@@ -188,11 +178,10 @@ class Task
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct ()
     {
         $this->taskEndDates = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
     /**
      * Add taskEndDates
      *
@@ -200,32 +189,31 @@ class Task
      *
      * @return Task
      */
-    public function addTaskEndDate(\SD\TaskBundle\Entity\TaskEndDate $taskEndDates)
+    public function addTaskEndDate (\SD\TaskBundle\Entity\TaskEndDate $taskEndDates)
     {
         $this->taskEndDates[] = $taskEndDates;
 
         return $this;
     }
-
     /**
      * Remove taskEndDates
      *
      * @param \SD\TaskBundle\Entity\TaskEndDate $taskEndDates
      */
-    public function removeTaskEndDate(\SD\TaskBundle\Entity\TaskEndDate $taskEndDates)
+    public function removeTaskEndDate (\SD\TaskBundle\Entity\TaskEndDate $taskEndDates)
     {
         $this->taskEndDates->removeElement($taskEndDates);
     }
-
     /**
      * Get taskEndDates
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getTaskEndDates()
+    public function getTaskEndDates ()
     {
         return $this->taskEndDates;
     }
+
     /**
      * @var \DateTime
      */
@@ -236,7 +224,6 @@ class Task
      */
     private $startDate;
 
-
     /**
      * Set createDate
      *
@@ -244,23 +231,21 @@ class Task
      *
      * @return Task
      */
-    public function setCreateDate($createDate)
+    public function setCreateDate ($createDate)
     {
         $this->createDate = $createDate;
 
         return $this;
     }
-
     /**
      * Get createDate
      *
      * @return \DateTime 
      */
-    public function getCreateDate()
+    public function getCreateDate ()
     {
         return $this->createDate;
     }
-
     /**
      * Set startDate
      *
@@ -268,19 +253,18 @@ class Task
      *
      * @return Task
      */
-    public function setStartDate($startDate)
+    public function setStartDate ($startDate)
     {
         $this->startDate = $startDate;
 
         return $this;
     }
-
     /**
      * Get startDate
      *
      * @return \DateTime 
      */
-    public function getStartDate()
+    public function getStartDate ()
     {
         return $this->startDate;
     }

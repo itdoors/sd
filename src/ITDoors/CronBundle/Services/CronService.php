@@ -22,17 +22,16 @@ class CronService
      *
      * @param Container $container
      */
-    public function __construct(Container $container)
+    public function __construct (Container $container)
     {
         $this->container = $container;
     }
-
     /**
      * get files and update create date in dogovor and dopdogovor
      * 
      * @return string
      */
-    public function addSendEmails()
+    public function addSendEmails ()
     {
         $cm = new CronManager();
         $cron = new Cron();
@@ -40,11 +39,11 @@ class CronService
         $comment = uniqid();
         $cron->setComment($comment);
 
-        if (!is_dir($directory.'/app/logs/cron')) {
-            mkdir($directory.'/app/logs/cron', 0777);
+        if (!is_dir($directory . '/app/logs/cron')) {
+            mkdir($directory . '/app/logs/cron', 0777);
         }
-        $cron->setLogFile($directory.'/app/logs/cron/log'.$comment.'.php');
-        $cron->setErrorFile($directory.'/app/logs/cron/err'.$comment.'.php');
+        $cron->setLogFile($directory . '/app/logs/cron/log' . $comment . '.php');
+        $cron->setErrorFile($directory . '/app/logs/cron/err' . $comment . '.php');
         $cron->setCommand(
             'cd ' . $directory .
             ' && app/console swiftmailer:spool:send --env=prod' .
@@ -54,7 +53,6 @@ class CronService
 
         return $comment;
     }
-
     /**
      * get files and update create date in dogovor and dopdogovor
      * 
@@ -63,7 +61,7 @@ class CronService
      * 
      * @return string
      */
-    public function sendOnly15ArticleDecision($articleId, $date)
+    public function sendOnly15ArticleDecision ($articleId, $date)
     {
         $cm = new CronManager();
         $cron = new Cron();
@@ -74,19 +72,18 @@ class CronService
         $cron->setHour(date('H', $date));
         $cron->setDayOfMonth(date('d', $date));
         $cron->setMonth(date('m', $date));
-        $cron->setLogFile($directory.'/app/logs/cron/log'.$comment.'.php');
-        $cron->setErrorFile($directory.'/app/logs/cron/err'.$comment.'.php');
+        $cron->setLogFile($directory . '/app/logs/cron/log' . $comment . '.php');
+        $cron->setErrorFile($directory . '/app/logs/cron/err' . $comment . '.php');
         $cron->setCommand(
-            'cd '.$directory .
-            ' && app/console lists:article:send:only:15 '. $articleId .
+            'cd ' . $directory .
+            ' && app/console lists:article:send:only:15 ' . $articleId .
             ' && app/console it:doors:cron:delete ' . $comment
         );
         $cm->add($cron);
 
         return $comment;
     }
-
-     /**
+    /**
      * get files and update create date in dogovor and dopdogovor
      * 
      * @param integer $articleId
@@ -94,15 +91,15 @@ class CronService
      * 
      * @return string
      */
-    public function sendResultArticleDecision($articleId, $date=false)
+    public function sendResultArticleDecision ($articleId, $date = false)
     {
         $cm = new CronManager();
         $cron = new Cron();
         $directory = $this->container->getParameter('project.dir');
-        $comment = 'ArticleResultDecision'.$articleId;
+        $comment = 'ArticleResultDecision' . $articleId;
         $cron->setComment($comment);
-        if (!is_dir($directory.'/app/logs/cron')) {
-            mkdir($directory.'/app/logs/cron', 0777);
+        if (!is_dir($directory . '/app/logs/cron')) {
+            mkdir($directory . '/app/logs/cron', 0777);
         }
         if ($date) {
             $cron->setMinute($date->format('i'));
@@ -110,8 +107,8 @@ class CronService
             $cron->setDayOfMonth($date->format('d'));
             $cron->setMonth($date->format('m'));
         }
-        $cron->setLogFile($directory.'/app/logs/cron/log'.$comment.'.php');
-        $cron->setErrorFile($directory.'/app/logs/cron/err'.$comment.'.php');
+        $cron->setLogFile($directory . '/app/logs/cron/log' . $comment . '.php');
+        $cron->setErrorFile($directory . '/app/logs/cron/err' . $comment . '.php');
         $cron->setCommand(
             'cd ' . $directory .
             ' && app/console lists:article:result:solution ' . $articleId .
