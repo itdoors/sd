@@ -23,8 +23,7 @@ class OperDogovorController extends BaseFilterController
      *
      * @return mixed[]
      */
-
-    public function indexAction($id)
+    public function indexAction ($id)
     {
         $idDepartment = $id;
 
@@ -32,11 +31,11 @@ class OperDogovorController extends BaseFilterController
         $dogovorDepartmentRepository = $this->getDoctrine()
             ->getRepository('ListsDogovorBundle:DogovorDepartment');
 
-        $dogovorsDepartment = $dogovorDepartmentRepository->findBy(array(
+        $dogovorsDepartment = $dogovorDepartmentRepository->findBy(array (
             'department' => $idDepartment,
         ));
 
-        $checkedForParent = array();
+        $checkedForParent = array ();
         /** @var  $dogovorDepartment \Lists\DogovorBundle\Entity\DogovorDepartment */
         foreach ($dogovorsDepartment as $dogovorDepartment) {
             $dopDogovor = $dogovorDepartment->getDopDogovorId();
@@ -52,47 +51,45 @@ class OperDogovorController extends BaseFilterController
                     }
                 }
                 if (!$hasParent) {
-                    $dogovorsDepartment = array_merge($dogovorsDepartment,
-                        $dogovorDepartmentRepository->findBy(array(
-                        'dogovor' => $parent,
-                        'dopDogovor' => null
+                    $dogovorsDepartment = array_merge($dogovorsDepartment, $dogovorDepartmentRepository->findBy(array (
+                            'dogovor' => $parent,
+                            'dopDogovor' => null
                     )));
                 }
             }
         }
         /*
-        $infoDogovors = array();
+          $infoDogovors = array();
 
-        /** @var  $dogovorDepartment \Lists\DogovorBundle\Entity\DogovorDepartment
-        foreach ($dogovors as $dogovorDepartment) {
-            if ($dogovorDepartment->getDopDogovor() != null) {
-                $dogovorKey = 'dogovor_'.$dogovorDepartment->getId();
-                /** @var  $dogovor \Lists\DogovorBundle\Entity\Dogovor
-                $dogovor = $dogovorDepartment->getDogovor();
-                $infoDogovors[$dogovorKey]['id'] = $dogovor->getId();
-                $infoDogovors[$dogovorKey]['prolongation'] = $dogovor->getProlongation();
-                $infoDogovors[$dogovorKey]['organization'] = $dogovor->getOrganization()->getName();
-                $infoDogovors[$dogovorKey]['name'] = $dogovor->getName();
-                $infoDogovors[$dogovorKey]['number'] = $dogovor->getNumber();
-                $infoDogovors[$dogovorKey]['dateStart'] = $dogovor->getStartdatetime();
-                $infoDogovors[$dogovorKey]['dateEnd'] = $dogovor->getStopdatetime();
-                $infoDogovors[$dogovorKey]['city'] = $dogovor->getCity();
-                $infoDogovors[$dogovorKey]['subject'] = $dogovor->getSubject();
-                $infoDogovors[$dogovorKey]['status'] = $dogovor->getIsActive();
-                $infoDogovors[$dogovorKey]['type'] = $dogovor->getDogovorType()->getName();
-                $infoDogovors[$dogovorKey]['personCreated'] = $dogovor->getUser();
-                $infoDogovors[$dogovorKey]['personCreated'] = $dogovor->getUser();
-                $infoDogovors[$dogovorKey]['personCreated'] = $dogovor->getUser();
+          /** @var  $dogovorDepartment \Lists\DogovorBundle\Entity\DogovorDepartment
+          foreach ($dogovors as $dogovorDepartment) {
+          if ($dogovorDepartment->getDopDogovor() != null) {
+          $dogovorKey = 'dogovor_'.$dogovorDepartment->getId();
+          /** @var  $dogovor \Lists\DogovorBundle\Entity\Dogovor
+          $dogovor = $dogovorDepartment->getDogovor();
+          $infoDogovors[$dogovorKey]['id'] = $dogovor->getId();
+          $infoDogovors[$dogovorKey]['prolongation'] = $dogovor->getProlongation();
+          $infoDogovors[$dogovorKey]['organization'] = $dogovor->getOrganization()->getName();
+          $infoDogovors[$dogovorKey]['name'] = $dogovor->getName();
+          $infoDogovors[$dogovorKey]['number'] = $dogovor->getNumber();
+          $infoDogovors[$dogovorKey]['dateStart'] = $dogovor->getStartdatetime();
+          $infoDogovors[$dogovorKey]['dateEnd'] = $dogovor->getStopdatetime();
+          $infoDogovors[$dogovorKey]['city'] = $dogovor->getCity();
+          $infoDogovors[$dogovorKey]['subject'] = $dogovor->getSubject();
+          $infoDogovors[$dogovorKey]['status'] = $dogovor->getIsActive();
+          $infoDogovors[$dogovorKey]['type'] = $dogovor->getDogovorType()->getName();
+          $infoDogovors[$dogovorKey]['personCreated'] = $dogovor->getUser();
+          $infoDogovors[$dogovorKey]['personCreated'] = $dogovor->getUser();
+          $infoDogovors[$dogovorKey]['personCreated'] = $dogovor->getUser();
 
-            }
-        }
-    */
+          }
+          }
+         */
 
 
 
-        return $this->render('ITDoorsOperBundle:Dogovor:dogovorMain.html.twig', array(
-            'dogovorsDepartment' => $dogovorsDepartment
+        return $this->render('ITDoorsOperBundle:Dogovor:dogovorMain.html.twig', array (
+                'dogovorsDepartment' => $dogovorsDepartment
         ));
     }
-
 }

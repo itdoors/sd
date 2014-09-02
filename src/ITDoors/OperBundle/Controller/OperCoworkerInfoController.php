@@ -21,7 +21,7 @@ class OperCoworkerInfoController extends BaseFilterController
      *
      * @return mixed[]
      */
-    public function indexAction()
+    public function indexAction ()
     {
         $year = intval(date('Y'));
         $month = intval(date('m'));
@@ -43,19 +43,18 @@ class OperCoworkerInfoController extends BaseFilterController
         $this->addToSessionValues('idDepartment', $allowedDepartments, 'param', 'oper.bundle.department');
 
         $user = $this->getUser();
-        $checkSupervisor =  $user->hasRole('ROLE_SUPERVISOR');
+        $checkSupervisor = $user->hasRole('ROLE_SUPERVISOR');
 
-        return $this->render('ITDoorsOperBundle:Coworker:index.html.twig', array(
-            'supervisor' => $checkSupervisor
+        return $this->render('ITDoorsOperBundle:Coworker:index.html.twig', array (
+                'supervisor' => $checkSupervisor
         ));
     }
-
     /**
      * coworkerTableAction
      *
      * @return mixed[]
      */
-    public function coworkerTableAction()
+    public function coworkerTableAction ()
     {
 
         $filterNamespace = $this->container->getParameter($this->getNamespace());
@@ -90,46 +89,43 @@ class OperCoworkerInfoController extends BaseFilterController
 
         $coworkers = $query->getResult();
 
-/*        $infoSumSalary = array();
-        $commonService = $this->get('common_oper.service');
+        /*        $infoSumSalary = array();
+          $commonService = $this->get('common_oper.service');
 
-        foreach ($coworkers as $coworker) {
-            $id = $coworker['id'];
-            $replacementId = $coworker['replacementId'];
-            $idDepartment = $coworker['idDepartment'];
-            //$infoSumSalary['coworker_'.$id] = $commonService->getSumsCoworker($year.'-'.$month, $id, $replacementId, $idDepartment);
+          foreach ($coworkers as $coworker) {
+          $id = $coworker['id'];
+          $replacementId = $coworker['replacementId'];
+          $idDepartment = $coworker['idDepartment'];
+          //$infoSumSalary['coworker_'.$id] = $commonService->getSumsCoworker($year.'-'.$month, $id, $replacementId, $idDepartment);
 
-        }*/
+          } */
 
         $canEdit = $accessService->checkIfCanEdit();
 
-        return $this->render('ITDoorsOperBundle:Coworker:coworkerTable.html.twig', array(
-            'coworkers' => $coworkers,
-            'month' => $month,
-            'year' => $year,
-            //'infoSumSalary' => $infoSumSalary,
-            'canEdit' => $canEdit
+        return $this->render('ITDoorsOperBundle:Coworker:coworkerTable.html.twig', array (
+                'coworkers' => $coworkers,
+                'month' => $month,
+                'year' => $year,
+                //'infoSumSalary' => $infoSumSalary,
+                'canEdit' => $canEdit
         ));
-
     }
-
     /**
      * @return Response
      */
-    public function coworkerIndexAction()
+    public function coworkerIndexAction ()
     {
         $user = $this->getUser();
-        $checkSupervisor =  $user->hasRole('ROLE_SUPERVISOR');
+        $checkSupervisor = $user->hasRole('ROLE_SUPERVISOR');
 
-        return $this->render('ITDoorsOperBundle:Coworker:coworker.html.twig', array(
-            'supervisor' => $checkSupervisor
+        return $this->render('ITDoorsOperBundle:Coworker:coworker.html.twig', array (
+                'supervisor' => $checkSupervisor
         ));
     }
-
     /**
      * @return Response
      */
-    public function scheduleIndexAction()
+    public function scheduleIndexAction ()
     {
         $checkSupervisor = $this->getUser()->hasRole('ROLE_SUPERVISOR');
 
@@ -138,12 +134,10 @@ class OperCoworkerInfoController extends BaseFilterController
             $coworkerSupervisorPage = true;
         }
 
-        return $this->render('ITDoorsOperBundle:Coworker:schedule.html.twig', array(
-            'coworkerSupervisorPage' => $coworkerSupervisorPage
+        return $this->render('ITDoorsOperBundle:Coworker:schedule.html.twig', array (
+                'coworkerSupervisorPage' => $coworkerSupervisorPage
         ));
     }
-
-
     /**
      * @return Response
      */
@@ -175,39 +169,37 @@ class OperCoworkerInfoController extends BaseFilterController
         $data[4]['visited'] = false;
         $data[4]['cityId'] = 28;
 
-/*
-        $departmentPeopleRepository = $this->getDoctrine()
-            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
+        /*
+          $departmentPeopleRepository = $this->getDoctrine()
+          ->getRepository('ListsDepartmentBundle:DepartmentPeople');
 
-        $dps = $departmentPeopleRepository->findBy(array(
-            'department' => 2111
-        ));
-        foreach ($dps as $dp) {
-            $data[] = get_object_vars($dp);
-        }
-*/
+          $dps = $departmentPeopleRepository->findBy(array(
+          'department' => 2111
+          ));
+          foreach ($dps as $dp) {
+          $data[] = get_object_vars($dp);
+          }
+         */
 
-        $options = array();
+        $options = array ();
         //$options['show'] = array('number', 'city', 'visited');
         $options['visited']['type'] = 'checkbox';
-        $options['visited']['param'] = array(
+        $options['visited']['param'] = array (
             'checked' => 'value',
             'pattern' => '/oleoleole/',
             'index' => 'cityId',
             'class' => 'cool aha',
-            'data' => array('pk' =>5, 'city'=> 'olena')
+            'data' => array ('pk' => 5, 'city' => 'olena')
         );
 
         $options['city']['type'] = 'text';
-        $options['city']['param'] = array(
+        $options['city']['param'] = array (
             'ordering' => true
         );
 
-        return $this->render('ITDoorsOperBundle:Coworker:testTable.html.twig', array(
-            'options' => $options,
-            'data' => $data
+        return $this->render('ITDoorsOperBundle:Coworker:testTable.html.twig', array (
+                'options' => $options,
+                'data' => $data
         ));
-
     }
-
 }

@@ -45,17 +45,15 @@ class Comment
      */
     private $user;
 
-
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set createDatetime
      *
@@ -63,23 +61,21 @@ class Comment
      *
      * @return Comment
      */
-    public function setCreateDatetime($createDatetime)
+    public function setCreateDatetime ($createDatetime)
     {
         $this->createDatetime = $createDatetime;
 
         return $this;
     }
-
     /**
      * Get createDatetime
      *
      * @return \DateTime 
      */
-    public function getCreateDatetime()
+    public function getCreateDatetime ()
     {
         return $this->createDatetime;
     }
-
     /**
      * Set value
      *
@@ -87,23 +83,21 @@ class Comment
      *
      * @return Comment
      */
-    public function setValue($value)
+    public function setValue ($value)
     {
         $this->value = $value;
 
         return $this;
     }
-
     /**
      * Get value
      *
      * @return string 
      */
-    public function getValue()
+    public function getValue ()
     {
         return $this->value;
     }
-
     /**
      * Set model
      *
@@ -111,23 +105,21 @@ class Comment
      *
      * @return Comment
      */
-    public function setModel($model)
+    public function setModel ($model)
     {
         $this->model = $model;
 
         return $this;
     }
-
     /**
      * Get model
      *
      * @return string 
      */
-    public function getModel()
+    public function getModel ()
     {
         return $this->model;
     }
-
     /**
      * Set modelId
      *
@@ -135,23 +127,21 @@ class Comment
      *
      * @return Comment
      */
-    public function setModelId($modelId)
+    public function setModelId ($modelId)
     {
         $this->modelId = $modelId;
 
         return $this;
     }
-
     /**
      * Get modelId
      *
      * @return integer 
      */
-    public function getModelId()
+    public function getModelId ()
     {
         return $this->modelId;
     }
-
     /**
      * Set additionField
      *
@@ -159,23 +149,21 @@ class Comment
      *
      * @return Comment
      */
-    public function setAdditionField($additionField)
+    public function setAdditionField ($additionField)
     {
         $this->additionField = $additionField;
 
         return $this;
     }
-
     /**
      * Get additionField
      *
      * @return string 
      */
-    public function getAdditionField()
+    public function getAdditionField ()
     {
         return $this->additionField;
     }
-
     /**
      * Set user
      *
@@ -183,19 +171,18 @@ class Comment
      *
      * @return Comment
      */
-    public function setUser(\SD\UserBundle\Entity\User $user = null)
+    public function setUser (\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
 
         return $this;
     }
-
     /**
      * Get user
      *
      * @return \SD\UserBundle\Entity\User 
      */
-    public function getUser()
+    public function getUser ()
     {
         return $this->user;
     }

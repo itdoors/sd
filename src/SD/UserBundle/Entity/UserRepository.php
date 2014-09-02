@@ -19,7 +19,7 @@ class UserRepository extends EntityRepository
      *
      * @return Query
      */
-    public function getOnlyStuff()
+    public function getOnlyStuff ()
     {
         return $this->createQueryBuilder('u')
                 ->select('u', 'stuff')
@@ -32,14 +32,13 @@ class UserRepository extends EntityRepository
      *
      * @return Query
      */
-    public function getAllUsersStuff()
+    public function getAllUsersStuff ()
     {
         return $this->createQueryBuilder('u')
                 ->select('u', 'stuff')
                 ->leftJoin('u.stuff', 'stuff')
                 ->orderBy('u.lastName', 'ASC');
     }
-
     /**
      * Get Only stuff
      *
@@ -47,7 +46,7 @@ class UserRepository extends EntityRepository
      * 
      * @return Query
      */
-    public function getStuffById($id)
+    public function getStuffById ($id)
     {
         return $this->createQueryBuilder('u')
                 ->select('u.id')
@@ -81,7 +80,7 @@ class UserRepository extends EntityRepository
      *
      * @return Query
      */
-    public function getOrganizationUsersQuery($organizationId)
+    public function getOrganizationUsersQuery ($organizationId)
     {
         return $this->createQueryBuilder('u')
                 ->select('u', 'stuff')
@@ -91,7 +90,6 @@ class UserRepository extends EntityRepository
                 ->where('organizations.id = :organizationId')
                 ->setParameter(':organizationId', $organizationId);
     }
-
     /**
      * Get users by handling
      *
@@ -99,7 +97,7 @@ class UserRepository extends EntityRepository
      *
      * @return Query
      */
-    public function getHandlingUsersQuery($handlingId)
+    public function getHandlingUsersQuery ($handlingId)
     {
         return $this->createQueryBuilder('u')
                 ->select('u', 'stuff', 'handlings')
@@ -109,13 +107,12 @@ class UserRepository extends EntityRepository
                 ->where('handlings.id = :handlingId')
                 ->setParameter(':handlingId', $handlingId);
     }
-
     /**
      * Processes sql query. adding select
      *
      * @param QueryBuilder $sql
      */
-    public function processSelect(QueryBuilder $sql)
+    public function processSelect (QueryBuilder $sql)
     {
         $sql
             ->select('u.id as id')
@@ -130,51 +127,47 @@ class UserRepository extends EntityRepository
             ->addSelect('u.isFired')
             ->addSelect('c.name as company');
     }
-
     /**
      * Processes sql query. adding select
      *
      * @param QueryBuilder $sql
      */
-    public function processCount(QueryBuilder $sql)
+    public function processCount (QueryBuilder $sql)
     {
         $sql
             ->select('COUNT(u.id) as usercount');
     }
-
     /**
      * Processes sql query. adding base query
      *
      * @param QueryBuilder $sql
      */
-    public function processBaseQuery(QueryBuilder $sql)
+    public function processBaseQuery (QueryBuilder $sql)
     {
         $sql->innerJoin('u.stuff', 's')
             ->leftJoin('s.companystructure', 'c');
         /* ->leftJoin('o.city', 'c')
           ->leftJoin('c.region', 'r'); */
     }
-
     /**
      * Processes sql query. adding id query
      *
      * @param QueryBuilder $sql
      * @param int          $id
      */
-    public function processIdQuery(QueryBuilder $sql, $id)
+    public function processIdQuery (QueryBuilder $sql, $id)
     {
         $sql
             ->andWhere('u.id = :id')
             ->setParameter(':id', $id);
     }
-
     /**
      * Processes sql query depending on filters
      *
      * @param QueryBuilder $sql
      * @param mixed[]      $filters
      */
-    public function processFilters(QueryBuilder $sql, $filters)
+    public function processFilters (QueryBuilder $sql, $filters)
     {
         if (sizeof($filters)) {
             foreach ($filters as $key => $value) {
@@ -223,17 +216,15 @@ class UserRepository extends EntityRepository
             }
         }
     }
-
     /**
      * Processes sql query. adding users query
      *
      * @param \Doctrine\ORM\QueryBuilder $sql
      */
-    public function processOrdering($sql)
+    public function processOrdering ($sql)
     {
         $sql->orderBy('u.firstName', 'ASC');
     }
-
     /**
      * getAllForUserQuery
      * 
@@ -242,7 +233,7 @@ class UserRepository extends EntityRepository
      * 
      * @return type
      */
-    public function getAllForUserQuery($filters, $id = false)
+    public function getAllForUserQuery ($filters, $id = false)
     {
         /** @var \Doctrine\ORM\QueryBuilder $sql */
         $sql = $this->createQueryBuilder('u');
@@ -266,7 +257,7 @@ class UserRepository extends EntityRepository
 
         $this->processOrdering($sql);
 
-        $query = array(
+        $query = array (
             'entity' => $sql->getQuery(),
             'count' => $sqlCount->getQuery()->getSingleScalarResult()
         );

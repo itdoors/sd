@@ -15,17 +15,15 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class updateGrafiksCommand extends ContainerAwareCommand
 {
-
     /**
      * configure
      */
-    protected function configure()
+    protected function configure ()
     {
         $this
             ->setName('it:doors:update_grafik')
             ->setDescription('Updates grafik due to new schedule');
     }
-
     /**
      * execute
      *
@@ -34,7 +32,7 @@ class updateGrafiksCommand extends ContainerAwareCommand
      *
      * @return string
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute (InputInterface $input, OutputInterface $output)
     {
 
         $parser = $this->getContainer()->get('schedule_update.service');
