@@ -1093,7 +1093,7 @@ class SalesController extends BaseController
                     ?
                     $handling['resultPercentageString']
                     :
-                    handling['percentageString']
+                    $handling['percentageString']
                 )
                 ->setCellValueByColumnAndRow(++$col, $str, $handling['statusName']);
         }
