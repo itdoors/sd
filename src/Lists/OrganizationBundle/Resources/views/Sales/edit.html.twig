@@ -50,45 +50,22 @@
                 width: 250
             }
         });
+
+        $('#ownershipId').editable({
+            url: '{{ path('sd_common_ajax_organization_save') }}',
+            source: '{{ path('sd_common_ajax_ownership') }}',
+            emptytext: '{% trans %}Enter value{% endtrans %}',
+            select2: {
+                placeholder: '{% trans %}Select ownership{% endtrans %}',
+                minimumInputLength: 0,
+                width: 250,
+                allowClear: true
+            }
+        });
     });
 
 </script>
-     <a class="btn green" id="history-show-btn" href="#history" data-toggle="modal">
-        <i class="fa fa-plus"></i>
-        {% trans %}Show history{% endtrans %}
-    </a>
-
-    {{ history_table_render_btn({
-        'selector' : '#history-show-btn',
-        'service' : {
-            'alias' : 'it_doors_history.service',
-            'method' : 'getHistory'
-        },
-        'params' : {
-            'modelName' : 'organization',
-            'modelId' : organization.id,
-            'showPagination' : 'true',
-            'showFilter' : 'true'
-        },
-        'target' : '#historyBlock',
-        'html' : 'ITDoorsHistoryBundle:History:index.html.twig'
-    }) }}
-
-    <div id="history" class="modal fade" role="basic" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">{% trans from 'ListsHistoryBundle' %}History{% endtrans %}</h4>
-                </div>
-                <div class="modal-body">
-                    <div id="historyBlock" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
-                    </div>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-    </div>
+    
     <div class="col-md-12">
         <table id="user" class="table table-bordered table-striped">
             <tbody>
@@ -98,6 +75,15 @@
                     {{ organization.creator }} {{ organization.createdatetime == '' ? '' : '(' ~ organization.createdatetime|date('d.m.Y, H:i') ~ ')' }}
                 </td>
                 <td style="width:35%"><span class="text-muted">{% trans %}Creator (date create){% endtrans %}</span></td>
+            </tr>
+            <tr>
+                <td>{% trans %}Ownership{% endtrans %}</td>
+                <td>
+                    <a href="#" id="ownershipId" data-type="select2" data-pk="{{ organization.id }}" data-original-title="{% trans %}Ownership{% endtrans %}">
+                       {% if organization.ownership %}{{ organization.ownership.shortname }} {{ '(' ~ organization.ownership ~ ')' }}{% endif%}
+                    </a>
+                </td>
+                <td><span class="text-muted">{% trans %}Select ownership{% endtrans %}</span></td>
             </tr>
             <tr>
                 <td style="width:15%">{% trans %}Organization name{% endtrans %}</td>
@@ -226,6 +212,7 @@
                 </td>
                 <td><span class="text-muted">{% trans %}Enter Organization Description{% endtrans %}</span></td>
             </tr>
+            
             </tbody>
         </table>
     </div>

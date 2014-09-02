@@ -1,0 +1,59 @@
+SD\TaskBundle\Entity\Task:
+    type:  entity
+    table: task
+    repositoryClass: SD\TaskBundle\Entity\TaskRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+    fields:
+        createDate:
+            type: datetime
+            nullable: true
+            column: createdatetime
+        startDate:
+            type: datetime
+            nullable: true
+            column: startdatetime
+        title:
+            type: string
+            nullable: false
+            length: 255
+        description:
+            type: text
+            nullable: true
+    manyToOne:
+        author:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        stage:
+            targetEntity: SD\TaskBundle\Entity\Stage
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                stage_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        type:
+            targetEntity: SD\TaskBundle\Entity\TaskType
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                task_type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    oneToMany:
+        taskEndDates:
+            targetEntity: SD\TaskBundle\Entity\TaskEndDate
+            cascade: {  }
+            mappedBy: task
+            orphanRemoval: false

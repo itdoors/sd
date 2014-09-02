@@ -58,6 +58,7 @@ class UserRepository extends EntityRepository
                 ->addselect('u.middleName')
                 ->addselect('u.birthday')
                 ->addselect('u.position')
+                ->addselect('u.username')
                 ->addselect('s.issues')
                 ->addselect('s.mobilephone')
                 ->addselect('s.phonePersonal')
@@ -121,6 +122,7 @@ class UserRepository extends EntityRepository
             ->addSelect('u.firstName')
             ->addSelect('u.lastName')
             ->addSelect('u.middleName')
+            ->addSelect('u.username')
             ->addSelect('u.position')
             ->addSelect('s.mobilephone')
             ->addSelect('u.email')
@@ -181,8 +183,25 @@ class UserRepository extends EntityRepository
                 }
                 switch ($key) {
                     case 'company':
-                        $sql->andWhere("c.id = :company");
-                        $sql->setParameter(':company', $value);
+                        $valueArr = explode(',', $value);
+                        $sql->andWhere("c.id in (:company) or c.id in 
+                                (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:company)
+                                )");
+                        $sql->setParameter(':company', $valueArr);
                         break;
                     case 'isActive':
                         $sql->andWhere("u.isBlocked = :active");

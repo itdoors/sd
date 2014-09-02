@@ -1050,6 +1050,24 @@ class Organization
     public function setDeletedAt($deletedAt)
     {
         $this->deletedAt = $deletedAt;
+    }
+
+    /**
+     * @var \Lists\OrganizationBundle\Entity\OrganizationOwnership
+     */
+    private $ownership;
+
+
+    /**
+     * Set ownership
+     *
+     * @param \Lists\OrganizationBundle\Entity\OrganizationOwnership $ownership
+     * 
+     * @return Organization
+     */
+    public function setOwnership(\Lists\OrganizationBundle\Entity\OrganizationOwnership $ownership = null)
+    {
+        $this->ownership = $ownership;
 
         return $this;
     }
@@ -1062,5 +1080,43 @@ class Organization
     public function getDeletedAt()
     {
         return $this->deletedAt;
+    }
+     /**
+     * Get ownership
+     *
+     * @return \Lists\OrganizationBundle\Entity\OrganizationOwnership 
+     */
+    public function getOwnership()
+    {
+        return $this->ownership;
+    }
+    /**
+     * @var integer
+     */
+    private $ownershipId;
+
+
+    /**
+     * Set ownershipId
+     *
+     * @param integer $ownershipId
+     * 
+     * @return Organization
+     */
+    public function setOwnershipId($ownershipId)
+    {
+        $this->ownershipId = $ownershipId;
+
+        return $this;
+    }
+
+    /**
+     * Get ownershipId
+     *
+     * @return integer 
+     */
+    public function getOwnershipId()
+    {
+        return $this->ownershipId;
     }
 }

@@ -34,3 +34,5 @@ ITDoors\ControllingBundle\Entity\InvoiceCompanystructure:
                 companystructure_id:
                     referencedColumnName: id
             orphanRemoval: false
+    lifecycleCallbacks:
+        preUpdate: [ addHistory ]

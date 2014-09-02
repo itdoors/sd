@@ -101,6 +101,8 @@ class SalesController extends BaseController
         }
 
         $pagination = array();
+        $accessService = $this->get('access.service');
+        $canExport = !$accessService->checkIfCanEdit();
 
         return $this->render('ListsContactBundle:' . $this->baseTemplate . ':handlingList.html.twig', array(
             'pagination' => $pagination,
@@ -108,7 +110,8 @@ class SalesController extends BaseController
             'departmentId' => $departmentId,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
-            'departmentContacts' => $departmentContacts
+            'departmentContacts' => $departmentContacts,
+            'canExport' => $canExport
         ));
     }
 

@@ -33,10 +33,9 @@
 
     <script>
         $(document).ready(function(){
-            $('#organizationSalesForm_organizationType, #organizationSalesForm_scope, #organizationSalesForm_city').select2({
+            $('#organizationSalesForm_ownership').select2({
                 allowClear: true
             });
-
             $('#organizationSalesForm_name, #organizationSalesForm_shortname').select2({
                 minimumInputLength: 2,
                 allowClear: true,
@@ -89,10 +88,17 @@
                     </div>
                     <h3 class="form-section">{% trans %}General information{% endtrans %}</h3>
                     <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(filterForm.ownership, 'Ownership', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.ownership, {'attr': {'class': 'form-control select2','placeholder': 'Select ownership'}}) }}
+                                <span class="help-block">{% trans %}Select ownership{% endtrans %}</span>
+                            </div>
+                        </div>
                         <div class="col-md-6
-							{% if filterForm.name.vars.errors|length %}
-							    has-error
-							{% endif %}">
+                                {% if filterForm.name.vars.errors|length %}
+                                    has-error
+                                {% endif %}">
                             <div class="form-group">
                                 {{ form_label(filterForm.name, 'Organization name'|trans ~ ' *', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.name, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter organization name'}}) }}
@@ -100,7 +106,6 @@
                                 {{ form_errors(filterForm.name) }}
                             </div>
                         </div>
-                        <!--/span-->
                         <div class="col-md-6">
                             <div class="form-group">
                                 {{ form_label(filterForm.shortname, 'Organization short name', {'attr': {'class': 'control-label'}}) }}
@@ -108,14 +113,10 @@
                                 <span class="help-block">{% trans %}for example{% endtrans %}: Impel Griffin {% trans %}(limit 50 chars){% endtrans %}</span>
                             </div>
                         </div>
-                        <!--/span-->
-                    </div>
-                    <!--/row-->
-                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 {{ form_label(filterForm.organizationType, 'Organization type', {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(filterForm.organizationType, {'attr': {'class': 'form-control select2me'}}) }}
+                                {{ form_widget(filterForm.organizationType, {'attr': {'class': 'form-control select2me', 'placeholder': 'Select organization type'}}) }}
                                 <span class="help-block">{% trans %}Select organization type{% endtrans %}</span>
                             </div>
                         </div>
@@ -123,11 +124,11 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 {{ form_label(filterForm.scope, 'Scope', {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(filterForm.scope, {'attr': {'class': 'form-control select2me'}}) }}
+                                {{ form_widget(filterForm.scope, {'attr': {'class': 'form-control select2me','placeholder': 'Select Organization scope'}}) }}
                                 <span class="help-block">{% trans %}Select Organization scope{% endtrans %}</span>
                             </div>
                         </div>
-                            <div class="col-md-6">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 {{ form_label(filterForm.group, 'Organization Group', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.group, {'attr': {'class': 'form-control select2me','placeholder': 'Select Organization Group'}}) }}
@@ -142,7 +143,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 {{ form_label(filterForm.city, 'City', {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(filterForm.city, {'attr': {'class': 'form-control select2me'}}) }}
+                                {{ form_widget(filterForm.city, {'attr': {'class': 'form-control select2me','placeholder': 'Select city'}}) }}
                                 <span class="help-block">{% trans %}Select city{% endtrans %}</span>
                             </div>
                         </div>
@@ -179,7 +180,7 @@
                         </div>
                         <!--/span-->
                     </div>
-                    <!--/row-->
+                   
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -198,7 +199,6 @@
                         </div>
                         <!--/span-->
                     </div>
-                    <!--/row-->
 
                     <h3 class="form-section">{% trans %}Сontact details{% endtrans %}</h3>
                     <div class="row">

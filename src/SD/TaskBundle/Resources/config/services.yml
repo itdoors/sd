@@ -1,0 +1,15 @@
+parameters:
+#    sd_task.example.class: SD\TaskBundle\Example
+    sd_tast.task.form.class: SD\TaskBundle\Form\TaskForm
+
+
+services:
+#    sd_task.example:
+#        class: %sd_task.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
+    sd_task.form.taskForm:
+        class: %sd_tast.task.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: taskForm1 }
+

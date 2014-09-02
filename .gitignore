@@ -23,3 +23,6 @@ nbproject/*
 /app/share/1c/debt/
 /web/uploads/dogovor/
 /web/uploads/handling_message/
+/web/uploads/document/
+/composer.lock
+/components/
