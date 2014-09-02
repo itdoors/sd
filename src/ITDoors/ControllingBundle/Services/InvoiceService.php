@@ -120,7 +120,10 @@ class InvoiceService
     {
         $em = $this->container->get('doctrine')->getManager();
         $invoiceNew = $em->getRepository('ITDoorsControllingBundle:Invoice')
-            ->findOneBy(array('invoiceId' => trim($invoice->invoiceId)));
+            ->findOneBy(array(
+                'invoiceId' => trim($invoice->invoiceId),
+                'date' => new \DateTime(trim($invoice->date))
+                ));
         if (!$invoiceNew) {
             $invoiceNew = new Invoice();
             $invoiceNew->setCourt(0);
