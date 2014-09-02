@@ -35,9 +35,12 @@ var ITDoorsSip = (function() {
         this.params = $.extend(defaults, options);
     }
 
-    ITDoorsSip.prototype.initIO = function(peerId)
+    ITDoorsSip.prototype.initIO = function(peerId, modelName, modelId)
     {
         var self = this;
+
+        this.modelName = modelName;
+        this.modelId = modelId;
 
         if (self.params.io.host && self.params.io.port && io) {
             var socket = io(self.params.io.host + ':' + self.params.io.port);
@@ -247,7 +250,7 @@ var ITDoorsSip = (function() {
                 //startRingTone();
 
                 if (confirm('Are you sure you want to call to ' + phone.replace(/ /g, "").replace(/-/g, ""))) {
-                    self.modelId = $(this).parents('.model-object-holder').data('id');
+                    //self.modelId = $(this).parents('.model-object-holder').data('id');
                     self.callSession.call(phone.replace(/ /g, "").replace(/-/g, ""));
                     $(this).parent().find('.hangup-btn').show();
                     $(this).hide();
@@ -261,7 +264,7 @@ var ITDoorsSip = (function() {
 
                     $(this).parent().find('.call-btn').show();
                     $(this).hide();
-                    self.modelId = null;
+                    //self.modelId = null;
                 }
             });
         });

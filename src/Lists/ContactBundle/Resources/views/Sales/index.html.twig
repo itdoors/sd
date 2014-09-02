@@ -41,7 +41,7 @@
     {{ parent() }}
     <script type="text/javascript">
         $(document).ready(function(){
-            ITDoorsSip.initIO('{{ app.user.peerId }}');
+            ITDoorsSip.initIO('{{ app.user.peerId }}', 'model_contact', '');
 
             ITDoorsSip.initSIP('{{ app.user.peerId }}', '{{ app.user.peerPassword }}');
         });

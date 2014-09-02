@@ -8,6 +8,8 @@ const VAR_SET_VARIABLE_ANSWEREDTIME = 'ANSWEREDTIME';
 const VAR_SET_VARIABLE_DIALSTATUS = 'DIALSTATUS';
 const VAR_SET_VARIABLE_CALLFILENAME = 'CALLFILENAME';
 
+const ACCOUNT_CODE = 'ITdoor';
+
 function Ami(application) {
     app = application;
 
@@ -98,28 +100,56 @@ Ami.prototype.onVarSet = function(evt) {
 
 Ami.prototype.onHangup = function(evt) {
 
-    var foundDoc;
+    console.log(evt);
+
+    var accountcode = evt.accountcode;
 
     if (evt.uniqueid) {
         app.mongodb.collectionCalls.findAndRemove(
             { uniqueId: evt.uniqueid },
             function(err, doc) {
 
-                foundDoc = doc;
+                if (!doc || evt.accountcode != ACCOUNT_CODE) {
+                    return;
+                }
 
-                console.log('Ami.prototype.onHangup was found', foundDoc);
+                if (!doc.callerId || !doc.receiverId ) {
+                    return;
+                }
 
-                var docJson = JSON.stringify(doc);
+                var execString = app.config.global.exec.path;
 
-                console.log('exec command = ', app.config.global.exec.path + ' ' + docJson);
+                for (key in doc) {
+                    if (doc.hasOwnProperty(key) && key != '_id') {
+                        execString += ' --' + key + '=' + doc[key];
+                    }
+                }
 
-                exec(app.config.global.exec.path + ' ' + docJson, function (error, stdout, stderr) {
+                //console.log('Ami.prototype.onHangup was found', doc);
+
+                //var docJson = JSON.stringify(doc);
+
+                console.log('exec command = ', execString);
+
+                exec(execString, function (error, stdout, stderr) {
                     console.log('exec std out', stdout);
                 });
             }
         )
     }
 }
+
+/*{ _id: 5405b4a1dec7e2f23585f26a,
+    uniqueId: '1409659581.14735',
+    filename: '14-09/1409659581.14735',
+    callerId: '8005',
+    proxyId: '3590556',
+    receiverId: '0636821588',
+    destuniqueId: '1409659581.14736',
+    modelName: 'contact',
+    modelId: 2209,
+    dialStatus: 'CANCEL' }*/
+
 
 /*Ami.prototype.onAll = function(evt) {
 
