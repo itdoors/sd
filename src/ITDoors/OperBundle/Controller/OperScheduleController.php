@@ -27,21 +27,20 @@ class OperScheduleController extends BaseFilterController
      *
      * @return mixed[]
      */
-    public function indexAction($id)
+    public function indexAction ($id)
     {
 
         $this->addToSessionValues('idDepartment', $id, 'param', 'oper.bundle.department', 'param');
         $this->checkEmtyDateFilter();
 
-        return $this->render('ITDoorsOperBundle:Schedule:schedule.html.twig', array(
-            'id' => $id
+        return $this->render('ITDoorsOperBundle:Schedule:schedule.html.twig', array (
+                'id' => $id
         ));
     }
-
     /**
      * checkEmtyDateFilter
      */
-    private function checkEmtyDateFilter()
+    private function checkEmtyDateFilter ()
     {
         $year = intval(date('Y'));
         $month = intval(date('m'));
@@ -63,7 +62,7 @@ class OperScheduleController extends BaseFilterController
      *
      * @return mixed[]
      */
-    public function scheduleTableAction($id)
+    public function scheduleTableAction ($id)
     {
         $idDepartment = $id;
         if ($id == 0) {
@@ -92,12 +91,12 @@ class OperScheduleController extends BaseFilterController
         $monthDaysRepository = $this->getDoctrine()
             ->getRepository('ListsGrafikBundle:Salary');
 
-        $monthDay = $monthDaysRepository->findOneBy(array(
+        $monthDay = $monthDaysRepository->findOneBy(array (
             'year' => $year,
-            'month' =>$month
+            'month' => $month
         ));
 
-        $holiday = array();
+        $holiday = array ();
 
         $dayAdvance = $monthDay->getDayAdvance();
         $dayPayment = $monthDay->getDayPayment();
@@ -105,7 +104,7 @@ class OperScheduleController extends BaseFilterController
         $countHours = $monthDay->getDaySalary();
         $holidays = $monthDay->getWeekends();
 
-        if (strlen($holidays)>0) {
+        if (strlen($holidays) > 0) {
             $holidaysParts = explode(',', $holidays);
             foreach ($holidaysParts as $holidayPart) {
                 $holiday[] = $holidayPart;
@@ -118,22 +117,22 @@ class OperScheduleController extends BaseFilterController
             }
         }
 
-        $days = date("t", strtotime($year.'-'.$month)); //num days in selected month
-        $monthName = date("F", strtotime($year.'-'.$month));
-        $dateInfo = array();
+        $days = date("t", strtotime($year . '-' . $month)); //num days in selected month
+        $monthName = date("F", strtotime($year . '-' . $month));
+        $dateInfo = array ();
 
         $monthShow = $month;
-        if ($month<10) {
-            $monthShow = '0'.$month;
+        if ($month < 10) {
+            $monthShow = '0' . $month;
         }
 
-        for ($i=0; $i<$days; $i++) {
-            $day = $i+1;
+        for ($i = 0; $i < $days; $i++) {
+            $day = $i + 1;
             $dayShow = $day;
-            if ($day<10) {
-                $dayShow = '0'.$day;
+            if ($day < 10) {
+                $dayShow = '0' . $day;
             }
-            $dateInfo[$i]['date'] = $year.'-'.$monthShow.'-'.$dayShow;
+            $dateInfo[$i]['date'] = $year . '-' . $monthShow . '-' . $dayShow;
             $dateInfo[$i]['day'] = $day;
             $stingDate = date('D', strtotime($dateInfo[$i]['date']));
             $dateInfo[$i]['vacation'] = false;
@@ -148,10 +147,10 @@ class OperScheduleController extends BaseFilterController
                 if (!$dateValue['vacation']) {
                     $dateInfo[$key]['vacation'] = true;
                 } else {
-                    if (!$dateInfo[$key+1]['vacation']) {
-                        $dateInfo[$key+1]['vacation'] = true;
+                    if (!$dateInfo[$key + 1]['vacation']) {
+                        $dateInfo[$key + 1]['vacation'] = true;
                     } else {
-                        $dateInfo[$key+2]['vacation'] = true;
+                        $dateInfo[$key + 2]['vacation'] = true;
                     }
                 }
             }
@@ -164,13 +163,16 @@ class OperScheduleController extends BaseFilterController
             $coworkersAll = $departmentPeopleRepository->getOrderedPeopleFromDepartment($idDepartment);
             /** @var  $coworkersOne \Lists\DepartmentBundle\Entity\departmentPeople */
             foreach ($coworkersAll as $key => $departmentPeople) {
-                if ($departmentPeople['dismissalDateNotOfficially'] != null
-                    && $departmentPeople['dismissalDateNotOfficially'] < new \DateTime($year.'-'.$month)) {
+                if (
+                        $departmentPeople['dismissalDateNotOfficially'] != null
+                        &&
+                        $departmentPeople['dismissalDateNotOfficially'] < new \DateTime($year . '-' . $month)
+                    ) {
                     unset($coworkersAll[$key]);
                 }
             }
         } else {
-            $coworkersAll = array();
+            $coworkersAll = array ();
         }
 
         /** @var $grafikRepository \Lists\GrafikBundle\Entity\GrafikRepository   */
@@ -187,7 +189,7 @@ class OperScheduleController extends BaseFilterController
 
         $coworkers = $query->getResult();
 
-        $infoHours = array();
+        $infoHours = array ();
 
         /** @var $coworker \Lists\DepartmentBundle\Entity\DepartmentPeople   */
         foreach ($coworkers as $coworker) {
@@ -206,34 +208,36 @@ class OperScheduleController extends BaseFilterController
                 $idReplacement
             );
 
-            $infoHours[$idCoworker.'-'.$idReplacement]['salaryOfficially'] = 0;
+            $infoHours[$idCoworker . '-' . $idReplacement]['salaryOfficially'] = 0;
 
             if (isset($coworker['salaryOfficially'])) {
-                $infoHours[$idCoworker.'-'.$idReplacement]['salaryOfficially'] = $coworker['salaryOfficially'];
+                $infoHours[$idCoworker . '-' . $idReplacement]['salaryOfficially'] = $coworker['salaryOfficially'];
             }
 
-            $infoHours[$idCoworker.'-'.$idReplacement]['realSalary'] = 0;
+            $infoHours[$idCoworker . '-' . $idReplacement]['realSalary'] = 0;
 
             if (isset($coworker['realSalary'])) {
-                $infoHours[$idCoworker.'-'.$idReplacement]['realSalary'] = $coworker['realSalary'];
+                $infoHours[$idCoworker . '-' . $idReplacement]['realSalary'] = $coworker['realSalary'];
             }
 
-            $infoHours[$idCoworker.'-'.$idReplacement]['officially'] = $grafikRepository->getSumTotalOfficially(
-                $year,
-                $month,
-                $idDepartment,
-                $idCoworker,
-                $idReplacement
-            );
-            $infoHours[$idCoworker.'-'.$idReplacement]['notOfficially'] = $grafikRepository->getSumTotalNotOfficially(
-                $year,
-                $month,
-                $idDepartment,
-                $idCoworker,
-                $idReplacement
-            );
+            $infoHours[$idCoworker . '-' . $idReplacement]['officially'] =
+                $grafikRepository->getSumTotalOfficially(
+                    $year,
+                    $month,
+                    $idDepartment,
+                    $idCoworker,
+                    $idReplacement
+                );
+            $infoHours[$idCoworker . '-' . $idReplacement]['notOfficially'] =
+                $grafikRepository->getSumTotalNotOfficially(
+                    $year,
+                    $month,
+                    $idDepartment,
+                    $idCoworker,
+                    $idReplacement
+                );
 
-            $infoHours[$idCoworker.'-'.$idReplacement]['accrual'] = $this->getTotalOnceOnlyAccruals(
+            $infoHours[$idCoworker . '-' . $idReplacement]['accrual'] = $this->getTotalOnceOnlyAccruals(
                 $month,
                 $year,
                 $idCoworker
@@ -243,35 +247,36 @@ class OperScheduleController extends BaseFilterController
                 ->getRepository('ListsDepartmentBundle:PlannedAccrual');
 
             $plannedAccrual = $plannedAccrualRepository->findOneBy(
-                array(
+                array (
                     'departmentPeople' => $idCoworker,
                     'code' => 'UU',
                     'isActive' => true
                 ),
-                array(
-                    'period' =>'desc'
+                array (
+                    'period' => 'desc'
                 )
             );
 
             if ($plannedAccrual) {
-                $infoHours[$idCoworker.'-'.$idReplacement]['plannedAccrual'] = $plannedAccrual->getValue();
+                $infoHours[$idCoworker . '-' . $idReplacement]['plannedAccrual'] = $plannedAccrual->getValue();
             } else {
-                $infoHours[$idCoworker.'-'.$idReplacement]['plannedAccrual'] = 0;
+                $infoHours[$idCoworker . '-' . $idReplacement]['plannedAccrual'] = 0;
             }
 
-            $infoHours[$idCoworker.'-'.$idReplacement]['salaryNotOfficially'] = $coworker['salaryNotOfficially'];
-            if (!$infoHours[$idCoworker.'-'.$idReplacement]['salaryNotOfficially']) {
-                $infoHours[$idCoworker.'-'.$idReplacement]['salaryNotOfficially'] =
-                    $infoHours[$idCoworker.'-'.$idReplacement]['plannedAccrual'];
-                $infoHours[$idCoworker.'-'.$idReplacement]['salaryNotOfficially'] +=
-                    $infoHours[$idCoworker.'-'.$idReplacement]['accrual']['notOfficially']['plus'];
-                $infoHours[$idCoworker.'-'.$idReplacement]['salaryNotOfficially'] -=
-                    $infoHours[$idCoworker.'-'.$idReplacement]['accrual']['notOfficially']['minus'];
+            $infoHours[$idCoworker . '-' . $idReplacement]['salaryNotOfficially'] = $coworker['salaryNotOfficially'];
+            if (!$infoHours[$idCoworker . '-' . $idReplacement]['salaryNotOfficially']) {
+                $infoHours[$idCoworker . '-' . $idReplacement]['salaryNotOfficially'] =
+                    $infoHours[$idCoworker . '-' . $idReplacement]['plannedAccrual'];
+                $infoHours[$idCoworker . '-' . $idReplacement]['salaryNotOfficially'] +=
+                    $infoHours[$idCoworker . '-' . $idReplacement]['accrual']['notOfficially']['plus'];
+                $infoHours[$idCoworker . '-' . $idReplacement]['salaryNotOfficially'] -=
+                    $infoHours[$idCoworker . '-' . $idReplacement]['accrual']['notOfficially']['minus'];
             }
 
-            $infoHours[$idCoworker.'-'.$idReplacement]['totalSalary'] =
-                $infoHours[$idCoworker.'-'.$idReplacement]['salaryOfficially']
-                + $infoHours[$idCoworker.'-'.$idReplacement]['salaryNotOfficially'];
+            $infoHours[$idCoworker . '-' . $idReplacement]['totalSalary'] =
+                $infoHours[$idCoworker . '-' . $idReplacement]['salaryOfficially']
+                +
+                $infoHours[$idCoworker . '-' . $idReplacement]['salaryNotOfficially'];
 
 
             foreach ($infoHoursCoworker as $infoDay) {
@@ -292,47 +297,45 @@ class OperScheduleController extends BaseFilterController
                     $status = 'sick';
                 }
 
-                $infoHours[$idCoworker.'-'.$idReplacement.'-'.$infoDay['day']]['status'] = $status;
-                $infoHours[$idCoworker.'-'.$idReplacement.'-'.$infoDay['day']]['officially'] = $infoDay['total'];
-                $infoHours[$idCoworker.'-'.$idReplacement.'-'.$infoDay['day']]['notOfficially'] =
+                $infoHours[$idCoworker . '-' . $idReplacement . '-' . $infoDay['day']]['status'] = $status;
+                $infoHours[$idCoworker . '-' . $idReplacement . '-' . $infoDay['day']]['officially'] =
+                    $infoDay['total'];
+                $infoHours[$idCoworker . '-' . $idReplacement . '-' . $infoDay['day']]['notOfficially'] =
                     $infoDay['totalNotOfficially'];
-
             }
             //var_dump(count($infoHours));
-            $infoHours[$idCoworker.'-'.$idReplacement]['idMonthInfo'] = $coworker['idMonthInfo'];
+            $infoHours[$idCoworker . '-' . $idReplacement]['idMonthInfo'] = $coworker['idMonthInfo'];
         }
 
         $canEdit = $this->checkIfCanEdit();
-        $infoSalary = $this->getSumsSalary($idDepartment, $year.'-'.$monthShow);
+        $infoSalary = $this->getSumsSalary($idDepartment, $year . '-' . $monthShow);
         $totalSalary = $infoSalary['totalSalary'];
         $salaryNotOfficially = $infoSalary['salaryNotOfficially'];
         $salaryOfficially = $infoSalary['salaryOfficially'];
         $idDepartment = $id;
 
-        return $this->render('ITDoorsOperBundle:Schedule:scheduleTable.html.twig', array(
-            'days'=> $days,
-            'coworkers' => $coworkers,
-            'dateInfo' => $dateInfo,
-            'idDepartment' => $idDepartment,
-            'infoHours' => $infoHours,
-            'year' => $year,
-            'month' => $month,
-            'monthName' => $monthName,
-            'filterCoworkers' => $coworkersAll,
-            'workDaysTotal' => $countWorkDays,
-            'hoursTotal' => $countHours,
-            'holydaysTotalString' => $holidays,
-            'dayAdvance' => $dayAdvance,
-            'dayPayment' => $dayPayment,
-            'canEdit' => $canEdit,
-            'totalSalary' => $totalSalary,
-            'salaryOfficially' => $salaryOfficially,
-            'salaryNotOfficially' => $salaryNotOfficially,
-            'departmentIsArray' => $departmentIsArray
+        return $this->render('ITDoorsOperBundle:Schedule:scheduleTable.html.twig', array (
+                'days' => $days,
+                'coworkers' => $coworkers,
+                'dateInfo' => $dateInfo,
+                'idDepartment' => $idDepartment,
+                'infoHours' => $infoHours,
+                'year' => $year,
+                'month' => $month,
+                'monthName' => $monthName,
+                'filterCoworkers' => $coworkersAll,
+                'workDaysTotal' => $countWorkDays,
+                'hoursTotal' => $countHours,
+                'holydaysTotalString' => $holidays,
+                'dayAdvance' => $dayAdvance,
+                'dayPayment' => $dayPayment,
+                'canEdit' => $canEdit,
+                'totalSalary' => $totalSalary,
+                'salaryOfficially' => $salaryOfficially,
+                'salaryNotOfficially' => $salaryNotOfficially,
+                'departmentIsArray' => $departmentIsArray
         ));
-
     }
-
     /**
      * getting the info about grafik for one day for exact user
      *
@@ -340,17 +343,17 @@ class OperScheduleController extends BaseFilterController
      *
      * @return string
      */
-    public function oneDayInfoAction(Request $request)
+    public function oneDayInfoAction (Request $request)
     {
-        $date =  $request->request->get('date');
+        $date = $request->request->get('date');
         $idCoworker = $request->request->get('idCoworker');
         $idDepartment = $request->request->get('idDepartment');
         $idLink = $request->request->get('idLink');
         $idReplacement = $request->request->get('idReplacement');
 
-/*        if (!isset($date) || !isset($idCoworker) || !isset($idDepartment)) {
-            echo ('some error, variables had not been sent');exit;
-        }*/
+        /*        if (!isset($date) || !isset($idCoworker) || !isset($idDepartment)) {
+          echo ('some error, variables had not been sent');exit;
+          } */
         /** @var $grafikTimeRepository \Lists\GrafikBundle\Entity\GrafikTimeRepository   */
         $grafikTimeRepository = $this->getDoctrine()
             ->getRepository('ListsGrafikBundle:GrafikTime');
@@ -370,7 +373,7 @@ class OperScheduleController extends BaseFilterController
         );
 
         //var_dump($coworkerDayTime[0]);
-        $return = array();
+        $return = array ();
 
         $monthName = date("F", strtotime($date));
         $dayName = date('D', strtotime($date));
@@ -390,7 +393,7 @@ class OperScheduleController extends BaseFilterController
             $idReplacement
         );
 
-            $status = 'ok';
+        $status = 'ok';
         if (isset($infoDay[0])) {
             if ($infoDay[0]['isVacation']) {
                 $status = 'vacation';
@@ -419,28 +422,32 @@ class OperScheduleController extends BaseFilterController
         $fio = '';
         if ($departmentPeople->getIndividual()) {
             $individual = $departmentPeople->getIndividual();
-            $fio = $individual->getLastName().' '.
-                $individual->getFirstName().' '.$individual->getMiddleName();
+            $fio = $individual->getLastName() . ' ' .
+                $individual->getFirstName() . ' ' . $individual->getMiddleName();
         } else {
-            $fio = $departmentPeople->getLastName().' '.
-                $departmentPeople->getFirstName().' '.$departmentPeople->getMiddleName();
+            $fio = $departmentPeople->getLastName() . ' ' .
+                $departmentPeople->getFirstName() . ' ' . $departmentPeople->getMiddleName();
         }
         $mpk = $departmentPeople->getMpks();
 
-        $canEdit  =  $this->checkIfCanEdit();
+        $canEdit = $this->checkIfCanEdit();
 
         $coworkersAll = $departmentPeopleRepository->getOrderedPeopleFromDepartment($idDepartment);
         /** @var  $coworkersOne \Lists\DepartmentBundle\Entity\departmentPeople */
         foreach ($coworkersAll as $key => $departmentPeople) {
-            if ($departmentPeople['dismissalDateNotOfficially'] != null
-                && $departmentPeople['dismissalDateNotOfficially'] < new \DateTime($year.'-'.$month)) {
+            if (
+                    $departmentPeople['dismissalDateNotOfficially'] != null
+                    &&
+                    $departmentPeople['dismissalDateNotOfficially'] < new \DateTime($year . '-' . $month)
+                ) {
                 unset($coworkersAll[$key]);
             }
         }
-        $coopration = array();
+        $coopration = array ();
         $coopration['exists'] = false;
         if (isset($infoDay[0]) && $infoDay[0]['departmentPeopleCooperationId']) {
-            $departmentPeopleCooperation = $departmentPeopleRepository->find($infoDay[0]['departmentPeopleCooperationId']);
+            $departmentPeopleCooperation =
+                $departmentPeopleRepository->find($infoDay[0]['departmentPeopleCooperationId']);
             //$departmentPoopleCooperation = $grafik->getDepartmentPeopleCooperation();
 
             $idCooperatinon = $departmentPeopleCooperation->getId();
@@ -451,11 +458,12 @@ class OperScheduleController extends BaseFilterController
                 $percentCooperation = $infoDay[0]['percentCooperation'];
                 if ($departmentPeopleCooperation->getIndividual()) {
                     $individualCooperation = $departmentPeopleCooperation->getIndividual();
-                    $fioCooperation = $individualCooperation->getLastName().' '.
-                        $individualCooperation->getFirstName().' '.$individualCooperation->getMiddleName();
+                    $fioCooperation = $individualCooperation->getLastName() . ' ' .
+                        $individualCooperation->getFirstName() . ' ' . $individualCooperation->getMiddleName();
                 } else {
-                    $fioCooperation = $departmentPeopleCooperation->getLastName().' '.
-                        $departmentPeopleCooperation->getFirstName().' '.$departmentPeopleCooperation->getMiddleName();
+                    $fioCooperation = $departmentPeopleCooperation->getLastName() . ' ' .
+                        $departmentPeopleCooperation->getFirstName() . ' ' .
+                        $departmentPeopleCooperation->getMiddleName();
                 }
                 $mpkCooperation = $departmentPeopleCooperation->getMpks();
                 $coopration['percent'] = $percentCooperation;
@@ -464,7 +472,7 @@ class OperScheduleController extends BaseFilterController
             }
         }
 
-        $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleDay.html.twig', array(
+        $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleDay.html.twig', array (
             'coworkerDayTime' => $coworkerDayTime,
             'date' => $date,
             'idCoworker' => $idCoworker,
@@ -486,19 +494,17 @@ class OperScheduleController extends BaseFilterController
         $return['success'] = 1;
 
         return new Response(json_encode($return));
-
     }
-
     /**
      * @param Request $request
      *
      * @return Response
      */
-    public function addNewTimeAction(Request $request)
+    public function addNewTimeAction (Request $request)
     {
-        $return = array();
+        $return = array ();
         $return['html'] = '';
-        $date =  $request->request->get('date');
+        $date = $request->request->get('date');
         $idCoworker = $request->request->get('idCoworker');
         $idDepartment = $request->request->get('idDepartment');
         $officially = $request->request->get('officially');
@@ -538,7 +544,7 @@ class OperScheduleController extends BaseFilterController
         list($hoursToTime, $minutesToTime) = explode(':', $toTime);
         $midnight = '00:00';
 
-        $timeIn = array();
+        $timeIn = array ();
         $infoDay['date'] = $date;
         $infoDay['from'] = $fromTime;
         $infoDay['to'] = $toTime;
@@ -546,7 +552,7 @@ class OperScheduleController extends BaseFilterController
         //wrong time error
         if (($hoursFromTime > $hoursToTime && $hoursToTime != 0) ||
             ($hoursToTime == 0 && $minutesToTime != 0 && $hoursFromTime != 0) ||
-            ($hoursToTime == $hoursFromTime && $minutesFromTime>$minutesToTime) ||
+            ($hoursToTime == $hoursFromTime && $minutesFromTime > $minutesToTime) ||
             ($fromTime == $toTime)) {
 
             $return['success'] = 0;
@@ -581,29 +587,33 @@ class OperScheduleController extends BaseFilterController
             return new Response(json_encode($return));
         }
 
-/*            if ($hoursFromTime > $hoursToTime || ($hoursToTime == 0 && $minutesToTime != 0 && $hoursFromTime != 0)) {
-                $timeIn[0]['from'] = $fromTime;
-                $timeIn[0]['to'] = $midnight;
-                $timeIn[0]['date'] = $date;
+        /*
+         *  if (
+         *  $hoursFromTime > $hoursToTime ||
+         *  ($hoursToTime == 0 && $minutesToTime != 0 && $hoursFromTime != 0)
+         * ) {
+          $timeIn[0]['from'] = $fromTime;
+          $timeIn[0]['to'] = $midnight;
+          $timeIn[0]['date'] = $date;
 
-                $timeIn[1]['from'] = $midnight;
-                $timeIn[1]['to'] = $toTime;
-                //date of the next day
-                $timeIn[1]['date'] = date('Y-m-d', strtotime($date .' +1 day'));
-            } else {
-                $timeIn[0]['from'] = $fromTime;
-                $timeIn[0]['to'] = $toTime;
-                $timeIn[0]['date'] = $date;
-            }*/
+          $timeIn[1]['from'] = $midnight;
+          $timeIn[1]['to'] = $toTime;
+          //date of the next day
+          $timeIn[1]['date'] = date('Y-m-d', strtotime($date .' +1 day'));
+          } else {
+          $timeIn[0]['from'] = $fromTime;
+          $timeIn[0]['to'] = $toTime;
+          $timeIn[0]['date'] = $date;
+          } */
 
 
-        $department  = $this->getDoctrine()
+        $department = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments')
             ->find($idDepartment);
 
 
 
-        $departmentPeopleReplacement  = $this->getDoctrine()
+        $departmentPeopleReplacement = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeople')
             ->find($idReplacement);
 
@@ -613,7 +623,7 @@ class OperScheduleController extends BaseFilterController
         $periodPoints[] = 22;
         $periodPoints[] = 24;
         //foreach ($timeIn as $infoDay) {
-            list($year, $month, $day) = explode('-', $infoDay['date']);
+        list($year, $month, $day) = explode('-', $infoDay['date']);
 
         if (isset($idTimeGrafik) && $idTimeGrafik > 0) {
             $newTime = $this->getDoctrine()
@@ -627,8 +637,8 @@ class OperScheduleController extends BaseFilterController
         $newTime->setYear($year);
         $newTime->setMonth($month);
 
-        $newTime->setFromTime(new \DateTime($infoDay['from'].':00'));
-        $newTime->setToTime(new \DateTime($infoDay['to'].':00'));
+        $newTime->setFromTime(new \DateTime($infoDay['from'] . ':00'));
+        $newTime->setToTime(new \DateTime($infoDay['to'] . ':00'));
 
         list($hoursFrom, $minutesFrom) = explode(':', $infoDay['from']);
         list($hoursTo, $minutesTo) = explode(':', $infoDay['to']);
@@ -636,12 +646,12 @@ class OperScheduleController extends BaseFilterController
             $hoursTo = 24;
         }
 
-        $hoursFrom += $minutesFrom/60;
-        $hoursTo += $minutesTo/60;
+        $hoursFrom += $minutesFrom / 60;
+        $hoursTo += $minutesTo / 60;
 
         //Algorithm to calculate number of hours
         //between two periods
-        $totalPeriod = array();
+        $totalPeriod = array ();
         foreach ($periodPoints as $point) {
             $check1 = $point - $hoursFrom;
             $check2 = $point - $hoursTo;
@@ -657,9 +667,9 @@ class OperScheduleController extends BaseFilterController
         }
         //end of algorithm
 
-        $totalNight = $totalPeriod[0] + $totalPeriod[3];//from 0-7, 22-24
-        $totalEvening = $totalPeriod[2];//from 7-19
-        $totalDay = $totalPeriod[1];//from 19-22
+        $totalNight = $totalPeriod[0] + $totalPeriod[3]; //from 0-7, 22-24
+        $totalEvening = $totalPeriod[2]; //from 7-19
+        $totalDay = $totalPeriod[1]; //from 19-22
 
         $total = $totalNight + $totalEvening + $totalDay;
 
@@ -668,10 +678,10 @@ class OperScheduleController extends BaseFilterController
         } else {
             $cleanOtherOfficially = '';
         }
-        $funcTotalClean = 'setTotal'.$cleanOtherOfficially;
-        $funcTotalDayClean = 'setTotalDay'.$cleanOtherOfficially;
-        $funcTotalEveningClean = 'setTotalEvening'.$cleanOtherOfficially;
-        $funcTotalNightClean = 'setTotalNight'.$cleanOtherOfficially;
+        $funcTotalClean = 'setTotal' . $cleanOtherOfficially;
+        $funcTotalDayClean = 'setTotalDay' . $cleanOtherOfficially;
+        $funcTotalEveningClean = 'setTotalEvening' . $cleanOtherOfficially;
+        $funcTotalNightClean = 'setTotalNight' . $cleanOtherOfficially;
 
         $newTime->$funcTotalClean(0);
         $newTime->$funcTotalDayClean(0);
@@ -679,10 +689,10 @@ class OperScheduleController extends BaseFilterController
         $newTime->$funcTotalNightClean(0);
 
 
-        $funcTotal = 'setTotal'.$addTypeOfficially;
-        $funcTotalDay = 'setTotalDay'.$addTypeOfficially;
-        $funcTotalEvening = 'setTotalEvening'.$addTypeOfficially;
-        $funcTotalNight = 'setTotalNight'.$addTypeOfficially;
+        $funcTotal = 'setTotal' . $addTypeOfficially;
+        $funcTotalDay = 'setTotalDay' . $addTypeOfficially;
+        $funcTotalEvening = 'setTotalEvening' . $addTypeOfficially;
+        $funcTotalNight = 'setTotalNight' . $addTypeOfficially;
 
         //setting official or not total hours
         $newTime->$funcTotal($total);
@@ -700,18 +710,17 @@ class OperScheduleController extends BaseFilterController
 
         $canEdit = $this->checkIfCanEdit();
 
-        $return['html'] .= $this->renderView('ITDoorsOperBundle:Schedule:scheduleDayTableRow.html.twig', array(
-            'oneDayTime'=> $newTime,
-            'canEdit' =>$canEdit
+        $return['html'] .= $this->renderView('ITDoorsOperBundle:Schedule:scheduleDayTableRow.html.twig', array (
+            'oneDayTime' => $newTime,
+            'canEdit' => $canEdit
         ));
 
 
         $this->updateSumGrafik($day, $month, $year, $idCoworker, $idDepartment, $idReplacement);
-    //}
+        //}
 
         return new Response(json_encode($return));
     }
-
     /**
      * Render one row of the table in schedule of one day
      *
@@ -720,24 +729,23 @@ class OperScheduleController extends BaseFilterController
      *
      * @return Response
      */
-    public function scheduleTableRowAction($oneDayTime, $canEdit)
+    public function scheduleTableRowAction ($oneDayTime, $canEdit)
     {
-        return $this->render('ITDoorsOperBundle:Schedule:scheduleDayTableRow.html.twig', array(
-            'oneDayTime' => $oneDayTime,
-            'canEdit' => $canEdit
+        return $this->render('ITDoorsOperBundle:Schedule:scheduleDayTableRow.html.twig', array (
+                'oneDayTime' => $oneDayTime,
+                'canEdit' => $canEdit
         ));
     }
-
     /**
      * @param Request $request
      *
      * @return Response
      */
-    public function deleteTimeFromDayAction(Request $request)
+    public function deleteTimeFromDayAction (Request $request)
     {
 
-        $return = array();
-        $date =  $request->request->get('date');
+        $return = array ();
+        $date = $request->request->get('date');
         $idCoworker = $request->request->get('idCoworker');
         $idDepartment = $request->request->get('idDepartment');
         $idGrafikTime = $request->request->get('idGrafikTime');
@@ -760,14 +768,14 @@ class OperScheduleController extends BaseFilterController
         }
 
         if (!$grafik) {
-            $return = array();
+            $return = array ();
             $return['success'] = 0;
             $return['error'] = 'no_entity_found';
 
             return new Response(json_encode($return));
         }
 
-        $em =  $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $em->remove($grafik);
         $em->flush();
 
@@ -776,9 +784,7 @@ class OperScheduleController extends BaseFilterController
         $return['success'] = 1;
 
         return new Response(json_encode($return));
-
     }
-
     /**
      * @param int $day
      * @param int $month
@@ -787,7 +793,7 @@ class OperScheduleController extends BaseFilterController
      * @param int $idDepartment
      * @param int $idReplacement
      */
-    private function updateSumGrafik($day, $month, $year, $idCoworker, $idDepartment, $idReplacement = 0)
+    private function updateSumGrafik ($day, $month, $year, $idCoworker, $idDepartment, $idReplacement = 0)
     {
 
         /** @var $grafikTimeRepository \Lists\GrafikBundle\Entity\GrafikTimeRepository   */
@@ -808,7 +814,7 @@ class OperScheduleController extends BaseFilterController
         $totalNight = 0;
 
         $totalNotOfficially = 0;
-        $totalDayNotOfficially= 0;
+        $totalDayNotOfficially = 0;
         $totalEveningNotOfficially = 0;
         $totalNightNotOfficially = 0;
 
@@ -824,30 +830,30 @@ class OperScheduleController extends BaseFilterController
             $totalNightNotOfficially += $coworkerTime->getTotalNightNotOfficially();
         }
 
-        $department  = $this->getDoctrine()
+        $department = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments')
             ->find($idDepartment);
 
-        $departmentPeople  = $this->getDoctrine()
+        $departmentPeople = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeople')
             ->find($idCoworker);
 
-        $departmentPeopleReplacement  = $this->getDoctrine()
+        $departmentPeopleReplacement = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeople')
             ->find($idReplacement);
 
-        /** @var  $grafik \Lists\GrafikBundle\Entity\Grafik*/
+        /** @var  $grafik \Lists\GrafikBundle\Entity\Grafik */
         $grafik = $this->getDoctrine()
             ->getRepository('ListsGrafikBundle:Grafik')
-            ->findOneBy(array(
-                'day' => $day,
-                'month' => $month,
-                'year' => $year,
-                'departmentPeople' => $departmentPeople,
-                //'department' => $department,
-                'departmentPeopleReplacement' => $departmentPeopleReplacement,
-                'replacementType' => DepartmentPeopleMonthInfoRepository::REPLACEMENT_TYPE_REPLACEMENT
-            ));
+            ->findOneBy(array (
+            'day' => $day,
+            'month' => $month,
+            'year' => $year,
+            'departmentPeople' => $departmentPeople,
+            //'department' => $department,
+            'departmentPeopleReplacement' => $departmentPeopleReplacement,
+            'replacementType' => DepartmentPeopleMonthInfoRepository::REPLACEMENT_TYPE_REPLACEMENT
+        ));
 
         if ($grafik == null) {
             $grafik = new Grafik();
@@ -877,16 +883,15 @@ class OperScheduleController extends BaseFilterController
         $em->persist($grafik);
         $em->flush();
     }
-
     /**
      * @param Request $request
      * 
      * @return Response
      */
-    public function oneDayTotalAction(Request $request)
+    public function oneDayTotalAction (Request $request)
     {
 
-        $params =  $request->request->get('params');
+        $params = $request->request->get('params');
 
         $date = $params['date'];
         $idCoworker = $params['idCoworker'];
@@ -894,7 +899,7 @@ class OperScheduleController extends BaseFilterController
         $idReplacement = $params['idReplacement'];
         list($year, $month, $day) = explode('-', $date);
 
-        $return = array();
+        $return = array ();
 
         /** @var $grafikRepository \Lists\GrafikBundle\Entity\GrafikRepository   */
         $grafikRepository = $this->getDoctrine()
@@ -943,9 +948,9 @@ class OperScheduleController extends BaseFilterController
         }
 
 
-        $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleTableCell.html.twig', array(
-            'officially'=> $officially,
-            'notOfficially'=> $notOfficially,
+        $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleTableCell.html.twig', array (
+            'officially' => $officially,
+            'notOfficially' => $notOfficially,
             'status' => $status,
         ));
 
@@ -953,16 +958,15 @@ class OperScheduleController extends BaseFilterController
 
         return new Response(json_encode($return));
     }
-
     /**
      * @param Request $request
      *
      * @return Response
      */
-    public function updateStatusCoworkerAction(Request $request)
+    public function updateStatusCoworkerAction (Request $request)
     {
         $status = $request->request->get('status');
-        $date =  $request->request->get('date');
+        $date = $request->request->get('date');
         $idCoworker = $request->request->get('idCoworker');
         $idDepartment = $request->request->get('idDepartment');
         $idReplacement = $request->request->get('idReplacement');
@@ -973,17 +977,17 @@ class OperScheduleController extends BaseFilterController
         }
         list($year, $month, $day) = explode('-', $date);
 
-        $em =  $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
 
-        $department  = $this->getDoctrine()
+        $department = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments')
             ->find($idDepartment);
 
-        $departmentPeople  = $this->getDoctrine()
+        $departmentPeople = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeople')
             ->find($idCoworker);
 
-        $departmentPeopleReplacement  = $this->getDoctrine()
+        $departmentPeopleReplacement = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeople')
             ->find($idReplacement);
 
@@ -993,7 +997,7 @@ class OperScheduleController extends BaseFilterController
 
 
 
-        $deleteGrafikTimes = $grafikTimeRepository->findBy(array(
+        $deleteGrafikTimes = $grafikTimeRepository->findBy(array (
             'department' => $idDepartment,
             'departmentPeople' => $idCoworker,
             'day' => $day,
@@ -1007,18 +1011,18 @@ class OperScheduleController extends BaseFilterController
             $em->flush();
         }
 
-        /** @var  $grafik \Lists\GrafikBundle\Entity\Grafik*/
-        $grafik  =$this->getDoctrine()
+        /** @var  $grafik \Lists\GrafikBundle\Entity\Grafik */
+        $grafik = $this->getDoctrine()
             ->getRepository('ListsGrafikBundle:Grafik')
-            ->findOneBy(array(
-                'day' => $day,
-                'month' => $month,
-                'year' => $year,
-                'departmentPeople' => $departmentPeople,
-                'department' => $department,
-                'departmentPeopleReplacement' => $departmentPeopleReplacement,
-                'replacementType' => 'r'
-            ));
+            ->findOneBy(array (
+            'day' => $day,
+            'month' => $month,
+            'year' => $year,
+            'departmentPeople' => $departmentPeople,
+            'department' => $department,
+            'departmentPeopleReplacement' => $departmentPeopleReplacement,
+            'replacementType' => 'r'
+        ));
 
         if (!$grafik) {
             $grafik = new \Lists\GrafikBundle\Entity\Grafik();
@@ -1039,6 +1043,7 @@ class OperScheduleController extends BaseFilterController
         $grafik->setIsSick(false);
         $grafik->setIsVacation(false);
         $grafik->setIsFired(false);
+        $grafik->setIsOwnVacation(false);
         $grafik->setTotal(0);
         $grafik->setTotalNotOfficially(0);
         $grafik->setTotalDay(0);
@@ -1048,7 +1053,7 @@ class OperScheduleController extends BaseFilterController
         $grafik->setTotalNight(0);
         $grafik->setTotalNightNotOfficially(0);
 
-        $departmentPeopleZero  = $this->getDoctrine()
+        $departmentPeopleZero = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeople')
             ->find(0);
         $grafik->setDepartmentPeopleCooperation($departmentPeopleZero);
@@ -1080,15 +1085,14 @@ class OperScheduleController extends BaseFilterController
 
         return new Response(json_encode($return));
     }
-
     /**
      * @param Request $request
      *
      * @return Response
      */
-    public function copyMonthDatesAction(Request $request)
+    public function copyMonthDatesAction (Request $request)
     {
-        $dates =  $request->request->get('dates');
+        $dates = $request->request->get('dates');
         $idCoworker = $request->request->get('idCoworker');
         $idDepartment = $request->request->get('idDepartment');
         $currentDate = $request->request->get('currentDate');
@@ -1099,7 +1103,7 @@ class OperScheduleController extends BaseFilterController
         foreach ($dates as $key => $date) {
             $dates[$key] = date('j', strtotime($date));
         }
-        $return = array();
+        $return = array ();
 
         $key = array_search($day, $dates);
         if ($key !== false) {
@@ -1111,7 +1115,7 @@ class OperScheduleController extends BaseFilterController
             ->getRepository('ListsGrafikBundle:GrafikTime');
 
 
-        $copyGrafikTimes = $grafikTimeRepository->findBy(array(
+        $copyGrafikTimes = $grafikTimeRepository->findBy(array (
             'department' => $idDepartment,
             'departmentPeople' => $idCoworker,
             'day' => intval($day),
@@ -1135,7 +1139,7 @@ class OperScheduleController extends BaseFilterController
 
         //check for wrong dates, like admission/dismissal not correct
         foreach ($dates as $dayCopy) {
-            $date = $year.'-'.$month.'-'.$dayCopy;
+            $date = $year . '-' . $month . '-' . $dayCopy;
             $checkOfficially['success'] = 1;
             $checkNotOfficially['success'] = 1;
             if ($hasNotOfficially) {
@@ -1163,9 +1167,9 @@ class OperScheduleController extends BaseFilterController
         }
 
         //deleting old day grafik times
-        $coworkerDayTimes = array();
+        $coworkerDayTimes = array ();
         foreach ($dates as $dayCopy) {
-            $founded = $grafikTimeRepository->findBy(array(
+            $founded = $grafikTimeRepository->findBy(array (
                 'department' => $idDepartment,
                 'departmentPeople' => $idCoworker,
                 'day' => intval($dayCopy),
@@ -1182,10 +1186,12 @@ class OperScheduleController extends BaseFilterController
             }
         }
 
-        $em =  $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
 
         foreach ($coworkerDayTimes as $coworkerDayTime) {
-            $em->remove($coworkerDayTime);
+            if (!is_array($coworkerDayTime)) {
+                $em->remove($coworkerDayTime);
+            }
             $em->flush();
         }
 
@@ -1195,16 +1201,15 @@ class OperScheduleController extends BaseFilterController
         /** @var $grafikRepository \Lists\GrafikBundle\Entity\GrafikRepository   */
         $grafikRepository = $this->getDoctrine()
             ->getRepository('ListsGrafikBundle:Grafik');
-        $coworkerDayTimesTotal = array();
+        $coworkerDayTimesTotal = array ();
         foreach ($dates as $dayCopy) {
-            $founded = $grafikRepository->findOneBy(array(
+            $founded = $grafikRepository->findOneBy(array (
                 'department' => $idDepartment,
                 'departmentPeople' => $idCoworker,
                 'day' => intval($dayCopy),
                 'year' => $year,
                 'month' => $month,
                 'departmentPeopleReplacement' => $idReplacement
-
             ));
             if ($founded) {
                 $coworkerDayTimesTotal[] = $founded;
@@ -1217,14 +1222,13 @@ class OperScheduleController extends BaseFilterController
 
         //copying new daytime to grafik time
         /** @var  $copyGrafikTime \Lists\GrafikBundle\Entity\GrafikTime */
-        $copyGrafikTimes = $grafikTimeRepository->findBy(array(
+        $copyGrafikTimes = $grafikTimeRepository->findBy(array (
             'department' => $idDepartment,
             'departmentPeople' => $idCoworker,
             'day' => $day,
             'year' => $year,
             'month' => $month,
             'departmentPeopleReplacement' => $idReplacement
-
         ));
 
         foreach ($copyGrafikTimes as $copyGrafikTime) {
@@ -1238,7 +1242,7 @@ class OperScheduleController extends BaseFilterController
 
         //copying new daytime to grafik
         /** @var  $copyGrafik \Lists\GrafikBundle\Entity\Grafik */
-        $copyGrafik = $grafikRepository->findOneBy(array(
+        $copyGrafik = $grafikRepository->findOneBy(array (
             'department' => $idDepartment,
             'departmentPeople' => $idCoworker,
             'day' => $day,
@@ -1259,7 +1263,6 @@ class OperScheduleController extends BaseFilterController
 
         return new Response(json_encode($return));
     }
-
     /**
      * @param integer $idCoworker
      * @param string  $date
@@ -1267,7 +1270,7 @@ class OperScheduleController extends BaseFilterController
      *
      * @return mixed
      */
-    private function checkErrorsForChangingDate($idCoworker, $date, $officially)
+    private function checkErrorsForChangingDate ($idCoworker, $date, $officially)
     {
 
         $departmentPeopleRepository = $this->getDoctrine()
@@ -1276,14 +1279,16 @@ class OperScheduleController extends BaseFilterController
         /** @var  $departmentPeople \Lists\DepartmentBundle\Entity\DepartmentPeople */
         $departmentPeople = $departmentPeopleRepository->find($idCoworker);
         //can't person work when fired
-        if ($departmentPeople->getDismissalDateNotOfficially() != null
-            && $departmentPeople->getDismissalDateNotOfficially() < new \DateTime($date)) {
+        if (
+                $departmentPeople->getDismissalDateNotOfficially() != null
+                &&
+                $departmentPeople->getDismissalDateNotOfficially() < new \DateTime($date)
+            ) {
 
             $return['success'] = 0;
             $return['error'] = 'fired';
 
             return $return;
-
         }
 
         //can't non-official person work officially
@@ -1292,22 +1297,29 @@ class OperScheduleController extends BaseFilterController
             $return['error'] = 'no_official_permitted';
 
             return $return;
-/*        } elseif ($departmentPeople->getAdmissionDate() != null
-            && $departmentPeople->getAdmissionDate() < new \DateTime($date)
-            && $departmentPeople->getDismissalDate() != null
-            && $departmentPeople->getDismissalDate() > new \DateTime($date)
-            && $officially) {
+            /*        } elseif ($departmentPeople->getAdmissionDate() != null
+              && $departmentPeople->getAdmissionDate() < new \DateTime($date)
+              && $departmentPeople->getDismissalDate() != null
+              && $departmentPeople->getDismissalDate() > new \DateTime($date)
+              && $officially) {
 
-            $return['success'] = 0;
-            $return['error'] = 'no_official_permitted';
+              $return['success'] = 0;
+              $return['error'] = 'no_official_permitted';
 
-            return $return;*/
-        } elseif (($departmentPeople->getAdmissionDate() != null
-            && $departmentPeople->getAdmissionDate() > new \DateTime($date)
-            && $officially) ||
-            ($departmentPeople->getDismissalDate() != null
-            && $departmentPeople->getDismissalDate() < new \DateTime($date)
-            && $officially)) {
+              return $return; */
+        } elseif (
+                    (
+                        $departmentPeople->getAdmissionDate() != null
+                        &&
+                        $departmentPeople->getAdmissionDate() > new \DateTime($date) && $officially
+                    )
+                    ||
+                    (
+                        $departmentPeople->getDismissalDate() != null
+                        &&
+                        $departmentPeople->getDismissalDate() < new \DateTime($date) && $officially
+                    )
+                ) {
 
             $return['success'] = 0;
             $return['error'] = 'no_official_permitted';
@@ -1326,14 +1338,13 @@ class OperScheduleController extends BaseFilterController
 
         return $return;
     }
-
     /**
      * @param string  $date
      * @param boolean $officially
      *
      * @return mixed
      */
-    private function checkErrorsForPeriods($date, $officially)
+    private function checkErrorsForPeriods ($date, $officially)
     {
         $currentDate = date('Y-m-d');
         list($year, $month, $day) = explode('-', $currentDate);
@@ -1341,18 +1352,18 @@ class OperScheduleController extends BaseFilterController
         $monthDaysRepository = $this->getDoctrine()
             ->getRepository('ListsGrafikBundle:Salary');
 
-        $monthDay = $monthDaysRepository->findOneBy(array(
+        $monthDay = $monthDaysRepository->findOneBy(array (
             'year' => $year,
-            'month' =>$month
+            'month' => $month
         ));
 
         $advanceDateCurrent = $monthDay->getDayAdvance();
         $paymentDateCurrent = $monthDay->getDayPayment();
 
         list($year, $month, $day) = explode('-', $date);
-        $monthDay = $monthDaysRepository->findOneBy(array(
+        $monthDay = $monthDaysRepository->findOneBy(array (
             'year' => $year,
-            'month' =>$month
+            'month' => $month
         ));
 
         $advanceDate = $monthDay->getDayAdvance();
@@ -1376,18 +1387,16 @@ class OperScheduleController extends BaseFilterController
         $return['success'] = 1;
 
         return $return;
-
     }
-
     /**
      * @param Request $request
      *
      * @return Response
      */
-    public function copyCoworkersByEtalonAction(Request $request)
+    public function copyCoworkersByEtalonAction (Request $request)
     {
 
-        $idsCopy =  $request->request->get('ids');
+        $idsCopy = $request->request->get('ids');
         $idSelected = $request->request->get('selected');
         $idsDepartment = $request->request->get('idsDepartment');
         $date = $request->request->get('date');
@@ -1410,12 +1419,12 @@ class OperScheduleController extends BaseFilterController
         //checking if possible to copy
         $return['errors'] = 0;
 
-        $departmentPeopleRepository  = $this->getDoctrine()
+        $departmentPeopleRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeople');
 
         foreach ($idsCopy as $keyCopy => $idCopy) {
-            for ($dayCopy=1; $dayCopy<=date("t", strtotime($year.'-'.$month)); $dayCopy++) {
-                $copyGrafikTimes = $grafikTimeRepository->findBy(array(
+            for ($dayCopy = 1; $dayCopy <= date("t", strtotime($year . '-' . $month)); $dayCopy++) {
+                $copyGrafikTimes = $grafikTimeRepository->findBy(array (
                     'department' => $idDepartmentSelected,
                     'departmentPeople' => $idSelected,
                     'day' => $dayCopy,
@@ -1434,7 +1443,7 @@ class OperScheduleController extends BaseFilterController
                         $hasNotOfficially = true;
                     }
                 }
-                $date = $year.'-'.$month.'-'.$dayCopy;
+                $date = $year . '-' . $month . '-' . $dayCopy;
                 $checkOfficially['success'] = 1;
                 $checkNotOfficially['success'] = 1;
                 if ($hasNotOfficially) {
@@ -1448,8 +1457,8 @@ class OperScheduleController extends BaseFilterController
                     $return['errors'] = 1;
 
                     $errorPerson = $departmentPeopleRepository->find($idCopy);
-                    $return['errorName'][] = $errorPerson->getFirstName().' '.
-                        $errorPerson->getMiddleName().' '.$errorPerson->getLastName();
+                    $return['errorName'][] = $errorPerson->getFirstName() . ' ' .
+                        $errorPerson->getMiddleName() . ' ' . $errorPerson->getLastName();
                     //deleting from the copy array
                     $key = array_search($idCopy, $idsCopy);
                     if ($key !== false) {
@@ -1466,14 +1475,14 @@ class OperScheduleController extends BaseFilterController
             return new Response(json_encode($return));
         }
 
-        $em =  $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
 
 
         foreach ($idsCopy as $key => $idCopy) {
-            $departmentPeople  = $this->getDoctrine()
+            $departmentPeople = $this->getDoctrine()
                 ->getRepository('ListsDepartmentBundle:DepartmentPeople')
                 ->find($idCopy);
-            $departmentPeopleReplacement  = $this->getDoctrine()
+            $departmentPeopleReplacement = $this->getDoctrine()
                 ->getRepository('ListsDepartmentBundle:DepartmentPeople')
                 ->find($idsReplacement[$key]);
 
@@ -1482,7 +1491,7 @@ class OperScheduleController extends BaseFilterController
                 ->find($idsDepartment[$key]);
 
             //deleting old day grafik times
-            $coworkerDayTimes = $grafikTimeRepository->findBy(array(
+            $coworkerDayTimes = $grafikTimeRepository->findBy(array (
                 'department' => $idsDepartment[$key],
                 'departmentPeople' => $idCopy,
                 'year' => $year,
@@ -1494,7 +1503,7 @@ class OperScheduleController extends BaseFilterController
                 $em->remove($coworkerDayTime);
             }
             //deleting old day grafik
-            $coworkerDayTimesTotal = $grafikRepository->findBy(array(
+            $coworkerDayTimesTotal = $grafikRepository->findBy(array (
                 'department' => $idsDepartment[$key],
                 'departmentPeople' => $idCopy,
                 'year' => $year,
@@ -1508,7 +1517,7 @@ class OperScheduleController extends BaseFilterController
 
             //copying new daytime to grafik time
             /** @var  $copyGrafikTime \Lists\GrafikBundle\Entity\GrafikTime */
-            $copyGrafikTimes = $grafikTimeRepository->findBy(array(
+            $copyGrafikTimes = $grafikTimeRepository->findBy(array (
                 'department' => $idDepartmentSelected,
                 'departmentPeople' => $idSelected,
                 'year' => $year,
@@ -1517,18 +1526,18 @@ class OperScheduleController extends BaseFilterController
             ));
             if (count($copyGrafikTimes) > 0) {
                 foreach ($copyGrafikTimes as $copyGrafikTime) {
-                        $cloneGrafikTime = clone $copyGrafikTime;
-                        $cloneGrafikTime->setDepartment($department);
-                        $cloneGrafikTime->setDepartmentPeople($departmentPeople);
-                        $cloneGrafikTime->setDepartmentPeopleReplacement($departmentPeopleReplacement);
-                        $em->persist($cloneGrafikTime);
+                    $cloneGrafikTime = clone $copyGrafikTime;
+                    $cloneGrafikTime->setDepartment($department);
+                    $cloneGrafikTime->setDepartmentPeople($departmentPeople);
+                    $cloneGrafikTime->setDepartmentPeopleReplacement($departmentPeopleReplacement);
+                    $em->persist($cloneGrafikTime);
                 }
                 $em->flush();
             }
 
             //copying new daytime to grafik
             /** @var  $copyGrafik \Lists\GrafikBundle\Entity\Grafik */
-            $copyGrafiks = $grafikRepository->findBy(array(
+            $copyGrafiks = $grafikRepository->findBy(array (
                 'department' => $idDepartmentSelected,
                 'departmentPeople' => $idSelected,
                 'year' => $year,
@@ -1553,23 +1562,25 @@ class OperScheduleController extends BaseFilterController
 
         return new Response(json_encode($return));
     }
-
     /**
      * @param Request $request
      *
      * @return Response
      */
-    public function showUserBasicTableAction(Request $request)
+    public function showUserBasicTableAction (Request $request)
     {
-        $params =  $request->request->get('params');
+        $params = $request->request->get('params');
         $date = $request->request->get('date');
 
-        $idCoworker =  $params['idCoworker'];
+        $idCoworker = $params['idCoworker'];
         $idDepartment = $params['idDepartment'];
         $idReplacement = $params['idReplacement'];
-        $replacementType = isset($params['replacementType'])
-                           ? $params['replacementType']
-                           : DepartmentPeopleMonthInfoRepository::REPLACEMENT_TYPE_REPLACEMENT;
+        $replacementType =
+            isset($params['replacementType'])
+            ?
+            $params['replacementType']
+            :
+            DepartmentPeopleMonthInfoRepository::REPLACEMENT_TYPE_REPLACEMENT;
 
         list($year, $month) = explode('-', $date);
 
@@ -1584,11 +1595,11 @@ class OperScheduleController extends BaseFilterController
         $fio = '';
         if ($departmentPeople->getIndividual()) {
             $individual = $departmentPeople->getIndividual();
-            $fio = $individual->getLastName().' '.
-                $individual->getFirstName().' '.$individual->getMiddleName();
+            $fio = $individual->getLastName() . ' ' .
+                $individual->getFirstName() . ' ' . $individual->getMiddleName();
         } else {
-            $fio = $departmentPeople->getLastName().' '.
-                $departmentPeople->getFirstName().' '.$departmentPeople->getMiddleName();
+            $fio = $departmentPeople->getLastName() . ' ' .
+                $departmentPeople->getFirstName() . ' ' . $departmentPeople->getMiddleName();
         }
 
         // Get Organiation Name
@@ -1602,7 +1613,7 @@ class OperScheduleController extends BaseFilterController
         } else {
             $info['selfOrganizationName'] = '';
         }
-            $info['fio'] = $fio;
+        $info['fio'] = $fio;
         $info['dateAcceptedOfficially'] = $departmentPeople->getAdmissionDate();
         $info['dateAcceptedNotOfficially'] = $departmentPeople->getAdmissionDateNotOfficially();
         $info['dateFiredOfficially'] = $departmentPeople->getDismissalDate();
@@ -1615,11 +1626,11 @@ class OperScheduleController extends BaseFilterController
             $info['changeFio'] = '';
             if ($departmentPeopleReplacement->getIndividual()) {
                 $individual = $departmentPeopleReplacement->getIndividual();
-                $info['changeFio'] = $individual->getLastName().' '.
-                    $individual->getFirstName().' '.$individual->getMiddleName();
+                $info['changeFio'] = $individual->getLastName() . ' ' .
+                    $individual->getFirstName() . ' ' . $individual->getMiddleName();
             } else {
-                $info['changeFio'] = $departmentPeopleReplacement->getLastName().' '.
-                    $departmentPeopleReplacement->getFirstName().' '.$departmentPeopleReplacement->getMiddleName();
+                $info['changeFio'] = $departmentPeopleReplacement->getLastName() . ' ' .
+                    $departmentPeopleReplacement->getFirstName() . ' ' . $departmentPeopleReplacement->getMiddleName();
             }
             $info['changeMpk'] = $departmentPeopleReplacement->getMpks();
         }
@@ -1627,40 +1638,39 @@ class OperScheduleController extends BaseFilterController
         $monthInfoRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
 
-        $monthInfo = $monthInfoRepository->findOneBy(array(
+        $monthInfo = $monthInfoRepository->findOneBy(array (
             'departmentPeople' => $departmentPeople->getId(),
             'year' => $year,
             'month' => $month,
             'replacementType' => DepartmentPeopleMonthInfoRepository::REPLACEMENT_TYPE_REPLACEMENT,
             //'departmentPeopleReplacement' => 0
-
         ));
 
 
         $onceOnlyAccrualRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:OnceOnlyAccrual');
 
-        $onceOnlyAccrual = $onceOnlyAccrualRepository->findBy(array(
-            'departmentPeopleMonthInfo'=>$monthInfo->getId()
+        $onceOnlyAccrual = $onceOnlyAccrualRepository->findBy(array (
+            'departmentPeopleMonthInfo' => $monthInfo->getId()
         ));
 
 
-        $accrual['officially'] = array();
-        $accrual['notOfficially'] = array();
+        $accrual['officially'] = array ();
+        $accrual['notOfficially'] = array ();
 
         $plannedAccrualRepository = $this->getDoctrine()
-          ->getRepository('ListsDepartmentBundle:PlannedAccrual');
+            ->getRepository('ListsDepartmentBundle:PlannedAccrual');
 
         $plannedAccrual = $plannedAccrualRepository->findBy(
-            array(
-                'departmentPeople' => $idCoworker
+            array (
+            'departmentPeople' => $idCoworker
             ),
-            array('period' => 'DESC')
+            array ('period' => 'DESC')
         );
 
-        $canEdit  =  $this->checkIfCanEdit();
-        $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleInfoUserBasic.html.twig', array(
-            'coworker'=> $info,
+        $canEdit = $this->checkIfCanEdit();
+        $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleInfoUserBasic.html.twig', array (
+            'coworker' => $info,
             'accrual' => $onceOnlyAccrual,
             'planned' => $plannedAccrual,
             'idCoworker' => $idCoworker,
@@ -1675,16 +1685,15 @@ class OperScheduleController extends BaseFilterController
 
         return new Response(json_encode($return));
     }
-
     /**
-    * @param Request $request
-    *
-    * @return Response
-    */
-    public function insertAccrualAction(Request $request)
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function insertAccrualAction (Request $request)
     {
         $date = $request->request->get('date');
-        $idCoworker =  $request->request->get('idCoworker');
+        $idCoworker = $request->request->get('idCoworker');
         $idDepartment = $request->request->get('idDepartment');
         $value = $request->request->get('value');
         $type = $request->request->get('type');
@@ -1701,8 +1710,8 @@ class OperScheduleController extends BaseFilterController
         } else {
             $check = false;
         }
-        for ($i=1; $i<=date("t", strtotime($year.'-'.$month)); $i++) {
-            $return = $this->checkErrorsForChangingDate($idCoworker, $date.'-'.$i, $check);
+        for ($i = 1; $i <= date("t", strtotime($year . '-' . $month)); $i++) {
+            $return = $this->checkErrorsForChangingDate($idCoworker, $date . '-' . $i, $check);
             if ($return['success'] == 1) {
                 break;
             }
@@ -1718,7 +1727,7 @@ class OperScheduleController extends BaseFilterController
         $monthInfoRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
 
-        $monthInfo = $monthInfoRepository->findOneBy(array(
+        $monthInfo = $monthInfoRepository->findOneBy(array (
             'departmentPeople' => $idCoworker,
             'year' => $year,
             'month' => $month,
@@ -1755,13 +1764,13 @@ class OperScheduleController extends BaseFilterController
         $onceOnlyAccrualRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:OnceOnlyAccrual');
 
-        $onceOnlyAccrual = $onceOnlyAccrualRepository->findBy(array(
-            'departmentPeopleMonthInfo'=>$monthInfo->getId()
+        $onceOnlyAccrual = $onceOnlyAccrualRepository->findBy(array (
+            'departmentPeopleMonthInfo' => $monthInfo->getId()
         ));
 
         $canEdit = $this->checkIfCanEdit();
-        $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleInfoUserBasicAccrual.html.twig', array(
-            'accruals'=> $onceOnlyAccrual,
+        $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleInfoUserBasicAccrual.html.twig', array (
+            'accruals' => $onceOnlyAccrual,
             'code' => $code,
             'canEdit' => $canEdit
         ));
@@ -1770,21 +1779,19 @@ class OperScheduleController extends BaseFilterController
 
         return new Response(json_encode($return));
     }
-
-
     /**
      * @param Request $request
      *
      * @return Response
      */
-    public function deleteAccrualAction(Request $request)
+    public function deleteAccrualAction (Request $request)
     {
         $id = $request->request->get('pk');
         $date = $request->request->get('date');
-        $idCoworker =  $request->request->get('idCoworker');
+        $idCoworker = $request->request->get('idCoworker');
         $code = $request->request->get('code');
 
-        list($year,$month) = explode('-', $date);
+        list($year, $month) = explode('-', $date);
 
         $departmentPeopleRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeople');
@@ -1800,8 +1807,8 @@ class OperScheduleController extends BaseFilterController
         if ($deleteAccrual->getCode() == 'uu') {
             $check = false;
         }
-        for ($i=1; $i<=date("t", strtotime($year.'-'.$month)); $i++) {
-            $return = $this->checkErrorsForChangingDate($idCoworker, $date.'-'.$i, $check);
+        for ($i = 1; $i <= date("t", strtotime($year . '-' . $month)); $i++) {
+            $return = $this->checkErrorsForChangingDate($idCoworker, $date . '-' . $i, $check);
             if ($return['success'] == 1) {
                 break;
             }
@@ -1820,7 +1827,7 @@ class OperScheduleController extends BaseFilterController
         $monthInfoRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
 
-        $monthInfo = $monthInfoRepository->findOneBy(array(
+        $monthInfo = $monthInfoRepository->findOneBy(array (
             'departmentPeople' => $idCoworker,
             'year' => $year,
             'month' => $month,
@@ -1828,12 +1835,12 @@ class OperScheduleController extends BaseFilterController
             'departmentPeopleReplacement' => 0
         ));
 
-        $onceOnlyAccrual = $onceOnlyAccrualRepository->findBy(array(
+        $onceOnlyAccrual = $onceOnlyAccrualRepository->findBy(array (
             'departmentPeopleMonthInfo' => $monthInfo->getId()
         ));
 
-        $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleInfoUserBasicAccrual.html.twig', array(
-            'accruals'=> $onceOnlyAccrual,
+        $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleInfoUserBasicAccrual.html.twig', array (
+            'accruals' => $onceOnlyAccrual,
             'code' => $code
         ));
 
@@ -1841,22 +1848,21 @@ class OperScheduleController extends BaseFilterController
 
         return new Response(json_encode($return));
     }
-
     /**
      * @param Request $request
      *
      * @return Response
      */
-    public function addUserToGrafikAction(Request $request)
+    public function addUserToGrafikAction (Request $request)
     {
         $idCoworker = $request->request->get('idCoworker');
         $date = $request->request->get('date');
-        $idCoworkerReplacement =  $request->request->get('idCoworkerReplacement');
+        $idCoworkerReplacement = $request->request->get('idCoworkerReplacement');
         $type = $request->request->get('typeReplacement');
 
         list($year, $month) = explode('-', $date);
 
-        $return = $this->checkErrorsForPeriods($date.'-01', false);
+        $return = $this->checkErrorsForPeriods($date . '-01', false);
         if ($return['success'] == 0) {
             return new Response(json_encode($return));
         }
@@ -1875,13 +1881,12 @@ class OperScheduleController extends BaseFilterController
             $departmentPeopleReplacement = $departmentPeopleRepository->find(0);
         }
 
-        $monthInfo = $monthInfoRepository->findBy(array(
+        $monthInfo = $monthInfoRepository->findBy(array (
             'departmentPeople' => $departmentPeople,
             'month' => $month,
             'year' => $year,
             'departmentPeopleReplacement' => $departmentPeopleReplacement,
-            'departmentPeopleId'=> $idCoworker
-
+            'departmentPeopleId' => $idCoworker
         ));
 
 
@@ -1909,24 +1914,23 @@ class OperScheduleController extends BaseFilterController
 
         return new Response(json_encode($return));
     }
-
     /**
      * @param Request $request
      *
      * @return Response
      */
-    public function deleteUserFromGrafikAction(Request $request)
+    public function deleteUserFromGrafikAction (Request $request)
     {
         $idCoworker = $request->request->get('idCoworker');
         $date = $request->request->get('date');
-        $idCoworkerReplacement =  $request->request->get('idReplacement');
-        $idDepartment =  $request->request->get('idDepartment');
-        $replacementType =  $request->request->get('replacementType');
+        $idCoworkerReplacement = $request->request->get('idReplacement');
+        $idDepartment = $request->request->get('idDepartment');
+        $replacementType = $request->request->get('replacementType');
 
         //var_dump($idCoworker, $date, $idCoworkerReplacement);
         list($year, $month) = explode('-', $date);
 
-        $options = array(
+        $options = array (
             'year' => $year,
             'month' => $month,
             'departmentId' => $idDepartment,
@@ -1944,13 +1948,12 @@ class OperScheduleController extends BaseFilterController
 
         return new Response(json_encode($return));
     }
-
     /**
      * @param Request $request
      *
      * @return Response
      */
-    public function copyToNextMonthAction(Request $request)
+    public function copyToNextMonthAction (Request $request)
     {
         $idDepartment = $request->request->get('idDepartment');
         $date = $request->request->get('date');
@@ -1962,7 +1965,7 @@ class OperScheduleController extends BaseFilterController
 
         $scheduleService->copyToNextMonth($idDepartment, $year, $month);
 
-        $return = array(
+        $return = array (
             'year' => $year,
             'month' => $month,
             'idDepartment' => $idDepartment
@@ -1970,7 +1973,6 @@ class OperScheduleController extends BaseFilterController
 
         return new Response(json_encode($return));
     }
-
     /**
      * @param integer $month
      * @param integer $year
@@ -1978,20 +1980,19 @@ class OperScheduleController extends BaseFilterController
      *
      * @return mixed[]
      */
-    private function getTotalOnceOnlyAccruals($month, $year, $idCoworker)
+    private function getTotalOnceOnlyAccruals ($month, $year, $idCoworker)
     {
 
         /** @var  $monthInfoRepository \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfoRepository */
         $monthInfoRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
 
-        $monthInfo = $monthInfoRepository->findOneBy(array(
+        $monthInfo = $monthInfoRepository->findOneBy(array (
             'departmentPeople' => $idCoworker,
             'year' => $year,
             'month' => $month,
             'replacementType' => 'r',
             //'departmentPeopleReplacement' => 0
-
         ));
 
 
@@ -1999,8 +2000,8 @@ class OperScheduleController extends BaseFilterController
             ->getRepository('ListsDepartmentBundle:OnceOnlyAccrual');
 
 
-        $accrual['officially'] = array();
-        $accrual['notOfficially'] = array();
+        $accrual['officially'] = array ();
+        $accrual['notOfficially'] = array ();
 
         $accrual['officially']['plus'] = 0;
         $accrual['notOfficially']['plus'] = 0;
@@ -2012,8 +2013,8 @@ class OperScheduleController extends BaseFilterController
 
             return $accrual;
         }
-        $onceOnlyAccruals = $onceOnlyAccrualRepository->findBy(array(
-            'departmentPeopleMonthInfo'=>$monthInfo->getId()
+        $onceOnlyAccruals = $onceOnlyAccrualRepository->findBy(array (
+            'departmentPeopleMonthInfo' => $monthInfo->getId()
         ));
 
         foreach ($onceOnlyAccruals as $onceOnlyAccrual) {
@@ -2031,17 +2032,16 @@ class OperScheduleController extends BaseFilterController
 
         return $accrual;
     }
-
     /**
      * @param Request $request
      *
      * @return Response
      */
-    public function getSumsRenderedAction(Request $request)
+    public function getSumsRenderedAction (Request $request)
     {
-        $params =  $request->request->get('params');
+        $params = $request->request->get('params');
 
-        $date =  $params['date'];
+        $date = $params['date'];
         $idCoworker = $params['idCoworker'];
         $idDepartment = $params['idDepartment'];
         $idReplacement = $params['idReplacement'];
@@ -2055,7 +2055,6 @@ class OperScheduleController extends BaseFilterController
 
         return new Response(json_encode($return));
     }
-
     /**
      * @param string  $date
      * @param integer $idCoworker
@@ -2064,14 +2063,13 @@ class OperScheduleController extends BaseFilterController
      *
      * @return Response
      */
-    public function getRowSumsRenderedAction($date, $idCoworker, $idReplacement, $idDepartment)
+    public function getRowSumsRenderedAction ($date, $idCoworker, $idReplacement, $idDepartment)
     {
         $info = $this->getSumsCoworker($date, $idCoworker, $idReplacement, $idDepartment);
-        $return  = $this->renderView('ITDoorsOperBundle:Schedule:scheduleTableSums.html.twig', $info);
+        $return = $this->renderView('ITDoorsOperBundle:Schedule:scheduleTableSums.html.twig', $info);
 
         return new Response($return);
     }
-
     /**
      * @param string  $date
      * @param integer $idCoworker
@@ -2080,7 +2078,7 @@ class OperScheduleController extends BaseFilterController
      *
      * @return array
      */
-    private function getSumsCoworker($date, $idCoworker, $idReplacement, $idDepartment)
+    private function getSumsCoworker ($date, $idCoworker, $idReplacement, $idDepartment)
     {
         list($year, $month) = explode('-', $date);
 
@@ -2092,13 +2090,12 @@ class OperScheduleController extends BaseFilterController
         $monthInfoRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
 
-        $monthInfo = $monthInfoRepository->findOneBy(array(
+        $monthInfo = $monthInfoRepository->findOneBy(array (
             'departmentPeople' => $idCoworker,
             'year' => $year,
             'month' => $month,
             'replacementType' => 'r',
             'departmentPeopleReplacement' => $idReplacement
-
         ));
 
         $idMonthInfo = $monthInfo->getId();
@@ -2141,12 +2138,12 @@ class OperScheduleController extends BaseFilterController
             ->getRepository('ListsDepartmentBundle:PlannedAccrual');
 
         $plannedAccrual = $plannedAccrualRepository->findOneBy(
-            array(
+            array (
                 'departmentPeople' => $idCoworker,
                 'code' => 'UU',
                 'isActive' => true
             ),
-            array(
+            array (
                 'period' => 'desc'
             )
         );
@@ -2164,8 +2161,8 @@ class OperScheduleController extends BaseFilterController
         }
 
         $totalSalary = $salaryOfficially + $salaryNotOfficially;
-        $canEdit  =  $this->checkIfCanEdit();
-        $return = array(
+        $canEdit = $this->checkIfCanEdit();
+        $return = array (
             'sumOfficially' => $officiallyTotal,
             'sumNotOfficially' => $notOfficiallyTotal,
             'plannedAccrual' => $plannedAccrualValue,
@@ -2176,21 +2173,20 @@ class OperScheduleController extends BaseFilterController
             'realSalary' => $realSalary,
             'salaryNotOfficially' => $salaryNotOfficially,
             'totalSalary' => $totalSalary,
-            'idMonthInfo'=> $idMonthInfo,
+            'idMonthInfo' => $idMonthInfo,
             'canEdit' => $canEdit,
             'idDepartment' => $idDepartment
         );
 
         return $return;
     }
-
     /**
      * @param integer $idDepartment
      * @param string  $date
      *
      * @return array
      */
-    private function getSumsSalary($idDepartment, $date)
+    private function getSumsSalary ($idDepartment, $date)
     {
         $totalSalary = 0;
         $salaryNotOfficially = 0;
@@ -2201,7 +2197,7 @@ class OperScheduleController extends BaseFilterController
             ->getRepository('ListsDepartmentBundle:DepartmentPeople');
 
         $departmentPeoples = $departmentPeopleRepository->findBy(
-            array(
+            array (
                 'department' => $idDepartment,
             )
         );
@@ -2212,7 +2208,7 @@ class OperScheduleController extends BaseFilterController
             ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
 
         foreach ($departmentPeoples as $departmentPeople) {
-            $monthInfos = $monthInfoRepository->findBy(array(
+            $monthInfos = $monthInfoRepository->findBy(array (
                 'year' => $year,
                 'month' => $month,
                 'departmentPeople' => $departmentPeople
@@ -2230,7 +2226,7 @@ class OperScheduleController extends BaseFilterController
             }
         }
 
-        $return = array(
+        $return = array (
             'totalSalary' => $totalSalary,
             'salaryNotOfficially' => $salaryNotOfficially,
             'salaryOfficially' => $salaryOfficially
@@ -2241,7 +2237,7 @@ class OperScheduleController extends BaseFilterController
     /**
      * @return Response
      */
-    public function ajaxEditingSalaryAction()
+    public function ajaxEditingSalaryAction ()
     {
         $idMonthInfo = $this->get('request')->request->get('pk');
         $value = $this->get('request')->request->get('value');
@@ -2258,7 +2254,7 @@ class OperScheduleController extends BaseFilterController
         $em->persist($monthInfo);
         $em->flush();
 
-        $result = array(
+        $result = array (
             'id' => $idMonthInfo,
             'value' => $value,
             'name' => '1',
@@ -2266,20 +2262,18 @@ class OperScheduleController extends BaseFilterController
         );
 
         return new Response(json_encode($result));
-
     }
-
     /**
      * @param Request $request
      *
      * @return Response
      */
-    public function changeCooperationAction(Request $request)
+    public function changeCooperationAction (Request $request)
     {
         $idDepartment = $request->request->get('idDepartment');
         $date = $request->request->get('date');
         $idCoworker = $request->request->get('idCoworker');
-        $idCooperation  = $request->request->get('idCooperation');
+        $idCooperation = $request->request->get('idCooperation');
         $idReplacement = $request->request->get('idReplacement');
         $percent = $request->request->get('percent');
 
@@ -2306,7 +2300,7 @@ class OperScheduleController extends BaseFilterController
         $departmentPeopleCooperation = $departmentPeopleRepository
             ->find($idCooperation);
 
-        $department =  $this->getDoctrine()
+        $department = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments')
             ->find($idDepartment);
 
@@ -2315,7 +2309,7 @@ class OperScheduleController extends BaseFilterController
             ->getRepository('ListsGrafikBundle:Grafik');
 
         /** @var  $grafik \Lists\GrafikBundle\Entity\Grafik */
-        $grafik = $grafikRepository->findOneBy(array(
+        $grafik = $grafikRepository->findOneBy(array (
             'department' => $idDepartment,
             'departmentPeople' => $idCoworker,
             'year' => $year,
@@ -2337,7 +2331,6 @@ class OperScheduleController extends BaseFilterController
             $grafik->setDepartmentPeopleId($idCoworker);
             $grafik->setDepartmentPeopleReplacement($departmentPeopleReplacement);
             $grafik->setDepartmentPeopleReplacementId($idReplacement);
-
         }
 
 
@@ -2347,17 +2340,16 @@ class OperScheduleController extends BaseFilterController
         $em->persist($grafik);
         $em->flush();
 
-        $result = array();
+        $result = array ();
 
         $result['success'] = 1;
 
         return new Response(json_encode($result));
     }
-
     /**
      * @return bool
      */
-    private function checkIfCanEdit()
+    private function checkIfCanEdit ()
     {
         $canEdit = !$this->getUser()->hasRole('ROLE_SUPERVISOR');
 

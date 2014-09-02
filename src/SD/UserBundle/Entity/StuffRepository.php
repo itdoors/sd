@@ -12,4 +12,24 @@ use Doctrine\ORM\EntityRepository;
  */
 class StuffRepository extends EntityRepository
 {
+    /**
+     * Get users by companystructure
+     *
+     * @param integer $companystructureId
+     *
+     * @return Query
+     */
+    public function getStuffForCompanystructure($companystructureId)
+    {
+        return $this->createQueryBuilder('s')
+                ->select('s')
+                ->leftJoin('s.user', 'u')
+                ->leftJoin('s.companystructure', 'c')
+                ->where('s.companystructureId = :companystructureId')
+                ->andWhere('c.stuffId is NULL or c.stuffId != s.id')
+                ->andWhere("u.isFired is NULL or u.isFired = false")
+                ->setParameter(':companystructureId', $companystructureId)
+                ->orderBy('u.lastName')
+                ->getQuery()->getResult();
+    }
 }

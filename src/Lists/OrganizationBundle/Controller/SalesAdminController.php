@@ -170,7 +170,8 @@ class SalesAdminController extends SalesDispatcherController
         $oU = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:OrganizationUser');
 
-        $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_organization'));
+        $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')
+            ->findOneBy(array('lukey' => 'manager_organization'));
 
         foreach ($organizationIds as $organizationId) {
             $organizationUser = $oU->findOneBy(array(

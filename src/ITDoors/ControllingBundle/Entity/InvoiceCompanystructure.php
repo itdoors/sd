@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class InvoiceCompanystructure
 {
+
     /**
      * @var integer
      */
@@ -34,17 +35,15 @@ class InvoiceCompanystructure
      */
     private $companystructure;
 
-
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set invoiceId
      *
@@ -52,23 +51,21 @@ class InvoiceCompanystructure
      * 
      * @return InvoiceCompanystructure
      */
-    public function setInvoiceId($invoiceId)
+    public function setInvoiceId ($invoiceId)
     {
         $this->invoiceId = $invoiceId;
 
         return $this;
     }
-
     /**
      * Get invoiceId
      *
      * @return integer 
      */
-    public function getInvoiceId()
+    public function getInvoiceId ()
     {
         return $this->invoiceId;
     }
-
     /**
      * Set companystructureId
      *
@@ -76,23 +73,21 @@ class InvoiceCompanystructure
      * 
      * @return InvoiceCompanystructure
      */
-    public function setCompanystructureId($companystructureId)
+    public function setCompanystructureId ($companystructureId)
     {
         $this->companystructureId = $companystructureId;
 
         return $this;
     }
-
     /**
      * Get companystructureId
      *
      * @return integer 
      */
-    public function getCompanystructureId()
+    public function getCompanystructureId ()
     {
         return $this->companystructureId;
     }
-
     /**
      * Set invoice
      *
@@ -100,23 +95,21 @@ class InvoiceCompanystructure
      * 
      * @return InvoiceCompanystructure
      */
-    public function setInvoice(\ITDoors\ControllingBundle\Entity\Invoice $invoice = null)
+    public function setInvoice (\ITDoors\ControllingBundle\Entity\Invoice $invoice = null)
     {
         $this->invoice = $invoice;
 
         return $this;
     }
-
     /**
      * Get invoice
      *
      * @return \ITDoors\ControllingBundle\Entity\Invoice 
      */
-    public function getInvoice()
+    public function getInvoice ()
     {
         return $this->invoice;
     }
-
     /**
      * Set companystructure
      *
@@ -124,27 +117,25 @@ class InvoiceCompanystructure
      * 
      * @return InvoiceCompanystructure
      */
-    public function setCompanystructure(\Lists\CompanystructureBundle\Entity\Companystructure $companystructure = null)
+    public function setCompanystructure (\Lists\CompanystructureBundle\Entity\Companystructure $companystructure = null)
     {
         $this->companystructure = $companystructure;
 
         return $this;
     }
-
     /**
      * Get companystructure
      *
      * @return \Lists\CompanystructureBundle\Entity\Companystructure 
      */
-    public function getCompanystructure()
+    public function getCompanystructure ()
     {
         return $this->companystructure;
     }
-
     /**
      * @ORM\PreUpdate
      */
-    public function addHistory()
+    public function addHistory ()
     {
         $history = new \ITDoors\HistoryBundle\Entity\History();
         $history->setModelName('InvoiceCompanystructyre');

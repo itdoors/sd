@@ -16,22 +16,20 @@ class TaskController extends Controller
     /**
      * @return Response
      */
-    public function indexAction()
+    public function indexAction ()
     {
         return $this->render('SDTaskBundle:Task:index.html.twig');
     }
-
-
     /**
      * @param Request $request
      *
      * @return Response
      */
-    public function taskTableAction(Request $request = null)
+    public function taskTableAction (Request $request = null)
     {
         $user = $this->getUser();
 
-        $filterArray = array(
+        $filterArray = array (
             'user' => $user
         );
 
@@ -40,10 +38,10 @@ class TaskController extends Controller
             if ($filter != 'all' && $filter) {
                 $role = $this->getDoctrine()
                     ->getRepository('SDTaskBundle:Role')
-                    ->findOneBy(array(
-                        'name' => $filter,
-                        'model' => 'task'
-                    ));
+                    ->findOneBy(array (
+                    'name' => $filter,
+                    'model' => 'task'
+                ));
                 $filterArray['role'] = $role;
             }
         }
@@ -51,91 +49,74 @@ class TaskController extends Controller
 
         $tasksUserRole = $this->getDoctrine()
             ->getRepository('SDTaskBundle:TaskUserRole')
-            ->findBy(
-                $filterArray,
-                array(
-                    'isViewed' => 'ASC',
-                    'id' => 'DESC'
-                )
-            );
+            ->findBy($filterArray, array (
+                'isViewed' => 'ASC',
+                'id' => 'DESC'
+            ));
 
         if ($filter) {
-            $return = array();
-            $return['html'] = $this->renderView('SDTaskBundle:Task:tableTasks.html.twig',
-                array(
-                    'tasksUserRole' => $tasksUserRole
-                )
-            );
-            $return['success'] = 1;
-
-            return new Response(json_encode($return));
-        }
-
-        return $this->render('SDTaskBundle:Task:tableTasks.html.twig',
-            array(
-              'tasksUserRole' => $tasksUserRole
-            )
-        );
-
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function taskTableDashboardAction(Request $request = null)
-    {
-        $user = $this->getUser();
-
-        $filterArray = array(
-            'user' => $user
-        );
-
-        if ($request != null) {
-            $filter = $request->request->get('filter');
-            if ($filter != 'all' && $filter) {
-                $role = $this->getDoctrine()
-                    ->getRepository('SDTaskBundle:Role')
-                    ->findOneBy(array(
-                        'name' => $filter,
-                        'model' => 'task'
-                    ));
-                $filterArray['role'] = $role;
-            }
-        }
-
-
-        $tasksUserRole = $this->getDoctrine()
-            ->getRepository('SDTaskBundle:TaskUserRole')
-            ->findBy(
-                $filterArray,
-                array(
-                    'isViewed' => 'ASC',
-                    'id' => 'DESC'
-                )
-            );
-
-        if ($filter) {
-            $return = array();
-            $return['html'] = $this->renderView('SDTaskBundle:Task:tableTasks.html.twig',
-                array(
-                    'tasksUserRole' => $tasksUserRole
-                )
-            );
-            $return['success'] = 1;
-
-            return new Response(json_encode($return));
-        }
-
-        return $this->render('SDTaskBundle:Dashboard:tableTasks.html.twig',
-            array(
+            $return = array ();
+            $return['html'] = $this->renderView('SDTaskBundle:Task:tableTasks.html.twig', array (
                 'tasksUserRole' => $tasksUserRole
-            )
+            ));
+            $return['success'] = 1;
+
+            return new Response(json_encode($return));
+        }
+
+        return $this->render('SDTaskBundle:Task:tableTasks.html.twig', array (
+            'tasksUserRole' => $tasksUserRole
+        ));
+    }
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function taskTableDashboardAction (Request $request = null)
+    {
+        $user = $this->getUser();
+
+        $filterArray = array (
+            'user' => $user
         );
 
-    }
+        if ($request != null) {
+            $filter = $request->request->get('filter');
+            if ($filter != 'all' && $filter) {
+                $role = $this->getDoctrine()
+                    ->getRepository('SDTaskBundle:Role')
+                    ->findOneBy(array (
+                    'name' => $filter,
+                    'model' => 'task'
+                ));
+                $filterArray['role'] = $role;
+            }
+        }
 
+
+        $tasksUserRole = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:TaskUserRole')
+            ->findBy($filterArray, array (
+                'isViewed' => 'ASC',
+                'id' => 'DESC'
+            ));
+
+        if ($filter) {
+            $return = array ();
+            $return['html'] =
+                $this->renderView('SDTaskBundle:Task:tableTasks.html.twig', array (
+                    'tasksUserRole' => $tasksUserRole
+                ));
+            $return['success'] = 1;
+
+            return new Response(json_encode($return));
+        }
+
+        return $this->render('SDTaskBundle:Dashboard:tableTasks.html.twig', array (
+            'tasksUserRole' => $tasksUserRole
+        ));
+    }
     /**
      * Renders modal inner html for one task
      *
@@ -143,10 +124,10 @@ class TaskController extends Controller
      *
      * @return Response
      */
-    public function taskModalAction(Request $request)
+    public function taskModalAction (Request $request)
     {
         $id = $request->request->get('id');
-        $return = array();
+        $return = array ();
 
         $info = $this->getTaskUserRoleInfo($id);
 
@@ -155,13 +136,12 @@ class TaskController extends Controller
 
         return new Response(json_encode($return));
     }
-
     /**
      * @param int $id
      *
      * @return array
      */
-    protected function getTaskUserRoleInfo($id)
+    protected function getTaskUserRoleInfo ($id)
     {
         $em = $this->getDoctrine()->getManager();
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
@@ -171,44 +151,47 @@ class TaskController extends Controller
             ->getRepository('SDTaskBundle:Role');
 
         $performerRole = $roleRepository
-            ->findOneBy(array(
-                'name' => 'performer',
-                'model' => 'task'
-            ));
+            ->findOneBy(array (
+            'name' => 'performer',
+            'model' => 'task'
+        ));
 
-        $controllerRole  = $roleRepository
-            ->findOneBy(array(
-                'name' => 'controller',
-                'model' => 'task'
-            ));
+        $controllerRole = $roleRepository
+            ->findOneBy(array (
+            'name' => 'controller',
+            'model' => 'task'
+        ));
 
-        $authorRole  = $roleRepository
-            ->findOneBy(array(
-                'name' => 'author',
-                'model' => 'task'
-            ));
+        $authorRole = $roleRepository
+            ->findOneBy(array (
+            'name' => 'author',
+            'model' => 'task'
+        ));
 
         $taskUserRoleController = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
-            array(
+            array (
                 'task' => $taskUserRole->getTask(),
                 'role' => $controllerRole
-            ));
+            )
+        );
 
         $taskUserRolePerformer = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
-            array(
+            array (
                 'task' => $taskUserRole->getTask(),
                 'role' => $performerRole
-            ));
+            )
+        );
 
         $taskUserRoleAuthor = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
-            array(
+            array (
                 'task' => $taskUserRole->getTask(),
                 'role' => $authorRole
-            ));
+            )
+        );
 
         $comment = $this->getLastTaskComment($taskUserRole->getTask()->getId());
 
-        $info = array(
+        $info = array (
             'taskUserRole' => $taskUserRole,
             'taskUserRoleController' => $taskUserRoleController,
             'taskUserRolePerformer' => $taskUserRolePerformer,
@@ -219,53 +202,69 @@ class TaskController extends Controller
 
         return $info;
     }
-
     /**
      * @param int $id
      *
      * @return Response
      */
-    public function showTaskPageAction($id)
+    public function showTaskPageAction ($id)
     {
+        $em = $this->getDoctrine()->getManager();
+
         $info = $this->getTaskUserRoleInfo($id);
 
-        return $this->render('SDTaskBundle:Task:taskPage.html.twig',
-            $info
-        );
-    }
+        $commentRepository = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:Comment');
 
+        //$user = $this->getUser();
+
+        /* $task = $this->getDoctrine()
+          ->getRepository('SDTaskBundle:Task')->find($idTask); */
+        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
+        $idTask = $taskUserRole->getTask()->getId();
+
+        $comments = $commentRepository->findBy(array (
+            'model' => 'Task',
+            //'user' => $user,
+            'modelId' => $idTask
+            ), array (
+            'createDatetime' => 'DESC'
+        ));
+        $info['comments'] = $comments;
+
+        return $this->render('SDTaskBundle:Task:taskPage.html.twig', $info);
+    }
     /**
      * @param int $idTask
      *
      * @return Comment
      */
-    protected function getLastTaskComment($idTask)
+    protected function getLastTaskComment ($idTask)
     {
         $commentRepository = $this->getDoctrine()
             ->getRepository('SDTaskBundle:Comment');
 
         //$user = $this->getUser();
 
-        /*$task = $this->getDoctrine()
-            ->getRepository('SDTaskBundle:Task')->find($idTask);*/
+        /* $task = $this->getDoctrine()
+          ->getRepository('SDTaskBundle:Task')->find($idTask); */
 
-        $lastComment = $commentRepository->findOneBy(array(
+        $lastComment = $commentRepository->findOneBy(array (
             'model' => 'Task',
             //'user' => $user,
             'modelId' => $idTask
-        ), array(
+            ), array (
             'createDatetime' => 'DESC'
         ));
 
         return $lastComment;
     }
-
     /**
      * @param Request $request
      *
      * @return Response
      */
-    public function setIsViewedTaskAction(Request $request)
+    public function setIsViewedTaskAction (Request $request)
     {
         $id = $request->request->get('id');
 
@@ -284,12 +283,11 @@ class TaskController extends Controller
 
         return new Response(json_encode($return));
     }
-
     /**
      * @param int  $id
      * @param bool $type
      */
-    private function checkIfCanPerform($id, $type = false)
+    private function checkIfCanPerform ($id, $type = false)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -299,15 +297,15 @@ class TaskController extends Controller
             ->getRepository('SDTaskBundle:Role');
 
         $performerRole = $roleRepository
-            ->findOneBy(array(
-                'name' => 'performer',
-                'model' => 'task'
-            ));
+            ->findOneBy(array (
+            'name' => 'performer',
+            'model' => 'task'
+        ));
 
         $task = $taskUserRole->getTask();
-        $tasksUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(array(
+        $tasksUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(array (
             'task' => $task,
-            'role'  => $performerRole
+            'role' => $performerRole
         ));
         if ($taskUserRole->getRole()->getName() != 'controller' || $type) {
             $performing = true;
@@ -317,32 +315,33 @@ class TaskController extends Controller
                     break;
                 }
             }
-
-            if ($performing) {
-                $stagePerforming = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
-                    'name' => 'performing',
-                    'model'  => 'task'
-                ));
-                $task ->setStage($stagePerforming);
-                $em->persist($task);
-            } else {
-                $stageCreated = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
-                    'name' => 'created',
-                    'model'  => 'task'
-                ));
-                $task ->setStage($stageCreated);
-                $em->persist($task);
+            $currentStage = $task->getStage();
+            if ($currentStage == 'created' || $currentStage == 'performing') {
+                if ($performing) {
+                    $stagePerforming = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array (
+                        'name' => 'performing',
+                        'model' => 'task'
+                    ));
+                    $task->setStage($stagePerforming);
+                    $em->persist($task);
+                } else {
+                    $stageCreated = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array (
+                        'name' => 'created',
+                        'model' => 'task'
+                    ));
+                    $task->setStage($stageCreated);
+                    $em->persist($task);
+                }
+                $em->flush();
             }
         }
-        $em->flush();
     }
-
     /**
      * @param Request $request
      *
      * @return Response
      */
-    public function taskStageUpdateAction(Request $request)
+    public function taskStageUpdateAction (Request $request)
     {
         $id = $request->request->get('id');
         $stage = $request->request->get('stage');
@@ -357,11 +356,11 @@ class TaskController extends Controller
         $stageName = $stage;
         $stage = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
             'name' => $stage,
-            'model'  => 'task'
+            'model' => 'task'
         ));
         $this->insertComment($id, 'Changed the stage to :'.$stageName);
 
-        $task ->setStage($stage);
+        $task->setStage($stage);
         $em->persist($task);
         $em->flush();
 
@@ -369,24 +368,23 @@ class TaskController extends Controller
 
         return new Response(json_encode($return));
     }
-
     /**
      * @param int $id
      */
-    private function closeDateRequest($id)
+    private function closeDateRequest ($id)
     {
         $em = $this->getDoctrine()->getManager();
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
-        $stageRequest = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
+        $stageRequest = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array (
             'name' => 'request',
             'model' => 'task_end_date'
         ));
-        $dateRequest= $em->getRepository('SDTaskBundle:TaskEndDate')->findOneBy(array(
+        $dateRequest = $em->getRepository('SDTaskBundle:TaskEndDate')->findOneBy(array (
             'task' => $taskUserRole->getTask(),
             'stage' => $stageRequest,
         ));
 
-        $stageDate = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
+        $stageDate = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array (
             'name' => 'rejected',
             'model' => 'task_end_date',
         ));
@@ -397,13 +395,12 @@ class TaskController extends Controller
             $em->flush;
         }
     }
-
     /**
      * @param Request $request
      *
      * @return Response
      */
-    public function taskChangeDateRequestAction(Request $request)
+    public function taskChangeDateRequestAction (Request $request)
     {
         $id = $request->request->get('id');
         $value = $request->request->get('value');
@@ -414,14 +411,14 @@ class TaskController extends Controller
 
         $task = $taskUserRole->getTask();
 
-        $stageRequest = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
+        $stageRequest = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array (
             'name' => 'request',
             'model' => 'task_end_date'
         ));
 
-        $dateRequest= $em->getRepository('SDTaskBundle:TaskEndDate')->findBy(array(
-           'task' => $task,
-           'stage' => $stageRequest,
+        $dateRequest = $em->getRepository('SDTaskBundle:TaskEndDate')->findBy(array (
+            'task' => $task,
+            'stage' => $stageRequest,
         ));
 
         if (sizeof($dateRequest)) {
@@ -430,27 +427,27 @@ class TaskController extends Controller
             return new Response(json_encode($return));
         }
 
-        $stageDate = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
+        $stageDate = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array (
             'name' => 'accepted',
             'model' => 'task_end_date',
         ));
 
-        $date = $em->getRepository('SDTaskBundle:TaskEndDate')->findOneBy(array(
+        $date = $em->getRepository('SDTaskBundle:TaskEndDate')->findOneBy(array (
             'task' => $task,
             'stage' => $stageDate,
-        ), array(
+            ), array (
             'id' => 'DESC'
         ));
 
 
         if ($type == 'hour') {
-            $stringAddDate = 'PT'.$value.'H';
-        } else if ($type == 'day') {
-            $stringAddDate = 'P'.$value.'D';
-        } else if ($type == 'week') {
-            $stringAddDate = 'P'.$value.'W';
-        } else if ($type == 'month') {
-            $stringAddDate = 'P'.$value.'M';
+            $stringAddDate = 'PT' . $value . 'H';
+        } elseif ($type == 'day') {
+            $stringAddDate = 'P' . $value . 'D';
+        } elseif ($type == 'week') {
+            $stringAddDate = 'P' . $value . 'W';
+        } elseif ($type == 'month') {
+            $stringAddDate = 'P' . $value . 'M';
         }
 
 
@@ -463,11 +460,11 @@ class TaskController extends Controller
             $this->insertComment($id, 'Changed the end date');
         } else {
             $newTaskEndDate->setStage($stageRequest);
-            $stageDateRequest = $em->getRepository('SDTaskBundle:Stage')->findOneby(array(
+            $stageDateRequest = $em->getRepository('SDTaskBundle:Stage')->findOneby(array (
                 'name' => 'date request',
                 'model' => 'task',
             ));
-            $task ->setStage($stageDateRequest);
+            $task->setStage($stageDateRequest);
             $this->insertComment($id, 'Made the end date request');
         }
         $newTaskEndDate->setTask($task);
@@ -481,9 +478,7 @@ class TaskController extends Controller
         $return['success'] = 1;
 
         return new Response(json_encode($return));
-
     }
-
     /**
      * @param Request $request
      *
@@ -499,12 +494,12 @@ class TaskController extends Controller
 
         $task = $taskUserRole->getTask();
 
-        $stageRequest = $em->getRepository('SDTaskBundle:Stage')->findOneby(array(
+        $stageRequest = $em->getRepository('SDTaskBundle:Stage')->findOneby(array (
             'name' => 'request',
             'model' => 'task_end_date'
         ));
 
-        $taskEndDateRequested = $em->getRepository('SDTaskBundle:TaskEndDate')->findOneBy(array(
+        $taskEndDateRequested = $em->getRepository('SDTaskBundle:TaskEndDate')->findOneBy(array (
             'task' => $task,
             'stage' => $stageRequest
         ));
@@ -516,7 +511,7 @@ class TaskController extends Controller
             $answerStageName = 'rejected';
             $this->insertComment($id, 'Rejected the date request');
         }
-        $answerStage = $em->getRepository('SDTaskBundle:Stage')->findOneby(array(
+        $answerStage = $em->getRepository('SDTaskBundle:Stage')->findOneby(array (
             'name' => $answerStageName,
             'model' => 'task_end_date'
         ));
@@ -529,9 +524,7 @@ class TaskController extends Controller
         $return['success'] = 1;
 
         return new Response(json_encode($return));
-
     }
-
     /**
      * Insert Comment
      *
@@ -539,7 +532,7 @@ class TaskController extends Controller
      *
      * @return Response
      */
-    public function addCommentAction(Request $request)
+    public function addCommentAction (Request $request)
     {
         $id = $request->request->get('id');
         $commentValue = $request->request->get('comment');

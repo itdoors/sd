@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Task
 {
+
     /**
      * @var integer
      */
@@ -54,17 +55,15 @@ class Task
      */
     private $user;
 
-
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set userId
      *
@@ -72,23 +71,21 @@ class Task
      * 
      * @return Task
      */
-    public function setUserId($userId)
+    public function setUserId ($userId)
     {
         $this->userId = $userId;
 
         return $this;
     }
-
     /**
      * Get userId
      *
      * @return integer 
      */
-    public function getUserId()
+    public function getUserId ()
     {
         return $this->userId;
     }
-
     /**
      * Set createDateTime
      *
@@ -96,23 +93,21 @@ class Task
      * 
      * @return Task
      */
-    public function setCreateDateTime($createDateTime)
+    public function setCreateDateTime ($createDateTime)
     {
         $this->createDateTime = $createDateTime;
 
         return $this;
     }
-
     /**
      * Get createDateTime
      *
      * @return \DateTime 
      */
-    public function getCreateDateTime()
+    public function getCreateDateTime ()
     {
         return $this->createDateTime;
     }
-
     /**
      * Set taskType
      *
@@ -120,23 +115,21 @@ class Task
      * 
      * @return Task
      */
-    public function setTaskType($taskType)
+    public function setTaskType ($taskType)
     {
         $this->taskType = $taskType;
 
         return $this;
     }
-
     /**
      * Get taskType
      *
      * @return string 
      */
-    public function getTaskType()
+    public function getTaskType ()
     {
         return $this->taskType;
     }
-
     /**
      * Set startDateTime
      *
@@ -144,23 +137,21 @@ class Task
      * 
      * @return Task
      */
-    public function setStartDateTime($startDateTime)
+    public function setStartDateTime ($startDateTime)
     {
         $this->startDateTime = $startDateTime;
 
         return $this;
     }
-
     /**
      * Get startDateTime
      *
      * @return \DateTime 
      */
-    public function getStartDateTime()
+    public function getStartDateTime ()
     {
         return $this->startDateTime;
     }
-
     /**
      * Set stopDateTime
      *
@@ -168,23 +159,21 @@ class Task
      * 
      * @return Task
      */
-    public function setStopDateTime($stopDateTime)
+    public function setStopDateTime ($stopDateTime)
     {
         $this->stopDateTime = $stopDateTime;
 
         return $this;
     }
-
     /**
      * Get stopDateTime
      *
      * @return \DateTime 
      */
-    public function getStopDateTime()
+    public function getStopDateTime ()
     {
         return $this->stopDateTime;
     }
-
     /**
      * Set title
      *
@@ -192,23 +181,21 @@ class Task
      * 
      * @return Task
      */
-    public function setTitle($title)
+    public function setTitle ($title)
     {
         $this->title = $title;
 
         return $this;
     }
-
     /**
      * Get title
      *
      * @return string 
      */
-    public function getTitle()
+    public function getTitle ()
     {
         return $this->title;
     }
-
     /**
      * Set description
      *
@@ -216,23 +203,21 @@ class Task
      * 
      * @return Task
      */
-    public function setDescription($description)
+    public function setDescription ($description)
     {
         $this->description = $description;
 
         return $this;
     }
-
     /**
      * Get description
      *
      * @return string 
      */
-    public function getDescription()
+    public function getDescription ()
     {
         return $this->description;
     }
-
     /**
      * Set user
      *
@@ -240,27 +225,26 @@ class Task
      * 
      * @return Task
      */
-    public function setUser(\SD\UserBundle\Entity\User $user = null)
+    public function setUser (\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
 
         return $this;
     }
-
     /**
      * Get user
      *
      * @return \SD\UserBundle\Entity\User 
      */
-    public function getUser()
+    public function getUser ()
     {
         return $this->user;
     }
+
     /**
      * @var boolean
      */
     private $isDone;
-
 
     /**
      * Set isDone
@@ -269,27 +253,26 @@ class Task
      *
      * @return Task
      */
-    public function setIsDone($isDone)
+    public function setIsDone ($isDone)
     {
         $this->isDone = $isDone;
 
         return $this;
     }
-
     /**
      * Get isDone
      *
      * @return boolean 
      */
-    public function getIsDone()
+    public function getIsDone ()
     {
         return $this->isDone;
     }
+
     /**
      * @var \SD\UserBundle\Entity\User
      */
     private $performer;
-
 
     /**
      * Set performer
@@ -298,27 +281,26 @@ class Task
      * 
      * @return Task
      */
-    public function setPerformer(\SD\UserBundle\Entity\User $performer = null)
+    public function setPerformer (\SD\UserBundle\Entity\User $performer = null)
     {
         $this->performer = $performer;
 
         return $this;
     }
-
     /**
      * Get performer
      *
      * @return \SD\UserBundle\Entity\User 
      */
-    public function getPerformer()
+    public function getPerformer ()
     {
         return $this->performer;
     }
+
     /**
      * @var \Lists\HandlingBundle\Entity\HandlingMessage
      */
     private $handlingMessage;
-
 
     /**
      * Set handlingMessage
@@ -327,19 +309,18 @@ class Task
      *
      * @return Task
      */
-    public function setHandlingMessage(\Lists\HandlingBundle\Entity\HandlingMessage $handlingMessage = null)
+    public function setHandlingMessage (\Lists\HandlingBundle\Entity\HandlingMessage $handlingMessage = null)
     {
         $this->handlingMessage = $handlingMessage;
 
         return $this;
     }
-
     /**
      * Get handlingMessage
      *
      * @return \Lists\HandlingBundle\Entity\HandlingMessage 
      */
-    public function getHandlingMessage()
+    public function getHandlingMessage ()
     {
         return $this->handlingMessage;
     }

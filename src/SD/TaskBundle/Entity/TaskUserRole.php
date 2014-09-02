@@ -30,17 +30,15 @@ class TaskUserRole
      */
     private $user;
 
-
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set task
      *
@@ -48,23 +46,21 @@ class TaskUserRole
      *
      * @return TaskUserRole
      */
-    public function setTask(\SD\TaskBundle\Entity\Task $task = null)
+    public function setTask (\SD\TaskBundle\Entity\Task $task = null)
     {
         $this->task = $task;
 
         return $this;
     }
-
     /**
      * Get task
      *
      * @return \SD\TaskBundle\Entity\Task 
      */
-    public function getTask()
+    public function getTask ()
     {
         return $this->task;
     }
-
     /**
      * Set role
      *
@@ -72,23 +68,21 @@ class TaskUserRole
      *
      * @return TaskUserRole
      */
-    public function setRole(\SD\TaskBundle\Entity\Role $role = null)
+    public function setRole (\SD\TaskBundle\Entity\Role $role = null)
     {
         $this->role = $role;
 
         return $this;
     }
-
     /**
      * Get role
      *
      * @return \SD\TaskBundle\Entity\Role 
      */
-    public function getRole()
+    public function getRole ()
     {
         return $this->role;
     }
-
     /**
      * Set user
      *
@@ -96,27 +90,26 @@ class TaskUserRole
      *
      * @return TaskUserRole
      */
-    public function setUser(\SD\UserBundle\Entity\User $user = null)
+    public function setUser (\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
 
         return $this;
     }
-
     /**
      * Get user
      *
      * @return \SD\UserBundle\Entity\User 
      */
-    public function getUser()
+    public function getUser ()
     {
         return $this->user;
     }
+
     /**
      * @var boolean
      */
     private $isViewed;
-
 
     /**
      * Set isViewed
@@ -125,19 +118,18 @@ class TaskUserRole
      *
      * @return TaskUserRole
      */
-    public function setIsViewed($isViewed)
+    public function setIsViewed ($isViewed)
     {
         $this->isViewed = $isViewed;
 
         return $this;
     }
-
     /**
      * Get isViewed
      *
      * @return boolean 
      */
-    public function getIsViewed()
+    public function getIsViewed ()
     {
         return $this->isViewed;
     }

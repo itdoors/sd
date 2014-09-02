@@ -3,6 +3,7 @@
 /**
  * Command class for deleting handling
  */
+
 namespace Lists\OrganizationBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -18,9 +19,11 @@ use Lists\OrganizationBundle\Entity\OrganizationUser;
  */
 class SetManagerMainCommand extends ContainerAwareCommand
 {
+
     /**
-    * @var \Doctrine\ORM\EntityManager $em
-    */
+     * @var \Doctrine\ORM\EntityManager $em
+     */
+
     protected $em;
 
     /**
@@ -31,38 +34,37 @@ class SetManagerMainCommand extends ContainerAwareCommand
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure ()
     {
         $this
-          ->setName('lists:organization:set:manager:organization')
-          ->setDescription('Set main manager for organization');
+            ->setName('lists:organization:set:manager:organization')
+            ->setDescription('Set main manager for organization');
     }
-
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute (InputInterface $input, OutputInterface $output)
     {
         $em = $this->getContainer()->get('doctrine')->getManager();
 
         /** @var Lookup $lookup */
-        $lookup = $em->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager_organization'));
+        $lookup = $em->getRepository('ListsLookupBundle:Lookup')->findOneBy(array ('lukey' => 'manager_organization'));
 
         $organizations = $em->getRepository('ListsOrganizationBundle:Organization')->findAll();
         foreach ($organizations as $organization) {
-            echo $organization->getId()." \t\n";
+            echo $organization->getId() . " \t\n";
             $organizationUsers = $organization->getOrganizationUsers();
             $userId = false;
             if (count($organizationUsers) == 1) {
                 $user = $organizationUsers[0];
                 $userId = $user->getUser()->getId();
-            } else if (count($organizationUsers) > 1) {
-                $user = $organizationUsers[count($organizationUsers)-1];
+            } elseif (count($organizationUsers) > 1) {
+                $user = $organizationUsers[count($organizationUsers) - 1];
                 $userId = $user->getUser()->getId();
-            } else if (count($organizationUsers) == 0 && method_exists($organization, 'getUser')) {
+            } elseif (count($organizationUsers) == 0 && method_exists($organization, 'getUser')) {
                 $userId = $organization->getUser()->getId();
-            } else if (!method_exists($organization, 'getUser')) {
-                echo 'In organization not found user creator and manager id: '.$organization->getId()."\n";
+            } elseif (!method_exists($organization, 'getUser')) {
+                echo 'In organization not found user creator and manager id: ' . $organization->getId() . "\n";
             }
             if ($userId) {
                 $organizationId = $organization->getId();
@@ -75,18 +77,18 @@ class SetManagerMainCommand extends ContainerAwareCommand
 
                 $managerOrganization = $em
                     ->getRepository('ListsOrganizationBundle:OrganizationUser')
-                    ->findOneBy(array(
-                        'organizationId' => $organizationId,
-                        'roleId' => $lookup->getId()
-                        ));
+                    ->findOneBy(array (
+                    'organizationId' => $organizationId,
+                    'roleId' => $lookup->getId()
+                ));
 
                 if (!$managerOrganization) {
                     $managerOrganization = $em
                         ->getRepository('ListsOrganizationBundle:OrganizationUser')
-                        ->findOneBy(array(
-                            'organizationId' => $organizationId,
-                            'userId' => $userId
-                        ));
+                        ->findOneBy(array (
+                        'organizationId' => $organizationId,
+                        'userId' => $userId
+                    ));
                     if (!$managerOrganization) {
                         $managerOrganization = new OrganizationUser();
                         $managerOrganization->setUser($user);
@@ -96,10 +98,10 @@ class SetManagerMainCommand extends ContainerAwareCommand
                 } else {
                     $oldManager = $em
                         ->getRepository('ListsOrganizationBundle:OrganizationUser')
-                        ->findOneBy(array(
-                            'organizationId' => $organizationId,
-                            'userId' => $userId,
-                            ));
+                        ->findOneBy(array (
+                        'organizationId' => $organizationId,
+                        'userId' => $userId,
+                    ));
                     if ($oldManager) {
                         $em->remove($oldManager);
                     }
@@ -109,27 +111,28 @@ class SetManagerMainCommand extends ContainerAwareCommand
 
                 /** @var Handling $handlings */
                 $handlings = $em->getRepository('ListsHandlingBundle:Handling')
-                        ->findBy(array('organization_id' => $organizationId));
+                    ->findBy(array ('organization_id' => $organizationId));
                 foreach ($handlings as $handling) {
                     $handlingId = $handling->getId();
                     $user = $em->getRepository('SDUserBundle:User')->find($userId);
 
-                    $lookupMP = $em->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_project'));
+                    $lookupMP = $em->getRepository('ListsLookupBundle:lookup')
+                        ->findOneBy(array ('lukey' => 'manager_project'));
 
                     $mainManager = $em
                         ->getRepository('ListsHandlingBundle:HandlingUser')
-                        ->findOneBy(array(
-                            'handlingId' => $lookupMP,
-                            'roleId' => $lookup->getId(),
-                            ));
+                        ->findOneBy(array (
+                        'handlingId' => $lookupMP,
+                        'roleId' => $lookup->getId(),
+                    ));
 
                     if (!$mainManager) {
                         $mainManager = $em
                             ->getRepository('ListsHandlingBundle:HandlingUser')
-                            ->findOneBy(array(
-                                'handlingId' => $handlingId,
-                                'userId' => $userId,
-                            ));
+                            ->findOneBy(array (
+                            'handlingId' => $handlingId,
+                            'userId' => $userId,
+                        ));
                         if (!$mainManager) {
                             $mainManager = new HandlingUser();
                             $mainManager->setUser($user);
@@ -143,12 +146,12 @@ class SetManagerMainCommand extends ContainerAwareCommand
                     } else {
                         $oldManager = $em
                             ->getRepository('ListsHandlingBundle:HandlingUser')
-                            ->findOneBy(array(
-                                'handlingId' => $handlingId,
-                                'userId' => $userId,
-                                ));
+                            ->findOneBy(array (
+                            'handlingId' => $handlingId,
+                            'userId' => $userId,
+                        ));
                         if ($oldManager) {
-                            $part = $mainManager->getPart()+$oldManager->getPart();
+                            $part = $mainManager->getPart() + $oldManager->getPart();
                             $em->remove($oldManager);
                             if ($part > 100) {
                                 $part = 100;

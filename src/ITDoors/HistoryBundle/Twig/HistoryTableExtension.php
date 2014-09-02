@@ -49,7 +49,11 @@ class HistoryTableExtension extends \Twig_Extension
     {
         return array(
             'history_table_render' => new \Twig_Function_Method($this, 'render', array('is_safe' => array('html'))),
-            'history_table_render_btn' => new \Twig_Function_Method($this, 'renderBtn', array('is_safe' => array('html')))
+            'history_table_render_btn' => new \Twig_Function_Method(
+                $this,
+                'renderBtn',
+                array('is_safe' => array('html'))
+            )
         );
     }
 

@@ -103,8 +103,8 @@ class HandlingRepository extends BaseRepository
             ->select('h.id as handlingId')
             ->addSelect('o.name as organizationName')
             ->addSelect('h.createdate as handlingCreatedate')
-            ->addSelect('h.lastHandlingDate as handlingLastHandlingDate')
-            ->addSelect('h.nextHandlingDate as handlingNextHandlingDate')
+            ->addSelect('hm.createdatetime as handlingLastHandlingDate')
+            ->addSelect('hm.createdate as handlingNextHandlingDate')
             ->addSelect('city.name as cityName')
             ->addSelect('scope.name as scopeName')
             ->addSelect('h.serviceOffered as handlingServiceOffered')
@@ -202,6 +202,14 @@ class HandlingRepository extends BaseRepository
      */
     public function processBaseQuery($sql)
     {
+        $subQuery = '(
+          SELECT max(hm2.id)
+            FROM
+          ListsHandlingBundle:HandlingMessage AS hm2
+            WHERE hm2.handling_id = h.id)';
+        $subQueryCase =  $sql->expr()->andx(
+            $sql->expr()->eq('hm.id', $subQuery)
+        );
         $sql
             ->leftJoin('h.organization', 'o')
             ->leftJoin('o.city', 'city')
@@ -209,6 +217,7 @@ class HandlingRepository extends BaseRepository
             ->leftJoin('h.status', 'status')
             ->leftJoin('h.result', 'result')
             ->leftJoin('h.handlingUsers', 'handlingUsers')
+             ->leftJoin('Lists\HandlingBundle\Entity\HandlingMessage', 'hm', 'WITH', $subQueryCase)
             ->leftJoin('handlingUsers.user', 'users')
             ->leftJoin('handlingUsers.lookup', 'lookup');
 
@@ -355,8 +364,8 @@ class HandlingRepository extends BaseRepository
             ->addSelect('result.slug as resultSlug')
             ->addSelect('result.percentageString as resultPercentageString')
             ->addSelect('result.progress as resultProgress')
-            ->addSelect('
-                (
+            ->addSelect(
+                '(
                 SELECT
                     hu.userId
                 FROM
@@ -370,8 +379,8 @@ class HandlingRepository extends BaseRepository
                     WHERE l.lukey = :lukey
                     )
                 )
-
-                 as managerProject')
+             as managerProject'
+            )
             ->leftJoin('h.organization', 'o')
             ->leftJoin('h.type', 'type')
             ->leftJoin('h.status', 'status')

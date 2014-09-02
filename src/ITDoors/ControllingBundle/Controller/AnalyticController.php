@@ -25,7 +25,6 @@ class AnalyticController extends BaseFilterController
 
     /** @var KnpPaginatorBundle $paginator */
     protected $paginator = 'knp_paginator';
-
     protected $filterFormName = 'invoiceFilterForAnalyticForm';
 
     /**
@@ -33,9 +32,9 @@ class AnalyticController extends BaseFilterController
      *
      * @return Response
      */
-    public function indexAction()
+    public function indexAction ()
     {
-        $filterNamespace = $this->container->getParameter($this->getNamespace()).'Grafic';
+        $filterNamespace = $this->container->getParameter($this->getNamespace()) . 'Grafic';
 
         $period = $this->getTab($filterNamespace);
         if (!$period) {
@@ -47,13 +46,12 @@ class AnalyticController extends BaseFilterController
 
         $tabs = $service->getTabsInvoiceGrafics();
 
-        return $this->render('ITDoorsControllingBundle:Analytic:index.html.twig', array(
+        return $this->render('ITDoorsControllingBundle:Analytic:index.html.twig', array (
                 'tabs' => $tabs,
                 'tab' => $period,
                 'namespace' => $filterNamespace
         ));
     }
-
     /**
      *  greficGeneralAction
      * 
@@ -61,7 +59,7 @@ class AnalyticController extends BaseFilterController
      * 
      * @return Response
      */
-    public function graficGeneralAction()
+    public function graficGeneralAction ()
     {
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
@@ -72,7 +70,7 @@ class AnalyticController extends BaseFilterController
         $entities = $organization->getForInvoice();
 
 
-        return $this->render('ITDoorsControllingBundle:Analytic:graficGeneral.html.twig', array(
+        return $this->render('ITDoorsControllingBundle:Analytic:graficGeneral.html.twig', array (
                 'entities' => $entities
         ));
     }
@@ -83,9 +81,9 @@ class AnalyticController extends BaseFilterController
      * 
      * @return Response
      */
-    public function graficWithoutactsAction()
+    public function graficWithoutactsAction ()
     {
-          /** @var EntityManager $em */
+        /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
         /** @var OrganizationRepository $organization */
@@ -93,7 +91,7 @@ class AnalyticController extends BaseFilterController
 
         $entities = $organization->getForInvoiceAct();
 
-        return $this->render('ITDoorsControllingBundle:Analytic:graficGeneral.html.twig', array(
+        return $this->render('ITDoorsControllingBundle:Analytic:graficGeneral.html.twig', array (
                 'entities' => $entities
         ));
     }
@@ -104,13 +102,13 @@ class AnalyticController extends BaseFilterController
      * 
      * @return Response
      */
-    public function graficIndividualAction($ajax)
+    public function graficIndividualAction ($ajax)
     {
-        $filterNamespace = $this->container->getParameter($this->getNamespace()).'GraficIndividual';
+        $filterNamespace = $this->container->getParameter($this->getNamespace()) . 'GraficIndividual';
 
         $filter = $this->filterFormName;
 
-        return $this->render('ITDoorsControllingBundle:Analytic:graficIndividual.html.twig', array(
+        return $this->render('ITDoorsControllingBundle:Analytic:graficIndividual.html.twig', array (
                 'filter' => $filter,
                 'ajax' => $ajax,
                 'namespace' => $filterNamespace
@@ -123,9 +121,9 @@ class AnalyticController extends BaseFilterController
      * 
      * @return Response
      */
-    public function graficIndividualListsAction()
+    public function graficIndividualListsAction ()
     {
-        $filterNamespace = $this->container->getParameter($this->getNamespace()).'GraficIndividual';
+        $filterNamespace = $this->container->getParameter($this->getNamespace()) . 'GraficIndividual';
 
         $filters = $this->getFilters($filterNamespace);
         $showType = null;
@@ -138,7 +136,7 @@ class AnalyticController extends BaseFilterController
             $dateFrom = new \DateTime($dates[0]);
             $dateTo = new \DateTime($dates[1]);
             if ($dateFrom->format('mY') == $dateTo->format('mY')) {
-                $showType = array(
+                $showType = array (
                     'year' => $dateFrom->format('Y'),
                     'month' => $dateFrom->format('m')
                 );
@@ -169,97 +167,87 @@ class AnalyticController extends BaseFilterController
         $entities->setHint($this->paginator . '.count', $count);
         $pagination = $paginator->paginate($entities, $page, 20);
 
-        $invoices = array();
+        $invoices = array ();
         foreach ($pagination as $organization) {
-            $invoices[$organization['id']] = array();
+            $invoices[$organization['id']] = array ();
             $invoiceAs = $invoice->getForCustomer($organization['id'], $filters);
             $invoicePs = $invoicePay->getForCustomer($organization['id'], $filters);
-            $yearsA = array();
-            $yearsP = array();
-            $yearsPR = array();
-            $years = array();
+            $yearsA = array ();
+            $yearsP = array ();
+            $yearsPR = array ();
+            $years = array ();
             foreach ($invoiceAs as $invoiceA) {
-                if (!array_key_exists($invoiceA['date']->format('Y'), $years)) {
-                    $years[$invoiceA['date']->format('Y')] = array();
-                }
-                if (!array_key_exists($invoiceA['delayDate']->format('Y'), $years)) {
-                    $years[$invoiceA['delayDate']->format('Y')] = array();
-                }
-                if (!array_key_exists($invoiceA['date']->format('Y'), $yearsA)) {
-                    $yearsA[$invoiceA['date']->format('Y')] = array();
-                }
-                if (!array_key_exists($invoiceA['date']->format('m'), $yearsA[$invoiceA['date']->format('Y')])) {
-                    $yearsA[$invoiceA['date']->format('Y')][$invoiceA['date']->format('m')] = array('summaInMonth' => 0);
-                }
-                if (!array_key_exists($invoiceA['date']->format('j'), $yearsA[$invoiceA['date']->format('Y')][$invoiceA['date']->format('m')])) {
-                    $yearsA[$invoiceA['date']->format('Y')][$invoiceA['date']->format('m')][$invoiceA['date']->format('j')] = 0;
-                }
-                $yearsA[$invoiceA['date']->format('Y')][$invoiceA['date']->format('m')]['summaInMonth']
-                        =
-                        $yearsA[$invoiceA['date']->format('Y')][$invoiceA['date']->format('m')]['summaInMonth']
-                        +
-                        ($invoiceA['sum']
-                        -
-                        $invoiceA['paymentsSumma']
-                        );
-                $yearsA[$invoiceA['date']->format('Y')][$invoiceA['date']->format('m')][$invoiceA['date']->format('j')]
-                        =
-                        $yearsA[$invoiceA['date']->format('Y')][$invoiceA['date']->format('m')][$invoiceA['date']->format('j')]
-                        +
-                        ($invoiceA['sum']
-                        -
-                        $invoiceA['paymentsSumma']
-                        );
+                $y = $invoiceA['date']->format('Y');
+                $m = $invoiceA['date']->format('m');
+                $d = $invoiceA['date']->format('j');
 
-                if (!array_key_exists($invoiceA['delayDate']->format('Y'), $yearsPR)) {
-                    $yearsPR[$invoiceA['delayDate']->format('Y')] = array();
+                $yd = $invoiceA['delayDate']->format('Y');
+                $md = $invoiceA['delayDate']->format('m');
+                $dd = $invoiceA['delayDate']->format('j');
+                if (!array_key_exists($y, $years)) {
+                    $years[$y] = array ();
                 }
-                if (!array_key_exists($invoiceA['delayDate']->format('m'), $yearsPR[$invoiceA['delayDate']->format('Y')])) {
-                    $yearsPR[$invoiceA['delayDate']->format('Y')][$invoiceA['delayDate']->format('m')] = array('summaInMonth' => 0);
+                if (!array_key_exists($yd, $years)) {
+                    $years[$yd] = array ();
                 }
-                if (!array_key_exists($invoiceA['delayDate']->format('j'), $yearsPR[$invoiceA['delayDate']->format('Y')][$invoiceA['delayDate']->format('m')])) {
-                    $yearsPR[$invoiceA['delayDate']->format('Y')][$invoiceA['delayDate']->format('m')][$invoiceA['delayDate']->format('j')] = 0;
+                if (!array_key_exists($y, $yearsA)) {
+                    $yearsA[$y] = array ();
                 }
-                $yearsPR[$invoiceA['delayDate']->format('Y')][$invoiceA['delayDate']->format('m')]['summaInMonth']
-                        =
-                        $yearsPR[$invoiceA['delayDate']->format('Y')][$invoiceA['delayDate']->format('m')]['summaInMonth']
-                        +
-                        ($invoiceA['sum']
-                        -
-                        $invoiceA['paymentsSumma']
-                        );
-                $yearsPR[$invoiceA['delayDate']->format('Y')][$invoiceA['delayDate']->format('m')][$invoiceA['delayDate']->format('j')]
-                        =
-                        $yearsPR[$invoiceA['delayDate']->format('Y')][$invoiceA['delayDate']->format('m')][$invoiceA['delayDate']->format('j')]
-                        +
-                        ($invoiceA['sum']
-                        -
-                        $invoiceA['paymentsSumma']
-                        );
+                if (!array_key_exists($m, $yearsA[$y])) {
+                    $yearsA[$y][$m]
+                        = array ('summaInMonth' => 0);
+                }
+                if (!array_key_exists($d, $yearsA[$y][$m])) {
+                    $yearsA[$y][$m][$d] = 0;
+                }
+                $yearsA[$y][$m]['summaInMonth'] = $yearsA[$y][$m]['summaInMonth'] +
+                    ($invoiceA['sum'] -
+                    $invoiceA['paymentsSumma']
+                    );
+                $yearsA[$y][$m][$d] = $yearsA[$y][$m][$d] +
+                    ($invoiceA['sum'] -
+                    $invoiceA['paymentsSumma']
+                    );
+
+                if (!array_key_exists($yd, $yearsPR)) {
+                    $yearsPR[$yd] = array ();
+                }
+                if (!array_key_exists($md, $yearsPR[$yd])) {
+                    $yearsPR[$yd][$md] = array ('summaInMonth' => 0);
+                }
+                if (!array_key_exists($dd, $yearsPR[$yd][$md])) {
+                    $yearsPR[$yd][$md][$dd] = 0;
+                }
+                $yearsPR[$yd][$md]['summaInMonth']
+                    = $yearsPR[$yd][$md]['summaInMonth']
+                    + ($invoiceA['sum'] - $invoiceA['paymentsSumma']);
+                $yearsPR[$yd][$md][$dd]
+                    = $yearsPR[$yd][$md][$dd]
+                    + ($invoiceA['sum'] - $invoiceA['paymentsSumma']);
             }
             foreach ($invoicePs as $invoiceP) {
-                if (!array_key_exists($invoiceP['date']->format('Y'), $years)) {
-                    $years[$invoiceP['date']->format('Y')] = array();
+                $y = $invoiceP['date']->format('Y');
+                $m = $invoiceP['date']->format('m');
+                $d = $invoiceP['date']->format('j');
+                if (!array_key_exists($y, $years)) {
+                    $years[$y] = array ();
                 }
-                if (!array_key_exists($invoiceP['date']->format('Y'), $yearsP)) {
-                    $yearsP[$invoiceP['date']->format('Y')] = array();
+                if (!array_key_exists($y, $yearsP)) {
+                    $yearsP[$y] = array ();
                 }
-                if (!array_key_exists($invoiceP['date']->format('m'), $yearsP[$invoiceP['date']->format('Y')])) {
-                    $yearsP[$invoiceP['date']->format('Y')][$invoiceP['date']->format('m')] = array('summaInMonth' => 0);
+                if (!array_key_exists($m, $yearsP[$y])) {
+                    $yearsP[$y][$m]
+                        = array ('summaInMonth' => 0);
                 }
-                if (!array_key_exists($invoiceP['date']->format('j'), $yearsP[$invoiceP['date']->format('Y')][$invoiceP['date']->format('m')])) {
-                    $yearsP[$invoiceP['date']->format('Y')][$invoiceP['date']->format('m')][$invoiceP['date']->format('j')] = 0;
+                if (!array_key_exists($d, $yearsP[$y][$m])) {
+                    $yearsP[$y][$m][$d] = 0;
                 }
-                $yearsP[$invoiceP['date']->format('Y')][$invoiceP['date']->format('m')]['summaInMonth']
-                        =
-                        $yearsP[$invoiceP['date']->format('Y')][$invoiceP['date']->format('m')]['summaInMonth']
-                        +
-                        $invoiceP['summaPay'];
-                $yearsP[$invoiceP['date']->format('Y')][$invoiceP['date']->format('m')][$invoiceP['date']->format('j')]
-                        =
-                        $yearsP[$invoiceP['date']->format('Y')][$invoiceP['date']->format('m')][$invoiceP['date']->format('j')]
-                        +
-                        $invoiceP['summaPay'];
+                $yearsP[$y][$m]['summaInMonth']
+                    = $yearsP[$y][$m]['summaInMonth']
+                    + $invoiceP['summaPay'];
+                $yearsP[$y][$m][$d]
+                    = $yearsP[$y][$m][$d] +
+                    $invoiceP['summaPay'];
             }
             $invoices[$organization['id']]['invoice'] = $invoiceAs;
             $invoices[$organization['id']]['invoicePays'] = $invoicePs;
@@ -269,7 +257,7 @@ class AnalyticController extends BaseFilterController
             $invoices[$organization['id']]['invoicesPR'] = $yearsPR;
         }
 
-        return $this->render('ITDoorsControllingBundle:Analytic:graficIndividualLists.html.twig', array(
+        return $this->render('ITDoorsControllingBundle:Analytic:graficIndividualLists.html.twig', array (
                 'showType' => $showType,
                 'entities' => $pagination,
                 'invoices' => $invoices,
