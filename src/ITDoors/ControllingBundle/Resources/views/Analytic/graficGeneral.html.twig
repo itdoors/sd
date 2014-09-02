@@ -70,7 +70,8 @@
                     tickLength: 0,
                     labelHeight: 0,
                     tickDecimals: 2,
-                    tickColor: "#eee"
+                    tickColor: "#eee",
+                    min: 0
                 },
                 yaxis: {
                     labelHeight: 50,
@@ -133,7 +134,7 @@
 <div class="portlet box yellow">
     <div class="portlet-title">
             <div class="caption">
-                    <i class="fa fa-gift"></i>График {{ entities|length }}
+                <i class="fa fa-gift"></i>{% trans %}Graphik{% endtrans %}
             </div>
             <div class="tools">
                     <a href="javascript:;" class="collapse">
@@ -147,6 +148,6 @@
             </div>
     </div>
     <div class="portlet-body">
-        <div id="chart_5" style="height: {{  50*entities|length}}px; padding: 0px; position: relative;"></div>
+        <div id="chart_5" style="height: {{  (50*entities|length)+1 }}px; padding: 0px; position: relative;"></div>
     </div>
 </div>

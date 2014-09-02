@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class InvoiceActDetal
 {
+
     /**
      * @var integer
      */
@@ -44,17 +45,15 @@ class InvoiceActDetal
      */
     private $act;
 
-
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set invoiceActId
      *
@@ -62,23 +61,21 @@ class InvoiceActDetal
      * 
      * @return InvoiceActDetal
      */
-    public function setInvoiceActId($invoiceActId)
+    public function setInvoiceActId ($invoiceActId)
     {
         $this->invoiceActId = $invoiceActId;
 
         return $this;
     }
-
     /**
      * Get invoiceActId
      *
      * @return integer 
      */
-    public function getInvoiceActId()
+    public function getInvoiceActId ()
     {
         return $this->invoiceActId;
     }
-
     /**
      * Set mpk
      *
@@ -86,23 +83,21 @@ class InvoiceActDetal
      * 
      * @return InvoiceActDetal
      */
-    public function setMpk($mpk)
+    public function setMpk ($mpk)
     {
         $this->mpk = $mpk;
 
         return $this;
     }
-
     /**
      * Get mpk
      *
      * @return string 
      */
-    public function getMpk()
+    public function getMpk ()
     {
         return $this->mpk;
     }
-
     /**
      * Set note
      *
@@ -110,23 +105,21 @@ class InvoiceActDetal
      * 
      * @return InvoiceActDetal
      */
-    public function setNote($note)
+    public function setNote ($note)
     {
         $this->note = $note;
 
         return $this;
     }
-
     /**
      * Get note
      *
      * @return string 
      */
-    public function getNote()
+    public function getNote ()
     {
         return $this->note;
     }
-
     /**
      * Set count
      *
@@ -134,23 +127,21 @@ class InvoiceActDetal
      * 
      * @return InvoiceActDetal
      */
-    public function setCount($count)
+    public function setCount ($count)
     {
         $this->count = $count;
 
         return $this;
     }
-
     /**
      * Get count
      *
      * @return float 
      */
-    public function getCount()
+    public function getCount ()
     {
         return $this->count;
     }
-
     /**
      * Set summa
      *
@@ -158,23 +149,21 @@ class InvoiceActDetal
      * 
      * @return InvoiceActDetal
      */
-    public function setSumma($summa)
+    public function setSumma ($summa)
     {
         $this->summa = $summa;
 
         return $this;
     }
-
     /**
      * Get summa
      *
      * @return float 
      */
-    public function getSumma()
+    public function getSumma ()
     {
         return $this->summa;
     }
-
     /**
      * Set act
      *
@@ -182,19 +171,18 @@ class InvoiceActDetal
      * 
      * @return InvoiceActDetal
      */
-    public function setAct(\ITDoors\ControllingBundle\Entity\InvoiceAct $act = null)
+    public function setAct (\ITDoors\ControllingBundle\Entity\InvoiceAct $act = null)
     {
         $this->act = $act;
 
         return $this;
     }
-
     /**
      * Get act
      *
      * @return \ITDoors\ControllingBundle\Entity\InvoiceAct 
      */
-    public function getAct()
+    public function getAct ()
     {
         return $this->act;
     }

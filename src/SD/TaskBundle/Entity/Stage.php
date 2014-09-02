@@ -30,90 +30,87 @@ class Stage
      */
     private $parent;
 
-
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set name
      *
      * @param string $name
+     *
      * @return Stage
      */
-    public function setName($name)
+    public function setName ($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
-
     /**
      * Get name
      *
      * @return string 
      */
-    public function getName()
+    public function getName ()
     {
         return $this->name;
     }
-
     /**
      * Set model
      *
      * @param string $model
+     *
      * @return Stage
      */
-    public function setModel($model)
+    public function setModel ($model)
     {
         $this->model = $model;
-    
+
         return $this;
     }
-
     /**
      * Get model
      *
      * @return string 
      */
-    public function getModel()
+    public function getModel ()
     {
         return $this->model;
     }
-
     /**
      * Set parent
      *
      * @param \SD\TaskBundle\Entity\Stage $parent
+     *
      * @return Stage
      */
-    public function setParent(\SD\TaskBundle\Entity\Stage $parent = null)
+    public function setParent (\SD\TaskBundle\Entity\Stage $parent = null)
     {
         $this->parent = $parent;
-    
+
         return $this;
     }
-
     /**
      * Get parent
      *
      * @return \SD\TaskBundle\Entity\Stage 
      */
-    public function getParent()
+    public function getParent ()
     {
         return $this->parent;
     }
-
     /**
      * @return string
      */
-    public function __toString() {
+    public function __toString ()
+    {
+
         return $this->getName();
     }
 }

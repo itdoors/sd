@@ -4,7 +4,6 @@
 <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
 <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
 #}
-<script></script>
 <script>
     $(document).ready(function(){
         $('#task_set_viewed').die('click')
@@ -33,6 +32,7 @@
         $('.stageButton').die('click');
         $('.stageButton').live('click', function(e){
             var stage = $(this).data('stage');
+            insertComment();
             updateTaskStage(stage);
         })
 
@@ -58,6 +58,7 @@
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
+                        insertComment();
                         update_modal();
                     } else {
                         //$('#copy_etalon_finished').show('blind', {}, 500);
@@ -86,6 +87,7 @@
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
+                        insertComment();
                         update_modal();
                     } else {
                         alert('Somebody already made request');
@@ -114,6 +116,34 @@
         })
 */
 
+        function insertComment() {
+            var comment = $('#comment').val();
+            var id = $('#task_modal_info_holder').data('id');
+            var url = $('#task_modal_info_holder').data('url_add_comment');
+            var sendData = {
+                'id': id,
+                'comment': comment
+            }
+            //alert(comment.length)
+            if (comment.length) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: sendData,
+                    success: function(data1) {
+                        //alert(data1)
+                        data = JSON.parse(data1);
+                        if (data.success == 1) {
+
+                        } else {
+                            //$('#copy_etalon_finished').show('blind', {}, 500);
+                        }
+                    }
+
+                })
+            }
+
+        }
 
         function updateTaskStage (stage) {
             var id = $('#task_modal_info_holder').data('id');
@@ -286,68 +316,86 @@
         {% endif %}
     #}
 </table>
+
+{% if comment is not empty %}
+    <div>
+        Последний комментарий ( {{ comment.user }}): <br>
+        "{{ comment.value }}"
+        <br><br>
+    </div>
+{% endif %}
 {% if taskUserRole.isViewed != true %}
     <a id="task_set_viewed" class="btn green" style="float: right;">{% trans %}Set viewed{% endtrans %}</a>
 {% else %}
 
-{% if taskUserRole.role == 'performer' %}
-    {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'date request'%}
-        <a id="task_set_done" data-stage="checking" class="btn purple stageButton" style="float: left;">{% trans %}Set done{% endtrans %}</a>
-    {% endif %}
-{% endif %}
-
-{% if taskUserRole.role == 'controller' %}
-    {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'checking' or taskUserRole.task.stage == 'date request'%}
-        <a id="task_set_closed" data-stage="closed" class="btn purple stageButton" style="float: left;">{% trans %}Close task{% endtrans %}</a>
-        <a id="task_set_undone" data-stage="undone" class="btn yellow stageButton" style="float: left; margin-left: 10px;">{% trans %}Set undone{% endtrans %}</a>
-    {% endif %}
-    {% if taskUserRole.task.stage == 'checking'%}
-        <a id="task_set_done_controller" data-stage="done" class="btn red stageButton" style="float: left; margin-left: 10px;">{% trans %}Set done{% endtrans %}</a>
-        <a id="task_set_performing_controller" data-stage="performing" class="btn green stageButton" style="float: left; margin-left: 10px;">{% trans %}Re-make{% endtrans %}</a>
-    {% endif %}
-
-    {% if taskUserRole.task.stage == 'date request'%}
-        {% if taskUserRole.isViewed != true %}
-            <div style="clear: both;"></div> <br>
+    {% if taskUserRole.role == 'performer' %}
+        {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'date request'%}
+            <a id="task_set_done" data-stage="checking" class="btn purple stageButton" style="float: left;">{% trans %}Set done{% endtrans %}</a>
         {% endif %}
-        <div style="float: right;">
-        {% trans %}Request to change date{% endtrans %}:
-        <a data-value="1" class="btn green answerButton" style="margin-left: 10px;">{% trans %}Submit{% endtrans %}</a>
-        <a data-value="0" class="btn red answerButton" style="margin-left: 10px;">{% trans %}Reject{% endtrans %}</a>
-        </div>
+    {% endif %}
+
+    {% if taskUserRole.role == 'controller' %}
+        {% if taskUserRole.task.stage == 'date request'%}
+            {% if taskUserRole.isViewed != true %}
+                <div style="clear: both;"></div>
+            {% endif %}
+            <div style="clear: both;" class="alert alert-danger">
+                {% trans %}Request to change date{% endtrans %}:
+                <a data-value="1" class="btn green answerButton" style="margin-left: 10px;">{% trans %}Submit{% endtrans %}</a>
+                <a data-value="0" class="btn red answerButton" style="margin-left: 10px;">{% trans %}Reject{% endtrans %}</a>
+            </div>
+            <br>
+        {% endif %}
+
+        {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'checking' or taskUserRole.task.stage == 'date request'%}
+            <a id="task_set_closed" data-stage="closed" class="btn purple stageButton" style="float: left;">{% trans %}Close task{% endtrans %}</a>
+            <a id="task_set_undone" data-stage="undone" class="btn yellow stageButton" style="float: left; margin-left: 10px;">{% trans %}Set undone{% endtrans %}</a>
+        {% endif %}
+        {% if taskUserRole.task.stage == 'checking'%}
+            <a id="task_set_done_controller" data-stage="done" class="btn red stageButton" style="float: left; margin-left: 10px;">{% trans %}Set done{% endtrans %}</a>
+            <a id="task_set_performing_controller" data-stage="performing" class="btn green stageButton" style="float: left; margin-left: 10px;">{% trans %}Re-make{% endtrans %}</a>
+        {% endif %}
+
 
     {% endif %}
 
-{% endif %}
+    {% if taskUserRole.task.stage != 'date request' and taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone' and taskUserRole.task.stage != 'closed' and taskUserRole.task.stage != 'checking'
+    and taskUserRole.role != 'author' %}
+        <a id="task_change_date" data-stage="date request" class="btn red" style="float: left; margin-left: 10px;">{% trans %}Change end date{% endtrans %}</a>
+        <div style="clear: both"></div>
+        <div id="change_date_holder" style="display: none">
+            {#
+                        <br>
+                        <label for="change_date_input">Change end date to:</label>
+                        <input type="text" id="change_date_input">
+                        <a id="task_change_date_submit" data-stage="date request" class="btn blue stageButton" style="margin-left: 10px;">{% trans %}Send request{% endtrans %}</a>
+            #}
+            <br>
+            <a data-value="1" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}1 hour{% endtrans %}</a>
+            <a data-value="3" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}3 hours{% endtrans %}</a>
+            <a data-value="5" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}5 hours{% endtrans %}</a>
+            <a data-value="12" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}12 hours{% endtrans %}</a>
+            <br><br>
+            <a data-value="1" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}1 day{% endtrans %}</a>
+            <a data-value="2" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}2 days{% endtrans %}</a>
+            <a data-value="3" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}3 days{% endtrans %}</a>
+            <a data-value="5" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}5 days{% endtrans %}</a>
+            <br><br>
+            <a data-value="1" data-type="week" class="btn green changeDate" style="width: 100px;">+ {% trans %}1 week{% endtrans %}</a>
+            <a data-value="2" data-type="week" class="btn green changeDate" style="width: 100px;">+ {% trans %}2 weeks{% endtrans %}</a>
+            <a data-value="3" data-type="week" class="btn green changeDate" style="width: 100px;">+ {% trans %}3 weeks{% endtrans %}</a>
+            <a data-value="1" data-type="month" class="btn green changeDate" style="width: 100px;">+ {% trans %}1 month{% endtrans %}</a>
 
-{% if taskUserRole.task.stage != 'date request' and taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone' and taskUserRole.task.stage != 'closed' and taskUserRole.task.stage != 'checking' %}
-    <a id="task_change_date" data-stage="date request" class="btn red" style="float: left; margin-left: 10px;">{% trans %}Change end date{% endtrans %}</a>
-    <div style="clear: both"></div>
-    <div id="change_date_holder" style="display: none">
-        {#
-                    <br>
-                    <label for="change_date_input">Change end date to:</label>
-                    <input type="text" id="change_date_input">
-                    <a id="task_change_date_submit" data-stage="date request" class="btn blue stageButton" style="margin-left: 10px;">{% trans %}Send request{% endtrans %}</a>
-        #}
-        <br>
-        <a data-value="1" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}1 hour{% endtrans %}</a>
-        <a data-value="3" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}3 hours{% endtrans %}</a>
-        <a data-value="5" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}5 hours{% endtrans %}</a>
-        <a data-value="12" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}12 hours{% endtrans %}</a>
-        <br><br>
-        <a data-value="1" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}1 day{% endtrans %}</a>
-        <a data-value="2" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}2 days{% endtrans %}</a>
-        <a data-value="3" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}3 days{% endtrans %}</a>
-        <a data-value="5" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}5 days{% endtrans %}</a>
-        <br><br>
-        <a data-value="1" data-type="week" class="btn green changeDate" style="width: 100px;">+ {% trans %}1 week{% endtrans %}</a>
-        <a data-value="2" data-type="week" class="btn green changeDate" style="width: 100px;">+ {% trans %}2 weeks{% endtrans %}</a>
-        <a data-value="3" data-type="week" class="btn green changeDate" style="width: 100px;">+ {% trans %}3 weeks{% endtrans %}</a>
-        <a data-value="1" data-type="month" class="btn green changeDate" style="width: 100px;">+ {% trans %}1 month{% endtrans %}</a>
-
-    </div>
-{% endif %}
+        </div>
+    {% endif %}
+    {% if taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone'
+    and taskUserRole.task.stage != 'closed' and taskUserRole.role != 'author' %}
+        {% if taskUserRole.role != 'performer' or taskUserRole.task.stage != 'checking'%}
+            <br>
+            <label for="comment">{% trans %}Your comment{% endtrans %}</label>
+            <textarea id="comment" class="form-control" placeholder="Введите комментарий к действию"></textarea>
+        {% endif %}
+    {% endif %}
 {% endif %}
 <br><br>
 <input type="hidden" id="task_modal_info_holder"
@@ -358,6 +406,8 @@
        data-url_change_date="{{ path('sd_task_change_date') }}"
        data-url_answer_date="{{ path('sd_task_answer_date') }}"
        data-role="{{ taskUserRole.role }}"
+       data-task_id="{{ taskUserRole.task.id }}"
+       data-url_add_comment="{{ path('sd_task_add_comment') }}"
     >
 {#
 

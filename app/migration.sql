@@ -884,5 +884,77 @@ ALTER TABLE organization ADD deletedAt TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NU
 ALTER TABLE handling ADD deletedAt TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL;
 ALTER TABLE dogovor ADD deletedAt TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL;
 
--- staging ----------------------
--- prod ----------------------
+ALTER TABLE companystructure ADD lft INT DEFAULT NULL;
+ALTER TABLE companystructure ADD lvl INT DEFAULT NULL;
+ALTER TABLE companystructure ADD rgt INT DEFAULT NULL;
+ALTER TABLE companystructure ADD root INT DEFAULT NULL;
+ALTER TABLE companystructure ALTER id TYPE BIGINT;
+ALTER TABLE companystructure ALTER id DROP DEFAULT;
+
+UPDATE "public".companystructure SET "lft" = 14, "rgt" = 15, "root" = 76, "lvl" = 1 WHERE id = 3;
+UPDATE "public".companystructure SET "lft" = 4, "rgt" = 5, "root" = 76, "lvl" = 1 WHERE id = 4;
+UPDATE "public".companystructure SET "lft" = 6, "rgt" = 7, "root" = 76, "lvl" = 1 WHERE id = 5;
+UPDATE "public".companystructure SET "lft" = 20, "rgt" = 21, "root" = 76, "lvl" = 1 WHERE id = 6;
+UPDATE "public".companystructure SET "lft" = 22, "rgt" = 23, "root" = 76, "lvl" = 1 WHERE id = 7;
+UPDATE "public".companystructure SET "lft" = 1, "rgt" = 2, "root" = 75, "lvl" = 0 WHERE id = 8;
+UPDATE "public".companystructure SET "lft" = 18, "rgt" = 19, "root" = 76, "lvl" = 1 WHERE id = 9;
+UPDATE "public".companystructure SET "lft" = 1, "rgt" = 32, "root" = 76, "lvl" = 0 WHERE id = 12;
+UPDATE "public".companystructure SET "lft" = 1, "rgt" = 14, "root" = 77, "lvl" = 0 WHERE id = 13;
+UPDATE "public".companystructure SET "lft" = 1, "rgt" = 22, "root" = 78, "lvl" = 0 WHERE id = 14;
+UPDATE "public".companystructure SET "lft" = 16, "rgt" = 19, "root" = 78, "lvl" = 1 WHERE id = 15;
+UPDATE "public".companystructure SET "lft" = 8, "rgt" = 9, "root" = 78, "lvl" = 1 WHERE id = 16;
+UPDATE "public".companystructure SET "lft" = 20, "rgt" = 21, "root" = 78, "lvl" = 1 WHERE id = 17;
+UPDATE "public".companystructure SET "lft" = 6, "rgt" = 7, "root" = 78, "lvl" = 1 WHERE id = 18;
+UPDATE "public".companystructure SET "lft" = 2, "rgt" = 3, "root" = 78, "lvl" = 1 WHERE id = 19;
+UPDATE "public".companystructure SET "lft" = 4, "rgt" = 5, "root" = 78, "lvl" = 1 WHERE id = 20;
+UPDATE "public".companystructure SET "lft" = 14, "rgt" = 15, "root" = 78, "lvl" = 1 WHERE id = 22;
+UPDATE "public".companystructure SET "lft" = 30, "rgt" = 31, "root" = 76, "lvl" = 1 WHERE id = 23;
+UPDATE "public".companystructure SET "lft" = 28, "rgt" = 29, "root" = 76, "lvl" = 1 WHERE id = 24;
+UPDATE "public".companystructure SET "lft" = 26, "rgt" = 27, "root" = 76, "lvl" = 1 WHERE id = 25;
+UPDATE "public".companystructure SET "lft" = 24, "rgt" = 25, "root" = 76, "lvl" = 1 WHERE id = 26;
+UPDATE "public".companystructure SET "lft" = 16, "rgt" = 17, "root" = 76, "lvl" = 1 WHERE id = 28;
+UPDATE "public".companystructure SET "lft" = 1, "rgt" = 2, "root" = 90, "lvl" = 0 WHERE id = 29;
+UPDATE "public".companystructure SET "lft" = 12, "rgt" = 13, "root" = 78, "lvl" = 1 WHERE id = 30;
+UPDATE "public".companystructure SET "lft" = 10, "rgt" = 11, "root" = 78, "lvl" = 1 WHERE id = 31;
+UPDATE "public".companystructure SET "lft" = 17, "rgt" = 18, "root" = 78, "lvl" = 2 WHERE id = 32;
+UPDATE "public".companystructure SET "lft" = 12, "rgt" = 13, "root" = 76, "lvl" = 1 WHERE id = 33;
+UPDATE "public".companystructure SET "lft" = 10, "rgt" = 11, "root" = 76, "lvl" = 1 WHERE id = 34;
+UPDATE "public".companystructure SET "lft" = 8, "rgt" = 9, "root" = 76, "lvl" = 1 WHERE id = 35;
+UPDATE "public".companystructure SET "lft" = 2, "rgt" = 3, "root" = 76, "lvl" = 1 WHERE id = 36;
+UPDATE "public".companystructure SET "lft" = 12, "rgt" = 13, "root" = 77, "lvl" = 1 WHERE id = 37;
+UPDATE "public".companystructure SET "lft" = 10, "rgt" = 11, "root" = 77, "lvl" = 1 WHERE id = 38;
+UPDATE "public".companystructure SET "lft" = 8, "rgt" = 9, "root" = 77, "lvl" = 1 WHERE id = 39;
+UPDATE "public".companystructure SET "lft" = 6, "rgt" = 7, "root" = 77, "lvl" = 1 WHERE id = 40;
+UPDATE "public".companystructure SET "lft" = 4, "rgt" = 5, "root" = 77, "lvl" = 1 WHERE id = 41;
+UPDATE "public".companystructure SET "lft" = 2, "rgt" = 3, "root" = 77, "lvl" = 1 WHERE id = 42;
+
+ALTER TABLE companystructure ALTER lft DROP DEFAULT;
+ALTER TABLE companystructure ALTER lvl DROP DEFAULT;
+ALTER TABLE companystructure ALTER rgt DROP DEFAULT;
+
+-- staging ++++++++++
+-- prod ++++++++++
+
+CREATE TABLE organization_ownership (id BIGSERIAL NOT NULL, shortname VARCHAR(10) NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id));
+ALTER TABLE organization ADD ownership_id BIGINT DEFAULT NULL;
+ALTER TABLE organization ADD CONSTRAINT FK_C1EE637C9E9FFAA0 FOREIGN KEY (ownership_id) REFERENCES organization_ownership (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE UNIQUE INDEX UNIQ_C1EE637C9E9FFAA0 ON organization (ownership_id);
+COMMENT ON COLUMN organization.ownership_id IS 'Форма собственности организации';
+-- staging +++++++
+-- prod ++++++++++++++++++++++++
+ALTER TABLE invoice ALTER date TYPE TIMESTAMP(0) WITHOUT TIME ZONE;
+-- staging ++++++++++++++++++++
+-- prod  ++++++++++++++++++++++
+CREATE TABLE comment (id SERIAL NOT NULL, create_datetime TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
+value VARCHAR(255) NOT NULL, model VARCHAR(255) NOT NULL, modelId INT NOT NULL, addition_field VARCHAR(255)
+, PRIMARY KEY(id));
+
+ALTER TABLE comment ADD user_id INT DEFAULT NULL;
+ALTER TABLE comment ADD CONSTRAINT FK_9474526CA76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_9474526CA76ED395 ON comment (user_id);
+-- staging +++++
+-- prod +++++
+DROP INDEX uniq_c1ee637c9e9ffaa0;
+CREATE INDEX IDX_C1EE637C9E9FFAA0 ON organization (ownership_id);
+-- staging ++++
+-- prod ++++

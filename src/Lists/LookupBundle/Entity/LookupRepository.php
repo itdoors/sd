@@ -38,7 +38,10 @@ class LookupRepository extends EntityRepository
      */
     public function getOnlyManagerProjectId()
     {
-        return $this->getLookupByLukeyQuery(self::KEY__MANAGER_PROJECT)->select('l.id')->getQuery()->getSingleScalarResult();
+        return $this->getLookupByLukeyQuery(self::KEY__MANAGER_PROJECT)
+            ->select('l.id')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**

@@ -39,11 +39,10 @@ class Organization
      *
      * @return integer
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set mpk
      *
@@ -51,23 +50,21 @@ class Organization
      *
      * @return Organization
      */
-    public function setMpk($mpk)
+    public function setMpk ($mpk)
     {
         $this->mpk = $mpk;
 
         return $this;
     }
-
     /**
      * Get mpk
      *
      * @return string
      */
-    public function getMpk()
+    public function getMpk ()
     {
         return $this->mpk;
     }
-
     /**
      * Set name
      *
@@ -75,23 +72,21 @@ class Organization
      *
      * @return Organization
      */
-    public function setName($name)
+    public function setName ($name)
     {
         $this->name = $name;
 
         return $this;
     }
-
     /**
      * Get name
      *
      * @return string
      */
-    public function getName()
+    public function getName ()
     {
         return $this->name;
     }
-
     /**
      * Set address
      *
@@ -99,23 +94,21 @@ class Organization
      *
      * @return Organization
      */
-    public function setAddress($address)
+    public function setAddress ($address)
     {
         $this->address = $address;
 
         return $this;
     }
-
     /**
      * Get address
      *
      * @return string
      */
-    public function getAddress()
+    public function getAddress ()
     {
         return $this->address;
     }
-
     /**
      * Set contacts
      *
@@ -123,19 +116,18 @@ class Organization
      *
      * @return Organization
      */
-    public function setContacts($contacts)
+    public function setContacts ($contacts)
     {
         $this->contacts = $contacts;
 
         return $this;
     }
-
     /**
      * Get contacts
      *
      * @return string
      */
-    public function getContacts()
+    public function getContacts ()
     {
         return $this->contacts;
     }
@@ -152,19 +144,18 @@ class Organization
      *
      * @return Organization
      */
-    public function setCity(\Lists\CityBundle\Entity\City $city = null)
+    public function setCity (\Lists\CityBundle\Entity\City $city = null)
     {
         $this->city = $city;
 
         return $this;
     }
-
     /**
      * Get city
      *
      * @return \Lists\CityBundle\Entity\City
      */
-    public function getCity()
+    public function getCity ()
     {
         return $this->city;
     }
@@ -181,19 +172,18 @@ class Organization
      *
      * @return Organization
      */
-    public function setScope(\Lists\LookupBundle\Entity\Lookup $scope = null)
+    public function setScope (\Lists\LookupBundle\Entity\Lookup $scope = null)
     {
         $this->scope = $scope;
 
         return $this;
     }
-
     /**
      * Get scope
      *
      * @return \Lists\LookupBundle\Entity\Lookup
      */
-    public function getScope()
+    public function getScope ()
     {
         return $this->scope;
     }
@@ -206,18 +196,17 @@ class Organization
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct ()
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setIsSmeta(false);
     }
-
     /**
      * Get users
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getUsers()
+    public function getUsers ()
     {
         return $this->users;
     }
@@ -274,23 +263,21 @@ class Organization
      *
      * @return Organization
      */
-    public function setShortname($shortname)
+    public function setShortname ($shortname)
     {
         $this->shortname = $shortname;
 
         return $this;
     }
-
     /**
      * Get shortname
      *
      * @return string
      */
-    public function getShortname()
+    public function getShortname ()
     {
         return $this->shortname;
     }
-
     /**
      * Set isSmeta
      *
@@ -298,23 +285,21 @@ class Organization
      *
      * @return Organization
      */
-    public function setIsSmeta($isSmeta)
+    public function setIsSmeta ($isSmeta)
     {
         $this->isSmeta = $isSmeta;
 
         return $this;
     }
-
     /**
      * Get isSmeta
      *
      * @return boolean
      */
-    public function getIsSmeta()
+    public function getIsSmeta ()
     {
         return $this->isSmeta;
     }
-
     /**
      * Set mailingAddress
      *
@@ -322,23 +307,21 @@ class Organization
      *
      * @return Organization
      */
-    public function setMailingAddress($mailingAddress)
+    public function setMailingAddress ($mailingAddress)
     {
         $this->mailingAddress = $mailingAddress;
 
         return $this;
     }
-
     /**
      * Get mailingAddress
      *
      * @return string
      */
-    public function getMailingAddress()
+    public function getMailingAddress ()
     {
         return $this->mailingAddress;
     }
-
     /**
      * Set rs
      *
@@ -346,23 +329,21 @@ class Organization
      *
      * @return Organization
      */
-    public function setRs($rs)
+    public function setRs ($rs)
     {
         $this->rs = $rs;
 
         return $this;
     }
-
     /**
      * Get rs
      *
      * @return string
      */
-    public function getRs()
+    public function getRs ()
     {
         return $this->rs;
     }
-
     /**
      * Set edrpou
      *
@@ -370,23 +351,21 @@ class Organization
      *
      * @return Organization
      */
-    public function setEdrpou($edrpou)
+    public function setEdrpou ($edrpou)
     {
         $this->edrpou = $edrpou;
 
         return $this;
     }
-
     /**
      * Get edrpou
      *
      * @return string
      */
-    public function getEdrpou()
+    public function getEdrpou ()
     {
         return $this->edrpou;
     }
-
     /**
      * Set inn
      *
@@ -394,23 +373,21 @@ class Organization
      *
      * @return Organization
      */
-    public function setInn($inn)
+    public function setInn ($inn)
     {
         $this->inn = $inn;
 
         return $this;
     }
-
     /**
      * Get inn
      *
      * @return string
      */
-    public function getInn()
+    public function getInn ()
     {
         return $this->inn;
     }
-
     /**
      * Set certificate
      *
@@ -418,23 +395,21 @@ class Organization
      *
      * @return Organization
      */
-    public function setCertificate($certificate)
+    public function setCertificate ($certificate)
     {
         $this->certificate = $certificate;
 
         return $this;
     }
-
     /**
      * Get certificate
      *
      * @return string
      */
-    public function getCertificate()
+    public function getCertificate ()
     {
         return $this->certificate;
     }
-
     /**
      * Set shortDescription
      *
@@ -442,23 +417,21 @@ class Organization
      *
      * @return Organization
      */
-    public function setShortDescription($shortDescription)
+    public function setShortDescription ($shortDescription)
     {
         $this->shortDescription = $shortDescription;
 
         return $this;
     }
-
     /**
      * Get shortDescription
      *
      * @return string
      */
-    public function getShortDescription()
+    public function getShortDescription ()
     {
         return $this->shortDescription;
     }
-
     /**
      * Set site
      *
@@ -466,19 +439,18 @@ class Organization
      *
      * @return Organization
      */
-    public function setSite($site)
+    public function setSite ($site)
     {
         $this->site = $site;
 
         return $this;
     }
-
     /**
      * Get site
      *
      * @return string
      */
-    public function getSite()
+    public function getSite ()
     {
         return $this->site;
     }
@@ -495,31 +467,28 @@ class Organization
      *
      * @return Organization
      */
-    public function setOrganizationType(\Lists\OrganizationBundle\Entity\OrganizationType $organizationType = null)
+    public function setOrganizationType (\Lists\OrganizationBundle\Entity\OrganizationType $organizationType = null)
     {
         $this->organizationType = $organizationType;
 
         return $this;
     }
-
     /**
      * Get organizationType
      *
      * @return \Lists\OrganizationBundle\Entity\OrganizationType
      */
-    public function getOrganizationType()
+    public function getOrganizationType ()
     {
         return $this->organizationType;
     }
-
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
         return $this->getName();
     }
-
     /**
      * Add users
      *
@@ -527,19 +496,18 @@ class Organization
      *
      * @return Organization
      */
-    public function addUser(\SD\UserBundle\Entity\User $users)
+    public function addUser (\SD\UserBundle\Entity\User $users)
     {
         $this->users[] = $users;
 
         return $this;
     }
-
     /**
      * Remove users
      *
      * @param \SD\UserBundle\Entity\User $users
      */
-    public function removeUser(\SD\UserBundle\Entity\User $users)
+    public function removeUser (\SD\UserBundle\Entity\User $users)
     {
         $this->users->removeElement($users);
     }
@@ -561,26 +529,24 @@ class Organization
      *
      * @return Organization
      */
-    public function setCityId($cityId)
+    public function setCityId ($cityId)
     {
         // @codingStandardsIgnoreStart
         $this->city_id = $cityId;
         // @codingStandardsIgnoreEnd
         return $this;
     }
-
     /**
      * Get city_id
      *
      * @return integer
      */
-    public function getCityId()
+    public function getCityId ()
     {
         // @codingStandardsIgnoreStart
         return $this->city_id;
         // @codingStandardsIgnoreEnd
     }
-
     /**
      * Set scope_id
      *
@@ -588,20 +554,19 @@ class Organization
      *
      * @return Organization
      */
-    public function setScopeId($scopeId)
+    public function setScopeId ($scopeId)
     {
         // @codingStandardsIgnoreStart
         $this->scope_id = $scopeId;
         // @codingStandardsIgnoreEnd
         return $this;
     }
-
     /**
      * Get scope_id
      *
      * @return integer
      */
-    public function getScopeId()
+    public function getScopeId ()
     {
         // @codingStandardsIgnoreStart
         return $this->scope_id;
@@ -620,20 +585,19 @@ class Organization
      *
      * @return Organization
      */
-    public function setOrganizationTypeId($organizationTypeId)
+    public function setOrganizationTypeId ($organizationTypeId)
     {
         // @codingStandardsIgnoreStart
         $this->organization_type_id = $organizationTypeId;
         // @codingStandardsIgnoreEnd
         return $this;
     }
-
     /**
      * Get organization_type_id
      *
      * @return integer
      */
-    public function getOrganizationTypeId()
+    public function getOrganizationTypeId ()
     {
         // @codingStandardsIgnoreStart
         return $this->organization_type_id;
@@ -657,23 +621,21 @@ class Organization
      *
      * @return Organization
      */
-    public function setCreatedatetime($createdatetime)
+    public function setCreatedatetime ($createdatetime)
     {
         $this->createdatetime = $createdatetime;
 
         return $this;
     }
-
     /**
      * Get createdatetime
      *
      * @return \DateTime
      */
-    public function getCreatedatetime()
+    public function getCreatedatetime ()
     {
         return $this->createdatetime;
     }
-
     /**
      * Set creator
      *
@@ -681,27 +643,25 @@ class Organization
      *
      * @return Organization
      */
-    public function setCreator(\SD\UserBundle\Entity\User $creator = null)
+    public function setCreator (\SD\UserBundle\Entity\User $creator = null)
     {
         $this->creator = $creator;
 
         return $this;
     }
-
     /**
      * Get creator
      *
      * @return \SD\UserBundle\Entity\User
      */
-    public function getCreator()
+    public function getCreator ()
     {
         return $this->creator;
     }
-
     /**
      * @ORM\PrePersist
      */
-    public function doOnPrePersist()
+    public function doOnPrePersist ()
     {
         if (!$this->getId()) {
             $this->setCreatedatetime(new \DateTime());
@@ -725,23 +685,21 @@ class Organization
      *
      * @return Organization
      */
-    public function setPhysicalAddress($physicalAddress)
+    public function setPhysicalAddress ($physicalAddress)
     {
         $this->physicalAddress = $physicalAddress;
 
         return $this;
     }
-
     /**
      * Get physicalAddress
      *
      * @return string
      */
-    public function getPhysicalAddress()
+    public function getPhysicalAddress ()
     {
         return $this->physicalAddress;
     }
-
     /**
      * Set phone
      *
@@ -749,19 +707,18 @@ class Organization
      *
      * @return Organization
      */
-    public function setPhone($phone)
+    public function setPhone ($phone)
     {
         $this->phone = $phone;
 
         return $this;
     }
-
     /**
      * Get phone
      *
      * @return string
      */
-    public function getPhone()
+    public function getPhone ()
     {
         return $this->phone;
     }
@@ -778,19 +735,18 @@ class Organization
      *
      * @return Organization
      */
-    public function setGroup(\Lists\OrganizationBundle\Entity\OrganizationGroup $group = null)
+    public function setGroup (\Lists\OrganizationBundle\Entity\OrganizationGroup $group = null)
     {
         $this->group = $group;
 
         return $this;
     }
-
     /**
      * Get group
      *
      * @return \Lists\OrganizationBundle\Entity\OrganizationGroup
      */
-    public function getGroup()
+    public function getGroup ()
     {
         return $this->group;
     }
@@ -807,32 +763,30 @@ class Organization
      *
      * @return Organization
      */
-    public function setGroupId($groupId)
+    public function setGroupId ($groupId)
     {
         // @codingStandardsIgnoreStart
         $this->group_id = $groupId;
         // @codingStandardsIgnoreEnd
         return $this;
     }
-
     /**
      * Get group_id
      *
      * @return integer
      */
-    public function getGroupId()
+    public function getGroupId ()
     {
         // @codingStandardsIgnoreStart
         return $this->group_id;
         // @codingStandardsIgnoreEnd
     }
-
     /**
      * @return array
      */
-    public function __sleep()
+    public function __sleep ()
     {
-        return array(
+        return array (
             'id',
             'name'
         );
@@ -855,26 +809,24 @@ class Organization
      *
      * @return Organization
      */
-    public function setParentId($parentId)
+    public function setParentId ($parentId)
     {
         // @codingStandardsIgnoreStart
         $this->parent_id = $parentId;
         // @codingStandardsIgnoreEnd
         return $this;
     }
-
     /**
      * Get parent_id
      *
      * @return integer
      */
-    public function getParentId()
+    public function getParentId ()
     {
         // @codingStandardsIgnoreStart
         return $this->parent_id;
         // @codingStandardsIgnoreEnd
     }
-
     /**
      * Set parent
      *
@@ -882,19 +834,18 @@ class Organization
      *
      * @return Organization
      */
-    public function setParent(\Lists\OrganizationBundle\Entity\Organization $parent = null)
+    public function setParent (\Lists\OrganizationBundle\Entity\Organization $parent = null)
     {
         $this->parent = $parent;
 
         return $this;
     }
-
     /**
      * Get parent
      *
      * @return \Lists\OrganizationBundle\Entity\Organization
      */
-    public function getParent()
+    public function getParent ()
     {
         return $this->parent;
     }
@@ -911,37 +862,35 @@ class Organization
      *
      * @return Organization
      */
-    public function addChildren(\Lists\OrganizationBundle\Entity\Organization $children)
+    public function addChildren (\Lists\OrganizationBundle\Entity\Organization $children)
     {
         $this->children[] = $children;
 
         return $this;
     }
-
     /**
      * Remove children
      *
      * @param \Lists\OrganizationBundle\Entity\Organization $children
      */
-    public function removeChildren(\Lists\OrganizationBundle\Entity\Organization $children)
+    public function removeChildren (\Lists\OrganizationBundle\Entity\Organization $children)
     {
         $this->children->removeElement($children);
     }
-
     /**
      * Get children
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getChildren()
+    public function getChildren ()
     {
         return $this->children;
     }
+
     /**
      * @var integer
      */
     private $organizationSignId;
-
 
     /**
      * Set organizationSignId
@@ -950,27 +899,26 @@ class Organization
      *
      * @return Organization
      */
-    public function setOrganizationSignId($organizationSignId)
+    public function setOrganizationSignId ($organizationSignId)
     {
         $this->organizationSignId = $organizationSignId;
 
         return $this;
     }
-
     /**
      * Get organizationSignId
      *
      * @return integer 
      */
-    public function getOrganizationSignId()
+    public function getOrganizationSignId ()
     {
         return $this->organizationSignId;
     }
+
     /**
      * @var \Lists\LookupBundle\Entity\Lookup
      */
     private $lookup;
-
 
     /**
      * Set lookup
@@ -979,27 +927,26 @@ class Organization
      *
      * @return Organization
      */
-    public function setLookup(\Lists\LookupBundle\Entity\Lookup $lookup = null)
+    public function setLookup (\Lists\LookupBundle\Entity\Lookup $lookup = null)
     {
         $this->lookup = $lookup;
 
         return $this;
     }
-
     /**
      * Get lookup
      *
      * @return \Lists\LookupBundle\Entity\Lookup 
      */
-    public function getLookup()
+    public function getLookup ()
     {
         return $this->lookup;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $organizationUsers;
-
 
     /**
      * Add organizationUsers
@@ -1008,37 +955,35 @@ class Organization
      * 
      * @return Organization
      */
-    public function addOrganizationUser(\Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers)
+    public function addOrganizationUser (\Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers)
     {
         $this->organizationUsers[] = $organizationUsers;
 
         return $this;
     }
-
     /**
      * Remove organizationUsers
      *
      * @param \Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers
      */
-    public function removeOrganizationUser(\Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers)
+    public function removeOrganizationUser (\Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers)
     {
         $this->organizationUsers->removeElement($organizationUsers);
     }
-
     /**
      * Get organizationUsers
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getOrganizationUsers()
+    public function getOrganizationUsers ()
     {
         return $this->organizationUsers;
     }
+
     /**
      * @var \DateTime
      */
     private $deletedAt;
-
 
     /**
      * Set deletedAt
@@ -1047,20 +992,73 @@ class Organization
      * 
      * @return Organization
      */
-    public function setDeletedAt($deletedAt)
+    public function setDeletedAt ($deletedAt)
     {
         $this->deletedAt = $deletedAt;
+    }
+
+    /**
+     * @var \Lists\OrganizationBundle\Entity\OrganizationOwnership
+     */
+    private $ownership;
+
+    /**
+     * Set ownership
+     *
+     * @param \Lists\OrganizationBundle\Entity\OrganizationOwnership $ownership
+     * 
+     * @return Organization
+     */
+    public function setOwnership (\Lists\OrganizationBundle\Entity\OrganizationOwnership $ownership = null)
+    {
+        $this->ownership = $ownership;
 
         return $this;
     }
-
     /**
      * Get deletedAt
      *
      * @return \DateTime 
      */
-    public function getDeletedAt()
+    public function getDeletedAt ()
     {
         return $this->deletedAt;
+    }
+    /**
+     * Get ownership
+     *
+     * @return \Lists\OrganizationBundle\Entity\OrganizationOwnership 
+     */
+    public function getOwnership ()
+    {
+        return $this->ownership;
+    }
+
+    /**
+     * @var integer
+     */
+    private $ownershipId;
+
+    /**
+     * Set ownershipId
+     *
+     * @param integer $ownershipId
+     * 
+     * @return Organization
+     */
+    public function setOwnershipId ($ownershipId)
+    {
+        $this->ownershipId = $ownershipId;
+
+        return $this;
+    }
+    /**
+     * Get ownershipId
+     *
+     * @return integer 
+     */
+    public function getOwnershipId ()
+    {
+        return $this->ownershipId;
     }
 }

@@ -26,12 +26,14 @@ class ContractorController extends SalesController
     {
         $namespase = $this->filterNamespace;
         $filter = $this->filterFormName;
+        $superviser = $this->getUser()->hasRole('ROLE_SUPERVISOR');
 
         return $this->render('ListsOrganizationBundle:Contractor:index.html.twig', array(
                 'namespase' => $namespase,
                 'filter' => $filter,
                 'baseTemplate' => $this->baseTemplate,
                 'baseRoutePrefix' => $this->baseRoutePrefix,
+                'supervisor' => $superviser
         ));
     }
 
@@ -144,7 +146,8 @@ class ContractorController extends SalesController
             $organization->setLookup($lookup);
 
             $em->persist($organization);
-            $lookupM = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_organization'));
+            $lookupM = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')
+                ->findOneBy(array('lukey' => 'manager_organization'));
             $manager = new OrganizationUser();
             $manager->setOrganization($organization);
             $manager->setUser($user);
@@ -297,4 +300,31 @@ class ContractorController extends SalesController
         ));
     }
 
+
+    /**
+     * @return Response
+     */
+    public function exportContractorsAction()
+    {
+        /** @var Lookup $lookup */
+        $lookup = $this->getDoctrine()
+            ->getRepository('ListsLookupBundle:Lookup')
+            ->findOneBy(array('lukey' => 'organization_sign_contractor'));
+
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $organizationsRepository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+
+        $organizations = $organizationsRepository->getAllContractors($lookup->getId());
+        //print_r($contacts);
+
+        $serviceExport = $this->get('itdoors_common.export.service');
+
+        $excelObject = $serviceExport->getExcel($organizations);
+
+        $response = $serviceExport->getResponse($excelObject, 'Contractors');
+
+        return $response;
+    }
 }

@@ -20,36 +20,34 @@ class TaskType
      */
     private $name;
 
-
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set name
      *
      * @param string $name
+     *
      * @return TaskType
      */
-    public function setName($name)
+    public function setName ($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
-
     /**
      * Get name
      *
      * @return string 
      */
-    public function getName()
+    public function getName ()
     {
         return $this->name;
     }

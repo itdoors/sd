@@ -1,0 +1,368 @@
+{% trans_default_domain 'SDTaskBundle' %}
+{#
+<link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
+<script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
+<script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
+#}
+<script></script>
+<script>
+    $(document).ready(function(){
+        $('#task_set_viewed').die('click')
+        $('#task_set_viewed').live('click', function(e){
+            var id = $('#task_modal_info_holder').data('id');
+            var url = $('#task_modal_info_holder').data('url_task_set_viewed');
+            var sendData = {
+                'id': id
+            }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data1) {
+                    //alert(data1)
+                    data = JSON.parse(data1);
+                    if (data.success == 1) {
+                        update_modal();
+                    } else {
+                        //$('#copy_etalon_finished').show('blind', {}, 500);
+                    }
+                }
+            })
+        })
+
+        $('.stageButton').die('click');
+        $('.stageButton').live('click', function(e){
+            var stage = $(this).data('stage');
+            updateTaskStage(stage);
+        })
+
+        $('#task_change_date').die('click');
+        $('#task_change_date').live('click', function(e){
+            $('#change_date_holder').toggle('blind', {}, 500)
+        })
+
+        $('.answerButton').die('click');
+        $('.answerButton').live('click', function(e){
+            var answer = $(this).data('value');
+            var id = $('#task_modal_info_holder').data('id');
+            var url = $('#task_modal_info_holder').data('url_answer_date');;
+            var sendData = {
+                'id': id,
+                'answer': answer
+            }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data1) {
+                    //alert(data1)
+                    data = JSON.parse(data1);
+                    if (data.success == 1) {
+                        update_modal();
+                    } else {
+                        //$('#copy_etalon_finished').show('blind', {}, 500);
+                    }
+                }
+
+            })
+        })
+
+        $('.changeDate').die('click');
+        $('.changeDate').live('click', function(e){
+            var value = $(this).data('value');
+            var type = $(this).data('type');
+            var id = $('#task_modal_info_holder').data('id');
+            var url = $('#task_modal_info_holder').data('url_change_date');;
+            var sendData = {
+                'id': id,
+                'value': value,
+                'type': type
+            }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data1) {
+                    //alert(data1)
+                    data = JSON.parse(data1);
+                    if (data.success == 1) {
+                        update_modal();
+                    } else {
+                        alert('Somebody already made request');
+                        update_modal();
+                        //$('#copy_etalon_finished').show('blind', {}, 500);
+                    }
+                }
+
+            })
+        })
+
+/*
+        $('#change_date_input').datetimepicker({
+                'language': 'ru',
+                'orientation': "auto",
+                'weekStart': 0
+
+        });
+*/
+
+/*
+        $('#task_change_date_submit').die('click');
+        $('#task_change_date_submit').live('click', function(e){
+            var date = $('#change_date_input').val();
+            var stage = $(this).data('stage');
+        })
+*/
+
+
+        function updateTaskStage (stage) {
+            var id = $('#task_modal_info_holder').data('id');
+            var url = $('#task_modal_info_holder').data('url_task_set_stage');
+            var sendData = {
+                'id': id,
+                'stage': stage
+            }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data1) {
+                    //alert(data1)
+                    data = JSON.parse(data1);
+                    if (data.success == 1) {
+                        update_modal();
+                    } else {
+                        //$('#copy_etalon_finished').show('blind', {}, 500);
+                    }
+                }
+
+            })
+        }
+
+
+
+        function update_modal() {
+            var id = $('#task_modal_info_holder').data('id');
+            var url = $('#task_modal_info_holder').data('url_update_modal');
+            var holder = $('#taskViewTpl');
+
+            var sendData = {
+                'id' : id
+            }
+            ITDoorsAjax.blockUI(holder);
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data1) {
+                    //alert(data1)
+                    data = JSON.parse(data1);
+                    if (data.success == 1) {
+                        holder.html(data.html);
+                        ITDoorsAjax.unblockUI(holder);
+                        update_content()
+                    } else {
+                        //$('#copy_etalon_finished').show('blind', {}, 500);
+                    }
+                }
+
+            })
+
+        }
+
+        function update_content() {
+            var filter = $('#task_modal_info_holder').data('role');
+            var url = $('#more_info_input').data('url_task_table');
+            var sendData = {
+                'filter': filter
+            }
+            ITDoorsAjax.blockUI($('#tasks_list'));
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data1) {
+                    data = JSON.parse(data1);
+                    if (data.success == 1) {
+                        ITDoorsAjax.unblockUI($('#tasks_list'));
+                        $('#tasks_list').html('').html(data.html);
+                        //$('#form_modal_task_view').modal('show');
+                    } else {
+                        //$('#copy_etalon_finished').show('blind', {}, 500);
+                    }
+
+                }
+
+            })
+
+
+        }
+
+        //function update_task_list
+
+    })
+
+</script>
+<table class="table table-bordered table-striped">
+    <tr>
+        <td>{% trans %}Title{% endtrans %}</td>
+        <td colspan="3">{{ taskUserRole.task.title }}</td>
+    </tr>
+    <tr>
+        <td>{% trans %}Date start{% endtrans %}</td>
+        <td colspan="3">{{ taskUserRole.task.startDate|date('d.m.Y') }}</td>
+    </tr>
+    <tr>
+        <td>{% trans %}Date stop{% endtrans %}</td>
+        <td colspan="3">
+            {{ include ('SDTaskBundle:Task:taskEndDate.html.twig', {
+            'taskEndDates': taskUserRole.task.taskEndDates,
+            'stage': taskUserRole.task.stage
+            }) }}
+        </td>
+    </tr>
+    <tr>
+        <td>{% trans %}Description{% endtrans %}</td>
+        <td colspan="3">{{ taskUserRole.task.description }}</td>
+    </tr>
+    <tr>
+        <td>{% trans %}Creator{% endtrans %}</td>
+        <td colspan="3">
+            {% if taskUserRoleAuthor|length %}
+                {% for author in taskUserRoleAuthor %}
+                    {{ author.user }}
+                {% endfor %}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td>{% trans %}Performer{% endtrans %}</td>
+        <td colspan="3">
+            {% if taskUserRolePerformer|length %}
+                {% for performer in taskUserRolePerformer %}
+                    {{ performer.user }}
+
+                    {% if performer.isViewed !=true %}
+                        <span style="color: red; font-size: smaller;">({% trans %}Not viewed{% endtrans %})</span>
+                    {% endif %}
+                    <br>
+                {% endfor %}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td>{% trans %}Controller{% endtrans %}</td>
+        <td colspan="3">
+            {% if taskUserRoleController|length %}
+                {% for controller in taskUserRoleController %}
+                    {{ controller.user }}
+                    {% if controller.isViewed !=true %}
+                        <span style="color: red; font-size: smaller;">({% trans %}Not viewed{% endtrans %})</span>
+                    {% endif %}
+                    <br>
+                {% endfor %}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td>{% trans %}My role{% endtrans %}</td>
+        <td colspan="3">{{ taskUserRole.role|trans }}</td>
+    </tr>
+    <tr>
+        <td>{% trans %}Stage{% endtrans %}</td>
+        <td colspan="3">{{ taskUserRole.task.stage|trans }}</td>
+    </tr>
+
+    {#
+        {% if task.handlingMessage is not empty %}
+            <tr>
+                <td>{% trans %}Link{% endtrans %}</td>
+                <td colspan="3">
+                    <a target="_blank" href="{{ path('lists_sales_handling_show', {'id':task.handlingMessage.handling.id}) }}#handling_message_{{ task.handlingMessage.id }}">
+                        {% trans %}Go to{% endtrans %}
+                    </a>
+                </td>
+            </tr>
+        {% endif %}
+    #}
+</table>
+{% if taskUserRole.isViewed != true %}
+    <a id="task_set_viewed" class="btn green" style="float: right;">{% trans %}Set viewed{% endtrans %}</a>
+{% else %}
+
+{% if taskUserRole.role == 'performer' %}
+    {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'date request'%}
+        <a id="task_set_done" data-stage="checking" class="btn purple stageButton" style="float: left;">{% trans %}Set done{% endtrans %}</a>
+    {% endif %}
+{% endif %}
+
+{% if taskUserRole.role == 'controller' %}
+    {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'checking' or taskUserRole.task.stage == 'date request'%}
+        <a id="task_set_closed" data-stage="closed" class="btn purple stageButton" style="float: left;">{% trans %}Close task{% endtrans %}</a>
+        <a id="task_set_undone" data-stage="undone" class="btn yellow stageButton" style="float: left; margin-left: 10px;">{% trans %}Set undone{% endtrans %}</a>
+    {% endif %}
+    {% if taskUserRole.task.stage == 'checking'%}
+        <a id="task_set_done_controller" data-stage="done" class="btn red stageButton" style="float: left; margin-left: 10px;">{% trans %}Set done{% endtrans %}</a>
+        <a id="task_set_performing_controller" data-stage="performing" class="btn green stageButton" style="float: left; margin-left: 10px;">{% trans %}Re-make{% endtrans %}</a>
+    {% endif %}
+
+    {% if taskUserRole.task.stage == 'date request'%}
+        {% if taskUserRole.isViewed != true %}
+            <div style="clear: both;"></div> <br>
+        {% endif %}
+        <div style="float: right;">
+        {% trans %}Request to change date{% endtrans %}:
+        <a data-value="1" class="btn green answerButton" style="margin-left: 10px;">{% trans %}Submit{% endtrans %}</a>
+        <a data-value="0" class="btn red answerButton" style="margin-left: 10px;">{% trans %}Reject{% endtrans %}</a>
+        </div>
+
+    {% endif %}
+
+{% endif %}
+
+    {% if taskUserRole.task.stage != 'date request' and taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone' and taskUserRole.task.stage != 'closed' and taskUserRole.task.stage != 'checking'
+    and taskUserRole.role != 'author' %}
+    <a id="task_change_date" data-stage="date request" class="btn red" style="float: left; margin-left: 10px;">{% trans %}Change end date{% endtrans %}</a>
+    <div style="clear: both"></div>
+    <div id="change_date_holder" style="display: none">
+        {#
+                    <br>
+                    <label for="change_date_input">Change end date to:</label>
+                    <input type="text" id="change_date_input">
+                    <a id="task_change_date_submit" data-stage="date request" class="btn blue stageButton" style="margin-left: 10px;">{% trans %}Send request{% endtrans %}</a>
+        #}
+        <br>
+        <a data-value="1" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}1 hour{% endtrans %}</a>
+        <a data-value="3" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}3 hours{% endtrans %}</a>
+        <a data-value="5" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}5 hours{% endtrans %}</a>
+        <a data-value="12" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}12 hours{% endtrans %}</a>
+        <br><br>
+        <a data-value="1" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}1 day{% endtrans %}</a>
+        <a data-value="2" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}2 days{% endtrans %}</a>
+        <a data-value="3" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}3 days{% endtrans %}</a>
+        <a data-value="5" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}5 days{% endtrans %}</a>
+        <br><br>
+        <a data-value="1" data-type="week" class="btn green changeDate" style="width: 100px;">+ {% trans %}1 week{% endtrans %}</a>
+        <a data-value="2" data-type="week" class="btn green changeDate" style="width: 100px;">+ {% trans %}2 weeks{% endtrans %}</a>
+        <a data-value="3" data-type="week" class="btn green changeDate" style="width: 100px;">+ {% trans %}3 weeks{% endtrans %}</a>
+        <a data-value="1" data-type="month" class="btn green changeDate" style="width: 100px;">+ {% trans %}1 month{% endtrans %}</a>
+
+    </div>
+{% endif %}
+{% endif %}
+<br><br>
+<input type="hidden" id="task_modal_info_holder"
+       data-id="{{ taskUserRole.id }}"
+       data-url_task_set_viewed="{{ path('sd_task_set_viewed') }}"
+       data-url_task_set_stage="{{ path('sd_task_set_stage') }}"
+       data-url_update_modal="{{ path('sd_task_modal') }}"
+       data-url_change_date="{{ path('sd_task_change_date') }}"
+       data-url_answer_date="{{ path('sd_task_answer_date') }}"
+       data-role="{{ taskUserRole.role }}"
+    >
+{#
+
+<a class="btn green" data-dismiss="modal" aria-hidden="true">{% trans %}Exit{% endtrans %}</a>
+{% if not task.isDone and task.performer.id == userId %}
+<a id="task_set_viewed" class="btn green" data-dismiss="modal" aria-hidden="true" style="float: right;">{% trans %}Set viewed{% endtrans %}</a>
+{% endif %}#}

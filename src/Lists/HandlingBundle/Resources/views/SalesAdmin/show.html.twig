@@ -58,6 +58,8 @@
                         'ListsHandlingBundle:' ~ baseTemplate ~ ':edit.html.twig',
                         {
                             handling: handling,
+                            isResultClosed: isResultClosed,
+                            canEdit: canEdit,
                             handlingServices: handlingServices
                         }
                         )

@@ -38,12 +38,16 @@ class HistoryFilterFormType extends AbstractType
                             'minimumInputLength' => 0,
                             'width' => '200px'
                         )),
-                        'placeholder' => $this->container->get('translator')->trans('Select action', array(), 'ITDoorsHistoryBundle')
+                        'placeholder' => $this->container->get('translator')
+                            ->trans('Select action', array(), 'ITDoorsHistoryBundle')
                     ),
                     'choices' => array(
-                        'insert' => $this->container->get('translator')->trans('Insert', array(), 'ITDoorsHistoryBundle'),
-                        'update' => $this->container->get('translator')->trans('Change', array(), 'ITDoorsHistoryBundle'),
-                        'delete' => $this->container->get('translator')->trans('Delete', array(), 'ITDoorsHistoryBundle')
+                        'insert' => $this->container->get('translator')
+                            ->trans('Insert', array(), 'ITDoorsHistoryBundle'),
+                        'update' => $this->container->get('translator')
+                            ->trans('Change', array(), 'ITDoorsHistoryBundle'),
+                        'delete' => $this->container->get('translator')
+                            ->trans('Delete', array(), 'ITDoorsHistoryBundle')
                     )
                 ));
 

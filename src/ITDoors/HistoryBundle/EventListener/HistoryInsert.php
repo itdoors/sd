@@ -1,4 +1,5 @@
 <?php
+
 namespace ITDoors\HistoryBundle\EventListener;
 
 use Symfony\Component\DependencyInjection\Container;
@@ -9,19 +10,20 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
  */
 class HistoryInsert
 {
+
     protected $container;
 
     /**
      * @param \Symfony\Component\DependencyInjection\Container $container
      */
-    public function __construct(Container $container)
+    public function __construct (Container $container)
     {
         $this->container = $container;
     }
     /**
      * @param \Doctrine\ORM\Event\LifecycleEventArgs $args
      */
-    public function postPersist(LifecycleEventArgs $args)
+    public function postPersist (LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
         $em = $args->getEntityManager();
@@ -29,10 +31,10 @@ class HistoryInsert
         $tableName = $em->getClassMetadata(get_class($entity))->getTableName();
         if (in_array($tableName, $tables)) {
             $uow = $em->getUnitOfWork();
-            $serviceHistory= $this->container->get('it_doors_history.service');
+            $serviceHistory = $this->container->get('it_doors_history.service');
             $changeset = $uow->getEntityChangeSet($entity);
             $serviceHistory->add(
-                array(
+                array (
                     'modelId' => $entity->getId(),
                     'modelName' => $tableName,
                     'action' => 'insert',

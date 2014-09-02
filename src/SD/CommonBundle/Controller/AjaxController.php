@@ -388,6 +388,35 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($result));
     }
+    /**
+     * Returns json ownership list depending search query
+     *
+     * @return string
+     */
+    public function ownershipAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:OrganizationOwnership');
+
+        $objects = $repository->getSearchQuery($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $text = $object->getShortname().' ('.$object->getName(). ')';
+            $id = $object->getId();
+            $result[] =  array(
+                'id' => $id,
+                'value' => $id,
+                'name' => $text,
+                'text' => $text
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
 
     /**
      * Returns json city object by id
@@ -1138,6 +1167,7 @@ class AjaxController extends BaseFilterController
         $objects = $companystructure->createQueryBuilder('c')
             ->andWhere('lower(c.name) LIKE :q')
             ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->orderBy('c.root, c.lft', 'ASC')
             ->getQuery()
             ->getResult();
 
@@ -1474,6 +1504,35 @@ class AjaxController extends BaseFilterController
         $objects = $repository
             ->createQueryBuilder('u')
             ->where('u.id in (:ids)')
+            ->setParameter(':ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json user object by requested id
+     *
+     * @return string
+     */
+    public function userStuffCompanyByIdsAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        /** @var \SD\UserBundle\Entity\UserRepository $repository */
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsCompanystructureBundle:Companystructure');
+
+        /** @var \SD\UserBundle\Entity\User $object */
+        $objects = $repository
+            ->createQueryBuilder('c')
+            ->where('c.id in (:ids)')
             ->setParameter(':ids', $ids)
             ->getQuery()
             ->getResult();
@@ -2111,8 +2170,8 @@ class AjaxController extends BaseFilterController
         $data = $form->getData();
 
         if (!$data->getId()) {
-           $data->setCreateDateTime(new \DateTime());
-           $data->setUser($user);
+            $data->setCreateDateTime(new \DateTime());
+            $data->setUser($user);
         }
 
         $formData = $request->request->get($form->getName());
@@ -2372,6 +2431,48 @@ class AjaxController extends BaseFilterController
             $invoiceC->setInvoice($invoice);
             $em->persist($invoiceC);
         }
+        $em->flush();
+
+        return true;
+    }
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function companystructureStuffFormSave(Form $form, User $user, Request $request)
+    {
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        if (!$user->hasRole('ROLE_HRADMIN')) {
+            return true;
+        }
+
+        $formData = $request->request->get($form->getName());
+
+        /** @var InvoiceCompanystructure $invoiceCompanystructure */
+        $companystructure = $em
+            ->getRepository('ListsCompanystructureBundle:Companystructure')
+            ->find($formData['companystructureId']);
+        if (!$companystructure) {
+            return true;
+        }
+
+        /** @var Stuff $stuff */
+        $stuff = $em
+            ->getRepository('SDUserBundle:Stuff')
+            ->findOneBy(array('user' => $formData['user'], 'companystructureId' => $formData['companystructureId']));
+        if (!$stuff) {
+            return false;
+        }
+        $companystructure->setStuff($stuff);
+        $em->persist($companystructure);
         $em->flush();
 
         return true;
@@ -2804,9 +2905,18 @@ class AjaxController extends BaseFilterController
             ->find($organizationId);
 
         /** @var Lookup $lookup */
-        $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager_organization'));
+        $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:Lookup')
+            ->findOneBy(array('lukey' => 'manager_organization'));
 
-        if ((!$organizationUser->getRole() || $organizationUser->getRole()->getId() != $lookup->getId()) && $this->getUser()->hasRole('ROLE_SALESADMIN')) {
+        if (
+                (
+                    !$organizationUser->getRole()
+                    ||
+                    $organizationUser->getRole()->getId() != $lookup->getId()
+                )
+                &&
+                $this->getUser()->hasRole('ROLE_SALESADMIN')
+            ) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($organizationUser);
             $em->flush();
@@ -3250,8 +3360,8 @@ class AjaxController extends BaseFilterController
                     )
                 )
             );
-        $cron = $this->container->get('it_doors_cron.service');
-        $cron->addSendEmails();
+            $cron = $this->container->get('it_doors_cron.service');
+            $cron->addSendEmails();
         } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
@@ -3807,9 +3917,10 @@ class AjaxController extends BaseFilterController
         $repository = $this->getDoctrine()->getRepository('ListsCompanystructureBundle:Companystructure');
 
         $form
-            ->add('companystructure', 'companystructure_tree', array(
+            ->add('companystructure', 'entity', array(
                 'class' => 'ListsCompanystructureBundle:Companystructure',
                 'empty_value' => '',
+                'property' => 'name',
                 'required' => false,
                 'mapped' => false,
                 'query_builder' => function ($repository) use ($invoiceId, $repository) {
@@ -3817,8 +3928,40 @@ class AjaxController extends BaseFilterController
                 return $repository->createQueryBuilder('c')
                     ->leftJoin('c.invoicecompanystructure', 'idc')
                     ->where('(idc.invoiceId is NULL OR idc.invoiceId <> :invoiceId)')
-                    ->orderBy('c.name')
+                    ->orderBy('c.root, c.lft', 'ASC')
                     ->setParameter(':invoiceId', $invoiceId);
+                }
+            ));
+    }
+    /**
+     * Adds children to {formName}ProcessDefaults depending on defaults in request
+     *
+     * @param Form    $form
+     * @param mixed[] $defaultData
+     * 
+     * @return QueryBuilder
+     */
+    public function companystructureStuffFormProcessDefaults(Form $form, $defaultData)
+    {
+        $companystructureId = $defaultData['companystructureId'];
+
+        $repository = $this->getDoctrine()->getRepository('SDUserBundle:User');
+
+        $form
+            ->add('user', 'entity', array(
+                'class' => 'SDUserBundle:User',
+                'empty_value' => '',
+                'required' => false,
+                'mapped' => false,
+                'query_builder' => function ($repository) use ($companystructureId, $repository) {
+
+                return $repository->createQueryBuilder('u')
+                    ->innerJoin('u.stuff', 's')
+                    ->innerJoin('s.companystructure', 'c')
+                    ->where('s.companystructure =  :companystructureId')
+                    ->andWhere('c.stuffId is null or c.stuffId != s.id')
+                    ->orderBy('u.lastName')
+                    ->setParameter(':companystructureId', $companystructureId);
                 }
             ));
     }
@@ -4232,7 +4375,14 @@ class AjaxController extends BaseFilterController
             if (!is_dir($directory)) {
                 mkdir($directory.'old', 0777);
             }
-            if (is_file($directory.$dogovor->getFilepath()) && rename($directory.$dogovor->getFilepath(), $directory.'old/'.$dogovorId.'_'.$dogovor->getFilepath())) {
+            if (
+                    is_file($directory.$dogovor->getFilepath())
+                    &&
+                    rename(
+                        $directory.$dogovor->getFilepath(),
+                        $directory.'old/'.$dogovorId.'_'.$dogovor->getFilepath()
+                    )
+                ) {
 
             } else {
                 $result['error'] = 'File move error';
@@ -4278,7 +4428,14 @@ class AjaxController extends BaseFilterController
             if (!is_dir($directory.'/old')) {
                 mkdir($directory.'/old', 0777, true);
             }
-            if (is_file($directory.$document->getFilepath()) && rename($directory.$document->getFilepath(), $directory.'old/'.$documentId.'_'.$document->getFilepath())) {
+            if (
+                    is_file($directory.$document->getFilepath())
+                    &&
+                    rename(
+                        $directory.$document->getFilepath(),
+                        $directory.'old/'.$documentId.'_'.$document->getFilepath()
+                    )
+                ) {
 
             } else {
                 $result['error'] = 'File move error';
@@ -4317,35 +4474,31 @@ class AjaxController extends BaseFilterController
                 'organizationId' => $organizationId,
                 'userId' => $user->getId(),
             ));
-        //if ($organizationUser) {
         $documentType = $em
             ->getRepository('ListsDocumentBundle:DocumentsType')
             ->find(1);
 
         $document = new Documents();
-            $document->setUser($user);
-            $document->setUserId($user->getId());
-            $document->setDatetime(null);
-            $document->setCreateDateTime(new \DateTime());
-            $document->setDocumentsType($documentType);
-            //$document->setStartdatetime(new \DateTime());
-            $file = $request->files->get('dogovor');
-            if ($file) {
-                $document->setFile($file);
-                $document->upload();
-            } else {
-                $result['error'] = 'File not found';
-            }
-            $em->persist($document);
-            $em->flush();
-            $documentOrganization = new DocumentsOrganization();
-            $documentOrganization->setOrganization($organization);
-            $documentOrganization->setDocuments($document);
-            $em->persist($documentOrganization);
-            $em->flush();
-/*        } else {
-            $result['error'] = 'No access';
-        }*/
+        $document->setUser($user);
+        $document->setUserId($user->getId());
+        $document->setDatetime(null);
+        $document->setCreateDateTime(new \DateTime());
+        $document->setDocumentsType($documentType);
+        //$document->setStartdatetime(new \DateTime());
+        $file = $request->files->get('dogovor');
+        if ($file) {
+            $document->setFile($file);
+            $document->upload();
+        } else {
+            $result['error'] = 'File not found';
+        }
+        $em->persist($document);
+        $em->flush();
+        $documentOrganization = new DocumentsOrganization();
+        $documentOrganization->setOrganization($organization);
+        $documentOrganization->setDocuments($document);
+        $em->persist($documentOrganization);
+        $em->flush();
 
         return new Response(json_encode($result));
     }
@@ -4377,7 +4530,14 @@ class AjaxController extends BaseFilterController
             if (!is_dir($directory)) {
                 mkdir($directory.'old', 0777);
             }
-            if (is_file($directory.$dopDogovor->getFilepath()) && rename($directory.$dopDogovor->getFilepath(), $directory.'old/'.$dopDogovorId.'_'.$dopDogovor->getFilepath())) {
+            if (
+                    is_file($directory.$dopDogovor->getFilepath())
+                    &&
+                    rename(
+                        $directory.$dopDogovor->getFilepath(),
+                        $directory.'old/'.$dopDogovorId.'_'.$dopDogovor->getFilepath()
+                    )
+                ) {
 
             } else {
                 $result['error'] = 'File move error';

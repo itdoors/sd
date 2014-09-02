@@ -6,6 +6,10 @@ sd_task_table:
     path:     /tasks/table
     defaults: { _controller: SDTaskBundle:Task:taskTable }
 
+sd_task_table_dashboard:
+    path:     /tasks/table/dashboard
+    defaults: { _controller: SDTaskBundle:Task:taskTableDashboard }
+
 sd_task_modal:
     path:     /tasks/modal
     defaults: { _controller: SDTaskBundle:Task:taskModal }
@@ -25,3 +29,11 @@ sd_task_change_date:
 sd_task_answer_date:
     path:     /tasks/answer/date
     defaults: { _controller: SDTaskBundle:Task:answerDate }
+
+sd_task_add_comment:
+    path:     /tasks/add/comment
+    defaults: { _controller: SDTaskBundle:Task:addComment }
+
+sd_task_page:
+    path:     /tasks/task/{id}
+    defaults: { _controller: SDTaskBundle:Task:showTaskPage}

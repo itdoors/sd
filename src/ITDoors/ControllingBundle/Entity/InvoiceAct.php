@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class InvoiceAct
 {
+
     /**
      * @var integer
      */
@@ -47,21 +48,19 @@ class InvoiceAct
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct ()
     {
         $this->detals = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set invoiceId
      *
@@ -69,23 +68,21 @@ class InvoiceAct
      * 
      * @return InvoiceAct
      */
-    public function setInvoiceId($invoiceId)
+    public function setInvoiceId ($invoiceId)
     {
         $this->invoiceId = $invoiceId;
 
         return $this;
     }
-
     /**
      * Get invoiceId
      *
      * @return integer 
      */
-    public function getInvoiceId()
+    public function getInvoiceId ()
     {
         return $this->invoiceId;
     }
-
     /**
      * Set number
      *
@@ -93,23 +90,21 @@ class InvoiceAct
      * 
      * @return InvoiceAct
      */
-    public function setNumber($number)
+    public function setNumber ($number)
     {
         $this->number = $number;
 
         return $this;
     }
-
     /**
      * Get number
      *
      * @return string 
      */
-    public function getNumber()
+    public function getNumber ()
     {
         return $this->number;
     }
-
     /**
      * Set date
      *
@@ -117,23 +112,21 @@ class InvoiceAct
      * 
      * @return InvoiceAct
      */
-    public function setDate($date)
+    public function setDate ($date)
     {
         $this->date = $date;
 
         return $this;
     }
-
     /**
      * Get date
      *
      * @return \DateTime 
      */
-    public function getDate()
+    public function getDate ()
     {
         return $this->date;
     }
-
     /**
      * Set original
      *
@@ -141,23 +134,21 @@ class InvoiceAct
      * 
      * @return InvoiceAct
      */
-    public function setOriginal($original)
+    public function setOriginal ($original)
     {
         $this->original = $original;
 
         return $this;
     }
-
     /**
      * Get original
      *
      * @return boolean 
      */
-    public function getOriginal()
+    public function getOriginal ()
     {
         return $this->original;
     }
-
     /**
      * Add detals
      *
@@ -165,33 +156,30 @@ class InvoiceAct
      * 
      * @return InvoiceAct
      */
-    public function addDetal(\ITDoors\ControllingBundle\Entity\InvoiceActDetal $detals)
+    public function addDetal (\ITDoors\ControllingBundle\Entity\InvoiceActDetal $detals)
     {
         $this->detals[] = $detals;
 
         return $this;
     }
-
     /**
      * Remove detals
      *
      * @param \ITDoors\ControllingBundle\Entity\InvoiceActDetal $detals
      */
-    public function removeDetal(\ITDoors\ControllingBundle\Entity\InvoiceActDetal $detals)
+    public function removeDetal (\ITDoors\ControllingBundle\Entity\InvoiceActDetal $detals)
     {
         $this->detals->removeElement($detals);
     }
-
     /**
      * Get detals
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getDetals()
+    public function getDetals ()
     {
         return $this->detals;
     }
-
     /**
      * Set invoice
      *
@@ -199,19 +187,18 @@ class InvoiceAct
      * 
      * @return InvoiceAct
      */
-    public function setInvoice(\ITDoors\ControllingBundle\Entity\Invoice $invoice = null)
+    public function setInvoice (\ITDoors\ControllingBundle\Entity\Invoice $invoice = null)
     {
         $this->invoice = $invoice;
 
         return $this;
     }
-
     /**
      * Get invoice
      *
      * @return \ITDoors\ControllingBundle\Entity\Invoice 
      */
-    public function getInvoice()
+    public function getInvoice ()
     {
         return $this->invoice;
     }
