@@ -193,11 +193,11 @@ class GrafikRepository extends EntityRepository
                 ->setParameter(':id', $idDepartment);
         }
             $result = $result->andWhere('dp.id = :idCoworker')
-                ->andWhere('t.isFired <> true')
-                ->andWhere('t.isOwnVacation <> true')
-                ->andWhere('t.isVacation <> true')
-                ->andWhere('t.isSick <> true')
-                ->andWhere('t.isSkip <> true')
+                ->andWhere('t.isFired = false OR t.isFired IS NULL')
+                ->andWhere('t.isOwnVacation = false OR t.isOwnVacation IS NULL')
+                ->andWhere('t.isVacation = false OR t.isVacation IS NULL')
+                ->andWhere('t.isSick = false OR t.isSick IS NULL')
+                ->andWhere('t.isSkip = false OR t.isSkip IS NULL')
                 ->setParameter(':idCoworker', $idCoworker)
             ->getQuery()
             ->getSingleScalarResult();
@@ -234,11 +234,11 @@ class GrafikRepository extends EntityRepository
                 ->setParameter(':id', $idDepartment);
         }
             $result = $result->andWhere('dp.id = :idCoworker')
-                ->andWhere('t.isFired <> true')
-                ->andWhere('t.isOwnVacation <> true')
-                ->andWhere('t.isVacation <> true')
-                ->andWhere('t.isSick <> true')
-                ->andWhere('t.isSkip <> true')
+                ->andWhere('t.isFired = false OR t.isFired IS NULL')
+                ->andWhere('t.isOwnVacation = false OR t.isOwnVacation IS NULL')
+                ->andWhere('t.isVacation = false OR t.isVacation IS NULL')
+                ->andWhere('t.isSick = false OR t.isSick IS NULL')
+                ->andWhere('t.isSkip = false OR t.isSkip IS NULL')
                 ->setParameter(':idCoworker', $idCoworker)
             ->getQuery()
             ->getSingleScalarResult();

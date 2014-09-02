@@ -358,7 +358,11 @@ class TaskController extends Controller
             'name' => $stage,
             'model' => 'task'
         ));
-        $this->insertComment($id, 'Changed the stage to :'.$stageName);
+        $translator = $this->get('translator');
+
+        $comment = $translator->trans('Changed the task stage', array(), 'SDTaskBundle');
+        $stageTrans = $translator->trans($stageName, array(), 'SDTaskBundle');
+        $this->insertComment($id, $comment.' :'.$stageTrans);
 
         $task->setStage($stage);
         $em->persist($task);
@@ -455,9 +459,12 @@ class TaskController extends Controller
 
         $newTaskEndDate = new TaskEndDate();
         $newTaskEndDate->setEndDateTime($newDate);
+        $translator = $this->get('translator');
+
         if ($taskUserRole->getRole() == 'controller') {
             $newTaskEndDate->setStage($stageDate);
-            $this->insertComment($id, 'Changed the end date');
+            $comment = $translator->trans('Changed the end date', array(), 'SDTaskBundle');
+            $this->insertComment($id, $comment.' :'.$newDate->format('d-m-Y H:i'));
         } else {
             $newTaskEndDate->setStage($stageRequest);
             $stageDateRequest = $em->getRepository('SDTaskBundle:Stage')->findOneby(array (
@@ -465,7 +472,8 @@ class TaskController extends Controller
                 'model' => 'task',
             ));
             $task->setStage($stageDateRequest);
-            $this->insertComment($id, 'Made the end date request');
+            $comment = $translator->trans('Made the end date request', array(), 'SDTaskBundle');
+            $this->insertComment($id, $comment.' :'.$newDate->format('d-m-Y H:i'));
         }
         $newTaskEndDate->setTask($task);
         $newTaskEndDate->setChangeDateTime(new \DateTime());
@@ -503,20 +511,31 @@ class TaskController extends Controller
             'task' => $task,
             'stage' => $stageRequest
         ));
-
+        $translator = $this->get('translator');
         if ($answer) {
             $answerStageName = 'accepted';
-            $this->insertComment($id, 'Accepted the date request');
+            $comment = $translator->trans('Accepted the date request', array(), 'SDTaskBundle');
+            $this->insertComment($id, $comment);
         } else {
             $answerStageName = 'rejected';
-            $this->insertComment($id, 'Rejected the date request');
+            $comment = $translator->trans('Rejected the date request', array(), 'SDTaskBundle');
+            $this->insertComment($id, $comment);
         }
-        $answerStage = $em->getRepository('SDTaskBundle:Stage')->findOneby(array (
+        $answerStage = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array (
             'name' => $answerStageName,
             'model' => 'task_end_date'
         ));
         $taskEndDateRequested->setStage($answerStage);
         $em->persist($taskEndDateRequested);
+
+        $stageCreated = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array (
+            'name' => 'created',
+            'model' => 'task'
+        ));
+
+        $task->setStage($stageCreated);
+        $em->persist($task);
+
         $em->flush();
 
         $this->checkIfCanPerform($id, true);
@@ -526,7 +545,7 @@ class TaskController extends Controller
         return new Response(json_encode($return));
     }
     /**
-     * Insert Comment
+     * Insert Comment to action
      *
      * @param Request $request
      *
@@ -543,7 +562,12 @@ class TaskController extends Controller
         return new Response(json_encode($return));
     }
 
-    protected function insertComment($idTaskUserRole, $commentValue) {
+    /**
+     * @param int    $idTaskUserRole
+     * @param string $commentValue
+     */
+    protected function insertComment($idTaskUserRole, $commentValue)
+    {
         $em = $this->getDoctrine()->getManager();
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($idTaskUserRole);
 
