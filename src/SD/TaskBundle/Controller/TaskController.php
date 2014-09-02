@@ -354,11 +354,12 @@ class TaskController extends Controller
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
 
         $task = $taskUserRole->getTask();
-
+        $stageName = $stage;
         $stage = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
             'name' => $stage,
             'model'  => 'task'
         ));
+        $this->insertComment($id, 'Changed the stage to :'.$stageName);
 
         $task ->setStage($stage);
         $em->persist($task);
@@ -459,6 +460,7 @@ class TaskController extends Controller
         $newTaskEndDate->setEndDateTime($newDate);
         if ($taskUserRole->getRole() == 'controller') {
             $newTaskEndDate->setStage($stageDate);
+            $this->insertComment($id, 'Changed the end date');
         } else {
             $newTaskEndDate->setStage($stageRequest);
             $stageDateRequest = $em->getRepository('SDTaskBundle:Stage')->findOneby(array(
@@ -466,6 +468,7 @@ class TaskController extends Controller
                 'model' => 'task',
             ));
             $task ->setStage($stageDateRequest);
+            $this->insertComment($id, 'Made the end date request');
         }
         $newTaskEndDate->setTask($task);
         $newTaskEndDate->setChangeDateTime(new \DateTime());
@@ -508,9 +511,10 @@ class TaskController extends Controller
 
         if ($answer) {
             $answerStageName = 'accepted';
+            $this->insertComment($id, 'Accepted the date request');
         } else {
             $answerStageName = 'rejected';
-
+            $this->insertComment($id, 'Rejected the date request');
         }
         $answerStage = $em->getRepository('SDTaskBundle:Stage')->findOneby(array(
             'name' => $answerStageName,
@@ -540,8 +544,15 @@ class TaskController extends Controller
         $id = $request->request->get('id');
         $commentValue = $request->request->get('comment');
 
+        $this->insertComment($id, $commentValue);
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
+
+    protected function insertComment($idTaskUserRole, $commentValue) {
         $em = $this->getDoctrine()->getManager();
-        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
+        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($idTaskUserRole);
 
         $idTask = $taskUserRole->getTask()->getId();
         $user = $this->getUser();
@@ -555,8 +566,5 @@ class TaskController extends Controller
 
         $em->persist($comment);
         $em->flush();
-        $return['success'] = 1;
-
-        return new Response(json_encode($return));
     }
 }
