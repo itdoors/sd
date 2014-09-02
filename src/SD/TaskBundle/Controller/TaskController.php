@@ -339,24 +339,27 @@ class TaskController extends Controller
                     break;
                 }
             }
-
-            if ($performing) {
-                $stagePerforming = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
-                    'name' => 'performing',
-                    'model'  => 'task'
-                ));
-                $task ->setStage($stagePerforming);
-                $em->persist($task);
-            } else {
-                $stageCreated = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
-                    'name' => 'created',
-                    'model'  => 'task'
-                ));
-                $task ->setStage($stageCreated);
-                $em->persist($task);
+            $currentStage = $task->getStage();
+            if ($currentStage == 'created' || $currentStage == 'performing') {
+                if ($performing) {
+                    $stagePerforming = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
+                        'name' => 'performing',
+                        'model'  => 'task'
+                    ));
+                    $task ->setStage($stagePerforming);
+                    $em->persist($task);
+                } else {
+                    $stageCreated = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
+                        'name' => 'created',
+                        'model'  => 'task'
+                    ));
+                    $task ->setStage($stageCreated);
+                    $em->persist($task);
+                }
+                $em->flush();
             }
         }
-        $em->flush();
+
     }
 
     /**
