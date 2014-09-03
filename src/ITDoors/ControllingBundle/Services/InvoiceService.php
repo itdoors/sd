@@ -312,7 +312,7 @@ class InvoiceService
         if ($dogovorfind) {
             $invoiceNew->setDogovor($dogovorfind);
             $em->persist($invoiceNew);
-            if (!$invoiceFind && $invoiceNew->getDogovorId()) {
+            if (!$invoiceFind) {
                 $this->addReaspon($invoiceNew);
             }
         } else {
