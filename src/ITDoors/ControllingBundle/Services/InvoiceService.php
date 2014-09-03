@@ -412,7 +412,8 @@ class InvoiceService
                 unset($em);
             }
             ++$countInvoice;
-            echo number_format((memory_get_usage() - $memStart) / 8000000, 0, ',', ' ') . "MB ~ more: ".($count - $key) . " .\n";
+            echo number_format((memory_get_usage() - $memStart) / 8000000, 0, ',', ' ')
+                . "MB ~ more: ".($count - $key) . " .\n";
 
             $invoiceFind = true;
             $this->messageTemplate = false;
