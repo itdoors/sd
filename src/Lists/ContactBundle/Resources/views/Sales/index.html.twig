@@ -37,16 +37,7 @@
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-switch/static/js/bootstrap-switch.min.js')}} "></script>
     <script type="text/javascript" src="{{ asset('templates/core/plugins/jquery-tmpl/jquery.tmpl.min.js')}} "></script>
 {% endblock %}
-{% block js_page_init_scripts %}
-    {{ parent() }}
-    <script type="text/javascript">
-        $(document).ready(function(){
-            ITDoorsSip.initIO('{{ app.user.peerId }}', 'model_contact', '');
 
-            ITDoorsSip.initSIP('{{ app.user.peerId }}', '{{ app.user.peerPassword }}');
-        });
-    </script>
-{% endblock %}
 {% block body %}
 
 <div class="row">
@@ -66,7 +57,6 @@
                 </a>
             </div>
         </div>
-
 
         <script type="text/javascript">
             $(document).ready(function(){
