@@ -35,7 +35,8 @@ class HistoryCommand extends ContainerAwareCommand
             ->addOption('destuniqueId', null, InputOption::VALUE_OPTIONAL)
             ->addOption('modelName', null, InputOption::VALUE_OPTIONAL)
             ->addOption('modelId', null, InputOption::VALUE_OPTIONAL)
-            ->addOption('dialStatus', null, InputOption::VALUE_OPTIONAL);
+            ->addOption('dialStatus', null, InputOption::VALUE_OPTIONAL)
+            ->addOption('answeredTime', null, InputOption::VALUE_OPTIONAL);
     }
 
     /**
@@ -52,28 +53,10 @@ class HistoryCommand extends ContainerAwareCommand
         $modelName = $input->getOption('modelName');
         $modelId = $input->getOption('modelId');
         $dialStatus = $input->getOption('dialStatus');
-        $duration = 0; // продолжительность звонка
+        $answeredTime = $input->getOption('answeredTime');
         
-        $em = $this->getContainer()->get('doctrine');
-        $caller = $em->getRepository('SDUserBundle:User')->findByOne(array(
-         'peerId' => $callerId
-        ));
-
-        $call = new Call();
-        $call->setCaller($caller);
-        $call->setDestuniqueId($destuniqueId);
-        $call->setDuration($duration);
-        $call->setFileName($filename);
-        $call->setModelId('1');
-        $call->setModelName('sdf');
-        $call->setPeerId($callerId);
-        $call->setPhone($receiverId);
-        $call->setProxyId($proxyId);
-        $call->setReceiver($caller);
-        $call->setStatus($dialStatus);
-        $call->setUniqueId($uniqueId);
-        $em->persist($call);
-        $em->flush();
+        $sip = $this->getContainer()->get('it_doors_sip.service');
+        $sip->saveCall($input);
 
         $output->writeln("uniqueId = {$uniqueId}");
         $output->writeln("filename = {$filename}");
@@ -84,5 +67,6 @@ class HistoryCommand extends ContainerAwareCommand
         $output->writeln("modelName = {$modelName}");
         $output->writeln("modelId = {$modelId}");
         $output->writeln("dialStatus = {$dialStatus}");
+        $output->writeln("answeredTime = {$answeredTime}");
     }
 }

@@ -15,7 +15,7 @@ class Call
     private $id;
 
     /**
-     * @var string
+     * @var integer
      */
     private $callerId;
 
@@ -25,7 +25,7 @@ class Call
     private $peerId;
 
     /**
-     * @var string
+     * @var integer
      */
     private $receiverId;
 
@@ -84,11 +84,6 @@ class Call
      */
     private $caller;
 
-    /**
-     * @var \SD\UserBundle\Entity\User
-     */
-    private $receiver;
-
 
     /**
      * Get id
@@ -103,7 +98,7 @@ class Call
     /**
      * Set callerId
      *
-     * @param string $callerId
+     * @param integer $callerId
      * @return Call
      */
     public function setCallerId($callerId)
@@ -116,7 +111,7 @@ class Call
     /**
      * Get callerId
      *
-     * @return string 
+     * @return integer 
      */
     public function getCallerId()
     {
@@ -149,7 +144,7 @@ class Call
     /**
      * Set receiverId
      *
-     * @param string $receiverId
+     * @param integer $receiverId
      * @return Call
      */
     public function setReceiverId($receiverId)
@@ -162,7 +157,7 @@ class Call
     /**
      * Get receiverId
      *
-     * @return string 
+     * @return integer 
      */
     public function getReceiverId()
     {
@@ -420,28 +415,5 @@ class Call
     public function getCaller()
     {
         return $this->caller;
-    }
-
-    /**
-     * Set receiver
-     *
-     * @param \SD\UserBundle\Entity\User $receiver
-     * @return Call
-     */
-    public function setReceiver(\SD\UserBundle\Entity\User $receiver = null)
-    {
-        $this->receiver = $receiver;
-    
-        return $this;
-    }
-
-    /**
-     * Get receiver
-     *
-     * @return \SD\UserBundle\Entity\User 
-     */
-    public function getReceiver()
-    {
-        return $this->receiver;
     }
 }
