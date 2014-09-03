@@ -242,6 +242,7 @@ class OrganizationRepository extends EntityRepository
             ->addSelect('view.name as viewName')
             ->addSelect('c.name as cityName')
             ->addSelect('r.name as regionName')
+            ->addSelect('oUser.userId as managerId')
             ->addSelect('scope.name as scopeName')
             ->addSelect(
                 "array_to_string(
