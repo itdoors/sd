@@ -1,0 +1,77 @@
+# src/ITDoors/SipBundle/Resources/config/doctrine/Call.orm.yml
+ITDoors\SipBundle\Entity\Call:
+    type: entity
+    table: call
+    repositoryClass: ITDoors\SipBundle\Entity\CallRepository
+    id:
+        id:
+            type: integer
+            generator: { strategy: IDENTITY }
+    fields:
+        callerId:
+            type: integer
+            column: caller_id
+            comment: 'user_id кто звонил'
+        peerId:
+            type: integer
+            nullable: false
+            column: peer_id
+        receiverId:
+            type: integer
+            column: receiver_id
+            comment: 'user_id кому звонили'
+        phone:
+            type: string
+            length: 12
+            fixed: false
+            nullable: false
+            comment: 'Номер телефона кому звонили'
+        proxyId:
+            type: string
+            length: 255
+            column: proxy_id
+            comment: 'номер с которого звонили'
+        uniqueId:
+            type: string
+            length: 255
+            column: unique_id
+        destuniqueId:
+            type: string
+            length: 255
+            column: destunique_id
+        datetime:
+            type: datetime
+        duration:
+            nullable: true
+            type: integer
+        fileName:
+            nullable: true
+            type: string
+            length: 255
+            column: file_name
+        status:
+            type: string
+            length: 255
+            column: status
+        modelName:
+            type: string
+            length: 255
+            nulltable: false
+            column: model_name
+        modelId:
+            type: integer
+            nulltable: false
+            column: model_id
+    manyToOne:
+        caller:
+            targetEntity: SD\UserBundle\Entity\User
+            inversedBy: null
+            joinColumn:
+                name: caller_id
+                referencedColumnName: id
+        receiver:
+            targetEntity: SD\UserBundle\Entity\User
+            inversedBy: null
+            joinColumn:
+                name: receiver_id
+                referencedColumnName: id
