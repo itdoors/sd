@@ -68,6 +68,8 @@ class InvoiceService
     {
         $directory = $this->container->getParameter('1C.file.path');
 
+        $em = $this->container->get('doctrine')->getManager();
+        
         if (!is_dir($directory)) {
             $this->addCronError(0, 'ok', 'directory not found', $directory);
             echo 'Directory not found: ';
@@ -86,7 +88,7 @@ class InvoiceService
                 case JSON_ERROR_NONE:
                     $this->addCronError(0, 'start parser', $file, 'parser file');
                     $this->arrCostumersForSendMessages = array();
-                    $em = $this->container->get('doctrine')->getManager();
+                    
                     $this->savejson($json->invoice);
                     $em->flush();
                     $this->addCronError(0, 'stop parser', $file, 'parser file');
