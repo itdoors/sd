@@ -1648,6 +1648,129 @@ class AjaxController extends BaseFilterController
     }
 
     /**
+     * Saves object to db
+     *
+     * @return mixed[]
+     */
+    public function userSaveAction()
+    {
+        if (!$this->getUser()->hasRole('ROLE_HRADMIN')) {
+            return false;
+        }
+        $translator = $this->get('translator');
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        $methodSet = 'set' . ucfirst($name);
+
+        $user = $this->getDoctrine()
+            ->getRepository('SDUserBundle:User')
+            ->find($pk);
+
+        if (!$value) {
+            $methodGet = 'get' . ucfirst($name);
+            $type = gettype($user->$methodGet());
+
+            if (in_array($type, array('integer'))) {
+                $value = null;
+            }
+        }
+
+        $user->$methodSet($value);
+
+        $validator = $this->get('validator');
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
+        $errors = $validator->validate($user, array('edit'));
+
+        if (sizeof($errors)) {
+            $return = $this->getFirstError($errors);
+
+            return new Response($return, 406);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+
+        try {
+            $em->flush();
+        } catch (\ErrorException $e) {
+            $return = array('msg' => $translator->trans('Wrong input data'));
+
+            return new Response(json_encode($return));
+        }
+
+        $return = array('success' => 1);
+
+        return new Response(json_encode($return));
+    }
+    /**
+     * Saves object to db
+     *
+     * @return mixed[]
+     */
+    public function stuffSaveAction()
+    {
+        if (!$this->getUser()->hasRole('ROLE_HRADMIN')) {
+            return false;
+        }
+        $translator = $this->get('translator');
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        $methodSet = 'set' . ucfirst($name);
+        
+        if (in_array($name, array('dateHire', 'dateFire'))) {
+            $value = new \DateTime($value);
+        }
+
+        $user = $this->getDoctrine()
+            ->getRepository('SDUserBundle:Stuff')
+            ->find($pk);
+
+        if (!$value) {
+            $methodGet = 'get' . ucfirst($name);
+            $type = gettype($user->$methodGet());
+
+            if (in_array($type, array('integer'))) {
+                $value = null;
+            }
+        }
+
+        $user->$methodSet($value);
+
+        $validator = $this->get('validator');
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
+        $errors = $validator->validate($user, array('edit'));
+
+        if (sizeof($errors)) {
+            $return = $this->getFirstError($errors);
+
+            return new Response($return, 406);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+
+        try {
+            $em->flush();
+        } catch (\ErrorException $e) {
+            $return = array('msg' => $translator->trans('Wrong input data'));
+
+            return new Response(json_encode($return));
+        }
+
+        $return = array('success' => 1);
+
+        return new Response(json_encode($return));
+    }
+
+    /**
      * Get first error message
      *
      * @param \Symfony\Component\Validator\ConstraintViolationList $errors

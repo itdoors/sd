@@ -81,6 +81,14 @@ sd_common_ajax_user_position:
 sd_common_ajax_user_email:
     pattern:  /ajax/user/email
     defaults: { _controller: SDCommonBundle:Ajax:userEmail }
+    
+sd_common_ajax_user_save:
+    pattern:  /ajax/user/save
+    defaults: { _controller: SDCommonBundle:Ajax:userSave }
+    
+sd_common_ajax_stuff_save:
+    pattern:  /ajax/stuff/save
+    defaults: { _controller: SDCommonBundle:Ajax:stuffSave }
 
 sd_common_ajax_contact_phone:
     pattern:  /ajax/contact/phone

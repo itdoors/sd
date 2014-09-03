@@ -1,4 +1,57 @@
 {% trans_default_domain 'SDUserBundle' %}
+{% if isAdmin %}
+<script>
+    $(document).ready(function(){
+        $('#username, #email').editable({
+            url: '{{ path('sd_common_ajax_user_save') }}',
+            emptytext: '{% trans %}Enter value{% endtrans %}'
+        });
+        $('#mobilephone, #phonePersonal, #phoneInside, #education, #birthPlace').editable({
+            url: '{{ path('sd_common_ajax_stuff_save') }}',
+            emptytext: '{% trans %}Enter value{% endtrans %}'
+        });
+        
+        $('.sd-stuff-editable').editable({
+            url: '{{ path('sd_common_ajax_stuff_save') }}'
+        });
+        
+        $('#companystructureId').editable({
+            url: '{{ path('sd_common_ajax_stuff_save') }}',
+            source: '{{ path('sd_common_ajax_company_structure') }}',
+            emptytext: '{% trans %}Enter value{% endtrans %}',
+            select2: {
+                placeholder: '{% trans %}Select companystructure{% endtrans %}',
+                minimumInputLength: 0,
+                width: 250,
+                allowClear: true
+            }
+        });
+        
+        $('.sd-stuff-date').live('mouseover', function(e){
+
+            e.preventDefault();
+
+            $(this).on('shown', function(e, editable) {
+
+                var input = editable.input.$input;
+
+                input.attr('readonly', 'readonly');
+
+                input.datepicker({
+                    rtl: Metronic.isRTL(),
+                    autoclose: true,
+                    format: "dd.mm.yyyy",
+                    pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+                    language: 'ru',
+                    startView: 'decade',
+                    //endDate: new Date(),
+                    weekStart: 1
+                });
+            });
+        });
+    });
+</script>
+{% endif %}
 <div class="row profile">
     <div class="col-md-12">
         <div class="tab-pane active" id="tab_1_1">
@@ -83,7 +136,13 @@
                                                     {% trans %}Subdivision{% endtrans %} 
                                                 </td>
                                                 <td>
-                                                    {{ item.companyName }}
+                                                    {% if isAdmin %}
+                                                     <a href="#" id="companystructureId" data-type="select2" data-pk="{{ item.stuffId }}" data-original-title="{% trans %}Companustructure{% endtrans %}">
+                                                        {{ item.companyName }}
+                                                     </a>
+                                                     {% else %}
+                                                        {{ item.companyName }}
+                                                    {% endif %}
                                                 </td>
                                             </tr>
                                             <tr>                                                                                                
@@ -91,7 +150,13 @@
                                                     {% trans %}Username{% endtrans %} 
                                                 </td>
                                                 <td>
-                                                    {{ item.username }}
+                                                    {% if isAdmin %}
+                                                        <a href="#" id="username" data-type="text" data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Enter username{% endtrans %}" data-original-title="{% trans %}Enter username{% endtrans %}">
+                                                            {{ item.username }}
+                                                        </a>
+                                                    {% else %}
+                                                        {{ item.username }}
+                                                    {% endif %}
                                                 </td>
                                             </tr>
                                             <tr>                                                                                                
@@ -99,7 +164,13 @@
                                                     {% trans %}Email{% endtrans %} 
                                                 </td>
                                                 <td>
-                                                    {{ item.email }}
+                                                    {% if isAdmin %}
+                                                        <a href="#" id="email" data-type="text" data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Enter email{% endtrans %}" data-original-title="{% trans %}Enter email{% endtrans %}">
+                                                            {{ item.email }}
+                                                        </a>
+                                                    {% else %}
+                                                        {{ item.email }}
+                                                    {% endif %}
                                                 </td>
                                             </tr>
                                             <tr>                                                                                                
@@ -107,7 +178,13 @@
                                                     {% trans %}Mobile phone{% endtrans %} 
                                                 </td>
                                                 <td>
-                                                    {{ item.mobilephone }}
+                                                    {% if isAdmin %}
+                                                        <a href="#" id="mobilephone" data-type="text" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter mobilephone{% endtrans %}" data-original-title="{% trans %}Enter mobilephone{% endtrans %}">
+                                                            {{ item.mobilephone }}
+                                                        </a>
+                                                    {% else %}
+                                                        {{ item.mobilephone }}
+                                                    {% endif %}
                                                 </td>
                                             </tr>
                                             <tr>  
@@ -115,7 +192,13 @@
                                                     {% trans %}Personale phone{% endtrans %} 
                                                 </td>
                                                 <td>
-                                                    {{ item.phonePersonal }}
+                                                    {% if isAdmin %}
+                                                        <a href="#" id="phonePersonal" data-type="text" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter phonePersonal{% endtrans %}" data-original-title="{% trans %}Enter phonePersonal{% endtrans %}">
+                                                            {{ item.phonePersonal }}
+                                                        </a>
+                                                    {% else %}
+                                                        {{ item.phonePersonal }}
+                                                    {% endif %}
                                                 </td>
                                             </tr>
                                             <tr>  
@@ -123,7 +206,13 @@
                                                     {% trans %}Inside phone{% endtrans %} 
                                                 </td>
                                                 <td>
-                                                    {{ item.phoneInside }}
+                                                    {% if isAdmin %}
+                                                        <a href="#" id="phoneInside" data-type="text" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter phoneInside{% endtrans %}" data-original-title="{% trans %}Enter phoneInside{% endtrans %}">
+                                                            {{ item.phoneInside }}
+                                                        </a>
+                                                    {% else %}
+                                                        {{ item.phoneInside }}
+                                                    {% endif %}
                                                 </td>
                                             </tr>
                                             <tr>  
@@ -131,7 +220,13 @@
                                                     {% trans %}Place of birth{% endtrans %} 
                                                 </td>
                                                 <td>
-                                                    {{ item.birthPlace }}
+                                                    {% if isAdmin %}
+                                                        <a href="#" id="birthPlace" data-type="text" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter birthPlace{% endtrans %}" data-original-title="{% trans %}Enter birthPlace{% endtrans %}">
+                                                            {{ item.birthPlace }}
+                                                        </a>
+                                                    {% else %}
+                                                        {{ item.birthPlace }}
+                                                    {% endif %}
                                                 </td>
                                             </tr>
                                             <tr>  
@@ -139,7 +234,27 @@
                                                     {% trans %}Hire Date{% endtrans %} 
                                                 </td>
                                                 <td>
-                                                    {{ item.dateHire == '' ? '' : item.dateHire|date('d.m.Y') }}
+                                                    {% if isAdmin %}
+                                                    <a href="#"
+                                                        class="sd-stuff-date sd-stuff-editable {% if item.dateHire is empty %} editable-empty {% endif %}"
+                                                        data-name="dateHire"
+                                                        data-type="text"
+                                                        data-pk="{{ item.stuffId }}"
+                                                             {% if item.dateHire %}
+                                                                 data-value="{{ item.dateHire|date("d.m.Y") }}"
+                                                             {% endif %}
+                                                        data-original-title="{% trans %}Edit{% endtrans %}"
+                                                             >
+                                                         {% if item.dateHire %}
+                                                             {{ item.dateHire|date("d.m.Y") }}
+                                                         {% else %}
+                                                             {% trans from 'messages' %}Enter value{% endtrans %}
+                                                         {% endif %}
+                                                    </a>
+                                                    {% else %}
+                                                        {{ item.dateHire == '' ? '' : item.dateHire|date('d.m.Y') }}
+                                                    {% endif %}
+                
                                                 </td>
                                             </tr>
                                             <tr>  
@@ -147,7 +262,26 @@
                                                     {% trans %}Termination date{% endtrans %} 
                                                 </td>
                                                 <td>
-                                                    {{ item.dateFire == '' ? '' : item.dateFire|date('d.m.Y') }}
+                                                    {% if isAdmin %}
+                                                    <a href="#"
+                                                        class="sd-stuff-date sd-stuff-editable {% if item.dateFire is empty %} editable-empty {% endif %}"
+                                                        data-name="dateFire"
+                                                        data-type="text"
+                                                        data-pk="{{ item.dateFire }}"
+                                                             {% if item.dateFire %}
+                                                                 data-value="{{ item.dateFire|date("d.m.Y") }}"
+                                                             {% endif %}
+                                                        data-original-title="{% trans %}Edit{% endtrans %}"
+                                                             >
+                                                         {% if item.dateFire %}
+                                                             {{ item.dateFire|date("d.m.Y") }}
+                                                         {% else %}
+                                                             {% trans from 'messages' %}Enter value{% endtrans %}
+                                                         {% endif %}
+                                                    </a>
+                                                    {% else %}
+                                                        {{ item.dateFire == '' ? '' : item.dateFire|date('d.m.Y') }}
+                                                    {% endif %}
                                                 </td>
                                             </tr>
                                             <tr>  
@@ -155,7 +289,13 @@
                                                     {% trans %}Education{% endtrans %} 
                                                 </td>
                                                 <td>
-                                                    {{ item.education }}
+                                                    {% if isAdmin %}
+                                                        <a href="#" id="education" data-type="textarea" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter education{% endtrans %}" data-original-title="{% trans %}Enter phoneInside{% endtrans %}">
+                                                            {{ item.education }}
+                                                        </a>
+                                                    {% else %}
+                                                        {{ item.education }}
+                                                    {% endif %}
                                                 </td>
                                             </tr>
                                             {% for contact in usercontactinfo %}

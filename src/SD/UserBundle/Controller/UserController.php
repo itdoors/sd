@@ -155,6 +155,8 @@ class UserController extends BaseController
         $namespace = $this->filterNamespace . $userId;
 
         $tab = $this->getTab($namespace);
+        
+        $isAdmin = $this->getUser()->hasRole('ROLE_HRADMIN');
 
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
@@ -165,6 +167,7 @@ class UserController extends BaseController
 
         return $this->render('SDUserBundle:User:showTab' . $tab . '.html.twig', array(
                 'item' => $item,
+                'isAdmin' => $isAdmin,
                 'usercontactinfo' => $usercontactinfo,
         ));
     }

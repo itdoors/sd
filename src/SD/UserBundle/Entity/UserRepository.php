@@ -58,6 +58,7 @@ class UserRepository extends EntityRepository
                 ->addselect('u.birthday')
                 ->addselect('u.position')
                 ->addselect('u.username')
+                ->addselect('s.id as stuffId')
                 ->addselect('s.issues')
                 ->addselect('s.mobilephone')
                 ->addselect('s.phonePersonal')
