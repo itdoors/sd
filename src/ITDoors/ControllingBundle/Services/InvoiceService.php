@@ -313,7 +313,7 @@ class InvoiceService
         if ($dogovorfind) {
             $invoiceNew->setDogovor($dogovorfind);
             $em->persist($invoiceNew);
-            if (!$invoiceFind && $invoiceNew->getDogovorId()) {
+            if ($invoiceFind && $invoiceNew->getDogovorId()) {
                 $this->addReaspon($invoiceNew);
             }
         } else {
@@ -412,8 +412,7 @@ class InvoiceService
                 unset($em);
             }
             ++$countInvoice;
-            echo number_format((memory_get_usage() - $memStart) / 8000000, 0, ',', ' ') . "MB ~ Осталось: ";
-            echo ($count - $key) . " шт.\n";
+            echo number_format((memory_get_usage() - $memStart) / 8000000, 0, ',', ' ') . "MB ~ more: ".($count - $key) . " .\n";
 
             $invoiceFind = true;
             $this->messageTemplate = false;
