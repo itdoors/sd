@@ -30,6 +30,7 @@ var ITDoorsSip = (function() {
         this.ringtone = null;
         this.phone = '';
         this.callbackHangup = null;
+        this.uniqueId = null;
     };
 
     ITDoorsSip.prototype.init = function(options)
@@ -53,6 +54,8 @@ var ITDoorsSip = (function() {
                     return;
                 }
 
+                self.uniqueId = clientGet.uniqueId;
+
                 console.log('AMI ', clientGet);
 
                 switch (clientGet.event) {
@@ -68,6 +71,19 @@ var ITDoorsSip = (function() {
                 }
             });
         }
+    }
+
+    ITDoorsSip.prototype.getUniqueId = function()
+    {
+        if (!window['ITDoorsSip']) {
+            return null;
+        }
+
+        if (!window['ITDoorsSip'].uniqueId) {
+            return null;
+        }
+
+        return window['ITDoorsSip'].uniqueId;
     }
 
     ITDoorsSip.prototype.initAudioTag = function()
@@ -197,9 +213,10 @@ var ITDoorsSip = (function() {
                 window['ITDoorsSip']['stopRingTone']();
 
                 if (window['ITDoorsSip']['callbackHangup']) {
-                    window['ITDoorsSip']['callbackHangup']();
+                    window['ITDoorsSip']['callbackHangup'](window['ITDoorsSip'].getUniqueId());
                 }
 
+                window['ITDoorsSip']['uniqueId'] = null;
                 window['ITDoorsSip']['phone'] = null;
                 window['ITDoorsSip']['callbackHangup'] = null;
                 window['ITDoorsSip']['callSession'] = null;
