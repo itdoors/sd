@@ -55,6 +55,9 @@ class HistoryCommand extends ContainerAwareCommand
 //        $duration = 0; // продолжительность звонка
 //        
 //        $em = $this->getContainer()->get('doctrine');
+//        $caller = $em->getRepository('SDUserBundle:User')->findByOne(array(
+//         
+//        ));
 //        $call = new Call();
 //        $call->setCaller();
 //        $call->setDestuniqueId($destuniqueId);

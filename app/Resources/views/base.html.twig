@@ -71,7 +71,8 @@
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
 <body class="page-header-fixed page-quick-sidebar-over-content">
-	<!-- BEGIN HEADER -->   
+    {% block header %}
+    <!-- BEGIN HEADER -->
 	<div class="page-header navbar navbar-fixed-top">
 		<!-- BEGIN TOP NAVIGATION BAR -->
 		<div class="page-header-inner">
@@ -94,11 +95,14 @@
 		</div>
 		<!-- END TOP NAVIGATION BAR -->
 	</div>
+    {% endblock %}
 	<!-- END HEADER -->
 	<div class="clearfix"></div>
 	<!-- BEGIN CONTAINER -->
 	<div class="page-container row-fluid" >
-		{% include 'sidebar.html.twig' %} 
+        {% block menu %}
+		    {% include 'sidebar.html.twig' %}
+        {% endblock %}
 		<!-- BEGIN PAGE -->
         <div class="page-content-wrapper">
 
