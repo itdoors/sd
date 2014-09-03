@@ -1,0 +1,18 @@
+{% extends "::call.html.twig" %}
+{% block js_page_init_scripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            ITDoorsSip.initIO('{{ app.user.peerId }}', 'model_contact', '');
+
+            callbackHangup = function() {
+                alert('Call hangup callback');
+            }
+
+            ITDoorsSip.initSIP('{{ app.user.peerId }}', '{{ app.user.peerPassword }}', '0636821588', callbackHangup);
+        });
+    </script>
+{% endblock %}
+{% block body %}
+    <a href="#" class="hangup-btn"></a>
+{% endblock %}

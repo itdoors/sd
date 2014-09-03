@@ -27,7 +27,9 @@ var ITDoorsSip = (function() {
         this.callSession = null;
         this.stack = null;
         this.ringbacktone = null;
-        this.ringtone = null
+        this.ringtone = null;
+        this.phone = '';
+        this.callbackHangup = null;
     };
 
     ITDoorsSip.prototype.init = function(options)
@@ -128,11 +130,9 @@ var ITDoorsSip = (function() {
 
     ITDoorsSip.prototype.onEventFired = function(e)
     {
-        console.log('this', this);
-
         switch (e.type) {
             case "started" :
-
+                console.log('ITDoorsSip.prototype.onEventFired STARTED');
                 try {
                     // LogIn (REGISTER) as soon as the stack finish starting
                     oSipSessionRegister = this.newSession('register', {
@@ -145,9 +145,27 @@ var ITDoorsSip = (function() {
                         ]
                     });
                     oSipSessionRegister.register();
+
+                    window['ITDoorsSip']['callSession'] = window['ITDoorsSip']['stack'].newSession('call-audio', {
+                        video_local: document.getElementById('video-local'),
+                        video_remote: document.getElementById('video-remote'),
+                        audio_remote: document.getElementById(window['ITDoorsSip'].params.audio.id),
+                        bandwidth: { audio:undefined, video:undefined },
+                        video_size: { minWidth:undefined, minHeight:undefined, maxWidth:undefined, maxHeight:undefined },
+                        events_listener: { events: '*', listener: window['ITDoorsSip']['onSipEventSession'] },
+                        sip_caps: [
+                            { name: '+g.oma.sip-im' },
+                            { name: '+sip.ice' },
+                            { name: 'language', value: '\"en,fr\"' }
+                        ]
+                    });
+
+                    console.log(window['ITDoorsSip']['callSession']);
+
+                    window['ITDoorsSip']['callSession'].call(window['ITDoorsSip']['phone'].replace(/ /g, "").replace(/-/g, ""));
                 }
                 catch (e) {
-
+                    console.log('ITDoorsSip.prototype.onEventFired ERROR', e);
                 }
                 break;
             case "m_permission_accepted":
@@ -175,20 +193,30 @@ var ITDoorsSip = (function() {
             } // i_ao_request
             case 'terminating': case 'terminated':
             {
-                window['ITDoorsSip']['callSession'] = null;
                 window['ITDoorsSip']['stopRingbackTone']();
                 window['ITDoorsSip']['stopRingTone']();
-                //ITDoorsSip.callSession = null;
-                //ITDoorsSip.stopRingbackTone();
-                //ITDoorsSip.stopRingTone();
+
+                if (window['ITDoorsSip']['callbackHangup']) {
+                    window['ITDoorsSip']['callbackHangup']();
+                }
+
+                window['ITDoorsSip']['phone'] = null;
+                window['ITDoorsSip']['callbackHangup'] = null;
+                window['ITDoorsSip']['callSession'] = null;
                 break;
             }
         }
     }
 
-    ITDoorsSip.prototype.initSIP = function(peerId, peerPassword)
+    ITDoorsSip.prototype.initSIP = function(peerId, peerPassword, phone, callbackHangup)
     {
         this.initAudioTag();
+
+        this.phone = phone;
+
+        if (callbackHangup) {
+            this.callbackHangup = callbackHangup;
+        }
 
         var self = this;
 
@@ -221,50 +249,17 @@ var ITDoorsSip = (function() {
                         ],
                         events_listener: { events: '*', listener: self.onEventFired }
                     });
+
                     self.stack.start();
                 }
             );
 
-            $('.call-btn').live('click', function(e) {
-
-                console.log(self);
-
-                self.callSession = self.stack.newSession('call-audio', {
-                    video_local: document.getElementById('video-local'),
-                    video_remote: document.getElementById('video-remote'),
-                    audio_remote: document.getElementById(self.params.audio.id),
-                    bandwidth: { audio:undefined, video:undefined },
-                    video_size: { minWidth:undefined, minHeight:undefined, maxWidth:undefined, maxHeight:undefined },
-                    events_listener: { events: '*', listener: self.onSipEventSession },
-                    sip_caps: [
-                        { name: '+g.oma.sip-im' },
-                        { name: '+sip.ice' },
-                        { name: 'language', value: '\"en,fr\"' }
-                    ]
-                });
-
-                e.preventDefault();
-                var phone = $(this).data('phone');
-                var pattern = new RegExp("(?:\([2-9]\d{2}\)\ ?|[2-9]\d{2}(?:\-?|\ ?))[2-9]\d{2}[- ]?\d{4}");
-
-                //startRingTone();
-
-                if (confirm('Are you sure you want to call to ' + phone.replace(/ /g, "").replace(/-/g, ""))) {
-                    //self.modelId = $(this).parents('.model-object-holder').data('id');
-                    self.callSession.call(phone.replace(/ /g, "").replace(/-/g, ""));
-                    $(this).parent().find('.hangup-btn').show();
-                    $(this).hide();
-                }
-            });
-
             $('.hangup-btn').live('click', function(e) {
+
                 e.preventDefault();
                 if (self.callSession) {
                     self.callSession.hangup({events_listener: { events: '*', listener: self.onSipEventSession }});
-
-                    $(this).parent().find('.call-btn').show();
-                    $(this).hide();
-                    //self.modelId = null;
+                    $('.hangup-btn').hide();
                 }
             });
         });
