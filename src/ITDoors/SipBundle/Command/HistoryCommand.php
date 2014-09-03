@@ -57,6 +57,7 @@ class HistoryCommand extends ContainerAwareCommand
         
         $sip = $this->getContainer()->get('it_doors_sip.service');
         $sip->saveCall($input);
+        //ucfirst($str);
 
         $output->writeln("uniqueId = {$uniqueId}");
         $output->writeln("filename = {$filename}");

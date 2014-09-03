@@ -19,7 +19,7 @@ ITDoors\SipBundle\Entity\Call:
         receiverId:
             type: integer
             column: receiver_id
-            comment: 'user_id кому звонили'
+            comment: 'model_contct_id кому звонили'
         phone:
             type: string
             length: 12
@@ -68,10 +68,4 @@ ITDoors\SipBundle\Entity\Call:
             inversedBy: null
             joinColumn:
                 name: caller_id
-                referencedColumnName: id
-        receiver:
-            targetEntity: SD\UserBundle\Entity\User
-            inversedBy: null
-            joinColumn:
-                name: receiver_id
                 referencedColumnName: id

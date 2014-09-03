@@ -1,7 +1,7 @@
 parameters:
-#    it_doors_sip.example.class: ITDoors\SipBundle\Example
+    it_doors_sip.service.class: ITDoors\SipBundle\Services\SipService
 
 services:
-#    it_doors_sip.example:
-#        class: %it_doors_sip.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    it_doors_sip.service:
+        class: %it_doors_sip.service.class%
+        arguments: [@service_container]
