@@ -155,7 +155,7 @@ class UserController extends BaseController
         $namespace = $this->filterNamespace . $userId;
 
         $tab = $this->getTab($namespace);
-        
+
         $isAdmin = $this->getUser()->hasRole('ROLE_HRADMIN');
 
         /** @var EntityManager $em */

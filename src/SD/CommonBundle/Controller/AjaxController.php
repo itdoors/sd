@@ -1723,7 +1723,7 @@ class AjaxController extends BaseFilterController
         $value = $this->get('request')->request->get('value');
 
         $methodSet = 'set' . ucfirst($name);
-        
+
         if (in_array($name, array('dateHire', 'dateFire'))) {
             $value = new \DateTime($value);
         }
