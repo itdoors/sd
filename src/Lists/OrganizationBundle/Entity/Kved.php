@@ -43,21 +43,19 @@ class Kved
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct ()
     {
         $this->kvedOrganizations = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set code
      *
@@ -65,23 +63,21 @@ class Kved
      *
      * @return Kved
      */
-    public function setCode($code)
+    public function setCode ($code)
     {
         $this->code = $code;
 
         return $this;
     }
-
     /**
      * Get code
      *
      * @return string 
      */
-    public function getCode()
+    public function getCode ()
     {
         return $this->code;
     }
-
     /**
      * Set name
      *
@@ -89,23 +85,21 @@ class Kved
      *
      * @return Kved
      */
-    public function setName($name)
+    public function setName ($name)
     {
         $this->name = $name;
 
         return $this;
     }
-
     /**
      * Get name
      *
      * @return string 
      */
-    public function getName()
+    public function getName ()
     {
         return $this->name;
     }
-
     /**
      * Set description
      *
@@ -113,23 +107,21 @@ class Kved
      *
      * @return Kved
      */
-    public function setDescription($description)
+    public function setDescription ($description)
     {
         $this->description = $description;
 
         return $this;
     }
-
     /**
      * Get description
      *
      * @return string 
      */
-    public function getDescription()
+    public function getDescription ()
     {
         return $this->description;
     }
-
     /**
      * Set parentId
      *
@@ -137,23 +129,21 @@ class Kved
      *
      * @return Kved
      */
-    public function setParentId($parentId)
+    public function setParentId ($parentId)
     {
         $this->parentId = $parentId;
 
         return $this;
     }
-
     /**
      * Get parentId
      *
      * @return integer 
      */
-    public function getParentId()
+    public function getParentId ()
     {
         return $this->parentId;
     }
-
     /**
      * Add kvedOrganizations
      *
@@ -161,37 +151,34 @@ class Kved
      *
      * @return Kved
      */
-    public function addKvedOrganization(\Lists\OrganizationBundle\Entity\kvedOrganization $kvedOrganizations)
+    public function addKvedOrganization (\Lists\OrganizationBundle\Entity\kvedOrganization $kvedOrganizations)
     {
         $this->kvedOrganizations[] = $kvedOrganizations;
 
         return $this;
     }
-
     /**
      * Remove kvedOrganizations
      *
      * @param \Lists\OrganizationBundle\Entity\kvedOrganization $kvedOrganizations
      */
-    public function removeKvedOrganization(\Lists\OrganizationBundle\Entity\kvedOrganization $kvedOrganizations)
+    public function removeKvedOrganization (\Lists\OrganizationBundle\Entity\kvedOrganization $kvedOrganizations)
     {
         $this->kvedOrganizations->removeElement($kvedOrganizations);
     }
-
     /**
      * Get kvedOrganizations
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getKvedOrganizations()
+    public function getKvedOrganizations ()
     {
         return $this->kvedOrganizations;
     }
-
     /**
      * @ORM\PrePersist
      */
-    public function doOnPrePersist()
+    public function doOnPrePersist ()
     {
         // Add your code here
     }
@@ -201,23 +188,21 @@ class Kved
      */
     private $kvedOrganization;
 
-
     /**
      * Get kvedOrganization
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getKvedOrganization()
+    public function getKvedOrganization ()
     {
         return $this->kvedOrganization;
     }
-
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString ()
     {
 
-        return '('.$this->code.') '.$this->name;
+        return '(' . $this->code . ') ' . $this->name;
     }
 }

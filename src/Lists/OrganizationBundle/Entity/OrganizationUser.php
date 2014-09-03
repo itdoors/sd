@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class OrganizationUser
 {
+
     /**
      * @var integer
      */
@@ -39,11 +40,10 @@ class OrganizationUser
      *
      * @return integer 
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set organizationId
      *
@@ -51,23 +51,21 @@ class OrganizationUser
      * 
      * @return OrganizationUser
      */
-    public function setOrganizationId($organizationId)
+    public function setOrganizationId ($organizationId)
     {
         $this->organizationId = $organizationId;
 
         return $this;
     }
-
     /**
      * Get organizationId
      *
      * @return integer 
      */
-    public function getOrganizationId()
+    public function getOrganizationId ()
     {
         return $this->organizationId;
     }
-
     /**
      * Set userId
      *
@@ -75,23 +73,21 @@ class OrganizationUser
      * 
      * @return OrganizationUser
      */
-    public function setUserId($userId)
+    public function setUserId ($userId)
     {
         $this->userId = $userId;
 
         return $this;
     }
-
     /**
      * Get userId
      *
      * @return integer 
      */
-    public function getUserId()
+    public function getUserId ()
     {
         return $this->userId;
     }
-
     /**
      * Set organization
      *
@@ -99,23 +95,21 @@ class OrganizationUser
      * 
      * @return OrganizationUser
      */
-    public function setOrganization(\Lists\OrganizationBundle\Entity\Organization $organization = null)
+    public function setOrganization (\Lists\OrganizationBundle\Entity\Organization $organization = null)
     {
         $this->organization = $organization;
 
         return $this;
     }
-
     /**
      * Get organization
      *
      * @return \Lists\OrganizationBundle\Entity\Organization 
      */
-    public function getOrganization()
+    public function getOrganization ()
     {
         return $this->organization;
     }
-
     /**
      * Set user
      *
@@ -123,29 +117,29 @@ class OrganizationUser
      * 
      * @return OrganizationUser
      */
-    public function setUser(\SD\UserBundle\Entity\User $user = null)
+    public function setUser (\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
 
         return $this;
     }
-
     /**
      * Get user
      *
      * @return \SD\UserBundle\Entity\User 
      */
-    public function getUser()
+    public function getUser ()
     {
         return $this->user;
     }
     /**
      * @ORM\PrePersist
      */
-    public function doOnPrePersist()
+    public function doOnPrePersist ()
     {
         // Add your code here
     }
+
     /**
      * @var integer
      */
@@ -156,7 +150,6 @@ class OrganizationUser
      */
     private $role;
 
-
     /**
      * Set roleId
      *
@@ -164,23 +157,21 @@ class OrganizationUser
      * 
      * @return OrganizationUser
      */
-    public function setRoleId($roleId)
+    public function setRoleId ($roleId)
     {
         $this->roleId = $roleId;
 
         return $this;
     }
-
     /**
      * Get roleId
      *
      * @return integer 
      */
-    public function getRoleId()
+    public function getRoleId ()
     {
         return $this->roleId;
     }
-
     /**
      * Set role
      *
@@ -188,19 +179,18 @@ class OrganizationUser
      * 
      * @return OrganizationUser
      */
-    public function setRole(\Lists\LookupBundle\Entity\Lookup $role = null)
+    public function setRole (\Lists\LookupBundle\Entity\Lookup $role = null)
     {
         $this->role = $role;
 
         return $this;
     }
-
     /**
      * Get role
      *
      * @return \Lists\LookupBundle\Entity\Lookup 
      */
-    public function getRole()
+    public function getRole ()
     {
         return $this->role;
     }

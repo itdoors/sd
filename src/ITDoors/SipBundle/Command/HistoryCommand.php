@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use ITDoors\SipBundle\Entity\Call;
 
 /**
  * HistoryCommand
@@ -51,6 +52,24 @@ class HistoryCommand extends ContainerAwareCommand
         $modelName = $input->getOption('modelName');
         $modelId = $input->getOption('modelId');
         $dialStatus = $input->getOption('dialStatus');
+//        $duration = 0; // продолжительность звонка
+//        
+//        $em = $this->getContainer()->get('doctrine');
+//        $call = new Call();
+//        $call->setCaller();
+//        $call->setDestuniqueId($destuniqueId);
+//        $call->setDuration($duration);
+//        $call->setFileName($filename);
+//        $call->setModelId();
+//        $call->setModelName();
+//        $call->setPeerId($callerId);
+//        $call->setPhone($receiverId);
+//        $call->setProxyId($proxyId);
+//        $call->setReceiver();
+//        $call->setStatus($dialStatus);
+//        $call->setUniqueId($uniqueId);
+//        $em->persist($call);
+//        $em->flush();
 
         $output->writeln("uniqueId = {$uniqueId}");
         $output->writeln("filename = {$filename}");

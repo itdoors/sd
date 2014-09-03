@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class InvoicePayments
 {
+
     /**
      * @var integer
      */
@@ -34,17 +35,15 @@ class InvoicePayments
      */
     private $invoice;
 
-
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set invoiceId
      *
@@ -52,23 +51,21 @@ class InvoicePayments
      * 
      * @return InvoicePayments
      */
-    public function setInvoiceId($invoiceId)
+    public function setInvoiceId ($invoiceId)
     {
         $this->invoiceId = $invoiceId;
 
         return $this;
     }
-
     /**
      * Get invoiceId
      *
      * @return integer 
      */
-    public function getInvoiceId()
+    public function getInvoiceId ()
     {
         return $this->invoiceId;
     }
-
     /**
      * Set summa
      *
@@ -76,23 +73,21 @@ class InvoicePayments
      * 
      * @return InvoicePayments
      */
-    public function setSumma($summa)
+    public function setSumma ($summa)
     {
         $this->summa = $summa;
 
         return $this;
     }
-
     /**
      * Get summa
      *
      * @return float 
      */
-    public function getSumma()
+    public function getSumma ()
     {
         return $this->summa;
     }
-
     /**
      * Set date
      *
@@ -100,23 +95,21 @@ class InvoicePayments
      * 
      * @return InvoicePayments
      */
-    public function setDate($date)
+    public function setDate ($date)
     {
         $this->date = $date;
 
         return $this;
     }
-
     /**
      * Get date
      *
      * @return \DateTime 
      */
-    public function getDate()
+    public function getDate ()
     {
         return $this->date;
     }
-
     /**
      * Set invoice
      *
@@ -124,27 +117,26 @@ class InvoicePayments
      * 
      * @return InvoicePayments
      */
-    public function setInvoice(\ITDoors\ControllingBundle\Entity\Invoice $invoice = null)
+    public function setInvoice (\ITDoors\ControllingBundle\Entity\Invoice $invoice = null)
     {
         $this->invoice = $invoice;
 
         return $this;
     }
-
     /**
      * Get invoice
      *
      * @return \ITDoors\ControllingBundle\Entity\Invoice 
      */
-    public function getInvoice()
+    public function getInvoice ()
     {
         return $this->invoice;
     }
+
     /**
      * @var string
      */
     private $bank;
-
 
     /**
      * Set bank
@@ -153,19 +145,18 @@ class InvoicePayments
      * 
      * @return InvoicePayments
      */
-    public function setBank($bank)
+    public function setBank ($bank)
     {
         $this->bank = $bank;
 
         return $this;
     }
-
     /**
      * Get bank
      *
      * @return string 
      */
-    public function getBank()
+    public function getBank ()
     {
         return $this->bank;
     }

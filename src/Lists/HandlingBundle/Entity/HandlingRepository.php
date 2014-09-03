@@ -364,8 +364,8 @@ class HandlingRepository extends BaseRepository
             ->addSelect('result.slug as resultSlug')
             ->addSelect('result.percentageString as resultPercentageString')
             ->addSelect('result.progress as resultProgress')
-            ->addSelect('
-                (
+            ->addSelect(
+                '(
                 SELECT
                     hu.userId
                 FROM
@@ -379,8 +379,8 @@ class HandlingRepository extends BaseRepository
                     WHERE l.lukey = :lukey
                     )
                 )
-
-                 as managerProject')
+             as managerProject'
+            )
             ->leftJoin('h.organization', 'o')
             ->leftJoin('h.type', 'type')
             ->leftJoin('h.status', 'status')

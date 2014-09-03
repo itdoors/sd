@@ -1,4 +1,5 @@
 <?php
+
 namespace ITDoors\OperBundle\Services;
 
 use Doctrine\Common\Collections\Collection;
@@ -14,6 +15,7 @@ use Symfony\Component\DependencyInjection\Container;
  */
 class ScheduleUpdateService
 {
+
     /** @var Container $container */
     protected $container;
 
@@ -23,18 +25,16 @@ class ScheduleUpdateService
     /**
      * @param Container $container
      */
-    public function __construct(Container $container)
+    public function __construct (Container $container)
     {
         $this->container = $container;
         $this->em = $this->container->get('doctrine.orm.entity_manager');
     }
-
-
     /**
      * @param int|array $months
      * @param int       $year
      */
-    public function scheduleUpdate($months, $year)
+    public function scheduleUpdate ($months, $year)
     {
         $this->em->getConnection()->getConfiguration()->setSQLLogger(null);
 
@@ -42,18 +42,17 @@ class ScheduleUpdateService
         $grafikTimeRepository = $this->container->get('doctrine')
             ->getRepository('ListsGrafikBundle:GrafikTime');
 
-        $grafikTimes = $grafikTimeRepository->findBy(array(
+        $grafikTimes = $grafikTimeRepository->findBy(array (
             'month' => $months,
             'year' => $year
-            )
-        );
+        ));
 
         $counter = count($grafikTimes);
-        echo $counter.' all'."\n";
-        echo 'starting re-count...'."\n";
+        echo $counter . ' all' . "\n";
+        echo 'starting re-count...' . "\n";
 
         //array of points during the day which make periods of the day(evening, night, etc)
-        $periodPoints = array();
+        $periodPoints = array ();
         $periodPoints[] = 6;
         $periodPoints[] = 18;
         $periodPoints[] = 22;
@@ -66,15 +65,16 @@ class ScheduleUpdateService
         foreach ($grafikTimes as $grafikJoke) {
 
             $grafikTime = $this->container->get('doctrine')
-                ->getRepository('ListsGrafikBundle:GrafikTime')->find($grafikJoke->getId());
+                    ->getRepository('ListsGrafikBundle:GrafikTime')->find($grafikJoke->getId());
             $counterFlush++;
-            echo $counter.' id:'.$grafikJoke->getId()."\n";
+            echo $counter . ' id:' . $grafikJoke->getId() . "\n";
             $counter--;
             if (!$grafikTime) {
                 echo 'ERROR ERROR';
                 continue;
             }
-            $hoursFromDb = $grafikTime->getFromTime()->format("H:i");;
+            $hoursFromDb = $grafikTime->getFromTime()->format("H:i");
+            ;
             $hoursToDb = $grafikTime->getToTime()->format("H:i");
 
             list($hoursFrom, $minutesFrom) = explode(':', $hoursFromDb);
@@ -83,12 +83,12 @@ class ScheduleUpdateService
                 $hoursTo = 24;
             }
 
-            $hoursFrom += $minutesFrom/60;
-            $hoursTo += $minutesTo/60;
+            $hoursFrom += $minutesFrom / 60;
+            $hoursTo += $minutesTo / 60;
 
             //Algorithm to calculate number of hours
             //between two periods
-            $totalPeriod = array();
+            $totalPeriod = array ();
             foreach ($periodPoints as $point) {
                 $check1 = $point - $hoursFrom;
                 $check2 = $point - $hoursTo;
@@ -104,9 +104,9 @@ class ScheduleUpdateService
             }
             //end of algorithm
 
-            $totalNight = $totalPeriod[0] + $totalPeriod[3];//from 0-7, 22-24
-            $totalEvening = $totalPeriod[2];//from 7-19
-            $totalDay = $totalPeriod[1];//from 19-22
+            $totalNight = $totalPeriod[0] + $totalPeriod[3]; //from 0-7, 22-24
+            $totalEvening = $totalPeriod[2]; //from 7-19
+            $totalDay = $totalPeriod[1]; //from 19-22
 
             $total = $totalNight + $totalEvening + $totalDay;
 
@@ -119,10 +119,10 @@ class ScheduleUpdateService
             }
             //$addTypeOfficially = $cleanOtherOfficially;
 
-            $funcTotalClean = 'setTotal'.$cleanOtherOfficially;
-            $funcTotalDayClean = 'setTotalDay'.$cleanOtherOfficially;
-            $funcTotalEveningClean = 'setTotalEvening'.$cleanOtherOfficially;
-            $funcTotalNightClean = 'setTotalNight'.$cleanOtherOfficially;
+            $funcTotalClean = 'setTotal' . $cleanOtherOfficially;
+            $funcTotalDayClean = 'setTotalDay' . $cleanOtherOfficially;
+            $funcTotalEveningClean = 'setTotalEvening' . $cleanOtherOfficially;
+            $funcTotalNightClean = 'setTotalNight' . $cleanOtherOfficially;
 
             $grafikTime->$funcTotalClean(0);
             $grafikTime->$funcTotalDayClean(0);
@@ -130,10 +130,10 @@ class ScheduleUpdateService
             $grafikTime->$funcTotalNightClean(0);
 
 
-            $funcTotal = 'setTotal'.$addTypeOfficially;
-            $funcTotalDay = 'setTotalDay'.$addTypeOfficially;
-            $funcTotalEvening = 'setTotalEvening'.$addTypeOfficially;
-            $funcTotalNight = 'setTotalNight'.$addTypeOfficially;
+            $funcTotal = 'setTotal' . $addTypeOfficially;
+            $funcTotalDay = 'setTotalDay' . $addTypeOfficially;
+            $funcTotalEvening = 'setTotalEvening' . $addTypeOfficially;
+            $funcTotalNight = 'setTotalNight' . $addTypeOfficially;
 
             //setting official or not total hours
             $grafikTime->$funcTotal($total);
@@ -161,10 +161,7 @@ class ScheduleUpdateService
             }
         }
         $this->em->flush();
-
-
     }
-
     /**
      * @param int $day
      * @param int $month
@@ -173,7 +170,7 @@ class ScheduleUpdateService
      * @param int $idDepartment
      * @param int $idReplacement
      */
-    private function updateSumGrafik($day, $month, $year, $idCoworker, $idDepartment, $idReplacement = 0)
+    private function updateSumGrafik ($day, $month, $year, $idCoworker, $idDepartment, $idReplacement = 0)
     {
 
         /** @var $grafikTimeRepository \Lists\GrafikBundle\Entity\GrafikTimeRepository   */
@@ -194,7 +191,7 @@ class ScheduleUpdateService
         $totalNight = 0;
 
         $totalNotOfficially = 0;
-        $totalDayNotOfficially= 0;
+        $totalDayNotOfficially = 0;
         $totalEveningNotOfficially = 0;
         $totalNightNotOfficially = 0;
 
@@ -210,68 +207,65 @@ class ScheduleUpdateService
             $totalNightNotOfficially += $coworkerTime->getTotalNightNotOfficially();
         }
 
-        $department  = $this->container->get('doctrine')
+        $department = $this->container->get('doctrine')
             ->getRepository('ListsDepartmentBundle:Departments')
             ->find($idDepartment);
 
-        $departmentPeople  = $this->container->get('doctrine')
+        $departmentPeople = $this->container->get('doctrine')
             ->getRepository('ListsDepartmentBundle:DepartmentPeople')
             ->find($idCoworker);
 
-        $departmentPeopleReplacement  = $this->container->get('doctrine')
+        $departmentPeopleReplacement = $this->container->get('doctrine')
             ->getRepository('ListsDepartmentBundle:DepartmentPeople')
             ->find($idReplacement);
 
-        /** @var  $grafik \Lists\GrafikBundle\Entity\Grafik*/
+        /** @var  $grafik \Lists\GrafikBundle\Entity\Grafik */
         $grafik = $this->container->get('doctrine')
             ->getRepository('ListsGrafikBundle:Grafik')
-            ->findOneBy(array(
-                'day' => $day,
-                'month' => $month,
-                'year' => $year,
-                'departmentPeople' => $departmentPeople,
-                //'department' => $department,
-                'departmentPeopleReplacement' => $departmentPeopleReplacement,
-                'replacementType' => DepartmentPeopleMonthInfoRepository::REPLACEMENT_TYPE_REPLACEMENT
-            ));
+            ->findOneBy(array (
+            'day' => $day,
+            'month' => $month,
+            'year' => $year,
+            'departmentPeople' => $departmentPeople,
+            //'department' => $department,
+            'departmentPeopleReplacement' => $departmentPeopleReplacement,
+            'replacementType' => DepartmentPeopleMonthInfoRepository::REPLACEMENT_TYPE_REPLACEMENT
+        ));
 
-/*        if ($grafik == null) {
-            $grafik = new Grafik();
-            $grafik->setDay($day);
-            $grafik->setMonth($month);
-            $grafik->setYear($year);
-            $grafik->setDepartmentPeople($departmentPeople);
-            $grafik->setDepartment($department);
-            $grafik->setReplacementType(DepartmentPeopleMonthInfoRepository::REPLACEMENT_TYPE_REPLACEMENT);
-            $grafik->setDepartmentId($idDepartment);
-            $grafik->setDepartmentPeopleId($idCoworker);
-            $grafik->setDepartmentPeopleReplacement($departmentPeopleReplacement);
-            $grafik->setDepartmentPeopleReplacementId($departmentPeopleReplacement);
-        }*/
+        /*        if ($grafik == null) {
+          $grafik = new Grafik();
+          $grafik->setDay($day);
+          $grafik->setMonth($month);
+          $grafik->setYear($year);
+          $grafik->setDepartmentPeople($departmentPeople);
+          $grafik->setDepartment($department);
+          $grafik->setReplacementType(DepartmentPeopleMonthInfoRepository::REPLACEMENT_TYPE_REPLACEMENT);
+          $grafik->setDepartmentId($idDepartment);
+          $grafik->setDepartmentPeopleId($idCoworker);
+          $grafik->setDepartmentPeopleReplacement($departmentPeopleReplacement);
+          $grafik->setDepartmentPeopleReplacementId($departmentPeopleReplacement);
+          } */
         if ($grafik != null) {
-        $grafik->setDepartment($department);
-        $grafik->setDepartmentId($idDepartment);
-        $grafik->setTotal($total);
-        $grafik->setTotalDay($totalDay);
-        $grafik->setTotalEvening($totalEvening);
-        $grafik->setTotalNight($totalNight);
-        $grafik->setTotalNotOfficially($totalNotOfficially);
-        $grafik->setTotalDayNotOfficially($totalDayNotOfficially);
-        $grafik->setTotalEveningNotOfficially($totalEveningNotOfficially);
-        $grafik->setTotalNightNotOfficially($totalNightNotOfficially);
+            $grafik->setDepartment($department);
+            $grafik->setDepartmentId($idDepartment);
+            $grafik->setTotal($total);
+            $grafik->setTotalDay($totalDay);
+            $grafik->setTotalEvening($totalEvening);
+            $grafik->setTotalNight($totalNight);
+            $grafik->setTotalNotOfficially($totalNotOfficially);
+            $grafik->setTotalDayNotOfficially($totalDayNotOfficially);
+            $grafik->setTotalEveningNotOfficially($totalEveningNotOfficially);
+            $grafik->setTotalNightNotOfficially($totalNightNotOfficially);
 
-        //$em = $this->container->get('doctrine')->getManager();
-        $this->em->persist($grafik);
+            //$em = $this->container->get('doctrine')->getManager();
+            $this->em->persist($grafik);
         }
-
     }
-
-
     /**
      * @param int|array $months
      * @param int       $year
      */
-    public function scheduleFix($months, $year)
+    public function scheduleFix ($months, $year)
     {
         $this->em->getConnection()->getConfiguration()->setSQLLogger(null);
 
@@ -279,27 +273,27 @@ class ScheduleUpdateService
         $grafikTimeRepository = $this->container->get('doctrine')
             ->getRepository('ListsGrafikBundle:GrafikTime');
 
-        $grafikTimes = $grafikTimeRepository->findBy(array(
+        $grafikTimes = $grafikTimeRepository
+            ->findBy(array (
                 'month' => $months,
                 'year' => $year
-            )
-        );
+            ));
 
         $counter = count($grafikTimes);
-        echo $counter.' all'."\n";
-        echo 'starting re-count...'."\n";
+        echo $counter . ' all' . "\n";
+        echo 'starting re-count...' . "\n";
 
         $currentMonth = 0;
         $currentDay = 0;
         $counterFlush = 0;
-        $deletedIds = array();
+        $deletedIds = array ();
         /** @var $grafikTime \Lists\GrafikBundle\Entity\GrafikTime   */
         foreach ($grafikTimes as $grafikJoke) {
             if (!in_array($grafikJoke->getId(), $deletedIds)) {
                 $grafikTime = $this->container->get('doctrine')
-                    ->getRepository('ListsGrafikBundle:GrafikTime')->find($grafikJoke->getId());
+                        ->getRepository('ListsGrafikBundle:GrafikTime')->find($grafikJoke->getId());
 
-                echo $counter.' id:'.$grafikJoke->getId()." delete:".$counterFlush."\n";
+                echo $counter . ' id:' . $grafikJoke->getId() . " delete:" . $counterFlush . "\n";
                 $counter--;
                 if (!$grafikTime) {
                     echo 'ERROR ERROR';
@@ -321,27 +315,27 @@ class ScheduleUpdateService
 
                 $subtimes = $this->container->get('doctrine')
                     ->getRepository('ListsGrafikBundle:GrafikTime')
-                ->getSubtimeIds(
-                    $year,
-                    $month,
-                    $day,
-                    $idDepartment,
-                    $idCoworker,
-                    $fromTime,
-                    $toTime,
-                    $grafikTime->getId(),
-                    $departmentPeopleReplacementId
-                );
+                    ->getSubtimeIds(
+                        $year,
+                        $month,
+                        $day,
+                        $idDepartment,
+                        $idCoworker,
+                        $fromTime,
+                        $toTime,
+                        $grafikTime->getId(),
+                        $departmentPeopleReplacementId
+                    );
                 $currentId = $grafikTime->getId();
                 if (count($subtimes)) {
                     foreach ($subtimes as $subtime) {
-                        if ($currentId>$subtime['id']) {
+                        if ($currentId > $subtime['id']) {
                             $this->em->remove($grafikTimeRepository->find($subtime['id']));
                             $deletedIds[] = $subtime['id'];
-                        } /*else {
-                            $this->em->remove($grafikTimeRepository->find($currentId));
-                            $deletedIds[] = $currentId;
-                        }*/
+                        } /* else {
+                          $this->em->remove($grafikTimeRepository->find($currentId));
+                          $deletedIds[] = $currentId;
+                          } */
                         $counterFlush++;
                     }
                 }
@@ -351,12 +345,8 @@ class ScheduleUpdateService
                     $this->em->clear();
                     $counterFlush = 0;
                 }
-
             }
-
         }
         $this->em->flush();
     }
-
-
 }

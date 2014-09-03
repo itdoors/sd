@@ -408,11 +408,11 @@ class AjaxController extends BaseFilterController
             $text = $object->getShortname().' ('.$object->getName(). ')';
             $id = $object->getId();
             $result[] =  array(
-            'id' => $id,
-            'value' => $id,
-            'name' => $text,
-            'text' => $text
-        );
+                'id' => $id,
+                'value' => $id,
+                'name' => $text,
+                'text' => $text
+            );
         }
 
         return new Response(json_encode($result));
@@ -2170,8 +2170,8 @@ class AjaxController extends BaseFilterController
         $data = $form->getData();
 
         if (!$data->getId()) {
-           $data->setCreateDateTime(new \DateTime());
-           $data->setUser($user);
+            $data->setCreateDateTime(new \DateTime());
+            $data->setUser($user);
         }
 
         $formData = $request->request->get($form->getName());
@@ -2905,9 +2905,18 @@ class AjaxController extends BaseFilterController
             ->find($organizationId);
 
         /** @var Lookup $lookup */
-        $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:Lookup')->findOneBy(array('lukey' => 'manager_organization'));
+        $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:Lookup')
+            ->findOneBy(array('lukey' => 'manager_organization'));
 
-        if ((!$organizationUser->getRole() || $organizationUser->getRole()->getId() != $lookup->getId()) && $this->getUser()->hasRole('ROLE_SALESADMIN')) {
+        if (
+                (
+                    !$organizationUser->getRole()
+                    ||
+                    $organizationUser->getRole()->getId() != $lookup->getId()
+                )
+                &&
+                $this->getUser()->hasRole('ROLE_SALESADMIN')
+            ) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($organizationUser);
             $em->flush();
@@ -3351,8 +3360,8 @@ class AjaxController extends BaseFilterController
                     )
                 )
             );
-        $cron = $this->container->get('it_doors_cron.service');
-        $cron->addSendEmails();
+            $cron = $this->container->get('it_doors_cron.service');
+            $cron->addSendEmails();
         } catch (\ErrorException $e) {
             $return = array('msg' => $translator->trans('Wrong input data'));
 
@@ -4366,7 +4375,14 @@ class AjaxController extends BaseFilterController
             if (!is_dir($directory)) {
                 mkdir($directory.'old', 0777);
             }
-            if (is_file($directory.$dogovor->getFilepath()) && rename($directory.$dogovor->getFilepath(), $directory.'old/'.$dogovorId.'_'.$dogovor->getFilepath())) {
+            if (
+                    is_file($directory.$dogovor->getFilepath())
+                    &&
+                    rename(
+                        $directory.$dogovor->getFilepath(),
+                        $directory.'old/'.$dogovorId.'_'.$dogovor->getFilepath()
+                    )
+                ) {
 
             } else {
                 $result['error'] = 'File move error';
@@ -4412,7 +4428,14 @@ class AjaxController extends BaseFilterController
             if (!is_dir($directory.'/old')) {
                 mkdir($directory.'/old', 0777, true);
             }
-            if (is_file($directory.$document->getFilepath()) && rename($directory.$document->getFilepath(), $directory.'old/'.$documentId.'_'.$document->getFilepath())) {
+            if (
+                    is_file($directory.$document->getFilepath())
+                    &&
+                    rename(
+                        $directory.$document->getFilepath(),
+                        $directory.'old/'.$documentId.'_'.$document->getFilepath()
+                    )
+                ) {
 
             } else {
                 $result['error'] = 'File move error';
@@ -4451,35 +4474,31 @@ class AjaxController extends BaseFilterController
                 'organizationId' => $organizationId,
                 'userId' => $user->getId(),
             ));
-        //if ($organizationUser) {
         $documentType = $em
             ->getRepository('ListsDocumentBundle:DocumentsType')
             ->find(1);
 
         $document = new Documents();
-            $document->setUser($user);
-            $document->setUserId($user->getId());
-            $document->setDatetime(null);
-            $document->setCreateDateTime(new \DateTime());
-            $document->setDocumentsType($documentType);
-            //$document->setStartdatetime(new \DateTime());
-            $file = $request->files->get('dogovor');
-            if ($file) {
-                $document->setFile($file);
-                $document->upload();
-            } else {
-                $result['error'] = 'File not found';
-            }
-            $em->persist($document);
-            $em->flush();
-            $documentOrganization = new DocumentsOrganization();
-            $documentOrganization->setOrganization($organization);
-            $documentOrganization->setDocuments($document);
-            $em->persist($documentOrganization);
-            $em->flush();
-/*        } else {
-            $result['error'] = 'No access';
-        }*/
+        $document->setUser($user);
+        $document->setUserId($user->getId());
+        $document->setDatetime(null);
+        $document->setCreateDateTime(new \DateTime());
+        $document->setDocumentsType($documentType);
+        //$document->setStartdatetime(new \DateTime());
+        $file = $request->files->get('dogovor');
+        if ($file) {
+            $document->setFile($file);
+            $document->upload();
+        } else {
+            $result['error'] = 'File not found';
+        }
+        $em->persist($document);
+        $em->flush();
+        $documentOrganization = new DocumentsOrganization();
+        $documentOrganization->setOrganization($organization);
+        $documentOrganization->setDocuments($document);
+        $em->persist($documentOrganization);
+        $em->flush();
 
         return new Response(json_encode($result));
     }
@@ -4511,7 +4530,14 @@ class AjaxController extends BaseFilterController
             if (!is_dir($directory)) {
                 mkdir($directory.'old', 0777);
             }
-            if (is_file($directory.$dopDogovor->getFilepath()) && rename($directory.$dopDogovor->getFilepath(), $directory.'old/'.$dopDogovorId.'_'.$dopDogovor->getFilepath())) {
+            if (
+                    is_file($directory.$dopDogovor->getFilepath())
+                    &&
+                    rename(
+                        $directory.$dopDogovor->getFilepath(),
+                        $directory.'old/'.$dopDogovorId.'_'.$dopDogovor->getFilepath()
+                    )
+                ) {
 
             } else {
                 $result['error'] = 'File move error';

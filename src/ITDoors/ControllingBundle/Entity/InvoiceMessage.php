@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class InvoiceMessage
 {
+
     /**
      * @var integer
      */
@@ -54,17 +55,15 @@ class InvoiceMessage
      */
     private $contact;
 
-
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set invoiceId
      *
@@ -72,23 +71,21 @@ class InvoiceMessage
      * 
      * @return InvoiceMessage
      */
-    public function setInvoiceId($invoiceId)
+    public function setInvoiceId ($invoiceId)
     {
         $this->invoiceId = $invoiceId;
 
         return $this;
     }
-
     /**
      * Get invoiceId
      *
      * @return integer 
      */
-    public function getInvoiceId()
+    public function getInvoiceId ()
     {
         return $this->invoiceId;
     }
-
     /**
      * Set userId
      *
@@ -96,23 +93,21 @@ class InvoiceMessage
      * 
      * @return InvoiceMessage
      */
-    public function setUserId($userId)
+    public function setUserId ($userId)
     {
         $this->userId = $userId;
 
         return $this;
     }
-
     /**
      * Get userId
      *
      * @return integer 
      */
-    public function getUserId()
+    public function getUserId ()
     {
         return $this->userId;
     }
-
     /**
      * Set contactId
      *
@@ -120,23 +115,21 @@ class InvoiceMessage
      * 
      * @return InvoiceMessage
      */
-    public function setContactId($contactId)
+    public function setContactId ($contactId)
     {
         $this->contactId = $contactId;
 
         return $this;
     }
-
     /**
      * Get contactId
      *
      * @return integer 
      */
-    public function getContactId()
+    public function getContactId ()
     {
         return $this->contactId;
     }
-
     /**
      * Set note
      *
@@ -144,23 +137,21 @@ class InvoiceMessage
      * 
      * @return InvoiceMessage
      */
-    public function setNote($note)
+    public function setNote ($note)
     {
         $this->note = $note;
 
         return $this;
     }
-
     /**
      * Get note
      *
      * @return string 
      */
-    public function getNote()
+    public function getNote ()
     {
         return $this->note;
     }
-
     /**
      * Set createdate
      *
@@ -168,23 +159,21 @@ class InvoiceMessage
      * 
      * @return InvoiceMessage
      */
-    public function setCreatedate($createdate)
+    public function setCreatedate ($createdate)
     {
         $this->createdate = $createdate;
 
         return $this;
     }
-
     /**
      * Get createdate
      *
      * @return \DateTime 
      */
-    public function getCreatedate()
+    public function getCreatedate ()
     {
         return $this->createdate;
     }
-
     /**
      * Set invoice
      *
@@ -192,23 +181,21 @@ class InvoiceMessage
      * 
      * @return InvoiceMessage
      */
-    public function setInvoice(\ITDoors\ControllingBundle\Entity\Invoice $invoice = null)
+    public function setInvoice (\ITDoors\ControllingBundle\Entity\Invoice $invoice = null)
     {
         $this->invoice = $invoice;
 
         return $this;
     }
-
     /**
      * Get invoice
      *
      * @return \ITDoors\ControllingBundle\Entity\Invoice 
      */
-    public function getInvoice()
+    public function getInvoice ()
     {
         return $this->invoice;
     }
-
     /**
      * Set user
      *
@@ -216,23 +203,21 @@ class InvoiceMessage
      * 
      * @return InvoiceMessage
      */
-    public function setUser(\SD\UserBundle\Entity\User $user = null)
+    public function setUser (\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
 
         return $this;
     }
-
     /**
      * Get user
      *
      * @return \SD\UserBundle\Entity\User 
      */
-    public function getUser()
+    public function getUser ()
     {
         return $this->user;
     }
-
     /**
      * Set contact
      *
@@ -240,19 +225,18 @@ class InvoiceMessage
      * 
      * @return InvoiceMessage
      */
-    public function setContact(\Lists\ContactBundle\Entity\ModelContact $contact = null)
+    public function setContact (\Lists\ContactBundle\Entity\ModelContact $contact = null)
     {
         $this->contact = $contact;
 
         return $this;
     }
-
     /**
      * Get contact
      *
      * @return \Lists\ContactBundle\Entity\ModelContact 
      */
-    public function getContact()
+    public function getContact ()
     {
         return $this->contact;
     }

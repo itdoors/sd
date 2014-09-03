@@ -26,7 +26,7 @@
             {% for item in pagination %}
                 <tr {% if loop.index is odd %}class="color"{% endif %}>
                     <td>
-                        {% if item.creatorId == app.user.id or is_granted('ROLE_DOGOVORADMIN') %}
+                        {% if item.managerId == app.user.id or is_granted('ROLE_DOGOVORADMIN') %}
                         <a
                             href="{{ path('lists_' ~ baseRoutePrefix ~ '_show', { id: item.organizationId }) }}">
                             {{ item.organizationId|e }}
@@ -36,7 +36,16 @@
                         {% endif %}
                     </td>
                     <td>{{ item.ownershipShortname|e }}</td>
-                    <td>{{ item.organizationName|e }}</td>
+                    <td>
+                        {% if item.managerId == app.user.id or is_granted('ROLE_DOGOVORADMIN') %}
+                        <a
+                            href="{{ path('lists_' ~ baseRoutePrefix ~ '_show', { id: item.organizationId }) }}">
+                            {{ item.organizationName|e }}
+                        </a>
+                        {% else %}
+                            {{ item.organizationName|e }}
+                        {% endif %}
+                    </td>
                     <td>{{ item.organizationShortname|e }}</td>
                     <td>{{ item.edrpou|e }}</td>
                     <td>{{ item.cityName|e }}</td>

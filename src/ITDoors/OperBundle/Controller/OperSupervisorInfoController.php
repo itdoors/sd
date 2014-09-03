@@ -13,11 +13,10 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class OperSupervisorInfoController extends OperCoworkerInfoController
 {
-
     /**
      * @return mixed
      */
-    public function exportExcelCoworkerAction()
+    public function exportExcelCoworkerAction ()
     {
         $filterNamespace = $this->container->getParameter($this->getNamespace());
         $filters = $this->getFilters($filterNamespace);
@@ -52,9 +51,16 @@ class OperSupervisorInfoController extends OperCoworkerInfoController
 
 
         foreach ($coworkers as $key => $coworker) {
-            $infoSalary = $this->getSumsCoworker($year.'-'.$month, $coworker['idCoworker'], $coworker['replacementId'], $coworker['idDepartment']);
-            $officiallAcrual = $infoSalary['accrual']['officially']['plus'] - $infoSalary['accrual']['officially']['minus'];
-            $notOfficiallAcrual = $infoSalary['accrual']['notOfficially']['plus'] - $infoSalary['accrual']['notOfficially']['minus'];
+            $infoSalary = $this->getSumsCoworker(
+                $year . '-' . $month,
+                $coworker['idCoworker'],
+                $coworker['replacementId'],
+                $coworker['idDepartment']
+            );
+            $officiallAcrual =
+                $infoSalary['accrual']['officially']['plus'] - $infoSalary['accrual']['officially']['minus'];
+            $notOfficiallAcrual =
+                $infoSalary['accrual']['notOfficially']['plus'] - $infoSalary['accrual']['notOfficially']['minus'];
             unset($infoSalary['accrual']);
             $infoSalary['officiallAcrual'] = $officiallAcrual;
             $infoSalary['notOfficiallAcrual'] = $notOfficiallAcrual;
@@ -81,8 +87,6 @@ class OperSupervisorInfoController extends OperCoworkerInfoController
 
         return $response;
     }
-
-
     /**
      * @param string  $date
      * @param integer $idCoworker
@@ -91,7 +95,7 @@ class OperSupervisorInfoController extends OperCoworkerInfoController
      *
      * @return array
      */
-    private function getSumsCoworker($date, $idCoworker, $idReplacement, $idDepartment)
+    private function getSumsCoworker ($date, $idCoworker, $idReplacement, $idDepartment)
     {
         list($year, $month) = explode('-', $date);
 
@@ -103,13 +107,12 @@ class OperSupervisorInfoController extends OperCoworkerInfoController
         $monthInfoRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
 
-        $monthInfo = $monthInfoRepository->findOneBy(array(
+        $monthInfo = $monthInfoRepository->findOneBy(array (
             'departmentPeople' => $idCoworker,
             'year' => $year,
             'month' => $month,
             'replacementType' => 'r',
             'departmentPeopleReplacement' => $idReplacement
-
         ));
 
         $idMonthInfo = $monthInfo->getId();
@@ -152,12 +155,12 @@ class OperSupervisorInfoController extends OperCoworkerInfoController
             ->getRepository('ListsDepartmentBundle:PlannedAccrual');
 
         $plannedAccrual = $plannedAccrualRepository->findOneBy(
-            array(
+            array (
                 'departmentPeople' => $idCoworker,
                 'code' => 'UU',
                 'isActive' => true
             ),
-            array(
+            array (
                 'period' => 'desc'
             )
         );
@@ -175,8 +178,8 @@ class OperSupervisorInfoController extends OperCoworkerInfoController
         }
 
         $totalSalary = $salaryOfficially + $salaryNotOfficially;
-        $canEdit  =  $this->checkIfCanEdit();
-        $return = array(
+        $canEdit = $this->checkIfCanEdit();
+        $return = array (
             'sumOfficiallyHours' => $officiallyTotal,
             'sumNotOfficiallyHours' => $notOfficiallyTotal,
             'plannedAccrual' => $plannedAccrualValue,
@@ -187,14 +190,13 @@ class OperSupervisorInfoController extends OperCoworkerInfoController
             'realSalary' => $realSalary,
             'salaryNotOfficially' => $salaryNotOfficially,
             'totalSalary' => $totalSalary,
-            'idMonthInfo'=> $idMonthInfo,
+            'idMonthInfo' => $idMonthInfo,
             'canEdit' => $canEdit,
             'idDepartment' => $idDepartment
         );
 
         return $return;
     }
-
     /**
      * @param integer $month
      * @param integer $year
@@ -202,20 +204,19 @@ class OperSupervisorInfoController extends OperCoworkerInfoController
      *
      * @return mixed[]
      */
-    private function getTotalOnceOnlyAccruals($month, $year, $idCoworker)
+    private function getTotalOnceOnlyAccruals ($month, $year, $idCoworker)
     {
 
         /** @var  $monthInfoRepository \Lists\DepartmentBundle\Entity\departmentPeopleMonthInfoRepository */
         $monthInfoRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeopleMonthInfo');
 
-        $monthInfo = $monthInfoRepository->findOneBy(array(
+        $monthInfo = $monthInfoRepository->findOneBy(array (
             'departmentPeople' => $idCoworker,
             'year' => $year,
             'month' => $month,
             'replacementType' => 'r',
             //'departmentPeopleReplacement' => 0
-
         ));
 
 
@@ -223,8 +224,8 @@ class OperSupervisorInfoController extends OperCoworkerInfoController
             ->getRepository('ListsDepartmentBundle:OnceOnlyAccrual');
 
 
-        $accrual['officially'] = array();
-        $accrual['notOfficially'] = array();
+        $accrual['officially'] = array ();
+        $accrual['notOfficially'] = array ();
 
         $accrual['officially']['plus'] = 0;
         $accrual['notOfficially']['plus'] = 0;
@@ -236,8 +237,8 @@ class OperSupervisorInfoController extends OperCoworkerInfoController
 
             return $accrual;
         }
-        $onceOnlyAccruals = $onceOnlyAccrualRepository->findBy(array(
-            'departmentPeopleMonthInfo'=>$monthInfo->getId()
+        $onceOnlyAccruals = $onceOnlyAccrualRepository->findBy(array (
+            'departmentPeopleMonthInfo' => $monthInfo->getId()
         ));
 
         foreach ($onceOnlyAccruals as $onceOnlyAccrual) {
@@ -255,15 +256,13 @@ class OperSupervisorInfoController extends OperCoworkerInfoController
 
         return $accrual;
     }
-
     /**
      * @return bool
      */
-    private function checkIfCanEdit()
+    private function checkIfCanEdit ()
     {
         $canEdit = !$this->getUser()->hasRole('ROLE_SUPERVISOR');
 
         return $canEdit;
     }
-
 }

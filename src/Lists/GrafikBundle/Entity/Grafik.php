@@ -2,6 +2,8 @@
 
 namespace Lists\GrafikBundle\Entity;
 
+use Lists\DepartmentBundle\Entity\DepartmentPeople;
+
 /**
  * Grafik
  */
@@ -78,12 +80,12 @@ class Grafik
     private $department;
 
     /**
-     * @var \Lists\DepartmentBundle\Entity\DepartmentPeople
+     * @var DepartmentPeople
      */
     private $departmentPeople;
 
     /**
-     * @var \Lists\DepartmentBundle\Entity\DepartmentPeople
+     * @var DepartmentPeople
      */
     private $departmentPeopleReplacement;
 
@@ -426,11 +428,11 @@ class Grafik
     /**
      * Set departmentPeople
      *
-     * @param \Lists\DepartmentBundle\Entity\DepartmentPeople $departmentPeople
+     * @param DepartmentPeople $departmentPeople
      *
      * @return Grafik
      */
-    public function setDepartmentPeople(\Lists\DepartmentBundle\Entity\DepartmentPeople $departmentPeople = null)
+    public function setDepartmentPeople(DepartmentPeople $departmentPeople = null)
     {
         $this->departmentPeople = $departmentPeople;
 
@@ -454,12 +456,8 @@ class Grafik
      *
      * @return Grafik
      */
-    public function setDepartmentPeopleReplacement(
-        \Lists\DepartmentBundle\Entity\DepartmentPeople $departmentPeopleReplacement = null
-    // @codingStandardsIgnoreStart
-    )
+    public function setDepartmentPeopleReplacement(DepartmentPeople $departmentPeopleReplacement = null)
     {
-    // @codingStandardsIgnoreEnd
         $this->departmentPeopleReplacement = $departmentPeopleReplacement;
 
         return $this;
@@ -726,7 +724,7 @@ class Grafik
      *
      * @return Grafik
      */
-    public function setDepartmentPeopleCooperation(\Lists\DepartmentBundle\Entity\DepartmentPeople $departmentPeopleCooperation = null)
+    public function setDepartmentPeopleCooperation(DepartmentPeople $departmentPeopleCooperation = null)
     {
         $this->departmentPeopleCooperation = $departmentPeopleCooperation;
 
