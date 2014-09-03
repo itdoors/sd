@@ -146,7 +146,8 @@ class ContractorController extends SalesController
             $organization->setLookup($lookup);
 
             $em->persist($organization);
-            $lookupM = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')->findOneBy(array('lukey' => 'manager_organization'));
+            $lookupM = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')
+                ->findOneBy(array('lukey' => 'manager_organization'));
             $manager = new OrganizationUser();
             $manager->setOrganization($organization);
             $manager->setUser($user);

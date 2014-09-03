@@ -21,21 +21,20 @@ class HistoryService
      *
      * @param Container $container
      */
-    public function __construct(Container $container)
+    public function __construct (Container $container)
     {
         $this->container = $container;
     }
-
     /**
-    * add
-    * 
-    * @param mixes $data
-    * 
-    * @return boolean
-    */
-    public function add($data)
+     * add
+     * 
+     * @param mixes $data
+     * 
+     * @return boolean
+     */
+    public function add ($data)
     {
-        $em= $this->container->get('doctrine')->getManager();
+        $em = $this->container->get('doctrine')->getManager();
         $db = $em->getConnection();
         if ($this->container->get('security.context')->getToken()) {
             $user = $this->container->get('security.context')->getToken()->getUser();
@@ -48,18 +47,19 @@ class HistoryService
                 history
                     (model_name, model_id, field_name, old_value, value, createdatetime, more, action, params, user_id)
                 VALUES 
-                    (:modelName, :modelId, :fieldName, :oldValue, :value, '".(date('Y-m-d H:i:s'))."', :more, :action, :params, ".$user->getId().")";
+                    (:modelName, :modelId, :fieldName, :oldValue, :value, '"
+            . (date('Y-m-d H:i:s')) . "', :more, :action, :params, " . $user->getId() . ")";
         $stmt = $db->prepare($query);
-        $params = array(
-                ':modelId' => $data['modelId'],
-                ':modelName' => $data['modelName'],
-                ':action' => $data['action'],
-                ':fieldName' => null,
-                ':oldValue' => null,
-                ':value' => null,
-                ':params' => null,
-                ':more' => null
-            );
+        $params = array (
+            ':modelId' => $data['modelId'],
+            ':modelName' => $data['modelName'],
+            ':action' => $data['action'],
+            ':fieldName' => null,
+            ':oldValue' => null,
+            ':value' => null,
+            ':params' => null,
+            ':more' => null
+        );
         if (key_exists('params', $data)) {
             $params[':params'] = $data['params'];
         }
@@ -78,16 +78,16 @@ class HistoryService
         $stmt->execute($params);
     }
     /**
-    * add
-    * 
-    * @param string  $modelName
-    * @param integer $modelId
-    * @param string  $filterNamespace
-    * @param array   $filters
-    * 
-    * @return boolean
-    */
-    public function getHistory($modelName, $modelId, $filterNamespace, $filters)
+     * add
+     * 
+     * @param string  $modelName
+     * @param integer $modelId
+     * @param string  $filterNamespace
+     * @param array   $filters
+     * 
+     * @return boolean
+     */
+    public function getHistory ($modelName, $modelId, $filterNamespace, $filters)
     {
         $em = $this->container->get('doctrine')->getManager();
         $historyes = $em->getRepository('ITDoorsHistoryBundle:History')

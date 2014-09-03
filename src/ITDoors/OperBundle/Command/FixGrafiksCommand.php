@@ -11,21 +11,19 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * ParserInvoiceCommand
+ * FixGrafiksCommand
  */
-class updateGrafiksCommand extends ContainerAwareCommand
+class FixGrafiksCommand extends ContainerAwareCommand
 {
-
     /**
      * configure
      */
-    protected function configure()
+    protected function configure ()
     {
         $this
-            ->setName('it:doors:update_grafik')
-            ->setDescription('Updates grafik due to new schedule');
+            ->setName('it:doors:fix_grafik')
+            ->setDescription('Fix grafik');
     }
-
     /**
      * execute
      *
@@ -34,16 +32,16 @@ class updateGrafiksCommand extends ContainerAwareCommand
      *
      * @return string
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute (InputInterface $input, OutputInterface $output)
     {
 
         $parser = $this->getContainer()->get('schedule_update.service');
 
-        $res = $parser->scheduleUpdate(8, 2014);
+        $res = $parser->scheduleFix(8, 2014);
 
         $output->writeln($res);
 
-        $res = $parser->scheduleUpdate(7, 2014);
+        $res = $parser->scheduleFix(7, 2014);
 
         $output->writeln($res);
     }

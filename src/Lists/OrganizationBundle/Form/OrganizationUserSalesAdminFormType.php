@@ -10,7 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 /**
  * Class OrganizationUserSalesAdminFormType
  */
-class organizationUserSalesAdminFormType extends AbstractType
+class OrganizationUserSalesAdminFormType extends AbstractType
 {
     /**
      * @var Container $container
