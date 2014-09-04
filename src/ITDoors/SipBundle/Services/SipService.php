@@ -3,6 +3,8 @@ namespace ITDoors\SipBundle\Services;
 
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Console\Input\InputInterface;
+use Lists\HandlingBundle\Entity\HandlingMessage;
+use ITDoors\ControllingBundle\Entity\InvoiceMessage;
 
 
 /**
@@ -65,6 +67,12 @@ class SipService
     }
     public function saveHandlingMessage(Call $call, $modelId)
     {
+        /** Em
+         */
+        $em = $this->container->get('doctrine')->getManager();
+        $type = $em->getRepository();
+        
+        $handlingMessage = new HandlingMessage();
         
     }
     public function saveInvoiceMessage()
