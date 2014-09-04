@@ -274,7 +274,7 @@ class SalesController extends BaseController
             $phpExcelObject->getActiveSheet()
                 ->setCellValueByColumnAndRow(++$col, $str, $organization['organizationShortname'])
                 ->setCellValueByColumnAndRow(++$col, $str, $organization['edrpou'])
-                ->setCellValueByColumnAndRow(++$col, $str, $organization['viewName'])
+                ->setCellValueByColumnAndRow(++$col, $str, $organization['viewNames'])
                 ->setCellValueByColumnAndRow(++$col, $str, $organization['cityName'])
                 ->setCellValueByColumnAndRow(++$col, $str, $organization['regionName'])
                 ->setCellValueByColumnAndRow(++$col, $str, $organization['scopeName'])
