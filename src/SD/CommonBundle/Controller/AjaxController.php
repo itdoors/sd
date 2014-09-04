@@ -1608,20 +1608,31 @@ class AjaxController extends BaseFilterController
         $organization = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization')
             ->find($pk);
-
-        if (!$value) {
-            $methodGet = 'get' . ucfirst($name);
-            $type = gettype($organization->$methodGet());
-
-            if (in_array($type, array('integer'))) {
-                $value = null;
+        if ($name == 'organizationsign') {
+            $methodSet = 'add' . ucfirst($name);
+            $lookups = $organization->getOrganizationsigns();
+            foreach ($lookups as $lookup) {
+                $organization->removeOrganizationsign($lookup);
             }
+            foreach ($value as $val) {
+                $lookups = $this->getDoctrine()
+                ->getRepository('ListsLookupBundle:Lookup')->find($val);
+                $organization->$methodSet($lookups);
+            }
+        } else {
+
+            if (!$value) {
+                $methodGet = 'get' . ucfirst($name);
+                $type = gettype($organization->$methodGet());
+
+                if (in_array($type, array('integer'))) {
+                    $value = null;
+                }
+            }
+
+            $organization->$methodSet($value);
         }
-
-        $organization->$methodSet($value);
-
         $validator = $this->get('validator');
-
         /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
         $errors = $validator->validate($organization, array('edit'));
 

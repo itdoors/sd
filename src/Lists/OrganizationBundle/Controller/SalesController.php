@@ -146,11 +146,14 @@ class SalesController extends BaseController
                         'id' => $organization->getParentId()
             )));
         }
-
+        $lookups = $this->getDoctrine()
+                ->getRepository('ListsLookupBundle:Lookup')->getGroupOrganizationQuery()->getQuery()->getResult();
+        
         $managerForm = $this->createForm('organizationUserForm');
 
         return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':show.html.twig', array (
                 'organization' => $organization,
+                'lookups' => $lookups,
                 'filterFormName' => $this->filterFormName,
                 'baseTemplate' => $this->baseTemplate,
                 'baseRoutePrefix' => $this->baseRoutePrefix,

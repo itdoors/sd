@@ -255,6 +255,18 @@ class OrganizationRepository extends EntityRepository
                         WHERE ou.organizationId = o.id
                     ), ','
                 ) as fullNames"
+            )
+            ->addSelect(
+                "array_to_string(
+                    ARRAY(
+                        SELECT
+                            os.name
+                        FROM
+                            ListsOrganizationBundle:Organization o2
+                        LEFT JOIN o2.organizationsigns os
+                        WHERE o2.id = o.id
+                    ), ','
+                ) as viewNames"
             );
     }
     /**
