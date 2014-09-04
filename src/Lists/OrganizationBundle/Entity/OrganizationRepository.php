@@ -68,9 +68,9 @@ class OrganizationRepository extends EntityRepository
         $this->processCount($sqlCount);
 
         $this->processBaseQuery($sql);
-        $sql->where('o.organizationSignId != 61 or o.organizationSignId is NULL');
+        //$sql->where('o.organizationSignId != 61 or o.organizationSignId is NULL');
         $this->processBaseQuery($sqlCount);
-        $sqlCount->where('o.organizationSignId != 61 or o.organizationSignId is NULL');
+        //$sqlCount->where('o.organizationSignId != 61 or o.organizationSignId is NULL');
 
         if (sizeof($userIds)) {
             $this->processUserQuery($sql, $userIds);
