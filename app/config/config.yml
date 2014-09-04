@@ -27,6 +27,11 @@ parameters:
     email.from: "noreply@griffin.ua"
     name.from: "ImpelNET"
     listener.history.table: %listener.history.tables%
+    call.ip: "192.168.4.4"
+    call.port: "81"
+    call.directory: "m"
+    call.extension: "mp3"
+    call.url: "http://%call.ip%:%call.port%/%call.directory%/"
 
 framework:
     #esi:             ~
