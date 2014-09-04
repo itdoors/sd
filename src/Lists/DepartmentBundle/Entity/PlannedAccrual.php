@@ -225,4 +225,15 @@ class PlannedAccrual
     {
         return $this->isActive;
     }
+
+    /**
+     * toString method
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+
+        return $this->value;
+    }
 }

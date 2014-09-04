@@ -58,7 +58,7 @@
                     if (data.success == 1) {
                         update_modal();
                     } else {
-                        //$('#copy_etalon_finished').show('blind', {}, 500);
+
                     }
                 }
             })
@@ -122,9 +122,8 @@
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
-                        if (insertComment()) {
-                            update_modal();
-                        }
+                        insertComment()
+                        update_modal();
                     } else {
                         alert('{% trans %}Somebody already made request{% endtrans %}');
                         update_modal();

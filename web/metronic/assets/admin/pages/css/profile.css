@@ -156,7 +156,7 @@ Profile Page
 
 /*profile sales summary*/
 .sale-summary ul {
-  margin-top: -12px;
+  margin-top: -10px;
 }
 
 .sale-summary li {
@@ -170,6 +170,7 @@ Profile Page
 }
 
 .sale-summary li .sale-info {
+  margin-top: 4px;
   float: left;
   color: #646464;
   font-size: 14px;
@@ -177,6 +178,7 @@ Profile Page
 }
 
 .sale-summary li .sale-num {
+  text-align: right;
   float: right;
   color: #169ef4;
   font-size: 20px;
