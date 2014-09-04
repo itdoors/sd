@@ -1,7 +1,7 @@
 Authorization: Авторизация
 Login to your account: Вход в Ваш аккаунт
 Enter valid username and password.: Введите правильное имя пользователя и пароль.
-Username: Имя пользователя
+Username: Логин пользователя
 Password: Пароль
 Remember me: Запомнить меня
 Forgot your password ?: Забыли пароль?
@@ -87,3 +87,19 @@ Enter issues: Куда обращатся
 Birthday: День рождения
 Enter date hire: Дата приема на работу
 Add manager: Добавить менеджера
+
+Select status fired: Выберите статус увольнения
+Select status blocked: Выберите статус блокировки
+Companustructure: Стуктура компании
+
+Enter last name: Введите фамилию
+Enter first name: Введите имя
+Enter middle name: Введите отчество
+Enter username: Введите логин
+Enter mobilephone: Введите мобильный
+Enter phonePersonal: Введите персональный телефон
+Enter phoneInside: Введите внутрений телефон
+Enter birthPlace: Введите место рождения
+Enter birthday: Введите день рождения
+Enter Hire Date: Введите дату приема на работу
+Enter termination date: Введите дату увольнения

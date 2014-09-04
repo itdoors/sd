@@ -2,17 +2,45 @@
 {% if isAdmin %}
 <script>
     $(document).ready(function(){
-        $('#username, #email').editable({
+        $('#isFired').editable({
+            url: '{{ path('sd_common_ajax_user_save') }}',
+            source: [
+                {value: 1, text: '{% trans %}Fired{% endtrans %}'},
+                {value: 0, text: '{% trans %}No fired{% endtrans %}'}
+            ],
+            select2: {
+                placeholder: '{% trans %}Select status fired{% endtrans %}',
+                minimumInputLength: 0,
+                width: 250
+            }
+        });
+        $('#isBlocked').editable({
+            url: '{{ path('sd_common_ajax_user_save') }}',
+            source: [
+                {value: 1, text: '{% trans %}Blocked{% endtrans %}'},
+                {value: 0, text: '{% trans %}Active{% endtrans %}'}
+            ],
+            select2: {
+                placeholder: '{% trans %}Select status blocked{% endtrans %}',
+                minimumInputLength: 0,
+                width: 250
+            }
+        });
+        
+        $('#username, #email, #position, #lastName, #firstName, #middleName').editable({
             url: '{{ path('sd_common_ajax_user_save') }}',
             emptytext: '{% trans %}Enter value{% endtrans %}'
         });
-        $('#mobilephone, #phonePersonal, #phoneInside, #education, #birthPlace').editable({
+        $('#mobilephone, #phonePersonal, #phoneInside, #education, #issues, #birthPlace').editable({
             url: '{{ path('sd_common_ajax_stuff_save') }}',
             emptytext: '{% trans %}Enter value{% endtrans %}'
         });
         
         $('.sd-stuff-editable').editable({
             url: '{{ path('sd_common_ajax_stuff_save') }}'
+        });
+        $('.sd-user-editable').editable({
+            url: '{{ path('sd_common_ajax_user_save') }}'
         });
         
         $('#companystructureId').editable({
@@ -28,6 +56,28 @@
         });
         
         $('.sd-stuff-date').live('mouseover', function(e){
+
+            e.preventDefault();
+
+            $(this).on('shown', function(e, editable) {
+
+                var input = editable.input.$input;
+
+                input.attr('readonly', 'readonly');
+
+                input.datepicker({
+                    rtl: Metronic.isRTL(),
+                    autoclose: true,
+                    format: "dd.mm.yyyy",
+                    pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+                    language: 'ru',
+                    startView: 'decade',
+                    //endDate: new Date(),
+                    weekStart: 1
+                });
+            });
+        });
+        $('.sd-user-date').live('mouseover', function(e){
 
             e.preventDefault();
 
@@ -145,6 +195,47 @@
                                                     {% endif %}
                                                 </td>
                                             </tr>
+                                            {% if isAdmin %}
+                                            <tr>                                                                                                
+                                                <td class="hidden-xs">
+                                                    {% trans %}Position{% endtrans %} 
+                                                </td>
+                                                <td>
+                                                        <a href="#" id="position" data-type="text" data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Enter position{% endtrans %}" data-original-title="{% trans %}Enter position{% endtrans %}">
+                                                            {{ item.position }}
+                                                        </a>
+                                                </td>
+                                            </tr>
+                                            <tr>                                                                                                
+                                                <td class="hidden-xs">
+                                                    {% trans %}Last name{% endtrans %} 
+                                                </td>
+                                                <td>
+                                                        <a href="#" id="lastName" data-type="text" data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Enter last name{% endtrans %}" data-original-title="{% trans %}Enter last name{% endtrans %}">
+                                                            {{ item.lastName }}
+                                                        </a>
+                                                </td>
+                                            </tr><tr>                                                                                                
+                                                <td class="hidden-xs">
+                                                    {% trans %}First Name{% endtrans %} 
+                                                </td>
+                                                <td>
+                                                        <a href="#" id="firstName" data-type="text" data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Enter first name{% endtrans %}" data-original-title="{% trans %}Enter first name{% endtrans %}">
+                                                            {{ item.firstName }}
+                                                        </a>
+                                                </td>
+                                            </tr><tr>                                                                                                
+                                                <td class="hidden-xs">
+                                                    {% trans %}Middle Name{% endtrans %} 
+                                                </td>
+                                                <td>
+                                                        <a href="#" id="middleName" data-type="text" data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Enter middle name{% endtrans %}" data-original-title="{% trans %}Enter middle name{% endtrans %}">
+                                                            {{ item.middleName }}
+                                                        </a>
+                                                </td>
+                                            </tr>
+                                            
+                                             {% endif %}
                                             <tr>                                                                                                
                                                 <td class="hidden-xs">
                                                     {% trans %}Username{% endtrans %} 
@@ -159,6 +250,32 @@
                                                     {% endif %}
                                                 </td>
                                             </tr>
+                                            <tr>  
+                                                <td class="hidden-xs">
+                                                    {% trans %}Blocked{% endtrans %} 
+                                                </td>
+                                                <td>
+                                                    {% if isAdmin %}
+                                                        <a href="#" 
+                                                            id="isBlocked" 
+                                                            class="status-edit" 
+                                                            data-type="select" 
+                                                            data-pk="{{ item.id }}"
+                                                            data-value="{{ item.isBlocked }}" 
+                                                            data-placement="right" 
+                                                            data-original-title="{% trans %}Select status blocked{% endtrans %}">
+                                                             {% if item.isBlocked ==  true %}
+                                                                 {% trans %}Blocked{% endtrans %}
+                                                             {% else%}
+                                                                 {% trans %}Active{% endtrans %}
+                                                             {% endif%}
+                                                         </a>
+                                                    {% else %}
+                                                        {{ item.isBlocked  ? 'Blocked'| trans() : 'Active'| trans() }}
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            
                                             <tr>                                                                                                
                                                 <td class="hidden-xs">
                                                     {% trans %}Email{% endtrans %} 
@@ -229,6 +346,56 @@
                                                     {% endif %}
                                                 </td>
                                             </tr>
+                                             {% if isAdmin %}
+                                             <tr>                                                                                                
+                                                <td class="hidden-xs">
+                                                    {% trans %}Birthday{% endtrans %} 
+                                                </td>
+                                                <td>
+                                                     <a href="#"
+                                                        class="sd-user-date sd-user-editable {% if item.birthday is empty %} editable-empty {% endif %}"
+                                                        data-name="birthday"
+                                                        data-type="text"
+                                                        data-pk="{{ item.id }}"
+                                                             {% if item.birthday %}
+                                                                 data-value="{{ item.birthday|date("d.m.Y") }}"
+                                                             {% endif %}
+                                                        data-original-title="{% trans %}Enter birthday{% endtrans %}"
+                                                             >
+                                                         {% if item.birthday %}
+                                                             {{ item.birthday|date("d.m.Y") }}
+                                                         {% else %}
+                                                             {% trans from 'messages' %}Enter value{% endtrans %}
+                                                         {% endif %}
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            {% endif %}
+                                            <tr>  
+                                                <td class="hidden-xs">
+                                                    {% trans %}Education{% endtrans %} 
+                                                </td>
+                                                <td>
+                                                    {% if isAdmin %}
+                                                        <a href="#" id="education" data-type="textarea" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter education{% endtrans %}" data-original-title="{% trans %}Enter education{% endtrans %}">
+                                                            {{ item.education }}
+                                                        </a>
+                                                    {% else %}
+                                                        {{ item.education }}
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            {% if isAdmin %}
+                                            <tr>  
+                                                <td class="hidden-xs">
+                                                    {% trans %}Enter issues{% endtrans %} 
+                                                </td>
+                                                <td>
+                                                        <a href="#" id="issues" data-type="textarea" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter issues{% endtrans %}" data-original-title="{% trans %}Enter issues{% endtrans %}">
+                                                            {{ item.issues }}
+                                                        </a>
+                                                </td>
+                                            </tr>
                                             <tr>  
                                                 <td class="hidden-xs">
                                                     {% trans %}Hire Date{% endtrans %} 
@@ -243,7 +410,7 @@
                                                              {% if item.dateHire %}
                                                                  data-value="{{ item.dateHire|date("d.m.Y") }}"
                                                              {% endif %}
-                                                        data-original-title="{% trans %}Edit{% endtrans %}"
+                                                        data-original-title="{% trans %}Enter Hire Date{% endtrans %}"
                                                              >
                                                          {% if item.dateHire %}
                                                              {{ item.dateHire|date("d.m.Y") }}
@@ -271,7 +438,7 @@
                                                              {% if item.dateFire %}
                                                                  data-value="{{ item.dateFire|date("d.m.Y") }}"
                                                              {% endif %}
-                                                        data-original-title="{% trans %}Edit{% endtrans %}"
+                                                        data-original-title="{% trans %}Enter termination date{% endtrans %}"
                                                              >
                                                          {% if item.dateFire %}
                                                              {{ item.dateFire|date("d.m.Y") }}
@@ -286,18 +453,30 @@
                                             </tr>
                                             <tr>  
                                                 <td class="hidden-xs">
-                                                    {% trans %}Education{% endtrans %} 
+                                                    {% trans %}Fired{% endtrans %} 
                                                 </td>
                                                 <td>
                                                     {% if isAdmin %}
-                                                        <a href="#" id="education" data-type="textarea" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter education{% endtrans %}" data-original-title="{% trans %}Enter phoneInside{% endtrans %}">
-                                                            {{ item.education }}
-                                                        </a>
+                                                         <a href="#" 
+                                                            id="isFired" 
+                                                            class="status-edit" 
+                                                            data-type="select" 
+                                                            data-pk="{{ item.id }}"
+                                                            data-value="{{ item.isFired }}" 
+                                                            data-placement="right" 
+                                                            data-original-title="{% trans %}Select status fired{% endtrans %}">
+                                                             {% if item.isFired ==  true %}
+                                                                 {% trans %}Fired{% endtrans %}
+                                                             {% else%}
+                                                                 {% trans %}No fired{% endtrans %}
+                                                             {% endif%}
+                                                         </a>
                                                     {% else %}
-                                                        {{ item.education }}
+                                                        {{ item.isFired  ? 'Fired'|trans() : 'No fired'|trans() }}
                                                     {% endif %}
                                                 </td>
                                             </tr>
+                                            {% endif %}
                                             {% for contact in usercontactinfo %}
                                                 <tr>
                                                     <td>{{ contact.contactinfo.name }}:</td>

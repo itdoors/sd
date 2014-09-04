@@ -1663,6 +1663,10 @@ class AjaxController extends BaseFilterController
         $name = $this->get('request')->request->get('name');
         $value = $this->get('request')->request->get('value');
 
+        if (in_array($name, array('birthday'))) {
+            $value = new \DateTime($value);
+        }
+
         $methodSet = 'set' . ucfirst($name);
 
         $user = $this->getDoctrine()
