@@ -65,13 +65,13 @@ class UserNewStuffForm extends AbstractType
                 'mapped' => false,
                 'constraints' => new NotBlank()
             ))
-            ->add('description', 'textarea', array(
-                'mapped' => false,
-                'constraints' => new NotBlank()
+            ->add('position', 'text', array(
+                'mapped' => false
             ))
             ->add('education', 'textarea', array(
+                'constraints' => new NotBlank(),
                 'mapped' => false,
-                'constraints' => new NotBlank()
+                'required' => false
             ))
             ->add('issues', 'textarea', array(
                 'mapped' => false,

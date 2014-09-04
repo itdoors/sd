@@ -162,11 +162,11 @@
                             {{ form_errors(form.hiredate) }}
                         {% endif %}
                     </div>
-                    <div class="form-group col-md-4{% if form.description.vars.errors|length %} has-error{% endif %}">
-                        {{ form_label(form.description, 'Enter description', {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.description, {'attr' : {'class' : 'form-control', 'placeholder': "Enter description"}}) }}
-                        {% if form.description.vars.errors|length %}
-                            {{ form_errors(form.description) }}
+                    <div class="form-group col-md-4{% if form.position.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.position, 'Enter position', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.position, {'attr' : {'class' : 'form-control', 'placeholder': "Enter position"}}) }}
+                        {% if form.position.vars.errors|length %}
+                            {{ form_errors(form.position) }}
                         {% endif %}
                     </div>
                     <div class="form-group col-md-4{% if form.education.vars.errors|length %} has-error{% endif %}">
