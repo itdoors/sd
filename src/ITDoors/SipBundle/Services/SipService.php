@@ -4,6 +4,7 @@ namespace ITDoors\SipBundle\Services;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Console\Input\InputInterface;
 
+
 /**
  * Class AccessService
  */
@@ -37,14 +38,19 @@ class SipService
             ->setParameter(':phone', $input->getOption('receiverId'))
             ->getQuery()
             ->getResult();
-        if ($receiver && $receiver) {
+        if ($caller && $receiver) {
             $call = new Call();
             $call->setCaller($caller);
             $call->setDestuniqueId($input->getOption('destuniqueId'));
             $call->setDuration($input->getOption('answeredTime'));
             $call->setFileName($input->getOption('filename').'.mp3');
-            $call->setModelId('1');//$input->getOption('modelId');
-            $call->setModelName('sdf');//$input->getOption('modelName');
+            $method = 'save'.ucfirst($input->getOption('modelName')).'Message';
+            if (method_exists($this, $method)) {
+                $this->$method($call, $input->getOption('modelId'));
+            } else {
+                $call->setModelId($input->getOption('modelId'));
+                $call->setModelName($input->getOption('modelName'));
+            }
             $call->setPeerId($input->getOption('callerId'));
             $call->setPhone($input->getOption('receiverId'));
             $call->setProxyId($input->getOption('proxyId'));
@@ -57,7 +63,7 @@ class SipService
             echo "!!! User not found !!!\n";
         }
     }
-    public function saveHandlingMessage()
+    public function saveHandlingMessage(Call $call, $modelId)
     {
         
     }
