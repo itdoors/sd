@@ -23,6 +23,7 @@ parameters:
         - handling
         - dogovor
         - companystructure
+        - call
     sd.host: http://sd.griffin.ua
     # AMI CONFIG
     ami.host: sd.griffin.ua
