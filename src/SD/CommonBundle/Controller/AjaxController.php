@@ -2092,7 +2092,6 @@ class AjaxController extends BaseFilterController
             }
         }
 
-        $em = $this->getDoctrine()->getManager();
         $em->persist($handlingMessage);
         // $em->flush();
 

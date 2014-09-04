@@ -122,12 +122,13 @@ class Call
      * Set peerId
      *
      * @param integer $peerId
+     * 
      * @return Call
      */
     public function setPeerId($peerId)
     {
         $this->peerId = $peerId;
-    
+
         return $this;
     }
 
@@ -145,12 +146,13 @@ class Call
      * Set receiverId
      *
      * @param integer $receiverId
+     * 
      * @return Call
      */
     public function setReceiverId($receiverId)
     {
         $this->receiverId = $receiverId;
-    
+
         return $this;
     }
 
@@ -168,12 +170,13 @@ class Call
      * Set phone
      *
      * @param string $phone
+     * 
      * @return Call
      */
     public function setPhone($phone)
     {
         $this->phone = $phone;
-    
+
         return $this;
     }
 

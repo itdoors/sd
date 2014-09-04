@@ -44,6 +44,9 @@ class HistoryCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $sip = $this->getContainer()->get('it_doors_sip.service');
+        $sip->saveCall($input, $output);
+
         $uniqueId = $input->getOption('uniqueId');
         $filename = $input->getOption('filename');
         $callerId = $input->getOption('callerId');
@@ -55,9 +58,6 @@ class HistoryCommand extends ContainerAwareCommand
         $dialStatus = $input->getOption('dialStatus');
         $answeredTime = $input->getOption('answeredTime');
         
-        $sip = $this->getContainer()->get('it_doors_sip.service');
-        $sip->saveCall($input);
-
         $output->writeln("uniqueId = {$uniqueId}");
         $output->writeln("filename = {$filename}");
         $output->writeln("callerId = {$callerId}");
