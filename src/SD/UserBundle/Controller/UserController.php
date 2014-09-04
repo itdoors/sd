@@ -241,7 +241,7 @@ class UserController extends BaseController
      */
     public function newAction(Request $request)
     {
-        $sessionUser = $this->getUser();
+//        $sessionUser = $this->getUser();
 
         /* if (!$sessionUser->hasRole('ROLE_HRADMIN')) {
           return $this->redirect($this->generateUrl('sd_user_index'));

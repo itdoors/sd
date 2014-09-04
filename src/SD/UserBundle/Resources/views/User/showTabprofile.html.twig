@@ -377,9 +377,7 @@
                                                 </td>
                                                 <td>
                                                     {% if isAdmin %}
-                                                        <a href="#" id="education" data-type="textarea" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter education{% endtrans %}" data-original-title="{% trans %}Enter education{% endtrans %}">
-                                                            {{ item.education }}
-                                                        </a>
+                                                        <a href="#" id="education" data-type="textarea" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter education{% endtrans %}" data-original-title="{% trans %}Enter education{% endtrans %}">{{ item.education }}</a>
                                                     {% else %}
                                                         {{ item.education }}
                                                     {% endif %}
@@ -391,9 +389,7 @@
                                                     {% trans %}Enter issues{% endtrans %} 
                                                 </td>
                                                 <td>
-                                                        <a href="#" id="issues" data-type="textarea" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter issues{% endtrans %}" data-original-title="{% trans %}Enter issues{% endtrans %}">
-                                                            {{ item.issues }}
-                                                        </a>
+                                                    <a href="#" id="issues" data-type="textarea" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter issues{% endtrans %}" data-original-title="{% trans %}Enter issues{% endtrans %}">{{ item.issues }}</a>
                                                 </td>
                                             </tr>
                                             <tr>  
