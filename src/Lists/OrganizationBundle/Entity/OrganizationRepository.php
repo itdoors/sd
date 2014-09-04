@@ -385,6 +385,19 @@ class OrganizationRepository extends EntityRepository
                         $sql->andWhere('o.edrpou in (:edrpou)');
                         $sql->setParameter(':edrpou', explode(',', $value));
                         break;
+                    case 'organizationsigns':
+                        $value = explode(',', $value);
+                        $sql->andWhere('o.id in (
+                        SELECT
+                            o3.id
+                        FROM
+                            ListsOrganizationBundle:Organization o3
+                        LEFT JOIN o3.organizationsigns os1
+                        WHERE o3.id = o.id
+                        AND os1.id in (:organizationsigns)
+                    )');
+                        $sql->setParameter(':organizationsigns', $value);
+                        break;
                     /* case 'users':
                       if (isset($value[0]) && !$value[0]) {
                       break;

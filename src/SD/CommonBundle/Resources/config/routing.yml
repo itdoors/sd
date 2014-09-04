@@ -229,6 +229,10 @@ sd_common_ajax_organization_lookup:
     pattern:  /ajax/organization_lookup
     defaults: { _controller: SDCommonBundle:Ajax:organizationLookup }
 
+sd_common_ajax_organization_lookup_by_ids:
+    pattern:  /ajax/organization_lookup_by_ids
+    defaults: { _controller: SDCommonBundle:Ajax:organizationLookupByIds }
+
 sd_common_ajax_handling_status:
     pattern:  /ajax/handling_status
     defaults: { _controller: SDCommonBundle:Ajax:handlingStatus }

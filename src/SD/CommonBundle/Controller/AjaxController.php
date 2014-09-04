@@ -799,6 +799,34 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($result));
     }
+    /**
+     * Returns json organization object by requested id
+     *
+     * @return string
+     */
+    public function organizationLookupByIdsAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $lookupReposutory = $this->getDoctrine()
+            ->getRepository('ListsLookupBundle:Lookup');
+
+        $lookups = $lookupReposutory
+            ->createQueryBuilder('l')
+            ->where('lukey = "organization_sign"')
+            ->where("l.id in (:ids)")
+            ->setParameter(':ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($lookups as $lookup) {
+            $result[] = $this->serializeObject($lookup);
+        }
+
+        return new Response(json_encode($result));
+    }
 
     /**
      * Returns json organization list for contacts query

@@ -1071,12 +1071,13 @@ class Organization
      * Add organizationsigns
      *
      * @param \Lists\LookupBundle\Entity\Lookup $organizationsigns
+     * 
      * @return Organization
      */
     public function addOrganizationsign(\Lists\LookupBundle\Entity\Lookup $organizationsigns)
     {
         $this->organizationsigns[] = $organizationsigns;
-    
+
         return $this;
     }
 
