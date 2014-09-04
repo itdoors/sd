@@ -31,13 +31,13 @@
         {% endif %}
     {% endfor %}
         {% set taskEndDate = taskUserRole.task.taskEndDates[key] %}
-            <span>{{ taskEndDate.endDatetime|date('d.m.Y H:i') }}
-
+            <span>
                 {% if 'now'|date('U') > taskEndDate.endDatetime|date('U')  and
                 stage != 'closed' and stage != 'done' and stage != 'undone' %}
                     <i class="icon-bell" style="color: red" title="{% trans %}Overdue{% endtrans %}"></i>
 
                 {% endif %}
 
+                {{ taskEndDate.endDatetime|date('d.m.Y H:i') }}
             </span>
 {% endif %}

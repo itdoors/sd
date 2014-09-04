@@ -201,12 +201,25 @@
         }
 
         function update_content() {
-            var filter = $('#task_modal_info_holder').data('role');
-            var url = $('#more_info_input').data('url_task_table');
+
+            var spinner = $('#spinner');
+            spinner.removeClass('notDisplayed');
+
+            var filtersCheckboxes = $('.roleFilter:checked');
+            var filter = new Array();
+            var filterRole = new Array();
+
+            for (var i=0; i<filtersCheckboxes.length; i++) {
+                filterRole.push(filtersCheckboxes[i].value);
+            }
+            //alert(filter);
+            filter = {
+                'role': filterRole
+            }
+            var url = $('#more_info_input').data('url_task_ajax_table');
             var sendData = {
                 'filter': filter
             }
-            ITDoorsAjax.blockUI($('#tasks_list'));
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -214,17 +227,20 @@
                 success: function(data1) {
                     data = JSON.parse(data1);
                     if (data.success == 1) {
-                        ITDoorsAjax.unblockUI($('#tasks_list'));
-                        $('#tasks_list').html('').html(data.html);
+                        console.log(data.html);
+                        spinner.addClass('notDisplayed');
+                        $('#feeds_holder').html(data.html);
+                        //ITDoorsAjax.unblockUI($('#tasks_list'));
+                        //$('#tasks_list').html('').html(data.html);
                         //$('#form_modal_task_view').modal('show');
                     } else {
+                        alert('error');
                         //$('#copy_etalon_finished').show('blind', {}, 500);
                     }
 
                 }
 
             })
-
 
         }
 

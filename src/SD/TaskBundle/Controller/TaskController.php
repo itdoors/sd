@@ -69,11 +69,9 @@ class TaskController extends Controller
         ));
     }
     /**
-     * @param Request $request
-     *
      * @return Response
      */
-    public function taskTableDashboardAction (Request $request = null)
+    public function taskTableDashboardAction ()
     {
         $user = $this->getUser();
 
@@ -81,20 +79,18 @@ class TaskController extends Controller
             'user' => $user
         );
 
-        if ($request != null) {
-            $filter = $request->request->get('filter');
-            if ($filter != 'all' && $filter) {
-                $role = $this->getDoctrine()
-                    ->getRepository('SDTaskBundle:Role')
-                    ->findOneBy(array (
-                    'name' => $filter,
-                    'model' => 'task'
-                ));
-                $filterArray['role'] = $role;
-            }
-        }
+        $info = $this->getTasksInfoForTable($filterArray);
 
+        return $this->render('SDTaskBundle:Dashboard:tableTasks.html.twig', $info);
+    }
 
+    /**
+     * @param array $filterArray
+     *
+     * @return array
+     */
+    private function getTasksInfoForTable($filterArray)
+    {
         $tasksUserRole = $this->getDoctrine()
             ->getRepository('SDTaskBundle:TaskUserRole')
             ->findBy($filterArray, array (
@@ -102,21 +98,55 @@ class TaskController extends Controller
                 'id' => 'DESC'
             ));
 
-        if ($filter) {
-            $return = array ();
-            $return['html'] =
-                $this->renderView('SDTaskBundle:Task:tableTasks.html.twig', array (
-                    'tasksUserRole' => $tasksUserRole
-                ));
-            $return['success'] = 1;
+        $allTaskRoles = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:Role')
+            ->findBy(array (
+                'model' => 'task'
+            ));
 
-            return new Response(json_encode($return));
+        return array(
+            'tasksUserRole' => $tasksUserRole,
+            'allTaskRoles' => $allTaskRoles
+        );
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function renderDashboardTaskRowsAjaxAction(Request $request)
+    {
+        $filter = $request->request->get('filter');
+        $user = $this->getUser();
+
+        $filterArray = array (
+            'user' => $user
+        );
+
+        if ($filter) {
+            if (count($filter['role'])) {
+                foreach ($filter['role'] as $filterRole) {
+                    $role = $this->getDoctrine()
+                        ->getRepository('SDTaskBundle:Role')
+                        ->findOneBy(array (
+                            'name' => $filterRole,
+                            'model' => 'task'
+                        ));
+                    $filterArray['role'][] = $role;
+                }
+            }
         }
 
-        return $this->render('SDTaskBundle:Dashboard:tableTasks.html.twig', array (
-            'tasksUserRole' => $tasksUserRole
-        ));
+        $info = $this->getTasksInfoForTable($filterArray);
+
+        $return = array();
+        $return['html'] = $this->renderView('SDTaskBundle:Dashboard:tableTasksRows.html.twig', $info);
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
     }
+
     /**
      * Renders modal inner html for one task
      *
@@ -492,7 +522,7 @@ class TaskController extends Controller
      *
      * @return Response
      */
-    public function answerDateAction (Request $request)
+    public function answerDateAction(Request $request)
     {
         $id = $request->request->get('id');
         $answer = $request->request->get('answer');
