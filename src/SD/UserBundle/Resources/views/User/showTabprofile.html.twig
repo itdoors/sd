@@ -392,6 +392,7 @@
                                                     <a href="#" id="issues" data-type="textarea" data-pk="{{ item.stuffId }}" data-placement="right" data-placeholder="{% trans %}Enter issues{% endtrans %}" data-original-title="{% trans %}Enter issues{% endtrans %}">{{ item.issues }}</a>
                                                 </td>
                                             </tr>
+                                            {% endif %}
                                             <tr>  
                                                 <td class="hidden-xs">
                                                     {% trans %}Hire Date{% endtrans %} 
@@ -472,7 +473,7 @@
                                                     {% endif %}
                                                 </td>
                                             </tr>
-                                            {% endif %}
+                                            
                                             {% for contact in usercontactinfo %}
                                                 <tr>
                                                     <td>{{ contact.contactinfo.name }}:</td>
