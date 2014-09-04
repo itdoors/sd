@@ -62,6 +62,21 @@
                 allowClear: true
             }
         });
+         $('#organizationsign').editable({
+            url: '{{ path('sd_common_ajax_organization_save') }}',
+            source: [{% for key, lookup in lookups %}
+                {{key > 0 ? ',' : '' }}{value:'{{lookup.id}}', text:'{{lookup.name}}'}
+                {% endfor %}
+            ],
+            emptytext: '{% trans %}Enter value{% endtrans %}',
+            select2: {
+                placeholder: '{% trans %}Select view{% endtrans %}',
+                minimumInputLength: 0,
+                width: 250,
+                allowClear: true,
+                multiple: true
+            }
+        });
     });
 
 </script>
@@ -102,6 +117,17 @@
                     </a>
                 </td>
                 <td><span class="text-muted">{% trans %}for example{% endtrans %}: Impel Griffin {% trans %}(limit 50 chars){% endtrans %}</span></td>
+            </tr>
+            <tr>
+                <td>{% trans %}View{% endtrans %}</td>
+                <td>
+                    <a href="#" id="organizationsign" data-type="select2" data-pk="{{ organization.id }}" data-value="
+                       {% for key, lookup in organization.organizationsigns %}
+                            {{key > 0 ? ',' : '' }}{{lookup.id}}
+                       {% endfor %}"
+                       data-original-title="{% trans %}View{% endtrans %}">{{ organization.organizationsigns | join(', ') }}</a>
+                </td>
+                <td><span class="text-muted">{% trans %}Select view{% endtrans %}</span></td>
             </tr>
             <tr>
                 <td>{% trans %}Organization type{% endtrans %}</td>

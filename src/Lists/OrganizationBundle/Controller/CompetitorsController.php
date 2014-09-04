@@ -98,6 +98,7 @@ class CompetitorsController extends SalesController
             $lookup = $em->getRepository('ListsLookupBundle:Lookup')
                 ->find(61);
             $organization->setLookup($lookup);
+            $organization->addOrganizationsign($lookup);
 
             $em->persist($organization);
 

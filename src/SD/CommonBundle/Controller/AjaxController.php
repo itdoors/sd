@@ -799,6 +799,34 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($result));
     }
+    /**
+     * Returns json organization object by requested id
+     *
+     * @return string
+     */
+    public function organizationLookupByIdsAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $lookupReposutory = $this->getDoctrine()
+            ->getRepository('ListsLookupBundle:Lookup');
+
+        $lookups = $lookupReposutory
+            ->createQueryBuilder('l')
+            ->where('lukey = "organization_sign"')
+            ->where("l.id in (:ids)")
+            ->setParameter(':ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($lookups as $lookup) {
+            $result[] = $this->serializeObject($lookup);
+        }
+
+        return new Response(json_encode($result));
+    }
 
     /**
      * Returns json organization list for contacts query
@@ -1608,20 +1636,31 @@ class AjaxController extends BaseFilterController
         $organization = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization')
             ->find($pk);
-
-        if (!$value) {
-            $methodGet = 'get' . ucfirst($name);
-            $type = gettype($organization->$methodGet());
-
-            if (in_array($type, array('integer'))) {
-                $value = null;
+        if ($name == 'organizationsign') {
+            $methodSet = 'add' . ucfirst($name);
+            $lookups = $organization->getOrganizationsigns();
+            foreach ($lookups as $lookup) {
+                $organization->removeOrganizationsign($lookup);
             }
+            foreach ($value as $val) {
+                $lookups = $this->getDoctrine()
+                ->getRepository('ListsLookupBundle:Lookup')->find($val);
+                $organization->$methodSet($lookups);
+            }
+        } else {
+
+            if (!$value) {
+                $methodGet = 'get' . ucfirst($name);
+                $type = gettype($organization->$methodGet());
+
+                if (in_array($type, array('integer'))) {
+                    $value = null;
+                }
+            }
+
+            $organization->$methodSet($value);
         }
-
-        $organization->$methodSet($value);
-
         $validator = $this->get('validator');
-
         /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
         $errors = $validator->validate($organization, array('edit'));
 
@@ -1633,6 +1672,133 @@ class AjaxController extends BaseFilterController
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($organization);
+
+        try {
+            $em->flush();
+        } catch (\ErrorException $e) {
+            $return = array('msg' => $translator->trans('Wrong input data'));
+
+            return new Response(json_encode($return));
+        }
+
+        $return = array('success' => 1);
+
+        return new Response(json_encode($return));
+    }
+
+    /**
+     * Saves object to db
+     *
+     * @return mixed[]
+     */
+    public function userSaveAction()
+    {
+        if (!$this->getUser()->hasRole('ROLE_HRADMIN')) {
+            return false;
+        }
+        $translator = $this->get('translator');
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        if (in_array($name, array('birthday'))) {
+            $value = new \DateTime($value);
+        }
+
+        $methodSet = 'set' . ucfirst($name);
+
+        $user = $this->getDoctrine()
+            ->getRepository('SDUserBundle:User')
+            ->find($pk);
+
+        if (!$value) {
+            $methodGet = 'get' . ucfirst($name);
+            $type = gettype($user->$methodGet());
+
+            if (in_array($type, array('integer'))) {
+                $value = null;
+            }
+        }
+
+        $user->$methodSet($value);
+
+        $validator = $this->get('validator');
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
+        $errors = $validator->validate($user, array('edit'));
+
+        if (sizeof($errors)) {
+            $return = $this->getFirstError($errors);
+
+            return new Response($return, 406);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+
+        try {
+            $em->flush();
+        } catch (\ErrorException $e) {
+            $return = array('msg' => $translator->trans('Wrong input data'));
+
+            return new Response(json_encode($return));
+        }
+
+        $return = array('success' => 1);
+
+        return new Response(json_encode($return));
+    }
+    /**
+     * Saves object to db
+     *
+     * @return mixed[]
+     */
+    public function stuffSaveAction()
+    {
+        if (!$this->getUser()->hasRole('ROLE_HRADMIN')) {
+            return false;
+        }
+        $translator = $this->get('translator');
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        $methodSet = 'set' . ucfirst($name);
+
+        if (in_array($name, array('dateHire', 'dateFire'))) {
+            $value = new \DateTime($value);
+        }
+
+        $user = $this->getDoctrine()
+            ->getRepository('SDUserBundle:Stuff')
+            ->find($pk);
+
+        if (!$value) {
+            $methodGet = 'get' . ucfirst($name);
+            $type = gettype($user->$methodGet());
+
+            if (in_array($type, array('integer'))) {
+                $value = null;
+            }
+        }
+
+        $user->$methodSet($value);
+
+        $validator = $this->get('validator');
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
+        $errors = $validator->validate($user, array('edit'));
+
+        if (sizeof($errors)) {
+            $return = $this->getFirstError($errors);
+
+            return new Response($return, 406);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
 
         try {
             $em->flush();

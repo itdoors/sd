@@ -21,6 +21,7 @@ class LookupRepository extends EntityRepository
     const KEY__DOGOVOR = 'dogovor';
     const KEY__ORGANIZATION_SIGN_COMPETITOR = 'organization_sign_competitor';
     const GROUP__MANAGER = 'manager_role';
+    const GROUP__ORGANIZATION = 'organization_sign';
 
     /**
      * Returns choices for scope
@@ -52,6 +53,15 @@ class LookupRepository extends EntityRepository
     public function getOnlyScopeQuery()
     {
         return $this->getLookupByLukeyQuery(self::KEY__SCOPE);
+    }
+    /**
+     * Returns choices for scope
+     *
+     * @return Query
+     */
+    public function getGroupOrganizationQuery()
+    {
+        return $this->getLookupByGroupQuery(self::GROUP__ORGANIZATION);
     }
 
     /**
