@@ -53,7 +53,7 @@
                 placeholder: '{% trans %}Enter Organization Site{% endtrans %}',
                 minimumInputLength: 0,
                 width: 250,
-                multiple: true
+                allowClear: true
             }
         });
         $('#ownershipId').editable({
@@ -173,7 +173,7 @@
         <tr>
             <td>{% trans %}City{% endtrans %}</td>
             <td>
-                <a href="#" id="cityId" data-type="select2" data-pk="{{ organization.id }}" data-value="BS" data-original-title="{% trans %}Select city{% endtrans %}">
+                <a href="#" id="cityId" data-type="select2" data-pk="{{ organization.id }}" data-value="" data-original-title="{% trans %}Select city{% endtrans %}">
                     {{ organization.city }}
                 </a>
             </td>
