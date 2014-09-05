@@ -2956,11 +2956,12 @@ class AjaxController extends BaseFilterController
                     /** @var InvoiceCompanystructure $invoiceC */
                     $invoiceC = $em
                         ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
-                        ->findOneBy(array(
+                        ->findBy(array(
                             'invoiceId' => $invoiceCS->getId(),
                             'companystructureId' => $object->getCompanystructureId()
                             ));
-                    $em->remove($invoiceC);
+                    $em->remove($invoiceC[0]);
+                    
                 }
             }
         }

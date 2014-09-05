@@ -453,15 +453,23 @@ class InvoiceService
             ->findBy(array ('dogovorId' => $invoice->getDogovorId()));
 
         foreach ($companystructs as $company) {
+            $invoiceCompanystructures = $em->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
+                ->findBy(array (
+                    'invoiceId' => $invoice->getId(),
+                    'companystructureId' => $company->getId(),
+                ));
+            if (!$invoiceCompanystructures) {
+                $invoicecompany = new InvoiceCompanystructure();
+                $invoicecompany->setInvoice($invoice);
+                $invoicecompany->setCompanystructure($company->getCompanyStructures());
 
-            $invoicecompany = new InvoiceCompanystructure();
-            $invoicecompany->setInvoice($invoice);
-            $invoicecompany->setCompanystructure($company->getCompanyStructures());
-
-            $em->persist($invoicecompany);
-            //$em->flush();
+                $em->persist($invoicecompany);
+            } elseif ($invoiceCompanystructures > 1) {
+                foreach ($invoiceCompanystructures as $invoiceCompanystructure) {
+                    $em->remove($invoiceCompanystructure);
+                }
+            } 
         }
-//        unset($companystructs);
     }
     /**
      * addCronError
