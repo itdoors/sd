@@ -5,6 +5,7 @@
         $(document).ready(function(){
             ITDoorsSip.initIO('{{ app.user.peerId }}', 'model_contact', '');
 
+             var uniqueId = ITDoorsSip.getUniqueId();
 
             callbackHangup = function(uniqueId) {
                 alert('Call hangup callback ' + uniqueId);

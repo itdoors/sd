@@ -1,4 +1,13 @@
 {% trans_default_domain 'ListsHandlingBundle' %}
+{{ call_botton({
+    'selector' : '.call-btn',
+    'params' : {
+        'modelName' : 'handling',
+        'modelId' : handling.0.id,
+        'formName' : 'handlingMessageCallForm'
+    },
+}) }}
+        
 <div class="tab-pane" id="tab_2">
     <div class="col-md-12">
         <h3>{% trans %}Contacts{% endtrans %}</h3>

@@ -36,7 +36,7 @@ var ITDoorsSip = (function() {
     ITDoorsSip.prototype.init = function(options)
     {
         this.params = $.extend(defaults, options);
-    }
+    };
 
     ITDoorsSip.prototype.initIO = function(peerId, modelName, modelId)
     {
@@ -71,7 +71,7 @@ var ITDoorsSip = (function() {
                 }
             });
         }
-    }
+    };
 
     ITDoorsSip.prototype.getUniqueId = function()
     {
@@ -84,7 +84,7 @@ var ITDoorsSip = (function() {
         }
 
         return window['ITDoorsSip'].uniqueId;
-    }
+    };
 
     ITDoorsSip.prototype.initAudioTag = function()
     {
@@ -118,31 +118,31 @@ var ITDoorsSip = (function() {
 
         this.ringtone = document.getElementById('ringtone');
         this.ringbacktone = document.getElementById('ringbacktone');
-    }
+    };
 
     ITDoorsSip.prototype.startRingTone = function()
     {
         try { this.ringtone.play(); }
         catch (e) { }
-    }
+    };
 
     ITDoorsSip.prototype.stopRingTone = function()
     {
         try { this.ringtone.pause(); }
         catch (e) { }
-    }
+    };
 
     ITDoorsSip.prototype.startRingbackTone = function()
     {
         try { this.ringbacktone.play(); }
         catch (e) { }
-    }
+    };
 
     ITDoorsSip.prototype.stopRingbackTone = function()
     {
         try { this.ringbacktone.pause(); }
         catch (e) { }
-    }
+    };
 
     ITDoorsSip.prototype.onEventFired = function(e)
     {
@@ -188,7 +188,7 @@ var ITDoorsSip = (function() {
                 //stopRingTone();
                 break;
         }
-    }
+    };
 
     ITDoorsSip.prototype.onSipEventSession = function(e) {
 
@@ -223,7 +223,7 @@ var ITDoorsSip = (function() {
                 break;
             }
         }
-    }
+    };
 
     ITDoorsSip.prototype.initSIP = function(peerId, peerPassword, phone, callbackHangup)
     {
@@ -280,7 +280,7 @@ var ITDoorsSip = (function() {
                 }
             });
         });
-    }
+    };
 
     return new ITDoorsSip();
 })();
