@@ -53,6 +53,7 @@ ITDoors\SipBundle\Entity\Call:
             type: string
             length: 255
             column: status
+            nullable: true
         modelName:
             type: string
             length: 255

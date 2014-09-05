@@ -297,7 +297,7 @@ class SalesController extends BaseController
 
             $usersFromOurSide['message' . $message->getId()] = $usersFromOurSideTemp;
             
-            if ($message->getType()->getId() === '1') {
+            if ($message->getType()->getId() === 1) {
                 $call = $this->getDoctrine()
                     ->getRepository('ITDoorsSipBundle:Call')
                     ->findOneBy(array('modelName' => 'handling_message' ,'modelId' => $message->getId()));
@@ -313,7 +313,7 @@ class SalesController extends BaseController
                 'baseRoutePrefix' => $this->baseRoutePrefix,
                 'usersFromTheirSide' => $usersFromTheirSide,
                 'usersFromOurSide' => $usersFromOurSide,
-                'call' => $calls
+                'calls' => $calls
         ));
     }
     /**
