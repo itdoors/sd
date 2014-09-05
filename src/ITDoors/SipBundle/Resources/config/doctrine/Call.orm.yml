@@ -39,6 +39,7 @@ ITDoors\SipBundle\Entity\Call:
             type: string
             length: 255
             column: destunique_id
+            nullable: true
         datetime:
             type: datetime
         duration:
