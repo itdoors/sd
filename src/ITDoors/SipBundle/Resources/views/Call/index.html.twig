@@ -3,12 +3,12 @@
     {{ parent() }}
     <script type="text/javascript">
         $(document).ready(function(){
-            ITDoorsSip.initIO('{{ app.user.peerId }}', 'model_contact', '');
+            ITDoorsSip.initIO('{{ app.user.peerId }}', {{ params.modelName }}, {{ params.modelId }});
 
              var uniqueId = ITDoorsSip.getUniqueId();
 
             callbackHangup = function(uniqueId) {
-                alert('Call hangup callback ' + uniqueId);
+                alert('Call hangup callback ' + uniqueId+ ' phone={{ phone}}');
             };
 
             ITDoorsSip.initSIP('{{ app.user.peerId }}', '{{ app.user.peerPassword }}', '0936469394', callbackHangup);

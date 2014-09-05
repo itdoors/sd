@@ -45,8 +45,15 @@ class SipService
             ->getResult();
         $modelName = $input->getOption('modelName');
         if ($caller && $receiver) {
-            $call = new Call();
-            $call->setCaller($caller);
+            $call = $em->getRepository('ITDoorsSipBundle:Call')
+                ->findOneBy(array('uniqueId' => $input->getOption('uniqueId')));
+            if (!$call) {
+                $call = new Call();
+                $call->setCaller($caller);
+                $call->setUniqueId($input->getOption('uniqueId'));
+                $call->setReceiverId($receiver[0]->getId());
+                $call->setPhone($input->getOption('receiverId'));
+            }
             $call->setDestuniqueId($input->getOption('destuniqueId'));
             $call->setDuration($input->getOption('answeredTime'));
             $call->setFileName($input->getOption('filename'));
@@ -60,11 +67,8 @@ class SipService
                 $call->setModelName($modelName);
             }
             $call->setPeerId($input->getOption('callerId'));
-            $call->setPhone($input->getOption('receiverId'));
             $call->setProxyId($input->getOption('proxyId'));
-            $call->setReceiverId($receiver[0]->getId());
             $call->setStatus($input->getOption('dialStatus'));
-            $call->setUniqueId($input->getOption('uniqueId'));
             $call->setDatetime(new \DateTime());
             $em->persist($call);
             $em->flush();
@@ -92,7 +96,7 @@ class SipService
             $result['modelId'] = $handlingMessage->getId();
             $result['modelName'] = $em->getClassMetadata(get_class($handlingMessage))->getTableName();
         }
-        
+
         return $result;
     }
 }

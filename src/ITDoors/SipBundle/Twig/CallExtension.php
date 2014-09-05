@@ -62,12 +62,7 @@ class CallExtension extends \Twig_Extension
      * @param mixed[] $options
      * Includes array(
      *      selector,       $(selector)     class name or id
-     *      formType,       form type service alias
-     *      saveService = array('serviceName' => 'saveMethod')
-     *      successFunctions = array('targetId' => array('functionName1', 'functionName2'))
-     *      errorFunctions = array('targetId' => array('functionName1', 'functionName2'))
-     *      target          $(target)       selector where form will be generated
-     *      isModal         default: false  open form in modal window
+     *      params,         array('modelName' => 'model', 'modelId' => 0', 'formName' => null)
      * )
      * saveService          service alias $serviceName->$saveMethod(Form $form, Request $request)
      * successFunctions     function that triggers when filter form is valid
@@ -81,7 +76,7 @@ class CallExtension extends \Twig_Extension
         $namespace = 'call'.$options['params']['modelName'].$options['params']['modelId'];
 
         $session->set($namespace, array('call' => $options['params']));
-        
+
         return $this->environment->render("ITDoorsSipBundle:Botton:form.html.twig", array(
             'options' => $options
         ));

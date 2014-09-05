@@ -18,8 +18,16 @@ class CallController extends BaseFilterController
         $phone = $this->getRequest()->get('phone');
         $namespace = 'call'.  $this->getRequest()->get('model');
         $params = $this->getSessionValues($namespace, 'call');
+        $form = null;
+        if (key_exists('formName', $params)) {
+            $form = $this->createForm($params['formName'])->createView();
 
-        if (key_exists('formName', $params))
+            return $this->render('ITDoorsSipBundle:Call:index.html.twig', array(
+                'phone' => $phone,
+                'params' => $params,
+                'form' => $form
+            ));
+        }
 
         return $this->render('ITDoorsSipBundle:Call:index.html.twig', array(
             'phone' => $phone,
