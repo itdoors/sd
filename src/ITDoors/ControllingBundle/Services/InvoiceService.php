@@ -468,7 +468,7 @@ class InvoiceService
                 foreach ($invoiceCompanystructures as $invoiceCompanystructure) {
                     $em->remove($invoiceCompanystructure);
                 }
-            } 
+            }
         }
     }
     /**
