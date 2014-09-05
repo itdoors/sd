@@ -48,7 +48,7 @@ class CallExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'call_botton' => new \Twig_Function_Method(
+            'call_to_model_contact' => new \Twig_Function_Method(
                 $this,
                 'render',
                 array('is_safe' => array('html'))

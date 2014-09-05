@@ -28,6 +28,9 @@
                 </a>
                 <br />
             {% endif %}
+            {% if calls[item.id] is defined %}
+                {% trans %}Listen to the conversation{% endtrans %}: <audio src="{{ call_url ~ calls[item.id].fileName ~ '.' ~ call_extension}}" controls></audio>
+            {% endif %}
         </div>
     </div>
     {% endfor %}

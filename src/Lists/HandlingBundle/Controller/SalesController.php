@@ -279,6 +279,7 @@ class SalesController extends BaseController
 
         $usersFromTheirSide = array ();
         $usersFromOurSide = array ();
+        $calls = array ();
         foreach ($messages as $message) {
             $usersFromTheirSideTemp = $this->getDoctrine()
                 ->getRepository('ListsHandlingBundle:HandlingMessageModelContact')
@@ -295,6 +296,15 @@ class SalesController extends BaseController
             ));
 
             $usersFromOurSide['message' . $message->getId()] = $usersFromOurSideTemp;
+            
+            if ($message->getType()->getId() === '1') {
+                $call = $this->getDoctrine()
+                    ->getRepository('ITDoorsSipBundle:Call')
+                    ->findOneBy(array('modelName' => 'handling_message' ,'modelId' => $message->getId()));
+                if ($call) {
+                    $calls[$message->getId()] = $call;
+                }
+            }
         }
 
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':messagesList.html.twig', array (
@@ -303,6 +313,7 @@ class SalesController extends BaseController
                 'baseRoutePrefix' => $this->baseRoutePrefix,
                 'usersFromTheirSide' => $usersFromTheirSide,
                 'usersFromOurSide' => $usersFromOurSide,
+                'call' => $calls
         ));
     }
     /**

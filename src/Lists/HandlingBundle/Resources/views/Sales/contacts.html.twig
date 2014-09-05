@@ -1,10 +1,9 @@
 {% trans_default_domain 'ListsHandlingBundle' %}
-{{ call_botton({
+{{ call_to_model_contact({
     'selector' : '.call-btn',
     'params' : {
         'modelName' : 'handling',
-        'modelId' : handling.0.id,
-        'formName' : 'handlingMessageCallForm'
+        'modelId' : handling.0.id
     },
 }) }}
         

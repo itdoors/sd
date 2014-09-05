@@ -3,18 +3,18 @@
     {{ parent() }}
     <script type="text/javascript">
         $(document).ready(function(){
-            ITDoorsSip.initIO('{{ app.user.peerId }}', {{ params.modelName }}, {{ params.modelId }});
+            ITDoorsSip.initIO('{{ app.user.peerId }}', '{{ params.modelName }}', '{{ params.modelId }}');
 
-             var uniqueId = ITDoorsSip.getUniqueId();
+            /* var uniqueId = ITDoorsSip.getUniqueId();
 
             callbackHangup = function(uniqueId) {
-                alert('Call hangup callback ' + uniqueId+ ' phone={{ phone}}');
+              alert('Call hangup callback '+uniqueId);
             };
-
-            ITDoorsSip.initSIP('{{ app.user.peerId }}', '{{ app.user.peerPassword }}', '0936469394', callbackHangup);
+            */
+            ITDoorsSip.initSIP('{{ app.user.peerId }}', '{{ app.user.peerPassword }}', '{{ phone }}', null);
         });
     </script>
 {% endblock %}
-{% block body %}
-    <a href="#" class="hangup-btn"></a>
+{% block body %} 
+    <a href="#" class="hangup-btn"></a> 
 {% endblock %}

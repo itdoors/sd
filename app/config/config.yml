@@ -31,7 +31,6 @@ parameters:
     call.port: "81"
     call.directory: "m"
     call.extension: "mp3"
-    call.url: "http://%call.ip%:%call.port%/%call.directory%/"
 
 framework:
     #esi:             ~
@@ -81,6 +80,8 @@ twig:
         sip_host: %sip.host%
         sip_port_udp: %sip.port.udp%
         sip_port_ws: %sip.port.ws%
+        call_url: "http://%call.ip%:%call.port%/%call.directory%/"
+        call_extension: "%call.extension%"
 # Assetic Configuration
 assetic:
     debug:          %kernel.debug%
