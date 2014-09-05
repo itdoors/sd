@@ -1,0 +1,28 @@
+
+{% if taskUserRole.role == 'author' %}
+    {% set color = 'red' %}
+{% elseif taskUserRole.role == 'performer' %}
+    {% set color = 'blue' %}
+{% elseif taskUserRole.role == 'controller' %}
+    {% set color = 'yellow' %}
+{% endif %}
+<div class="todo-tasklist-item todo-tasklist-item-border-{{ color }} task-item">
+    <img class="todo-userpic pull-left" src="../../assets/admin/layout/img/avatar7.jpg" width="27px" height="27px">
+    <div class="todo-tasklist-item-title">
+        {{ taskUserRole.task.title }}
+    </div>
+    <div class="todo-tasklist-item-text">
+        {{ taskUserRole.task.description }}
+    </div>
+    <div class="todo-tasklist-controls pull-left">
+        <span class="todo-tasklist-date"><i class="fa fa-calendar"></i>
+            {{
+                include('SDTaskBundle:Task:taskEndDateLast.html.twig',
+                    {
+                        'taskUserRole' : taskUserRole
+                    }
+                )
+            }}
+        </span>
+    </div>
+</div>

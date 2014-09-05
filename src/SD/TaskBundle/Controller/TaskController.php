@@ -18,56 +18,51 @@ class TaskController extends Controller
      */
     public function indexAction ()
     {
-        return $this->render('SDTaskBundle:Task:index.html.twig');
-    }
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function taskTableAction (Request $request = null)
-    {
         $user = $this->getUser();
 
         $filterArray = array (
             'user' => $user
         );
 
-        if ($request != null) {
-            $filter = $request->request->get('filter');
-            if ($filter != 'all' && $filter) {
-                $role = $this->getDoctrine()
-                    ->getRepository('SDTaskBundle:Role')
-                    ->findOneBy(array (
-                    'name' => $filter,
-                    'model' => 'task'
-                ));
-                $filterArray['role'] = $role;
-            }
-        }
+        $info = $this->getTasksInfoForTable($filterArray);
 
+        return $this->render('SDTaskBundle:Task:index.html.twig', $info);
+    }
+
+    public function taskListAction() {
+        $user = $this->getUser();
+
+        $filterArray = array (
+            'user' => $user
+        );
+
+        $info = $this->getTasksInfoForTable($filterArray);
+
+        return $this->render('SDTaskBundle:Task:taskList.html.twig', $info);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function taskViewAction(Request $request) {
+        $id = $request->request->get('id');
 
         $tasksUserRole = $this->getDoctrine()
             ->getRepository('SDTaskBundle:TaskUserRole')
-            ->findBy($filterArray, array (
-                'isViewed' => 'ASC',
-                'id' => 'DESC'
-            ));
+            ->find($id);
 
-        if ($filter) {
-            $return = array ();
-            $return['html'] = $this->renderView('SDTaskBundle:Task:tableTasks.html.twig', array (
-                'tasksUserRole' => $tasksUserRole
-            ));
-            $return['success'] = 1;
+        $info = array();
+        $info['taskUserRole'] = $tasksUserRole;
 
-            return new Response(json_encode($return));
-        }
+        $return = array();
+        $return['html'] = $this->renderView('SDTaskBundle:Task:taskView.html.twig', $info);
+        $return['success'] = 1;
 
-        return $this->render('SDTaskBundle:Task:tableTasks.html.twig', array (
-            'tasksUserRole' => $tasksUserRole
-        ));
+        return new Response(json_encode($return));
     }
+
     /**
      * @return Response
      */
