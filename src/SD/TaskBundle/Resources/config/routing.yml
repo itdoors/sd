@@ -41,3 +41,11 @@ sd_task_add_comment:
 sd_task_page:
     path:     /tasks/task/{id}
     defaults: { _controller: SDTaskBundle:Task:showTaskPage}
+
+sd_task_view:
+    path:     /tasks/view/task
+    defaults: { _controller: SDTaskBundle:Task:taskView}
+
+sd_task_list:
+    path:     /tasks/list
+    defaults: { _controller: SDTaskBundle:Task:taskList}

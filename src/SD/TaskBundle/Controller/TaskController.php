@@ -29,16 +29,35 @@ class TaskController extends Controller
         return $this->render('SDTaskBundle:Task:index.html.twig', $info);
     }
 
-    public function taskListAction() {
+    public function taskListAction(Request $request) {
+        $filter = $request->request->get('filter');
         $user = $this->getUser();
 
         $filterArray = array (
             'user' => $user
         );
 
+        if ($filter) {
+            if (count($filter['role'])) {
+                foreach ($filter['role'] as $filterRole) {
+                    $role = $this->getDoctrine()
+                        ->getRepository('SDTaskBundle:Role')
+                        ->findOneBy(array (
+                            'name' => $filterRole,
+                            'model' => 'task'
+                        ));
+                    $filterArray['role'][] = $role;
+                }
+            }
+        }
+
         $info = $this->getTasksInfoForTable($filterArray);
 
-        return $this->render('SDTaskBundle:Task:taskList.html.twig', $info);
+        $return = array();
+        $return['html'] = $this->renderView('SDTaskBundle:Task:taskList.html.twig', $info);
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
     }
 
     /**
@@ -86,6 +105,15 @@ class TaskController extends Controller
      */
     private function getTasksInfoForTable($filterArray)
     {
+        if (!count($filterArray['role'])) {
+            $role = $this->getDoctrine()
+                ->getRepository('SDTaskBundle:Role')
+                ->findOneBy(array (
+                    'name' => 'performer',
+                    'model' => 'task'
+                ));
+            $filterArray['role'][] = $role;
+        }
         $tasksUserRole = $this->getDoctrine()
             ->getRepository('SDTaskBundle:TaskUserRole')
             ->findBy($filterArray, array (

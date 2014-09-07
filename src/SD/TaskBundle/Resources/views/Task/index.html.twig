@@ -39,13 +39,18 @@
 {% endblock %}
 
 {% block body %}
-
+    <style>
+        .notDisplayed{
+            display: none;
+        }
+    </style>
     <script>
         $(document).ready(function(){
             $('.task-item').die('click')
             $('.task-item').live('click', function(e){
-                var id = $('#task_modal_info_holder').data('id');
-                var url = $('#task_modal_info_holder').data('url_task_set_viewed');
+                var obj = this;
+                var id = $(obj).data('id');
+                var url = $('#more_info_input').data('url_get_task_view');
                 var sendData = {
                     'id': id
                 }
@@ -57,13 +62,70 @@
                         //alert(data1)
                         data = JSON.parse(data1);
                         if (data.success == 1) {
-                            update_modal();
+                            setTaskContent(data.html);
                         } else {
                             //$('#copy_etalon_finished').show('blind', {}, 500);
                         }
                     }
                 })
             })
+            $('#taskFilterButton').die('click');
+            $('#taskFilterButton').bind('click', function(e){
+                e.preventDefault();
+
+                var spinner = $('#spinner');
+                spinner.removeClass('notDisplayed');
+
+                var filtersCheckboxes = $('.roleFilter:checked');
+                var filter = new Array();
+                var filterRole = new Array();
+
+                for (var i=0; i<filtersCheckboxes.length; i++) {
+                    filterRole.push(filtersCheckboxes[i].value);
+                }
+                //alert(filter);
+                filter = {
+                    'role': filterRole
+                }
+                var url = $('#more_info_input').data('url_get_task_list');
+                var sendData = {
+                    'filter': filter
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: sendData,
+                    success: function(data1) {
+                        data = JSON.parse(data1);
+                        if (data.success == 1) {
+                            //console.log(data.html);
+                            spinner.addClass('notDisplayed');
+                            setTaskListContent(data.html);
+                            //ITDoorsAjax.unblockUI($('#tasks_list'));
+                            //$('#tasks_list').html('').html(data.html);
+                            //$('#form_modal_task_view').modal('show');
+                        } else {
+                            alert('error');
+                            //$('#copy_etalon_finished').show('blind', {}, 500);
+                        }
+
+                    }
+
+                })
+            })
+
+            function setTaskContent(html) {
+                $('#task_holder').html('')
+                $('#task_holder').html(html)
+            }
+
+            function setTaskListContent(html) {
+                $('.todo-tasklist').html('')
+                $('.todo-tasklist').html(html)
+            }
+
+
         })
     </script>
     <!-- END PAGE HEADER-->
@@ -75,27 +137,48 @@
         <div class="portlet light">
             <div class="portlet-title">
                 <div class="caption" data-toggle="collapse" data-target=".todo-project-list-content">
-                    <span class="caption-subject font-green-sharp bold uppercase">PROJECTS </span>
+                    <span class="caption-subject font-green-sharp bold uppercase">{% trans %}Tasks{% endtrans %} </span>
                     <span class="caption-helper visible-sm-inline-block visible-xs-inline-block">click to view project list</span>
                 </div>
                 <div class="actions">
                     <div class="btn-group">
                         <a class="btn green-haze btn-circle btn-sm todo-projects-config" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                            <i class="icon-settings"></i> &nbsp; <i class="fa fa-angle-down"></i>
+                            <i class="fa fa-filter{#icon-settings#}"></i> &nbsp; <i class="fa fa-angle-down"></i>
                         </a>
-                        <ul class="dropdown-menu pull-right">
+                        <ul class="dropdown-menu hold-on-click dropdown-checkboxes pull-right">
 
-                            <li>
-                                <a href="#">
-                                    {% trans %}Tasks{% endtrans %} <span class="badge">
-												4 </span>
-                                </a>
-                            </li>
+                            {% for taskRole in allTaskRoles %}
+                                {% if taskRole == 'author' %}
+                                    {% set icon = 'fa-pencil' %}
+                                    {% set label = 'label-danger' %}
+                                    {% set checked = '' %}
+                                {% elseif taskRole == 'performer' %}
+                                    {% set icon = 'fa-rocket' %}
+                                    {% set label = 'label-info' %}
+                                    {% set checked = 'checked' %}
+                                {% elseif taskRole == 'controller' %}
+                                    {% set icon = 'fa-crosshairs' %}
+                                    {% set label = 'label-warning' %}
+                                    {% set checked = '' %}
+                                    {#
+                                        {% elseif taskUserRole == 'done' %}
+                                            {% set icon = 'orange' %}
+                                            fa-eye
+                                    #}
+                                {% endif %}
+                                <label><input type="checkbox" class="roleFilter" value="{{ taskRole }}" {{ checked }}/>{{ taskRole|trans }}</label>
+                            {% endfor %}
+                            {#
+                                            <label><input type="checkbox" id="set_filters_on"/>{% trans %}All{% endtrans %}</label>
+                            #}
+                            {#
+                                            <label><input type="checkbox"/> System</label>
+                            #}
                             <li class="divider">
+                            </li>
                             <li>
-                                <a href="#">
-                                    {% trans %}Documents{% endtrans %} <span class="badge">
-												12 </span>
+                                <a class="btn red" id="taskFilterButton" >
+                                    <span style="color: white;">{% trans %}Filter{% endtrans %}</span>
                                 </a>
                             </li>
                         </ul>
@@ -105,29 +188,43 @@
             <div class="portlet-body todo-project-list-content">
                 <div class="todo-project-list">
                     <ul class="nav nav-pills nav-stacked">
-                        {% for taskRole in allTaskRoles %}
-                            {% if taskRole == 'author' %}
-                                {% set icon = 'fa-pencil' %}
-                                {% set label = 'badge-danger' %}
-                            {% elseif taskRole == 'performer' %}
-                                {% set icon = 'fa-rocket' %}
-                                {% set label = 'badge-info' %}
-                            {% elseif taskRole == 'controller' %}
-                                {% set icon = 'fa-crosshairs' %}
-                                {% set label = 'badge-warning' %}
-                                {#
-                                    {% elseif taskUserRole == 'done' %}
-                                        {% set icon = 'orange' %}
-                                        fa-eye
-                                #}
-                            {% endif %}
-                            <li {#class="active"#}>
-                                <a href="#">
-                                    <span class="{{ label }} badge {#badge-active#}"> 1 </span>
-                                    {{ taskRole|trans }}
-                                </a>
-                            </li>
-                        {% endfor %}
+                        <li class="active">
+                            <a href="">
+                                <span class="badge badge-active"> 1 </span>
+                                {% trans %}Tasks{% endtrans %}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="alert('Документы в разработке')">
+                                <span class="badge badge-active"> 0 </span>
+                                {% trans %}Documents{% endtrans %}
+                            </a>
+                        </li>
+                        {#
+                                                {% for taskRole in allTaskRoles %}
+                                                    {% if taskRole == 'author' %}
+                                                        {% set icon = 'fa-pencil' %}
+                                                        {% set label = 'badge-danger' %}
+                                                    {% elseif taskRole == 'performer' %}
+                                                        {% set icon = 'fa-rocket' %}
+                                                        {% set label = 'badge-info' %}
+                                                    {% elseif taskRole == 'controller' %}
+                                                        {% set icon = 'fa-crosshairs' %}
+                                                        {% set label = 'badge-warning' %}
+                                                        &#123;&#35;
+                                                            {% elseif taskUserRole == 'done' %}
+                                                                {% set icon = 'orange' %}
+                                                                fa-eye
+                                                        &#35;&#125;
+                                                    {% endif %}
+                                                    <li &#123;&#35;class="active"&#35;&#125;>
+                                                        <a href="#">
+                                                            <span class="{{ label }} badge &#123;&#35;badge-active&#35;&#125;"> 1 </span>
+                                                            {{ taskRole|trans }}
+                                                        </a>
+                                                    </li>
+                                                {% endfor %}
+                        #}
                     </ul>
                 </div>
             </div>
@@ -209,20 +306,19 @@
     </div>
     <div class="todo-tasklist-devider">
     </div>
-    <div class="col-md-7 col-sm-8">
-    <div class="scroller" style="max-height: 600px;" data-always-visible="0" data-rail-visible="0" data-handle-color="#dae3e7">
+    <div class="col-md-7 col-sm-8" id="task_holder">
+        <div style="color:#666666;">{% trans %}<< Choose any task from the list{% endtrans %}</div>
 
 {#
     {{
         include('SDTaskBundle:Task:taskView.html.twig',
             {
-                'taskUserRole' : taskUserRole
+                'taskUserRole' : tasksUserRole[0]
             }
         )
     }}
 #}
 
-    </div>
     </div>
     </div>
     </div>
@@ -316,4 +412,12 @@
     </div>
     </div>
 #}
+
+    <input type="hidden" id="more_info_input"
+           data-url_task_modal="{{ path('sd_task_modal') }}"
+           data-url_task_table="{{ path('sd_task_table')}}"
+           data-url_get_task_view="{{ path('sd_task_view')}}"
+           data-url_get_task_list="{{ path('sd_task_list')}}"
+            >
+
 {% endblock body %}

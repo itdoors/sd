@@ -6,7 +6,7 @@
 {% elseif taskUserRole.role == 'controller' %}
     {% set color = 'yellow' %}
 {% endif %}
-<div class="todo-tasklist-item todo-tasklist-item-border-{{ color }} task-item">
+<div class="todo-tasklist-item todo-tasklist-item-border-{{ color }} task-item" data-id="{{ taskUserRole.id }}">
     <img class="todo-userpic pull-left" src="../../assets/admin/layout/img/avatar7.jpg" width="27px" height="27px">
     <div class="todo-tasklist-item-title">
         {{ taskUserRole.task.title }}

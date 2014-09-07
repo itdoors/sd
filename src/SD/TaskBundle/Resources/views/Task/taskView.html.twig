@@ -1,11 +1,13 @@
-<form action="#" class="form-horizontal">
+<div class="scroller" style="max-height: 600px;" data-always-visible="0" data-rail-visible="0" data-handle-color="#dae3e7"
+     >
+    <form action="#" class="form-horizontal">
     <!-- TASK HEAD -->
     <div class="form">
         <div class="form-group">
             <div class="col-md-8 col-sm-8">
                 <div class="todo-taskbody-user">
                     <img class="todo-userpic pull-left" src="../../assets/admin/layout/img/avatar6.jpg" width="50px" height="50px">
-                    <span class="todo-username pull-left">{{ tasksUserRole.user }}</span>
+                    <span class="todo-username pull-left">{{ taskUserRole.user }}</span>
                     <button type="button" class="todo-username-btn btn btn-circle btn-default btn-xs">&nbsp;edit&nbsp;</button>
                 </div>
             </div>
@@ -19,13 +21,13 @@
         <!-- TASK TITLE -->
         <div class="form-group">
             <div class="col-md-12">
-                {{ tasksUserRole.task.title }}
+                {{ taskUserRole.task.title }}
             </div>
         </div>
         <!-- TASK DESC -->
         <div class="form-group">
             <div class="col-md-12">
-                {{ tasksUserRole.task.description }}
+                {{ taskUserRole.task.description }}
             </div>
         </div>
         <!-- END TASK DESC -->
@@ -183,3 +185,4 @@
         </div>
     </div>
 </form>
+</div>
