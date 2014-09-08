@@ -862,7 +862,7 @@ class InvoiceService
             if ($invoice->getDate()->format('Y') < 2014 && $invoice->getDateFact() !== null) {
                 $em->remove($invoice);
             }
-            if ($countInvoice == 100) {
+            if ($countInvoice == 1000) {
                 $em->flush();
                 $countInvoice = 0;
             }
