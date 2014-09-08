@@ -856,7 +856,7 @@ class InvoiceService
                 }
             }
 
-            if ($invoice->getDate()->format('Y') < 2014) {
+            if ($invoice->getDate()->format('Y') < 2014 && $invoice->getDateFact() !== NULL) {
                 $em->remove($invoice);
             }
         }
