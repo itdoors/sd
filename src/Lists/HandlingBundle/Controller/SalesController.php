@@ -253,6 +253,9 @@ class SalesController extends BaseController
 
         $showMoreInfoIds = array (5, 6);
 
+        $lookups = $this->getDoctrine()
+                ->getRepository('ListsLookupBundle:Lookup')->getGroupOrganizationQuery()->getQuery()->getResult();
+
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':show.html.twig', array (
                 'handling' => $object,
                 'baseTemplate' => $this->baseTemplate,
@@ -261,7 +264,8 @@ class SalesController extends BaseController
                 'canEdit' => $canEdit,
                 'isResultClosed' => $isResultClosed,
                 'organization' => $organization,
-                'showMoreInfoIds' => $showMoreInfoIds
+                'showMoreInfoIds' => $showMoreInfoIds,
+                'lookups' => $lookups
         ));
     }
     /**
