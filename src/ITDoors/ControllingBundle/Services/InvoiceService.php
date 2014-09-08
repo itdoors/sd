@@ -101,10 +101,9 @@ class InvoiceService
             $em = $this->container->get('doctrine')->getManager();
             $this->addCronError(0, 'ok', 'file not found', 'new file not found');
 
-            $em->flush();
-
             return 'File not found in derictory ' . "\n" . $directory;
         }
+        $em->flush();
     }
     /**
      * saveinvoice
@@ -413,7 +412,7 @@ class InvoiceService
             }
             ++$countInvoice;
             echo number_format((memory_get_usage() - $memStart) / 8000000, 0, ',', ' ')
-                . "MB ~ more: ".($count - $key) . " .\n";
+                . "MB ~ more: ".($count - $key) . "\n";
 
             $invoiceFind = true;
             $this->messageTemplate = false;
