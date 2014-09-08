@@ -428,7 +428,6 @@ class InvoiceService
             $this->findDogovor($invoiceFind, $invoice, $invoiceNew);
             $json[$key] = null;
             unset($json[$key]);
-//            unset($invoice);
             unset($invoiceNew);
         }
         echo 'Try add email for send' . "\n";
@@ -490,8 +489,6 @@ class InvoiceService
         $error->setReason($reason);
         $error->setDescription($descript);
         $em->persist($error);
-        //$em->flush();
-//        unset($error);
 
         return true;
     }
@@ -854,7 +851,6 @@ class InvoiceService
                     }
                 }
             }
-
             if ($invoice->getDate()->format('Y') < 2014 && $invoice->getDateFact() !== NULL) {
                 $em->remove($invoice);
             }
