@@ -830,29 +830,41 @@ class InvoiceService
     public function removeInvoice ()
     {
         $em = $this->container->get('doctrine')->getManager();
+        $em->getConnection()->getConfiguration()->setSQLLogger(null);
         $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')->findAll();
-        foreach ($invoices as $invoice) {
-            if ($invoice->getDogovorId()) {
-                $companystructs = $em->getRepository('ListsCompanystructureBundle:Companystructure')
-                    ->findAll();
+        
+        $companystructs = $em->getRepository('ListsCompanystructureBundle:Companystructure')
+                ->findAll();
+        
+        $memStart = memory_get_usage();
+        $count = count($invoices);
+        $countInvoice = 0;
+        foreach ($invoices as $key => $invoice) {
+            
+            ++$countInvoice;
+            echo $countInvoice. ' ~ '. number_format((memory_get_usage() - $memStart) / 8000000, 0, ',', ' ')
+                . "MB ~ more: ".($count - $key) . "\n";
 
-                foreach ($companystructs as $company) {
-                    $invoiceCompanystructures = $em->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
-                        ->findBy(array (
-                            'invoiceId' => $invoice->getId(),
-                            'companystructureId' => $company->getId()
-                        ));
-                    if (count($invoiceCompanystructures) > 1) {
-                        foreach ($invoiceCompanystructures as $key => $invoiceCompanystructure) {
-                            if ($key > 0) {
-                                $em->remove($invoiceCompanystructure);
-                            }
+            foreach ($companystructs as $company) {
+                $invoiceCompanystructures = $em->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
+                    ->findBy(array (
+                        'invoiceId' => $invoice->getId(),
+                        'companystructureId' => $company->getId()
+                    ));
+                if (count($invoiceCompanystructures) > 1) {
+                    foreach ($invoiceCompanystructures as $key => $invoiceCompanystructure) {
+                        if ($key > 0) {
+                            $em->remove($invoiceCompanystructure);
                         }
                     }
                 }
             }
             if ($invoice->getDate()->format('Y') < 2014 && $invoice->getDateFact() !== null) {
                 $em->remove($invoice);
+            }
+            if ($countInvoice == 100) {
+                $em->flush();
+                $countInvoice = 0;
             }
         }
         $em->flush();
