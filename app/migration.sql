@@ -958,3 +958,17 @@ DROP INDEX uniq_c1ee637c9e9ffaa0;
 CREATE INDEX IDX_C1EE637C9E9FFAA0 ON organization (ownership_id);
 -- staging ++++
 -- prod ++++
+CREATE TABLE organization_organizationsign (organization_id BIGINT NOT NULL, organization_sign_id INT NOT NULL, PRIMARY KEY(organization_id, organization_sign_id));
+CREATE INDEX IDX_2E73694C32C8A3DE ON organization_organizationsign (organization_id);
+CREATE INDEX IDX_2E73694CCB2EF456 ON organization_organizationsign (organization_sign_id);
+ALTER TABLE organization_organizationsign ADD CONSTRAINT FK_2E73694C32C8A3DE FOREIGN KEY (organization_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE organization_organizationsign ADD CONSTRAINT FK_2E73694CCB2EF456 FOREIGN KEY (organization_sign_id) REFERENCES lookup (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+
+INSERT INTO "public".organization_organizationsign (organization_id, organization_sign_id)
+SELECT id, organization_sign_id FROM "public".organization WHERE "public".organization.organization_sign_id is  not NULL;
+-- staging -----
+-- prod ----
+ALTER TABLE invoice ADD deletedAt TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL;
+-- staging -----
+-- prod ----

@@ -1,10 +1,3 @@
-/****
-Boby
-****/
-body {
-  background-color: white;
-}
-
 /*********** 
 Page Header
 ***********/
@@ -78,7 +71,7 @@ Page Header
   box-shadow: 5px 5px rgba(138, 148, 158, 0.2);
 }
 .page-header.navbar .hor-menu .navbar-nav > li.mega-menu-dropdown > .dropdown-menu .mega-menu-content .mega-menu-submenu {
-  border-right: 1px solid #98a0aa;
+  border-right: 1px solid #8d96a1;
 }
 .page-header.navbar .hor-menu .navbar-nav > li.mega-menu-dropdown > .dropdown-menu .mega-menu-content .mega-menu-submenu li > h3 {
   color: #eaeaea;
@@ -181,6 +174,8 @@ Page Header
 .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover,
 .page-sidebar {
   background-color: white;
+  /* Default sidebar */
+  /* light sidebar */
   /* Sidebar search */
 }
 .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu,
@@ -207,6 +202,10 @@ Page Header
 .page-sidebar .page-sidebar-menu > li > a > .arrow:before,
 .page-sidebar .page-sidebar-menu > li > a > .arrow.open:before {
   color: #a6adb6;
+}
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.heading > h3,
+.page-sidebar .page-sidebar-menu > li.heading > h3 {
+  color: #1a1a1a;
 }
 .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li:hover > a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.open > a,
 .page-sidebar .page-sidebar-menu > li:hover > a,
@@ -249,16 +248,6 @@ Page Header
 .page-sidebar .page-sidebar-menu > li.active.open > a > .arrow:before,
 .page-sidebar .page-sidebar-menu > li.active.open > a > .arrow.open:before {
   color: white;
-}
-.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active > a > .selected, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active.open > a > .selected,
-.page-sidebar .page-sidebar-menu > li.active > a > .selected,
-.page-sidebar .page-sidebar-menu > li.active.open > a > .selected {
-  background-image: url("../../img/sidebar-menu-arrow.png");
-}
-.page-sidebar-reversed .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active > a > .selected, .page-sidebar-reversed .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active.open > a > .selected, .page-sidebar-reversed
-.page-sidebar .page-sidebar-menu > li.active > a > .selected, .page-sidebar-reversed
-.page-sidebar .page-sidebar-menu > li.active.open > a > .selected {
-  background-image: url("../../img/sidebar-menu-arrow-reverse.png");
 }
 .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active + li > a,
 .page-sidebar .page-sidebar-menu > li.active + li > a {
@@ -332,6 +321,50 @@ Page Header
 .page-sidebar .page-sidebar-menu .sub-menu > li.active > a > .arrow.open:before {
   color: #aeaeae;
 }
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu.page-sidebar-menu-light,
+.page-sidebar .page-sidebar-menu.page-sidebar-menu-light {
+  /* 1st level links */
+}
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu.page-sidebar-menu-light > li:hover > a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu.page-sidebar-menu-light > li.open > a,
+.page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li:hover > a,
+.page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li.open > a {
+  background: whitesmoke;
+}
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu.page-sidebar-menu-light > li.active > a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu.page-sidebar-menu-light > li.active.open > a,
+.page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li.active > a,
+.page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li.active.open > a {
+  background: #ededed;
+  border-left: 4px solid #3fd5c0;
+  color: #666666;
+}
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu.page-sidebar-menu-light > li.active > a:hover, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu.page-sidebar-menu-light > li.active.open > a:hover,
+.page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li.active > a:hover,
+.page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li.active.open > a:hover {
+  border-left: 4px solid #3fd5c0;
+  background: whitesmoke;
+}
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu.page-sidebar-menu-light > li.active > a > i, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu.page-sidebar-menu-light > li.active.open > a > i,
+.page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li.active > a > i,
+.page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li.active.open > a > i {
+  color: #999999;
+}
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu.page-sidebar-menu-light > li.active > a > .arrow:before, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu.page-sidebar-menu-light > li.active > a > .arrow.open:before, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu.page-sidebar-menu-light > li.active.open > a > .arrow:before, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu.page-sidebar-menu-light > li.active.open > a > .arrow.open:before,
+.page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li.active > a > .arrow:before,
+.page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li.active > a > .arrow.open:before,
+.page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li.active.open > a > .arrow:before,
+.page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li.active.open > a > .arrow.open:before {
+  color: #999999;
+}
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu.page-sidebar-menu-light > li .sub-menu,
+.page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li .sub-menu {
+  background: white;
+}
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu.page-sidebar-menu-light > li .sub-menu > li:hover > a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu.page-sidebar-menu-light > li .sub-menu > li.open > a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu.page-sidebar-menu-light > li .sub-menu > li.active > a,
+.page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li .sub-menu > li:hover > a,
+.page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li .sub-menu > li.open > a,
+.page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li .sub-menu > li.active > a {
+  background: #ededed !important;
+}
 .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .sidebar-toggler,
 .page-sidebar .sidebar-toggler {
   background: url(../../img/sidebar_inline_toggler_icon_light.jpg);
@@ -395,6 +428,18 @@ Page Header
 .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .sidebar-search.sidebar-search-solid.open .input-group .form-control,
 .page-sidebar .sidebar-search.sidebar-search-solid.open .input-group .form-control {
   background: white;
+}
+
+.page-sidebar-reversed .page-sidebar-menu.page-sidebar-menu-light {
+  /* 1st level links */
+}
+.page-sidebar-reversed .page-sidebar-menu.page-sidebar-menu-light > li.active > a, .page-sidebar-reversed .page-sidebar-menu.page-sidebar-menu-light > li.active.open > a {
+  border-left: 0;
+  border-right: 4px solid #3fd5c0;
+}
+.page-sidebar-reversed .page-sidebar-menu.page-sidebar-menu-light > li.active > a:hover, .page-sidebar-reversed .page-sidebar-menu.page-sidebar-menu-light > li.active.open > a:hover {
+  border-left: 0;
+  border-right: 4px solid #3fd5c0;
 }
 
 /*************
@@ -537,22 +582,41 @@ Page Footer
 .page-footer .page-footer-inner {
   color: #333333;
 }
-.page-footer .page-footer-tools .go-top {
-  background-color: #9ca6ad;
-}
-.page-footer .page-footer-tools .go-top:hover {
-  opacity: 0.7;
-  filter: alpha(opacity=70);
-}
-.page-footer .page-footer-tools .go-top i {
-  color: #dddddd;
-}
 .page-footer-fixed .page-footer {
   background-color: #e4e6e8;
 }
 
 @media (min-width: 992px) {
   /* 992px */
+  /* Sidebar menu closed */
+  .page-sidebar-menu.page-sidebar-menu-hover-submenu > li:hover > .sub-menu {
+    box-shadow: 5px 5px rgba(241, 241, 241, 0.2);
+  }
+  .page-sidebar-menu.page-sidebar-menu-hover-submenu > li:hover > .sub-menu.sidebar-toggler-wrapper, .page-sidebar-menu.page-sidebar-menu-hover-submenu > li:hover > .sub-menu.sidebar-search-wrapper {
+    box-shadow: none;
+  }
+
+  .page-sidebar-menu.page-sidebar-menu-closed > li:hover {
+    box-shadow: 5px 5px rgba(241, 241, 241, 0.2);
+  }
+  .page-sidebar-menu.page-sidebar-menu-closed > li:hover.sidebar-toggler-wrapper, .page-sidebar-menu.page-sidebar-menu-closed > li:hover.sidebar-search-wrapper {
+    box-shadow: none;
+  }
+  .page-sidebar-menu.page-sidebar-menu-closed > li:hover > .sub-menu {
+    box-shadow: 5px 5px rgba(241, 241, 241, 0.2);
+  }
+  .page-sidebar-menu.page-sidebar-menu-closed > li:hover > .sub-menu.sidebar-toggler-wrapper, .page-sidebar-menu.page-sidebar-menu-closed > li:hover > .sub-menu.sidebar-search-wrapper {
+    box-shadow: none;
+  }
+
+  /* Light sidebar menu */
+  .page-sidebar-menu.page-sidebar-menu-light.page-sidebar-menu-closed > li.heading {
+    padding: 0;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border-top: 1px solid #f0f5f7 !important;
+  }
+
   /* Fixed Sidebar */
   .page-sidebar-fixed:not(.page-footer-fixed) .page-content {
     border-bottom: 0;
@@ -563,13 +627,8 @@ Page Footer
   .page-sidebar-fixed:not(.page-footer-fixed) .page-footer .page-footer-inner {
     color: #333;
   }
-  .page-sidebar-fixed:not(.page-footer-fixed) .page-footer .page-footer-tools .go-top {
-    background-color: #7B838A;
-  }
-  .page-sidebar-fixed:not(.page-footer-fixed) .page-footer .page-footer-tools .go-top i {
-    color: #ddd;
-  }
 
+  /* Boxed Layout */
   .page-boxed {
     background-color: #f7f7f7 !important;
     /* Page container */
@@ -607,18 +666,30 @@ Page Footer
   .page-boxed.page-sidebar-fixed.page-footer-fixed .page-footer .page-footer-inner {
     color: #333333;
   }
+
+  /* Sidebar Menu Wirh Hoverable Submenu */
+  .page-sidebar-menu-hover-submenu li:hover a > .arrow {
+    border-right: 8px solid #e9e9e9;
+  }
+  .page-sidebar-reversed .page-sidebar-menu-hover-submenu li:hover a > .arrow {
+    border-left: 8px solid #e9e9e9;
+  }
+  .page-sidebar-menu-hover-submenu li:hover > .sub-menu {
+    background: #e9e9e9 !important;
+  }
 }
 @media (max-width: 991px) {
   /* 991px */
   /* Page sidebar */
   .page-sidebar {
     background-color: #fcfcfc;
+    /* light sidebar */
   }
   .page-sidebar .page-sidebar-menu > li > a {
     border-top: 1px solid white;
   }
   .page-sidebar .page-sidebar-menu > li:hover > a, .page-sidebar .page-sidebar-menu > li.open > a {
-    background: #e9e9e9;
+    background: #d9d9d9;
   }
   .page-sidebar .page-sidebar-menu > li:last-child > a {
     border-bottom: 0 !important;
@@ -628,6 +699,24 @@ Page Footer
   }
   .page-sidebar .page-sidebar-menu .sidebar-search input {
     background-color: #fcfcfc !important;
+  }
+  .page-sidebar .page-sidebar-menu.page-sidebar-menu-light {
+    /* 1st level links */
+  }
+  .page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li:hover > a, .page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li.open > a {
+    background: white;
+  }
+  .page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li.active > a, .page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li.active.open > a {
+    background: white;
+  }
+  .page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li.active > a:hover, .page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li.active.open > a:hover {
+    background: white;
+  }
+  .page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li .sub-menu {
+    background: #fcfcfc !important;
+  }
+  .page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li .sub-menu > li:hover > a, .page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li .sub-menu > li.open > a, .page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li .sub-menu > li.active > a {
+    background: white !important;
   }
 }
 @media (max-width: 480px) {
@@ -651,6 +740,13 @@ Page Footer
     background-color: #8a949e;
   }
 }
+/****
+Boby
+****/
+body {
+  background-color: white;
+}
+
 /* Page sidebar */
 .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu,
 .page-sidebar .page-sidebar-menu {
@@ -661,30 +757,34 @@ Page Footer
 .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active.open > a > .selected, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active > a > .selected,
 .page-sidebar .page-sidebar-menu > li.active.open > a > .selected,
 .page-sidebar .page-sidebar-menu > li.active > a > .selected {
-  background-image: url("../../img/sidebar_arrow_icon_light.png");
-}
-.page-sidebar-reversed .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active.open > a > .selected, .page-sidebar-reversed .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active > a > .selected, .page-sidebar-reversed
-.page-sidebar .page-sidebar-menu > li.active.open > a > .selected, .page-sidebar-reversed
-.page-sidebar .page-sidebar-menu > li.active > a > .selected {
-  background-image: url("../../img/sidebar_arrow_icon_light_rtl.png");
-}
-.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active.open > a > .selected, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active > a > .selected,
-.page-sidebar .page-sidebar-menu > li.active.open > a > .selected,
-.page-sidebar .page-sidebar-menu > li.active > a > .selected {
-  top: 1px;
-  right: -7px;
-  width: 8px;
-  height: 39px;
+  top: 0px;
+  right: -8px;
+  border-top: 20px double transparent;
+  border-bottom: 20px double transparent;
+  border-right: 0;
+  border-left: 8px solid #3fd5c0;
 }
 .page-sidebar-reversed .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active.open > a > .selected, .page-sidebar-reversed .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active > a > .selected, .page-sidebar-reversed
 .page-sidebar .page-sidebar-menu > li.active.open > a > .selected, .page-sidebar-reversed
 .page-sidebar .page-sidebar-menu > li.active > a > .selected {
   right: auto;
-  left: -7px;
+  left: -8px;
+  border-left: 0;
+  border-right: 8px solid #3fd5c0;
+}
+.page-container-bg-solid .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active.open > a > .selected, .page-container-bg-solid .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active > a > .selected, .page-container-bg-solid
+.page-sidebar .page-sidebar-menu > li.active.open > a > .selected, .page-container-bg-solid
+.page-sidebar .page-sidebar-menu > li.active > a > .selected {
+  border-color: transparent transparent transparent #3fd5c0;
+}
+.page-container-bg-solid.page-sidebar-reversed .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active.open > a > .selected, .page-container-bg-solid.page-sidebar-reversed .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active > a > .selected, .page-container-bg-solid.page-sidebar-reversed
+.page-sidebar .page-sidebar-menu > li.active.open > a > .selected, .page-container-bg-solid.page-sidebar-reversed
+.page-sidebar .page-sidebar-menu > li.active > a > .selected {
+  border-color: transparent #3fd5c0 transparent transparent;
 }
 .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu li > a,
 .page-sidebar .page-sidebar-menu li > a {
-  font-weight: normal;
+  font-weight: 400;
 }
 .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu li > a > i,
 .page-sidebar .page-sidebar-menu li > a > i {
@@ -713,6 +813,10 @@ Page Footer
   margin-left: -228px !important;
   border: 1px solid #F0F0F0;
   border-right-color: transparent;
+}
+.page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu.page-sidebar-menu-light > li > a .selected,
+.page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li > a .selected {
+  display: none;
 }
 
 .page-content {

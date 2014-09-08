@@ -349,6 +349,12 @@ $.extend($.fn.dataTableExt.oPagination, {
             for (i = 0, iLen = an.length; i < iLen; i++) {
                 var wrapper = $(an[i]).parents(".dataTables_wrapper");
 
+                if (oPaging.iTotal <= 0) {
+                    $('.dataTables_paginate, .dataTables_length', wrapper).hide();
+                } else {
+                    $('.dataTables_paginate, .dataTables_length', wrapper).show();
+                }
+
                 if (oPaging.iTotalPages <= 0) {
                     $('.dataTables_paginate, .dataTables_length .seperator', wrapper).hide();
                 } else {

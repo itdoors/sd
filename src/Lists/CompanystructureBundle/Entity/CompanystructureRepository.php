@@ -25,7 +25,7 @@ class CompanystructureRepository extends NestedTreeRepository
         $sql = $this->createQueryBuilder('c')
             ->where('lower(c.name) LIKE :q')
             ->setParameter(':q', mb_strtolower($q, 'UTF-8') . '%')
-            ->orderBy('c.name')
+            ->orderBy('c.root, c.lft', 'ASC')
             ->getQuery();
 
         return $sql->getResult();

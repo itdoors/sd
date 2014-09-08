@@ -257,10 +257,29 @@ class OperScheduleController extends BaseFilterController
                 )
             );
 
+            $plannedAccrualOfficially = $plannedAccrualRepository->findOneBy(
+                array (
+                    'departmentPeople' => $idCoworker,
+                    'code' => 'OZ',
+                    'isActive' => true
+                ),
+                array (
+                    'period' => 'desc'
+                )
+            );
+
+
             if ($plannedAccrual) {
                 $infoHours[$idCoworker . '-' . $idReplacement]['plannedAccrual'] = $plannedAccrual->getValue();
             } else {
                 $infoHours[$idCoworker . '-' . $idReplacement]['plannedAccrual'] = 0;
+            }
+
+            if ($plannedAccrualOfficially) {
+                $infoHours[$idCoworker . '-' . $idReplacement]['plannedAccrualOfficially'] =
+                    $plannedAccrualOfficially->getValue();
+            } else {
+                $infoHours[$idCoworker . '-' . $idReplacement]['plannedAccrualOfficially'] = 0;
             }
 
             $infoHours[$idCoworker . '-' . $idReplacement]['salaryNotOfficially'] = $coworker['salaryNotOfficially'];
@@ -2151,11 +2170,30 @@ class OperScheduleController extends BaseFilterController
             )
         );
 
+        $plannedAccrualOfficially = $plannedAccrualRepository->findOneBy(
+            array (
+                'departmentPeople' => $idCoworker,
+                'code' => 'OZ',
+                'isActive' => true
+            ),
+            array (
+                'period' => 'desc'
+            )
+        );
+
         if ($plannedAccrual) {
             $plannedAccrualValue = $plannedAccrual->getValue();
         } else {
             $plannedAccrualValue = 0;
         }
+
+        if ($plannedAccrualOfficially) {
+            $plannedAccrualOfficiallyValue =
+                $plannedAccrualOfficially->getValue();
+        } else {
+            $plannedAccrualOfficiallyValue = 0;
+        }
+
         $salaryNotOfficially = $monthInfo->getSalaryNotOfficially();
         if (!$salaryNotOfficially) {
             $salaryNotOfficially = $plannedAccrualValue;
@@ -2178,7 +2216,8 @@ class OperScheduleController extends BaseFilterController
             'totalSalary' => $totalSalary,
             'idMonthInfo' => $idMonthInfo,
             'canEdit' => $canEdit,
-            'idDepartment' => $idDepartment
+            'idDepartment' => $idDepartment,
+            'plannedAccrualOfficially' => $plannedAccrualOfficiallyValue
         );
 
         return $return;

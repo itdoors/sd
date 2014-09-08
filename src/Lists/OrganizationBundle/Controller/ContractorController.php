@@ -144,6 +144,7 @@ class ContractorController extends SalesController
                 ->findOneBy(array('lukey' => 'organization_sign_contractor'));
 
             $organization->setLookup($lookup);
+            $organization->addOrganizationsign($lookup);
 
             $em->persist($organization);
             $lookupM = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')

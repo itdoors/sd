@@ -142,7 +142,7 @@ class InvoiceRepository extends EntityRepository
             ->leftJoin('i.dogovor', 'd')
             ->leftJoin('i.customer', 'customer')
             ->leftJoin('i.performer', 'performer')
-            ->leftJoin('i.invoicecompanystructure', 'i_ics')
+           //->leftJoin('i.invoicecompanystructure', 'i_ics')
             ->leftJoin('performer.city', 'c')
             ->leftJoin('c.region', 'r')
             ->leftJoin('i.messages', 'h')
@@ -313,7 +313,9 @@ class InvoiceRepository extends EntityRepository
         /** where */
         $this->whereInvoicePeriod($res, $periodmin, $periodmax);
         if ($companystryctyre) {
-            $res->andWhere('i_ics.companystructureId = :companystructureId')
+            $res
+                ->leftJoin('i.invoicecompanystructure', 'i_ics')
+                ->andWhere('i_ics.companystructureId = :companystructureId')
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         $this->processFilters($res, $filters);
@@ -362,7 +364,9 @@ class InvoiceRepository extends EntityRepository
         /** join */
         $this->joinInvoicePeriod($res);
         if ($companystryctyre) {
-            $res->andWhere('i_ics.companystructureId = :companystructureId')
+            $res
+                ->leftJoin('i.invoicecompanystructure', 'i_ics')
+                ->andWhere('i_ics.companystructureId = :companystructureId')
                 ->setParameter(':companystructureId', $companystryctyre);
         }
 
@@ -398,7 +402,9 @@ class InvoiceRepository extends EntityRepository
         /** join */
         $this->joinInvoicePeriod($rescount);
         if ($companystryctyre) {
-            $rescount->andWhere('i_ics.companystructureId = :companystructureId')
+            $rescount
+                ->leftJoin('i.invoicecompanystructure', 'i_ics')
+                ->andWhere('i_ics.companystructureId = :companystructureId')
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         $this->processFilters($rescount, $filters);
@@ -512,7 +518,8 @@ class InvoiceRepository extends EntityRepository
         /** join */
         $this->joinInvoicePeriod($res);
         if ($companystryctyre) {
-            $res->andWhere('i_ics.companystructureId = :companystructureId')
+            $res->leftJoin('i.invoicecompanystructure', 'i_ics')
+                ->andWhere('i_ics.companystructureId = :companystructureId')
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         $this->processFilters($res, $filters);
@@ -543,7 +550,9 @@ class InvoiceRepository extends EntityRepository
 
         $this->processFilters($res, $filters);
         if ($companystryctyre) {
-            $res->andWhere('i_ics.companystructureId = :companystructureId')
+            $res
+                ->leftJoin('i.invoicecompanystructure', 'i_ics')
+                ->andWhere('i_ics.companystructureId = :companystructureId')
                 ->setParameter(':companystructureId', $companystryctyre);
         }
 
@@ -569,7 +578,9 @@ class InvoiceRepository extends EntityRepository
         /** join */
         $this->joinInvoicePeriod($rescount);
         if ($companystryctyre) {
-            $rescount->andWhere('i_ics.companystructureId = :companystructureId')
+            $rescount
+                ->leftJoin('i.invoicecompanystructure', 'i_ics')
+                ->andWhere('i_ics.companystructureId = :companystructureId')
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         $this->processFilters($rescount, $filters);
@@ -599,7 +610,9 @@ class InvoiceRepository extends EntityRepository
         /** where */
         $this->processFilters($res, $filters);
         if ($companystryctyre) {
-            $res->andWhere('i_ics.companystructureId = :companystructureId')
+            $res
+                ->leftJoin('i.invoicecompanystructure', 'i_ics')
+                ->andWhere('i_ics.companystructureId = :companystructureId')
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         $res->andWhere("i.dateFact is not NULL")
@@ -627,7 +640,9 @@ class InvoiceRepository extends EntityRepository
         /** where */
         $this->processFilters($res, $filters);
         if ($companystryctyre) {
-            $res->andWhere('i_ics.companystructureId = :companystructureId')
+            $res
+                ->leftJoin('i.invoicecompanystructure', 'i_ics')
+                ->andWhere('i_ics.companystructureId = :companystructureId')
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         $res
@@ -653,7 +668,9 @@ class InvoiceRepository extends EntityRepository
         /** join */
         $this->joinInvoicePeriod($res);
         if ($companystryctyre) {
-            $res->andWhere('i_ics.companystructureId = :companystructureId')
+            $res
+                ->leftJoin('i.invoicecompanystructure', 'i_ics')
+                ->andWhere('i_ics.companystructureId = :companystructureId')
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         /** where */
@@ -736,7 +753,9 @@ class InvoiceRepository extends EntityRepository
         /** join */
         $this->joinInvoicePeriod($res);
         if ($companystryctyre) {
-            $res->andWhere('i_ics.companystructureId = :companystructureId')
+            $res
+                ->leftJoin('i.invoicecompanystructure', 'i_ics')
+                ->andWhere('i_ics.companystructureId = :companystructureId')
                 ->setParameter(':companystructureId', $companystryctyre);
         }
 
@@ -766,7 +785,9 @@ class InvoiceRepository extends EntityRepository
         $this->processFilters($res, $filters);
         /** where */
         if ($companystryctyre) {
-            $res->andWhere('i_ics.companystructureId = :companystructureId')
+            $res
+                ->leftJoin('i.invoicecompanystructure', 'i_ics')
+                ->andWhere('i_ics.companystructureId = :companystructureId')
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         $res->andWhere("i.dateFact is not NULL")->andWhere("i.dateFact >= :date")->setParameter(':date', $date);
@@ -793,7 +814,9 @@ class InvoiceRepository extends EntityRepository
         $this->processFilters($res, $filters);
         /** where */
         if ($companystryctyre) {
-            $res->andWhere('i_ics.companystructureId = :companystructureId')
+            $res
+                ->leftJoin('i.invoicecompanystructure', 'i_ics')
+                ->andWhere('i_ics.companystructureId = :companystructureId')
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         $res->andWhere("i.dateFact is NULL")->andWhere("i.delayDate >= :date")->setParameter(':date', $date);
@@ -820,7 +843,9 @@ class InvoiceRepository extends EntityRepository
         /** where */
         $this->processFilters($rescount, $filters);
         if ($companystryctyre) {
-            $rescount->andWhere('i_ics.companystructureId = :companystructureId')
+            $rescount
+                ->leftJoin('i.invoicecompanystructure', 'i_ics')
+                ->andWhere('i_ics.companystructureId = :companystructureId')
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         $rescount
@@ -850,7 +875,9 @@ class InvoiceRepository extends EntityRepository
         /** where */
         $this->processFilters($rescount, $filters);
         if ($companystryctyre) {
-            $rescount->andWhere('i_ics.companystructureId = :companystructureId')
+            $rescount
+                ->leftJoin('i.invoicecompanystructure', 'i_ics')
+                ->andWhere('i_ics.companystructureId = :companystructureId')
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         $rescount

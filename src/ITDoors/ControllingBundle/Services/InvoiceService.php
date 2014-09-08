@@ -101,10 +101,9 @@ class InvoiceService
             $em = $this->container->get('doctrine')->getManager();
             $this->addCronError(0, 'ok', 'file not found', 'new file not found');
 
-            $em->flush();
-
             return 'File not found in derictory ' . "\n" . $directory;
         }
+        $em->flush();
     }
     /**
      * saveinvoice
@@ -412,8 +411,8 @@ class InvoiceService
                 unset($em);
             }
             ++$countInvoice;
-            echo number_format((memory_get_usage() - $memStart) / 8000000, 0, ',', ' ') . "MB ~ Осталось: ";
-            echo ($count - $key) . " шт.\n";
+            echo number_format((memory_get_usage() - $memStart) / 8000000, 0, ',', ' ')
+                . "MB ~ more: ".($count - $key) . "\n";
 
             $invoiceFind = true;
             $this->messageTemplate = false;
@@ -429,15 +428,14 @@ class InvoiceService
             $this->findDogovor($invoiceFind, $invoice, $invoiceNew);
             $json[$key] = null;
             unset($json[$key]);
-//            unset($invoice);
             unset($invoiceNew);
         }
-        echo 'try add email for send' . "\n";
+        echo 'Try add email for send' . "\n";
         $this->sendEmails();
-        echo 'try add cron for send email' . "\n";
+        echo 'Try add cron for send email' . "\n";
         $cron = $this->container->get('it_doors_cron.service');
         $cron->addSendEmails();
-        echo 'cron successfully' . "\n";
+        echo 'Cron successfully' . "\n";
     }
     /**
      * addReaspon
@@ -453,15 +451,19 @@ class InvoiceService
             ->findBy(array ('dogovorId' => $invoice->getDogovorId()));
 
         foreach ($companystructs as $company) {
+            $invoiceCompanystructures = $em->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
+                ->findBy(array (
+                    'invoiceId' => $invoice->getId(),
+                    'companystructureId' => $company->getCompanyStructureId()
+                ));
+            if (!$invoiceCompanystructures) {
+                $invoicecompany = new InvoiceCompanystructure();
+                $invoicecompany->setInvoice($invoice);
+                $invoicecompany->setCompanystructure($company->getCompanyStructures());
 
-            $invoicecompany = new InvoiceCompanystructure();
-            $invoicecompany->setInvoice($invoice);
-            $invoicecompany->setCompanystructure($company->getCompanyStructures());
-
-            $em->persist($invoicecompany);
-            //$em->flush();
+                $em->persist($invoicecompany);
+            }
         }
-//        unset($companystructs);
     }
     /**
      * addCronError
@@ -487,8 +489,6 @@ class InvoiceService
         $error->setReason($reason);
         $error->setDescription($descript);
         $em->persist($error);
-        //$em->flush();
-//        unset($error);
 
         return true;
     }
@@ -823,5 +823,38 @@ class InvoiceService
                 }
             }
         }
+    }
+    /**
+     * removeInvoice
+     */
+    public function removeInvoice ()
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')->findAll();
+        foreach ($invoices as $invoice) {
+            if ($invoice->getDogovorId()) {
+                $companystructs = $em->getRepository('ListsCompanystructureBundle:Companystructure')
+                    ->findAll();
+
+                foreach ($companystructs as $company) {
+                    $invoiceCompanystructures = $em->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
+                        ->findBy(array (
+                            'invoiceId' => $invoice->getId(),
+                            'companystructureId' => $company->getId()
+                        ));
+                    if (count($invoiceCompanystructures) > 1) {
+                        foreach ($invoiceCompanystructures as $key => $invoiceCompanystructure) {
+                            if ($key > 0) {
+                                $em->remove($invoiceCompanystructure);
+                            }
+                        }
+                    }
+                }
+            }
+            if ($invoice->getDate()->format('Y') < 2014 && $invoice->getDateFact() !== null) {
+                $em->remove($invoice);
+            }
+        }
+        $em->flush();
     }
 }
