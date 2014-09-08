@@ -969,3 +969,6 @@ INSERT INTO "public".organization_organizationsign (organization_id, organizatio
 SELECT id, organization_sign_id FROM "public".organization WHERE "public".organization.organization_sign_id is  not NULL;
 -- staging -----
 -- prod ----
+ALTER TABLE invoice ADD deletedAt TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL;
+-- staging -----
+-- prod ----

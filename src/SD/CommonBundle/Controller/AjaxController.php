@@ -521,7 +521,12 @@ class AjaxController extends BaseFilterController
         $result = array();
 
         foreach ($objects as $object) {
-            $result[] = $this->serializeObject($object);
+            $result[] =  array(
+            'id' => $object->getId(),
+            'value' => $object->getId(),
+            'name' => $object->getNameForList(),
+            'text' => $object->getNameForList()
+                );
         }
 
         return new Response(json_encode($result));
@@ -2956,11 +2961,11 @@ class AjaxController extends BaseFilterController
                     /** @var InvoiceCompanystructure $invoiceC */
                     $invoiceC = $em
                         ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
-                        ->findOneBy(array(
+                        ->findBy(array(
                             'invoiceId' => $invoiceCS->getId(),
                             'companystructureId' => $object->getCompanystructureId()
                             ));
-                    $em->remove($invoiceC);
+                    $em->remove($invoiceC[0]);
                 }
             }
         }
