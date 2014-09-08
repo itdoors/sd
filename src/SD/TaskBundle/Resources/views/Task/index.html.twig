@@ -48,6 +48,8 @@
         $(document).ready(function(){
             $('.task-item').die('click')
             $('.task-item').live('click', function(e){
+                clearTaskContent();
+                showSpinner()
                 var obj = this;
                 var id = $(obj).data('id');
                 var url = $('#more_info_input').data('url_get_task_view');
@@ -62,6 +64,7 @@
                         //alert(data1)
                         data = JSON.parse(data1);
                         if (data.success == 1) {
+                            hideSpinner();
                             setTaskContent(data.html);
                         } else {
                             //$('#copy_etalon_finished').show('blind', {}, 500);
@@ -125,6 +128,19 @@
                 $('.todo-tasklist').html(html)
             }
 
+            function clearTaskContent() {
+                $('#task_holder').html('')
+            }
+
+            function showSpinner() {
+                var spinner = $('#spinner');
+                spinner.removeClass('notDisplayed');
+            }
+
+            function hideSpinner() {
+                var spinner = $('#spinner');
+                spinner.addClass('notDisplayed');
+            }
 
         })
     </script>
@@ -190,7 +206,7 @@
                     <ul class="nav nav-pills nav-stacked">
                         <li class="active">
                             <a href="">
-                                <span class="badge badge-active"> 1 </span>
+                                <span class="badge badge-active"> {{ countTasks }} </span>
                                 {% trans %}Tasks{% endtrans %}
                             </a>
                         </li>
@@ -243,6 +259,7 @@
                 <i class="fa fa-spinner fa-spin notDisplayed" id="spinner"></i>
             </span>
         </div>
+{#
         <div class="actions">
             <div class="btn-group">
                 <a class="btn green-haze btn-circle btn-sm" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -282,6 +299,7 @@
                 </ul>
             </div>
         </div>
+#}
     </div>
     <!-- end PROJECT HEAD -->
     <div class="portlet-body">
@@ -307,7 +325,7 @@
     <div class="todo-tasklist-devider">
     </div>
     <div class="col-md-7 col-sm-8" id="task_holder">
-        <div style="color:#666666;">{% trans %}<< Choose any task from the list{% endtrans %}</div>
+        <div style="color:#666666;"><< {% trans %}Choose any task from the list{% endtrans %}</div>
 
 {#
     {{

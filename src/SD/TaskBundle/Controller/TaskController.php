@@ -26,6 +26,13 @@ class TaskController extends Controller
 
         $info = $this->getTasksInfoForTable($filterArray);
 
+        $tasksUserRoleRepo = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:TaskUserRole');
+
+        $countTasks = $tasksUserRoleRepo->countTasksByRoleAndUser($user->getId(), 'performer');
+        $countTasks += $tasksUserRoleRepo->countTasksByRoleAndUser($user->getId(), 'controller');
+        $info['countTasks'] = $countTasks;
+
         return $this->render('SDTaskBundle:Task:index.html.twig', $info);
     }
 
@@ -68,12 +75,28 @@ class TaskController extends Controller
     public function taskViewAction(Request $request) {
         $id = $request->request->get('id');
 
-        $tasksUserRole = $this->getDoctrine()
+        $taskUserRole = $this->getDoctrine()
             ->getRepository('SDTaskBundle:TaskUserRole')
             ->find($id);
 
-        $info = array();
-        $info['taskUserRole'] = $tasksUserRole;
+        $info = $this->getTaskUserRoleInfo($id);
+
+        $commentRepository = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:Comment');
+
+        $idTask = $taskUserRole->getTask()->getId();
+
+        $comments = $commentRepository->findBy(array (
+            'model' => 'Task',
+            //'user' => $user,
+            'modelId' => $idTask
+        ), array (
+            'createDatetime' => 'DESC'
+        ));
+
+        $info['comments'] = $comments;
+
+        $info['taskUserRole'] = $taskUserRole;
 
         $return = array();
         $return['html'] = $this->renderView('SDTaskBundle:Task:taskView.html.twig', $info);
@@ -105,7 +128,7 @@ class TaskController extends Controller
      */
     private function getTasksInfoForTable($filterArray)
     {
-        if (!count($filterArray['role'])) {
+        if (!isset($filterArray['role']) || !count($filterArray['role'])) {
             $role = $this->getDoctrine()
                 ->getRepository('SDTaskBundle:Role')
                 ->findOneBy(array (
@@ -114,8 +137,11 @@ class TaskController extends Controller
                 ));
             $filterArray['role'][] = $role;
         }
-        $tasksUserRole = $this->getDoctrine()
-            ->getRepository('SDTaskBundle:TaskUserRole')
+
+        $tasksUserRoleRepo = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:TaskUserRole');
+
+        $tasksUserRole = $tasksUserRoleRepo
             ->findBy($filterArray, array (
                 'isViewed' => 'ASC',
                 'id' => 'DESC'
@@ -260,7 +286,7 @@ class TaskController extends Controller
      *
      * @return Response
      */
-    public function showTaskPageAction ($id)
+    public function showTaskPageAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 

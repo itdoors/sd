@@ -12,4 +12,26 @@ use Doctrine\ORM\EntityRepository;
  */
 class TaskUserRoleRepository extends EntityRepository
 {
+    /**
+     * @param integer $userId
+     * @param string  $role
+     *
+     * @return integer
+     */
+    public function countTasksByRoleAndUser($userId, $role)
+    {
+        $sql = $this->createQueryBuilder('tur')
+            ->select('COUNT(tur.id)')
+            ->leftJoin('tur.role', 'r')
+            ->leftJoin('tur.user', 'u')
+            ->where('u.id = :userId')
+            ->setParameter(':userId', $userId);
+
+        if ($role) {
+            $sql->andWhere('r.name = :role')
+                ->setParameter(':role', $role);
+        }
+
+        return $sql->getQuery()->getSingleScalarResult();
+    }
 }
