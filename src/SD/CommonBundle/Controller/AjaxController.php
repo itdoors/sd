@@ -2149,59 +2149,7 @@ class AjaxController extends BaseFilterController
         $em->flush();
         $em->refresh($data);
 
-        if (isset($formData['usersFromOurSide']) || isset($formData['contactMany'])) {
-            //specially for kiwa
-            $user = $data->getUser();
-            $performer = $this->getDoctrine()
-                ->getRepository('SDUserBundle:User')
-                ->find(362);
-
-            $task = new \SD\CalendarBundle\Entity\Task();
-            $task->setCreateDateTime(new \DateTime());
-            $task->setStartDateTime($data->getCreatedate());
-            $task->setStopDateTime($data->getCreatedate());
-            $task->setTitle($data->getType()->getName().': '.$user->getFullname());
-            $task->setUser($user);
-            $task->setPerformer($performer);
-            $task->setHandlingMessage($data);
-            $task->setIsDone(false);
-            $task->setTaskType('personal');
-            $em->persist($task);
-            $em->flush();
-        }
-
-        if (isset($formData['usersFromOurSide'])) {
-            //$usersFromOurSide = explode(',', $formData['usersFromOurSide']);
-            $usersFromOurSide = $formData['usersFromOurSide'];
-            if (count($usersFromOurSide)) {
-                foreach ($usersFromOurSide as $userFromOurSide) {
-                    $handlingUser = $this->getDoctrine()
-                        ->getRepository('ListsHandlingBundle:HandlingUser')
-                        ->find($userFromOurSide);
-                    $handlingMessageHandlingUser = new HandlingMessageHandlingUser();
-                    $handlingMessageHandlingUser->setHandlingMessage($data);
-                    $handlingMessageHandlingUser->setHandlingUser($handlingUser);
-                    $em->persist($handlingMessageHandlingUser);
-                }
-
-            }
-        }
-        if (isset($formData['contactMany'])) {
-            //$usersFromTheirSide = explode(',', $formData['contactMany']);
-            $usersFromTheirSide = $formData['contactMany'];
-            if (count($usersFromTheirSide)) {
-                foreach ($usersFromTheirSide as $userFromTheirSide) {
-                    $modelContact = $this->getDoctrine()
-                        ->getRepository('ListsContactBundle:ModelContact')
-                        ->find($userFromTheirSide);
-                    $handlingMessageModelContact = new HandlingMessageModelContact();
-                    $handlingMessageModelContact->setHandlingMessage($data);
-                    $handlingMessageModelContact->setModelContact($modelContact);
-                    $em->persist($handlingMessageModelContact);
-                }
-
-            }
-        }
+      
 
         // Insert future
         $type = $this->getDoctrine()
@@ -2248,8 +2196,6 @@ class AjaxController extends BaseFilterController
         }
 
         $em->persist($handlingMessage);
-        // $em->flush();
-
         $handling->setLastHandlingDate($data->getCreatedate());
         $handling->setNextHandlingDate($nextDatetime);
 

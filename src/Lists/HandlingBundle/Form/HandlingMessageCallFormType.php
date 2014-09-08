@@ -42,6 +42,9 @@ class HandlingMessageCallFormType extends AbstractType
                 'format' => 'dd.M.yyyy HH:mm'
               //  'empty_value' => ''
             ))
+            ->add('createdate', 'hidden', array(
+                'data' => date('Y-m-d')
+            ))
             ->add('nexttype', 'entity', array(
                 'class' => 'ListsHandlingBundle:HandlingMessageType',
                 'required' => true,
@@ -95,17 +98,20 @@ class HandlingMessageCallFormType extends AbstractType
 
                 $form = $event->getForm();
 
-                $currentDatetime = new \DateTime($data['createdate']);
-                $nextDatetime = new \DateTime($data['nextcreatedate']);
+                if (key_exists('nextcreatedate', $data)) {
+                    $currentDatetime = new \DateTime();
 
-                if ($currentDatetime > $nextDatetime) {
-                    $translator = $container->get('translator');
+                    $nextDatetime = new \DateTime($data['nextcreatedate']);
 
-                    $msgString = "Event next date can't be greater then current event date";
+                    if ($currentDatetime > $nextDatetime) {
+                        $translator = $container->get('translator');
 
-                    $msg = $translator->trans($msgString, array(), 'ListsHandlingBundle');
+                        $msgString = "Event next date can't be greater then current event date";
 
-                    $form->addError(new FormError($msg));
+                        $msg = $translator->trans($msgString, array(), 'ListsHandlingBundle');
+
+                        $form->addError(new FormError($msg));
+                    }
                 }
             }
         );
@@ -134,7 +140,7 @@ class HandlingMessageCallFormType extends AbstractType
 
                 $form = $event->getForm();
 
-                $currentDatetime = new \DateTime($data['createdate']);
+                $currentDatetime = new \DateTime();
 
                 if (isset($data['handling_id']) && $data['handling_id']) {
                     $handlingId = $data['handling_id'];
