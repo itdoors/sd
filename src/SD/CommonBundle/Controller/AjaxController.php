@@ -2106,6 +2106,161 @@ class AjaxController extends BaseFilterController
 
         return true;
     }
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function handlingMessageCallFormSave(Form $form, $user, $request)
+    {
+        /** @var \Lists\HandlingBundle\Entity\HandlingMessage $data */
+        $data = $form->getData();
+
+        $formData = $request->request->get($form->getName());
+        $handlingId = $data->getHandlingId();
+
+        /** @var \Lists\HandlingBundle\Entity\Handling $handling */
+        $handling = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling')
+            ->find($handlingId);
+
+        $data->setCreatedatetime(new \DateTime());
+
+        $user = $this->getUser();
+
+        if (!$data->getUser()) {
+            $data->setUser($user);
+        }
+
+        $data->setHandling($handling);
+
+        $file = $form['file']->getData();
+
+        if ($file) {
+            $data->upload();
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+        $em->refresh($data);
+
+        if (isset($formData['usersFromOurSide']) || isset($formData['contactMany'])) {
+            //specially for kiwa
+            $user = $data->getUser();
+            $performer = $this->getDoctrine()
+                ->getRepository('SDUserBundle:User')
+                ->find(362);
+
+            $task = new \SD\CalendarBundle\Entity\Task();
+            $task->setCreateDateTime(new \DateTime());
+            $task->setStartDateTime($data->getCreatedate());
+            $task->setStopDateTime($data->getCreatedate());
+            $task->setTitle($data->getType()->getName().': '.$user->getFullname());
+            $task->setUser($user);
+            $task->setPerformer($performer);
+            $task->setHandlingMessage($data);
+            $task->setIsDone(false);
+            $task->setTaskType('personal');
+            $em->persist($task);
+            $em->flush();
+        }
+
+        if (isset($formData['usersFromOurSide'])) {
+            //$usersFromOurSide = explode(',', $formData['usersFromOurSide']);
+            $usersFromOurSide = $formData['usersFromOurSide'];
+            if (count($usersFromOurSide)) {
+                foreach ($usersFromOurSide as $userFromOurSide) {
+                    $handlingUser = $this->getDoctrine()
+                        ->getRepository('ListsHandlingBundle:HandlingUser')
+                        ->find($userFromOurSide);
+                    $handlingMessageHandlingUser = new HandlingMessageHandlingUser();
+                    $handlingMessageHandlingUser->setHandlingMessage($data);
+                    $handlingMessageHandlingUser->setHandlingUser($handlingUser);
+                    $em->persist($handlingMessageHandlingUser);
+                }
+
+            }
+        }
+        if (isset($formData['contactMany'])) {
+            //$usersFromTheirSide = explode(',', $formData['contactMany']);
+            $usersFromTheirSide = $formData['contactMany'];
+            if (count($usersFromTheirSide)) {
+                foreach ($usersFromTheirSide as $userFromTheirSide) {
+                    $modelContact = $this->getDoctrine()
+                        ->getRepository('ListsContactBundle:ModelContact')
+                        ->find($userFromTheirSide);
+                    $handlingMessageModelContact = new HandlingMessageModelContact();
+                    $handlingMessageModelContact->setHandlingMessage($data);
+                    $handlingMessageModelContact->setModelContact($modelContact);
+                    $em->persist($handlingMessageModelContact);
+                }
+
+            }
+        }
+
+        // Insert future
+        $type = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingMessageType')
+            ->find($formData['nexttype']);
+
+        $nextDatetime = new \DateTime($formData['nextcreatedate']);
+        $contactNext = $formData['contactnext'];
+        $descriptionNext = $formData['descriptionnext'];
+        $statusId = $formData['status'];
+        //$nextUser
+
+        $handlingMessage = new HandlingMessage();
+        $handlingMessage->setCreatedate($nextDatetime);
+        $handlingMessage->setCreatedatetime(new \DateTime());
+
+        if (isset($formData['userNext']) && $formData['userNext']) {
+            /** @var UserRepository $ur */
+            $ur = $this->get('sd_user.repository');
+
+            $userNext = $ur->find($formData['userNext']);
+
+            if ($userNext) {
+                $handlingMessage->setUser($userNext);
+            }
+        } else {
+            $handlingMessage->setUser($user);
+        }
+
+        $handlingMessage->setHandling($handling);
+        $handlingMessage->setType($type);
+        $handlingMessage->setIsBusinessTrip(isset($formData['next_is_business_trip']) ? true : false);
+        $handlingMessage->setAdditionalType(HandlingMessage::ADDITIONAL_TYPE_FUTURE_MESSAGE);
+
+        $handlingMessage->setDescription($descriptionNext);
+
+        if ((int) $contactNext) {
+            $contact = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
+                ->find((int) $contactNext);
+
+            if ($contact) {
+                $handlingMessage->setContact($contact);
+            }
+        }
+
+        $em->persist($handlingMessage);
+        // $em->flush();
+
+        $handling->setLastHandlingDate($data->getCreatedate());
+        $handling->setNextHandlingDate($nextDatetime);
+
+        $handling->setStatusId($statusId);
+
+        $em->persist($handling);
+
+        $em->flush();
+
+        return true;
+    }
 
     /**
      * Saves {formName}Save after valid ajax validation
@@ -3800,6 +3955,75 @@ class AjaxController extends BaseFilterController
                             ->setParameter(':ownerIds', $userIds);
                 }
             ));
+
+         $form
+            ->add('contactnext', 'entity', array(
+                'class' => 'ListsContactBundle:ModelContact',
+                'empty_value' => '',
+                'required' => false,
+                'mapped' => false,
+                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
+                        return $repository->createQueryBuilder('mc')
+                            ->leftJoin('mc.owner', 'owner')
+                            ->where('mc.modelName = :modelName')
+                            ->andWhere('mc.modelId = :modelId')
+                            ->andWhere('owner.id in (:ownerIds)')
+                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                            ->setParameter(':modelId', $organizationId)
+                            ->setParameter(':ownerIds', $userIds);
+                }
+            ));
+
+        $form
+            ->add('status', 'entity', array(
+                'class' => 'ListsHandlingBundle:HandlingStatus',
+                'data' => $handling->getStatus(),
+                'empty_value' => '',
+                'mapped' => false,
+                'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingStatusRepository $repository) {
+                        return $repository->createQueryBuilder('s')
+                            ->orderBy('s.sortorder', 'ASC');
+                }
+            ));
+
+        $form
+            ->add('mindate', 'hidden', array(
+                'data' => $defaultData['mindate'],
+                'mapped' => false
+        ));
+    }
+    /**
+     * Adds children to {formName}ProcessDefaults depending on defaults in request
+     *
+     * @param Form    $form
+     * @param mixed[] $defaultData
+     *
+     * @return void
+     */
+    public function handlingMessageCallFormProcessDefaults($form, $defaultData)
+    {
+        $handlingId = $defaultData['handling_id'];
+
+        /** @var \Lists\HandlingBundle\Entity\Handling $handling */
+        $handling = $this->getDoctrine()->getRepository('ListsHandlingBundle:Handling')
+            ->find($handlingId);
+
+        $creator = $handling->getUser();
+
+        $userIds = array();
+
+        $userIds[$creator->getId()] = $creator->getId();
+
+        /** @var HandlingUser[] $users */
+        $users = $handling->getHandlingUsers();
+
+        if ($users) {
+            foreach ($users as $user) {
+                $userIds[$user->getUserId()] = $user->getUserId();
+            }
+        }
+
+        $organizationId = $handling->getOrganizationId();
 
          $form
             ->add('contactnext', 'entity', array(

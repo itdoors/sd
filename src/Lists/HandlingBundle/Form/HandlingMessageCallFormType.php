@@ -2,6 +2,7 @@
 
 namespace Lists\HandlingBundle\Form;
 
+use Lists\HandlingBundle\Entity\HandlingMessage;
 use SD\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\AbstractType;
@@ -16,6 +17,7 @@ use Symfony\Component\Form\FormEvent;
  */
 class HandlingMessageCallFormType extends AbstractType
 {
+
     protected $container;
 
     /**
@@ -25,7 +27,6 @@ class HandlingMessageCallFormType extends AbstractType
     {
         $this->container = $container;
     }
-
     /**
      * @param FormBuilderInterface $builder
      * @param array                $options
@@ -33,22 +34,13 @@ class HandlingMessageCallFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $container = $this->container;
-
         $builder
-            ->add('createdate', 'datetime', array(
-                'data' => new \DateTime(),
-                'widget' => 'single_text',
-                'format' => 'dd.M.yyyy HH:mm'
-            ))
-            ->add('type', null, array(
-                'empty_value' => '',
-                'required' => true,
-            ))
             ->add('nextcreatedate', 'datetime', array(
                 'required' => true,
                 'mapped' => false,
                 'widget' => 'single_text',
                 'format' => 'dd.M.yyyy HH:mm'
+              //  'empty_value' => ''
             ))
             ->add('nexttype', 'entity', array(
                 'class' => 'ListsHandlingBundle:HandlingMessageType',
@@ -61,7 +53,7 @@ class HandlingMessageCallFormType extends AbstractType
                 'required' => false
             ))
             ->add('description')
-            ->add('descriptionnext', 'text', array(
+            ->add('descriptionnext', 'textarea', array(
                 'required' => false,
                 'mapped' => false
             ))
@@ -78,18 +70,18 @@ class HandlingMessageCallFormType extends AbstractType
         $user = $container->get('security.context')->getToken()->getUser();
 
         if ($user->hasRole('ROLE_SALESADMIN')) {
-            $builder
-                ->add('user', 'hidden_entity', array(
-                    'entity' => 'SDUserBundle:User',
-                    'data_class' => null,
-                    'data' => $user
-                ))
-                ->add('userNext', 'hidden_entity', array(
-                    'entity' => 'SDUserBundle:User',
-                    'data_class' => null,
-                    'data' => $user,
-                    'mapped' => false
-                ));
+//            $builder
+//                ->add('user', 'hidden_entity', array(
+//                    'entity' => 'SDUserBundle:User',
+//                    'data_class' => null,
+//                    'data' => $user
+//                ))
+//                ->add('userNext', 'hidden_entity', array(
+//                    'entity' => 'SDUserBundle:User',
+//                    'data_class' => null,
+//                    'data' => $user,
+//                    'mapped' => false
+//                ));
         }
 
         $builder
