@@ -66,6 +66,13 @@ class OrganizationSalesFormType extends AbstractType
                 'empty_value' => '',
                 'query_builder' => $lr->getOnlyScopeQuery()
             ))
+            ->add('organizationsigns', 'entity', array(
+                'class'=>'Lists\LookupBundle\Entity\Lookup',
+                'property'=>'name',
+                'empty_value' => '',
+                'multiple' => 'multiple',
+                'query_builder' => $lr->getGroupOrganizationQuery()
+            ))
             ->add('phone')
             ->add('physicalAddress');
         $builder

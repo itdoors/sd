@@ -69,11 +69,9 @@ class TaskController extends Controller
         ));
     }
     /**
-     * @param Request $request
-     *
      * @return Response
      */
-    public function taskTableDashboardAction (Request $request = null)
+    public function taskTableDashboardAction ()
     {
         $user = $this->getUser();
 
@@ -81,20 +79,18 @@ class TaskController extends Controller
             'user' => $user
         );
 
-        if ($request != null) {
-            $filter = $request->request->get('filter');
-            if ($filter != 'all' && $filter) {
-                $role = $this->getDoctrine()
-                    ->getRepository('SDTaskBundle:Role')
-                    ->findOneBy(array (
-                    'name' => $filter,
-                    'model' => 'task'
-                ));
-                $filterArray['role'] = $role;
-            }
-        }
+        $info = $this->getTasksInfoForTable($filterArray);
 
+        return $this->render('SDTaskBundle:Dashboard:tableTasks.html.twig', $info);
+    }
 
+    /**
+     * @param array $filterArray
+     *
+     * @return array
+     */
+    private function getTasksInfoForTable($filterArray)
+    {
         $tasksUserRole = $this->getDoctrine()
             ->getRepository('SDTaskBundle:TaskUserRole')
             ->findBy($filterArray, array (
@@ -102,21 +98,55 @@ class TaskController extends Controller
                 'id' => 'DESC'
             ));
 
-        if ($filter) {
-            $return = array ();
-            $return['html'] =
-                $this->renderView('SDTaskBundle:Task:tableTasks.html.twig', array (
-                    'tasksUserRole' => $tasksUserRole
-                ));
-            $return['success'] = 1;
+        $allTaskRoles = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:Role')
+            ->findBy(array (
+                'model' => 'task'
+            ));
 
-            return new Response(json_encode($return));
+        return array(
+            'tasksUserRole' => $tasksUserRole,
+            'allTaskRoles' => $allTaskRoles
+        );
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function renderDashboardTaskRowsAjaxAction(Request $request)
+    {
+        $filter = $request->request->get('filter');
+        $user = $this->getUser();
+
+        $filterArray = array (
+            'user' => $user
+        );
+
+        if ($filter) {
+            if (count($filter['role'])) {
+                foreach ($filter['role'] as $filterRole) {
+                    $role = $this->getDoctrine()
+                        ->getRepository('SDTaskBundle:Role')
+                        ->findOneBy(array (
+                            'name' => $filterRole,
+                            'model' => 'task'
+                        ));
+                    $filterArray['role'][] = $role;
+                }
+            }
         }
 
-        return $this->render('SDTaskBundle:Dashboard:tableTasks.html.twig', array (
-            'tasksUserRole' => $tasksUserRole
-        ));
+        $info = $this->getTasksInfoForTable($filterArray);
+
+        $return = array();
+        $return['html'] = $this->renderView('SDTaskBundle:Dashboard:tableTasksRows.html.twig', $info);
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
     }
+
     /**
      * Renders modal inner html for one task
      *
@@ -353,11 +383,16 @@ class TaskController extends Controller
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
 
         $task = $taskUserRole->getTask();
-
-        $stage = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array (
+        $stageName = $stage;
+        $stage = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
             'name' => $stage,
             'model' => 'task'
         ));
+        $translator = $this->get('translator');
+
+        $comment = $translator->trans('Changed the task stage', array(), 'SDTaskBundle');
+        $stageTrans = $translator->trans($stageName, array(), 'SDTaskBundle');
+        $this->insertComment($id, $comment.' :'.$stageTrans);
 
         $task->setStage($stage);
         $em->persist($task);
@@ -454,8 +489,12 @@ class TaskController extends Controller
 
         $newTaskEndDate = new TaskEndDate();
         $newTaskEndDate->setEndDateTime($newDate);
+        $translator = $this->get('translator');
+
         if ($taskUserRole->getRole() == 'controller') {
             $newTaskEndDate->setStage($stageDate);
+            $comment = $translator->trans('Changed the end date', array(), 'SDTaskBundle');
+            $this->insertComment($id, $comment.' :'.$newDate->format('d-m-Y H:i'));
         } else {
             $newTaskEndDate->setStage($stageRequest);
             $stageDateRequest = $em->getRepository('SDTaskBundle:Stage')->findOneby(array (
@@ -463,6 +502,8 @@ class TaskController extends Controller
                 'model' => 'task',
             ));
             $task->setStage($stageDateRequest);
+            $comment = $translator->trans('Made the end date request', array(), 'SDTaskBundle');
+            $this->insertComment($id, $comment.' :'.$newDate->format('d-m-Y H:i'));
         }
         $newTaskEndDate->setTask($task);
         $newTaskEndDate->setChangeDateTime(new \DateTime());
@@ -481,7 +522,7 @@ class TaskController extends Controller
      *
      * @return Response
      */
-    public function answerDateAction (Request $request)
+    public function answerDateAction(Request $request)
     {
         $id = $request->request->get('id');
         $answer = $request->request->get('answer');
@@ -500,18 +541,31 @@ class TaskController extends Controller
             'task' => $task,
             'stage' => $stageRequest
         ));
-
+        $translator = $this->get('translator');
         if ($answer) {
             $answerStageName = 'accepted';
+            $comment = $translator->trans('Accepted the date request', array(), 'SDTaskBundle');
+            $this->insertComment($id, $comment);
         } else {
             $answerStageName = 'rejected';
+            $comment = $translator->trans('Rejected the date request', array(), 'SDTaskBundle');
+            $this->insertComment($id, $comment);
         }
-        $answerStage = $em->getRepository('SDTaskBundle:Stage')->findOneby(array (
+        $answerStage = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array (
             'name' => $answerStageName,
             'model' => 'task_end_date'
         ));
         $taskEndDateRequested->setStage($answerStage);
         $em->persist($taskEndDateRequested);
+
+        $stageCreated = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array (
+            'name' => 'created',
+            'model' => 'task'
+        ));
+
+        $task->setStage($stageCreated);
+        $em->persist($task);
+
         $em->flush();
 
         $this->checkIfCanPerform($id, true);
@@ -521,7 +575,7 @@ class TaskController extends Controller
         return new Response(json_encode($return));
     }
     /**
-     * Insert Comment
+     * Insert Comment to action
      *
      * @param Request $request
      *
@@ -532,8 +586,20 @@ class TaskController extends Controller
         $id = $request->request->get('id');
         $commentValue = $request->request->get('comment');
 
+        $this->insertComment($id, $commentValue);
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
+
+    /**
+     * @param int    $idTaskUserRole
+     * @param string $commentValue
+     */
+    protected function insertComment($idTaskUserRole, $commentValue)
+    {
         $em = $this->getDoctrine()->getManager();
-        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
+        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($idTaskUserRole);
 
         $idTask = $taskUserRole->getTask()->getId();
         $user = $this->getUser();
@@ -547,8 +613,5 @@ class TaskController extends Controller
 
         $em->persist($comment);
         $em->flush();
-        $return['success'] = 1;
-
-        return new Response(json_encode($return));
     }
 }

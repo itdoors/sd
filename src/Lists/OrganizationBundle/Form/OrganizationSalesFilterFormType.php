@@ -93,6 +93,20 @@ class OrganizationSalesFilterFormType extends AbstractType
                     )),
                     'placeholder' => 'Enter edrpou',
                 )
+            ))
+            ->add('organizationsigns', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_organization_lookup'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_organization_lookup_by_ids'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 0,
+                        'allowClear' => true,
+                        'width' => '250px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter view organizarion',
+                )
             ));
 
         $builder

@@ -183,6 +183,17 @@ Lists\OrganizationBundle\Entity\Organization:
             targetEntity: OrganizationUser
             mappedBy: organization
     manyToMany:
+        organizationsigns:
+            targetEntity: Lists\LookupBundle\Entity\Lookup
+            inversedBy: null
+            joinTable:
+              name: organization_organizationsign
+              joinColumns:
+                organization_id:
+                  referencedColumnName: id
+              inverseJoinColumns:
+                organization_sign_id:
+                  referencedColumnName: id
 #        users:
 #            targetEntity: SD\UserBundle\Entity\User
 #            inversedBy: organizations

@@ -31,14 +31,6 @@
                             {% trans %}Add task{% endtrans %} <i class="fa fa-plus"></i>
                         </a>
                         <br><br>
-                        <div class="row">
-                            <div class="col-md-3"><a class="yellow btn filterButton" style="min-width: 100px;" href="#" data-show="all">{% trans %}All{% endtrans %}</a></div>
-                            <div class="col-md-3"><a class="blue btn filterButton" style="min-width: 100px;" href="#" data-show="performer">{% trans %}Performer{% endtrans %}</a></div>
-                            <div class="col-md-3"><a class="purple btn filterButton" style="min-width: 100px;" href="#" data-show="controller">{% trans %}Controller{% endtrans %}</a></div>
-                            <div class="col-md-3"><a class="red btn filterButton" style="min-width: 100px;" href="#" data-show="author">{% trans %}Author{% endtrans %}</a></div>
-                        </div>
-
-                        <br>
 
                         <div id="tasks_list" data-url="{{ path('sd_task_table_dashboard')}}">
                                 {{ render(controller('SDTaskBundle:Task:taskTableDashboard')) }}
@@ -46,7 +38,8 @@
         </div>
             <input type="hidden" id="more_info_input"
                     data-url_task_modal="{{ path('sd_task_modal') }}"
-                    data-url_task_table="{{ path('sd_task_table_dashboard')}}">
+                    data-url_task_table="{{ path('sd_task_table_dashboard')}}"
+                    data-url_task_ajax_table="{{ path('sd_task_table_dashboard_rows_ajax')}}">
             {#
                         <div id="base_table_test" data-url="{{ path('it_doors_oper_coworker_test_table')}}">
                             {{ render(controller('ITDoorsOperBundle:OperCoworkerInfo:testTableRender', {
