@@ -978,4 +978,49 @@ CREATE INDEX IDX_FF2CA26B8DB60186 ON task_file (task_id);
 ALTER TABLE task_file ADD CONSTRAINT FK_FF2CA26BA76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE task_file ADD CONSTRAINT FK_FF2CA26B8DB60186 FOREIGN KEY (task_id) REFERENCES task (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 -- staging -----
--- prod -----
+-- prod ----
+
+UPDATE "public".companystructure SET "root" = 1 WHERE id = 14;
+UPDATE "public".companystructure SET "root" = 1 WHERE id = 15;
+UPDATE "public".companystructure SET "root" = 1 WHERE id = 31;
+UPDATE "public".companystructure SET "lft" = 0, "lvl" = 1, "rgt" = 0, "root" = 1 WHERE id = 43;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 13;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 22;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 39;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 40;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 42;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 41;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 37;
+UPDATE "public".companystructure SET "lft" = 0, "rgt" = 0, "root" = 2 WHERE id = 44;
+UPDATE "public".companystructure SET "lft" = 0, "rgt" = 0, "root" = 3 WHERE id = 45;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 38;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 12;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 35;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 34;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 30;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 33;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 3;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 5;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 4;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 23;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 25;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 24;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 26;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 6;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 28;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 7;
+UPDATE "public".companystructure SET "root" = 5 WHERE id = 8;
+UPDATE "public".companystructure SET "root" = 4 WHERE id = 29;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 9;
+UPDATE "public".companystructure SET "parent_id" = 3, "lvl" = 2, "root" = 3 WHERE id = 32;
+INSERT INTO "public".companystructure (id, parent_id, "name", mpk, address, phone, stuff_id, lft, lvl, rgt, root) 
+	VALUES (46, 3, 'Киев', 'к-', NULL, NULL, NULL, 0, 2, 0, 3)
+INSERT INTO "public".companystructure (id, parent_id, "name", mpk, address, phone, stuff_id, lft, lvl, rgt, root) 
+	VALUES (48, 3, 'Технический отдел', 'т-', NULL, NULL, NULL, 0, 2, 0, 3)
+INSERT INTO "public".companystructure (id, parent_id, "name", mpk, address, phone, stuff_id, lft, lvl, rgt, root) 
+	VALUES (47, 3, 'Прилуки', 'п-', NULL, NULL, NULL, 0, 2, 0, 3)
+INSERT INTO "public".companystructure (id, parent_id, "name", mpk, address, phone, stuff_id, lft, lvl, rgt, root) 
+	VALUES (49, 5, 'Львов', 'л-', NULL, NULL, NULL, 0, 2, 0, 3)
+
+-- staging ----------------------
+-- prod ----------------------
