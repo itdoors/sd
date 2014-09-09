@@ -38,7 +38,7 @@ var ITDoorsSip = (function() {
         this.params = $.extend(defaults, options);
     };
 
-    ITDoorsSip.prototype.initIO = function(peerId, modelName, modelId)
+    ITDoorsSip.prototype.initIO = function(peerId, modelName, modelId, onDial)
     {
         var self = this;
 
@@ -65,6 +65,9 @@ var ITDoorsSip = (function() {
                             modelId: self.modelId,
                             uniqueId: clientGet.uniqueId
                         });
+                        if (onDial) {
+                            onDial();
+                        }
                         break;
                     case "Hangup":
                         break;
