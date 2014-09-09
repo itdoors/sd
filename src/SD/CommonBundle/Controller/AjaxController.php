@@ -2586,10 +2586,18 @@ class AjaxController extends BaseFilterController
                 ->getRepository('ITDoorsControllingBundle:Invoice')
                     ->findBy(array('dogovorId' => $invoice->getDogovorId()));
                 foreach ($invoices as $invoiceCS) {
-                    $invoiceC = new \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure();
-                    $invoiceC->setCompanystructure($company);
-                    $invoiceC->setInvoice($invoiceCS);
-                    $em->persist($invoiceC);
+                    $invoiceCompanystructure = $em
+                        ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
+                        ->findOneBy(array(
+                            'invoiceId' => $invoiceCS->getId(),
+                            'companystructureId' => $company->getId()
+                        ));
+                    if ($invoiceCompanystructure) {
+                        $invoiceC = new \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure();
+                        $invoiceC->setCompanystructure($company);
+                        $invoiceC->setInvoice($invoiceCS);
+                        $em->persist($invoiceC);
+                    }
                 }
                 $dogovorC = new DogovorCompanystructure();
                 $dogovorC->setCompanyStructures($company);
