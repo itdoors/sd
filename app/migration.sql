@@ -958,8 +958,6 @@ DROP INDEX uniq_c1ee637c9e9ffaa0;
 CREATE INDEX IDX_C1EE637C9E9FFAA0 ON organization (ownership_id);
 -- staging ++++
 -- prod ++++
--- staging ----------------------
--- prod ----------------------
 ALTER TABLE fos_user ADD peer_id INT DEFAULT NULL;
 ALTER TABLE fos_user ADD peer_password VARCHAR(255) DEFAULT NULL;
 -- staging ----------------------
@@ -967,7 +965,7 @@ ALTER TABLE fos_user ADD peer_password VARCHAR(255) DEFAULT NULL;
 CREATE TABLE call (
     id SERIAL NOT NULL,
     caller_id INT NOT NULL,
-    receiver_id INT  \DEFAULT NULL,
+    receiver_id INT  DEFAULT NULL,
     peer_id INT DEFAULT NULL,
     phone VARCHAR(12) DEFAULT NULL,
     proxy_id VARCHAR(255) DEFAULT NULL,

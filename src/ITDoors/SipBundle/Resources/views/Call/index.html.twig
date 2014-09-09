@@ -1,4 +1,5 @@
 {% extends "::call.html.twig" %}
+{% trans_default_domain 'ITDoorsSipBundle' %}
 {% block css_page_level_plugin %}
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
@@ -23,32 +24,41 @@
     {{ parent() }}
     <script type="text/javascript">
         $(document).ready(function(){
-            ITDoorsSip.initIO('{{ app.user.peerId }}', '{{ params.modelName }}', '{{ params.modelId }}');
-
-            //var uniqueId = ITDoorsSip.getUniqueId();
-
-            callbackHangup = function(uniqueId) {
+            onDial = function() {
+                var uniqueId = ITDoorsSip.getUniqueId();
+                console.log(uniqueId);
                 {% if formName %}
+                        $('#managers_list_new').click();
                         var obj = $('#{{formName}}_uniqueId');
                         if (obj !== undefined) {
                             obj.val(uniqueId);
-                            $('.bottons-form').show();
-                        } else {
-                            close();
                         }
+                {% endif %}
+              
+            };
+            
+            ITDoorsSip.initIO('{{ app.user.peerId }}', '{{ params.modelName }}', '{{ params.modelId }}', onDial);
+
+            
+            callbackHangup = function() {
+                {% if formName %}
+                    var obj = $('#{{formName}}_uniqueId');
+                    if (obj === undefined) {
+                        close();
+                    }else{
+                        $('.hangup-btn').hide();
+                    }
                 {% else %}
                     close();
                 {% endif %}
               
             };
             ITDoorsSip.initSIP('{{ app.user.peerId }}', '{{ app.user.peerPassword }}', '{{ phone }}', callbackHangup);
-         function closeIt(){
-            return 'Если Вы закроете окно то будет прерван звонок';
-         }
-        window.onbeforeunload = closeIt;
-        {% if formName %}
-            $('#managers_list_new').click();
-         {% endif %}
+
+            function closeIt(){
+               return '{% trans %}Attention !!! If you close the window, the call will be terminated{% endtrans %}.';
+            }
+            window.onbeforeunload = closeIt;
         });
     </script>
 {% endblock %}
