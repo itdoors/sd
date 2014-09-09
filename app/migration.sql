@@ -972,3 +972,40 @@ SELECT id, organization_sign_id FROM "public".organization WHERE "public".organi
 ALTER TABLE invoice ADD deletedAt TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL;
 -- staging -----
 -- prod ----
+
+UPDATE "public".companystructure SET "root" = 1 WHERE id = 14;
+UPDATE "public".companystructure SET "root" = 1 WHERE id = 15;
+UPDATE "public".companystructure SET "root" = 1 WHERE id = 31;
+UPDATE "public".companystructure SET "lft" = 0, "lvl" = 1, "rgt" = 0, "root" = 1 WHERE id = 43;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 13;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 22;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 39;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 40;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 42;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 41;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 37;
+UPDATE "public".companystructure SET "lft" = 0, "rgt" = 0, "root" = 2 WHERE id = 44;
+UPDATE "public".companystructure SET "lft" = 0, "rgt" = 0, "root" = 3 WHERE id = 45;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 38;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 12;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 35;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 34;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 30;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 33;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 3;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 5;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 4;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 23;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 25;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 24;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 26;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 6;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 28;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 7;
+UPDATE "public".companystructure SET "root" = 5 WHERE id = 8;
+UPDATE "public".companystructure SET "root" = 4 WHERE id = 29;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 9;
+UPDATE "public".companystructure SET "parent_id" = 3, "lvl" = 2, "root" = 3 WHERE id = 32;
+
+-- staging ----------------------
+-- prod ----------------------
