@@ -1006,6 +1006,14 @@ UPDATE "public".companystructure SET "root" = 5 WHERE id = 8;
 UPDATE "public".companystructure SET "root" = 4 WHERE id = 29;
 UPDATE "public".companystructure SET "root" = 3 WHERE id = 9;
 UPDATE "public".companystructure SET "parent_id" = 3, "lvl" = 2, "root" = 3 WHERE id = 32;
+INSERT INTO "public".companystructure (id, parent_id, "name", mpk, address, phone, stuff_id, lft, lvl, rgt, root) 
+	VALUES (46, 3, 'Киев', 'к-', NULL, NULL, NULL, 0, 2, 0, 3)
+INSERT INTO "public".companystructure (id, parent_id, "name", mpk, address, phone, stuff_id, lft, lvl, rgt, root) 
+	VALUES (48, 3, 'Технический отдел', 'т-', NULL, NULL, NULL, 0, 2, 0, 3)
+INSERT INTO "public".companystructure (id, parent_id, "name", mpk, address, phone, stuff_id, lft, lvl, rgt, root) 
+	VALUES (47, 3, 'Прилуки', 'п-', NULL, NULL, NULL, 0, 2, 0, 3)
+INSERT INTO "public".companystructure (id, parent_id, "name", mpk, address, phone, stuff_id, lft, lvl, rgt, root) 
+	VALUES (49, 5, 'Львов', 'л-', NULL, NULL, NULL, 0, 2, 0, 3)
 
 -- staging ----------------------
 -- prod ----------------------
