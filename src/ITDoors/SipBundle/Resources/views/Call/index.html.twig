@@ -40,7 +40,6 @@
                     if (obj.length !== undefined) {
                         obj.val(uniqueId);
                     }
-                   
                 {% endif %}
             };            
             ITDoorsSip.initIO('{{ app.user.peerId }}', '{{ params.modelName }}', '{{ params.modelId }}', onDial);
@@ -49,7 +48,7 @@
             callbackHangup = function() {
                 {% if formName %}
                     var obj = $('#{{formName}}_uniqueId');
-                    if (obj === undefined) {
+                    if (obj.length === undefined) {
                         close();
                     }else{
                         $('.hangup-btn').hide();
@@ -63,7 +62,12 @@
             ITDoorsSip.initSIP('{{ app.user.peerId }}', '{{ app.user.peerPassword }}', '{{ phone }}', callbackHangup);
 
             function closeForm(){
-               return '{% trans %}Attention !!! If you close the window, the appeal does not survive{% endtrans %}.';
+                var obj = $('#{{formName}}_uniqueId');
+                    if (obj.length !== undefined) {
+                        return '{% trans %}Attention !!! If you close the window, the appeal does not survive{% endtrans %}.';
+                    }else{
+                        close();
+                    }
             }
             function closeIt(){
                return '{% trans %}Attention !!! If you close the window, the call will be terminated{% endtrans %}.';
