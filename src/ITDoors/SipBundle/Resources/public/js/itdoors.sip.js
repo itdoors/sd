@@ -40,6 +40,10 @@ var ITDoorsSip = (function() {
 
     ITDoorsSip.prototype.initIO = function(peerId, modelName, modelId, onDial)
     {
+        if (!peerId) {
+            return;
+        }
+
         var self = this;
 
         this.modelName = modelName;
@@ -230,6 +234,10 @@ var ITDoorsSip = (function() {
 
     ITDoorsSip.prototype.initSIP = function(peerId, peerPassword, phone, callbackHangup)
     {
+        if (!peerId || !peerPassword || !phone) {
+            return;
+        }
+
         this.initAudioTag();
 
         this.phone = phone;
