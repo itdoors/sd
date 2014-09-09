@@ -14,23 +14,25 @@ ITDoors\SipBundle\Entity\Call:
             comment: 'user_id кто звонил'
         peerId:
             type: integer
-            nullable: false
+            nullable: true
             column: peer_id
         receiverId:
             type: integer
             column: receiver_id
+            nullable: true
             comment: 'model_contct_id кому звонили'
         phone:
             type: string
             length: 12
             fixed: false
-            nullable: false
+            nullable: true
             comment: 'Номер телефона кому звонили'
         proxyId:
             type: string
             length: 255
             column: proxy_id
             comment: 'номер с которого звонили'
+            nullable: true
         uniqueId:
             type: string
             length: 255

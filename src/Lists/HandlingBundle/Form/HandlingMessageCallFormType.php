@@ -42,8 +42,11 @@ class HandlingMessageCallFormType extends AbstractType
                 'format' => 'dd.M.yyyy HH:mm'
               //  'empty_value' => ''
             ))
-            ->add('createdate', 'hidden', array(
-                'data' => date('Y-m-d')
+            ->add('createdate', 'datetime', array(
+                'data' => new \DateTime(),
+                'disabled' => 'disabled',
+                'widget' => 'single_text',
+                'format' => 'dd.M.yyyy HH:mm'
             ))
             ->add('nexttype', 'entity', array(
                 'class' => 'ListsHandlingBundle:HandlingMessageType',
@@ -67,6 +70,10 @@ class HandlingMessageCallFormType extends AbstractType
             ->add('handling_id', 'hidden')
             ->add('mindate', 'hidden', array(
                 'mapped' => false
+            ))
+            ->add('type', 'hidden', array(
+                'mapped' => false,
+                'data' => 1
             ));
 
         /** @var User $user */
@@ -88,8 +95,7 @@ class HandlingMessageCallFormType extends AbstractType
         }
 
         $builder
-            ->add('create', 'submit')
-            ->add('cancel', 'button');
+            ->add('create', 'submit');
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,

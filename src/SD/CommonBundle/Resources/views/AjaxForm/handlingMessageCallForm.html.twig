@@ -56,6 +56,21 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">{% trans %}Current Message{% endtrans %}</div>
                             <div class="panel-body">
+                                <div class="form-group"> {#.'<span class="required"> * </span>'#}
+                                    {{ form_label(form.createdate, 'Current Message Create Date', {'attr': {'class': 'control-label'}}) }}
+                                    <div class="input-group date form_datetime">
+                                        {{ form_widget(form.createdate, {'attr' : {
+                                        'class' : 'form-control',
+                                        'placeholder': 'Create date',
+                                        'readonly': 'readonly'
+                                        }}) }}
+                                        <span class="input-group-btn">
+                                            <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+                                        </span>
+                                    </div>
+                                        {{ form_errors(form.createdate) }}
+                                </div>
+                                        
                                 {% if form.user is defined %}
                                 <div class="form-group">
                                     {{ form_label(form.user, 'Creator'|trans({}, 'messages'), {'attr': {'class': 'control-label'}}) }}
@@ -155,9 +170,8 @@
                 <input type="hidden" name="targetId" value="{{ targetId }}">
                 <input type="hidden" name="defaultData" value='{{ defaultData|json_encode|raw }}'>
 
-                <div class="form-actions">
+                <div class="form-actions bottons-form" style="display: none">
                     {{ form_widget(form.create, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
-                    {{ form_widget(form.cancel, { 'label': 'Cancel', 'attr': {'class': 'btn default sd-cancel-btn'} } ) }}
                 </div>
                 {{ form_end(form) }}
             </div>

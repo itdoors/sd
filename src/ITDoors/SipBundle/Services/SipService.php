@@ -28,14 +28,19 @@ class SipService
         $this->container = $container;
     }
 
+    /**
+     * 
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
     public function saveCall(InputInterface $input,  OutputInterface $output)
     {
         $em = $this->container->get('doctrine')->getManager();
-        
+
         $caller = $em->getRepository('SDUserBundle:User')->findOneBy(array(
             'peerId' => $input->getOption('callerId')
         ));
-       
+
         $receiver = $em->getRepository('ListsContactBundle:ModelContact')
             ->createQueryBuilder('mc')
             ->select('mc')
@@ -51,18 +56,18 @@ class SipService
                 $call = new Call();
                 $call->setCaller($caller);
                 $call->setUniqueId($input->getOption('uniqueId'));
-                $call->setReceiverId($receiver[0]->getId());
-                $call->setPhone($input->getOption('receiverId'));
             }
+            $call->setReceiverId($receiver[0]->getId());
+            $call->setPhone($input->getOption('receiverId'));
             $call->setDestuniqueId($input->getOption('destuniqueId'));
             $call->setDuration($input->getOption('answeredTime'));
             $call->setFileName($input->getOption('filename'));
             $method = 'save'.ucfirst($modelName).'Message';
-            if (method_exists($this, $method)) {
+            if (method_exists($this, $method) && !$call->getModelId()) {
                 $model = $this->$method($receiver[0], $caller, $input->getOption('modelId'));
                 $call->setModelId($model['modelId']);
                 $call->setModelName($model['modelName']);
-            } else {
+            } elseif (!$call->getModelId()) {
                 $call->setModelId($input->getOption('modelId'));
                 $call->setModelName($modelName);
             }
@@ -72,10 +77,18 @@ class SipService
             $call->setDatetime(new \DateTime());
             $em->persist($call);
             $em->flush();
-        }else {
+        } else {
             $output->writeln("!!! User not found !!!");
         }
     }
+    /**
+     * 
+     * @param \Lists\ContactBundle\Entity\ModelContact $receiver
+     * @param \SD\UserBundle\Entity\User               $caller
+     * @param integer                                  $modelId
+     * 
+     * @return mixed
+     */
     public function saveHandlingMessage(ModelContact $receiver, User $caller, $modelId)
     {
         /*@var EventManager $em */

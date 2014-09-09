@@ -300,7 +300,7 @@ class SalesController extends BaseController
             ));
 
             $usersFromOurSide['message' . $message->getId()] = $usersFromOurSideTemp;
-            
+
             if ($message->getType()->getId() === 1) {
                 $call = $this->getDoctrine()
                     ->getRepository('ITDoorsSipBundle:Call')

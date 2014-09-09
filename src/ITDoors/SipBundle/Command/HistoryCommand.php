@@ -57,7 +57,7 @@ class HistoryCommand extends ContainerAwareCommand
         $modelId = $input->getOption('modelId');
         $dialStatus = $input->getOption('dialStatus');
         $answeredTime = $input->getOption('answeredTime');
-        
+
         $output->writeln("uniqueId = {$uniqueId}");
         $output->writeln("filename = {$filename}");
         $output->writeln("callerId = {$callerId}");

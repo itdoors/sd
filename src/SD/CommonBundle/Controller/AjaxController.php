@@ -45,6 +45,7 @@ use Lists\HandlingBundle\Entity\HandlingUser;
 use Lists\OrganizationBundle\Entity\OrganizationUser;
 use ITDoors\HistoryBundle\Entity\History;
 use Lists\DogovorBundle\Entity\DogovorCompanystructure;
+use ITDoors\SipBundle\Entity\Call;
 
 /**
  * AjaxController class.
@@ -2127,29 +2128,43 @@ class AjaxController extends BaseFilterController
         $handling = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:Handling')
             ->find($handlingId);
-
-        $data->setCreatedatetime(new \DateTime());
-
         $user = $this->getUser();
-
-        if (!$data->getUser()) {
-            $data->setUser($user);
-        }
-
-        $data->setHandling($handling);
-
         $file = $form['file']->getData();
+         // Insert future
+        $typeCall = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingMessageType')
+            ->find(1);
 
+        $em = $this->getDoctrine()->getManager();
+        $call = null;
+        if (isset($formData['uniqueId']) && !empty($formData['uniqueId'])) {
+             $call = $em->getRepository('ITDoorsSipBundle:Call')
+                ->findOneBy(array('uniqueId' => $formData['uniqueId']));
+             if ($call) {
+                $data = $this->getDoctrine()
+                    ->getRepository('ListsHandlingBundle:HandlingMessage')
+                    ->find($call->getModelId());
+             }
+        }
+        $data->setCreatedatetime(new \DateTime());
+        $data->setUser($user);
+        $data->setHandling($handling);
+        $data->setType($typeCall);
         if ($file) {
             $data->upload();
         }
-
-        $em = $this->getDoctrine()->getManager();
         $em->persist($data);
         $em->flush();
         $em->refresh($data);
-
-      
+        if (isset($formData['uniqueId']) && !empty($formData['uniqueId']) && !$call) {
+            $call = new Call();
+            $call->setCaller($user);
+            $call->setUniqueId($formData['uniqueId']);
+            $call->setModelId($data->getId());
+            $call->setDatetime(new \DateTime());
+            $call->setModelName($em->getClassMetadata(get_class($data))->getTableName());
+            $em->persist($call);
+        }
 
         // Insert future
         $type = $this->getDoctrine()
@@ -2160,7 +2175,6 @@ class AjaxController extends BaseFilterController
         $contactNext = $formData['contactnext'];
         $descriptionNext = $formData['descriptionnext'];
         $statusId = $formData['status'];
-        //$nextUser
 
         $handlingMessage = new HandlingMessage();
         $handlingMessage->setCreatedate($nextDatetime);
@@ -4001,6 +4015,9 @@ class AjaxController extends BaseFilterController
                 }
             ));
 
+        $form->add('uniqueId', 'hidden', array(
+                'mapped' => false
+            ));
         $form
             ->add('mindate', 'hidden', array(
                 'data' => $defaultData['mindate'],
