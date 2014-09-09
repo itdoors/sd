@@ -835,10 +835,6 @@ class InvoiceService
 
         $companystructs = $em->getRepository('ListsCompanystructureBundle:Companystructure')
                 ->findAll();
-<<<<<<< HEAD
-
-=======
->>>>>>> 07ce968ae61bbdd4874bdc489dcfa9506dc677f7
         $memStart = memory_get_usage();
         $count = count($invoices);
         $countInvoice = 0;
