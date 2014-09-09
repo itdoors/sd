@@ -170,7 +170,7 @@
                 <input type="hidden" name="targetId" value="{{ targetId }}">
                 <input type="hidden" name="defaultData" value='{{ defaultData|json_encode|raw }}'>
 
-                <div class="form-actions">
+                <div class="form-actions send-form">
                     {{ form_widget(form.create, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
                 </div>
                 {{ form_end(form) }}

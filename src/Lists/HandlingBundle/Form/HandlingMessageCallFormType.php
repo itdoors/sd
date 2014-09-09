@@ -42,9 +42,8 @@ class HandlingMessageCallFormType extends AbstractType
                 'format' => 'dd.M.yyyy HH:mm'
               //  'empty_value' => ''
             ))
-            ->add('createdate', 'datetime', array(
+             ->add('createdate', 'datetime', array(
                 'data' => new \DateTime(),
-                'disabled' => 'disabled',
                 'widget' => 'single_text',
                 'format' => 'dd.M.yyyy HH:mm'
             ))
