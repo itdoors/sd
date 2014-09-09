@@ -1,0 +1,9 @@
+{% for taskUserRole in tasksUserRole %}
+    {{
+    include('SDTaskBundle:Task:taskListItem.html.twig',
+        {
+            'taskUserRole' : taskUserRole
+        }
+    )
+    }}
+{% endfor %}

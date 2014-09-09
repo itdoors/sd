@@ -1,0 +1,18 @@
+
+{% set key = 0 %}
+{% for key,taskEndDate in taskUserRole.task.taskEndDates %}
+    {% if taskEndDate.stage == 'accepted' %}
+        {% set key = key %}
+    {% endif %}
+{% endfor %}
+    {% set taskEndDate = taskUserRole.task.taskEndDates[key] %}
+    {% set stage = taskUserRole.task.stage %}
+        <span>
+            {% if 'now'|date('U') > taskEndDate.endDatetime|date('U')  and
+            stage != 'closed' and stage != 'done' and stage != 'undone' %}
+                <i class="icon-bell" style="color: red" title="{% trans %}Overdue{% endtrans %}"></i>
+
+            {% endif %}
+
+            {{ taskEndDate.endDatetime|date('d.m.Y H:i') }}
+        </span>

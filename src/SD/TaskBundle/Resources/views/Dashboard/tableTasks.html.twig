@@ -103,6 +103,22 @@
         background-color: #f0f0f0;
     }
 </style>
+<div id="form_modal_task" class="modal fade" tabindex="-1" role="basic" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">{% trans %}Create task{% endtrans %}</h4>
+            </div>
+            <div class="modal-body">
+                <div id="taskFormTpl1"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
 
 <div class="portlet light bordered">
 <div class="portlet-title">
@@ -113,6 +129,18 @@
     </div>
     <div class="actions">
         <div class="btn-group">
+
+            <a class="btn btn-sm btn-default btn-circle ajax-form" style="margin-right: 15px;"
+                                          data-toggle="modal"
+                                          href="#form_modal_task"
+                                          data-target_holder="taskFormTpl1"
+                                          data-form_name="taskForm1"
+                                          data-post_function="updateList"
+                                          data-post_target_id="tasks_list"
+                    >
+                <i class="fa fa-plus"></i>
+            </a>
+
             <a class="btn btn-sm btn-default btn-circle" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                 {% trans %}Filter by{% endtrans %} <i class="fa fa-angle-down"></i>
             </a>

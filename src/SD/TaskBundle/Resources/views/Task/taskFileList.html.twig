@@ -1,0 +1,24 @@
+<div class="form-group">
+    <div class="col-md-12">
+        <ul class="media-list">
+            {% for file in files %}
+                <li class="media">
+                    <a class="pull-left" href="{{ path('sd_user_show',{ 'id': file.user.id}) }}">
+                        <img class="todo-userpic" src="{{ asset( userprofiles_url ~ file.user.id ~ '/image29_' ~ file.user.photo) }}" width="27px" height="27px">
+                    </a>
+                    <div class="media-body todo-comment">
+                        {#
+                                                            <button type="button" class="todo-comment-btn btn btn-circle btn-default btn-xs">&nbsp; Reply &nbsp;</button>
+                        #}
+                        <p class="todo-comment-head">
+                            <span class="todo-comment-username">{{ file.user }}</span> &nbsp; <span class="todo-comment-date">{{ file.createDate|date('H:i d-m-Y') }}</span>
+                        </p>
+                        <p class="todo-text-color">
+                            <a href="/uploads/task/{{ file.filepath }}" target="_blank">{{ file.name }}</a> <br>
+                        </p>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
