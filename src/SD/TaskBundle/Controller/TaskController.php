@@ -36,7 +36,13 @@ class TaskController extends Controller
         return $this->render('SDTaskBundle:Task:index.html.twig', $info);
     }
 
-    public function taskListAction(Request $request) {
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function taskListAction(Request $request)
+    {
         $filter = $request->request->get('filter');
         $user = $this->getUser();
 
@@ -60,11 +66,11 @@ class TaskController extends Controller
 
         $info = $this->getTasksInfoForTable($filterArray);
 
-        $return = array();
-        $return['html'] = $this->renderView('SDTaskBundle:Task:taskList.html.twig', $info);
-        $return['success'] = 1;
+/*        $return = array();
+        $return['html'] =
+        $return['success'] = 1;*/
 
-        return new Response(json_encode($return));
+        return new Response($this->renderView('SDTaskBundle:Task:taskList.html.twig', $info));
     }
 
     /**
@@ -72,7 +78,8 @@ class TaskController extends Controller
      *
      * @return Response
      */
-    public function taskViewAction(Request $request) {
+    public function taskViewAction(Request $request)
+    {
         $id = $request->request->get('id');
 
         $taskUserRole = $this->getDoctrine()
@@ -662,5 +669,121 @@ class TaskController extends Controller
 
         $em->persist($comment);
         $em->flush();
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return Response
+     */
+    public function renderListOfFilesAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
+
+        $idTask = $taskUserRole->getTask()->getId();
+
+        $info = $this->getFilesInfoFromTask($idTask);
+
+        return $this->render('SDTaskBundle:Task:taskFileList.html.twig', $info);
+    }
+
+    /**
+     * @param int $idTask
+     *
+     * @return mixed
+     */
+    protected function getFilesInfoFromTask($idTask)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $task = $em->getRepository('SDTaskBundle:Task')->find($idTask);
+
+        $files = $em->getRepository('SDTaskBundle:TaskFile')->findBy(array(
+            'task' => $task
+        ), array(
+            'createDate' => 'DESC'
+        ));
+
+        $info['files'] = $files;
+
+        return $info;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function changeDateAction(Request $request)
+    {
+        $id = $request->request->get('id');
+        $value = $request->request->get('value');
+
+        $em = $this->getDoctrine()->getManager();
+        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
+
+        $task = $taskUserRole->getTask();
+
+        $stageRequest = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array (
+            'name' => 'request',
+            'model' => 'task_end_date'
+        ));
+
+        $dateRequest = $em->getRepository('SDTaskBundle:TaskEndDate')->findBy(array (
+            'task' => $task,
+            'stage' => $stageRequest,
+        ));
+
+        if (sizeof($dateRequest)) {
+            $return['success'] = 0;
+
+            return new Response(json_encode($return));
+        }
+
+        $stageDate = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array (
+            'name' => 'accepted',
+            'model' => 'task_end_date',
+        ));
+
+        $date = $em->getRepository('SDTaskBundle:TaskEndDate')->findOneBy(array (
+            'task' => $task,
+            'stage' => $stageDate,
+        ), array (
+            'id' => 'DESC'
+        ));
+
+        $newDate = new \DateTime($value);//$date->getEndDateTime()->add(new \DateInterval($stringAddDate));
+
+        $newTaskEndDate = new TaskEndDate();
+        $newTaskEndDate->setEndDateTime($newDate);
+        $translator = $this->get('translator');
+
+        if ($taskUserRole->getRole() == 'controller') {
+            $newTaskEndDate->setStage($stageDate);
+            $comment = $translator->trans('Changed the end date', array(), 'SDTaskBundle');
+            $this->insertComment($id, $comment.' :'.$newDate->format('d-m-Y H:i'));
+        } else {
+            $newTaskEndDate->setStage($stageRequest);
+            $stageDateRequest = $em->getRepository('SDTaskBundle:Stage')->findOneby(array (
+                'name' => 'date request',
+                'model' => 'task',
+            ));
+            $task->setStage($stageDateRequest);
+            $comment = $translator->trans('Made the end date request', array(), 'SDTaskBundle');
+            $this->insertComment($id, $comment.' :'.$newDate->format('d-m-Y H:i'));
+        }
+        $newTaskEndDate->setTask($task);
+        $newTaskEndDate->setChangeDateTime(new \DateTime());
+
+        $em->persist($newTaskEndDate);
+
+        $em->persist($task);
+        $em->flush();
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
     }
 }

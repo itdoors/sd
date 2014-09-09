@@ -224,7 +224,7 @@ class AutomailerController extends BaseFilterController
                     $addFile->setPath($directory);
                     $addFile->setTableName('automailer');
                     $addFile->setTableId($id);
-                    $addFile->setUserId($this->getUser()->getId());
+                    $addFile->setUser($this->getUser());
                     $addFile->setDate(new \DateTime(date('Y-m-d H:i:s')));
                     $em->persist($addFile);
                 }

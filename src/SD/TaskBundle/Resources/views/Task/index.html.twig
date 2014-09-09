@@ -12,9 +12,11 @@
     </ul>
 {% endblock %}
 {% block page_title %}
+{#
     <h3 class="page-title">
         {% trans %}Tasks{% endtrans %} <small>{% trans %}Tasks list{% endtrans %}</small>
     </h3>
+#}
 {% endblock %}
 
 {% block css_page_level_plugin %}
@@ -100,7 +102,12 @@
                     url: url,
                     data: sendData,
                     success: function(data1) {
-                        data = JSON.parse(data1);
+                        spinner.addClass('notDisplayed');
+                        setTaskListContent(data1);
+
+                        //data = JSON.parse(data1);
+
+/*
                         if (data.success == 1) {
                             //console.log(data.html);
                             spinner.addClass('notDisplayed');
@@ -112,38 +119,60 @@
                             alert('error');
                             //$('#copy_etalon_finished').show('blind', {}, 500);
                         }
+*/
 
                     }
 
                 })
             })
 
-            function setTaskContent(html) {
-                $('#task_holder').html('')
-                $('#task_holder').html(html)
-            }
-
-            function setTaskListContent(html) {
-                $('.todo-tasklist').html('')
-                $('.todo-tasklist').html(html)
-            }
-
-            function clearTaskContent() {
-                $('#task_holder').html('')
-            }
-
-            function showSpinner() {
-                var spinner = $('#spinner');
-                spinner.removeClass('notDisplayed');
-            }
-
-            function hideSpinner() {
-                var spinner = $('#spinner');
-                spinner.addClass('notDisplayed');
-            }
 
         })
+
+        function setTaskContent(html) {
+            $('#task_holder').html('')
+            $('#task_holder').html(html)
+        }
+
+        function setTaskListContent(html) {
+            $('.todo-tasklist').html('')
+            $('.todo-tasklist').html(html)
+        }
+
+        function clearTaskContent() {
+            $('#task_holder').html('')
+        }
+
+        function showSpinner() {
+            var spinner = $('#spinner');
+            spinner.removeClass('notDisplayed');
+        }
+
+        function hideSpinner() {
+            var spinner = $('#spinner');
+            spinner.addClass('notDisplayed');
+        }
+
     </script>
+
+    <div id="form_modal_task" class="modal fade" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">{% trans %}Create task{% endtrans %}</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="taskFormTpl1"></div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+    </div>
+
+
     <!-- END PAGE HEADER-->
     <!-- BEGIN PAGE CONTENT-->
     <div class="row">
@@ -243,6 +272,10 @@
                         #}
                     </ul>
                 </div>
+                <h3>{% trans %}Keys{% endtrans %}</h3>
+                <span class="badge badge-danger badge-active">&nbsp;  </span> - {% trans %}author{% endtrans %}<br>
+                <span class="badge badge-info badge-active">&nbsp;  </span> - {% trans %}performer{% endtrans %}<br>
+                <span class="badge badge-warning badge-active">&nbsp;  </span> - {% trans %}controller{% endtrans %}<br>
             </div>
         </div>
     </div>
@@ -254,59 +287,35 @@
     <div class="portlet-title">
         <div class="caption">
             <i class="icon-bar-chart font-green-sharp hide"></i>
-             &nbsp; <span class="caption-subject font-green-sharp bold uppercase">Tune Website</span>
+             &nbsp;
+            <span class="caption-subject font-green-sharp bold uppercase">
+                {% trans %}Tasks list{% endtrans %}
+            </span>
             <span class="caption-helper">
                 <i class="fa fa-spinner fa-spin notDisplayed" id="spinner"></i>
             </span>
         </div>
-{#
         <div class="actions">
             <div class="btn-group">
-                <a class="btn green-haze btn-circle btn-sm" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                    MANAGE <i class="fa fa-angle-down"></i>
+                <a class="btn green-haze btn-circle btn-sm ajax-form"
+                   data-toggle="modal"
+                   href="#form_modal_task"
+                   data-target_holder="taskFormTpl1"
+                   data-form_name="taskForm1"
+                   data-post_function="updateList"
+                   data-post_target_id="task_list"
+                        >{% trans %}Create task{% endtrans %}
+                    <i class="fa fa-plus"></i>
                 </a>
-                <ul class="dropdown-menu pull-right">
-                    <li>
-                        <a href="#">
-                            <i class="i"></i> New Task </a>
-                    </li>
-                    <li class="divider">
-                    </li>
-                    <li>
-                        <a href="#">
-                            Pending <span class="badge badge-danger">
-												4 </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            Completed <span class="badge badge-success">
-												12 </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            Overdue <span class="badge badge-warning">
-												9 </span>
-                        </a>
-                    </li>
-                    <li class="divider">
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="i"></i> Delete Project </a>
-                    </li>
-                </ul>
             </div>
         </div>
-#}
     </div>
     <!-- end PROJECT HEAD -->
     <div class="portlet-body">
     <div class="row">
     <div class="col-md-5 col-sm-4">
         <div class="scroller" style="max-height: 600px;" data-always-visible="0" data-rail-visible="0" data-handle-color="#dae3e7">
-            <div class="todo-tasklist">
+            <div class="todo-tasklist" data-url="{{ path('sd_task_list') }}" id="task_list">
 
                 {% for taskUserRole in tasksUserRole %}
                     {{
@@ -326,6 +335,10 @@
     </div>
     <div class="col-md-7 col-sm-8" id="task_holder">
         <div style="color:#666666;"><< {% trans %}Choose any task from the list{% endtrans %}</div>
+{#
+        <div class="scroller" style="max-height: 600px;" data-always-visible="0" data-rail-visible="0" data-handle-color="#dae3e7"
+                >
+#}
 
 {#
     {{
@@ -336,7 +349,9 @@
         )
     }}
 #}
-
+{#
+        </div>
+#}
     </div>
     </div>
     </div>

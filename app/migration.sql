@@ -967,8 +967,15 @@ ALTER TABLE organization_organizationsign ADD CONSTRAINT FK_2E73694CCB2EF456 FOR
 
 INSERT INTO "public".organization_organizationsign (organization_id, organization_sign_id)
 SELECT id, organization_sign_id FROM "public".organization WHERE "public".organization.organization_sign_id is  not NULL;
--- staging -----
--- prod ----
+-- staging +++++
+-- prod +++++
 ALTER TABLE invoice ADD deletedAt TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL;
+-- staging +++++
+-- prod +++++
+CREATE TABLE task_file (id SERIAL NOT NULL, user_id INT DEFAULT NULL, task_id INT DEFAULT NULL, createdatetime TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, name VARCHAR(255) DEFAULT NULL, filepath VARCHAR(255) NOT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_FF2CA26BA76ED395 ON task_file (user_id);
+CREATE INDEX IDX_FF2CA26B8DB60186 ON task_file (task_id);
+ALTER TABLE task_file ADD CONSTRAINT FK_FF2CA26BA76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE task_file ADD CONSTRAINT FK_FF2CA26B8DB60186 FOREIGN KEY (task_id) REFERENCES task (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 -- staging -----
--- prod ----
+-- prod -----

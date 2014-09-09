@@ -49,3 +49,11 @@ sd_task_view:
 sd_task_list:
     path:     /tasks/list
     defaults: { _controller: SDTaskBundle:Task:taskList}
+
+sd_task_files:
+    path:     /tasks/taskfiles/{id}
+    defaults: { _controller: SDTaskBundle:Task:renderListOfFiles}
+
+sd_task_change_date_calendar:
+    path:     /tasks/change/date/calendar
+    defaults: { _controller: SDTaskBundle:Task:changeDate }

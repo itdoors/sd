@@ -1,4 +1,27 @@
 {% trans_default_domain 'SDTaskBundle' %}
+<link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
+<script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
+<script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
+{{ ajax_form_render_btn({
+    'selector' : '#task_add_file',
+    'formType' : 'taskFileForm',
+    'successFunctions' : {
+        'list_files' : 'ITDoorsAjax.updateList'
+    },
+    'serviceDefault' : {
+        'alias' : 'task.file.form.service',
+        'method' : 'addFormDefaults'
+    },
+    'serviceSave' : {
+        'alias' : 'task.file.form.service',
+        'method' : 'saveForm'
+    },
+    'parameters' : {
+        'idTask' : taskUserRole.task.id
+    },
+    'target' : '#task_add_file_holder'
+    })
+}}
 
 <script>
     $(document).ready(function(){
@@ -34,7 +57,7 @@
 
         $('#task_change_date').die('click');
         $('#task_change_date').live('click', function(e){
-            $('#change_date_holder').toggle('blind', {}, 500)
+            $('#change_date_holder').toggle('blind', {}, 100)
         })
 
         $('.answerButton').die('click');
@@ -64,17 +87,16 @@
             })
         })
 
-        $('.changeDate').die('click');
-        $('.changeDate').live('click', function(e){
-            var value = $(this).data('value');
-            var type = $(this).data('type');
+        $('.changeDateCalendar').die('click');
+        $('.changeDateCalendar').live('click', function(e){
+            var value = $('#new_date_holder').val();
             var id = $('#task_modal_info_holder').data('id');
             var url = $('#task_modal_info_holder').data('url_change_date');;
             var sendData = {
                 'id': id,
-                'value': value,
-                'type': type
+                'value': value
             }
+            alert(value);
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -94,23 +116,6 @@
 
             })
         })
-
-        /*
-         $('#change_date_input').datetimepicker({
-         'language': 'ru',
-         'orientation': "auto",
-         'weekStart': 0
-
-         });
-         */
-
-        /*
-         $('#task_change_date_submit').die('click');
-         $('#task_change_date_submit').live('click', function(e){
-         var date = $('#change_date_input').val();
-         var stage = $(this).data('stage');
-         })
-         */
 
         function insertComment() {
             var comment = $('#comment').val();
@@ -134,7 +139,6 @@
                         } else {
                             //$('#copy_etalon_finished').show('blind', {}, 500);
                         }
-                        return true;
                     }
 
                 })
@@ -169,20 +173,58 @@
 
 
         function updateTask() {
-            location.reload();
+            var id = $('#task_modal_info_holder').data('id');
+            var url = $('#more_info_input').data('url_get_task_view');
+
+            clearTaskContent();
+            showSpinner();
+
+            var sendData = {
+                'id': id
+            }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data1) {
+                    //alert(data1)
+                    data = JSON.parse(data1);
+                    if (data.success == 1) {
+                        hideSpinner();
+                        setTaskContent(data.html);
+                    } else {
+                        //$('#copy_etalon_finished').show('blind', {}, 500);
+                    }
+                }
+            })
         }
-
-
-        //function updateTask_list
+/*
+        Metronic.initSlimScroll('.scroller');
+*/
+        $('#new_date_holder').datetimepicker({
+            minView:0,
+            rtl: Metronic.isRTL(),
+            autoclose: true,
+            format: "dd.mm.yyyy hh:ii:ss",
+            pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+            language: 'ru',
+            minuteStep: 30,
+            weekStart: 1,
+            startDate: new Date()
+        }).on('changeDate', function(ev){
+                    //.val($('.datatime-picker').val()+':00');
+                }
+        );
 
     })
 
 </script>
 
 
-<div class="scroller" style="max-height: 600px;" data-always-visible="0" data-rail-visible="0" data-handle-color="#dae3e7"
+{#
+<div class="scroller" style="max-height: 600px" data-always-visible="0" data-rail-visible="0" data-handle-color="#dae3e7"
      >
-    <form action="#" class="form-horizontal">
+#}
     <!-- TASK HEAD -->
     <div class="form">
         <div class="form-group">
@@ -202,10 +244,25 @@
                             &nbsp; {% trans %}Set viewed{% endtrans %} &nbsp;
                         </button>
                     {% else %}
-                            <div class="actions">
+                        {% set showAction = false %}
+                        {% if taskUserRole.role == 'performer' %}
+                            {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'date request'%}
+                                {% set showAction = true %}
+                            {% endif %}
+                        {% endif %}
+                        {% if taskUserRole.role == 'controller' %}
+                            {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'checking' or taskUserRole.task.stage == 'date request'%}
+                                {% set showAction = true %}
+                            {% endif %}
+                            {% if taskUserRole.task.stage == 'checking'%}
+                                {% set showAction = true %}
+                            {% endif %}
+                        {% endif %}
+                        {% if showAction == true %}
+                        <div class="actions">
                                 <div class="btn-group">
                                     <a class="btn green-haze btn-circle btn-sm" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                        MANAGE <i class="fa fa-angle-down"></i>
+                                        {% trans %}Contol{% endtrans %} <i class="fa fa-angle-down"></i>
                                     </a>
                                     <ul class="dropdown-menu pull-right">
                                         {% if taskUserRole.role == 'performer' %}
@@ -235,39 +292,10 @@
 
 
                                         {% endif %}
-                                        <li>
-                                            <a href="#">
-                                                <i class="i"></i> New Task </a>
-                                        </li>
-                                        <li class="divider">
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                Pending <span class="badge badge-danger">
-                                                                    4 </span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                Completed <span class="badge badge-success">
-                                                                    12 </span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                Overdue <span class="badge badge-warning">
-                                                                    9 </span>
-                                            </a>
-                                        </li>
-                                        <li class="divider">
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i class="i"></i> Delete Project </a>
-                                        </li>
                                     </ul>
                                 </div>
                             </div>
+                        {% endif %}
                     {% endif %}
 
 
@@ -278,13 +306,15 @@
         <!-- TASK TITLE -->
         <div class="form-group">
             <div class="col-md-12">
-                {{ taskUserRole.task.title }}
+                <br>
+                <h3>{{ taskUserRole.task.title }}</h3>
             </div>
         </div>
         <!-- TASK DESC -->
         <div class="form-group">
             <div class="col-md-12">
                 {{ taskUserRole.task.description }}
+                <br><br>
             </div>
         </div>
 
@@ -300,6 +330,7 @@
                             'taskEndDates': taskUserRole.task.taskEndDates,
                             'stage': taskUserRole.task.stage
                         }) }}
+                    <br><br>
                 </div>
             </div>
         </div>
@@ -361,7 +392,8 @@
                 {% if taskUserRole.role == 'controller' %}
                     {% if taskUserRole.task.stage == 'date request'%}
                         {% if taskUserRole.isViewed == true %}
-                            <div style="clear: both;" class="alert alert-danger">
+                            <br>
+                            <div class="alert alert-danger">
                                 {% trans %}Request to change date{% endtrans %}:
                                 <a data-value="1" class="btn green answerButton" style="margin-left: 10px;">{% trans %}Submit{% endtrans %}</a>
                                 <a data-value="0" class="btn red answerButton" style="margin-left: 10px;">{% trans %}Reject{% endtrans %}</a>
@@ -379,51 +411,78 @@
         <div class="form-actions right todo-form-actions">
             {% if taskUserRole.task.stage != 'date request' and taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone' and taskUserRole.task.stage != 'closed' and taskUserRole.task.stage != 'checking'
             and taskUserRole.role != 'author' and taskUserRole.isViewed == true %}
-                <button id="task_change_date" data-stage="date request" class="btn btn-circle btn-sm green-haze">{% trans %}Change end date{% endtrans %}</button>
+                <button id="task_change_date" class="btn btn-circle btn-sm green-haze">{% trans %}Change the end date{% endtrans %}</button>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12">
+
                 <div id="change_date_holder" style="display: none">
-                    {#
-                                <br>
-                                <label for="change_date_input">Change end date to:</label>
-                                <input type="text" id="change_date_input">
-                                <a id="task_change_date_submit" data-stage="date request" class="btn blue stageButton" style="margin-left: 10px;">{% trans %}Send request{% endtrans %}</a>
-                    #}
-                    <br>
-                    <a data-value="1" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}1 hour{% endtrans %}</a>
-                    <a data-value="3" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}3 hours{% endtrans %}</a>
-                    <a data-value="5" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}5 hours{% endtrans %}</a>
-                    <a data-value="12" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}12 hours{% endtrans %}</a>
-                    <br><br>
-                    <a data-value="1" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}1 day{% endtrans %}</a>
-                    <a data-value="2" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}2 days{% endtrans %}</a>
-                    <a data-value="3" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}3 days{% endtrans %}</a>
-                    <a data-value="5" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}5 days{% endtrans %}</a>
-                    <br><br>
-                    <a data-value="1" data-type="week" class="btn green changeDate" style="width: 100px;">+ {% trans %}1 week{% endtrans %}</a>
-                    <a data-value="2" data-type="week" class="btn green changeDate" style="width: 100px;">+ {% trans %}2 weeks{% endtrans %}</a>
-                    <a data-value="3" data-type="week" class="btn green changeDate" style="width: 100px;">+ {% trans %}3 weeks{% endtrans %}</a>
-                    <a data-value="1" data-type="month" class="btn green changeDate" style="width: 100px;">+ {% trans %}1 month{% endtrans %}</a>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <div class="input-icon">
+                                <i class="fa fa-calendar"></i>
+                                <input type="text" id="new_date_holder" class="form-control todo-taskbody-due" placeholder="{% trans %}New date end{% endtrans %}">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                                <button class="btn btn-circle btn-sm btn-default changeDateCalendar">{% trans %}Change{% endtrans %}</button>
+                        </div>
+                    </div>
 
                 </div>
+            </div>
+        </div>
             {% endif %}
 
 {#
             <button class="btn btn-circle btn-sm green-haze">Save Changes</button>
             <button class="btn btn-circle btn-sm btn-default">Cancel</button>
 #}
-        </div>
+
+
     </div>
+    <br><br>
+    <!-- TASK COMMENT FORM -->
+    {% if taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone'
+    and taskUserRole.task.stage != 'closed' and taskUserRole.role != 'author' and taskUserRole.isViewed == true %}
+        {% if taskUserRole.role != 'performer' or taskUserRole.task.stage != 'checking'%}
+            <div class="form-group">
+                <div class="col-md-12">
+                    <ul class="media-list">
+                        <li class="media">
+                            <img class="todo-userpic pull-left" src="{{ asset( userprofiles_url ~ taskUserRole.user.id ~ '/image29_' ~ taskUserRole.user.photo) }}" width="27px" height="27px">
+                            <div class="media-body">
+                                <textarea id="comment" class="form-control todo-taskbody-taskdesc" rows="4" placeholder="Введите комментарий к действию"></textarea>
+                            </div>
+                        </li>
+                    </ul>
+{#
+                    <button type="button" class="pull-right btn btn-sm btn-circle green-haze"> &nbsp; Submit &nbsp; </button>
+#}
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+
+    <!-- END TASK COMMENT FORM -->
+
     <div class="tabbable-line">
         <ul class="nav nav-tabs ">
             <li class="active">
                 <a href="#tab_1" data-toggle="tab">
                     {% trans %}Comments{% endtrans %} </a>
             </li>
-{#
             <li>
                 <a href="#tab_2" data-toggle="tab">
-                    History </a>
+                    {% trans %}Files{% endtrans %} </a>
             </li>
-#}
+
+            {#
+                        <li>
+                            <a href="#tab_2" data-toggle="tab">
+                                History </a>
+                        </li>
+            #}
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="tab_1">
@@ -433,7 +492,7 @@
                         <ul class="media-list">
                             {% for comment in comments %}
                                 <li class="media">
-                                    <a class="pull-left" href="#">
+                                    <a class="pull-left" href="{{ path('sd_user_show',{ 'id': comment.user.id}) }}">
                                         <img class="todo-userpic" src="{{ asset( userprofiles_url ~ comment.user.id ~ '/image29_' ~ comment.user.photo) }}" width="27px" height="27px">
                                     </a>
                                     <div class="media-body todo-comment">
@@ -453,29 +512,19 @@
                     </div>
                 </div>
                 <!-- END TASK COMMENTS -->
-                <!-- TASK COMMENT FORM -->
-                {% if taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone'
-                and taskUserRole.task.stage != 'closed' and taskUserRole.role != 'author' and taskUserRole.isViewed == true %}
-                    {% if taskUserRole.role != 'performer' or taskUserRole.task.stage != 'checking'%}
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <ul class="media-list">
-                                    <li class="media">
-                                        <img class="todo-userpic pull-left" src="../../assets/admin/layout/img/avatar4.jpg" width="27px" height="27px">
-                                        <div class="media-body">
-                                            <textarea class="form-control todo-taskbody-taskdesc" rows="4" placeholder="Введите комментарий к действию"></textarea>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <button type="button" class="pull-right btn btn-sm btn-circle green-haze"> &nbsp; Submit &nbsp; </button>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endif %}
-
-                <!-- END TASK COMMENT FORM -->
             </div>
-{#
+            <div class="tab-pane" id="tab_2">
+                <button type="button" id="task_add_file" class="pull-right btn btn-sm btn-circle green-haze"> &nbsp; {% trans %}Add file{% endtrans %} &nbsp; </button>
+                <div id="task_add_file_holder" style=" display: none; background-color: #f6fbfc; border-radius: 5px; border-color: green; padding: 15px; margin: 15px 0px 15px 0px;">
+
+                </div>
+                <div id="list_files" data-url="{{ path('sd_task_files', { 'id' : taskUserRole.id })}}">
+                    {{ render(controller('SDTaskBundle:Task:renderListOfFiles', {
+                        'id': taskUserRole.id
+                    })) }}
+                </div>
+            </div>
+            {#
             <div class="tab-pane" id="tab_2">
                 <ul class="todo-task-history">
                     <li>
@@ -515,14 +564,15 @@
 #}
         </div>
     </div>
-</form>
+{#
 </div>
+#}
 <input type="hidden" id="task_modal_info_holder"
        data-id="{{ taskUserRole.id }}"
        data-url_task_set_viewed="{{ path('sd_task_set_viewed') }}"
        data-url_task_set_stage="{{ path('sd_task_set_stage') }}"
        data-url_update_modal="{{ path('sd_task_modal') }}"
-       data-url_change_date="{{ path('sd_task_change_date') }}"
+       data-url_change_date="{{ path('sd_task_change_date_calendar') }}"
        data-url_answer_date="{{ path('sd_task_answer_date') }}"
        data-role="{{ taskUserRole.role }}"
        data-task_id="{{ taskUserRole.task.id }}"

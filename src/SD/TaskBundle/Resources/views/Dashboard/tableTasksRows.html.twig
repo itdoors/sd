@@ -34,7 +34,7 @@
     #}
     {% endif %}
 
-    <li data-id="{{ taskUserRole.id }}" class="modal_task">
+    <li data-id="{{ taskUserRole.id }}" class="modal_task" style="cursor: pointer;">
         <div class="col1">
             <div class="cont">
                 <div class="cont-col1">
@@ -59,10 +59,9 @@
         </div>
         <div class="col2" style="width: 150px; margin-left: -150px;">
             <div class="date">
-                {{ include ('SDTaskBundle:Task:taskEndDate.html.twig', {
+                {{ include ('SDTaskBundle:Task:taskEndDateLast.html.twig', {
                 'taskEndDates': taskUserRole.task.taskEndDates,
                 'stage': stage,
-                'type': 'last'
                 }) }}
             </div>
         </div>
