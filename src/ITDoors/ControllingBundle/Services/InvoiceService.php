@@ -832,15 +832,13 @@ class InvoiceService
         $em = $this->container->get('doctrine')->getManager();
         $em->getConnection()->getConfiguration()->setSQLLogger(null);
         $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')->findAll();
-        
+
         $companystructs = $em->getRepository('ListsCompanystructureBundle:Companystructure')
                 ->findAll();
-        
         $memStart = memory_get_usage();
         $count = count($invoices);
         $countInvoice = 0;
         foreach ($invoices as $key => $invoice) {
-            
             ++$countInvoice;
             echo $countInvoice. ' ~ '. number_format((memory_get_usage() - $memStart) / 8000000, 0, ',', ' ')
                 . "MB ~ more: ".($count - $key) . "\n";
