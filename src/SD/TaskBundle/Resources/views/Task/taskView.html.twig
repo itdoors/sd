@@ -57,7 +57,7 @@
 
         $('#task_change_date').die('click');
         $('#task_change_date').live('click', function(e){
-            $('#change_date_holder').toggle('blind', {}, 100)
+            $('#change_date_holder').toggle('blind', {}, 300)
         })
 
         $('.answerButton').die('click');
@@ -239,64 +239,68 @@
             </div>
             <div class="col-md-4 col-sm-4">
                 <div class="todo-taskbody-date pull-right">
+
                     {% if taskUserRole.isViewed != true %}
                         <button type="button" class="todo-username-btn btn btn-circle btn-default btn-xs" id="task_set_viewed">
                             &nbsp; {% trans %}Set viewed{% endtrans %} &nbsp;
                         </button>
-                    {% else %}
-                        {% set showAction = false %}
-                        {% if taskUserRole.role == 'performer' %}
-                            {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'date request'%}
-                                {% set showAction = true %}
-                            {% endif %}
-                        {% endif %}
-                        {% if taskUserRole.role == 'controller' %}
-                            {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'checking' or taskUserRole.task.stage == 'date request'%}
-                                {% set showAction = true %}
-                            {% endif %}
-                            {% if taskUserRole.task.stage == 'checking'%}
-                                {% set showAction = true %}
-                            {% endif %}
-                        {% endif %}
-                        {% if showAction == true %}
-                        <div class="actions">
-                                <div class="btn-group">
-                                    <a class="btn green-haze btn-circle btn-sm" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                        {% trans %}Contol{% endtrans %} <i class="fa fa-angle-down"></i>
-                                    </a>
-                                    <ul class="dropdown-menu pull-right">
-                                        {% if taskUserRole.role == 'performer' %}
-                                            {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'date request'%}
-                                            <li>
-                                                <a id="task_set_done" data-stage="checking" class="stageButton">{% trans %}Set done{% endtrans %}</a>
-                                            </li>
-                                            {% endif %}
-                                        {% endif %}
-                                        {% if taskUserRole.role == 'controller' %}
-                                            {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'checking' or taskUserRole.task.stage == 'date request'%}
-                                                <li>
-                                                    <a id="task_set_closed" data-stage="closed" class="stageButton">{% trans %}Close task{% endtrans %}</a>
-                                                </li>
-                                                <li>
-                                                    <a id="task_set_undone" data-stage="undone" class="stageButton">{% trans %}Set undone{% endtrans %}</a>
-                                                </li>
-                                            {% endif %}
-                                            {% if taskUserRole.task.stage == 'checking'%}
-                                                <li>
-                                                    <a id="task_set_done_controller" data-stage="done" class="stageButton">{% trans %}Set done{% endtrans %}</a>
-                                                </li>
-                                                <li>
-                                                    <a id="task_set_performing_controller" data-stage="performing" class="stageButton">{% trans %}Re-make{% endtrans %}</a>
-                                                </li>
-                                            {% endif %}
-
-
-                                        {% endif %}
-                                    </ul>
-                                </div>
-                            </div>
+                    {% endif %}
+                    {#
+                {% else %}
+                    {% set showAction = false %}
+                    {% if taskUserRole.role == 'performer' %}
+                        {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'date request'%}
+                            {% set showAction = true %}
                         {% endif %}
                     {% endif %}
+                    {% if taskUserRole.role == 'controller' %}
+                        {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'checking' or taskUserRole.task.stage == 'date request'%}
+                            {% set showAction = true %}
+                        {% endif %}
+                        {% if taskUserRole.task.stage == 'checking'%}
+                            {% set showAction = true %}
+                        {% endif %}
+                    {% endif %}
+                    {% if showAction == true %}
+                    <div class="actions">
+                            <div class="btn-group">
+                                <a class="btn green-haze btn-circle btn-sm" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                    {% trans %}Contol{% endtrans %} <i class="fa fa-angle-down"></i>
+                                </a>
+                                <ul class="dropdown-menu pull-right">
+                                    {% if taskUserRole.role == 'performer' %}
+                                        {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'date request'%}
+                                        <li>
+                                            <a id="task_set_done" data-stage="checking" class="stageButton">{% trans %}Set done{% endtrans %}</a>
+                                        </li>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if taskUserRole.role == 'controller' %}
+                                        {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'checking' or taskUserRole.task.stage == 'date request'%}
+                                            <li>
+                                                <a id="task_set_closed" data-stage="closed" class="stageButton">{% trans %}Close task{% endtrans %}</a>
+                                            </li>
+                                            <li>
+                                                <a id="task_set_undone" data-stage="undone" class="stageButton">{% trans %}Set undone{% endtrans %}</a>
+                                            </li>
+                                        {% endif %}
+                                        {% if taskUserRole.task.stage == 'checking'%}
+                                            <li>
+                                                <a id="task_set_done_controller" data-stage="done" class="stageButton">{% trans %}Set done{% endtrans %}</a>
+                                            </li>
+                                            <li>
+                                                <a id="task_set_performing_controller" data-stage="performing" class="stageButton">{% trans %}Re-make{% endtrans %}</a>
+                                            </li>
+                                        {% endif %}
+
+
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+#}
 
 
                 </div>
@@ -385,7 +389,7 @@
                 {% trans %}Stage{% endtrans %}: {{ taskUserRole.task.stage|trans }}
             </div>
         </div>
-
+        <br><br>
         <!-- TASK TAGS -->
         <div class="form-group">
             <div class="col-md-12">
@@ -402,19 +406,72 @@
                         {% endif %}
                     {% endif %}
                 {% endif %}
-                {#
-                                <input type="text" class="form-control todo-taskbody-tags" placeholder="Tags..." value="Pending, Requested">
-                #}
             </div>
-        </div>
-        <!-- TASK TAGS -->
-        <div class="form-actions right todo-form-actions">
-            {% if taskUserRole.task.stage != 'date request' and taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone' and taskUserRole.task.stage != 'closed' and taskUserRole.task.stage != 'checking'
-            and taskUserRole.role != 'author' and taskUserRole.isViewed == true %}
-                <button id="task_change_date" class="btn btn-circle btn-sm green-haze">{% trans %}Change the end date{% endtrans %}</button>
         </div>
         <div class="form-group">
             <div class="col-md-12">
+                <br>
+            </div>
+        </div>
+        <br><br>
+        {% if taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone'
+        and taskUserRole.task.stage != 'closed' and taskUserRole.role != 'author' and taskUserRole.isViewed == true %}
+            {% if taskUserRole.role != 'performer' or taskUserRole.task.stage != 'checking'%}
+                <div class="form-group">
+                    <div class="col-md-12" style="background-color: #f6fbfc;">
+                        <br><br>
+                        <ul class="media-list">
+                            <li class="media">
+                                <img class="todo-userpic pull-left" src="{{ asset( userprofiles_url ~ taskUserRole.user.id ~ '/image29_' ~ taskUserRole.user.photo) }}" width="27px" height="27px">
+                                <div class="media-body">
+                                    <textarea id="comment" class="form-control todo-taskbody-taskdesc" rows="4" placeholder="Введите комментарий к действию"></textarea>
+                                </div>
+                            </li>
+                        </ul>
+                        {#
+                                            <button type="button" class="pull-right btn btn-sm btn-circle green-haze"> &nbsp; Submit &nbsp; </button>
+                        #}
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+        <div class="form-group">
+            <div class="col-md-12" style="background-color: #f6fbfc;">
+                <div class="form-actions right todo-form-actions" >
+                    {% if taskUserRole.isViewed == true %}
+                        {% if taskUserRole.role == 'performer' %}
+                            {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'date request'%}
+                                    <button id="task_set_done" data-stage="checking" class="stageButton btn btn-circle btn-sm green-haze">{% trans %}Set done{% endtrans %}</button>
+                            {% endif %}
+                        {% endif %}
+                        {% if taskUserRole.role == 'controller' %}
+                            {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'checking' or taskUserRole.task.stage == 'date request'%}
+                                    <button id="task_set_closed" data-stage="closed" class="stageButton btn btn-circle btn-sm green-haze">{% trans %}Close task{% endtrans %}</button>
+                                    <button id="task_set_undone" data-stage="undone" class="stageButton btn btn-circle btn-sm green-haze">{% trans %}Set undone{% endtrans %}</button>
+                            {% endif %}
+                            {% if taskUserRole.task.stage == 'checking'%}
+                                    <button id="task_set_done_controller" data-stage="done" class="stageButton btn btn-circle btn-sm green-haze">{% trans %}Set done{% endtrans %}</button>
+                                    <button id="task_set_performing_controller" data-stage="performing" class="stageButton btn btn-circle btn-sm green-haze">{% trans %}Re-make{% endtrans %}</button>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+
+
+
+
+
+                    {% if taskUserRole.task.stage != 'date request' and taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone' and taskUserRole.task.stage != 'closed' and taskUserRole.task.stage != 'checking'
+                    and taskUserRole.role != 'author' and taskUserRole.isViewed == true %}
+                        <button id="task_change_date" class="btn btn-circle btn-sm green-haze">{% trans %}Change the end date{% endtrans %}</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% if taskUserRole.task.stage != 'date request' and taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone' and taskUserRole.task.stage != 'closed' and taskUserRole.task.stage != 'checking'
+        and taskUserRole.role != 'author' and taskUserRole.isViewed == true %}
+
+        <div class="form-group">
+            <div class="col-md-12" style="background-color: #f6fbfc;">
 
                 <div id="change_date_holder" style="display: none">
                     <div class="form-group">
@@ -427,44 +484,14 @@
                         <div class="col-md-2">
                                 <button class="btn btn-circle btn-sm btn-default changeDateCalendar">{% trans %}Change{% endtrans %}</button>
                         </div>
+                        <br><br>
                     </div>
-
                 </div>
             </div>
         </div>
-            {% endif %}
-
-{#
-            <button class="btn btn-circle btn-sm green-haze">Save Changes</button>
-            <button class="btn btn-circle btn-sm btn-default">Cancel</button>
-#}
-
+        {% endif %}
 
     </div>
-    <br><br>
-    <!-- TASK COMMENT FORM -->
-    {% if taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone'
-    and taskUserRole.task.stage != 'closed' and taskUserRole.role != 'author' and taskUserRole.isViewed == true %}
-        {% if taskUserRole.role != 'performer' or taskUserRole.task.stage != 'checking'%}
-            <div class="form-group">
-                <div class="col-md-12">
-                    <ul class="media-list">
-                        <li class="media">
-                            <img class="todo-userpic pull-left" src="{{ asset( userprofiles_url ~ taskUserRole.user.id ~ '/image29_' ~ taskUserRole.user.photo) }}" width="27px" height="27px">
-                            <div class="media-body">
-                                <textarea id="comment" class="form-control todo-taskbody-taskdesc" rows="4" placeholder="Введите комментарий к действию"></textarea>
-                            </div>
-                        </li>
-                    </ul>
-{#
-                    <button type="button" class="pull-right btn btn-sm btn-circle green-haze"> &nbsp; Submit &nbsp; </button>
-#}
-                </div>
-            </div>
-        {% endif %}
-    {% endif %}
-
-    <!-- END TASK COMMENT FORM -->
 
     <div class="tabbable-line">
         <ul class="nav nav-tabs ">
@@ -476,13 +503,6 @@
                 <a href="#tab_2" data-toggle="tab">
                     {% trans %}Files{% endtrans %} </a>
             </li>
-
-            {#
-                        <li>
-                            <a href="#tab_2" data-toggle="tab">
-                                History </a>
-                        </li>
-            #}
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="tab_1">
@@ -524,44 +544,6 @@
                     })) }}
                 </div>
             </div>
-            {#
-            <div class="tab-pane" id="tab_2">
-                <ul class="todo-task-history">
-                    <li>
-                        <div class="todo-task-history-date">
-                            20 Jun, 2014 at 11:35am
-                        </div>
-                        <div class="todo-task-history-desc">
-                            Task created
-                        </div>
-                    </li>
-                    <li>
-                        <div class="todo-task-history-date">
-                            21 Jun, 2014 at 10:35pm
-                        </div>
-                        <div class="todo-task-history-desc">
-                            Task category status changed to "Top Priority"
-                        </div>
-                    </li>
-                    <li>
-                        <div class="todo-task-history-date">
-                            22 Jun, 2014 at 11:35am
-                        </div>
-                        <div class="todo-task-history-desc">
-                            Task owner changed to "Nick Larson"
-                        </div>
-                    </li>
-                    <li>
-                        <div class="todo-task-history-date">
-                            30 Jun, 2014 at 8:09am
-                        </div>
-                        <div class="todo-task-history-desc">
-                            Task completed by "Nick Larson"
-                        </div>
-                    </li>
-                </ul>
-            </div>
-#}
         </div>
     </div>
 {#
