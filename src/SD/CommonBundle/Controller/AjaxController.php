@@ -2140,11 +2140,11 @@ class AjaxController extends BaseFilterController
         if (isset($formData['uniqueId']) && !empty($formData['uniqueId'])) {
              $call = $em->getRepository('ITDoorsSipBundle:Call')
                 ->findOneBy(array('uniqueId' => $formData['uniqueId']));
-             if ($call) {
+            if ($call) {
                 $data = $this->getDoctrine()
                     ->getRepository('ListsHandlingBundle:HandlingMessage')
                     ->find($call->getModelId());
-             }
+            }
         }
         $data->setCreatedatetime(new \DateTime());
         $data->setUser($user);
