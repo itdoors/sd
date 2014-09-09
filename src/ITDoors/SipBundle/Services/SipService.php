@@ -29,11 +29,12 @@ class SipService
     }
 
     /**
+     * saveCall
      * 
      * @param \Symfony\Component\Console\Input\InputInterface   $input
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    public function saveCall(InputInterface $input,  OutputInterface $output)
+    public function saveCall(InputInterface $input, OutputInterface $output)
     {
         $em = $this->container->get('doctrine')->getManager();
 
@@ -82,6 +83,7 @@ class SipService
         }
     }
     /**
+     * saveHandlingMessage
      * 
      * @param \Lists\ContactBundle\Entity\ModelContact $receiver
      * @param \SD\UserBundle\Entity\User               $caller
