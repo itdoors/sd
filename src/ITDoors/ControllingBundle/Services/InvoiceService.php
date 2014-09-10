@@ -64,6 +64,7 @@ class InvoiceService
      */
     public function parserFile ()
     {
+        $this->updateIvoiceInfo();
         $directory = $this->container->getParameter('1C.file.path');
 
         if (!is_dir($directory)) {
@@ -87,6 +88,7 @@ class InvoiceService
                     $em = $this->container->get('doctrine')->getManager();
                     $this->savejson($json->invoice);
                     $em->flush();
+
                     $this->addCronError(0, 'stop parser', $file, 'parser file');
                     if (!is_dir($directory . 'old')) {
                         mkdir($directory . 'old', 0700);
@@ -866,5 +868,62 @@ class InvoiceService
             }
         }
         $em->flush();
+    }
+    private function updateIvoiceInfo ()
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $em->getConnection()->getConfiguration()->setSQLLogger(null);
+        $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')->findAll();
+        echo 'Start update info'."\n";
+        foreach ($invoices as $invoice) {
+            echo $invoice->getInvoiceId()." ";
+            /** @var Dogovor  $dogovorfind */
+            $dogovorfind = $em->getRepository('ListsDogovorBundle:Dogovor')
+                ->findOneBy(array ('dogovorGuid' => $invoice->getDogovorGuid()));
+
+            /** @var Organization  $customerfind */
+            $customerfind = $em->getRepository('ListsOrganizationBundle:Organization')
+                ->findOneBy(array ('edrpou' => $invoice->getCustomerEdrpou()));
+
+            /** @var Organization  $performerfind */
+            $performerfind = $em->getRepository('ListsOrganizationBundle:Organization')
+                ->findOneBy(array ('edrpou' => $invoice->getPerformerEdrpou()));
+
+            if (!$dogovorfind) {
+                if ($customerfind && $performerfind) {
+
+                    /** @var Dogovor  $dogovoradd */
+                    $dogovoradd = $em->getRepository('ListsDogovorBundle:Dogovor')
+                        ->findOneBy(array (
+                        'number' => $invoice->getDogovorNumber(),
+                        'startdatetime' => $invoice->getDogovorDate(),
+                        'customerId' => $customerfind->getId(),
+                        'performerId' => $performerfind->getId()
+                    ));
+                    if ($dogovoradd) {
+                        // подтвердить связь и 1С
+                        $dogovoradd->setDogovorGuid($invoice->getDogovorGuid());
+                        $em->persist($dogovoradd);
+                    }
+                }
+            }
+            if ($customerfind) {
+                $invoice->setCustomer($customerfind);
+            }
+            if ($performerfind) {
+                $invoice->setPerformer($performerfind);
+            }
+            if ($dogovorfind) {
+                echo ' add dogovor';
+                $invoice->setDogovor($dogovorfind);
+                $this->addReaspon($invoice);
+            } else {
+                echo ' dogovor not fount';
+            }
+            $em->persist($invoice);
+             echo "\n";
+        }
+        $em->flush();
+        echo 'End update info'."\n";
     }
 }
