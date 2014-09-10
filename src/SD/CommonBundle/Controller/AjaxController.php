@@ -2599,10 +2599,18 @@ class AjaxController extends BaseFilterController
                         $em->persist($invoiceC);
                     }
                 }
-                $dogovorC = new DogovorCompanystructure();
-                $dogovorC->setCompanyStructures($company);
-                $dogovorC->setDogovors($dogovor);
-                $em->persist($dogovorC);
+                $dogovorCompanystructure = $em
+                    ->getRepository('ListsDogovorBundle:DogovorCompanystructure')
+                    ->findOneBy(array(
+                        'dogovorId' => $dogovor->getId(),
+                        'companystructureId' => $company->getId()
+                    ));
+                if (!$dogovorCompanystructure) {
+                    $dogovorC = new DogovorCompanystructure();
+                    $dogovorC->setCompanyStructures($company);
+                    $dogovorC->setDogovors($dogovor);
+                    $em->persist($dogovorC);
+                }
             }
         } else {
             $invoiceC = new \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure();
