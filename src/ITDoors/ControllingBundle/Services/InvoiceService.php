@@ -87,9 +87,8 @@ class InvoiceService
                     $this->arrCostumersForSendMessages = array ();
                     $em = $this->container->get('doctrine')->getManager();
                     $this->savejson($json->invoice);
-                    $em->flush();
-
                     $this->addCronError(0, 'stop parser', $file, 'parser file');
+                    $em->flush();
                     if (!is_dir($directory . 'old')) {
                         mkdir($directory . 'old', 0700);
                     }
@@ -400,17 +399,16 @@ class InvoiceService
         $count = count($json);
         $countInvoice = 0;
         $memStart = memory_get_usage();
+        $em = $this->container->get('doctrine')->getManager();
+        $em->getConnection()->getConfiguration()->setSQLLogger(null);
 
         foreach ($json as $key => $invoice) {
 
             echo $countInvoice . " ~ ";
             if ($countInvoice == 1000) {
-                $em = $this->container->get('doctrine')->getManager();
                 $em->flush();
                 $em->clear();
-                $em->getConnection()->getConfiguration()->setSQLLogger(null);
                 $countInvoice = 0;
-                unset($em);
             }
             ++$countInvoice;
             echo number_format((memory_get_usage() - $memStart) / 8000000, 0, ',', ' ')
@@ -453,18 +451,19 @@ class InvoiceService
             ->findBy(array ('dogovorId' => $invoice->getDogovorId()));
 
         foreach ($companystructs as $company) {
-            $invoiceCompanystructures = $em->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
-                ->findBy(array (
-                    'invoiceId' => $invoice->getId(),
-                    'companystructureId' => $company->getCompanyStructureId()
-                ));
-            if (!$invoiceCompanystructures) {
-                $invoicecompany = new InvoiceCompanystructure();
-                $invoicecompany->setInvoice($invoice);
-                $invoicecompany->setCompanystructure($company->getCompanyStructures());
+            $db = $em->getConnection();
+            $query = "
+                DELETE FROM invoice_companystructure
+                    WHERE invoice_id = :invoiceId
+               ";
+            $stmt = $db->prepare($query);
+            $params[':invoiceId'] = $invoice->getId();
+            $stmt->execute($params);
+            $invoicecompany = new InvoiceCompanystructure();
+            $invoicecompany->setInvoice($invoice);
+            $invoicecompany->setCompanystructure($company->getCompanyStructures());
 
-                $em->persist($invoicecompany);
-            }
+            $em->persist($invoicecompany);
         }
     }
     /**

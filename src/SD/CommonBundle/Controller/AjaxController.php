@@ -2592,7 +2592,7 @@ class AjaxController extends BaseFilterController
                             'invoiceId' => $invoiceCS->getId(),
                             'companystructureId' => $company->getId()
                         ));
-                    if ($invoiceCompanystructure) {
+                    if (!$invoiceCompanystructure) {
                         $invoiceC = new \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure();
                         $invoiceC->setCompanystructure($company);
                         $invoiceC->setInvoice($invoiceCS);
