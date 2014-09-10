@@ -9,6 +9,9 @@
 namespace SD\UserBundle\Entity;
 
 use FOS\UserBundle\Model\User as BaseUser;
+use Lists\HandlingBundle\Entity\HandlingUser;
+use Lists\OrganizationBundle\Entity\OrganizationUser;
+use Lists\TeamBundle\Entity\Team;
 
 /**
  * User
@@ -306,7 +309,7 @@ class User extends BaseUser
      *
      * @return User
      */
-    public function setStuff(\SD\UserBundle\Entity\Stuff $stuff = null)
+    public function setStuff(Stuff $stuff = null)
     {
         $this->stuff = $stuff;
 
@@ -335,7 +338,7 @@ class User extends BaseUser
      *
      * @return User
      */
-    public function addTeam(\Lists\TeamBundle\Entity\Team $teams)
+    public function addTeam(Team $teams)
     {
         $this->teams[] = $teams;
 
@@ -347,7 +350,7 @@ class User extends BaseUser
      *
      * @param \Lists\TeamBundle\Entity\Team $teams
      */
-    public function removeTeam(\Lists\TeamBundle\Entity\Team $teams)
+    public function removeTeam(Team $teams)
     {
         $this->teams->removeElement($teams);
     }
@@ -403,7 +406,7 @@ class User extends BaseUser
      * 
      * @return User
      */
-    public function addUsercontactinfo(\SD\UserBundle\Entity\Contactinfo $usercontactinfo)
+    public function addUsercontactinfo(Contactinfo $usercontactinfo)
     {
         $this->usercontactinfo[] = $usercontactinfo;
 
@@ -415,7 +418,7 @@ class User extends BaseUser
      *
      * @param \SD\UserBundle\Entity\Contactinfo $usercontactinfo
      */
-    public function removeUsercontactinfo(\SD\UserBundle\Entity\Contactinfo $usercontactinfo)
+    public function removeUsercontactinfo(Contactinfo $usercontactinfo)
     {
         $this->usercontactinfo->removeElement($usercontactinfo);
     }
@@ -442,7 +445,7 @@ class User extends BaseUser
      * 
      * @return User
      */
-    public function addHandlingUser(\Lists\HandlingBundle\Entity\HandlingUser $handlingUsers)
+    public function addHandlingUser(HandlingUser $handlingUsers)
     {
         $this->handlingUsers[] = $handlingUsers;
 
@@ -454,7 +457,7 @@ class User extends BaseUser
      *
      * @param \Lists\HandlingBundle\Entity\HandlingUser $handlingUsers
      */
-    public function removeHandlingUser(\Lists\HandlingBundle\Entity\HandlingUser $handlingUsers)
+    public function removeHandlingUser(HandlingUser $handlingUsers)
     {
         $this->handlingUsers->removeElement($handlingUsers);
     }
@@ -479,7 +482,7 @@ class User extends BaseUser
      * 
      * @return User
      */
-    public function addOrganizationUser(\Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers)
+    public function addOrganizationUser(OrganizationUser $organizationUsers)
     {
         $this->organizationUsers[] = $organizationUsers;
 
@@ -491,7 +494,7 @@ class User extends BaseUser
      *
      * @param \Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers
      */
-    public function removeOrganizationUser(\Lists\OrganizationBundle\Entity\OrganizationUser $organizationUsers)
+    public function removeOrganizationUser(OrganizationUser $organizationUsers)
     {
         $this->organizationUsers->removeElement($organizationUsers);
     }
@@ -504,5 +507,63 @@ class User extends BaseUser
     public function getOrganizationUsers()
     {
         return $this->organizationUsers;
+    }
+    /**
+     * @var integer
+     */
+    private $peerId;
+
+    /**
+     * @var string
+     */
+    private $peerPassword;
+
+
+    /**
+     * Set peerId
+     *
+     * @param integer $peerId
+     *
+     * @return User
+     */
+    public function setPeerId($peerId)
+    {
+        $this->peerId = $peerId;
+
+        return $this;
+    }
+
+    /**
+     * Get peerId
+     *
+     * @return integer 
+     */
+    public function getPeerId()
+    {
+        return $this->peerId;
+    }
+
+    /**
+     * Set peerPassword
+     *
+     * @param string $peerPassword
+     *
+     * @return User
+     */
+    public function setPeerPassword($peerPassword)
+    {
+        $this->peerPassword = $peerPassword;
+
+        return $this;
+    }
+
+    /**
+     * Get peerPassword
+     *
+     * @return string 
+     */
+    public function getPeerPassword()
+    {
+        return $this->peerPassword;
     }
 }

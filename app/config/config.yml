@@ -27,6 +27,10 @@ parameters:
     email.from: "noreply@griffin.ua"
     name.from: "ImpelNET"
     listener.history.table: %listener.history.tables%
+    call.ip: "192.168.4.4"
+    call.port: "81"
+    call.directory: "m"
+    call.extension: "mp3"
 
 framework:
     #esi:             ~
@@ -70,6 +74,14 @@ twig:
         ajax_namespace_organziation_service_cover: %ajax.filter.namespace.organziation.service.cover%
 
         userprofiles_url: %userprofiles.file.path%
+
+        ami_host: %ami.host%
+        ami_port: %ami.port%
+        sip_host: %sip.host%
+        sip_port_udp: %sip.port.udp%
+        sip_port_ws: %sip.port.ws%
+        call_url: "http://%call.ip%:%call.port%/%call.directory%/"
+        call_extension: "%call.extension%"
 # Assetic Configuration
 assetic:
     debug:          %kernel.debug%
@@ -98,8 +110,8 @@ doctrine:
         # path:     %database_path%
 
     orm:
-#        auto_mapping: true
         auto_generate_proxy_classes: %kernel.debug%
+        # auto_mapping: true
         entity_managers:
             default:
                 filters:

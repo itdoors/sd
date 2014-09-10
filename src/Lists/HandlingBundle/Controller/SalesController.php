@@ -253,6 +253,9 @@ class SalesController extends BaseController
 
         $showMoreInfoIds = array (5, 6);
 
+        $lookups = $this->getDoctrine()
+                ->getRepository('ListsLookupBundle:Lookup')->getGroupOrganizationQuery()->getQuery()->getResult();
+
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':show.html.twig', array (
                 'handling' => $object,
                 'baseTemplate' => $this->baseTemplate,
@@ -261,7 +264,8 @@ class SalesController extends BaseController
                 'canEdit' => $canEdit,
                 'isResultClosed' => $isResultClosed,
                 'organization' => $organization,
-                'showMoreInfoIds' => $showMoreInfoIds
+                'showMoreInfoIds' => $showMoreInfoIds,
+                'lookups' => $lookups
         ));
     }
     /**
@@ -279,6 +283,7 @@ class SalesController extends BaseController
 
         $usersFromTheirSide = array ();
         $usersFromOurSide = array ();
+        $calls = array ();
         foreach ($messages as $message) {
             $usersFromTheirSideTemp = $this->getDoctrine()
                 ->getRepository('ListsHandlingBundle:HandlingMessageModelContact')
@@ -295,6 +300,15 @@ class SalesController extends BaseController
             ));
 
             $usersFromOurSide['message' . $message->getId()] = $usersFromOurSideTemp;
+
+            if ($message->getType()->getId() === 1) {
+                $call = $this->getDoctrine()
+                    ->getRepository('ITDoorsSipBundle:Call')
+                    ->findOneBy(array('modelName' => 'handling_message' ,'modelId' => $message->getId()));
+                if ($call) {
+                    $calls[$message->getId()] = $call;
+                }
+            }
         }
 
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':messagesList.html.twig', array (
@@ -303,6 +317,7 @@ class SalesController extends BaseController
                 'baseRoutePrefix' => $this->baseRoutePrefix,
                 'usersFromTheirSide' => $usersFromTheirSide,
                 'usersFromOurSide' => $usersFromOurSide,
+                'calls' => $calls
         ));
     }
     /**

@@ -36,94 +36,10 @@
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-switch/static/js/bootstrap-switch.min.js')}} "></script>
     <script type="text/javascript" src="{{ asset('templates/core/plugins/jquery-tmpl/jquery.tmpl.min.js')}} "></script>
-    <script type="text/javascript" src="{{ asset('templates/sipml/sipml-api.js')}} "></script>
 {% endblock %}
+
 {% block body %}
 
-<script type="text/javascript">
-
-
-    $(document).ready(function(){
-
-        var callSession;
-        var stack;
-
-        var ringtone = document.getElementById('ringtone');
-
-        function stopRingTone() {
-            try { ringtone.pause(); }
-            catch (e) { }
-        }
-
-        function startRingTone() {
-            try {  }
-            catch (e) {
-                console.log(e.message);
-            }
-        }
-
-        onEventFired = function(e){
-
-            console.log(e.type);
-
-            switch (e.type) {
-                case "started" :
-                    callSession = stack.newSession('call-audio', {
-                        video_local: document.getElementById('video-local'),
-                        video_remote: document.getElementById('video-remote'),
-                        audio_remote: document.getElementById('audio-remote')
-                    });
-                    break;
-                case "m_permission_accepted":
-                    //stopRingTone();
-                    break;
-            }
-        }
-
-        SIPml.init(
-                function(e){
-                    stack =  new SIPml.Stack({
-                        realm: '95.67.67.170',
-                        impi: '8005',
-                        impu: 'sip:8005@95.67.67.170',
-                        password: 'itdoors25',
-                        websocket_proxy_url: 'ws://95.67.67.170:10060/ws', // optional
-                        outbound_proxy_url: 'udp://95.67.67.170:5060', // optional
-                        enable_rtcweb_breaker: true, // optional
-                        sip_caps: [
-                            { name: '+g.oma.sip-im' },
-                            { name: '+sip.ice' },
-                            { name: 'language', value: '\"en,fr\"' }
-                        ],
-                        ice_servers: [{"url":"stun:23.21.150.121:3478"},{"url":"stun:216.93.246.18:3478"},{"url":"stun:66.228.45.110:3478"},{"url":"stun:173.194.78.127:19302"}], // optional
-                        events_listener: { events: '*', listener: onEventFired }
-                    });
-                    stack.start();
-                }
-        );
-
-
-
-        $('.call-btn').live('click', function(e) {
-            e.preventDefault();
-            var phone = $(this).data('phone');
-            var pattern = new RegExp("(?:\([2-9]\d{2}\)\ ?|[2-9]\d{2}(?:\-?|\ ?))[2-9]\d{2}[- ]?\d{4}");
-
-            //startRingTone();
-
-            if (confirm('Are you sure you want to call to ' + phone.replace(/ /g, "").replace(/-/g, ""))) {
-                callSession.call(phone.replace(/ /g, "").replace(/-/g, ""));
-            }
-
-            //$("#ringtone").play();
-
-            /*if (pattern.test(phone.trim())) {
-
-                //callSession.call(phone.trim());
-            }*/
-        });
-    });
-</script>
 <div class="row">
     <div class="col-md-12">
         <p>{% trans %}Contacts on contacts{% endtrans %}</p>
@@ -141,7 +57,6 @@
                 </a>
             </div>
         </div>
-
 
         <script type="text/javascript">
             $(document).ready(function(){
@@ -178,11 +93,4 @@
         </div>
     </div>
 </div>
-    <audio id="audio_remote" autoplay="autoplay" />
-    <audio id="ringtone" loop src="{{ asset('templates/sipml/sounds/ringtone.wav')}}" />
-    <audio id="ringbacktone" loop src="{{ asset('templates/sipml/sounds/ringbacktone.wav')}}" />
-    <audio id="dtmfTone" src="{{ asset('templates/sipml/sounds/dtmf.wav')}}" />
-
-    <video id="video_remote" class="video" height="100%" width="100%" style="opacity: 0; background-color: #000000; -webkit-transition-property: opacity; -webkit-transition-duration: 2s;" autoplay="autoplay"> </video>
-    <video id="video_local" class="video" height="72px" width="88px" style="opacity: 0; margin-top: -80px; margin-left: 5px; background-color: #000000; -webkit-transition-property: opacity; -webkit-transition-duration: 2s;" muted="true" autoplay="autoplay"> </video>
 {% endblock body %}

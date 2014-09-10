@@ -1,0 +1,180 @@
+{% trans_default_domain 'ListsHandlingBundle' %}
+
+<script type="text/javascript">
+
+    $(document).ready(function (){
+
+        $(".form_datetime").datetimepicker({
+            autoclose: true,
+            isRTL: Metronic.isRTL(),
+            format: "dd.mm.yyyy hh:ii",
+            pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+            language: 'ru',
+            weekStart: 1,
+            startDate: new Date(1000*{{ form.mindate.vars.value }})
+        });
+
+        $('#' + '{{ form.vars.name }}' + '_next_is_business_trip').uniform();
+
+    });
+
+    SD.select2('#' + '{{ form.vars.name }}' + '_user', {
+        allowClear: false
+    });
+
+    SD.select2('#' + '{{ form.vars.name }}' + '_userNext', {
+        allowClear: false
+    });
+
+</script>
+{% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title"><div class="caption"><i class="fa fa-cogs"></i>{% trans %}Create New Message{% endtrans %}</div></div>
+            <div class="portlet-body">
+                {% if form.vars.valid %}
+                {% else %}
+                <div class="alert alert-danger">
+                    <button class="close" data-close="alert"></button>
+                    {{ form_errors(form) }}
+                </div>
+                {% endif %}
+
+                {{ form_start(form, {
+                    'action' : path('sd_common_ajax_form'),
+                    'attr' : {
+                        'method' : 'POST',
+                        'class' : 'ajax-form-entity',
+                        'data-post_function': postFunction,
+                        'data-post_target_id': postTargetId,
+                        'data-target_id': targetId
+                }
+                }) }}
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">{% trans %}Current Message{% endtrans %}</div>
+                            <div class="panel-body">
+                                <div class="form-group"> {#.'<span class="required"> * </span>'#}
+                                    {{ form_label(form.createdate, 'Current Message Create Date', {'attr': {'class': 'control-label'}}) }}
+                                    <div class="input-group date form_datetime">
+                                        {{ form_widget(form.createdate, {'attr' : {
+                                        'class' : 'form-control',
+                                        'placeholder': 'Create date',
+                                        'readonly': 'readonly'
+                                        }}) }}
+                                        <span class="input-group-btn">
+                                            <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+                                        </span>
+                                    </div>
+                                        {{ form_errors(form.createdate) }}
+                                </div>
+                                        
+                                {% if form.user is defined %}
+                                <div class="form-group">
+                                    {{ form_label(form.user, 'Creator'|trans({}, 'messages'), {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.user, {'attr' : {
+                                        'class' : 'form-control',
+                                        'placeholder': 'Creator'|trans({}, 'messages'),
+                                        'data-url': path('sd_common_ajax_user'),
+                                        'data-url-by-id': path('sd_common_ajax_user_by_id'),
+                                    } } ) }}
+                                </div>
+                                {% endif %}
+                                <div class="form-group">
+                                    <span id="label_description">
+                                        {{ form_label(form.description, 'Description', {'attr': {'class': 'control-label'}}) }}
+                                    </span>
+                                    <span id="input_description">
+                                        {{ form_widget(form.description, {'attr' : {'class' : 'form-control', 'placeholder': 'Description'} } ) }}
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.filename, 'Filename', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.filename, {'attr' : {'class' : 'form-control', 'placeholder': 'Filename'} } ) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.file, 'Select File', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.file ) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">{% trans %}Next Message{% endtrans %}</div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    {{ form_label(form.nextcreatedate, 'Next Message Create Date', {'attr': {'class': 'control-label'}}) }}
+                                    <div class="input-group date form_datetime">
+                                        {{ form_widget(form.nextcreatedate, {'attr' : {
+                                        'class' : 'form-control',
+                                        'placeholder': 'Create Date',
+                                        'readonly': 'readonly'
+                                        }}) }}
+                                        <span class="input-group-btn">
+                                            <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+                                        </span>
+                                    </div>
+                                </div>
+                                {% if form.userNext is defined %}
+                                    <div class="form-group">
+                                        {{ form_label(form.userNext, 'Creator'|trans({}, 'messages'), {'attr': {'class': 'control-label'}}) }}
+                                        {{ form_widget(form.userNext, {'attr' : {
+                                            'class' : 'form-control',
+                                            'placeholder': 'Creator'|trans({}, 'messages'),
+                                            'data-url': path('sd_common_ajax_user'),
+                                            'data-url-by-id': path('sd_common_ajax_user_by_id'),
+                                        } } ) }}
+                                    </div>
+                                {% endif %}
+                                <div class="form-group">
+                                    {{ form_label(form.nexttype, 'Message Type', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.nexttype, {'attr' : {'class' : 'form-control', 'placeholder': 'Message Type'} } ) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.contactnext, 'Contact Person', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.contactnext, {'attr' : {'class' : 'form-control', 'placeholder': 'Select Contact Person'} } ) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.descriptionnext, 'Description', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.descriptionnext, {'attr' : {'class' : 'form-control', 'placeholder': 'Description'} } ) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">{% trans %}Extra{% endtrans %}</div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <div class="checkbox-list">
+                                        <label class="checkbox-inline">
+                                            {{ form_widget(form.next_is_business_trip, {'attr' : { 'placeholder': 'Is business trip'} } ) }}
+                                            {% trans %}Is business trip{% endtrans %}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    {{ form_label(form.status, 'Project Status', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.status, {'attr' : {'class' : 'form-control', 'placeholder': 'Project Status'} } ) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="formName" value="{{ formName }}">
+                <input type="hidden" name="postFunction" value="{{ postFunction }}">
+                <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
+                <input type="hidden" name="targetId" value="{{ targetId }}">
+                <input type="hidden" name="defaultData" value='{{ defaultData|json_encode|raw }}'>
+
+                <div class="form-actions send-form">
+                    {{ form_widget(form.create, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>

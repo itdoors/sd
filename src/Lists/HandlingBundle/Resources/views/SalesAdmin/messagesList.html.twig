@@ -10,7 +10,7 @@
         <div class="portlet-title">
             <div class="caption">
                 #{{ item.id }} |
-                {{ item.createdate|date('d.m.Y, H:i') }} ({{  item.createdatetime|date('d.m.Y, H:i')}}) | {{ item.type }} | {{ item.user }}
+                {{ item.createdate|date('d.m.Y, H:i') }} {{ item.createdatetime == '' ? '' : '(' ~ item.createdatetime|date('d.m.Y, H:i') ~ ')'}} | {{ item.type }} | {{ item.user }}
                 {% if item.isBusinessTrip %}
                     | {% trans %}Business trip{% endtrans %}
                 {% endif %}
@@ -28,6 +28,9 @@
                     {% endif %}
                 </a>
                 <br />
+            {% endif %}
+            {% if calls[item.id] is defined %}
+                {% trans %}Listen to the conversation{% endtrans %}: <audio src="{{ call_url ~ calls[item.id].fileName ~ '.' ~ call_extension}}" controls></audio>
             {% endif %}
         </div>
     </div>
