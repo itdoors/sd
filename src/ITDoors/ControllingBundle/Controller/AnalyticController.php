@@ -61,17 +61,30 @@ class AnalyticController extends BaseFilterController
      */
     public function graficGeneralAction ()
     {
+        $filterNamespace = $this->container->getParameter($this->getNamespace()) . 'GraficGeneral';
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
         /** @var OrganizationRepository $organization */
         $organization = $em->getRepository('ListsOrganizationBundle:Organization');
 
-        $entities = $organization->getForInvoice();
+        $result = $organization->getForInvoice();
+        $entities = $result['entity'];
+        $count = $result['count'];
 
+        $namespasePagin = $filterNamespace;
+        $page = $this->getPaginator($namespasePagin);
+        if (!$page) {
+            $page = 1;
+        }
+
+        $paginator = $this->container->get($this->paginator);
+        $entities->setHint($this->paginator . '.count', $count);
+        $pagination = $paginator->paginate($entities, $page, 65);
 
         return $this->render('ITDoorsControllingBundle:Analytic:graficGeneral.html.twig', array (
-                'entities' => $entities
+                'entities' => $pagination,
+                'namespace' => $filterNamespace
         ));
     }
     /**
@@ -83,16 +96,31 @@ class AnalyticController extends BaseFilterController
      */
     public function graficWithoutactsAction ()
     {
+        $filterNamespace = $this->container->getParameter($this->getNamespace()) . 'GraficWithoutacts';
+        
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
         /** @var OrganizationRepository $organization */
         $organization = $em->getRepository('ListsOrganizationBundle:Organization');
 
-        $entities = $organization->getForInvoiceAct();
+        $result = $organization->getForInvoiceAct();
+        $entities = $result['entity'];
+        $count = $result['count'];
+
+        $namespasePagin = $filterNamespace;
+        $page = $this->getPaginator($namespasePagin);
+        if (!$page) {
+            $page = 1;
+        }
+
+        $paginator = $this->container->get($this->paginator);
+        $entities->setHint($this->paginator . '.count', $count);
+        $pagination = $paginator->paginate($entities, $page, 65);
 
         return $this->render('ITDoorsControllingBundle:Analytic:graficGeneral.html.twig', array (
-                'entities' => $entities
+                'entities' => $pagination,
+                'namespace' => $filterNamespace
         ));
     }
     /**

@@ -596,6 +596,16 @@ class InvoiceService
     {
         $translator = $this->container->get('translator');
         $tabs = array ();
+         $tabs['individual'] = array (
+            'blockupdate' => 'ajax-tab-holder',
+            'tab' => 'individual',
+            'url' => $this->container->get('router')
+                ->generate(
+                    'it_doors_controlling_invoice_grafic_individual',
+                    array ('ajax' => 'true')
+                ),
+            'text' => $translator->trans('Individual')
+        );
         $tabs['general'] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'general',
@@ -608,16 +618,7 @@ class InvoiceService
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_grafic_withoutacts'),
             'text' => $translator->trans('Without acts')
         );
-        $tabs['individual'] = array (
-            'blockupdate' => 'ajax-tab-holder',
-            'tab' => 'individual',
-            'url' => $this->container->get('router')
-                ->generate(
-                    'it_doors_controlling_invoice_grafic_individual',
-                    array ('ajax' => 'true')
-                ),
-            'text' => $translator->trans('Individual')
-        );
+       
 
         return $tabs;
     }

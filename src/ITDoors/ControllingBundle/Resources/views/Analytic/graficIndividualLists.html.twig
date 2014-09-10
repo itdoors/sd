@@ -206,11 +206,8 @@
                     {% if showType %}
                         var year = '{{showType.year}}';
                         var month = '{{showType.month}}';
-                        console.log(year);
-                        console.log(month);
                        
                             var maxDay = daysInMonth(month,year);
-                             console.log(maxDay);
                             for (i = 1; i <= maxDay; i++) {
                                if(yearA[year] !== undefined && yearA[year][month] !== undefined &&  yearA[year][month][i] !== undefined) {
                                    sumA += yearA[year][month][i];
@@ -252,10 +249,6 @@
                                 <i class="fa fa-gift"></i>
                                 {{ item.customerName }}
                                 
-                        </div>
-                        <div class="tools">
-                                <a href="javascript:;" class="collapse"></a>
-                                <a href="javascript:;" class="remove"></a>
                         </div>
                 </div>
                 <div class="portlet-body">

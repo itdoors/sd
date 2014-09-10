@@ -96,11 +96,11 @@
                         'px;top:' + (o.top-8)+ 
                         'px;color:#666;font-size:smaller">{{ ( item.allSumma ? item.allSumma : 0 )|number_format(2, ',', ' ')}}</div>'); 
                  o = plot.pointOffset({ x:  0   , y: {{key}}});
-                $("#chart_5").append(
+               /* $("#chart_5").append(
                         '<div style="width:100%;position:absolute;left:' + 
                         (o.left +5) + 
                         'px;top:' + (o.top+8)+ 
-                        'px;color:#000;font-size:smaller">{{ item.responsibles }} сумма по счетам:{{ item.allSummaInvoice }}</div>'); 
+                        'px;color:#000;font-size:smaller">{{ item.responsibles }} сумма по счетам:{{ item.allSummaInvoice }}</div>'); */
            {% endfor %}
 
     }   
@@ -131,23 +131,29 @@
         });
     });
 </script>
+<div class="navigation">
+    {{ ajax_paginator_render(
+            entities, namespace, {
+                    'datatable_ajax': 'ITDoorsAjax.updateList'
+                }
+            )
+    }}
+</div>
 <div class="portlet box yellow">
     <div class="portlet-title">
             <div class="caption">
                 <i class="fa fa-gift"></i>{% trans %}Graphik{% endtrans %}
             </div>
-            <div class="tools">
-                    <a href="javascript:;" class="collapse">
-                    </a>
-                    <a href="#portlet-config" data-toggle="modal" class="config">
-                    </a>
-                    <a href="javascript:;" class="reload">
-                    </a>
-                    <a href="javascript:;" class="remove">
-                    </a>
-            </div>
     </div>
     <div class="portlet-body">
         <div id="chart_5" style="height: {{  (50*entities|length)+1 }}px; padding: 0px; position: relative;"></div>
     </div>
+</div>
+    <div class="navigation">
+    {{ ajax_paginator_render(
+            entities, namespace, {
+                    'datatable_ajax': 'ITDoorsAjax.updateList'
+                }
+            )
+    }}
 </div>
