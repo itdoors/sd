@@ -450,15 +450,16 @@ class InvoiceService
         $companystructs = $em->getRepository('ListsDogovorBundle:DogovorCompanystructure')
             ->findBy(array ('dogovorId' => $invoice->getDogovorId()));
 
+        $db = $em->getConnection();
+        $query = "
+            DELETE FROM invoice_companystructure
+                WHERE invoice_id = :invoiceId
+           ";
+        $stmt = $db->prepare($query);
+        $params[':invoiceId'] = $invoice->getId();
+        $stmt->execute($params);
+            
         foreach ($companystructs as $company) {
-            $db = $em->getConnection();
-            $query = "
-                DELETE FROM invoice_companystructure
-                    WHERE invoice_id = :invoiceId
-               ";
-            $stmt = $db->prepare($query);
-            $params[':invoiceId'] = $invoice->getId();
-            $stmt->execute($params);
             $invoicecompany = new InvoiceCompanystructure();
             $invoicecompany->setInvoice($invoice);
             $invoicecompany->setCompanystructure($company->getCompanyStructures());
