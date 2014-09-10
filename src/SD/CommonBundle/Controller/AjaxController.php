@@ -2981,7 +2981,7 @@ class AjaxController extends BaseFilterController
                             'invoiceId' => $invoiceCS->getId(),
                             'companystructureId' => $object->getCompanystructureId()
                             ));
-                    $em->remove($invoiceC[0]);
+                    $em->remove($invoiceC);
                 }
             }
         }
