@@ -80,7 +80,7 @@ class AnalyticController extends BaseFilterController
 
         $paginator = $this->container->get($this->paginator);
         $entities->setHint($this->paginator . '.count', $count);
-        $pagination = $paginator->paginate($entities, $page, 65);
+        $pagination = $paginator->paginate($entities, $page, 100);
 
         return $this->render('ITDoorsControllingBundle:Analytic:graficGeneral.html.twig', array (
                 'entities' => $pagination,

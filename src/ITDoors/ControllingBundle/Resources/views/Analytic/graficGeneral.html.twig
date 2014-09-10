@@ -18,8 +18,6 @@
          function chart5() {
             var d1 = [];
             var d2 = [];
-            /*d1.push([0, '']);
-            d2.push([0, '']);*/
             {% for  item in entities %}
                 d1.push([{{ item.allSumma }}, '{{ item.customerName}}']);
                 d2.push([{{ item.allSumma-item.paymentsSumma }}, '{{ item.customerName }}']);
@@ -65,7 +63,7 @@
                 },
                 colors: ["#808080", "#d84a38"],
                 xaxis: {
-                    position: "top", // or "top"
+                    position: "bottom", // or "top"
                     ticks: 5,
                     tickLength: 0,
                     labelHeight: 0,
@@ -96,11 +94,7 @@
                         'px;top:' + (o.top-8)+ 
                         'px;color:#666;font-size:smaller">{{ ( item.allSumma ? item.allSumma : 0 )|number_format(2, ',', ' ')}}</div>'); 
                  o = plot.pointOffset({ x:  0   , y: {{key}}});
-               /* $("#chart_5").append(
-                        '<div style="width:100%;position:absolute;left:' + 
-                        (o.left +5) + 
-                        'px;top:' + (o.top+8)+ 
-                        'px;color:#000;font-size:smaller">{{ item.responsibles }} сумма по счетам:{{ item.allSummaInvoice }}</div>'); */
+          
            {% endfor %}
 
     }   
