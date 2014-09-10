@@ -97,7 +97,7 @@ class AnalyticController extends BaseFilterController
     public function graficWithoutactsAction ()
     {
         $filterNamespace = $this->container->getParameter($this->getNamespace()) . 'GraficWithoutacts';
-        
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 

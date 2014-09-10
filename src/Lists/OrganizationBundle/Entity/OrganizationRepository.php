@@ -615,7 +615,7 @@ class OrganizationRepository extends EntityRepository
                 )
                 ->orderBy('allSumma')->getQuery();
         $count = $this->createQueryBuilder('o')
-                ->select('COUNT(o.id)') 
+                ->select('COUNT(o.id)')
                 ->where(
                     'o.id in (
                         SELECT DISTINCT(i.customerId) 
@@ -785,8 +785,8 @@ class OrganizationRepository extends EntityRepository
             )
             ->orderBy('allSumma')->getQuery();
         $count = $this->createQueryBuilder('o')
-                ->select('COUNT(o.id)') 
-                 ->where(
+                ->select('COUNT(o.id)')
+                ->where(
                     'o.id in (
                         SELECT DISTINCT(i.customerId) 
                         FROM  ITDoorsControllingBundle:Invoice i

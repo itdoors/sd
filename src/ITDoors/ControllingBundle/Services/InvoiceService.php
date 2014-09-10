@@ -458,7 +458,7 @@ class InvoiceService
         $stmt = $db->prepare($query);
         $params[':invoiceId'] = $invoice->getId();
         $stmt->execute($params);
-            
+
         foreach ($companystructs as $company) {
             $invoicecompany = new InvoiceCompanystructure();
             $invoicecompany->setInvoice($invoice);
@@ -618,7 +618,6 @@ class InvoiceService
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_grafic_withoutacts'),
             'text' => $translator->trans('Without acts')
         );
-       
 
         return $tabs;
     }
