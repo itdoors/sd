@@ -53,7 +53,7 @@ class StructureController extends BaseController
             ->getRepository('ListsCompanystructureBundle:Companystructure');
 
         if ($parent == "#") {
-            $objects = $repository->getRootNodes();
+            $objects = $repository->getRootNodes('root', 'ASC');
             foreach ($objects as $object) {
                 $name = $object->getName();
                 if ($object->getStuff()) {
@@ -71,7 +71,7 @@ class StructureController extends BaseController
             }
         } else {
             $object = $repository->find((int) $parent);
-            $childrens = $repository->getChildren($object, true);
+            $childrens = $repository->getChildren($object, true, 'root');
             if ($childrens) {
                 foreach ($childrens as $children) {
                     $name = $children->getName();

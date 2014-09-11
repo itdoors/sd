@@ -3,6 +3,10 @@ ITDoors\ControllingBundle\Entity\Invoice:
     type: entity
     table: invoice
     repositoryClass: ITDoors\ControllingBundle\Entity\InvoiceRepository
+    gedmo:
+        soft_deleteable:
+          field_name: deletedAt
+          time_aware: false
     id:
         id:
             type: integer
@@ -93,6 +97,9 @@ ITDoors\ControllingBundle\Entity\Invoice:
             column: performer_edrpou
         court:
             type: boolean
+        deletedAt:
+            type: datetime
+            nullable: true
     manyToOne:
         dogovor:
             targetEntity: Lists\DogovorBundle\Entity\Dogovor

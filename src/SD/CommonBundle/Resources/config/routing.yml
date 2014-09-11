@@ -81,6 +81,14 @@ sd_common_ajax_user_position:
 sd_common_ajax_user_email:
     pattern:  /ajax/user/email
     defaults: { _controller: SDCommonBundle:Ajax:userEmail }
+    
+sd_common_ajax_user_save:
+    pattern:  /ajax/user/save
+    defaults: { _controller: SDCommonBundle:Ajax:userSave }
+    
+sd_common_ajax_stuff_save:
+    pattern:  /ajax/stuff/save
+    defaults: { _controller: SDCommonBundle:Ajax:stuffSave }
 
 sd_common_ajax_contact_phone:
     pattern:  /ajax/contact/phone
@@ -220,6 +228,10 @@ sd_common_ajax_organization_group:
 sd_common_ajax_organization_lookup:
     pattern:  /ajax/organization_lookup
     defaults: { _controller: SDCommonBundle:Ajax:organizationLookup }
+
+sd_common_ajax_organization_lookup_by_ids:
+    pattern:  /ajax/organization_lookup_by_ids
+    defaults: { _controller: SDCommonBundle:Ajax:organizationLookupByIds }
 
 sd_common_ajax_handling_status:
     pattern:  /ajax/handling_status

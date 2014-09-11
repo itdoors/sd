@@ -1061,4 +1061,43 @@ class Organization
     {
         return $this->ownershipId;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $organizationsigns;
+
+
+    /**
+     * Add organizationsigns
+     *
+     * @param \Lists\LookupBundle\Entity\Lookup $organizationsigns
+     * 
+     * @return Organization
+     */
+    public function addOrganizationsign(\Lists\LookupBundle\Entity\Lookup $organizationsigns)
+    {
+        $this->organizationsigns[] = $organizationsigns;
+
+        return $this;
+    }
+
+    /**
+     * Remove organizationsigns
+     *
+     * @param \Lists\LookupBundle\Entity\Lookup $organizationsigns
+     */
+    public function removeOrganizationsign(\Lists\LookupBundle\Entity\Lookup $organizationsigns)
+    {
+        $this->organizationsigns->removeElement($organizationsigns);
+    }
+
+    /**
+     * Get organizationsigns
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOrganizationsigns()
+    {
+        return $this->organizationsigns;
+    }
 }

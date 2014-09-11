@@ -45,6 +45,7 @@ use Lists\HandlingBundle\Entity\HandlingUser;
 use Lists\OrganizationBundle\Entity\OrganizationUser;
 use ITDoors\HistoryBundle\Entity\History;
 use Lists\DogovorBundle\Entity\DogovorCompanystructure;
+use ITDoors\SipBundle\Entity\Call;
 
 /**
  * AjaxController class.
@@ -521,7 +522,12 @@ class AjaxController extends BaseFilterController
         $result = array();
 
         foreach ($objects as $object) {
-            $result[] = $this->serializeObject($object);
+            $result[] =  array(
+            'id' => $object->getId(),
+            'value' => $object->getId(),
+            'name' => $object->getNameForList(),
+            'text' => $object->getNameForList()
+                );
         }
 
         return new Response(json_encode($result));
@@ -795,6 +801,34 @@ class AjaxController extends BaseFilterController
 
         foreach ($lookup as $organization) {
             $result[] = $this->serializeObject($organization);
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json organization object by requested id
+     *
+     * @return string
+     */
+    public function organizationLookupByIdsAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $lookupReposutory = $this->getDoctrine()
+            ->getRepository('ListsLookupBundle:Lookup');
+
+        $lookups = $lookupReposutory
+            ->createQueryBuilder('l')
+            ->where('lukey = "organization_sign"')
+            ->where("l.id in (:ids)")
+            ->setParameter(':ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $result = array();
+
+        foreach ($lookups as $lookup) {
+            $result[] = $this->serializeObject($lookup);
         }
 
         return new Response(json_encode($result));
@@ -1608,20 +1642,31 @@ class AjaxController extends BaseFilterController
         $organization = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization')
             ->find($pk);
-
-        if (!$value) {
-            $methodGet = 'get' . ucfirst($name);
-            $type = gettype($organization->$methodGet());
-
-            if (in_array($type, array('integer'))) {
-                $value = null;
+        if ($name == 'organizationsign') {
+            $methodSet = 'add' . ucfirst($name);
+            $lookups = $organization->getOrganizationsigns();
+            foreach ($lookups as $lookup) {
+                $organization->removeOrganizationsign($lookup);
             }
+            foreach ($value as $val) {
+                $lookups = $this->getDoctrine()
+                ->getRepository('ListsLookupBundle:Lookup')->find($val);
+                $organization->$methodSet($lookups);
+            }
+        } else {
+
+            if (!$value) {
+                $methodGet = 'get' . ucfirst($name);
+                $type = gettype($organization->$methodGet());
+
+                if (in_array($type, array('integer'))) {
+                    $value = null;
+                }
+            }
+
+            $organization->$methodSet($value);
         }
-
-        $organization->$methodSet($value);
-
         $validator = $this->get('validator');
-
         /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
         $errors = $validator->validate($organization, array('edit'));
 
@@ -1633,6 +1678,133 @@ class AjaxController extends BaseFilterController
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($organization);
+
+        try {
+            $em->flush();
+        } catch (\ErrorException $e) {
+            $return = array('msg' => $translator->trans('Wrong input data'));
+
+            return new Response(json_encode($return));
+        }
+
+        $return = array('success' => 1);
+
+        return new Response(json_encode($return));
+    }
+
+    /**
+     * Saves object to db
+     *
+     * @return mixed[]
+     */
+    public function userSaveAction()
+    {
+        if (!$this->getUser()->hasRole('ROLE_HRADMIN')) {
+            return false;
+        }
+        $translator = $this->get('translator');
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        if (in_array($name, array('birthday'))) {
+            $value = new \DateTime($value);
+        }
+
+        $methodSet = 'set' . ucfirst($name);
+
+        $user = $this->getDoctrine()
+            ->getRepository('SDUserBundle:User')
+            ->find($pk);
+
+        if (!$value) {
+            $methodGet = 'get' . ucfirst($name);
+            $type = gettype($user->$methodGet());
+
+            if (in_array($type, array('integer'))) {
+                $value = null;
+            }
+        }
+
+        $user->$methodSet($value);
+
+        $validator = $this->get('validator');
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
+        $errors = $validator->validate($user, array('edit'));
+
+        if (sizeof($errors)) {
+            $return = $this->getFirstError($errors);
+
+            return new Response($return, 406);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+
+        try {
+            $em->flush();
+        } catch (\ErrorException $e) {
+            $return = array('msg' => $translator->trans('Wrong input data'));
+
+            return new Response(json_encode($return));
+        }
+
+        $return = array('success' => 1);
+
+        return new Response(json_encode($return));
+    }
+    /**
+     * Saves object to db
+     *
+     * @return mixed[]
+     */
+    public function stuffSaveAction()
+    {
+        if (!$this->getUser()->hasRole('ROLE_HRADMIN')) {
+            return false;
+        }
+        $translator = $this->get('translator');
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        $methodSet = 'set' . ucfirst($name);
+
+        if (in_array($name, array('dateHire', 'dateFire'))) {
+            $value = new \DateTime($value);
+        }
+
+        $user = $this->getDoctrine()
+            ->getRepository('SDUserBundle:Stuff')
+            ->find($pk);
+
+        if (!$value) {
+            $methodGet = 'get' . ucfirst($name);
+            $type = gettype($user->$methodGet());
+
+            if (in_array($type, array('integer'))) {
+                $value = null;
+            }
+        }
+
+        $user->$methodSet($value);
+
+        $validator = $this->get('validator');
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
+        $errors = $validator->validate($user, array('edit'));
+
+        if (sizeof($errors)) {
+            $return = $this->getFirstError($errors);
+
+            return new Response($return, 406);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
 
         try {
             $em->flush();
@@ -2092,10 +2264,123 @@ class AjaxController extends BaseFilterController
             }
         }
 
-        $em = $this->getDoctrine()->getManager();
         $em->persist($handlingMessage);
         // $em->flush();
 
+        $handling->setLastHandlingDate($data->getCreatedate());
+        $handling->setNextHandlingDate($nextDatetime);
+
+        $handling->setStatusId($statusId);
+
+        $em->persist($handling);
+
+        $em->flush();
+
+        return true;
+    }
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function handlingMessageCallFormSave(Form $form, $user, $request)
+    {
+        /** @var \Lists\HandlingBundle\Entity\HandlingMessage $data */
+        $data = $form->getData();
+
+        $formData = $request->request->get($form->getName());
+        $handlingId = $data->getHandlingId();
+
+        /** @var \Lists\HandlingBundle\Entity\Handling $handling */
+        $handling = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling')
+            ->find($handlingId);
+        $user = $this->getUser();
+        $file = $form['file']->getData();
+         // Insert future
+        $typeCall = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingMessageType')
+            ->find(1);
+
+        $em = $this->getDoctrine()->getManager();
+        $call = null;
+        if (isset($formData['uniqueId']) && !empty($formData['uniqueId'])) {
+             $call = $em->getRepository('ITDoorsSipBundle:Call')
+                ->findOneBy(array('uniqueId' => $formData['uniqueId']));
+            if ($call) {
+                $data = $this->getDoctrine()
+                    ->getRepository('ListsHandlingBundle:HandlingMessage')
+                    ->find($call->getModelId());
+            }
+        }
+        $data->setCreatedatetime(new \DateTime());
+        $data->setUser($user);
+        $data->setHandling($handling);
+        $data->setType($typeCall);
+        if ($file) {
+            $data->upload();
+        }
+        $em->persist($data);
+        $em->flush();
+        $em->refresh($data);
+        if (isset($formData['uniqueId']) && !empty($formData['uniqueId']) && !$call) {
+            $call = new Call();
+            $call->setCaller($user);
+            $call->setUniqueId($formData['uniqueId']);
+            $call->setModelId($data->getId());
+            $call->setDatetime(new \DateTime());
+            $call->setModelName($em->getClassMetadata(get_class($data))->getTableName());
+            $em->persist($call);
+        }
+
+        // Insert future
+        $type = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingMessageType')
+            ->find($formData['nexttype']);
+
+        $nextDatetime = new \DateTime($formData['nextcreatedate']);
+        $contactNext = $formData['contactnext'];
+        $descriptionNext = $formData['descriptionnext'];
+        $statusId = $formData['status'];
+
+        $handlingMessage = new HandlingMessage();
+        $handlingMessage->setCreatedate($nextDatetime);
+        $handlingMessage->setCreatedatetime(new \DateTime());
+
+        if (isset($formData['userNext']) && $formData['userNext']) {
+            /** @var UserRepository $ur */
+            $ur = $this->get('sd_user.repository');
+
+            $userNext = $ur->find($formData['userNext']);
+
+            if ($userNext) {
+                $handlingMessage->setUser($userNext);
+            }
+        } else {
+            $handlingMessage->setUser($user);
+        }
+
+        $handlingMessage->setHandling($handling);
+        $handlingMessage->setType($type);
+        $handlingMessage->setIsBusinessTrip(isset($formData['next_is_business_trip']) ? true : false);
+        $handlingMessage->setAdditionalType(HandlingMessage::ADDITIONAL_TYPE_FUTURE_MESSAGE);
+
+        $handlingMessage->setDescription($descriptionNext);
+
+        if ((int) $contactNext) {
+            $contact = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
+                ->find((int) $contactNext);
+
+            if ($contact) {
+                $handlingMessage->setContact($contact);
+            }
+        }
+
+        $em->persist($handlingMessage);
         $handling->setLastHandlingDate($data->getCreatedate());
         $handling->setNextHandlingDate($nextDatetime);
 
@@ -2415,15 +2700,31 @@ class AjaxController extends BaseFilterController
                 ->getRepository('ITDoorsControllingBundle:Invoice')
                     ->findBy(array('dogovorId' => $invoice->getDogovorId()));
                 foreach ($invoices as $invoiceCS) {
-                    $invoiceC = new \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure();
-                    $invoiceC->setCompanystructure($company);
-                    $invoiceC->setInvoice($invoiceCS);
-                    $em->persist($invoiceC);
+                    $invoiceCompanystructure = $em
+                        ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
+                        ->findOneBy(array(
+                            'invoiceId' => $invoiceCS->getId(),
+                            'companystructureId' => $company->getId()
+                        ));
+                    if (!$invoiceCompanystructure) {
+                        $invoiceC = new \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure();
+                        $invoiceC->setCompanystructure($company);
+                        $invoiceC->setInvoice($invoiceCS);
+                        $em->persist($invoiceC);
+                    }
                 }
-                $dogovorC = new DogovorCompanystructure();
-                $dogovorC->setCompanyStructures($company);
-                $dogovorC->setDogovors($dogovor);
-                $em->persist($dogovorC);
+                $dogovorCompanystructure = $em
+                    ->getRepository('ListsDogovorBundle:DogovorCompanystructure')
+                    ->findOneBy(array(
+                        'dogovorId' => $dogovor->getId(),
+                        'companystructureId' => $company->getId()
+                    ));
+                if (!$dogovorCompanystructure) {
+                    $dogovorC = new DogovorCompanystructure();
+                    $dogovorC->setCompanyStructures($company);
+                    $dogovorC->setDogovors($dogovor);
+                    $em->persist($dogovorC);
+                }
             }
         } else {
             $invoiceC = new \ITDoors\ControllingBundle\Entity\InvoiceCompanystructure();
@@ -3832,6 +4133,78 @@ class AjaxController extends BaseFilterController
                 }
             ));
 
+        $form
+            ->add('mindate', 'hidden', array(
+                'data' => $defaultData['mindate'],
+                'mapped' => false
+        ));
+    }
+    /**
+     * Adds children to {formName}ProcessDefaults depending on defaults in request
+     *
+     * @param Form    $form
+     * @param mixed[] $defaultData
+     *
+     * @return void
+     */
+    public function handlingMessageCallFormProcessDefaults($form, $defaultData)
+    {
+        $handlingId = $defaultData['handling_id'];
+
+        /** @var \Lists\HandlingBundle\Entity\Handling $handling */
+        $handling = $this->getDoctrine()->getRepository('ListsHandlingBundle:Handling')
+            ->find($handlingId);
+
+        $creator = $handling->getUser();
+
+        $userIds = array();
+
+        $userIds[$creator->getId()] = $creator->getId();
+
+        /** @var HandlingUser[] $users */
+        $users = $handling->getHandlingUsers();
+
+        if ($users) {
+            foreach ($users as $user) {
+                $userIds[$user->getUserId()] = $user->getUserId();
+            }
+        }
+
+        $organizationId = $handling->getOrganizationId();
+
+         $form
+            ->add('contactnext', 'entity', array(
+                'class' => 'ListsContactBundle:ModelContact',
+                'empty_value' => '',
+                'required' => false,
+                'mapped' => false,
+                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
+                        return $repository->createQueryBuilder('mc')
+                            ->leftJoin('mc.owner', 'owner')
+                            ->where('mc.modelName = :modelName')
+                            ->andWhere('mc.modelId = :modelId')
+                            ->andWhere('owner.id in (:ownerIds)')
+                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                            ->setParameter(':modelId', $organizationId)
+                            ->setParameter(':ownerIds', $userIds);
+                }
+            ));
+
+        $form
+            ->add('status', 'entity', array(
+                'class' => 'ListsHandlingBundle:HandlingStatus',
+                'data' => $handling->getStatus(),
+                'empty_value' => '',
+                'mapped' => false,
+                'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingStatusRepository $repository) {
+                        return $repository->createQueryBuilder('s')
+                            ->orderBy('s.sortorder', 'ASC');
+                }
+            ));
+
+        $form->add('uniqueId', 'hidden', array(
+                'mapped' => false
+            ));
         $form
             ->add('mindate', 'hidden', array(
                 'data' => $defaultData['mindate'],

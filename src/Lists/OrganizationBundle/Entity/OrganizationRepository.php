@@ -68,9 +68,9 @@ class OrganizationRepository extends EntityRepository
         $this->processCount($sqlCount);
 
         $this->processBaseQuery($sql);
-        $sql->where('o.organizationSignId != 61 or o.organizationSignId is NULL');
+        //$sql->where('o.organizationSignId != 61 or o.organizationSignId is NULL');
         $this->processBaseQuery($sqlCount);
-        $sqlCount->where('o.organizationSignId != 61 or o.organizationSignId is NULL');
+        //$sqlCount->where('o.organizationSignId != 61 or o.organizationSignId is NULL');
 
         if (sizeof($userIds)) {
             $this->processUserQuery($sql, $userIds);
@@ -242,6 +242,7 @@ class OrganizationRepository extends EntityRepository
             ->addSelect('view.name as viewName')
             ->addSelect('c.name as cityName')
             ->addSelect('r.name as regionName')
+            ->addSelect('oUser.userId as managerId')
             ->addSelect('scope.name as scopeName')
             ->addSelect(
                 "array_to_string(
@@ -254,6 +255,18 @@ class OrganizationRepository extends EntityRepository
                         WHERE ou.organizationId = o.id
                     ), ','
                 ) as fullNames"
+            )
+            ->addSelect(
+                "array_to_string(
+                    ARRAY(
+                        SELECT
+                            os.name
+                        FROM
+                            ListsOrganizationBundle:Organization o2
+                        LEFT JOIN o2.organizationsigns os
+                        WHERE o2.id = o.id
+                    ), ','
+                ) as viewNames"
             );
     }
     /**
@@ -371,6 +384,21 @@ class OrganizationRepository extends EntityRepository
                         }
                         $sql->andWhere('o.edrpou in (:edrpou)');
                         $sql->setParameter(':edrpou', explode(',', $value));
+                        break;
+                    case 'organizationsigns':
+                        $value = explode(',', $value);
+                        $sql->andWhere(
+                            'o.id in (
+                                SELECT
+                                    o3.id
+                                FROM
+                                    ListsOrganizationBundle:Organization o3
+                                LEFT JOIN o3.organizationsigns os1
+                                WHERE o3.id = o.id
+                                AND os1.id in (:organizationsigns)
+                            )'
+                        );
+                        $sql->setParameter(':organizationsigns', $value);
                         break;
                     /* case 'users':
                       if (isset($value[0]) && !$value[0]) {
@@ -585,11 +613,19 @@ class OrganizationRepository extends EntityRepository
                         FROM  ITDoorsControllingBundle:Invoice i
                     )'
                 )
-                ->orderBy('allSumma')
-                //->setMaxResults(40)
-                ->getQuery()->getResult();
+                ->orderBy('allSumma')->getQuery();
+        $count = $this->createQueryBuilder('o')
+                ->select('COUNT(o.id)')
+                ->where(
+                    'o.id in (
+                        SELECT DISTINCT(i.customerId) 
+                        FROM  ITDoorsControllingBundle:Invoice i
+                    )'
+                )
+                ->getQuery()
+                ->getSingleScalarResult();
 
-        return $res;
+        return array('entity' => $res, 'count' => $count);
     }
     /**
      * Returns results for interval future invoice
@@ -747,10 +783,21 @@ class OrganizationRepository extends EntityRepository
                     AND i_a_.original = false
                 )'
             )
-            ->orderBy('allSumma')
-            ->getQuery()
-            ->getResult();
+            ->orderBy('allSumma')->getQuery();
+        $count = $this->createQueryBuilder('o')
+                ->select('COUNT(o.id)')
+                ->where(
+                    'o.id in (
+                        SELECT DISTINCT(i.customerId) 
+                        FROM  ITDoorsControllingBundle:Invoice i
+                        LEFT JOIN ITDoorsControllingBundle:InvoiceAct i_a_
+                        WHERE i.id = i_a_.invoiceId
+                        AND i_a_.original = false
+                    )'
+                )
+                ->getQuery()
+                ->getSingleScalarResult();
 
-        return $res;
+        return array('entity' => $res, 'count' => $count);
     }
 }

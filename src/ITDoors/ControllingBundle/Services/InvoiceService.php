@@ -64,7 +64,10 @@ class InvoiceService
      */
     public function parserFile ()
     {
+        $this->updateIvoiceInfo();
         $directory = $this->container->getParameter('1C.file.path');
+
+        $em = $this->container->get('doctrine')->getManager();
 
         if (!is_dir($directory)) {
             $this->addCronError(0, 'ok', 'directory not found', $directory);
@@ -83,11 +86,11 @@ class InvoiceService
             switch (json_last_error()) {
                 case JSON_ERROR_NONE:
                     $this->addCronError(0, 'start parser', $file, 'parser file');
-                    $this->arrCostumersForSendMessages = array ();
-                    $em = $this->container->get('doctrine')->getManager();
+                    $this->arrCostumersForSendMessages = array();
+
                     $this->savejson($json->invoice);
-                    $em->flush();
                     $this->addCronError(0, 'stop parser', $file, 'parser file');
+                    $em->flush();
                     if (!is_dir($directory . 'old')) {
                         mkdir($directory . 'old', 0700);
                     }
@@ -101,10 +104,9 @@ class InvoiceService
             $em = $this->container->get('doctrine')->getManager();
             $this->addCronError(0, 'ok', 'file not found', 'new file not found');
 
-            $em->flush();
-
             return 'File not found in derictory ' . "\n" . $directory;
         }
+        $em->flush();
     }
     /**
      * saveinvoice
@@ -399,21 +401,20 @@ class InvoiceService
         $count = count($json);
         $countInvoice = 0;
         $memStart = memory_get_usage();
+        $em = $this->container->get('doctrine')->getManager();
+        $em->getConnection()->getConfiguration()->setSQLLogger(null);
 
         foreach ($json as $key => $invoice) {
 
             echo $countInvoice . " ~ ";
             if ($countInvoice == 1000) {
-                $em = $this->container->get('doctrine')->getManager();
                 $em->flush();
                 $em->clear();
-                $em->getConnection()->getConfiguration()->setSQLLogger(null);
                 $countInvoice = 0;
-                unset($em);
             }
             ++$countInvoice;
-            echo number_format((memory_get_usage() - $memStart) / 8000000, 0, ',', ' ') . "MB ~ Осталось: ";
-            echo ($count - $key) . " шт.\n";
+            echo number_format((memory_get_usage() - $memStart) / 8000000, 0, ',', ' ')
+                . "MB ~ more: ".($count - $key) . "\n";
 
             $invoiceFind = true;
             $this->messageTemplate = false;
@@ -429,15 +430,14 @@ class InvoiceService
             $this->findDogovor($invoiceFind, $invoice, $invoiceNew);
             $json[$key] = null;
             unset($json[$key]);
-//            unset($invoice);
             unset($invoiceNew);
         }
-        echo 'try add email for send' . "\n";
+        echo 'Try add email for send' . "\n";
         $this->sendEmails();
-        echo 'try add cron for send email' . "\n";
+        echo 'Try add cron for send email' . "\n";
         $cron = $this->container->get('it_doors_cron.service');
         $cron->addSendEmails();
-        echo 'cron successfully' . "\n";
+        echo 'Cron successfully' . "\n";
     }
     /**
      * addReaspon
@@ -452,16 +452,22 @@ class InvoiceService
         $companystructs = $em->getRepository('ListsDogovorBundle:DogovorCompanystructure')
             ->findBy(array ('dogovorId' => $invoice->getDogovorId()));
 
-        foreach ($companystructs as $company) {
+        $db = $em->getConnection();
+        $query = "
+            DELETE FROM invoice_companystructure
+                WHERE invoice_id = :invoiceId
+           ";
+        $stmt = $db->prepare($query);
+        $params[':invoiceId'] = $invoice->getId();
+        $stmt->execute($params);
 
+        foreach ($companystructs as $company) {
             $invoicecompany = new InvoiceCompanystructure();
             $invoicecompany->setInvoice($invoice);
             $invoicecompany->setCompanystructure($company->getCompanyStructures());
 
             $em->persist($invoicecompany);
-            //$em->flush();
         }
-//        unset($companystructs);
     }
     /**
      * addCronError
@@ -487,8 +493,6 @@ class InvoiceService
         $error->setReason($reason);
         $error->setDescription($descript);
         $em->persist($error);
-        //$em->flush();
-//        unset($error);
 
         return true;
     }
@@ -594,6 +598,16 @@ class InvoiceService
     {
         $translator = $this->container->get('translator');
         $tabs = array ();
+         $tabs['individual'] = array (
+            'blockupdate' => 'ajax-tab-holder',
+            'tab' => 'individual',
+            'url' => $this->container->get('router')
+                ->generate(
+                    'it_doors_controlling_invoice_grafic_individual',
+                    array ('ajax' => 'true')
+                ),
+            'text' => $translator->trans('Individual')
+        );
         $tabs['general'] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'general',
@@ -605,16 +619,6 @@ class InvoiceService
             'tab' => 'withoutacts',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_grafic_withoutacts'),
             'text' => $translator->trans('Without acts')
-        );
-        $tabs['individual'] = array (
-            'blockupdate' => 'ajax-tab-holder',
-            'tab' => 'individual',
-            'url' => $this->container->get('router')
-                ->generate(
-                    'it_doors_controlling_invoice_grafic_individual',
-                    array ('ajax' => 'true')
-                ),
-            'text' => $translator->trans('Individual')
         );
 
         return $tabs;
@@ -823,5 +827,105 @@ class InvoiceService
                 }
             }
         }
+    }
+    /**
+     * removeInvoice
+     */
+    public function removeInvoice ()
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $em->getConnection()->getConfiguration()->setSQLLogger(null);
+        $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')->findAll();
+
+        $companystructs = $em->getRepository('ListsCompanystructureBundle:Companystructure')
+                ->findAll();
+        $memStart = memory_get_usage();
+        $count = count($invoices);
+        $countInvoice = 0;
+        foreach ($invoices as $key => $invoice) {
+            ++$countInvoice;
+            echo $countInvoice. ' ~ '. number_format((memory_get_usage() - $memStart) / 8000000, 0, ',', ' ')
+                . "MB ~ more: ".($count - $key) . "\n";
+
+            foreach ($companystructs as $company) {
+                $invoiceCompanystructures = $em->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
+                    ->findBy(array (
+                        'invoiceId' => $invoice->getId(),
+                        'companystructureId' => $company->getId()
+                    ));
+                if (count($invoiceCompanystructures) > 1) {
+                    foreach ($invoiceCompanystructures as $key => $invoiceCompanystructure) {
+                        if ($key > 0) {
+                            $em->remove($invoiceCompanystructure);
+                        }
+                    }
+                }
+            }
+            if ($invoice->getDate()->format('Y') < 2014 && $invoice->getDateFact() !== null) {
+                $em->remove($invoice);
+            }
+            if ($countInvoice == 1000) {
+                $em->flush();
+                $countInvoice = 0;
+            }
+        }
+        $em->flush();
+    }
+    private function updateIvoiceInfo ()
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $em->getConnection()->getConfiguration()->setSQLLogger(null);
+        $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')->findAll();
+        echo 'Start update info'."\n";
+        foreach ($invoices as $invoice) {
+            echo $invoice->getInvoiceId()." ";
+            /** @var Dogovor  $dogovorfind */
+            $dogovorfind = $em->getRepository('ListsDogovorBundle:Dogovor')
+                ->findOneBy(array ('dogovorGuid' => $invoice->getDogovorGuid()));
+
+            /** @var Organization  $customerfind */
+            $customerfind = $em->getRepository('ListsOrganizationBundle:Organization')
+                ->findOneBy(array ('edrpou' => $invoice->getCustomerEdrpou()));
+
+            /** @var Organization  $performerfind */
+            $performerfind = $em->getRepository('ListsOrganizationBundle:Organization')
+                ->findOneBy(array ('edrpou' => $invoice->getPerformerEdrpou()));
+
+            if (!$dogovorfind) {
+                if ($customerfind && $performerfind) {
+
+                    /** @var Dogovor  $dogovoradd */
+                    $dogovoradd = $em->getRepository('ListsDogovorBundle:Dogovor')
+                        ->findOneBy(array (
+                        'number' => $invoice->getDogovorNumber(),
+                        'startdatetime' => $invoice->getDogovorDate(),
+                        'customerId' => $customerfind->getId(),
+                        'performerId' => $performerfind->getId()
+                    ));
+                    if ($dogovoradd) {
+                        // подтвердить связь и 1С
+                        $dogovoradd->setDogovorGuid($invoice->getDogovorGuid());
+                        $em->persist($dogovoradd);
+                    }
+                }
+            }
+            if ($customerfind) {
+                $invoice->setCustomer($customerfind);
+            }
+            if ($performerfind) {
+                $invoice->setPerformer($performerfind);
+            }
+            if ($dogovorfind) {
+                echo ' add dogovor';
+                $invoice->setDogovor($dogovorfind);
+                $this->addReaspon($invoice);
+            } else {
+                echo ' dogovor not fount';
+            }
+            $em->persist($invoice);
+             echo "\n";
+        }
+        $em->flush();
+        echo 'End update info'."\n";
     }
 }

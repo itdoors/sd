@@ -1,0 +1,41 @@
+SD\TaskBundle\Entity\TaskFile:
+    type:  entity
+    table: task_file
+    repositoryClass: SD\TaskBundle\Entity\TaskFileRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+    fields:
+        createDate:
+            type: datetime
+            nullable: false
+            column: createdatetime
+        name:
+            type: string
+            nullable: true
+            length: 255
+        filepath:
+            type: string
+            nullable: false
+            length: 255
+    manyToOne:
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        task:
+            targetEntity: SD\TaskBundle\Entity\Task
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                task_id:
+                    referencedColumnName: id
+            orphanRemoval: false

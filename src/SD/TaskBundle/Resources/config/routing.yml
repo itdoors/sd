@@ -10,6 +10,10 @@ sd_task_table_dashboard:
     path:     /tasks/table/dashboard
     defaults: { _controller: SDTaskBundle:Task:taskTableDashboard }
 
+sd_task_table_dashboard_rows_ajax:
+    path:     /tasks/table/dashboard/ajax
+    defaults: { _controller: SDTaskBundle:Task:renderDashboardTaskRowsAjax }
+
 sd_task_modal:
     path:     /tasks/modal
     defaults: { _controller: SDTaskBundle:Task:taskModal }
@@ -37,3 +41,19 @@ sd_task_add_comment:
 sd_task_page:
     path:     /tasks/task/{id}
     defaults: { _controller: SDTaskBundle:Task:showTaskPage}
+
+sd_task_view:
+    path:     /tasks/view/task
+    defaults: { _controller: SDTaskBundle:Task:taskView}
+
+sd_task_list:
+    path:     /tasks/list
+    defaults: { _controller: SDTaskBundle:Task:taskList}
+
+sd_task_files:
+    path:     /tasks/taskfiles/{id}
+    defaults: { _controller: SDTaskBundle:Task:renderListOfFiles}
+
+sd_task_change_date_calendar:
+    path:     /tasks/change/date/calendar
+    defaults: { _controller: SDTaskBundle:Task:changeDate }

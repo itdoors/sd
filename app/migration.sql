@@ -958,3 +958,94 @@ DROP INDEX uniq_c1ee637c9e9ffaa0;
 CREATE INDEX IDX_C1EE637C9E9FFAA0 ON organization (ownership_id);
 -- staging ++++
 -- prod ++++
+CREATE TABLE organization_organizationsign (organization_id BIGINT NOT NULL, organization_sign_id INT NOT NULL, PRIMARY KEY(organization_id, organization_sign_id));
+CREATE INDEX IDX_2E73694C32C8A3DE ON organization_organizationsign (organization_id);
+CREATE INDEX IDX_2E73694CCB2EF456 ON organization_organizationsign (organization_sign_id);
+ALTER TABLE organization_organizationsign ADD CONSTRAINT FK_2E73694C32C8A3DE FOREIGN KEY (organization_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE organization_organizationsign ADD CONSTRAINT FK_2E73694CCB2EF456 FOREIGN KEY (organization_sign_id) REFERENCES lookup (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+
+INSERT INTO "public".organization_organizationsign (organization_id, organization_sign_id)
+SELECT id, organization_sign_id FROM "public".organization WHERE "public".organization.organization_sign_id is  not NULL;
+-- staging +++++
+-- prod +++++
+ALTER TABLE invoice ADD deletedAt TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL;
+-- staging +++++
+-- prod +++++
+CREATE TABLE task_file (id SERIAL NOT NULL, user_id INT DEFAULT NULL, task_id INT DEFAULT NULL, createdatetime TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, name VARCHAR(255) DEFAULT NULL, filepath VARCHAR(255) NOT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_FF2CA26BA76ED395 ON task_file (user_id);
+CREATE INDEX IDX_FF2CA26B8DB60186 ON task_file (task_id);
+ALTER TABLE task_file ADD CONSTRAINT FK_FF2CA26BA76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE task_file ADD CONSTRAINT FK_FF2CA26B8DB60186 FOREIGN KEY (task_id) REFERENCES task (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+-- staging -----
+-- prod ----
+
+UPDATE "public".companystructure SET "root" = 1 WHERE id = 14;
+UPDATE "public".companystructure SET "root" = 1 WHERE id = 15;
+UPDATE "public".companystructure SET "root" = 1 WHERE id = 31;
+UPDATE "public".companystructure SET "lft" = 0, "lvl" = 1, "rgt" = 0, "root" = 1 WHERE id = 43;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 13;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 22;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 39;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 40;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 42;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 41;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 37;
+UPDATE "public".companystructure SET "lft" = 0, "rgt" = 0, "root" = 2 WHERE id = 44;
+UPDATE "public".companystructure SET "lft" = 0, "rgt" = 0, "root" = 3 WHERE id = 45;
+UPDATE "public".companystructure SET "root" = 2 WHERE id = 38;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 12;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 35;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 34;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 30;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 33;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 3;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 5;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 4;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 23;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 25;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 24;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 26;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 6;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 28;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 7;
+UPDATE "public".companystructure SET "root" = 5 WHERE id = 8;
+UPDATE "public".companystructure SET "root" = 4 WHERE id = 29;
+UPDATE "public".companystructure SET "root" = 3 WHERE id = 9;
+UPDATE "public".companystructure SET "parent_id" = 3, "lvl" = 2, "root" = 3 WHERE id = 32;
+INSERT INTO "public".companystructure (id, parent_id, "name", mpk, address, phone, stuff_id, lft, lvl, rgt, root) 
+	VALUES (46, 3, 'Киев', 'к-', NULL, NULL, NULL, 0, 2, 0, 3)
+INSERT INTO "public".companystructure (id, parent_id, "name", mpk, address, phone, stuff_id, lft, lvl, rgt, root) 
+	VALUES (48, 3, 'Технический отдел', 'т-', NULL, NULL, NULL, 0, 2, 0, 3)
+INSERT INTO "public".companystructure (id, parent_id, "name", mpk, address, phone, stuff_id, lft, lvl, rgt, root) 
+	VALUES (47, 3, 'Прилуки', 'п-', NULL, NULL, NULL, 0, 2, 0, 3)
+INSERT INTO "public".companystructure (id, parent_id, "name", mpk, address, phone, stuff_id, lft, lvl, rgt, root) 
+	VALUES (49, 5, 'Львов', 'л-', NULL, NULL, NULL, 0, 2, 0, 3)
+
+-- staging ----------------------
+-- prod ----------------------
+ALTER TABLE fos_user ADD peer_id INT DEFAULT NULL;
+ALTER TABLE fos_user ADD peer_password VARCHAR(255) DEFAULT NULL;
+-- staging ----------------------
+-- prod ----------------------
+CREATE TABLE call (
+    id SERIAL NOT NULL,
+    caller_id INT NOT NULL,
+    receiver_id INT  DEFAULT NULL,
+    peer_id INT DEFAULT NULL,
+    phone VARCHAR(12) DEFAULT NULL,
+    proxy_id VARCHAR(255) DEFAULT NULL,
+    unique_id VARCHAR(255) NOT NULL,
+    destunique_id VARCHAR(255) DEFAULT NULL,
+    datetime TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
+    duration INT DEFAULT NULL,
+    file_name VARCHAR(255) DEFAULT NULL,
+    status VARCHAR(255) DEFAULT NULL,
+    model_name VARCHAR(255) NOT NULL,
+    model_id INT NOT NULL,
+    PRIMARY KEY(id));
+CREATE INDEX IDX_CC8E2F3EA5626C52 ON call (caller_id);
+ALTER TABLE call ADD CONSTRAINT FK_CC8E2F3EA5626C52 FOREIGN KEY (caller_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+-- staging ----------------------
+-- prod ----------------------

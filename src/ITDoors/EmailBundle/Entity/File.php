@@ -24,11 +24,6 @@ class File
     /**
      * @var string
      */
-    private $page;
-
-    /**
-     * @var string
-     */
     private $tableId;
 
     /**
@@ -52,9 +47,15 @@ class File
     private $date;
 
     /**
+     * @var \SD\UserBundle\Entity\User
+     */
+    private $user;
+
+
+    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -65,7 +66,7 @@ class File
      * Set userId
      *
      * @param integer $userId
-     * 
+     *
      * @return File
      */
     public function setUserId($userId)
@@ -78,7 +79,7 @@ class File
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -86,34 +87,10 @@ class File
     }
 
     /**
-     * Set page
-     *
-     * @param string $page
-     * 
-     * @return File
-     */
-    public function setPage($page)
-    {
-        $this->page = $page;
-
-        return $this;
-    }
-
-    /**
-     * Get page
-     *
-     * @return string 
-     */
-    public function getPage()
-    {
-        return $this->page;
-    }
-
-    /**
      * Set tableId
      *
      * @param string $tableId
-     * 
+     *
      * @return File
      */
     public function setTableId($tableId)
@@ -126,7 +103,7 @@ class File
     /**
      * Get tableId
      *
-     * @return string 
+     * @return string
      */
     public function getTableId()
     {
@@ -137,7 +114,7 @@ class File
      * Set tableName
      *
      * @param string $tableName
-     * 
+     *
      * @return File
      */
     public function setTableName($tableName)
@@ -150,7 +127,7 @@ class File
     /**
      * Get tableName
      *
-     * @return string 
+     * @return string
      */
     public function getTableName()
     {
@@ -161,7 +138,7 @@ class File
      * Set name
      *
      * @param string $name
-     * 
+     *
      * @return File
      */
     public function setName($name)
@@ -174,7 +151,7 @@ class File
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -185,7 +162,7 @@ class File
      * Set path
      *
      * @param string $path
-     * 
+     *
      * @return File
      */
     public function setPath($path)
@@ -198,7 +175,7 @@ class File
     /**
      * Get path
      *
-     * @return string 
+     * @return string
      */
     public function getPath()
     {
@@ -209,7 +186,7 @@ class File
      * Set date
      *
      * @param \DateTime $date
-     * 
+     *
      * @return File
      */
     public function setDate($date)
@@ -222,18 +199,42 @@ class File
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
         return $this->date;
     }
 
+    /**
+     * Set user
+     *
+     * @param \SD\UserBundle\Entity\User $user
+     *
+     * @return File
+     */
+    public function setUser(\SD\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \SD\UserBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
     protected $file;
 
     /**
      * setFile
-     * 
+     *
      * @param \Symfony\Component\HttpFoundation\File\File $file
      */
     public function setFile(Sfile $file = null)
@@ -243,7 +244,7 @@ class File
 
     /**
      * getFile
-     * 
+     *
      * @return file
      */
     public function getFile()

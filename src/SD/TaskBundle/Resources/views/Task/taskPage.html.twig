@@ -1,6 +1,6 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'SDTaskBundle' %}
-{% block title %} {% trans %}List tasks{% endtrans %} {% endblock %}
+{% block title %}{{ taskUserRole.task.title }}{% endblock %}
 {% block page_breadcrumbs %}
     <ul class="page-breadcrumb breadcrumb">
         <li>
@@ -58,7 +58,7 @@
                     if (data.success == 1) {
                         update_modal();
                     } else {
-                        //$('#copy_etalon_finished').show('blind', {}, 500);
+
                     }
                 }
             })
@@ -122,10 +122,10 @@
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
-                        insertComment();
+                        insertComment()
                         update_modal();
                     } else {
-                        alert('Somebody already made request');
+                        alert('{% trans %}Somebody already made request{% endtrans %}');
                         update_modal();
                         //$('#copy_etalon_finished').show('blind', {}, 500);
                     }
@@ -173,6 +173,7 @@
                         } else {
                             //$('#copy_etalon_finished').show('blind', {}, 500);
                         }
+                        return true;
                     }
 
                 })
@@ -398,13 +399,18 @@
             </div>
             <div class="portlet-body" id="chats">
                     <ul class="chats">
+                        {% set currentUserId = 0 %}
                         {% for comment in comments %}
-                            {% if (counter % 2) == 0 %}
+                            {% if currentUserId != comment.user.id %}
+                                {% set counter = counter+1 %}
+                                {% set currentUserId = comment.user.id %}
+                            {% endif %}
+                            {% if (counter % 2) == 1 %}
                                 {% set classMessage = "in" %}
                             {% else %}
                                 {% set classMessage = "out" %}
                             {% endif %}
-                            {% set counter = counter+1 %}
+
                         <li class="{{ classMessage }}">
                             <img class="avatar" alt="" src="{{ asset( userprofiles_url ~ comment.user.id ~ '/image29_' ~ comment.user.photo) }}"/>
                             <div class="message">

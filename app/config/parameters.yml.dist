@@ -23,3 +23,11 @@ parameters:
         - handling
         - dogovor
         - companystructure
+        - call
+    sd.host: http://sd.griffin.ua
+    # AMI CONFIG
+    ami.host: sd.griffin.ua
+    ami.port: 8888
+    sip.host: 192.168.4.4
+    sip.port.udp: 5060
+    sip.port.ws: 10060

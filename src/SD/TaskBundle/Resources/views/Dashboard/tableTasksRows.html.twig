@@ -1,0 +1,71 @@
+{% trans_default_domain 'SDTaskBundle' %}
+<ul class="feeds">
+    {% for taskUserRole in tasksUserRole %}
+    {% set stage = taskUserRole.task.stage %}
+    {% if stage == 'undone' %}
+    {% set labelStage = 'label-primary' %}
+    {% elseif stage == 'performing' %}
+    {% set labelStage = 'label-info' %}
+    {% elseif stage == 'created' %}
+    {% set labelStage = 'label-default' %}
+    {% elseif stage == 'done' %}
+    {% set labelStage = 'label-success' %}
+    {% elseif stage == 'date request' %}
+    {% set labelStage = 'label-danger' %}
+    {% elseif stage == 'closed' %}
+    {% set labelStage = 'label-primary' %}
+    {% elseif stage == 'checking' %}
+    {% set labelStage = 'label-warning' %}
+    {% endif %}
+
+    {% if taskUserRole.role == 'author' %}
+    {% set icon = 'fa-pencil' %}
+    {% set label = 'label-danger' %}
+    {% elseif taskUserRole.role == 'performer' %}
+    {% set icon = 'fa-rocket' %}
+    {% set label = 'label-info' %}
+    {% elseif taskUserRole.role == 'controller' %}
+    {% set icon = 'fa-crosshairs' %}
+    {% set label = 'label-warning' %}
+    {#
+    {% elseif taskUserRole == 'done' %}
+    {% set icon = 'orange' %}
+    fa-eye
+    #}
+    {% endif %}
+
+    <li data-id="{{ taskUserRole.id }}" class="modal_task" style="cursor: pointer;">
+        <div class="col1">
+            <div class="cont">
+                <div class="cont-col1">
+                    <div class="label label-sm {{ label }}">
+                        <i class="fa {{ icon }}"></i>
+                        {#{{ taskUserRole.role|slice(0, 1) }}-{{ taskUserRole.task.id }}#}
+                    </div>
+                </div>
+                <div class="cont-col2">
+                    <div class="desc">
+                        {% if not taskUserRole.isViewed %}
+                        <span style="color: green;">{{ taskUserRole.task.title }}</span>
+                        {% else %}
+                        {{ taskUserRole.task.title }}
+                        {% endif %}
+                        <span class="label label-sm {{ labelStage }} ">
+														{{ stage|trans }} {#<i class="fa fa-share"></i>#}
+														</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col2" style="width: 150px; margin-left: -150px;">
+            <div class="date">
+                {{ include ('SDTaskBundle:Task:taskEndDateLast.html.twig', {
+                'taskEndDates': taskUserRole.task.taskEndDates,
+                'stage': stage,
+                }) }}
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+
+</ul>

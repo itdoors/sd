@@ -1,17 +1,17 @@
-var Charts = function () {
+var Charts = function() {
 
     return {
         //main function to initiate the module
 
-        init: function () {
+        init: function() {
 
-            Metronic.addResizeHandler(function () {
-                 Charts.initPieCharts(); 
+            Metronic.addResizeHandler(function() {
+                Charts.initPieCharts();
             });
-            
+
         },
 
-        initCharts: function () {
+        initCharts: function() {
 
             if (!jQuery.plot) {
                 return;
@@ -34,13 +34,20 @@ var Charts = function () {
                 }
                 // zip the generated y values with the x values
                 var res = [];
-                for (var i = 0; i < data.length; ++i) res.push([i, data[i]])
+                for (var i = 0; i < data.length; ++i) {
+                    res.push([i, data[i]]);
+                }
+
                 return res;
             }
 
             //Basic Chart
 
             function chart1() {
+                if ($('#chart_1').size() != 1) {
+                    return;
+                }
+
                 var d1 = [];
                 for (var i = 0; i < Math.PI * 2; i += 0.25)
                     d1.push([i, Math.sin(i)]);
@@ -53,65 +60,68 @@ var Charts = function () {
                 for (var i = 0; i < Math.PI * 2; i += 0.1)
                     d3.push([i, Math.tan(i)]);
 
-                    $.plot($("#chart_1"), [{
-                            label: "sin(x)",
-                            data: d1,
-                            lines: {
-                                lineWidth: 1,
-                            },
-                            shadowSize: 0
-                        }, {
-                            label: "cos(x)",
-                            data: d2,
-                            lines: {
-                                lineWidth: 1,
-                            },
-                            shadowSize: 0
-                        }, {
-                            label: "tan(x)",
-                            data: d3,
-                            lines: {
-                                lineWidth: 1,
-                            },
-                            shadowSize: 0
+                $.plot($("#chart_1"), [{
+                    label: "sin(x)",
+                    data: d1,
+                    lines: {
+                        lineWidth: 1,
+                    },
+                    shadowSize: 0
+                }, {
+                    label: "cos(x)",
+                    data: d2,
+                    lines: {
+                        lineWidth: 1,
+                    },
+                    shadowSize: 0
+                }, {
+                    label: "tan(x)",
+                    data: d3,
+                    lines: {
+                        lineWidth: 1,
+                    },
+                    shadowSize: 0
+                }], {
+                    series: {
+                        lines: {
+                            show: true,
+                        },
+                        points: {
+                            show: true,
+                            fill: true,
+                            radius: 3,
+                            lineWidth: 1
                         }
-                    ], {
-                        series: {
-                            lines: {
-                                show: true,
-                            },
-                            points: {
-                                show: true,
-                                fill: true,
-                                radius: 3,
-                                lineWidth: 1
-                            }
-                        },
-                        xaxis: {
-                            tickColor: "#eee",
-                            ticks: [0, [Math.PI / 2, "\u03c0/2"],
-                                [Math.PI, "\u03c0"],
-                                [Math.PI * 3 / 2, "3\u03c0/2"],
-                                [Math.PI * 2, "2\u03c0"]
-                            ]
-                        },
-                        yaxis: {
-                            tickColor: "#eee",
-                            ticks: 10,
-                            min: -2,
-                            max: 2
-                        },
-                        grid: {
-                            borderColor: "#eee",
-                            borderWidth: 1
-                        }
-                    });
+                    },
+                    xaxis: {
+                        tickColor: "#eee",
+                        ticks: [0, [Math.PI / 2, "\u03c0/2"],
+                            [Math.PI, "\u03c0"],
+                            [Math.PI * 3 / 2, "3\u03c0/2"],
+                            [Math.PI * 2, "2\u03c0"]
+                        ]
+                    },
+                    yaxis: {
+                        tickColor: "#eee",
+                        ticks: 10,
+                        min: -2,
+                        max: 2
+                    },
+                    grid: {
+                        borderColor: "#eee",
+                        borderWidth: 1
+                    }
+                });
 
             }
 
             //Interactive Chart
 
             function chart2() {
+                if ($('#chart_2').size() != 1) {
+                    return;
+                }
+
                 function randValue() {
                     return (Math.floor(Math.random() * (1 + 40 - 20))) + 20;
                 }
@@ -181,81 +191,79 @@ var Charts = function () {
                 ];
 
                 var plot = $.plot($("#chart_2"), [{
-                            data: pageviews,
-                            label: "Unique Visits",
-                            lines: {
-                                lineWidth: 1,
-                            },
-                            shadowSize: 0
+                    data: pageviews,
+                    label: "Unique Visits",
+                    lines: {
+                        lineWidth: 1,
+                    },
+                    shadowSize: 0
 
-                        }, {
-                            data: visitors,
-                            label: "Page Views",
-                            lines: {
-                                lineWidth: 1,
-                            },
-                            shadowSize: 0
-                        }
-                    ], {
-                        series: {
-                            lines: {
-                                show: true,
-                                lineWidth: 2,
-                                fill: true,
-                                fillColor: {
-                                    colors: [{
-                                            opacity: 0.05
-                                        }, {
-                                            opacity: 0.01
-                                        }
-                                    ]
-                                }
-                            },
-                            points: {
-                                show: true,
-                                radius: 3,
-                                lineWidth: 1
-                            },
-                            shadowSize: 2
+                }, {
+                    data: visitors,
+                    label: "Page Views",
+                    lines: {
+                        lineWidth: 1,
+                    },
+                    shadowSize: 0
+                }], {
+                    series: {
+                        lines: {
+                            show: true,
+                            lineWidth: 2,
+                            fill: true,
+                            fillColor: {
+                                colors: [{
+                                    opacity: 0.05
+                                }, {
+                                    opacity: 0.01
+                                }]
+                            }
                         },
-                        grid: {
-                            hoverable: true,
-                            clickable: true,
-                            tickColor: "#eee",
-                            borderColor: "#eee",
-                            borderWidth: 1
+                        points: {
+                            show: true,
+                            radius: 3,
+                            lineWidth: 1
                         },
-                        colors: ["#d12610", "#37b7f3", "#52e136"],
-                        xaxis: {
-                            ticks: 11,
-                            tickDecimals: 0,
-                            tickColor: "#eee",
-                        },
-                        yaxis: {
-                            ticks: 11,
-                            tickDecimals: 0,
-                            tickColor: "#eee",
-                        }
-                    });
+                        shadowSize: 2
+                    },
+                    grid: {
+                        hoverable: true,
+                        clickable: true,
+                        tickColor: "#eee",
+                        borderColor: "#eee",
+                        borderWidth: 1
+                    },
+                    colors: ["#d12610", "#37b7f3", "#52e136"],
+                    xaxis: {
+                        ticks: 11,
+                        tickDecimals: 0,
+                        tickColor: "#eee",
+                    },
+                    yaxis: {
+                        ticks: 11,
+                        tickDecimals: 0,
+                        tickColor: "#eee",
+                    }
+                });
 
 
                 function showTooltip(x, y, contents) {
                     $('<div id="tooltip">' + contents + '</div>').css({
-                            position: 'absolute',
-                            display: 'none',
-                            top: y + 5,
-                            left: x + 15,
-                            border: '1px solid #333',
-                            padding: '4px',
-                            color: '#fff',
-                            'border-radius': '3px',
-                            'background-color': '#333',
-                            opacity: 0.80
-                        }).appendTo("body").fadeIn(200);
+                        position: 'absolute',
+                        display: 'none',
+                        top: y + 5,
+                        left: x + 15,
+                        border: '1px solid #333',
+                        padding: '4px',
+                        color: '#fff',
+                        'border-radius': '3px',
+                        'background-color': '#333',
+                        opacity: 0.80
+                    }).appendTo("body").fadeIn(200);
                 }
 
                 var previousPoint = null;
-                $("#chart_2").bind("plothover", function (event, pos, item) {
+                $("#chart_2").bind("plothover", function(event, pos, item) {
                     $("#x").text(pos.x.toFixed(2));
                     $("#y").text(pos.y.toFixed(2));
 
@@ -279,6 +287,9 @@ var Charts = function () {
             //Tracking Curves
 
             function chart3() {
+                if ($('#chart_3').size() != 1) {
+                    return;
+                }
                 //tracking curves:
 
                 var sin = [],
@@ -289,44 +300,43 @@ var Charts = function () {
                 }
 
                 plot = $.plot($("#chart_3"), [{
-                            data: sin,
-                            label: "sin(x) = -0.00",
-                            lines: {
-                                lineWidth: 1,
-                            },
-                            shadowSize: 0
-                        }, {
-                            data: cos,
-                            label: "cos(x) = -0.00",
-                            lines: {
-                                lineWidth: 1,
-                            },
-                            shadowSize: 0
+                    data: sin,
+                    label: "sin(x) = -0.00",
+                    lines: {
+                        lineWidth: 1,
+                    },
+                    shadowSize: 0
+                }, {
+                    data: cos,
+                    label: "cos(x) = -0.00",
+                    lines: {
+                        lineWidth: 1,
+                    },
+                    shadowSize: 0
+                }], {
+                    series: {
+                        lines: {
+                            show: true
                         }
-                    ], {
-                        series: {
-                            lines: {
-                                show: true
-                            }
-                        },
-                        crosshair: {
-                            mode: "x"
-                        },
-                        grid: {
-                            hoverable: true,
-                            autoHighlight: false,
-                            tickColor: "#eee",
-                            borderColor: "#eee",
-                            borderWidth: 1
-                        },
-                        yaxis: {
-                            min: -1.2,
-                            max: 1.2
-                        }
-                    });
+                    },
+                    crosshair: {
+                        mode: "x"
+                    },
+                    grid: {
+                        hoverable: true,
+                        autoHighlight: false,
+                        tickColor: "#eee",
+                        borderColor: "#eee",
+                        borderWidth: 1
+                    },
+                    yaxis: {
+                        min: -1.2,
+                        max: 1.2
+                    }
+                });
 
                 var legends = $("#chart_3 .legendLabel");
-                legends.each(function () {
+                legends.each(function() {
                     // fix the widths so they don't jump around
                     $(this).css('width', $(this).width());
                 });
@@ -353,6 +363,7 @@ var Charts = function () {
                             // now interpolate
                         var y, p1 = series.data[j - 1],
                             p2 = series.data[j];
+
                         if (p1 == null) y = p2[1];
                         else if (p2 == null) y = p1[1];
                         else y = p1[1] + (p2[1] - p1[1]) * (pos.x - p1[0]) / (p2[0] - p1[0]);
@@ -361,7 +372,7 @@ var Charts = function () {
                     }
                 }
 
-                $("#chart_3").bind("plothover", function (event, pos, item) {
+                $("#chart_3").bind("plothover", function(event, pos, item) {
                     latestPosition = pos;
                     if (!updateLegendTimeout) updateLegendTimeout = setTimeout(updateLegend, 50);
                 });
@@ -370,6 +381,9 @@ var Charts = function () {
             //Dynamic Chart
 
             function chart4() {
+                if ($('#chart_4').size() != 1) {
+                    return;
+                }
                 //server load
                 var options = {
                     series: {
@@ -381,18 +395,17 @@ var Charts = function () {
                         fill: true,
                         fillColor: {
                             colors: [{
-                                    opacity: 0.1
-                                }, {
-                                    opacity: 1
-                                }
-                            ]
+                                opacity: 0.1
+                            }, {
+                                opacity: 1
+                            }]
                         }
                     },
                     yaxis: {
                         min: 0,
-                        max: 100,                        
+                        max: 100,
                         tickColor: "#eee",
-                        tickFormatter: function (v) {
+                        tickFormatter: function(v) {
                             return v + "%";
                         }
                     },
@@ -420,6 +433,9 @@ var Charts = function () {
             //bars with controls
 
             function chart5() {
+                if ($('#chart_5').size() != 1) {
+                    return;
+                }
                 var d1 = [];
                 for (var i = 0; i <= 10; i += 1)
                     d1.push([i, parseInt(Math.random() * 30)]);
@@ -438,7 +454,7 @@ var Charts = function () {
                     steps = false;
 
                 function plotWithOptions() {
-                    $.plot($("#chart_5"), 
+                    $.plot($("#chart_5"),
 
                         [{
                             label: "sales",
@@ -485,16 +501,17 @@ var Charts = function () {
                                 borderColor: "#eee",
                                 borderWidth: 1
                             }
-                        }                       
+                        }
                     );
-                }   
+                }
 
-                $(".stackControls input").click(function (e) {
+                $(".stackControls input").click(function(e) {
                     e.preventDefault();
                     stack = $(this).val() == "With stacking" ? true : null;
                     plotWithOptions();
                 });
-                $(".graphControls input").click(function (e) {
+
+                $(".graphControls input").click(function(e) {
                     e.preventDefault();
                     bars = $(this).val().indexOf("Bars") != -1;
                     lines = $(this).val().indexOf("Lines") != -1;
@@ -514,105 +531,118 @@ var Charts = function () {
 
         },
 
-        initBarCharts: function () {
+        initBarCharts: function() {
 
             // bar chart:
             var data = GenerateSeries(0);
-     
-            function GenerateSeries(added){
+
+            function GenerateSeries(added) {
                 var data = [];
                 var start = 100 + added;
                 var end = 200 + added;
-         
-                for(i=1;i<=20;i++){        
-                    var d = Math.floor(Math.random() * (end - start + 1) + start);        
+
+                for (i = 1; i <= 20; i++) {
+                    var d = Math.floor(Math.random() * (end - start + 1) + start);
                     data.push([i, d]);
                     start++;
                     end++;
                 }
-         
+
                 return data;
             }
-         
-            var options = {
-                    series:{
-                        bars:{show: true}
-                    },
-                    bars:{
-                                    barWidth: 0.8,
-                                    lineWidth: 0, // in pixels
-                                    shadowSize: 0,
-                                    align: 'left'
-                    },            
 
-                    grid:{
-                         tickColor: "#eee",
-                                borderColor: "#eee",
-                                borderWidth: 1
+            var options = {
+                series: {
+                    bars: {
+                        show: true
                     }
-            };
- 
-            $.plot($("#chart_1_1"),
-             [{
-                data: data,
-                lines: {
-                    lineWidth: 1,
                 },
-                shadowSize: 0
-             }]
-             , options);
+                bars: {
+                    barWidth: 0.8,
+                    lineWidth: 0, // in pixels
+                    shadowSize: 0,
+                    align: 'left'
+                },
+
+                grid: {
+                    tickColor: "#eee",
+                    borderColor: "#eee",
+                    borderWidth: 1
+                }
+            };
+
+            if ($('#chart_1_1').size() !== 0) {
+                $.plot($("#chart_1_1"), [{
+                    data: data,
+                    lines: {
+                        lineWidth: 1,
+                    },
+                    shadowSize: 0
+                }], options);
+            }
 
             // horizontal bar chart:
 
             var data1 = [
-                [10, 10], [20, 20], [30, 30], [40, 40], [50, 50]
+                [10, 10],
+                [20, 20],
+                [30, 30],
+                [40, 40],
+                [50, 50]
             ];
-         
+
             var options = {
-                    series:{
-                        bars:{show: true}
-                    },
-                    bars:{
-                        horizontal:true,
-                        barWidth:6,
-                                    lineWidth: 0, // in pixels
-                                    shadowSize: 0,
-                                    align: 'left'
-                    },
-                    grid:{
-                         tickColor: "#eee",
-                                borderColor: "#eee",
-                                borderWidth: 1
+                series: {
+                    bars: {
+                        show: true
                     }
+                },
+                bars: {
+                    horizontal: true,
+                    barWidth: 6,
+                    lineWidth: 0, // in pixels
+                    shadowSize: 0,
+                    align: 'left'
+                },
+                grid: {
+                    tickColor: "#eee",
+                    borderColor: "#eee",
+                    borderWidth: 1
+                }
             };
-         
-            $.plot($("#chart_1_2"), [data1], options);  
+
+            if ($('#chart_1_2').size() !== 0) {
+                $.plot($("#chart_1_2"), [data1], options);
+            }
         },
 
-        initPieCharts: function () {
+        initPieCharts: function() {
 
             var data = [];
             var series = Math.floor(Math.random() * 10) + 1;
             series = series < 5 ? 5 : series;
-            
+
             for (var i = 0; i < series; i++) {
                 data[i] = {
                     label: "Series" + (i + 1),
                     data: Math.floor(Math.random() * 100) + 1
-                }
+                };
             }
 
             // DEFAULT
-            $.plot($("#pie_chart"), data, {
+            if ($('#pie_chart').size() !== 0) {
+                $.plot($("#pie_chart"), data, {
                     series: {
                         pie: {
                             show: true
                         }
                     }
                 });
+            }
 
             // GRAPH 1
-            $.plot($("#pie_chart_1"), data, {
+            if ($('#pie_chart_1').size() !== 0) {
+                $.plot($("#pie_chart_1"), data, {
                     series: {
                         pie: {
                             show: true
@@ -622,9 +652,11 @@ var Charts = function () {
                         show: false
                     }
                 });
+            }
 
             // GRAPH 2
-            $.plot($("#pie_chart_2"), data, {
+            if ($('#pie_chart_2').size() !== 0) {
+                $.plot($("#pie_chart_2"), data, {
                     series: {
                         pie: {
                             show: true,
@@ -632,7 +664,7 @@ var Charts = function () {
                             label: {
                                 show: true,
                                 radius: 1,
-                                formatter: function (label, series) {
+                                formatter: function(label, series) {
                                     return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">' + label + '<br/>' + Math.round(series.percent) + '%</div>';
                                 },
                                 background: {
@@ -645,9 +677,11 @@ var Charts = function () {
                         show: false
                     }
                 });
+            }
 
             // GRAPH 3
-            $.plot($("#pie_chart_3"), data, {
+            if ($('#pie_chart_3').size() !== 0) {
+                $.plot($("#pie_chart_3"), data, {
                     series: {
                         pie: {
                             show: true,
@@ -655,7 +689,7 @@ var Charts = function () {
                             label: {
                                 show: true,
                                 radius: 3 / 4,
-                                formatter: function (label, series) {
+                                formatter: function(label, series) {
                                     return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">' + label + '<br/>' + Math.round(series.percent) + '%</div>';
                                 },
                                 background: {
@@ -668,9 +702,11 @@ var Charts = function () {
                         show: false
                     }
                 });
+            }
 
             // GRAPH 4
-            $.plot($("#pie_chart_4"), data, {
+            if ($('#pie_chart_4').size() !== 0) {
+                $.plot($("#pie_chart_4"), data, {
                     series: {
                         pie: {
                             show: true,
@@ -678,7 +714,7 @@ var Charts = function () {
                             label: {
                                 show: true,
                                 radius: 3 / 4,
-                                formatter: function (label, series) {
+                                formatter: function(label, series) {
                                     return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">' + label + '<br/>' + Math.round(series.percent) + '%</div>';
                                 },
                                 background: {
@@ -692,9 +728,11 @@ var Charts = function () {
                         show: false
                     }
                 });
+            }
 
             // GRAPH 5
-            $.plot($("#pie_chart_5"), data, {
+            if ($('#pie_chart_5').size() !== 0) {
+                $.plot($("#pie_chart_5"), data, {
                     series: {
                         pie: {
                             show: true,
@@ -702,7 +740,7 @@ var Charts = function () {
                             label: {
                                 show: true,
                                 radius: 3 / 4,
-                                formatter: function (label, series) {
+                                formatter: function(label, series) {
                                     return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">' + label + '<br/>' + Math.round(series.percent) + '%</div>';
                                 },
                                 background: {
@@ -716,9 +754,11 @@ var Charts = function () {
                         show: false
                     }
                 });
+            }
 
             // GRAPH 6
-            $.plot($("#pie_chart_6"), data, {
+            if ($('#pie_chart_6').size() !== 0) {
+                $.plot($("#pie_chart_6"), data, {
                     series: {
                         pie: {
                             show: true,
@@ -726,7 +766,7 @@ var Charts = function () {
                             label: {
                                 show: true,
                                 radius: 2 / 3,
-                                formatter: function (label, series) {
+                                formatter: function(label, series) {
                                     return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">' + label + '<br/>' + Math.round(series.percent) + '%</div>';
                                 },
                                 threshold: 0.1
@@ -737,9 +777,11 @@ var Charts = function () {
                         show: false
                     }
                 });
+            }
 
             // GRAPH 7
-            $.plot($("#pie_chart_7"), data, {
+            if ($('#pie_chart_7').size() !== 0) {
+                $.plot($("#pie_chart_7"), data, {
                     series: {
                         pie: {
                             show: true,
@@ -753,16 +795,18 @@ var Charts = function () {
                         show: false
                     }
                 });
+            }
 
             // GRAPH 8
-            $.plot($("#pie_chart_8"), data, {
+            if ($('#pie_chart_8').size() !== 0) {
+                $.plot($("#pie_chart_8"), data, {
                     series: {
                         pie: {
                             show: true,
                             radius: 300,
                             label: {
                                 show: true,
-                                formatter: function (label, series) {
+                                formatter: function(label, series) {
                                     return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">' + label + '<br/>' + Math.round(series.percent) + '%</div>';
                                 },
                                 threshold: 0.1
@@ -773,9 +817,11 @@ var Charts = function () {
                         show: false
                     }
                 });
+            }
 
             // GRAPH 9
-            $.plot($("#pie_chart_9"), data, {
+            if ($('#pie_chart_9').size() !== 0) {
+                $.plot($("#pie_chart_9"), data, {
                     series: {
                         pie: {
                             show: true,
@@ -784,7 +830,7 @@ var Charts = function () {
                             label: {
                                 show: true,
                                 radius: 1,
-                                formatter: function (label, series) {
+                                formatter: function(label, series) {
                                     return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">' + label + '<br/>' + Math.round(series.percent) + '%</div>';
                                 },
                                 background: {
@@ -801,9 +847,11 @@ var Charts = function () {
                         show: false
                     }
                 });
+            }
 
             // DONUT
-            $.plot($("#donut"), data, {
+            if ($('#donut').size() !== 0) {
+                $.plot($("#donut"), data, {
                     series: {
                         pie: {
                             innerRadius: 0.5,
@@ -811,9 +859,11 @@ var Charts = function () {
                         }
                     }
                 });
+            }
 
             // INTERACTIVE
-            $.plot($("#interactive"), data, {
+            if ($('#interactive').size() !== 0) {
+                $.plot($("#interactive"), data, {
                     series: {
                         pie: {
                             show: true
@@ -824,11 +874,12 @@ var Charts = function () {
                         clickable: true
                     }
                 });
-            $("#interactive").bind("plothover", pieHover);
-            $("#interactive").bind("plotclick", pieClick);
+                $("#interactive").bind("plothover", pieHover);
+                $("#interactive").bind("plotclick", pieClick);
+            }
 
             function pieHover(event, pos, obj) {
-            if (!obj)
+                if (!obj)
                     return;
                 percent = parseFloat(obj.series.percent).toFixed(2);
                 $("#hover").html('<span style="font-weight: bold; color: ' + obj.series.color + '">' + obj.series.label + ' (' + percent + '%)</span>');
@@ -842,7 +893,7 @@ var Charts = function () {
             }
 
         }
-        
+
     };
 
 }();
