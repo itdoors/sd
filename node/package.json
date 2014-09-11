@@ -4,6 +4,7 @@
     "version": "0.0.1",
     "private": true,
     "dependencies": {
+        "forever": "*",
         "socket.io": "1.x.x",
         "mongodb": "1.4.x",
         "asterisk-manager": "0.1.x"
