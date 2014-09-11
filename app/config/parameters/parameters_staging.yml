@@ -28,6 +28,6 @@ parameters:
     # AMI CONFIG
     ami.host: itdoors.jelastic.neohost.net
     ami.port: 8888
-    sip.host: 192.168.4.4
+    sip.host: 95.67.67.170
     sip.port.udp: 5060
     sip.port.ws: 10060
