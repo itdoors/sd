@@ -9,7 +9,7 @@ set :deploy_via, :remote_cache
 
 desc "Install node modules non-globally"
 task :npm_update do
-    run "cd #{latest_release}/node/ami && npm -g update"
+    run "cd #{latest_release}/node && npm install"
 end
 
 namespace :forever do

@@ -26,7 +26,7 @@ parameters:
         - call
     sd.host: http://itdoors.jelastic.neohost.net
     # AMI CONFIG
-    ami.host: itdoors.jelastic.neohost.net
+    ami.host: 193.242.166.54
     ami.port: 8888
     sip.host: 95.67.67.170
     sip.port.udp: 5060
