@@ -1,0 +1,11 @@
+{
+    "name": "sd",
+    "description": "sd ami",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "socket.io": "1.x.x",
+        "mongodb": "1.4.x",
+        "asterisk-manager": "0.1.x"
+    }
+}
