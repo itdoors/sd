@@ -269,7 +269,15 @@ class UserRepository extends EntityRepository
 
         return $query;
     }
-    
+
+    /**
+     * getBirthdaysForCalendar
+     * 
+     * @param integer $startTimestamp
+     * @param integer $endTimestamp
+     * 
+     * @return type
+     */
     public function getBirthdaysForCalendar($startTimestamp, $endTimestamp)
     {
         return $this->createQueryBuilder('u')

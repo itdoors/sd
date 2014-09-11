@@ -177,7 +177,6 @@ class PrivateController extends SalesController
                 'url' => '#create_task'
                 );
         }
-        
         /** get birthdays */
         $users = $em->getRepository('SDUserBundle:User')
                 ->getBirthdaysForCalendar($startTimestamp, $endTimestamp);
