@@ -14,20 +14,24 @@ end
 
 namespace :forever do
     task :stop do
+        capifony_pretty_print "--> stop node.js"
         run "sudo forever stopall"
     end
 
     task :start do
+        capifony_pretty_print "--> start node.js"
         run "cd #{latest_release}/node/ami && sudo forever start master.js"
     end
 
     task :restart do
-        forever_stop
+        capifony_pretty_print "--> restart node.js"
+        stop
         sleep 5
-        forever_start
+        start
+        capifony_puts_ok
     end
 end
 
 after "deploy",  "deploy:cleanup"
-after "deploy",  "npm_update"
-after "deploy",  "forever:restart"
+after "deploy:update_code",  "npm_update"
+after "deploy:update_code",  "forever:restart"
