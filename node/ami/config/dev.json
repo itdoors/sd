@@ -1,14 +1,16 @@
 {
     "global": {
         "exec": {
-            "path": "/var/www/sd2/app/console itdoors:sip:history"
+            "path": "/var/www/webroot/ci/current/app/console itdoors:sip:history"
         }
     },
     "mongodb": {
-        "host": "127.0.0.1",
+        "host": "mongodb-itdoors.jelastic.neohost.net",
         "port": 27017,
         "db": "ami",
-        "collectionCalls": "calls"
+        "collectionCalls": "calls",
+        "username": "admin",
+        "password": "JZhv0jvAtP"
     },
     "ami": {
         "host": "192.168.4.4",
