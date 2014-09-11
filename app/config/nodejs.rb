@@ -15,7 +15,7 @@ end
 namespace :forever do
     task :stop do
         capifony_pretty_print "--> stop node.js"
-        run "sudo forever stopall"
+        run "sudo forever stopall: true"
     end
 
     task :start do
