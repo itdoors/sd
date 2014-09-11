@@ -177,6 +177,25 @@ class PrivateController extends SalesController
                 'url' => '#create_task'
                 );
         }
+        
+        /** get birthdays */
+        $users = $em->getRepository('SDUserBundle:User')
+                ->getBirthdaysForCalendar($startTimestamp, $endTimestamp);
+        /** @var Translator $translator */
+        $translator = $this->container->get('translator');
+
+        foreach ($users as $user) {
+            $events[] = array(
+                'hover_title' => '',
+                'title' => $translator->trans('Birthday', array(), 'SDDashboardBundle').' '. $user->getLastname().' '. $user->getFirstName(),
+                'start' => $user->getBirthday()->format('Y-m-d'),
+                'end' => $user->getBirthday()->format('Y-m-d'),
+                'allDay' => false,
+                'url' => $this->generateUrl('sd_user_show', array(
+                            'id' => $user->getId()
+                        )),
+                );
+        }
 
         return $events;
     }

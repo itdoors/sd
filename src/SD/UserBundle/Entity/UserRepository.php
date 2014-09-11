@@ -269,4 +269,16 @@ class UserRepository extends EntityRepository
 
         return $query;
     }
+    
+    public function getBirthdaysForCalendar($startTimestamp, $endTimestamp)
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u')
+            ->where('u.birthday >= :startDate')
+            ->andWhere('u.birthday <= :endDat')
+            ->setParameter(':startDate', date('Y-m-d', $startTimestamp))
+            ->setParameter(':endDat', date('Y-m-d', $endTimestamp))
+            ->getQuery()
+            ->getResult();
+    }
 }
