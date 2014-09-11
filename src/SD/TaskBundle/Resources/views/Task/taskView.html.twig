@@ -341,7 +341,7 @@
 
         <div class="form-group">
             <div class="col-md-12">
-                {% trans %}Performer{% endtrans %} :
+                <b>{% trans %}Performer{% endtrans %}</b> :
                 {% if taskUserRolePerformer|length %}
                     {% for performer in taskUserRolePerformer %}
                         {{ performer.user }}
@@ -357,7 +357,7 @@
 
         <div class="form-group">
             <div class="col-md-12">
-                {% trans %}Controller{% endtrans %}:
+                <b>{% trans %}Controller{% endtrans %}</b>:
                 {% if taskUserRoleController|length %}
                     {% for controller in taskUserRoleController %}
                         {{ controller.user }}
@@ -369,7 +369,7 @@
                 {% endif %}
 
                 <br><br>
-                {% trans %}Author{% endtrans %}: {% if taskUserRoleAuthor|length %}
+                <b>{% trans %}Author{% endtrans %}</b>: {% if taskUserRoleAuthor|length %}
                     {% for author in taskUserRoleAuthor %}
                         {{ author.user }}
                     {% endfor %}
@@ -380,13 +380,13 @@
 
         <div class="form-group">
             <div class="col-md-12">
-                {% trans %}My role{% endtrans %}: {{ taskUserRole.role|trans }}
+                <b>{% trans %}My role{% endtrans %}</b>: {{ taskUserRole.role|trans }}
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-12">
-                {% trans %}Stage{% endtrans %}: {{ taskUserRole.task.stage|trans }}
+                <b>{% trans %}Stage{% endtrans %}</b>: {{ taskUserRole.task.stage|trans }}
             </div>
         </div>
         <br><br>

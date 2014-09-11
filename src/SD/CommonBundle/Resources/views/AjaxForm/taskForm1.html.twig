@@ -1,12 +1,12 @@
 {% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
 <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
-<script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js')}}">
+<script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
 
-</script>
 <script>
         $(document).ready(function(){
             $('.datatime-picker').datetimepicker({
-                        minView:0,
+                        minView:1,
                         rtl: Metronic.isRTL(),
                         autoclose: true,
                         format: "dd.mm.yyyy hh:ii:ss",
@@ -76,6 +76,12 @@
                         {{ form_widget(form.controller, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter controller'|trans({}, 'SDCalendarBundle')} } ) }}
                         <span class="help-block">{{ form_errors(form.controller) }}</span>
                     </div>
+                    <div class="form-group col-md-12">
+                        {{ form_label(form.files, 'Files'|trans({}, 'SDTaskBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.files, {'attr' : {'class' : 'form-control'} } ) }}
+                        <span class="help-block">{{ form_errors(form.files) }}</span>
+                    </div>
+
                     {#<div class="form-group col-md-2">
                         {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': 'Handling tye'} } ) }}
                     </div>

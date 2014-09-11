@@ -120,6 +120,9 @@ class TaskForm extends AbstractType
                 'mapped' => false,
                 'widget' => 'single_text',
                 'format' => 'dd.MM.yyyy HH:mm:ss'
+            ))->add('files', 'file', array(
+                'mapped' => false,
+                'required' => false
             ));
 
         $builder->addEventListener(

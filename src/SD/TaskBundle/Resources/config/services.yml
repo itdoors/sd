@@ -3,6 +3,7 @@ parameters:
     sd_task.task.form.class: SD\TaskBundle\Form\TaskForm
     sd_task.task.file.form.class: SD\TaskBundle\Form\TaskFileForm
     sd_task.task.file.service.class: SD\TaskBundle\Services\TaskFileService
+    sd_task.task.service.class: SD\TaskBundle\Services\TaskService
 
 services:
 #    sd_task.example:
@@ -24,3 +25,6 @@ services:
         class: %sd_task.task.file.service.class%
         arguments: [@service_container]
 
+    task.form.service:
+        class: %sd_task.task.service.class%
+        arguments: [@service_container]
