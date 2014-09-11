@@ -151,7 +151,7 @@
                                 <span class="help-block">{% trans %}Select view organization{% endtrans %}</span>
                             </div>
                         </div>
-                        {% if filterForm.lookup is defined %}
+                        {#% if filterForm.lookup is defined %}
                             <div class="col-md-6
                                 {% if filterForm.lookup.vars.errors|length %}
                                     has-error
@@ -163,7 +163,7 @@
                                     {{ form_errors(filterForm.lookup) }}
                                 </div>
                             </div>
-                        {% endif %}
+                        {% endif %#}
                         <!--/span-->
                     </div>
                     <!--/row-->
