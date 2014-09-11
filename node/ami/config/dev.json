@@ -13,7 +13,7 @@
         "password": "JZhv0jvAtP"
     },
     "ami": {
-        "host": "192.168.4.4",
+        "host": "193.242.166.54",
         "port": "5038",
         "user": "itdoors",
         "password": "itdoors25",
