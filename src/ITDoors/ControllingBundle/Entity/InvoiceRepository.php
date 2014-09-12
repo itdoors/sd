@@ -94,6 +94,18 @@ class InvoiceRepository extends EntityRepository
                  ) as actOriginals"
             )
             ->addSelect(
+                "array_to_string(
+                  ARRAY(
+                        SELECT
+                            iad.summa
+                        FROM
+                            ITDoorsControllingBundle:InvoiceAct i_act1
+                        LEFT JOIN i_act1.detals iad
+                        WHERE i_act1.invoiceId = i.id
+                      ), ','
+                 ) as sumActs"
+            )
+            ->addSelect(
                 "("
                 . "SELECT SUM(paymens.summa)"
                 . " FROM  ITDoorsControllingBundle:InvoicePayments paymens"
