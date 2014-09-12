@@ -1,4 +1,4 @@
-server "gate.jelastic.neohost.net", :web, :app, :primary => true
+server "193.242.166.21", :web, :app, :primary => true
 set :user,       "23918-5766"
 set :parameters_file, "parameters_nodejs.yml"
 
