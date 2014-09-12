@@ -28,7 +28,7 @@ set :use_sudo,      false
 #set :user,       "root"
 #set :user,       "23849-5766"
 
-ssh_options[:keys] = [File.join(ENV["HOME"], ".ssh", "id_dsa")]
+#ssh_options[:keys] = [File.join(ENV["HOME"], ".ssh", "id_dsa")]
 #ssh_options[:port] = 3764
 ssh_options[:port] = 3022
 ssh_options[:forward_agent] = true
