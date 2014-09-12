@@ -222,7 +222,7 @@ class InvoiceService
         }
         if (in_array($invoice->delayDaysType, array ('Б', 'б', 'Банковский'))) {
             $invoiceNew->setDelayDaysType('Б');
-        } else if(in_array($invoice->delayDaysType, array ('К', 'к', 'Календарный'))) {
+        } elseif (in_array($invoice->delayDaysType, array ('К', 'к', 'Календарный'))) {
             $invoiceNew->setDelayDaysType('К');
         }
         if (!empty($invoice->dogovorDate) && $invoice->dogovorDate != 'null') {
@@ -264,7 +264,7 @@ class InvoiceService
                 $em->remove($actOld);
             }
         }
-        
+
         foreach ($acts as $act) {
             $actFind = new InvoiceAct();
             $actFind->setNumber($act->actNumber);
