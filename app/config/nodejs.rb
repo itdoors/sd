@@ -21,7 +21,7 @@ namespace :forever do
 
     task :start do
         capifony_pretty_print "--> start node.js"
-        run "cd #{latest_release}/node/ami && sudo forever start master.js"
+        run "cd #{latest_release}/node/ami && sudo forever start -m 1 master.js"
     end
 
     task :restart do
