@@ -17,8 +17,8 @@ function Application (){
 
     app = this;
 
-    this.environment = 'local';
-    //this.environment = 'dev';
+    //this.environment = 'local';
+    this.environment = 'dev';
     //this.environment = 'production';
 
     this.loadConfiguration();
