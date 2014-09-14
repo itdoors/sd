@@ -40,7 +40,7 @@ set :shared_children,     [app_path + "/logs", web_path + "/uploads", "node/node
 
 #composer
 set :use_composer,        true
-set :copy_vendors,        true
+#set :copy_vendors,        true
 set :update_vendors,      true
 
 set :cache_warmup,        false
