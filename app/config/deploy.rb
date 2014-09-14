@@ -1,4 +1,4 @@
-set :stages,        %w(staging nodejs)
+set :stages,        %w(staging nodejs production nodejs_production)
 set :default_stage, "staging"
 set :stage_dir,     "app/config"
 
@@ -17,7 +17,7 @@ set :scm,         :git
 
 #git
 #set :branch, "staging"
-set :branch, "task-multideploy"
+#set :branch, "task-multideploy"
 set :git_enable_submodules, 1
 
 set :model_manager, "doctrine"
