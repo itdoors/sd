@@ -97,7 +97,7 @@ class InvoiceRepository extends EntityRepository
                 "array_to_string(
                   ARRAY(
                         SELECT
-                            iad.summa
+                            SUM(iad.summa)
                         FROM
                             ITDoorsControllingBundle:InvoiceAct i_act1
                         LEFT JOIN i_act1.detals iad
