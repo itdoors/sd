@@ -2,5 +2,5 @@ SD\TaskBundle\Entity\TaskFile:
     properties:
         file:
             - File:
-                maxSize: 1M
+                maxSize: 5M
                 maxSizeMessage: The file is too large. Allowed maximum size is {{ limit }} {{ suffix }}
