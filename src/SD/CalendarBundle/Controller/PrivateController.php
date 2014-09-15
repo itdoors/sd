@@ -2,8 +2,10 @@
 
 namespace SD\CalendarBundle\Controller;
 
+use SD\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Translation\Translator;
 
 /**
  * Class PrivateController
@@ -175,6 +177,27 @@ class PrivateController extends SalesController
                 'end' => $val['stopDateTime']->format('Y-m-d H:i:s'),
                 'allDay' => false,
                 'url' => '#create_task'
+                );
+        }
+        /** @var User[] $users get birthdays */
+        $users = $em->getRepository('SDUserBundle:User')
+                ->getBirthdaysForCalendar($startTimestamp, $endTimestamp);
+        /** @var Translator $translator */
+        $translator = $this->container->get('translator');
+
+        foreach ($users as $user) {
+
+            $fullName = $user->getFullname();
+
+            $events[] = array(
+                'hover_title' => '',
+                'title' => $translator->trans('Birthday', array(), 'SDDashboardBundle').' '. $fullName,
+                'start' => $user->getBirthday()->format('Y-m-d'),
+                'end' => $user->getBirthday()->format('Y-m-d'),
+                'allDay' => false,
+                'url' => $this->generateUrl('sd_user_show', array(
+                            'id' => $user->getId()
+                        )),
                 );
         }
 

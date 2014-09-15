@@ -1,0 +1,33 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_driver: pdo_pgsql
+    database_host: postgres-itdoors.jelastic.neohost.net
+    database_port: null
+    database_name: sd
+    database_user: webadmin
+    database_password: u0kPq950sE
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_port: 465
+    mailer_encryption: ssl
+    mailer_user: null
+    mailer_password: null
+    locale: en
+    secret: 53391534dallas53391534
+    project.dir: /var/www/webroot/ci/current
+    router.request_context.host: itdoors.jelastic.neohost.net
+    router.request_context.scheme: http
+    listener.history.tables:
+        - organization
+        - email
+        - handling
+        - dogovor
+        - companystructure
+        - call
+    sd.host: http://itdoors.jelastic.neohost.net
+    # AMI CONFIG
+    ami.host: 193.242.166.54
+    ami.port: 8888
+    sip.host: 95.67.67.170
+    sip.port.udp: 5060
+    sip.port.ws: 10060

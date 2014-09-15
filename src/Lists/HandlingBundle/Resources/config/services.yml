@@ -5,6 +5,7 @@ parameters:
     lists_handling.sales.form.class: Lists\HandlingBundle\Form\HandlingSalesFormType
     lists_handling.sales.wizard.form.class: Lists\HandlingBundle\Form\HandlingSalesWizardForm
     lists_handling.message.form.class: Lists\HandlingBundle\Form\HandlingMessageFormType
+    lists_handling.message.call.form.class: Lists\HandlingBundle\Form\HandlingMessageCallFormType
     lists_handling.message.wizard.form.class: Lists\HandlingBundle\Form\HandlingMessageWizardForm
     lists_handling.form.user.class: Lists\HandlingBundle\Form\HandlingUserFormType
     lists_handling.form.user.sales.admin.class: Lists\HandlingBundle\Form\HandlingUserSalesAdminFormType
@@ -162,6 +163,12 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: handlingMessageForm }
+
+    lists_handling.form.handlingMessageCallForm:
+        class: %lists_handling.message.call.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: handlingMessageCallForm }
 
     lists_handling.form.handlingMessageWizardForm:
         class: %lists_handling.message.wizard.form.class%

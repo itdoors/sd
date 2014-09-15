@@ -61,6 +61,8 @@
                     id: item.0.id,
                     organizationId: organizationId
                 }) }}"
+                data-id="{{ item.0.id }}"
+                class="model-object-holder"
             >
                 {{  include(
                     'ListsContactBundle:' ~ baseTemplate ~ ':organizationElement.html.twig',
@@ -80,6 +82,8 @@
                             id: item.0.id,
                             organizationId: organizationId,
                         }) }}"
+                        data-id="{{ item.0.id }}"
+                        class="model-object-holder"
                             >
                         {{  include(
                         'ListsContactBundle:' ~ baseTemplate ~ ':organizationElement.html.twig',

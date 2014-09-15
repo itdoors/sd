@@ -46,6 +46,15 @@ SD\UserBundle\Entity\User:
         birthday:
             type: date
             nullable: true
+        peerId:
+            type: integer
+            nullable: true
+            column: peer_id
+        peerPassword:
+            type: string
+            length: 255
+            nullable: true
+            column: peer_password
     manyToMany:
         groups:
             targetEntity: Group

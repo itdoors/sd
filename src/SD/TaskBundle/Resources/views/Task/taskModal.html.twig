@@ -32,7 +32,7 @@
         $('.stageButton').die('click');
         $('.stageButton').live('click', function(e){
             var stage = $(this).data('stage');
-            insertComment();
+            //insertComment();
             updateTaskStage(stage);
         })
 
@@ -45,10 +45,12 @@
         $('.answerButton').live('click', function(e){
             var answer = $(this).data('value');
             var id = $('#task_modal_info_holder').data('id');
-            var url = $('#task_modal_info_holder').data('url_answer_date');;
+            var url = $('#task_modal_info_holder').data('url_answer_date');
+            var comment = getComment();
             var sendData = {
                 'id': id,
-                'answer': answer
+                'answer': answer,
+                'comment': comment
             }
             $.ajax({
                 type: 'POST',
@@ -58,7 +60,7 @@
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
-                        insertComment();
+                        //insertComment();
                         update_modal();
                     } else {
                         //$('#copy_etalon_finished').show('blind', {}, 500);
@@ -73,11 +75,13 @@
             var value = $(this).data('value');
             var type = $(this).data('type');
             var id = $('#task_modal_info_holder').data('id');
-            var url = $('#task_modal_info_holder').data('url_change_date');;
+            var url = $('#task_modal_info_holder').data('url_change_date');
+            var comment = getComment();
             var sendData = {
                 'id': id,
                 'value': value,
-                'type': type
+                'type': type,
+                'comment': comment
             }
             $.ajax({
                 type: 'POST',
@@ -87,7 +91,7 @@
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
-                        insertComment();
+                        //insertComment();
                         update_modal();
                     } else {
                         alert('Somebody already made request');
@@ -115,6 +119,13 @@
             var stage = $(this).data('stage');
         })
 */
+        function getComment() {
+            var comment = $('#comment').val();
+            if (comment.length) {
+                return comment;
+            }
+            return '';
+        }
 
         function insertComment() {
             var comment = $('#comment').val();
@@ -148,9 +159,11 @@
         function updateTaskStage (stage) {
             var id = $('#task_modal_info_holder').data('id');
             var url = $('#task_modal_info_holder').data('url_task_set_stage');
+            var comment = getComment();
             var sendData = {
                 'id': id,
-                'stage': stage
+                'stage': stage,
+                'comment': getComment()
             }
             $.ajax({
                 type: 'POST',
@@ -243,6 +256,52 @@
             })
 
         }
+        $('#new_date_holder').datetimepicker({
+            minView:1,
+            rtl: Metronic.isRTL(),
+            autoclose: true,
+            format: "dd.mm.yyyy hh:ii:ss",
+            pickerPosition: "top-right",
+            language: 'ru',
+            minuteStep: 30,
+            weekStart: 1,
+            startDate: new Date()
+        }).on('changeDate', function(ev){
+                    //.val($('.datatime-picker').val()+':00');
+                }
+        );
+
+        $('.changeDateCalendar').die('click');
+        $('.changeDateCalendar').live('click', function(e){
+            var value = $('#new_date_holder').val();
+            var id = $('#task_modal_info_holder').data('id');
+            var url = $('#task_modal_info_holder').data('url_change_date');
+            var comment = getComment();
+            var sendData = {
+                'id': id,
+                'value': value,
+                'comment': comment
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data1) {
+                    //alert(data1)
+                    data = JSON.parse(data1);
+                    if (data.success == 1) {
+                        //insertComment()
+                        update_modal();
+                    } else {
+                        alert('{% trans %}Somebody already made request{% endtrans %}');
+                        update_modal();
+                        //$('#copy_etalon_finished').show('blind', {}, 500);
+                    }
+                }
+
+            })
+        })
 
         //function update_task_list
 
@@ -338,7 +397,7 @@
 {% if comment is not empty %}
     <div>
         Последний комментарий ( {{ comment.user }}): <br>
-        "{{ comment.value }}"
+        "{{ comment.value|raw }}"
         <br><br>
     </div>
 {% endif %}
@@ -382,34 +441,25 @@
         <a id="task_change_date" data-stage="date request" class="btn red" style="float: left; margin-left: 10px;">{% trans %}Change end date{% endtrans %}</a>
         <div style="clear: both"></div>
         <div id="change_date_holder" style="display: none">
-            {#
-                        <br>
-                        <label for="change_date_input">Change end date to:</label>
-                        <input type="text" id="change_date_input">
-                        <a id="task_change_date_submit" data-stage="date request" class="btn blue stageButton" style="margin-left: 10px;">{% trans %}Send request{% endtrans %}</a>
-            #}
-            <br>
-            <a data-value="1" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}1 hour{% endtrans %}</a>
-            <a data-value="3" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}3 hours{% endtrans %}</a>
-            <a data-value="5" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}5 hours{% endtrans %}</a>
-            <a data-value="12" data-type="hour" class="btn red changeDate" style="width: 100px;">+ {% trans %}12 hours{% endtrans %}</a>
             <br><br>
-            <a data-value="1" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}1 day{% endtrans %}</a>
-            <a data-value="2" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}2 days{% endtrans %}</a>
-            <a data-value="3" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}3 days{% endtrans %}</a>
-            <a data-value="5" data-type="day" class="btn blue changeDate" style="width: 100px;">+ {% trans %}5 days{% endtrans %}</a>
-            <br><br>
-            <a data-value="1" data-type="week" class="btn green changeDate" style="width: 100px;">+ {% trans %}1 week{% endtrans %}</a>
-            <a data-value="2" data-type="week" class="btn green changeDate" style="width: 100px;">+ {% trans %}2 weeks{% endtrans %}</a>
-            <a data-value="3" data-type="week" class="btn green changeDate" style="width: 100px;">+ {% trans %}3 weeks{% endtrans %}</a>
-            <a data-value="1" data-type="month" class="btn green changeDate" style="width: 100px;">+ {% trans %}1 month{% endtrans %}</a>
-
+            <div class="form-group">
+                <div class="col-md-10">
+                    <div class="input-icon">
+                        <i class="fa fa-calendar"></i>
+                        <input type="text" id="new_date_holder" class="form-control todo-taskbody-due" placeholder="{% trans %}New date end{% endtrans %}">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-circle btn-sm btn-default changeDateCalendar">{% trans %}Change{% endtrans %}</button>
+                </div>
+                <br><br>
+            </div>
         </div>
     {% endif %}
     {% if taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone'
     and taskUserRole.task.stage != 'closed' and taskUserRole.role != 'author' %}
         {% if taskUserRole.role != 'performer' or taskUserRole.task.stage != 'checking'%}
-            <br>
+            <br><br>
             <label for="comment">{% trans %}Your comment{% endtrans %}</label>
             <textarea id="comment" class="form-control" placeholder="Введите комментарий к действию"></textarea>
         {% endif %}
@@ -421,7 +471,7 @@
        data-url_task_set_viewed="{{ path('sd_task_set_viewed') }}"
        data-url_task_set_stage="{{ path('sd_task_set_stage') }}"
        data-url_update_modal="{{ path('sd_task_modal') }}"
-       data-url_change_date="{{ path('sd_task_change_date') }}"
+       data-url_change_date="{{ path('sd_task_change_date_calendar') }}"
        data-url_answer_date="{{ path('sd_task_answer_date') }}"
        data-role="{{ taskUserRole.role }}"
        data-task_id="{{ taskUserRole.task.id }}"
