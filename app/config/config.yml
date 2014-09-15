@@ -184,3 +184,10 @@ services:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
             - [ setAnnotationReader, [ @annotation_reader ] ]
+
+doctrine_migrations:
+    dir_name: %kernel.root_dir%/DoctrineMigrations
+    namespace: Application\Migrations
+    table_name: migration_versions
+    name: Application Migrations
+

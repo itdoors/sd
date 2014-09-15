@@ -54,11 +54,20 @@
                 </th>
                 <th width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
                     {% trans %}Invoice amount{% endtrans %}
-                    <br>
-                    ({% trans %}Payments{% endtrans %})
-                </th><th width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
-                {% trans %}№ and date ABP/BH{% endtrans %}
-                </th><th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                </th>
+                <th width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}Summa act{% endtrans %}
+                </th>
+                 <th width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}Payments{% endtrans %}
+                </th>
+                <th width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}Debt{% endtrans %}
+                </th>
+                <th width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}№ and date ABP/BH{% endtrans %}
+                </th>
+                <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
                 {% trans %}Original ABP/BH{% endtrans %}
                 </th><th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
                 {% trans %}Responsible{% endtrans %}
@@ -85,8 +94,16 @@
                 <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceCustomerName }} {{ '(' ~ entity.customerName ~ ')' }}</a></td>
                 <td class="">{{ entity.performerName }}</td>
                 <td class="">
-                    {{ entity.sum|number_format(2, ',', ' ')  }}<br>
-                    ({{ entity.paymentsSumma|number_format(2, ',', ' ')  }})
+                    {{ entity.sum|number_format(2, ',', ' ')  }}
+                </td>
+                <td class="">
+                    {{ entity.sumActs|number_format(2, ',', ' ')  }}
+                </td>
+                <td class="">
+                    {{ entity.paymentsSumma|number_format(2, ',', ' ')  }}
+                </td>
+                <td class="">
+                    {{ (entity.sumActs-entity.paymentsSumma)|number_format(2, ',', ' ')  }}
                 </td>
                 <td class="">
                     {% if entity.actNumbers | length %}
