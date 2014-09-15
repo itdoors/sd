@@ -65,10 +65,8 @@ class InvoiceService
     public function parserFile ()
     {
         $this->updateIvoiceInfo();
-        $directory = $this->container->getParameter('1C.file.path');
-
         $em = $this->container->get('doctrine')->getManager();
-
+        $directory = $this->container->getParameter('1C.file.path');
         if (!is_dir($directory)) {
             $this->addCronError(0, 'ok', 'directory not found', $directory);
             echo 'Directory not found: ';
@@ -97,7 +95,7 @@ class InvoiceService
                     rename($directory . $file, $directory . 'old/' . $file);
                     break;
                 default:
-                    echo json_last_error();
+                    echo 'Error json: ' . json_last_error();
                     $this->addCronError(0, 'FATAL ERROR', $file, json_last_error());
             }
         } else {
@@ -409,7 +407,6 @@ class InvoiceService
     {
         $count = count($json);
         $countInvoice = 0;
-        $memStart = memory_get_usage();
         $em = $this->container->get('doctrine')->getManager();
         $em->getConnection()->getConfiguration()->setSQLLogger(null);
 
@@ -422,7 +419,7 @@ class InvoiceService
                 $countInvoice = 0;
             }
             ++$countInvoice;
-            echo number_format((memory_get_usage() - $memStart) / 8000000, 0, ',', ' ')
+            echo number_format(memory_get_usage() / 8000000, 0, ',', ' ')
                 . "MB ~ more: ".($count - $key) . "\n";
 
             $invoiceFind = true;
