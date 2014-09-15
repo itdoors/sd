@@ -689,6 +689,7 @@ class InvoiceRepository extends EntityRepository
         switch ($type) {
             case 'delay':
                 $res = $res->andWhere("i.delayDays is NULL or i.delayDays = 0")
+                    ->andWhere("i.dateFact is NULL")
                     ->orderBy('performerName, i.id', 'DESC');
                 break;
             case 'act':
@@ -702,6 +703,7 @@ class InvoiceRepository extends EntityRepository
                         AND ia.original = false
                     )"
                 )
+                ->andWhere("i.dateFact is NULL")
                 ->orderBy('performerName, i.id', 'DESC');
                 break;
         }
@@ -730,7 +732,9 @@ class InvoiceRepository extends EntityRepository
         /** where */
         switch ($type) {
             case 'delay':
-                $res = $res->andWhere("i.delayDays is NULL or i.delayDays = 0");
+                $res = $res
+                 ->andWhere("i.dateFact is NULL")
+                ->andWhere("i.delayDays is NULL or i.delayDays = 0");
                 break;
             case 'act':
                 $res = $res
@@ -743,6 +747,7 @@ class InvoiceRepository extends EntityRepository
                         AND ia.original = :boolean
                     )"
                 )
+                ->andWhere("i.dateFact is NULL")
                 ->setParameter(':boolean', false, \PDO::PARAM_BOOL);
                 break;
         }
