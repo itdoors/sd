@@ -97,14 +97,14 @@ class InvoiceService
                 default:
                     echo 'Error json: ' . json_last_error();
                     $this->addCronError(0, 'FATAL ERROR', $file, json_last_error());
+                    $em->flush();
             }
         } else {
-            $em = $this->container->get('doctrine')->getManager();
             $this->addCronError(0, 'ok', 'file not found', 'new file not found');
+            $em->flush();
 
             return 'File not found in derictory ' . "\n" . $directory;
         }
-        $em->flush();
     }
     /**
      * saveinvoice
