@@ -140,7 +140,7 @@ class InvoiceController extends BaseFilterController
         $entities = $result['entities'];
         $count = $result['count'];
 
-        $namespasePagin = $filterNamespace . 'P' . $period;
+        $namespasePagin = $filterNamespace;
         $page = $this->getPaginator($namespasePagin);
         if (!$page) {
             $page = 1;
@@ -299,8 +299,7 @@ class InvoiceController extends BaseFilterController
      */
     public function expectedpayAction ()
     {
-        $filterNamespace = $this->container->getParameter($this->getNamespace());
-        $namespaceTab = $filterNamespace . 'expectedpay';
+        $namespaceTab = $this->container->getParameter($this->getNamespace());
         $tab = $this->getTab($namespaceTab);
         if (!$tab) {
             $tab = 'today';
@@ -322,8 +321,7 @@ class InvoiceController extends BaseFilterController
      */
     public function expecteddataAction ()
     {
-        $filterNamespace = $this->container->getParameter($this->getNamespace());
-        $namespaceTab = $filterNamespace . 'expecteddata';
+        $namespaceTab = $this->container->getParameter($this->getNamespace());
         $tab = $this->getTab($namespaceTab);
         if (!$tab) {
             $tab = 'delay';
@@ -345,8 +343,7 @@ class InvoiceController extends BaseFilterController
      */
     public function expectedpayshowAction ()
     {
-        $filterNamespace = $this->container->getParameter($this->getNamespace());
-        $namespaceTab = $filterNamespace . 'expectedpay';
+        $namespaceTab = $this->container->getParameter($this->getNamespace());
         $tab = $this->getTab($namespaceTab);
 
         /** @var EntityManager $em */
@@ -393,8 +390,7 @@ class InvoiceController extends BaseFilterController
      */
     public function expecteddatashowAction ()
     {
-        $filterNamespace = $this->container->getParameter($this->getNamespace());
-        $namespaceTab = $filterNamespace . 'expecteddata';
+        $namespaceTab = $this->container->getParameter($this->getNamespace());
         $tab = $this->getTab($namespaceTab);
 
         /** @var EntityManager $em */
