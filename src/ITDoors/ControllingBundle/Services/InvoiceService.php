@@ -142,7 +142,7 @@ class InvoiceService
                         $payments->setBank(trim($pay->bank));
                     }
                     $em->persist($payments);
-                    $summaPaymens = $pay->summa;
+                    $summaPaymens += $pay->summa;
                 }
             } else {
                 $this->messageTemplate = 'invoice-not-pay';
@@ -169,7 +169,7 @@ class InvoiceService
                         $payments->setBank(trim($pay->bank));
                     }
                     $em->persist($payments);
-                    $summaPaymens = $pay->summa;
+                    $summaPaymens += $pay->summa;
 
                     $days = ($date->format('U') - strtotime($pay->date)) / 24 / 3600;
 
