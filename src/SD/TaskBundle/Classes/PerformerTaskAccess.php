@@ -4,6 +4,7 @@ namespace SD\TaskBundle\Classes;
 
 use SD\TaskBundle\Entity\Task;
 use SD\TaskBundle\Entity\TaskUserRole;
+
 /**
  * PerformerTaskAccess class
  */
@@ -12,9 +13,11 @@ class PerformerTaskAccess extends BasicTaskAccess
     /**
      * @return bool
      */
-    public function canSetDone() {
+    public function canSetDone()
+    {
         if ($this->isViewed()) {
             if ($this->stage == 'created' || $this->stage == 'performing' || $this->stage == 'date request') {
+
                 return true;
             }
         }
@@ -25,7 +28,8 @@ class PerformerTaskAccess extends BasicTaskAccess
     /**
      * @return bool
      */
-    public function canMakeDateRequest() {
+    public function canMakeDateRequest()
+    {
         if ($this->isViewed()) {
             if ($this->stage == 'created' || $this->stage == 'performing') {
 
@@ -40,7 +44,8 @@ class PerformerTaskAccess extends BasicTaskAccess
     /**
      * @return bool
      */
-    public function canUploadFiles() {
+    public function canUploadFiles()
+    {
         if ($this->isViewed()) {
 
             return true;
@@ -50,7 +55,8 @@ class PerformerTaskAccess extends BasicTaskAccess
     /**
      * @return bool
      */
-    public function canLeaveComment() {
+    public function canLeaveComment()
+    {
         if ($this->isViewed()) {
 
             return true;

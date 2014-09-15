@@ -20,25 +20,23 @@ class BasicTaskAccess implements TaskAccessInterface
     /**
      * @var bool
      */
-    protected  $isViewed;
+    protected $isViewed;
 
     /**
      * @param Stage $stage
      * @param bool  $isViewed
      */
-    public function __construct(Stage $stage, $isViewed) {
+    public function __construct(Stage $stage, $isViewed)
+    {
         $this->stage = $stage;
         $this->isViewed = $isViewed;
     }
-/*    public function __construct(TaskUserRole $taskUserRole) {
-        $this->stage = $taskUserRole->getTask()->getStage();
-        $this->isViewed = $taskUserRole->getIsViewed();
-    }*/
 
     /**
      * @return bool
      */
-    public function isViewed() {
+    public function isViewed()
+    {
 
         return $this->getIsViewed();
     }
@@ -46,7 +44,8 @@ class BasicTaskAccess implements TaskAccessInterface
     /**
      * @return bool
      */
-    public function canSetDone() {
+    public function canSetDone()
+    {
 
         return false;
     }
@@ -54,7 +53,8 @@ class BasicTaskAccess implements TaskAccessInterface
     /**
      * @return bool
      */
-    public function canSetUndone() {
+    public function canSetUndone()
+    {
 
         return false;
     }
@@ -62,7 +62,8 @@ class BasicTaskAccess implements TaskAccessInterface
     /**
      * @return bool
      */
-    public function canSetClosed() {
+    public function canSetClosed()
+    {
 
         return false;
     }
@@ -70,7 +71,8 @@ class BasicTaskAccess implements TaskAccessInterface
     /**
      * @return bool
      */
-    public function canUploadFiles() {
+    public function canUploadFiles()
+    {
 
         return true;
     }
@@ -78,7 +80,8 @@ class BasicTaskAccess implements TaskAccessInterface
     /**
      * @return bool
      */
-    public function canSetChecking() {
+    public function canSetChecking()
+    {
 
         return false;
     }
@@ -86,7 +89,8 @@ class BasicTaskAccess implements TaskAccessInterface
     /**
      * @return bool
      */
-    public function canMakeDateRequest() {
+    public function canMakeDateRequest()
+    {
 
         return false;
     }
@@ -94,7 +98,8 @@ class BasicTaskAccess implements TaskAccessInterface
     /**
      * @return bool
      */
-    public function canAnswerDateRequest() {
+    public function canAnswerDateRequest()
+    {
 
         return false;
     }
@@ -102,7 +107,8 @@ class BasicTaskAccess implements TaskAccessInterface
     /**
      * @return bool
      */
-    public function canLeaveComment() {
+    public function canLeaveComment()
+    {
         if ($this->canSetClosed() || $this->canSetDone() || $this->canSetUndone() || $this->canMakeDateRequest()) {
             return true;
         }
@@ -113,16 +119,16 @@ class BasicTaskAccess implements TaskAccessInterface
     /**
      * @return Task
      */
-    public function getStage() {
+    public function getStage()
+    {
         return $this->stage;
     }
 
     /**
      * @return bool
      */
-    public function getIsViewed() {
+    public function getIsViewed()
+    {
         return $this->isViewed;
     }
-
-
 }

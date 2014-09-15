@@ -51,7 +51,7 @@
         $('.stageButton').die('click');
         $('.stageButton').live('click', function(e){
             var stage = $(this).data('stage');
-            insertComment();
+            //insertComment();
             updateTaskStage(stage);
         })
 
@@ -64,10 +64,12 @@
         $('.answerButton').live('click', function(e){
             var answer = $(this).data('value');
             var id = $('#task_modal_info_holder').data('id');
-            var url = $('#task_modal_info_holder').data('url_answer_date');;
+            var url = $('#task_modal_info_holder').data('url_answer_date');
+            var comment = getComment();
             var sendData = {
                 'id': id,
-                'answer': answer
+                'answer': answer,
+                'comment' : comment
             }
             $.ajax({
                 type: 'POST',
@@ -77,7 +79,7 @@
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
-                        insertComment();
+                        //insertComment();
                         updateTask();
                     } else {
                         //$('#copy_etalon_finished').show('blind', {}, 500);
@@ -91,12 +93,14 @@
         $('.changeDateCalendar').live('click', function(e){
             var value = $('#new_date_holder').val();
             var id = $('#task_modal_info_holder').data('id');
-            var url = $('#task_modal_info_holder').data('url_change_date');;
+            var url = $('#task_modal_info_holder').data('url_change_date');
+            var comment = getComment();
             var sendData = {
                 'id': id,
-                'value': value
+                'value': value,
+                'comment': comment
             }
-            alert(value);
+
             $.ajax({
                 type: 'POST',
                 url: url,
@@ -105,7 +109,7 @@
                     //alert(data1)
                     data = JSON.parse(data1);
                     if (data.success == 1) {
-                        insertComment()
+                        //insertComment()
                         updateTask();
                     } else {
                         alert('{% trans %}Somebody already made request{% endtrans %}');
@@ -116,6 +120,15 @@
 
             })
         })
+
+
+        function getComment() {
+            var comment = $('#comment').val();
+            if (comment.length) {
+                return comment;
+            }
+            return '';
+        }
 
         function insertComment() {
             var comment = $('#comment').val();
@@ -149,9 +162,12 @@
         function updateTaskStage (stage) {
             var id = $('#task_modal_info_holder').data('id');
             var url = $('#task_modal_info_holder').data('url_task_set_stage');
+            var comment = getComment();
+
             var sendData = {
                 'id': id,
-                'stage': stage
+                'stage': stage,
+                'comment': comment
             }
             $.ajax({
                 type: 'POST',
@@ -202,7 +218,7 @@
         Metronic.initSlimScroll('.scroller');
 */
         $('#new_date_holder').datetimepicker({
-            minView:0,
+            minView:1,
             rtl: Metronic.isRTL(),
             autoclose: true,
             format: "dd.mm.yyyy hh:ii:ss",
@@ -507,7 +523,7 @@
                                             <span class="todo-comment-username">{{ comment.user }}</span> &nbsp; <span class="todo-comment-date">{{ comment.createDatetime|date('H:i d-m-Y') }}</span>
                                         </p>
                                         <p class="todo-text-color">
-                                            {{ comment.value }} <br>
+                                            {{ comment.value|raw  }} <br>
                                         </p>
                                     </div>
                                 </li>

@@ -24,7 +24,7 @@
     {% set labelStage = 'label-warning' %}
 {% endif %}
 
-<div class="todo-tasklist-item todo-tasklist-item-border-{{ color }} task-item" data-id="{{ taskUserRole.id }}">
+<div class="todo-tasklist-item todo-tasklist-item-border-{{ color }} task-item" data-id="{{ taskUserRole.id }}" style="border-width: 3px;">
     <img class="todo-userpic pull-left" src="{{ asset( userprofiles_url ~ taskUserRole.user.id ~ '/image29_' ~ taskUserRole.user.photo) }}" width="27px" height="27px">
     <div class="todo-tasklist-item-title">
         {{ taskUserRole.task.title }}

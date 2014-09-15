@@ -36,8 +36,13 @@ class TaskUserRoleRepository extends EntityRepository
     }
 
 
-
-    public function getEntitiesListByFilter($filterArray) {
+    /**
+     * @param array $filterArray
+     *
+     * @return array
+     */
+    public function getEntitiesListByFilter($filterArray)
+    {
 
         $notViewingStages = array('closed', 'undone', 'done');
         $sql = $this->createQueryBuilder('tur')

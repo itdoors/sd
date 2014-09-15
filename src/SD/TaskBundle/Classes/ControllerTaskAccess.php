@@ -4,6 +4,7 @@ namespace SD\TaskBundle\Classes;
 
 use SD\TaskBundle\Entity\Task;
 use SD\TaskBundle\Entity\TaskUserRole;
+
 /**
  * ControllerTaskAccess class
  */
@@ -12,9 +13,11 @@ class ControllerTaskAccess extends BasicTaskAccess
     /**
      * @return bool
      */
-    public function canSetDone() {
+    public function canSetDone()
+    {
         if ($this->isViewed()) {
             if ($this->stage == 'created' || $this->stage == 'performing' || $this->stage == 'date request') {
+
                 return true;
             }
         }
@@ -25,9 +28,12 @@ class ControllerTaskAccess extends BasicTaskAccess
     /**
      * @return bool
      */
-    public function canSetUndone() {
+    public function canSetUndone()
+    {
         if ($this->isViewed()) {
-            if ($this->stage == 'created' || $this->stage == 'performing' || $this->stage == 'date request' || $this->stage == 'checking') {
+            if ($this->stage == 'created' || $this->stage == 'performing' ||
+                $this->stage == 'date request' || $this->stage == 'checking') {
+
                 return true;
             }
         }
@@ -35,9 +41,15 @@ class ControllerTaskAccess extends BasicTaskAccess
         return false;
     }
 
-    public function canSetClosed() {
+    /**
+     * @return bool
+     */
+    public function canSetClosed()
+    {
         if ($this->isViewed()) {
-            if ($this->stage == 'created' || $this->stage == 'performing' || $this->stage == 'date request' || $this->stage == 'checking') {
+            if ($this->stage == 'created' || $this->stage == 'performing' ||
+                $this->stage == 'date request' || $this->stage == 'checking') {
+
                 return true;
             }
         }
@@ -47,7 +59,8 @@ class ControllerTaskAccess extends BasicTaskAccess
     /**
      * @return bool
      */
-    public function canUploadFiles() {
+    public function canUploadFiles()
+    {
         if ($this->isViewed()) {
 
             return true;
@@ -57,9 +70,10 @@ class ControllerTaskAccess extends BasicTaskAccess
     /**
      * @return bool
      */
-    public function canLeaveComment() {
+    public function canLeaveComment()
+    {
         if ($this->isViewed()) {
-            
+
             return true;
         }
     }
@@ -67,7 +81,8 @@ class ControllerTaskAccess extends BasicTaskAccess
     /**
      * @return bool
      */
-    public function canSetChecking() {
+    public function canSetChecking()
+    {
         if ($this->stage == 'checking') {
 
             return true;
@@ -79,7 +94,8 @@ class ControllerTaskAccess extends BasicTaskAccess
     /**
      * @return bool
      */
-    public function canMakeDateRequest() {
+    public function canMakeDateRequest()
+    {
         if ($this->isViewed()) {
             if ($this->stage == 'created' || $this->stage == 'performing') {
 
@@ -93,7 +109,8 @@ class ControllerTaskAccess extends BasicTaskAccess
     /**
      * @return bool
      */
-    public function canAnswerDateRequest() {
+    public function canAnswerDateRequest()
+    {
         if ($this->isViewed()) {
             if ($this->stage == 'date request') {
 
@@ -103,5 +120,4 @@ class ControllerTaskAccess extends BasicTaskAccess
 
         return false;
     }
-
 }

@@ -36,9 +36,12 @@ class TaskFileForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            //->add('name')
+            //->add('name', 'text', array('required' => true))
             ->add('file', 'file', array(
-                'required' => true
+                'required' => true,
+                'attr' => array(
+                    'class' => 'den',
+                )
             ));
 /*            ->add('idTask', 'hidden',  array(
                 'mapped' => false

@@ -15,12 +15,18 @@
                         minuteStep: 30,
                         weekStart: 1,
                         startDate: new Date()
-                    }).on('changeDate', function(ev){
+                    }).on('changeDate', function(date){
+/*
+                        var currentDate = date.date;
+                        currentDate = currentDate.setMinutes(0);
+                        //currentDate = currentDate.setSeconds(0);
+                        //$('.datatime-picker').val(new Date());
                         //.val($('.datatime-picker').val()+':00');
+*/
                     }
                 );
 
-/*
+            /*
             $('#' + '{{ form.vars.name }}' + '_performer').attr("multiple", true);
              */
             $('#' + '{{ form.vars.name }}' + '_performer').select2(

@@ -14,7 +14,8 @@ class TaskAccessFactory
      *
      * @return AuthorTaskAccess|ControllerTaskAccess|PerformerTaskAccess
      */
-    public static function createAccess($stringAccess, $stage, $isViewed) {
+    public static function createAccess($stringAccess, $stage, $isViewed)
+    {
         if ($stringAccess == 'performer') {
             return new PerformerTaskAccess($stage, $isViewed);
         } elseif ($stringAccess == 'author') {
