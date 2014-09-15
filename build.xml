@@ -3,7 +3,7 @@
 
     <property file="${project.basedir}/build.properties" />
 
-    <property name="path.bin" value="/usr/local/bin" />
+    <property name="path.bin" value="/usr/bin" />
     <property name="phpcs.standard" value="PSR2" />
 
     <property name="dir.build" value="build" />

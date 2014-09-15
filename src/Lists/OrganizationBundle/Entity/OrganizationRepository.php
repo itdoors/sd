@@ -583,20 +583,20 @@ class OrganizationRepository extends EntityRepository
                 )
                 ->addSelect(
                     "(
-                SELECT SUM(paymens.summa)
-                FROM  ITDoorsControllingBundle:Invoice  i_paymens
-                LEFT JOIN  ITDoorsControllingBundle:InvoicePayments paymens
-                WHERE paymens.invoiceId = i_paymens.id
-                AND i_paymens.customerId = o.id
-                )as paymentsSumma"
+                        SELECT SUM(paymens.summa)
+                        FROM  ITDoorsControllingBundle:Invoice  i_paymens
+                        LEFT JOIN  ITDoorsControllingBundle:InvoicePayments paymens
+                        WHERE i_paymens.customerId = o.id
+                        AND paymens.invoiceId = i_paymens.id
+                    )as paymentsSumma"
                 )
-                ->addSelect(
-                    '(
-                  SELECT SUM(i_s.sum)
-                  FROM  ITDoorsControllingBundle:Invoice  i_s
-                  WHERE i_s.customerId = o.id
-                 ) as allSummaInvoice'
-                )
+//                ->addSelect(
+//                    '(
+//                        SELECT SUM(i_s.sum)
+//                        FROM  ITDoorsControllingBundle:Invoice  i_s
+//                        WHERE i_s.customerId = o.id
+//                    ) as allSummaInvoice'
+//                )
                 ->addSelect(
                     '(
                         SELECT SUM(i_a_d.summa)
@@ -613,7 +613,7 @@ class OrganizationRepository extends EntityRepository
                         FROM  ITDoorsControllingBundle:Invoice i
                     )'
                 )
-                ->orderBy('allSumma')->getQuery();
+                ->orderBy('allSumma', 'ASC')->getQuery();
         $count = $this->createQueryBuilder('o')
                 ->select('COUNT(o.id)')
                 ->where(

@@ -65,10 +65,8 @@ class InvoiceService
     public function parserFile ()
     {
         $this->updateIvoiceInfo();
-        $directory = $this->container->getParameter('1C.file.path');
-
         $em = $this->container->get('doctrine')->getManager();
-
+        $directory = $this->container->getParameter('1C.file.path');
         if (!is_dir($directory)) {
             $this->addCronError(0, 'ok', 'directory not found', $directory);
             echo 'Directory not found: ';
@@ -97,7 +95,7 @@ class InvoiceService
                     rename($directory . $file, $directory . 'old/' . $file);
                     break;
                 default:
-                    echo json_last_error();
+                    echo 'Error json: ' . json_last_error();
                     $this->addCronError(0, 'FATAL ERROR', $file, json_last_error());
             }
         } else {
@@ -123,30 +121,28 @@ class InvoiceService
             'invoiceId' => trim($invoice->invoiceId),
             'date' => new \DateTime(trim($invoice->date))
         ));
+        $summaPaymens = 0;
+        $dateFact = new \DateTime(trim($invoice->date));
         if (!$invoiceNew) {
             $invoiceNew = new Invoice();
             $invoiceNew->setCourt(0);
             $invoiceNew->setInvoiceId(trim($invoice->invoiceId));
 
             if (count($invoice->payments) > 0) {
-                $summa = 0;
-                $dateFact = null;
                 foreach ($invoice->payments as $pay) {
-                    $dateFact = new \DateTime(trim($pay->date));
+                    $date = new \DateTime(trim($pay->date));
+                    if ($dateFact->format('U') < $date->format('U')) {
+                        $dateFact = $date;
+                    }
                     $payments = new InvoicePayments();
                     $payments->setInvoice($invoiceNew);
-                    $payments->setDate($dateFact);
+                    $payments->setDate($date);
                     $payments->setSumma(trim($pay->summa));
                     if ($pay->bank != 'null') {
                         $payments->setBank(trim($pay->bank));
                     }
                     $em->persist($payments);
-//                    unset($payments);
-                    $summa += trim($pay->summa);
-                }
-
-                if ($summa >= $invoice->sum && $dateFact != null) {
-                    $invoiceNew->setDateFact($dateFact);
+                    $summaPaymens = $pay->summa;
                 }
             } else {
                 $this->messageTemplate = 'invoice-not-pay';
@@ -158,24 +154,24 @@ class InvoiceService
                 foreach ($paymentsOld as $payOld) {
                     $em->remove($payOld);
                 }
-                $summa = 0;
-                $dateFact = null;
                 $sendEmailPay = false;
-                $date = date('Y-m-d');
+                $date = new \DateTime();
                 foreach ($invoice->payments as $pay) {
-                    $dateFact = new \DateTime(trim($pay->date));
+                    $date = new \DateTime(trim($pay->date));
+                    if ($dateFact->format('U') < $date->format('U')) {
+                        $dateFact = $date;
+                    }
                     $payments = new InvoicePayments();
                     $payments->setInvoice($invoiceNew);
-                    $payments->setDate($dateFact);
+                    $payments->setDate($date);
                     $payments->setSumma(trim($pay->summa));
                     if ($pay->bank != 'null') {
                         $payments->setBank(trim($pay->bank));
                     }
                     $em->persist($payments);
-//                    unset($payments);
-                    $summa += trim($pay->summa);
+                    $summaPaymens = $pay->summa;
 
-                    $days = (strtotime($date) - strtotime($pay->date)) / 24 / 3600;
+                    $days = ($date->format('U') - strtotime($pay->date)) / 24 / 3600;
 
                     if (in_array($days, array (1))) {
                         $sendEmailPay = true;
@@ -184,14 +180,10 @@ class InvoiceService
                 if ($sendEmailPay) {
                     $this->messageTemplate = 'invoice-pay';
                 }
-
-                if ($summa >= $invoice->sum && $dateFact != null) {
-                    $invoiceNew->setDateFact($dateFact);
-                }
             } else {
-                $date = date('Y-m-d');
+                $date = new \DateTime();
                 $invoiceNew->setDateFact(null);
-                $days = (strtotime($date) - strtotime($invoiceNew->getDelayDate()->format('Y-m-d'))) / 24 / 3600;
+                $days = ($date->format('U') - strtotime($invoiceNew->getDelayDate()->format('Y-m-d'))) / 24 / 3600;
                 if (in_array($days, array (1))) {
                     $this->messageTemplate = 'invoice-not-pay';
                 }
@@ -202,6 +194,7 @@ class InvoiceService
                 }
             }
         }
+
         $invoiceNew->setDogovorGuid(trim($invoice->dogovorGuid));
         $invoiceNew->setDogovorNumber(trim($invoice->dogovorNumber));
         $invoiceNew->setDogovorName(trim($invoice->dogovorName));
@@ -212,8 +205,12 @@ class InvoiceService
         $invoiceNew->setCustomerEdrpou(trim($invoice->customerEdrpou));
         $invoiceNew->setPerformerName(trim($invoice->performerName));
         $invoiceNew->setPerformerEdrpou(trim($invoice->performerEdrpou));
-        $acts = $invoice->acts;
-        $this->addActs($invoiceNew, $acts);
+
+        $summaActs = $this->addActs($invoiceNew, $invoice->acts);
+
+        if ($summaPaymens >= $summaActs) {
+            $invoiceNew->setDateFact($dateFact);
+        }
 
         if (!empty($invoice->delayDate) && $invoice->delayDate != 'null') {
             $invoiceNew->setDelayDate(new \DateTime(trim($invoice->delayDate)));
@@ -221,8 +218,10 @@ class InvoiceService
         if (is_numeric($invoice->delayDays)) {
             $invoiceNew->setDelayDays((int) $invoice->delayDays);
         }
-        if (in_array($invoice->delayDaysType, array ('Б', 'К', 'б', 'к'))) {
-            $invoiceNew->setDelayDaysType(trim($invoice->delayDaysType));
+        if (in_array($invoice->delayDaysType, array ('Б', 'б', 'Банковский'))) {
+            $invoiceNew->setDelayDaysType('Б');
+        } elseif (in_array($invoice->delayDaysType, array ('К', 'к', 'Календарный'))) {
+            $invoiceNew->setDelayDaysType('К');
         }
         if (!empty($invoice->dogovorDate) && $invoice->dogovorDate != 'null') {
             $invoiceNew->setDogovorDate(new \DateTime(trim($invoice->dogovorDate)));
@@ -246,25 +245,32 @@ class InvoiceService
     }
     private function addActs ($invoiceNew, $acts)
     {
+        $summa = 0;
         $em = $this->container->get('doctrine')->getManager();
-        foreach ($acts as $act) {
-            $actFind = $em->getRepository('ITDoorsControllingBundle:InvoiceAct')
-                ->findOneBy(array ('number' => $act->actNumber));
-            if (!$actFind) {
-                $actFind = new InvoiceAct();
-                $actFind->setNumber($act->actNumber);
-                $actFind->setInvoice($invoiceNew);
+
+        if (method_exists($invoiceNew, 'getId')) {
+            $actsOld = $em->getRepository('ITDoorsControllingBundle:InvoiceAct')
+               ->findBy(array (
+                   'invoiceId' => $invoiceNew->getId()
+               ));
+            foreach ($actsOld as $actOld) {
+                $detailsFind = $em->getRepository('ITDoorsControllingBundle:InvoiceActDetal')
+                    ->findBy(array ('invoiceActId' => $actOld->getId()));
+                foreach ($detailsFind as $detailsFindOne) {
+                    $em->remove($detailsFindOne);
+                }
+                $em->remove($actOld);
             }
+        }
+
+        foreach ($acts as $act) {
+            $actFind = new InvoiceAct();
+            $actFind->setNumber($act->actNumber);
+            $actFind->setInvoice($invoiceNew);
             $actFind->setDate(new \DateTime(trim($act->actDate)));
             $actFind->setOriginal($act->actOriginal);
             $em->persist($actFind);
             $details = $act->actDetail;
-            $detailsFind = $em->getRepository('ITDoorsControllingBundle:InvoiceActDetal')
-                ->findBy(array ('invoiceActId' => $actFind->getId()));
-            foreach ($detailsFind as $detailsFindOne) {
-                $em->remove($detailsFindOne);
-            }
-//            unset($detailsFind);
             foreach ($details as $detail) {
                 $detalAdd = new InvoiceActDetal();
                 $detalAdd->setAct($actFind);
@@ -272,11 +278,12 @@ class InvoiceService
                 $detalAdd->setMpk($detail->mpk);
                 $detalAdd->setNote($detail->note);
                 $detalAdd->setSumma($detail->summa);
+                $summa += $detail->summa;
                 $em->persist($detalAdd);
-//                 unset($detalAdd);
             }
-//            unset($details);
         }
+
+        return $summa;
     }
     private function findDogovor ($invoiceFind, $invoice, $invoiceNew)
     {
@@ -400,7 +407,6 @@ class InvoiceService
     {
         $count = count($json);
         $countInvoice = 0;
-        $memStart = memory_get_usage();
         $em = $this->container->get('doctrine')->getManager();
         $em->getConnection()->getConfiguration()->setSQLLogger(null);
 
@@ -413,7 +419,7 @@ class InvoiceService
                 $countInvoice = 0;
             }
             ++$countInvoice;
-            echo number_format((memory_get_usage() - $memStart) / 8000000, 0, ',', ' ')
+            echo number_format(memory_get_usage() / 8000000, 0, ',', ' ')
                 . "MB ~ more: ".($count - $key) . "\n";
 
             $invoiceFind = true;
