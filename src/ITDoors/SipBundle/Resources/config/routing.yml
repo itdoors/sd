@@ -1,0 +1,7 @@
+it_doors_sip_call:
+    path:     /sip/call
+    defaults: { _controller: ITDoorsSipBundle:Call:index }
+    
+it_doors_sip_save_params:
+    path:     /sip/save_params
+    defaults: { _controller: ITDoorsSipBundle:Call:saveParams }

@@ -155,6 +155,26 @@
 
     </script>
 
+{#
+    {{ ajax_form_render_btn({
+        'selector' : '#create_task_btn',
+        'formType' : 'taskForm1',
+        'successFunctions' : {
+            'list_files' : 'ITDoorsAjax.updateList'
+        },
+        'serviceDefault' : {
+            'alias' : 'task.form.service',
+            'method' : 'addFormDefaults'
+        },
+        'serviceSave' : {
+            'alias' : 'task.form.service',
+            'method' : 'saveForm'
+        },
+        'target' : '#task_holder'
+        })
+    }}
+#}
+
     <div id="form_modal_task" class="modal fade" tabindex="-1" role="basic" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -307,6 +327,14 @@
                         >{% trans %}Create task{% endtrans %}
                     <i class="fa fa-plus"></i>
                 </a>
+
+{#
+                <button class="btn green-haze btn-circle btn-sm ajax-form" href="#" id="create_task_btn" >
+                    {% trans %}Create task{% endtrans %}
+                    <i class="fa fa-plus"></i>
+                </button>
+#}
+
             </div>
         </div>
     </div>
@@ -360,91 +388,6 @@
     <!-- END TODO CONTENT -->
     </div>
     </div>
-{#
-    <div id="form_modal_task" class="modal fade" tabindex="-1" role="basic" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">{% trans %}Create task{% endtrans %}</h4>
-                </div>
-                <div class="modal-body">
-                    <div id="taskFormTpl"></div>
-                </div>
-                <div class="modal-footer">
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-    </div>
-
-
-    <div class="row">
-        <div class="col-md-12">
-            <div class="tabbable tabbable-custom boxless">
-                <ul class="nav nav-tabs" id="ajax_tabs">
-                    <li class="active"><a id="task_tab_button" href="#tab_3" data-toggle="tab" data-block="tasks_list" data-url="{{ path('sd_task_table')}}">{% trans %}Tasks{% endtrans %}</a></li>
-                    <li ><a id="document_tab_button" href="#tab_3" data-block="tab_content" data-url="&#123;&#35;{{ url('it_doors_oper_coworker_schedule_index') }}&#35;&#125;" data-toggle="tab">{% trans %}Documents{% endtrans %}</a></li>
-                </ul>
-                    <div class="tab-content" id="tab_content">
-                        <br>
-                        <a id="managers_list_new" class="btn green ajax-form"
-                           data-toggle="modal"
-                           href="#form_modal_task"
-                           data-target_holder="taskFormTpl"
-                           data-form_name="taskForm1"
-                           data-post_function="updateList"
-                           data-post_target_id="tasks_list"
-                                >
-                            {% trans %}Add task{% endtrans %} <i class="fa fa-plus"></i>
-                        </a>
-                        <br><br>
-                        <div class="row">
-                            <div class="col-md-3"><a class="yellow btn filterButton" style="min-width: 100px;" href="#" data-show="all">{% trans %}All{% endtrans %}</a></div>
-                            <div class="col-md-3"><a class="blue btn filterButton" style="min-width: 100px;" href="#" data-show="performer">{% trans %}Performer{% endtrans %}</a></div>
-                            <div class="col-md-3"><a class="purple btn filterButton" style="min-width: 100px;" href="#" data-show="controller">{% trans %}Controller{% endtrans %}</a></div>
-                            <div class="col-md-3"><a class="red btn filterButton" style="min-width: 100px;" href="#" data-show="author">{% trans %}Author{% endtrans %}</a></div>
-                        </div>
-
-                        <br>
-
-                        <div id="tasks_list" data-url="{{ path('sd_task_table')}}">
-                                {{ render(controller('SDTaskBundle:Task:taskTable')) }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <input type="hidden" id="more_info_input"
-                    data-url_task_modal="{{ path('sd_task_modal') }}"
-                    data-url_task_table="{{ path('sd_task_table')}}">
-            &#123;&#35;
-                        <div id="base_table_test" data-url="{{ path('it_doors_oper_coworker_test_table')}}">
-                            {{ render(controller('ITDoorsOperBundle:OperCoworkerInfo:testTableRender', {
-
-                            })) }}
-                        </div>
-            &#35;&#125;
-
-            <div id="form_modal_task_view" class="modal fade" tabindex="-1" role="basic" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                            <h4 class="modal-title">{% trans %}View task{% endtrans %}</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div id="taskViewTpl"></div>
-                        </div>
-                        <div class="modal-footer">
-                        </div>
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-            </div>
-
-    </div>
-    </div>
-#}
 
     <input type="hidden" id="more_info_input"
            data-url_task_modal="{{ path('sd_task_modal') }}"

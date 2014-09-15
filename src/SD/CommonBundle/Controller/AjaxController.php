@@ -45,6 +45,7 @@ use Lists\HandlingBundle\Entity\HandlingUser;
 use Lists\OrganizationBundle\Entity\OrganizationUser;
 use ITDoors\HistoryBundle\Entity\History;
 use Lists\DogovorBundle\Entity\DogovorCompanystructure;
+use ITDoors\SipBundle\Entity\Call;
 
 /**
  * AjaxController class.
@@ -2263,10 +2264,123 @@ class AjaxController extends BaseFilterController
             }
         }
 
-        $em = $this->getDoctrine()->getManager();
         $em->persist($handlingMessage);
         // $em->flush();
 
+        $handling->setLastHandlingDate($data->getCreatedate());
+        $handling->setNextHandlingDate($nextDatetime);
+
+        $handling->setStatusId($statusId);
+
+        $em->persist($handling);
+
+        $em->flush();
+
+        return true;
+    }
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function handlingMessageCallFormSave(Form $form, $user, $request)
+    {
+        /** @var \Lists\HandlingBundle\Entity\HandlingMessage $data */
+        $data = $form->getData();
+
+        $formData = $request->request->get($form->getName());
+        $handlingId = $data->getHandlingId();
+
+        /** @var \Lists\HandlingBundle\Entity\Handling $handling */
+        $handling = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling')
+            ->find($handlingId);
+        $user = $this->getUser();
+        $file = $form['file']->getData();
+         // Insert future
+        $typeCall = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingMessageType')
+            ->find(1);
+
+        $em = $this->getDoctrine()->getManager();
+        $call = null;
+        if (isset($formData['uniqueId']) && !empty($formData['uniqueId'])) {
+             $call = $em->getRepository('ITDoorsSipBundle:Call')
+                ->findOneBy(array('uniqueId' => $formData['uniqueId']));
+            if ($call) {
+                $data = $this->getDoctrine()
+                    ->getRepository('ListsHandlingBundle:HandlingMessage')
+                    ->find($call->getModelId());
+            }
+        }
+        $data->setCreatedatetime(new \DateTime());
+        $data->setUser($user);
+        $data->setHandling($handling);
+        $data->setType($typeCall);
+        if ($file) {
+            $data->upload();
+        }
+        $em->persist($data);
+        $em->flush();
+        $em->refresh($data);
+        if (isset($formData['uniqueId']) && !empty($formData['uniqueId']) && !$call) {
+            $call = new Call();
+            $call->setCaller($user);
+            $call->setUniqueId($formData['uniqueId']);
+            $call->setModelId($data->getId());
+            $call->setDatetime(new \DateTime());
+            $call->setModelName($em->getClassMetadata(get_class($data))->getTableName());
+            $em->persist($call);
+        }
+
+        // Insert future
+        $type = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:HandlingMessageType')
+            ->find($formData['nexttype']);
+
+        $nextDatetime = new \DateTime($formData['nextcreatedate']);
+        $contactNext = $formData['contactnext'];
+        $descriptionNext = $formData['descriptionnext'];
+        $statusId = $formData['status'];
+
+        $handlingMessage = new HandlingMessage();
+        $handlingMessage->setCreatedate($nextDatetime);
+        $handlingMessage->setCreatedatetime(new \DateTime());
+
+        if (isset($formData['userNext']) && $formData['userNext']) {
+            /** @var UserRepository $ur */
+            $ur = $this->get('sd_user.repository');
+
+            $userNext = $ur->find($formData['userNext']);
+
+            if ($userNext) {
+                $handlingMessage->setUser($userNext);
+            }
+        } else {
+            $handlingMessage->setUser($user);
+        }
+
+        $handlingMessage->setHandling($handling);
+        $handlingMessage->setType($type);
+        $handlingMessage->setIsBusinessTrip(isset($formData['next_is_business_trip']) ? true : false);
+        $handlingMessage->setAdditionalType(HandlingMessage::ADDITIONAL_TYPE_FUTURE_MESSAGE);
+
+        $handlingMessage->setDescription($descriptionNext);
+
+        if ((int) $contactNext) {
+            $contact = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
+                ->find((int) $contactNext);
+
+            if ($contact) {
+                $handlingMessage->setContact($contact);
+            }
+        }
+
+        $em->persist($handlingMessage);
         $handling->setLastHandlingDate($data->getCreatedate());
         $handling->setNextHandlingDate($nextDatetime);
 
@@ -2370,12 +2484,20 @@ class AjaxController extends BaseFilterController
      */
     public function taskForm1Save(Form $form, $user, $request)
     {
+        $formName = $request->request->get('formName');
+        $postFunction = $request->request->get('postFunction');
+        $postTargetId = $request->request->get('postTargetId');
+        $targetId = $request->request->get('targetId');
+        $model = $request->request->get('model');
+        $modelId = $request->request->get('modelId');
+
+
         /** @var \SD\TaskBundle\Entity\Task $data */
         $data = $form->getData();
 
         //if (!$data->getId()) {
         //}
-
+        //if ($form->isValid()) {
         $formData = $request->request->get($form->getName());
 
         $data->setCreateDate(new \DateTime());
@@ -2395,6 +2517,23 @@ class AjaxController extends BaseFilterController
         $em->persist($data);
         $em->flush();
         //$em->refresh($data);
+
+
+        $files = $form['files']->getData();
+        if (count($files)) {
+            foreach ($files as $file) {
+                if ($file) {
+                    $fileTask = new \SD\TaskBundle\Entity\TaskFile();
+                    $fileTask->setTask($data);
+                    $fileTask->setUser($user);
+                    $fileTask->setCreateDate(new \DateTime());
+                    $fileTask->setFile($file);
+                    $fileTask->upload();
+                    $em->persist($fileTask);
+                    $em->flush();
+                }
+            }
+        }
 
         $dateStage = $this->getDoctrine()
             ->getRepository('SDTaskBundle:Stage')
@@ -2443,31 +2582,46 @@ class AjaxController extends BaseFilterController
 
         //var_dump($formData['performer']);die();
         //foreach ($formData['performer'] as $performer) {
-            $idPerformer = $formData['performer'];
-            $performer = $userRepository->find($idPerformer);
+        $idPerformer = $formData['performer'];
+        $performer = $userRepository->find($idPerformer);
 
-            $taskUserRole = new \SD\TaskBundle\Entity\TaskUserRole();
-            $taskUserRole->setRole($performerRole);
-            $taskUserRole->setUser($performer);
-            $taskUserRole->setTask($data);
+        $taskUserRole = new \SD\TaskBundle\Entity\TaskUserRole();
+        $taskUserRole->setRole($performerRole);
+        $taskUserRole->setUser($performer);
+        $taskUserRole->setTask($data);
+        $taskUserRole->setIsViewed(false);
+        $em->persist($taskUserRole);
+    //}
+
+    //foreach ($formData['controller'] as $idController) {
+        $idController = $formData['controller'];
+        $controller = $userRepository->find($idController);
+
+        $taskUserRole = new \SD\TaskBundle\Entity\TaskUserRole();
+        $taskUserRole->setRole($controllerRole);
+        $taskUserRole->setUser($controller);
+        $taskUserRole->setTask($data);
+        if ($controller == $user) {
+            $taskUserRole->setIsViewed(true);
+        } else {
             $taskUserRole->setIsViewed(false);
-            $em->persist($taskUserRole);
-        //}
-
-        //foreach ($formData['controller'] as $idController) {
-            $idController = $formData['controller'];
-            $controller = $userRepository->find($idController);
-
-            $taskUserRole = new \SD\TaskBundle\Entity\TaskUserRole();
-            $taskUserRole->setRole($controllerRole);
-            $taskUserRole->setUser($controller);
-            $taskUserRole->setTask($data);
-            $taskUserRole->setIsViewed(false);
-            $em->persist($taskUserRole);
+        }
+        $em->persist($taskUserRole);
         //}
         $em->flush();
 
         return true;
+/*        }
+
+        return $this->render('SDCommonBundle:AjaxForm:taskForm1.html.twig', array(
+            'form' => $form->createView(),
+            'formName' => $formName,
+            'postFunction' => $postFunction,
+            'postTargetId' => $postTargetId,
+            'targetId' => $targetId,
+            'model' => $model,
+            'modelId' => $modelId,
+        ));*/
     }
 
 
@@ -2977,11 +3131,11 @@ class AjaxController extends BaseFilterController
                     /** @var InvoiceCompanystructure $invoiceC */
                     $invoiceC = $em
                         ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
-                        ->findBy(array(
+                        ->findOneBy(array(
                             'invoiceId' => $invoiceCS->getId(),
                             'companystructureId' => $object->getCompanystructureId()
                             ));
-                    $em->remove($invoiceC[0]);
+                    $em->remove($invoiceC);
                 }
             }
         }
@@ -4019,6 +4173,78 @@ class AjaxController extends BaseFilterController
                 }
             ));
 
+        $form
+            ->add('mindate', 'hidden', array(
+                'data' => $defaultData['mindate'],
+                'mapped' => false
+        ));
+    }
+    /**
+     * Adds children to {formName}ProcessDefaults depending on defaults in request
+     *
+     * @param Form    $form
+     * @param mixed[] $defaultData
+     *
+     * @return void
+     */
+    public function handlingMessageCallFormProcessDefaults($form, $defaultData)
+    {
+        $handlingId = $defaultData['handling_id'];
+
+        /** @var \Lists\HandlingBundle\Entity\Handling $handling */
+        $handling = $this->getDoctrine()->getRepository('ListsHandlingBundle:Handling')
+            ->find($handlingId);
+
+        $creator = $handling->getUser();
+
+        $userIds = array();
+
+        $userIds[$creator->getId()] = $creator->getId();
+
+        /** @var HandlingUser[] $users */
+        $users = $handling->getHandlingUsers();
+
+        if ($users) {
+            foreach ($users as $user) {
+                $userIds[$user->getUserId()] = $user->getUserId();
+            }
+        }
+
+        $organizationId = $handling->getOrganizationId();
+
+         $form
+            ->add('contactnext', 'entity', array(
+                'class' => 'ListsContactBundle:ModelContact',
+                'empty_value' => '',
+                'required' => false,
+                'mapped' => false,
+                'query_builder' => function (ModelContactRepository $repository) use ($organizationId, $userIds) {
+                        return $repository->createQueryBuilder('mc')
+                            ->leftJoin('mc.owner', 'owner')
+                            ->where('mc.modelName = :modelName')
+                            ->andWhere('mc.modelId = :modelId')
+                            ->andWhere('owner.id in (:ownerIds)')
+                            ->setParameter(':modelName', ModelContactRepository::MODEL_ORGANIZATION)
+                            ->setParameter(':modelId', $organizationId)
+                            ->setParameter(':ownerIds', $userIds);
+                }
+            ));
+
+        $form
+            ->add('status', 'entity', array(
+                'class' => 'ListsHandlingBundle:HandlingStatus',
+                'data' => $handling->getStatus(),
+                'empty_value' => '',
+                'mapped' => false,
+                'query_builder' => function (\Lists\HandlingBundle\Entity\HandlingStatusRepository $repository) {
+                        return $repository->createQueryBuilder('s')
+                            ->orderBy('s.sortorder', 'ASC');
+                }
+            ));
+
+        $form->add('uniqueId', 'hidden', array(
+                'mapped' => false
+            ));
         $form
             ->add('mindate', 'hidden', array(
                 'data' => $defaultData['mindate'],

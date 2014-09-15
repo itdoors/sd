@@ -583,20 +583,20 @@ class OrganizationRepository extends EntityRepository
                 )
                 ->addSelect(
                     "(
-                SELECT SUM(paymens.summa)
-                FROM  ITDoorsControllingBundle:Invoice  i_paymens
-                LEFT JOIN  ITDoorsControllingBundle:InvoicePayments paymens
-                WHERE paymens.invoiceId = i_paymens.id
-                AND i_paymens.customerId = o.id
-                )as paymentsSumma"
+                        SELECT SUM(paymens.summa)
+                        FROM  ITDoorsControllingBundle:Invoice  i_paymens
+                        LEFT JOIN  ITDoorsControllingBundle:InvoicePayments paymens
+                        WHERE i_paymens.customerId = o.id
+                        AND paymens.invoiceId = i_paymens.id
+                    )as paymentsSumma"
                 )
-                ->addSelect(
-                    '(
-                  SELECT SUM(i_s.sum)
-                  FROM  ITDoorsControllingBundle:Invoice  i_s
-                  WHERE i_s.customerId = o.id
-                 ) as allSummaInvoice'
-                )
+//                ->addSelect(
+//                    '(
+//                        SELECT SUM(i_s.sum)
+//                        FROM  ITDoorsControllingBundle:Invoice  i_s
+//                        WHERE i_s.customerId = o.id
+//                    ) as allSummaInvoice'
+//                )
                 ->addSelect(
                     '(
                         SELECT SUM(i_a_d.summa)
@@ -613,11 +613,19 @@ class OrganizationRepository extends EntityRepository
                         FROM  ITDoorsControllingBundle:Invoice i
                     )'
                 )
-                ->orderBy('allSumma')
-                //->setMaxResults(40)
-                ->getQuery()->getResult();
+                ->orderBy('allSumma', 'ASC')->getQuery();
+        $count = $this->createQueryBuilder('o')
+                ->select('COUNT(o.id)')
+                ->where(
+                    'o.id in (
+                        SELECT DISTINCT(i.customerId) 
+                        FROM  ITDoorsControllingBundle:Invoice i
+                    )'
+                )
+                ->getQuery()
+                ->getSingleScalarResult();
 
-        return $res;
+        return array('entity' => $res, 'count' => $count);
     }
     /**
      * Returns results for interval future invoice
@@ -775,10 +783,21 @@ class OrganizationRepository extends EntityRepository
                     AND i_a_.original = false
                 )'
             )
-            ->orderBy('allSumma')
-            ->getQuery()
-            ->getResult();
+            ->orderBy('allSumma')->getQuery();
+        $count = $this->createQueryBuilder('o')
+                ->select('COUNT(o.id)')
+                ->where(
+                    'o.id in (
+                        SELECT DISTINCT(i.customerId) 
+                        FROM  ITDoorsControllingBundle:Invoice i
+                        LEFT JOIN ITDoorsControllingBundle:InvoiceAct i_a_
+                        WHERE i.id = i_a_.invoiceId
+                        AND i_a_.original = false
+                    )'
+                )
+                ->getQuery()
+                ->getSingleScalarResult();
 
-        return $res;
+        return array('entity' => $res, 'count' => $count);
     }
 }

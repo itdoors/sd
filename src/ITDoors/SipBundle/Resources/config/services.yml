@@ -1,0 +1,14 @@
+parameters:
+    it_doors_sip.service.class: ITDoors\SipBundle\Services\SipService
+    it_doors_sip.twig.call_extension.class: ITDoors\SipBundle\Twig\CallExtension
+
+services:
+    it_doors_sip.service:
+        class: %it_doors_sip.service.class%
+        arguments: [@service_container]
+        
+    it_doors_sip.twig.call_extension:
+        class: %it_doors_sip.twig.call_extension.class%
+        arguments: [@service_container]
+        tags:
+            - { name: twig.extension }

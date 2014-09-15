@@ -1024,3 +1024,28 @@ INSERT INTO "public".companystructure (id, parent_id, "name", mpk, address, phon
 
 -- staging ----------------------
 -- prod ----------------------
+ALTER TABLE fos_user ADD peer_id INT DEFAULT NULL;
+ALTER TABLE fos_user ADD peer_password VARCHAR(255) DEFAULT NULL;
+-- staging ----------------------
+-- prod ----------------------
+CREATE TABLE call (
+    id SERIAL NOT NULL,
+    caller_id INT NOT NULL,
+    receiver_id INT  DEFAULT NULL,
+    peer_id INT DEFAULT NULL,
+    phone VARCHAR(12) DEFAULT NULL,
+    proxy_id VARCHAR(255) DEFAULT NULL,
+    unique_id VARCHAR(255) NOT NULL,
+    destunique_id VARCHAR(255) DEFAULT NULL,
+    datetime TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
+    duration INT DEFAULT NULL,
+    file_name VARCHAR(255) DEFAULT NULL,
+    status VARCHAR(255) DEFAULT NULL,
+    model_name VARCHAR(255) NOT NULL,
+    model_id INT NOT NULL,
+    PRIMARY KEY(id));
+CREATE INDEX IDX_CC8E2F3EA5626C52 ON call (caller_id);
+ALTER TABLE call ADD CONSTRAINT FK_CC8E2F3EA5626C52 FOREIGN KEY (caller_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+-- staging ----------------------
+-- prod ----------------------

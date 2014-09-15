@@ -5,6 +5,9 @@
 /app/bootstrap.php.cache
 /app/cache/*
 /app/config/parameters.yml
+/node/ami/config/local.json
+/node/node_modules
+/node/node_modules/*
 /app/logs/*
 #!app/cache/.gitkeep
 #!app/logs/.gitkeep
