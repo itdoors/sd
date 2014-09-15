@@ -3,9 +3,9 @@
 namespace SD\TaskBundle\Interfaces;
 
 /**
- * TaskRoleInterface interface
+ * TaskAccessInterface interface
  */
-interface TaskRoleInterface
+interface TaskAccessInterface
 {
     public function isViewed();
     public function canSetDone();
@@ -13,4 +13,8 @@ interface TaskRoleInterface
     public function canSetClosed();
     public function canUploadFiles();
     public function canLeaveComment();
+    public function canSetChecking();
+    public function canAnswerDateRequest();
+
+
 }

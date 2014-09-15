@@ -2,14 +2,15 @@
 
 namespace SD\TaskBundle\Classes;
 
-use SD\TaskBundle\Interfaces\TaskRoleInterface;
+use SD\TaskBundle\Entity\Stage;
+use SD\TaskBundle\Interfaces\TaskAccessInterface;
 use SD\TaskBundle\Entity\Task;
 use SD\TaskBundle\Entity\TaskUserRole;
 
 /**
- * BasicTaskRole class
+ * BasicTaskAccess class
  */
-class BasicTaskRole implements TaskRoleInterface
+class BasicTaskAccess implements TaskAccessInterface
 {
     /**
      * @var \SD\TaskBundle\Entity\Stage
@@ -22,17 +23,23 @@ class BasicTaskRole implements TaskRoleInterface
     protected  $isViewed;
 
     /**
-     * @param TaskUserRole $taskUserRole
+     * @param Stage $stage
+     * @param bool  $isViewed
      */
-    public function __construct(TaskUserRole $taskUserRole) {
+    public function __construct(Stage $stage, $isViewed) {
+        $this->stage = $stage;
+        $this->isViewed = $isViewed;
+    }
+/*    public function __construct(TaskUserRole $taskUserRole) {
         $this->stage = $taskUserRole->getTask()->getStage();
         $this->isViewed = $taskUserRole->getIsViewed();
-    }
+    }*/
 
     /**
      * @return bool
      */
     public function isViewed() {
+
         return $this->getIsViewed();
     }
 
@@ -40,6 +47,7 @@ class BasicTaskRole implements TaskRoleInterface
      * @return bool
      */
     public function canSetDone() {
+
         return false;
     }
 
@@ -47,6 +55,7 @@ class BasicTaskRole implements TaskRoleInterface
      * @return bool
      */
     public function canSetUndone() {
+
         return false;
     }
 
@@ -54,6 +63,7 @@ class BasicTaskRole implements TaskRoleInterface
      * @return bool
      */
     public function canSetClosed() {
+
         return false;
     }
 
@@ -61,14 +71,39 @@ class BasicTaskRole implements TaskRoleInterface
      * @return bool
      */
     public function canUploadFiles() {
+
         return true;
     }
 
     /**
      * @return bool
      */
+    public function canSetChecking() {
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function canMakeDateRequest() {
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function canAnswerDateRequest() {
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
     public function canLeaveComment() {
-        if ($this->canSetClosed() || $this->canSetDone() || $this->canSetUndone()) {
+        if ($this->canSetClosed() || $this->canSetDone() || $this->canSetUndone() || $this->canMakeDateRequest()) {
             return true;
         }
 
@@ -88,4 +123,6 @@ class BasicTaskRole implements TaskRoleInterface
     public function getIsViewed() {
         return $this->isViewed;
     }
+
+
 }

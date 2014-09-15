@@ -2497,7 +2497,7 @@ class AjaxController extends BaseFilterController
 
         //if (!$data->getId()) {
         //}
-/*        if ($form->isValid()) {
+        //if ($form->isValid()) {
             $formData = $request->request->get($form->getName());
 
             $data->setCreateDate(new \DateTime());
@@ -2597,13 +2597,17 @@ class AjaxController extends BaseFilterController
                 $taskUserRole->setRole($controllerRole);
                 $taskUserRole->setUser($controller);
                 $taskUserRole->setTask($data);
-                $taskUserRole->setIsViewed(false);
+                if ($controller == $user) {
+                    $taskUserRole->setIsViewed(true);
+                } else {
+                    $taskUserRole->setIsViewed(false);
+                }
                 $em->persist($taskUserRole);
             //}
             $em->flush();
 
             return true;
-        }*/
+/*        }
 
         return $this->render('SDCommonBundle:AjaxForm:taskForm1.html.twig', array(
             'form' => $form->createView(),
@@ -2613,7 +2617,7 @@ class AjaxController extends BaseFilterController
             'targetId' => $targetId,
             'model' => $model,
             'modelId' => $modelId,
-        ));
+        ));*/
     }
 
 

@@ -2,6 +2,7 @@
 
 namespace SD\TaskBundle\Controller;
 
+use SD\TaskBundle\Classes\TaskAccessFactory;
 use SD\TaskBundle\Entity\Comment;
 use SD\TaskBundle\Entity\TaskEndDate;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -135,24 +136,11 @@ class TaskController extends Controller
      */
     private function getTasksInfoForTable($filterArray)
     {
-        if (!isset($filterArray['role']) || !count($filterArray['role'])) {
-            $role = $this->getDoctrine()
-                ->getRepository('SDTaskBundle:Role')
-                ->findOneBy(array (
-                    'name' => 'performer',
-                    'model' => 'task'
-                ));
-            $filterArray['role'][] = $role;
-        }
 
         $tasksUserRoleRepo = $this->getDoctrine()
             ->getRepository('SDTaskBundle:TaskUserRole');
 
-        $tasksUserRole = $tasksUserRoleRepo
-            ->findBy($filterArray, array (
-                'isViewed' => 'ASC',
-                'id' => 'DESC'
-            ));
+        $tasksUserRole = $tasksUserRoleRepo->getEntitiesListByFilter($filterArray);
 
         $allTaskRoles = $this->getDoctrine()
             ->getRepository('SDTaskBundle:Role')
@@ -277,13 +265,21 @@ class TaskController extends Controller
 
         $comment = $this->getLastTaskComment($taskUserRole->getTask()->getId());
 
+        $currentRole = $taskUserRole->getRole();
+        $currentStage = $taskUserRole->getTask()->getStage();
+        $currentIsViewed = $taskUserRole->getIsViewed();
+
+
+        $access = TaskAccessFactory::createAccess($currentRole, $currentStage, $currentIsViewed);
+
         $info = array (
             'taskUserRole' => $taskUserRole,
             'taskUserRoleController' => $taskUserRoleController,
             'taskUserRolePerformer' => $taskUserRolePerformer,
             'taskUserRoleAuthor' => $taskUserRoleAuthor,
             'userId' => $userId,
-            'comment' => $comment
+            'comment' => $comment,
+            'access' => $access
         );
 
         return $info;
@@ -461,7 +457,7 @@ class TaskController extends Controller
     /**
      * @param int $id
      */
-    private function closeDateRequest ($id)
+    private function closeDateRequest($id)
     {
         $em = $this->getDoctrine()->getManager();
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
@@ -482,7 +478,7 @@ class TaskController extends Controller
         if ($dateRequest) {
             $dateRequest->setStage($stageDate);
             $em->persist($dateRequest);
-            $em->flush;
+            $em->flush();
         }
     }
     /**

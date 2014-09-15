@@ -240,7 +240,7 @@
             <div class="col-md-4 col-sm-4">
                 <div class="todo-taskbody-date pull-right">
 
-                    {% if taskUserRole.isViewed != true %}
+                    {% if access.isViewed != true %}
                         <button type="button" class="todo-username-btn btn btn-circle btn-default btn-xs" id="task_set_viewed">
                             &nbsp; {% trans %}Set viewed{% endtrans %} &nbsp;
                         </button>
@@ -393,9 +393,7 @@
         <!-- TASK TAGS -->
         <div class="form-group">
             <div class="col-md-12">
-                {% if taskUserRole.role == 'controller' %}
-                    {% if taskUserRole.task.stage == 'date request'%}
-                        {% if taskUserRole.isViewed == true %}
+                {% if access.canAnswerDateRequest %}
                             <br>
                             <div class="alert alert-danger">
                                 {% trans %}Request to change date{% endtrans %}:
@@ -403,8 +401,6 @@
                                 <a data-value="0" class="btn red answerButton" style="margin-left: 10px;">{% trans %}Reject{% endtrans %}</a>
                             </div>
                             <br>
-                        {% endif %}
-                    {% endif %}
                 {% endif %}
             </div>
         </div>
@@ -416,7 +412,7 @@
         <br><br>
         {% if taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone'
         and taskUserRole.task.stage != 'closed' and taskUserRole.role != 'author' and taskUserRole.isViewed == true %}
-            {% if taskUserRole.role != 'performer' or taskUserRole.task.stage != 'checking'%}
+            {% if taskUserRole.role != 'performer' or taskUserRole.task.stage != 'checking' %}
                 <div class="form-group">
                     <div class="col-md-12" style="background-color: #f6fbfc;">
                         <br><br>
@@ -438,57 +434,45 @@
         <div class="form-group">
             <div class="col-md-12" style="background-color: #f6fbfc;">
                 <div class="form-actions right todo-form-actions" >
-                    {% if taskUserRole.isViewed == true %}
-                        {% if taskUserRole.role == 'performer' %}
-                            {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'date request'%}
-                                    <button id="task_set_done" data-stage="checking" class="stageButton btn btn-circle btn-sm green-haze">{% trans %}Set done{% endtrans %}</button>
-                            {% endif %}
-                        {% endif %}
-                        {% if taskUserRole.role == 'controller' %}
-                            {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'checking' or taskUserRole.task.stage == 'date request'%}
-                                    <button id="task_set_closed" data-stage="closed" class="stageButton btn btn-circle btn-sm green-haze">{% trans %}Close task{% endtrans %}</button>
-                                    <button id="task_set_undone" data-stage="undone" class="stageButton btn btn-circle btn-sm green-haze">{% trans %}Set undone{% endtrans %}</button>
-                            {% endif %}
-                            {% if taskUserRole.task.stage == 'checking'%}
-                                    <button id="task_set_done_controller" data-stage="done" class="stageButton btn btn-circle btn-sm green-haze">{% trans %}Set done{% endtrans %}</button>
-                                    <button id="task_set_performing_controller" data-stage="performing" class="stageButton btn btn-circle btn-sm green-haze">{% trans %}Re-make{% endtrans %}</button>
-                            {% endif %}
-                        {% endif %}
+                    {% if access.canSetDone %}
+                        <button id="task_set_done" data-stage="checking" class="stageButton btn btn-circle btn-sm green-haze" style="margin-top:5px;">{% trans %}Set done{% endtrans %}</button>
                     {% endif %}
-
-
-
-
-
-                    {% if taskUserRole.task.stage != 'date request' and taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone' and taskUserRole.task.stage != 'closed' and taskUserRole.task.stage != 'checking'
-                    and taskUserRole.role != 'author' and taskUserRole.isViewed == true %}
-                        <button id="task_change_date" class="btn btn-circle btn-sm green-haze">{% trans %}Change the end date{% endtrans %}</button>
+                    {% if access.canSetClosed %}
+                        <button id="task_set_closed" data-stage="closed" class="stageButton btn btn-circle btn-sm green-haze" style="margin-top:5px;">{% trans %}Close task{% endtrans %}</button>
+                    {% endif %}
+                    {% if access.canSetUndone %}
+                        <button id="task_set_undone" data-stage="undone" class="stageButton btn btn-circle btn-sm green-haze" style="margin-top:5px;">{% trans %}Set undone{% endtrans %}</button>
+                    {% endif %}
+                    {% if access.canSetChecking %}
+                        <button id="task_set_done_controller" data-stage="done" class="stageButton btn btn-circle btn-sm green-haze" style="margin-top:5px;">{% trans %}Set done{% endtrans %}</button>
+                        <button id="task_set_performing_controller" data-stage="performing" class="stageButton btn btn-circle btn-sm green-haze" style="margin-top:5px;">{% trans %}Re-make{% endtrans %}</button>
+                    {% endif %}
+                    {% if access.canMakeDateRequest %}
+                        <button id="task_change_date" class="btn btn-circle btn-sm green-haze" style="margin-top:5px;">{% trans %}Change the end date{% endtrans %}</button>
                     {% endif %}
                 </div>
             </div>
         </div>
-        {% if taskUserRole.task.stage != 'date request' and taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone' and taskUserRole.task.stage != 'closed' and taskUserRole.task.stage != 'checking'
-        and taskUserRole.role != 'author' and taskUserRole.isViewed == true %}
+        {% if access.canMakeDateRequest %}
+            <div class="form-group">
+                <div class="col-md-12" style="background-color: #f6fbfc;">
 
-        <div class="form-group">
-            <div class="col-md-12" style="background-color: #f6fbfc;">
-
-                <div id="change_date_holder" style="display: none">
-                    <div class="form-group">
-                        <div class="col-md-10">
-                            <div class="input-icon">
-                                <i class="fa fa-calendar"></i>
-                                <input type="text" id="new_date_holder" class="form-control todo-taskbody-due" placeholder="{% trans %}New date end{% endtrans %}">
+                    <div id="change_date_holder" style="display: none">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <div class="input-icon">
+                                    <i class="fa fa-calendar"></i>
+                                    <input type="text" id="new_date_holder" class="form-control todo-taskbody-due" placeholder="{% trans %}New date end{% endtrans %}">
+                                </div>
                             </div>
+                            <div class="col-md-2">
+                                    <button class="btn btn-circle btn-sm btn-default changeDateCalendar">{% trans %}Change{% endtrans %}</button>
+                            </div>
+                            <br><br>
                         </div>
-                        <div class="col-md-2">
-                                <button class="btn btn-circle btn-sm btn-default changeDateCalendar">{% trans %}Change{% endtrans %}</button>
-                        </div>
-                        <br><br>
                     </div>
                 </div>
             </div>
-        </div>
         {% endif %}
 
     </div>

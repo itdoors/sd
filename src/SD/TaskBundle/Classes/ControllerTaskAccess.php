@@ -2,13 +2,12 @@
 
 namespace SD\TaskBundle\Classes;
 
-use SD\TaskBundle\Interfaces\TaskRoleInterface;
 use SD\TaskBundle\Entity\Task;
 use SD\TaskBundle\Entity\TaskUserRole;
 /**
- * ControllerTaskRole class
+ * ControllerTaskAccess class
  */
-class ControllerTaskRole extends BasicTaskRole
+class ControllerTaskAccess extends BasicTaskAccess
 {
     /**
      * @return bool
@@ -64,4 +63,45 @@ class ControllerTaskRole extends BasicTaskRole
             return true;
         }
     }
+
+    /**
+     * @return bool
+     */
+    public function canSetChecking() {
+        if ($this->stage == 'checking') {
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function canMakeDateRequest() {
+        if ($this->isViewed()) {
+            if ($this->stage == 'created' || $this->stage == 'performing') {
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function canAnswerDateRequest() {
+        if ($this->isViewed()) {
+            if ($this->stage == 'date request') {
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

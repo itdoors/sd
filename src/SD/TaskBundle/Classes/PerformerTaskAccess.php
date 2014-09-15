@@ -2,13 +2,12 @@
 
 namespace SD\TaskBundle\Classes;
 
-use SD\TaskBundle\Interfaces\TaskRoleInterface;
 use SD\TaskBundle\Entity\Task;
 use SD\TaskBundle\Entity\TaskUserRole;
 /**
- * PerformerTaskRole class
+ * PerformerTaskAccess class
  */
-class PerformerTaskRole extends BasicTaskRole
+class PerformerTaskAccess extends BasicTaskAccess
 {
     /**
      * @return bool
@@ -22,6 +21,21 @@ class PerformerTaskRole extends BasicTaskRole
 
         return false;
     }
+
+    /**
+     * @return bool
+     */
+    public function canMakeDateRequest() {
+        if ($this->isViewed()) {
+            if ($this->stage == 'created' || $this->stage == 'performing') {
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     /**
      * @return bool

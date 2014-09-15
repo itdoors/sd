@@ -34,4 +34,36 @@ class TaskUserRoleRepository extends EntityRepository
 
         return $sql->getQuery()->getSingleScalarResult();
     }
+
+
+
+    public function getEntitiesListByFilter($filterArray) {
+
+        $notViewingStages = array('closed', 'undone', 'done');
+        $sql = $this->createQueryBuilder('tur')
+            ->leftJoin('tur.role', 'r')
+            ->leftJoin('tur.task', 't')
+            ->leftJoin('t.stage', 's')
+            ->leftJoin('tur.user', 'u');
+
+        $sql->where('s.name NOT IN (:stage)')
+            ->setParameter(':stage', $notViewingStages);
+
+        if (isset($filterArray['role']) && count($filterArray['role'])) {
+            $sql->andWhere('r IN (:role)')
+                ->setParameter(':role', $filterArray['role']);
+        } else {
+            $sql->andWhere('r.name IN (:role)')
+                ->setParameter(':role', array('performer'));
+        }
+
+        if (isset($filterArray['user'])) {
+            $sql->andWhere('u = :user')
+                ->setParameter(':user', $filterArray['user']);
+        }
+
+        $sql->orderBy('t.createDate', 'DESC');
+
+        return $sql->getQuery()->getResult();
+    }
 }
