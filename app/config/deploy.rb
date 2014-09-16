@@ -78,7 +78,7 @@ task :upload_parameters do
   end
 end
 
-before 'deploy', 'upload_parameters'
+before 'update_vendors', 'upload_parameters'
 
 after "deploy:update_code" do
   capifony_pretty_print "--> Ensuring cache directory permissions"
