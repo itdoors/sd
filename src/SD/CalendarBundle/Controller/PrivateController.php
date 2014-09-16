@@ -192,8 +192,8 @@ class PrivateController extends SalesController
             $events[] = array(
                 'hover_title' => '',
                 'title' => $translator->trans('Birthday', array(), 'SDDashboardBundle').' '. $fullName,
-                'start' => $user->getBirthday()->format('Y-m-d'),
-                'end' => $user->getBirthday()->format('Y-m-d'),
+                'start' => date('Y').'-'.$user->getBirthday()->format('m-d'),
+                'end' => date('Y').'-'.$user->getBirthday()->format('m-d'),
                 'allDay' => false,
                 'url' => $this->generateUrl('sd_user_show', array(
                             'id' => $user->getId()

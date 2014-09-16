@@ -1,0 +1,52 @@
+{% trans_default_domain 'ListsOrganizationBundle' %}
+<script>
+    $(document).ready(function(){
+        $('.scopeId').editable({
+            url: '{{ path('sd_common_ajax_dogovor_save') }}',
+            source: '{{ path('sd_common_ajax_dogovor_type') }}',
+            select2: {
+                placeholder: '{% trans %}Select type{% endtrans %}',
+                minimumInputLength: 0,
+                width: 250
+            }
+        });
+    });
+</script>
+<div class="table-responsive table-scrollable">
+    <table class="table table-striped table-bordered table-advance table-hover">
+        <thead>
+        <tr>
+            <th>{% trans %}#{% endtrans %} </th>
+            <th>{% trans %}Code{% endtrans %} </th>
+            <th>{% trans %}Name{% endtrans %} </th>
+            <th>{% trans %}Actions{% endtrans %} </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% set counter = 0 %}
+        {% for kved in kveds %}
+            {% set counter = counter + 1 %}
+            <tr {% if loop.index is odd %}class="color"{% endif %}>
+                <td><span data-id="{{ kved.id }}">{{ kved.id }}</span></td>
+                <td>{{ kved.code }}</td>
+                <td>
+{#
+                    <a href="#" id="scopeId" class="scopeId" data-type="select2" data-pk="{{ kved.id }}" data-value="{{ kved.name }}" data-placement="right" data-original-title="{% trans %}Enter scope{% endtrans %}">
+#}
+                        {{ kved.name }}
+{#
+                    </a>
+#}
+                </td>
+                <td>
+                    <a class="ajax-delete fa fa-trash-o"
+                       title="{% trans %}Delete{% endtrans %}"
+                       href="javascript:;"
+                       data-params='{"model":"Kved","id":{{ kved.id }},"organization":{{ organizationId }}}'
+                            ></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -39,6 +39,22 @@ lists_sales_organization_service_cover_list:
     pattern:  /lists/sales/organization/service/cover/list/{organizationId}
     defaults: { _controller: ListsOrganizationBundle:ServiceCover:list }
     methods:   [GET, POST]
+
+lists_sales_organization_show_list_document:
+    pattern:  /lists/sales/organization/show/list/document/{id}
+    defaults: { _controller: ListsOrganizationBundle:Sales:listDocument }
+
+lists_sales_organization_show_list_dogovor:
+    pattern:  /lists/sales/organization/show/list/dogovor/{id}
+    defaults: { _controller: ListsOrganizationBundle:Sales:listDogovor }
+
+lists_sales_organization_show_list_coea:
+    pattern:  /lists/sales/organization/show/list/coea/{id}
+    defaults: { _controller: ListsOrganizationBundle:Sales:listCoea }
+
+lists_sales_organization_show_list_kved:
+    pattern:  /lists/sales/organization/show/list/kved/{id}
+    defaults: { _controller: ListsOrganizationBundle:Sales:listKved }
 #SALES DISPATCHER ROUTES
 
 lists_sales_dispatcher_organization_index:
