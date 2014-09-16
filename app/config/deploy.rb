@@ -48,7 +48,6 @@ set :webserver_user,      "nginx"
 
 before 'symfony:composer:install', 'composer:copy_vendors'
 before 'symfony:composer:update', 'composer:copy_vendors'
-after 'symfony:composer:update', 'upload_parameters'
 
 namespace :composer do
   task :copy_vendors, :except => { :no_release => true } do
@@ -78,6 +77,8 @@ task :upload_parameters do
     top.upload(origin_file, destination_file)
   end
 end
+
+after 'deploy:finalize_update', 'upload_parameters'
 
 after "deploy:update_code" do
   capifony_pretty_print "--> Ensuring cache directory permissions"
