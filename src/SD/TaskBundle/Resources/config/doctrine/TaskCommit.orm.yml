@@ -1,0 +1,28 @@
+SD\TaskBundle\Entity\TaskCommit:
+    type:  entity
+    table: task_commit
+    repositoryClass: SD\TaskBundle\Entity\TaskCommitRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+    manyToOne:
+        stage:
+            targetEntity: SD\TaskBundle\Entity\Stage
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                stage_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        taskUserRole:
+            targetEntity: SD\TaskBundle\Entity\TaskUserRole
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                task_user_role_id:
+                    referencedColumnName: id
+            orphanRemoval: false

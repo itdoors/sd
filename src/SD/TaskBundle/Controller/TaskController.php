@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
 class TaskController extends Controller
 {
     /**
+     * Renders the index page with count of tasks and its list
+     *
      * @return Response
      */
     public function indexAction ()
@@ -96,7 +98,6 @@ class TaskController extends Controller
 
         $comments = $commentRepository->findBy(array (
             'model' => 'Task',
-            //'user' => $user,
             'modelId' => $idTask
         ), array (
             'createDatetime' => 'DESC'
@@ -136,7 +137,6 @@ class TaskController extends Controller
      */
     private function getTasksInfoForTable($filterArray)
     {
-
         $tasksUserRoleRepo = $this->getDoctrine()
             ->getRepository('SDTaskBundle:TaskUserRole');
 
@@ -242,6 +242,12 @@ class TaskController extends Controller
             'model' => 'task'
         ));
 
+        $matcherRole = $roleRepository
+            ->findOneBy(array(
+                'name' => 'matcher',
+                'model' => 'task'
+            ));
+
         $taskUserRoleController = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
             array (
                 'task' => $taskUserRole->getTask(),
@@ -263,6 +269,14 @@ class TaskController extends Controller
             )
         );
 
+        $taskUserRoleMatcher = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
+            array (
+                'task' => $taskUserRole->getTask(),
+                'role' => $matcherRole
+            )
+        );
+
+
         $comment = $this->getLastTaskComment($taskUserRole->getTask()->getId());
 
         $currentRole = $taskUserRole->getRole();
@@ -277,44 +291,13 @@ class TaskController extends Controller
             'taskUserRoleController' => $taskUserRoleController,
             'taskUserRolePerformer' => $taskUserRolePerformer,
             'taskUserRoleAuthor' => $taskUserRoleAuthor,
+            'taskUserRoleMatcher' => $taskUserRoleMatcher,
             'userId' => $userId,
             'comment' => $comment,
             'access' => $access
         );
 
         return $info;
-    }
-    /**
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function showTaskPageAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $info = $this->getTaskUserRoleInfo($id);
-
-        $commentRepository = $this->getDoctrine()
-            ->getRepository('SDTaskBundle:Comment');
-
-        //$user = $this->getUser();
-
-        /* $task = $this->getDoctrine()
-          ->getRepository('SDTaskBundle:Task')->find($idTask); */
-        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
-        $idTask = $taskUserRole->getTask()->getId();
-
-        $comments = $commentRepository->findBy(array (
-            'model' => 'Task',
-            //'user' => $user,
-            'modelId' => $idTask
-            ), array (
-            'createDatetime' => 'DESC'
-        ));
-        $info['comments'] = $comments;
-
-        return $this->render('SDTaskBundle:Task:taskPage.html.twig', $info);
     }
     /**
      * @param int $idTask
@@ -325,11 +308,6 @@ class TaskController extends Controller
     {
         $commentRepository = $this->getDoctrine()
             ->getRepository('SDTaskBundle:Comment');
-
-        //$user = $this->getUser();
-
-        /* $task = $this->getDoctrine()
-          ->getRepository('SDTaskBundle:Task')->find($idTask); */
 
         $lastComment = $commentRepository->findOneBy(array (
             'model' => 'Task',
@@ -367,9 +345,9 @@ class TaskController extends Controller
     }
     /**
      * @param int  $id
-     * @param bool $type
+     * @param bool $forceCheck
      */
-    private function checkIfCanPerform ($id, $type = false)
+    private function checkIfCanPerform ($id, $forceCheck = false)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -389,7 +367,7 @@ class TaskController extends Controller
             'task' => $task,
             'role' => $performerRole
         ));
-        if ($taskUserRole->getRole()->getName() != 'controller' || $type) {
+        if ($taskUserRole->getRole()->getName() != 'controller' || $forceCheck) {
             $performing = true;
             foreach ($tasksUserRole as $taskPerforming) {
                 if ($taskPerforming->getIsViewed() == false) {
@@ -777,14 +755,14 @@ class TaskController extends Controller
             'id' => 'DESC'
         ));
 
-        $newDate = new \DateTime($value);//$date->getEndDateTime()->add(new \DateInterval($stringAddDate));
+        $newDate = new \DateTime($value);
 
         $newTaskEndDate = new TaskEndDate();
         $newTaskEndDate->setEndDateTime($newDate);
         $translator = $this->get('translator');
-
+        // comment block //
         if ($taskUserRole->getRole() == 'controller') {
-            $newTaskEndDate->setStage($stageDate);
+            $newTaskEndDate->setStage($stageDate); //set without request, coz CONTROLLER did it, behold)
             $comment = $translator->trans('Changed the end date', array(), 'SDTaskBundle').
                 ' :'.$newDate->format('d-m-Y H:i');
             if ($commentValue) {
@@ -795,6 +773,7 @@ class TaskController extends Controller
             $this->insertComment($id, $comment);
         } else {
             $newTaskEndDate->setStage($stageRequest);
+            //set with request, coz CONTROLLER have to take a decision about it
             $stageDateRequest = $em->getRepository('SDTaskBundle:Stage')->findOneby(array (
                 'name' => 'date request',
                 'model' => 'task',
@@ -809,6 +788,7 @@ class TaskController extends Controller
 
             $this->insertComment($id, $comment);
         }
+        // end comment block //
         $newTaskEndDate->setTask($task);
         $newTaskEndDate->setChangeDateTime(new \DateTime());
 

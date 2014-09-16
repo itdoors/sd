@@ -22,6 +22,10 @@ class TaskAccessFactory
             return new AuthorTaskAccess($stage, $isViewed);
         } elseif ($stringAccess == 'controller') {
             return new ControllerTaskAccess($stage, $isViewed);
+        } elseif ($stringAccess == 'matcher') {
+            return new MatcherTaskAccess($stage, $isViewed);
+        } else {
+            return new BasicTaskAccess($stage, $isViewed);
         }
     }
 }

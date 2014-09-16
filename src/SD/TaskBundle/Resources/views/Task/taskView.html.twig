@@ -261,63 +261,6 @@
                             &nbsp; {% trans %}Set viewed{% endtrans %} &nbsp;
                         </button>
                     {% endif %}
-                    {#
-                {% else %}
-                    {% set showAction = false %}
-                    {% if taskUserRole.role == 'performer' %}
-                        {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'date request'%}
-                            {% set showAction = true %}
-                        {% endif %}
-                    {% endif %}
-                    {% if taskUserRole.role == 'controller' %}
-                        {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'checking' or taskUserRole.task.stage == 'date request'%}
-                            {% set showAction = true %}
-                        {% endif %}
-                        {% if taskUserRole.task.stage == 'checking'%}
-                            {% set showAction = true %}
-                        {% endif %}
-                    {% endif %}
-                    {% if showAction == true %}
-                    <div class="actions">
-                            <div class="btn-group">
-                                <a class="btn green-haze btn-circle btn-sm" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                    {% trans %}Contol{% endtrans %} <i class="fa fa-angle-down"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    {% if taskUserRole.role == 'performer' %}
-                                        {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'date request'%}
-                                        <li>
-                                            <a id="task_set_done" data-stage="checking" class="stageButton">{% trans %}Set done{% endtrans %}</a>
-                                        </li>
-                                        {% endif %}
-                                    {% endif %}
-                                    {% if taskUserRole.role == 'controller' %}
-                                        {% if taskUserRole.task.stage == 'created' or taskUserRole.task.stage == 'performing' or taskUserRole.task.stage == 'checking' or taskUserRole.task.stage == 'date request'%}
-                                            <li>
-                                                <a id="task_set_closed" data-stage="closed" class="stageButton">{% trans %}Close task{% endtrans %}</a>
-                                            </li>
-                                            <li>
-                                                <a id="task_set_undone" data-stage="undone" class="stageButton">{% trans %}Set undone{% endtrans %}</a>
-                                            </li>
-                                        {% endif %}
-                                        {% if taskUserRole.task.stage == 'checking'%}
-                                            <li>
-                                                <a id="task_set_done_controller" data-stage="done" class="stageButton">{% trans %}Set done{% endtrans %}</a>
-                                            </li>
-                                            <li>
-                                                <a id="task_set_performing_controller" data-stage="performing" class="stageButton">{% trans %}Re-make{% endtrans %}</a>
-                                            </li>
-                                        {% endif %}
-
-
-                                    {% endif %}
-                                </ul>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endif %}
-#}
-
 
                 </div>
             </div>
@@ -390,6 +333,19 @@
                         {{ author.user }}
                     {% endfor %}
                 {% endif %}
+
+                {% if taskUserRoleMatcher|length %}
+                <br>
+                <b>{% trans %}Matcher{% endtrans %}</b>:
+                    {% for matcher in taskUserRoleMatcher %}
+                        {{ matcher.user }}
+                        {% if matcher.isViewed !=true %}
+                            <span style="color: red; font-size: smaller;">({% trans %}Not viewed{% endtrans %})</span>
+                        {% endif %}
+
+                    {% endfor %}
+                {% endif %}
+                <br><br>
             </div>
         </div>
 

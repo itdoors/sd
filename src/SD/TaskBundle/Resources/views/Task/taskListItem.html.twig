@@ -1,10 +1,13 @@
 {% trans_default_domain 'SDTaskBundle' %}
+{% set color = 'grey' %}
 {% if taskUserRole.role == 'author' %}
     {% set color = 'red' %}
 {% elseif taskUserRole.role == 'performer' %}
     {% set color = 'blue' %}
 {% elseif taskUserRole.role == 'controller' %}
     {% set color = 'yellow' %}
+{% elseif taskUserRole.role == 'matcher' %}
+    {% set color = 'purple' %}
 {% endif %}
 
 {% set stage = taskUserRole.task.stage %}
@@ -21,6 +24,8 @@
 {% elseif stage == 'closed' %}
     {% set labelStage = 'label-primary' %}
 {% elseif stage == 'checking' %}
+    {% set labelStage = 'label-warning' %}
+{% elseif stage == 'matching' %}
     {% set labelStage = 'label-warning' %}
 {% endif %}
 

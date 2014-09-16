@@ -2504,14 +2504,24 @@ class AjaxController extends BaseFilterController
         $data->setAuthor($user);
         $data->setStartDate(new \DateTime($formData['startDate']));
 
-        $stage = $this->getDoctrine()
-            ->getRepository('SDTaskBundle:Stage')
-            ->findOneBy(array(
-                'model' =>'task',
-                'name' => 'created'
-            ));
+        if ($formData['matcher']) {
+            $stageMatching = $this->getDoctrine()
+                ->getRepository('SDTaskBundle:Stage')
+                ->findOneBy(array(
+                    'model' =>'task',
+                    'name' => 'matching'
+                ));
+            $data->setStage($stageMatching);
 
-        $data->setStage($stage);
+        } else {
+            $stageCreated = $this->getDoctrine()
+                ->getRepository('SDTaskBundle:Stage')
+                ->findOneBy(array(
+                    'model' =>'task',
+                    'name' => 'created'
+                ));
+            $data->setStage($stageCreated);
+        }
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
@@ -2572,6 +2582,11 @@ class AjaxController extends BaseFilterController
                 'name' => 'author',
                 'model' => 'task'
             ));
+        $matcherRole  = $roleRepository
+            ->findOneBy(array(
+                'name' => 'matcher',
+                'model' => 'task'
+            ));
 
         $taskUserRole = new \SD\TaskBundle\Entity\TaskUserRole();
         $taskUserRole->setRole($authorRole);
@@ -2591,6 +2606,17 @@ class AjaxController extends BaseFilterController
         $taskUserRole->setTask($data);
         $taskUserRole->setIsViewed(false);
         $em->persist($taskUserRole);
+
+        if ($formData['matcher']) {
+            $idMatcher = $formData['matcher'];
+            $matcher = $userRepository->find($idMatcher);
+            $taskUserRole = new \SD\TaskBundle\Entity\TaskUserRole();
+            $taskUserRole->setRole($matcherRole);
+            $taskUserRole->setUser($matcher);
+            $taskUserRole->setTask($data);
+            $taskUserRole->setIsViewed(false);
+            $em->persist($taskUserRole);
+        }
     //}
 
     //foreach ($formData['controller'] as $idController) {

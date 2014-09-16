@@ -131,4 +131,23 @@ class BasicTaskAccess implements TaskAccessInterface
     {
         return $this->isViewed;
     }
+
+    /**
+     * @return bool
+     */
+    public function canSignUp()
+    {
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function canRefuseSignUp()
+    {
+
+        return false;
+    }
+
 }

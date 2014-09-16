@@ -32,6 +32,9 @@ Controller: Контролирующий
 controller: Контролирующий
 Author: Автор
 author: Автор
+matcher: Согласующий
+matching: Согласовуется
+Matcher: Согласующий
 checking: Проверяется
 performing: Исполняется
 date request: Запрос переноса даты
@@ -46,6 +49,7 @@ Title: Название
 My role: Моя роль
 
 Enter performer: Введите исполнителя
+Enter matcher: Введите согласующего
 Creator: Автор
 Created: Созданные
 Go to: Перейти

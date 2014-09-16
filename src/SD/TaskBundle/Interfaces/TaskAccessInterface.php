@@ -40,4 +40,14 @@ interface TaskAccessInterface
      * @return bool
      */
     public function canAnswerDateRequest();
+
+    /**
+     * @return bool
+     */
+    public function canSignUp();
+
+    /**
+     * @return bool
+     */
+    public function canRefuseSignUp();
 }
