@@ -282,10 +282,11 @@ class UserRepository extends EntityRepository
     {
         return $this->createQueryBuilder('u')
             ->select('u')
-            ->where('MONTH(u.birthday) >= :startDate')
-            ->andWhere('MONTH(u.birthday) <= :endDat')
-            ->setParameter(':startDate', date('m', $startTimestamp))
-            ->setParameter(':endDat', date('m', $endTimestamp))
+            ->where('u.birthday is not null')
+//            ->where('MONTH(u.birthday) >= :startDate')
+//            ->andWhere('MONTH(u.birthday) <= :endDat')
+//            ->setParameter(':startDate', date('m', $startTimestamp))
+//            ->setParameter(':endDat', date('m', $endTimestamp))
             ->getQuery()
             ->getResult();
     }

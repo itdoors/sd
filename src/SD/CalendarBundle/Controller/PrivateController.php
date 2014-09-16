@@ -196,8 +196,8 @@ class PrivateController extends SalesController
                 'end' => date('Y').'-'.$user->getBirthday()->format('m-d'),
                 'allDay' => false,
                 'url' => $this->generateUrl('sd_user_show', array(
-                            'id' => $user->getId()
-                        )),
+                    'id' => $user->getId()
+                )),
                 );
         }
 
