@@ -29,5 +29,6 @@ parameters:
     ami.host: 193.242.166.54
     ami.port: 8888
     sip.host: 95.67.67.170
+    sip.host.proxy: 192.168.4.4
     sip.port.udp: 5060
     sip.port.ws: 10060
