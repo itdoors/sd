@@ -1057,5 +1057,9 @@ CREATE INDEX IDX_757DAA7E2298D193 ON task_commit (stage_id);
 CREATE INDEX IDX_757DAA7E469F188B ON task_commit (task_user_role_id);
 ALTER TABLE task_commit ADD CONSTRAINT FK_757DAA7E2298D193 FOREIGN KEY (stage_id) REFERENCES stage (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE task_commit ADD CONSTRAINT FK_757DAA7E469F188B FOREIGN KEY (task_user_role_id) REFERENCES task_user_role (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+INSERT INTO stage (name, model) VALUES ('sign_up', 'task_commit');
+INSERT INTO stage (name, model) VALUES ('refused_sign_up', 'task_commit');
+ALTER TABLE comment ALTER COLUMN value TYPE text;
 -- staging ----
 -- prod ----

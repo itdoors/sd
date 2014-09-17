@@ -79,6 +79,7 @@ class TaskForm extends AbstractType
                 'class' => 'SD\UserBundle\Entity\User',
                 'empty_value' => '',
                 'required' => false,
+                'multiple' => true,
                 //'data' => $user,
                 'query_builder' => function (\SD\UserBundle\Entity\UserRepository $repository) use ($userId) {
                         return $repository->createQueryBuilder('u')
@@ -121,6 +122,7 @@ class TaskForm extends AbstractType
             $builder->add('matcher', 'entity', array(
                 'mapped' => false,
                 'class' => 'SD\UserBundle\Entity\User',
+                'multiple' => 'true',
                 'empty_value' => '',
                 'required' => false,
                 //'data' => $user,

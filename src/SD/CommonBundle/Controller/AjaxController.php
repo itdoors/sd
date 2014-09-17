@@ -2607,15 +2607,17 @@ class AjaxController extends BaseFilterController
         $taskUserRole->setIsViewed(false);
         $em->persist($taskUserRole);
 
-        if ($formData['matcher']) {
-            $idMatcher = $formData['matcher'];
-            $matcher = $userRepository->find($idMatcher);
-            $taskUserRole = new \SD\TaskBundle\Entity\TaskUserRole();
-            $taskUserRole->setRole($matcherRole);
-            $taskUserRole->setUser($matcher);
-            $taskUserRole->setTask($data);
-            $taskUserRole->setIsViewed(false);
-            $em->persist($taskUserRole);
+        if (count($formData['matcher'])) {
+            foreach($formData['matcher'] as $idMatcher) {
+            //$idMatcher = $formData['matcher'];
+                $matcher = $userRepository->find($idMatcher);
+                $taskUserRole = new \SD\TaskBundle\Entity\TaskUserRole();
+                $taskUserRole->setRole($matcherRole);
+                $taskUserRole->setUser($matcher);
+                $taskUserRole->setTask($data);
+                $taskUserRole->setIsViewed(false);
+                $em->persist($taskUserRole);
+            }
         }
     //}
 

@@ -4,6 +4,7 @@ namespace SD\TaskBundle\Controller;
 
 use SD\TaskBundle\Classes\TaskAccessFactory;
 use SD\TaskBundle\Entity\Comment;
+use SD\TaskBundle\Entity\TaskCommit;
 use SD\TaskBundle\Entity\TaskEndDate;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -104,6 +105,16 @@ class TaskController extends Controller
         ));
 
         $info['comments'] = $comments;
+
+        $commentsMatching = $commentRepository->findBy(array (
+            'model' => 'TaskMatching',
+            'modelId' => $idTask
+        ), array (
+            'createDatetime' => 'DESC'
+        ));
+
+        $info['comments'] = $comments;
+        $info['commentsMatching'] = $commentsMatching;
 
         $info['taskUserRole'] = $taskUserRole;
 
@@ -651,8 +662,9 @@ class TaskController extends Controller
     /**
      * @param int    $idTaskUserRole
      * @param string $commentValue
+     * @param string $model
      */
-    protected function insertComment($idTaskUserRole, $commentValue)
+    protected function insertComment($idTaskUserRole, $commentValue, $model = 'Task')
     {
         $em = $this->getDoctrine()->getManager();
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($idTaskUserRole);
@@ -663,7 +675,7 @@ class TaskController extends Controller
 
         $comment->setValue($commentValue);
         $comment->setCreateDatetime(new \DateTime());
-        $comment->setModel('Task');
+        $comment->setModel($model);
         $comment->setModelId($idTask);
         $comment->setUser($user);
 
@@ -796,6 +808,115 @@ class TaskController extends Controller
 
         $em->persist($task);
         $em->flush();
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
+
+
+    /**
+    * Function to handle the ajax queries from editable elements
+    *
+    * @return mixed[]
+    */
+    public function editableTaskAction()
+    {
+        $pk = $this->get('request')->request->get('pk');
+        $value = $this->get('request')->request->get('value');
+        $name = $this->get('request')->request->get('name');
+
+        $em = $this->getDoctrine()->getManager();
+
+        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($pk);
+
+        $task = $taskUserRole->getTask();
+        $translator = $this->get('translator');
+        if ($name == 'title') {
+            $task->setTitle($value);
+            $em->persist($task);
+            $comment = $translator->trans('Changed the title', array(), 'SDTaskBundle').
+                ' :'.$value;
+
+        } elseif ($name == 'description') {
+            $task->setDescription($value);
+            $em->persist($task);
+            $comment = $translator->trans('Changed the description', array(), 'SDTaskBundle').
+                ' :'.$value;
+
+        } elseif ($name == 'date') {
+
+            $newDate = new \DateTime($value);
+
+            $taskEndDate = $em->getRepository('SDTaskBundle:TaskEndDate')->findOneBy(array (
+                'task' => $task
+            ));
+            $taskEndDate->setEndDateTime($newDate);
+            $em->persist($taskEndDate);
+
+            $comment = $translator->trans('Changed the end date', array(), 'SDTaskBundle').
+                ' :'.$newDate->format('d-m-Y H:i');
+
+        }
+
+        $this->insertComment($pk, $comment, 'TaskMatching');
+
+        $em->flush();
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
+
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function signUpTaskAction(Request $request) {
+        $id = $request->request->get('id');
+        $status = $request->request->get('status');
+        $commentValue = $request->request->get('comment');
+
+        $translator = $this->get('translator');
+        $em = $this->getDoctrine()->getManager();
+
+        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
+
+        $taskCommit = $em->getRepository('SDTaskBundle:TaskCommit')->findOneBy(array(
+            'taskUserRole' => $taskUserRole
+        ));
+
+        if ($status) {
+            $stageName = 'sign_up';
+            $comment = $translator->trans('Signed up', array(), 'SDTaskBundle');
+
+        } else {
+            $stageName = 'refused_sign_up';
+            $comment = $translator->trans('Refused to signed up', array(), 'SDTaskBundle');
+        }
+        $stage = $em->getRepository('SDTaskBundle:Stage')->findOneby(array (
+            'name' => $stageName,
+            'model' => 'task_commit',
+        ));
+
+
+        if (!$taskCommit) {
+            $taskCommit = new TaskCommit();
+        }
+        $taskCommit->setStage($stage);
+        $taskCommit->setTaskUserRole($taskUserRole);
+
+        $em->persist($taskCommit);
+
+        $comment .= '<br>
+            '.$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
+
+        $this->insertComment($id, $comment, 'TaskMatching');
+
+        $em->flush();
+
 
         $return['success'] = 1;
 

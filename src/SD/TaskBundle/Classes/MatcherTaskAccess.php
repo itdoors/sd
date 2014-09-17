@@ -30,4 +30,16 @@ class MatcherTaskAccess extends BasicTaskAccess
         }
         return false;
     }
+
+    /**
+     * @return bool
+     */
+    public function canLeaveComment() {
+        if ($this->canRefuseSignUp() || $this->canSignUp()) {
+
+            return true;
+        }
+
+        return false;
+    }
 }

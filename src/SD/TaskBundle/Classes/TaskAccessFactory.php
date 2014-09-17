@@ -12,7 +12,7 @@ class TaskAccessFactory
      * @param \SD\TaskBundle\Entity\Stage $stage
      * @param bool                        $isViewed
      *
-     * @return AuthorTaskAccess|ControllerTaskAccess|PerformerTaskAccess
+     * @return AuthorTaskAccess|ControllerTaskAccess|PerformerTaskAccess|MatcherTaskAccess
      */
     public static function createAccess($stringAccess, $stage, $isViewed)
     {

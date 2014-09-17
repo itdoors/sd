@@ -89,6 +89,37 @@
             })
         })
 
+        $('.signUpButton').die('click');
+        $('.signUpButton').live('click', function(e){
+            var status = $(this).data('status');
+
+            var id = $('#task_modal_info_holder').data('id');
+            var url = $('#task_modal_info_holder').data('url_sign_up');
+
+            var comment = getComment();
+            var sendData = {
+                'id': id,
+                'status': status,
+                'comment' : comment
+            }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data1) {
+                    //alert(data1)
+                    data = JSON.parse(data1);
+                    if (data.success == 1) {
+                        updateTask();
+                    } else {
+
+                    }
+                }
+
+            })
+        })
+
+
         $('.changeDateCalendar').die('click');
         $('.changeDateCalendar').live('click', function(e){
             var value = $('#new_date_holder').val();
@@ -270,13 +301,42 @@
         <div class="form-group">
             <div class="col-md-12">
                 <br>
-                <h3>{{ taskUserRole.task.title }}</h3>
+                <h3>
+                    {% if access.canEditDescription %}
+                        <a href="#" id="title" data-type="text"
+                           data-pk="{{ taskUserRole.id }}" data-placement="top"
+                           data-original-title="{% trans %}Enter description{% endtrans %}"
+                           data-name="title">
+                            {{ taskUserRole.task.title }}
+                        </a>
+                        <script>
+                            $('#title').editable({
+                                url: '{{ path('sd_task_editable') }}'
+                            });
+                        </script>
+                    {% else %}
+                        {{ taskUserRole.task.title }}
+                    {% endif %}
+
+                </h3>
             </div>
         </div>
         <!-- TASK DESC -->
         <div class="form-group">
             <div class="col-md-12">
-                {{ taskUserRole.task.description }}
+                {% if access.canEditDescription %}
+                    <a href="#" id="description" data-type="textarea"
+                       data-pk="{{ taskUserRole.id }}" data-placement="top"
+                       data-original-title="{% trans %}Enter description{% endtrans %}"
+                       data-name="description">{{ taskUserRole.task.description }}</a>
+                    <script>
+                        $('#description').editable({
+                            url: '{{ path('sd_task_editable') }}'
+                        });
+                    </script>
+                {% else %}
+                    {{ taskUserRole.task.description }}
+                {% endif %}
                 <br><br>
             </div>
         </div>
@@ -289,10 +349,45 @@
                 <div class="input-icon">
                     {#<i class="fa fa-calendar"></i>#}
                     {% trans %}End date{% endtrans %}:<br>
-                        {{ include ('SDTaskBundle:Task:taskEndDate.html.twig', {
-                            'taskEndDates': taskUserRole.task.taskEndDates,
-                            'stage': taskUserRole.task.stage
+
+                    {% if access.canEditDescription %}
+
+                    <a href="#" id="endDate" data-type="datetime" data-pk="{{ taskUserRole.id }}"
+                       data-original-title="{% trans %}Enter date{% endtrans %}"
+                       data-format="dd-mm-yyyy hh:ii"
+                       data-name="date"
+                       data-date="
+                            {{ include ('SDTaskBundle:Task:taskEndDateLastSimple.html.twig', {
+                           'taskEndDates': taskUserRole.task.taskEndDates,
+                           'stage': taskUserRole.task.stage
+                           }) }}
+                       ">
+                        {{ include ('SDTaskBundle:Task:taskEndDateLastSimple.html.twig', {
+                        'taskEndDates': taskUserRole.task.taskEndDates,
+                        'stage': taskUserRole.task.stage
                         }) }}
+                    </a>
+                        <script>
+                            $('#endDate').editable({
+                                clear: '{% trans from 'ITDoorsControllingBundle' %}clear{% endtrans %}<i class="icon-remove fa fa-times" style="font-size:12px"></i>',
+                                type: 'date',
+                                url: '{{ path('sd_task_editable') }}',
+                                datetimepicker: {
+                                    autoclose: true,
+                                    format: "dd-mm-yyyy HH:ii",
+                                    language: "ru",
+                                    startView: 'month',
+                                    weekStart: 1,
+                                    minView: 1
+                                }
+                            });
+                        </script>
+                    {% else %}
+                        {{ include ('SDTaskBundle:Task:taskEndDate.html.twig', {
+                        'taskEndDates': taskUserRole.task.taskEndDates,
+                        'stage': taskUserRole.task.stage
+                        }) }}
+                    {% endif %}
                     <br><br>
                 </div>
             </div>
@@ -342,7 +437,6 @@
                         {% if matcher.isViewed !=true %}
                             <span style="color: red; font-size: smaller;">({% trans %}Not viewed{% endtrans %})</span>
                         {% endif %}
-
                     {% endfor %}
                 {% endif %}
                 <br><br>
@@ -422,6 +516,13 @@
                     {% if access.canMakeDateRequest %}
                         <button id="task_change_date" class="btn btn-circle btn-sm green-haze" style="margin-top:5px;">{% trans %}Change the end date{% endtrans %}</button>
                     {% endif %}
+                    {% if access.canSignUp %}
+                        <button id="task_sign_up" data-status="1" class="signUpButton btn btn-circle btn-sm green-haze" style="margin-top:5px;">{% trans %}Sign up{% endtrans %}</button>
+                    {% endif %}
+                    {% if access.canRefuseSignUp %}
+                        <button id="task_sign_up" data-status="0" class="signUpButton btn btn-circle btn-sm green-haze" style="margin-top:5px;">{% trans %}Refuse sign up{% endtrans %}</button>
+                    {% endif %}
+
                 </div>
             </div>
         </div>
@@ -459,6 +560,11 @@
                 <a href="#tab_2" data-toggle="tab">
                     {% trans %}Files{% endtrans %} </a>
             </li>
+            <li>
+                <a href="#tab_3" data-toggle="tab">
+                    {% trans %}Matching{% endtrans %} </a>
+            </li>
+
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="tab_1">
@@ -500,6 +606,34 @@
                     })) }}
                 </div>
             </div>
+            <div class="tab-pane" id="tab_3">
+                <!-- TASK COMMENTS -->
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <ul class="media-list">
+                            {% for comment in commentsMatching %}
+                                <li class="media">
+                                    <a class="pull-left" href="{{ path('sd_user_show',{ 'id': comment.user.id}) }}">
+                                        <img class="todo-userpic" src="{{ asset( userprofiles_url ~ comment.user.id ~ '/image29_' ~ comment.user.photo) }}" width="27px" height="27px">
+                                    </a>
+                                    <div class="media-body todo-comment">
+                                        {#
+                                                                            <button type="button" class="todo-comment-btn btn btn-circle btn-default btn-xs">&nbsp; Reply &nbsp;</button>
+                                        #}
+                                        <p class="todo-comment-head">
+                                            <span class="todo-comment-username">{{ comment.user }}</span> &nbsp; <span class="todo-comment-date">{{ comment.createDatetime|date('H:i d-m-Y') }}</span>
+                                        </p>
+                                        <p class="todo-text-color">
+                                            {{ comment.value|raw  }} <br>
+                                        </p>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <!-- END TASK COMMENTS -->
+            </div>
         </div>
     </div>
 {#
@@ -515,4 +649,5 @@
        data-role="{{ taskUserRole.role }}"
        data-task_id="{{ taskUserRole.task.id }}"
        data-url_add_comment="{{ path('sd_task_add_comment') }}"
+       data-url_sign_up="{{ path('sd_task_sign_up') }}"
         >

@@ -150,4 +150,25 @@ class BasicTaskAccess implements TaskAccessInterface
         return false;
     }
 
+    /**
+     * @return bool
+     */
+    public function canEditHeader() {
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canEditDescription() {
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canEditEndDate() {
+
+        return false;
+    }
 }
