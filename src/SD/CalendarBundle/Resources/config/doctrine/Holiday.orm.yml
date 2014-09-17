@@ -1,0 +1,23 @@
+SD\CalendarBundle\Entity\Holiday:
+    type:  entity
+    table: holiday
+    repositoryClass: SD\CalendarBundle\Entity\HolidayRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+    fields:
+        month:
+            type: integer
+        day:
+            type: integer
+        name:
+            type: string
+            length: 128
+        shortDescription:
+            type: string
+            length: 512
+            column: short_description
+        description:
+            type: text

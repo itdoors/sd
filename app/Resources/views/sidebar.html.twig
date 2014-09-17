@@ -689,6 +689,16 @@
                     <span class="title">{% trans %}My tasks{% endtrans %}</span>
                 </a>
             </li>
+            {% if is_granted('ROLE_HRADMIN') %}
+                <li{% if
+                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_holiday_index')
+                %} class="active"{% endif %}>
+                    <a href="{{ path('sd_holiday_index') }}">
+                        <i class="icon-pencil"></i>
+                        <span class="title">{% trans %}Holidays{% endtrans %}</span>
+                    </a>
+                </li>
+            {% endif %}
 
     </ul>
         <!-- END SIDEBAR MENU -->

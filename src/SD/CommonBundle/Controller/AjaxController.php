@@ -1978,6 +1978,32 @@ class AjaxController extends BaseFilterController
 
         return true;
     }
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function holidayFormSave($form, $user, $request)
+    {
+        $data = $form->getData();
+        $formData = $request->request->get($form->getName());
+        
+        $date = explode('.', $formData['date']);
+        if (!key_exists(1, $date)) {
+            return true;
+        }
+        $data->setMonth($date[1]);
+        $data->setDay($date[0]);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
 
     /**
      * Saves {formName}Save after valid ajax validation
@@ -3156,6 +3182,26 @@ class AjaxController extends BaseFilterController
         /** @var InvoiceCompanystructure $object */
         $object = $this->getDoctrine()
             ->getRepository('SDUserBundle:Usercontactinfo')
+            ->find($id);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function holidayDelete($params)
+    {
+        $id = $params['id'];
+
+        $object = $this->getDoctrine()
+            ->getRepository('SDCalendarBundle:Holiday')
             ->find($id);
 
         /** @var EntityManager $em */

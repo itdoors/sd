@@ -977,8 +977,8 @@ CREATE INDEX IDX_FF2CA26BA76ED395 ON task_file (user_id);
 CREATE INDEX IDX_FF2CA26B8DB60186 ON task_file (task_id);
 ALTER TABLE task_file ADD CONSTRAINT FK_FF2CA26BA76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE task_file ADD CONSTRAINT FK_FF2CA26B8DB60186 FOREIGN KEY (task_id) REFERENCES task (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
--- staging -----
--- prod ----
+-- staging +++++
+-- prod +++++
 
 UPDATE "public".companystructure SET "root" = 1 WHERE id = 14;
 UPDATE "public".companystructure SET "root" = 1 WHERE id = 15;
@@ -1022,12 +1022,12 @@ INSERT INTO "public".companystructure (id, parent_id, "name", mpk, address, phon
 INSERT INTO "public".companystructure (id, parent_id, "name", mpk, address, phone, stuff_id, lft, lvl, rgt, root) 
 	VALUES (49, 5, 'Львов', 'л-', NULL, NULL, NULL, 0, 2, 0, 3)
 
--- staging ----------------------
--- prod ----------------------
+-- staging +++++++++++++
+-- prod ++++++++++
 ALTER TABLE fos_user ADD peer_id INT DEFAULT NULL;
 ALTER TABLE fos_user ADD peer_password VARCHAR(255) DEFAULT NULL;
--- staging ----------------------
--- prod ----------------------
+-- staging ++++++
+-- prod +++++
 CREATE TABLE call (
     id SERIAL NOT NULL,
     caller_id INT NOT NULL,
@@ -1047,5 +1047,8 @@ CREATE TABLE call (
 CREATE INDEX IDX_CC8E2F3EA5626C52 ON call (caller_id);
 ALTER TABLE call ADD CONSTRAINT FK_CC8E2F3EA5626C52 FOREIGN KEY (caller_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 
--- staging ----------------------
--- prod ----------------------
+-- staging +++++++
+-- prod +++++++
+CREATE TABLE holiday (id SERIAL NOT NULL, month INT NOT NULL, day INT NOT NULL, name VARCHAR(128) NOT NULL, short_description VARCHAR(512) NOT NULL, description TEXT NOT NULL, PRIMARY KEY(id));
+-- staging ----
+-- prod------
