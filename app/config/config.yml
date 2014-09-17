@@ -78,6 +78,7 @@ twig:
         ami_host: %ami.host%
         ami_port: %ami.port%
         sip_host: %sip.host%
+        sip_host_proxy: %sip.host.proxy%
         sip_port_udp: %sip.port.udp%
         sip_port_ws: %sip.port.ws%
         call_url: "http://%call.ip%:%call.port%/%call.directory%/"
