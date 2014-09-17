@@ -45,7 +45,6 @@ class HolidayController extends BaseFilterController
             ->getList();
         $count = $result['count'];
         $entities = $result['entities'];
-        
 
         $paginator = $this->container->get($this->paginator);
         $entities->setHint($this->paginator . '.count', $count);

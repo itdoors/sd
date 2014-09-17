@@ -1991,7 +1991,7 @@ class AjaxController extends BaseFilterController
     {
         $data = $form->getData();
         $formData = $request->request->get($form->getName());
-        
+
         $date = explode('.', $formData['date']);
         if (!key_exists(1, $date)) {
             return true;
