@@ -15,7 +15,7 @@ SD\TaskBundle\Entity\Comment:
         value:
             type: text
             nullable: false
-        model:git
+        model:
             type: string
             nullable: false
             length: 255
