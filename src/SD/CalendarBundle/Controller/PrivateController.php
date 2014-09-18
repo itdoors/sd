@@ -189,9 +189,9 @@ class PrivateController extends SalesController
             $events[] = array(
                 'hover_title' => '',
                 'title' => $translator->trans('Birthday', array(), 'SDDashboardBundle').' '. $fullName,
-                'start' => date('Y').'-'.$user->getBirthday()->format('m-d').' 00:00:00',
-                'end' => date('Y').'-'.$user->getBirthday()->format('m-d').' 23:59:59',
-                'allDay' => false,
+                'start' => date('Y').'-'.$user->getBirthday()->format('m-d'),
+                'end' => date('Y').'-'.$user->getBirthday()->format('m-d'),
+                'allDay' => true,
                 'url' => $this->generateUrl('sd_user_show', array(
                     'id' => $user->getId()
                 )),
@@ -206,9 +206,9 @@ class PrivateController extends SalesController
             $events[] = array(
                 'hover_title' => '',
                 'title' => $name,
-                'start' => date('Y').'-'.$holiday->getMonth().'-'.$holiday->getDay().' 00:00:00',
-                'end' => date('Y').'-'.$holiday->getMonth().'-'.$holiday->getDay().' 23:59:59',
-                'allDay' => false
+                'start' => date('Y').'-'.$holiday->getMonth().'-'.$holiday->getDay(),
+                'end' => date('Y').'-'.$holiday->getMonth().'-'.$holiday->getDay(),
+                'allDay' => true
                 );
         }
 

@@ -283,6 +283,8 @@ class UserRepository extends EntityRepository
         return $this->createQueryBuilder('u')
             ->select('u')
             ->where('u.birthday is not null')
+            ->andWhere('u.isFired = FALSE OR u.isFired IS NULL')
+            
 //            ->where('MONTH(u.birthday) >= :startDate')
 //            ->andWhere('MONTH(u.birthday) <= :endDat')
 //            ->setParameter(':startDate', date('m', $startTimestamp))
