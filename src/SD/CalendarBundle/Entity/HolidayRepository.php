@@ -72,11 +72,10 @@ class HolidayRepository extends EntityRepository
         /** select */
         $this->select($res);
         /** where */
-        $res
-            ->andWhere('h.month >= :monthStart')
-            ->andWhere('h.month <= :monthStop')
-            ->setParameter(':monthStart', date('m', $startTimestamp))
-            ->setParameter(':monthStop', date('m', $endTimestamp));
+        $res->andWhere('dayofyear(h.date) >= :dayofyearStart')
+            ->andWhere('dayofyear(h.date) <= :dayofyearStop')
+            ->setParameter(':dayofyearStart', date('z', $startTimestamp))
+            ->setParameter(':dayofyearStop', date('z', $endTimestamp));
 
         return $res->getQuery()->getResult();
     }

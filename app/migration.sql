@@ -1049,7 +1049,7 @@ ALTER TABLE call ADD CONSTRAINT FK_CC8E2F3EA5626C52 FOREIGN KEY (caller_id) REFE
 
 -- staging +++++++
 -- prod +++++++
-CREATE TABLE holiday (id SERIAL NOT NULL, month INT NOT NULL, day INT NOT NULL, name VARCHAR(128) NOT NULL, short_description VARCHAR(512) NOT NULL, description TEXT NOT NULL, PRIMARY KEY(id));
+CREATE TABLE holiday (id SERIAL NOT NULL, date DATE NOT NULL, name VARCHAR(128) NOT NULL, short_description VARCHAR(512) NOT NULL, description TEXT NOT NULL, PRIMARY KEY(id));
 -- staging ----
 -- prod------
 ALTER TABLE history ALTER COLUMN value TYPE text;

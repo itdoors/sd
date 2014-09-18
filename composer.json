@@ -27,7 +27,8 @@
         "bcc/cron-manager-bundle": "dev-master",
         "liuggio/excelbundle": "~2.0",
         "gedmo/doctrine-extensions": "2.3.*@dev",
-        "stof/doctrine-extensions-bundle": "1.1.*@dev"
+        "stof/doctrine-extensions-bundle": "1.1.*@dev",
+        "oro/doctrine-extensions": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

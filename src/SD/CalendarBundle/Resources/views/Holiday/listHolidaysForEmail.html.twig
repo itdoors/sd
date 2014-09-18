@@ -1,0 +1,17 @@
+{% trans_default_domain 'SDCalendarBundle' %}
+<h6>{% trans %}Holidays{% endtrans %}:</h6>
+<br>
+<table style="width:100%">
+    <thead>
+        <tr>
+            <th>{% trans %}Name{% endtrans %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in holidays %}
+            <tr class="{{ cycle(['odd', 'even'], item.id) }}">
+                <td class="">{{ item.name }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

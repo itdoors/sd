@@ -2000,8 +2000,7 @@ class AjaxController extends BaseFilterController
         if (!key_exists(1, $date)) {
             return true;
         }
-        $data->setMonth($date[1]);
-        $data->setDay($date[0]);
+        $data->setDate(new \DateTime(date('Y').'-'.$date[0].'-'.$date[1].'00:00:00'));
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
         $em->flush();

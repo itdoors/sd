@@ -136,9 +136,12 @@ doctrine:
                         array: ITDoors\CommonBundle\DQL\ArrayDQL
                         select_next_handling_message_date: SD\CommonBundle\DQL\SelectNextHandlingMessageDateDQL
                     #datetime_functions:
-                        #YEAR: ITDoors\CommonBundle\DQL\Year
-                        #MONTH: ITDoors\CommonBundle\DQL\Month
-                    # numeric_functions:
+                    numeric_functions:
+                        dayofyear: Oro\ORM\Query\AST\Functions\SimpleFunction
+                        year: Oro\ORM\Query\AST\Functions\SimpleFunction
+                        month: Oro\ORM\Query\AST\Functions\SimpleFunction
+                        day: Oro\ORM\Query\AST\Functions\SimpleFunction
+                        
 stof_doctrine_extensions:
      orm:
         default:

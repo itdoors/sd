@@ -16,16 +16,6 @@ class Holiday
     private $id;
 
     /**
-     * @var integer
-     */
-    private $month;
-
-    /**
-     * @var integer
-     */
-    private $day;
-
-    /**
      * @var string
      */
     private $name;
@@ -49,50 +39,7 @@ class Holiday
     {
         return $this->id;
     }
-    /**
-     * Set month
-     *
-     * @param integer $month
-     * 
-     * @return Holiday
-     */
-    public function setMonth ($month)
-    {
-        $this->month = $month;
 
-        return $this;
-    }
-    /**
-     * Get month
-     *
-     * @return integer 
-     */
-    public function getMonth ()
-    {
-        return $this->month;
-    }
-    /**
-     * Set day
-     *
-     * @param integer $day
-     * 
-     * @return Holiday
-     */
-    public function setDay ($day)
-    {
-        $this->day = $day;
-
-        return $this;
-    }
-    /**
-     * Get day
-     *
-     * @return integer 
-     */
-    public function getDay ()
-    {
-        return $this->day;
-    }
     /**
      * Set name
      *
@@ -158,5 +105,33 @@ class Holiday
     public function getDescription ()
     {
         return $this->description;
+    }
+    /**
+     * @var \DateTime
+     */
+    private $date;
+
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     * @return Holiday
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+    
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime 
+     */
+    public function getDate()
+    {
+        return $this->date;
     }
 }

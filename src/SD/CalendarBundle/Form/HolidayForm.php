@@ -36,9 +36,7 @@ class HolidayForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('date', 'text', array(
-                'mapped' => false
-            ))
+            ->add('date', 'text')
             ->add('name', 'text')
             ->add('shortDescription', 'textarea')
             ->add('description', 'textarea');

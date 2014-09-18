@@ -1,0 +1,23 @@
+{% trans_default_domain 'SDUserBundle' %}
+<h6>{% trans %}Birthdays{% endtrans %}:</h6>
+<br>
+<table style="width:100%">
+    <thead>
+        <tr>
+            <th>{% trans %}FIO{% endtrans %}</th>
+            <th>{% trans %}Email{% endtrans %}</th>
+            <th>{% trans %}Phone{% endtrans %}</th>
+            <th>{% trans %}Position{% endtrans %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in users %}
+            <tr class="{{ cycle(['odd', 'even'], item.id) }}">
+                <td class="">{{ item }}</td>
+                <td class="">{{ item.email }}</td>
+                <td class="">{{ item.stuff.mobilephone }}</td>
+                <td class="">{{ item.position }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

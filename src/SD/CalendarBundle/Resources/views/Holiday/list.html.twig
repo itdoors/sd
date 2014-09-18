@@ -60,9 +60,9 @@
                             data-name="date"
                             data-type="text"
                             data-pk="{{ item.id }}"
-                            data-value="{{ item.day > 9 ? item.day : '0'~item.day }}.{{ item.month > 9 ? item.month : '0'~item.month }}"
+                            data-value="{{ item.date | date('d.m') }}"
                             data-original-title="{% trans %}Enter date{% endtrans %}"
-                        >{{ item.day > 9 ? item.day : '0'~item.day }}.{{ item.month > 9 ? item.month : '0'~item.month }}</a>
+                        >{{ item.date | date('d.m') }}</a>
                     </td>
                     <td class="">
                         <a class="editable-holiday" href="#" id="name" data-type="text" data-pk="{{ item.id }}" data-original-title="{% trans %}Name{% endtrans %}">{{ item.name }}</a>

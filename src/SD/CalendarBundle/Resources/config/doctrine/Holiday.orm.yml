@@ -8,10 +8,8 @@ SD\CalendarBundle\Entity\Holiday:
             generator:
                 strategy: IDENTITY
     fields:
-        month:
-            type: integer
-        day:
-            type: integer
+        date:
+            type: date
         name:
             type: string
             length: 128

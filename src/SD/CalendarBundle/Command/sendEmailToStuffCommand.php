@@ -13,9 +13,9 @@ use BCC\CronManagerBundle\Manager\CronManager;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
- * CronDeleteCommand
+ * sendEmailToStuffCommand
  */
-class CronDeleteCommand extends ContainerAwareCommand
+class sendEmailToStuffCommand extends ContainerAwareCommand
 {
 
     /**
@@ -24,11 +24,8 @@ class CronDeleteCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('sd:newsletter:holiday')
-            ->setDescription('Newsletter holidays for stuff')
-            ->setDefinition(array(
-                new InputArgument('period', InputArgument::REQUIRED, 'The period (day or week)')
-            ));
+            ->setName('sd:send:email:to:stuff')
+            ->setDescription('Send email holidays for stuff');
     }
 
     /**
@@ -40,17 +37,9 @@ class CronDeleteCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        $period = strtoupper($input->getArgument('period'));
-        
-        if (!in_array($period, array('day', 'week'))) {
-            $output->writeln('period mast be "dey" or "week"');
+        $holiday = $this->getContainer()->get('sd_calendar.holiday.service');
 
-            return;
-        }
-
-        $holiday = $this->getContainer()->get('sd_calendar.holiday.service.class');
-
-        $res = $holiday->newsletterHoliday($period);
+        $res = $holiday->sendEmailToStuff();
 
         $output->writeln($res);
     }
