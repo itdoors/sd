@@ -2608,7 +2608,7 @@ class AjaxController extends BaseFilterController
         $em->persist($taskUserRole);
 
         if (count($formData['matcher'])) {
-            foreach($formData['matcher'] as $idMatcher) {
+            foreach ($formData['matcher'] as $idMatcher) {
             //$idMatcher = $formData['matcher'];
                 $matcher = $userRepository->find($idMatcher);
                 $taskUserRole = new \SD\TaskBundle\Entity\TaskUserRole();

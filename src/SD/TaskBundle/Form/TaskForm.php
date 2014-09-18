@@ -85,7 +85,7 @@ class TaskForm extends AbstractType
                         return $repository->createQueryBuilder('u')
                             ->where('u.id = :user')
                             ->setParameter(':user', $userId);
-                    }
+                }
             ));
 
         } else {
@@ -133,7 +133,7 @@ class TaskForm extends AbstractType
                             ->orWhere('u.isFired is NULL')
                             ->orderBy('u.lastName', 'asc');
                         //->setParameter(':fired', true, \PDO::PARAM_BOOL);
-                    }
+                }
             ));
 
 

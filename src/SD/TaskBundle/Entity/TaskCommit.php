@@ -40,12 +40,13 @@ class TaskCommit
      * Set stage
      *
      * @param \SD\TaskBundle\Entity\Stage $stage
+     *
      * @return TaskCommit
      */
     public function setStage(\SD\TaskBundle\Entity\Stage $stage = null)
     {
         $this->stage = $stage;
-    
+
         return $this;
     }
 
@@ -63,12 +64,13 @@ class TaskCommit
      * Set taskUserRole
      *
      * @param \SD\TaskBundle\Entity\TaskUserRole $taskUserRole
+     *
      * @return TaskCommit
      */
     public function setTaskUserRole(\SD\TaskBundle\Entity\TaskUserRole $taskUserRole = null)
     {
         $this->taskUserRole = $taskUserRole;
-    
+
         return $this;
     }
 

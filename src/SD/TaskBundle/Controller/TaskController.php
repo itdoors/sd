@@ -248,7 +248,7 @@ class TaskController extends Controller
         ));
 
         $authorRole = $roleRepository
-            ->findOneBy(array (
+            ->findOneBy(array(
             'name' => 'author',
             'model' => 'task'
         ));
@@ -287,15 +287,32 @@ class TaskController extends Controller
             )
         );
 
+        $matchingInfo = array();
+        $taskCommitRepo = $em->getRepository('SDTaskBundle:TaskCommit');
+        foreach ($taskUserRoleMatcher as $key => $tur) {
+
+            $taskCommit = $taskCommitRepo->findOneBy(array(
+                'taskUserRole' => $tur
+            ), array(
+                'id' => 'DESC'
+            ));
+
+            if (!$taskCommit) {
+                $matchingInfo[$key] = 'none';
+            } else {
+                if ($taskCommit->getStage() == 'refused_sign_up') {
+                    $matchingInfo[$key] = 'refused';
+                } elseif ($taskCommit->getStage() == 'sign_up') {
+                    $matchingInfo[$key] = 'agree';
+                }
+            }
+
+        }
 
         $comment = $this->getLastTaskComment($taskUserRole->getTask()->getId());
 
-        $currentRole = $taskUserRole->getRole();
-        $currentStage = $taskUserRole->getTask()->getStage();
-        $currentIsViewed = $taskUserRole->getIsViewed();
 
-
-        $access = TaskAccessFactory::createAccess($currentRole, $currentStage, $currentIsViewed);
+        $access = TaskAccessFactory::createAccess($em, $taskUserRole);
 
         $info = array (
             'taskUserRole' => $taskUserRole,
@@ -303,6 +320,7 @@ class TaskController extends Controller
             'taskUserRolePerformer' => $taskUserRolePerformer,
             'taskUserRoleAuthor' => $taskUserRoleAuthor,
             'taskUserRoleMatcher' => $taskUserRoleMatcher,
+            'matchingInfo' => $matchingInfo,
             'userId' => $userId,
             'comment' => $comment,
             'access' => $access
@@ -874,7 +892,8 @@ class TaskController extends Controller
      *
      * @return Response
      */
-    public function signUpTaskAction(Request $request) {
+    public function signUpTaskAction(Request $request)
+    {
         $id = $request->request->get('id');
         $status = $request->request->get('status');
         $commentValue = $request->request->get('comment');
@@ -884,14 +903,16 @@ class TaskController extends Controller
 
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
 
-        $taskCommit = $em->getRepository('SDTaskBundle:TaskCommit')->findOneBy(array(
+        $taskCommitRepo = $em->getRepository('SDTaskBundle:TaskCommit');
+        $taskCommit = $taskCommitRepo->findOneBy(array(
             'taskUserRole' => $taskUserRole
         ));
 
+        $needToCheckSignUps = false;
         if ($status) {
             $stageName = 'sign_up';
             $comment = $translator->trans('Signed up', array(), 'SDTaskBundle');
-
+            $needToCheckSignUps = true;
         } else {
             $stageName = 'refused_sign_up';
             $comment = $translator->trans('Refused to signed up', array(), 'SDTaskBundle');
@@ -917,6 +938,48 @@ class TaskController extends Controller
 
         $em->flush();
 
+        if ($needToCheckSignUps) {
+            $roleRepository = $em->getRepository('SDTaskBundle:Role');
+            $matcherRole = $roleRepository
+                ->findOneBy(array(
+                    'name' => 'matcher',
+                    'model' => 'task'
+                ));
+
+            $taskUserRoleMatcher = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
+                array (
+                    'task' => $taskUserRole->getTask(),
+                    'role' => $matcherRole
+                )
+            );
+
+            $canBePerforming = true;
+            foreach ($taskUserRoleMatcher as $taskUserRoleCheck) {
+                $taskCommit = $taskCommitRepo->findOneBy(array(
+                    'taskUserRole' => $taskUserRoleCheck
+                ));
+                if (!$taskCommit) {
+                    $canBePerforming = false;
+                    break;
+                }
+                if ($taskCommit->getStage() == 'refused_sign_up') {
+                    $canBePerforming = false;
+                    break;
+                }
+            }
+
+            if ($canBePerforming) {
+                $task = $taskUserRole->getTask();
+                $stageCreated = $em->getRepository('SDTaskBundle:Stage')->findOneby(array (
+                    'name' => 'created',
+                    'model' => 'task',
+                ));
+                $task->setStage($stageCreated);
+
+                $em->persist($task);
+                $em->flush();
+            }
+        }
 
         $return['success'] = 1;
 

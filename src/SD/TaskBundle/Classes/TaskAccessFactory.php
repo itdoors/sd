@@ -8,24 +8,25 @@ namespace SD\TaskBundle\Classes;
 class TaskAccessFactory
 {
     /**
-     * @param string                      $stringAccess
-     * @param \SD\TaskBundle\Entity\Stage $stage
-     * @param bool                        $isViewed
+     * @param Object       $em
+     * @param TaskUserRole $taskUserRole
      *
      * @return AuthorTaskAccess|ControllerTaskAccess|PerformerTaskAccess|MatcherTaskAccess
      */
-    public static function createAccess($stringAccess, $stage, $isViewed)
+    public static function createAccess($em, $taskUserRole)
     {
+        $stringAccess =$taskUserRole->getRole();
+
         if ($stringAccess == 'performer') {
-            return new PerformerTaskAccess($stage, $isViewed);
+            return new PerformerTaskAccess($em, $taskUserRole);
         } elseif ($stringAccess == 'author') {
-            return new AuthorTaskAccess($stage, $isViewed);
+            return new AuthorTaskAccess($em, $taskUserRole);
         } elseif ($stringAccess == 'controller') {
-            return new ControllerTaskAccess($stage, $isViewed);
+            return new ControllerTaskAccess($em, $taskUserRole);
         } elseif ($stringAccess == 'matcher') {
-            return new MatcherTaskAccess($stage, $isViewed);
+            return new MatcherTaskAccess($em, $taskUserRole);
         } else {
-            return new BasicTaskAccess($stage, $isViewed);
+            return new BasicTaskAccess($em, $taskUserRole);
         }
     }
 }

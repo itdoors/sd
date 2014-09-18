@@ -432,10 +432,18 @@
                 {% if taskUserRoleMatcher|length %}
                 <br>
                 <b>{% trans %}Matcher{% endtrans %}</b>:
-                    {% for matcher in taskUserRoleMatcher %}
+                    {% for key,matcher in taskUserRoleMatcher %}
                         {{ matcher.user }}
                         {% if matcher.isViewed !=true %}
                             <span style="color: red; font-size: smaller;">({% trans %}Not viewed{% endtrans %})</span>
+                        {% else %}
+                            {% if matchingInfo[key] == 'none' %}
+                                <span style="color: red; font-size: smaller;">({% trans %}Not signed yet{% endtrans %})</span>
+                            {% elseif matchingInfo[key] == 'refused' %}
+                                <span style="color: red; font-size: smaller;">({% trans %}Refused sign up{% endtrans %})</span>
+                            {% elseif matchingInfo[key] == 'agree' %}
+                                <span style="color: green; font-size: smaller;">({% trans %}Signed up{% endtrans %})</span>
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                 {% endif %}
@@ -476,10 +484,8 @@
             </div>
         </div>
         <br><br>
-        {% if taskUserRole.task.stage != 'done' and taskUserRole.task.stage != 'undone'
-        and taskUserRole.task.stage != 'closed' and taskUserRole.role != 'author' and taskUserRole.isViewed == true %}
-            {% if taskUserRole.role != 'performer' or taskUserRole.task.stage != 'checking' %}
-                <div class="form-group">
+        {% if access.canLeaveComment %}
+            <div class="form-group">
                     <div class="col-md-12" style="background-color: #f6fbfc;">
                         <br><br>
                         <ul class="media-list">
@@ -495,7 +501,6 @@
                         #}
                     </div>
                 </div>
-            {% endif %}
         {% endif %}
         <div class="form-group">
             <div class="col-md-12" style="background-color: #f6fbfc;">

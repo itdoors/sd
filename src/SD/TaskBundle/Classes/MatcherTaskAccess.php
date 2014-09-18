@@ -13,9 +13,13 @@ class MatcherTaskAccess extends BasicTaskAccess
     public function canSignUp()
     {
         if ($this->getStage() == 'matching' && $this->getIsViewed()) {
+            if ($this->getLastCommitStage() != 'sign_up') {
 
-            return true;
+                return true;
+            }
+
         }
+
         return false;
     }
 
@@ -25,16 +29,20 @@ class MatcherTaskAccess extends BasicTaskAccess
     public function canRefuseSignUp()
     {
         if ($this->getStage() == 'matching' && $this->getIsViewed()) {
+            if ($this->getLastCommitStage() == null) {
 
-            return true;
+                return true;
+            }
         }
+
         return false;
     }
 
     /**
      * @return bool
      */
-    public function canLeaveComment() {
+    public function canLeaveComment()
+    {
         if ($this->canRefuseSignUp() || $this->canSignUp()) {
 
             return true;
