@@ -53,3 +53,7 @@ sd_holiday_index:
 sd_holiday_list:
     pattern:  sd/holiday/list
     defaults: { _controller: SDCalendarBundle:Holiday:list }
+    
+sd_holiday_save:
+    pattern:  /ajax/holiday/save
+    defaults: { _controller: SDCalendarBundle:Holiday:holidaySave }

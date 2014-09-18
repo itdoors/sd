@@ -59,8 +59,10 @@ class HolidayRepository extends EntityRepository
         );
     }
     /**
-     * Returns results for interval future holidays
-     *
+     * 
+     * @param integer $startTimestamp
+     * @param integer $endTimestamp
+     * 
      * @return mixed[]
      */
     public function getListForDate ($startTimestamp, $endTimestamp)
