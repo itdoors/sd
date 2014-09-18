@@ -15,12 +15,16 @@ class ControllerTaskAccess extends BasicTaskAccess
      */
     public function canSetDone()
     {
+/*
         if ($this->isViewed()) {
-            if ($this->stage == 'created' || $this->stage == 'performing' || $this->stage == 'date request') {
+            if ($this->getStage() == 'created' ||
+                $this->getStage() == 'performing' ||
+                $this->getStage() == 'date request') {
 
                 return true;
             }
         }
+*/
 
         return false;
     }
@@ -31,8 +35,8 @@ class ControllerTaskAccess extends BasicTaskAccess
     public function canSetUndone()
     {
         if ($this->isViewed()) {
-            if ($this->stage == 'created' || $this->stage == 'performing' ||
-                $this->stage == 'date request' || $this->stage == 'checking') {
+            if ($this->getStage() == 'created' || $this->getStage() == 'performing' ||
+                $this->getStage() == 'date request' || $this->getStage() == 'checking') {
 
                 return true;
             }
@@ -47,8 +51,8 @@ class ControllerTaskAccess extends BasicTaskAccess
     public function canSetClosed()
     {
         if ($this->isViewed()) {
-            if ($this->stage == 'created' || $this->stage == 'performing' ||
-                $this->stage == 'date request' || $this->stage == 'checking') {
+            if ($this->getStage() == 'created' || $this->getStage() == 'performing' ||
+                $this->getStage() == 'date request' || $this->getStage() == 'checking') {
 
                 return true;
             }
@@ -83,7 +87,7 @@ class ControllerTaskAccess extends BasicTaskAccess
      */
     public function canSetChecking()
     {
-        if ($this->stage == 'checking') {
+        if ($this->getStage() == 'checking') {
 
             return true;
         }
@@ -97,7 +101,7 @@ class ControllerTaskAccess extends BasicTaskAccess
     public function canMakeDateRequest()
     {
         if ($this->isViewed()) {
-            if ($this->stage == 'created' || $this->stage == 'performing') {
+            if ($this->getStage() == 'created' || $this->getStage() == 'performing') {
 
                 return true;
             }
@@ -112,7 +116,7 @@ class ControllerTaskAccess extends BasicTaskAccess
     public function canAnswerDateRequest()
     {
         if ($this->isViewed()) {
-            if ($this->stage == 'date request') {
+            if ($this->getStage() == 'date request') {
 
                 return true;
             }

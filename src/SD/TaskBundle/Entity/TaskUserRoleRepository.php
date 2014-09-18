@@ -45,6 +45,11 @@ class TaskUserRoleRepository extends EntityRepository
     {
 
         $notViewingStages = array('closed', 'undone', 'done');
+        $viewingRoleMatching = array('author', 'matcher');
+
+        //$notViewingMatched = array('matching');
+        $roleMatching = array('matcher');
+
         $sql = $this->createQueryBuilder('tur')
             ->leftJoin('tur.role', 'r')
             ->leftJoin('tur.task', 't')
@@ -53,6 +58,17 @@ class TaskUserRoleRepository extends EntityRepository
 
         $sql->where('s.name NOT IN (:stage)')
             ->setParameter(':stage', $notViewingStages);
+
+
+
+        $sql->andWhere('(r.name IN (:viewingRoleMatching) OR s.name != :stageMatching)')
+            ->setParameter(':stageMatching', 'matching')
+            ->setParameter(':viewingRoleMatching', $viewingRoleMatching);
+
+/*        $sql->andWhere('(r.name NOT IN (:roleMatching) OR s.name = :stageMatching)')
+            ->setParameter(':stageMatching', 'matching')
+            ->setParameter(':roleMatching', $roleMatching);*/
+
 
         if (isset($filterArray['role']) && count($filterArray['role'])) {
             $sql->andWhere('r IN (:role)')

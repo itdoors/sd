@@ -3,30 +3,35 @@
     {% for taskUserRole in tasksUserRole %}
     {% set stage = taskUserRole.task.stage %}
     {% if stage == 'undone' %}
-    {% set labelStage = 'label-primary' %}
+        {% set labelStage = 'label-primary' %}
     {% elseif stage == 'performing' %}
-    {% set labelStage = 'label-info' %}
+        {% set labelStage = 'label-info' %}
     {% elseif stage == 'created' %}
-    {% set labelStage = 'label-default' %}
+        {% set labelStage = 'label-default' %}
     {% elseif stage == 'done' %}
-    {% set labelStage = 'label-success' %}
+        {% set labelStage = 'label-success' %}
     {% elseif stage == 'date request' %}
-    {% set labelStage = 'label-danger' %}
+        {% set labelStage = 'label-danger' %}
     {% elseif stage == 'closed' %}
-    {% set labelStage = 'label-primary' %}
+        {% set labelStage = 'label-primary' %}
     {% elseif stage == 'checking' %}
-    {% set labelStage = 'label-warning' %}
+        {% set labelStage = 'label-warning' %}
+    {% elseif stage == 'matching' %}
+        {% set labelStage = 'label-warning' %}
     {% endif %}
 
     {% if taskUserRole.role == 'author' %}
-    {% set icon = 'fa-pencil' %}
-    {% set label = 'label-danger' %}
+        {% set icon = 'fa-pencil' %}
+        {% set label = 'label-danger' %}
     {% elseif taskUserRole.role == 'performer' %}
-    {% set icon = 'fa-rocket' %}
-    {% set label = 'label-info' %}
+        {% set icon = 'fa-rocket' %}
+        {% set label = 'label-info' %}
     {% elseif taskUserRole.role == 'controller' %}
-    {% set icon = 'fa-crosshairs' %}
-    {% set label = 'label-warning' %}
+        {% set icon = 'fa-crosshairs' %}
+        {% set label = 'label-warning' %}
+    {% elseif taskUserRole.role == 'matcher' %}
+        {% set icon = 'fa-unlock' %}
+        {% set label = 'label-success' %}
     {#
     {% elseif taskUserRole == 'done' %}
     {% set icon = 'orange' %}

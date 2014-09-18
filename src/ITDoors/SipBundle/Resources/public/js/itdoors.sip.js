@@ -7,6 +7,7 @@ var ITDoorsSip = (function() {
         },
         sip: {
             host: '',
+            hostProxy: '',
             portUdp: '',
             portWs: ''
         },
@@ -264,7 +265,7 @@ var ITDoorsSip = (function() {
                         impu: 'sip:' + peerId + '@' + self.params.sip.host,
                         password: peerPassword,
                         websocket_proxy_url: 'ws://' + self.params.sip.host + ':' + self.params.sip.portWs + '/ws', // optional
-                        outbound_proxy_url: 'udp://' + self.params.sip.host + ':' + self.params.sip.portUdp, // optional
+                        outbound_proxy_url: 'udp://' + self.params.sip.hostProxy + ':' + self.params.sip.portUdp, // optional
                         ice_servers: null,
                         enable_early_ims: true,
                         enable_rtcweb_breaker: true, // optional

@@ -12,24 +12,18 @@ use SD\TaskBundle\Entity\TaskUserRole;
  */
 class BasicTaskAccess implements TaskAccessInterface
 {
-    /**
-     * @var \SD\TaskBundle\Entity\Stage
-     */
-    protected $stage;
+
+    protected $taskUserRole;
+    protected $em;
 
     /**
-     * @var bool
+     * @param Object       $em
+     * @param TaskUserRole $taskUserRole
      */
-    protected $isViewed;
-
-    /**
-     * @param Stage $stage
-     * @param bool  $isViewed
-     */
-    public function __construct(Stage $stage, $isViewed)
+    public function __construct($em, $taskUserRole)
     {
-        $this->stage = $stage;
-        $this->isViewed = $isViewed;
+        $this->taskUserRole = $taskUserRole;
+        $this->em = $em;
     }
 
     /**
@@ -121,7 +115,7 @@ class BasicTaskAccess implements TaskAccessInterface
      */
     public function getStage()
     {
-        return $this->stage;
+        return $this->taskUserRole->getTask()->getStage();
     }
 
     /**
@@ -129,6 +123,70 @@ class BasicTaskAccess implements TaskAccessInterface
      */
     public function getIsViewed()
     {
-        return $this->isViewed;
+        return $this->taskUserRole->getIsViewed();
+    }
+
+    /**
+     * @return bool
+     */
+    public function canSignUp()
+    {
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function canRefuseSignUp()
+    {
+
+        return false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function canEditHeader()
+    {
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canEditDescription()
+    {
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canEditEndDate()
+    {
+
+        return false;
+    }
+
+    /**
+     * @return null|Stage
+     */
+    public function getLastCommitStage()
+    {
+        $taskUserRole = $this->taskUserRole;
+
+        $taskCommitRepo = $this->em->getRepository('SDTaskBundle:TaskCommit');
+        $taskCommit = $taskCommitRepo->findOneBy(array(
+            'taskUserRole' => $taskUserRole
+        ), array(
+            'id' => 'DESC'
+        ));
+
+        if (!$taskCommit) {
+            return null;
+        } else {
+            return $taskCommit->getStage();
+        }
     }
 }

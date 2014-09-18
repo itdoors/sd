@@ -977,8 +977,8 @@ CREATE INDEX IDX_FF2CA26BA76ED395 ON task_file (user_id);
 CREATE INDEX IDX_FF2CA26B8DB60186 ON task_file (task_id);
 ALTER TABLE task_file ADD CONSTRAINT FK_FF2CA26BA76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE task_file ADD CONSTRAINT FK_FF2CA26B8DB60186 FOREIGN KEY (task_id) REFERENCES task (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
--- staging -----
--- prod ----
+-- staging ++++++
+-- prod +++++
 
 UPDATE "public".companystructure SET "root" = 1 WHERE id = 14;
 UPDATE "public".companystructure SET "root" = 1 WHERE id = 15;
@@ -1022,12 +1022,12 @@ INSERT INTO "public".companystructure (id, parent_id, "name", mpk, address, phon
 INSERT INTO "public".companystructure (id, parent_id, "name", mpk, address, phone, stuff_id, lft, lvl, rgt, root) 
 	VALUES (49, 5, 'Львов', 'л-', NULL, NULL, NULL, 0, 2, 0, 3)
 
--- staging ----------------------
--- prod ----------------------
+-- staging +++++++
+-- prod +++++++++
 ALTER TABLE fos_user ADD peer_id INT DEFAULT NULL;
 ALTER TABLE fos_user ADD peer_password VARCHAR(255) DEFAULT NULL;
--- staging ----------------------
--- prod ----------------------
+-- staging ++++++++++
+-- prod +++++++++
 CREATE TABLE call (
     id SERIAL NOT NULL,
     caller_id INT NOT NULL,
@@ -1047,5 +1047,19 @@ CREATE TABLE call (
 CREATE INDEX IDX_CC8E2F3EA5626C52 ON call (caller_id);
 ALTER TABLE call ADD CONSTRAINT FK_CC8E2F3EA5626C52 FOREIGN KEY (caller_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 
--- staging ----------------------
--- prod ----------------------
+-- staging +++++
+-- prod ++++
+
+INSERT INTO role (name, model) VALUES ('matcher', 'task');
+INSERT INTO stage (name, model) VALUES ('matching', 'task');
+CREATE TABLE task_commit (id SERIAL NOT NULL, stage_id INT DEFAULT NULL, task_user_role_id INT DEFAULT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_757DAA7E2298D193 ON task_commit (stage_id);
+CREATE INDEX IDX_757DAA7E469F188B ON task_commit (task_user_role_id);
+ALTER TABLE task_commit ADD CONSTRAINT FK_757DAA7E2298D193 FOREIGN KEY (stage_id) REFERENCES stage (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE task_commit ADD CONSTRAINT FK_757DAA7E469F188B FOREIGN KEY (task_user_role_id) REFERENCES task_user_role (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+INSERT INTO stage (name, model) VALUES ('sign_up', 'task_commit');
+INSERT INTO stage (name, model) VALUES ('refused_sign_up', 'task_commit');
+ALTER TABLE comment ALTER COLUMN value TYPE text;
+-- staging ----
+-- prod ----

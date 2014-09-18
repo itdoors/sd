@@ -36,7 +36,7 @@
             );
 
             $('#' + '{{ form.vars.name }}' + '_controller').select2();
-
+            $('#' + '{{ form.vars.name }}' + '_matcher').select2();
         });
     </script>
             <div class="portlet-body">
@@ -83,7 +83,12 @@
                         <span class="help-block">{{ form_errors(form.controller) }}</span>
                     </div>
                     <div class="form-group col-md-12">
-                        {{ form_label(form.files, 'Files'|trans({}, 'SDTaskBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_label(form.matcher, 'Matcher'|trans({}, 'SDTaskBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.matcher, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter matcher'|trans({}, 'SDTaskBundle')} } ) }}
+                        <span class="help-block">{{ form_errors(form.matcher) }}</span>
+                    </div>
+                    <div class="form-group col-md-12">
+                        {{ form_label(form.files, 'Files (max size 2mb)'|trans({}, 'SDTaskBundle'), {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.files, {'attr' : {'class' : 'form-control'} } ) }}
                         <span class="help-block">{{ form_errors(form.files) }}</span>
                     </div>

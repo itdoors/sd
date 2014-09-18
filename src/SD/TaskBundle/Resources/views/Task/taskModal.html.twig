@@ -401,6 +401,7 @@
         <br><br>
     </div>
 {% endif %}
+{#
 {% if taskUserRole.isViewed != true %}
     <a id="task_set_viewed" class="btn green" style="float: right;">{% trans %}Set viewed{% endtrans %}</a>
 {% else %}
@@ -465,6 +466,7 @@
         {% endif %}
     {% endif %}
 {% endif %}
+#}
 <br><br>
 <input type="hidden" id="task_modal_info_holder"
        data-id="{{ taskUserRole.id }}"

@@ -65,6 +65,15 @@ class OrganizationRepository extends EntityRepository
         $sqlCount = $this->createQueryBuilder('o');
 
         $this->processSelect($sql);
+        $sql->addSelect(
+            "array_to_string(
+               ARRAY(
+                    SELECT k.name FROM ListsOrganizationBundle:KvedOrganization k_o
+                    LEFT JOIN ListsOrganizationBundle:Kved k WITH k_o.kved = k
+                    WHERE k_o.organization = o
+               ),
+            ', ') as kveds"
+        );
         $this->processCount($sqlCount);
 
         $this->processBaseQuery($sql);
@@ -242,7 +251,7 @@ class OrganizationRepository extends EntityRepository
             ->addSelect('view.name as viewName')
             ->addSelect('c.name as cityName')
             ->addSelect('r.name as regionName')
-            ->addSelect('oUser.userId as managerId')
+//            ->addSelect('oUser.userId as managerId')
             ->addSelect('scope.name as scopeName')
             ->addSelect(
                 "array_to_string(
@@ -292,9 +301,9 @@ class OrganizationRepository extends EntityRepository
             ->leftJoin('o.city', 'c')
             ->leftJoin('c.region', 'r')
             ->leftJoin('o.scope', 'scope')
-            ->leftJoin('o.organizationUsers', 'oUser')
-            ->leftJoin('oUser.user', 'users')
-            ->leftJoin('oUser.role', 'role')
+//            ->leftJoin('o.organizationUsers', 'oUser')
+//            ->leftJoin('oUser.user', 'users')
+//            ->leftJoin('oUser.role', 'role')
             ->leftJoin('o.ownership', 'ownership')
             ->leftJoin('Lists\LookupBundle\Entity\Lookup', 'view', 'WITH', $subQueryCase)
             ->leftJoin('o.creator', 'creator')
@@ -309,6 +318,8 @@ class OrganizationRepository extends EntityRepository
     public function processUserQuery ($sql, $userIds)
     {
         $sql
+            ->leftJoin('o.organizationUsers', 'oUser')
+            ->leftJoin('oUser.user', 'users')
             ->andWhere('users.id in (:userIds)')
             ->setParameter(':userIds', $userIds);
     }

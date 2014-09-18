@@ -4,6 +4,7 @@ namespace SD\TaskBundle\Controller;
 
 use SD\TaskBundle\Classes\TaskAccessFactory;
 use SD\TaskBundle\Entity\Comment;
+use SD\TaskBundle\Entity\TaskCommit;
 use SD\TaskBundle\Entity\TaskEndDate;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +16,8 @@ use Symfony\Component\HttpFoundation\Response;
 class TaskController extends Controller
 {
     /**
+     * Renders the index page with count of tasks and its list
+     *
      * @return Response
      */
     public function indexAction ()
@@ -96,11 +99,12 @@ class TaskController extends Controller
 
         $comments = $commentRepository->findBy(array (
             'model' => 'Task',
-            //'user' => $user,
             'modelId' => $idTask
         ), array (
             'createDatetime' => 'DESC'
         ));
+
+        $info['comments'] = $comments;
 
         $info['comments'] = $comments;
 
@@ -136,7 +140,6 @@ class TaskController extends Controller
      */
     private function getTasksInfoForTable($filterArray)
     {
-
         $tasksUserRoleRepo = $this->getDoctrine()
             ->getRepository('SDTaskBundle:TaskUserRole');
 
@@ -237,10 +240,16 @@ class TaskController extends Controller
         ));
 
         $authorRole = $roleRepository
-            ->findOneBy(array (
+            ->findOneBy(array(
             'name' => 'author',
             'model' => 'task'
         ));
+
+        $matcherRole = $roleRepository
+            ->findOneBy(array(
+                'name' => 'matcher',
+                'model' => 'task'
+            ));
 
         $taskUserRoleController = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
             array (
@@ -263,58 +272,53 @@ class TaskController extends Controller
             )
         );
 
+        $taskUserRoleMatcher = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
+            array (
+                'task' => $taskUserRole->getTask(),
+                'role' => $matcherRole
+            )
+        );
+
+        $matchingInfo = array();
+        $taskCommitRepo = $em->getRepository('SDTaskBundle:TaskCommit');
+        foreach ($taskUserRoleMatcher as $key => $tur) {
+
+            $taskCommit = $taskCommitRepo->findOneBy(array(
+                'taskUserRole' => $tur
+            ), array(
+                'id' => 'DESC'
+            ));
+
+            if (!$taskCommit) {
+                $matchingInfo[$key] = 'none';
+            } else {
+                if ($taskCommit->getStage() == 'refused_sign_up') {
+                    $matchingInfo[$key] = 'refused';
+                } elseif ($taskCommit->getStage() == 'sign_up') {
+                    $matchingInfo[$key] = 'agree';
+                }
+            }
+
+        }
+
         $comment = $this->getLastTaskComment($taskUserRole->getTask()->getId());
 
-        $currentRole = $taskUserRole->getRole();
-        $currentStage = $taskUserRole->getTask()->getStage();
-        $currentIsViewed = $taskUserRole->getIsViewed();
 
-
-        $access = TaskAccessFactory::createAccess($currentRole, $currentStage, $currentIsViewed);
+        $access = TaskAccessFactory::createAccess($em, $taskUserRole);
 
         $info = array (
             'taskUserRole' => $taskUserRole,
             'taskUserRoleController' => $taskUserRoleController,
             'taskUserRolePerformer' => $taskUserRolePerformer,
             'taskUserRoleAuthor' => $taskUserRoleAuthor,
+            'taskUserRoleMatcher' => $taskUserRoleMatcher,
+            'matchingInfo' => $matchingInfo,
             'userId' => $userId,
             'comment' => $comment,
             'access' => $access
         );
 
         return $info;
-    }
-    /**
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function showTaskPageAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $info = $this->getTaskUserRoleInfo($id);
-
-        $commentRepository = $this->getDoctrine()
-            ->getRepository('SDTaskBundle:Comment');
-
-        //$user = $this->getUser();
-
-        /* $task = $this->getDoctrine()
-          ->getRepository('SDTaskBundle:Task')->find($idTask); */
-        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
-        $idTask = $taskUserRole->getTask()->getId();
-
-        $comments = $commentRepository->findBy(array (
-            'model' => 'Task',
-            //'user' => $user,
-            'modelId' => $idTask
-            ), array (
-            'createDatetime' => 'DESC'
-        ));
-        $info['comments'] = $comments;
-
-        return $this->render('SDTaskBundle:Task:taskPage.html.twig', $info);
     }
     /**
      * @param int $idTask
@@ -325,11 +329,6 @@ class TaskController extends Controller
     {
         $commentRepository = $this->getDoctrine()
             ->getRepository('SDTaskBundle:Comment');
-
-        //$user = $this->getUser();
-
-        /* $task = $this->getDoctrine()
-          ->getRepository('SDTaskBundle:Task')->find($idTask); */
 
         $lastComment = $commentRepository->findOneBy(array (
             'model' => 'Task',
@@ -367,9 +366,9 @@ class TaskController extends Controller
     }
     /**
      * @param int  $id
-     * @param bool $type
+     * @param bool $forceCheck
      */
-    private function checkIfCanPerform ($id, $type = false)
+    private function checkIfCanPerform ($id, $forceCheck = false)
     {
 
         $em = $this->getDoctrine()->getManager();
@@ -389,7 +388,7 @@ class TaskController extends Controller
             'task' => $task,
             'role' => $performerRole
         ));
-        if ($taskUserRole->getRole()->getName() != 'controller' || $type) {
+        if ($taskUserRole->getRole()->getName() != 'controller' || $forceCheck) {
             $performing = true;
             foreach ($tasksUserRole as $taskPerforming) {
                 if ($taskPerforming->getIsViewed() == false) {
@@ -673,8 +672,9 @@ class TaskController extends Controller
     /**
      * @param int    $idTaskUserRole
      * @param string $commentValue
+     * @param string $model
      */
-    protected function insertComment($idTaskUserRole, $commentValue)
+    protected function insertComment($idTaskUserRole, $commentValue, $model = 'Task')
     {
         $em = $this->getDoctrine()->getManager();
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($idTaskUserRole);
@@ -685,7 +685,7 @@ class TaskController extends Controller
 
         $comment->setValue($commentValue);
         $comment->setCreateDatetime(new \DateTime());
-        $comment->setModel('Task');
+        $comment->setModel($model);
         $comment->setModelId($idTask);
         $comment->setUser($user);
 
@@ -777,14 +777,14 @@ class TaskController extends Controller
             'id' => 'DESC'
         ));
 
-        $newDate = new \DateTime($value);//$date->getEndDateTime()->add(new \DateInterval($stringAddDate));
+        $newDate = new \DateTime($value);
 
         $newTaskEndDate = new TaskEndDate();
         $newTaskEndDate->setEndDateTime($newDate);
         $translator = $this->get('translator');
-
+        // comment block //
         if ($taskUserRole->getRole() == 'controller') {
-            $newTaskEndDate->setStage($stageDate);
+            $newTaskEndDate->setStage($stageDate); //set without request, coz CONTROLLER did it, behold)
             $comment = $translator->trans('Changed the end date', array(), 'SDTaskBundle').
                 ' :'.$newDate->format('d-m-Y H:i');
             if ($commentValue) {
@@ -795,6 +795,7 @@ class TaskController extends Controller
             $this->insertComment($id, $comment);
         } else {
             $newTaskEndDate->setStage($stageRequest);
+            //set with request, coz CONTROLLER have to take a decision about it
             $stageDateRequest = $em->getRepository('SDTaskBundle:Stage')->findOneby(array (
                 'name' => 'date request',
                 'model' => 'task',
@@ -809,6 +810,7 @@ class TaskController extends Controller
 
             $this->insertComment($id, $comment);
         }
+        // end comment block //
         $newTaskEndDate->setTask($task);
         $newTaskEndDate->setChangeDateTime(new \DateTime());
 
@@ -816,6 +818,161 @@ class TaskController extends Controller
 
         $em->persist($task);
         $em->flush();
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
+
+
+    /**
+    * Function to handle the ajax queries from editable elements
+    *
+    * @return mixed[]
+    */
+    public function editableTaskAction()
+    {
+        $pk = $this->get('request')->request->get('pk');
+        $value = $this->get('request')->request->get('value');
+        $name = $this->get('request')->request->get('name');
+
+        $em = $this->getDoctrine()->getManager();
+
+        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($pk);
+
+        $task = $taskUserRole->getTask();
+        $translator = $this->get('translator');
+        if ($name == 'title') {
+            $task->setTitle($value);
+            $em->persist($task);
+            $comment = $translator->trans('Changed the title', array(), 'SDTaskBundle').
+                ' :'.$value;
+
+        } elseif ($name == 'description') {
+            $task->setDescription($value);
+            $em->persist($task);
+            $comment = $translator->trans('Changed the description', array(), 'SDTaskBundle').
+                ' :'.$value;
+
+        } elseif ($name == 'date') {
+
+            $newDate = new \DateTime($value);
+
+            $taskEndDate = $em->getRepository('SDTaskBundle:TaskEndDate')->findOneBy(array (
+                'task' => $task
+            ));
+            $taskEndDate->setEndDateTime($newDate);
+            $em->persist($taskEndDate);
+
+            $comment = $translator->trans('Changed the end date', array(), 'SDTaskBundle').
+                ' :'.$newDate->format('d-m-Y H:i');
+
+        }
+
+        $this->insertComment($pk, $comment);
+
+        $em->flush();
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
+
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function signUpTaskAction(Request $request)
+    {
+        $id = $request->request->get('id');
+        $status = $request->request->get('status');
+        $commentValue = $request->request->get('comment');
+
+        $translator = $this->get('translator');
+        $em = $this->getDoctrine()->getManager();
+
+        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
+
+        $taskCommitRepo = $em->getRepository('SDTaskBundle:TaskCommit');
+        $taskCommit = $taskCommitRepo->findOneBy(array(
+            'taskUserRole' => $taskUserRole
+        ));
+
+        $needToCheckSignUps = false;
+        if ($status) {
+            $stageName = 'sign_up';
+            $comment = $translator->trans('Signed up', array(), 'SDTaskBundle');
+            $needToCheckSignUps = true;
+        } else {
+            $stageName = 'refused_sign_up';
+            $comment = $translator->trans('Refused to signed up', array(), 'SDTaskBundle');
+        }
+        $stage = $em->getRepository('SDTaskBundle:Stage')->findOneby(array (
+            'name' => $stageName,
+            'model' => 'task_commit',
+        ));
+
+
+        if (!$taskCommit) {
+            $taskCommit = new TaskCommit();
+        }
+        $taskCommit->setStage($stage);
+        $taskCommit->setTaskUserRole($taskUserRole);
+
+        $em->persist($taskCommit);
+
+        if ($commentValue) {
+            $comment .= '<br>
+            '.$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
+        }
+        $this->insertComment($id, $comment);
+
+        $em->flush();
+
+        if ($needToCheckSignUps) {
+            $roleRepository = $em->getRepository('SDTaskBundle:Role');
+            $matcherRole = $roleRepository
+                ->findOneBy(array(
+                    'name' => 'matcher',
+                    'model' => 'task'
+                ));
+
+            $taskUserRoleMatcher = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
+                array (
+                    'task' => $taskUserRole->getTask(),
+                    'role' => $matcherRole
+                )
+            );
+
+            $canBePerforming = true;
+            foreach ($taskUserRoleMatcher as $taskUserRoleCheck) {
+                $taskCommit = $taskCommitRepo->findOneBy(array(
+                    'taskUserRole' => $taskUserRoleCheck
+                ));
+                if (!$taskCommit) {
+                    $canBePerforming = false;
+                    break;
+                }
+                if ($taskCommit->getStage() == 'refused_sign_up') {
+                    $canBePerforming = false;
+                    break;
+                }
+            }
+
+            if ($canBePerforming) {
+                $task = $taskUserRole->getTask();
+                $stageCreated = $em->getRepository('SDTaskBundle:Stage')->findOneby(array (
+                    'name' => 'created',
+                    'model' => 'task',
+                ));
+                $task->setStage($stageCreated);
+
+                $em->persist($task);
+                $em->flush();
+            }
+        }
 
         $return['success'] = 1;
 
