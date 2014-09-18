@@ -2504,7 +2504,7 @@ class AjaxController extends BaseFilterController
         $data->setAuthor($user);
         $data->setStartDate(new \DateTime($formData['startDate']));
 
-        if ($formData['matcher']) {
+        if (isset($formData['matcher']) && $formData['matcher']) {
             $stageMatching = $this->getDoctrine()
                 ->getRepository('SDTaskBundle:Stage')
                 ->findOneBy(array(
@@ -2512,7 +2512,6 @@ class AjaxController extends BaseFilterController
                     'name' => 'matching'
                 ));
             $data->setStage($stageMatching);
-
         } else {
             $stageCreated = $this->getDoctrine()
                 ->getRepository('SDTaskBundle:Stage')

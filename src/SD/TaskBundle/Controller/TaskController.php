@@ -106,15 +106,7 @@ class TaskController extends Controller
 
         $info['comments'] = $comments;
 
-        $commentsMatching = $commentRepository->findBy(array (
-            'model' => 'TaskMatching',
-            'modelId' => $idTask
-        ), array (
-            'createDatetime' => 'DESC'
-        ));
-
         $info['comments'] = $comments;
-        $info['commentsMatching'] = $commentsMatching;
 
         $info['taskUserRole'] = $taskUserRole;
 
@@ -877,7 +869,7 @@ class TaskController extends Controller
 
         }
 
-        $this->insertComment($pk, $comment, 'TaskMatching');
+        $this->insertComment($pk, $comment);
 
         $em->flush();
 
@@ -931,10 +923,11 @@ class TaskController extends Controller
 
         $em->persist($taskCommit);
 
-        $comment .= '<br>
+        if ($commentValue) {
+            $comment .= '<br>
             '.$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
-
-        $this->insertComment($id, $comment, 'TaskMatching');
+        }
+        $this->insertComment($id, $comment);
 
         $em->flush();
 

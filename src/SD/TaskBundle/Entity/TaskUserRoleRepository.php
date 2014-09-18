@@ -62,14 +62,12 @@ class TaskUserRoleRepository extends EntityRepository
 
 
         $sql->andWhere('(r.name IN (:viewingRoleMatching) OR s.name != :stageMatching)')
-            //->setParameter(':stageMatching', 'matching')
+            ->setParameter(':stageMatching', 'matching')
             ->setParameter(':viewingRoleMatching', $viewingRoleMatching);
 
-
-
-        $sql->andWhere('(r.name NOT IN (:roleMatching) OR s.name = :stageMatching)')
+/*        $sql->andWhere('(r.name NOT IN (:roleMatching) OR s.name = :stageMatching)')
             ->setParameter(':stageMatching', 'matching')
-            ->setParameter(':roleMatching', $roleMatching);
+            ->setParameter(':roleMatching', $roleMatching);*/
 
 
         if (isset($filterArray['role']) && count($filterArray['role'])) {

@@ -7,7 +7,7 @@
 {% elseif taskUserRole.role == 'controller' %}
     {% set color = 'yellow' %}
 {% elseif taskUserRole.role == 'matcher' %}
-    {% set color = 'purple' %}
+    {% set color = 'green' %}
 {% endif %}
 
 {% set stage = taskUserRole.task.stage %}
@@ -35,7 +35,7 @@
         {{ taskUserRole.task.title }}
     </div>
     <div class="todo-tasklist-item-text">
-        {{ taskUserRole.task.description }}
+        {{ taskUserRole.task.description|length > 100 ? taskUserRole.task.description|slice(0, 50) ~ '...' : taskUserRole.task.description  }}
 {#
         {% if taskUserRole.role = 'controller' %}
             <br>

@@ -29,7 +29,7 @@ class MatcherTaskAccess extends BasicTaskAccess
     public function canRefuseSignUp()
     {
         if ($this->getStage() == 'matching' && $this->getIsViewed()) {
-            if ($this->getLastCommitStage() == null) {
+            if ($this->getLastCommitStage() != 'sign_up') {
 
                 return true;
             }

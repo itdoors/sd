@@ -518,14 +518,18 @@
                         <button id="task_set_done_controller" data-stage="done" class="stageButton btn btn-circle btn-sm green-haze" style="margin-top:5px;">{% trans %}Set done{% endtrans %}</button>
                         <button id="task_set_performing_controller" data-stage="performing" class="stageButton btn btn-circle btn-sm green-haze" style="margin-top:5px;">{% trans %}Re-make{% endtrans %}</button>
                     {% endif %}
-                    {% if access.canMakeDateRequest %}
-                        <button id="task_change_date" class="btn btn-circle btn-sm green-haze" style="margin-top:5px;">{% trans %}Change the end date{% endtrans %}</button>
-                    {% endif %}
                     {% if access.canSignUp %}
                         <button id="task_sign_up" data-status="1" class="signUpButton btn btn-circle btn-sm green-haze" style="margin-top:5px;">{% trans %}Sign up{% endtrans %}</button>
                     {% endif %}
                     {% if access.canRefuseSignUp %}
                         <button id="task_sign_up" data-status="0" class="signUpButton btn btn-circle btn-sm green-haze" style="margin-top:5px;">{% trans %}Refuse sign up{% endtrans %}</button>
+                    {% endif %}
+                    {% if access.canMakeDateRequest %}
+                        {% set textDate = 'Change the end date'|trans %}
+                        {% if taskUserRole.role == 'performer' %}
+                            {% set textDate = 'Request to change end date'|trans %}
+                        {% endif %}
+                        <button id="task_change_date" class="btn btn-circle btn-sm green-haze" style="margin-top:5px;">{{ textDate }}</button>
                     {% endif %}
 
                 </div>
@@ -565,10 +569,12 @@
                 <a href="#tab_2" data-toggle="tab">
                     {% trans %}Files{% endtrans %} </a>
             </li>
+{#
             <li>
                 <a href="#tab_3" data-toggle="tab">
                     {% trans %}Matching{% endtrans %} </a>
             </li>
+#}
 
         </ul>
         <div class="tab-content">
@@ -610,34 +616,6 @@
                         'id': taskUserRole.id
                     })) }}
                 </div>
-            </div>
-            <div class="tab-pane" id="tab_3">
-                <!-- TASK COMMENTS -->
-                <div class="form-group">
-                    <div class="col-md-12">
-                        <ul class="media-list">
-                            {% for comment in commentsMatching %}
-                                <li class="media">
-                                    <a class="pull-left" href="{{ path('sd_user_show',{ 'id': comment.user.id}) }}">
-                                        <img class="todo-userpic" src="{{ asset( userprofiles_url ~ comment.user.id ~ '/image29_' ~ comment.user.photo) }}" width="27px" height="27px">
-                                    </a>
-                                    <div class="media-body todo-comment">
-                                        {#
-                                                                            <button type="button" class="todo-comment-btn btn btn-circle btn-default btn-xs">&nbsp; Reply &nbsp;</button>
-                                        #}
-                                        <p class="todo-comment-head">
-                                            <span class="todo-comment-username">{{ comment.user }}</span> &nbsp; <span class="todo-comment-date">{{ comment.createDatetime|date('H:i d-m-Y') }}</span>
-                                        </p>
-                                        <p class="todo-text-color">
-                                            {{ comment.value|raw  }} <br>
-                                        </p>
-                                    </div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-                <!-- END TASK COMMENTS -->
             </div>
         </div>
     </div>
