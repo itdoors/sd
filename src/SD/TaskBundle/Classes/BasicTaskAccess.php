@@ -189,6 +189,4 @@ class BasicTaskAccess implements TaskAccessInterface
             return $taskCommit->getStage();
         }
     }
-
-
 }

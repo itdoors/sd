@@ -44,5 +44,4 @@ class AuthorTaskAccess extends BasicTaskAccess
 
         return false;
     }
-
 }
