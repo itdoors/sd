@@ -66,7 +66,8 @@ class AjaxController extends BaseFilterController
         'Dogovor' => 'ListsDogovorBundle:Dogovor',
         'DopDogovor' => 'ListsDogovorBundle:DopDogovor',
         'Email' => 'ITDoorsEmailBundle:Email',
-        'Task' => 'SDCalendarBundle:Task'
+        'Task' => 'SDCalendarBundle:Task',
+        'Holiday' => 'SDCalendarBundle:Holiday'
     );
 
     /**
@@ -1989,6 +1990,9 @@ class AjaxController extends BaseFilterController
      */
     public function holidayFormSave($form, $user, $request)
     {
+        if (!$this->getUser()->hasRole('ROLE_HRADMIN')) {
+            throw new Symfony\Component\HttpKernel\Exception\HttpException(403, "No access");
+        }
         $data = $form->getData();
         $formData = $request->request->get($form->getName());
 
@@ -3198,6 +3202,9 @@ class AjaxController extends BaseFilterController
      */
     public function holidayDelete($params)
     {
+        if (!$this->getUser()->hasRole('ROLE_HRADMIN')) {
+            throw new Symfony\Component\HttpKernel\Exception\HttpException(403, "No access");
+        }
         $id = $params['id'];
 
         $object = $this->getDoctrine()
@@ -4101,7 +4108,6 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($return));
     }
-
     /**
      * Adds children to {formName}ProcessDefaults depending on defaults in request
      *

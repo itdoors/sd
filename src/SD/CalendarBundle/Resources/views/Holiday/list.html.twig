@@ -1,35 +1,47 @@
 {% trans_default_domain 'SDCalendarBundle' %}
+<div id="form_modal_contact" class="modal fade" role="basic" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title">{% trans from 'SDCalendarBundle' %}Edit holiday{% endtrans %}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="modelContactFormTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+        </div>
 <div class="table-scrollable">
     <table class="table table-striped table-bordered table-hover dataTable" aria-describedby="datatable_ajax_info">
         <thead>
             <tr role="row" class="heading">
-                <th width="5%" class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">
-                    {% trans %}ID{% endtrans %}
-                </th>
-                <th width="5%" class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">
-                    {% trans %}Name{% endtrans %}
-                </th>
-                <th width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
-                    {% trans %}Short description{% endtrans %}
-                </th>
-                <th width="5%" class="sorting_desc" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
-                    {% trans %}Action{% endtrans %}
-                </th>
+                <th>{% trans %}ID{% endtrans %}</th>
+                <th>{% trans %}Date{% endtrans %}</th>
+                <th>{% trans %}Name{% endtrans %}</th>
+                <th>{% trans %}Short description{% endtrans %}</th>
+                <th>{% trans %}Description{% endtrans %}</th>
+                <th>{% trans %}Action{% endtrans %}</th>
             </tr>
         </thead>
         <tbody role="alert" aria-live="polite" aria-relevant="all">
             {% for item in entities %}
                 <tr class="{{ cycle(['odd', 'even'], item.id) }}">
-                    <td class="">{{ item.id }}</td>
+                    <td class="">
+                             {{ item.id }}
+                    </td>
+                    <td class="">{{ item.day }}.{{ item.month }}</td>
                     <td class="">{{ item.name }}</td>
                     <td class="">{{ item.shortDescription }}</td>
+                    <td class="">{{ item.description }}</td>
                     <td class="">
                         <a class="ajax-delete fa fa-trash-o"
                             title="{% trans %}Delete{% endtrans %}"
                             href="javascript:;"
                             data-params='{"model":"Holiday","id":{{ item.id }}}'
                         ></a>
-                        
                     </td>
                 </tr>
             {% endfor %}

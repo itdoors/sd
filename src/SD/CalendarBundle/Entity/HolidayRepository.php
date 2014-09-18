@@ -39,7 +39,7 @@ class HolidayRepository extends EntityRepository
 
         return $res;
     }
-     /**
+    /**
      * Returns results for interval future holidays
      *
      * @return mixed[]
@@ -57,5 +57,25 @@ class HolidayRepository extends EntityRepository
             'entities' => $res->getQuery(),
             'count' => $resCount->getQuery()->getSingleScalarResult()
         );
+    }
+    /**
+     * Returns results for interval future holidays
+     *
+     * @return mixed[]
+     */
+    public function getListForDate ($startTimestamp, $endTimestamp)
+    {
+        $res = $this->createQueryBuilder('h');
+
+        /** select */
+        $this->select($res);
+        /** where */
+        $res
+            ->andWhere('h.month >= :monthStart')
+            ->andWhere('h.month <= :monthStop')
+            ->setParameter(':monthStart', date('m', $startTimestamp))
+            ->setParameter(':monthStop', date('m', $endTimestamp));
+
+        return $res->getQuery()->getResult();
     }
 }
