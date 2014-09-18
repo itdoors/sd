@@ -65,6 +65,15 @@ class OrganizationRepository extends EntityRepository
         $sqlCount = $this->createQueryBuilder('o');
 
         $this->processSelect($sql);
+        $sql->addSelect(
+            "array_to_string(
+               ARRAY(
+                    SELECT k.name FROM ListsOrganizationBundle:KvedOrganization k_o
+                    LEFT JOIN ListsOrganizationBundle:Kved k WITH k_o.kved = k
+                    WHERE k_o.organization = o
+               ),
+            ', ') as kveds"
+        );
         $this->processCount($sqlCount);
 
         $this->processBaseQuery($sql);

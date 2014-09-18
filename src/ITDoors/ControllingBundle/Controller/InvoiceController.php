@@ -299,7 +299,7 @@ class InvoiceController extends BaseFilterController
      */
     public function expectedpayAction ()
     {
-        $namespaceTab = $this->container->getParameter($this->getNamespace());
+        $namespaceTab = $this->container->getParameter($this->getNamespace()).'expectedpay';
         $tab = $this->getTab($namespaceTab);
         if (!$tab) {
             $tab = 'today';
@@ -321,7 +321,7 @@ class InvoiceController extends BaseFilterController
      */
     public function expecteddataAction ()
     {
-        $namespaceTab = $this->container->getParameter($this->getNamespace());
+        $namespaceTab = $this->container->getParameter($this->getNamespace()).'expecteddata';
         $tab = $this->getTab($namespaceTab);
         if (!$tab) {
             $tab = 'delay';
@@ -343,7 +343,7 @@ class InvoiceController extends BaseFilterController
      */
     public function expectedpayshowAction ()
     {
-        $namespaceTab = $this->container->getParameter($this->getNamespace());
+        $namespaceTab = $this->container->getParameter($this->getNamespace()).'expectedpay';
         $tab = $this->getTab($namespaceTab);
 
         /** @var EntityManager $em */
@@ -390,7 +390,7 @@ class InvoiceController extends BaseFilterController
      */
     public function expecteddatashowAction ()
     {
-        $namespaceTab = $this->container->getParameter($this->getNamespace());
+        $namespaceTab = $this->container->getParameter($this->getNamespace()).'expecteddata';
         $tab = $this->getTab($namespaceTab);
 
         /** @var EntityManager $em */
