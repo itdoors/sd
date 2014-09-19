@@ -13,9 +13,9 @@ use BCC\CronManagerBundle\Manager\CronManager;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
- * sendEmailToStuffCommand
+ * SendEmailToStuffCommand
  */
-class sendEmailToStuffCommand extends ContainerAwareCommand
+class SendEmailToStuffCommand extends ContainerAwareCommand
 {
 
     /**

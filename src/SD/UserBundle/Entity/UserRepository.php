@@ -283,13 +283,18 @@ class UserRepository extends EntityRepository
         $res = $this->createQueryBuilder('u')
             ->select('u')
             ->where('u.birthday is not null')
-            ->andWhere('u.isFired = FALSE OR u.isFired IS NULL')
-            ->andWhere('dayofyear(u.birthday) >= :dayofyearStart')
-            ->andWhere('dayofyear(u.birthday) <= :dayofyearStop')
+            ->andWhere('u.isFired = FALSE OR u.isFired IS NULL');
+        if (date('Y', $startTimestamp) == date('Y', $endTimestamp)) {
+            $res->andWhere('dayofyear(u.birthday) >= :dayofyearStart')
+            ->andWhere('dayofyear(u.birthday) <= :dayofyearStop');
+        } else {
+            $res->andWhere('dayofyear(u.birthday) >= :dayofyearStart or dayofyear(u.birthday) <= :dayofyearStop');
+        }
+        $res
             ->setParameter(':dayofyearStart', date('z', $startTimestamp))
-            ->setParameter(':dayofyearStop', date('z', $endTimestamp));
+            ->setParameter(':dayofyearStop', date('z', $endTimestamp))
+            ->getQuery()->getResult();
 
-        $ret = $res->getQuery()->getResult();
-        return $ret;
+        return $res;
     }
 }
