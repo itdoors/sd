@@ -891,7 +891,7 @@ class InvoiceService
                 ->getSum($invoice->getId());
             $paySum = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')
                 ->getSum($invoice->getId());
-            if ($invoice->getDateFact() == NULL && $paySum >= $debtSum) {
+            if ($invoice->getDateFact() == null && $paySum >= $debtSum) {
                 $date = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')
                 ->dateLastPay($invoice->getId());
                 if (key_exists('date', $date)) {
@@ -901,7 +901,7 @@ class InvoiceService
                 }
                 $invoice->setDateFact($date);
             }
-            
+
             /** @var Dogovor  $dogovorfind */
             $dogovorfind = $em->getRepository('ListsDogovorBundle:Dogovor')
                 ->findOneBy(array ('dogovorGuid' => $invoice->getDogovorGuid()));
