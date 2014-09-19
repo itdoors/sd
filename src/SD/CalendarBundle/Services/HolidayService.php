@@ -92,6 +92,7 @@ class HolidayService
         $cron->addSendEmails();
     }
     /**
+     * getBirthdays
      * 
      * @param integer $startTimestamp
      * @param integer $endTimestamp
@@ -120,6 +121,7 @@ class HolidayService
         return $html;
     }
     /**
+     * getHolidays
      * 
      * @param integer $startTimestamp
      * @param integer $endTimestamp
