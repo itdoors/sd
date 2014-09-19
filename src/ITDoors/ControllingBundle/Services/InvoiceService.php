@@ -883,8 +883,25 @@ class InvoiceService
         $em->getConnection()->getConfiguration()->setSQLLogger(null);
         $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')->findAll();
         echo 'Start update info'."\n";
-        foreach ($invoices as $invoice) {
-            echo $invoice->getInvoiceId()." ";
+        $count = count($invoices);
+        foreach ($invoices as $key => $invoice) {
+            echo ($count-$key).' number:'.$invoice->getInvoiceId()." id:".$invoice->getId();
+
+            $debtSum = $em->getRepository('ITDoorsControllingBundle:InvoiceAct')
+                ->getSum($invoice->getId());
+            $paySum = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')
+                ->getSum($invoice->getId());
+            if ($invoice->getDateFact() == NULL && $paySum >= $debtSum) {
+                $date = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')
+                ->dateLastPay($invoice->getId());
+                if (key_exists('date', $date)) {
+                    $date = new \DateTime($date['date']);
+                } else {
+                    $date = $invoice->getDate();
+                }
+                $invoice->setDateFact($date);
+            }
+            
             /** @var Dogovor  $dogovorfind */
             $dogovorfind = $em->getRepository('ListsDogovorBundle:Dogovor')
                 ->findOneBy(array ('dogovorGuid' => $invoice->getDogovorGuid()));

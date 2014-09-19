@@ -12,4 +12,21 @@ use Doctrine\ORM\EntityRepository;
  */
 class InvoiceActRepository extends EntityRepository
 {
+    /**
+     * getSum
+     * 
+     * @param integer $invoiceId
+     * 
+     * @return integer
+     */
+    public function getSum ($invoiceId)
+    {
+
+        return $this->createQueryBuilder('a')
+            ->select('SUM(ad.summa)')
+            ->join('a.detals', 'ad')
+            ->where('a.invoiceId = :invoiceId')
+            ->setParameter(':invoiceId', $invoiceId)
+            ->getQuery()->getOneOrNullResult();
+    }
 }
