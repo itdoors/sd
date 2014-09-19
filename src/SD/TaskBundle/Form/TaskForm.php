@@ -55,6 +55,7 @@ class TaskForm extends AbstractType
                 'mapped' => false,
                 'class' => 'SD\UserBundle\Entity\User',
                 'empty_value' => '',
+                'data' => $user,
                 'query_builder' => function (\SD\UserBundle\Entity\UserRepository $repository) use ($userId) {
                         return $repository->createQueryBuilder('u')
                             ->where('u.id = :user')
@@ -65,12 +66,28 @@ class TaskForm extends AbstractType
                 'mapped' => false,
                 'class' => 'SD\UserBundle\Entity\User',
                 'empty_value' => '',
+                'data' => $user,
                 'query_builder' => function (\SD\UserBundle\Entity\UserRepository $repository) use ($userId) {
                         return $repository->createQueryBuilder('u')
                             ->where('u.id = :user')
                             ->setParameter(':user', $userId);
                 }
             ));
+
+            $builder->add('matcher', 'entity', array(
+                'mapped' => false,
+                'class' => 'SD\UserBundle\Entity\User',
+                'empty_value' => '',
+                'required' => false,
+                'multiple' => true,
+                //'data' => $user,
+                'query_builder' => function (\SD\UserBundle\Entity\UserRepository $repository) use ($userId) {
+                        return $repository->createQueryBuilder('u')
+                            ->where('u.id = :user')
+                            ->setParameter(':user', $userId);
+                }
+            ));
+
         } else {
             //$companyStructure = $stuff->getCompanystructure();
             $builder->add('performer', 'entity', array(
@@ -101,6 +118,24 @@ class TaskForm extends AbstractType
                         //->setParameter(':fired', true, \PDO::PARAM_BOOL);
                 }
             ));
+
+            $builder->add('matcher', 'entity', array(
+                'mapped' => false,
+                'class' => 'SD\UserBundle\Entity\User',
+                'multiple' => 'true',
+                'empty_value' => '',
+                'required' => false,
+                //'data' => $user,
+                'query_builder' => function (\SD\UserBundle\Entity\UserRepository $repository) {
+                        return $repository->createQueryBuilder('u')
+                            ->innerJoin('u.stuff', 's')
+                            ->where('u.isFired = false')
+                            ->orWhere('u.isFired is NULL')
+                            ->orderBy('u.lastName', 'asc');
+                        //->setParameter(':fired', true, \PDO::PARAM_BOOL);
+                }
+            ));
+
 
         }
 /*        $builder->add('performer', 'entity', array(

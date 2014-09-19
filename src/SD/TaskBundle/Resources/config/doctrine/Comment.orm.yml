@@ -13,9 +13,8 @@ SD\TaskBundle\Entity\Comment:
             nullable: false
             column: create_datetime
         value:
-            type: string
+            type: text
             nullable: false
-            length: 255
         model:
             type: string
             nullable: false

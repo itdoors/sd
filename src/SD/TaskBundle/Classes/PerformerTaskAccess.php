@@ -16,7 +16,9 @@ class PerformerTaskAccess extends BasicTaskAccess
     public function canSetDone()
     {
         if ($this->isViewed()) {
-            if ($this->stage == 'created' || $this->stage == 'performing' || $this->stage == 'date request') {
+            if ($this->getStage() == 'created' ||
+                $this->getStage() == 'performing' ||
+                $this->getStage() == 'date request') {
 
                 return true;
             }
@@ -31,7 +33,7 @@ class PerformerTaskAccess extends BasicTaskAccess
     public function canMakeDateRequest()
     {
         if ($this->isViewed()) {
-            if ($this->stage == 'created' || $this->stage == 'performing') {
+            if ($this->getStage() == 'created' || $this->getStage() == 'performing') {
 
                 return true;
             }
@@ -57,7 +59,7 @@ class PerformerTaskAccess extends BasicTaskAccess
      */
     public function canLeaveComment()
     {
-        if ($this->isViewed()) {
+        if ($this->isViewed() && ($this->canSetDone() || $this->canMakeDateRequest())) {
 
             return true;
         }

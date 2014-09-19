@@ -57,3 +57,11 @@ sd_task_files:
 sd_task_change_date_calendar:
     path:     /tasks/change/date/calendar
     defaults: { _controller: SDTaskBundle:Task:changeDate }
+
+sd_task_editable:
+    path:     /tasks/editable
+    defaults: { _controller: SDTaskBundle:Task:editableTask }
+
+sd_task_sign_up:
+    path:     /tasks/sign/up
+    defaults: { _controller: SDTaskBundle:Task:signUpTask }
