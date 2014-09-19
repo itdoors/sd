@@ -47,11 +47,11 @@ sd_tasks_done:
 
 #Holidays
 sd_holiday_index:
-    path:  /holiday
+    pattern:  /holiday
     defaults: { _controller: SDCalendarBundle:Holiday:index}
 
 sd_holiday_list:
-    path:  /holiday/list
+    pattern:  /holiday/list
     defaults: { _controller: SDCalendarBundle:Holiday:list}
 
 sd_holiday_save:
