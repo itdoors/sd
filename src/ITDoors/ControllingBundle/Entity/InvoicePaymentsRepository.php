@@ -52,4 +52,37 @@ class InvoicePaymentsRepository extends EntityRepository
                 ->getQuery()
                 ->getResult();
     }
+    /**
+     * getSum
+     * 
+     * @param integer $invoiceId
+     * 
+     * @return integer
+     */
+    public function getSum ($invoiceId)
+    {
+
+        return $this->createQueryBuilder('p')
+            ->select('SUM(p.summa)')
+            ->where('p.invoiceId = :invoiceId')
+            ->setParameter(':invoiceId', $invoiceId)
+            ->getQuery()->getOneOrNullResult();
+    }
+    /**
+     * dateLastPay
+     * 
+     * @param integer $invoiceId
+     * 
+     * @return mixed|null
+     */
+    public function dateLastPay ($invoiceId)
+    {
+
+        return $this->createQueryBuilder('p')
+            ->select('p.date')
+            ->where('p.invoiceId = :invoiceId')
+            ->setParameter(':invoiceId', $invoiceId)
+            ->orderBy('p.date', 'DESC')
+            ->getQuery()->getScalarResult();
+    }
 }
