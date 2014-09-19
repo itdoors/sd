@@ -71,7 +71,7 @@ class HolidayController extends BaseFilterController
         $object = $this->getDoctrine()
             ->getRepository('SDCalendarBundle:Holiday')
             ->find($pk);
-        
+
         if ($name == 'date') {
             $data = explode('.', $this->get('request')->request->get('value'));
             $object->setDay($data[0]);
@@ -81,10 +81,6 @@ class HolidayController extends BaseFilterController
             $value = $this->get('request')->request->get('value');
             $methodSet = 'set' . ucfirst($name);
         }
-
-        
-
-        
 
         $object->$methodSet($value);
 

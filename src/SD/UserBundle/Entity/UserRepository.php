@@ -286,15 +286,14 @@ class UserRepository extends EntityRepository
             ->andWhere('u.isFired = FALSE OR u.isFired IS NULL');
         if (date('Y', $startTimestamp) == date('Y', $endTimestamp)) {
             $res->andWhere('dayofyear(u.birthday) >= :dayofyearStart')
-            ->andWhere('dayofyear(u.birthday) <= :dayofyearStop');
+                ->andWhere('dayofyear(u.birthday) <= :dayofyearStop');
         } else {
-            $res->andWhere('dayofyear(u.birthday) >= :dayofyearStart or dayofyear(u.birthday) <= :dayofyearStop');
+            $res->andWhere('(dayofyear(u.birthday) >= :dayofyearStart) or (dayofyear(u.birthday) <= :dayofyearStop)');
         }
         $res
             ->setParameter(':dayofyearStart', date('z', $startTimestamp))
-            ->setParameter(':dayofyearStop', date('z', $endTimestamp))
-            ->getQuery()->getResult();
+            ->setParameter(':dayofyearStop', date('z', $endTimestamp));
 
-        return $res;
+        return $res->getQuery()->getResult();
     }
 }

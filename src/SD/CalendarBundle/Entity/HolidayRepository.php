@@ -53,12 +53,13 @@ class HolidayRepository extends EntityRepository
         $this->select($res);
         $this->selectCount($resCount);
 
-        return array(
+        return array (
             'entities' => $res->getQuery(),
             'count' => $resCount->getQuery()->getSingleScalarResult()
         );
     }
     /**
+     * getListForDate
      * 
      * @param integer $startTimestamp
      * @param integer $endTimestamp
@@ -72,9 +73,13 @@ class HolidayRepository extends EntityRepository
         /** select */
         $this->select($res);
         /** where */
-        $res->andWhere('dayofyear(h.date) >= :dayofyearStart')
-            ->andWhere('dayofyear(h.date) <= :dayofyearStop')
-            ->setParameter(':dayofyearStart', date('z', $startTimestamp))
+        if (date('Y', $startTimestamp) == date('Y', $endTimestamp)) {
+            $res->andWhere('dayofyear(h.date) >= :dayofyearStart')
+                ->andWhere('dayofyear(h.date) <= :dayofyearStop');
+        } else {
+            $res->andWhere('dayofyear(h.date) >= :dayofyearStart) or (dayofyear(u.birthday) <= :dayofyearStop)');
+        }
+        $res->setParameter(':dayofyearStart', date('z', $startTimestamp))
             ->setParameter(':dayofyearStop', date('z', $endTimestamp));
 
         return $res->getQuery()->getResult();

@@ -39,7 +39,6 @@ class Holiday
     {
         return $this->id;
     }
-
     /**
      * Set name
      *
@@ -106,31 +105,31 @@ class Holiday
     {
         return $this->description;
     }
+
     /**
      * @var \DateTime
      */
     private $date;
 
-
     /**
      * Set date
      *
      * @param \DateTime $date
+     * 
      * @return Holiday
      */
-    public function setDate($date)
+    public function setDate ($date)
     {
         $this->date = $date;
-    
+
         return $this;
     }
-
     /**
      * Get date
      *
      * @return \DateTime 
      */
-    public function getDate()
+    public function getDate ()
     {
         return $this->date;
     }
