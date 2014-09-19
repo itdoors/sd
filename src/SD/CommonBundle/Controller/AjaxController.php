@@ -66,7 +66,8 @@ class AjaxController extends BaseFilterController
         'Dogovor' => 'ListsDogovorBundle:Dogovor',
         'DopDogovor' => 'ListsDogovorBundle:DopDogovor',
         'Email' => 'ITDoorsEmailBundle:Email',
-        'Task' => 'SDCalendarBundle:Task'
+        'Task' => 'SDCalendarBundle:Task',
+        'Holiday' => 'SDCalendarBundle:Holiday'
     );
 
     /**
@@ -1978,6 +1979,34 @@ class AjaxController extends BaseFilterController
 
         return true;
     }
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function holidayFormSave($form, $user, $request)
+    {
+        if (!$this->getUser()->hasRole('ROLE_HRADMIN')) {
+            throw new Symfony\Component\HttpKernel\Exception\HttpException(403, "No access");
+        }
+        $data = $form->getData();
+        $formData = $request->request->get($form->getName());
+
+        $date = explode('.', $formData['date']);
+        if (!key_exists(1, $date)) {
+            return true;
+        }
+        $data->setDate(new \DateTime(date('Y').'-'.$date[0].'-'.$date[1].'00:00:00'));
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
 
     /**
      * Saves {formName}Save after valid ajax validation
@@ -3190,6 +3219,29 @@ class AjaxController extends BaseFilterController
         $em->remove($object);
         $em->flush();
     }
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
+    public function holidayDelete($params)
+    {
+        if (!$this->getUser()->hasRole('ROLE_HRADMIN')) {
+            throw new Symfony\Component\HttpKernel\Exception\HttpException(403, "No access");
+        }
+        $id = $params['id'];
+
+        $object = $this->getDoctrine()
+            ->getRepository('SDCalendarBundle:Holiday')
+            ->find($id);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($object);
+        $em->flush();
+    }
 
     /**
      * Deletes {entityName}Delete instance
@@ -4082,7 +4134,6 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($return));
     }
-
     /**
      * Adds children to {formName}ProcessDefaults depending on defaults in request
      *

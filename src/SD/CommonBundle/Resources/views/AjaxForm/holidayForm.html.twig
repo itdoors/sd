@@ -1,0 +1,85 @@
+{% trans_default_domain 'SDCalendarBundle' %}
+{% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+<script>
+    $(document).ready(function(){
+         $('#' + '{{ form.vars.name }}' + '_date').datepicker({
+                rtl: Metronic.isRTL(),
+                autoclose: true,
+                format: "dd.mm",
+                pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+                language: 'ru',
+                weekStart: 1
+            });
+    });
+</script>
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title"><div class="caption"><i class="fa fa-cogs"></i>{% trans from 'SDCalendarBundle' %}New holiday{% endtrans %}</div></div>
+            <div class="portlet-body">
+                {% if form.vars.valid %}
+                {% else %}
+                <div class="alert alert-danger">
+                    <button class="close" data-close="alert"></button>
+                    {{ form_errors(form) }}
+                </div>
+                {% endif %}
+
+                {{ form_start(form, {
+                    'action' : path('sd_common_ajax_form'),
+                    'attr' : {
+                        'method' : 'POST',
+                        'class' : 'ajax-form-entity',
+                        'data-post_function': postFunction,
+                        'data-post_target_id': postTargetId,
+                        'data-target_id': targetId
+                }
+                }) }}
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                
+                                {{ form_label(form.date, 'Date', {'attr': {'class': 'control-label'}}) }}
+                                <div class="input-group date form_datetime">
+                                        {{ form_widget(form.date, {'attr' : {
+                                        'class' : 'form-control',
+                                        'placeholder': 'Enter date'
+                                        }}) }}
+                                        <span class="input-group-btn">
+                                            <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+                                        </span>
+                                    </div>
+                            </div>
+                            <div class="form-group">
+                                {{ form_label(form.name, 'Name', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.name, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter name'} } ) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_label(form.shortDescription, 'Short description', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.shortDescription, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter short description'} } ) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_label(form.description, 'Description', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.description, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter description'} } ) }}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="formName" value="{{ formName }}">
+                <input type="hidden" name="postFunction" value="{{ postFunction }}">
+                <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
+                <input type="hidden" name="targetId" value="{{ targetId }}">
+                <input type="hidden" name="defaultData" value='{{ defaultData|json_encode|raw }}'>
+
+                <div class="form-actions">
+                    {{ form_widget(form.create, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
+                    {{ form_widget(form.cancel, { 'label': 'Cancel', 'attr': {'class': 'btn default sd-cancel-btn', 'data-dismiss':'modal'} } ) }}
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>

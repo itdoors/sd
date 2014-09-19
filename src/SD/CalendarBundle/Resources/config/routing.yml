@@ -44,3 +44,16 @@ sd_tasks_set_done:
 sd_tasks_done:
     pattern:  sd/tasks/done
     defaults: { _controller: SDCalendarBundle:Private:tasksDone }
+    
+#Holidays
+sd_holiday_index:
+    pattern:  sd/holiday
+    defaults: { _controller: SDCalendarBundle:Holiday:index }
+
+sd_holiday_list:
+    pattern:  sd/holiday/list
+    defaults: { _controller: SDCalendarBundle:Holiday:list }
+    
+sd_holiday_save:
+    pattern:  /ajax/holiday/save
+    defaults: { _controller: SDCalendarBundle:Holiday:holidaySave }

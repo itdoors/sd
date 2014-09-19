@@ -24,11 +24,11 @@ parameters:
         - dogovor
         - companystructure
         - call
-    sd.host: http://sd.griffin.ua
+    sd.host: http://itdoors.jelastic.neohost.net
     # AMI CONFIG
-    ami.host: sd.griffin.ua
+    ami.host: 193.242.166.54
     ami.port: 8888
-    sip.host: 192.168.4.4
+    sip.host: 95.67.67.170
     sip.host.proxy: 192.168.4.4
     sip.port.udp: 5060
     sip.port.ws: 10060

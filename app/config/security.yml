@@ -44,4 +44,5 @@ security:
         - { path: ^/sd/calendar/shared, role: ROLE_SALESADMIN }
         - { path: ^/controlling, roles: 'ROLE_CONTROLLING, ROLE_CONTROLLING_OPER' }
         - { path: ^/controlling/invoice/analytic, role: ROLE_CONTROLLING }
+        - { path: ^/sd/holiday, role: ROLE_HRADMIN }
         

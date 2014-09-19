@@ -184,20 +184,31 @@ class PrivateController extends SalesController
                 ->getBirthdaysForCalendar($startTimestamp, $endTimestamp);
         /** @var Translator $translator */
         $translator = $this->container->get('translator');
-
         foreach ($users as $user) {
-
             $fullName = $user->getFullname();
-
             $events[] = array(
                 'hover_title' => '',
-                'title' => $translator->trans('Birthday', array(), 'SDDashboardBundle').' '. $fullName,
+                'title' => $translator->trans('BD', array(), 'SDDashboardBundle').' '. $fullName,
                 'start' => date('Y').'-'.$user->getBirthday()->format('m-d'),
                 'end' => date('Y').'-'.$user->getBirthday()->format('m-d'),
-                'allDay' => false,
+                'allDay' => true,
                 'url' => $this->generateUrl('sd_user_show', array(
                     'id' => $user->getId()
                 )),
+                );
+        }
+        /** @var Holiday[] $holidays */
+        $holidays = $em->getRepository('SDCalendarBundle:Holiday')
+                ->getListForDate($startTimestamp, $endTimestamp);
+        /** @var Translator $translator */
+        foreach ($holidays as $holiday) {
+            $name = $holiday->getName();
+            $events[] = array(
+                'hover_title' => '',
+                'title' => $name,
+                'start' => date('Y').'-'.$holiday->getMonth().'-'.$holiday->getDay(),
+                'end' => date('Y').'-'.$holiday->getMonth().'-'.$holiday->getDay(),
+                'allDay' => true
                 );
         }
 

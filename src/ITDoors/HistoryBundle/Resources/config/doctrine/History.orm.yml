@@ -26,14 +26,12 @@ ITDoors\HistoryBundle\Entity\History:
             nullable: true
             column: field_name
         oldValue:
-            type: string
-            length: 255
+            type: text
             fixed: false
             nullable: true
             column: old_value
         value:
-            type: string
-            length: 255
+            type: text
             fixed: false
             nullable: true
         createdatetime:
