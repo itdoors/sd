@@ -169,4 +169,88 @@ class TaskService
 
         return true;
     }
+
+    /**
+     * sendEmailInform
+     *
+     * @param SD/TaskBundle/Entity/TaskUserRole[] $taskUserRoles
+     * @param string                              $type
+     */
+    protected  function sendEmailInform($taskUserRoles, $type)
+    {
+        /** @var EntityManager $em */
+        $em = $this->container->get('doctrine')->getManager();
+
+        $translator = $this->container->get('translator');
+        $templating = $this->container->get('templating');
+        $emailService = $this->container->get('it_doors_email.service');
+
+        if ($type == 'new') {
+            $subject = $translator->trans('You have new task', array(), 'SDTaskBundle');
+
+            foreach ($taskUserRoles as $taskUserRole) {
+                $text = $translator->trans('You have new task', array(), 'SDTaskBundle');
+                $text .= $taskUserRole->getTask()->getTitle();
+                $text .= "<br>";
+                $text .= $translator->trans('Your role', array (), 'SDTaskBundle');
+                $text .= $translator->trans($taskUserRole->getRole(), array(), 'SDTaskBundle');
+
+                $emails = array();
+                $userEmail = $taskUserRole->getUser()->getEmail();
+                if ($userEmail) {
+                    $emails[] = $userEmail;
+                }
+
+                $emailService->send(
+                    null,
+                    'empty-template',
+                    array (
+                        'users' => $emails,
+                        'variables' => array (
+                            '${subject}$' => $subject,
+                            '${text}$' => $text
+                        )
+                    )
+                );
+
+            }
+
+        } elseif ($type == 'close') {
+            $subject = $translator->trans('Task is closed', array(), 'SDTaskBundle');
+
+            foreach ($taskUserRoles as $taskUserRole) {
+                $text = $translator->trans('Task had been finished :', array(), 'SDTaskBundle');
+                $text .= $taskUserRole->getTask()->getTitle();
+                $text .= "<br>";
+                $text .= $translator->trans('Your role', array(), 'SDTaskBundle').': ';
+                $text .= $translator->trans($taskUserRole->getRole(), array(), 'SDTaskBundle');
+                $text .= "<br>";
+                $text .= $translator->trans('Last stage', array(), 'SDTaskBundle').': ';
+                $text .= $translator->trans($taskUserRole->getTask()->getStage(), array(), 'SDTaskBundle');
+
+                $emails = array();
+                $userEmail = $taskUserRole->getUser()->getEmail();
+                if ($userEmail) {
+                    $emails[] = $userEmail;
+                }
+
+                $emailService->send(
+                    null,
+                    'empty-template',
+                    array (
+                        'users' => $emails,
+                        'variables' => array (
+                            '${subject}$' => $subject,
+                            '${text}$' => $text
+                        )
+                    )
+                );
+
+            }
+        }
+
+        $cron = $this->container->get('it_doors_cron.service');
+        $cron->addSendEmails();
+    }
+
 }

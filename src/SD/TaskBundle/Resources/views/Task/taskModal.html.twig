@@ -378,7 +378,7 @@
         <td colspan="3">{{ taskUserRole.task.stage|trans }}</td>
     </tr>
     <tr>
-        <td colspan="4"><a href="{{ path('sd_task_homepage') }}{#{{ path('sd_task_page', {'id' : taskUserRole.id }) }}#}">{% trans %}Link to page{% endtrans %}</a></td>
+        <td colspan="4"><a href="{{ path('sd_task_homepage', {}, true) }}{#{{ path('sd_task_page', {'id' : taskUserRole.id }) }}#}">{% trans %}Link to page{% endtrans %}</a></td>
     </tr>
     {#
         {% if task.handlingMessage is not empty %}

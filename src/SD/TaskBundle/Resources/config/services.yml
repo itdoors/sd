@@ -25,6 +25,6 @@ services:
         class: %sd_task.task.file.service.class%
         arguments: [@service_container]
 
-    task.form.service:
+    task.service:
         class: %sd_task.task.service.class%
         arguments: [@service_container]
