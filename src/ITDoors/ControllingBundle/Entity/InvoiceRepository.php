@@ -708,6 +708,11 @@ class InvoiceRepository extends EntityRepository
                 ->andWhere("i.dateFact is NULL")
                 ->orderBy('performerName, i.id', 'DESC');
                 break;
+            case 'dogovor':
+                $res = $res->andWhere("i.dogovorId is NULL")
+                    ->andWhere("i.dateFact is NULL")
+                    ->orderBy('performerName, i.id', 'DESC');
+                break;
         }
 
         return $res->getQuery();
@@ -751,6 +756,10 @@ class InvoiceRepository extends EntityRepository
                 )
                 ->andWhere("i.dateFact is NULL")
                 ->setParameter(':boolean', false, \PDO::PARAM_BOOL);
+                break;
+            case 'dogovor':
+                $res = $res->andWhere("i.dogovorId is NULL")
+                    ->andWhere("i.dateFact is NULL");
                 break;
         }
 
@@ -996,6 +1005,10 @@ class InvoiceRepository extends EntityRepository
             case 'act':
                 $result['entities'] = $this->getInvoiceEmptyData('act', $companystryctyre);
                 $result['count'] = $this->getInvoiceEmptyDataCount('act', $companystryctyre);
+                break;
+            case 'dogovor':
+                $result['entities'] = $this->getInvoiceEmptyData('dogovor', $companystryctyre);
+                $result['count'] = $this->getInvoiceEmptyDataCount('dogovor', $companystryctyre);
                 break;
         }
 
