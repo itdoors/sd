@@ -601,13 +601,6 @@ class OrganizationRepository extends EntityRepository
                         AND paymens.invoiceId = i_paymens.id
                     )as paymentsSumma"
                 )
-//                ->addSelect(
-//                    '(
-//                        SELECT SUM(i_s.sum)
-//                        FROM  ITDoorsControllingBundle:Invoice  i_s
-//                        WHERE i_s.customerId = o.id
-//                    ) as allSummaInvoice'
-//                )
                 ->addSelect(
                     '(
                         SELECT SUM(i_a_d.summa)
