@@ -543,7 +543,7 @@ class InvoiceController extends BaseFilterController
                 ->setCellValueByColumnAndRow(
                     ++$col,
                     $str,
-                    !$invoice['court'] ? '' : $invoice['court']->format('d.m.Y')
+                    !$invoice['court'] ? '' : $invoice['court']
                 );
         }
         $phpExcelObject->getActiveSheet()->getStyle('A2:P' . $str)->getAlignment()->setWrapText(true);
