@@ -4,18 +4,18 @@
     <thead>
         <tr>
             <th style="border: 1px double #eee;text-align: center">{% trans %}FIO{% endtrans %}</th>
+            <th style="border: 1px double #eee;text-align: center">{% trans %}Position{% endtrans %}</th>
             <th style="border: 1px double #eee;text-align: center">{% trans %}Email{% endtrans %}</th>
             <th style="border: 1px double #eee;text-align: center">{% trans %}Phone{% endtrans %}</th>
-            <th style="border: 1px double #eee;text-align: center">{% trans %}Position{% endtrans %}</th>
         </tr>
     </thead>
     <tbody>
         {% for item in users %}
             <tr class="{{ cycle(['odd', 'even'], item.id) }}">
                 <td style="border: 1px double #eee;padding: 5px;">{{ item }}</td>
+                <td style="border: 1px double #eee;padding: 5px;">{{ item.position }}</td>
                 <td style="border: 1px double #eee;padding: 5px;">{{ item.email }}</td>
                 <td style="border: 1px double #eee;padding: 5px;">{{ item.stuff.mobilephone }}</td>
-                <td style="border: 1px double #eee;padding: 5px;">{{ item.position }}</td>
             </tr>
         {% endfor %}
     </tbody>
