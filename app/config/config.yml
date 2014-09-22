@@ -10,6 +10,7 @@ parameters:
     ajax.filter.namespace.report.last.messages: "report.last.messages"
     it_doors.history.namespace: "report.history"
     ajax.filter.namespace.report.invoice: "report.invoice"
+    sd.holiday: "sd.holiday"
     filter.namespace.article: "article.namespase"
     it.doors.email.namespace: "namespace.email"
     ajax.filter.namespace.oper.department.table: "oper.department.table"
@@ -62,6 +63,7 @@ twig:
         ajax_filter_namespace_dashboard_calendar: %ajax.filter.namespace.dashboard.calendar%
         ajax_filter_namespace_report_last_messages: %ajax.filter.namespace.report.last.messages%
         ajax_filter_namespace_report_invoice: %ajax.filter.namespace.report.invoice%
+        sd_holiday: %sd.holiday%
         it_doors_namespace_history: %it_doors.history.namespace%
         filter_namespace_article: %filter.namespace.article%
         it_doors_namespace_email: %it.doors.email.namespace%
@@ -134,9 +136,12 @@ doctrine:
                         array: ITDoors\CommonBundle\DQL\ArrayDQL
                         select_next_handling_message_date: SD\CommonBundle\DQL\SelectNextHandlingMessageDateDQL
                     #datetime_functions:
-                        #YEAR: ITDoors\CommonBundle\DQL\Year
-                        #MONTH: ITDoors\CommonBundle\DQL\Month
-                    # numeric_functions:
+                    numeric_functions:
+                        dayofyear: Oro\ORM\Query\AST\Functions\SimpleFunction
+                        year: Oro\ORM\Query\AST\Functions\SimpleFunction
+                        month: Oro\ORM\Query\AST\Functions\SimpleFunction
+                        day: Oro\ORM\Query\AST\Functions\SimpleFunction
+                        
 stof_doctrine_extensions:
      orm:
         default:

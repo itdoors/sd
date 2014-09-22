@@ -5,8 +5,7 @@ SD\UserBundle\Entity\User:
     id:
         id:
             type: integer
-            generator:
-                strategy: IDENTITY
+            generator: { strategy: IDENTITY }
     fields:
         firstName:
             type: string

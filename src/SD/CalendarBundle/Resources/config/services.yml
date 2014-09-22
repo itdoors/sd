@@ -3,6 +3,8 @@ parameters:
     sd_calendar.form.class: SD\CalendarBundle\Form\CalendarEventForm
     sd_calendar.task.form.class: SD\CalendarBundle\Form\TaskForm
     sd_calendar.service.class: SD\CalendarBundle\Services\CalendarService
+    sd_calendar.holiday.form.class: SD\CalendarBundle\Form\HolidayForm
+    sd_calendar.holiday.service.class: SD\CalendarBundle\Services\HolidayService
 
 services:
 #    sd_calendar.example:
@@ -22,4 +24,14 @@ services:
 
     sd_calendar.service:
         class: %sd_calendar.service.class%
+        arguments: [@service_container]
+        
+    sd_calendar.form.holidayForm:
+        class: %sd_calendar.holiday.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: holidayForm }
+
+    sd_calendar.holiday.service:
+        class: %sd_calendar.holiday.service.class%
         arguments: [@service_container]

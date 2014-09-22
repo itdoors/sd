@@ -7,6 +7,7 @@ use ITDoors\EmailBundle\Entity\Email;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_Attachment;
+use Symfony\Component\Validator\Constraints\Email as EmailBase;
 
 /**
  * Email Service class
@@ -73,16 +74,27 @@ class EmailService
             ->findOneBy(array('alias' => $template));
 
         if (!$templateEmail) {
-            return false;
+            throw new NotFoundHttpException('Template not found');
         }
-        /** Swift_Mailer $mailer */
-        $mailer = $this->container->get('mailer');
 
         if (!array_key_exists('users', $to)) {
-            return false;
+            throw new NotFoundHttpException(
+                'Not found email.
+                Try send($from, $template, $to)
+                $to = array("user" => array (email)))'
+            );
         }
-        $result = array();
+        $send = false;
+        $emailConstraint = new EmailBase();
+        $validator = $this->container->get('validator');
         foreach ($to['users'] as $email) {
+            /** Swift_Mailer $mailer */
+            $mailer = $this->container->get('mailer');
+            $errors = $validator->validateValue($email, $emailConstraint);
+            if (count($errors) > 0) {
+                echo $email.' - '.$errors[0]->getMessage()."\n";
+                                continue;
+            }
             $message = Swift_Message::newInstance()
                 ->setFrom($from)
                 ->setTo($email);
@@ -103,12 +115,16 @@ class EmailService
                 $this->addFiles($message, $to['files']);
             }
             $mailer->send($message);
-            $mailer = $em->getRepository('TSSAutomailerBundle:Automailer')
+            $send = true;
+        }
+        $result = null;
+        if ($send) {
+            $last = $em->getRepository('TSSAutomailerBundle:Automailer')
                     ->createQueryBuilder('a')
                     ->orderBy('a.id', 'DESC')
                     ->getQuery()
                     ->getResult();
-            $result = $mailer[0]->getId();
+            $result = $last[0]->getId();
         }
 
         return $result;

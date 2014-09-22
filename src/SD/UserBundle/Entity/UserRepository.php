@@ -236,7 +236,7 @@ class UserRepository extends EntityRepository
      * @param array           $filters
      * @param integer|boolean $id
      * 
-     * @return type
+     * @return mixed[]
      */
     public function getAllForUserQuery ($filters, $id = false)
     {
@@ -276,18 +276,24 @@ class UserRepository extends EntityRepository
      * @param integer $startTimestamp
      * @param integer $endTimestamp
      * 
-     * @return type
+     * @return mixed[]
      */
     public function getBirthdaysForCalendar($startTimestamp, $endTimestamp)
     {
-        return $this->createQueryBuilder('u')
+        $res = $this->createQueryBuilder('u')
             ->select('u')
             ->where('u.birthday is not null')
-//            ->where('MONTH(u.birthday) >= :startDate')
-//            ->andWhere('MONTH(u.birthday) <= :endDat')
-//            ->setParameter(':startDate', date('m', $startTimestamp))
-//            ->setParameter(':endDat', date('m', $endTimestamp))
-            ->getQuery()
-            ->getResult();
+            ->andWhere('u.isFired = FALSE OR u.isFired IS NULL');
+        if (date('Y', $startTimestamp) == date('Y', $endTimestamp)) {
+            $res->andWhere('dayofyear(u.birthday) >= :dayofyearStart')
+                ->andWhere('dayofyear(u.birthday) <= :dayofyearStop');
+        } else {
+            $res->andWhere('(dayofyear(u.birthday) >= :dayofyearStart) or (dayofyear(u.birthday) <= :dayofyearStop)');
+        }
+        $res
+            ->setParameter(':dayofyearStart', date('z', $startTimestamp))
+            ->setParameter(':dayofyearStop', date('z', $endTimestamp));
+
+        return $res->getQuery()->getResult();
     }
 }

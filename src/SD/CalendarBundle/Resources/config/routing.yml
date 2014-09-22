@@ -1,6 +1,6 @@
 # private calendar
 sd_calendar_private_handling_message:
-    pattern:  sd/calendar/ajax/private/handlind_message
+    pattern:  /calendar/ajax/private/handlind_message
     defaults: { _controller: SDCalendarBundle:Private:HandlingMessage }
 sd_calendar_private_index:
     pattern:  sd/calendar/ajax/private/index
@@ -44,3 +44,16 @@ sd_tasks_set_done:
 sd_tasks_done:
     pattern:  sd/tasks/done
     defaults: { _controller: SDCalendarBundle:Private:tasksDone }
+
+#Holidays
+sd_holiday_index:
+    pattern:  /holiday
+    defaults: { _controller: SDCalendarBundle:Holiday:index}
+
+sd_holiday_list:
+    pattern:  /holiday/list
+    defaults: { _controller: SDCalendarBundle:Holiday:list}
+
+sd_holiday_save:
+    pattern:  /ajax/holiday/save
+    defaults: {  _controller: SDCalendarBundle:Holiday:holidaySave}
