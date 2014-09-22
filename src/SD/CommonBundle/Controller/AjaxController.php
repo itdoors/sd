@@ -19,7 +19,7 @@ use Lists\HandlingBundle\Entity\HandlingRepository;
 use Lists\HandlingBundle\Entity\HandlingService;
 use Lists\HandlingBundle\Entity\HandlingServiceRepository;
 use Lists\HandlingBundle\Entity\HandlingUserRepository;
-use Lists\HandlingBundle\ListsHandlingBundle;
+use Lists\HandliInvoiceCompanystructurengBundle\ListsHandlingBundle;
 use Lists\LookupBundle\Entity\LookupRepository;
 use Lists\ContactBundle\Entity\ModelContact;
 use Lists\ContactBundle\Entity\ModelContactRepository;
@@ -3194,6 +3194,8 @@ class AjaxController extends BaseFilterController
                     $em->remove($invoiceC);
                 }
             }
+        } else {
+            $em->remove($object);
         }
         $em->flush();
     }
