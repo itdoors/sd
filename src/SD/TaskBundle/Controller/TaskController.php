@@ -35,6 +35,7 @@ class TaskController extends Controller
 
         $countTasks = $tasksUserRoleRepo->countTasksByRoleAndUser($user->getId(), 'performer');
         $countTasks += $tasksUserRoleRepo->countTasksByRoleAndUser($user->getId(), 'controller');
+        $countTasks += $tasksUserRoleRepo->countTasksByRoleAndUser($user->getId(), 'matcher');
         $info['countTasks'] = $countTasks;
 
         return $this->render('SDTaskBundle:Task:index.html.twig', $info);
