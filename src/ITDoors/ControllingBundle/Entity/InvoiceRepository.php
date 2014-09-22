@@ -22,7 +22,9 @@ class InvoiceRepository extends EntityRepository
      */
     public function selectInvoiceSum (QueryBuilder $res)
     {
-        $res->select('Sum(i.sum) as summa');
+        $res->select('SUM(detals_summ.summa) as summa')
+            ->leftJoin('i.acts', 'acts_summ')
+            ->leftJoin('acts_summ.detals', 'detals_summ');
 
         return $res;
     }
