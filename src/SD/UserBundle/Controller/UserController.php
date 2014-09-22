@@ -336,7 +336,6 @@ class UserController extends BaseController
                 if (!empty($formData['hiredate'])) {
                     $stuff->setDateHire(new \DateTime($formData['hiredate']));
                 }
-                $stuff->setDescription($formData['description']);
                 $stuff->setEducation($formData['education']);
                 $stuff->setIssues($formData['issues']);
                 $stuff->setStuffclass('stuff');
