@@ -434,7 +434,7 @@ class InvoiceController extends BaseFilterController
      *  expectedpayshowAction
      * 
      * @param mixed $invoices
-     * \
+     * 
      * @return render Description
      */
     private function getExel ($invoices)
