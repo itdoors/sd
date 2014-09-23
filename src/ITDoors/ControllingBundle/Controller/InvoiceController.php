@@ -433,25 +433,14 @@ class InvoiceController extends BaseFilterController
     /**
      *  expectedpayshowAction
      * 
-     * 
+     * @param mixed $invoices
+     * \
      * @return render Description
      */
-    public function exportExelAction ()
+    private function getExel ($invoices)
     {
         /** @var Translator $translator */
         $translator = $this->container->get('translator');
-
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-
-        $companystryctyre = null;
-        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
-            $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
-        }
-
-        /** @var InvoiceRepository $invoices */
-        $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')->getForExel($companystryctyre);
-
         // ask the service for a Excel5
         $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
 
@@ -627,6 +616,48 @@ class InvoiceController extends BaseFilterController
         $response->headers->set('Cache-Control', 'maxage=1');
 
         return $response;
+    }
+    /**
+     *  expectedpayshowAction
+     * 
+     * 
+     * @return render Description
+     */
+    public function exportExelAction ()
+    {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        $companystryctyre = null;
+        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+            $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
+        }
+
+        /** @var InvoiceRepository $invoices */
+        $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')->getForExel($companystryctyre);
+
+        return $this->getExel($invoices);
+    }
+    /**
+     *  expectedpayshowAction
+     * 
+     * 
+     * @return render Description
+     */
+    public function exportExelNoDogovorAction ()
+    {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        $companystryctyre = null;
+        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+            $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
+        }
+
+        /** @var InvoiceRepository $invoices */
+        $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')->getForExelNoDogovor($companystryctyre);
+
+        return $this->getExel($invoices);
     }
     /**
      *  sendEmailChangeAction
