@@ -1030,7 +1030,13 @@ class TaskController extends Controller
         $taskService->sendEmailInform($taskUserRoles, $type);
     }
 
-    public function deleteFileAction(Request $request) {
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function deleteFileAction(Request $request)
+    {
         $id = $request->request->get('id');
         $em = $this->getDoctrine()->getManager();
 
@@ -1043,6 +1049,4 @@ class TaskController extends Controller
 
         return new Response(json_encode($return));
     }
-
-
 }

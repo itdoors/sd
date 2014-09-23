@@ -190,7 +190,11 @@ class BasicTaskAccess implements TaskAccessInterface
         }
     }
 
-    public function canDeleteFile() {
+    /**
+     * @return bool
+     */
+    public function canDeleteFile()
+    {
         if ($this->getStage() != 'closed'
             && $this->getStage() != 'done'
             && $this->getStage() != 'undone') {
