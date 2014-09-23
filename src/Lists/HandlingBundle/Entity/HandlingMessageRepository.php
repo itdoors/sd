@@ -58,8 +58,8 @@ class HandlingMessageRepository extends EntityRepository
     }
 
     /**
-     * @param string $from
-     * @param string $to
+     * @param datetime $from
+     * @param datetime $to
      *
      * @return array
      */
@@ -78,7 +78,7 @@ class HandlingMessageRepository extends EntityRepository
             return array();
         }
 
-        $types = $this->getEntityManager()->getRepository('ListsHandlingBundle:HandlingMessageType')
+        $this->getEntityManager()->getRepository('ListsHandlingBundle:HandlingMessageType')
             ->getList();
 
         $result = array();
@@ -87,15 +87,10 @@ class HandlingMessageRepository extends EntityRepository
             if (!isset ( $result[$handlingMessage->getUserId()] )) {
                 $result[$handlingMessage->getUserId()] = array();
                 $result[$handlingMessage->getUserId()]['user'] = $handlingMessage->getUser();
+                $result[$handlingMessage->getUserId()]['actions'] = array();
             }
 
-            $current = 0;
-
-            if (isset( $result[$handlingMessage->getUserId()][$handlingMessage->getTypeId()] )) {
-                $current = $result[$handlingMessage->getUserId()][$handlingMessage->getTypeId()];
-            }
-
-            $result[$handlingMessage->getUserId()][$handlingMessage->getTypeId()] = $current + 1;
+            $result[$handlingMessage->getUserId()]['actions'][] = $handlingMessage;
         }
 
         return $result;

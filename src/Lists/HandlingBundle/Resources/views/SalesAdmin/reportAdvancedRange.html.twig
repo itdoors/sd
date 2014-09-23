@@ -3,7 +3,7 @@
 {% block title %}{% trans %}List of Handlings{% endtrans %} {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
-        {% trans %}Handlings <small>list of handlings</small>{% endtrans %}
+        {% trans %}Action <small>period of actions</small>{% endtrans %}
     </h3>
 {% endblock %}
 {% block page_breadcrumbs %}
@@ -13,7 +13,7 @@
             <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
             <i class="fa fa-angle-right"></i>
         </li>
-        <li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_index') }}" title="{% trans %}Handlings{% endtrans %}">{% trans %}Handlings{% endtrans %}</a></li>
+        <li><a href="" title="{% trans %}Actions{% endtrans %}">{% trans %}Actions{% endtrans %}</a></li>
     </ul>
 {% endblock %}
 {% block css_page_level_plugin %}
@@ -57,7 +57,7 @@
         <div class="col-md-12">
             <div class="portlet box blue">
                 <div class="portlet-title">
-                    <div class="caption"><i class="fa fa-reorder"></i>{% trans %}Create Handling{% endtrans %}</div>
+                    <div class="caption"><i class="fa fa-reorder"></i>{% trans %}Create report{% endtrans %}</div>
                     <div class="tools">
                         <a class="collapse" href="javascript:;"></a>
                     </div>
@@ -77,12 +77,12 @@
                             <button class="close" data-close="alert"></button>
                             {% trans %}You have some form errors. Please check below.{% endtrans %}
                         </div>
-                        <h3 class="form-section">{% trans %}General information{% endtrans %}</h3>
+                        {#<h3 class="form-section">{% trans %}General information{% endtrans %}</h3>#}
                         <div class="row">
                             <div class="col-md-3
-							{% if form.from.vars.errors|length %}
-							    has-error
-							{% endif %}">
+                                    {% if form.from.vars.errors|length %}
+                                        has-error
+                                    {% endif %}">
                                 <div class="form-group">
                                     {{ form_label(form.from, 'From DateTime *', {'attr': {'class': 'control-label'}}) }}
                                     <div class="input-group input-medium date date-picker">
@@ -99,15 +99,15 @@
                                     {% if form.from.vars.errors|length %}
                                         {{ form_errors(form.from) }}
                                     {% else %}
-                                        <span class="help-block">{% trans %}Enter From DateTime{% endtrans %}"</span>
+                                        <span class="help-block">{% trans %}Enter From DateTime{% endtrans %}</span>
                                     {% endif %}
                                 </div>
                             </div>
 
                             <div class="col-md-3
-							{% if form.to.vars.errors|length %}
-							    has-error
-							{% endif %}">
+                                    {% if form.to.vars.errors|length %}
+                                        has-error
+                                    {% endif %}">
                                 <div class="form-group">
                                     {{ form_label(form.to, 'To DateTime *', {'attr': {'class': 'control-label'}}) }}
                                     <div class="input-group input-medium date date-picker">
@@ -124,7 +124,7 @@
                                     {% if form.to.vars.errors|length %}
                                         {{ form_errors(form.to) }}
                                     {% else %}
-                                        <span class="help-block">{% trans %}Enter To DateTime{% endtrans %}"</span>
+                                        <span class="help-block">{% trans %}Enter To DateTime{% endtrans %}</span>
                                     {% endif %}
                                 </div>
                             </div>
@@ -145,5 +145,4 @@
             </div>
         </div>
     </div>
-
 {% endblock body %}

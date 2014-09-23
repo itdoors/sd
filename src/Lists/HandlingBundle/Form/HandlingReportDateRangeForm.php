@@ -28,21 +28,21 @@ class HandlingReportDateRangeForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $container = $this->container;
+//        $container = $this->container;
 
         /** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
-        $lr = $container->get('lists_lookup.repository');
+//        $lr = $container->get('lists_lookup.repository');
 
         $builder
             ->add('from', 'datetime', array(
                 'data' => new \DateTime(),
                 'widget' => 'single_text',
-                'format' => 'dd.M.yyyy HH:mm'
+                'format' => 'dd.MM.yyyy HH:mm'
             ))
             ->add('to', 'datetime', array(
                 'data' => new \DateTime(),
                 'widget' => 'single_text',
-                'format' => 'dd.M.yyyy HH:mm'
+                'format' => 'dd.MM.yyyy HH:mm'
             ));
 
         $builder

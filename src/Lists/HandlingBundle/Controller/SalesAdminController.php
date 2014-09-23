@@ -24,7 +24,7 @@ class SalesAdminController extends SalesController
     public function indexAction()
     {
         /** @var \Lists\TeamBundle\Entity\TeamRepository $teamRepository */
-        $teamRepository = $this->get('lists_team.repository');
+//        $teamRepository = $this->get('lists_team.repository');
 
         // Get organization filter
         $filters = $this->getFilters();
