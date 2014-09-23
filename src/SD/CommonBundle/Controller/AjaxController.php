@@ -19,7 +19,7 @@ use Lists\HandlingBundle\Entity\HandlingRepository;
 use Lists\HandlingBundle\Entity\HandlingService;
 use Lists\HandlingBundle\Entity\HandlingServiceRepository;
 use Lists\HandlingBundle\Entity\HandlingUserRepository;
-use Lists\HandlingBundle\ListsHandlingBundle;
+use Lists\HandliInvoiceCompanystructurengBundle\ListsHandlingBundle;
 use Lists\LookupBundle\Entity\LookupRepository;
 use Lists\ContactBundle\Entity\ModelContact;
 use Lists\ContactBundle\Entity\ModelContactRepository;
@@ -3209,6 +3209,8 @@ class AjaxController extends BaseFilterController
                     $em->remove($invoiceC);
                 }
             }
+        } else {
+            $em->remove($object);
         }
         $em->flush();
     }
@@ -4426,7 +4428,7 @@ class AjaxController extends BaseFilterController
             ->add('companystructure', 'entity', array(
                 'class' => 'ListsCompanystructureBundle:Companystructure',
                 'empty_value' => '',
-                'property' => 'name',
+                'property' => 'name_for_list',
                 'required' => false,
                 'mapped' => false,
                 'query_builder' => function ($repository) use ($invoiceId, $repository) {
@@ -5073,11 +5075,11 @@ class AjaxController extends BaseFilterController
     {
         $dogovorId = $defaultData['dogovorId'];
 
-        $organizationIds = array();
+//        $organizationIds = array();
 
-        $dogovor = $this->getDoctrine()
-            ->getRepository('ListsDogovorBundle:Dogovor')
-            ->find($dogovorId);
+//        $dogovor = $this->getDoctrine()
+//            ->getRepository('ListsDogovorBundle:Dogovor')
+//            ->find($dogovorId);
 
         $form
             ->add('dopDogovor', 'entity', array(
@@ -5101,6 +5103,7 @@ class AjaxController extends BaseFilterController
                 'required' => true,
                 'mapped' => false,
                 'multiple' => true,
+                'property' => 'select_label',
                 'query_builder' => $dr->getDepartmentsForDogovor($dogovorId)
         ));
     }

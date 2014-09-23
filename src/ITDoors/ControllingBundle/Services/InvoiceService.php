@@ -652,6 +652,12 @@ class InvoiceService
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_data_show'),
             'text' => $translator->trans('Existence act')
         );
+        $tabs['dogovor'] = array (
+            'blockupdate' => 'ajax-tab-holder-1',
+            'tab' => 'dogovor',
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_data_show'),
+            'text' => $translator->trans('Existence dogovor')
+        );
 
         return $tabs;
     }

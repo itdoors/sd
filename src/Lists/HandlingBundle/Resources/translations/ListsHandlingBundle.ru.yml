@@ -111,7 +111,6 @@ Shortname: Короткое
 Scope: Деятельность
 Enter Scope: Введите деятельность
 
-Actions: Действие
 Address: Адрес
 Users: Пользователи
 
@@ -247,3 +246,16 @@ Enter services: Введите услуги
 Handling type: Тип проекта
 Delete manager: Удалить менеджера
 Listen to the conversation: Прослушать разговор
+
+From DateTime *: Период начало *
+Enter From DateTime: Укажите начало периода
+To DateTime *: Период окончания *
+Enter To DateTime: Укажите окончание периода
+
+Create report: Создание отчета
+
+Action <small>period of actions</small>: Активность <small>период активности</small>
+Show action: Просмотр активности
+Date: Дата
+View action: Вид активности
+List of actions: Список активностей
