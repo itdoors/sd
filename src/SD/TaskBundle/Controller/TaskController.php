@@ -429,13 +429,14 @@ class TaskController extends Controller
         $stage = $request->request->get('stage');
         $commentValue = $request->request->get('comment');
 
+        $em = $this->getDoctrine()->getManager();
+        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
+        $task = $taskUserRole->getTask();
+
         if ($stage == 'done' || $stage == 'undone' || $stage == 'closed' || $stage == 'checking') {
             $this->closeDateRequest($id);
         }
-        $em = $this->getDoctrine()->getManager();
-        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
 
-        $task = $taskUserRole->getTask();
         $stageName = $stage;
         $stage = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
             'name' => $stage,
@@ -456,6 +457,13 @@ class TaskController extends Controller
         $em->persist($task);
         $em->flush();
 
+        if ($stage == 'done' || $stage == 'undone' || $stage == 'closed') {
+            $taskUserRolesEmail = $em->getRepository('SDTaskBundle:TaskUserRole')
+                ->findBy(array(
+                    'task' => $task
+                ));
+            $this->sendEmail($taskUserRolesEmail, 'close');
+        }
         $return['success'] = 1;
 
         return new Response(json_encode($return));
@@ -1014,8 +1022,9 @@ class TaskController extends Controller
      * @param SD/TaskBundle/Entity/TaskUserRole[] $taskUserRoles
      * @param string                              $type
      */
-    private function sendEmail($taskUserRoles, $type) {
-        $taskFileService = $this->get('task.service');
-        $taskFileService->sendEmailInform($taskUserRoles, $type);
+    private function sendEmail($taskUserRoles, $type)
+    {
+        $taskService = $this->get('task.service');
+        $taskService->sendEmailInform($taskUserRoles, $type);
     }
 }

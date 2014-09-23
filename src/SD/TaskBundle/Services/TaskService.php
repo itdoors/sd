@@ -176,7 +176,7 @@ class TaskService
      * @param SD/TaskBundle/Entity/TaskUserRole[] $taskUserRoles
      * @param string                              $type
      */
-    protected  function sendEmailInform($taskUserRoles, $type)
+    public function sendEmailInform($taskUserRoles, $type)
     {
         /** @var EntityManager $em */
         $em = $this->container->get('doctrine')->getManager();
@@ -189,10 +189,10 @@ class TaskService
             $subject = $translator->trans('You have new task', array(), 'SDTaskBundle');
 
             foreach ($taskUserRoles as $taskUserRole) {
-                $text = $translator->trans('You have new task', array(), 'SDTaskBundle');
+                $text = '<b>'.$translator->trans('You have new task', array(), 'SDTaskBundle').':</b> ';
                 $text .= $taskUserRole->getTask()->getTitle();
                 $text .= "<br>";
-                $text .= $translator->trans('Your role', array (), 'SDTaskBundle');
+                $text .= '<b>'.$translator->trans('Your role', array (), 'SDTaskBundle').':</b> ';
                 $text .= $translator->trans($taskUserRole->getRole(), array(), 'SDTaskBundle');
 
                 $emails = array();
@@ -216,16 +216,16 @@ class TaskService
             }
 
         } elseif ($type == 'close') {
-            $subject = $translator->trans('Task is closed', array(), 'SDTaskBundle');
+            $subject = $translator->trans('Task had been finished', array(), 'SDTaskBundle');
 
             foreach ($taskUserRoles as $taskUserRole) {
-                $text = $translator->trans('Task had been finished :', array(), 'SDTaskBundle');
+                $text = '<b>'.$translator->trans('Task had been finished', array(), 'SDTaskBundle').':</b> ';
                 $text .= $taskUserRole->getTask()->getTitle();
                 $text .= "<br>";
-                $text .= $translator->trans('Your role', array(), 'SDTaskBundle').': ';
+                $text .= '<b>'.$translator->trans('Your role', array(), 'SDTaskBundle').':</b> ';
                 $text .= $translator->trans($taskUserRole->getRole(), array(), 'SDTaskBundle');
                 $text .= "<br>";
-                $text .= $translator->trans('Last stage', array(), 'SDTaskBundle').': ';
+                $text .= '<b>'.$translator->trans('Final stage', array(), 'SDTaskBundle').':</b> ';
                 $text .= $translator->trans($taskUserRole->getTask()->getStage(), array(), 'SDTaskBundle');
 
                 $emails = array();
@@ -252,5 +252,4 @@ class TaskService
         $cron = $this->container->get('it_doors_cron.service');
         $cron->addSendEmails();
     }
-
 }
