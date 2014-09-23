@@ -56,7 +56,7 @@
                 <tr>
                     <td>{{ action.id }}</td>
                     <td><a href="{{ path('lists_sales_admin_handling_show', { id : action.handling.id }) }}" title="{% trans %}Show Handling{% endtrans %}">{{ action.handling.organization }}</a></td>
-                    <td>{{ action.createdate | date('H:i d:m:Y') }}</td>
+                    <td>{{ action.createdate | date('H:i d.m.Y') }}</td>
                     <td><a href="{{ path('lists_sales_admin_handling_show', { id : action.handling.id }) }}#handling_message_{{ action.id }}"  title="{% trans %}Show action{% endtrans %}">{{ action.type }}</td>
                 </tr>
             {% endfor %}
