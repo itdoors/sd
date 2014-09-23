@@ -20,11 +20,7 @@ class DogovorDepartmentForm extends AbstractType
         $builder
             ->add('isActive')
             ->add('comment')
-            //->add('createdatetime')
-            //->add('department')
-            ->add('dopDogovor')
-            //->add('user')
-        ;
+            ->add('dopDogovor');
 
         $builder
             ->add('add', 'submit')

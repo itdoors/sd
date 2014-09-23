@@ -5060,11 +5060,11 @@ class AjaxController extends BaseFilterController
     {
         $dogovorId = $defaultData['dogovorId'];
 
-        $organizationIds = array();
+//        $organizationIds = array();
 
-        $dogovor = $this->getDoctrine()
-            ->getRepository('ListsDogovorBundle:Dogovor')
-            ->find($dogovorId);
+//        $dogovor = $this->getDoctrine()
+//            ->getRepository('ListsDogovorBundle:Dogovor')
+//            ->find($dogovorId);
 
         $form
             ->add('dopDogovor', 'entity', array(
@@ -5088,6 +5088,7 @@ class AjaxController extends BaseFilterController
                 'required' => true,
                 'mapped' => false,
                 'multiple' => true,
+                'property' => 'select_label',
                 'query_builder' => $dr->getDepartmentsForDogovor($dogovorId)
         ));
     }
