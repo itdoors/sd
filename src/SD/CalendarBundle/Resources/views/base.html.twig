@@ -73,15 +73,17 @@
 </script>
 
 
-<div class="portlet box blue calendar">
+<div class="portlet light calendar bordered">
     <div class="portlet-title">
         <div class="caption">
             <i class="fa fa-calendar"></i>
+            <span class="caption-subject font-green-sharp ">
             {% if text is defined  %}
                 {{ text }}
             {% else %}
                 {% trans from 'messages' %}My Calendar{% endtrans%}
             {% endif %}
+            </span>
         </div>
     </div>
     <div class="portlet-body light-grey">
