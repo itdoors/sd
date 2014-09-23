@@ -37,12 +37,12 @@ class HandlingReportDateRangeForm extends AbstractType
             ->add('from', 'datetime', array(
                 'data' => new \DateTime(),
                 'widget' => 'single_text',
-                'format' => 'dd.MM.yyyy HH:mm'
+                'format' => 'dd.MM.yyyy'
             ))
             ->add('to', 'datetime', array(
                 'data' => new \DateTime(),
                 'widget' => 'single_text',
-                'format' => 'dd.MM.yyyy HH:mm'
+                'format' => 'dd.MM.yyyy'
             ));
 
         $builder

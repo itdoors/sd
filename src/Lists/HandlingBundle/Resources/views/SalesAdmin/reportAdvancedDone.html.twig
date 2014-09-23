@@ -1,6 +1,6 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'ListsHandlingBundle' %}
-{% block title %}{% trans %}List of actions{% endtrans %} {% endblock %}
+{% block title %}{% trans %}List of actions{% endtrans %}{% endblock %}
 {% block page_title %}
     <h3 class="page-title">
         {% trans %}Action <small>period of actions</small>{% endtrans %} <small>{{ from | date('d.m.Y H:i')}} - {{ to | date('d.m.Y H:i')}}</small>

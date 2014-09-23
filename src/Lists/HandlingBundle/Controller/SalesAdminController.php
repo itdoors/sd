@@ -165,7 +165,7 @@ class SalesAdminController extends SalesController
         }
 
         $from = new \DateTime($data['from']);
-        $to = new \DateTime($data['to']);
+        $to = new \DateTime('23:59:59 '.$data['to']);
 
         /** @var \Lists\HandlingBundle\Entity\HandlingMessageRepository $handlingRepository */
         $handlingMessageRepository = $this->getDoctrine()
