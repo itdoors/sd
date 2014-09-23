@@ -515,6 +515,16 @@ class Departments
     }
 
     /**
+     * toString Method
+     *
+     * @return string
+     */
+    public function getSelectLabel()
+    {
+        return $this->mpk.' | '.$this->city.' | '.$this->name;
+    }
+
+    /**
      * @var string
      */
     private $mpk;

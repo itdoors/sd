@@ -33,7 +33,7 @@ controller: Контролирующий
 Author: Автор
 author: Автор
 matcher: Согласующий
-matching: Согласовуется
+matching: Согласовывается
 Matcher: Согласующий
 checking: Проверяется
 performing: Исполняется
@@ -134,3 +134,7 @@ Refused sign up: Отказался подписывать
 Signed up: Подписал
 Request to change end date: Запрос переноса срока исполнения
 Files (max size 2mb): Файлы (максимальный размер 2 мб)
+Final stage: Последний этап задачи
+You have new task: У вас новая задача
+Your role: Ваша роль
+Task had been finished: Задача была закончена

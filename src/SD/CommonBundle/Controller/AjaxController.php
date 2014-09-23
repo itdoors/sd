@@ -2520,6 +2520,7 @@ class AjaxController extends BaseFilterController
         $model = $request->request->get('model');
         $modelId = $request->request->get('modelId');
 
+        $taskService = $this->get('task.service');
 
         /** @var \SD\TaskBundle\Entity\Task $data */
         $data = $form->getData();
@@ -2634,8 +2635,15 @@ class AjaxController extends BaseFilterController
         $taskUserRole->setTask($data);
         $taskUserRole->setIsViewed(false);
         $em->persist($taskUserRole);
+        $em->flush();
 
-        if (count($formData['matcher'])) {
+        $taskUserRolesEmail = array();
+
+        if (!isset($formData['matcher']) || !$formData['matcher']) {
+            $taskUserRolesEmail[] = $taskUserRole;
+        }
+
+        if (isset($formData['matcher']) && count($formData['matcher'])) {
             foreach ($formData['matcher'] as $idMatcher) {
             //$idMatcher = $formData['matcher'];
                 $matcher = $userRepository->find($idMatcher);
@@ -2645,6 +2653,7 @@ class AjaxController extends BaseFilterController
                 $taskUserRole->setTask($data);
                 $taskUserRole->setIsViewed(false);
                 $em->persist($taskUserRole);
+                $taskUserRolesEmail[] = $taskUserRole;
             }
         }
     //}
@@ -2663,8 +2672,14 @@ class AjaxController extends BaseFilterController
             $taskUserRole->setIsViewed(false);
         }
         $em->persist($taskUserRole);
+        if (!isset($formData['matcher']) || !$formData['matcher']) {
+            $taskUserRolesEmail[] = $taskUserRole;
+        }
+
         //}
         $em->flush();
+
+        $taskService->sendEmailInform($taskUserRolesEmail, 'new');
 
         return true;
 /*        }
@@ -4413,7 +4428,7 @@ class AjaxController extends BaseFilterController
             ->add('companystructure', 'entity', array(
                 'class' => 'ListsCompanystructureBundle:Companystructure',
                 'empty_value' => '',
-                'property' => 'name',
+                'property' => 'name_for_list',
                 'required' => false,
                 'mapped' => false,
                 'query_builder' => function ($repository) use ($invoiceId, $repository) {
@@ -5060,11 +5075,11 @@ class AjaxController extends BaseFilterController
     {
         $dogovorId = $defaultData['dogovorId'];
 
-        $organizationIds = array();
+//        $organizationIds = array();
 
-        $dogovor = $this->getDoctrine()
-            ->getRepository('ListsDogovorBundle:Dogovor')
-            ->find($dogovorId);
+//        $dogovor = $this->getDoctrine()
+//            ->getRepository('ListsDogovorBundle:Dogovor')
+//            ->find($dogovorId);
 
         $form
             ->add('dopDogovor', 'entity', array(
@@ -5088,6 +5103,7 @@ class AjaxController extends BaseFilterController
                 'required' => true,
                 'mapped' => false,
                 'multiple' => true,
+                'property' => 'select_label',
                 'query_builder' => $dr->getDepartmentsForDogovor($dogovorId)
         ));
     }

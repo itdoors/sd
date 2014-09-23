@@ -39,6 +39,20 @@
             )
     }}
 </div>
+{% if period == 'dogovor' %}
+<div class="portlet">
+    <div class="">
+        <div class="">
+            <div class="btn-group">
+                <a class="btn default green-stripe" href="{{ path('it_doors_controlling_invoice_export_exel_no_dogovor')}}"{# data-toggle="dropdown"#}>
+                    <i class="fa fa-share"></i>
+                    <span class="hidden-480">{% trans %}Export to Excel{% endtrans %}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 <div class="table-scrollable">
     <table class="table table-striped table-bordered table-hover dataTable" aria-describedby="datatable_ajax_info">
         <thead>

@@ -384,10 +384,43 @@ class InvoiceRepository extends EntityRepository
                 ->setParameter(':companystructureId', $companystryctyre);
         }
 
-        $date = date('Y-m-d');
-        $res->andWhere(":date -  i.delayDate >= :periodmin");
+        $date = date('Y-m-d', time() - 2592000);
+        $res
+            ->andWhere("i.dateFact >= :date or i.dateFact is NULL")
+            ->setParameter(':date', $date);
 
-        $res->setParameter(':periodmin', 0)->setParameter(':date', $date);
+        return $res
+                ->orderBy('i.performerEdrpou', 'DESC')
+                ->getQuery()
+                ->getResult();
+    }
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @param integer $companystryctyre
+     * 
+     * @return mixed[]
+     */
+    public function getForExelNoDogovor ($companystryctyre)
+    {
+        $res = $this->createQueryBuilder('i');
+
+        /** select */
+        $this->selectInvoicePeriod($res);
+        /** join */
+        $this->joinInvoicePeriod($res);
+        if ($companystryctyre) {
+            $res
+                ->leftJoin('i.invoicecompanystructure', 'i_ics')
+                ->andWhere('i_ics.companystructureId = :companystructureId')
+                ->setParameter(':companystructureId', $companystryctyre);
+        }
+
+        $date = date('Y-m-d', time() - 2592000);
+        $res
+            ->andWhere("i.dogovorId is NULL")
+            ->andWhere("i.dateFact >= :date or i.dateFact is NULL")
+            ->setParameter(':date', $date);
 
         return $res
                 ->orderBy('i.performerEdrpou', 'DESC')

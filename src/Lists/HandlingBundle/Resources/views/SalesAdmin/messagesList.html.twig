@@ -2,11 +2,8 @@
     {% for item in messages %}
     <div class="portlet box {% if (item.createdate | date('U')) <= ("now"|date("U")) and item.isFutureMessage %}
                     red
-                {% elseif (item.createdate | date('U')) <= ("now"|date("U")) %}
-                    green
-                {% else %}
-                    yellow
-                {% endif %}">
+                {% elseif (item.createdate | date('U')) <= ("now"|date("U")) %}green{% else %}yellow{% endif %}"
+                id="handling_message_{{ item.id }}">
         <div class="portlet-title">
             <div class="caption">
                 #{{ item.id }} |
