@@ -1,3 +1,36 @@
+<script>
+    $(document).ready(function(){
+        $('.deleteFile').die('click');
+        $('.deleteFile').live('click', function(e){
+            e.preventDefault();
+            if (confirm("{% trans %}Are you sure in deleting{% endtrans %}?")) {
+                var id = $(this).data('id');
+                var url = $('#task_modal_info_holder').data('url_task_delete_file');
+                var sendData = {
+                    'id': id
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: sendData,
+                    success: function(data1) {
+                        //alert(data1)
+                        data = JSON.parse(data1);
+                        if (data.success == 1) {
+                            ITDoorsAjax.updateList('list_files')
+                        } else {
+
+                        }
+                    }
+                })
+            }
+
+        })
+    })
+</script>
+
+
+
 <div class="form-group">
     <div class="col-md-12">
         <ul class="media-list">
@@ -14,8 +47,20 @@
                             <span class="todo-comment-username">{{ file.user }}</span> &nbsp; <span class="todo-comment-date">{{ file.createDate|date('H:i d-m-Y') }}</span>
                         </p>
                         <p class="todo-text-color">
-                            <a href="/uploads/task/{{ file.filepath }}" target="_blank">{{ file.name }}</a> <br>
+                            <div class="col-md-11">
+                                <a href="/uploads/task/{{ file.filepath }}" target="_blank">{{ file.name }}</a>
+                            </div>
+                            <div class="col-md-1">
+                                {% if access.canDeleteFile and file.user.id == app.user.id %}
+                                    <a href="#">
+                                        <i class="fa fa-trash-o deleteFile" style="margin-left: 20px;" data-id="{{ file.id }}"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+
+                            <br>
                         </p>
+
                     </div>
                 </li>
             {% endfor %}

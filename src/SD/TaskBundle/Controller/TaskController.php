@@ -715,6 +715,8 @@ class TaskController extends Controller
         $idTask = $taskUserRole->getTask()->getId();
 
         $info = $this->getFilesInfoFromTask($idTask);
+        $access = TaskAccessFactory::createAccess($em, $taskUserRole);
+        $info['access'] = $access;
 
         return $this->render('SDTaskBundle:Task:taskFileList.html.twig', $info);
     }
@@ -1027,4 +1029,20 @@ class TaskController extends Controller
         $taskService = $this->get('task.service');
         $taskService->sendEmailInform($taskUserRoles, $type);
     }
+
+    public function deleteFileAction(Request $request) {
+        $id = $request->request->get('id');
+        $em = $this->getDoctrine()->getManager();
+
+        $taskFile = $em->getRepository('SDTaskBundle:TaskFile')->find($id);
+
+        $em->remove($taskFile);
+        $em->flush();
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
+
+
 }
