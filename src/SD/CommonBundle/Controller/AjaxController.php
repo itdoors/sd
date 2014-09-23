@@ -4413,7 +4413,7 @@ class AjaxController extends BaseFilterController
             ->add('companystructure', 'entity', array(
                 'class' => 'ListsCompanystructureBundle:Companystructure',
                 'empty_value' => '',
-                'property' => 'name',
+                'property' => 'name_for_list',
                 'required' => false,
                 'mapped' => false,
                 'query_builder' => function ($repository) use ($invoiceId, $repository) {
