@@ -1,9 +1,9 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'ListsHandlingBundle' %}
-{% block title %}{% trans %}List of Handlings{% endtrans %} {% endblock %}
+{% block title %}{% trans %}List of actions{% endtrans %} {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
-        {% trans %}Handling <small>list of handlings</small>{% endtrans %}
+        {% trans %}Action <small>period of actions</small>{% endtrans %} <small>{{ from | date('d.m.Y H:i')}} - {{ to | date('d.m.Y H:i')}}</small>
     </h3>
 {% endblock %}
 {% block page_breadcrumbs %}
@@ -12,7 +12,7 @@
             <i class="fa fa-home"></i>
             <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
         </li>
-        <li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_index') }}" title="{% trans %}Handlings{% endtrans %}">{% trans %}Handlings{% endtrans %}</a></li>
+        <li><a href="" title="{% trans %}Actions{% endtrans %}">{% trans %}Actions{% endtrans %}</a></li>
     </ul>
 {% endblock %}
 {% block css_page_level_plugin %}

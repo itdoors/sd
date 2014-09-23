@@ -181,7 +181,9 @@ class SalesAdminController extends SalesController
                 'baseRoutePrefix' => $this->baseRoutePrefix,
                 'baseTemplate' => $this->baseTemplate,
                 'results' => $results,
-                'types' => $types
+                'types' => $types,
+                'from' => $from,
+                'to' => $to
             ));
 
     }
