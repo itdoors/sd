@@ -353,7 +353,7 @@ class InvoiceRepository extends EntityRepository
      *
      * @return mixed[]
      */
-    public function getAll ($filters, $companystryctyre)
+    public function getAll ($filters, $companystryctyre = null)
     {
         $res = $this->createQueryBuilder('i');
 
@@ -371,7 +371,9 @@ class InvoiceRepository extends EntityRepository
         $this->processFilters($res, $filters);
 
         return $res
-                ->orderBy('i.customerName', 'ASC')->getQuery();
+            ->orderBy('i.customerName', 'ASC')
+            ->orderBy('i.date', 'ASC')
+            ->getQuery();
     }
     /**
      * Returns results for interval future invoice

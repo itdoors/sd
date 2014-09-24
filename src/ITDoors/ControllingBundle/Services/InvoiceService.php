@@ -607,24 +607,26 @@ class InvoiceService
          $tabs['individual'] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'individual',
-            'url' => $this->container->get('router')
-                ->generate(
-                    'it_doors_controlling_invoice_grafic_individual',
-                    array ('ajax' => 'true')
-                ),
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_analytic_list'),
             'text' => $translator->trans('Individual')
         );
         $tabs['general'] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'general',
-            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_grafic_general'),
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_analytic_list'),
             'text' => $translator->trans('General')
         );
         $tabs['withoutacts'] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'withoutacts',
-            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_grafic_withoutacts'),
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_analytic_list'),
             'text' => $translator->trans('Without acts')
+        );
+        $tabs['responsible'] = array (
+            'blockupdate' => 'ajax-tab-holder',
+            'tab' => 'responsible',
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_analytic_list'),
+            'text' => $translator->trans('Responsible')
         );
 
         return $tabs;
