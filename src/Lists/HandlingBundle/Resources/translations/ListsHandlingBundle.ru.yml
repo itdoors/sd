@@ -223,7 +223,7 @@ Count employees: Кол-во сотрудников
 
 Launch date: Дата запуска
 Add manager in project: Добавить менеджера в проект
-Add manager project in project: Добавить менеджера проекта в проект
+Change manager project in project: Изменить менеджера проекта
 
 Enter share: Введите процент участия
 Percentage of participation: Процент участия
@@ -259,3 +259,4 @@ Show action: Просмотр активности
 Date: Дата
 View action: Вид активности
 List of actions: Список активностей
+Change project manager: Изменить менеджера проекта

@@ -13,7 +13,7 @@ Lists\DogovorBundle\Entity\DogovorCompanystructure:
             type: bigint
             nullable: false
             column: dogovor_id
-        companyStructureId:
+        companystructureId:
             type: bigint
             nullable: false
             column: companystructure_id
@@ -27,7 +27,7 @@ Lists\DogovorBundle\Entity\DogovorCompanystructure:
                 dogovor_id:
                     referencedColumnName: id
             orphanRemoval: false
-        companyStructures:
+        companystructures:
             targetEntity: Lists\CompanystructureBundle\Entity\Companystructure
             cascade: {  }
             mappedBy: null
