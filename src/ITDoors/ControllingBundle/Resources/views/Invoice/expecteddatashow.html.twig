@@ -92,7 +92,7 @@
             {% for key,entity in entities %}
                 <tr class="{{ cycle(['odd', 'even'], entity.invoiceId) }}">
                     <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceId }}</a> {{ entity.date is empty ? '' : entity.date|date("d.m.y") }}</td>
-                    <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceCustomerName }}</a></td>
+                    <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceCustomerName }} {{ entity.customerName ? '' : ('<br><b>!!! '~('Customer not found'|trans())~' !!!</b>')|raw}}</a></td>
                     <td class="">{{ entity.performerName }}</td>
                     <td class="">{{ entity.sum|number_format(2, ',', ' ')  }}</td>
                     <td class="">
@@ -137,7 +137,8 @@
                     </td>
                     <td class="">
                         <a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">
-                            {{ entity.dogovorNumber }}
+                            {{ entity.dogovorNumber ? entity.dogovorNumber : entity.dogNumber }}
+                            {{ entity.dogovorNumber ? '' : ('<br><b>!!! '~('Dogovor not found'|trans())~' !!!</b>')|raw}}
                         </a>
                         {{ entity.dogovorStartDatetime is empty ? '' :  entity.dogovorStartDatetime|date("d.m.y") }}
                     </td>

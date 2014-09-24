@@ -60,18 +60,23 @@ class HandlingMessageRepository extends EntityRepository
     /**
      * @param datetime $from
      * @param datetime $to
+     * @param string   $manager
      *
      * @return array
      */
-    public function getAdvancedResult($from, $to)
+    public function getAdvancedResult($from, $to, $manager)
     {
         $q = $this->createQueryBuilder('hm')
             ->where('hm.createdate >= :createdateFrom')
             ->andWhere('hm.createdate <= :createdateTo')
             ->leftJoin('hm.user', 'user')
             ->setParameter(':createdateFrom', $from, \Doctrine\DBAL\Types\Type::DATETIME)
-            ->setParameter(':createdateTo', $to, \Doctrine\DBAL\Types\Type::DATETIME)
-            ->getQuery()
+            ->setParameter(':createdateTo', $to, \Doctrine\DBAL\Types\Type::DATETIME);
+        if ($manager) {
+            $q->andWhere('hm.user in (:managers)')
+                ->setParameter(':managers', $manager);
+        }
+        $q = $q->getQuery()
             ->getResult();
 
         if (!sizeof($q)) {

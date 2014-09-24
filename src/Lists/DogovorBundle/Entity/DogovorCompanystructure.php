@@ -23,7 +23,7 @@ class DogovorCompanystructure
     /**
      * @var integer
      */
-    private $companyStructureId;
+    private $companystructureId;
 
     /**
      * @var \Lists\DogovorBundle\Entity\Dogovor
@@ -33,7 +33,7 @@ class DogovorCompanystructure
     /**
      * @var \Lists\CompanystructureBundle\Entity\Companystructure
      */
-    private $companyStructures;
+    private $companystructures;
 
     /**
      * Get id
@@ -70,15 +70,15 @@ class DogovorCompanystructure
     }
 
     /**
-     * Set companyStructureId
+     * Set companystructureId
      *
-     * @param integer $companyStructureId
+     * @param integer $companystructureId
      * 
      * @return DogovorCompanystructure
      */
-    public function setCompanyStructureId($companyStructureId)
+    public function setCompanystructureId($companystructureId)
     {
-        $this->companyStructureId = $companyStructureId;
+        $this->companystructureId = $companystructureId;
 
         return $this;
     }
@@ -88,9 +88,9 @@ class DogovorCompanystructure
      *
      * @return integer 
      */
-    public function getCompanyStructureId()
+    public function getCompanystructureId()
     {
-        return $this->companyStructureId;
+        return $this->companystructureId;
     }
 
     /**
@@ -118,26 +118,26 @@ class DogovorCompanystructure
     }
 
     /**
-     * Set companyStructures
+     * Set companystructures
      *
-     * @param \Lists\CompanystructureBundle\Entity\Companystructure $companyStructures
+     * @param \Lists\CompanystructureBundle\Entity\Companystructure $companystructures
      * 
      * @return DogovorCompanystructure
      */
-    public function setCompanyStructures(Companystructure $companyStructures = null)
+    public function setCompanystructures(Companystructure $companystructures = null)
     {
-        $this->companyStructures = $companyStructures;
+        $this->companystructures = $companystructures;
 
         return $this;
     }
 
     /**
-     * Get companyStructures
+     * Get companystructures
      *
      * @return \Lists\CompanystructureBundle\Entity\Companystructure 
      */
-    public function getCompanyStructures()
+    public function getCompanystructures()
     {
-        return $this->companyStructures;
+        return $this->companystructures;
     }
 }

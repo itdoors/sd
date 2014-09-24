@@ -33,6 +33,9 @@ class HandlingReportDateRangeForm extends AbstractType
         /** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
 //        $lr = $container->get('lists_lookup.repository');
 
+        /** @var \SD\UserBundle\Entity\UserRepository $ur */
+        $ur = $this->container->get('sd_user.repository');
+
         $builder
             ->add('from', 'datetime', array(
                 'data' => new \DateTime(),
@@ -43,6 +46,14 @@ class HandlingReportDateRangeForm extends AbstractType
                 'data' => new \DateTime(),
                 'widget' => 'single_text',
                 'format' => 'dd.MM.yyyy'
+            ))
+            ->add('manager', 'entity', array(
+                'class' => 'SD\UserBundle\Entity\User',
+                'mapped' => false,
+                'multiple' => true,
+                'property' => 'fullname',
+                'required' => false,
+                'query_builder' => $ur->getOnlyStuff()
             ));
 
         $builder

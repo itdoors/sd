@@ -166,13 +166,17 @@ class SalesAdminController extends SalesController
 
         $from = new \DateTime($data['from']);
         $to = new \DateTime('23:59:59 '.$data['to']);
+        $managers = null;
+        if (isset($data['manager'])) {
+            $managers = $data['manager'];
+        }
 
         /** @var \Lists\HandlingBundle\Entity\HandlingMessageRepository $handlingRepository */
         $handlingMessageRepository = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:HandlingMessage');
 
         /** @var HandlingMessageRepository $handlingMessageRepository */
-        $results = $handlingMessageRepository->getAdvancedResult($from, $to);
+        $results = $handlingMessageRepository->getAdvancedResult($from, $to, $managers);
 
         $types = $this->getDoctrine()->getRepository('ListsHandlingBundle:HandlingMessageType')
             ->getList();

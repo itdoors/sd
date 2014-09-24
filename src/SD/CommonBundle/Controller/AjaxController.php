@@ -2780,7 +2780,7 @@ class AjaxController extends BaseFilterController
         $invoiceCompanystructure = $em
             ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
             ->findOneBy(array(
-                'invoiceId' => $data->getInvoiceID(),
+                'invoiceId' => $data->getInvoiceId(),
                 'companystructureId' => $formData['companystructure']
             ));
         if ($invoiceCompanystructure) {
@@ -2801,9 +2801,7 @@ class AjaxController extends BaseFilterController
 
         if ($invoice->getDogovorId()) {
             /** @var Dogovor $dogovor */
-            $dogovor = $em
-                ->getRepository('ListsDogovorBundle:Dogovor')
-                ->find($invoice->getDogovorId());
+            $dogovor = $invoice->getDogovor();
 
             if ($dogovor) {
                 /** @var Invoice $invoices */
