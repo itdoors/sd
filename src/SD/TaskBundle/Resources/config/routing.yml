@@ -65,3 +65,7 @@ sd_task_editable:
 sd_task_sign_up:
     path:     /tasks/sign/up
     defaults: { _controller: SDTaskBundle:Task:signUpTask }
+
+sd_task_delete_file:
+    path:     /tasks/delete
+    defaults: { _controller: SDTaskBundle:Task:deleteFile }

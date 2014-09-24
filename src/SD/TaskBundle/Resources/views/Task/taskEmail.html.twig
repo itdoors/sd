@@ -1,0 +1,75 @@
+{% trans_default_domain 'SDTaskBundle' %}
+
+<table>
+    <tr>
+        <td>{% trans %}Title{% endtrans %}</td>
+        <td colspan="3">{{ taskUserRole.task.title }}</td>
+    </tr>
+    <tr>
+        <td>{% trans %}Date start{% endtrans %}</td>
+        <td colspan="3">{{ taskUserRole.task.startDate|date('d.m.Y') }}</td>
+    </tr>
+    <tr>
+        <td>{% trans %}Date stop{% endtrans %}</td>
+        <td colspan="3">
+            {{ include ('SDTaskBundle:Task:taskEndDate.html.twig', {
+            'taskEndDates': taskUserRole.task.taskEndDates,
+            'stage': taskUserRole.task.stage
+            }) }}
+        </td>
+    </tr>
+    <tr>
+        <td>{% trans %}Description{% endtrans %}</td>
+        <td colspan="3">{{ taskUserRole.task.description }}</td>
+    </tr>
+    <tr>
+        <td>{% trans %}Creator{% endtrans %}</td>
+        <td colspan="3">
+            {% if taskUserRoleAuthor|length %}
+                {% for author in taskUserRoleAuthor %}
+                    {{ author.user }}
+                {% endfor %}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td>{% trans %}Performer{% endtrans %}</td>
+        <td colspan="3">
+            {% if taskUserRolePerformer|length %}
+                {% for performer in taskUserRolePerformer %}
+                    {{ performer.user }}
+
+                    {% if performer.isViewed !=true %}
+                        <span style="color: red; font-size: smaller;">({% trans %}Not viewed{% endtrans %})</span>
+                    {% endif %}
+                    <br>
+                {% endfor %}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td>{% trans %}Controller{% endtrans %}</td>
+        <td colspan="3">
+            {% if taskUserRoleController|length %}
+                {% for controller in taskUserRoleController %}
+                    {{ controller.user }}
+                    {% if controller.isViewed !=true %}
+                        <span style="color: red; font-size: smaller;">({% trans %}Not viewed{% endtrans %})</span>
+                    {% endif %}
+                    <br>
+                {% endfor %}
+            {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <td>{% trans %}My role{% endtrans %}</td>
+        <td colspan="3">{{ taskUserRole.role|trans }}</td>
+    </tr>
+    <tr>
+        <td>{% trans %}Stage{% endtrans %}</td>
+        <td colspan="3">{{ taskUserRole.task.stage|trans }}</td>
+    </tr>
+    <tr>
+        <td colspan="4"><a href="{{ path('sd_task_homepage', {}, true) }}">{% trans %}Link to page{% endtrans %}</a></td>
+    </tr>
+</table>

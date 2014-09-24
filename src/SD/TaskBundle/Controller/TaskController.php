@@ -429,13 +429,14 @@ class TaskController extends Controller
         $stage = $request->request->get('stage');
         $commentValue = $request->request->get('comment');
 
+        $em = $this->getDoctrine()->getManager();
+        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
+        $task = $taskUserRole->getTask();
+
         if ($stage == 'done' || $stage == 'undone' || $stage == 'closed' || $stage == 'checking') {
             $this->closeDateRequest($id);
         }
-        $em = $this->getDoctrine()->getManager();
-        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
 
-        $task = $taskUserRole->getTask();
         $stageName = $stage;
         $stage = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
             'name' => $stage,
@@ -456,6 +457,13 @@ class TaskController extends Controller
         $em->persist($task);
         $em->flush();
 
+        if ($stage == 'done' || $stage == 'undone' || $stage == 'closed') {
+            $taskUserRolesEmail = $em->getRepository('SDTaskBundle:TaskUserRole')
+                ->findBy(array(
+                    'task' => $task
+                ));
+            $this->sendEmail($taskUserRolesEmail, 'close');
+        }
         $return['success'] = 1;
 
         return new Response(json_encode($return));
@@ -707,6 +715,8 @@ class TaskController extends Controller
         $idTask = $taskUserRole->getTask()->getId();
 
         $info = $this->getFilesInfoFromTask($idTask);
+        $access = TaskAccessFactory::createAccess($em, $taskUserRole);
+        $info['access'] = $access;
 
         return $this->render('SDTaskBundle:Task:taskFileList.html.twig', $info);
     }
@@ -972,8 +982,68 @@ class TaskController extends Controller
 
                 $em->persist($task);
                 $em->flush();
+                //sending email
+
+                $controllerRole = $roleRepository
+                    ->findOneBy(array(
+                        'name' => 'controller',
+                        'model' => 'task'
+                    ));
+                $taskUserRoleController = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
+                    array (
+                        'task' => $taskUserRole->getTask(),
+                        'role' => $controllerRole
+                    )
+                );
+                $this->sendEmail($taskUserRoleController, 'new');
+
+                $performerRole = $roleRepository
+                    ->findOneBy(array(
+                        'name' => 'performer',
+                        'model' => 'task'
+                    ));
+                $taskUserRolePerformer = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
+                    array (
+                        'task' => $taskUserRole->getTask(),
+                        'role' => $performerRole
+                    )
+                );
+                $this->sendEmail($taskUserRolePerformer, 'new');
+
+                //end sending email
+
             }
         }
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
+
+    /**
+     * @param SD/TaskBundle/Entity/TaskUserRole[] $taskUserRoles
+     * @param string                              $type
+     */
+    private function sendEmail($taskUserRoles, $type)
+    {
+        $taskService = $this->get('task.service');
+        $taskService->sendEmailInform($taskUserRoles, $type);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function deleteFileAction(Request $request)
+    {
+        $id = $request->request->get('id');
+        $em = $this->getDoctrine()->getManager();
+
+        $taskFile = $em->getRepository('SDTaskBundle:TaskFile')->find($id);
+
+        $em->remove($taskFile);
+        $em->flush();
 
         $return['success'] = 1;
 

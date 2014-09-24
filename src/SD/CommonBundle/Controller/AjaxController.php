@@ -2520,6 +2520,7 @@ class AjaxController extends BaseFilterController
         $model = $request->request->get('model');
         $modelId = $request->request->get('modelId');
 
+        $taskService = $this->get('task.service');
 
         /** @var \SD\TaskBundle\Entity\Task $data */
         $data = $form->getData();
@@ -2634,8 +2635,15 @@ class AjaxController extends BaseFilterController
         $taskUserRole->setTask($data);
         $taskUserRole->setIsViewed(false);
         $em->persist($taskUserRole);
+        $em->flush();
 
-        if (count($formData['matcher'])) {
+        $taskUserRolesEmail = array();
+
+        if (!isset($formData['matcher']) || !$formData['matcher']) {
+            $taskUserRolesEmail[] = $taskUserRole;
+        }
+
+        if (isset($formData['matcher']) && count($formData['matcher'])) {
             foreach ($formData['matcher'] as $idMatcher) {
             //$idMatcher = $formData['matcher'];
                 $matcher = $userRepository->find($idMatcher);
@@ -2645,6 +2653,7 @@ class AjaxController extends BaseFilterController
                 $taskUserRole->setTask($data);
                 $taskUserRole->setIsViewed(false);
                 $em->persist($taskUserRole);
+                $taskUserRolesEmail[] = $taskUserRole;
             }
         }
     //}
@@ -2663,8 +2672,14 @@ class AjaxController extends BaseFilterController
             $taskUserRole->setIsViewed(false);
         }
         $em->persist($taskUserRole);
+        if (!isset($formData['matcher']) || !$formData['matcher']) {
+            $taskUserRolesEmail[] = $taskUserRole;
+        }
+
         //}
         $em->flush();
+
+        $taskService->sendEmailInform($taskUserRolesEmail, 'new');
 
         return true;
 /*        }
