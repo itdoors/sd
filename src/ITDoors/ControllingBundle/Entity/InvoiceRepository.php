@@ -115,7 +115,6 @@ class InvoiceRepository extends EntityRepository
             )
             ->addSelect('customer.name as customerName')
             ->addSelect('i.customerName as invoiceCustomerName')
-            
             ->addSelect('performer.name as performerName')
             ->addSelect('r.name as regionName')
             ->addSelect('d.number as dogovorNumber')
