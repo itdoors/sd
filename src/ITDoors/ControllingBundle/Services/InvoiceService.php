@@ -747,6 +747,14 @@ class InvoiceService
             'text' => $translator->trans('Flow')
             . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
+        $summa = $invoice->getInvoiceAllSum($companystryctyre, $filters);
+        $tabs[] = array (
+            'blockupdate' => 'ajax-tab-holder',
+            'tab' => 'all',
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_show'),
+            'text' => $translator->trans('All')
+            . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
+        );
 
         return $tabs;
     }
