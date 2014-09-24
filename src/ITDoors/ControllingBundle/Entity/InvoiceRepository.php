@@ -49,7 +49,6 @@ class InvoiceRepository extends EntityRepository
             ->addSelect('i.delayDaysType')
             ->addSelect('i.dateEnd')
             ->addSelect('i.dateFact')
-            ->addSelect('i.customerName as invoiceCustomerName')
             ->addSelect(
                 "array_to_string(
                   ARRAY(
@@ -115,10 +114,13 @@ class InvoiceRepository extends EntityRepository
                 . ") as paymentsSumma"
             )
             ->addSelect('customer.name as customerName')
+            ->addSelect('i.customerName as invoiceCustomerName')
             ->addSelect('performer.name as performerName')
             ->addSelect('r.name as regionName')
             ->addSelect('d.number as dogovorNumber')
+            ->addSelect('i.dogovorNumber as dogNumber')
             ->addSelect('d.startdatetime as dogovorStartDatetime')
+            ->addSelect('i.dogovorDate as invoiceDogovorDate')
             ->addSelect('h.note as description')
             ->addSelect('h.createdate as descriptiondate');
 
@@ -389,7 +391,7 @@ class InvoiceRepository extends EntityRepository
             ->setParameter(':date', $date);
 
         return $res
-                ->orderBy('i.performerEdrpou', 'DESC')
+                ->orderBy('i.customer')
                 ->getQuery()
                 ->getResult();
     }
@@ -422,7 +424,7 @@ class InvoiceRepository extends EntityRepository
             ->setParameter(':date', $date);
 
         return $res
-                ->orderBy('i.performer')
+                ->orderBy('i.customer')
                 ->getQuery()
                 ->getResult();
     }
