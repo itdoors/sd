@@ -49,7 +49,10 @@
                 language: 'ru',
                 weekStart: 1
             });
-        })
+            $('#handlingReportDateRangeForm_manager').select2({
+                minimumInputLength: 0
+            });
+        });
 
     </script>
 
@@ -128,11 +131,14 @@
                                     {% endif %}
                                 </div>
                             </div>
-                            <!--/span-->
-                        </div>
-                        <!--/row-->
-                        <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-3">
+                                 <div class="form-group">
+                                    {{ form_label(form.manager, 'Manager', {'attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(form.manager, {'attr' : {'class' : 'form-control', 'placeholder': 'Manager'} } ) }}    
+                                </div>
+                            </div>
+                            <div class="row">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     {{ form_widget(form.create, { 'label': 'Create', 'attr': {'class': 'btn green'}} ) }}
                                 </div>

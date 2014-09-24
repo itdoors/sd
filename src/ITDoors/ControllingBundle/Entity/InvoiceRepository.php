@@ -156,7 +156,6 @@ class InvoiceRepository extends EntityRepository
             ->leftJoin('i.dogovor', 'd')
             ->leftJoin('i.customer', 'customer')
             ->leftJoin('i.performer', 'performer')
-           //->leftJoin('i.invoicecompanystructure', 'i_ics')
             ->leftJoin('performer.city', 'c')
             ->leftJoin('c.region', 'r')
             ->leftJoin('i.messages', 'h')
@@ -423,7 +422,7 @@ class InvoiceRepository extends EntityRepository
             ->setParameter(':date', $date);
 
         return $res
-                ->orderBy('i.performerEdrpou', 'DESC')
+                ->orderBy('i.performer')
                 ->getQuery()
                 ->getResult();
     }
