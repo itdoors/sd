@@ -3210,9 +3210,14 @@ class AjaxController extends BaseFilterController
                 }
             }
         } else {
-            foreach ($object as $obj) {
-                $em->remove($obj);
+            if (is_array($object)) {
+                foreach ($object as $obj) {
+                    $em->remove($obj);
+                }
+            } else {
+                $em->remove($object);
             }
+            
         }
         $em->flush();
     }
