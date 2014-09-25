@@ -1665,7 +1665,7 @@ class AjaxController extends BaseFilterController
                 }
             }
 
-            $organization->$methodSet($value);
+            $organization->$methodSet(trim($value));
         }
         $validator = $this->get('validator');
         /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
@@ -3852,7 +3852,7 @@ class AjaxController extends BaseFilterController
             }
         }
 
-        $object->$methodSet($value);
+        $object->$methodSet(trim($value));
 
         $validator = $this->get('validator');
 
