@@ -24,6 +24,7 @@
 {% elseif status == 'ok' %}
 
     {% set showNothing = true %}
+
     {% if officially is defined  and officially != 0%}
         <span style="color: green">{{ officially|number_format(2) }}</span> <br>
         {% set showNothing = false %}
@@ -33,7 +34,9 @@
         <span style="color: blue">{{ notOfficially|number_format(2) }}</span>
         {% set showNothing = false %}
     {% endif %}
-
+    {% if cooperation is defined and cooperation%}
+        <i title="{{ cooperation }}%">*</i>
+    {% endif %}
     {% if showNothing %}
         -
     {% endif %}

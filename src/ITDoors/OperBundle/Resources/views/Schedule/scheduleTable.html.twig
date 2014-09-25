@@ -743,14 +743,18 @@
                                     {% set notOfficially = 0 %}
                                 {% endif %}
 
+                                {% if infoHours[idCoworker~'-'~idReplacement~'-'~day]['cooperation'] is defined %}
+                                    {% set cooperation = infoHours[idCoworker~'-'~idReplacement~'-'~day]['cooperation'] %}
+                                {% else %}
+                                    {% set cooperation = 0 %}
+                                {% endif %}
                                 {{ include(
                                 'ITDoorsOperBundle:Schedule:scheduleTableCell.html.twig', {
                                     'officially': officially,
                                     'notOfficially': notOfficially,
-                                    'status': status
-
+                                    'status': status,
+                                    'cooperation' : cooperation
                                 }) }}
-
                                 </a>
                             </td>
                     {% endfor %}

@@ -654,6 +654,7 @@
                             $('#fio_mpk_cooperation').html(fio_mpk_cooperation);
                             $('#has_cooperation_block').show();
                             $('#has_not_cooperation_block').hide();
+                            updateTableCell(false)
                         }
                     }
 
@@ -697,6 +698,7 @@
                     } else {
                         $('#has_cooperation_block').hide();
                         $('#has_not_cooperation_block').show();
+                        updateTableCell(false)
                     }
                 }
 
