@@ -1665,7 +1665,7 @@ class AjaxController extends BaseFilterController
                 }
             }
 
-            $organization->$methodSet($value);
+            $organization->$methodSet(trim($value));
         }
         $validator = $this->get('validator');
         /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
@@ -3210,9 +3210,14 @@ class AjaxController extends BaseFilterController
                 }
             }
         } else {
-            foreach ($object as $obj) {
-                $em->remove($obj);
+            if (is_array($object)) {
+                foreach ($object as $obj) {
+                    $em->remove($obj);
+                }
+            } else {
+                $em->remove($object);
             }
+            
         }
         $em->flush();
     }
@@ -3847,7 +3852,7 @@ class AjaxController extends BaseFilterController
             }
         }
 
-        $object->$methodSet($value);
+        $object->$methodSet(trim($value));
 
         $validator = $this->get('validator');
 
