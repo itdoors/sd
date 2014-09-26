@@ -212,6 +212,40 @@ class PrivateController extends SalesController
                 );
         }
 
+        //tasks
+        $user = $this->getUser();
+        $taskUserRoles = $em->getRepository('SDTaskBundle:TaskUserRole')
+            ->findBy(array(
+                'user' => $user
+            ));
+        $stageAccepted = $em->getRepository('SDTaskBundle:Stage')
+            ->findOneBy(array(
+                'name' => 'accepted',
+                'model' => 'task_end_date'
+            ));
+        //var_dump(count($taskUserRoles));die();
+        foreach ($taskUserRoles as $taskUserRole) {
+            $task = $taskUserRole->getTask();
+            $stage = $task->getStage();
+            if ($stage == 'closed' || $stage == 'undone' || $stage == 'done') {
+                continue;
+            }
+            $endDate = $em->getRepository('SDTaskBundle:TaskEndDate')
+                ->findOneBy(array(
+                    'task' => $task,
+                    'stage' => $stageAccepted
+                ));
+
+            $events[] = array(
+                'hover_title' => '',
+                'title' => $taskUserRole->getTask()->getTitle(),
+                'start' => $endDate->getEndDateTime()->format('Y-m-d'),
+                'end' => $endDate->getEndDateTime()->format('Y-m-d'),
+                'url' => $this->generateUrl('sd_task_homepage')
+                //'allDay' => true
+            );
+        }
+
         return $events;
     }
 }

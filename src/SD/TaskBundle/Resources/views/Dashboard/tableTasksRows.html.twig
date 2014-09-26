@@ -32,11 +32,9 @@
     {% elseif taskUserRole.role == 'matcher' %}
         {% set icon = 'fa-unlock' %}
         {% set label = 'label-success' %}
-    {#
-    {% elseif taskUserRole == 'done' %}
-    {% set icon = 'orange' %}
-    fa-eye
-    #}
+    {% elseif taskUserRole.role == 'viewer' %}
+        {% set icon = 'fa-eye' %}
+        {% set label = 'label-default' %}
     {% endif %}
 
     <li data-id="{{ taskUserRole.id }}" class="modal_task" style="cursor: pointer;">

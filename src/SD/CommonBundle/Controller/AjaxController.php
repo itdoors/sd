@@ -3217,7 +3217,6 @@ class AjaxController extends BaseFilterController
             } else {
                 $em->remove($object);
             }
-            
         }
         $em->flush();
     }

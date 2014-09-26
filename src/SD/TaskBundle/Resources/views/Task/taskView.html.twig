@@ -2,27 +2,6 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
 <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
 <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
-{{ ajax_form_render_btn({
-    'selector' : '#task_add_file',
-    'formType' : 'taskFileForm',
-    'successFunctions' : {
-        'list_files' : 'ITDoorsAjax.updateList'
-    },
-    'serviceDefault' : {
-        'alias' : 'task.file.form.service',
-        'method' : 'addFormDefaults'
-    },
-    'serviceSave' : {
-        'alias' : 'task.file.form.service',
-        'method' : 'saveForm'
-    },
-    'parameters' : {
-        'idTask' : taskUserRole.task.id
-    },
-    'target' : '#task_add_file_holder'
-    })
-}}
-
 <script>
     $(document).ready(function(){
         $('#task_set_viewed').die('click')
@@ -58,6 +37,11 @@
         $('#task_change_date').die('click');
         $('#task_change_date').live('click', function(e){
             $('#change_date_holder').toggle('blind', {}, 300)
+        })
+
+        $('#add_viewer_btn').die('click');
+        $('#add_viewer_btn').live('click', function(e){
+            $('#add_viewer_holder').toggle('blind', {}, 300)
         })
 
         $('.answerButton').die('click');
@@ -113,6 +97,39 @@
                         updateTask();
                     } else {
 
+                    }
+                }
+
+            })
+        })
+
+
+        $('#add_viewer_submit').die('click');
+        $('#add_viewer_submit').live('click', function(e){
+            var id = $('#task_modal_info_holder').data('id');
+            var url = $('#task_modal_info_holder').data('url_add_viewer');
+
+            var viewer = $("#viewer_select").select2("val");
+
+            var sendData = {
+                'id': id,
+                'viewer' : viewer
+            }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data1) {
+                    alert(data1)
+                    data = JSON.parse(data1);
+                    if (data.success == 1) {
+                        updateTask();
+                    } else {
+                        if (data.error == 'already_in_task') {
+                            alert('{% trans %}This user already taking part in task{% endtrans %}');
+                        } else {
+                            alert('error');
+                        }
                     }
                 }
 
@@ -263,6 +280,7 @@
                 }
         );
 
+        $('#viewer_select').select2();
     })
 
 </script>
@@ -323,8 +341,8 @@
         </div>
         <!-- TASK DESC -->
         <div class="form-group">
-            <div class="col-md-12">
-                {% if access.canEditDescription %}
+            {# sorry for this shitty twig style, but I had to hide empty spaces #}
+            <div class="col-md-12" style="white-space: pre;">{% if access.canEditDescription %}
                     <a href="#" id="description" data-type="textarea"
                        data-pk="{{ taskUserRole.id }}" data-placement="top"
                        data-original-title="{% trans %}Enter description{% endtrans %}"
@@ -334,9 +352,7 @@
                             url: '{{ path('sd_task_editable') }}'
                         });
                     </script>
-                {% else %}
-                    {{ taskUserRole.task.description }}
-                {% endif %}
+                {% else %}{{ taskUserRole.task.description }}{% endif %}
                 <br><br>
             </div>
         </div>
@@ -445,6 +461,18 @@
                                 <span style="color: green; font-size: smaller;">({% trans %}Signed up{% endtrans %})</span>
                             {% endif %}
                         {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                {% if taskUserRoleViewer|length %}
+                    <br>
+                    <b>{% trans %}Viewer{% endtrans %}</b>:
+                    {% for viewer in taskUserRoleViewer %}
+                        {{ viewer.user }}
+                        {% if viewer.isViewed !=true %}
+                            <span style="color: red; font-size: smaller;">({% trans %}Not viewed{% endtrans %})</span>
+                        {% endif %}
+                        <br>
                     {% endfor %}
                 {% endif %}
                 <br><br>
@@ -557,6 +585,34 @@
             </div>
         {% endif %}
 
+        {% if access.canAddViewer %}
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="form-actions right todo-form-actions" >
+                        <button id="add_viewer_btn" class="btn btn-circle btn-sm green-haze">{% trans %}Add viewer{% endtrans %}</button>
+                        <br><br>
+                    <div id="add_viewer_holder" style="display: none;">
+                        <div class="form-group">
+                            <div class="col-md-10">
+                                <select id="viewer_select">
+                                    {% for user in usersCanBeViewed %}
+                                        <option value="{{ user.id }}">{{ user }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-circle btn-sm btn-default" id="add_viewer_submit">{% trans %}Add{% endtrans %}</button>
+                            </div>
+                            <br><br>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+
+        {% endif %}
+
     </div>
 
     <div class="tabbable-line">
@@ -607,10 +663,33 @@
                 <!-- END TASK COMMENTS -->
             </div>
             <div class="tab-pane" id="tab_2">
-                <button type="button" id="task_add_file" class="pull-right btn btn-sm btn-circle green-haze"> &nbsp; {% trans %}Add file{% endtrans %} &nbsp; </button>
-                <div id="task_add_file_holder" style=" display: none; background-color: #f6fbfc; border-radius: 5px; border-color: green; padding: 15px; margin: 15px 0px 15px 0px;">
+                {% if access.canUploadFiles %}
+                    <button type="button" id="task_add_file" class="pull-right btn btn-sm btn-circle green-haze"> &nbsp; {% trans %}Add file{% endtrans %} &nbsp; </button>
 
-                </div>
+                    <div id="task_add_file_holder" style=" display: none; background-color: #f6fbfc; border-radius: 5px; border-color: green; padding: 15px; margin: 15px 0px 15px 0px;">
+
+                    </div>
+                    {{ ajax_form_render_btn({
+                    'selector' : '#task_add_file',
+                    'formType' : 'taskFileForm',
+                    'successFunctions' : {
+                    'list_files' : 'ITDoorsAjax.updateList'
+                    },
+                    'serviceDefault' : {
+                    'alias' : 'task.file.form.service',
+                    'method' : 'addFormDefaults'
+                    },
+                    'serviceSave' : {
+                    'alias' : 'task.file.form.service',
+                    'method' : 'saveForm'
+                    },
+                    'parameters' : {
+                    'idTask' : taskUserRole.task.id
+                    },
+                    'target' : '#task_add_file_holder'
+                    })
+                    }}
+                {% endif %}
                 <div id="list_files" data-url="{{ path('sd_task_files', { 'id' : taskUserRole.id })}}">
                     {{ render(controller('SDTaskBundle:Task:renderListOfFiles', {
                         'id': taskUserRole.id
@@ -634,4 +713,5 @@
        data-url_add_comment="{{ path('sd_task_add_comment') }}"
        data-url_sign_up="{{ path('sd_task_sign_up') }}"
        data-url_task_delete_file="{{ path('sd_task_delete_file') }}"
+       data-url_add_viewer="{{ path('sd_task_add_viewer') }}"
         >

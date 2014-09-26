@@ -1220,7 +1220,7 @@ class OperScheduleController extends BaseFilterController
                 'departmentPeopleReplacement' => $idReplacement
             ));
             if (count($founded) > 1) {
-                foreach($founded as $found) {
+                foreach ($founded as $found) {
                     $coworkerDayTimes[] = $found;
                 }
             } elseif (isset($founded[0]) && $founded[0]) {
@@ -1228,7 +1228,7 @@ class OperScheduleController extends BaseFilterController
                 foreach ($founded as $found) {
                     $coworkerDayTimes[] = $found;
                 }
-	    }
+            }
         }
 
         $em = $this->getDoctrine()->getManager();

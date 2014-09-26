@@ -296,4 +296,18 @@ class UserRepository extends EntityRepository
 
         return $res->getQuery()->getResult();
     }
+
+    /**
+     * @return mixed[]
+     */
+    public function getAllStuff()
+    {
+        $result = $this->createQueryBuilder('u')
+            ->innerJoin('u.stuff', 's')
+            ->where('u.isFired = false')
+            ->orWhere('u.isFired is NULL')
+            ->orderBy('u.lastName', 'asc');
+
+        return $result->getQuery()->getResult();
+    }
 }
