@@ -1,0 +1,21 @@
+SD\TaskBundle\Entity\TaskPattern:
+    type:  entity
+    table: task_pattern
+    repositoryClass: SD\TaskBundle\Entity\TaskPatternRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: false
+            length: 255
+        title:
+            type: string
+            nullable: false
+            length: 255
+        description:
+            type: text
+            nullable: true

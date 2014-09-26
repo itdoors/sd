@@ -1074,5 +1074,7 @@ INSERT INTO "public".email ("alias", subject, text, deletedat)
 -- prod +++++
 
 INSERT INTO role (name, model) VALUES ('viewer', 'task');
--- staging ----
--- prod -----
+-- staging ++++
+-- prod ++++
+
+CREATE TABLE task_pattern (id SERIAL NOT NULL, name VARCHAR(255) NOT NULL, title VARCHAR(255) NOT NULL, description TEXT DEFAULT NULL, PRIMARY KEY(id));

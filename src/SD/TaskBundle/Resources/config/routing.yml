@@ -73,3 +73,7 @@ sd_task_delete_file:
 sd_task_add_viewer:
     path:     /tasks/add/viewer
     defaults: { _controller: SDTaskBundle:Task:addViewer }
+
+sd_task_set_pattern:
+    path:     /tasks/set/pattern
+    defaults: { _controller: SDTaskBundle:Task:setPattern }

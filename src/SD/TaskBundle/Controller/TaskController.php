@@ -1129,4 +1129,26 @@ class TaskController extends Controller
         return new Response(json_encode($return));
 
     }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function setPatternAction(Request $request)
+    {
+        $id = $request->request->get('id');
+
+        $em = $this->getDoctrine()->getManager();
+
+        $pattern = $em->getRepository('SDTaskBundle:TaskPattern')->find($id);
+
+
+        $return['description'] = $pattern->getDescription();
+        $return['title'] = $pattern->getTitle();
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
 }
