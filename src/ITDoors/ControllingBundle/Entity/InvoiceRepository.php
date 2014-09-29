@@ -417,7 +417,8 @@ class InvoiceRepository extends EntityRepository
             $result[$invoice['invoiceCustomerId']]['customer']['debtSum'] += $invoice['sumActs'];
             $result[$invoice['invoiceCustomerId']]['customer']['paySum'] += $invoice['paymentsSumma'];
             $result[$invoice['invoiceCustomerId']]['customer']['days'] += $invoice['days'];
-            $result[$invoice['invoiceCustomerId']]['customer']['lastDebt'] += ($invoice['sumActs']-$invoice['paymentsSumma']);
+            $result[$invoice['invoiceCustomerId']]['customer']['lastDebt'] +=
+                ($invoice['sumActs']-$invoice['paymentsSumma']);
         }
 
         return $result;
