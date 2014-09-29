@@ -64,6 +64,10 @@ it_doors_controlling_invoice_analytic:
     pattern:  /controlling/invoice/analytic
     defaults: { _controller: ITDoorsControllingBundle:Analytic:index}
 
+it_doors_controlling_invoice_analytic_list:
+    pattern:  /controlling/invoice/analytic/list
+    defaults: { _controller: ITDoorsControllingBundle:Analytic:list}
+
 it_doors_controlling_invoice_grafic_general:
     pattern:  /controlling/invoice/analytic/grafic/general
     defaults: { _controller: ITDoorsControllingBundle:Analytic:graficGeneral}
@@ -76,9 +80,6 @@ it_doors_controlling_invoice_grafic_individual_lists:
     pattern:  /controlling/invoice/analytic/grafic/individual/lists
     defaults: { _controller: ITDoorsControllingBundle:Analytic:graficIndividualLists}
     
-it_doors_controlling_invoice_grafic_individual:
-    pattern:  /controlling/invoice/analytic/grafic/individual/{ajax}
-    defaults: { _controller: ITDoorsControllingBundle:Analytic:graficIndividual}
 
 
     
