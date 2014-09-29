@@ -107,9 +107,12 @@
         }) }}
         <div class="tabbable tabbable-custom boxless">
              {{ ajax_tab_render( tabs, tab, namespace) }}
+             В разработке
+             {#
             <div class="tab-content ajax-tab-holder" id="datatable_ajax" data-url="{{ tabs[tab].url }}">
                 {{ render(controller('ITDoorsControllingBundle:Analytic:list')) }}
             </div>
+             #}
         </div>
     </div>
 </div>

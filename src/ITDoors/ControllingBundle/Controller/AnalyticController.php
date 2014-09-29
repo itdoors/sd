@@ -45,7 +45,7 @@ class AnalyticController extends BaseFilterController
         $service = $this->container->get($this->service);
 
         $tabs = $service->getTabsInvoiceGrafics();
-        
+
         $filter = $this->filterFormName;
 
         return $this->render('ITDoorsControllingBundle:Analytic:index.html.twig', array (
@@ -88,14 +88,13 @@ class AnalyticController extends BaseFilterController
 //                );
 //            }
 //        }
-        
-        
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
         /** @var InvoiceRepository $invoiceRepository */
         $invoiceRepository = $em->getRepository('ITDoorsControllingBundle:Invoice');
-        
+
         $invoices = $invoiceRepository->getAll($filters);
         $result = array();
         foreach ($invoices as $invoice) {
@@ -104,7 +103,7 @@ class AnalyticController extends BaseFilterController
             }
             $result[$invoice['invoiceCustomerName']] = $invoice;
         }
-        
+
         /** @var InvoicePaymentsRepository $invoicePay */
 //        $invoicePay = $em->getRepository('ITDoorsControllingBundle:InvoicePayments');
 //
@@ -216,7 +215,7 @@ class AnalyticController extends BaseFilterController
         $paginator = $this->container->get($this->paginator);
         $entities->setHint($this->paginator . '.count', $count);
         $pagination = $paginator->paginate($entities, $page, 20);
-        
+
         return $this->render('ITDoorsControllingBundle:Analytic:graficIndividualLists.html.twig', array (
                 'showType' => $showType,
                 'entities' => $pagination,

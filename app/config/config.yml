@@ -141,6 +141,7 @@ doctrine:
                         year: Oro\ORM\Query\AST\Functions\SimpleFunction
                         month: Oro\ORM\Query\AST\Functions\SimpleFunction
                         day: Oro\ORM\Query\AST\Functions\SimpleFunction
+                        timestampdiff: Oro\ORM\Query\AST\Functions\SimpleFunction
                         
 stof_doctrine_extensions:
      orm:

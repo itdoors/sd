@@ -138,3 +138,13 @@ Debt: Долг (остаток)
 Customer not found: Заказчик не найден
 Dogovor not found: Договор не найден
 Enter daterange: Введите период
+
+Planned date <br> of Pay: Плановая дата <br> оплаты
+Actual date <br> of payment: Факт дата <br> оплаты
+The debt <br> initial: Сумма долга <br> начальная
+The amount <br> paid: Сумма <br> оплачена
+Days <br> overdue: Дней <br> просрочено
+Remaining <br> debt: Остаток <br> долга
+Please enter at least one parameter in the filter: Пожалуйста, введите хотя бы один параметр в фильтре
+How to specify accounts found: По указаным параметрам счетов не найдено
+Invoice for the customer: Счет на оплату покупателю

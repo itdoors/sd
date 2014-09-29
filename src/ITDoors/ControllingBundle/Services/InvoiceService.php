@@ -741,21 +741,21 @@ class InvoiceService
             'text' => $translator->trans('pay')
             . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getInvoiceFlowSum($companystryctyre, $filters);
+        //$summa = $invoice->getInvoiceFlowSum($companystryctyre, $filters);
         $tabs[] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'flow',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_show'),
-            'text' => $translator->trans('Flow')
-            . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
+            'text' => $translator->trans('All')
+            . '<br> ' .  $translator->trans('flow')
         );
-        $summa = $invoice->getInvoiceAllSum($companystryctyre, $filters);
+        //$summa = $invoice->getInvoiceAllSum($companystryctyre, $filters);
         $tabs[] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'all',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_show'),
-            'text' => $translator->trans('All')
-            . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
+            'text' => $translator->trans('General'). '<br>' .  $translator->trans('list')
+           // . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
 
         return $tabs;

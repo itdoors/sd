@@ -22,9 +22,24 @@ class InvoiceRepository extends EntityRepository
      */
     public function selectInvoiceSum (QueryBuilder $res)
     {
-        $res->select('SUM(detals_summ.summa) as summa')
+        $res->select('SUM(detals_summ.summa)-SUM(psum.summa) as summa')
             ->leftJoin('i.acts', 'acts_summ')
-            ->leftJoin('acts_summ.detals', 'detals_summ');
+            ->leftJoin('acts_summ.detals', 'detals_summ')
+            ->leftJoin('i.payments', 'psum');
+
+        return $res;
+    }
+    /**
+     * Returns results for interval future invoice
+     *
+     * @param QueryBuilder $res Description
+     * 
+     * @return QueryBuilder
+     */
+    public function selectPaySum (QueryBuilder $res)
+    {
+        $res->select('SUM(pss.summa) as summa')
+            ->leftJoin('i.payments', 'pss');
 
         return $res;
     }
@@ -114,6 +129,7 @@ class InvoiceRepository extends EntityRepository
                 . ") as paymentsSumma"
             )
             ->addSelect('customer.name as customerName')
+            ->addSelect('i.customerId as invoiceCustomerId')
             ->addSelect('i.customerName as invoiceCustomerName')
             ->addSelect('performer.name as performerName')
             ->addSelect('r.name as regionName')
@@ -355,25 +371,56 @@ class InvoiceRepository extends EntityRepository
      */
     public function getAll ($filters, $companystryctyre = null)
     {
-        $res = $this->createQueryBuilder('i');
+        if (!sizeof($filters)) {
+            return array();
+        }
+        $invoices = $this->createQueryBuilder('i');
 
         /** select */
-        $this->selectInvoicePeriod($res);
+        $this->selectInvoicePeriod($invoices);
         /** join */
-        $this->joinInvoicePeriod($res);
+        $this->joinInvoicePeriod($invoices);
 
         if ($companystryctyre) {
-            $res
+            $invoices
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
                 ->andWhere('i_ics.companystructureId = :companystructureId')
                 ->setParameter(':companystructureId', $companystryctyre);
         }
-        $this->processFilters($res, $filters);
+        $this->processFilters($invoices, $filters);
 
-        return $res
+        $res = $invoices
             ->orderBy('i.customerName', 'ASC')
             ->orderBy('i.date', 'ASC')
-            ->getQuery();
+            ->getQuery()->getResult();
+
+        if (!sizeof($res)) {
+            return array();
+        }
+
+        $result = array();
+        foreach ($res as $invoice) {
+            if (!isset ( $result[$invoice['invoiceCustomerId']] )) {
+                $result[$invoice['invoiceCustomerId']] = [];
+                $result[$invoice['invoiceCustomerId']]['customer'] = [];
+                $result[$invoice['invoiceCustomerId']]['customer']['name'] = $invoice['customerName'];
+                $result[$invoice['invoiceCustomerId']]['customer']['debtSum'] = 0;
+                $result[$invoice['invoiceCustomerId']]['customer']['paySum'] = 0;
+                $result[$invoice['invoiceCustomerId']]['customer']['days'] = 0;
+                $result[$invoice['invoiceCustomerId']]['customer']['lastDebt'] = 0;
+                $result[$invoice['invoiceCustomerId']]['invoices'] = [];
+            }
+            $date = $invoice['dateFact'] != '' ? $invoice['dateFact']->format('U') : date('U');
+            $invoice['days'] = floor(($date-$invoice['delayDate']->format('U'))/86400);
+            $invoice['days'] = $invoice['days'] <= 0 ? 0 : $invoice['days'];
+            $result[$invoice['invoiceCustomerId']]['invoices'][] = $invoice;
+            $result[$invoice['invoiceCustomerId']]['customer']['debtSum'] += $invoice['sumActs'];
+            $result[$invoice['invoiceCustomerId']]['customer']['paySum'] += $invoice['paymentsSumma'];
+            $result[$invoice['invoiceCustomerId']]['customer']['days'] += $invoice['days'];
+            $result[$invoice['invoiceCustomerId']]['customer']['lastDebt'] += ($invoice['sumActs']-$invoice['paymentsSumma']);
+        }
+
+        return $result;
     }
     /**
      * Returns results for interval future invoice
@@ -905,7 +952,7 @@ class InvoiceRepository extends EntityRepository
         $date = date('Y-m-d', time() - 2592000);
         $res = $this->createQueryBuilder('i');
         /** select */
-        $this->selectInvoiceSum($res);
+        $this->selectPaySum($res);
         /** join */
         $this->joinInvoicePeriod($res);
 
