@@ -1,0 +1,105 @@
+<table class="table table-striped table-hover table-bordered" id="graffic_table" cellpadding="0" cellspacing="0">
+    <thead>
+        <tr>
+            <th>{% trans %}Id{% endtrans %}</th>
+            <th>{% trans %}With prolongation{% endtrans %}</th>
+            <th>{% trans %}Organization{% endtrans %}</th>
+            <th>{% trans %}Name{% endtrans %}</th>
+            <th>{% trans %}Number{% endtrans %}</th>
+            <th>{% trans %}Start date{% endtrans %}</th>
+            <th>{% trans %}End date{% endtrans %}</th>
+            <th>{% trans %}City{% endtrans %}</th>
+            <th>{% trans %}Subject{% endtrans %}</th>
+            <th>{% trans %}Status{% endtrans %}</th>
+            <th>{% trans %}Type dogovor{% endtrans %}</th>
+            <th>{% trans %}User created{% endtrans %}</th>
+            <th>{% trans %}User sold{% endtrans %}</th>
+            <th>{% trans %}Payment deferment{% endtrans %}</th>
+            <th>{% trans %}Sum{% endtrans %}</th>
+            <th>{% trans %}File{% endtrans %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for dogovorDepartment in dogovorsDepartment %}
+            {% set dogovor = dogovorDepartment.dogovor %}
+            {% if dogovorDepartment.dopDogovor is empty %}
+            <tr>
+                <td>{{ dogovor.id }}</td>
+                <td>{{ dogovor.prolongation }} need db</td>
+                <td>{{ dogovor.organization }}</td>
+                <td>{{ dogovor.name }}</td>
+                <td>{{ dogovor.number }}</td>
+                <td>{{ dogovor.startdatetime }}</td>
+                <td>{{ dogovor.enddatetime }}</td>
+                <td>{{ dogovor.city }}</td>
+                <td>{{ dogovor.subject }}</td>
+                <td>{{ dogovor.isActive }}</td>
+                <td>{{ dogovor.dogovorType }}</td>
+                <td>{{ dogovor.user }}</td>
+                <td>{% if dogovor.sailer is not empty %}
+                        {{ dogovor.sailer }}
+                    {% endif %}
+                </td>
+
+                <td>{{ dogovor.paymentDeferment }}</td>
+                <td>{{ dogovor.summMonthVat }}</td>
+                <td>
+                    <a href="/uploads/{{ dogovor.filepath }}" >{% trans %}File{% endtrans %}</a>
+                </td>
+            </tr>
+                {% set headerDone = false %}
+                {% for dogovorDepartment in dogovorsDepartment %}
+                    {% set dogovorMain = dogovorDepartment.dogovor %}
+                    {% set dopDogovor = dogovorDepartment.dopDogovor %}
+                    {% if dopDogovor is not empty and dogovorMain.id == dogovor.id %}
+                        {% if headerDone == false %}
+                        <tr>
+                            <td></td>
+                            <td colspan="16">{% trans %}List of dopDogovors for dogovor{% endtrans %}:{{ dogovor.id }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td colspan="16">
+                                <table>
+
+                                    <tr>
+                                        <td>{% trans %}id{% endtrans %}</td>
+                                        <td>{% trans %}Type dopDogovor{% endtrans %}</td>
+                                        <td>{% trans %}Number{% endtrans %}</td>
+                                        <td>{% trans %}Start date{% endtrans %}</td>
+                                        <td>{% trans %}Activation date{% endtrans %}</td>
+                                        <td>{% trans %}Subject{% endtrans %}</td>
+                                        <td>{% trans %}Status{% endtrans %}</td>
+                                        <td>{% trans %}User created{% endtrans %}</td>
+                                        <td>{% trans %}User sold{% endtrans %}</td>
+                                        <td>{% trans %}Sum{% endtrans %}</td>
+                                        <td>{% trans %}File{% endtrans %}</td>
+                                    </tr>
+                        {% endif %}
+                        {% set headerDone = true %}
+                                    <tr>{{ dopDogovor.id }}</tr>
+                                    <tr>{{ dopDogovor.dopDogovorType }}</tr>
+                                    <tr>{{ dopDogovor.number }}</tr>
+                                    <tr>{{ dopDogovor.startdatetime|date('d-m-Y') }}</tr>
+                                    <tr>{{ dopDogovor.activedatetime|date('d-m-Y') }}</tr>
+                                    <tr>{{ dopDogovor.subject }}</tr>
+                                    <tr>{{ dopDogovor.isActive }}</tr>
+                                    <tr>{{ dopDogovor.user }}</tr>
+                                    <tr>{{ dopDogovor.saller }}</tr>
+                                    <tr>{{ dopDogovor.total }}</tr>
+                                    <td>
+                                        <a href="/uploads/{{ dopDogovor.filepath }}" >{% trans %}File{% endtrans %}</a>
+                                    </td>
+
+                    {% endif %}
+
+                {% endfor %}
+                                </table>
+                            </tr>
+            {% endif %}
+        {% endfor %}
+
+
+
+    </tbody>
+</table>

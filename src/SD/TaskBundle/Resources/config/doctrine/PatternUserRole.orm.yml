@@ -1,0 +1,41 @@
+SD\TaskBundle\Entity\PatternUserRole:
+    type:  entity
+    table: pattern_user_role
+    repositoryClass: SD\TaskBundle\Entity\PatternUserRoleRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+    fields:
+        isViewed:
+            type: boolean
+            column: is_viewed
+    manyToOne:
+        taskPattern:
+            targetEntity: SD\TaskBundle\Entity\TaskPattern
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                task_pattern_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        role:
+            targetEntity: SD\TaskBundle\Entity\Role
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                role_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
