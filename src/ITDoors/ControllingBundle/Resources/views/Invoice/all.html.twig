@@ -1,0 +1,174 @@
+{% trans_default_domain 'ITDoorsControllingBundle' %}
+{% if entities|length %}
+<div class="table-scrollable">
+    <table class="table table-striped table-bordered table-hover dataTable" aria-describedby="datatable_ajax_info">
+        <thead style="vertical-align:middle">
+            <tr role="row" class="heading">
+                <th width="40%" class="sorting_desc" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1" style="color: #fff;background-color: #000 !important;">
+                    {% trans %}Customer{% endtrans %}
+                </th>
+                <th rowspan="2" width="5%" class="sorting_disabled" role="columnheader"  style="vertical-align: middle;color: #fff;background-color: #000 !important;text-align: center">
+                    {% trans %}Planned date <br> of Pay{% endtrans %}
+                </th>
+                <th rowspan="2" width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" style="vertical-align: middle;color: #fff;background-color: #000 !important;text-align: center;">
+                    {% trans %}Actual date <br> of payment{% endtrans %}
+                </th>
+                <th rowspan="2" width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" style="vertical-align: middle;color: #fff;background-color: #000 !important;text-align: center;">
+                    {% trans %}The debt <br> initial{% endtrans %}
+                </th>
+                 <th rowspan="2" width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" style="vertical-align: middle;color: #fff;background-color: #000 !important;text-align: center;">
+                    {% trans %}The amount <br> paid{% endtrans %}
+                </th>
+                <th rowspan="2" width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" style="vertical-align: middle;color: #fff;background-color: #000 !important;text-align: center;">
+                    {% trans %}Days <br> overdue{% endtrans %}
+                </th>
+                <th rowspan="2" width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" style="vertical-align: middle;color: #fff;background-color: #000 !important;text-align: center;">
+                    {% trans %}Remaining <br> debt{% endtrans %}
+                </th>
+            </tr>
+            <tr>
+                <th width="5%" class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="color: #fff;background-color: #000 !important;">
+                    {% trans %}Invoice{% endtrans %}
+                </th>
+            </tr>
+        </thead>
+        <tbody role="alert" aria-live="polite" aria-relevant="all">
+            {% for entity in entities %}
+                <tr>
+                    <td  colspan="3" style="color: #000;background-color: #6FC48C !important;"><b>{{ entity.customer.name}}</b></td>
+                    <td  colspan="1" style="color: #000;background-color: #6FC48C !important;text-align: right;"><b>{{ entity.customer.debtSum |number_format(2, ',' , '')}}</b></td>
+                    <td  colspan="1" style="color: #000;background-color: #6FC48C !important;text-align: right;"><b>{{ entity.customer.paySum |number_format(2, ',' , '')}}</b></td>
+                    <td  colspan="1" style="color: #000;background-color: #6FC48C !important;text-align: right;"><b>{{ (entity.customer.days /(entity['invoices']|length)) |round(0, 'floor')}}</b></td>
+                    <td  colspan="1" style="color: #000;background-color: #6FC48C !important;text-align: right;"><b>{{ entity.customer.lastDebt |number_format(2, ',' , '')}}</b></td>
+                </tr>
+                {% for invoice in entity['invoices'] %}
+                    <tr>
+                        <td  colspan="1" style="color: #000;background-color: #C5FFBC !important;">{% trans %}Invoice for the customer{% endtrans %} {{ invoice.invoiceId}} {{ invoice.date | date('d.m.Y H:i:s')}}</td>
+                        <td  colspan="1" style="color: #000;background-color: #C5FFBC !important;text-align: right">{{ invoice.delayDate | date('d.m.Y')}}</td>
+                        <td  colspan="1" style="color: #000;background-color: #C5FFBC !important;text-align: right">{{ invoice.dateFact == '' ? '' : invoice.dateFact | date('d.m.Y')}}</td>
+                        <td  colspan="1" style="color: #000;background-color: #C5FFBC !important;text-align: right;">{{ invoice.sumActs |number_format(2, ',' , '')}}</td>
+                        <td  colspan="1" style="color: #000;background-color: #C5FFBC !important;text-align: right;">{{ invoice.paymentsSumma |number_format(2, ',' , '')}}</td>
+                        <td  colspan="1" style="color: #000;background-color: #C5FFBC !important;text-align: right;">{{ invoice.days }}</td>
+                        <td  colspan="1" style="color: #000;background-color: #C5FFBC !important;text-align: right;">{{ (invoice.sumActs-invoice.paymentsSumma) |number_format(2, ',' , '')}}</td>
+                    </tr>
+                {% endfor %}
+                {#
+            <tr class="{{ cycle(['odd', 'even'], entity.invoiceId) }}">
+                <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceId }}</a> {{ entity.date is empty ? '' : entity.date|date("d.m.y") }}</td>
+                <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceCustomerName }} {{ '(' ~ entity.customerName ~ ')' }}</a></td>
+                <td class="">{{ entity.performerName }}</td>
+                <td class="">
+                    {{ entity.sum|number_format(2, ',', ' ')  }}
+                </td>
+                <td class="">
+                    {{ entity.sumActs|number_format(2, ',', ' ')  }}
+                </td>
+                <td class="">
+                    {{ entity.paymentsSumma|number_format(2, ',', ' ')  }}
+                </td>
+                <td class="">
+                    {{ (entity.sumActs-entity.paymentsSumma)|number_format(2, ',', ' ')  }}
+                </td>
+                <td class="">
+                    {% if entity.actNumbers | length %}
+                    {% set actNumbers = entity.actNumbers |split(',')%}
+                    {% set actDates = entity.actDates |split(',')%}
+                    <table>
+                    {% for key,number in actNumbers %}
+                        <tr><td>{{ number }}</td><td> ({{ actDates[key]|date("d.m.y") }})</td></tr>
+                    {% endfor %}
+                    </table>
+                    {% endif %}
+                </td>
+                <td class="">
+                    {% if entity.actOriginals | length %}
+                    {% set actOriginals = entity.actOriginals |split(',')%}
+                    <table>
+                    {% for original in actOriginals %}
+                        <tr><td>{% if original == 't' %}{% trans %}on{% endtrans %}{% else %}{% trans %}off{% endtrans %}{% endif %}</td></tr>
+                    {% endfor %}
+                    </table>
+                    {% endif %}
+                </td>
+                <td class="">
+                    {% if is_granted('ROLE_CONTROLLING') %}
+                    <a id="managers_list_new" class="fa ajax-form fa-plus" title="{% trans %}Add note{% endtrans %}"
+                       data-toggle="modal"
+                       href="#form_modal"
+                       data-target_holder="invoiceMessageFormTpl"
+                       data-default='{"invoiceId":"{{ entity.id }}"}'
+                       data-form_name="invoiceCompanystructureForm"
+                       data-post_function="updateList"
+                       data-post_target_id="datatable_ajax"
+                       ></a><br>
+                       {% endif %}
+                    {% set responsibles = entity.responsibles|split(',') %}
+                    {% for responsible in responsibles %}
+                    <a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">
+                        {{ responsible }}
+                    </a>
+                    <br>
+                    {% endfor %}
+                </td>
+                <td class="">{{ entity.bank }}</td>
+                <td class="">
+                    <a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">
+                        {{ entity.dogovorNumber }}
+                    </a>
+                    {{ entity.dogovorStartDatetime is empty ? '' :  entity.dogovorStartDatetime|date("d.m.y") }}
+                </td>
+                <td class="">{{ entity.delayDate is empty ? '' :  entity.delayDate|date("d.m.y")  }} {% if entity.delayDays is not empty %} ({{ entity.delayDays}} {{ entity.delayDaysType }}) {% endif %}</td>
+                <td class="">
+                    <a id="managers_list_new" class="fa ajax-form fa-plus" title="{% trans %}Add note{% endtrans %}"
+                       data-toggle="modal"
+                       href="#form_modal"
+                       data-target_holder="invoiceMessageFormTpl"
+                       data-default='{"invoice_id":"{{ entity.id }}"}'
+                       data-form_name="invoiceMessageForm"
+                       data-post_function="updateList"
+                       data-post_target_id="datatable_ajax"
+                       ></a>
+                       {{ entity.descriptiondate is empty ? '' : '('~entity.descriptiondate |date("d.m.y")~')'}} {{ entity.description |raw('html') }}
+                </td>
+                <td class="">
+                    <a href="#" 
+                       class="datesave fa fa-plus" data-pk="{{ entity.id }}"
+                       data-original-title="{% trans %}Select data{% endtrans %}"
+                       data-date="{{entity.dateEnd|date("d.m.Y")}}"
+                       data-format="dd.mm.yyyy"> 
+                        {{ entity.dateEnd is empty ? '' : entity.dateEnd|date("d.m.Y") }}
+                    </a>
+                </td>
+                <td class="">{{ entity.dateFact is empty ? '' : entity.dateFact|date("d.m.Y") }}</td>
+                <td class="">
+                    <a href="#" 
+                       id="court" 
+                       class="status-edit" 
+                       data-type="select" 
+                       data-pk="{{ entity.id }}"
+                       data-value="{{ entity.court }}" 
+                       data-placement="right" 
+                       data-original-title="{% trans %}Select status{% endtrans %}">
+                        {% if entity.court ==  true %}
+                            {% trans %}In coutr{% endtrans %}
+                        {% else%}
+                            {% trans %}Not in coutr{% endtrans %}
+                        {% endif%}
+                    </a>
+                </td>
+            </tr>#}
+            {% endfor %}
+      
+        </tbody>
+    </table>
+</div>
+{% elseif filters.isFired is defined or filters|length == 0 %}
+    <div class="note note-danger">
+        <h4 class="block">{% trans %}Please enter at least one parameter in the filter{% endtrans %}</h4>
+    </div>
+{% elseif entities|length == 0 %}
+    <div class="note note-danger">
+        <h4 class="block">{% trans %}How to specify accounts found{% endtrans %}</h4>
+    </div>
+{%  endif%}
+

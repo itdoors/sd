@@ -107,6 +107,14 @@ class InvoiceFilterFormType extends AbstractType
                     )),
                     'placeholder' => 'Enter companystructure',
                 )
+            ))
+            ->add('daterange', 'text', array(
+                'attr' => array(
+                    'class_outer' => 'input-group input-group itdoors-daterange-custom tooltips col-md-3 ',
+                    'class' => 'form-control can-be-reseted itdoors-daterange-text ',
+                    'placeholder' => 'Enter daterange',
+                    'data-original-title' => 'Enter daterange',
+                )
             ));
 
         $builder

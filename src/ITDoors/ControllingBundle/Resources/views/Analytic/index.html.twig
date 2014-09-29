@@ -12,7 +12,6 @@
     <li>
          <i class="fa fa-home"></i>
          <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
-        <i class="fa fa-angle-right"></i>
     </li>
     <li>
         <a href="{{ path('it_doors_controlling_invoice') }}" title="{% trans %}Analitic{% endtrans %}">{% trans %}Analitic{% endtrans %}</a>
@@ -51,19 +50,69 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>#}
+        <script>
+            $(document).ready(function(){
+                $('.daterangepicker').daterangepicker(
+                        {
+                            ranges: {
+                            'Текущий месяц': [moment().startOf('month'), moment().endOf('month')],
+                            'Текущий год': [moment().startOf('year'), moment().endOf('year')]
+                           },
+                           format: "DD.MM.YYYY",
+                            startDate: moment().startOf('year'),
+                            endDate: moment().endOf('year'),
+                            locale: {
+                                applyLabel: 'ОК',
+                                cancelLabel: 'Отмена',
+                                fromLabel: 'от',
+                                toLabel: 'до',
+                                customRangeLabel: 'Выбрать диапазон',
+                                daysOfWeek: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб','Вс'],
+                                monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                                firstDay: 1
+                            }
+                        }
+                );
+
+            });
+        </script>
+        <style>
+            .input-daterange{
+                outline: 0;
+                height: auto;
+                min-height: 32px;
+                padding: 6px 6px;
+                line-height: 20px;
+                font-size: 14px;
+                font-weight: normal;
+                vertical-align: top;
+                font-size: 100%;
+                color: #666;
+                outline: 0;
+                border: 0;
+                -webkit-box-shadow: none;
+                -moz-box-shadow: none;
+                box-shadow: none;
+                background: transparent !important;
+                border: 1px solid #e5e5e5;
+                top: 0px;
+                left: 15px;
+                width: 250px;
+                margin: 0;
+            }
+        </style>
         {{ ajax_filter_render(filter, namespace, {
             'datatable_ajax': 'ITDoorsAjax.updateList'
-        }) }}#}
+        }) }}
         <div class="tabbable tabbable-custom boxless">
              {{ ajax_tab_render( tabs, tab, namespace) }}
+             В разработке
+             {#
             <div class="tab-content ajax-tab-holder" id="datatable_ajax" data-url="{{ tabs[tab].url }}">
-                {% if tab == 'individual' %}
-                    {{ render(controller('ITDoorsControllingBundle:Analytic:grafic'~tab | title, {ajax:'false'})) }}
-                {% else %}
-                     {{ render(controller('ITDoorsControllingBundle:Analytic:grafic'~tab | title)) }}
-                {% endif %}
+                {{ render(controller('ITDoorsControllingBundle:Analytic:list')) }}
             </div>
+             #}
         </div>
     </div>
 </div>
