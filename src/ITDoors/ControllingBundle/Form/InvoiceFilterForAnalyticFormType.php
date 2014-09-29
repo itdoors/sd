@@ -66,7 +66,7 @@ class InvoiceFilterForAnalyticFormType extends AbstractType
                     'placeholder' => 'Enter performer',
                 )
             ))
-             ->add('dateRange', 'text', array(
+             ->add('daterange', 'text', array(
                 'attr' => array(
                     'empty_value' =>  '',
                     'class' => 'daterangepicker input-daterange',

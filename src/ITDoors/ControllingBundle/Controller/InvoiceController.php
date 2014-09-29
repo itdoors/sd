@@ -116,6 +116,9 @@ class InvoiceController extends BaseFilterController
      */
     public function showAction ()
     {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
         $filterNamespace = $this->container->getParameter($this->getNamespace());
 
         $filters = $this->getFilters($filterNamespace);
@@ -123,39 +126,49 @@ class InvoiceController extends BaseFilterController
             $filters['isFired'] = 'No fired';
             $this->setFilters($filterNamespace, $filters);
         }
-
-        $period = $this->getTab($filterNamespace);
-
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-
-        /** @var InvoiceRepository $invoice */
-        $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
-
         $companystryctyre = null;
         if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
             $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
         }
-        $result = $invoice->getEntittyCountSum($period, $filters, $companystryctyre);
-        $entities = $result['entities'];
-        $count = $result['count'];
 
-        $namespasePagin = $filterNamespace;
-        $page = $this->getPaginator($namespasePagin);
-        if (!$page) {
-            $page = 1;
+        $period = $this->getTab($filterNamespace);
+
+        /** @var InvoiceRepository $invoice */
+        $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
+        if ($period === 'all') {
+            if (isset($filters['isFired'])) {
+                $result = array();
+            } else {
+                $result = $invoice->getAll($filters, $companystryctyre);
+            }
+
+            return $this->render('ITDoorsControllingBundle:Invoice:all.html.twig', array (
+                    'period' => $period,
+                    'entities' => $result,
+                    'filters' => $filters
+            ));
+        } else {
+            $result = $invoice->getEntittyCountSum($period, $filters, $companystryctyre);
+            $entities = $result['entities'];
+            $count = $result['count'];
+
+            $namespasePagin = $filterNamespace;
+            $page = $this->getPaginator($namespasePagin);
+            if (!$page) {
+                $page = 1;
+            }
+
+            $paginator = $this->container->get($this->paginator);
+            $entities->setHint($this->paginator . '.count', $count);
+            $pagination = $paginator->paginate($entities, $page, 20);
+
+
+            return $this->render('ITDoorsControllingBundle:Invoice:show.html.twig', array (
+                    'period' => $period,
+                    'entities' => $pagination,
+                    'namespasePagin' => $namespasePagin
+            ));
         }
-
-        $paginator = $this->container->get($this->paginator);
-        $entities->setHint($this->paginator . '.count', $count);
-        $pagination = $paginator->paginate($entities, $page, 20);
-
-
-        return $this->render('ITDoorsControllingBundle:Invoice:show.html.twig', array (
-                'period' => $period,
-                'entities' => $pagination,
-                'namespasePagin' => $namespasePagin
-        ));
     }
     /**
      *  invoice Action
