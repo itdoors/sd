@@ -23,9 +23,11 @@ class InvoiceRepository extends EntityRepository
     public function selectInvoiceSum (QueryBuilder $res)
     {
         $res
-            ->select('SUM(case when detals_summ.summa is not NULL then detals_summ.summa else 0 end)'
+            ->select(
+                'SUM(case when detals_summ.summa is not NULL then detals_summ.summa else 0 end)'
                 . '-'
-                . 'SUM(case when psum.summa is not NULL then psum.summa else 0 end) as summa'
+                . 'SUM(case when psum.summa is not NULL then psum.summa else 0 end)'
+                . ' as summa'
             )
             ->leftJoin('i.acts', 'acts_summ')
             ->leftJoin('acts_summ.detals', 'detals_summ')

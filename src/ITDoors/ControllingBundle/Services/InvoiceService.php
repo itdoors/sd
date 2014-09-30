@@ -749,12 +749,12 @@ class InvoiceService
             'text' => $translator->trans('Flow')
             . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-         if (!isset($filters['isFired'])) {
+        if (!isset($filters['isFired'])) {
             $summa = $invoice->getInvoiceAllSum($companystryctyre, $filters);
             $summa = $summa[0]['summa'];
-         } else {
-             $summa = 0;
-         }
+        } else {
+            $summa = 0;
+        }
         $tabs[] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'all',
