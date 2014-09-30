@@ -84,7 +84,7 @@ Select subdivision: Выберите подразделение
 Enter description: Введите описание
 Enter education: Укажите образование
 Enter issues: Професиональные вопросы
-Birthday: День рождения
+Birthday: Дата рождения
 Enter date hire: Дата приема на работу
 Add manager: Добавить менеджера
 
@@ -107,3 +107,4 @@ Enter termination date: Введите дату увольнения
 FIO: Ф.И.О
 Phone: Телефон
 Birthdays: Дни рожденья
+Change avatar: Изменить аватарку

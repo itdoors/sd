@@ -5,6 +5,7 @@ parameters:
     sd_user.form.new.class: SD\UserBundle\Form\UserNewForm
     sd_user.form.new.stuff.class: SD\UserBundle\Form\UserNewStuffForm
     stuff.filter.form.class: SD\UserBundle\Form\StuffFilterForm
+    sd_user.form.avatar.class: SD\UserBundle\Form\UserAvatarForm
     sd_user_contactinfo.form.class: SD\UserBundle\Form\UserContactinfoForm
     sd_user.service.class: SD\UserBundle\Services\UserService
 
@@ -38,6 +39,12 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: stuffFilterForm }
+            
+    sd.user.form.userAvatarForm:
+        class: %sd_user.form.avatar.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: userAvatarForm }
             
     sd.user.form.userContactinfoForm:
         class: %sd_user_contactinfo.form.class%
