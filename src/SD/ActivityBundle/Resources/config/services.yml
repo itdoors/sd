@@ -1,0 +1,8 @@
+parameters:
+#    sd_task.example.class: SD\TaskBundle\Example
+    activity.organization.service.class: SD\ActivityBundle\Services\OrganizationActivityService
+
+services:
+    activity.organization.service:
+        class: %activity.organization.service.class%
+        arguments: [@service_container]

@@ -1,0 +1,3 @@
+sd_activity_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: SDActivityBundle:Default:index }
