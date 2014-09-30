@@ -227,7 +227,11 @@ class PrivateController extends SalesController
         foreach ($taskUserRoles as $taskUserRole) {
             $task = $taskUserRole->getTask();
             $stage = $task->getStage();
+            $role = $taskUserRole->getRole();
             if ($stage == 'closed' || $stage == 'undone' || $stage == 'done') {
+                continue;
+            }
+            if ($stage == 'matching' && ($role == 'performer' || $role='controller')) {
                 continue;
             }
             $endDate = $em->getRepository('SDTaskBundle:TaskEndDate')

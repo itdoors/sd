@@ -1,3 +1,7 @@
+sd_activity:
+    resource: "@SDActivityBundle/Resources/config/routing.yml"
+    prefix:   /
+
 it_doors_sip:
     resource: "@ITDoorsSipBundle/Resources/config/routing.yml"
     prefix:   /

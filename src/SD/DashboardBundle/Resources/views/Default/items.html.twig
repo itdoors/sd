@@ -144,8 +144,20 @@
             </div>
         </div>
     </div>
-                    
-{{ include('SDCalendarBundle:Dashboard:filterColors.html.twig') }}
+
+<div class="col-md-12 col-sm-12">
+    <div class="sd-event-green sd-event-text-div">
+        {% trans from 'SDCalendarBundle' %}Future event{% endtrans %}
+    </div>
+    <div class="sd-event-yellow sd-event-text-div">
+        {% trans from 'SDCalendarBundle' %}Event ok{% endtrans %}
+    </div>
+    <div class="sd-event-red sd-event-text-div">
+        {% trans from 'SDCalendarBundle' %}Event overdue{% endtrans %}
+    </div>
+</div>
+<div class="clear"></div>
+
 <div>
     <div class="row" id="calendarBlock" data-url="{{ path('sd_dashboard_calendar_task') }}">
             {{ render(controller('SDDashboardBundle:Default:generateTasksCalendar')) }}
