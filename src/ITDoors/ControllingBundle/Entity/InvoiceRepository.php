@@ -22,7 +22,11 @@ class InvoiceRepository extends EntityRepository
      */
     public function selectInvoiceSum (QueryBuilder $res)
     {
-        $res->select('SUM(detals_summ.summa)-SUM(psum.summa) as summa')
+        $res
+            ->select('SUM(case when detals_summ.summa is not NULL then detals_summ.summa else 0 end)'
+                . '-'
+                . 'SUM(case when psum.summa is not NULL then psum.summa else 0 end) as summa'
+            )
             ->leftJoin('i.acts', 'acts_summ')
             ->leftJoin('acts_summ.detals', 'detals_summ')
             ->leftJoin('i.payments', 'psum');
@@ -261,8 +265,7 @@ class InvoiceRepository extends EntityRepository
                         $daterange = explode('-', $value);
                         $from = new \DateTime($daterange[0]);
                         $to = new \DateTime($daterange[1]);
-                        $sql->andWhere('i.delayDate >= :dateFrom')
-                            ->andWhere('i.delayDate <= :dateTo')
+                        $sql->andWhere('i.delayDate BETWEEN :dateFrom AND :dateTo')
                             ->setParameter(':dateFrom', $from)
                             ->setParameter(':dateTo', $to);
                         break;
@@ -986,7 +989,6 @@ class InvoiceRepository extends EntityRepository
         /** join */
         $this->joinInvoicePeriod($res);
 
-        $this->processFilters($res, $filters);
         /** where */
         if ($companystryctyre) {
             $res
@@ -994,6 +996,8 @@ class InvoiceRepository extends EntityRepository
                 ->andWhere('i_ics.companystructureId = :companystructureId')
                 ->setParameter(':companystructureId', $companystryctyre);
         }
+        $this->processFilters($res, $filters);
+
         $res->andWhere("i.dateFact is NULL")->andWhere("i.delayDate >= :date")->setParameter(':date', $date);
 
         return $res->getQuery()->getResult();
@@ -1013,8 +1017,6 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoiceSum($res);
         /** join */
         $this->joinInvoicePeriod($res);
-
-        $this->processFilters($res, $filters);
         /** where */
         if ($companystryctyre) {
             $res
@@ -1022,6 +1024,8 @@ class InvoiceRepository extends EntityRepository
                 ->andWhere('i_ics.companystructureId = :companystructureId')
                 ->setParameter(':companystructureId', $companystryctyre);
         }
+        $this->processFilters($res, $filters);
+        $res->andWhere("i.dateFact is NULL");
 
         return $res->getQuery()->getResult();
     }
