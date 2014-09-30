@@ -70,9 +70,13 @@ class TaskUserRoleRepository extends EntityRepository
             ->leftJoin('t.stage', 's')
             ->leftJoin('tur.user', 'u');
 
-        $sql->where('s.name NOT IN (:stage)')
+        if (isset($filterArray['showClosed']) && $filterArray['showClosed']) {
+            $sql->where('s.name IN (:stage)')
+                ->setParameter(':stage', $notViewingStages);
+        } else {
+            $sql->where('s.name NOT IN (:stage)')
             ->setParameter(':stage', $notViewingStages);
-
+        }
 
         $sql->andWhere('(r.name IN (:viewingRoleMatching) OR s.name != :stageMatching)')
             ->setParameter(':stageMatching', 'matching')

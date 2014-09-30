@@ -44,4 +44,17 @@ class AuthorTaskAccess extends BasicTaskAccess
 
         return false;
     }
+
+    /**
+     * @return bool
+     */
+    public function canSetClosed()
+    {
+        if ($this->getStage() == 'matching') {
+
+            return true;
+        }
+
+        return false;
+    }
 }

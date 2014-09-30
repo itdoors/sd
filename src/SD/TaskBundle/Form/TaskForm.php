@@ -163,7 +163,7 @@ class TaskForm extends AbstractType
             ));
         $patterns = $container->get("doctrine")->getRepository('SDTaskBundle:TaskPattern')
             ->findAll();
-        if ($patterns) {
+        if ($patterns && $stuff) {
             $builder->add('pattern', 'entity', array(
                 'mapped' => false,
                 'class' => 'SD\TaskBundle\Entity\TaskPattern',

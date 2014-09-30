@@ -342,7 +342,7 @@
         <!-- TASK DESC -->
         <div class="form-group">
             {# sorry for this shitty twig style, but I had to hide empty spaces #}
-            <div class="col-md-12">{% if access.canEditDescription %}
+            <div class="col-md-12" style="white-space: pre-line">{% if access.canEditDescription %}
                     <a href="#" id="description" data-type="textarea"
                        data-pk="{{ taskUserRole.id }}" data-placement="top"
                        data-original-title="{% trans %}Enter description{% endtrans %}"

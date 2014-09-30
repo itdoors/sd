@@ -56,6 +56,8 @@ class TaskController extends Controller
             'user' => $user
         );
 
+        $filterArray['showClosed'] = (bool) $request->request->get('showClosed');
+
         if ($filter) {
             if (count($filter['role'])) {
                 foreach ($filter['role'] as $filterRole) {
@@ -1121,8 +1123,9 @@ class TaskController extends Controller
 
         $em->persist($taskUserRoleViewer);
         $em->flush();
+        $em->refresh($taskUserRoleViewer);
 
-
+        $this->sendEmail(array($taskUserRoleViewer), 'new');
 
         $return['success'] = 1;
 
@@ -1143,9 +1146,19 @@ class TaskController extends Controller
 
         $pattern = $em->getRepository('SDTaskBundle:TaskPattern')->find($id);
 
-
         $return['description'] = $pattern->getDescription();
         $return['title'] = $pattern->getTitle();
+
+        $patternRoles = $em->getRepository('SDTaskBundle:PatternUserRole')->findBy(array(
+            'taskPattern' => $pattern
+        ));
+
+        if ($patternRoles) {
+            foreach ($patternRoles as $patternRole) {
+                $role = $patternRole->getRole()->getName();
+                $return[$role][] = $patternRole->getUser()->getId();
+            }
+        }
 
         $return['success'] = 1;
 

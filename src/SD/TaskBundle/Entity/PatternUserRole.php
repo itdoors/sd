@@ -49,12 +49,13 @@ class PatternUserRole
      * Set isViewed
      *
      * @param boolean $isViewed
+     *
      * @return PatternUserRole
      */
     public function setIsViewed($isViewed)
     {
         $this->isViewed = $isViewed;
-    
+
         return $this;
     }
 
@@ -72,12 +73,13 @@ class PatternUserRole
      * Set taskPattern
      *
      * @param \SD\TaskBundle\Entity\TaskPattern $taskPattern
+     *
      * @return PatternUserRole
      */
     public function setTaskPattern(\SD\TaskBundle\Entity\TaskPattern $taskPattern = null)
     {
         $this->taskPattern = $taskPattern;
-    
+
         return $this;
     }
 
@@ -95,12 +97,13 @@ class PatternUserRole
      * Set role
      *
      * @param \SD\TaskBundle\Entity\Role $role
+     *
      * @return PatternUserRole
      */
     public function setRole(\SD\TaskBundle\Entity\Role $role = null)
     {
         $this->role = $role;
-    
+
         return $this;
     }
 
@@ -118,12 +121,13 @@ class PatternUserRole
      * Set user
      *
      * @param \SD\UserBundle\Entity\User $user
+     *
      * @return PatternUserRole
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+
         return $this;
     }
 

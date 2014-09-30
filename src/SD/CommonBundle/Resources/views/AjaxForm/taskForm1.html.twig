@@ -38,6 +38,7 @@
             $('#' + '{{ form.vars.name }}' + '_controller').select2();
             $('#' + '{{ form.vars.name }}' + '_matcher').select2();
             $('#' + '{{ form.vars.name }}' + '_pattern').select2();
+
             $('#' + '{{ form.vars.name }}' + '_pattern').die('change');
             $('#' + '{{ form.vars.name }}' + '_pattern').live('change', function(e){
                 var value = $('#' + '{{ form.vars.name }}' + '_pattern').select2("val");
@@ -67,6 +68,16 @@
             function setTaskPattern(data) {
                 $('#' + '{{ form.vars.name }}' + '_title').val(data.title);
                 $('#' + '{{ form.vars.name }}' + '_description').val(data.description);
+
+                if (data.performer) {
+                    $('#' + '{{ form.vars.name }}' + '_performer').select2("val", data.performer)
+                }
+                if (data.controller) {
+                    $('#' + '{{ form.vars.name }}' + '_controller').select2("val", data.controller)
+                }
+                if (data.matcher) {
+                    $('#' + '{{ form.vars.name }}' + '_matcher').select2("val", data.matcher)
+                }
             }
 
             function showSpinner() {
