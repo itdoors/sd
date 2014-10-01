@@ -639,7 +639,7 @@ class OrganizationRepository extends EntityRepository
      * 
      * @return mixed[]
      */
-    public function getForInvoiceAnalitic ($page, $filters)
+    public function getForInvoiceAnalitic ($filters)
     {
         $res = $this->createQueryBuilder('o')
             ->select('o.id')
@@ -729,10 +729,7 @@ class OrganizationRepository extends EntityRepository
         }
         $count = $resCount->getQuery()->getSingleScalarResult();
         $entity = $res->getQuery();
-
-//        $paginator = $this->container->get($this->paginator);
         $entity->setHint('knp_paginator' . '.count', $count);
-//        $result = $paginator->paginate($entity, $page, 20);
 
         return $entity;
     }

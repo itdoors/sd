@@ -994,7 +994,7 @@ class InvoiceService
         /** @var InvoicePaymentsRepository $invoicePayRepository */
         $invoicePayRepository = $em->getRepository('ITDoorsControllingBundle:InvoicePayments');
 
-        $organizationsEntity = $organizationRepository->getForInvoiceAnalitic($page, $filters);
+        $organizationsEntity = $organizationRepository->getForInvoiceAnalitic($filters);
         $paginator = $this->container->get($this->paginator);
         $organizations = $paginator->paginate($organizationsEntity, $page, 10);
         $result = array('paginator' => $organizations);
@@ -1128,6 +1128,28 @@ class InvoiceService
         }
         $result['entities'] = $invoices;
         $result['showDays'] = $showDays;
+
+        return $result;
+    }
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @param integer $page
+     * @param array   $filters
+     * 
+     * @return tabs[]
+     */
+    public function getResponsible ($page, $filters = null)
+    {
+        /** @var EntityManager $em */
+        $em = $this->container->get('doctrine')->getManager();
+
+        /** @var CompanystructurenRepository $companystructureRepository */
+        $companystructureRepository = $em->getRepository('ListsCompanystructureBundle:Companystructure');
+        $companystructures = $companystructureRepository->getForInvoiceAnalitic($filters);
+        $result = array('paginator' => null, 'showDays' => null);
+
+        $result['entities'] = $companystructures;
 
         return $result;
     }
