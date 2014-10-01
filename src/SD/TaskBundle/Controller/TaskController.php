@@ -6,6 +6,7 @@ use SD\TaskBundle\Classes\TaskAccessFactory;
 use SD\TaskBundle\Entity\Comment;
 use SD\TaskBundle\Entity\TaskCommit;
 use SD\TaskBundle\Entity\TaskEndDate;
+use SD\TaskBundle\Entity\TaskUserRole;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -252,6 +253,12 @@ class TaskController extends Controller
                 'model' => 'task'
             ));
 
+        $viewerRole = $roleRepository
+            ->findOneBy(array(
+                'name' => 'viewer',
+                'model' => 'task'
+            ));
+
         $taskUserRoleController = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
             array (
                 'task' => $taskUserRole->getTask(),
@@ -280,6 +287,13 @@ class TaskController extends Controller
             )
         );
 
+        $taskUserRoleViewer = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
+            array (
+                'task' => $taskUserRole->getTask(),
+                'role' => $viewerRole
+            )
+        );
+
         $matchingInfo = array();
         $taskCommitRepo = $em->getRepository('SDTaskBundle:TaskCommit');
         foreach ($taskUserRoleMatcher as $key => $tur) {
@@ -304,6 +318,18 @@ class TaskController extends Controller
 
         $comment = $this->getLastTaskComment($taskUserRole->getTask()->getId());
 
+        $user = $this->getUser();
+
+        $stuff = $em->getRepository('SDUserBundle:Stuff')
+            ->findBy(array(
+                'user' => $user
+            ));
+        if ($stuff) {
+            $usersCanBeViewed = $em->getRepository('SDUserBundle:User')->getAllStuff();
+        } else {
+            $usersCanBeViewed = array($user);
+        }
+
 
         $access = TaskAccessFactory::createAccess($em, $taskUserRole);
 
@@ -313,10 +339,12 @@ class TaskController extends Controller
             'taskUserRolePerformer' => $taskUserRolePerformer,
             'taskUserRoleAuthor' => $taskUserRoleAuthor,
             'taskUserRoleMatcher' => $taskUserRoleMatcher,
+            'taskUserRoleViewer' => $taskUserRoleViewer,
             'matchingInfo' => $matchingInfo,
             'userId' => $userId,
             'comment' => $comment,
-            'access' => $access
+            'access' => $access,
+            'usersCanBeViewed' => $usersCanBeViewed
         );
 
         return $info;
@@ -1048,5 +1076,57 @@ class TaskController extends Controller
         $return['success'] = 1;
 
         return new Response(json_encode($return));
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function addViewerAction(Request $request)
+    {
+        $id = $request->request->get('id');
+        $idViewer = $request->request->get('viewer');
+
+        $em = $this->getDoctrine()->getManager();
+
+        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
+
+        $task = $taskUserRole->getTask();
+
+        $userViewer = $em->getRepository('SDUserBundle:User')->find($idViewer);
+        $viewerRole = $em->getRepository('SDTaskBundle:Role')
+            ->findOneBy(array(
+                'name' => 'viewer',
+                'model' => 'task'
+            ));
+
+        $checkTaskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->findOneBy(array(
+            'task' => $task,
+            'user' => $userViewer
+        ));
+
+        if ($checkTaskUserRole) {
+            $return['success'] = 0;
+            $return['error'] = 'already_in_task';
+
+            return new Response(json_encode($return));
+        }
+
+        $taskUserRoleViewer = new TaskUserRole();
+        $taskUserRoleViewer->setUser($userViewer);
+        $taskUserRoleViewer->setRole($viewerRole);
+        $taskUserRoleViewer->setTask($task);
+        $taskUserRoleViewer->setIsViewed(false);
+
+        $em->persist($taskUserRoleViewer);
+        $em->flush();
+
+
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+
     }
 }

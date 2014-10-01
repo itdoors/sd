@@ -69,3 +69,7 @@ sd_task_sign_up:
 sd_task_delete_file:
     path:     /tasks/delete
     defaults: { _controller: SDTaskBundle:Task:deleteFile }
+
+sd_task_add_viewer:
+    path:     /tasks/add/viewer
+    defaults: { _controller: SDTaskBundle:Task:addViewer }

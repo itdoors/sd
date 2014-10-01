@@ -321,6 +321,17 @@ class OperScheduleController extends BaseFilterController
                     $infoDay['total'];
                 $infoHours[$idCoworker . '-' . $idReplacement . '-' . $infoDay['day']]['notOfficially'] =
                     $infoDay['totalNotOfficially'];
+
+                if ($infoDay['departmentPeopleCooperationId']) {
+                    $infoHours[$idCoworker . '-' . $idReplacement . '-' . $infoDay['day']]['cooperation'] =
+                        $this->getDoctrine()
+                            ->getRepository('ListsDepartmentBundle:DepartmentPeople')
+                            ->find($infoDay['departmentPeopleCooperationId'])->getIndividual()
+                            .' '.$infoDay['percentCooperation'];
+                    ;
+                } else {
+                    $infoHours[$idCoworker . '-' . $idReplacement . '-' . $infoDay['day']]['cooperation'] = 0;
+                }
             }
             //var_dump(count($infoHours));
             $infoHours[$idCoworker . '-' . $idReplacement]['idMonthInfo'] = $coworker['idMonthInfo'];
@@ -966,11 +977,23 @@ class OperScheduleController extends BaseFilterController
             }
         }
 
+        if ($infoDay[0]['departmentPeopleCooperationId']) {
+            $cooperation =
+                $this->getDoctrine()
+                    ->getRepository('ListsDepartmentBundle:DepartmentPeople')
+                    ->find($infoDay[0]['departmentPeopleCooperationId'])->getIndividual()
+                .' '.$infoDay[0]['percentCooperation'];
+        } else {
+            $cooperation = 0;
+        }
+
+
 
         $return['html'] = $this->renderView('ITDoorsOperBundle:Schedule:scheduleTableCell.html.twig', array (
             'officially' => $officially,
             'notOfficially' => $notOfficially,
             'status' => $status,
+            'cooperation' => $cooperation
         ));
 
         $return['success'] = 1;
@@ -1201,7 +1224,10 @@ class OperScheduleController extends BaseFilterController
                     $coworkerDayTimes[] = $found;
                 }
             } elseif (isset($founded[0]) && $founded[0]) {
-                $coworkerDayTimes[] = $founded[0];
+                $coworkerDayTimes[] = $founded;
+                foreach ($founded as $found) {
+                    $coworkerDayTimes[] = $found;
+                }
             }
         }
 

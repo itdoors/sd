@@ -1665,7 +1665,7 @@ class AjaxController extends BaseFilterController
                 }
             }
 
-            $organization->$methodSet($value);
+            $organization->$methodSet(trim($value));
         }
         $validator = $this->get('validator');
         /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
@@ -2780,7 +2780,7 @@ class AjaxController extends BaseFilterController
         $invoiceCompanystructure = $em
             ->getRepository('ITDoorsControllingBundle:InvoiceCompanystructure')
             ->findOneBy(array(
-                'invoiceId' => $data->getInvoiceID(),
+                'invoiceId' => $data->getInvoiceId(),
                 'companystructureId' => $formData['companystructure']
             ));
         if ($invoiceCompanystructure) {
@@ -2801,9 +2801,7 @@ class AjaxController extends BaseFilterController
 
         if ($invoice->getDogovorId()) {
             /** @var Dogovor $dogovor */
-            $dogovor = $em
-                ->getRepository('ListsDogovorBundle:Dogovor')
-                ->find($invoice->getDogovorId());
+            $dogovor = $invoice->getDogovor();
 
             if ($dogovor) {
                 /** @var Invoice $invoices */
@@ -3206,11 +3204,19 @@ class AjaxController extends BaseFilterController
                             'invoiceId' => $invoiceCS->getId(),
                             'companystructureId' => $object->getCompanystructureId()
                             ));
-                    $em->remove($invoiceC);
+                    if ($invoiceC) {
+                        $em->remove($invoiceC);
+                    }
                 }
             }
         } else {
-            $em->remove($object);
+            if (is_array($object)) {
+                foreach ($object as $obj) {
+                    $em->remove($obj);
+                }
+            } else {
+                $em->remove($object);
+            }
         }
         $em->flush();
     }
@@ -3845,7 +3851,7 @@ class AjaxController extends BaseFilterController
             }
         }
 
-        $object->$methodSet($value);
+        $object->$methodSet(trim($value));
 
         $validator = $this->get('validator');
 

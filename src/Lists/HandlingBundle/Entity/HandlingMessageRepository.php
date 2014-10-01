@@ -76,7 +76,9 @@ class HandlingMessageRepository extends EntityRepository
             $q->andWhere('hm.user in (:managers)')
                 ->setParameter(':managers', $manager);
         }
-        $q = $q->getQuery()
+        $q = $q
+            ->orderBy('hm.createdate')
+            ->getQuery()
             ->getResult();
 
         if (!sizeof($q)) {

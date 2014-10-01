@@ -25,6 +25,8 @@ class TaskAccessFactory
             return new ControllerTaskAccess($em, $taskUserRole);
         } elseif ($stringAccess == 'matcher') {
             return new MatcherTaskAccess($em, $taskUserRole);
+        } elseif ($stringAccess == 'viewer') {
+            return new ViewerTaskAccess($em, $taskUserRole);
         } else {
             return new BasicTaskAccess($em, $taskUserRole);
         }
