@@ -23,10 +23,12 @@ class InvoicePaymentsRepository extends EntityRepository
         $sql = $this->createQueryBuilder('ip')
             ->select('ip.date')
             ->addSelect('ip.summa as summaPay')
+            ->addSelect('i.date invoiceDate')
             ->addSelect('i.delayDate')
             ->innerJoin('ip.invoice', 'i')
             ->where('i.customerId = :customerId')
             ->andWhere('i.delayDate < ip.date')
+            ->andWhere('i.dateFact is NULL')
             ->setParameter('customerId', $customerId);
         if (sizeof($filters)) {
             foreach ($filters as $key => $value) {
@@ -34,7 +36,7 @@ class InvoicePaymentsRepository extends EntityRepository
                     continue;
                 }
                 switch ($key) {
-                    case 'dateRange':
+                    case 'daterange':
                         $dateArr = explode('-', $value);
                         $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
                         $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));

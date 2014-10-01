@@ -135,6 +135,7 @@ class InvoiceRepository extends EntityRepository
                 . ") as paymentsSumma"
             )
             ->addSelect('customer.name as customerName')
+            ->addSelect('i.customerEdrpou as invoiceCustomerEdrpou')
             ->addSelect('i.customerId as invoiceCustomerId')
             ->addSelect('i.customerName as invoiceCustomerName')
             ->addSelect('performer.name as performerName')
@@ -1452,29 +1453,48 @@ class InvoiceRepository extends EntityRepository
      *
      * @return mixed[]
      */
-    public function getForCustomer ($customerId, $filters)
+    public function getForCustomerDebit ($customerId, $filters)
     {
+        $date = new \DateTime();
         $sql = $this->createQueryBuilder('i')
             ->select('i.date')
             ->addSelect('i.delayDate')
-            ->addSelect('i.sum')
+            ->addSelect(
+                '(
+                    SELECT SUM(case when detalall.summa is not NULL then detalall.summa else 0 end )
+                    FROM  ITDoorsControllingBundle:InvoiceAct actall
+                    LEFT JOIN actall.detals detalall
+                    WHERE actall.invoiceId = i.id
+                ) as allSumm'
+            )
+            ->addSelect(
+                '(
+                    SELECT SUM(case when detal.summa  is not NULL then detal.summa else 0 end)
+                    FROM  ITDoorsControllingBundle:InvoiceAct act
+                    LEFT JOIN act.detals detal
+                    WHERE act.invoiceId = i.id
+                    AND i.delayDate < :date
+                ) as allSummDebit'
+            )
             ->addSelect(
                 "(
-                SELECT SUM(paymens.summa)
-                FROM  ITDoorsControllingBundle:InvoicePayments  paymens
-                WHERE paymens.invoiceId = i.id
-                AND i.delayDate >= paymens.date
-                )as paymentsSumma"
+                    SELECT SUM(case when paymens.summa is not NULL then paymens.summa else 0 end)
+                    FROM  ITDoorsControllingBundle:InvoicePayments  paymens
+                    WHERE paymens.invoiceId = i.id
+                    AND i.delayDate >= paymens.date
+                ) as payInTime"
             )
             ->where('i.customerId = :customerId')
-            ->setParameter('customerId', $customerId);
+            ->andWhere('i.dateFact is NULL')
+            ->setParameter('customerId', $customerId)
+            ->setParameter(':date', $date);
         if (sizeof($filters)) {
             foreach ($filters as $key => $value) {
                 if (!$value) {
                     continue;
                 }
                 switch ($key) {
-                    case 'dateRange':
+                    case 'daterange':
                         $dateArr = explode('-', $value);
                         $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
                         $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));

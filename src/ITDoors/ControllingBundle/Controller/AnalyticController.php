@@ -34,11 +34,11 @@ class AnalyticController extends BaseFilterController
      */
     public function indexAction ()
     {
-        $filterNamespace = $this->container->getParameter($this->getNamespace()) . '.grafic';
+        $filterNamespace = $this->container->getParameter($this->getNamespace()) . '.Analytic';
 
         $period = $this->getTab($filterNamespace);
         if (!$period) {
-            $period = 'general';
+            $period = 'individual';
             $this->setTab($filterNamespace, $period);
         }
 
@@ -64,7 +64,7 @@ class AnalyticController extends BaseFilterController
      */
     public function listAction ()
     {
-        $filterNamespace = $this->container->getParameter($this->getNamespace()) . '.grafic';
+        $filterNamespace = $this->container->getParameter($this->getNamespace()) . '.Analytic';
 
         $filters = $this->getFilters($filterNamespace);
         $showType = null;
@@ -77,6 +77,16 @@ class AnalyticController extends BaseFilterController
             $tab = 'individual';
             $this->setTab($filterNamespace, $tab);
         }
+        $page = $this->getPaginator($filterNamespace);
+        if (!$page) {
+            $page = 1;
+        }
+        
+        $service = $this->container->get($this->service);
+
+        $method = 'get'.ucfirst($tab);
+        $result = $service->$method($page, $filters);
+        
 //        if (!empty($filters['dateRange'])) {
 //            $daterange = explode('-', $filters['daterange']);
 //            $dateFrom = new \DateTime($daterange[0]);
@@ -90,19 +100,41 @@ class AnalyticController extends BaseFilterController
 //        }
 
         /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-
-        /** @var InvoiceRepository $invoiceRepository */
-        $invoiceRepository = $em->getRepository('ITDoorsControllingBundle:Invoice');
-
-        $invoices = $invoiceRepository->getAll($filters);
-        $result = array();
-        foreach ($invoices as $invoice) {
-            if (!isset($result[$invoice['invoiceCustomerName']])) {
-                $result[$invoice['invoiceCustomerName']] = array();
-            }
-            $result[$invoice['invoiceCustomerName']] = $invoice;
-        }
+//        $em = $this->getDoctrine()->getManager();
+//
+//        /** @var InvoiceRepository $invoiceRepository */
+//        $invoiceRepository = $em->getRepository('ITDoorsControllingBundle:Invoice');
+//
+//        $invoices = $invoiceRepository->getAll($filters);
+//        $result = array();
+//        foreach ($invoices as $invoice) {
+//            if (!isset($result[$invoice['invoiceCustomerName']])) {
+//                $result[$invoice['invoiceCustomerName']] = array();
+//            }
+//            $result[$invoice['invoiceCustomerName']] = $invoice;
+//        }
+//        foreach ($invoices as $invoice) {
+//            if (!isset ( $result[$invoice['invoiceCustomerEdrpou']] )) {
+//                $result[$invoice['invoiceCustomerEdrpou']] = [];
+//                $result[$invoice['invoiceCustomerEdrpou']]['customer'] = [];
+//                $result[$invoice['invoiceCustomerEdrpou']]['customer']['name'] = $invoice['invoiceCustomerName'];
+//                $result[$invoice['invoiceCustomerEdrpou']]['customer']['debtSum'] = 0;
+//                $result[$invoice['invoiceCustomerEdrpou']]['customer']['paySum'] = 0;
+//                $result[$invoice['invoiceCustomerEdrpou']]['customer']['days'] = 0;
+//                $result[$invoice['invoiceCustomerEdrpou']]['customer']['lastDebt'] = 0;
+//                $result[$invoice['invoiceCustomerEdrpou']]['invoices'] = [];
+//            }
+//            $date = $invoice['dateFact'] != '' ? $invoice['dateFact']->format('U') : date('U');
+//            $invoice['days'] = floor(($date-$invoice['delayDate']->format('U'))/86400);
+//            $invoice['days'] = $invoice['days'] <= 0 ? 0 : $invoice['days'];
+//            $result[$invoice['invoiceCustomerEdrpou']]['invoices'][] = $invoice;
+//            $result[$invoice['invoiceCustomerEdrpou']]['customer']['debtSum'] += $invoice['sumActs'];
+//            $result[$invoice['invoiceCustomerEdrpou']]['customer']['paySum'] += $invoice['paymentsSumma'];
+//            $result[$invoice['invoiceCustomerEdrpou']]['customer']['days'] += $invoice['days'];
+//            $result[$invoice['invoiceCustomerEdrpou']]['customer']['lastDebt'] +=
+//                ($invoice['sumActs']-$invoice['paymentsSumma']);
+//        }
+//        
 
         /** @var InvoicePaymentsRepository $invoicePay */
 //        $invoicePay = $em->getRepository('ITDoorsControllingBundle:InvoicePayments');
@@ -207,21 +239,14 @@ class AnalyticController extends BaseFilterController
 //            $invoices[$organization['id']]['invoicesPR'] = $yearsPR;
 //        }
 
-        $page = $this->getPaginator($namespasePagin);
-        if (!$page) {
-            $page = 1;
-        }
+        
 
-        $paginator = $this->container->get($this->paginator);
-        $entities->setHint($this->paginator . '.count', $count);
-        $pagination = $paginator->paginate($entities, $page, 20);
-
-        return $this->render('ITDoorsControllingBundle:Analytic:graficIndividualLists.html.twig', array (
+        return $this->render('ITDoorsControllingBundle:Analytic:'.$tab.'.html.twig', array (
                 'showType' => $showType,
-                'entities' => $pagination,
-                'invoices' => $invoices,
-                'namespace' => $filterNamespace,
-                'namespasePagin' => $namespasePagin
+                'entities' => $result['entities'],
+                'paginator' => $result['paginator'],
+                'showDays' => $result['showDays'],
+                'namespase' => $filterNamespace
         ));
     }
     /**
@@ -233,146 +258,146 @@ class AnalyticController extends BaseFilterController
      */
     public function graficIndividualListsAction ()
     {
-        $filterNamespace = $this->container->getParameter($this->getNamespace()) . '.grafic';
-
-        $filters = $this->getFilters($filterNamespace);
-        $showType = null;
-        if (empty($filters)) {
-            $filters['isFired'] = 'No fired';
-            $this->setFilters($filterNamespace, $filters);
-        }
-        if (!empty($filters['dateRange'])) {
-            $dates = explode('-', $filters['dateRange']);
-            $dateFrom = new \DateTime($dates[0]);
-            $dateTo = new \DateTime($dates[1]);
-            if ($dateFrom->format('mY') == $dateTo->format('mY')) {
-                $showType = array (
-                    'year' => $dateFrom->format('Y'),
-                    'month' => $dateFrom->format('m')
-                );
-            }
-        }
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-
-        /** @var InvoiceRepository $invoice */
-        $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
-        /** @var InvoicePaymentsRepository $invoicePay */
-        $invoicePay = $em->getRepository('ITDoorsControllingBundle:InvoicePayments');
-
-        /** @var OrganizationRepository $organization */
-        $organization = $em->getRepository('ListsOrganizationBundle:Organization');
-
-        $result = $organization->getForInvoiceAndCount($filters);
-        $count = $result['count'];
-        $entities = $result['entity'];
-
-        $namespasePagin = $filterNamespace;
-        $page = $this->getPaginator($namespasePagin);
-        if (!$page) {
-            $page = 1;
-        }
-
-        $paginator = $this->container->get($this->paginator);
-        $entities->setHint($this->paginator . '.count', $count);
-        $pagination = $paginator->paginate($entities, $page, 20);
-
-        $invoices = array ();
-        foreach ($pagination as $organization) {
-            $invoices[$organization['id']] = array ();
-            $invoiceAs = $invoice->getForCustomer($organization['id'], $filters);
-            $invoicePs = $invoicePay->getForCustomer($organization['id'], $filters);
-            $yearsA = array ();
-            $yearsP = array ();
-            $yearsPR = array ();
-            $years = array ();
-            foreach ($invoiceAs as $invoiceA) {
-                $y = $invoiceA['date']->format('Y');
-                $m = $invoiceA['date']->format('m');
-                $d = $invoiceA['date']->format('j');
-
-                $yd = $invoiceA['delayDate']->format('Y');
-                $md = $invoiceA['delayDate']->format('m');
-                $dd = $invoiceA['delayDate']->format('j');
-                if (!array_key_exists($y, $years)) {
-                    $years[$y] = array ();
-                }
-                if (!array_key_exists($yd, $years)) {
-                    $years[$yd] = array ();
-                }
-                if (!array_key_exists($y, $yearsA)) {
-                    $yearsA[$y] = array ();
-                }
-                if (!array_key_exists($m, $yearsA[$y])) {
-                    $yearsA[$y][$m]
-                        = array ('summaInMonth' => 0);
-                }
-                if (!array_key_exists($d, $yearsA[$y][$m])) {
-                    $yearsA[$y][$m][$d] = 0;
-                }
-                $yearsA[$y][$m]['summaInMonth'] = $yearsA[$y][$m]['summaInMonth'] +
-                    ($invoiceA['sum'] -
-                    $invoiceA['paymentsSumma']
-                    );
-                $yearsA[$y][$m][$d] = $yearsA[$y][$m][$d] +
-                    ($invoiceA['sum'] -
-                    $invoiceA['paymentsSumma']
-                    );
-
-                if (!array_key_exists($yd, $yearsPR)) {
-                    $yearsPR[$yd] = array ();
-                }
-                if (!array_key_exists($md, $yearsPR[$yd])) {
-                    $yearsPR[$yd][$md] = array ('summaInMonth' => 0);
-                }
-                if (!array_key_exists($dd, $yearsPR[$yd][$md])) {
-                    $yearsPR[$yd][$md][$dd] = 0;
-                }
-                $yearsPR[$yd][$md]['summaInMonth']
-                    = $yearsPR[$yd][$md]['summaInMonth']
-                    + ($invoiceA['sum'] - $invoiceA['paymentsSumma']);
-                $yearsPR[$yd][$md][$dd]
-                    = $yearsPR[$yd][$md][$dd]
-                    + ($invoiceA['sum'] - $invoiceA['paymentsSumma']);
-            }
-            foreach ($invoicePs as $invoiceP) {
-                $y = $invoiceP['date']->format('Y');
-                $m = $invoiceP['date']->format('m');
-                $d = $invoiceP['date']->format('j');
-                if (!array_key_exists($y, $years)) {
-                    $years[$y] = array ();
-                }
-                if (!array_key_exists($y, $yearsP)) {
-                    $yearsP[$y] = array ();
-                }
-                if (!array_key_exists($m, $yearsP[$y])) {
-                    $yearsP[$y][$m]
-                        = array ('summaInMonth' => 0);
-                }
-                if (!array_key_exists($d, $yearsP[$y][$m])) {
-                    $yearsP[$y][$m][$d] = 0;
-                }
-                $yearsP[$y][$m]['summaInMonth']
-                    = $yearsP[$y][$m]['summaInMonth']
-                    + $invoiceP['summaPay'];
-                $yearsP[$y][$m][$d]
-                    = $yearsP[$y][$m][$d] +
-                    $invoiceP['summaPay'];
-            }
-            $invoices[$organization['id']]['invoice'] = $invoiceAs;
-            $invoices[$organization['id']]['invoicePays'] = $invoicePs;
-            $invoices[$organization['id']]['years'] = $years;
-            $invoices[$organization['id']]['invoicesA'] = $yearsA;
-            $invoices[$organization['id']]['invoicesP'] = $yearsP;
-            $invoices[$organization['id']]['invoicesPR'] = $yearsPR;
-        }
+//        $filterNamespace = $this->container->getParameter($this->getNamespace()) . '.grafic';
+//
+//        $filters = $this->getFilters($filterNamespace);
+//        $showType = null;
+//        if (empty($filters)) {
+//            $filters['isFired'] = 'No fired';
+//            $this->setFilters($filterNamespace, $filters);
+//        }
+//        if (!empty($filters['dateRange'])) {
+//            $dates = explode('-', $filters['dateRange']);
+//            $dateFrom = new \DateTime($dates[0]);
+//            $dateTo = new \DateTime($dates[1]);
+//            if ($dateFrom->format('mY') == $dateTo->format('mY')) {
+//                $showType = array (
+//                    'year' => $dateFrom->format('Y'),
+//                    'month' => $dateFrom->format('m')
+//                );
+//            }
+//        }
+//        /** @var EntityManager $em */
+//        $em = $this->getDoctrine()->getManager();
+//
+//        /** @var InvoiceRepository $invoice */
+//        $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
+//        /** @var InvoicePaymentsRepository $invoicePay */
+//        $invoicePay = $em->getRepository('ITDoorsControllingBundle:InvoicePayments');
+//
+//        /** @var OrganizationRepository $organization */
+//        $organization = $em->getRepository('ListsOrganizationBundle:Organization');
+//
+//        $result = $organization->getForInvoiceAndCount($filters);
+//        $count = $result['count'];
+//        $entities = $result['entity'];
+//
+//        $namespasePagin = $filterNamespace;
+//        $page = $this->getPaginator($namespasePagin);
+//        if (!$page) {
+//            $page = 1;
+//        }
+//
+//        $paginator = $this->container->get($this->paginator);
+//        $entities->setHint($this->paginator . '.count', $count);
+//        $pagination = $paginator->paginate($entities, $page, 20);
+//
+//        $invoices = array ();
+//        foreach ($pagination as $organization) {
+//            $invoices[$organization['id']] = array ();
+//            $invoiceAs = $invoice->getForCustomer($organization['id'], $filters);
+//            $invoicePs = $invoicePay->getForCustomer($organization['id'], $filters);
+//            $yearsA = array ();
+//            $yearsP = array ();
+//            $yearsPR = array ();
+//            $years = array ();
+//            foreach ($invoiceAs as $invoiceA) {
+//                $y = $invoiceA['date']->format('Y');
+//                $m = $invoiceA['date']->format('m');
+//                $d = $invoiceA['date']->format('j');
+//
+//                $yd = $invoiceA['delayDate']->format('Y');
+//                $md = $invoiceA['delayDate']->format('m');
+//                $dd = $invoiceA['delayDate']->format('j');
+//                if (!array_key_exists($y, $years)) {
+//                    $years[$y] = array ();
+//                }
+//                if (!array_key_exists($yd, $years)) {
+//                    $years[$yd] = array ();
+//                }
+//                if (!array_key_exists($y, $yearsA)) {
+//                    $yearsA[$y] = array ();
+//                }
+//                if (!array_key_exists($m, $yearsA[$y])) {
+//                    $yearsA[$y][$m]
+//                        = array ('summaInMonth' => 0);
+//                }
+//                if (!array_key_exists($d, $yearsA[$y][$m])) {
+//                    $yearsA[$y][$m][$d] = 0;
+//                }
+//                $yearsA[$y][$m]['summaInMonth'] = $yearsA[$y][$m]['summaInMonth'] +
+//                    ($invoiceA['sum'] -
+//                    $invoiceA['paymentsSumma']
+//                    );
+//                $yearsA[$y][$m][$d] = $yearsA[$y][$m][$d] +
+//                    ($invoiceA['sum'] -
+//                    $invoiceA['paymentsSumma']
+//                    );
+//
+//                if (!array_key_exists($yd, $yearsPR)) {
+//                    $yearsPR[$yd] = array ();
+//                }
+//                if (!array_key_exists($md, $yearsPR[$yd])) {
+//                    $yearsPR[$yd][$md] = array ('summaInMonth' => 0);
+//                }
+//                if (!array_key_exists($dd, $yearsPR[$yd][$md])) {
+//                    $yearsPR[$yd][$md][$dd] = 0;
+//                }
+//                $yearsPR[$yd][$md]['summaInMonth']
+//                    = $yearsPR[$yd][$md]['summaInMonth']
+//                    + ($invoiceA['sum'] - $invoiceA['paymentsSumma']);
+//                $yearsPR[$yd][$md][$dd]
+//                    = $yearsPR[$yd][$md][$dd]
+//                    + ($invoiceA['sum'] - $invoiceA['paymentsSumma']);
+//            }
+//            foreach ($invoicePs as $invoiceP) {
+//                $y = $invoiceP['date']->format('Y');
+//                $m = $invoiceP['date']->format('m');
+//                $d = $invoiceP['date']->format('j');
+//                if (!array_key_exists($y, $years)) {
+//                    $years[$y] = array ();
+//                }
+//                if (!array_key_exists($y, $yearsP)) {
+//                    $yearsP[$y] = array ();
+//                }
+//                if (!array_key_exists($m, $yearsP[$y])) {
+//                    $yearsP[$y][$m]
+//                        = array ('summaInMonth' => 0);
+//                }
+//                if (!array_key_exists($d, $yearsP[$y][$m])) {
+//                    $yearsP[$y][$m][$d] = 0;
+//                }
+//                $yearsP[$y][$m]['summaInMonth']
+//                    = $yearsP[$y][$m]['summaInMonth']
+//                    + $invoiceP['summaPay'];
+//                $yearsP[$y][$m][$d]
+//                    = $yearsP[$y][$m][$d] +
+//                    $invoiceP['summaPay'];
+//            }
+//            $invoices[$organization['id']]['invoice'] = $invoiceAs;
+//            $invoices[$organization['id']]['invoicePays'] = $invoicePs;
+//            $invoices[$organization['id']]['years'] = $years;
+//            $invoices[$organization['id']]['invoicesA'] = $yearsA;
+//            $invoices[$organization['id']]['invoicesP'] = $yearsP;
+//            $invoices[$organization['id']]['invoicesPR'] = $yearsPR;
+//        }
 
         return $this->render('ITDoorsControllingBundle:Analytic:graficIndividualLists.html.twig', array (
-                'showType' => $showType,
-                'entities' => $pagination,
-                'invoices' => $invoices,
-                'namespace' => $filterNamespace,
-                'namespasePagin' => $namespasePagin
+//                'showType' => $showType,
+//                'entities' => $pagination,
+//                'invoices' => $invoices,
+//                'namespace' => $filterNamespace,
+//                'namespasePagin' => $namespasePagin
         ));
     }
     /**

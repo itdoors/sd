@@ -634,11 +634,12 @@ class OrganizationRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      * 
-     * @param array $filters
+     * @param integer $page
+     * @param array   $filters
      * 
      * @return mixed[]
      */
-    public function getForInvoiceAndCount ($filters)
+    public function getForInvoiceAnalitic ($page, $filters)
     {
         $res = $this->createQueryBuilder('o')
             ->select('o.id')
@@ -647,6 +648,7 @@ class OrganizationRepository extends EntityRepository
                 'o.id in (
                     SELECT DISTINCT(i.customerId) 
                     FROM  ITDoorsControllingBundle:Invoice i
+                    WHERE i.dateFact is NULL
                 )'
             )
             ->orderBy('o.name');
@@ -657,6 +659,7 @@ class OrganizationRepository extends EntityRepository
                 'o.id in (
                     SELECT DISTINCT(i.customerId) 
                     FROM  ITDoorsControllingBundle:Invoice i
+                    WHERE i.dateFact is NULL
                 )'
             );
 
@@ -693,7 +696,7 @@ class OrganizationRepository extends EntityRepository
                         );
                         $resCount->setParameter(':performerIds', $arr);
                         break;
-                    case 'dateRange':
+                    case 'daterange':
                         $dateArr = explode('-', $value);
                         $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
                         $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));
@@ -704,6 +707,7 @@ class OrganizationRepository extends EntityRepository
                                     SELECT DISTINCT(i_date.customerId) 
                                     FROM  ITDoorsControllingBundle:Invoice i_date
                                     WHERE i_date.date BETWEEN :datestart AND :datestop
+                                    AND i_date.dateFact is NULL
                                 )'
                             )
                             ->setParameter(':datestart', $dateStart)
@@ -714,6 +718,7 @@ class OrganizationRepository extends EntityRepository
                                 SELECT DISTINCT(i_date.customerId) 
                                 FROM  ITDoorsControllingBundle:Invoice i_date
                                 WHERE i_date.date BETWEEN :datestart AND :datestop
+                                AND i_date.dateFact is NULL
                                 )'
                             )
                             ->setParameter(':datestart', $dateStart)
@@ -722,12 +727,14 @@ class OrganizationRepository extends EntityRepository
                 }
             }
         }
-        $result = array (
-            'entity' => $res->getQuery(),
-            'count' => $resCount->getQuery()->getSingleScalarResult()
-        );
+        $count = $resCount->getQuery()->getSingleScalarResult();
+        $entity = $res->getQuery();
 
-        return $result;
+//        $paginator = $this->container->get($this->paginator);
+        $entity->setHint('knp_paginator' . '.count', $count);
+//        $result = $paginator->paginate($entity, $page, 20);
+
+        return $entity;
     }
     /**
      * Returns results for interval future invoice

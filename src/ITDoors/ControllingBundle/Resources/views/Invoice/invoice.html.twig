@@ -46,6 +46,32 @@
 {% endblock %}
 
 {% block body %}
+    <script>
+            $(document).ready(function(){
+                $('.itdoors-daterange-custom').daterangepicker(
+                        {
+                            ranges: {
+                            'Текущий месяц': [moment().startOf('month'), moment().endOf('month')],
+                            'Текущий год': [moment().startOf('year'), moment().endOf('year')]
+                           },
+                           format: "DD.MM.YYYY",
+                            startDate: moment().startOf('year'),
+                            endDate: moment().endOf('year'),
+                            locale: {
+                                applyLabel: 'ОК',
+                                cancelLabel: 'Отмена',
+                                fromLabel: 'от',
+                                toLabel: 'до',
+                                customRangeLabel: 'Выбрать диапазон',
+                                daysOfWeek: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб','Вс'],
+                                monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                                firstDay: 1
+                            }
+                        }
+                );
+
+            });
+        </script>
 <div class="row">
     <div class="col-md-12">
         <div class="tabbable boxless">
