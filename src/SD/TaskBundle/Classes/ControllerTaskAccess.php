@@ -71,16 +71,16 @@ class ControllerTaskAccess extends BasicTaskAccess
         }
     }
 
-    /**
+    /*
      * @return bool
-     */
-    public function canLeaveComment()
+
+/*    public function canLeaveComment()
     {
         if ($this->isViewed()) {
 
             return true;
         }
-    }
+    }*/
 
     /**
      * @return bool

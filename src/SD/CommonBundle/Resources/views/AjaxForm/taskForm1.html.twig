@@ -37,8 +37,78 @@
 
             $('#' + '{{ form.vars.name }}' + '_controller').select2();
             $('#' + '{{ form.vars.name }}' + '_matcher').select2();
+            $('#' + '{{ form.vars.name }}' + '_pattern').select2();
+
+            $('#' + '{{ form.vars.name }}' + '_pattern').die('change');
+            $('#' + '{{ form.vars.name }}' + '_pattern').live('change', function(e){
+                var value = $('#' + '{{ form.vars.name }}' + '_pattern').select2("val");
+                showSpinner()
+                var id = value;
+                var url = $('#info_input').data('url_set_pattern');
+                var sendData = {
+                    'id': id
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: sendData,
+                    success: function(data1) {
+                        //alert(data1)
+                        data = JSON.parse(data1);
+                        if (data.success == 1) {
+                            hideSpinner();
+                            setTaskPattern(data);
+                        } else {
+                            //$('#copy_etalon_finished').show('blind', {}, 500);
+                        }
+                    }
+                })
+            })
+
+            function setTaskPattern(data) {
+                $('#' + '{{ form.vars.name }}' + '_title').val(data.title);
+                $('#' + '{{ form.vars.name }}' + '_description').val(data.description);
+
+                if (data.performer) {
+                    $('#' + '{{ form.vars.name }}' + '_performer').select2("val", data.performer)
+                }
+                if (data.controller) {
+                    $('#' + '{{ form.vars.name }}' + '_controller').select2("val", data.controller)
+                }
+                if (data.matcher) {
+                    $('#' + '{{ form.vars.name }}' + '_matcher').select2("val", data.matcher)
+                }
+            }
+
+            function showSpinner() {
+                var spinner = $('#spinner');
+                spinner.removeClass('notDisplayed');
+            }
+
+            function hideSpinner() {
+                var spinner = $('#spinner');
+                spinner.addClass('notDisplayed');
+            }
+
         });
     </script>
+<style>
+    .patterns-animation{
+        opacity: 0.6;
+        -webkit-transition: opacity 1s;
+        -moz-transition: opacity 1s;
+        -o-transition: opacity 1s;
+        transition: opacity 1s;
+    }
+
+    .patterns-animation:hover{
+        opacity: 1;
+    }
+
+    .notDisplayed{
+        display: none;
+    }
+</style>
             <div class="portlet-body">
                 {{ form_errors(form) }}
                  {{ form_start(form, {
@@ -52,7 +122,14 @@
                     }
                 }) }}
                 <div class="row">
-                     <div class="form-group col-md-6">
+                    {% if form.pattern is defined %}
+                        <div class="form-group col-md-12 patterns-animation">
+                            {{ form_label(form.pattern, 'Pattern'|trans({}, 'SDTaskBundle'), {'attr': {'class': 'control-label'}}) }}<i class="fa fa-spinner fa-spin notDisplayed" id="spinner"></i>
+                            {{ form_widget(form.pattern, {'attr' : {'class' : 'form-control ', 'placeholder': 'Choose pattern'|trans({}, 'SDTaskBundle')} } ) }}
+                            <span class="help-block">{{ form_errors(form.startDate) }}</span>
+                        </div>
+                    {% endif %}
+                    <div class="form-group col-md-6">
                         {{ form_label(form.startDate, 'Date start'|trans({}, 'SDCalendarBundle'), {'attr': {'class': 'control-label'}}) }}
                         {{ form_widget(form.startDate, {'attr' : {'class' : 'form-control datatime-picker', 'placeholder': 'Enter date start'|trans({}, 'SDCalendarBundle')} } ) }}
                         <span class="help-block">{{ form_errors(form.startDate) }}</span>
@@ -136,3 +213,9 @@
                 {{ form_end(form) }}
            
             </div>
+
+<input type="hidden" id="info_input"
+    data-url_set_pattern="{{ path('sd_task_set_pattern') }}"
+
+
+    >

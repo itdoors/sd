@@ -1074,5 +1074,17 @@ INSERT INTO "public".email ("alias", subject, text, deletedat)
 -- prod +++++
 
 INSERT INTO role (name, model) VALUES ('viewer', 'task');
--- staging ----
--- prod -----
+-- staging ++++
+-- prod ++++
+
+CREATE TABLE task_pattern (id SERIAL NOT NULL, name VARCHAR(255) NOT NULL, title VARCHAR(255) NOT NULL, description TEXT DEFAULT NULL, PRIMARY KEY(id));
+
+CREATE TABLE pattern_user_role (id SERIAL NOT NULL, task_pattern_id INT DEFAULT NULL, role_id INT DEFAULT NULL, user_id INT DEFAULT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_1F606499EB27E9A0 ON pattern_user_role (task_pattern_id);
+CREATE INDEX IDX_1F606499D60322AC ON pattern_user_role (role_id);
+CREATE INDEX IDX_1F606499A76ED395 ON pattern_user_role (user_id);
+
+
+ALTER TABLE pattern_user_role ADD CONSTRAINT FK_1F606499EB27E9A0 FOREIGN KEY (task_pattern_id) REFERENCES task_pattern (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE pattern_user_role ADD CONSTRAINT FK_1F606499D60322AC FOREIGN KEY (role_id) REFERENCES role (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE pattern_user_role ADD CONSTRAINT FK_1F606499A76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;CREATE INDEX IDX_1F606499EB27E9A0 ON pattern_user_role (task_pattern_id);

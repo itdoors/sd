@@ -2,6 +2,9 @@
 
     <script>
         $(document).ready(function(){
+            var d = new Date();
+            d.setDate(d.getDate()-1);
+
             $('.datatime-picker').datetimepicker({
                         rtl: Metronic.isRTL(),
                         autoclose: true,
@@ -9,7 +12,7 @@
                         pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
                         language: 'ru',
                         weekStart: 1,
-                        startDate: new Date()
+                        startDate: d
                     });
             $('#' + '{{ form.vars.name }}' + '_performer').select2();
         });

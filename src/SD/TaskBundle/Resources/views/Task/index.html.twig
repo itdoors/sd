@@ -88,13 +88,20 @@
                 for (var i=0; i<filtersCheckboxes.length; i++) {
                     filterRole.push(filtersCheckboxes[i].value);
                 }
-                //alert(filter);
+
+                var showClosed = $("#oldFilter").prop("checked");
+                if (showClosed) {
+                    showClosed = 1;
+                } else {
+                    showClosed = 0;
+                }
                 filter = {
                     'role': filterRole
                 }
                 var url = $('#more_info_input').data('url_get_task_list');
                 var sendData = {
-                    'filter': filter
+                    'filter': filter,
+                    'showClosed': showClosed
                 }
 
                 $.ajax({
@@ -231,7 +238,7 @@
                                             fa-eye
                                     #}
                                 {% endif %}
-                                <label><input type="checkbox" class="roleFilter" value="{{ taskRole }}" {{ checked }}/>{{ taskRole|trans }}</label>
+                                <li><label><input type="checkbox" class="roleFilter" value="{{ taskRole }}" {{ checked }}/>{{ taskRole|trans }}</label></li>
                             {% endfor %}
                             {#
                                             <label><input type="checkbox" id="set_filters_on"/>{% trans %}All{% endtrans %}</label>
@@ -239,6 +246,11 @@
                             {#
                                             <label><input type="checkbox"/> System</label>
                             #}
+                            <li class="divider">
+                            </li>
+                            <li>
+                                <label><input type="checkbox" id="oldFilter" value="1"/>{% trans %}Show closed{% endtrans %}</label>
+                            </li>
                             <li class="divider">
                             </li>
                             <li>

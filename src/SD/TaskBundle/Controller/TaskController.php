@@ -56,6 +56,8 @@ class TaskController extends Controller
             'user' => $user
         );
 
+        $filterArray['showClosed'] = (bool) $request->request->get('showClosed');
+
         if ($filter) {
             if (count($filter['role'])) {
                 foreach ($filter['role'] as $filterRole) {
@@ -93,11 +95,11 @@ class TaskController extends Controller
             ->find($id);
 
         $info = $this->getTaskUserRoleInfo($id);
+        $idTask = $taskUserRole->getTask()->getId();
 
         $commentRepository = $this->getDoctrine()
             ->getRepository('SDTaskBundle:Comment');
 
-        $idTask = $taskUserRole->getTask()->getId();
 
         $comments = $commentRepository->findBy(array (
             'model' => 'Task',
@@ -476,8 +478,7 @@ class TaskController extends Controller
         $stageTrans = $translator->trans($stageName, array(), 'SDTaskBundle');
         $text = $comment.' :'.$stageTrans;
         if ($commentValue) {
-            $text .= '<br>
-            '.$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
+            $text .= "\n".$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
         }
         $this->insertComment($id, $text);
 
@@ -591,8 +592,7 @@ class TaskController extends Controller
             $comment = $translator->trans('Changed the end date', array(), 'SDTaskBundle').
                 ' :'.$newDate->format('d-m-Y H:i');
             if ($commentValue) {
-                $comment .= '<br>
-            '.$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
+                $comment .= "\n".$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
             }
             $this->insertComment($id, $comment);
         } else {
@@ -605,8 +605,7 @@ class TaskController extends Controller
             $comment = $translator->trans('Made the end date request', array(), 'SDTaskBundle').
                 ' :'.$newDate->format('d-m-Y H:i');
             if ($commentValue) {
-                $comment .= '<br>
-            '.$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
+                $comment .= "\n".$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
             }
             $this->insertComment($id, $comment);
         }
@@ -652,16 +651,14 @@ class TaskController extends Controller
             $answerStageName = 'accepted';
             $comment = $translator->trans('Accepted the date request', array(), 'SDTaskBundle');
             if ($commentValue) {
-                $comment .= '<br>
-            '.$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
+                $comment .= "\n".$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
             }
             $this->insertComment($id, $comment);
         } else {
             $answerStageName = 'rejected';
             $comment = $translator->trans('Rejected the date request', array(), 'SDTaskBundle');
             if ($commentValue) {
-                $comment .= '<br>
-            '.$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
+                $comment .= "\n".$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
             }
             $this->insertComment($id, $comment);
         }
@@ -827,8 +824,7 @@ class TaskController extends Controller
             $comment = $translator->trans('Changed the end date', array(), 'SDTaskBundle').
                 ' :'.$newDate->format('d-m-Y H:i');
             if ($commentValue) {
-                $comment .= '<br>
-            '.$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
+                $comment .= "\n".$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
             }
 
             $this->insertComment($id, $comment);
@@ -843,8 +839,7 @@ class TaskController extends Controller
             $comment = $translator->trans('Made the end date request', array(), 'SDTaskBundle').
                 ' :'.$newDate->format('d-m-Y H:i');
             if ($commentValue) {
-                $comment .= '<br>
-            '.$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
+                $comment .= "\n".$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
             }
 
             $this->insertComment($id, $comment);
@@ -963,8 +958,7 @@ class TaskController extends Controller
         $em->persist($taskCommit);
 
         if ($commentValue) {
-            $comment .= '<br>
-            '.$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
+            $comment .= "\n".$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
         }
         $this->insertComment($id, $comment);
 
@@ -1121,12 +1115,45 @@ class TaskController extends Controller
 
         $em->persist($taskUserRoleViewer);
         $em->flush();
+        $em->refresh($taskUserRoleViewer);
 
-
+        $this->sendEmail(array($taskUserRoleViewer), 'new');
 
         $return['success'] = 1;
 
         return new Response(json_encode($return));
 
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function setPatternAction(Request $request)
+    {
+        $id = $request->request->get('id');
+
+        $em = $this->getDoctrine()->getManager();
+
+        $pattern = $em->getRepository('SDTaskBundle:TaskPattern')->find($id);
+
+        $return['description'] = $pattern->getDescription();
+        $return['title'] = $pattern->getTitle();
+
+        $patternRoles = $em->getRepository('SDTaskBundle:PatternUserRole')->findBy(array(
+            'taskPattern' => $pattern
+        ));
+
+        if ($patternRoles) {
+            foreach ($patternRoles as $patternRole) {
+                $role = $patternRole->getRole()->getName();
+                $return[$role][] = $patternRole->getUser()->getId();
+            }
+        }
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
     }
 }
