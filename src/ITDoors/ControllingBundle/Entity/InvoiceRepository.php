@@ -22,7 +22,13 @@ class InvoiceRepository extends EntityRepository
      */
     public function selectInvoiceSum (QueryBuilder $res)
     {
-        $res->select('SUM(detals_summ.summa)-SUM(psum.summa) as summa')
+        $res
+            ->select(
+                'SUM(case when detals_summ.summa is not NULL then detals_summ.summa else 0 end)'
+                . '-'
+                . 'SUM(case when psum.summa is not NULL then psum.summa else 0 end)'
+                . ' as summa'
+            )
             ->leftJoin('i.acts', 'acts_summ')
             ->leftJoin('acts_summ.detals', 'detals_summ')
             ->leftJoin('i.payments', 'psum');
@@ -129,6 +135,7 @@ class InvoiceRepository extends EntityRepository
                 . ") as paymentsSumma"
             )
             ->addSelect('customer.name as customerName')
+            ->addSelect('i.customerEdrpou as invoiceCustomerEdrpou')
             ->addSelect('i.customerId as invoiceCustomerId')
             ->addSelect('i.customerName as invoiceCustomerName')
             ->addSelect('performer.name as performerName')
@@ -261,8 +268,7 @@ class InvoiceRepository extends EntityRepository
                         $daterange = explode('-', $value);
                         $from = new \DateTime($daterange[0]);
                         $to = new \DateTime($daterange[1]);
-                        $sql->andWhere('i.delayDate >= :dateFrom')
-                            ->andWhere('i.delayDate <= :dateTo')
+                        $sql->andWhere('i.delayDate BETWEEN :dateFrom AND :dateTo')
                             ->setParameter(':dateFrom', $from)
                             ->setParameter(':dateTo', $to);
                         break;
@@ -986,7 +992,6 @@ class InvoiceRepository extends EntityRepository
         /** join */
         $this->joinInvoicePeriod($res);
 
-        $this->processFilters($res, $filters);
         /** where */
         if ($companystryctyre) {
             $res
@@ -994,6 +999,8 @@ class InvoiceRepository extends EntityRepository
                 ->andWhere('i_ics.companystructureId = :companystructureId')
                 ->setParameter(':companystructureId', $companystryctyre);
         }
+        $this->processFilters($res, $filters);
+
         $res->andWhere("i.dateFact is NULL")->andWhere("i.delayDate >= :date")->setParameter(':date', $date);
 
         return $res->getQuery()->getResult();
@@ -1013,8 +1020,6 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoiceSum($res);
         /** join */
         $this->joinInvoicePeriod($res);
-
-        $this->processFilters($res, $filters);
         /** where */
         if ($companystryctyre) {
             $res
@@ -1022,6 +1027,8 @@ class InvoiceRepository extends EntityRepository
                 ->andWhere('i_ics.companystructureId = :companystructureId')
                 ->setParameter(':companystructureId', $companystryctyre);
         }
+        $this->processFilters($res, $filters);
+        $res->andWhere("i.dateFact is NULL");
 
         return $res->getQuery()->getResult();
     }
@@ -1446,40 +1453,59 @@ class InvoiceRepository extends EntityRepository
      *
      * @return mixed[]
      */
-    public function getForCustomer ($customerId, $filters)
+    public function getForCustomerDebit ($customerId, $filters)
     {
+        $date = new \DateTime();
         $sql = $this->createQueryBuilder('i')
             ->select('i.date')
             ->addSelect('i.delayDate')
-            ->addSelect('i.sum')
+            ->addSelect(
+                '(
+                    SELECT SUM(case when detalall.summa is not NULL then detalall.summa else 0 end )
+                    FROM  ITDoorsControllingBundle:InvoiceAct actall
+                    LEFT JOIN actall.detals detalall
+                    WHERE actall.invoiceId = i.id
+                ) as allSumm'
+            )
+            ->addSelect(
+                '(
+                    SELECT SUM(case when detal.summa  is not NULL then detal.summa else 0 end)
+                    FROM  ITDoorsControllingBundle:InvoiceAct act
+                    LEFT JOIN act.detals detal
+                    WHERE act.invoiceId = i.id
+                    AND i.delayDate < :date
+                ) as allSummDebit'
+            )
             ->addSelect(
                 "(
-                SELECT SUM(paymens.summa)
-                FROM  ITDoorsControllingBundle:InvoicePayments  paymens
-                WHERE paymens.invoiceId = i.id
-                AND i.delayDate >= paymens.date
-                )as paymentsSumma"
+                    SELECT SUM(case when paymens.summa is not NULL then paymens.summa else 0 end)
+                    FROM  ITDoorsControllingBundle:InvoicePayments  paymens
+                    WHERE paymens.invoiceId = i.id
+                    AND i.delayDate >= paymens.date
+                ) as payInTime"
             )
             ->where('i.customerId = :customerId')
-            ->setParameter('customerId', $customerId);
-        if (sizeof($filters)) {
-            foreach ($filters as $key => $value) {
-                if (!$value) {
-                    continue;
-                }
-                switch ($key) {
-                    case 'dateRange':
-                        $dateArr = explode('-', $value);
-                        $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
-                        $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));
-
-                        $sql->andWhere('i.date BETWEEN :datestart AND :datestop')
-                            ->setParameter(':datestart', $dateStart)
-                            ->setParameter(':datestop', $dateStop);
-                        break;
-                }
-            }
-        }
+            ->andWhere('i.dateFact is NULL')
+            ->setParameter('customerId', $customerId)
+            ->setParameter(':date', $date);
+//        if (sizeof($filters)) {
+//            foreach ($filters as $key => $value) {
+//                if (!$value) {
+//                    continue;
+//                }
+//                switch ($key) {
+//                    case 'daterange':
+//                        $dateArr = explode('-', $value);
+//                        $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
+//                        $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));
+//
+//                        $sql->andWhere('i.date BETWEEN :datestart AND :datestop')
+//                            ->setParameter(':datestart', $dateStart)
+//                            ->setParameter(':datestop', $dateStop);
+//                        break;
+//                }
+//            }
+//        }
 
         return $sql
                 ->orderBy('i.date')

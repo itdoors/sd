@@ -1,0 +1,161 @@
+{% trans_default_domain 'ITDoorsControllingBundle' %}
+
+<script>
+    function showTooltip(x, y, contents) {
+        $('<div id="tooltip">' + contents + '</div>').css({
+                position: 'absolute',
+                display: 'none',
+                top: y - 20,
+                left: x -50 ,
+                border: '1px solid #333',
+                padding: '4px',
+                color: '#fff',
+                'border-radius': '3px',
+                'background-color': '#333',
+                opacity: 0.80
+            }).appendTo("body").fadeIn(200);
+    }
+   function chart(d1, d2, id) {
+                if ($('#chart_'+id).size() !== 1) {
+                    return;
+                }
+                var stack = 0,
+                    bars = true,
+                    lines = false,
+                    steps = false;
+
+                function plotWithOptions() {
+                    $.plot($("#chart_"+id),
+
+                        [{
+                            label: "Общий долг",
+                            data: d1,
+                            lines: {
+                                lineWidth: 0.5
+                            },
+                            shadowSize: 0
+                        },
+                    {
+                            label: "Простроченный долг",
+                            data: d2,
+                            lines: {
+                                lineWidth: 0.5
+                            },
+                            shadowSize: 0
+                        }]
+
+                        , {
+                            series: {
+                                stack: stack,
+                                lines: {
+                                    show: lines,
+                                    fill: true,
+                                    steps: steps,
+                                    lineWidth: 0 // in pixels
+                                },
+                                bars: {
+                                    show: bars,
+                                    barWidth: 0.5,
+                                    lineWidth: 0, // in pixels
+                                    shadowSize: 0,
+                                    align: 'center'
+                                }
+                            },
+                            grid: {
+                                hoverable: true,
+                                tickColor: "#eee",
+                                borderColor: "#eee",
+                                borderWidth: 1
+                            },
+                            colors: ["#615A5A", "#d84a38"],
+                            xaxis: {
+                                mode: "categories",
+                                tickLength: 0,
+                                //ticks: 10,
+                                //tickDecimals: 0,
+                                tickColor: "#eee",
+                                alignTicksWithAxis: 10
+                            },
+                            yaxis: {
+                                //ticks: 3,
+                                min: 0,
+                                tickDecimals: 0,
+                                tickColor: "#eee"
+                            }
+                        }
+                    );
+                }
+                plotWithOptions();
+            }
+</script>
+ {% if entities.entities| length %}
+    <div class="navigation">
+        {{ ajax_paginator_render(
+                entities.paginator, namespase, {
+                        'datatable_ajax': 'ITDoorsAjax.updateList'
+                    }
+                )
+        }}
+    </div>
+    {% for  key,item in entities.entities %}
+            <script>
+                $(document).ready(function(){
+                    
+                    var pageviews = [];
+                    var visitors = [];
+                     {% for date,invoice in item.invoices %}
+                             console.log('{{date}}');
+                             console.log('{{invoice.all}}');
+                             console.log('{{invoice.debt}}');
+                            {% if entities.showDays %}
+                                pageviews.push(['{{ date | date('d') }}<br>{{ date | date('M') | trans }}<br>{{ date | date('Y') }}',{{ invoice.all }}]);
+                                visitors.push(['{{ date | date('d') }}<br>{{ date | date('M') | trans }}<br>{{ date | date('Y') }}',{{ invoice.debt}}]);
+                            {% else %}
+                                pageviews.push(['{{ date | date('M') | trans }}<br>{{ date | date('Y') }}',{{ invoice.all }}]);
+                                visitors.push(['{{ date | date('M') | trans }}<br>{{ date | date('Y') }}',{{ invoice.debt}}]);
+                            {% endif%}
+                    {% endfor%}
+                    chart(pageviews, visitors, {{ key }});
+                    var previousPoint = null;
+                    $("#chart_{{ key }}").bind("plothover", function (event, pos, item) {
+                        $("#x").text(pos.x.toFixed(2));
+                        $("#y").text(pos.y.toFixed(2));
+                        if (item) {
+                            console.log(item.datapoint);
+                            if (previousPoint !== item.dataIndex) {
+                                previousPoint = item.dataIndex;
+
+                                $("#tooltip").remove();
+                                var y = item.datapoint[1].toFixed(2);
+
+                                showTooltip(item.pageX, item.pageY, item.series.label + " " + y);
+                            }
+                        } else {
+                            $("#tooltip").remove();
+                            previousPoint = null;
+                        }
+                    });
+                });
+            </script>
+            <div id="legendBlock{{ key }}" style="float: right;"></div>
+            <div class="portlet box red">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-gift"></i>
+                        {{ item.name }}
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div id="chart_{{ key }}" class="chart" style="padding: 0px; position: relative;"></div>
+                </div>
+            </div>
+    {% endfor %}  
+    <div class="navigation">
+        {{ ajax_paginator_render(
+                entities.paginator, namespase, {
+                        'datatable_ajax': 'ITDoorsAjax.updateList'
+                    }
+                )
+        }}
+    </div>
+{% endif %}
