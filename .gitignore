@@ -1,5 +1,6 @@
 /web/bundles/
 /web/uploads/document/
+/web/uploads/task/
 /web/files/email/*
 /web/files/upload/*
 /app/bootstrap.php.cache

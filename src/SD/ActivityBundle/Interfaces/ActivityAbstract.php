@@ -7,9 +7,9 @@ namespace SD\ActivityBundle\Interfaces;
  */
 abstract class ActivityAbstract
 {
-    public $numActivities = 10;
+    public $numberShowLastDays = 7;
     /**
      * @return bool
      */
-    abstract function getActivity();
+    abstract public function getActivity();
 }

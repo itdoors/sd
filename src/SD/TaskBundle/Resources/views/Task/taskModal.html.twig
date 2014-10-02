@@ -369,6 +369,45 @@
             {% endif %}
         </td>
     </tr>
+
+    {% if taskUserRoleMatcher|length %}
+    <tr>
+        <td>{% trans %}Matcher{% endtrans %}:</td>
+        <td colspan="3">
+            {% for key,matcher in taskUserRoleMatcher %}
+                {{ matcher.user }}
+                {% if matcher.isViewed !=true %}
+                    <span style="color: red; font-size: smaller;">({% trans %}Not viewed{% endtrans %})</span>
+                {% else %}
+                    {% if matchingInfo[key] == 'none' %}
+                        <span style="color: red; font-size: smaller;">({% trans %}Not signed yet{% endtrans %})</span>
+                    {% elseif matchingInfo[key] == 'refused' %}
+                        <span style="color: red; font-size: smaller;">({% trans %}Refused sign up{% endtrans %})</span>
+                    {% elseif matchingInfo[key] == 'agree' %}
+                        <span style="color: green; font-size: smaller;">({% trans %}Signed up{% endtrans %})</span>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </td>
+    </tr>
+    {% endif %}
+
+    {% if taskUserRoleViewer|length %}
+    <tr>
+        <td>{% trans %}Viewer{% endtrans %}</td>
+        <td colspan="3">
+        {% for viewer in taskUserRoleViewer %}
+            {{ viewer.user }}
+            {% if viewer.isViewed !=true %}
+                <span style="color: red; font-size: smaller;">({% trans %}Not viewed{% endtrans %})</span>
+            {% endif %}
+            <br>
+        {% endfor %}
+        </td>
+    </tr>
+    {% endif %}
+    <br><br>
+
     <tr>
         <td>{% trans %}My role{% endtrans %}</td>
         <td colspan="3">{{ taskUserRole.role|trans }}</td>

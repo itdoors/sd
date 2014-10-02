@@ -95,11 +95,11 @@ class TaskController extends Controller
             ->find($id);
 
         $info = $this->getTaskUserRoleInfo($id);
+        $idTask = $taskUserRole->getTask()->getId();
 
         $commentRepository = $this->getDoctrine()
             ->getRepository('SDTaskBundle:Comment');
 
-        $idTask = $taskUserRole->getTask()->getId();
 
         $comments = $commentRepository->findBy(array (
             'model' => 'Task',
@@ -478,8 +478,7 @@ class TaskController extends Controller
         $stageTrans = $translator->trans($stageName, array(), 'SDTaskBundle');
         $text = $comment.' :'.$stageTrans;
         if ($commentValue) {
-            $text .= '<br>
-            '.$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
+            $text .= "\n".$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
         }
         $this->insertComment($id, $text);
 
@@ -593,8 +592,7 @@ class TaskController extends Controller
             $comment = $translator->trans('Changed the end date', array(), 'SDTaskBundle').
                 ' :'.$newDate->format('d-m-Y H:i');
             if ($commentValue) {
-                $comment .= '<br>
-            '.$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
+                $comment .= "\n".$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
             }
             $this->insertComment($id, $comment);
         } else {
@@ -607,8 +605,7 @@ class TaskController extends Controller
             $comment = $translator->trans('Made the end date request', array(), 'SDTaskBundle').
                 ' :'.$newDate->format('d-m-Y H:i');
             if ($commentValue) {
-                $comment .= '<br>
-            '.$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
+                $comment .= "\n".$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
             }
             $this->insertComment($id, $comment);
         }
@@ -654,16 +651,14 @@ class TaskController extends Controller
             $answerStageName = 'accepted';
             $comment = $translator->trans('Accepted the date request', array(), 'SDTaskBundle');
             if ($commentValue) {
-                $comment .= '<br>
-            '.$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
+                $comment .= "\n".$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
             }
             $this->insertComment($id, $comment);
         } else {
             $answerStageName = 'rejected';
             $comment = $translator->trans('Rejected the date request', array(), 'SDTaskBundle');
             if ($commentValue) {
-                $comment .= '<br>
-            '.$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
+                $comment .= "\n".$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
             }
             $this->insertComment($id, $comment);
         }
@@ -829,8 +824,7 @@ class TaskController extends Controller
             $comment = $translator->trans('Changed the end date', array(), 'SDTaskBundle').
                 ' :'.$newDate->format('d-m-Y H:i');
             if ($commentValue) {
-                $comment .= '<br>
-            '.$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
+                $comment .= "\n".$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
             }
 
             $this->insertComment($id, $comment);
@@ -845,8 +839,7 @@ class TaskController extends Controller
             $comment = $translator->trans('Made the end date request', array(), 'SDTaskBundle').
                 ' :'.$newDate->format('d-m-Y H:i');
             if ($commentValue) {
-                $comment .= '<br>
-            '.$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
+                $comment .= "\n".$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
             }
 
             $this->insertComment($id, $comment);
@@ -965,8 +958,7 @@ class TaskController extends Controller
         $em->persist($taskCommit);
 
         if ($commentValue) {
-            $comment .= '<br>
-            '.$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
+            $comment .= "\n".$translator->trans('Comment', array(), 'SDTaskBundle').' :'.$commentValue;
         }
         $this->insertComment($id, $comment);
 

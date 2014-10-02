@@ -11,7 +11,7 @@ use SD\ActivityBundle\Interfaces\ActivityAbstract;
 /**
  * OrganizationActivityService class
  */
-class OrganizationActivityService extends  ActivityAbstract
+class OrganizationActivityService extends ActivityAbstract
 {
     /**
      * @var Container $container
@@ -28,22 +28,29 @@ class OrganizationActivityService extends  ActivityAbstract
         $this->container = $container;
     }
 
-    public function getActivity() {
+    /**
+     * @return array
+     */
+    public function getActivity()
+    {
         $activity = array();
+
         $history = $this->container
             ->get('doctrine')->getManager()
             ->getRepository('ITDoorsHistoryBundle:History')
-            ->findOneBy(
+            ->findBy(
                 array(
                     'modelName' =>'organization'
                 ),
                 array(
                     'createdatetime' => 'desc'
                 ),
-                $this->numActivities
+                $this->numberShowLastDays
             );
-
         $activity = array_merge($activity, $history);
+
+        $activity = $this->container
+            ->get('activity.sentence.maker.service')->makeSentenceHistoryActivity($activity);
 
         return $activity;
     }

@@ -1,8 +1,18 @@
 parameters:
 #    sd_task.example.class: SD\TaskBundle\Example
     activity.organization.service.class: SD\ActivityBundle\Services\OrganizationActivityService
+    activity.task.service.class: SD\ActivityBundle\Services\TaskActivityService
+    activity.sentence.maker.service.class: SD\ActivityBundle\Services\ActivitySentenceMaker
 
 services:
     activity.organization.service:
         class: %activity.organization.service.class%
+        arguments: [@service_container]
+
+    activity.task.service:
+        class: %activity.task.service.class%
+        arguments: [@service_container]
+
+    activity.sentence.maker.service:
+        class: %activity.sentence.maker.service.class%
         arguments: [@service_container]

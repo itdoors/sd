@@ -1079,7 +1079,7 @@ INSERT INTO role (name, model) VALUES ('viewer', 'task');
 
 CREATE TABLE task_pattern (id SERIAL NOT NULL, name VARCHAR(255) NOT NULL, title VARCHAR(255) NOT NULL, description TEXT DEFAULT NULL, PRIMARY KEY(id));
 
-CREATE TABLE pattern_user_role (id SERIAL NOT NULL, task_pattern_id INT DEFAULT NULL, role_id INT DEFAULT NULL, user_id INT DEFAULT NULL, is_viewed BOOLEAN NOT NULL, PRIMARY KEY(id));
+CREATE TABLE pattern_user_role (id SERIAL NOT NULL, task_pattern_id INT DEFAULT NULL, role_id INT DEFAULT NULL, user_id INT DEFAULT NULL, PRIMARY KEY(id));
 CREATE INDEX IDX_1F606499EB27E9A0 ON pattern_user_role (task_pattern_id);
 CREATE INDEX IDX_1F606499D60322AC ON pattern_user_role (role_id);
 CREATE INDEX IDX_1F606499A76ED395 ON pattern_user_role (user_id);
