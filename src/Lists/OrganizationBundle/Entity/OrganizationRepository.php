@@ -576,69 +576,72 @@ class OrganizationRepository extends EntityRepository
      */
     public function getForInvoice ()
     {
+        $date = date('Y-m-d');
         $res = $this->createQueryBuilder('o')
-                ->select('o.id')
-                ->addSelect('o.edrpou')
-                ->addSelect(
-                    "array_to_string(
-                        ARRAY(
-                            SELECT
-                                DISTINCT(cs.name)
-                            FROM ITDoorsControllingBundle:Invoice  i_company
-                            LEFT JOIN ITDoorsControllingBundle:InvoiceCompanystructure ics 
-                                WITH ics.invoiceId = i_company.id
-                            LEFT JOIN ics.companystructure  cs
-                                WHERE o.id = i_company.customerId
-                        ), ','
-                    ) as responsibles"
+            ->select('o.id')
+            ->addSelect('o.edrpou')
+            ->addSelect(
+                "array_to_string(
+                    ARRAY(
+                        SELECT
+                            DISTINCT(cs.name)
+                        FROM ITDoorsControllingBundle:Invoice  i_company
+                        LEFT JOIN ITDoorsControllingBundle:InvoiceCompanystructure ics 
+                            WITH ics.invoiceId = i_company.id
+                        LEFT JOIN ics.companystructure  cs
+                            WHERE o.id = i_company.customerId
+                    ), ','
+                ) as responsibles"
+            )
+            ->addSelect(
+                '(
+                    SELECT SUM(detal_all.summa)
+                    FROM  ITDoorsControllingBundle:Invoice  i_all
+                    LEFT JOIN i_all.acts act_all
+                    LEFT JOIN act_all.detals detal_all
+                    WHERE i_all.customerId = o.id
                 )
-                ->addSelect(
-                    "(
-                        SELECT SUM(paymens.summa)
-                        FROM  ITDoorsControllingBundle:Invoice  i_paymens
-                        LEFT JOIN  ITDoorsControllingBundle:InvoicePayments paymens
-                        WHERE i_paymens.customerId = o.id
-                        AND paymens.invoiceId = i_paymens.id
-                    )as paymentsSumma"
-                )
-                ->addSelect(
-                    '(
-                        SELECT SUM(i_a_d.summa)
-                        FROM  ITDoorsControllingBundle:Invoice  i_s_ 
-                        LEFT JOIN ITDoorsControllingBundle:InvoiceAct i_a WITH i_s_.id = i_a.invoiceId
-                        LEFT JOIN ITDoorsControllingBundle:InvoiceActDetal i_a_d WITH i_a.id = i_a_d.invoiceActId
-                        WHERE i_s_.customerId = o.id
-                    ) as allSumma'
-                )
-                ->addSelect('o.name as customerName')
-                ->where(
-                    'o.id in (
-                        SELECT DISTINCT(i.customerId) 
-                        FROM  ITDoorsControllingBundle:Invoice i
-                    )'
-                )
-                ->orderBy('allSumma', 'ASC')->getQuery();
-        $count = $this->createQueryBuilder('o')
-                ->select('COUNT(o.id)')
-                ->where(
-                    'o.id in (
-                        SELECT DISTINCT(i.customerId) 
-                        FROM  ITDoorsControllingBundle:Invoice i
-                    )'
-                )
-                ->getQuery()
-                ->getSingleScalarResult();
+                as allSumma'
+            )
+            ->addSelect(
+                '(
+                    SELECT SUM(case when detal_debt.summa  is not NULL then detal_debt.summa else 0 end)
+                    FROM  ITDoorsControllingBundle:Invoice  i_all_debt
+                    LEFT JOIN i_all_debt.acts act_debt
+                    LEFT JOIN act_debt.detals detal_debt
+                    WHERE i_all_debt.customerId = o.id
+                    AND i_all_debt.delayDate < :date
+                ) as allSummDebit'
+            )
+            ->addSelect(
+                "(
+                    SELECT SUM(pay.summa)
+                    FROM  ITDoorsControllingBundle:Invoice  i_pay
+                    LEFT JOIN i_pay.payments pay
+                    WHERE i_pay.customerId = o.id
+                )as paySumma"
+            )
+            ->addSelect('o.name as customerName')
+            ->where(
+                'o.id in (
+                    SELECT DISTINCT(i.customerId) 
+                    FROM  ITDoorsControllingBundle:Invoice i
+                    WHERE i.dateFact is NULL
+                )'
+            )
+            ->setParameter(':date', $date)
+            ->getQuery()->getResult();
 
-        return array('entity' => $res, 'count' => $count);
+        return $res;
     }
     /**
      * Returns results for interval future invoice
      * 
-     * @param array $filters
+     * @param array   $filters
      * 
      * @return mixed[]
      */
-    public function getForInvoiceAndCount ($filters)
+    public function getForInvoiceAnalitic ($filters)
     {
         $res = $this->createQueryBuilder('o')
             ->select('o.id')
@@ -647,6 +650,7 @@ class OrganizationRepository extends EntityRepository
                 'o.id in (
                     SELECT DISTINCT(i.customerId) 
                     FROM  ITDoorsControllingBundle:Invoice i
+                    WHERE i.dateFact is NULL
                 )'
             )
             ->orderBy('o.name');
@@ -657,6 +661,7 @@ class OrganizationRepository extends EntityRepository
                 'o.id in (
                     SELECT DISTINCT(i.customerId) 
                     FROM  ITDoorsControllingBundle:Invoice i
+                    WHERE i.dateFact is NULL
                 )'
             );
 
@@ -693,7 +698,7 @@ class OrganizationRepository extends EntityRepository
                         );
                         $resCount->setParameter(':performerIds', $arr);
                         break;
-                    case 'dateRange':
+                    case 'daterange':
                         $dateArr = explode('-', $value);
                         $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
                         $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));
@@ -704,6 +709,7 @@ class OrganizationRepository extends EntityRepository
                                     SELECT DISTINCT(i_date.customerId) 
                                     FROM  ITDoorsControllingBundle:Invoice i_date
                                     WHERE i_date.date BETWEEN :datestart AND :datestop
+                                    AND i_date.dateFact is NULL
                                 )'
                             )
                             ->setParameter(':datestart', $dateStart)
@@ -714,6 +720,7 @@ class OrganizationRepository extends EntityRepository
                                 SELECT DISTINCT(i_date.customerId) 
                                 FROM  ITDoorsControllingBundle:Invoice i_date
                                 WHERE i_date.date BETWEEN :datestart AND :datestop
+                                AND i_date.dateFact is NULL
                                 )'
                             )
                             ->setParameter(':datestart', $dateStart)
@@ -722,12 +729,11 @@ class OrganizationRepository extends EntityRepository
                 }
             }
         }
-        $result = array (
-            'entity' => $res->getQuery(),
-            'count' => $resCount->getQuery()->getSingleScalarResult()
-        );
+        $count = $resCount->getQuery()->getSingleScalarResult();
+        $entity = $res->getQuery();
+        $entity->setHint('knp_paginator' . '.count', $count);
 
-        return $result;
+        return $entity;
     }
     /**
      * Returns results for interval future invoice
@@ -739,15 +745,6 @@ class OrganizationRepository extends EntityRepository
         $res = $this->createQueryBuilder('o')
             ->select('o.id')
             ->addSelect('o.edrpou')
-            ->addSelect(
-                "(
-                SELECT SUM(paymens.summa)
-                FROM  ITDoorsControllingBundle:Invoice  i_paymens
-                LEFT JOIN  ITDoorsControllingBundle:InvoicePayments paymens
-                WHERE paymens.invoiceId = i_paymens.id
-                AND i_paymens.customerId = o.id
-                )as paymentsSumma"
-            )
             ->addSelect(
                 "array_to_string(
                   ARRAY(
@@ -763,45 +760,43 @@ class OrganizationRepository extends EntityRepository
             )
             ->addSelect(
                 '(
-                  SELECT SUM(i_s.sum)
-                  FROM  ITDoorsControllingBundle:Invoice  i_s
-                  WHERE i_s.customerId = o.id
-                 ) as allSummaInvoice'
+                    SELECT SUM(detal_all.summa)
+                    FROM  ITDoorsControllingBundle:Invoice  i_all
+                    LEFT JOIN i_all.acts act_all
+                    LEFT JOIN act_all.detals detal_all
+                    WHERE i_all.customerId = o.id
+                ) as allSumma'
             )
             ->addSelect(
                 '(
-                  SELECT SUM(i_a_d.summa)
-                  FROM  ITDoorsControllingBundle:Invoice  i_s_ 
-                  LEFT JOIN ITDoorsControllingBundle:InvoiceAct i_a WITH i_s_.id = i_a.invoiceId
-                  LEFT JOIN ITDoorsControllingBundle:InvoiceActDetal i_a_d WITH i_a.id = i_a_d.invoiceActId
-                  WHERE i_s_.customerId = o.id
-                 ) as allSumma'
+                    SELECT SUM(case when detal_debt.summa  is not NULL then detal_debt.summa else 0 end)
+                    FROM  ITDoorsControllingBundle:Invoice  i_all_debt
+                    LEFT JOIN i_all_debt.acts act_debt
+                    LEFT JOIN act_debt.detals detal_debt
+                    WHERE i_all_debt.customerId = o.id
+                    AND i_all_debt.delayDate < :date
+                ) as allSummDebit'
+            )
+            ->addSelect(
+                "(
+                    SELECT SUM(pay.summa)
+                    FROM  ITDoorsControllingBundle:Invoice  i_pay
+                    LEFT JOIN i_pay.payments pay
+                    WHERE i_pay.customerId = o.id
+                )as paySumma"
             )
             ->addSelect('o.name as customerName')
             ->where(
                 'o.id in (
                     SELECT DISTINCT(i.customerId) 
                     FROM  ITDoorsControllingBundle:Invoice i
-                    LEFT JOIN ITDoorsControllingBundle:InvoiceAct i_a_
+                    LEFT JOIN i.acts i_a_
                     WHERE i.id = i_a_.invoiceId
                     AND i_a_.original = false
                 )'
             )
             ->orderBy('allSumma')->getQuery();
-        $count = $this->createQueryBuilder('o')
-                ->select('COUNT(o.id)')
-                ->where(
-                    'o.id in (
-                        SELECT DISTINCT(i.customerId) 
-                        FROM  ITDoorsControllingBundle:Invoice i
-                        LEFT JOIN ITDoorsControllingBundle:InvoiceAct i_a_
-                        WHERE i.id = i_a_.invoiceId
-                        AND i_a_.original = false
-                    )'
-                )
-                ->getQuery()
-                ->getSingleScalarResult();
 
-        return array('entity' => $res, 'count' => $count);
+        return $res;
     }
 }
