@@ -631,7 +631,6 @@ class OrganizationRepository extends EntityRepository
                 )'
             )
             ->setParameter(':date', $date)
-            ->orderBy('o.name')
             ->getQuery()->getResult();
 
         return $res;

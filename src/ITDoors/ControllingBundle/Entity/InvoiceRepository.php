@@ -1488,24 +1488,24 @@ class InvoiceRepository extends EntityRepository
             ->andWhere('i.dateFact is NULL')
             ->setParameter('customerId', $customerId)
             ->setParameter(':date', $date);
-        if (sizeof($filters)) {
-            foreach ($filters as $key => $value) {
-                if (!$value) {
-                    continue;
-                }
-                switch ($key) {
-                    case 'daterange':
-                        $dateArr = explode('-', $value);
-                        $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
-                        $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));
-
-                        $sql->andWhere('i.date BETWEEN :datestart AND :datestop')
-                            ->setParameter(':datestart', $dateStart)
-                            ->setParameter(':datestop', $dateStop);
-                        break;
-                }
-            }
-        }
+//        if (sizeof($filters)) {
+//            foreach ($filters as $key => $value) {
+//                if (!$value) {
+//                    continue;
+//                }
+//                switch ($key) {
+//                    case 'daterange':
+//                        $dateArr = explode('-', $value);
+//                        $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
+//                        $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));
+//
+//                        $sql->andWhere('i.date BETWEEN :datestart AND :datestop')
+//                            ->setParameter(':datestart', $dateStart)
+//                            ->setParameter(':datestop', $dateStop);
+//                        break;
+//                }
+//            }
+//        }
 
         return $sql
                 ->orderBy('i.date')

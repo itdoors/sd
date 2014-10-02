@@ -1027,6 +1027,8 @@ class InvoiceService
                 if (!$dateStop) {
                     $maxDate = date('t.m.Y');
                 }
+                $minDateInvoice = $dateStart;
+                $maxDateInvoice = date('t.m.Y');
                 // общая сумма долга
                 $invoiceAct = array();
                 foreach ($invoiceActs as $act) {
@@ -1035,12 +1037,17 @@ class InvoiceService
                     } else {
                         $date = $act['date']->format('d.m.Y');
                     }
-
                     if ((empty($minDate) || strtotime($date) < strtotime($minDate)) && !$dateStart) {
                         $minDate = $date;
                     }
                     if ((empty($maxDate) || strtotime($date) > strtotime($maxDate)) && !$dateStop) {
                         $maxDate = $date;
+                    }
+                    if ((empty($minDateInvoice) || strtotime($date) < strtotime($minDateInvoice))) {
+                        $minDateInvoice = $date;
+                    }
+                    if ((empty($maxDateInvoice) || strtotime($date) > strtotime($maxDateInvoice))) {
+                        $maxDateInvoice = $date;
                     }
                     if (!isset($invoiceAct[$date])) {
                         $invoiceAct[$date] = array();
@@ -1065,6 +1072,12 @@ class InvoiceService
                     if ((empty($maxDate) || strtotime($date) > strtotime($maxDate)) && !$dateStop) {
                         $maxDate = $date;
                     }
+                    if ((empty($minDateInvoice) || strtotime($date) < strtotime($minDateInvoice))) {
+                        $minDateInvoice = $date;
+                    }
+                    if ((empty($maxDateInvoice) || strtotime($date) > strtotime($maxDateInvoice))) {
+                        $maxDateInvoice = $date;
+                    }
                     if (!isset($invoicePay[$date])) {
                         $invoicePay[$date] = array();
                         $invoicePay[$date]['pay'] = 0;
@@ -1076,8 +1089,8 @@ class InvoiceService
                 $res = array();
                 if (!$showDays) {
                     for (
-                            $i = strtotime($minDate);
-                            $i <= strtotime($maxDate);
+                            $i = strtotime($minDateInvoice);
+                            $i <= strtotime($maxDateInvoice);
                             $i = mktime(0, 0, 0, date('m', $i)+1, 1, date('Y', $i))
                         ) {
                         $date = date('t.m.Y', $i);
@@ -1102,7 +1115,7 @@ class InvoiceService
                         );
                     }
                 } else {
-                    for ($i = strtotime($minDate);$i <= strtotime($maxDate);$i = mktime(0, 0, 0, date('m', $i), date('d', $i)+1, date('Y', $i))) {
+                    for ($i = strtotime($minDateInvoice);$i <= strtotime($maxDateInvoice);$i = mktime(0, 0, 0, date('m', $i), date('d', $i)+1, date('Y', $i))) {
                         $date = date('d.m.Y', $i);
                         if (isset($invoiceAct[$date])) {
                             $all += $invoiceAct[$date]['all'];
@@ -1123,6 +1136,11 @@ class InvoiceService
                             'all' => $all,
                             'debt' => $debt
                         );
+                    }
+                }
+                foreach ($res as $data => $val) {
+                    if (($dateStart && strtotime($dateStart) > strtotime($data)) or ($dateStop && strtotime($dateStop) < strtotime($data))){
+                        unset($res[$data]);
                     }
                 }
                 $invoices[$organization['id']]['min'] = $minDate;

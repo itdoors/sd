@@ -98,7 +98,7 @@ class CompanystructureRepository extends NestedTreeRepository
                         $arr = explode(',', $value);
                         $res->andWhere(
                             'c.id in (
-                                SELECT DISTINCT(ic.companystructureId) 
+                                SELECT DISTINCT(ic_c.companystructureId) 
                                 FROM  ITDoorsControllingBundle:InvoiceCompanystructure ic_c
                                 LEFT JOIN ITDoorsControllingBundle:Invoice i_c with ic_c.invoiceId = i_c.id
                                 WHERE i_c.customerId in (:customerIds)
