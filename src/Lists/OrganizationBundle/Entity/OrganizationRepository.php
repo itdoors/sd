@@ -613,7 +613,6 @@ class OrganizationRepository extends EntityRepository
                     AND i_all_debt.delayDate < :date
                 ) as allSummDebit'
             )
-           
             ->addSelect(
                 "(
                     SELECT SUM(pay.summa)

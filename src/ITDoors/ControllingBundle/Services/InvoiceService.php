@@ -1088,11 +1088,9 @@ class InvoiceService
                 $debt = 0;
                 $res = array();
                 if (!$showDays) {
-                    for (
-                            $i = strtotime($minDateInvoice);
-                            $i <= strtotime($maxDateInvoice);
-                            $i = mktime(0, 0, 0, date('m', $i)+1, 1, date('Y', $i))
-                        ) {
+                    for ($i = strtotime($minDateInvoice);
+                        $i <= strtotime($maxDateInvoice);
+                        $i = mktime(0, 0, 0, date('m', $i)+1, 1, date('Y', $i))) {
                         $date = date('t.m.Y', $i);
                         if (isset($invoiceAct[$date])) {
                             $all += $invoiceAct[$date]['all'];
@@ -1115,7 +1113,9 @@ class InvoiceService
                         );
                     }
                 } else {
-                    for ($i = strtotime($minDateInvoice);$i <= strtotime($maxDateInvoice);$i = mktime(0, 0, 0, date('m', $i), date('d', $i)+1, date('Y', $i))) {
+                    for ($i = strtotime($minDateInvoice);
+                        $i <= strtotime($maxDateInvoice);
+                        $i = mktime(0, 0, 0, date('m', $i), date('d', $i)+1, date('Y', $i))) {
                         $date = date('d.m.Y', $i);
                         if (isset($invoiceAct[$date])) {
                             $all += $invoiceAct[$date]['all'];
@@ -1139,7 +1139,11 @@ class InvoiceService
                     }
                 }
                 foreach ($res as $data => $val) {
-                    if (($dateStart && strtotime($dateStart) > strtotime($data)) or ($dateStop && strtotime($dateStop) < strtotime($data))){
+                    if (
+                            ($dateStart && strtotime($dateStart) > strtotime($data))
+                            or
+                            ($dateStop && strtotime($dateStop) < strtotime($data))
+                        ) {
                         unset($res[$data]);
                     }
                 }

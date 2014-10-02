@@ -1,43 +1,11 @@
 {% trans_default_domain 'ITDoorsControllingBundle' %}
 
 <script>
-    /*
-    function daysInMonth(month,year) {
-        var dd = new Date(year, month, 0);
-        return dd.getDate();
-    }
-    function number_format(number, decimals, dec_point, thousands_sep) {
-            number = (number + '')
-              .replace(/[^0-9+\-Ee.]/g, '');
-            var n = !isFinite(+number) ? 0 : +number,
-              prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
-              sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
-              dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
-              s = '',
-              toFixedFix = function(n, prec) {
-                var k = Math.pow(10, prec);
-                return '' + (Math.round(n * k) / k)
-                  .toFixed(prec);
-              };
-            // Fix for IE parseFloat(0.55).toFixed(0) = 0;
-            s = (prec ? toFixedFix(n, prec) : '' + Math.round(n))
-              .split('.');
-            if (s[0].length > 3) {
-              s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
-            }
-            if ((s[1] || '')
-              .length < prec) {
-              s[1] = s[1] || '';
-              s[1] += new Array(prec - s[1].length + 1)
-                .join('0');
-            }
-            return s.join(dec);
-    }
     function showTooltip(x, y, contents) {
         $('<div id="tooltip">' + contents + '</div>').css({
                 position: 'absolute',
                 display: 'none',
-                top: y + 5,
+                top: y - 20,
                 left: x -50 ,
                 border: '1px solid #333',
                 padding: '4px',
@@ -47,146 +15,6 @@
                 opacity: 0.80
             }).appendTo("body").fadeIn(200);
     }
-        
-    function chart(pageviews, visitors, id) {
-
-        var plot = $.plot($("#chart_"+id), [
-                {
-                    data: visitors,
-                    label: "Простроченый долг",
-                    lines: {
-                        lineWidth: 5
-                    },
-                    shadowSize: 0
-                },
-                {
-                    data: pageviews,
-                    label: "Общий долг",
-                    lines: {
-                        lineWidth: 5
-                    },
-                    shadowSize: 0
-
-                }
-            ], {
-                series: {
-                    stack: stack,
-                    lines: {
-                        show: lines,
-                        lineWidth: 1,
-                        fill: true,
-                        steps: false,
-                        fillColor: {
-                            colors: [{
-                                    opacity: 0.05
-                                }, {
-                                    opacity: 0.06
-                                }
-                            ]
-                        }
-                    },
-                    bars: {
-                            show: bars,
-                            barWidth: 0.5,
-                            lineWidth: 0, // in pixels
-                            shadowSize: 0,
-                            align: 'center'
-                        },
-                    points: {
-                        show: true,
-                        radius: 3,
-                        lineWidth: 1
-                    },
-                    shadowSize: 1
-                },
-                grid: {
-                    hoverable: true,
-                    clickable: true,
-                    tickColor: "#eee",
-                    borderColor: "#eee",
-                    borderWidth: 1
-                },
-                colors: ["#d84a38", "#615A5A", "#52e136"],
-                xaxis: {
-                    mode: "categories",
-                    tickLength: 0,
-                    //ticks: 10,
-                    //tickDecimals: 0,
-                    tickColor: "#eee",
-                    alignTicksWithAxis: 10
-                },
-                yaxis: {
-                    ticks: 10,
-                    min: 0,
-                    tickDecimals: 0,
-                    tickColor: "#eee"
-                },
-                legend: {
-                    show: true,
-                    noColumns: 1, // number of colums in legend table
-                    labelFormatter: null, // fn: string -> string
-                    labelBoxBorderColor: "#ccc", // border color for the little label boxes
-                    container: "#legendBlock"+id, // container (as jQuery object) to put legend in, null means default on top of graph
-                    position: "left", // position of default legend container within plot
-                    margin: 10, // distance from grid edge to default legend container within plot
-                    backgroundColor: '#eee', // null means auto-detect
-                    backgroundOpacity: 0.15, // set to 0 to avoid background
-                    sorted: 'asc'    // default to no legend sorting
-                }
-                
-            });
-        var previousPoint = null;
-        $("#chart_"+id).bind("plothover", function (event, pos, item) {
-            $("#x").text(pos.x.toFixed(2));
-            $("#y").text(pos.y.toFixed(2));
-            if (item) {
-                if (previousPoint !== item.dataIndex) {
-                    previousPoint = item.dataIndex;
-
-                    $("#tooltip").remove();
-                    var x = item.series.data[item.datapoint[0]][0],
-                        y = item.datapoint[1].toFixed(2);
-
-                    showTooltip(item.pageX, item.pageY, item.series.label + " " + x + " - " + y);
-                }
-            } else {
-                $("#tooltip").remove();
-                previousPoint = null;
-            }
-        });
-        
-        for (visitor in visitors) {
-             o = plot.pointOffset({ x:  visitor , y: visitors[visitor][1] });
-            $("#chart_"+id).append(
-                       '<div style="text-align:right;width:65px;position:absolute;left:' + 
-                       (o.left - 66) + 
-                       'px;top:' + (o.top-16)+ 
-                       'px;color:#000;font-size:smaller">'+number_format(visitors[visitor][1], 2, ',', ' ')+'</div>'); 
-        }
-        for (pageview in pageviews) {
-             o = plot.pointOffset({ x:  pageview , y: pageviews[pageview][1] });
-            $("#chart_"+id).append(
-                       '<div style="text-align:right;width:65px;position:absolute;left:' + 
-                       (o.left - 66) + 
-                       'px;top:' + (o.top-16)+ 
-                       'px;color:#000;font-size:smaller">'+number_format(pageviews[pageview][1], 2, ',', ' ')+'</div>'); 
-        }
-    }
-    var mountsShort = [];
-        mountsShort['01'] = 'Янв.';
-        mountsShort['02'] = 'Фев.';
-        mountsShort['03'] = 'Мар.';
-        mountsShort['04'] = 'Апр.';
-        mountsShort['05'] = 'Май';
-        mountsShort['06'] = 'Июн.';
-        mountsShort['07'] = 'Июл.';
-        mountsShort['08'] = 'Авг.';
-        mountsShort['09'] = 'Сен.';
-        mountsShort['10'] = 'Окт.';
-        mountsShort['11'] = 'Ноя.';
-        mountsShort['12'] = 'Дек.';
-    var months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
-    */
    function chart(d1, d2, id) {
                 if ($('#chart_'+id).size() !== 1) {
                     return;
@@ -234,6 +62,7 @@
                                 }
                             },
                             grid: {
+                                hoverable: true,
                                 tickColor: "#eee",
                                 borderColor: "#eee",
                                 borderWidth: 1
@@ -287,6 +116,25 @@
                             {% endif%}
                     {% endfor%}
                     chart(pageviews, visitors, {{ key }});
+                    var previousPoint = null;
+                    $("#chart_{{ key }}").bind("plothover", function (event, pos, item) {
+                        $("#x").text(pos.x.toFixed(2));
+                        $("#y").text(pos.y.toFixed(2));
+                        if (item) {
+                            console.log(item.datapoint);
+                            if (previousPoint !== item.dataIndex) {
+                                previousPoint = item.dataIndex;
+
+                                $("#tooltip").remove();
+                                var y = item.datapoint[1].toFixed(2);
+
+                                showTooltip(item.pageX, item.pageY, item.series.label + " " + y);
+                            }
+                        } else {
+                            $("#tooltip").remove();
+                            previousPoint = null;
+                        }
+                    });
                 });
             </script>
             <div id="legendBlock{{ key }}" style="float: right;"></div>
