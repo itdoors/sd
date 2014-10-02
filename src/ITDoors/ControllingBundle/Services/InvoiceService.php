@@ -607,25 +607,25 @@ class InvoiceService
         $translator = $this->container->get('translator');
         $tabs = array ();
          $tabs['individual'] = array (
-            'blockupdate' => 'datatable_ajax',
+            'blockupdate' => 'ajax-tab-holder',
             'tab' => 'individual',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_analytic_list'),
             'text' => $translator->trans('Individual')
         );
         $tabs['general'] = array (
-            'blockupdate' => 'datatable_ajax',
+            'blockupdate' => 'ajax-tab-holder',
             'tab' => 'general',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_analytic_list'),
             'text' => $translator->trans('General')
         );
         $tabs['withoutacts'] = array (
-            'blockupdate' => 'datatable_ajax',
+            'blockupdate' => 'ajax-tab-holder',
             'tab' => 'withoutacts',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_analytic_list'),
             'text' => $translator->trans('Without acts')
         );
         $tabs['responsible'] = array (
-            'blockupdate' => 'datatable_ajax',
+            'blockupdate' => 'ajax-tab-holder',
             'tab' => 'responsible',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_analytic_list'),
             'text' => $translator->trans('Responsible')
@@ -1147,9 +1147,44 @@ class InvoiceService
         /** @var CompanystructurenRepository $companystructureRepository */
         $companystructureRepository = $em->getRepository('ListsCompanystructureBundle:Companystructure');
         $companystructures = $companystructureRepository->getForInvoiceAnalitic($filters);
-        $result = array('paginator' => null, 'showDays' => null);
 
-        $result['entities'] = $companystructures;
+        return $companystructures;
+    }
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @param integer $page
+     * @param array   $filters
+     * 
+     * @return tabs[]
+     */
+    public function getGeneral ($page, $filters = null)
+    {
+        /** @var EntityManager $em */
+        $em = $this->container->get('doctrine')->getManager();
+
+        /** @var OrganizationRepository $organization */
+        $organization = $em->getRepository('ListsOrganizationBundle:Organization');
+        $result = $organization->getForInvoice();
+
+        return $result;
+    }
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @param integer $page
+     * @param array   $filters
+     * 
+     * @return tabs[]
+     */
+    public function getWithoutacts ($page, $filters = null)
+    {
+        /** @var EntityManager $em */
+        $em = $this->container->get('doctrine')->getManager();
+
+        /** @var OrganizationRepository $organization */
+        $organization = $em->getRepository('ListsOrganizationBundle:Organization');
+        $result = $organization->getForInvoice();
 
         return $result;
     }

@@ -259,23 +259,23 @@
                 plotWithOptions();
             }
 </script>
- {% if entities | length %}
+ {% if entities.entities| length %}
     <div class="navigation">
         {{ ajax_paginator_render(
-                paginator, namespase, {
+                entities.paginator, namespase, {
                         'datatable_ajax': 'ITDoorsAjax.updateList'
                     }
                 )
         }}
     </div>
-    {% for  key,item in entities %}
+    {% for  key,item in entities.entities %}
             <script>
                 $(document).ready(function(){
                     
                     var pageviews = [];
                     var visitors = [];
                      {% for date,invoice in item.invoices %}
-                            {% if showDays %}
+                            {% if entities.showDays %}
                                 pageviews.push(['{{ date | date('d') }}<br>{{ date | date('M') | trans }}<br>{{ date | date('Y') }}',{{ invoice.all }}]);
                                 visitors.push(['{{ date | date('d') }}<br>{{ date | date('M') | trans }}<br>{{ date | date('Y') }}',{{ invoice.debt}}]);
                             {% else %}
@@ -301,7 +301,7 @@
     {% endfor %}  
     <div class="navigation">
         {{ ajax_paginator_render(
-                paginator, namespase, {
+                entities.paginator, namespase, {
                         'datatable_ajax': 'ITDoorsAjax.updateList'
                     }
                 )

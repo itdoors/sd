@@ -1,6 +1,4 @@
 {% trans_default_domain 'ITDoorsControllingBundle' %}
-В разработке
-{#
 <script>
     function showTooltip(x, y, contents) {
         $('<div id="tooltip">' + contents + '</div>').css({
@@ -21,8 +19,8 @@
             var d1 = [];
             var d2 = [];
             {% for  item in entities %}
-                d1.push([{{ item.allSumma }}, '{{ item.customerName}}']);
-                d2.push([{{ item.allSumma-item.paymentsSumma }}, '{{ item.customerName }}']);
+                d1.push([{{ item.allSumma-item.paySumma }}, '{{ item.customerName}}']);
+                d2.push([{{ item.allSummDebit-item.paySumma }}, '{{ item.customerName }}']);
            {% endfor %}
     function plotWithOptions() {
         var plot = $.plot($("#chart_5"), [
@@ -83,18 +81,18 @@
             }                       
         );
  {% for  key,item in entities %}
-                 o = plot.pointOffset({ x:  {{ item.allSumma-item.paymentsSumma }}  , y: {{key}}});
+                 o = plot.pointOffset({ x:  {{ item.allSumma-item.paySumma }}  , y: {{key}}});
                 $("#chart_5").append(
                         '<div style="text-align:right;width:65px;position:absolute;left:' + 
                         ((o.left - 65) > 230 ? o.left - 65 : 230) + 
                         'px;top:' + (o.top-8)+ 
-                        'px;color:#666;font-size:smaller">{{ (item.allSumma-item.paymentsSumma )|number_format(2, ',', ' ') }}</div>'); 
-                 o = plot.pointOffset({ x:  {{ ( item.allSumma ? item.allSumma : 0 ) }}  , y: {{key}}});
+                        'px;color:#666;font-size:smaller">{{ (item.allSumma-item.paySumma )|number_format(2, ',', ' ') }}</div>'); 
+                 o = plot.pointOffset({ x:  {{ ( item.allSumma ? item.allSumma-item.paySumma : 0 ) }}  , y: {{key}}});
                 $("#chart_5").append(
                         '<div style="text-align:right;width:65px;position:absolute;left:' + 
                         ((o.left - 65) > 310 ? o.left - 65 : 310) + 
                         'px;top:' + (o.top-8)+ 
-                        'px;color:#666;font-size:smaller">{{ ( item.allSumma ? item.allSumma : 0 )|number_format(2, ',', ' ')}}</div>'); 
+                        'px;color:#666;font-size:smaller">{{ ( item.allSummDebit ? item.allSummDebit-item.paySumma : 0 )|number_format(2, ',', ' ')}}</div>'); 
                  o = plot.pointOffset({ x:  0   , y: {{key}}});
           
            {% endfor %}
@@ -127,14 +125,6 @@
         });
     });
 </script>
-<div class="navigation">
-    {{ ajax_paginator_render(
-            entities, namespace, {
-                    'datatable_ajax': 'ITDoorsAjax.updateList'
-                }
-            )
-    }}
-</div>
 <div class="portlet box yellow">
     <div class="portlet-title">
             <div class="caption">
@@ -145,12 +135,3 @@
         <div id="chart_5" style="height: {{  (50*entities|length)+1 }}px; padding: 0px; position: relative;"></div>
     </div>
 </div>
-    <div class="navigation">
-    {{ ajax_paginator_render(
-            entities, namespace, {
-                    'datatable_ajax': 'ITDoorsAjax.updateList'
-                }
-            )
-    }}
-</div>
-#}
