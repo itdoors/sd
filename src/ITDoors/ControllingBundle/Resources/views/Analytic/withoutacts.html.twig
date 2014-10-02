@@ -1,0 +1,134 @@
+{% trans_default_domain 'ITDoorsControllingBundle' %}
+<script>
+    function showTooltip(x, y, contents) {
+        $('<div id="tooltip">' + contents + '</div>').css({
+                position: 'absolute',
+                display: 'none',
+                top: y + 5,
+                left: x -50 ,
+                border: '1px solid #333',
+                padding: '4px',
+                color: '#fff',
+                'border-radius': '3px',
+                'background-color': '#333',
+                opacity: 0.80
+            }).appendTo("body").fadeIn(200);
+    }
+    $(document).ready(function(){
+         function chart5() {
+            var d1 = [];
+            var d2 = [];
+            {% for  item in entities %}
+                d1.push([{{ item.allSumma-item.paySumma }}, '{{ item.customerName}}']);
+                d2.push([{{ item.allSummDebit-item.paySumma }}, '{{ item.customerName }}']);
+           {% endfor %}
+    function plotWithOptions() {
+        var plot = $.plot($("#chart_5"), [
+                {
+                    label: "Общая сумма",
+                    data: d1,
+                    lines: {
+                        lineWidth: 5
+                    },
+                    shadowSize: 0
+                }, {
+                    label: "Простроченая сумма",
+                    data: d2,
+                    lines: {
+                        lineWidth: 5
+                    },
+                    shadowSize: 0
+                }
+            ], {
+                series: {
+                    bars: {
+                        horizontal:true,
+                        show: true,
+                        barWidth: 0,
+                        lineWidth: 48,
+                        shadowSize: 0,
+                        align: 'center'
+                    },
+                    points: {
+                        show: true,
+                        radius: 5,
+                        lineWidth: 10
+                    }
+                },
+                grid: {
+                    hoverable: true,
+                    tickColor: "#eee",
+                    borderColor: "#eee",
+                    borderWidth: 1
+                },
+                colors: ["#808080", "#d84a38"],
+                xaxis: {
+                    position: "bottom", // or "top"
+                    ticks: 5,
+                    tickLength: 0,
+                    labelHeight: 0,
+                    tickDecimals: 2,
+                    tickColor: "#eee",
+                    min: 0
+                },
+                yaxis: {
+                    labelHeight: 50,
+                    labelWidth: 200,
+                    mode: "categories",
+                    tickColor: "#eee",
+                    tickLength: 0
+                }
+            }                       
+        );
+ {% for  key,item in entities %}
+                 o = plot.pointOffset({ x:  {{ item.allSumma-item.paySumma }}  , y: {{key}}});
+                $("#chart_5").append(
+                        '<div style="text-align:right;width:65px;position:absolute;left:' + 
+                        ((o.left - 65) > 230 ? o.left - 65 : 230) + 
+                        'px;top:' + (o.top-8)+ 
+                        'px;color:#666;font-size:smaller">{{ (item.allSumma-item.paySumma )|number_format(2, ',', ' ') }}</div>'); 
+                 o = plot.pointOffset({ x:  {{ ( item.allSumma ? item.allSumma-item.paySumma : 0 ) }}  , y: {{key}}});
+                $("#chart_5").append(
+                        '<div style="text-align:right;width:65px;position:absolute;left:' + 
+                        ((o.left - 65) > 310 ? o.left - 65 : 310) + 
+                        'px;top:' + (o.top-8)+ 
+                        'px;color:#666;font-size:smaller">{{ ( item.allSummDebit ? item.allSummDebit-item.paySumma : 0 )|number_format(2, ',', ' ')}}</div>'); 
+                 o = plot.pointOffset({ x:  0   , y: {{key}}});
+          
+           {% endfor %}
+
+    }   
+            plotWithOptions();
+            }
+            chart5();
+            var previousPoint = null;
+        $("#chart_5").bind("plothover", function (event, pos, item) {
+            $("#x").text(pos.x.toFixed(2));
+            $("#y").text(pos.y.toFixed(2));
+            if (item) {
+                console.log(item.datapoint);
+                if (previousPoint !== item.dataIndex) {
+                    previousPoint = item.dataIndex;
+
+                    $("#tooltip").remove();
+                    var y = item.datapoint[0].toFixed(2);
+
+                    showTooltip(item.pageX, item.pageY, item.series.label + " " + y);
+                }
+            } else {
+                $("#tooltip").remove();
+                previousPoint = null;
+            }
+        });
+    });
+</script>
+<div class="portlet box yellow">
+    <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-gift"></i>{% trans %}Graphik{% endtrans %}
+            </div>
+    </div>
+    <div class="portlet-body">
+        <div id="chart_5" style="height: {{  (50*entities|length)+1 }}px; padding: 0px; position: relative;"></div>
+    </div>
+</div>

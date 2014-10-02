@@ -30,4 +30,116 @@ class CompanystructureRepository extends NestedTreeRepository
 
         return $sql->getResult();
     }
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @param array   $filters
+     * 
+     * @return mixed[]
+     */
+    public function getForInvoiceAnalitic ($filters)
+    {
+        $date = new \DateTime();
+        $res = $this->createQueryBuilder('c')
+            ->select('c.id')
+            ->addSelect('c.name')
+            ->addSelect(
+                '(
+                    SELECT SUM(case when detalall.summa is not NULL then detalall.summa else 0 end )
+                    FROM  ITDoorsControllingBundle:InvoiceAct actall
+                    LEFT JOIN actall.invoice i_actall
+                    LEFT JOIN i_actall.invoicecompanystructure i_cstr
+                    LEFT JOIN actall.detals detalall
+                    WHERE i_cstr.companystructureId = c.id
+                    AND i_actall.dateFact is NULL
+                ) as allSumm'
+            )
+            ->addSelect(
+                '(
+                    SELECT SUM(case when detal.summa  is not NULL then detal.summa else 0 end)
+                    FROM  ITDoorsControllingBundle:InvoiceAct act
+                    LEFT JOIN act.detals detal
+                    LEFT JOIN act.invoice i_act
+                    LEFT JOIN i_act.invoicecompanystructure i_cstrac
+                    WHERE i_cstrac.companystructureId = c.id
+                    AND i_act.delayDate < :date
+                    AND i_act.dateFact is NULL
+                ) as allSummDebit'
+            )
+            ->addSelect(
+                '(
+                    SELECT SUM(case when ip.summa  is not NULL then ip.summa else 0 end)
+                    FROM  ITDoorsControllingBundle:InvoicePayments ip
+                    LEFT JOIN ip.invoice i_p
+                    LEFT JOIN i_p.invoicecompanystructure i_cstracp
+                    WHERE i_cstracp.companystructureId = c.id
+                    AND i_p.delayDate < :date
+                    AND i_p.dateFact is NULL
+                ) as allPay'
+            )
+            ->where(
+                'c.id in (
+                    SELECT DISTINCT(ic.companystructureId) 
+                    FROM  ITDoorsControllingBundle:InvoiceCompanystructure ic
+                    LEFT JOIN ITDoorsControllingBundle:Invoice i_cs with ic.invoiceId = i_cs.id
+                    AND i_cs.dateFact is NULL
+                )'
+            )
+            ->setParameter(':date', $date)
+            ->orderBy('allSumm');
+
+        if (sizeof($filters)) {
+            foreach ($filters as $key => $value) {
+                if (!$value) {
+                    continue;
+                }
+                switch ($key) {
+                    case 'customer':
+                        $arr = explode(',', $value);
+                        $res->andWhere(
+                            'c.id in (
+                                SELECT DISTINCT(ic_c.companystructureId) 
+                                FROM  ITDoorsControllingBundle:InvoiceCompanystructure ic_c
+                                LEFT JOIN ITDoorsControllingBundle:Invoice i_c with ic_c.invoiceId = i_c.id
+                                WHERE i_c.customerId in (:customerIds)
+                            )'
+                        );
+                        $res->setParameter(':customerIds', $arr);
+                        break;
+                    case 'performer':
+                        $arr = explode(',', $value);
+                        $res->andWhere(
+                            'c.id in (
+                                SELECT DISTINCT(ic.companystructureId) 
+                                FROM  ITDoorsControllingBundle:InvoiceCompanystructure ic_p
+                                LEFT JOIN ITDoorsControllingBundle:Invoice i_p with ic_p.invoiceId = i_p.id
+                                WHERE i_p.performerId in (:performerIds)
+                            )'
+                        );
+                        $res->setParameter(':performerIds', $arr);
+                        break;
+                    case 'daterange':
+                        $dateArr = explode('-', $value);
+                        $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
+                        $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));
+
+                        $res
+                            ->andWhere(
+                                'c.id in (
+                                    SELECT DISTINCT(ic.companystructureId) 
+                                    FROM  ITDoorsControllingBundle:InvoiceCompanystructure ic_d
+                                    LEFT JOIN ITDoorsControllingBundle:Invoice i_d with ic_d.invoiceId = i_d.id
+                                    WHERE i_d.date BETWEEN :datestart AND :datestop
+                                )'
+                            )
+                            ->setParameter(':datestart', $dateStart)
+                            ->setParameter(':datestop', $dateStop);
+                        break;
+                }
+            }
+        }
+        $entity = $res->getQuery()->getResult();
+
+        return $entity;
+    }
 }
