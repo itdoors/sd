@@ -275,6 +275,9 @@
                     var pageviews = [];
                     var visitors = [];
                      {% for date,invoice in item.invoices %}
+                             console.log('{{date}}');
+                             console.log('{{invoice.all}}');
+                             console.log('{{invoice.debt}}');
                             {% if entities.showDays %}
                                 pageviews.push(['{{ date | date('d') }}<br>{{ date | date('M') | trans }}<br>{{ date | date('Y') }}',{{ invoice.all }}]);
                                 visitors.push(['{{ date | date('d') }}<br>{{ date | date('M') | trans }}<br>{{ date | date('Y') }}',{{ invoice.debt}}]);

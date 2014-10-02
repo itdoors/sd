@@ -33,7 +33,6 @@ class CompanystructureRepository extends NestedTreeRepository
     /**
      * Returns results for interval future invoice
      * 
-     * @param integer $page
      * @param array   $filters
      * 
      * @return mixed[]
@@ -126,7 +125,7 @@ class CompanystructureRepository extends NestedTreeRepository
 
                         $res
                             ->andWhere(
-                                 'c.id in (
+                                'c.id in (
                                     SELECT DISTINCT(ic.companystructureId) 
                                     FROM  ITDoorsControllingBundle:InvoiceCompanystructure ic_d
                                     LEFT JOIN ITDoorsControllingBundle:Invoice i_d with ic_d.invoiceId = i_d.id

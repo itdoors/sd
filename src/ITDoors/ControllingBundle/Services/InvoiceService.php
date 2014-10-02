@@ -1006,7 +1006,7 @@ class InvoiceService
             $dateArr = explode('-', $filters['daterange']);
             $start = new \DateTime(str_replace('.', '-', $dateArr[0]));
             $stop = new \DateTime(str_replace('.', '-', $dateArr[1]));
-            if ($start->format('m.Y') === $stop->format('m.Y')){
+            if ($start->format('m.Y') === $stop->format('m.Y')) {
                 $showDays = true;
             }
             $dateStart = $start->format('d.m.Y');
@@ -1024,7 +1024,7 @@ class InvoiceService
 
                 $minDate = $dateStart;
                 $maxDate = $dateStop;
-                 if (!$dateStop) {
+                if (!$dateStop) {
                     $maxDate = date('t.m.Y');
                 }
                 // общая сумма долга
@@ -1075,7 +1075,11 @@ class InvoiceService
                 $debt = 0;
                 $res = array();
                 if (!$showDays) {
-                    for ($i = strtotime($minDate);$i <= strtotime($maxDate);$i = mktime(0, 0, 0, date('m', $i)+1, 1, date('Y', $i))) {
+                    for (
+                            $i = strtotime($minDate);
+                            $i <= strtotime($maxDate);
+                            $i = mktime(0, 0, 0, date('m', $i)+1, 1, date('Y', $i))
+                        ) {
                         $date = date('t.m.Y', $i);
                         if (isset($invoiceAct[$date])) {
                             $all += $invoiceAct[$date]['all'];

@@ -578,65 +578,67 @@ class OrganizationRepository extends EntityRepository
     {
         $date = date('Y-m-d');
         $res = $this->createQueryBuilder('o')
-                ->select('o.id')
-                ->addSelect('o.edrpou')
-                ->addSelect(
-                    "array_to_string(
-                        ARRAY(
-                            SELECT
-                                DISTINCT(cs.name)
-                            FROM ITDoorsControllingBundle:Invoice  i_company
-                            LEFT JOIN ITDoorsControllingBundle:InvoiceCompanystructure ics 
-                                WITH ics.invoiceId = i_company.id
-                            LEFT JOIN ics.companystructure  cs
-                                WHERE o.id = i_company.customerId
-                        ), ','
-                    ) as responsibles"
+            ->select('o.id')
+            ->addSelect('o.edrpou')
+            ->addSelect(
+                "array_to_string(
+                    ARRAY(
+                        SELECT
+                            DISTINCT(cs.name)
+                        FROM ITDoorsControllingBundle:Invoice  i_company
+                        LEFT JOIN ITDoorsControllingBundle:InvoiceCompanystructure ics 
+                            WITH ics.invoiceId = i_company.id
+                        LEFT JOIN ics.companystructure  cs
+                            WHERE o.id = i_company.customerId
+                    ), ','
+                ) as responsibles"
+            )
+            ->addSelect(
+                '(
+                    SELECT SUM(detal_all.summa)
+                    FROM  ITDoorsControllingBundle:Invoice  i_all
+                    LEFT JOIN i_all.acts act_all
+                    LEFT JOIN act_all.detals detal_all
+                    WHERE i_all.customerId = o.id
                 )
-                ->addSelect(
-                    '(
-                        SELECT SUM(detal_all.summa)
-                        FROM  ITDoorsControllingBundle:Invoice  i_all
-                        LEFT JOIN i_all.acts act_all
-                        LEFT JOIN act_all.detals detal_all
-                        WHERE i_all.customerId = o.id
-                    ) as allSumma'
-                )
-                ->addSelect(
-                    '(
-                        SELECT SUM(case when detal_debt.summa  is not NULL then detal_debt.summa else 0 end)
-                        FROM  ITDoorsControllingBundle:Invoice  i_all_debt
-                        LEFT JOIN i_all_debt.acts act_debt
-                        LEFT JOIN act_debt.detals detal_debt
-                        WHERE i_all_debt.customerId = o.id
-                        AND i_all_debt.delayDate < :date
-                    ) as allSummDebit'
-                )
-                ->addSelect(
-                    "(
-                        SELECT SUM(pay.summa)
-                        FROM  ITDoorsControllingBundle:Invoice  i_pay
-                        LEFT JOIN i_pay.payments pay
-                        WHERE i_pay.customerId = o.id
-                    )as paySumma"
-                )
-                ->addSelect('o.name as customerName')
-                ->where(
-                    'o.id in (
-                        SELECT DISTINCT(i.customerId) 
-                        FROM  ITDoorsControllingBundle:Invoice i
-                        WHERE i.dateFact is NULL
-                    )'
-                )
-                ->setParameter(':date', $date)
-                ->orderBy('allSumma', 'ASC')
+                as allSumma'
+            )
+            ->addSelect(
+                '(
+                    SELECT SUM(case when detal_debt.summa  is not NULL then detal_debt.summa else 0 end)
+                    FROM  ITDoorsControllingBundle:Invoice  i_all_debt
+                    LEFT JOIN i_all_debt.acts act_debt
+                    LEFT JOIN act_debt.detals detal_debt
+                    WHERE i_all_debt.customerId = o.id
+                    AND i_all_debt.delayDate < :date
+                ) as allSummDebit'
+            )
+           
+            ->addSelect(
+                "(
+                    SELECT SUM(pay.summa)
+                    FROM  ITDoorsControllingBundle:Invoice  i_pay
+                    LEFT JOIN i_pay.payments pay
+                    WHERE i_pay.customerId = o.id
+                )as paySumma"
+            )
+            ->addSelect('o.name as customerName')
+            ->where(
+                'o.id in (
+                    SELECT DISTINCT(i.customerId) 
+                    FROM  ITDoorsControllingBundle:Invoice i
+                    WHERE i.dateFact is NULL
+                )'
+            )
+            ->setParameter(':date', $date)
+            ->orderBy('o.name')
             ->getQuery()->getResult();
+
         return $res;
     }
     /**
      * Returns results for interval future invoice
      * 
-     * @param integer $page
      * @param array   $filters
      * 
      * @return mixed[]
@@ -759,42 +761,42 @@ class OrganizationRepository extends EntityRepository
                  ) as responsibles"
             )
             ->addSelect(
-                    '(
-                        SELECT SUM(detal_all.summa)
-                        FROM  ITDoorsControllingBundle:Invoice  i_all
-                        LEFT JOIN i_all.acts act_all
-                        LEFT JOIN act_all.detals detal_all
-                        WHERE i_all.customerId = o.id
-                    ) as allSumma'
-                )
-                ->addSelect(
-                    '(
-                        SELECT SUM(case when detal_debt.summa  is not NULL then detal_debt.summa else 0 end)
-                        FROM  ITDoorsControllingBundle:Invoice  i_all_debt
-                        LEFT JOIN i_all_debt.acts act_debt
-                        LEFT JOIN act_debt.detals detal_debt
-                        WHERE i_all_debt.customerId = o.id
-                        AND i_all_debt.delayDate < :date
-                    ) as allSummDebit'
-                )
-                ->addSelect(
-                    "(
-                        SELECT SUM(pay.summa)
-                        FROM  ITDoorsControllingBundle:Invoice  i_pay
-                        LEFT JOIN i_pay.payments pay
-                        WHERE i_pay.customerId = o.id
-                    )as paySumma"
-                )
-                ->addSelect('o.name as customerName')
-                ->where(
-                    'o.id in (
-                        SELECT DISTINCT(i.customerId) 
-                        FROM  ITDoorsControllingBundle:Invoice i
-                        LEFT JOIN i.acts i_a_
-                        WHERE i.id = i_a_.invoiceId
-                        AND i_a_.original = false
-                    )'
-                )
+                '(
+                    SELECT SUM(detal_all.summa)
+                    FROM  ITDoorsControllingBundle:Invoice  i_all
+                    LEFT JOIN i_all.acts act_all
+                    LEFT JOIN act_all.detals detal_all
+                    WHERE i_all.customerId = o.id
+                ) as allSumma'
+            )
+            ->addSelect(
+                '(
+                    SELECT SUM(case when detal_debt.summa  is not NULL then detal_debt.summa else 0 end)
+                    FROM  ITDoorsControllingBundle:Invoice  i_all_debt
+                    LEFT JOIN i_all_debt.acts act_debt
+                    LEFT JOIN act_debt.detals detal_debt
+                    WHERE i_all_debt.customerId = o.id
+                    AND i_all_debt.delayDate < :date
+                ) as allSummDebit'
+            )
+            ->addSelect(
+                "(
+                    SELECT SUM(pay.summa)
+                    FROM  ITDoorsControllingBundle:Invoice  i_pay
+                    LEFT JOIN i_pay.payments pay
+                    WHERE i_pay.customerId = o.id
+                )as paySumma"
+            )
+            ->addSelect('o.name as customerName')
+            ->where(
+                'o.id in (
+                    SELECT DISTINCT(i.customerId) 
+                    FROM  ITDoorsControllingBundle:Invoice i
+                    LEFT JOIN i.acts i_a_
+                    WHERE i.id = i_a_.invoiceId
+                    AND i_a_.original = false
+                )'
+            )
             ->orderBy('allSumma')->getQuery();
 
         return $res;
