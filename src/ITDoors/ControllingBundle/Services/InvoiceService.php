@@ -1239,5 +1239,4 @@ class InvoiceService
 
         return $result;
     }
-
 }

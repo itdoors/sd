@@ -622,7 +622,7 @@ class OrganizationRepository extends EntityRepository
                     AND i_all_debt.delayDate < :date
                 ) as allSummDebit'
             )
-            
+
             ->addSelect('o.name as customerName')
             ->where(
                 'o.id in (
@@ -632,8 +632,8 @@ class OrganizationRepository extends EntityRepository
                 )'
             )
             ->setParameter(':date', $date);
-            
-         if (sizeof($filters)) {
+
+        if (sizeof($filters)) {
 
             foreach ($filters as $key => $value) {
                 if (!$value) {

@@ -58,7 +58,7 @@ class SalesAdminController extends SalesController
                     'organizationId' => $this->getFilterValueByKey('organization_id'),
                     'userId' => $this->getUser()->getId()
                 ));
-            if (!$manager){
+            if (!$manager) {
                 $canAddNew = false;
             }
         }
