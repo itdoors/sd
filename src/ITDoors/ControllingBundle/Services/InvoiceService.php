@@ -1172,9 +1172,16 @@ class InvoiceService
 
         /** @var CompanystructurenRepository $companystructureRepository */
         $companystructureRepository = $em->getRepository('ListsCompanystructureBundle:Companystructure');
-        $companystructures = $companystructureRepository->getForInvoiceAnalitic($filters);
+        $result = $companystructureRepository->getForInvoiceAnalitic($filters);
+        $newResult = array();
+        foreach ($result as $key => $val) {
+             $result[$key]['allSumma'] =  $val['allSumma']-$val['paySumma'];
+             $result[$key]['allSummDebit'] = $val['allSummDebit']-$val['paySumma'];
+             $newResult[$key] = $result[$key]['allSumma'];
+        }
+        array_multisort($newResult, SORT_ASC, $result);
 
-        return $companystructures;
+        return $result;
     }
     /**
      * Returns results for interval future invoice
@@ -1191,7 +1198,14 @@ class InvoiceService
 
         /** @var OrganizationRepository $organization */
         $organization = $em->getRepository('ListsOrganizationBundle:Organization');
-        $result = $organization->getForInvoice();
+        $result = $organization->getForInvoice($filters);
+        $newResult = array();
+        foreach ($result as $key => $val) {
+             $result[$key]['allSumma'] =  $val['allSumma']-$val['paySumma'];
+             $result[$key]['allSummDebit'] = $val['allSummDebit']-$val['paySumma'];
+             $newResult[$key] = $result[$key]['allSumma'];
+        }
+        array_multisort($newResult, SORT_ASC, $result);
 
         return $result;
     }
@@ -1210,8 +1224,20 @@ class InvoiceService
 
         /** @var OrganizationRepository $organization */
         $organization = $em->getRepository('ListsOrganizationBundle:Organization');
-        $result = $organization->getForInvoice();
+        $result = $organization->getForInvoice($filters);
+        foreach ($result as $val) {
+             $val['allSumma'] -= $val['paySumma'];
+             $val['allSummDebit'] -= $val['paySumma'];
+        }
+        $newResult = array();
+        foreach ($result as $key => $val) {
+             $result[$key]['allSumma'] =  $val['allSumma']-$val['paySumma'];
+             $result[$key]['allSummDebit'] = $val['allSummDebit']-$val['paySumma'];
+             $newResult[$key] = $result[$key]['allSumma'];
+        }
+        array_multisort($newResult, SORT_ASC, $result);
 
         return $result;
     }
+
 }

@@ -19,8 +19,8 @@
             var d1 = [];
             var d2 = [];
             {% for  item in entities %}
-                d1.push([{{ item.allSumma-item.paySumma }}, '{{ item.customerName}}']);
-                d2.push([{{ item.allSummDebit-item.paySumma }}, '{{ item.customerName }}']);
+                d1.push([{{ item.allSumma }}, '{{ item.customerName}}']);
+                d2.push([{{ item.allSummDebit }}, '{{ item.customerName }}']);
            {% endfor %}
     function plotWithOptions() {
         var plot = $.plot($("#chart_5"), [
@@ -81,18 +81,18 @@
             }                       
         );
  {% for  key,item in entities %}
-                 o = plot.pointOffset({ x:  {{ item.allSumma-item.paySumma }}  , y: {{key}}});
+                o = plot.pointOffset({ x:  {{ item.allSumma }}  , y: {{key}}});
                 $("#chart_5").append(
-                        '<div style="text-align:right;width:65px;position:absolute;left:' + 
-                        ((o.left - 65) > 230 ? o.left - 65 : 230) + 
-                        'px;top:' + (o.top-8)+ 
-                        'px;color:#666;font-size:smaller">{{ (item.allSumma-item.paySumma )|number_format(2, ',', ' ') }}</div>'); 
-                 o = plot.pointOffset({ x:  {{ ( item.allSumma ? item.allSumma-item.paySumma : 0 ) }}  , y: {{key}}});
+                        '<div style="text-align:right;width:70px;position:absolute;left:' + 
+                        ((o.left - 70) > 310 ? o.left-70  : 210) + 
+                        'px;top:' + (o.top-18)+ 
+                        'px;color:#666;font-size:smaller">{{ (item.allSumma )|number_format(2, ',', ' ') }}</div>'); 
+                 o = plot.pointOffset({ x:  {{ ( item.allSummDebit ? item.allSummDebit : 0 ) }}  , y: {{key}}});
                 $("#chart_5").append(
-                        '<div style="text-align:right;width:65px;position:absolute;left:' + 
-                        ((o.left - 65) > 310 ? o.left - 65 : 310) + 
-                        'px;top:' + (o.top-8)+ 
-                        'px;color:#666;font-size:smaller">{{ ( item.allSummDebit ? item.allSummDebit-item.paySumma : 0 )|number_format(2, ',', ' ')}}</div>'); 
+                        '<div style="text-align:right;width:70px;position:absolute;left:' + 
+                        ((o.left -70)  > 310 ? o.left-70  : 210) + 
+                        'px;top:' + (o.top+8)+ 
+                        'px;color:#000;font-size:smaller">{{ ( item.allSummDebit ? item.allSummDebit : 0 )|number_format(2, ',', ' ')}}</div>'); 
                  o = plot.pointOffset({ x:  0   , y: {{key}}});
           
            {% endfor %}

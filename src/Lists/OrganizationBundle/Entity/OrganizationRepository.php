@@ -572,9 +572,11 @@ class OrganizationRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      * 
+     * @param array   $filters
+     * 
      * @return mixed[]
      */
-    public function getForInvoice ()
+    public function getForInvoice ($filters)
     {
         $date = date('Y-m-d');
         $res = $this->createQueryBuilder('o')
@@ -592,6 +594,13 @@ class OrganizationRepository extends EntityRepository
                             WHERE o.id = i_company.customerId
                     ), ','
                 ) as responsibles"
+            )
+            ->addSelect(
+                "(SELECT SUM(pay.summa)
+                    FROM  ITDoorsControllingBundle:Invoice  i_pay
+                    LEFT JOIN i_pay.payments pay
+                    WHERE i_pay.customerId = o.id
+                )as paySumma"
             )
             ->addSelect(
                 '(
@@ -613,14 +622,7 @@ class OrganizationRepository extends EntityRepository
                     AND i_all_debt.delayDate < :date
                 ) as allSummDebit'
             )
-            ->addSelect(
-                "(
-                    SELECT SUM(pay.summa)
-                    FROM  ITDoorsControllingBundle:Invoice  i_pay
-                    LEFT JOIN i_pay.payments pay
-                    WHERE i_pay.customerId = o.id
-                )as paySumma"
-            )
+            
             ->addSelect('o.name as customerName')
             ->where(
                 'o.id in (
@@ -629,10 +631,53 @@ class OrganizationRepository extends EntityRepository
                     WHERE i.dateFact is NULL
                 )'
             )
-            ->setParameter(':date', $date)
-            ->getQuery()->getResult();
+            ->setParameter(':date', $date);
+            
+         if (sizeof($filters)) {
 
-        return $res;
+            foreach ($filters as $key => $value) {
+                if (!$value) {
+                    continue;
+                }
+                switch ($key) {
+                    case 'customer':
+                        $arr = explode(',', $value);
+                        $res->andWhere("o.id in (:customerIds)");
+                        $res->setParameter(':customerIds', $arr);
+                        break;
+                    case 'performer':
+                        $arr = explode(',', $value);
+                        $res->andWhere(
+                            'o.id in (
+                                SELECT DISTINCT(i_p.customerId) 
+                                FROM  ITDoorsControllingBundle:Invoice i_p
+                                WHERE i_p.performerId in (:performerIds)
+                            )'
+                        );
+                        $res->setParameter(':performerIds', $arr);
+                        break;
+                    case 'daterange':
+                        $dateArr = explode('-', $value);
+                        $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
+                        $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));
+
+                        $res
+                            ->andWhere(
+                                'o.id in (
+                                    SELECT DISTINCT(i_date.customerId) 
+                                    FROM  ITDoorsControllingBundle:Invoice i_date
+                                    WHERE i_date.date BETWEEN :datestart AND :datestop
+                                    AND i_date.dateFact is NULL
+                                )'
+                            )
+                            ->setParameter(':datestart', $dateStart)
+                            ->setParameter(':datestop', $dateStop);
+                        break;
+                }
+            }
+        }
+
+        return $res->getQuery()->getResult();
     }
     /**
      * Returns results for interval future invoice

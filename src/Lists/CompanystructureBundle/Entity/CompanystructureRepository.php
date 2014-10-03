@@ -52,7 +52,7 @@ class CompanystructureRepository extends NestedTreeRepository
                     LEFT JOIN actall.detals detalall
                     WHERE i_cstr.companystructureId = c.id
                     AND i_actall.dateFact is NULL
-                ) as allSumm'
+                ) as allSumma'
             )
             ->addSelect(
                 '(
@@ -75,7 +75,7 @@ class CompanystructureRepository extends NestedTreeRepository
                     WHERE i_cstracp.companystructureId = c.id
                     AND i_p.delayDate < :date
                     AND i_p.dateFact is NULL
-                ) as allPay'
+                ) as paySumma'
             )
             ->where(
                 'c.id in (
@@ -86,7 +86,7 @@ class CompanystructureRepository extends NestedTreeRepository
                 )'
             )
             ->setParameter(':date', $date)
-            ->orderBy('allSumm');
+            ->orderBy('allSumma');
 
         if (sizeof($filters)) {
             foreach ($filters as $key => $value) {
