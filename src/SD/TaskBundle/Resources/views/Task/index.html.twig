@@ -31,13 +31,10 @@
 
 {% block js_page_level_plugins %}
     {{ parent() }}
-    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
-    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
-    <script src="{{ asset('bundles/itdoorsoper/js/tabs_department_info.js')}}" ></script>
+
+
 {% endblock %}
 
 {% block body %}
@@ -46,7 +43,46 @@
             display: none;
         }
     </style>
+    <script src="{{ asset('templates/core/angular/angular.js') }}"></script>
     <script>
+        var taskApp = angular.module('taskApp', []);
+
+        taskApp.controller('TaskCtrl', function ($scope, $http, $interval) {
+            $scope.tasksUserRole = [];
+
+
+            var intervalActivity;
+            $scope.updateTasks = function() {
+                $http({method: 'GET', url: '{{ path('sd_task_get_tasks_api') }}'}).
+                        success(function(data, status, headers, config) {
+                            //$scope.activities = data;
+                            console.log(data)
+
+                            // this callback will be called asynchronously
+                            // when the response is available
+                        }).
+                        error(function(data, status, headers, config) {
+                            // called asynchronously if an error occurs
+                            // or server returns response with an error status.
+                        });
+            }
+            $scope.updateTasks();
+//            intervalActivity = $interval($scope.updateActivity, 2000)
+
+            /*
+             $scope.startActivity = function() {
+
+             intervalActivity = $interval(function() {
+             $scope.updateActivity;
+             }, 1000)
+             }
+             */
+
+
+
+        });
+
+/*
         $(document).ready(function(){
             $('.task-item').die('click')
             $('.task-item').live('click', function(e){
@@ -114,6 +150,7 @@
 
                         //data = JSON.parse(data1);
 
+*/
 /*
                         if (data.success == 1) {
                             //console.log(data.html);
@@ -126,7 +163,8 @@
                             alert('error');
                             //$('#copy_etalon_finished').show('blind', {}, 500);
                         }
-*/
+*//*
+
 
                     }
 
@@ -159,50 +197,12 @@
             var spinner = $('#spinner');
             spinner.addClass('notDisplayed');
         }
+*/
 
     </script>
 
-{#
-    {{ ajax_form_render_btn({
-        'selector' : '#create_task_btn',
-        'formType' : 'taskForm1',
-        'successFunctions' : {
-            'list_files' : 'ITDoorsAjax.updateList'
-        },
-        'serviceDefault' : {
-            'alias' : 'task.form.service',
-            'method' : 'addFormDefaults'
-        },
-        'serviceSave' : {
-            'alias' : 'task.form.service',
-            'method' : 'saveForm'
-        },
-        'target' : '#task_holder'
-        })
-    }}
-#}
-
-    <div id="form_modal_task" class="modal fade" tabindex="-1" role="basic" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">{% trans %}Create task{% endtrans %}</h4>
-                </div>
-                <div class="modal-body">
-                    <div id="taskFormTpl1"></div>
-                </div>
-                <div class="modal-footer">
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-    </div>
-
-
-    <!-- END PAGE HEADER-->
     <!-- BEGIN PAGE CONTENT-->
-    <div class="row">
+    <div class="row" ng-app="taskApp" ng-controller="TaskCtrl">
     <div class="col-md-12">
     <!-- BEGIN TODO SIDEBAR -->
     <div class="todo-sidebar">
@@ -232,20 +232,9 @@
                                     {% set icon = 'fa-crosshairs' %}
                                     {% set label = 'label-warning' %}
                                     {% set checked = '' %}
-                                    {#
-                                        {% elseif taskUserRole == 'done' %}
-                                            {% set icon = 'orange' %}
-                                            fa-eye
-                                    #}
                                 {% endif %}
                                 <li><label><input type="checkbox" class="roleFilter" value="{{ taskRole }}" {{ checked }}/>{{ taskRole|trans }}</label></li>
                             {% endfor %}
-                            {#
-                                            <label><input type="checkbox" id="set_filters_on"/>{% trans %}All{% endtrans %}</label>
-                            #}
-                            {#
-                                            <label><input type="checkbox"/> System</label>
-                            #}
                             <li class="divider">
                             </li>
                             <li>
@@ -359,6 +348,38 @@
         <div class="scroller" style="max-height: 600px; min-height: 500px;" data-always-visible="0" data-rail-visible="0" data-handle-color="#dae3e7">
             <div class="todo-tasklist" data-url="{{ path('sd_task_list') }}" id="task_list">
 
+                <div class="todo-tasklist-item todo-tasklist-item-border-{{ color }} task-item" data-id="{{ taskUserRole.id }}" style="border-width: 3px;">
+                    <img class="todo-userpic pull-left" src="{{ asset( userprofiles_url ~ taskUserRole.user.id ~ '/image29_' ~ taskUserRole.user.photo) }}" width="27px" height="27px">
+                    <div class="todo-tasklist-item-title">
+                        {{ taskUserRole.task.title }} <span style="color: #577688">(ID:{{ taskUserRole.task.id }}) </span>
+                    </div>
+                    <div class="todo-tasklist-item-text">
+                        {{ taskUserRole.task.description|length > 100 ? taskUserRole.task.description|slice(0, 50) ~ '...' : taskUserRole.task.description  }}
+
+                        {#
+                                {% if taskUserRole.role = 'controller' %}
+                                    <br>
+                                    {% trans %}Performer{% endtrans %}:
+                                {% endif %}
+                        #}
+                    </div>
+                    <div class="todo-tasklist-controls pull-left">
+{#
+        <span class="todo-tasklist-date"><i class="fa fa-calendar"></i>
+            {{
+            include('SDTaskBundle:Task:taskEndDateLast.html.twig',
+            {
+            'taskUserRole' : taskUserRole
+            }
+            )
+            }}
+        </span>
+#}
+                        <span class="label label-sm {{ labelStage }}">{{ stage|trans }}</span>
+                    </div>
+                </div>
+
+{#
                 {% for taskUserRole in tasksUserRole %}
                     {{
                     include('SDTaskBundle:Task:taskListItem.html.twig',
@@ -369,6 +390,7 @@
                     }}
 
                 {% endfor %}
+#}
 
             </div>
         </div>
