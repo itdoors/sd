@@ -622,7 +622,7 @@ class OrganizationRepository extends EntityRepository
                     AND i_all_debt.delayDate < :date
                 ) as allSummDebit'
             )
-            
+
             ->addSelect('o.name as customerName')
             ->where(
                 'o.id in (
@@ -632,8 +632,8 @@ class OrganizationRepository extends EntityRepository
                 )'
             )
             ->setParameter(':date', $date);
-            
-         if (sizeof($filters)) {
+
+        if (sizeof($filters)) {
 
             foreach ($filters as $key => $value) {
                 if (!$value) {
@@ -843,5 +843,21 @@ class OrganizationRepository extends EntityRepository
             ->orderBy('allSumma')->getQuery();
 
         return $res;
+    }
+    /**
+     * Searches organization by $q
+     *
+     * @param string $userId
+     *
+     * @return mixed[]
+     */
+    public function isManager ($userId)
+    {
+        $sql = $this->createQueryBuilder('o')
+            ->where('lower(o.name) LIKE :q')
+            ->setParameter(':q', mb_strtolower($q, 'UTF-8') . '%')
+            ->getQuery();
+
+        return $sql->getResult();
     }
 }

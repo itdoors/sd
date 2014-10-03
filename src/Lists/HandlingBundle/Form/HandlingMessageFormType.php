@@ -110,7 +110,6 @@ class HandlingMessageFormType extends AbstractType
 
                 $currentDatetime = new \DateTime($data['createdate']);
                 $nextDatetime = new \DateTime($data['nextcreatedate']);
-
                 if ($currentDatetime > $nextDatetime) {
                     $translator = $container->get('translator');
 
@@ -158,9 +157,7 @@ class HandlingMessageFormType extends AbstractType
                         ->find($handlingId);
 
                     if ($handling) {
-                        if ($handling->getCreatedate() > $currentDatetime ||
-                            $handling->getCreatedatetime() > $currentDatetime
-                        ) {
+                        if ($handling->getCreatedate() > $currentDatetime) {
                             $translator = $container->get('translator');
 
                             $creationDate = $handling->getCreatedate()  ?

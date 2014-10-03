@@ -764,7 +764,6 @@ class SalesController extends BaseController
                         ->setParameter(':ownerIds', $userIds);
                 }
         ));
-
         $form
             ->add('contactnext', 'entity', array (
                 'class' => 'ListsContactBundle:ModelContact',
