@@ -1,0 +1,125 @@
+{% trans_default_domain 'SDActivityBundle' %}
+
+<script src="{{ asset('templates/core/angular/angular.js') }}"></script>
+<script src="{{ asset('templates/core/angulat/angular-route.js') }}"></script>
+{#
+<script src="{{ asset('templates/core/angulat/angular-animate.js') }}"></script>
+#}
+
+
+<script>
+    var activityApp = angular.module('activityApp', []);
+
+    activityApp.controller('ActivityCtrl', function ($scope, $http, $interval) {
+        $scope.activities = [];
+        var intervalActivity;
+        $scope.updateActivity = function() {
+            $http({method: 'GET', url: '{{ path('sd_activity_api') }}'}).
+                    success(function(data, status, headers, config) {
+                            $scope.activities = data;
+                            //console.log(data)
+
+                        //$scope.activities = data;
+                        // this callback will be called asynchronously
+                        // when the response is available
+                    }).
+                    error(function(data, status, headers, config) {
+                        // called asynchronously if an error occurs
+                        // or server returns response with an error status.
+                    });
+        }
+        $scope.updateActivity();
+        intervalActivity = $interval($scope.updateActivity, 2000)
+/*
+        $scope.startActivity = function() {
+
+            intervalActivity = $interval(function() {
+                $scope.updateActivity;
+            }, 1000)
+        }
+*/
+
+
+
+    });
+
+
+</script>
+
+
+        <div class="portlet light bordered" ng-app="activityApp" ng-controller="ActivityCtrl">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-share font-blue-steel"></i>
+                <span class="caption-subject font-blue-steel ">{% trans %}Recent Activities{% endtrans %}</span>
+            </div>
+            <div class="actions">
+                <div class="input-icon right">
+                    <i class="icon-magnifier"></i>
+                    <input type="text" class="form-control input-circle" ng-model="search" placeholder="{% trans %}Search{% endtrans %}...">
+                </div>
+{#
+                <div class="btn-group">
+                    <a class="btn btn-sm btn-default btn-circle" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                        Filter By <i class="fa fa-angle-down"></i>
+                    </a>
+                    <div class="dropdown-menu hold-on-click dropdown-checkboxes pull-right">
+                        <label><input type="checkbox"> Finance</label>
+                        <label><input type="checkbox"> Finance</label>
+                        <label><input type="checkbox"> Finance</label>
+                        <label><input type="checkbox"> Finance</label>
+                        <label><input type="checkbox"> Finance</label>
+                    </div>
+                </div>
+#}
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="scroller" style="height: 300px;" data-always-visible="1" data-rail-visible="0">
+
+            {#
+        <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 300px;">
+        <div class="scroller" style="height: 300px;" data-always-visible="1" data-rail-visible="0" data-initialized="1">
+#}
+        <ul class="feeds">
+            <li ng-repeat="activity in activities | filter:search ">
+                <div class="col1">
+                    <div class="cont" style="margin-right: 120px;">
+                        <div class="cont-col1">
+                            <div class="label label-sm label-info">
+                                <i class="fa fa-info"></i>
+                            </div>
+                        </div>
+                        <div class="cont-col2">
+                            <div class="desc">
+                                <span style="white-space: pre-line">{{ '{{activity.message}}' }}.</span> {#<span class="label label-sm label-warning ">
+                                                            Take action <i class="fa fa-share"></i>
+                                                            </span>#}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col2" style="width: 120px; margin-left: -120px;">
+                    <div class="date">
+                        {{ '{{activity.date}}' }}
+                    </div>
+                </div>
+            </li>
+        </ul>
+        </div>
+{#
+        <div class="slimScrollBar" style="width: 7px; position: absolute; opacity: 0.4; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; z-index: 99; right: 1px; top: 0px; height: 166.358595194085px; display: block; background: rgb(187, 187, 187);"></div><div class="slimScrollRail" style="width: 7px; height: 100%; position: absolute; top: 0px; display: none; border-top-left-radius: 7px; border-top-right-radius: 7px; border-bottom-right-radius: 7px; border-bottom-left-radius: 7px; opacity: 0.2; z-index: 90; right: 1px; background: rgb(234, 234, 234);">
+
+        </div>
+        </div>
+#}
+        <div class="scroller-footer">
+            <div class="btn-arrow-link pull-right">
+{#
+                <a href="#">See All Records</a>
+                <i class="icon-arrow-right"></i>
+#}
+            </div>
+        </div>
+        </div>
+        </div>

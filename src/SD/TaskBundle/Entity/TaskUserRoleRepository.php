@@ -12,6 +12,9 @@ use Doctrine\ORM\EntityRepository;
  */
 class TaskUserRoleRepository extends EntityRepository
 {
+
+    private $notViewingStages = array('closed', 'undone', 'done');
+    private $viewingRoleMatching = array('author', 'matcher');
     /**
      * @param integer $userId
      * @param string  $role
@@ -20,8 +23,8 @@ class TaskUserRoleRepository extends EntityRepository
      */
     public function countTasksByRoleAndUser($userId, $role)
     {
-        $notViewingStages = array('closed', 'undone', 'done');
-        $viewingRoleMatching = array('author', 'matcher');
+        $notViewingStages = $this->notViewingStages;
+        $viewingRoleMatching = $this->viewingRoleMatching;
 
         $sql = $this->createQueryBuilder('tur')
             ->select('COUNT(tur.id)')
@@ -58,8 +61,8 @@ class TaskUserRoleRepository extends EntityRepository
     public function getEntitiesListByFilter($filterArray)
     {
 
-        $notViewingStages = array('closed', 'undone', 'done');
-        $viewingRoleMatching = array('author', 'matcher');
+        $notViewingStages = $this->notViewingStages;
+        $viewingRoleMatching = $this->viewingRoleMatching;
 
         //$notViewingMatched = array('matching');
         $roleMatching = array('matcher');
@@ -70,9 +73,13 @@ class TaskUserRoleRepository extends EntityRepository
             ->leftJoin('t.stage', 's')
             ->leftJoin('tur.user', 'u');
 
-        $sql->where('s.name NOT IN (:stage)')
+        if (isset($filterArray['showClosed']) && $filterArray['showClosed']) {
+            $sql->where('s.name IN (:stage)')
+                ->setParameter(':stage', $notViewingStages);
+        } else {
+            $sql->where('s.name NOT IN (:stage)')
             ->setParameter(':stage', $notViewingStages);
-
+        }
 
         $sql->andWhere('(r.name IN (:viewingRoleMatching) OR s.name != :stageMatching)')
             ->setParameter(':stageMatching', 'matching')
@@ -95,6 +102,39 @@ class TaskUserRoleRepository extends EntityRepository
             $sql->andWhere('u = :user')
                 ->setParameter(':user', $filterArray['user']);
         }
+
+        $sql->orderBy('t.createDate', 'DESC');
+
+        return $sql->getQuery()->getResult();
+    }
+
+    /**
+     * @param \SD\UserBundle\Entity\User $user
+     *
+     * @return array
+     */
+    public function getTasksAvailable($user)
+    {
+
+        $notViewingStages = $this->notViewingStages;
+        $viewingRoleMatching = $this->viewingRoleMatching;
+
+        //$notViewingMatched = array('matching');
+        $roleMatching = array('matcher');
+
+        $sql = $this->createQueryBuilder('tur')
+            ->select('t.id')
+            ->leftJoin('tur.role', 'r')
+            ->leftJoin('tur.task', 't')
+            ->leftJoin('t.stage', 's')
+            ->leftJoin('tur.user', 'u');
+
+        $sql->andWhere('(r.name IN (:viewingRoleMatching) OR s.name != :stageMatching)')
+            ->setParameter(':stageMatching', 'matching')
+            ->setParameter(':viewingRoleMatching', $viewingRoleMatching);
+
+            $sql->andWhere('u = :user')
+                ->setParameter(':user', $user);
 
         $sql->orderBy('t.createDate', 'DESC');
 

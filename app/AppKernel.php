@@ -53,7 +53,8 @@ class AppKernel extends Kernel
             new SD\TaskBundle\SDTaskBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new ITDoors\SipBundle\ITDoorsSipBundle(),
-            new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle()
+            new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
+            new SD\ActivityBundle\SDActivityBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

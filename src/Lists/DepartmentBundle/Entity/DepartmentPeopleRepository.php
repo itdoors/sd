@@ -74,6 +74,7 @@ class DepartmentPeopleRepository extends EntityRepository
             ->addSelect('i.passport')
             ->addSelect('m.name as mpkName')
             ->addSelect('ompk.name as selfOrganizationName')
+            ->addSelect('ompk.shortname as selfOrganizationShortName')
             ->leftJoin('dp.department', 'd')
             ->leftJoin('dp.individual', 'i')
             ->leftJoin('dp.mpks', 'm')

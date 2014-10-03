@@ -161,6 +161,16 @@ class TaskForm extends AbstractType
                 'required' => false,
                 'multiple' => true
             ));
+        $patterns = $container->get("doctrine")->getRepository('SDTaskBundle:TaskPattern')
+            ->findAll();
+        if ($patterns && $stuff) {
+            $builder->add('pattern', 'entity', array(
+                'mapped' => false,
+                'class' => 'SD\TaskBundle\Entity\TaskPattern',
+                'empty_value' => '',
+                'required' => false,
+            ));
+        }
 
         $builder->addEventListener(
             FormEvents::POST_SUBMIT,

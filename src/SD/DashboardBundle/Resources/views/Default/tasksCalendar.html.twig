@@ -1,9 +1,60 @@
+{% trans_default_domain 'SDDashboardBundle' %}
+
 <div class="col-md-6">
+    {{ include('SDActivityBundle:Activity:index.html.twig') }}
+</div>
+<div class="col-md-6">
+    {{ render(controller('SDTaskBundle:DashboardTask:index')) }}
+</div>
+
+
+<div class="col-md-12">
+
+    <div class="table-toolbar">
+        <div class="btn-group">
+            <a id="managers_list_new"
+               class="btn green ajax-form"
+               data-toggle="modal"
+               href="#create_task"
+               data-target_holder="taskFormTpl"
+               data-form_name="taskForm"
+               data-post_function="updateList"
+               data-post_target_id="calendarBlock"
+                    >
+                {% trans %}Create event{% endtrans %} <i class="fa fa-plus"></i>
+            </a>
+        </div>
+        <div id="create_task" class="modal fade" role="basic" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title">{% trans %}Create event{% endtrans %}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="taskFormTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}"></div>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 col-sm-12">
+        <div class="sd-event-green sd-event-text-div">
+            {% trans from 'SDCalendarBundle' %}Future event{% endtrans %}
+        </div>
+        <div class="sd-event-yellow sd-event-text-div">
+            {% trans from 'SDCalendarBundle' %}Event ok{% endtrans %}
+        </div>
+        <div class="sd-event-red sd-event-text-div">
+            {% trans from 'SDCalendarBundle' %}Event overdue{% endtrans %}
+        </div>
+    </div>
+    <div class="clear"></div>
+
     {{ render(controller('SDCalendarBundle:Private:Index')) }}
     {#{ include('SDCalendarBundle::base.html.twig', {
         url: path('sd_calendar_private_handling_message')
     }) }#}
-</div>
-<div class="col-md-6">
-    {{ render(controller('SDTaskBundle:DashboardTask:index')) }}
 </div>

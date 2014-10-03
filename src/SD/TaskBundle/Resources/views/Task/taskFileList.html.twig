@@ -47,10 +47,10 @@
                             <span class="todo-comment-username">{{ file.user }}</span> &nbsp; <span class="todo-comment-date">{{ file.createDate|date('H:i d-m-Y') }}</span>
                         </p>
                         <p class="todo-text-color">
-                            <div class="col-md-11">
+                            <div class="col-md-10">
                                 <a href="/uploads/task/{{ file.filepath }}" target="_blank">{{ file.name }}</a>
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-md-2">
                                 {% if access.canDeleteFile and file.user.id == app.user.id %}
                                     <a href="#">
                                         <i class="fa fa-trash-o deleteFile" style="margin-left: 20px;" data-id="{{ file.id }}"></i>

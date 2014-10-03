@@ -34,9 +34,32 @@ class HistoryUpdate
             $serviceHistory = $this->container->get('it_doors_history.service');
             $changeset = $uow->getEntityChangeSet($entity);
             $keys = array_keys($changeset);
+            $metaData = $em->getClassMetadata(get_class($entity));
             foreach ($keys as $key) {
                 $oldValue = $args->getOldValue($key);
                 $value = $args->getNewValue($key);
+
+                $fieldName = $key;
+
+                foreach ($metaData->getAssociationNames() as $originalFieldName) {
+                    if (!$metaData->isAssociationWithSingleJoinColumn($originalFieldName)) {
+                        continue;
+                    }
+                    $originalColumnName = $metaData->getSingleAssociationJoinColumnName($originalFieldName);
+
+                    if ($originalColumnName == $fieldName) {
+                        $repositoryClass = $metaData->getAssociationTargetClass($originalFieldName);
+                        if ($value) {
+                            $value = (string) $em->getRepository($repositoryClass)->find($value);
+                        }
+                        if ($oldValue) {
+                            $oldValue = (string) $em->getRepository($repositoryClass)->find($oldValue);
+                        }
+                        break;
+                    }
+                    //$metaData->getAssociationTargetClass($originalFieldName);
+                }
+
                 if (gettype($oldValue) == 'object') {
                     if (get_class($oldValue) == 'DateTime') {
                         $oldValue = $oldValue->format('Y-m-d H:i:s');
