@@ -50,6 +50,18 @@ class SalesAdminController extends SalesController
         );
 
         $canAddNew = $this->getFilterValueByKey('organization_id') ? true : false;
+        if ($canAddNew) {
+            /** @var \Lists\OrganizationBundle\Entity\OrganizationUserRepository $manager */
+            $manager = $this->getDoctrine()
+                ->getRepository('ListsOrganizationBundle:OrganizationUser')
+                ->findOneBy(array(
+                    'organizationId' => $this->getFilterValueByKey('organization_id'),
+                    'userId' => $this->getUser()->getId()
+                ));
+            if (!$manager){
+                $canAddNew = false;
+            }
+        }
 
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':index.html.twig', array(
                 'pagination' => $pagination,

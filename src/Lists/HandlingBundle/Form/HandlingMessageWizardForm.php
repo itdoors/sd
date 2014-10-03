@@ -128,8 +128,10 @@ class HandlingMessageWizardForm extends AbstractType
                 $form = $event->getForm();
 
                 $currentDatetime = new \DateTime($data['createdate']);
+                $session = $this->container->get('session');
+                $handling = $session->get('sales.wizard.handling');
 
-                $handlingCreatedate = new \DateTime('yesterday');
+                $handlingCreatedate = $handling->getCreatedate();
 
                 if ($handlingCreatedate > $currentDatetime) {
                     $translator = $container->get('translator');
