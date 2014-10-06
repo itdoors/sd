@@ -66,7 +66,7 @@ class DogovorService
             if (is_file($directory . $dogovor->getFilepath())) {
                 $countOk++;
                 $date = date("d.m.Y H:i:s", filemtime($directory . $dogovor->getFilepath()));
-                $dogovor->setCreateTime(new \DateTime($date));
+                $dogovor->setCreateDateTime(new \DateTime($date));
                 $em->persist($dogovor);
             } else {
                 $countErr++;
