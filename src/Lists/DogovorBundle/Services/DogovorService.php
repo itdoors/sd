@@ -48,7 +48,9 @@ class DogovorService
 
         $countErr = 0;
         $countOk = 0;
+        $i = 0;
         foreach ($dogovorR as $dogovor) {
+            echo $i++."\n";
             if (is_file($directory . $dogovor->getFilepath())) {
                 $countOk++;
                 $date = date("d.m.Y H:i:s.", filemtime($directory . $dogovor->getFilepath()));
@@ -60,6 +62,7 @@ class DogovorService
             }
         }
         foreach ($dopDogovorR as $dogovor) {
+            echo $i++."\n";
             if (is_file($directory . $dogovor->getFilepath())) {
                 $countOk++;
                 $date = date("d.m.Y H:i:s.", filemtime($directory . $dogovor->getFilepath()));
