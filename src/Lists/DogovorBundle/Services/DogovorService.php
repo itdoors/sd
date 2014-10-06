@@ -56,11 +56,11 @@ class DogovorService
                 $date = date("d.m.Y H:i:s.", filemtime($directory . $dogovor->getFilepath()));
                 $dogovor->setCreateDateTime(new \DateTime($date));
                 $em->persist($dogovor);
-                $em->flush();
             } else {
                 $countErr++;
             }
         }
+        $em->flush();
         foreach ($dopDogovorR as $dogovor) {
             echo $i++."\n";
             if (is_file($directory . $dogovor->getFilepath())) {
@@ -68,11 +68,11 @@ class DogovorService
                 $date = date("d.m.Y H:i:s.", filemtime($directory . $dogovor->getFilepath()));
                 $dogovor->setCreateTime(new \DateTime($date));
                 $em->persist($dogovor);
-                $em->flush();
             } else {
                 $countErr++;
             }
         }
+        $em->flush();
 
         return 'ok: ' . $countOk . "\t\n" .' errors: ' . $countErr;
     }
