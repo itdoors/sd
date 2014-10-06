@@ -21,7 +21,7 @@
             url: '{{ path('sd_common_ajax_invoice_save') }}',
             source: [
                 {value: 1, text: '{% trans %}In coutr{% endtrans %}'},
-                {value: 0, text: '{% trans %}Not in coutr{% endtrans %}'}
+                {value: 0, text: 'Empty'}
             ],
             select2: {
                 placeholder: '{% trans %}Select Organization{% endtrans %}',
@@ -31,6 +31,18 @@
         });
     });
 </script>
+<div class="portlet">
+    <div class="">
+        <div class="">
+            <div class="btn-group">
+                <a class="btn default green-stripe" href="{{ path('it_doors_controlling_invoice_export_exel_pay')}}">
+                    <i class="fa fa-share"></i>
+                    <span class="hidden-480">{% trans %}Export to Excel{% endtrans %}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="navigation">
     {{ ajax_paginator_render(
             entities, namespace, {
@@ -162,7 +174,7 @@
                             {% if entity.court ==  true %}
                                 {% trans %}In coutr{% endtrans %}
                             {% else%}
-                                {% trans %}Not in coutr{% endtrans %}
+                                Empty
                             {% endif%}
                         </a>
                     </td>

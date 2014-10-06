@@ -575,23 +575,115 @@ class InvoiceService
         /** @var InvoicecronRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
 
-        $summa = $invoice->getSumma(date('Y-m-d'));
+        $summa = $invoice->getSumma($date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') - 1, date('Y'))));
 
         $translator = $this->container->get('translator');
         $tabs = array ();
+        $tabs['yesterday'] = array (
+            'blockupdate' => 'ajax-tab-holder-2',
+            'tab' => 'yesterday',
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
+            'text' => $translator->trans('Yesterday') . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
+        );
+        $summa = $invoice->getSumma(date('Y-m-d'));
         $tabs['today'] = array (
             'blockupdate' => 'ajax-tab-holder-2',
             'tab' => 'today',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
-            'text' => $translator->trans('Today') . ' ' . number_format($summa[0]['summa'], 2, ',', ' ')
+            'text' => $translator->trans('Today') . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
         );
-        $summa = $invoice->getSumma(date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + 1, date('Y'))));
-        $tabs['tomorrow'] = array (
-            'blockupdate' => 'ajax-tab-holder-2',
-            'tab' => 'tomorrow',
-            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
-            'text' => $translator->trans('Tomorrow') . ' ' . number_format($summa[0]['summa'], 2, ',', ' ')
-        );
+        $days = date("w") < 5 ? (int) date("w") : 0;
+        $toMonday = 0;
+        if ($days !== 0) {
+            $summa = $invoice->getSummaTo(
+                date('Y-m-d'),
+                date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + 5 - $days, date('Y')))
+            );
+            $tabs['toFriday'] = array (
+                'blockupdate' => 'ajax-tab-holder-2',
+                'tab' => 'toFriday',
+                'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
+                'text' => $translator->trans('Until Friday') . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
+            );
+        } else {
+            if (date("w") == 0) {
+                $toMonday = 0;
+                $days = 1;
+            } elseif (date("w") == 6) {
+                $days = 2;
+                $toMonday = 7;
+            } elseif (date("w") == 5) {
+                $days = 3;
+                $toMonday = 7;
+            }
+            $summa = $invoice->getSummaTo(
+                date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y'))),
+                date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + 5 + $days, date('Y')))
+            );
+            $tabs['nextWeek'] = array (
+                'blockupdate' => 'ajax-tab-holder-2',
+                'tab' => 'nextWeek',
+                'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
+                'text' => $translator->trans('Next week') . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
+            );
+        }
+        $days =  1 - date("w") + $toMonday;
+        if ($days > 0) {
+            $summa = $invoice->getSumma(date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y'))));
+            $tabs['monday'] = array (
+                'blockupdate' => 'ajax-tab-holder-2',
+                'tab' => 'monday',
+                'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
+                'text' => $translator->trans('Monday') . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
+            );
+        }
+        $days = 2 - date("w") + $toMonday;
+        if ($days > 0) {
+            $summa = $invoice->getSumma(date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y'))));
+            $tabs['tuesday'] = array (
+                'blockupdate' => 'ajax-tab-holder-2',
+                'tab' => 'tuesday',
+                'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
+                'text' => $translator->trans('Tuesday') . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
+            );
+        }
+        $days = 3 - date("w")+$toMonday;
+        if ($days !== 0) {
+            $summa = $invoice->getSumma(date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y'))));
+            $tabs['wednesday'] = array (
+                'blockupdate' => 'ajax-tab-holder-2',
+                'tab' => 'wednesday',
+                'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
+                'text' => $translator->trans('Wednesday') . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
+            );
+        }
+        $days = 4 - date("w")+$toMonday;
+        if ($days !== 0) {
+            $summa = $invoice->getSumma(date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y'))));
+            $tabs['thursday'] = array (
+                'blockupdate' => 'ajax-tab-holder-2',
+                'tab' => 'thursday',
+                'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
+                'text' => $translator->trans('Thursday') . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
+            );
+        }
+        $days = 5 - date("w")+$toMonday;
+        if ($days !== 0) {
+            $summa = $invoice->getSumma(date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y'))));
+            $tabs['friday'] = array (
+                'blockupdate' => 'ajax-tab-holder-2',
+                'tab' => 'friday',
+                'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
+                'text' => $translator->trans('Friday') . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
+            );
+        }
+//        $summa = $invoice->getSumma(date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + 1, date('Y'))));
+//        $tabs['tomorrow'] = array (
+//            'blockupdate' => 'ajax-tab-holder-2',
+//            'tab' => 'tomorrow',
+//            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
+//            'text' => $translator->trans('Tomorrow') . ' ' . number_format($summa[0]['summa'], 2, ',', ' ')
+//        );
 
         return $tabs;
     }
@@ -606,11 +698,17 @@ class InvoiceService
     {
         $translator = $this->container->get('translator');
         $tabs = array ();
-         $tabs['individual'] = array (
+        $tabs['individual'] = array (
             'blockupdate' => 'ajax-tab-holder',
             'tab' => 'individual',
             'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_analytic_list'),
-            'text' => $translator->trans('Individual')
+            'text' => $translator->trans('Statistics dept')
+        );
+        $tabs['analiz'] = array (
+            'blockupdate' => 'ajax-tab-holder',
+            'tab' => 'analiz',
+            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_analytic_list'),
+            'text' => $translator->trans('Analysis of payments')
         );
         $tabs['general'] = array (
             'blockupdate' => 'ajax-tab-holder',
@@ -914,11 +1012,11 @@ class InvoiceService
                 ->getSum($invoice->getId());
             $paySum = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')
                 ->getSum($invoice->getId());
-            if ($invoice->getDateFact() == null && $paySum >= $debtSum) {
+            if ($paySum >= $debtSum) {
                 $date = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')
                 ->dateLastPay($invoice->getId());
-                if (key_exists('date', $date)) {
-                    $date = new \DateTime($date['date']);
+                if (key_exists('date', $date[0])) {
+                    $date = $date[0]['date'];
                 } else {
                     $date = $invoice->getDate();
                 }
@@ -992,7 +1090,7 @@ class InvoiceService
         /** @var InvoiceRepository $invoiceRepository */
         $invoiceRepository = $em->getRepository('ITDoorsControllingBundle:Invoice');
         /** @var InvoicePaymentsRepository $invoicePayRepository */
-        $invoicePayRepository = $em->getRepository('ITDoorsControllingBundle:InvoicePayments');
+//        $invoicePayRepository = $em->getRepository('ITDoorsControllingBundle:InvoicePayments');
 
         $organizationsEntity = $organizationRepository->getForInvoiceAnalitic($filters);
         $paginator = $this->container->get($this->paginator);
@@ -1020,7 +1118,7 @@ class InvoiceService
                 $invoices[$organization['id']]['name'] = $organization['customerName'];
                 $invoices[$organization['id']]['invoices'] = array();
                 $invoiceActs = $invoiceRepository->getForCustomerDebit($organization['id'], $filters);
-                $invoicePays = $invoicePayRepository->getForCustomer($organization['id'], $filters);
+//                $invoicePays = $invoicePayRepository->getForCustomer($organization['id'], $filters);
 
                 $minDate = $dateStart;
                 $maxDate = $dateStop;
@@ -1054,11 +1152,203 @@ class InvoiceService
                         $invoiceAct[$date]['all'] = 0;
                         $invoiceAct[$date]['debt'] = 0;
                     }
-                    $invoiceAct[$date]['all'] += $act['allSumm']-$act['payInTime'];
-                    $invoiceAct[$date]['debt'] += $act['allSummDebit']-$act['payInTime'];
+                    $invoiceAct[$date]['all'] += $act['allSumm']-$act['payAll'];
+                    $invoiceAct[$date]['debt'] += $act['allSummDebit']-$act['payAll'];
                 }
 
-                // простроченая оплата
+//                // простроченая оплата
+//                $invoicePay = array();
+//                foreach ($invoicePays as $pay) {
+//                    if (!$showDays) {
+//                        $date = $pay['date']->format('t.m.Y');
+//                    } else {
+//                        $date = $pay['date']->format('d.m.Y');
+//                    }
+//                    if ((empty($minDate) || strtotime($date) < strtotime($minDate)) && !$dateStart) {
+//                        $minDate = $date;
+//                    }
+//                    if ((empty($maxDate) || strtotime($date) > strtotime($maxDate)) && !$dateStop) {
+//                        $maxDate = $date;
+//                    }
+//                    if ((empty($minDateInvoice) || strtotime($date) < strtotime($minDateInvoice))) {
+//                        $minDateInvoice = $date;
+//                    }
+//                    if ((empty($maxDateInvoice) || strtotime($date) > strtotime($maxDateInvoice))) {
+//                        $maxDateInvoice = $date;
+//                    }
+//                    if (!isset($invoicePay[$date])) {
+//                        $invoicePay[$date] = array();
+//                        $invoicePay[$date]['pay'] = 0;
+//                    }
+//                    $invoicePay[$date]['pay'] += $pay['summaPay'];
+//                }
+                $all = 0;
+                $debt = 0;
+                $res = array();
+                if (!$showDays) {
+                    for ($i = strtotime($minDateInvoice);
+                        $i <= strtotime($maxDateInvoice);
+                        $i = mktime(0, 0, 0, date('m', $i)+1, 1, date('Y', $i))) {
+                        $date = date('t.m.Y', $i);
+                        if (isset($invoiceAct[$date])) {
+                            $all += $invoiceAct[$date]['all'];
+                            $debt += $invoiceAct[$date]['debt'];
+                        }
+                        if (!isset($invoiceAct[$date])) {
+                            $invoiceAct[$date] = array();
+                            $invoiceAct[$date]['all'] = $all;
+                            $invoiceAct[$date]['debt'] = $debt;
+                        }
+//                        if (isset($invoicePay[$date])) {
+//                            $all -= $invoicePay[$date]['pay'];
+//                            $debt -= $invoicePay[$date]['pay'];
+//                        }
+                        $invoiceAct[$date]['all'] = $all;
+                        $invoiceAct[$date]['debt'] = $debt;
+                        $res[$date] = array(
+                            'all' => $all,
+                            'debt' => $debt
+                        );
+                    }
+                } else {
+                    for ($i = strtotime($minDateInvoice);
+                        $i <= strtotime($maxDateInvoice);
+                        $i = mktime(0, 0, 0, date('m', $i), date('d', $i)+1, date('Y', $i))) {
+                        $date = date('d.m.Y', $i);
+                        if (isset($invoiceAct[$date])) {
+                            $all += $invoiceAct[$date]['all'];
+                            $debt += $invoiceAct[$date]['debt'];
+                        }
+                        if (!isset($invoiceAct[$date])) {
+                            $invoiceAct[$date] = array();
+                            $invoiceAct[$date]['all'] = $all;
+                            $invoiceAct[$date]['debt'] = $debt;
+                        }
+//                        if (isset($invoicePay[$date])) {
+//                            $all -= $invoicePay[$date]['pay'];
+//                            $debt -= $invoicePay[$date]['pay'];
+//                        }
+                        $invoiceAct[$date]['all'] = $all;
+                        $invoiceAct[$date]['debt'] = $debt;
+                        $res[$date] = array(
+                            'all' => $all,
+                            'debt' => $debt
+                        );
+                    }
+                }
+                foreach ($res as $data => $val) {
+                    if (
+                            ($dateStart && strtotime($dateStart) > strtotime($data))
+                            or
+                            ($dateStop && strtotime($dateStop) < strtotime($data))
+                        ) {
+                        unset($res[$data]);
+                    }
+                }
+                $invoices[$organization['id']]['min'] = $minDate;
+                $invoices[$organization['id']]['max'] = $maxDate;
+                $invoices[$organization['id']]['invoices'] = $res;
+            }
+        }
+        $result['entities'] = $invoices;
+        $result['showDays'] = $showDays;
+
+        return $result;
+    }
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @param integer $page
+     * @param array   $filters
+     * 
+     * @return tabs[]
+     */
+    public function getAnaliz ($page, $filters = null)
+    {
+        /** @var EntityManager $em */
+        $em = $this->container->get('doctrine')->getManager();
+
+        /** @var OrganizationRepository $organizationRepository */
+        $organizationRepository = $em->getRepository('ListsOrganizationBundle:Organization');
+        /** @var InvoiceRepository $invoiceRepository */
+        $invoiceRepository = $em->getRepository('ITDoorsControllingBundle:Invoice');
+        /** @var InvoicePaymentsRepository $invoicePayRepository */
+        $invoicePayRepository = $em->getRepository('ITDoorsControllingBundle:InvoicePayments');
+
+        $organizationsEntity = $organizationRepository->getForInvoiceAll($filters);
+        $paginator = $this->container->get($this->paginator);
+        $organizations = $paginator->paginate($organizationsEntity, $page, 10);
+        $result = array('paginator' => $organizations);
+
+        $showDays = false;
+        $dateStart = null;
+        $dateStop = null;
+        if (isset($filters['daterange']) && !empty($filters['daterange'])) {
+            $dateArr = explode('-', $filters['daterange']);
+            $start = new \DateTime(str_replace('.', '-', $dateArr[0]));
+            $stop = new \DateTime(str_replace('.', '-', $dateArr[1]));
+            if ($start->format('m.Y') === $stop->format('m.Y')) {
+                $showDays = true;
+            }
+            $dateStart = $start->format('d.m.Y');
+            $dateStop = $stop->format('d.m.Y');
+        }
+
+        $invoices = array();
+        if ($organizations) {
+            foreach ($organizations as $organization) {
+                $invoices[$organization['id']] = array ();
+                $invoices[$organization['id']]['name'] = $organization['customerName'];
+                $invoices[$organization['id']]['invoices'] = array();
+                $invoiceActs = $invoiceRepository->getForAnaliticAll($organization['id'], $filters);
+                $invoicePays = $invoicePayRepository->getForAnaliticAll($organization['id'], $filters);
+
+                $minDate = $dateStart;
+                $maxDate = $dateStop;
+                if (!$dateStop) {
+                    $maxDate = date('t.m.Y');
+                }
+                $minDateInvoice = $dateStart;
+                $maxDateInvoice = date('t.m.Y');
+                // общая сумма долга
+                $invoiceAct = array();
+                $debtAll = array();
+                foreach ($invoiceActs as $act) {
+                    if (!$showDays) {
+                        $date = $act['date']->format('t.m.Y');
+                        if (!isset($debtAll[$act['delayDate']->format('t.m.Y')])) {
+                            $debtAll[$act['delayDate']->format('t.m.Y')] = 0;
+                        }
+                        $debtAll[$act['delayDate']->format('t.m.Y')] += $act['allSumm'];
+                    } else {
+                        $date = $act['date']->format('d.m.Y');
+                        if (!isset($debtAll[$act['delayDate']->format('d.m.Y')])) {
+                            $debtAll[$act['delayDate']->format('d.m.Y')] = 0;
+                        }
+                        $debtAll[$act['delayDate']->format('d.m.Y')] += $act['allSumm'];
+                    }
+                    if ((empty($minDate) || strtotime($date) < strtotime($minDate)) && !$dateStart) {
+                        $minDate = $date;
+                    }
+                    if ((empty($maxDate) || strtotime($date) > strtotime($maxDate)) && !$dateStop) {
+                        $maxDate = $date;
+                    }
+                    if ((empty($minDateInvoice) || strtotime($date) < strtotime($minDateInvoice))) {
+                        $minDateInvoice = $date;
+                    }
+                    if ((empty($maxDateInvoice) || strtotime($date) > strtotime($maxDateInvoice))) {
+                        $maxDateInvoice = $date;
+                    }
+                    if (!isset($invoiceAct[$date])) {
+                        $invoiceAct[$date] = array();
+                        $invoiceAct[$date]['all'] = 0;
+                        $invoiceAct[$date]['debt'] = 0;
+                    }
+                    $invoiceAct[$date]['all'] += $act['allSumm'];
+                    $invoiceAct[$date]['debt'] += 0;
+                }
+
+                // оплата
                 $invoicePay = array();
                 foreach ($invoicePays as $pay) {
                     if (!$showDays) {
@@ -1081,8 +1371,13 @@ class InvoiceService
                     if (!isset($invoicePay[$date])) {
                         $invoicePay[$date] = array();
                         $invoicePay[$date]['pay'] = 0;
+                        $invoicePay[$date]['payDebt'] = 0;
                     }
-                    $invoicePay[$date]['pay'] += $pay['summaPay'];
+//                    if ($pay['date']->format('U') > $pay['delayDate']->format('U')) {
+//                        $invoicePay[$date]['payDebt'] += $pay['summaPay'];
+//                    } else {
+                        $invoicePay[$date]['pay'] += $pay['summaPay'];
+//                    }
                 }
                 $all = 0;
                 $debt = 0;
@@ -1096,14 +1391,17 @@ class InvoiceService
                             $all += $invoiceAct[$date]['all'];
                             $debt += $invoiceAct[$date]['debt'];
                         }
-                        if (!isset($invoiceAct[$date])) {
-                            $invoiceAct[$date] = array();
-                            $invoiceAct[$date]['all'] = $all;
-                            $invoiceAct[$date]['debt'] = $debt;
+                        if (isset($debtAll[$date])) {
+                            $debt += $debtAll[$date];
                         }
                         if (isset($invoicePay[$date])) {
                             $all -= $invoicePay[$date]['pay'];
                             $debt -= $invoicePay[$date]['pay'];
+                        }
+                        if (!isset($invoiceAct[$date])) {
+                            $invoiceAct[$date] = array();
+                            $invoiceAct[$date]['all'] = $all;
+                            $invoiceAct[$date]['debt'] = $debt;
                         }
                         $invoiceAct[$date]['all'] = $all;
                         $invoiceAct[$date]['debt'] = $debt;
@@ -1121,14 +1419,17 @@ class InvoiceService
                             $all += $invoiceAct[$date]['all'];
                             $debt += $invoiceAct[$date]['debt'];
                         }
-                        if (!isset($invoiceAct[$date])) {
-                            $invoiceAct[$date] = array();
-                            $invoiceAct[$date]['all'] = $all;
-                            $invoiceAct[$date]['debt'] = $debt;
+                        if (isset($debtAll[$date])) {
+                            $debt += $debtAll[$date];
                         }
                         if (isset($invoicePay[$date])) {
                             $all -= $invoicePay[$date]['pay'];
                             $debt -= $invoicePay[$date]['pay'];
+                        }
+                        if (!isset($invoiceAct[$date])) {
+                            $invoiceAct[$date] = array();
+                            $invoiceAct[$date]['all'] = $all;
+                            $invoiceAct[$date]['debt'] = $debt;
                         }
                         $invoiceAct[$date]['all'] = $all;
                         $invoiceAct[$date]['debt'] = $debt;

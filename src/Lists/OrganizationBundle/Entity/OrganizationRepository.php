@@ -659,7 +659,7 @@ class OrganizationRepository extends EntityRepository
                     case 'daterange':
                         $dateArr = explode('-', $value);
                         $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
-                        $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));
+                        $dateStop = new \DateTime('23:59:59 '.str_replace('.', '-', $dateArr[1]));
 
                         $res
                             ->andWhere(
@@ -745,30 +745,127 @@ class OrganizationRepository extends EntityRepository
                         break;
                     case 'daterange':
                         $dateArr = explode('-', $value);
-                        $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
-                        $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));
+//                        $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
+                        $dateStop = new \DateTime('23:59:59 '.str_replace('.', '-', $dateArr[1]));
 
                         $res
                             ->andWhere(
                                 'o.id in (
                                     SELECT DISTINCT(i_date.customerId) 
                                     FROM  ITDoorsControllingBundle:Invoice i_date
-                                    WHERE i_date.date BETWEEN :datestart AND :datestop
+                                    WHERE i_date.date <= :datestop
                                     AND i_date.dateFact is NULL
                                 )'
                             )
-                            ->setParameter(':datestart', $dateStart)
+//                            ->setParameter(':datestart', $dateStart)
                             ->setParameter(':datestop', $dateStop);
                         $resCount
                             ->andWhere(
                                 'o.id in (
                                 SELECT DISTINCT(i_date.customerId) 
                                 FROM  ITDoorsControllingBundle:Invoice i_date
-                                WHERE i_date.date BETWEEN :datestart AND :datestop
+                                WHERE i_date.date <= :datestop
                                 AND i_date.dateFact is NULL
                                 )'
                             )
-                            ->setParameter(':datestart', $dateStart)
+//                            ->setParameter(':datestart', $dateStart)
+                            ->setParameter(':datestop', $dateStop);
+                        break;
+                }
+            }
+        }
+        $count = $resCount->getQuery()->getSingleScalarResult();
+        $entity = $res->getQuery();
+        $entity->setHint('knp_paginator' . '.count', $count);
+
+        return $entity;
+    }
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @param array   $filters
+     * 
+     * @return mixed[]
+     */
+    public function getForInvoiceAll ($filters)
+    {
+        $res = $this->createQueryBuilder('o')
+            ->select('o.id')
+            ->addSelect('o.name as customerName')
+            ->where(
+                'o.id in (
+                    SELECT DISTINCT(i.customerId) 
+                    FROM  ITDoorsControllingBundle:Invoice i
+                )'
+            )
+            ->orderBy('o.name');
+
+        $resCount = $this->createQueryBuilder('o')
+            ->select('COUNT(o.id)')
+            ->where(
+                'o.id in (
+                    SELECT DISTINCT(i.customerId) 
+                    FROM  ITDoorsControllingBundle:Invoice i
+                )'
+            );
+
+        if (sizeof($filters)) {
+
+            foreach ($filters as $key => $value) {
+                if (!$value) {
+                    continue;
+                }
+                switch ($key) {
+                    case 'customer':
+                        $arr = explode(',', $value);
+                        $res->andWhere("o.id in (:customerIds)");
+                        $res->setParameter(':customerIds', $arr);
+                        $resCount->andWhere("o.id in (:customerIds)");
+                        $resCount->setParameter(':customerIds', $arr);
+                        break;
+                    case 'performer':
+                        $arr = explode(',', $value);
+                        $res->andWhere(
+                            'o.id in (
+                                SELECT DISTINCT(i_p.customerId) 
+                                FROM  ITDoorsControllingBundle:Invoice i_p
+                                WHERE i_p.performerId in (:performerIds)
+                            )'
+                        );
+                        $res->setParameter(':performerIds', $arr);
+                        $resCount->andWhere(
+                            'o.id in (
+                                SELECT DISTINCT(i_p.customerId) 
+                                FROM  ITDoorsControllingBundle:Invoice i_p
+                                WHERE i_p.performerId in (:performerIds)
+                            )'
+                        );
+                        $resCount->setParameter(':performerIds', $arr);
+                        break;
+                    case 'daterange':
+                        $dateArr = explode('-', $value);
+//                        $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
+                        $dateStop = new \DateTime('23:59:59 '.str_replace('.', '-', $dateArr[1]));
+
+                        $res
+                            ->andWhere(
+                                'o.id in (
+                                    SELECT DISTINCT(i_date.customerId) 
+                                    FROM  ITDoorsControllingBundle:Invoice i_date
+                                    WHERE i_date.date <= :datestop
+                                )'
+                            )
+//                            ->setParameter(':datestart', $dateStart)
+                            ->setParameter(':datestop', $dateStop);
+                        $resCount
+                            ->andWhere(
+                                'o.id in (
+                                SELECT DISTINCT(i_date.customerId) 
+                                FROM  ITDoorsControllingBundle:Invoice i_date
+                                WHERE i_date.date <= :datestop
+                                )'
+                            )
+//                            ->setParameter(':datestart', $dateStart)
                             ->setParameter(':datestop', $dateStop);
                         break;
                 }

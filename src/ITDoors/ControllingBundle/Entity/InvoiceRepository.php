@@ -62,6 +62,7 @@ class InvoiceRepository extends EntityRepository
             ->select('i.sum')
             ->addSelect('i.court')
             ->addSelect('i.id')
+            ->addSelect('i.status')
             ->addSelect('i.invoiceId')
             ->addSelect('i.date')
             ->addSelect('i.bank')
@@ -670,6 +671,29 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
+     * @param date $dateStart
+     * @param date $dateStop
+     *
+     * @return float summa
+     */
+    public function getSummaTo ($dateStart, $dateStop)
+    {
+        $res = $this->createQueryBuilder('i');
+
+        /** select */
+        $this->selectInvoiceSum($res);
+        /** where */
+        $res
+            ->andWhere("i.dateEnd BETWEEN  :dateStart AND :dateStop or i.delayDate BETWEEN  :dateStart AND :dateStop")
+            ->setParameter(':dateStart', $dateStart)
+            ->setParameter(':dateStop', $dateStop)
+            ->andWhere("i.dateFact is NULL");
+
+        return $res->getQuery()->getResult();
+    }
+    /**
+     * Returns results for interval future invoice
+     *
      * @param array   $filters
      * @param integer $companystryctyre
      * 
@@ -866,6 +890,121 @@ class InvoiceRepository extends EntityRepository
                     ->andWhere("i.dateFact is NULL")
                     ->orderBy('performerName, i.id', 'DESC');
                 break;
+            case 'toFriday':
+                $dateStart = date('Y-m-d');
+                $dateStop = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + 5 - date("w"), date('Y')));
+                $res
+                    ->andWhere("i.delayDate BETWEEN  :dateStart AND :dateStop")
+                    ->setParameter(':dateStart', $dateStart)
+                    ->setParameter(':dateStop', $dateStop)
+                    ->orderBy('performerName', 'DESC');
+                break;
+            case 'nextWeek':
+                $days = 0;
+                if (date("w") == 0) {
+                    $days = 1;
+                } elseif (date("w") == 6) {
+                    $days = 2;
+                } elseif (date("w") == 5) {
+                    $days = 3;
+                }
+                $dateStart = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y')));
+                $dateStop = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + 5 + $days, date('Y')));
+                $res
+                    ->andWhere("i.delayDate BETWEEN  :dateStart AND :dateStop")
+                    ->setParameter(':dateStart', $dateStart)
+                    ->setParameter(':dateStop', $dateStop)
+                    ->orderBy('performerName', 'DESC');
+                break;
+            case 'monday':
+                $days = 0;
+                if (date("w") == 0) {
+                    $days = 1;
+                } elseif (date("w") == 6) {
+                    $days = 2;
+                } elseif (date("w") == 5) {
+                    $days = 3;
+                }
+                $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y')));
+                $res
+                    ->andWhere("i.delayDate = :date")
+                    ->setParameter(':date', $date)
+                    ->orderBy('performerName', 'DESC');
+                break;
+            case 'today':
+                $date = date('Y-m-d');
+                $res
+                    ->andWhere("i.delayDate = :date")
+                    ->setParameter(':date', $date)
+                    ->orderBy('performerName', 'DESC');
+                break;
+            case 'yesterday':
+                $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') - 1, date('Y')));
+                $res
+                    ->andWhere("i.delayDate = :date")
+                    ->setParameter(':date', $date)
+                    ->orderBy('performerName', 'DESC');
+                break;
+            case 'tuesday':
+                $days = 1;
+                if (date("w") == 0) {
+                    $days = 2;
+                } elseif (date("w") == 6) {
+                    $days = 3;
+                } elseif (date("w") == 5) {
+                    $days = 4;
+                }
+                $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y')));
+                $res
+                    ->andWhere("i.delayDate = :date")
+                    ->setParameter(':date', $date)
+                    ->orderBy('performerName', 'DESC');
+                break;
+            case 'wednesday':
+                $days = 2;
+                if (date("w") == 0) {
+                    $days = 3;
+                } elseif (date("w") == 6) {
+                    $days = 4;
+                } elseif (date("w") == 5) {
+                    $days = 5;
+                }
+                $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y')));
+                $res
+                    ->andWhere("i.delayDate = :date")
+                    ->setParameter(':date', $date)
+                    ->orderBy('performerName', 'DESC');
+                break;
+            case 'thursday':
+                $days = 3;
+                if (date("w") == 0) {
+                    $days = 4;
+                } elseif (date("w") == 6) {
+                    $days = 5;
+                } elseif (date("w") == 5) {
+                    $days = 6;
+                }
+                $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y')));
+                $res
+                    ->andWhere("i.delayDate = :date")
+                    ->setParameter(':date', $date)
+                    ->orderBy('performerName', 'DESC');
+                break;
+            case 'friday':
+                $days = 4;
+                if (date("w") == 0) {
+                    $days = 5;
+                } elseif (date("w") == 6) {
+                    $days = 6;
+                } elseif (date("w") == 5) {
+                    $days = 7;
+                }
+                $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y')));
+                $res
+                    ->andWhere("i.delayDate = :date")
+                    ->setParameter(':date', $date)
+                    ->orderBy('performerName', 'DESC');
+                break;
         }
 
         return $res->getQuery();
@@ -914,6 +1053,111 @@ class InvoiceRepository extends EntityRepository
                 $res = $res->andWhere("i.dogovorId is NULL")
                     ->andWhere("i.dateFact is NULL");
                 break;
+            case 'yesterday':
+                $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') - 1, date('Y')));
+                $res = $res->andWhere("i.delayDate = :date")
+                    ->setParameter(':date', $date);
+                break;
+            case 'today':
+                $date = date('Y-m-d');
+                $res
+                    ->andWhere("i.delayDate = :date")
+                    ->setParameter(':date', $date);
+                break;
+            case 'toFriday':
+                $dateStart = date('Y-m-d');
+                $dateStop = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + 5 - date("w"), date('Y')));
+                $res
+                    ->andWhere("i.delayDate BETWEEN  :dateStart AND :dateStop")
+                    ->setParameter(':dateStart', $dateStart)
+                    ->setParameter(':dateStop', $dateStop);
+                break;
+            case 'nextWeek':
+                $days = 0;
+                if (date("w") == 0) {
+                    $days = 1;
+                } elseif (date("w") == 6) {
+                    $days = 2;
+                } elseif (date("w") == 5) {
+                    $days = 3;
+                }
+                $dateStart = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y')));
+                $dateStop = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + 5 + $days, date('Y')));
+                $res
+                    ->andWhere("i.delayDate BETWEEN  :dateStart AND :dateStop")
+                    ->setParameter(':dateStart', $dateStart)
+                    ->setParameter(':dateStop', $dateStop);
+                break;
+            case 'monday':
+                $days = 0;
+                if (date("w") == 0) {
+                    $days = 1;
+                } elseif (date("w") == 6) {
+                    $days = 2;
+                } elseif (date("w") == 5) {
+                    $days = 3;
+                }
+                $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y')));
+                $res
+                    ->andWhere("i.delayDate = :date")
+                    ->setParameter(':date', $date);
+                break;
+            case 'tuesday':
+                $days = 1;
+                if (date("w") == 0) {
+                    $days = 2;
+                } elseif (date("w") == 6) {
+                    $days = 3;
+                } elseif (date("w") == 5) {
+                    $days = 4;
+                }
+                $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y')));
+                $res
+                    ->andWhere("i.delayDate = :date")
+                    ->setParameter(':date', $date);
+                break;
+            case 'wednesday':
+                $days = 2;
+                if (date("w") == 0) {
+                    $days = 3;
+                } elseif (date("w") == 6) {
+                    $days = 4;
+                } elseif (date("w") == 5) {
+                    $days = 5;
+                }
+                $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y')));
+                $res
+                    ->andWhere("i.delayDate = :date")
+                    ->setParameter(':date', $date);
+                break;
+            case 'thursday':
+                $days = 3;
+                if (date("w") == 0) {
+                    $days = 4;
+                } elseif (date("w") == 6) {
+                    $days = 5;
+                } elseif (date("w") == 5) {
+                    $days = 6;
+                }
+                $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y')));
+                $res
+                    ->andWhere("i.delayDate = :date")
+                    ->setParameter(':date', $date);
+                break;
+            case 'friday':
+                $days = 4;
+                if (date("w") == 0) {
+                    $days = 5;
+                } elseif (date("w") == 6) {
+                    $days = 6;
+                } elseif (date("w") == 5) {
+                    $days = 7;
+                }
+                $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y')));
+                $res
+                    ->andWhere("i.delayDate = :date")
+                    ->setParameter(':date', $date);
+                break;
         }
 
         return $res->getQuery()->getSingleScalarResult();
@@ -943,6 +1187,33 @@ class InvoiceRepository extends EntityRepository
         return $res->andWhere("i.dateEnd = :date or i.delayDate = :date")
                 ->setParameter(':date', $date)
                 ->andWhere("i.dateFact is NULL")
+                ->orderBy('i.dateEnd', 'DESC')
+                ->getQuery();
+    }
+    /**
+     * Returns results for interval future invoice
+     *
+     * @param date    $date
+     * @param integer $companystryctyre
+     * 
+     * @return mixed[]
+     */
+    public function getForToday ($date, $companystryctyre)
+    {
+        $res = $this->createQueryBuilder('i');
+        /** select */
+        $this->selectInvoicePeriod($res);
+        /** join */
+        $this->joinInvoicePeriod($res);
+        if ($companystryctyre) {
+            $res
+                ->leftJoin('i.invoicecompanystructure', 'i_ics')
+                ->andWhere('i_ics.companystructureId = :companystructureId')
+                ->setParameter(':companystructureId', $companystryctyre);
+        }
+
+        return $res->andWhere("i.dateEnd = :date or i.delayDate = :date")
+                ->setParameter(':date', $date)
                 ->orderBy('i.dateEnd', 'DESC')
                 ->getQuery();
     }
@@ -1127,6 +1398,33 @@ class InvoiceRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
+     * @param date    $date
+     * @param integer $companystryctyre
+     * 
+     * @return mixed[]
+     */
+    public function getFortodayCount ($date, $companystryctyre)
+    {
+        $rescount = $this->createQueryBuilder('i');
+
+        /** select */
+        $this->selectInvoicePeriodCount($rescount);
+        /** where */
+        if ($companystryctyre) {
+            $rescount
+                ->leftJoin('i.invoicecompanystructure', 'i_ics')
+                ->andWhere('i_ics.companystructureId = :companystructureId')
+                ->setParameter(':companystructureId', $companystryctyre);
+        }
+        $rescount
+            ->andWhere("i.dateEnd = :date or i.delayDate = :date")
+            ->setParameter(':date', $date);
+
+        return $rescount->getQuery()->getSingleScalarResult();
+    }
+    /**
+     * Returns results for interval future invoice
+     *
      * @param string  $period
      * @param array   $filters
      * @param integer $companystryctyre
@@ -1171,8 +1469,16 @@ class InvoiceRepository extends EntityRepository
                 break;
             case 'today':
                 $date = date('Y-m-d');
-                $result['entities'] = $this->getInvoiceWhen($date, $companystryctyre);
-                $result['count'] = $this->getInvoiceWhenCount($date, $companystryctyre);
+                $result['entities'] = $this->getForToday($date, $companystryctyre);
+                $result['count'] = $this->getForTodayCount($date, $companystryctyre);
+                break;
+            case 'toFriday':
+                $result['entities'] = $this->getInvoiceEmptyData('toFriday', $companystryctyre);
+                $result['count'] = $this->getInvoiceEmptyDataCount('toFriday', $companystryctyre);
+                break;
+            case 'nextWeek':
+                $result['entities'] = $this->getInvoiceEmptyData('nextWeek', $companystryctyre);
+                $result['count'] = $this->getInvoiceEmptyDataCount('nextWeek', $companystryctyre);
                 break;
             case 'tomorrow':
                 $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + 1, date('Y')));
@@ -1195,6 +1501,9 @@ class InvoiceRepository extends EntityRepository
                 $result['entities'] = $this->getAll($filters, $companystryctyre);
                 $result['count'] = $this->getAllCount($filters, $companystryctyre);
                 break;
+            default:
+                $result['entities'] = $this->getInvoiceEmptyData($period, $companystryctyre);
+                $result['count'] = $this->getInvoiceEmptyDataCount($period, $companystryctyre);
         }
 
         return $result;
@@ -1481,31 +1790,77 @@ class InvoiceRepository extends EntityRepository
                     SELECT SUM(case when paymens.summa is not NULL then paymens.summa else 0 end)
                     FROM  ITDoorsControllingBundle:InvoicePayments  paymens
                     WHERE paymens.invoiceId = i.id
-                    AND i.delayDate >= paymens.date
-                ) as payInTime"
+                ) as payAll"
             )
             ->where('i.customerId = :customerId')
             ->andWhere('i.dateFact is NULL')
             ->setParameter('customerId', $customerId)
             ->setParameter(':date', $date);
-//        if (sizeof($filters)) {
-//            foreach ($filters as $key => $value) {
-//                if (!$value) {
-//                    continue;
-//                }
-//                switch ($key) {
-//                    case 'daterange':
-//                        $dateArr = explode('-', $value);
+        if (sizeof($filters)) {
+            foreach ($filters as $key => $value) {
+                if (!$value) {
+                    continue;
+                }
+                switch ($key) {
+                    case 'daterange':
+                        $dateArr = explode('-', $value);
 //                        $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
-//                        $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));
-//
-//                        $sql->andWhere('i.date BETWEEN :datestart AND :datestop')
+                        $dateStop = new \DateTime('23:59:59 '.str_replace('.', '-', $dateArr[1]));
+
+                        $sql->andWhere('i.date <= :datestop')
 //                            ->setParameter(':datestart', $dateStart)
-//                            ->setParameter(':datestop', $dateStop);
-//                        break;
-//                }
-//            }
-//        }
+                            ->setParameter(':datestop', $dateStop);
+                        break;
+                }
+            }
+        }
+
+        return $sql
+                ->orderBy('i.date')
+                ->getQuery()
+                ->getResult();
+    }
+    /**
+     * @param integer $customerId
+     * @param array   $filters
+     *
+     * @return mixed[]
+     */
+    public function getForAnaliticAll ($customerId, $filters)
+    {
+//        $date = new \DateTime();
+        $sql = $this->createQueryBuilder('i')
+            ->select('i.date')
+            ->addSelect('i.delayDate')
+            ->addSelect(
+                '(
+                    SELECT SUM(case when detalall.summa is not NULL then detalall.summa else 0 end )
+                    FROM  ITDoorsControllingBundle:InvoiceAct actall
+                    LEFT JOIN actall.detals detalall
+                    WHERE actall.invoiceId = i.id
+                ) as allSumm'
+            )
+            ->where('i.customerId = :customerId')
+            ->setParameter('customerId', $customerId);
+//            ->setParameter(':date', $date);
+        if (sizeof($filters)) {
+            foreach ($filters as $key => $value) {
+                if (!$value) {
+                    continue;
+                }
+                switch ($key) {
+                    case 'daterange':
+                        $dateArr = explode('-', $value);
+//                        $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
+                        $dateStop = new \DateTime('23:59:59 '.str_replace('.', '-', $dateArr[1]));
+
+                        $sql->andWhere('i.date <= :datestop')
+//                            ->setParameter(':datestart', $dateStart)
+                            ->setParameter(':datestop', $dateStop);
+                        break;
+                }
+            }
+        }
 
         return $sql
                 ->orderBy('i.date')
