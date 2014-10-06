@@ -100,6 +100,9 @@ ITDoors\ControllingBundle\Entity\Invoice:
         deletedAt:
             type: datetime
             nullable: true
+        status:
+            type: integer
+            nullable: true
     manyToOne:
         dogovor:
             targetEntity: Lists\DogovorBundle\Entity\Dogovor

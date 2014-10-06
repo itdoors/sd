@@ -21,7 +21,7 @@
             url: '{{ path('sd_common_ajax_invoice_save') }}',
             source: [
                 {value: 1, text: '{% trans %}In coutr{% endtrans %}'},
-                {value: 0, text: '{% trans %}Not in coutr{% endtrans %}'}
+                {value: 0, text: 'Empty'}
             ],
             select2: {
                 placeholder: '{% trans %}Select Organization{% endtrans %}',
@@ -152,7 +152,7 @@
                             {% if entity.court ==  true %}
                                 {% trans %}In coutr{% endtrans %}
                             {% else%}
-                                {% trans %}Not in coutr{% endtrans %}
+                                Empty
                             {% endif%}
                         </a>
                     </td>

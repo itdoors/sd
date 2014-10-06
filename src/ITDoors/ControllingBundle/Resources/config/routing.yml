@@ -52,9 +52,13 @@ it_doors_controlling_invoice_export_exel:
     pattern:  /controlling/invoice/export/exel
     defaults: { _controller: ITDoorsControllingBundle:Invoice:exportExel}
 
-it_doors_controlling_invoice_export_exel_no_dogovor:
-    pattern:  /controlling/invoice/export/exel/no/dogovor
-    defaults: { _controller: ITDoorsControllingBundle:Invoice:exportExelNoDogovor}
+it_doors_controlling_invoice_export_exel_data:
+    pattern:  /controlling/invoice/export/exel/data
+    defaults: { _controller: ITDoorsControllingBundle:Invoice:exportExelData}
+
+it_doors_controlling_invoice_export_exel_pay:
+    pattern:  /controlling/invoice/export/exel/pay
+    defaults: { _controller: ITDoorsControllingBundle:Invoice:exportExelPay}
 
 it_doors_controlling_invoice_send_email:
     pattern:  /controlling/invoice/send/email

@@ -43,7 +43,7 @@
                 </tr>
                 {% for invoice in entity['invoices'] %}
                     <tr>
-                        <td  colspan="1" style="color: #000;background-color: #C5FFBC !important;">{% trans %}Invoice for the customer{% endtrans %} {{ invoice.invoiceId}} {{ invoice.date | date('d.m.Y H:i:s')}}</td>
+                        <td  colspan="1" style="color: #000;background-color: #C5FFBC !important;">{{ invoice.id}} {% trans %}Invoice for the customer{% endtrans %} {{ invoice.invoiceId}} {{ invoice.date | date('d.m.Y H:i:s')}}</td>
                         <td  colspan="1" style="color: #000;background-color: #C5FFBC !important;text-align: right">{{ invoice.delayDate | date('d.m.Y')}}</td>
                         <td  colspan="1" style="color: #000;background-color: #C5FFBC !important;text-align: right">{{ invoice.dateFact == '' ? '' : invoice.dateFact | date('d.m.Y')}}</td>
                         <td  colspan="1" style="color: #000;background-color: #C5FFBC !important;text-align: right;">{{ invoice.sumActs |number_format(2, ',' , ' ')}}</td>

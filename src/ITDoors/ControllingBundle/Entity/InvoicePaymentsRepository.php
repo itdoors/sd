@@ -38,11 +38,51 @@ class InvoicePaymentsRepository extends EntityRepository
                 switch ($key) {
                     case 'daterange':
                         $dateArr = explode('-', $value);
-                        $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
-                        $dateStop = new \DateTime(str_replace('.', '-', $dateArr[1]));
+//                        $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
+                        $dateStop = new \DateTime('23:59:59 '.str_replace('.', '-', $dateArr[1]));
 
-                        $sql->andWhere('i.date BETWEEN :datestart AND :datestop')
-                            ->setParameter(':datestart', $dateStart)
+                        $sql->andWhere('i.date <= :datestop')
+//                            ->setParameter(':datestart', $dateStart)
+                            ->setParameter(':datestop', $dateStop);
+                        break;
+                }
+            }
+        }
+
+        return $sql
+                ->orderBy('ip.date')
+                ->getQuery()
+                ->getResult();
+    }
+    /**
+     * @param integer $customerId
+     * @param array   $filters
+     *
+     * @return mixed[]
+     */
+    public function getForAnaliticAll($customerId, $filters)
+    {
+        $sql = $this->createQueryBuilder('ip')
+            ->select('ip.date')
+            ->addSelect('ip.summa as summaPay')
+            ->addSelect('i.date invoiceDate')
+            ->addSelect('i.delayDate')
+            ->innerJoin('ip.invoice', 'i')
+            ->where('i.customerId = :customerId')
+            ->setParameter('customerId', $customerId);
+        if (sizeof($filters)) {
+            foreach ($filters as $key => $value) {
+                if (!$value) {
+                    continue;
+                }
+                switch ($key) {
+                    case 'daterange':
+                        $dateArr = explode('-', $value);
+//                        $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
+                        $dateStop = new \DateTime('23:59:59 '.str_replace('.', '-', $dateArr[1]));
+
+                        $sql->andWhere('i.date <= :datestop')
+//                            ->setParameter(':datestart', $dateStart)
                             ->setParameter(':datestop', $dateStop);
                         break;
                 }
@@ -70,6 +110,7 @@ class InvoicePaymentsRepository extends EntityRepository
             ->setParameter(':invoiceId', $invoiceId)
             ->getQuery()->getOneOrNullResult();
     }
+
     /**
      * dateLastPay
      * 
@@ -85,6 +126,6 @@ class InvoicePaymentsRepository extends EntityRepository
             ->where('p.invoiceId = :invoiceId')
             ->setParameter(':invoiceId', $invoiceId)
             ->orderBy('p.date', 'DESC')
-            ->getQuery()->getScalarResult();
+            ->getQuery()->getResult();
     }
 }

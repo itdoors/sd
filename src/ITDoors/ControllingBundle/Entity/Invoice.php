@@ -867,4 +867,32 @@ class Invoice
     {
         return $this->deletedAt;
     }
+    /**
+     * @var integer
+     */
+    private $status;
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     * 
+     * @return Invoice
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
 }

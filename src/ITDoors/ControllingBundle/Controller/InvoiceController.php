@@ -672,8 +672,11 @@ class InvoiceController extends BaseFilterController
      * 
      * @return render Description
      */
-    public function exportExelNoDogovorAction ()
+    public function exportExelDataAction ()
     {
+        $namespaceTab = $this->container->getParameter($this->getNamespace()).'expecteddata';
+        $tab = $this->getTab($namespaceTab);
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
@@ -683,7 +686,33 @@ class InvoiceController extends BaseFilterController
         }
 
         /** @var InvoiceRepository $invoices */
-        $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')->getForExelNoDogovor($companystryctyre);
+        $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')
+            ->getInvoiceEmptyData($tab, $companystryctyre)->getResult();
+
+        return $this->getExel($invoices);
+    }
+    /**
+     *  expectedpayshowAction
+     * 
+     * 
+     * @return render Description
+     */
+    public function exportExelPayAction ()
+    {
+        $namespaceTab = $this->container->getParameter($this->getNamespace()).'expectedpay';
+        $tab = $this->getTab($namespaceTab);
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        $companystryctyre = null;
+        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+            $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
+        }
+
+        /** @var InvoiceRepository $invoices */
+        $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')
+            ->getInvoiceEmptyData($tab, $companystryctyre)->getResult();
 
         return $this->getExel($invoices);
     }

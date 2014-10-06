@@ -21,15 +21,18 @@
                 url: '{{ path('sd_common_ajax_invoice_save') }}',
                 source: [
                     {value: 1, text: '{% trans %}In coutr{% endtrans %}'},
-                    {value: 0, text: '{% trans %}Not in coutr{% endtrans %}'}
-                ],
-                select2: {
-                    placeholder: '{% trans %}Select Organization{% endtrans %}',
-                        minimumInputLength: 2,
-                        width: 250
-                    }
-                });
+                    {value: 0, text: 'Empty'}
+                ]
             });
+            $('.status-invoice').editable({
+                url: '{{ path('sd_common_ajax_invoice_save') }}',
+                source: [
+                    {value: 1, text: '{% trans %}Problem{% endtrans %}'},
+                    {value: 2, text: '{% trans %}Loyal{% endtrans %}'}
+                ]
+            });
+            });
+            
 </script>
 <div class="navigation">
     {{ ajax_paginator_render(
@@ -64,6 +67,9 @@
                 <th width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
                     {% trans %}Debt{% endtrans %}
                 </th>
+                <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}Deferment{% endtrans %}
+                </th>
                 <th width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
                     {% trans %}№ and date ABP/BH{% endtrans %}
                 </th>
@@ -80,9 +86,6 @@
                 {% trans %}№ and date contract{% endtrans %}
                 </th>
                 <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
-                {% trans %}Deferment{% endtrans %}
-                </th>
-                <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
                 {% trans %}Notes{% endtrans %}
                 </th>
                 <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
@@ -93,7 +96,11 @@
                 </th>
                 <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
                 {% trans %}Status{% endtrans %}
-                </th></tr>
+                </th>
+                <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                {% trans %}Status invoice{% endtrans %}
+                </th>
+            </tr>
         </thead>
         <tbody role="alert" aria-live="polite" aria-relevant="all">
             {% for entity in entities %}
@@ -112,6 +119,12 @@
                 </td>
                 <td class="">
                     {{ (entity.sumActs-entity.paymentsSumma)|number_format(2, ',', ' ')  }}
+                </td>
+                 <td class="">
+                    {{ entity.delayDate is empty ? '' :  entity.delayDate|date("d.m.y")  }}
+                    {% if entity.delayDays is not empty %}<br>({{ entity.delayDays}}{{ entity.delayDaysType }}) {% endif %}
+                    {% set days = (('now'|date('U')-entity.delayDate|date('U'))/86400)|round(0, 'floor') %}
+                    <br>({% if entity.dateFact is empty %}{{ days > 0 ? days : 0 }}{% else %}0{% endif %})
                 </td>
                 <td class="">
                     {% if entity.actNumbers | length %}
@@ -162,12 +175,6 @@
                     {{ entity.dogovorStartDatetime is empty ? '' :  entity.dogovorStartDatetime|date("d.m.y") }}
                 </td>
                 <td class="">
-                    {{ entity.delayDate is empty ? '' :  entity.delayDate|date("d.m.y")  }}
-                    {% if entity.delayDays is not empty %}<br>({{ entity.delayDays}}{{ entity.delayDaysType }}) {% endif %}
-                    {% set days = (('now'|date('U')-entity.delayDate|date('U'))/86400)|round(0, 'floor') %}
-                    <br>({% if entity.dateFact is empty %}{{ days > 0 ? days : 0 }}{% else %}0{% endif %})
-                </td>
-                <td class="">
                     <a id="managers_list_new" class="fa ajax-form fa-plus" title="{% trans %}Add note{% endtrans %}"
                        data-toggle="modal"
                        href="#form_modal"
@@ -201,7 +208,25 @@
                         {% if entity.court ==  true %}
                             {% trans %}In coutr{% endtrans %}
                         {% else%}
-                            {% trans %}Not in coutr{% endtrans %}
+                            Empty
+                        {% endif%}
+                    </a>
+                </td>
+                <td class="">
+                    <a href="#" 
+                       id="status" 
+                       class="status-invoice" 
+                       data-type="select" 
+                       data-pk="{{ entity.id }}"
+                       data-value="{{ entity.status }}" 
+                       data-placement="right" 
+                       data-original-title="{% trans %}Select status{% endtrans %}">
+                        {% if entity.status ==  1 %}
+                            {% trans %}Problem{% endtrans %}
+                        {% elseif entity.status ==  2 %}
+                            {% trans %}Loyal{% endtrans %}
+                        {% else%}
+                            Empty
                         {% endif%}
                     </a>
                 </td>
