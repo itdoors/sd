@@ -53,7 +53,7 @@ class DogovorService
             echo $i++."\n";
             if (is_file($directory . $dogovor->getFilepath())) {
                 $countOk++;
-                $date = date("d.m.Y H:i:s.", filemtime($directory . $dogovor->getFilepath()));
+                $date = date("d.m.Y H:i:s", filemtime($directory . $dogovor->getFilepath()));
                 $dogovor->setCreateDateTime(new \DateTime($date));
                 $em->persist($dogovor);
             } else {
@@ -65,7 +65,7 @@ class DogovorService
             echo $i++."\n";
             if (is_file($directory . $dogovor->getFilepath())) {
                 $countOk++;
-                $date = date("d.m.Y H:i:s.", filemtime($directory . $dogovor->getFilepath()));
+                $date = date("d.m.Y H:i:s", filemtime($directory . $dogovor->getFilepath()));
                 $dogovor->setCreateTime(new \DateTime($date));
                 $em->persist($dogovor);
             } else {
