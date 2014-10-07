@@ -1319,13 +1319,13 @@ class InvoiceService
                         if (!isset($debtAll[$act['delayDate']->format('t.m.Y')])) {
                             $debtAll[$act['delayDate']->format('t.m.Y')] = 0;
                         }
-                        $debtAll[$act['delayDate']->format('t.m.Y')] += $act['allSumm'];
+                        $debtAll[$act['delayDate']->format('t.m.Y')] += $act['allSumm']- $act['payAll'];
                     } else {
                         $date = $act['date']->format('d.m.Y');
                         if (!isset($debtAll[$act['delayDate']->format('d.m.Y')])) {
                             $debtAll[$act['delayDate']->format('d.m.Y')] = 0;
                         }
-                        $debtAll[$act['delayDate']->format('d.m.Y')] += $act['allSumm'];
+                        $debtAll[$act['delayDate']->format('d.m.Y')] += $act['allSumm']-$act['payAll'];
                     }
                     if ((empty($minDate) || strtotime($date) < strtotime($minDate)) && !$dateStart) {
                         $minDate = $date;
@@ -1373,11 +1373,10 @@ class InvoiceService
                         $invoicePay[$date]['pay'] = 0;
                         $invoicePay[$date]['payDebt'] = 0;
                     }
-//                    if ($pay['date']->format('U') > $pay['delayDate']->format('U')) {
-//                        $invoicePay[$date]['payDebt'] += $pay['summaPay'];
-//                    } else {
-                        $invoicePay[$date]['pay'] += $pay['summaPay'];
-//                    }
+                    $invoicePay[$date]['pay'] += $pay['summaPay'];
+                    if ($pay['date']->format('U') > $pay['delayDate']->format('U')) {
+                        $invoicePay[$date]['payDebt'] += $pay['summaPay'];
+                    }
                 }
                 $all = 0;
                 $debt = 0;
@@ -1396,7 +1395,7 @@ class InvoiceService
                         }
                         if (isset($invoicePay[$date])) {
                             $all -= $invoicePay[$date]['pay'];
-                            $debt -= $invoicePay[$date]['pay'];
+                            $debt -= $invoicePay[$date]['payDebt'];
                         }
                         if (!isset($invoiceAct[$date])) {
                             $invoiceAct[$date] = array();
@@ -1424,7 +1423,7 @@ class InvoiceService
                         }
                         if (isset($invoicePay[$date])) {
                             $all -= $invoicePay[$date]['pay'];
-                            $debt -= $invoicePay[$date]['pay'];
+                            $debt -= $invoicePay[$date]['payDebt'];
                         }
                         if (!isset($invoiceAct[$date])) {
                             $invoiceAct[$date] = array();

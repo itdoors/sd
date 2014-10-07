@@ -1840,6 +1840,14 @@ class InvoiceRepository extends EntityRepository
                     WHERE actall.invoiceId = i.id
                 ) as allSumm'
             )
+            ->addSelect(
+                "(
+                    SELECT SUM(case when paymens.summa is not NULL then paymens.summa else 0 end)
+                    FROM  ITDoorsControllingBundle:InvoicePayments  paymens
+                    WHERE paymens.invoiceId = i.id
+                    AND paymens.date <= i.delayDate
+                ) as payAll"
+            )
             ->where('i.customerId = :customerId')
             ->setParameter('customerId', $customerId);
 //            ->setParameter(':date', $date);
