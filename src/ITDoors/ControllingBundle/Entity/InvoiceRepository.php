@@ -360,8 +360,30 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
-                ->setParameter(':companystructureId', $companystryctyre);
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:company) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:company)
+                            )
+                    '
+                )
+                ->setParameter(':company', $companystryctyre);
         }
         $this->processFilters($res, $filters);
 
@@ -391,8 +413,30 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $invoices
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
-                ->setParameter(':companystructureId', $companystryctyre);
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:company) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:company)
+                            )
+                    '
+                )
+                ->setParameter(':company', $companystryctyre);
         }
         $this->processFilters($invoices, $filters);
 
@@ -473,8 +517,30 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
-                ->setParameter(':companystructureId', $companystryctyre);
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:company) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:company)
+                            )
+                    '
+                )
+                ->setParameter(':company', $companystryctyre);
         }
 
         $date = date('Y-m-d', time() - 2592000);
@@ -505,8 +571,30 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
-                ->setParameter(':companystructureId', $companystryctyre);
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:company) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:company)
+                            )
+                    '
+                )
+                ->setParameter(':company', $companystryctyre);
         }
 
         $date = date('Y-m-d', time() - 2592000);
@@ -544,8 +632,30 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $rescount
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
-                ->setParameter(':companystructureId', $companystryctyre);
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:company) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:company)
+                            )
+                    '
+                )
+                ->setParameter(':company', $companystryctyre);
         }
         $this->processFilters($rescount, $filters);
 
@@ -572,8 +682,30 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $rescount
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
-                ->setParameter(':companystructureId', $companystryctyre);
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:company) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:company)
+                            )
+                    '
+                )
+                ->setParameter(':company', $companystryctyre);
         }
         $this->processFilters($rescount, $filters);
 
@@ -642,7 +774,29 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:companystructureId) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:companystructureId)
+                            )
+                    '
+                )
                 ->setParameter(':companystructureId', $companystryctyre);
         }
 
@@ -710,7 +864,29 @@ class InvoiceRepository extends EntityRepository
         $this->joinInvoicePeriod($res);
         if ($companystryctyre) {
             $res->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:companystructureId) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:companystructureId)
+                            )
+                    '
+                )
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         $this->processFilters($res, $filters);
@@ -743,7 +919,29 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:companystructureId) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:companystructureId)
+                            )
+                    '
+                )
                 ->setParameter(':companystructureId', $companystryctyre);
         }
 
@@ -771,7 +969,29 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $rescount
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:companystructureId) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:companystructureId)
+                            )
+                    '
+                )
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         $this->processFilters($rescount, $filters);
@@ -803,7 +1023,29 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:companystructureId) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:companystructureId)
+                            )
+                    '
+                )
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         $res->andWhere("i.dateFact is not NULL")
@@ -833,7 +1075,29 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:companystructureId) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:companystructureId)
+                            )
+                    '
+                )
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         $res
@@ -861,7 +1125,29 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:companystructureId) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:companystructureId)
+                            )
+                    '
+                )
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         /** where */
@@ -1025,7 +1311,29 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:companystructureId) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:companystructureId)
+                            )
+                    '
+                )
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         /** where */
@@ -1180,7 +1488,29 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:companystructureId) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:companystructureId)
+                            )
+                    '
+                )
                 ->setParameter(':companystructureId', $companystryctyre);
         }
 
@@ -1208,7 +1538,29 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:companystructureId) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:companystructureId)
+                            )
+                    '
+                )
                 ->setParameter(':companystructureId', $companystryctyre);
         }
 
@@ -1239,7 +1591,29 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:companystructureId) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:companystructureId)
+                            )
+                    '
+                )
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         $res->andWhere("i.dateFact is not NULL")->andWhere("i.dateFact >= :date")->setParameter(':date', $date);
@@ -1267,7 +1641,29 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:companystructureId) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:companystructureId)
+                            )
+                    '
+                )
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         $this->processFilters($res, $filters);
@@ -1295,7 +1691,29 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:companystructureId) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:companystructureId)
+                            )
+                    '
+                )
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         $this->processFilters($res, $filters);
@@ -1325,7 +1743,29 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $rescount
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:companystructureId) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:companystructureId)
+                            )
+                    '
+                )
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         $rescount
@@ -1357,7 +1797,29 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $rescount
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:companystructureId) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:companystructureId)
+                            )
+                    '
+                )
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         $rescount
@@ -1385,7 +1847,29 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $rescount
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:companystructureId) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:companystructureId)
+                            )
+                    '
+                )
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         $rescount
@@ -1413,7 +1897,29 @@ class InvoiceRepository extends EntityRepository
         if ($companystryctyre) {
             $rescount
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere('i_ics.companystructureId = :companystructureId')
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:companystructureId) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:companystructureId)
+                            )
+                    '
+                )
                 ->setParameter(':companystructureId', $companystryctyre);
         }
         $rescount
