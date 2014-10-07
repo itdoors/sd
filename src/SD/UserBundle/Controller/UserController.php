@@ -11,6 +11,7 @@ use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Session\Session;
 use SD\UserBundle\Entity\Usercontactinfo;
 use Lists\CompanystructureBundle\Entity\Companystructure;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * UserController
@@ -358,5 +359,53 @@ class UserController extends BaseController
                 'form' => $form->createView(),
                 'baseTemplate' => $this->baseTemplate
         ));
+    }
+    /**
+     * Executes new action
+     * 
+     * @param Request $request
+     * 
+     * @return string
+     */
+    public function uploadPhotoAction(Request $request)
+    {
+        $result = array();
+
+        $em = $this->getDoctrine()->getManager();
+        $files=$request->files->get('userAvatarForm');
+
+        $file = $files['photo'];
+        
+        $user = $this->getUser();
+        $directory = $user->getUploadRootDir();
+
+        if ($file) {
+            $directory = $user->getUploadRootDir().'/original';
+            if (!is_dir($directory.'/original')) {
+                mkdir($directory.'/original', 0777);
+            }
+            if (
+                    is_file($directory.$user->getPhoto())
+                    &&
+                    rename(
+                        $directory.$user->getPhoto(),
+                        $directory.$user->getId().'_old_'.$user->getPhoto()
+                    )
+                ) {
+
+            } else {
+                $result['error'] = 'File move error';
+            }
+            $user->setFile($file);
+            $user->upload();
+            $result['file'] = $user->getWebPath();
+        } else {
+            $result['error'] = 'File not found';
+        }
+
+        $em->persist($user);
+        $em->flush();
+
+        return new Response(json_encode($result));
     }
 }

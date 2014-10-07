@@ -79,3 +79,4 @@ SD\UserBundle\Entity\User:
         handlingUsers:
             targetEntity: Lists\HandlingBundle\Entity\HandlingUser
             mappedBy: user
+    lifecycleCallbacks: {  }

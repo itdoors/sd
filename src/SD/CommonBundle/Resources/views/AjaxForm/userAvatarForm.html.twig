@@ -96,63 +96,61 @@ console.log(rx + ' + '+ry);
                     {% endif %}
                     <div class="row">
                        <div class="col-md-6 responsive-1024">
-                           <img src="{{ asset('templates/metronic/plugins/jcrop/demos/demo_files/image1.jpg')}}" id="avatar" alt="Jcrop Example"/>
+                            {% if app.user.photo %}
+                                <img src="http://sd.griffin.ua/{{ app.user.getWebPath() }}" id="avatar" alt="Jcrop Example"/>
+                            {% else %}
+                                <img src="{{ asset('templates/metronic/plugins/jcrop/demos/demo_files/image1.jpg')}}" id="avatar" alt="Jcrop Example"/>
+                            {% endif %}
                        </div>
                        <div class="col-md-6 responsive-1024">
                            <div id="preview-pane">
                                 <div class="preview-container">
-                                    <img src="{{ asset('templates/metronic/plugins/jcrop/demos/demo_files/image1.jpg')}}">
+                                    {% if app.user.photo %}
+                                        <img src="http://sd.griffin.ua/{{ app.user.getWebPath() }}"/>
+                                    {% else %}
+                                        <img src="{{ asset('templates/metronic/plugins/jcrop/demos/demo_files/image1.jpg')}}"/>
+                                    {% endif %}
                                 </div>
                            </div>
-                                {#% if dogovor.filepath %}
-                    <a href="/uploads/dogovor/{{ dogovor.filepath }}" target="_blank">
-                        {% trans %}See document{% endtrans %}
-                    </a>
-                {% endif %#}
-                                <div style="margin: 255px 0px 0px 205px;">
-                <script>
-                    $(document).ready(function(){
-                        $(function () {
-                            $('#userAvatarForm_photo').fileupload({
-                                disableImageResize: false, 
-                                previewMaxWidth: 320, 
-                                previewMaxHeight: 320,
-                               
-                            dataType: 'json',
-                            fail: function (e, data) {
-                                alert('Error upload');
-                            },
-                            done: function (e, data) {
-                                $('#avatar').attr('src', '');
-                                $(this).parents('td').prepend('<a target="_blank" href="/uploads/dogovor/'+data.result.file+'">{% trans %}See document{% endtrans %}</a>');
-                                alert('{% trans %}Document is uploaded{% endtrans %}');
-                                $.each(data.result.files, function (index, file) {
-                                   // $('<p/>').text(file.name).appendTo('#files');
-                                   
-                                });
-                            },
-                            add: function (e, data) {
-                                var canvas = data.files[0].preview;
-      var dataURL = canvas.toDataURL();
-      $("#avatar").css("src",  dataURL);
-                                if(confirm('{% trans %}Upload a new document? The old document will be removed.{% endtrans %}')){data.submit();}
-                            }
-                            }).prop('disabled', !$.support.fileInput)
-                                .parent().addClass($.support.fileInput ? undefined : 'disabled');
-                        }).bind('fileuploadprocessalways', function(e, data)
-  {
-      alert('dfdg');
-      
+                            <div style="margin: 255px 0px 0px 205px;">
+                                <script>
+                                    $(document).ready(function(){
+                                        $(function () {
+                                            $('#userAvatarForm_photo').fileupload({
+                                                disableImageResize: false, 
+                                                previewMaxWidth: 320, 
+                                                previewMaxHeight: 320,
 
-  });
-                    });
-                </script>
-                <span class="btn btn-success fileinput-button">
-                    <i class="glyphicon glyphicon-plus"></i>
-                    <span>{% trans %}Upload new avatar{% endtrans %}</span>
-                    {{ form_widget(form.photo ) }}
-                    {#<input id="fileupload" type="file" name="dogovor" data-url="{ path('sd_common_ajax_dogovor_upload_file', {'id': dogovor.id}) }">#}
-                </span>
+                                            dataType: 'json',
+                                            fail: function (e, data) {
+                                                alert('Error upload');
+                                            },
+                                            done: function (e, data) {
+                                                $('#avatar').attr('src', data.result.file);
+                                                if(data.result.error != undefined) {
+                                                   // $.each(data.result.error, function (index, error) {
+                                                        alert(data.result.error);
+                                                       // $('<p/>').text(file.name).appendTo('#files');
+
+                                                    //});
+                                                }
+                                            },
+                                            add: function (e, data) {
+                                                if(confirm('{% trans %}Upload a new document? The old document will be removed.{% endtrans %}')){data.submit();}
+                                                }
+                                            })
+                                                .prop('disabled', !$.support.fileInput)
+                                                .parent().addClass($.support.fileInput ? undefined : 'disabled');
+                                        }).bind('fileuploadprocessalways', function(e, data){
+                                            alert('dfdg');
+                                        });
+                                    });
+                                </script>
+                                <span class="btn btn-success fileinput-button">
+                                    <i class="glyphicon glyphicon-plus"></i>
+                                    <span>{% trans %}Upload new avatar{% endtrans %}</span>
+                                    {{ form_widget(form.photo, {'attr' : {'name' : 'photo', 'data-url': path('fos_user_upload_photo')} }  ) }}
+                                </span>
                 
                        </div>
                        </div>
