@@ -1163,7 +1163,7 @@ class InvoiceService
                             $all = $invoiceAct[$date]['all'];
                             $debt = $invoiceAct[$date]['debt'];
                         }
-                    
+
                         $res[$date] = array(
                             'all' => $all,
                             'debt' => $debt
