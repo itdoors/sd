@@ -2053,7 +2053,7 @@ class AjaxController extends BaseFilterController
         if (!function_exists($icfunc)) {
             return 3;
         }
-        $icfunc($imgResize, $directory.'/'.$user->getId().'.'.$format);
+        $icfunc($imgResize, $directory.'/'.$user->getPhoto());
 
         return true;
     }
