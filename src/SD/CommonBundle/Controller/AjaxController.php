@@ -2016,9 +2016,9 @@ class AjaxController extends BaseFilterController
             $em->persist($user);
             $em->flush();
         } elseif (empty($userPhoto)) {
-            $file = $projectDir.'/web'.$userprofiles.'/no_avatar.jpg';
-            copy($file, $directory.'/original_'.$user->getId().'.jpg');
-            $user->setPhoto($user->getId().'.jpg');
+            $file = $projectDir.'/web'.$userprofiles.'/no_avatar.png';
+            copy($file, $directory.'/original_'.$user->getId().'.png');
+            $user->setPhoto($user->getId().'.png');
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
