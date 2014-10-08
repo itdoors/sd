@@ -212,7 +212,7 @@
                     <ul class="list-unstyled profile-nav">
                         <li>
                             {% if item.photo is not empty %}
-                                <img src="{{ asset( userprofiles_url ~ item.id ~ '/image200_' ~ item.photo) }}" class="img-responsive" alt=""/>
+                                <img src="{{ web_image( userprofiles_url ~ item.id ~ '/' ~ item.photo).resize(247,247) }}" class="img-responsive" alt=""/>
                             {% endif %}
                             <a href="#changeAvatar" data-toggle="modal" class="profile-edit btn default">{% trans %}Change avatar{% endtrans %}</a>
                             {#% include "ComurImageBundle:Form:croppable_image_modal.html.twig"%#}

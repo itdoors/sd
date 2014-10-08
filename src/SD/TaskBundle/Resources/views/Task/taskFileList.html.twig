@@ -37,7 +37,7 @@
             {% for file in files %}
                 <li class="media">
                     <a class="pull-left" href="{{ path('sd_user_show',{ 'id': file.user.id}) }}">
-                        <img class="todo-userpic" src="{{ asset( userprofiles_url ~ file.user.id ~ '/image29_' ~ file.user.photo) }}" width="27px" height="27px">
+                        <img class="todo-userpic" src="{{ web_image( userprofiles_url ~ file.user.id ~ '/' ~ file.user.photo).resize(27, 27) }}">
                     </a>
                     <div class="media-body todo-comment">
                         {#

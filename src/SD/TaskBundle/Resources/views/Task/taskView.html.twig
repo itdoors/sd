@@ -295,7 +295,7 @@
         <div class="form-group">
             <div class="col-md-8 col-sm-8">
                 <div class="todo-taskbody-user">
-                    <img class="todo-userpic pull-left" src="{{ asset( userprofiles_url ~ app.user.id ~ '/image29_' ~ app.user.photo) }}" width="50px" height="50px">
+                    <img class="todo-userpic pull-left" src="{{ web_image( userprofiles_url ~ app.user.id ~ '/' ~ app.user.photo).resize(50, 50) }}" width="50px" height="50px">
                     <span class="todo-username pull-left">{{ taskUserRole.user }}</span>
 {#
                     <button type="button" class="todo-username-btn btn btn-circle btn-default btn-xs">&nbsp;edit&nbsp;</button>
@@ -518,7 +518,7 @@
                         <br><br>
                         <ul class="media-list">
                             <li class="media">
-                                <img class="todo-userpic pull-left" src="{{ asset( userprofiles_url ~ taskUserRole.user.id ~ '/image29_' ~ taskUserRole.user.photo) }}" width="27px" height="27px">
+                                <img class="todo-userpic pull-left" src="{{ web_image( userprofiles_url ~ taskUserRole.user.id ~ '/' ~ taskUserRole.user.photo).resize(27, 27) }}" width="27px" height="27px">
                                 <div class="media-body">
                                     <textarea id="comment" class="form-control todo-taskbody-taskdesc" rows="4" placeholder="Введите комментарий к действию"></textarea>
                                 </div>
@@ -642,7 +642,7 @@
                             {% for comment in comments %}
                                 <li class="media">
                                     <a class="pull-left" href="{{ path('sd_user_show',{ 'id': comment.user.id}) }}">
-                                        <img class="todo-userpic" src="{{ asset( userprofiles_url ~ comment.user.id ~ '/image29_' ~ comment.user.photo) }}" width="27px" height="27px">
+                                        <img class="todo-userpic" src="{{ web_image( userprofiles_url ~ comment.user.id ~ '/' ~ comment.user.photo).resize(27, 27) }}" width="27px" height="27px">
                                     </a>
                                     <div class="media-body todo-comment">
                                         {#
