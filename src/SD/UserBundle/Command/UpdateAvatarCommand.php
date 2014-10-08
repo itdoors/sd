@@ -22,7 +22,7 @@ class UpdateAvatarCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('sd:user:change-avatar')
+            ->setName('app')
             ->setDescription('Change avatar new');
     }
 

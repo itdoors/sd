@@ -108,6 +108,9 @@
 </script>
 {% endif %}
 <style type="text/css">
+    #avatar{
+        max-width: 600px;
+    }
     .jcrop-holder #preview-pane {
       display: block;
       position: absolute;
@@ -163,6 +166,7 @@
                             {% else %}
                                 <img src="{{ asset( userprofiles_url ~  'no_avatar.jpg') }}" class="img-responsive" alt=""/>
                             {% endif %}
+                            {% if app.user.id == item.id %}
                             <a 
                                 id="managers_list_new"
                                 data-toggle="modal"
@@ -175,6 +179,7 @@
                                 {#data-post_function="updateList"
                                 data-post_target_id="messages_list"#}
                                 class="profile-edit btn default ajax-form">{% trans %}Change avatar{% endtrans %}</a>
+                            {% endif %}
                         </li>
                         {#<li>
                             <a href="#">Projects </a>
