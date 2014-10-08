@@ -98,7 +98,7 @@ class UserNewStuffForm extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'SD\UserBundle\Entity\User',
-            'validation_groups' => array('new'),
+            'validation_groups' => array('Registration'),
             'translation_domain' => 'SDUserBundle'
         ));
     }

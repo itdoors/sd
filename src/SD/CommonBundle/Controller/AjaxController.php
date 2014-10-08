@@ -1988,6 +1988,84 @@ class AjaxController extends BaseFilterController
      *
      * @return boolean
      */
+    public function userAvatarFormSave($form, $user, $request)
+    {
+        $data = $request->request->get($form->getName());
+
+        $isUpload = $data['loadPhoto'] !== '' ? $data['loadPhoto'] : null;
+
+        $widthSave = $heightSave = 247;
+
+        $projectDir = $this->container->getParameter('project.dir');
+        $userprofiles = $this->container->getParameter('userprofiles.file.path');
+        $directory = $projectDir.'/web'.$userprofiles.$user->getId();
+        if (!is_dir($directory)) {
+            mkdir($directory, 0777);
+        }
+        $userPhoto = $user->getPhoto();
+        if ($isUpload) {
+            $src = $directory.'/temp/'.$isUpload;
+            if (is_file($src)) {
+                rename(
+                    $src,
+                    $directory.'/original_'.$isUpload
+                );
+            }
+            $user->setPhoto($isUpload);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+        } elseif (empty($userPhoto)) {
+            $file = $projectDir.'/web'.$userprofiles.'/no_avatar.jpg';
+            copy($file, $directory.'/original_'.$user->getId().'.jpg');
+            $user->setPhoto($user->getId().'.jpg');
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+        }
+        $src = $directory.'/original_'.$user->getPhoto();
+        $size = getimagesize($src);
+        $format = strtolower(substr($size['mime'], strpos($size['mime'], '/')+1));
+
+        $icfunc = 'imagecreatefrom' . $format;
+
+        if (!function_exists($icfunc)) {
+            return 3;
+        }
+        $imgOriginal = $icfunc($src);
+
+        $imgResize = imagecreatetruecolor($widthSave, $heightSave);
+
+        imagecopyresampled(
+            $imgResize,
+            $imgOriginal,
+            0,
+            0,
+            intval($data['x']),
+            intval($data['y']),
+            $widthSave,
+            $heightSave,
+            intval($data['w']),
+            intval($data['h'])
+        );
+
+        $icfunc = "image".$format;
+        if (!function_exists($icfunc)) {
+            return 3;
+        }
+        $icfunc($imgResize, $directory.'/'.$user->getId().'.'.$format);
+
+        return true;
+    }
+    /**
+     * Saves {formName}Save after valid ajax validation
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
     public function holidayFormSave($form, $user, $request)
     {
         if (!$this->getUser()->hasRole('ROLE_HRADMIN')) {

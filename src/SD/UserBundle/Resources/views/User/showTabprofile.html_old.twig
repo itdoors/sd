@@ -2,10 +2,6 @@
 {% if isAdmin %}
 <script>
     $(document).ready(function(){
-        $('#changeAvatar').on('hidden.bs.modal', function () {
-            document.location.reload();
-        });
-        
         $('#isFired').editable({
             url: '{{ path('sd_common_ajax_user_save') }}',
             source: [
@@ -103,52 +99,109 @@
                 });
             });
         });
-       
+        $('#changeAvatar').on({
+        'hide': destroyImageManager
+    });
     });
 </script>
 {% endif %}
-<style type="text/css">
-    .jcrop-holder #preview-pane {
-      display: block;
-      position: absolute;
-      z-index: 2000;
-      top: 10px;
-      right: -250px;
-      padding: 6px;
-      border: 1px rgba(0,0,0,.4) solid;
-      background-color: white;
 
-      -webkit-border-radius: 6px;
-      -moz-border-radius: 6px;
-      border-radius: 6px;
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+    
+    <script src="{{ asset('bundles/comurimage/js/jquery.js') }}"></script>
+    
+    <script src="{{ asset('bundles/comurimage/js/jquery.ui.widget.js') }}"></script>
+<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+<script src="{{ asset('bundles/comurimage/js/jquery.iframe-transport.js') }}"></script>
+<script src="{{ asset('bundles/comurimage/js/jquery.fileupload.js') }}"></script>
+<script src="{{ asset('bundles/comurimage/js/jquery.Jcrop.min.js') }}"></script>
+<script src="{{ asset('bundles/comurimage/js/jquery.color.js') }}"></script>
 
-      -webkit-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
-      -moz-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
-      box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
-    }
-    #preview-pane .preview-container {
-      width: 200px;
-      height: 200px;
-      overflow: hidden;
-    }
-</style>
+<script src="{{ asset('bundles/comurimage/js/comur.imagelibrary.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('bundles/comurimage/css/jquery.Jcrop.min.css') }}" type="text/css" />
 
-<link href="{{ asset('templates/metronic/plugins/jcrop/css/jquery.Jcrop.min.css')}}" rel="stylesheet" type="text/css"/>
-<script src="{{ asset('templates/metronic/plugins/jcrop/js/jquery.color.js')}}" type="text/javascript"></script>
-<script src="{{ asset('templates/metronic/plugins/jcrop/js/jquery.Jcrop.min.js')}}" type="text/javascript"></script>
 
-<div id="changeAvatar" class="modal fade" role="basic" aria-hidden="true" data-backdrop="static">
+<link rel="stylesheet" href="{{ asset('bundles/comurimage/css/comur.image_bundle.css') }}" type="text/css" />
+
+
+<div class="modal fade bs-modal-sm" id="changeAvatar" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                 <h4 class="modal-title">{% trans %}Change avatar{% endtrans %}</h4>
             </div>
-            <div id="userAvatarFormTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}"></div>
-
+            <div class="modal-body">
+                <ul class="nav nav-pills" id="image_upload_tabs">
+            <li class="active">
+                <a href="#upload-image" data-toggle="tab">{% trans %}Upload Image{% endtrans %}</a>
+            </li>
+            <li><a href="#select-existing" data-toggle="tab">{% trans %}Select Existing{% endtrans %}</a></li>
+            <li><a href="#crop-and-use" data-toggle="tab">{% trans %}Crop and Use{% endtrans %}</a></li>
+        </ul>
+        <div class="tab-content">
+            <!-- UPLOAD IMAGE -->
+            <div class="tab-pane active" id="upload-image">
+                <div class="field-error clearfix hidden">
+                    <div id="image_upload_widget_error" class="alert alert-danger span6">
+                    </div>
+                </div>
+                <div id="image_upload_drop_zone" class="image_upload_drop_zone">
+                    <p>{% trans %}Drop your file here{% endtrans %}</p>
+                    <p>{% trans %}or{% endtrans %}</p>
+                </div>
+                <div id="image_upload_file_container">
+                    <span class="btn btn-info fileinput-button">
+                        <i class="icon-white icon-download-alt"></i>
+                        <span> {% trans %}Select a file...{% endtrans %}</span>
+                        <input id="image_upload_file" type="file" name="image_upload_file">
+                    </span>
+                </div>
+                <div id="image_file_upload_progress" class="progress">
+                    <div class="progress-bar progress-bar-success"></div>
+                </div>
+            </div>
+            <!-- IMAGE LIB -->
+            <div class="tab-pane hidden" id="select-existing">
+                <div class="field-error clearfix hidden">
+                    <div id="image_select_widget_error" class="alert alert-danger span6">
+                    </div>
+                </div>
+                <div id="existing-images"></div>
+                <input type="hidden" id="selected_image"/>
+            </div>
+            <!-- CROP IMAGE -->
+            <div class="tab-pane" id="crop-and-use">
+                <p>{% trans %}Please adjust selection to your image{% endtrans %}</p>
+                <div class="image_preview" id="image_preview" style="z-index: 1050">
+                    <p>{% trans %}Please select or upload an image{% endtrans %}</p>
+                </div>
+            </div>
         </div>
-        <!-- /.modal-content -->
+                {#% include "ComurImageBundle:Form:croppable_image_modal.html.twig"%#}
+                {#% include "ComurImageBundle:Form:croppable_image_modal.html.twig" with {'include_jquery': false, 'include_bootstrap': false} %#}
+                     {#<div class="row">
+                            <div class="col-md-6 responsive-1024">
+                                    <img src="../../assets/global/plugins/jcrop/demos/demo_files/image3.jpg" id="demo3" alt="Jcrop Example"/>
+                            </div>
+                            <div class="col-md-6 responsive-1024">
+                                    <div id="preview-pane">
+                                            <div class="preview-container">
+                                                    <img src="../../assets/global/plugins/jcrop/demos/demo_files/image3.jpg" class="jcrop-preview" alt="Preview"/>
+                                            </div>
+                                    </div>
+                            </div>
+                    </div>#}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn default" data-dismiss="modal">{% trans %}Cancel{% endtrans %}</button>
+                <button type="button" class="btn blue">{% trans %}Save{% endtrans %}</button>
+            </div>
+        </div>
+            <!-- /.modal-content -->
     </div>
+        <!-- /.modal-dialog -->
 </div>
 
 <div class="row profile">
@@ -160,21 +213,9 @@
                         <li>
                             {% if item.photo is not empty %}
                                 <img src="{{ web_image( userprofiles_url ~ item.id ~ '/' ~ item.photo).resize(247,247) }}" class="img-responsive" alt=""/>
-                            {% else %}
-                                <img src="{{ asset( userprofiles_url ~  'no_avatar.jpg') }}" class="img-responsive" alt=""/>
                             {% endif %}
-                            <a 
-                                id="managers_list_new"
-                                data-toggle="modal"
-                                href="#changeAvatar"
-                                data-target_holder="userAvatarFormTpl"
-                                data-target_holder="changeAvatar"
-                                data-form_name="userAvatarForm"
-                                data-default='{"user_id":{{ item.id }}}'
-
-                                {#data-post_function="updateList"
-                                data-post_target_id="messages_list"#}
-                                class="profile-edit btn default ajax-form">{% trans %}Change avatar{% endtrans %}</a>
+                            <a href="#changeAvatar" data-toggle="modal" class="profile-edit btn default">{% trans %}Change avatar{% endtrans %}</a>
+                            {#% include "ComurImageBundle:Form:croppable_image_modal.html.twig"%#}
                         </li>
                         {#<li>
                             <a href="#">Projects </a>
@@ -494,7 +535,7 @@
                                                         class="sd-stuff-date sd-stuff-editable {% if item.dateFire is empty %} editable-empty {% endif %}"
                                                         data-name="dateFire"
                                                         data-type="text"
-                                                        data-pk="{{ item.stuffId }}"
+                                                        data-pk="{{ item.dateFire }}"
                                                              {% if item.dateFire %}
                                                                  data-value="{{ item.dateFire|date("d.m.Y") }}"
                                                              {% endif %}

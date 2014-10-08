@@ -28,3 +28,4 @@ nbproject/*
 /web/uploads/document/
 /composer.lock
 /components/
+/web/cache/*

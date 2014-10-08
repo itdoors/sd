@@ -11,6 +11,8 @@ use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Session\Session;
 use SD\UserBundle\Entity\Usercontactinfo;
 use Lists\CompanystructureBundle\Entity\Companystructure;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\Image;
 
 /**
  * UserController
@@ -317,6 +319,7 @@ class UserController extends BaseController
                 $user = $form->getData();
                 $formData = $request->request->get($form->getName());
                 $user->setBirthday(new \DateTime($formData['birthday']));
+                $user->setEnabled(true);
 
 
                 $em->persist($user);
@@ -358,5 +361,51 @@ class UserController extends BaseController
                 'form' => $form->createView(),
                 'baseTemplate' => $this->baseTemplate
         ));
+    }
+    /**
+     * Executes new action
+     * 
+     * @param Request $request
+     * 
+     * @return string
+     */
+    public function uploadPhotoAction(Request $request)
+    {
+        $imgConstraint = new Image();
+        $imgConstraint->maxSize = '5M';
+        $imgConstraint->minHeight = 247;
+        $imgConstraint->minWidth = 247;
+
+        $result = array();
+
+        $em = $this->getDoctrine()->getManager();
+        $files=$request->files->get('userAvatarForm');
+
+        $file = $files['photo'];
+        $errorList = $this->get('validator')->validateValue($file, $imgConstraint);
+
+        if (count($errorList) == 0) {
+            $user = $this->getUser();
+
+            if ($file) {
+                $directory = $this->container->getParameter('project.web.dir');
+                $directory .= '/uploads/userprofiles/'.$user->getId().'/';
+                if (!is_dir($directory)) {
+                    mkdir($directory, 0777);
+                }
+                $user->setFile($file);
+                $result = $user->uploadTemp();
+                $result['file'] = $result['file'].'?v='.time();
+            } else {
+                $result['error'] = 'File not found';
+            }
+
+            $em->persist($user);
+            $em->flush();
+        } else {
+            $result['error'] = $errorList[0]->getMessage();
+        }
+
+        return new Response(json_encode($result));
     }
 }
