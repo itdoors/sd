@@ -170,9 +170,9 @@
                    data-name="startdatetimeString"
                    data-type="text"
                    data-pk="{{ dogovor.id }}"
-                        {% if dogovor.startdatetime %}
-                            data-value="{{ dogovor.startdatetime|date("d.m.Y") }}"
-                        {% endif %}
+                    {% if dogovor.startdatetime %}
+                        data-value="{{ dogovor.startdatetime|date("d.m.Y") }}"
+                    {% endif %}
                    data-original-title="{% trans %}Edit{% endtrans %}"
                 >
                     {% if dogovor.startdatetime %}

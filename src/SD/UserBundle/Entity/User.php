@@ -12,6 +12,7 @@ use FOS\UserBundle\Model\User as BaseUser;
 use Lists\HandlingBundle\Entity\HandlingUser;
 use Lists\OrganizationBundle\Entity\OrganizationUser;
 use Lists\TeamBundle\Entity\Team;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * User
@@ -392,6 +393,147 @@ class User extends BaseUser
     public function getPhoto()
     {
         return $this->photo;
+    }
+    /**
+     * getAbsolutePath
+     *
+     * @return null|string
+     */
+    public function getAbsolutePath ()
+    {
+        return null === $this->photo ? null : $this->getUploadRootDir() . '/' . $this->photo;
+    }
+    /**
+     * getWebPath
+     *
+     * @return null|string
+     */
+    public function getWebPath ()
+    {
+        return null === $this->photo ? null : $this->getUploadDir() . '/'. $this->photo;
+    }
+    /**
+     * getWebPath
+     *
+     * @return null|string
+     */
+    public function getWebPathOriginal ()
+    {
+        return null === $this->photo ? null : $this->getUploadDir() . '/original_'. $this->photo;
+    }
+    /**
+     * getUploadRootDir
+     *
+     * @return string
+     */
+    protected function getUploadRootDir ()
+    {
+        $dir = __DIR__ . '/../../../../web/' . $this->getUploadDir();
+
+        // the absolute directory path where uploaded
+        // documents should be saved
+        return $dir;
+    }
+    /**
+     * getUploadDir
+     *
+     * @return string
+     */
+    protected function getUploadDir ()
+    {
+        // get rid of the __DIR__ so it doesn't screw up
+        // when displaying uploaded doc/image in the view.
+        return '/uploads/userprofiles/'.$this->id;
+    }
+    private $file;
+
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile (UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile ()
+    {
+        return $this->file;
+    }
+    /**
+     * upload
+     */
+    public function upload ()
+    {
+        // the file property can be empty if the field is not required
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+        // move takes the target directory and then the
+        // target filename to move to
+
+        $fileExtension = $this->getFile()->getClientOriginalExtension();
+
+        $filename = md5(microtime()) . '.' . $fileExtension;
+
+        $uploadDir = $this->getUploadRootDir();
+
+        $this->getFile()->move(
+            $uploadDir,
+            $filename
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->photo = $filename;
+
+        // clean up the file property as you won't need it anymore
+        $this->file = null;
+    }
+    /**
+     * upload
+     * 
+     * @return mixed[]
+     */
+    public function uploadTemp ()
+    {
+        // the file property can be empty if the field is not required
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+        // move takes the target directory and then the
+        // target filename to move to
+
+        $fileExtension = $this->getFile()->getClientOriginalExtension();
+
+        $filename = $this->id . '.' . $fileExtension;
+
+        $uploadDir = $this->getUploadRootDir().'/temp';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777);
+        }
+        $this->getFile()->move(
+            $uploadDir,
+            $filename
+        );
+
+        // clean up the file property as you won't need it anymore
+        $this->file = null;
+
+        return array(
+            'file' => $this->getUploadDir().'/temp/'.$filename,
+            'fileName' => $filename
+        );
     }
 
     /**
