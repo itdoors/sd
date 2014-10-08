@@ -1089,8 +1089,6 @@ class InvoiceService
         $organizationRepository = $em->getRepository('ListsOrganizationBundle:Organization');
         /** @var InvoiceRepository $invoiceRepository */
         $invoiceRepository = $em->getRepository('ITDoorsControllingBundle:Invoice');
-        /** @var InvoicePaymentsRepository $invoicePayRepository */
-//        $invoicePayRepository = $em->getRepository('ITDoorsControllingBundle:InvoicePayments');
 
         $organizationsEntity = $organizationRepository->getForInvoiceAnalitic($filters);
         $paginator = $this->container->get($this->paginator);
@@ -1118,7 +1116,6 @@ class InvoiceService
                 $invoices[$organization['id']]['name'] = $organization['customerName'];
                 $invoices[$organization['id']]['invoices'] = array();
                 $invoiceActs = $invoiceRepository->getForCustomerDebit($organization['id'], $filters);
-//                $invoicePays = $invoicePayRepository->getForCustomer($organization['id'], $filters);
 
                 $minDate = $dateStart;
                 $maxDate = $dateStop;
@@ -1127,7 +1124,6 @@ class InvoiceService
                 }
                 $minDateInvoice = $dateStart;
                 $maxDateInvoice = date('t.m.Y');
-                // общая сумма долга
                 $invoiceAct = array();
                 foreach ($invoiceActs as $act) {
                     if (!$showDays) {
@@ -1155,56 +1151,19 @@ class InvoiceService
                     $invoiceAct[$date]['all'] += $act['allSumm']-$act['payAll'];
                     $invoiceAct[$date]['debt'] += $act['allSummDebit']-$act['payAll'];
                 }
-
-//                // простроченая оплата
-//                $invoicePay = array();
-//                foreach ($invoicePays as $pay) {
-//                    if (!$showDays) {
-//                        $date = $pay['date']->format('t.m.Y');
-//                    } else {
-//                        $date = $pay['date']->format('d.m.Y');
-//                    }
-//                    if ((empty($minDate) || strtotime($date) < strtotime($minDate)) && !$dateStart) {
-//                        $minDate = $date;
-//                    }
-//                    if ((empty($maxDate) || strtotime($date) > strtotime($maxDate)) && !$dateStop) {
-//                        $maxDate = $date;
-//                    }
-//                    if ((empty($minDateInvoice) || strtotime($date) < strtotime($minDateInvoice))) {
-//                        $minDateInvoice = $date;
-//                    }
-//                    if ((empty($maxDateInvoice) || strtotime($date) > strtotime($maxDateInvoice))) {
-//                        $maxDateInvoice = $date;
-//                    }
-//                    if (!isset($invoicePay[$date])) {
-//                        $invoicePay[$date] = array();
-//                        $invoicePay[$date]['pay'] = 0;
-//                    }
-//                    $invoicePay[$date]['pay'] += $pay['summaPay'];
-//                }
-                $all = 0;
-                $debt = 0;
                 $res = array();
                 if (!$showDays) {
                     for ($i = strtotime($minDateInvoice);
                         $i <= strtotime($maxDateInvoice);
                         $i = mktime(0, 0, 0, date('m', $i)+1, 1, date('Y', $i))) {
                         $date = date('t.m.Y', $i);
+                        $all = 0;
+                        $debt = 0;
                         if (isset($invoiceAct[$date])) {
-                            $all += $invoiceAct[$date]['all'];
-                            $debt += $invoiceAct[$date]['debt'];
+                            $all = $invoiceAct[$date]['all'];
+                            $debt = $invoiceAct[$date]['debt'];
                         }
-                        if (!isset($invoiceAct[$date])) {
-                            $invoiceAct[$date] = array();
-                            $invoiceAct[$date]['all'] = $all;
-                            $invoiceAct[$date]['debt'] = $debt;
-                        }
-//                        if (isset($invoicePay[$date])) {
-//                            $all -= $invoicePay[$date]['pay'];
-//                            $debt -= $invoicePay[$date]['pay'];
-//                        }
-                        $invoiceAct[$date]['all'] = $all;
-                        $invoiceAct[$date]['debt'] = $debt;
+
                         $res[$date] = array(
                             'all' => $all,
                             'debt' => $debt
@@ -1215,21 +1174,12 @@ class InvoiceService
                         $i <= strtotime($maxDateInvoice);
                         $i = mktime(0, 0, 0, date('m', $i), date('d', $i)+1, date('Y', $i))) {
                         $date = date('d.m.Y', $i);
+                        $all = 0;
+                        $debt = 0;
                         if (isset($invoiceAct[$date])) {
-                            $all += $invoiceAct[$date]['all'];
-                            $debt += $invoiceAct[$date]['debt'];
+                            $all = $invoiceAct[$date]['all'];
+                            $debt = $invoiceAct[$date]['debt'];
                         }
-                        if (!isset($invoiceAct[$date])) {
-                            $invoiceAct[$date] = array();
-                            $invoiceAct[$date]['all'] = $all;
-                            $invoiceAct[$date]['debt'] = $debt;
-                        }
-//                        if (isset($invoicePay[$date])) {
-//                            $all -= $invoicePay[$date]['pay'];
-//                            $debt -= $invoicePay[$date]['pay'];
-//                        }
-                        $invoiceAct[$date]['all'] = $all;
-                        $invoiceAct[$date]['debt'] = $debt;
                         $res[$date] = array(
                             'all' => $all,
                             'debt' => $debt
