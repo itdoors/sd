@@ -164,7 +164,7 @@
                             {% if item.photo is not empty %}
                                 <img src="{{ web_image( userprofiles_url ~ item.id ~ '/' ~ item.photo).resize(247,247) }}" class="img-responsive" alt=""/>
                             {% else %}
-                                <img src="{{ asset( userprofiles_url ~  'no_avatar.jpg') }}" class="img-responsive" alt=""/>
+                                <img src="{{ asset( userprofiles_url ~  'no_avatar.png') }}" class="img-responsive" alt=""/>
                             {% endif %}
                             {% if app.user.id == item.id %}
                             <a 
