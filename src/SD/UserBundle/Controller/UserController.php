@@ -319,6 +319,7 @@ class UserController extends BaseController
                 $user = $form->getData();
                 $formData = $request->request->get($form->getName());
                 $user->setBirthday(new \DateTime($formData['birthday']));
+                $user->setEnabled(true);
 
 
                 $em->persist($user);
@@ -372,8 +373,8 @@ class UserController extends BaseController
     {
         $imgConstraint = new Image();
         $imgConstraint->maxSize = '5M';
-        $imgConstraint->minHeight = 200;
-        $imgConstraint->minWidth = 200;
+        $imgConstraint->minHeight = 247;
+        $imgConstraint->minWidth = 247;
     
         $result = array();
 
@@ -394,7 +395,8 @@ class UserController extends BaseController
                     mkdir($directory, 0777);
                 }
                 $user->setFile($file);
-                $result['file'] = $user->uploadTemp().'?v='.time();
+                $result = $user->uploadTemp();
+                $result['file'] = $result['file'].'?v='.time();
             } else {
                 $result['error'] = 'File not found';
             }

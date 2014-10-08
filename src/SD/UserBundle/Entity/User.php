@@ -413,6 +413,15 @@ class User extends BaseUser
         return null === $this->photo ? null : $this->getUploadDir() . '/'. $this->photo;
     }
     /**
+     * getWebPath
+     *
+     * @return null|string
+     */
+    public function getWebPathOriginal ()
+    {
+        return null === $this->photo ? null : $this->getUploadDir() . '/original_'. $this->photo;
+    }
+    /**
      * getUploadRootDir
      *
      * @return string
@@ -516,13 +525,13 @@ class User extends BaseUser
             $filename
         );
 
-        // set the path property to the filename where you've saved the file
-        $this->photo = $filename;
-
         // clean up the file property as you won't need it anymore
         $this->file = null;
         
-        return $this->getUploadDir().'/temp/'.$filename;
+        return array(
+            'file' => $this->getUploadDir().'/temp/'.$filename,
+            'fileName' => $filename
+        );
     }
 
     /**

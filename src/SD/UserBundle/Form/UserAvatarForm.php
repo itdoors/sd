@@ -34,6 +34,9 @@ class UserAvatarForm extends AbstractType
                 'mapped' => false,
                 'required' => false
             ))
+            ->add('loadPhoto', 'hidden', array(
+                'mapped' => false,
+            ))
             ->add('x', 'hidden', array(
                 'mapped' => false,
             ))

@@ -22,7 +22,7 @@ Muzyka Dmytro
 	<!-- BEGIN USER LOGIN DROPDOWN -->
 	<li class="dropdown dropdown-user">
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-			{% if app.user.photo is not empty %}<img class="img-circle hide1" alt="" src="{{ asset( userprofiles_url ~ app.user.id ~ '/image29_' ~ app.user.photo) }}"/>{% endif %}
+			{% if app.user.photo is not empty %}<img class="img-circle hide1" alt="" src="{{ asset( userprofiles_url ~ app.user.id ~ '/' ~ app.user.photo) }}"/>{% endif %}
 			<span class="username">{{ app.user.fullName }}</span>
 			<i class="fa fa-angle-down"></i>
 		</a>
