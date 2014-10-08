@@ -375,22 +375,21 @@ class UserController extends BaseController
         $imgConstraint->maxSize = '5M';
         $imgConstraint->minHeight = 247;
         $imgConstraint->minWidth = 247;
-    
+
         $result = array();
 
         $em = $this->getDoctrine()->getManager();
         $files=$request->files->get('userAvatarForm');
 
         $file = $files['photo'];
-        
         $errorList = $this->get('validator')->validateValue($file, $imgConstraint);
 
         if (count($errorList) == 0) {
-        
             $user = $this->getUser();
 
             if ($file) {
-                $directory = $this->container->getParameter('project.web.dir'). '/uploads/userprofiles/'.$user->getId().'/';
+                $directory = $this->container->getParameter('project.web.dir');
+                $directory .= '/uploads/userprofiles/'.$user->getId().'/';
                 if (!is_dir($directory)) {
                     mkdir($directory, 0777);
                 }
@@ -403,7 +402,7 @@ class UserController extends BaseController
 
             $em->persist($user);
             $em->flush();
-         } else {
+        } else {
             $result['error'] = $errorList[0]->getMessage();
         }
 

@@ -1994,7 +1994,7 @@ class AjaxController extends BaseFilterController
 
         $isUpload = $data['loadPhoto'] !== '' ? $data['loadPhoto'] : null;
 
-        $widthSave = $HeightSave = 247;
+        $widthSave = $heightSave = 247;
 
         $projectDir = $this->container->getParameter('project.dir');
         $userprofiles = $this->container->getParameter('userprofiles.file.path');
@@ -2005,7 +2005,7 @@ class AjaxController extends BaseFilterController
         $userPhoto = $user->getPhoto();
         if ($isUpload) {
             $src = $directory.'/temp/'.$isUpload;
-            if (is_file($src)){
+            if (is_file($src)) {
                 rename(
                     $src,
                     $directory.'/original_'.$isUpload
@@ -2016,9 +2016,9 @@ class AjaxController extends BaseFilterController
             $em->persist($user);
             $em->flush();
         } elseif (empty($userPhoto)) {
-            $file = $projectDir.'/web'.$userprofiles.'/no_avatar.png';
-            copy($file, $directory.'/original_'.$user->getId().'.png');
-            $user->setPhoto($user->getId().'.png');
+            $file = $projectDir.'/web'.$userprofiles.'/no_avatar.jpg';
+            copy($file, $directory.'/original_'.$user->getId().'.jpg');
+            $user->setPhoto($user->getId().'.jpg');
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
@@ -2026,18 +2026,17 @@ class AjaxController extends BaseFilterController
         $src = $directory.'/original_'.$user->getPhoto();
         $size = getimagesize($src);
         $format = strtolower(substr($size['mime'], strpos($size['mime'], '/')+1));
-        
-        
-        
-	$icfunc = "imagecreatefrom".$format;
-        if(!function_exists($icfunc)) {
+
+        $icfunc = 'imagecreatefrom' . $format;
+
+        if (!function_exists($icfunc)) {
             return 3;
         }
         $imgOriginal = $icfunc($src);
 
-	$imgResize = ImageCreateTrueColor($widthSave, $HeightSave);
+        $imgResize = imagecreatetruecolor($widthSave, $heightSave);
 
-	imagecopyresampled(
+        imagecopyresampled(
             $imgResize,
             $imgOriginal,
             0,
@@ -2045,12 +2044,13 @@ class AjaxController extends BaseFilterController
             intval($data['x']),
             intval($data['y']),
             $widthSave,
-            $HeightSave,
+            $heightSave,
             intval($data['w']),
             intval($data['h'])
         );
+
         $icfunc = "image".$format;
-        if(!function_exists($icfunc)) {
+        if (!function_exists($icfunc)) {
             return 3;
         }
         $icfunc($imgResize, $directory.'/'.$user->getId().'.'.$format);

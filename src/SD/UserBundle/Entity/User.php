@@ -499,6 +499,8 @@ class User extends BaseUser
     }
     /**
      * upload
+     * 
+     * @return mixed[]
      */
     public function uploadTemp ()
     {
@@ -527,7 +529,7 @@ class User extends BaseUser
 
         // clean up the file property as you won't need it anymore
         $this->file = null;
-        
+
         return array(
             'file' => $this->getUploadDir().'/temp/'.$filename,
             'fileName' => $filename

@@ -85,10 +85,10 @@ class UserService
         $directory .= '/web'.$this->container->getParameter('userprofiles.file.path');
         if (!is_dir($directory)) {
             $output->writeln("Directory not found {$directory}");
-            
+
             return;
         }
-        
+
         $users = $em->getRepository('SDUserBundle:User')->findAll();
         foreach ($users as $user) {
             $photo = $user->getPhoto();

@@ -2,6 +2,10 @@
 {% if isAdmin %}
 <script>
     $(document).ready(function(){
+        $('#changeAvatar').on('hidden.bs.modal', function () {
+            document.location.reload();
+        });
+        
         $('#isFired').editable({
             url: '{{ path('sd_common_ajax_user_save') }}',
             source: [
@@ -155,9 +159,9 @@
                     <ul class="list-unstyled profile-nav">
                         <li>
                             {% if item.photo is not empty %}
-                                <img src="{{ asset( userprofiles_url ~ item.id ~ '/' ~ item.photo) }}" class="img-responsive" alt=""/>
+                                <img src="{{ web_image( userprofiles_url ~ item.id ~ '/' ~ item.photo).resize(247,247) }}" class="img-responsive" alt=""/>
                             {% else %}
-                                <img src="{{ asset( userprofiles_url ~  'no_avatar.png') }}" class="img-responsive" alt=""/>
+                                <img src="{{ asset( userprofiles_url ~  'no_avatar.jpg') }}" class="img-responsive" alt=""/>
                             {% endif %}
                             <a 
                                 id="managers_list_new"
