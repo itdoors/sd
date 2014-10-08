@@ -410,7 +410,7 @@ class User extends BaseUser
      */
     public function getWebPath ()
     {
-        return null === $this->photo ? null : $this->getUploadDir() . '/image200_' . $this->photo;
+        return null === $this->photo ? null : $this->getUploadDir() . '/'. $this->photo;
     }
     /**
      * getUploadRootDir
@@ -420,9 +420,7 @@ class User extends BaseUser
     protected function getUploadRootDir ()
     {
         $dir = __DIR__ . '/../../../../web/' . $this->getUploadDir();
-        if (!is_dir($dir)) {
-            mkdir($dir, 0777);
-        }
+
         // the absolute directory path where uploaded
         // documents should be saved
         return $dir;
@@ -436,7 +434,7 @@ class User extends BaseUser
     {
         // get rid of the __DIR__ so it doesn't screw up
         // when displaying uploaded doc/image in the view.
-        return 'uploads/userprofiles/'.$this->id;
+        return '/uploads/userprofiles/'.$this->id;
     }
     private $file;
 
@@ -475,12 +473,9 @@ class User extends BaseUser
 
         $fileExtension = $this->getFile()->getClientOriginalExtension();
 
-        $filename = $this->getId() . '.' . $fileExtension;
+        $filename = md5(microtime()) . '.' . $fileExtension;
 
         $uploadDir = $this->getUploadRootDir();
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777);
-        }
 
         $this->getFile()->move(
             $uploadDir,
@@ -492,6 +487,42 @@ class User extends BaseUser
 
         // clean up the file property as you won't need it anymore
         $this->file = null;
+    }
+    /**
+     * upload
+     */
+    public function uploadTemp ()
+    {
+        // the file property can be empty if the field is not required
+        if (null === $this->getFile()) {
+            return;
+        }
+
+        // use the original file name here but you should
+        // sanitize it at least to avoid any security issues
+        // move takes the target directory and then the
+        // target filename to move to
+
+        $fileExtension = $this->getFile()->getClientOriginalExtension();
+
+        $filename = $this->id . '.' . $fileExtension;
+
+        $uploadDir = $this->getUploadRootDir().'/temp';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777);
+        }
+        $this->getFile()->move(
+            $uploadDir,
+            $filename
+        );
+
+        // set the path property to the filename where you've saved the file
+        $this->photo = $filename;
+
+        // clean up the file property as you won't need it anymore
+        $this->file = null;
+        
+        return $this->getUploadDir().'/temp/'.$filename;
     }
 
     /**

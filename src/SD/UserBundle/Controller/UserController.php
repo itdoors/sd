@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use SD\UserBundle\Entity\Usercontactinfo;
 use Lists\CompanystructureBundle\Entity\Companystructure;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\Image;
 
 /**
  * UserController
@@ -369,6 +370,11 @@ class UserController extends BaseController
      */
     public function uploadPhotoAction(Request $request)
     {
+        $imgConstraint = new Image();
+        $imgConstraint->maxSize = '5M';
+        $imgConstraint->minHeight = 200;
+        $imgConstraint->minWidth = 200;
+    
         $result = array();
 
         $em = $this->getDoctrine()->getManager();
@@ -376,35 +382,28 @@ class UserController extends BaseController
 
         $file = $files['photo'];
         
-        $user = $this->getUser();
-        $directory = $user->getUploadRootDir();
+        $errorList = $this->get('validator')->validateValue($file, $imgConstraint);
 
-        if ($file) {
-            $directory = $user->getUploadRootDir().'/original';
-            if (!is_dir($directory.'/original')) {
-                mkdir($directory.'/original', 0777);
-            }
-            if (
-                    is_file($directory.$user->getPhoto())
-                    &&
-                    rename(
-                        $directory.$user->getPhoto(),
-                        $directory.$user->getId().'_old_'.$user->getPhoto()
-                    )
-                ) {
+        if (count($errorList) == 0) {
+        
+            $user = $this->getUser();
 
+            if ($file) {
+                $directory = $this->container->getParameter('project.web.dir'). '/uploads/userprofiles/'.$user->getId().'/';
+                if (!is_dir($directory)) {
+                    mkdir($directory, 0777);
+                }
+                $user->setFile($file);
+                $result['file'] = $user->uploadTemp().'?v='.time();
             } else {
-                $result['error'] = 'File move error';
+                $result['error'] = 'File not found';
             }
-            $user->setFile($file);
-            $user->upload();
-            $result['file'] = $user->getWebPath();
-        } else {
-            $result['error'] = 'File not found';
-        }
 
-        $em->persist($user);
-        $em->flush();
+            $em->persist($user);
+            $em->flush();
+         } else {
+            $result['error'] = $errorList[0]->getMessage();
+        }
 
         return new Response(json_encode($result));
     }
