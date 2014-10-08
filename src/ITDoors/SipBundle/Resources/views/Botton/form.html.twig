@@ -1,0 +1,12 @@
+<script type="text/javascript">
+    $(document).ready(function(){
+       $('{{ options.selector }}').live('click', function(){
+           $('#callForm').empty()
+                   .append('<input name="model" type="hidden" value="{{ options.params.modelName }}{{ options.params.modelId }}">')
+                   .append('<input name="phone" type="hidden" value="'+$(this).data('phone')+'">');
+           $('#callForm').submit();
+           return false;
+        });
+    });
+</script>
+<form action="{{ path('it_doors_sip_call') }}" target="_blank" id="callForm" method="post"></form>

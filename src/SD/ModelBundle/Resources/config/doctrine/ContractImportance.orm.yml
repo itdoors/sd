@@ -1,0 +1,42 @@
+SD\ModelBundle\Entity\ContractImportance:
+    type: entity
+    table: contract_importance
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        duration:
+            type: bigint
+            nullable: false
+    manyToOne:
+        contract:
+            targetEntity: Contract
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contract_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        importance:
+            targetEntity: Importance
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                importance_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        organization:
+            targetEntity: Organization
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                organization_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

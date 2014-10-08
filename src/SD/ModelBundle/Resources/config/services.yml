@@ -1,0 +1,7 @@
+parameters:
+#    sd_model.example.class: SD\ModelBundle\Example
+
+services:
+#    sd_model.example:
+#        class: %sd_model.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

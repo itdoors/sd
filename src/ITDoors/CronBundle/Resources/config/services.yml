@@ -1,0 +1,7 @@
+parameters:
+    it_doors_cron.service.class: ITDoors\CronBundle\Services\CronService
+
+services:
+    it_doors_cron.service:
+        class: %it_doors_cron.service.class%
+        arguments: [@service_container]

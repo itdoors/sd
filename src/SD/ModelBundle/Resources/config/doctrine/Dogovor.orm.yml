@@ -1,0 +1,152 @@
+SD\ModelBundle\Entity\Dogovor:
+    type: entity
+    table: dogovor
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        startdatetime:
+            type: datetime
+            nullable: false
+        stopdatetime:
+            type: datetime
+            nullable: true
+        subject:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        filepath:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        isActive:
+            type: boolean
+            nullable: true
+            column: is_active
+        mashtab:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        prolongation:
+            type: boolean
+            nullable: true
+        number:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        total:
+            type: float
+            nullable: true
+        maturity:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        completionNotice:
+            type: boolean
+            nullable: true
+            column: completion_notice
+        paymentDeferment:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: payment_deferment
+        prolongationTerm:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: prolongation_term
+        launchDate:
+            type: date
+            nullable: true
+            column: launch_date
+        summMonthVat:
+            type: float
+            nullable: true
+            column: summ_month_vat
+        plannedPf1:
+            type: float
+            nullable: true
+            column: planned_pf1
+        plannedPf1Percent:
+            type: float
+            nullable: true
+            column: planned_pf1_percent
+    manyToOne:
+        city:
+            targetEntity: City
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                city_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        companyRole:
+            targetEntity: Lookup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                company_role_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        companystructure:
+            targetEntity: Companystructure
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                companystructure_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        dogovorType:
+            targetEntity: Lookup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                dogovor_type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        organization:
+            targetEntity: Organization
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                organization_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        stuff:
+            targetEntity: Stuff
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                stuff_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SfGuardUser
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

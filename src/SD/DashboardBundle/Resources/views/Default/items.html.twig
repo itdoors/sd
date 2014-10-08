@@ -1,0 +1,127 @@
+{% trans_default_domain 'SDDashboardBundle' %}
+
+{% set masterRole = 'Sales' %}
+{% set isCrm = false %}
+{% set debitors = false %}
+
+{% if app.user.hasRole('ROLE_SALES') %}
+    {% set isCrm = true %}
+{%  endif %}
+
+{% if app.user.hasRole('ROLE_CONTROLLING') %}
+    {% set debitors = true %}
+{%  endif %}
+
+{% if app.user.hasRole('ROLE_SALESDISPATCHER') %}
+    {% set masterRole = 'SalesDispatcher' %}
+    {% set isCrm = true %}
+{%  endif %}
+
+{% if app.user.hasRole('ROLE_SALESADMIN') %}
+    {% set masterRole = 'SalesAdmin' %}
+    {% set isCrm = true %}
+{%  endif %}
+
+{% set masterRoleRoute = masterRole|lower %}
+
+{% if app.user.hasRole('ROLE_CRM') %}
+    <a href="{{ path('lists_organization_index') }}">
+        {% trans %}Organizations list{% endtrans %}
+    </a>
+{% endif %}
+
+{% if app.user.hasGroup('admin') %}
+    user has group admin
+{% endif %}
+
+{% if isCrm %}
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption"><i class="fa fa-globe"></i> {% trans %}My Actions{% endtrans %}</div>
+        </div>
+        <div class="tools">
+            <a class="collapse" href="javascript:;"></a>
+            <a class="reload" href="javascript:;"></a>
+        </div>
+        <div class="portlet-body">
+            {% if isCrm %}
+                <a class="btn btn-lg blue" href="{{ path('lists_sales_handling_create_step1') }}">
+                    {% trans %}Create project{% endtrans %} <i class="fa fa-comments"></i>
+                </a>
+
+                <a id="managers_list_new" class="btn btn-lg green ajax-form"
+                   data-toggle="modal"
+                   href="#form_modal_contact"
+                   data-target_holder="modelContactFormTpl"
+                   data-form_name="modelContactOrganizationEditForm"
+                   data-post_function=""
+                   data-post_target_id=""
+                   >
+                    {% trans %}Create contact{% endtrans %} <i class="fa fa-comments"></i>
+                </a>
+                <div id="form_modal_contact" class="modal fade" role="basic" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                <h4 class="modal-title">{% trans from 'ListsContactBundle' %}New Contact{% endtrans %}</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div id="modelContactFormTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $.fn.modal.Constructor.prototype.enforceFocus = function() {
+            };
+        });
+    </script>
+{%  endif %}
+
+{% if debitors %}
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption"><i class="fa fa-globe"></i> {% trans %}Invoice need stitch{% endtrans %}</div>
+            <div class="tools">
+                <a class="expand" href="" title="{% trans %}Invoice need stitch{% endtrans %}"></a>
+            </div>
+        </div>
+        <div style="display:none;" class="portlet-body" id="datatable_ajax" data-url="{{ url('it_doors_controlling_invoice_expected_data') }}">
+            {{ render(controller('ITDoorsControllingBundle:Invoice:Expecteddata')) }}
+        </div>
+    </div>
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption"><i class="fa fa-globe"></i> {% trans %}List expected payments{% endtrans %}</div>
+            <div class="tools">
+                <a class="collapse" href="" title="{% trans %}List expected payments{% endtrans %}"></a>
+            </div>
+        </div>
+        <div class="portlet-body" id="datatable_ajax" data-url="{{ url('it_doors_controlling_invoice_expected_pay') }}">
+            {{ render(controller('ITDoorsControllingBundle:Invoice:Expectedpay')) }}
+        </div>
+    </div>
+{% endif %}
+ 
+
+<div>
+    <div class="row" id="calendarBlock" data-url="{{ path('sd_dashboard_calendar_task') }}">
+            {{ render(controller('SDDashboardBundle:Default:generateTasksCalendar')) }}
+    </div>
+</div>
+<script>
+    jQuery(document).ready(function() {
+        Tasks.initDashboardWidget();
+    });
+</script>
+{#% if isCrm %}
+    {{ render(controller('ListsHandlingBundle:' ~ masterRole ~ ':List')) }}
+{% endif %#}

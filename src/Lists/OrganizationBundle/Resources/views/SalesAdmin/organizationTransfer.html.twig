@@ -1,0 +1,67 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsOrganizationBundle' %}
+{% block title %}{% trans %}List of rganizations{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li><a href="" title="{% trans %}Transfer organizations{% endtrans %}">{% trans %}Transfer organizations{% endtrans %}</a></li>
+    </ul>
+{% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Organization <small>list of organization</small>{% endtrans %}
+    </h3>
+{% endblock %}
+
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    {{ ajax_filter_render('organizationUserFilterForm', namespase, {
+        'datatable_ajax': 'ITDoorsAjax.updateList'
+    }) }}     
+    <script>
+        $(document).ready(function(){
+           $('#organizationUserFilterForm_user').select2({
+               width: '200px',
+                minimumInputLength: 2,
+                ajax: {
+                    url: '{{ path('sd_common_ajax_user_all_stuff') }}',
+                    dataType: 'json',
+                    data: function (term, page) {
+                        return {
+                            query: term
+                        };
+                    },
+                    results: function (data, page) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            }).on("select2-selecting", function(e) {
+            //alert(e.object.text);
+          //log("selecting val=" + e.val + " choice=" + e.object.text);
+        });
+        });
+    </script>
+    <div class="row">
+        <div class="col-md-12">
+            <div id="datatable_ajax"  data-url="{{ url('lists_sales_admin_organization_for_user') }}">
+                {{ render(controller('ListsOrganizationBundle:SalesAdmin:organizationForUser')) }}
+            </div>
+        </div>
+    </div>
+{% endblock body %}

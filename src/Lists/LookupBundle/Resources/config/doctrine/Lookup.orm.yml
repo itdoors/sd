@@ -1,0 +1,21 @@
+Lists\LookupBundle\Entity\Lookup:
+    type: entity
+    table: lookup
+    repositoryClass: Lists\LookupBundle\Entity\LookupRepository
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        name:
+            type: string
+            length: 255
+            nullable: false
+        lukey:
+            type: string
+            length: 255
+            nullable: false
+        group:
+            type: string
+            length: 255
+            nullable: true

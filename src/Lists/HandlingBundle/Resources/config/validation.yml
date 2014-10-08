@@ -1,0 +1,10 @@
+Lists\HandlingBundle\Entity\HandlingMessage:
+    properties:
+        createdate:
+            - NotBlank: { groups: [new] }
+
+Lists\HandlingBundle\Entity\Handling:
+    properties:
+        createdate:
+            - NotBlank: { groups: [new] }
+            - Lists\HandlingBundle\Validator\CreatedateRange: { groups: [new] }

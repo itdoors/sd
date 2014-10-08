@@ -1,0 +1,49 @@
+SD\ModelBundle\Entity\QueueLog:
+    type: entity
+    table: queue_log
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        objectModel:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            column: object_model
+        objectSubmodel:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            column: object_submodel
+        params:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        createdatetime:
+            type: datetime
+            nullable: true
+        status:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        persent:
+            type: bigint
+            nullable: true
+    manyToOne:
+        user:
+            targetEntity: SfGuardUser
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

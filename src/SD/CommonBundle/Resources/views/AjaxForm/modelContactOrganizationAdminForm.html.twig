@@ -1,0 +1,220 @@
+{% trans_default_domain 'ListsContactBundle' %}
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+        $('#modelContactOrganizationAdminForm_birthday_year, #modelContactOrganizationAdminForm_birthday_month, #modelContactOrganizationAdminForm_birthday_day').select2({
+            allowClear: true
+        });
+
+        $('#modelContactOrganizationAdminForm_type').select2({
+            allowClear: true
+        });
+
+        $('#modelContactOrganizationAdminForm_level').select2({
+            allowClear: true
+        });
+
+        $('#modelContactOrganizationAdminForm_phone1, #modelContactOrganizationAdminForm_phone2').select2({
+            minimumInputLength: 2,
+            allowClear: true,
+            ajax: {
+                url: '{{ path('sd_common_ajax_contact_phone') }}',
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        query: term,
+                        organizationId: $('#modelContactOrganizationAdminForm_modelId').val()
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        })
+
+        $('#modelContactOrganizationAdminForm_email').select2({
+            minimumInputLength: 2,
+            allowClear: true,
+            ajax: {
+                url: '{{ path('sd_common_ajax_contact_email') }}',
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        query: term,
+                        organizationId: $('#modelContactOrganizationAdminForm_modelId').val()
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        })
+
+        {% if form.modelId.vars.block_prefixes.1 != 'hidden' %}
+
+            $('#modelContactOrganizationAdminForm_modelId').select2({
+                minimumInputLength: 2,
+                ajax: {
+                    url: '{{ path('sd_common_ajax_organization_for_contacts') }}',
+                    dataType: 'json',
+                    data: function (term, page) {
+                        return {
+                            q: term
+                        };
+                    },
+                    results: function (data, page) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            })
+
+        {% endif %}
+
+        $('#modelContactOrganizationAdminForm_owner').select2({
+            minimumInputLength: 2,
+            ajax: {
+                url: '{{ path('sd_common_ajax_user') }}',
+                dataType: 'json',
+                quietMillis: 30,
+                data: function (term, page) {
+                    return {
+                        query: term
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        })
+
+        $(".date-picker").inputmask("d.m.y", {
+            "placeholder": "*"
+        });
+
+    });
+
+</script>
+
+<div class="row ">
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title"><div class="caption"><i class="fa fa-edit"></i>
+                    {% trans %}Create New Contact{% endtrans %}
+                </div>
+            </div>
+            <div class="portlet-body form">
+                {{ form_start(form, {
+                'action' : path('sd_common_ajax_form'),
+                'attr' : {
+                'method' : 'POST',
+                'class' : 'ajax-form-entity',
+                'data-post_function': postFunction,
+                'data-post_target_id': postTargetId,
+                'data-target_id': targetId
+                }
+                }) }}
+                    {% if form.vars.valid is sameas(false) %}
+                    <div class="alert alert-danger">
+                        <button class="close" data-close="alert"></button>
+                        {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                        {{ form_errors(form) }}
+                        {% if form.phone1.vars.errors|length %}
+                            {{ form_errors(form.phone1) }}
+                        {% endif %}
+                        {% if form.level.vars.errors|length %}
+                            {{ form_errors(form.level) }}
+                        {% endif %}
+                    </div>
+                {% endif %}
+                <div class="form-body row">
+                    {% if form.modelId.vars.block_prefixes.1 != 'hidden' %}
+                        <div class="form-group col-md-12">
+                            {{ form_label(form.modelId, 'Organization Name', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.modelId, {'attr' : {'class' : 'form-control', 'placeholder': "Organization" }}) }}
+                        </div>
+                    {% endif %}
+
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.lastName, 'Last Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.lastName, {'attr' : {'class' : 'form-control', 'placeholder': "Last name"}}) }}
+                    </div>
+                    
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.firstName, 'First Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.firstName, {'attr' : {'class' : 'form-control', 'placeholder': "First name"}}) }}
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.middleName, 'Middle Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.middleName, {'attr' : {'class' : 'form-control', 'placeholder': "Middle name"}}) }}
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.position, 'Position', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.position, {'attr' : {'class' : 'form-control', 'placeholder': "Position"}}) }}
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.phone1, 'Phone 1', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.phone1, {'attr' : {'class' : 'form-control', 'placeholder': "Phone 1"}}) }}
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.phone2, 'Phone 2', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.phone2, {'attr' : {'class' : 'form-control', 'placeholder': "Phone 2"}}) }}
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.email, 'Email', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.email, {'attr' : {'class' : 'form-control', 'placeholder': "Email"}}) }}
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.birthday, 'Birthday', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.birthday, {'attr': {
+                            'class': 'form-control date-picker',
+                            'data-required': '0',
+                            'placeholder': 'Enter Birthday',
+                        }}) }}
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.type, 'Contact type', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': "Contact type"}}) }}
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        {{  form_label(form.owner, 'Owner', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.owner, {'attr' : {'class' : 'form-control', 'placeholder': "Owner"}}) }}
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        {{ form_label(form.level, 'Contact level', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.level, {'attr' : {'class' : 'form-control', 'placeholder': "Contact level"}}) }}
+                    </div>
+
+                    <input type="hidden" name="formName" value="{{ formName }}">
+                    <input type="hidden" name="postFunction" value="{{ postFunction }}">
+                    <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
+                    <input type="hidden" name="targetId" value="{{ targetId }}">
+                </div>
+                <div class="form-actions">
+                    {{ form_widget(form.add, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
+                    {{ form_widget(form.cancel, { 'label': 'Cancel', 'attr': {'class': 'btn default sd-cancel-btn'} } ) }}
+                </div>
+
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+    </div>
+</div>

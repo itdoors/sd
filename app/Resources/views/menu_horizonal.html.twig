@@ -1,0 +1,43 @@
+{# 
+Horizontal menu template
+Muzyka Dmytro
+25.11.2013
+#}
+
+<!-- BEGIN RESPONSIVE MENU TOGGLER --> 
+{#<a href="javascript:;" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<img src="{{ asset('templates/metronic/img/menu-toggler.png') }}" alt="" />
+</a> #}
+<!-- END RESPONSIVE MENU TOGGLER -->
+
+<!-- BEGIN TOP NAVIGATION MENU -->
+<div class="top-menu">
+
+<ul class="nav navbar-nav pull-right">			
+	{#{% include 'notification_dropdown.html.twig' %}
+	{% include 'inbox_dropdown.html.twig' %}
+	{% include 'todo_dropdown.html.twig' %}
+	#}
+	{#{% include 'language_dropdown.html.twig' %}#}
+	<!-- BEGIN USER LOGIN DROPDOWN -->
+	<li class="dropdown dropdown-user">
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+			{% if app.user.photo is not empty %}<img class="img-circle hide1" alt="" src="{{ web_image(app.user.getWebPath()).resize(29,29) }}"/>{% endif %}
+			<span class="username">{{ app.user.fullName }}</span>
+			<i class="fa fa-angle-down"></i>
+		</a>
+		<ul class="dropdown-menu">
+			<li><a href="{{ path('sd_user_show', {'id': app.user.id}) }}"><i class="fa fa-user"></i> {% trans %}My Profile{% endtrans %}</a></li>
+			{#<li><a href="#"><i class="fa fa-calendar"></i> {% trans %}My Calendar{% endtrans %}</a></li>
+			<li><a href="inbox.html"><i class="fa fa-envelope"></i> {% trans %}My Inbox{% endtrans %} <span class="badge badge-danger">3</span></a></li>
+			<li><a href="#"><i class="fa fa-tasks"></i> {% trans %}My Tasks{% endtrans %} <span class="badge badge-success">7</span></a></li>
+			<li class="divider"></li>#}
+			<li><a href="javascript:;" id="trigger_fullscreen"><i class="fa fa-move"></i> {% trans %}Full Screen{% endtrans %}</a></li>
+			{#<li><a href="extra_lock.html"><i class="fa fa-lock"></i> {% trans %}Lock Screen{% endtrans %}</a></li>#}
+			<li><a href="{{ path('fos_user_security_logout') }}" title="{% trans %}Logout{% endtrans %}"><i class="fa fa-key"></i> {% trans %}Logout{% endtrans %}</a></li>
+		</ul>
+	</li>
+	<!-- END USER LOGIN DROPDOWN -->
+</ul>
+</div>
+<!-- END TOP NAVIGATION MENU -->

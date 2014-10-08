@@ -1,0 +1,69 @@
+<script>
+    $(document).ready(function(){
+        $('.deleteFile').die('click');
+        $('.deleteFile').live('click', function(e){
+            e.preventDefault();
+            if (confirm("{% trans %}Are you sure in deleting{% endtrans %}?")) {
+                var id = $(this).data('id');
+                var url = $('#task_modal_info_holder').data('url_task_delete_file');
+                var sendData = {
+                    'id': id
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: sendData,
+                    success: function(data1) {
+                        //alert(data1)
+                        data = JSON.parse(data1);
+                        if (data.success == 1) {
+                            ITDoorsAjax.updateList('list_files')
+                        } else {
+
+                        }
+                    }
+                })
+            }
+
+        })
+    })
+</script>
+
+
+
+<div class="form-group">
+    <div class="col-md-12">
+        <ul class="media-list">
+            {% for file in files %}
+                <li class="media">
+                    <a class="pull-left" href="{{ path('sd_user_show',{ 'id': file.user.id}) }}">
+                        <img class="todo-userpic" src="{{ web_image( userprofiles_url ~ file.user.id ~ '/' ~ file.user.photo).resize(27, 27) }}">
+                    </a>
+                    <div class="media-body todo-comment">
+                        {#
+                                                            <button type="button" class="todo-comment-btn btn btn-circle btn-default btn-xs">&nbsp; Reply &nbsp;</button>
+                        #}
+                        <p class="todo-comment-head">
+                            <span class="todo-comment-username">{{ file.user }}</span> &nbsp; <span class="todo-comment-date">{{ file.createDate|date('H:i d-m-Y') }}</span>
+                        </p>
+                        <p class="todo-text-color">
+                            <div class="col-md-10">
+                                <a href="/uploads/task/{{ file.filepath }}" target="_blank">{{ file.name }}</a>
+                            </div>
+                            <div class="col-md-2">
+                                {% if access.canDeleteFile and file.user.id == app.user.id %}
+                                    <a href="#">
+                                        <i class="fa fa-trash-o deleteFile" style="margin-left: 20px;" data-id="{{ file.id }}"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+
+                            <br>
+                        </p>
+
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+# src/ITDoors/EmailBundle/Resources/config/doctrine/File.orm.yml
+ITDoors\EmailBundle\Entity\File:
+    type: entity
+    table: file
+    repositoryClass: ITDoors\EmailBundle\Entity\FileRepository
+    id:
+        id:
+            type: integer
+            generator: { strategy: IDENTITY }
+    fields:
+        userId:
+            type: integer
+            length: 11
+            column: user_id
+            nullable: false
+        tableId:
+            type: string
+            length: 255
+            column: table_id
+            nullable: true
+        tableName:
+            type: string
+            length: 255
+            nullable: true
+            column: table_name
+        name:
+            type: string
+            length: 255
+        path:
+            type: string
+            length: 255
+            nullable: false
+        date:
+            type: date
+            nullable: false
+    manyToOne:
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false

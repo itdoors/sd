@@ -1,0 +1,51 @@
+<div id="responsibles_list" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'responsible' }) }}">
+{% trans_default_domain 'ITDoorsControllingBundle' %}
+    <div class="col-md-12">
+        <div class="table-toolbar">
+            {% if is_granted('ROLE_CONTROLLING') %}
+            <div class="btn-group">
+                <button id="managers_list_new" class="btn green ajax-form"
+                        data-target_holder="invoiceCompanystructureFormTpl"
+                        data-form_name="invoiceCompanystructureForm"
+                        data-default='{"invoiceId":"{{entitie.0.invoiceId}}"}'
+                        data-post_function="updateList"
+                        data-post_target_id="responsibles_list"
+                        style="margin-bottom: 10px;"
+                        >
+                        {% trans %} Add {% endtrans %} <i class="fa fa-plus"></i>
+                </button>
+                <div style="display: none" id="invoiceCompanystructureFormTpl"></div>
+            </div>
+            {% endif %}
+            <table id="handling" class="table table-bordered table-striped">
+                <thead>
+                    <tr  role="row" class="heading">
+                        <td class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">{% trans %}Name{% endtrans %}</td>
+                        {% if is_granted('ROLE_CONTROLLING') %}
+                        <td class="sorting_disabled" role="columnheader" rowspan="1" colspan="1"></td>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody role="alert" aria-live="polite" aria-relevant="all">
+                    {% for responsible in entitie %}
+                            <tr>
+                                <td> {{ responsible.name }}</td>          
+                                {% if is_granted('ROLE_CONTROLLING') %}     
+                                <td>
+                                    {% if  responsible.id is not empty %}
+                                    <a
+                                        class="ajax-delete fa fa-trash-o"
+                                        title="{% trans %}Delete{% endtrans %}"
+                                        href="javascript:;"
+                                        data-params='{"model":"InvoiceCompanystructure","id":{{ responsible.id }}}'
+                                    ></a>
+                                    {% endif %}
+                                </td>
+                                 {% endif %}
+                            </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

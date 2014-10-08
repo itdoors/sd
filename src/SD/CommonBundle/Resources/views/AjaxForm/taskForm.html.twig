@@ -1,0 +1,100 @@
+{% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+
+    <script>
+        $(document).ready(function(){
+            var d = new Date();
+            d.setDate(d.getDate()-1);
+
+            $('.datatime-picker').datetimepicker({
+                        rtl: Metronic.isRTL(),
+                        autoclose: true,
+                        format: "dd.mm.yyyy hh:ii:ss",
+                        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+                        language: 'ru',
+                        weekStart: 1,
+                        startDate: d
+                    });
+            $('#' + '{{ form.vars.name }}' + '_performer').select2();
+        });
+    </script>
+            <div class="portlet-body">
+                {{ form_errors(form) }}
+                 {{ form_start(form, {
+                    'action' : path('sd_common_ajax_form'),
+                    'attr' : {
+                        'method' : 'POST',
+                        'class' : 'ajax-form-entity',
+                        'data-post_function': postFunction,
+                        'data-post_target_id': postTargetId,
+                        'data-target_id': targetId
+                    }
+                }) }}
+                <div class="row">
+                     <div class="form-group col-md-6">
+                        {{ form_label(form.startDateTime, 'Date start'|trans({}, 'SDCalendarBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.startDateTime, {'attr' : {'class' : 'form-control datatime-picker', 'placeholder': 'Enter date start'|trans({}, 'SDCalendarBundle')} } ) }}
+                        <span class="help-block">{{ form_errors(form.startDateTime) }}</span>
+                    </div>
+                     <div class="form-group col-md-6">
+                        {{ form_label(form.startDateTime, 'Date stop'|trans({}, 'SDCalendarBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.stopDateTime, {'attr' : {'class' : 'form-control datatime-picker', 'placeholder': 'Enter date stop'|trans({}, 'SDCalendarBundle')} } ) }}
+                        <span class="help-block">{{ form_errors(form.stopDateTime) }}</span>
+                    </div>
+                    <div class="form-group col-md-12">
+                        {{ form_label(form.title, 'Title'|trans({}, 'SDCalendarBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.title, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter title'|trans({}, 'SDCalendarBundle')} } ) }}
+                        <span class="help-block">{{ form_errors(form.title) }}</span>
+                    </div>
+                    <div class="form-group col-md-12">
+                        {{ form_label(form.description, 'Description'|trans({}, 'SDCalendarBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.description, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter description'|trans({}, 'SDCalendarBundle')} } ) }}
+                        <span class="help-block">{{ form_errors(form.description) }}</span>
+                    </div>
+                    <div class="form-group col-md-12">
+                        {{ form_label(form.performer, 'Performer'|trans({}, 'SDCalendarBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.performer, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter performer'|trans({}, 'SDCalendarBundle')} } ) }}
+                        <span class="help-block">{{ form_errors(form.performer) }}</span>
+                    </div>
+                    {#<div class="form-group col-md-2">
+                        {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': 'Handling tye'} } ) }}
+                    </div>
+                    <div class="form-group col-md-3">
+                        <div class="input-group date form_datetime">
+                            {{ form_widget(form.nextcreatedate, {'attr' : {
+                            'class' : 'form-control',
+                            'placeholder': 'Create date',
+                            'readonly': 'readonly'
+                            }}) }}
+                            <span class="input-group-btn">
+                                <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        {{ form_widget(form.description, {'attr' : {'class' : 'form-control', 'placeholder': 'Description'} } ) }}
+                    </div>
+                </div>#}
+
+               
+                    <input type="hidden" name="formName" value="{{ formName }}">
+                    <input type="hidden" name="postFunction" value="{{ postFunction }}">
+                    <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
+                    <input type="hidden" name="targetId" value="{{ targetId }}">
+                    <input type="hidden" name="model" value="{{ model }}">
+                    <input type="hidden" name="modelId" value="{{ modelId }}">
+                    
+                <div class="form-group col-md-12">
+                    
+                
+                <div class="modal-footer" style="border: none;">
+                    <button type="submit" class="btn default" data-dismiss="modal">{% trans %}Cancel{% endtrans %}</button>
+                    <button type="submit" class="btn blue">{% trans %}Save{% endtrans %}</button>
+                </div>
+                </div>
+             </div>
+                {{ form_end(form) }}
+           
+            </div>

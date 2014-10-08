@@ -1,0 +1,181 @@
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+        $('#modelContactOrganizationUserForm_birthday_year, #modelContactOrganizationUserForm_birthday_month, #modelContactOrganizationUserForm_birthday_day').select2({
+            allowClear: true
+        });
+
+        $('#modelContactOrganizationUserForm_type').select2({
+            allowClear: true
+        });
+
+        $('#modelContactOrganizationUserForm_phone1, #modelContactOrganizationUserForm_phone2').select2({
+            minimumInputLength: 2,
+            allowClear: true,
+            ajax: {
+                url: '{{ path('sd_common_ajax_contact_phone') }}',
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        query: term,
+                        organizationId: $('#modelContactOrganizationUserForm_modelId').val()
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        })
+
+        $('#modelContactOrganizationUserForm_email').select2({
+            minimumInputLength: 2,
+            allowClear: true,
+            ajax: {
+                url: '{{ path('sd_common_ajax_contact_email') }}',
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        query: term,
+                        organizationId: $('#modelContactOrganizationUserForm_modelId').val()
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        })
+
+
+        {% if form.modelId.vars.block_prefixes.1 != 'hidden' %}
+
+            $('#modelContactOrganizationUserForm_modelId').select2({
+                minimumInputLength: 2,
+                ajax: {
+                    url: '{{ path('sd_common_ajax_organization_for_contacts') }}',
+                    dataType: 'json',
+                    data: function (term, page) {
+                        return {
+                            q: term
+                        };
+                    },
+                    results: function (data, page) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            })
+
+        {% endif %}
+
+        $('.date-picker').datepicker({
+            rtl: Metronic.isRTL(),
+            autoclose: true,
+            format: "dd.mm.yyyy",
+            pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+            language: 'ru',
+            startView: 'decade',
+            endDate: new Date(),
+            weekStart: 1
+        });
+    });
+
+</script>
+{% trans_default_domain 'ListsOrganizationBundle' %}
+<div class="row ">
+    <div class="col-md-12">
+        <div class="portlet box yellow">
+            <div class="portlet-title"><div class="caption"><i class="fa fa-edit"></i>
+                    {% trans %}Create New Contact{% endtrans %}                    
+                </div>
+            </div>
+            <div class="portlet-body">
+
+                {{ form_start(form, {
+                        'action' : path('sd_common_ajax_form'),
+                        'attr' : {
+                        'method' : 'POST',
+                        'class' : 'ajax-form-entity',
+                        'data-post_function': postFunction,
+                        'data-post_target_id': postTargetId,
+                        'data-target_id': targetId
+                    }
+                }) }}
+                <div class="form-body row">
+                    {% if form.modelId.vars.block_prefixes.1 != 'hidden' %}
+                        <div class="form-group col-md-12">
+                            {{ form_label(form.modelId, 'Organization Name', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.modelId, {'attr' : {'class' : 'form-control', 'placeholder': "Organization" }}) }}
+                        </div>
+                    {% endif %}
+
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.lastName, 'Last Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.lastName, {'attr' : {'class' : 'form-control', 'placeholder': "Last name"}}) }}
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        {{  form_label(form.firstName, 'First Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.firstName, {'attr' : {'class' : 'form-control', 'placeholder': "First name"}}) }}
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.middleName, 'Middle Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.middleName, {'attr' : {'class' : 'form-control', 'placeholder': "Middle name"}}) }}
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.position, 'Position', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.position, {'attr' : {'class' : 'form-control', 'placeholder': "Position"}}) }}
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.phone1, 'Phone 1', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.phone1, {'attr' : {'class' : 'form-control', 'placeholder': "Phone 1"}}) }}
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.phone2, 'Phone 2', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.phone2, {'attr' : {'class' : 'form-control', 'placeholder': "Phone 2"}}) }}
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.email, 'Email', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.email, {'attr' : {'class' : 'form-control', 'placeholder': "Email"}}) }}
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        {{ form_label(form.birthday, 'Birthday', {'attr': {'class': 'control-label'}}) }}
+                        <div class="input-group input-medium date date-picker">
+                            {{ form_widget(form.birthday, {'attr': {
+                            'class': 'form-control',
+                            'data-required': '0',
+                            'placeholder': 'Enter Birthday',
+                            'readonly': 'readonly'
+                            }}) }}
+                            <span class="input-group-btn">
+                            <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="formName" value="{{ formName }}">
+                    <input type="hidden" name="postFunction" value="{{ postFunction }}">
+                    <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
+                    <input type="hidden" name="targetId" value="{{ targetId }}">
+                </div>
+                <div class="form-actions">
+                    {{ form_widget(form.add, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
+                    {{ form_widget(form.cancel, { 'label': 'Cancel', 'attr': {'class': 'btn default sd-cancel-btn'} } ) }}
+                </div>
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+parameters:
+    sd_dashboard.calendar.filter.form.class: SD\DashboardBundle\Form\DashboardCalendarFilterType
+
+services:
+    sd_dashboard.form.handlingSalesFilterForm:
+        class: %sd_dashboard.calendar.filter.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: dashboardCalendarFilterType }

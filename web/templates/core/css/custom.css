@@ -1,0 +1,7 @@
+.select2-drop {
+    z-index: 30001;
+}
+
+.select2-drop-mask {
+    z-index: 30000;
+}

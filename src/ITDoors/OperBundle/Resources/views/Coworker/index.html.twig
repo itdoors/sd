@@ -1,0 +1,81 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ITDoorsOperBundle' %}
+{% block title %} {% trans %}List coworkers{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li><a href="" title="{% trans   %}Coworkers{% endtrans %}">{% trans   %}Coworkers{% endtrans %}</a></li>
+    </ul>
+{% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Coworkers{% endtrans %} <small>{% trans %}Coworkers list{% endtrans %}</small>
+    </h3>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/itdoorsoper/css/details.css')}}" />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
+    <script src="{{ asset('bundles/itdoorsoper/js/tabs_department_info.js')}}" ></script>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <p>{% trans %}Notice all coworkers{% endtrans %}</p>
+
+            <div class="tabbable tabbable-custom boxless">
+                <ul class="nav nav-tabs" id="ajax_tabs">
+                    <li class="active"><a href="#tab_3" data-toggle="tab" data-block="tab_content" data-url="{{ url('it_doors_oper_coworker_index') }}">{% trans %}Co-workers{% endtrans %}</a></li>
+                    <li ><a id="schedule_block" href="#tab_3" data-block="tab_content" data-url="{{ url('it_doors_oper_coworker_schedule_index') }}" data-toggle="tab">{% trans %}Schedule{% endtrans %}</a></li>
+                </ul>
+                <div class="tab-content" id="tab_content">
+                    {% if supervisor %}
+                        {% set filterName = 'ScheduleSupervisorFilterFormType' %}
+                    {% else %}
+                        {% set filterName = 'ScheduleFilterFormType' %}
+                    {% endif %}
+                    {{ ajax_filter_render(filterName, ajax_namespace_oper_department_schedule, {
+                    'coworker_list': 'ITDoorsAjax.updateList'
+                    }) }}
+
+                    <div id="coworker_list" data-url="{{ path('it_doors_oper_coworker_table')}}">
+
+                        {% if not supervisor %}
+                            {{ render(controller('ITDoorsOperBundle:OperCoworkerInfo:coworkerTable', {
+
+                            })) }}
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+
+{#
+            <div id="base_table_test" data-url="{{ path('it_doors_oper_coworker_test_table')}}">
+                {{ render(controller('ITDoorsOperBundle:OperCoworkerInfo:testTableRender', {
+
+                })) }}
+            </div>
+#}
+        </div>
+    </div>
+{% endblock body %}

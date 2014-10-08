@@ -1,0 +1,16 @@
+SD\ModelBundle\Entity\Tenderkeywords:
+    type: entity
+    table: tenderkeywords
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 100
+            fixed: false
+            nullable: false
+    lifecycleCallbacks: {  }

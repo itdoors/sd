@@ -1,0 +1,133 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ITDoorsControllingBundle' %}
+{% block title %}{% trans %}List of debtors{% endtrans %} {% endblock %}
+{% block page_title %}
+<h3 class="page-title">
+        {% trans %}Invoice <small>list of debtors</small>{% endtrans %}
+</h3>
+{% endblock %}
+{% block page_breadcrumbs %}
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <i class="fa fa-home"></i>
+        <a href="{{ path('it_doors_controlling_invoice') }}" title="{% trans %}Controlling{% endtrans %}">{% trans %}Controlling{% endtrans %}</a>
+        <i class="fa fa-angle-right"></i>
+    </li>
+    <li>
+        <a href="{{ path('it_doors_controlling_invoice') }}" title="{% trans %}Invoices{% endtrans %}">{% trans %}Invoices{% endtrans %}</a>
+        <i class="fa fa-angle-right"></i>
+    </li>
+    <li>
+        <a href="{{ path('it_doors_controlling_invoice_invoice',{invoiceid:invoiceid}) }}" title="{% trans %}Invoice{% endtrans %}">{% trans %}Invoice{% endtrans %} {{ invoice.invoiceId}} ({{  invoice.date is empty ? '' : invoice.date|date('d.m.y') }})</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <script>
+            $(document).ready(function(){
+                $('.daterangepicker').daterangepicker(
+                        {
+                            ranges: {
+                            'Текущий месяц': [moment().startOf('month'), moment().endOf('month')],
+                            'Текущий год': [moment().startOf('year'), moment().endOf('year')]
+                           },
+                           format: "DD.MM.YYYY",
+                            startDate: moment().startOf('year'),
+                            endDate: moment().endOf('year'),
+                            locale: {
+                                applyLabel: 'ОК',
+                                cancelLabel: 'Отмена',
+                                fromLabel: 'от',
+                                toLabel: 'до',
+                                customRangeLabel: 'Выбрать диапазон',
+                                daysOfWeek: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб','Вс'],
+                                monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                                firstDay: 1
+                            }
+                        }
+                );
+
+            });
+        </script>
+        <style>
+            .input-daterange{
+                outline: 0;
+                height: auto;
+                min-height: 32px;
+                padding: 6px 6px;
+                line-height: 20px;
+                font-size: 14px;
+                font-weight: normal;
+                vertical-align: top;
+                font-size: 100%;
+                color: #666;
+                outline: 0;
+                border: 0;
+                -webkit-box-shadow: none;
+                -moz-box-shadow: none;
+                box-shadow: none;
+                background: transparent !important;
+                border: 1px solid #e5e5e5;
+                top: 0px;
+                left: 15px;
+                width: 250px;
+                margin: 0;
+            }
+        </style>
+<div class="row">
+    <div class="col-md-12">
+        <div class="tabbable boxless">
+            {{ ajax_tab_render( tabs, tab, namespaceTab ) }}               
+            <div class="tab-content ajax-tab-holder"  id="datatable_ajax">
+                     {{ render(controller('ITDoorsControllingBundle:Invoice:invoiceshow')) }}
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane" id="tab_1">
+        <div class="col-md-12">
+            <h3>{% trans %} Notes {% endtrans %}</h3>
+            <div class="table-toolbar">
+                <div class="btn-group">
+                    <button id="managers_list_new" class="btn green ajax-form"
+                            data-target_holder="invoiceMessageFormTpl"
+                            data-form_name="invoiceMessageForm"
+                            data-default='{"invoice_id":"{{ invoiceid }}"}'
+                            data-post_function="updateList"
+                            data-post_target_id="messages_list"
+                            >
+                                    {% trans %} Add {% endtrans %} <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+                <div style="display: none" id="invoiceMessageFormTpl">
+                </div>
+            </div>
+            <div id="messages_list" data-url="{{ url('it_doors_controlling_invoice_invoice_lastaction') }}">
+                        {{ render(controller('ITDoorsControllingBundle:Invoice:lastaction')) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

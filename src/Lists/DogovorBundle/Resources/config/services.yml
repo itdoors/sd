@@ -1,0 +1,95 @@
+parameters:
+    lists_dogovor.dogovor.filter.form.class: Lists\DogovorBundle\Form\DogovorFilterForm
+    lists_dogovor.dogovor.made.filter.form.class: Lists\DogovorBundle\Form\DogovorMadeFilterForm
+    lists_dogovor.dogovor.form.class: Lists\DogovorBundle\Form\DogovorForm
+    lists_dogovor.dogovor.department.form.class: Lists\DogovorBundle\Form\DogovorDepartmentForm
+    lists_dogovor.dopdogovor.form.class: Lists\DogovorBundle\Form\DopDogovorForm
+    lists_dogovor.dopdogovoredit.form.class: Lists\DogovorBundle\Form\DopDogovorEditForm
+    lists_dogovor.dogovor.history.form.class: Lists\DogovorBundle\Form\DogovorHistoryForm
+
+    lists_dogovor.repository.class: Lists\DogovorBundle\Entity\DogovorRepository
+    lists_dogovor.repository.entity: Lists\DogovorBundle\Entity\Dogovor
+
+    lists_dogovor.dopdogovor.repository.class: Lists\DogovorBundle\Entity\DopDogovorRepository
+    lists_dogovor.dopdogovor.repository.entity: Lists\DogovorBundle\Entity\DopDogovor
+
+    lists_dogovor.history.repository.class: Lists\DogovorBundle\Entity\DogovorHistoryRepository
+    lists_dogovor.history.repository.entity: Lists\DogovorBundle\Entity\DogovorHistory
+
+    lists_dogovor.department.repository.class: Lists\DogovorBundle\Entity\DogovorDepartmentRepository
+    lists_dogovor.department.repository.entity: Lists\DogovorBundle\Entity\DogovorDepartment
+
+    lists_dogovor.service.class: Lists\DogovorBundle\Services\DogovorService
+services:
+
+    lists_dogovor.repository:
+        class: %lists_dogovor.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_dogovor.repository.entity% ]
+        calls:
+            - [setTranslator, ["@translator"]]
+
+    lists_dogovor.dopdogovor.repository:
+        class: %lists_dogovor.dopdogovor.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_dogovor.dopdogovor.repository.entity% ]
+
+    lists_dogovor.history.repository:
+        class: %lists_dogovor.history.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_dogovor.history.repository.entity% ]
+
+    lists_dogovor.department.repository:
+        class: %lists_dogovor.department.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_dogovor.department.repository.entity% ]
+
+    lists_dogovor.form.dogovorFilterForm:
+        class: %lists_dogovor.dogovor.filter.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: dogovorFilterForm }
+            
+    lists_dogovor.form.dogovorMadeFilterForm:
+        class: %lists_dogovor.dogovor.made.filter.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: dogovorMadeFilterForm }
+
+    lists_dogovor.form.dogovorForm:
+        class: %lists_dogovor.dogovor.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: dogovorForm }
+
+    lists_dogovor.form.dogovorDepartmentForm:
+        class: %lists_dogovor.dogovor.department.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: dogovorDepartmentForm }
+
+    lists_dogovor.form.dopDogovorForm:
+        class: %lists_dogovor.dopdogovor.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: dopDogovorForm }
+            
+    lists_dogovor.form.dopDogovorEditForm:
+        class: %lists_dogovor.dopdogovoredit.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: dopDogovorEditForm }
+
+    lists_dogovor.form.dogovorHistoryForm:
+        class: %lists_dogovor.dogovor.history.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: dogovorHistoryForm }
+            
+    lists_dogovor.service:
+        class: %lists_dogovor.service.class%
+        arguments: [@service_container]

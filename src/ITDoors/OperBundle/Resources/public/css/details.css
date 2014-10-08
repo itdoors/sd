@@ -1,0 +1,17 @@
+.button_wide {
+    width: 100%;
+}
+
+.left_float{
+    float: left;
+}
+
+.right_float{
+    float: right;
+}
+.clear{
+    height:0;
+    font-size:1px;
+    line-height:0px;
+    clear:both;
+}

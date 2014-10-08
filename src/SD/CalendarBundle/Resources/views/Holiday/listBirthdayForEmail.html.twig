@@ -1,0 +1,22 @@
+{% trans_default_domain 'SDUserBundle' %}
+<h4 style="display: block; margin: 5px 0 15px 0;">{% trans %}Birthdays{% endtrans %}:</h4>
+<table style="width:100%;text-align:center;border-collapse: collapse;border: 1px double #eee">
+    <thead>
+        <tr>
+            <th style="border: 1px double #eee;text-align: center">{% trans %}FIO{% endtrans %}</th>
+            <th style="border: 1px double #eee;text-align: center">{% trans %}Position{% endtrans %}</th>
+            <th style="border: 1px double #eee;text-align: center">{% trans %}Email{% endtrans %}</th>
+            <th style="border: 1px double #eee;text-align: center">{% trans %}Phone{% endtrans %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in users %}
+            <tr class="{{ cycle(['odd', 'even'], item.id) }}">
+                <td style="border: 1px double #eee;padding: 5px;">{{ item }}</td>
+                <td style="border: 1px double #eee;padding: 5px;">{{ item.position }}</td>
+                <td style="border: 1px double #eee;padding: 5px;">{{ item.email }}</td>
+                <td style="border: 1px double #eee;padding: 5px;">{{ item.stuff.mobilephone }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

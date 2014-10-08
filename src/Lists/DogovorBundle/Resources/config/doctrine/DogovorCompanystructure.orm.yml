@@ -1,0 +1,39 @@
+Lists\DogovorBundle\Entity\DogovorCompanystructure:
+    type: entity
+    table: dogovor_companystructure
+    repositoryClass: Lists\DogovorBundle\Entity\DogovorCompanystructureRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+        dogovorId:
+            type: bigint
+            nullable: false
+            column: dogovor_id
+        companystructureId:
+            type: bigint
+            nullable: false
+            column: companystructure_id
+    manyToOne:
+        dogovors:
+            targetEntity: Lists\DogovorBundle\Entity\Dogovor
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                dogovor_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        companystructures:
+            targetEntity: Lists\CompanystructureBundle\Entity\Companystructure
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                companystructure_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

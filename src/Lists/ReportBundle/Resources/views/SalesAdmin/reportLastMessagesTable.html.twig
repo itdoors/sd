@@ -1,0 +1,57 @@
+{% trans_default_domain 'ListsHandlingBundle' %}
+{% if results|length %}
+    <table class="table table-striped table-bordered table-advance table-hover">
+        <thead>
+        <tr>
+            <th colspan="2">{% trans %}Organization{% endtrans %} </th>
+            <th colspan="4">{% trans %}Message{% endtrans %} </th>
+            <th colspan="4">{% trans %}Future Message{% endtrans %} </th>
+        </tr>
+        <tr>
+            <th>{% trans %}ID{% endtrans %} </th>
+            <th>{% trans %}Handling{% endtrans %} </th>
+            <th>{% trans %}Create Date{% endtrans %} </th>
+            <th>{% trans %}Contact Type{% endtrans %} </th>
+            <th>{% trans %}Contact Person{% endtrans %} </th>
+            <th>{% trans %}Description{% endtrans %} </th>
+            <th>{% trans %}Create Date{% endtrans %} </th>
+            <th>{% trans %}Contact Type{% endtrans %} </th>
+            <th>{% trans %}Contact Person{% endtrans %} </th>
+            <th>{% trans %}Description{% endtrans %} </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in results %}
+
+            {% set indexCurrent = 1 %}
+            {% set indexFuture = 2 %}
+
+            {% if item.handlingMessageCreatedate4 is defined and item.handlingMessageCreatedate4 > item.handlingMessageCreatedate2 %}
+                {% set indexCurrent = 3 %}
+                {% set indexFuture = 4 %}
+            {% endif %}
+
+            <tr {% if loop.index is odd %}class="color"{% endif %}>
+                <td>
+                    <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_show', { id: item.handlingId } ) }}">
+                        {{ item.handlingId|e }}
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_show', { id: item.handlingId } ) }}">
+                        {{ item.organizationName|e }}
+                    </a>
+                </td>
+                <td>{{ item['handlingMessageCreatedate' ~ indexCurrent]|date('d.m.Y H:i') }}</td>
+                <td>{{ item['handlingMessageTypeName' ~ indexCurrent]|e }}</td>
+                <td>{{ item['handlingMessageContact' ~ indexCurrent]|e }}</td>
+                <td>{{ item['handlingMessageDescription' ~ indexCurrent]|e }}</td>
+                <td>{{ item['handlingMessageCreatedate' ~ indexFuture]|date('d.m.Y H:i') }}</td>
+                <td>{{ item['handlingMessageTypeName' ~ indexFuture]|e }}</td>
+                <td>{{ item['handlingMessageContact' ~ indexFuture]|e }}</td>
+                <td>{{ item['handlingMessageDescription' ~ indexFuture]|e }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}

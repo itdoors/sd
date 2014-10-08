@@ -1,0 +1,30 @@
+Lists\OrganizationBundle\Entity\Kved:
+    type: entity
+    table: kved
+    repositoryClass: Lists\OrganizationBundle\Entity\KvedRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        code:
+            type: string
+            length: 10
+            nullable: true
+        name:
+            type: string
+            length: 255
+            nullable: true
+        description:
+            type: string
+            length: 255
+            nullable: true
+        parentId:
+            type: bigint
+            nullable: true
+            column: parent_id
+
+    lifecycleCallbacks:
+            prePersist: [ doOnPrePersist ]

@@ -1,0 +1,262 @@
+Handlings <small>create handling</small>: Проект <small>создание нового проекта</small>
+Handling <small>show handling</small>: Проект <small>просмотр проектов</small>
+Handling <small>list of handlings</small>: Проект <small>список проектов</small>
+Handling <small>create handling</small>: Проект <small>создание нового проекта</small>
+
+New Handling: Новый Проект
+Show Handling: Просмотр проекта
+
+Dashboard: Рабочий стол
+Handling: Проект
+Handlings: Проекты
+Team Handlings: Проекты команды
+Contacts: Контакты
+List of Handlings: Список проектов
+My Handlings: Мои проекты
+My Handling List: Список моих проектов
+Closed Hanling: Проект закрыт
+Create Handling: Создание проекта
+
+Handling ID: № проекта
+Create Date: Дата создания
+Createdatetime: Дата создания
+LastHandlingDate: Последнее
+Create User: Кто создал
+Service offered: Предлагаемые услуги
+ServiceOffered: Предлагаемые услуги
+Enter Service offered: Введите услуги, которые предлагаете
+Select Service Offered: Выберите услуги
+Select offered services: Выберите предлагаемые услуги
+Contact Type: Тип контакта
+Handling Type: Тип проекта
+Enter Handling Type: Введите тип проекта
+Select Contact Type: Выберите тип контакта
+Select Handling Type: Выберите тип проекта
+Notice: Заметки
+Enter Notice: Введите заметки
+Enter Handling Notice: Введите заметки
+Enter Budget: Введите бюджет
+Budget without VAT: Бюджет без НДС
+Enter Budget without VAT: Введите бюджет без НДС
+Chance: Шанс
+Enter Chance: Введите шанс
+Status: Статус
+Handling Status: Статус проекта
+Select Handling Status: Выберите статус проекта
+Select project status: Выберите статус проекта
+Enter Status: Введите статус
+Status Description: Описание статуса
+Select Result Type: Выберите тип результата
+Select project result: Выберите результат проекта
+Select project result, if has: Выберите результат проекта, если есть
+Enter Status Description: Введите описание статуса
+Result: Результат
+Result Description: Описание результата
+Result description: Описание результата
+
+Enter Result Description: Введите описание результата
+Result: Результат
+Enter Result: Введите рузультат
+Select Handling Result: Выберите результат проекта
+Square: Площадь
+Enter Square: Введите площадь
+Show History: Показать историю
+History: История
+NextHandlingDate: Следующее
+
+Organization Name: Название организации
+Enter Organiztion: Введите организацию
+Add Manager: Добавить менеджера
+
+Create New Message: Создание нового обращения
+Create Message: Создать обращение
+Enter Handling Create DateTime: Введите дату создания проекта
+Enter Handling Create DateTime hint: Дата создания не может быть
+Handling Create DateTime: Дата создания проекта
+Is business trip: Командировка
+
+Event next date can't be greater then current event date: Дата следующего события не должна быть раньше текущего.
+Current event date can't be less then handling creation date: Дата текущего обращения не может быть раньше даты содания проекта
+
+Filename: Имя файла
+Description: Описание
+Messages: Обращения
+Message: Обращение
+Messages list: Список обращений по данному проекту
+Message Type: Тип обращения
+Current Message Create Date: Дата создания
+Filename: Название файла
+Select File: Выберите файл
+Next Message: Следующее обращение
+Current Message: Текущее обращение
+Next Message Create Date: Дата следующего обращения
+Extra: Дополнительно
+
+Select Contact Person: Выберите контактное лицо
+Contact Person: Контактное лицо
+Project Status: Статус проекта
+Select responsible:  Выберите ответственого
+
+List of Organizations: Список организаций
+Create Organization: Создание организации
+
+MPK: МПК
+Enter MPK: Ввдедите МПК
+City: Город
+Enter City: Введите город
+Region: Область
+Enter Region: Введите область
+Name: Наименование
+Shortname: Короткое
+Scope: Деятельность
+Enter Scope: Введите деятельность
+
+Address: Адрес
+Users: Пользователи
+
+Organization: Организация
+Enter Organization: Введите организацию
+Enter organization name: Введите название организации
+Creating Message: Создание обращения
+Form Wizard create handling: Мастер создания нового проекта
+Step: Шаг
+of: из
+Check and create organization: Проверка и создание организации
+Add contact persons: Добавление контактных лиц
+<strong>Note</strong> Select exist organization: <strong>Обратите внимание</strong> Выбрана существующая организация
+<strong>Note</strong> will create a new business: <strong>Обратите внимание</strong> будет создана новая организация
+<strong>Error</strong> no enter field organization: <strong>Ошибка</strong> не введена организация
+Enter Organization Name: Введите название организации
+Create contacts on organization: Создание контактных лиц в организации
+
+
+
+
+Name: Наименование
+Createdatetime: Дата создания
+LastHandlingDate: Последнее событие
+City: Город
+Scope: Деятельность
+ServiceOffered: Услуги
+Chance: Шанс
+Status: Статус
+Enter Status: Введите статус
+Enter Manager: Введите менеджеров
+Actions: Действия
+Action: Действие
+FirstName, LastName: Имя Фамилия
+Mobile: Мобильный
+Closed: Проект закрыт
+No: Нет
+Attached Files: Прикрепленные файлы
+Noname File: Файл без названия
+No matches found: Совпадений не  найдено
+Contacts on handling: Контактные лица в проекте
+
+Managers: Менеджеры
+Manager: Менеджер
+Manager project: Менеджер проекта
+Enter Manager: Введите менеджера
+Managers on handling: Менеджеры, имеющие доступ к проекту
+
+Create New Message: Создание нового обращения
+
+Creating Handling: Создание обращения
+
+General information: Основная информация
+
+Role: Роль
+
+Appoint a manager: Назначить менеджером
+
+Mast be integer number: Должно быть целое число
+
+Filters: Фильтры
+Clear Filter: Очистить
+Filter: Фильтр
+Enter filter parameters and press Filter button.: Введите параметры для фильтра и нажмите кнопку Поиск
+Create: Создать
+Add New: Добавить
+Add Contact: Добавить контакт
+Save: Сохранить
+Cancel: Отменить
+Handling list link: Проекты
+Enter value: Введите значение
+Search: Поиск
+Delete: Удалить
+Roll Up: Свернуть
+Continue: Продолжить
+
+You have some form errors. Please check below.: При заполнении формы допущены ошибки. Пожалуйста, перепроверьте данные.
+Services cant be empty: Список предлагаемых услуг не может быть пустым.
+Event next date can't be empty: Дата следующего обращения не может быть пустой.
+
+More info: Дополнительная информация
+Show more info: Показать доп. информацию
+
+Monthly turnover: Предположительный оборот в месяц ( без НДС)
+Start date: Предположительная дата старта
+
+Future Message: Запланированое
+Last messages: Последние обращения
+Last messages <small>list of last messages</small>: Последние обращения <small>список последних обращений</small>
+Interval: Интервал дат
+Enter date range: Введите интервал
+Is Marketing: Маркетинг
+Add competitor: Добавить конкурента
+Add Competitor: Добавить конкурента
+Competitor: Конкурент
+Competitors: Конкуренты
+Strengths: Сильные стороны
+Weaknesses: Слабые стороны
+End date: Работают до
+Total: Сумма
+
+Enter Competitor: Введите Конкурента
+Enter Strengths: Введите Сильные стороны
+Enter Weaknesses: Введите Слабые стороны
+Enter End Date: Введите Работают до
+Enter Total: Введите Сумму
+
+Enter count employees: Введите кол-во сотрудников
+Count employees: Кол-во сотрудников
+
+Launch date: Дата запуска
+Add manager in project: Добавить менеджера в проект
+Change manager project in project: Изменить менеджера проекта
+
+Enter share: Введите процент участия
+Percentage of participation: Процент участия
+
+This user is already a manager: Этот пользователь уже является менеджером
+
+Change part: Процент участия
+You can not create a project for the organization refer to: Вы не можете создать проект по данной организации обратитесь к
+organization manager: менеджеру организации
+administrator of Sales: администратору отдела продаж
+
+Persons from our side: Лица с нашей стороны
+Persons from their side: Лица с их стороны
+Select persons from our side: Выберите лица с нашей стороны
+Select persons from their side: Выберите лица с их стороны
+Audit protocol: Протокол аудита
+
+Services: Услуги
+Enter services: Введите услуги
+Handling type: Тип проекта
+Delete manager: Удалить менеджера
+Listen to the conversation: Прослушать разговор
+
+From DateTime *: Период начало *
+Enter From DateTime: Укажите начало периода
+To DateTime *: Период окончания *
+Enter To DateTime: Укажите окончание периода
+
+Create report: Создание отчета
+
+Action <small>period of actions</small>: Активность <small>период активности</small>
+Show action: Просмотр активности
+Date: Дата
+View action: Вид активности
+List of actions: Список активностей
+Change project manager: Изменить менеджера проекта

@@ -1,0 +1,76 @@
+SD\ModelBundle\Entity\Stuff:
+    type: entity
+    table: stuff
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        mobilephone:
+            type: string
+            length: 12
+            fixed: false
+            nullable: false
+        description:
+            type: text
+            nullable: true
+        stuffclass:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+    manyToMany:
+        city:
+            targetEntity: City
+            cascade: {  }
+            mappedBy: null
+            inversedBy: stuff
+            joinTable:
+                name: sfuff_city
+                joinColumns:
+                    -
+                        name: stuff_id
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    -
+                        name: city_id
+                        referencedColumnName: id
+            orderBy: null
+        departments:
+            targetEntity: Departments
+            cascade: {  }
+            mappedBy: null
+            inversedBy: stuff
+            joinTable:
+                name: sfuff_departments
+                joinColumns:
+                    -
+                        name: stuff_id
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    -
+                        name: departments_id
+                        referencedColumnName: id
+            orderBy: null
+    manyToOne:
+        companystructure:
+            targetEntity: Companystructure
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                companystructure_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SfGuardUser
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

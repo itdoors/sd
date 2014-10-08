@@ -1,0 +1,363 @@
+sd_common_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: SDCommonBundle:Default:index }
+
+sd_common_ajax_organization:
+    pattern:  /ajax/organization
+    defaults: { _controller: SDCommonBundle:Ajax:organization }
+
+sd_common_ajax_organization_first:
+    pattern: /ajax/organization/first
+    defaults: { _controller: SDCommonBundle:Ajax:organizationFirst }
+
+sd_common_ajax_organization_edrpou:
+    pattern: /ajax/organization/edrpou
+    defaults: { _controller: SDCommonBundle:Ajax:organizationEdrpou }
+
+sd_common_ajax_competitor:
+    pattern:  /ajax/competitor
+    defaults: { _controller: SDCommonBundle:Ajax:competitor }
+
+sd_common_ajax_handling:
+    pattern:  /ajax/handling
+    defaults: { _controller: SDCommonBundle:Ajax:handling }
+
+sd_common_ajax_organization_for_contacts:
+    pattern:  /ajax/organization/for/contacts
+    defaults: { _controller: SDCommonBundle:Ajax:organizationForContacts }
+
+sd_common_ajax_organization_for_wizard:
+    pattern:  /ajax/organization/for/wizard
+    defaults: { _controller: SDCommonBundle:Ajax:organizationForWizard }
+
+sd_common_ajax_organization_for_creation:
+    pattern:  /ajax/organization/for/creation
+    defaults: { _controller: SDCommonBundle:Ajax:organizationForCreation }
+
+sd_common_ajax_handling_service:
+    pattern:  /ajax/handling/service
+    defaults: { _controller: SDCommonBundle:Ajax:handlingService }
+
+sd_common_ajax_handling_more_info:
+    pattern:  /ajax/handling/more/info
+    defaults: { _controller: SDCommonBundle:Ajax:handlingMoreInfo }
+
+sd_common_ajax_city:
+    pattern:  /ajax/city
+    defaults: { _controller: SDCommonBundle:Ajax:city }
+    
+sd_common_ajax_ownership:
+    pattern:  /ajax/ownership
+    defaults: { _controller: SDCommonBundle:Ajax:ownership }
+
+sd_common_ajax_scope:
+    pattern:  /ajax/scope
+    defaults: { _controller: SDCommonBundle:Ajax:scope }
+
+sd_common_ajax_form:
+    pattern:  /ajax/form
+    defaults: { _controller: SDCommonBundle:Ajax:form }
+
+sd_common_ajax_user:
+    pattern:  /ajax/user
+    defaults: { _controller: SDCommonBundle:Ajax:user }
+    
+sd_common_ajax_user_all_stuff:
+    pattern:  /ajax/user/all/stuff
+    defaults: { _controller: SDCommonBundle:Ajax:userAllStuff }
+
+sd_common_ajax_user_fio:
+    pattern:  /ajax/user/fio
+    defaults: { _controller: SDCommonBundle:Ajax:userFIO }
+    
+sd_common_ajax_user_fio_not_my:
+    pattern:  /ajax/user/fio/not_my
+    defaults: { _controller: SDCommonBundle:Ajax:userFIONotMy }
+    
+sd_common_ajax_user_position:
+    pattern:  /ajax/user/position
+    defaults: { _controller: SDCommonBundle:Ajax:userPosition }
+    
+sd_common_ajax_user_email:
+    pattern:  /ajax/user/email
+    defaults: { _controller: SDCommonBundle:Ajax:userEmail }
+    
+sd_common_ajax_user_save:
+    pattern:  /ajax/user/save
+    defaults: { _controller: SDCommonBundle:Ajax:userSave }
+    
+sd_common_ajax_stuff_save:
+    pattern:  /ajax/stuff/save
+    defaults: { _controller: SDCommonBundle:Ajax:stuffSave }
+
+sd_common_ajax_contact_phone:
+    pattern:  /ajax/contact/phone
+    defaults: { _controller: SDCommonBundle:Ajax:contactPhone }
+
+sd_common_ajax_contact_email:
+    pattern:  /ajax/contact/email
+    defaults: { _controller: SDCommonBundle:Ajax:contactEmail }
+
+sd_common_ajax_contact_company:
+    pattern:  /ajax/contact/company
+    defaults: { _controller: SDCommonBundle:Ajax:userStuffCompany }
+
+sd_common_ajax_delete:
+    pattern:  /ajax/delete
+    defaults: { _controller: SDCommonBundle:Ajax:delete }
+
+sd_common_ajax_organization_save:
+    pattern:  /ajax/organization/save
+    defaults: { _controller: SDCommonBundle:Ajax:organizationSave }
+
+sd_common_ajax_handling_save:
+    pattern:  /ajax/handling/save
+    defaults: { _controller: SDCommonBundle:Ajax:handlingSave }
+
+sd_common_ajax_handling_user_part_change:
+    pattern:  /ajax/handling/user/part
+    defaults: { _controller: SDCommonBundle:Ajax:handlingUserPartChange }
+    
+sd_common_ajax_dogovor_save:
+    pattern:  /ajax/dogovor/save
+    defaults: { _controller: SDCommonBundle:Ajax:dogovorSave }
+
+sd_common_ajax_document_type_save:
+    pattern:  /ajax/document/type/save
+    defaults: { _controller: SDCommonBundle:Ajax:documentTypeSave }
+
+sd_common_ajax_dogovor_upload_file:
+    pattern:  /ajax/dogovor/upload
+    defaults: { _controller: SDCommonBundle:Ajax:dogovorUpload }
+
+sd_common_ajax_document_upload_file:
+    pattern:  /ajax/document/upload
+    defaults: { _controller: SDCommonBundle:Ajax:documentUpload }
+sd_common_ajax_dopdogovor_upload_file:
+    pattern:  /ajax/dopdogovor/upload
+    defaults: { _controller: SDCommonBundle:Ajax:dopDogovorUpload }
+
+sd_common_ajax_contractor_upload_file:
+    pattern:  /ajax/contractor/upload
+    defaults: { _controller: SDCommonBundle:Ajax:contractorUpload }
+
+sd_common_ajax_handling_more_info_save:
+    pattern:  /ajax/handling/more/info/save
+    defaults: { _controller: SDCommonBundle:Ajax:handlingMoreInfoSave }
+
+sd_common_ajax_handling_service_save:
+    pattern:  /ajax/handling/service/save
+    defaults: { _controller: SDCommonBundle:Ajax:handlingServiceSave }
+
+sd_common_ajax_organization_by_id:
+    pattern:  /ajax/organization_by_id
+    defaults: { _controller: SDCommonBundle:Ajax:organizationById }
+
+sd_common_ajax_organization_by_ids:
+    pattern:  /ajax/organization_by_ids
+    defaults: { _controller: SDCommonBundle:Ajax:organizationByIds }
+
+sd_common_ajax_organization_by_edrpous:
+    pattern:  /ajax/organization_by_edrpous
+    defaults: { _controller: SDCommonBundle:Ajax:organizationByEdrpous }
+
+sd_common_ajax_user_by_id:
+    pattern:  /ajax/user_by_id
+    defaults: { _controller: SDCommonBundle:Ajax:userById }
+    
+sd_common_ajax_contact_company_by_ids:
+    pattern:  /ajax/contact/company_by_ids
+    defaults: { _controller: SDCommonBundle:Ajax:userStuffCompanyByIds}
+
+sd_common_ajax_user_by_ids:
+    pattern:  /ajax/user_by_ids
+    defaults: { _controller: SDCommonBundle:Ajax:userByIds }
+
+sd_common_ajax_city_by_id:
+    pattern:  /ajax/city_by_id
+    defaults: { _controller: SDCommonBundle:Ajax:cityById }
+
+sd_common_ajax_city_one_by_id:
+    pattern:  /ajax/city_one_by_id
+    defaults: { _controller: SDCommonBundle:Ajax:cityOneById }
+    
+sd_common_ajax_scope_by_id:
+    pattern:  /ajax/scope_by_id
+    defaults: { _controller: SDCommonBundle:Ajax:scopeById }
+    
+    
+sd_common_ajax_scope_by_ids:
+    pattern:  /ajax/scope_by_ids
+    defaults: { _controller: SDCommonBundle:Ajax:scopeByIdS }
+    
+sd_common_ajax_organization_type:
+    pattern:  /ajax/organization_type
+    defaults: { _controller: SDCommonBundle:Ajax:organizationType }
+
+sd_common_ajax_dogovor_type:
+    pattern:  /ajax/dogovor_type
+    defaults: { _controller: SDCommonBundle:Ajax:dogovorType }
+
+sd_common_ajax_document_type:
+    pattern:  /ajax/document/type
+    defaults: { _controller: SDCommonBundle:Ajax:documentType }
+#sd_common_ajax_dogovor_subject:
+#    pattern:  /ajax/dogovor_subject
+#    defaults: { _controller: SDCommonBundle:Ajax:dogovorSubject }
+
+sd_common_ajax_dogovor_startdatetime:
+    pattern:  /ajax/dogovor_startdatetime
+    defaults: { _controller: SDCommonBundle:Ajax:dogovorStartdatetime }
+
+sd_common_ajax_dogovor_stopdatetime:
+    pattern:  /ajax/dogovor_stopdatetime
+    defaults: { _controller: SDCommonBundle:Ajax:dogovorStopdatetime }
+
+sd_common_ajax_dogovor_startdatetime_by_ids:
+    pattern:  /ajax/dogovor_startdatetime_ids
+    defaults: { _controller: SDCommonBundle:Ajax:dogovorStartdatetimeIdS }
+
+sd_common_ajax_dogovor_stopdatetime_by_ids:
+    pattern:  /ajax/dogovor_stopdatetime_ids
+    defaults: { _controller: SDCommonBundle:Ajax:dogovorStopdatetimeIdS }
+
+sd_common_ajax_organization_group:
+    pattern:  /ajax/organization_group
+    defaults: { _controller: SDCommonBundle:Ajax:organizationGroup }
+
+sd_common_ajax_organization_lookup:
+    pattern:  /ajax/organization_lookup
+    defaults: { _controller: SDCommonBundle:Ajax:organizationLookup }
+
+sd_common_ajax_organization_lookup_by_ids:
+    pattern:  /ajax/organization_lookup_by_ids
+    defaults: { _controller: SDCommonBundle:Ajax:organizationLookupByIds }
+
+sd_common_ajax_handling_status:
+    pattern:  /ajax/handling_status
+    defaults: { _controller: SDCommonBundle:Ajax:handlingStatus }
+
+sd_common_ajax_handling_result:
+    pattern:  /ajax/handling_result
+    defaults: { _controller: SDCommonBundle:Ajax:handlingResult }
+
+sd_common_ajax_handling_type:
+    pattern:  /ajax/handling_type
+    defaults: { _controller: SDCommonBundle:Ajax:handlingType }
+
+sd_common_ajax_model_contact_type:
+    pattern:  /ajax/model_contact_type
+    defaults: { _controller: SDCommonBundle:Ajax:modelContactType }
+
+sd_common_ajax_model_contact_save:
+    pattern:  /ajax/model_contact/save
+    defaults: { _controller: SDCommonBundle:Ajax:modelContactSave }
+
+sd_common_ajax_mpk:
+    pattern: /ajax/mpk
+    defaults: { _controller: SDCommonBundle:Ajax:mpk }
+
+sd_common_ajax_mpk_by_id:
+    pattern: /ajax/mpk/by/id
+    defaults: { _controller: SDCommonBundle:Ajax:mpkById }
+
+sd_common_ajax_department_type:
+    pattern: /ajax/department/type
+    defaults: { _controller: SDCommonBundle:Ajax:departmentType }
+
+sd_common_ajax_department_type_by_id:
+    pattern: /ajax/department/type/by/id
+    defaults: { _controller: SDCommonBundle:Ajax:departmentTypeById }
+
+sd_common_ajax_region:
+    pattern: /ajax/region
+    defaults: { _controller: SDCommonBundle:Ajax:region }
+
+sd_common_ajax_region_by_id:
+    pattern: /ajax/region/by/id
+    defaults: { _controller: SDCommonBundle:Ajax:regionById }
+
+sd_common_ajax_department_status:
+    pattern: /ajax/department/status
+    defaults: { _controller: SDCommonBundle:Ajax:departmentStatus }
+
+sd_common_ajax_department_status_by_id:
+    pattern: /ajax/department/status/by/id
+    defaults: { _controller: SDCommonBundle:Ajax:departmentStatusById }
+
+sd_common_ajax_company_structure:
+    pattern: /ajax/company/structure
+    defaults: { _controller: SDCommonBundle:Ajax:companyStructure }
+
+sd_common_ajax_company_structure_by_id:
+    pattern: /ajax/company/structure/by/id
+    defaults: { _controller: SDCommonBundle:Ajax:companyStructureById }
+
+sd_common_ajax_self_organization:
+    pattern: /ajax/self/organization
+    defaults: { _controller: SDCommonBundle:Ajax:selfOrganization }
+
+sd_common_ajax_editable_department:
+    pattern: /ajax/editable/department
+    defaults: { _controller: SDCommonBundle:Ajax:editableDepartment }
+
+sd_common_ajax_document_date:
+    pattern: /ajax/document/date
+    defaults: { _controller: SDCommonBundle:Ajax:documentDate}
+
+sd_common_ajax_oper_department_mpk:
+    pattern: /ajax/oper/department/mpk
+    defaults: { _controller: SDCommonBundle:Ajax:departmentPeopleMpk }
+
+sd_common_ajax_oper_department_individual:
+    pattern: /ajax/oper/department/individual
+    defaults: { _controller: SDCommonBundle:Ajax:departmentPeopleIndividual }
+
+sd_common_ajax_oper_department_individual_by_id:
+    pattern: /ajax/oper/department/individual/by/id
+    defaults: { _controller: SDCommonBundle:Ajax:departmentPeopleIndividualById }
+
+sd_common_ajax_oper_schedule_month:
+    pattern: /ajax/oper/schedule/month/
+    defaults: { _controller: SDCommonBundle:Ajax:monthsFromDepartment }
+
+sd_common_ajax_oper_schedule_month_by_id:
+    pattern: /ajax/oper/schedule/month/by/id
+    defaults: { _controller: SDCommonBundle:Ajax:monthsFromDepartmentById }
+
+sd_common_ajax_oper_schedule_year:
+    pattern: /ajax/oper/schedule/year/
+    defaults: { _controller: SDCommonBundle:Ajax:yearsFromDepartment }
+
+sd_common_ajax_oper_schedule_year_by_id:
+    pattern: /ajax/oper/schedule/year/by/id
+    defaults: { _controller: SDCommonBundle:Ajax:yearsFromDepartmentById }
+
+sd_common_ajax_schedule_grafik_people:
+    pattern:  /ajax/schedule/grafik/people/
+    defaults: { _controller: SDCommonBundle:Ajax:departmentIndividualGrafik }
+
+sd_common_ajax_invoice_save:
+    pattern:  /ajax/invoice/save
+    defaults: { _controller: SDCommonBundle:Ajax:invoiceSave }
+
+sd_common_ajax_organization_service_cover_save:
+    pattern:  /ajax/organization_service_cove/save/{organizationId}/{serviceId}
+    defaults: { _controller: SDCommonBundle:Ajax:organizationServiceCoverSave }
+
+
+sd_common_ajax_invoice_invoice_id:
+    pattern:  /ajax/invoice/invoice/id
+    defaults: { _controller: SDCommonBundle:Ajax:invoiceInvoiceId }
+    
+sd_common_ajax_invoice_act_number:
+    pattern:  /ajax/invoice/act/number
+    defaults: { _controller: SDCommonBundle:Ajax:invoiceActNumber }
+
+sd_common_ajax_invoice_by_act_numbers:
+    pattern:  /ajax/invoice_by_act_numbers
+    defaults: { _controller: SDCommonBundle:Ajax:invoiceByActNumbers }
+
+sd_common_ajax_invoice_by_ids:
+    pattern:  /ajax/invoice_by_ids
+    defaults: { _controller: SDCommonBundle:Ajax:invoiceByIds }

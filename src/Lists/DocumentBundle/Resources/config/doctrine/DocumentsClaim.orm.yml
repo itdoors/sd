@@ -1,0 +1,20 @@
+Lists\DocumentBundle\Entity\DocumentsClaim:
+    type: entity
+    table: documents_claim
+    fields:
+        claimId:
+            id: true
+            type: bigint
+            nullable: false
+            column: claim_id
+    oneToOne:
+        documents:
+            targetEntity: Documents
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                documents_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

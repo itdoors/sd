@@ -1,0 +1,100 @@
+{% trans_default_domain 'ListsReportBundle' %}
+
+{% if results|length %}
+<div class="table-scrollable">
+    <table class="table table-striped table-bordered table-advance table-hover" id="report-activity-content">
+        <thead>
+        <tr>
+            <th >{% trans %}Handling Id{% endtrans %}</th>
+            <th >{% trans %}Createdatetime{% endtrans %}</th>
+            <th >{% trans %}Organization{% endtrans %}</th>
+            <th colspan="{{ levels|length }}">{% trans %}Contact level{% endtrans %}</th>
+            {% for type in types %}
+                <th>{{ type.reportName }}</th>
+            {% endfor %}
+            <th>{% trans %}Service list{% endtrans %}</th>
+            <th>{% trans %}PF1{% endtrans %}</th>
+            <th>{% trans %}Our summ{% endtrans %}</th>
+            <th>{% trans %}Dogovor{% endtrans %}</th>
+            <th>{% trans %}Launch date{% endtrans %}</th>
+            <th>{% trans %}Marketing{% endtrans %}</th>
+            <th>{% trans %}Competitor list{% endtrans %}</th>
+            <th>{% trans %}Competitor end date{% endtrans %}</th>
+            <th>{% trans %}Competitor price{% endtrans %}</th>
+            <th>{% trans %}Square{% endtrans %}</th>
+            <th>{% trans %}Employees{% endtrans %}</th>
+            <th>{% trans %}Group{% endtrans %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for result in results %}
+            <tr>
+                <td colspan="{{ 3 + types|length + levels|length + 13 }}">{{ result.user }}</td>
+            </tr>
+            {% for organization in result['organizations'] %}
+            <tr>
+                <td>
+                    {{ organization['handlingId'] }}
+                </td>
+                <td>
+                    {% if organization['handlingCreatedatetime'] %}
+                        {{ organization['handlingCreatedatetime']|date('d.m.Y') }}
+                    {% endif %}
+                </td>
+                <td>
+                <a
+                   href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_show', { id: organization['handlingId'] }) }}"
+                   target="_blank"
+                >
+                    {{ organization['name'] }}
+                </a>
+                </td>
+                {% for level in levels %}
+                    <td>
+                        {% if  organization['levelDigit'][level.digit] is defined %}
+                            {{ organization['levelDigit'][level.digit] }}
+                        {% endif %}
+                    </td>
+                {% endfor %}
+                {% for type in types %}
+                    {% if organization['types'][type.id] is defined %}
+                        <td>
+                            <div class="itdoors-week-number-{{ organization['types'][type.id] }}" style="width: 100%; height: 100%">
+                                &nbsp;+
+                            </div>
+                        </td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                {% endfor %}
+                <td>{{ organization['serviceList'] }}</td>
+                <td>{{ organization['pf1'] }}</td>
+                <td>{{ organization['budget'] }}</td>
+                <td>
+                    {% if organization['dogovorList'] %}
+                        +
+                    {% endif %}
+                </td>
+                <td>
+                    {% if organization['launchDate'] is defined and organization['launchDate'] %}
+                        {{ organization['launchDate']|date('d.m.Y') }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if organization['marketing'] %}
+                        +
+                    {% endif %}
+                </td>
+                <td>{{ organization['competitorList'] }}</td>
+                <td>{{ organization['competitorEndDate'] }}</td>
+                <td>{{ organization['competitorPrice'] }}</td>
+                <td>{{ organization['square'] }}</td>
+                <td>{{ organization['employees'] }}</td>
+                <td>{{ organization['organizationGroupName'] }}</td>
+            </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}

@@ -1,0 +1,59 @@
+# private calendar
+sd_calendar_private_handling_message:
+    pattern:  /calendar/ajax/private/handlind_message
+    defaults: { _controller: SDCalendarBundle:Private:HandlingMessage }
+sd_calendar_private_index:
+    pattern:  sd/calendar/ajax/private/index
+    defaults: { _controller: SDCalendarBundle:Private:Index }
+# shared calendar
+sd_calendar_shared_index:
+    pattern:  sd/calendar/shared/index
+    defaults: { _controller: SDCalendarBundle:Shared:Index }
+    
+sd_calendar_shared_handling_message:
+    pattern:  sd/calendar/ajax/shared/handlind_message
+    defaults: { _controller: SDCalendarBundle:Shared:HandlingMessage }
+#SALES ROUTES
+sd_calendar_sales_handling_message:
+    pattern:  sd/calendar/ajax/sales/handlind_message
+    defaults: { _controller: SDCalendarBundle:Sales:HandlingMessage }
+
+#OPER ROUTES
+sd_calendar_oper_handling_message:
+    pattern:  sd/calendar/ajax/oper/handlind_message
+    defaults: { _controller: SDCalendarBundle:Oper:HandlingMessage }
+
+#SALES DISPATCHER ROUTES
+sd_calendar_salesdispatcher_handling_message:
+    pattern:  sd/calendar/ajax/salesdispatcher/handlind_message
+    defaults: { _controller: SDCalendarBundle:SalesDispatcher:HandlingMessage }
+
+#SALES ADMIN ROUTES
+sd_calendar_salesadmin_handling_message:
+    pattern:  sd/calendar/ajax/salesadmin/handlind_message
+    defaults: { _controller: SDCalendarBundle:SalesAdmin:HandlingMessage }
+
+sd_tasks_modal_content:
+    pattern:  sd/tasks/modal/content
+    defaults: { _controller: SDCalendarBundle:Private:oneTaskAjax }
+
+sd_tasks_set_done:
+    pattern:  sd/tasks/set/done
+    defaults: { _controller: SDCalendarBundle:Private:setDoneTask }
+
+sd_tasks_done:
+    pattern:  sd/tasks/done
+    defaults: { _controller: SDCalendarBundle:Private:tasksDone }
+
+#Holidays
+sd_holiday_index:
+    pattern:  /holiday
+    defaults: { _controller: SDCalendarBundle:Holiday:index}
+
+sd_holiday_list:
+    pattern:  /holiday/list
+    defaults: { _controller: SDCalendarBundle:Holiday:list}
+
+sd_holiday_save:
+    pattern:  /ajax/holiday/save
+    defaults: {  _controller: SDCalendarBundle:Holiday:holidaySave}

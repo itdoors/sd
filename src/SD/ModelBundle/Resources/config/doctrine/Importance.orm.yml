@@ -1,0 +1,24 @@
+SD\ModelBundle\Entity\Importance:
+    type: entity
+    table: importance
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 100
+            fixed: false
+            nullable: false
+        color:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        duration:
+            type: bigint
+            nullable: true
+    lifecycleCallbacks: {  }

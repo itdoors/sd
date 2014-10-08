@@ -1,0 +1,43 @@
+Lists\TeamBundle\Entity\Team:
+    type: entity
+    table: team
+    repositoryClass: Lists\TeamBundle\Entity\TeamRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 128
+            nullable: false
+        description:
+            type: text
+            nullable: true
+            column: descriprion
+    manyToOne:
+        owner:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                owner_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    manyToMany:
+        users:
+            targetEntity: SD\UserBundle\Entity\User
+            inversedBy: teams
+            joinTable:
+              name: team_user
+              joinColumns:
+                handling_id:
+                  referencedColumnName: id
+              inverseJoinColumns:
+                user_id:
+                  referencedColumnName: id
+    lifecycleCallbacks:
+        prePersist: [ doOnPrePersist ]

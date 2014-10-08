@@ -1,0 +1,20 @@
+parameters:
+    lists_article.form.history: Lists\ArticleBundle\Form\ArticleHistoryFormType
+    lists_article.form.decision: Lists\ArticleBundle\Form\ArticleDecisionFormType
+    lists_article.service.class: Lists\ArticleBundle\Services\ArticleService
+
+services:
+    lists_article.form.history:
+        class: %lists_article.form.history%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: articleHistoryForm }
+    lists_article.form.decision:
+        class: %lists_article.form.decision%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: articleDecisionForm }
+    lists_article.service:
+        class: %lists_article.service.class%
+        arguments: [@service_container]
+

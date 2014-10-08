@@ -1,0 +1,20 @@
+SD\ModelBundle\Entity\FosGroup:
+    type: entity
+    table: fos_group
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        roles:
+            type: array
+            nullable: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,137 @@
+parameters:
+    lists_organization.sales.filter.form.class: Lists\OrganizationBundle\Form\OrganizationSalesFilterFormType
+    lists_organization.sales.dispatcher.filter.form.class: Lists\OrganizationBundle\Form\OrganizationSalesDispatcherFilterFormType
+    lists_organization.sales.admin.filter.form.class: Lists\OrganizationBundle\Form\OrganizationSalesAdminFilterFormType
+    lists_organization.form.sales.class: Lists\OrganizationBundle\Form\OrganizationSalesFormType
+    lists_organization.form.contractor.class: Lists\OrganizationBundle\Form\OrganizationContractorFilterFormType
+    lists_organization.form.dogovoradmin.class: Lists\OrganizationBundle\Form\OrganizationDogovorAdminFormType
+    lists_organization.form.user.class: Lists\OrganizationBundle\Form\OrganizationUserFormType
+    lists_organization.service.cover.form.class: Lists\OrganizationBundle\Form\OrganizationServiceCoverType
+    lists_organization.form.user.sales.admin.class: Lists\OrganizationBundle\Form\OrganizationUserSalesAdminFormType
+    lists_organization.form.user.filter.class: Lists\OrganizationBundle\Form\OrganizationUserFilterFormType
+    lists_organization.form.child.class: Lists\OrganizationBundle\Form\OrganizationChildForm
+    lists_organization.form.kved.class: Lists\OrganizationBundle\Form\KvedFormType
+    
+
+    lists_organization.edrpou.validator.class: Lists\OrganizationBundle\Validator\UniqueEdrpouValidator
+
+    lists_organization.repository.class: Lists\OrganizationBundle\Entity\OrganizationRepository
+    lists_organization.repository.entity: Lists\OrganizationBundle\Entity\Organization
+
+    lists_organization.service_cover.repository.class: Lists\OrganizationBundle\Entity\OrganizationServiceCoverRepository
+    lists_organization.service_cover.repository.entity: Lists\OrganizationBundle\Entity\OrganizationServiceCover
+    
+    lists_organization.user.service.class: Lists\OrganizationBundle\Services\OrganizationUserService
+
+    lists_organization.service.cover.service.class: Lists\OrganizationBundle\Services\OrganizationServiceCoverService
+
+services:
+    lists_organization.form.organizationFilterForm:
+        class: %lists_organization.sales.filter.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: organizationSalesFilterForm }
+    lists_organization.form.organizationSalesDispatcherFilterForm:
+        class: %lists_organization.sales.dispatcher.filter.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: organizationSalesDispatcherFilterForm }
+
+    lists_organization.form.organizationSalesAdminFilterForm:
+          class: %lists_organization.sales.admin.filter.form.class%
+          arguments: [@service_container]
+          tags:
+              - { name: form.type, alias: organizationSalesAdminFilterForm }
+
+    lists_organization.form.organizationSalesForm:
+        class: %lists_organization.form.sales.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: organizationSalesForm }
+
+    lists_organization.form.organizationContractorFilterForm:
+        class: %lists_organization.form.contractor.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: organizationContractorFilterFormType }
+
+    lists_organization.form.organizationDogovorAdminForm:
+        class: %lists_organization.form.dogovoradmin.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: organizationDogovorAdminForm }
+
+    lists_organization.form.organizationUserForm:
+        class: %lists_organization.form.user.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: organizationUserForm }
+            
+    lists_organization.form.organizationUserSalesAdminForm:
+        class: %lists_organization.form.user.sales.admin.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: organizationUserSalesAdminForm }
+            
+    lists_organization.user.service:
+        class: %lists_organization.user.service.class%
+        arguments: [ @service_container ]
+        
+    lists_organization.form.organizationUserFilterForm:
+        class: %lists_organization.form.user.filter.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: organizationUserFilterForm }
+
+    lists_organization.form.organizationChildForm:
+        class: %lists_organization.form.child.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: organizationChildForm }
+
+    lists_organization.form.kvedForm:
+        class: %lists_organization.form.kved.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: kvedForm }
+
+    unique_event_date_validator:
+        class: %lists_organization.edrpou.validator.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@translator"
+        tags:
+            -
+                name: validator.constraint_validator
+                alias: unique_edrpou
+
+    lists_organization.repository:
+        class: %lists_organization.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_organization.repository.entity% ]
+
+    organization.repository:
+        alias: lists_organization.repository
+
+    lists_organization.service_cover.repository:
+        class: %lists_organization.service_cover.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_organization.service_cover.repository.entity% ]
+
+    organization.service_cover.repository:
+        alias: lists_organization.service_cover.repository
+
+    lists_organization.service.cover.service:
+        class: %lists_organization.service.cover.service.class%
+        arguments: [ @service_container ]
+
+    organization.service.cover.service:
+        alias: lists_organization.service.cover.service
+
+    lists_organization.form.organizationServiceCoverType:
+        class: %lists_organization.service.cover.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: organizationServiceCoverType }

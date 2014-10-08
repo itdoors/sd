@@ -1,0 +1,84 @@
+SD\ModelBundle\Entity\FinanceClaim:
+    type: entity
+    table: finance_claim
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        claimId:
+            type: bigint
+            nullable: false
+            column: claim_id
+        costsN:
+            type: float
+            nullable: true
+            column: costs_n
+        costsNds:
+            type: float
+            nullable: true
+            column: costs_nds
+        costsNonnds:
+            type: float
+            nullable: true
+            column: costs_nonnds
+        incomeNds:
+            type: float
+            nullable: true
+            column: income_nds
+        incomeNonnds:
+            type: float
+            nullable: true
+            column: income_nonnds
+        billNumber:
+            type: string
+            length: 100
+            fixed: false
+            nullable: true
+            column: bill_number
+        profitability:
+            type: float
+            nullable: true
+        nds:
+            type: float
+            nullable: true
+        obnal:
+            type: float
+            nullable: true
+        isClosed:
+            type: boolean
+            nullable: true
+            column: is_closed
+        work:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        mpk:
+            type: string
+            length: 50
+            fixed: false
+            nullable: true
+        paymentType:
+            type: string
+            length: 10
+            fixed: false
+            nullable: true
+            column: payment_type
+        costsBeznalnonnds:
+            type: float
+            nullable: true
+            column: costs_beznalnonnds
+    manyToOne:
+        status:
+            targetEntity: Status
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                status_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,111 @@
+Authorization: Авторизация
+Login to your account: Вход в Ваш аккаунт
+Enter valid username and password.: Введите правильное имя пользователя и пароль.
+Username: Логин пользователя
+Password: Пароль
+Remember me: Запомнить меня
+Forgot your password ?: Забыли пароль?
+no worries, click <a href="javascript:;"  id="forget-password">here</a> to reset your password.: нажмите <a href="javascript:;"  id="forget-password">сюда</a> для восстановления пароля
+no worries, click: нажмите
+here: сюда
+to reset your password.: для сброса пароля.
+
+
+Forget Password ?: Забыли пароль?
+Enter your e-mail address below to reset your password.: Введите Ваш e-mail для восстановления пароля
+Back: Назад
+Submit: ОК
+Login: Вход
+
+List of stuff: Список сотрудников
+Stuff <small>list of stuff</small>: Сотрудники <small>список сотрудников</small>
+Dashboard: Рабочий стол
+Enter fio: Введите ФИО
+Enter position: Введите должность
+Filter: Фильтр
+Clear Filter: Очистить фильтр
+Position: Должность
+First name: Имя
+First Name: Имя
+Last name: Фамилия
+Middle name: Отчество
+Middle Name: Отчество
+Mobile phone: Мобильный
+Mobile Phone: Мобильный
+Personale phone: Персональный телефон
+Inside phone: Внутрений телефон
+Fired: Уволен
+fired: Уволен
+No fired: Работает
+Active: Активный
+Blocked: Заблокирован
+blocked: заблокирован
+active: активный
+Status: Статус
+Enter email: Введите Email
+Enter phone: Введите телефон
+
+Subdivision: Подразделение
+Enter subdivision: Введите подразделение
+User profile: Профиль пользователя
+Users <small>user profile</small>: Пользователи <small>профиль пользователя</small>
+
+Profile: Главный профиль
+Plan: План
+Settings profile: Настройки профиля
+
+Current password: Текущий пароль
+New password: Новый пароль
+New password again: Повторить новый пароль
+Password again: Повторить новый пароль
+Save: Сохранить
+
+Change Password: Сменить пароль
+
+Place of birth: Место рождения
+Hire Date: Дата приема на работу
+Termination date: Дата увольнения
+Education: Образование
+
+Contaсts: Контакты
+Change Avatar: Изменить аватарку
+
+Select contact: Укажите контакт
+Enter value: Введите значение
+Add: Добавить
+Cancel: Закрыть
+Add Contact: Добавить контакт
+
+Add new user: Добавить нового пользователя
+New user: Новый пользователь
+Users <small>new stuff</small>: Пользователи <small>новый сотрудник</small>
+New stuff: Новый сотрудник
+Select subdivision: Выберите подразделение
+Enter description: Введите описание
+Enter education: Укажите образование
+Enter issues: Професиональные вопросы
+Birthday: Дата рождения
+Enter date hire: Дата приема на работу
+Add manager: Добавить менеджера
+
+Select status fired: Выберите статус увольнения
+Select status blocked: Выберите статус блокировки
+Companustructure: Стуктура компании
+
+Enter last name: Введите фамилию
+Enter first name: Введите имя
+Enter middle name: Введите отчество
+Enter username: Введите логин
+Enter mobilephone: Введите мобильный
+Enter phonePersonal: Введите персональный телефон
+Enter phoneInside: Введите внутрений телефон
+Enter birthPlace: Введите место рождения
+Enter birthday: Введите день рождения
+Enter Hire Date: Введите дату приема на работу
+Enter termination date: Введите дату увольнения
+
+FIO: Ф.И.О
+Phone: Телефон
+Birthdays: Дни рожденья
+Change avatar: Изменить аватарку
+Upload new avatar: Загрузить новую аватарку

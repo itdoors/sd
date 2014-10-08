@@ -1,0 +1,43 @@
+{% trans_default_domain 'ListsHandlingBundle' %}
+<script>
+    $(document).ready(function(){
+        $('button#managers_list_new').on('click', function() {
+            var $target = $(this);
+            $('html, body').animate({scrollTop: $target.offset().top-$target.height()}, 1000);
+        });
+    });
+</script>
+<div class="tab-pane" id="tab_1">
+    <div class="col-md-12">
+        <h3>{% trans %}Messages{% endtrans %}</h3>
+        <p>{% trans %}Messages list{% endtrans %}</p>
+
+        <div id="messages_list"
+             data-url="{{ path('lists_sales_handling_ajax_messages', {
+                handlingId: handling.0.id
+             }) }}"
+             data-params='{"handlingId":{{ handling.0.id }}'
+                >
+            {{ render(controller('ListsHandlingBundle:' ~ baseTemplate ~ ':MessagesList', {
+                handlingId: handling.0.id
+            })) }}
+        </div>
+        {% if canEdit %}
+            <div class="table-toolbar">
+                <div class="btn-group">
+                    <button id="managers_list_new" class="btn green ajax-form"
+                            data-target_holder="messageFormTpl"
+                            data-form_name="handlingMessageForm"
+                            data-default='{"handling_id":{{ handling.0.id }},"mindate":"{{ handling.0.createdate|date('U') }}"}'
+                            data-post_function="updateList"
+                            data-post_target_id="messages_list"
+                            >
+                        {% trans %}Add New{% endtrans %} <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+                <div style="display: none" id="messageFormTpl">
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>

@@ -1,0 +1,27 @@
+SD\TaskBundle\Entity\Stage:
+    type:  entity
+    table: stage
+    repositoryClass: SD\TaskBundle\Entity\StageRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: false
+            length: 255
+        model:
+            type: text
+            nullable: true
+    manyToOne:
+        parent:
+            targetEntity: SD\TaskBundle\Entity\Stage
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                parent_id:
+                    referencedColumnName: id
+            orphanRemoval: false

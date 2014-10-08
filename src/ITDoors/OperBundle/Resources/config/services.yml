@@ -1,0 +1,60 @@
+parameters:
+    itdoors_oper.department.filter.form.class: ITDoors\OperBundle\Form\DepartmentFilterFormType
+    itdoors_oper.coworker.filter.form.class: ITDoors\OperBundle\Form\CoworkerFilterFormType
+    itdoors_oper.schedule.filter.form.class: ITDoors\OperBundle\Form\ScheduleFilterFormType
+    itdoors_oper.schedule.supervisor.filter.form.class: ITDoors\OperBundle\Form\ScheduleSupervisorFilterFormType
+    itdoors_oper.schedule.service.class: ITDoors\OperBundle\Services\ScheduleService
+    itdoors_oper.access.service.class: ITDoors\OperBundle\Services\AccessService
+    itdoors_oper.common_oper.service.class: ITDoors\OperBundle\Services\CommonOperService
+    itdoors_oper.schedule_update_oper.service.class: ITDoors\OperBundle\Services\ScheduleUpdateService
+
+services:
+    itdoors_oper.form.DepartmentFilterFormType:
+        class: %itdoors_oper.department.filter.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: DepartmentFilterFormType }
+    itdoors_oper.form.CoworkerFilterFormType:
+        class: %itdoors_oper.coworker.filter.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: CoworkerFilterFormType }
+    itdoors_oper.form.ScheduleFilterFormType:
+        class: %itdoors_oper.schedule.filter.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: ScheduleFilterFormType }
+    itdoors_oper.form.ScheduleSupervisorFilterFormType:
+        class: %itdoors_oper.schedule.supervisor.filter.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: ScheduleSupervisorFilterFormType }
+
+    itdoors_oper.schedule.service:
+        class: %itdoors_oper.schedule.service.class%
+        arguments: [@service_container]
+
+    schedule.service:
+        alias: itdoors_oper.schedule.service
+
+    itdoors_oper.access.service:
+        class: %itdoors_oper.access.service.class%
+        arguments: [@service_container]
+
+    access.service:
+        alias: itdoors_oper.access.service
+
+    itdoors_oper.schedule_update.service:
+        class: %itdoors_oper.schedule_update_oper.service.class%
+        arguments: [@service_container]
+
+    schedule_update.service:
+        alias: itdoors_oper.schedule_update.service
+
+
+    itdoors_oper.common_oper.service:
+        class: %itdoors_oper.common_oper.service.class%
+        arguments: [@service_container]
+
+    common_oper.service:
+        alias: itdoors_oper.common_oper.service

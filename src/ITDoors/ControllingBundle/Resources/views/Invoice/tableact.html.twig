@@ -1,0 +1,47 @@
+{% trans_default_domain 'ITDoorsControllingBundle' %}
+<script>
+    $(document).ready(function() {
+        $('.datesave').editable({
+            type: 'date',
+            name: 'DateEnd',
+            url: '{{ path('sd_common_ajax_invoice_save') }}',
+            emptytext: '{% trans from 'messages' %}Enter value{% endtrans %}',
+                        clear: '{% trans from 'ITDoorsControllingBundle' %}clear{% endtrans %}<i class="icon-remove fa fa-times" style="font-size:12px"></i>',
+                        datepicker: {
+                            rtl: Metronic.isRTL(),
+                            autoclose: true,
+                            format: "dd.mm.yyyy",
+                            pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+                            language: "{{ app.request.locale }}",
+                            startView: 'month',
+                            weekStart: 1
+                        }
+                    });
+                });
+</script>
+<div class="col-md-12">
+    <table id="handling" class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <td>{% trans %}Number act{% endtrans %}</td>
+                <td>{% trans %}Date{% endtrans %}</td>
+                <td>{% trans %}MPK{% endtrans %}</td>
+                <td>{% trans %}Summa{% endtrans %}</td>
+                <td>{% trans %}Count{% endtrans %}</td>
+                <td>{% trans %}Original ABP/BN{% endtrans %}</td>
+                <td>{% trans %}Note{% endtrans %}</td>
+            </tr>
+            {% for item in entitie %}
+            <tr>
+                <td>{{ item.number}}</td>
+                <td>{{ item.date is empty ? '' :item.date | date('d-m-Y')}}</td>
+                <td>{{ item.mpk}}</td>
+                <td>{{ item.summa|number_format(2, ',', ' ')}}</td>
+                <td>{{ item.count}}</td>
+                <td>{% if item.original is not empty %}{% trans %}on{% endtrans %}{% else %}{% trans %}off{% endtrans %}{% endif %}</td>
+                <td>{{ item.note }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

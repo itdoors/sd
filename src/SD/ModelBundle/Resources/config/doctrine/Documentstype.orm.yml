@@ -1,0 +1,21 @@
+SD\ModelBundle\Entity\Documentstype:
+    type: entity
+    table: documentstype
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 100
+            fixed: false
+            nullable: false
+        dockey:
+            type: string
+            length: 20
+            fixed: false
+            nullable: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,187 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsHandlingBundle' %}
+{% block title %}{% trans %}List of Handlings{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Handlings <small>list of handlings</small>{% endtrans %}
+    </h3>
+{% endblock %}
+{% block page_breadcrumbs %}
+	<ul class="page-breadcrumb breadcrumb">
+		<li>
+			<i class="fa fa-home"></i>
+			<a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+			<i class="fa fa-angle-right"></i>
+		</li>
+		<li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_index') }}" title="{% trans %}Handlings{% endtrans %}">{% trans %}Handlings{% endtrans %}</a></li>
+	</ul>
+{% endblock %}
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/core/plugins/table-tools/media/css/TableTools.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/core/plugins/table-tools/media/js/ZeroClipboard.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/core/plugins/table-tools/media/js/TableTools.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+
+    {% trans_default_domain 'ListsHandlingBundle' %}
+
+    {{  include(
+        'ListsReportBundle:' ~ baseTemplate ~ ':filters.html.twig',
+            {
+                filterForm: filterForm,
+                baseRoutePrefix: baseRoutePrefix
+            }
+        )
+    }}
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+
+                "date-euro-pre": function ( a ) {
+                    if ($.trim(a) != '') {
+                        var frDatea = $.trim(a).split(', ');
+
+                        var frTimea = ['00', '00'];
+
+                        if (typeof frDatea[1] != "undefined" )
+                        {
+                            frTimea = frDatea[1].split(':');
+                        }
+
+                        var frDatea2 = frDatea[0].split('.');
+                        var x = (frDatea2[2] + frDatea2[1] + frDatea2[0] + frTimea[0] + frTimea[1]) * 1;
+                    } else {
+                        var x = 1; // = l'an 1000 ...
+                    }
+
+                    return x;
+                },
+
+                "date-euro-asc": function ( a, b ) {
+                    return a - b;
+                },
+
+                "date-euro-desc": function ( a, b ) {
+                    return b - a;
+                }
+            } );
+
+
+            /*
+             * Initialize DataTables, with no sorting on the 'details' column
+             */
+            var oTable = $('#report-handling').dataTable( {
+                //"sDom": "<'row'<'col-md-12 col-sm-12'T><'col-md-6 col-sm-12'l><'col-md-12 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
+                "aoColumnDefs": [
+                    {"bSortable": false, "aTargets": [ 0 ] }
+                ],
+                /*"oTableTools": {
+                    "sSwfPath": "{{ asset('templates/core/plugins/table-tools/media/swf/copy_csv_xls_pdf.swf') }}"
+                },*/
+                "aoColumns": [
+                    null,
+                    null,
+                    null,
+                    { "sType": "date-euro" },
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ],
+                "aaSorting": [[1, 'asc']],
+                "aLengthMenu": [
+                    [10, 20, 50, -1],
+                    [10, 20, 50, "All"] // change per page values here
+                ],
+                // set the initial value
+                "iDisplayLength": 10,
+                "oLanguage": {
+                    "sProcessing":   "Подождите...",
+                    "sLengthMenu":   "Показать _MENU_ записей",
+                    "sZeroRecords":  "Записи отсутствуют.",
+                    "sInfo":         "Записи с _START_ до _END_ из _TOTAL_ записей",
+                    "sInfoEmpty":    "Записи с 0 до 0 из 0 записей",
+                    "sInfoFiltered": "(отфильтровано из _MAX_ записей)",
+                    "sInfoPostFix":  "",
+                    "sSearch":       "Поиск:",
+                    "sUrl":          "",
+                    "oPaginate": {
+                        "sFirst": "Первая",
+                        "sPrevious": "Предыдущая",
+                        "sNext": "Следующая",
+                        "sLast": "Последняя"
+                    },
+                    "oAria": {
+                        "sSortAscending":  ": активировать для сортировки столбца по возрастанию",
+                        "sSortDescending": ": активировать для сортировки столбцов по убыванию"
+                    }
+                }
+            });
+
+            jQuery('#report-handling_wrapper .dataTables_filter input').addClass("form-control input-small"); // modify table search input
+            jQuery('#report-handling_wrapper .dataTables_length select').addClass("form-control input-small"); // modify table per page dropdown
+            jQuery('#report-handling_wrapper .dataTables_length select').select2(); // modify table per page dropdown
+        })
+    </script>
+
+    <div class="table-responsive">
+
+        {% if results|length %}
+            <table class="table table-striped table-bordered table-advance table-hover" id="report-handling">
+                <thead>
+                    <tr>
+                        <th>{% trans %}N/n{% endtrans %} </th>
+                        <th>{% trans %}Managers{% endtrans %} </th>
+                        <th>{% trans %}Handling ID{% endtrans %}</th>
+                        <th>{% trans %}Createdatetime{% endtrans %} </th>
+                        <th>{% trans %}Name{% endtrans %} </th>
+                        <th>{% trans %}ServiceOffered{% endtrans %} </th>
+                        <th>{% trans %}Monthly turnover{% endtrans %} </th>
+                        <th>{% trans %}Start date{% endtrans %} </th>
+                        <th>{% trans %}Status{% endtrans %} </th>
+                        <th>{% trans %}City{% endtrans %} </th>
+                        <th>{% trans %}Chance{% endtrans %} </th>
+                    </tr>
+                </thead>
+                {% for item in results %}
+                    <tr {% if loop.index is odd %}class="color"{% endif %}>
+                        <td>
+                            <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_show', { id: item.handlingId } ) }}">
+                                {{ item.handlingId|e }}
+                            </a>
+                        </td>
+                        <td>{{ item.fullNames|e }}</td>
+                        <td>{{ item.handlingId }}</td>
+                        <td>{{ item.handlingCreatedate|date("d.m.y") }}</td>
+                        <td>{{ item.organizationName|e }}</td>
+                        <td>{{ item.handlingServiceOffered|e }}</td>
+                        <td></td>
+                        <td></td>
+                        <td>{{ item.statusName|e }}</td>
+                        <td>{{ item.cityName|e }}</td>
+                        {% set progress = (item.resultProgress is not null) ? item.resultProgress : item.progress %}
+                        {% set percentageString = item.resultPercentageString ? item.resultPercentageString : item.percentageString %}
+                        <td>
+                            {{ progress|e }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    </div>
+{% endblock body %}

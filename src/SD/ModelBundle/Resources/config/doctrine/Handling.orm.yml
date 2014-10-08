@@ -1,0 +1,122 @@
+SD\ModelBundle\Entity\Handling:
+    type: entity
+    table: handling
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        number:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+        createdatetime:
+            type: datetime
+            nullable: false
+        statusDescription:
+            type: text
+            nullable: true
+            column: status_description
+        statusChangeDate:
+            type: datetime
+            nullable: true
+            column: status_change_date
+        serviceOffered:
+            type: text
+            nullable: true
+            column: service_offered
+        budget:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+        square:
+            type: float
+            nullable: true
+        chance:
+            type: text
+            nullable: true
+        worktimeWithclient:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            column: worktime_withclient
+        description:
+            type: text
+            nullable: true
+        resultString:
+            type: text
+            nullable: true
+            column: result_string
+        statusAdmin:
+            type: boolean
+            nullable: true
+            column: status_admin
+        isClosed:
+            type: boolean
+            nullable: true
+            column: is_closed
+        budgetClient:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            column: budget_client
+        lastHandlingDate:
+            type: date
+            nullable: true
+            column: last_handling_date
+        createdate:
+            type: date
+            nullable: false
+    manyToOne:
+        organization:
+            targetEntity: Organization
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                organization_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        result:
+            targetEntity: HandlingResult
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                result_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        status:
+            targetEntity: HandlingStatus
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                status_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        type:
+            targetEntity: HandlingType
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SfGuardUser
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,179 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
+
+<div class="tabbable tabbable-custom boxless">
+    <ul class="nav nav-tabs" id="ajax_tabs">
+        <li class="active"><a href="#tab_0" data-block="tab_content" data-toggle="tab">{% trans %}Basic{% endtrans %}</a></li>
+        <li><a href="#tab_1" data-toggle="tab">{% trans %}Planned accrual{% endtrans %}</a></li>
+    </ul>
+    <div class="tab-content" id="tab_content">
+        <div class="tab-pane active" id="tab_0">
+
+<table id="handling" class="table table-bordered table-striped">
+    <tbody>
+        <tr>
+            <td>
+                {% trans %}Id{% endtrans %}
+            </td>
+            <td>
+                {{ person.0.id }}
+            </td>
+            <td>
+                {% trans %}Mpk{% endtrans %}
+            </td>
+            <td>
+                {{ person.0.mpkName }} ({{ person.0.selfOrganizationShortName }})
+            </td>
+        </tr>
+        <tr>
+            <td>{% trans %}Self organization{% endtrans %}</td>
+            <td colspan="2">{{ person.0.selfOrganizationName }}</td>
+        </tr>
+        <tr>
+            <td>
+                {% trans %}Surname{% endtrans %}
+            </td>
+            <td>
+                {{ person.0.lastName }}
+            </td>
+            <td>
+                {% trans %}Name{% endtrans %}
+            </td>
+            <td>
+                {{ person.0.firstName }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% trans %}Middle Name{% endtrans %}
+            </td>
+            <td>
+                {{ person.0.middleName }}
+            </td>
+            <td>
+
+            </td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% trans %}DRFO{% endtrans %}
+            </td>
+            <td>
+                {{ person.0.tin }}
+            </td>
+            <td>
+                {% trans %}Passport{% endtrans %}
+            </td>
+            <td>
+                {{ person.0.passport }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% trans %}Date accepted{% endtrans %}
+            </td>
+            <td>
+                {% if person.0.admissionDate is not empty %}
+                    {{ person.0.admissionDate|date("d-m-Y") }}
+                {% endif %}
+            </td>
+            <td>
+                {% trans %}Date faired{% endtrans %}
+            </td>
+            <td>
+                {% if person.0.dismissalDate is not empty %}
+                    {{ person.0.dismissalDate|date("d-m-Y") }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% trans %}Date accepted UU{% endtrans %}
+            </td>
+            <td>
+                {% if person.0.admissionDateNotOfficially is not empty %}
+                    {{ person.0.admissionDateNotOfficially|date("d-m-Y") }}
+                {% endif %}
+            </td>
+            <td>
+                {% trans %}Date faired UU{% endtrans %}
+            </td>
+            <td>
+                {% if person.0.dismissalDateNotOfficially is not empty %}
+                    {{ person.0.dismissalDateNotOfficially|date("d-m-Y") }}
+                {% endif %}
+            </td>
+        </tr>
+
+        {% if person.0.gph %}
+            <tr>
+                <td>{% trans %}Type of working{% endtrans %}</td>
+                <td>{% trans %}GPH{% endtrans %}</td>
+                <td colspan="2"></td>
+            </tr>
+        {% endif %}
+
+        <tr>
+            <td>
+                {% trans %}Phone{% endtrans %}
+            </td>
+            <td>
+                {{ person.0.phone }}
+            </td>
+            <td>
+                {% trans %}Birthday{% endtrans %}
+            </td>
+            <td>
+                {% if person.0.birthday is not empty %}
+                    {{ person.0.birthday|date("d-m-Y") }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {% trans %}Address{% endtrans %}
+            </td>
+            <td colspan="3">
+                {{ person.0.address }}
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+        </div>
+        <div class="tab-pane" id="tab_1">
+            <table  class="table table-bordered table-striped">
+                <thead>
+                <th>{% trans %}Type accrual{% endtrans %}</th>
+                <th>{% trans %}Value{% endtrans %}</th>
+                <th>{% trans %}Date{% endtrans %}</th>
+                <th>{% trans %}Status{% endtrans %}</th>
+                </thead>
+                {% for plannedAccrual in planned %}
+                    <tr>
+                        <td width="50%">{{ plannedAccrual.name }} ({{ plannedAccrual.type|trans }})</td>
+                        <td>{{ plannedAccrual.value }}</td>
+                        <td>
+                            {% if plannedAccrual.period is not empty %}
+                                {{ plannedAccrual.period|date('d-m-Y') }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if plannedAccrual.isActive is defined %}
+                                {% if plannedAccrual.isActive %}
+                                    {% trans %}Active{% endtrans %}
+                                {% else %}
+                                    {% trans %}Not active{% endtrans %}
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+
+    </div>
+</div>

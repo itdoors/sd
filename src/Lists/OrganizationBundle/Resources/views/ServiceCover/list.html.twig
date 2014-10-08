@@ -1,0 +1,194 @@
+{% trans_default_domain 'ListsOrganizationBundle' %}
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+        $.fn.editable.defaults.inputclass = 'form-control';
+        $.fn.editable.defaults.emptytext = '{% trans from 'messages' %}Enter value{% endtrans %}';
+
+        $('.itdoors-editable').editable();
+
+        $('.itdoors-editable-competitor').editable({
+            select2: {
+                minimumInputLength: 2
+            }
+        });
+
+        $('.itdoors-date').live('mouseover', function(e){
+
+            e.preventDefault();
+
+            $(this).on('shown', function(e, editable) {
+
+                var input = editable.input.$input;
+
+                input.attr('readonly', 'readonly');
+
+                input.datepicker({
+                    rtl: Metronic.isRTL(),
+                    autoclose: true,
+                    format: "dd.mm.yyyy",
+                    pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+                    language: 'ru',
+                    startView: 'decade',
+                    //endDate: new Date(),
+                    weekStart: 1
+                });
+            });
+        });
+
+        $('.itdoors-editable, .itdoors-editable-competitor').on('save', function(e, params) {
+            var response = JSON.parse(params.response);
+
+            var target = $(this).parents('tr').find('.service-cover-id');
+
+            if (target.length && response.id) {
+                target.html(response.id);
+            }
+        });
+    });
+</script>
+<table class="table table-striped table-bordered table-advance table-hover">
+    <thead>
+        <tr>
+            <th>{% trans %}ID{% endtrans %} </th>
+            <th>{% trans %}serviceName{% endtrans %} </th>
+            <th>{% trans %}Is interested{% endtrans %} </th>
+            <th>{% trans %}Is working{% endtrans %} </th>
+            <th>{% trans %}Evaluation{% endtrans %} </th>
+            <th>{% trans %}Competitor{% endtrans %} </th>
+            <th>{% trans %}End date{% endtrans %} </th>
+            <th>{% trans %}Responsible{% endtrans %} </th>
+            <th>{% trans %}Description{% endtrans %} </th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for serviceItem in allServices %}
+        <tr {% if loop.index is odd %}class="color"{% endif %}>
+            {% set serviceCover = serviceCovers[serviceItem.id] %}
+            <td class="service-cover-id">
+                {% if serviceCover.id %}
+                    {{ serviceCover.id }}
+                {% endif %}
+            </td>
+            <td>{{ serviceItem.name|e }}</td>
+            <td>
+                {% if not serviceCover.id or serviceCover.isInterested is empty %}
+                {% set isInterested ='' %}
+                {% elseif serviceCover.isInterested %}
+                    {% set isInterested ='Yes' %}
+                {% else %}
+                    {% set isInterested ='No' %}
+                {% endif %}
+                <a href="#"
+                   class="itdoors-editable"
+                   data-name="isInterested"
+                   data-type="select"
+                   data-source="{{ boolChoices }}"
+                   data-pk="{{ serviceCover.id }}"
+                   data-url="{{ path('sd_common_ajax_organization_service_cover_save', { organizationId: organizationId, serviceId: serviceItem.id }) }}"
+                   data-value="{{ isInterested }}"
+                   data-original-title="{% trans %}Enter Is interested{% endtrans %}"
+                >
+                    {{ isInterested|trans({}, 'messages') }}
+                </a>
+            </td>
+            <td>
+                {% if not serviceCover.id or serviceCover.isWorking is empty %}
+                    {% set isWorking ='' %}
+                {% elseif serviceCover.isWorking %}
+                    {% set isWorking ='Yes' %}
+                {% else %}
+                    {% set isWorking ='No' %}
+                {% endif %}
+                <a href="#"
+                   class="itdoors-editable"
+                   data-name="isWorking"
+                   data-type="select"
+                   data-source="{{ boolChoices }}"
+                   data-pk="{{ serviceCover.id }}"
+                   data-url="{{ path('sd_common_ajax_organization_service_cover_save', { organizationId: organizationId, serviceId: serviceItem.id }) }}"
+                   data-value="{{ isWorking }}"
+                   data-original-title="{% trans %}Enter Is working{% endtrans %}"
+                >
+                    {{ isWorking|trans({}, 'messages') }}
+                </a>
+            </td>
+            <td>
+                <a href="#"
+                   class="itdoors-editable"
+                   data-name="evaluation"
+                   data-type="select"
+                   data-source="{{ numberChoices }}"
+                   data-pk="{{ serviceCover.id }}"
+                   data-url="{{ path('sd_common_ajax_organization_service_cover_save', { organizationId: organizationId, serviceId: serviceItem.id }) }}"
+                   data-value="{{ serviceCover.evaluation }}"
+                   data-original-title="{% trans %}Evaluation{% endtrans %}"
+                        >
+                    {{ serviceCover.evaluation }}
+                </a>
+            </td>
+            <td>
+                <a href="#"
+                   class="itdoors-editable-competitor"
+                   data-name="competitorId"
+                   data-type="select2"
+                   data-source="{{ path('sd_common_ajax_competitor') }}"
+                   data-pk="{{ serviceCover.id }}"
+                   data-url="{{ path('sd_common_ajax_organization_service_cover_save', { organizationId: organizationId, serviceId: serviceItem.id }) }}"
+                   data-value="{{ serviceCover.competitorId }}"
+                   data-original-title="{% trans %}Competitor{% endtrans %}"
+                        >
+                    {{ serviceCover.competitorName }}
+                </a>
+            </td>
+            <td>
+                <a href="#"
+                   class="itdoors-date itdoors-editable {% if serviceCover.endDate %}{% else %} editable-empty {% endif %}"
+                   data-name="endDateString"
+                   data-type="text"
+                   data-url="{{ path('sd_common_ajax_organization_service_cover_save', { organizationId: organizationId, serviceId: serviceItem.id }) }}"
+                   data-pk="{{ serviceCover.id }}"
+                    {% if serviceCover.endDate %}
+                        data-value="{{ serviceCover.endDate|date("d.m.Y") }}"
+                    {% endif %}
+                   data-original-title="{% trans %}Edit{% endtrans %}"
+                >
+                    {% if serviceCover.endDate %}
+                        {{ serviceCover.endDate|date("d.m.Y") }}
+                    {% else %}
+                        {% trans from 'messages' %}Enter value{% endtrans %}
+                    {% endif %}
+                </a>
+            </td>
+            <td>
+                <a href="#"
+                   class="itdoors-editable"
+                   data-name="responsible"
+                   data-type="text"
+                   data-pk="{{ serviceCover.id }}"
+                   data-url="{{ path('sd_common_ajax_organization_service_cover_save', { organizationId: organizationId, serviceId: serviceItem.id }) }}"
+                   data-value="{{ serviceCover.responsible }}"
+                   data-original-title="{% trans %}Responsible{% endtrans %}"
+                >
+                    {{ serviceCover.responsible }}
+                </a>
+            </td>
+            <td>
+                <a href="#"
+                   class="itdoors-editable"
+                   data-name="description"
+                   data-type="text"
+                   data-pk="{{ serviceCover.id }}"
+                   data-url="{{ path('sd_common_ajax_organization_service_cover_save', { organizationId: organizationId, serviceId: serviceItem.id }) }}"
+                   data-value="{{ serviceCover.description }}"
+                   data-original-title="{% trans %}Description{% endtrans %}"
+                >
+                    {{ serviceCover.description }}
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+

@@ -1,0 +1,48 @@
+Lists\DepartmentBundle\Entity\PlannedAccrual:
+    type: entity
+    table: planned_accrual
+    repositoryClass : Lists\DepartmentBundle\Entity\PlannedAccrualRepository
+    id:
+        id:
+            type: bigint
+            nullable: false
+            generator:
+                strategy: SEQUENCE
+    fields:
+        name:
+            type: string
+            length: 100
+            fixed: false
+            nullable: false
+        type:
+            type: string
+            length: 10
+            fixed: false
+            nullable: false
+        code:
+            type: string
+            length: 10
+            fixed: false
+            nullable: false
+            column: code
+        value:
+            type: string
+            length: 100
+            fixed: false
+            nullable: false
+        period:
+            type: date
+            nullable: false
+            column: period
+        isActive:
+            type: boolean
+            nullable: true
+            column: is_active
+    manyToOne:
+        departmentPeople:
+            targetEntity: Lists\DepartmentBundle\Entity\DepartmentPeople
+            joinColumns:
+                department_people_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,62 @@
+{% trans_default_domain 'SDUserBundle' %}
+{% if is_granted('ROLE_INTRANETADMIN') or is_granted('ROLE_HRADMIN')   %}    
+    <a class="btn btn-lg green" href="{{ url('sd_user_new_stuff') }}">{% trans %}Add new user{% endtrans %}</a>
+{% endif %}
+<div class="navigation">
+    {{ ajax_paginator_render(
+            items, namespase, {
+                    'datatable_ajax': 'ITDoorsAjax.updateList'
+                }
+            )
+    }}
+</div>
+<div class="table-scrollable" style="clear: right">
+    {% if items|length %}
+        <table class="table table-striped table-bordered table-advance table-hover" id="user-list">
+            <thead>
+            <tr>
+                <th>{% trans %}ID{% endtrans %} </th>
+                <th>{% trans %}Last name{% endtrans %} </th>
+                <th>{% trans %}First name{% endtrans %} </th>
+                <th>{% trans %}Middle name{% endtrans %} </th>
+                <th>{% trans %}Mobile phone{% endtrans %} </th>
+                <th>{% trans %}Email{% endtrans %} </th>
+                <th>{% trans %}Position{% endtrans %} </th>
+                <th>{% trans %}Subdivision{% endtrans %} </th>
+                <th>{% trans %}Status{% endtrans %} </th>
+                <th>{% trans %}Fired{% endtrans %} </th>
+            </tr>
+            </thead>
+            {% for item in items %}
+                <tr {% if loop.index is odd %}class="color"{% endif %}>
+                    <td>
+                        <a href="{{ path('sd_user_show', { id : item.id }) }}">
+                            {{ item.id|e }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ path('sd_user_show', { id : item.id }) }}">
+                            {{ item.lastName|e }}
+                        </a>
+                    </td>
+                    <td>{{ item.firstName|e }}</td>
+                    <td>{{ item.middleName|e }}</td>
+                    <td>{{ item.mobilephone }} </td>
+                    <td>{{ item.email|e }}</td>
+                    <td>{{ item.position|e }}</td>
+                    <td>{{ item.company|e }}</td>
+                    <td>{% if item.isBlocked %}{% trans %}blocked{% endtrans %}{% else %}{% trans %}active{% endtrans %}{% endif %}</td>
+                    <td>{% if item.isFired %}{% trans %}fired{% endtrans %}{% else %}{% trans %}No fired{% endtrans %}{% endif %}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+</div>
+<div class="navigation">
+    {{ ajax_paginator_render(
+            items, namespase, {
+                    'datatable_ajax': 'ITDoorsAjax.updateList'
+                }
+            )
+    }}
+</div>

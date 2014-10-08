@@ -1,0 +1,37 @@
+{% trans_default_domain 'ListsOrganizationBundle' %}
+<table class="table table-striped table-hover table-bordered">
+    <thead>
+    <tr>
+        <th>{% trans %}LastName, FirstName{% endtrans %}</th>
+        <th>{% trans %}Mobile{% endtrans %}</th>
+        <th>{% trans %}Email{% endtrans %}</th>
+        <th>{% trans %}Role{% endtrans %}</th>
+        {% if is_granted('ROLE_SALESADMIN') %}
+                <th>{% trans %}Action{% endtrans %}</th>
+                {% endif %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in organizationUsers %}
+        <tr>
+            <td>{{ item.firstName }} {{ item.lastName }}</td>
+            <td>{{ item.mobilephone }}</td>
+            <td>{{ item.email }}</td>
+            <td>{{ item.name }}</td>
+            {% if is_granted('ROLE_SALESADMIN') %}
+                    <td>
+                        {% if item.lukey != 'manager_organization'  %}
+                        <a
+                            class="ajax-delete"
+                            href="javascript:;"
+                            data-params='{"model":"OrganizationUser","organizationUserId":{{ item.id }}}'
+                        >
+                            {% trans %}Delete{% endtrans %}
+                        </a>
+                        {% endif %}
+                    </td>
+                     {% endif %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

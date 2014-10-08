@@ -1,0 +1,83 @@
+SD\ModelBundle\Entity\Works:
+    type: entity
+    table: works
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        incomeNonnds:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: income_nonnds
+        costsN:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: costs_n
+        costsNonnds:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: costs_nonnds
+        statusId:
+            type: string
+            length: null
+            fixed: false
+            nullable: true
+            column: status_id
+    manyToMany:
+        claim:
+            targetEntity: Claim
+            cascade: {  }
+            mappedBy: null
+            inversedBy: works
+            joinTable:
+                name: claim_works
+                joinColumns:
+                    -
+                        name: works_id
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    -
+                        name: claim_id
+                        referencedColumnName: id
+            orderBy: null
+        contract:
+            targetEntity: Contract
+            cascade: {  }
+            mappedBy: null
+            inversedBy: works
+            joinTable:
+                name: contract_works
+                joinColumns:
+                    -
+                        name: works_id
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    -
+                        name: contract_id
+                        referencedColumnName: id
+            orderBy: null
+    manyToOne:
+        workstypes:
+            targetEntity: Workstypes
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                workstypes_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

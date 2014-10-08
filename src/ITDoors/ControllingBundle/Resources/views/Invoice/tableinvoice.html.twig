@@ -1,0 +1,77 @@
+{% trans_default_domain 'ITDoorsControllingBundle' %}
+<script>
+    $(document).ready(function() {
+        $('.datesave').editable({
+            type: 'date',
+            name: 'DateEnd',
+            url: '{{ path('sd_common_ajax_invoice_save') }}',
+            emptytext: '{% trans from 'messages' %}Enter value{% endtrans %}',
+                        clear: '{% trans from 'ITDoorsControllingBundle' %}clear{% endtrans %}<i class="icon-remove fa fa-times" style="font-size:12px"></i>',
+                        datepicker: {
+                            rtl: Metronic.isRTL(),
+                            autoclose: true,
+                            format: "dd.mm.yyyy",
+                            pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+                            language: "{{ app.request.locale }}",
+                            startView: 'month',
+                            weekStart: 1
+                        }
+                    });
+                });
+</script>
+<div class="col-md-12">
+    <table id="handling" class="table table-bordered table-striped">
+        <tbody>
+            <tr>
+                <td style="width:40%">{% trans %}Customer{% endtrans %}</td>
+                <td style="width:40%">{{ entitie.customerName}}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Performer{% endtrans %}</td>
+                <td> {{ entitie.performerName}}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Bank{% endtrans %}</td>
+                <td> {{ entitie.bank}}</td>
+            </tr>
+            <tr>
+                <td style="width:40%">{% trans %}Number invoice{% endtrans %}</td>
+                <td style="width:40%">{{ entitie.invoiceId}}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Summa{% endtrans %}</td>
+                <td>{{ entitie.sum|number_format(2, ',', ' ')}}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Date{% endtrans %}</td>
+                <td>{{ entitie.date is empty ? '' : entitie.date|date('d.m.y')}}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Date_end{% endtrans %}</td>
+                <td><a href="#" 
+                       class="datesave fa fa-plus" data-pk="{{ entitie.id }}"
+                       data-original-title="{% trans %}Select data{% endtrans %}"
+                       data-date="{{entitie.dateEnd|date("d.m.Y")}}"
+                       data-format="dd.mm.yyyy"> 
+                        {{ entitie.dateEnd is empty ? '' : entitie.dateEnd|date("d.m.Y") }}
+                    </a></td>
+            </tr>
+            <tr>
+                <td>{% trans %}Date_fact{% endtrans %}</td>
+                <td>{{ entitie.dateFact is empty ?  '' : entitie.dateFact|date('d.m.y')}}</td>
+            </tr>
+            <tr>
+                <td>{% trans %}Status{% endtrans %}</td>
+                <td>
+                        {% if entitie.court ==  true %}
+                            {% trans %}In coutr{% endtrans %}
+                        {% elseif entitie.dateFact is not null %}
+                            {% trans %}Pay{% endtrans %}
+                        {% else%}
+                            {% trans %}Not pay{% endtrans %}
+                        {% endif%}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,125 @@
+Lists\ContactBundle\Entity\ModelContact:
+    type: entity
+    table: model_contact
+    repositoryClass: Lists\ContactBundle\Entity\ModelContactRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        modelName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: model_name
+        modelId:
+            type: bigint
+            nullable: true
+            column: model_id
+        sort:
+            type: bigint
+            nullable: true
+        firstName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: first_name
+        lastName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: last_name
+        middleName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: middle_name
+        phone1:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        phone2:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        position:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        birthday:
+            type: date
+            nullable: true
+        email:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+        createdatetime:
+            type: datetime
+            nullable: true
+        ownerdatetime:
+            type: datetime
+            nullable: true
+        owner_id:
+            type: integer
+            nullable: true
+            column: owner_id
+        type_id:
+            type: integer
+            nullable: true
+            column: type_id
+        isShared:
+            type: boolean
+            nullable: true
+            default: false
+            column: is_shared
+        levelId:
+            type: integer
+            nullable: true
+            column: level_id
+    manyToOne:
+        type:
+            targetEntity: ModelContactType
+            inversedBy: contacts
+            joinColumn:
+                name: type_id
+                referencedColumnName: id
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        owner:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                owner_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        level:
+            targetEntity: ModelContactLevel
+            joinColumns:
+                level_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    oneToMany:
+        sendEmail:
+            targetEntity: ModelContactSendEmail
+            mappedBy: modelContact
+    lifecycleCallbacks:
+            prePersist: [ doOnPrePersist ]

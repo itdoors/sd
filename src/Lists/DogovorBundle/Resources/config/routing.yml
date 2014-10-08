@@ -1,0 +1,55 @@
+#DOGOVOR ROUTE
+lists_dogovor_dogovor_index:
+    pattern:  /lists/dogovor/dogovor/index
+    defaults: { _controller: ListsDogovorBundle:Dogovor:index }
+
+lists_dogovor_handling_list:
+    pattern:  /lists/dogovor/handling/list/{dogovorId}
+    defaults: { _controller: ListsDogovorBundle:Handling:list }
+
+lists_dogovor_handling_form:
+    pattern:  /lists/dogovor/handling/form
+    defaults: { _controller: ListsDogovorBundle:Handling:form }
+
+lists_dogovor_dogovor_new:
+    pattern:  /lists/dogovor/dogovor/new
+    defaults: { _controller: ListsDogovorBundle:Dogovor:new }
+
+lists_dogovor_dogovor_show:
+    pattern:  /lists/dogovor/dogovor/show/{id}
+    defaults: { _controller: ListsDogovorBundle:Dogovor:show }
+
+lists_dogovor_dogovor_filter:
+    pattern:  /lists/dogovor/dogovor/filter
+    defaults: { _controller: ListsDogovorBundle:Dogovor:filter }
+
+lists_dogovor_ajax_element:
+    pattern:  /lists/dogovor/ajax/element/{id}
+    defaults: { _controller: ListsDogovorBundle:Dogovor:element }
+
+lists_dogovor_list_for_organization:
+    pattern:  /lists/dogovor/for/organization/{id}
+    defaults: { _controller: ListsDogovorBundle:Dogovor:forOrganization }
+
+#DOP DOGOVOR ROUTE
+lists_dogovor_dopdogovor_list:
+    pattern:  /lists/dogovor/dopdogovor/list/{dogovorId}
+    defaults: { _controller: ListsDogovorBundle:DopDogovor:list }
+
+lists_dopdogovor_ajax_element:
+    pattern:  /lists/dogovor/dopdogovor/ajax/element/{id}
+    defaults: { _controller: ListsDogovorBundle:DopDogovor:element }
+
+#DOGOVOR DEPARTMENT
+lists_dogovor_department_list:
+    pattern:  /lists/dogovor/department/list/{dogovorId}
+    defaults: { _controller: ListsDogovorBundle:DogovorDepartment:list }
+    
+
+lists_dogovor_made_index:
+    pattern:  /lists/dogovor/made/index
+    defaults: { _controller: ListsDogovorBundle:DogovorMade:index }
+
+lists_dogovor_made_list:
+    pattern:  /lists/dogovor/made/list
+    defaults: { _controller: ListsDogovorBundle:DogovorMade:list }

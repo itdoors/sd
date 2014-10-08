@@ -1,0 +1,62 @@
+SD\ModelBundle\Entity\Companystructure:
+    type: entity
+    table: companystructure
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        mpk:
+            type: string
+            length: 10
+            fixed: false
+            nullable: false
+        address:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        phone:
+            type: string
+            length: 12
+            fixed: false
+            nullable: true
+        stuffId:
+            type: bigint
+            nullable: true
+            column: stuff_id
+    manyToMany:
+        region:
+            targetEntity: Region
+            cascade: {  }
+            mappedBy: null
+            inversedBy: companystructure
+            joinTable:
+                name: companystructure_region
+                joinColumns:
+                    -
+                        name: companystructure_id
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    -
+                        name: region_id
+                        referencedColumnName: id
+            orderBy: null
+    manyToOne:
+        parentColumn:
+            targetEntity: Stuff
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                parent_column_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

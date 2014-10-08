@@ -1,0 +1,196 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'SDUserBundle' %}
+{% block title %}{% trans %}New stuff{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Users <small>new stuff</small>{% endtrans %}
+    </h3>
+{% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="{{ path('sd_user_stuff') }}" title="{% trans %}List of stuff{% endtrans %}">{% trans %}List of stuff{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li><a href="" title="{% trans %}New user{% endtrans %}">{% trans %}New user{% endtrans %}</a></li>
+    </ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/css/datepicker.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+{% endblock %}
+
+{% block body %}
+    {% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+    <script>
+        $(document).ready(function(){
+            $('.datapicer-class').datepicker({
+                rtl: Metronic.isRTL(),
+                autoclose: true,
+                format: "dd.mm.yyyy",
+                pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+                language: 'ru',
+                startView: 'decade',
+                weekStart: 1
+            });
+        });
+    </script>
+    
+    <div class="row">
+        <div class="col-md-12">
+            {% if form.vars.valid %}
+            {% else %}
+                <div class="alert alert-danger">
+                    <button class="close" data-close="alert"></button>
+                    {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                    {{ form_errors(form) }}
+                </div>
+            {% endif %}
+            {% if notice is defined and notice %}
+                <div class="alert alert-success">
+                    {{ notice }}
+                </div>
+            {% endif %}
+            <div class="portlet-body form">
+                {{ form_start(form, {
+                        'action' : path('sd_user_new_stuff'),
+                        'attr' : {
+                        'method' : 'POST',
+                    }
+            }) }}
+                <div class="row">
+
+                    <div class="form-group col-md-4{% if form.lastName.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.lastName, 'Last name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.lastName, {'attr' : {'class' : 'form-control', 'placeholder': "Last name"}}) }}
+                        {% if form.lastName.vars.errors|length %}
+                            {{ form_errors(form.lastName) }}
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group col-md-4{% if form.firstName.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.firstName, 'First Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.firstName, {'attr' : {'class' : 'form-control', 'placeholder': "First Name"}}) }}
+                        {% if form.firstName.vars.errors|length %}
+                            {{ form_errors(form.firstName) }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-md-4{% if form.middleName.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.middleName, 'Middle Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.middleName, {'attr' : {'class' : 'form-control', 'placeholder': "Middle Name"}}) }}
+                        {% if form.middleName.vars.errors|length %}
+                            {{ form_errors(form.middleName) }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-md-4{% if form.birthday.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.birthday, 'Birthday', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.birthday, {'attr' : {'class' : 'form-control datapicer-class', 'placeholder': "Birthday"}}) }}
+                        {{ block('date_widget') }}
+                        {% if form.birthday.vars.errors|length %}
+                            {{ form_errors(form.birthday) }}
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group col-md-4{% if form.username.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.username, 'Username', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.username, {'attr' : {'class' : 'form-control', 'placeholder': "Username"}}) }}
+                        {% if form.username.vars.errors|length %}
+                            {{ form_errors(form.username) }}
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group col-md-4{% if form.email.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.email, 'Email', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.email, {'attr' : {'class' : 'form-control', 'placeholder': "Email"}}) }}
+                        {% if form.email.vars.errors|length %}
+                            {{ form_errors(form.email) }}
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group col-md-4{% if form.plainPassword.first.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.plainPassword.first, 'New password', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.plainPassword.first, {'attr' : {'class' : 'form-control', 'placeholder': "New password"}}) }}
+                        {% if form.plainPassword.first.vars.errors|length %}
+                            {{ form_errors(form.plainPassword.first) }}
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group col-md-4{% if form.plainPassword.second.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.plainPassword.second, 'Password again', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.plainPassword.second, {'attr' : {'class' : 'form-control', 'placeholder': "Password again"}}) }}
+                        {% if form.plainPassword.second.vars.errors|length %}
+                            {{ form_errors(form.plainPassword.second) }}
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group col-md-4{% if form.mobilephone.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.mobilephone, 'Mobile Phone', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.mobilephone, {'attr' : {'class' : 'form-control', 'placeholder': "Mobile Phone"}}) }}
+                        {% if form.mobilephone.vars.errors|length %}
+                            {{ form_errors(form.mobilephone) }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-md-4{% if form.companystructure.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.companystructure, 'Select subdivision', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.companystructure,   {'attr' : {'class' : 'form-control', 'placeholder': "Select subdivision"}}) }}
+                        {% if form.companystructure.vars.errors|length %}
+                            {{ form_errors(form.companystructure) }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-md-4{% if form.hiredate.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.hiredate, 'Enter date hire', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.hiredate, {'attr' : {'class' : 'form-control datapicer-class', 'placeholder': "Enter date hire"}}) }}
+                        {{ block('date_widget') }}
+                        {% if form.hiredate.vars.errors|length %}
+                            {{ form_errors(form.hiredate) }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-md-4{% if form.position.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.position, 'Enter position', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.position, {'attr' : {'class' : 'form-control', 'placeholder': "Enter position"}}) }}
+                        {% if form.position.vars.errors|length %}
+                            {{ form_errors(form.position) }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-md-4{% if form.education.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.education, 'Enter education', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.education, {'attr' : {'class' : 'form-control', 'placeholder': "Enter education"}}) }}
+                        {% if form.education.vars.errors|length %}
+                            {{ form_errors(form.education) }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group col-md-4{% if form.issues.vars.errors|length %} has-error{% endif %}">
+                        {{ form_label(form.issues, 'Enter issues', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.issues, {'attr' : {'class' : 'form-control', 'placeholder': "Enter issues"}}) }}
+                        {% if form.issues.vars.errors|length %}
+                            {{ form_errors(form.issues) }}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    {{ form_widget(form.create, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+{% endblock body %}

@@ -1,0 +1,137 @@
+# src/ITDoors/ControllingBundle/Resources/config/doctrine/Invoice.orm.yml
+ITDoors\ControllingBundle\Entity\Invoice:
+    type: entity
+    table: invoice
+    repositoryClass: ITDoors\ControllingBundle\Entity\InvoiceRepository
+    gedmo:
+        soft_deleteable:
+          field_name: deletedAt
+          time_aware: false
+    id:
+        id:
+            type: integer
+            generator: { strategy: IDENTITY }
+    fields:
+        invoiceId:
+            type: string
+            length: 255
+            column: invoice_id
+        sum:
+            type: float
+            length: 20
+        date:
+            type: datetime
+        delayDate:
+            nullable: true
+            type: date
+            column: delay_date
+        delayDays:
+            nullable: true
+            type: integer
+            column: delay_days
+        delayDaysType:
+            type: string
+            nullable: true
+            length: 5
+            column: delay_days_type
+        dateEnd:
+            type: date
+            nullable: true
+            column: date_end
+        dateFact:
+            type: date
+            column: date_fact
+            nullable: true
+        dogovorId:
+            type: integer
+            nullable: true
+            length: 10
+            column: dogovor_id
+        dogovorGuid:
+            type: string
+            nullable: false
+            length: 512
+            column: dogovor_quid
+        dogovorName:
+            type: string
+            length: 255
+            column: dogovor_name
+        dogovorNumber:
+            type: string
+            length: 255
+            nullable: true
+            column: dogovor_number
+        dogovorDate:
+            type: datetime
+            nullable: true
+            column: dogovor_date
+        bank:
+            type: text
+        customerId:
+            nullable: true
+            type: integer
+            column: customer_id
+        customerName:
+            nullable: true
+            type: string
+            length: 255
+            column: customer_name
+        customerEdrpou:
+            nullable: true
+            type: string
+            length: 255
+            column: customer_edrpou
+        performerId:
+            nullable: true
+            type: integer
+            column: performer_id
+        performerName:
+            nullable: true
+            type: string
+            length: 255
+            column: performer_name
+        performerEdrpou:
+            nullable: true
+            type: string
+            length: 255
+            column: performer_edrpou
+        court:
+            type: boolean
+        deletedAt:
+            type: datetime
+            nullable: true
+        status:
+            type: integer
+            nullable: true
+    manyToOne:
+        dogovor:
+            targetEntity: Lists\DogovorBundle\Entity\Dogovor
+            inversedBy: null
+            joinColumn:
+                name: dogovor_id
+                referencedColumnName: id
+        customer:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            inversedBy: null
+            joinColumn:
+                name: customer_id
+                referencedColumnName: id
+        performer:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            inversedBy: null
+            joinColumn:
+                name: performer_id
+                referencedColumnName: id
+    oneToMany:
+        messages:
+            targetEntity: ITDoors\ControllingBundle\Entity\InvoiceMessage
+            mappedBy: invoice
+        invoicecompanystructure:
+            targetEntity: ITDoors\ControllingBundle\Entity\InvoiceCompanystructure
+            mappedBy: invoice
+        payments:
+            targetEntity: InvoicePayments
+            mappedBy: invoice
+        acts:
+            targetEntity: InvoiceAct
+            mappedBy: invoice

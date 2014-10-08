@@ -1,0 +1,400 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsDogovorBundle' %}
+{% block title %}{% trans %}Dogovor new{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans from 'messages' %}Dashboard{% endtrans %}">{% trans from 'messages' %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_dogovor_new') }}" title="{% trans %}Dogovor new{% endtrans %}">{% trans %}Dogovor new{% endtrans %}</a></li>
+    </ul>
+{% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Dogovor<small>dogovor new</small>{% endtrans %}
+    </h3>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+{% endblock %}
+{% block body %}
+
+    <script>
+        $(document).ready(function(){
+
+            SD.select2('#' + '{{ form.vars.name }}' + '_city');
+            SD.select2('#' + '{{ form.vars.name }}' + '_customer');
+            SD.select2('#' + '{{ form.vars.name }}' + '_performer');
+            SD.select2('#' + '{{ form.vars.name }}' + '_companystructure');
+            SD.select2('#' + '{{ form.vars.name }}' + '_saller');
+            SD.select2('#' + '{{ form.vars.name }}' + '_dogovorType', {
+                minimumInputLength: 0
+            });
+            SD.select2('#' + '{{ form.vars.name }}' + '_mashtab', {
+                minimumInputLength: 0
+            });
+
+            $('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                autoclose: true,
+                format: "dd.mm.yyyy",
+                pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+                language: 'ru',
+                startView: 'decade',
+                weekStart: 1
+            });
+        });
+    </script>
+
+<div class="portlet box blue">
+    <div class="portlet-title">
+        <div class="caption"><i class="fa fa-reorder"></i>{% trans %}Create Dogovor{% endtrans %}</div>
+        <div class="tools">
+            <a class="collapse" href="javascript:;"></a>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <!-- BEGIN FORM-->
+        {% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+
+        {{ form_start(form,
+            {
+                'action': path('lists_' ~ baseRoutePrefix ~ '_dogovor_new'),
+                'attr': {'class' : 'horizontal-form', 'novalidate': 'novalidate'}
+            })
+        }}
+
+        <div class="form-body">
+            {% if form.vars.valid == false %}
+                <div class="alert alert-danger">
+                    <button class="close" data-close="alert"></button>
+                    {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                    {{ form_errors(form) }}
+                </div>
+            {% endif %}
+            <h3 class="form-section">{% trans %}General information{% endtrans %}</h3>
+            <div class="row">
+                <div class="col-md-6
+                        {% if form.customer.vars.errors|length %}
+                            has-error
+                        {% endif %}">
+                    <div class="form-group">
+                        {{ form_label(form.customer, 'Customer', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.customer, {'attr': {
+                            'class': 'form-control',
+                            'placeholder': 'Enter Customer',
+                            'data-url': path('sd_common_ajax_organization_for_contacts'),
+                            'data-url-by-id': path('sd_common_ajax_organization_by_id'),
+                            'required': 'required'
+                        }}) }}
+                        {% if form.customer.vars.errors|length %}
+                            {{ form_errors(form.customer) }}
+                        {% endif %}
+                    </div>
+                </div>
+                <!--/span-->
+                <div class="col-md-6
+                    {% if form.performer.vars.errors|length %}
+                        has-error
+                    {% endif %}">
+                    <div class="form-group">
+                        {{ form_label(form.performer, 'Performer', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.performer, {'attr': {
+                            'class': 'form-control',
+                            'placeholder': 'Enter Performer',
+                            'data-url': path('sd_common_ajax_organization_for_contacts'),
+                            'data-url-by-id': path('sd_common_ajax_organization_by_id')
+                        }}) }}
+                        {% if form.performer.vars.errors|length %}
+                            {{ form_errors(form.performer) }}
+                        {% endif %}
+                    </div>
+                </div>
+                <!--/span-->
+            </div>
+            <!--/row-->
+            <div class="row">
+                <div class="col-md-6
+                    {% if form.number.vars.errors|length %}
+                        has-error
+                    {% endif %}">
+                    <div class="form-group">
+                        {{ form_label(form.number, 'Number', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.number, {'attr': {'class': 'form-control', 'placeholder': 'Enter Number'}}) }}
+                        {% if form.number.vars.errors|length %}
+                            {{ form_errors(form.number) }}
+                        {% endif %}
+                    </div>
+                </div>
+                <!--/span-->
+                <div class="col-md-6
+                    {% if form.subject.vars.errors|length %}
+                        has-error
+                    {% endif %}">
+                    <div class="form-group">
+                        {{ form_label(form.subject, 'Subject', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.subject, {'attr': {'class': 'form-control', 'placeholder': 'Enter Subject'}}) }}
+                        {% if form.subject.vars.errors|length %}
+                            {{ form_errors(form.subject) }}
+                        {% endif %}
+                    </div>
+                </div>
+                <!--/span-->
+            </div>
+            <!--/row-->
+            <h3 class="form-section">{% trans %}Start date information{% endtrans %}</h3>
+            <div class="row">
+                <div class="form-group col-md-4
+                    {% if form.startdatetime.vars.errors|length %}
+                        has-error
+                    {% endif %}">
+                    {{ form_label(form.startdatetime, 'Startdatetime', {'attr': {'class': 'control-label'}}) }}
+                    <div class="input-group input-medium date date-picker">
+                        {{ form_widget(form.startdatetime, {'attr': {
+                            'class': 'form-control',
+                            'placeholder': 'Enter Startdatetime',
+                            'readonly': 'readonly'
+                        }}) }}
+                        <span class="input-group-btn">
+                            <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                    </div>
+                    {% if form.startdatetime.vars.errors|length %}
+                        {{ form_errors(form.startdatetime) }}
+                    {% endif %}
+                </div>
+                <!--/span-->
+                <div class="col-md-4
+                    {% if form.stopdatetime.vars.errors|length %}
+                        has-error
+                    {% endif %}">
+                    <div class="form-group">
+                        {{ form_label(form.stopdatetime, 'Stopdatetime', {'attr': {'class': 'control-label'}}) }}
+                        <div class="input-group input-medium date date-picker">
+                            {{ form_widget(form.stopdatetime, {'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Enter Stopdatetime',
+                                'readonly': 'readonly'
+                            }}) }}
+                            <span class="input-group-btn">
+                                <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                        {% if form.stopdatetime.vars.errors|length %}
+                            {{ form_errors(form.stopdatetime) }}
+                        {% endif %}
+                    </div>
+                </div>
+                <!--/span-->
+                <div class="col-md-4  {% if form.launchdate.vars.errors|length %}
+                        has-error
+                    {% endif %}">
+                    <div class="form-group">
+                        {{ form_label(form.launchdate, 'Launch Date', {'attr': {'class': 'control-label'}}) }}
+                        <div class="input-group input-medium date date-picker">
+                            {{ form_widget(form.launchdate, {'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Enter Launch Date',
+                                'readonly': 'readonly'
+                            }}) }}
+                            <span class="input-group-btn">
+                                <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                        {% if form.launchdate.vars.errors|length %}
+                            {{ form_errors(form.launchdate) }}
+                        {% endif %}
+                    </div>
+                </div>
+                <!--/span-->
+            </div>
+            <!--/row-->
+            <h3 class="form-section">{% trans %}Prolongation{% endtrans %}</h3>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        {{ form_label(form.prolongation, 'Prolongation', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.prolongation, {'attr': {'class': 'form-control', 'placeholder': 'Prolongation'}}) }}
+                    </div>
+                </div>
+                <!--/span-->
+                <div class="col-md-4
+                    {% if form.prolongationTerm.vars.errors|length %}
+                        has-error
+                    {% endif %}">
+                    <div class="form-group">
+                        {{ form_label(form.prolongationTerm, 'Prolongation Term', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.prolongationTerm, {'attr': {'class': 'form-control', 'placeholder': 'Enter Prolongation Term In Days'}}) }}
+                        {% if form.prolongationTerm.vars.errors|length %}
+                            {{ form_errors(form.prolongationTerm) }}
+                        {% endif %}
+                    </div>
+                </div>
+                <!--/span-->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        {{ form_label(form.prolongationDate, 'Prolongation Date', {'attr': {'class': 'control-label'}}) }}
+                        <div class="input-group input-medium date date-picker">
+                            {{ form_widget(form.prolongationDate, {'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Enter Prolongation Date',
+                                'readonly': 'readonly'
+                            }}) }}
+                            <span class="input-group-btn">
+                                <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!--/span-->
+            </div>
+            <!--/row-->
+            <h3 class="form-section">{% trans %}Dogovor Type{% endtrans %}</h3>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        {{ form_label(form.dogovorType, 'Dogovor Type', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.dogovorType, {'attr': {'class': 'form-control', 'placeholder': 'Dogovor Type'}}) }}
+                    </div>
+                </div>
+                <!--/span-->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        {{ form_label(form.city, 'City'|trans({}, 'messages'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.city, {'attr': {
+                            'class': 'form-control',
+                            'placeholder': 'Enter City'|trans({}, 'messages'),
+                            'data-url': path('sd_common_ajax_city'),
+                            'data-url-by-id': path('sd_common_ajax_city_one_by_id'),
+                        }}) }}
+                    </div>
+                </div>
+                <!--/span-->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        {{ form_label(form.mashtab, 'Mashtab', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.mashtab, {'attr': {'class': 'form-control', 'placeholder': 'Mashtab'}}) }}
+                    </div>
+                </div>
+                <!--/span-->
+            </div>
+            <!--/row-->
+            <h3 class="form-section">{% trans %}Company structure{% endtrans %}</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form_label(form.companystructure, 'Company Structure', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.companystructure, {'attr': {'class': 'form-control', 'placeholder': 'Company Structure'}}) }}
+                    </div>
+                </div>
+                <!--/span-->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form_label(form.saller, 'Saller'|trans({}, 'messages'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.saller, {'attr': {
+                            'class': 'form-control',
+                            'placeholder': 'Enter Saller'|trans({}, 'messages'),
+                            'data-url': path('sd_common_ajax_user'),
+                            'data-url-by-id': path('sd_common_ajax_user_by_id'),
+                        }}) }}
+                    </div>
+                </div>
+                <!--/span-->
+            </div>
+            <!--/row-->
+            <h3 class="form-section">{% trans %}Total summ{% endtrans %}</h3>
+            <div class="row">
+                <div class="col-md-4
+                    {% if form.total.vars.errors|length %}
+                        has-error
+                    {% endif %}">
+                    <div class="form-group">
+                        {{ form_label(form.total, 'Total summ', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.total, {'attr': {'class': 'form-control', 'placeholder': 'Enter Total summ'}}) }}
+                    </div>
+                    {% if form.total.vars.errors|length %}
+                        {{ form_errors(form.total) }}
+                    {% endif %}
+                </div>
+                <!--/span-->
+                <div class="col-md-4
+                    {% if form.summMonthVat.vars.errors|length %}
+                        has-error
+                    {% endif %}">
+                    <div class="form-group">
+                        {{ form_label(form.summMonthVat, 'Summ with VAT', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.summMonthVat, {'attr': {'class': 'form-control', 'placeholder': 'Enter Summ with VAT'}}) }}
+                    </div>
+                    {% if form.summMonthVat.vars.errors|length %}
+                        {{ form_errors(form.summMonthVat) }}
+                    {% endif %}
+                </div>
+                <!--/span-->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        {{ form_label(form.paymentDeferment, 'Payment Deferment', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.paymentDeferment, {'attr': {'class': 'form-control', 'placeholder': 'Enter Payment Deferment'}}) }}
+                    </div>
+                </div>
+                <!--/span-->
+            </div>
+            <!--/row-->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form_label(form.plannedPf1, 'Planned Pf1', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.plannedPf1, {'attr': {'class': 'form-control', 'placeholder': 'Enter Planned Pf1'}}) }}
+                    </div>
+                </div>
+                <!--/span-->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form_label(form.plannedPf1Percent, 'Planned Pf1 Percent', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.plannedPf1Percent, {'attr': {'class': 'form-control', 'placeholder': 'Enter Planned Pf1 Percent'}}) }}
+                    </div>
+                </div>
+                <!--/span-->
+            </div>
+            <!--/row-->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form_label(form.file, 'File'|trans({}, 'messages'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.file) }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form_label(form.isActive, 'Is Active', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.isActive, {'attr': {'class': 'form-control', 'placeholder': 'Is Active'}}) }}
+                    </div>
+                </div>
+                <!--/span-->
+            </div>
+            <!--/row-->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form_widget(form.create, { 'label': 'Create'|trans({}, 'messages'), 'attr': {'class': 'btn green'}} ) }}
+                    </div>
+                </div>
+            </div>
+            {{ form_end(form) }}
+            <!--/row-->
+        </div>
+    </div>
+</div>
+{% endblock body %}

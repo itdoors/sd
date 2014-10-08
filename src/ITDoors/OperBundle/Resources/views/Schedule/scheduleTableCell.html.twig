@@ -1,0 +1,44 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
+{% if status == 'vacation' %}
+{#
+    {% trans %}Vacation{% endtrans %}
+#}
+    в
+{% elseif status == 'sick' %}
+{#
+    {% trans %}Sick{% endtrans %}
+#}
+    тн
+{% elseif status == 'skip' %}
+{#
+    {% trans %}Skip{% endtrans %}
+#}
+    пр
+{% elseif status == 'fired' %}
+{#
+    {% trans %}Fired{% endtrans %}
+#}
+    ув
+{% elseif status == 'ownVacation' %}
+    на
+{% elseif status == 'ok' %}
+
+    {% set showNothing = true %}
+
+    {% if officially is defined  and officially != 0%}
+        <span style="color: green">{{ officially|number_format(2) }}</span> <br>
+        {% set showNothing = false %}
+    {% endif %}
+
+    {% if notOfficially is defined  and notOfficially != 0%}
+        <span style="color: blue">{{ notOfficially|number_format(2) }}</span>
+        {% set showNothing = false %}
+    {% endif %}
+    {% if cooperation is defined and cooperation%}
+        <i title="{{ cooperation }}%">*</i>
+    {% endif %}
+    {% if showNothing %}
+        -
+    {% endif %}
+
+{% endif %}

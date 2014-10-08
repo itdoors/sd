@@ -1,0 +1,164 @@
+Enter City: Введите город
+Search...: Поиск...
+Default title: Заголовок по умолчанию
+Default <small>default template</small>: По умолчанию <small>шаблон по умолчанию</small>
+#header
+My Profile: Мой профиль
+My Calendar: Мой календарь
+My Inbox: Входящие
+My Tasks: Мои задачи
+Full Screen: Полный экран
+Lock Screen: Заблокировать
+Logout: Выход
+
+#MENU
+Dashboard: Рабочий стол
+
+#menu role_oper:
+Opermanager: Оперменеджер
+#menu role_sales
+My Sales: Мои продажи
+My Contacts: Мои контакты
+My Organizations: Мои организации
+My Handlings: Мои проекты
+My Tenders: Мои тендеры
+My Calendar: Мой календарь
+My Reports: Мои отчеты
+My Team: Моя команда
+
+#menu role_salesdispatcher
+Sales Dispatcher: Диспетчер продаж
+Team Contacts: Контакты команды
+Team Organizations: Организации команды
+Team Handlings: Активности команды
+Team Tenders: Тендеры команды
+Team Calendar: Календарь команды
+Team Reports: Отчеты команды
+
+#menu role_salesadmin
+Sales Admin short: Админ продаж
+Sales Admin: Администратор продаж
+Manage Teams: Управление командами
+Reports: Отчеты
+Calendar: Календарь
+Tenders: Тендеры
+Handlings: Активности
+Organizations: Организации
+Contacts: Контакты
+Teams: Команды
+
+Sales Admin report: Отчеты
+Activity: Активность
+All projects: Все проекты
+Projects: Проекты
+
+#menu role_intranet
+Intranet: Интранет
+My Profile: Мой профиль
+Documents: Документы
+News: Новости
+
+#menu role_controlling
+Debtors: Дебиторы
+Dogovors: Договора
+
+# Menu Dogovor
+My Dogovor: Мои договора
+Dogovor List: Список договоров
+New Dogovor: Новый договор
+
+
+
+
+
+#CRM
+#contacts 
+Position: Должность
+Birthday: Дата рождения
+Email: Email
+Mobile: Мобильный
+Phone: Телефон
+FIO: ФИО
+Creator: Создатель
+Owner: Владелец
+Create date: Дата создания
+Owner Date: Дата владения
+Handler: Обработчик
+Handler date: Обработчик дата
+Сontact location: Откуда
+Organization: Организация
+Notice: Отправлять уведомления по Email
+Notice SMS: Отправлять SMS
+
+#id | FIO | Position | Mobile | Phone | Email | Birthday | Organization | Creator | Create date| Owner | Owner date | Handler | Handler date| | | | | 
+
+#Birthday - можно вносить только день и месяц
+#Email - ссылка с префиксом mailto:email@email.com
+#Organization - нужно подумать про историю, люди переходят из одной организации в другую.
+#И вообще над историей изменений нужно подумать.
+#Mobile - нужны иконочки при нажатии на которые - сразу идет звонок, регулярное выражение для ввода данных страна код номер 
+#Phone - нужны иконочки при нажатии на которые - сразу идет звонок / страна код номер внутренний
+
+#Дополнительный справочник с контактами - скайп, доп емайл, доп тел, аська и т.п.
+
+#CRM
+#organization 
+
+
+#Zagalne
+Filters: Фильтры
+Clear Filter: Очистить
+Filter: Фильтр
+
+You have some form errors. Please check below.: При заполнении формы допущены ошибки. Пожалуйста, перепроверьте данные.
+Dashboard: Рабочий стол
+Loading data. Please wait: Данные загружаются. Пожалуйста подождите...
+No: Нет
+Yes: Да
+Active: Активный
+Not Active: Не Активный
+Enter value: Введите значение
+City: Город
+File: Файл
+Creator: Кто создал
+Saller: Кто продал
+Enter Saller: Укажите менеджера
+Actions: Действия
+Create: Cоздать
+Save: Сохранить
+Cancel: Отменить
+Createdatetime: Дата создания
+Delete: Удалить
+100% projects: Состояние проекта
+Reset: Очистить
+Last messages: Последние активности
+All manager activity: Отчет за 4 недели
+# emeil
+Email: Email сообщения
+Email templates: Email шаблоны
+Email history: Email история
+
+Stuff: Сотрудники
+Vote: Голосование
+History: Истории
+
+Offices: Отделения
+Competitors: Конкуренты
+Decisions: Решения
+Coworkers: Сотрудники
+
+Made agreement: Внесенные договора
+
+Shared calendar: Общий календарь
+See document: Просмотреть документ
+
+Transfer organizations: Перенос организаций
+Select: Выбрать
+Contractors: Подрядчики
+Analytics: Аналитика
+
+My tasks: Мои задачи
+Impel griffin: Импел Гриффин
+Structure company: Структура компании
+
+Holidays: Праздники

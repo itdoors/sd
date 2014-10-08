@@ -1,0 +1,221 @@
+{% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+<link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
+<script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
+
+<script>
+        $(document).ready(function(){
+            $('.datatime-picker').datetimepicker({
+                        minView:1,
+                        rtl: Metronic.isRTL(),
+                        autoclose: true,
+                        format: "dd.mm.yyyy hh:ii:ss",
+                        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+                        language: 'ru',
+                        minuteStep: 30,
+                        weekStart: 1,
+                        startDate: new Date()
+                    }).on('changeDate', function(date){
+/*
+                        var currentDate = date.date;
+                        currentDate = currentDate.setMinutes(0);
+                        //currentDate = currentDate.setSeconds(0);
+                        //$('.datatime-picker').val(new Date());
+                        //.val($('.datatime-picker').val()+':00');
+*/
+                    }
+                );
+
+            /*
+            $('#' + '{{ form.vars.name }}' + '_performer').attr("multiple", true);
+             */
+            $('#' + '{{ form.vars.name }}' + '_performer').select2(
+                    {
+                        //'multiple': true
+                    }
+            );
+
+            $('#' + '{{ form.vars.name }}' + '_controller').select2();
+            $('#' + '{{ form.vars.name }}' + '_matcher').select2();
+            $('#' + '{{ form.vars.name }}' + '_pattern').select2();
+
+            $('#' + '{{ form.vars.name }}' + '_pattern').die('change');
+            $('#' + '{{ form.vars.name }}' + '_pattern').live('change', function(e){
+                var value = $('#' + '{{ form.vars.name }}' + '_pattern').select2("val");
+                showSpinner()
+                var id = value;
+                var url = $('#info_input').data('url_set_pattern');
+                var sendData = {
+                    'id': id
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: sendData,
+                    success: function(data1) {
+                        //alert(data1)
+                        data = JSON.parse(data1);
+                        if (data.success == 1) {
+                            hideSpinner();
+                            setTaskPattern(data);
+                        } else {
+                            //$('#copy_etalon_finished').show('blind', {}, 500);
+                        }
+                    }
+                })
+            })
+
+            function setTaskPattern(data) {
+                $('#' + '{{ form.vars.name }}' + '_title').val(data.title);
+                $('#' + '{{ form.vars.name }}' + '_description').val(data.description);
+
+                if (data.performer) {
+                    $('#' + '{{ form.vars.name }}' + '_performer').select2("val", data.performer)
+                }
+                if (data.controller) {
+                    $('#' + '{{ form.vars.name }}' + '_controller').select2("val", data.controller)
+                }
+                if (data.matcher) {
+                    $('#' + '{{ form.vars.name }}' + '_matcher').select2("val", data.matcher)
+                }
+            }
+
+            function showSpinner() {
+                var spinner = $('#spinner');
+                spinner.removeClass('notDisplayed');
+            }
+
+            function hideSpinner() {
+                var spinner = $('#spinner');
+                spinner.addClass('notDisplayed');
+            }
+
+        });
+    </script>
+<style>
+    .patterns-animation{
+        opacity: 0.6;
+        -webkit-transition: opacity 1s;
+        -moz-transition: opacity 1s;
+        -o-transition: opacity 1s;
+        transition: opacity 1s;
+    }
+
+    .patterns-animation:hover{
+        opacity: 1;
+    }
+
+    .notDisplayed{
+        display: none;
+    }
+</style>
+            <div class="portlet-body">
+                {{ form_errors(form) }}
+                 {{ form_start(form, {
+                    'action' : path('sd_common_ajax_form'),
+                    'attr' : {
+                        'method' : 'POST',
+                        'class' : 'ajax-form-entity',
+                        'data-post_function': postFunction,
+                        'data-post_target_id': postTargetId,
+                        'data-target_id': targetId
+                    }
+                }) }}
+                <div class="row">
+                    {% if form.pattern is defined %}
+                        <div class="form-group col-md-12 patterns-animation">
+                            {{ form_label(form.pattern, 'Pattern'|trans({}, 'SDTaskBundle'), {'attr': {'class': 'control-label'}}) }}<i class="fa fa-spinner fa-spin notDisplayed" id="spinner"></i>
+                            {{ form_widget(form.pattern, {'attr' : {'class' : 'form-control ', 'placeholder': 'Choose pattern'|trans({}, 'SDTaskBundle')} } ) }}
+                            <span class="help-block">{{ form_errors(form.startDate) }}</span>
+                        </div>
+                    {% endif %}
+                    <div class="form-group col-md-6">
+                        {{ form_label(form.startDate, 'Date start'|trans({}, 'SDCalendarBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.startDate, {'attr' : {'class' : 'form-control datatime-picker', 'placeholder': 'Enter date start'|trans({}, 'SDCalendarBundle')} } ) }}
+                        <span class="help-block">{{ form_errors(form.startDate) }}</span>
+                    </div>
+                     <div class="form-group col-md-6">
+                        {{ form_label(form.endDate, 'Date stop'|trans({}, 'SDCalendarBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.endDate, {'attr' : {'class' : 'form-control datatime-picker', 'placeholder': 'Enter date stop'|trans({}, 'SDCalendarBundle')} } ) }}
+                        <span class="help-block">{{ form_errors(form.endDate) }}</span>
+                    </div>
+                    <div class="form-group col-md-12">
+                        {{ form_label(form.title, 'Title'|trans({}, 'SDCalendarBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.title, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter title'|trans({}, 'SDCalendarBundle')} } ) }}
+                        <span class="help-block">{{ form_errors(form.title) }}</span>
+                    </div>
+                    <div class="form-group col-md-12">
+                        {{ form_label(form.description, 'Description'|trans({}, 'SDCalendarBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.description, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter description'|trans({}, 'SDCalendarBundle')} } ) }}
+                        <span class="help-block">{{ form_errors(form.description) }}</span>
+                    </div>
+                    <div class="form-group col-md-12">
+                        {{ form_label(form.performer, 'Performer'|trans({}, 'SDCalendarBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.performer, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter performer'|trans({}, 'SDCalendarBundle')} } ) }}
+                        <span class="help-block">{{ form_errors(form.performer) }}</span>
+                    </div>
+                    <div class="form-group col-md-12">
+                        {{ form_label(form.controller, 'Controller'|trans({}, 'SDCalendarBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.controller, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter controller'|trans({}, 'SDCalendarBundle')} } ) }}
+                        <span class="help-block">{{ form_errors(form.controller) }}</span>
+                    </div>
+                    <div class="form-group col-md-12">
+                        {{ form_label(form.matcher, 'Matcher'|trans({}, 'SDTaskBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.matcher, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter matcher'|trans({}, 'SDTaskBundle')} } ) }}
+                        <span class="help-block">{{ form_errors(form.matcher) }}</span>
+                    </div>
+                    <div class="form-group col-md-12">
+                        {{ form_label(form.files, 'Files (max size 2mb)'|trans({}, 'SDTaskBundle'), {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.files, {'attr' : {'class' : 'form-control'} } ) }}
+                        <span class="help-block">{{ form_errors(form.files) }}</span>
+                    </div>
+
+                    {#<div class="form-group col-md-2">
+                        {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': 'Handling tye'} } ) }}
+                    </div>
+                    <div class="form-group col-md-3">
+                        <div class="input-group date form_datetime">
+                            {{ form_widget(form.nextcreatedate, {'attr' : {
+                            'class' : 'form-control',
+                            'placeholder': 'Create date',
+                            'readonly': 'readonly'
+                            }}) }}
+                            <span class="input-group-btn">
+                                <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        {{ form_widget(form.description, {'attr' : {'class' : 'form-control', 'placeholder': 'Description'} } ) }}
+                    </div>
+                </div>#}
+
+               
+                    <input type="hidden" name="formName" value="{{ formName }}">
+                    <input type="hidden" name="postFunction" value="{{ postFunction }}">
+                    <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
+                    <input type="hidden" name="targetId" value="{{ targetId }}">
+                    <input type="hidden" name="model" value="{{ model }}">
+                    <input type="hidden" name="modelId" value="{{ modelId }}">
+                    
+                <div class="form-group col-md-12">
+                    
+                
+                <div class="modal-footer" style="border: none;">
+                    <button class="btn default sd-cancel-btn" data-dismiss="modal">{% trans %}Cancel{% endtrans %}</button>
+                    <button type="submit" class="btn blue">{% trans %}Save{% endtrans %}</button>
+                </div>
+                </div>
+             </div>
+                {{ form_end(form) }}
+           
+            </div>
+
+<input type="hidden" id="info_input"
+    data-url_set_pattern="{{ path('sd_task_set_pattern') }}"
+
+
+    >

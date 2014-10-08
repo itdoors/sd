@@ -1,0 +1,89 @@
+{% trans_default_domain 'ListsDogovorBundle' %}
+<script>
+    $(document).ready(function(){
+        $('#' + '{{ form.vars.name }}' + '_prolongationDateTo')
+
+        $('.date-picker').datepicker({
+            rtl: Metronic.isRTL(),
+            autoclose: true,
+            format: "dd.mm.yyyy",
+            pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+            language: 'ru',
+            startView: 'decade',
+            weekStart: 1
+        });
+    });
+</script>
+
+<div class="row ">
+    <div class="col-md-12">
+        <div class="portlet box yellow">
+            <div class="portlet-title"><div class="caption"><i class="fa fa-edit"></i>
+                    {% trans  from 'ListsDogovorBundle' %}Prolongation{% endtrans %}
+                </div>
+            </div>
+            <div class="portlet-body">
+                {% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+                {% if form.vars.valid is sameas(false) %}
+                    <div class="alert alert-danger">
+                        <button class="close" data-close="alert"></button>
+                        {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                        {{ form_errors(form) }}
+                    </div>
+                {% endif %}
+                {{ form_start(form, {
+                        'action' : path('sd_common_ajax_form'),
+                        'attr' : {
+                        'method' : 'POST',
+                        'class' : 'ajax-form-entity',
+                        'data-post_function': postFunction,
+                        'data-post_target_id': postTargetId,
+                        'data-target_id': targetId,
+                        'enctype': 'multipart/form-data'
+                    }
+                }) }}
+                <div class="form-body row">
+                    {% if form.dopDogovor is defined %}
+                        <div class="form-group col-md-12">
+                            {{ form_label(form.dopDogovor, 'Dop Dogovor Number', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.dopDogovor, {'attr' : {'class' : 'form-control', 'placeholder': "Dop Dogovor Number"}}) }}
+                            {{ form_errors(form.dopDogovor) }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="form-body row">
+                    <div class="form-group col-md-12">
+                        {{ form_label(form.prolongationDateTo, 'Prolongation Date', {'attr': {'class': 'control-label'}}) }}
+                        <div class="input-group input-medium date date-picker">
+                            {{ form_widget(form.prolongationDateTo, {'attr': {
+                                'class': 'form-control',
+                                'data-required': '1',
+                                'placeholder': 'Prolongation Date',
+                                'readonly': 'readonly'
+                            }}) }}
+                            <span class="input-group-btn">
+                                <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    {{ form_widget(form.submit, { 'label': 'Prolongate', 'attr': {'class': 'btn blue'} } ) }}
+                    {{ form_widget(form.cancel, { 'label': 'Cancel'|trans({}, 'messages'), 'attr':
+                        {
+                            'class': 'btn default sd-cancel-btn',
+                            'data-dismiss': "modal"
+                        }
+                    } ) }}
+                </div>
+                <input type="hidden" name="formName" value="{{ formName }}">
+                <input type="hidden" name="postFunction" value="{{ postFunction }}">
+                <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
+                <input type="hidden" name="targetId" value="{{ targetId }}">
+                <input type="hidden" name="model" value="{{ model }}">
+                <input type="hidden" name="modelId" value="{{ modelId }}">
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>

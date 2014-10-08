@@ -1,0 +1,59 @@
+{% trans_default_domain 'SDTaskBundle' %}
+{% set color = 'grey' %}
+{% if taskUserRole.role == 'author' %}
+    {% set color = 'red' %}
+{% elseif taskUserRole.role == 'performer' %}
+    {% set color = 'blue' %}
+{% elseif taskUserRole.role == 'controller' %}
+    {% set color = 'yellow' %}
+{% elseif taskUserRole.role == 'matcher' %}
+    {% set color = 'green' %}
+{% endif %}
+
+{% set stage = taskUserRole.task.stage %}
+{% if stage == 'undone' %}
+    {% set labelStage = 'label-primary' %}
+{% elseif stage == 'performing' %}
+    {% set labelStage = 'label-info' %}
+{% elseif stage == 'created' %}
+    {% set labelStage = 'label-default' %}
+{% elseif stage == 'done' %}
+    {% set labelStage = 'label-success' %}
+{% elseif stage == 'date request' %}
+    {% set labelStage = 'label-danger' %}
+{% elseif stage == 'closed' %}
+    {% set labelStage = 'label-primary' %}
+{% elseif stage == 'checking' %}
+    {% set labelStage = 'label-warning' %}
+{% elseif stage == 'matching' %}
+    {% set labelStage = 'label-warning' %}
+{% endif %}
+
+<div class="todo-tasklist-item todo-tasklist-item-border-{{ color }} task-item" data-id="{{ taskUserRole.id }}" style="border-width: 3px;">
+    <img class="todo-userpic pull-left" src="{{ web_image( userprofiles_url ~ taskUserRole.user.id ~ '/' ~ taskUserRole.user.photo).resize(27, 27) }}">
+    <div class="todo-tasklist-item-title">
+         {{ taskUserRole.task.title }} <span style="color: #577688">(ID:{{ taskUserRole.task.id }}) </span>
+    </div>
+    <div class="todo-tasklist-item-text">
+        {{ taskUserRole.task.description|length > 100 ? taskUserRole.task.description|slice(0, 50) ~ '...' : taskUserRole.task.description  }}
+
+{#
+        {% if taskUserRole.role = 'controller' %}
+            <br>
+            {% trans %}Performer{% endtrans %}:
+        {% endif %}
+#}
+    </div>
+    <div class="todo-tasklist-controls pull-left">
+        <span class="todo-tasklist-date"><i class="fa fa-calendar"></i>
+            {{
+                include('SDTaskBundle:Task:taskEndDateLast.html.twig',
+                    {
+                        'taskUserRole' : taskUserRole
+                    }
+                )
+            }}
+        </span>
+        <span class="label label-sm {{ labelStage }}">{{ stage|trans }}</span>
+    </div>
+</div>

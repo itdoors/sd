@@ -1,0 +1,14 @@
+SD\TaskBundle\Entity\TaskType:
+    type:  entity
+    table: task_type
+    repositoryClass: SD\TaskBundle\Entity\TaskTypeRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: false
+            length: 255

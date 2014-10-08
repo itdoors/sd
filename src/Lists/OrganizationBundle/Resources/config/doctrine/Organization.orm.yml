@@ -1,0 +1,209 @@
+Lists\OrganizationBundle\Entity\Organization:
+    type: entity
+    table: organization
+    repositoryClass: Lists\OrganizationBundle\Entity\OrganizationRepository
+    gedmo:
+        soft_deleteable:
+          field_name: deletedAt
+          time_aware: false
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        mpk:
+            type: string
+            length: 20
+            nullable: true
+        name:
+            type: string
+            length: 255
+        address:
+            type: string
+            length: 255
+            nullable: true
+        contacts:
+            type: string
+            length: 255
+            nullable: true
+        shortname:
+            type: string
+            length: 50
+            fixed: false
+            nullable: true
+        isSmeta:
+            type: boolean
+            nullable: false
+            column: is_smeta
+            default: false
+        mailingAddress:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: mailing_address
+        rs:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        edrpou:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        inn:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        certificate:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        shortDescription:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: short_description
+        site:
+            type: string
+            length: 125
+            fixed: false
+            nullable: true
+        organization_type_id:
+            type: integer
+            nullable: true
+            column: organization_type_id
+        city_id:
+            type: integer
+            nullable: true
+            column: city_id
+        scope_id:
+            type: integer
+            nullable: true
+            column: scope_id
+        createdatetime:
+            type: datetime
+            nullable: true
+        physicalAddress:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: physical_address
+        phone:
+            type: string
+            length: 50
+            fixed: false
+            nullable: true
+            column: phone
+        group_id:
+            type: integer
+            nullable: true
+            column: group_id
+        parent_id:
+            type: integer
+            nullable: true
+            column: parent_id
+        organizationSignId:
+            type: integer
+            nullable: true
+            column: organization_sign_id
+        deletedAt:
+            type: datetime
+            nullable: true
+        ownershipId:
+            nullable: true
+            column: ownership_id
+    manyToOne:
+        city:
+            targetEntity: Lists\CityBundle\Entity\City
+            inversedBy: organizations
+            joinColumn:
+                name: city_id
+                referencedColumnName: id
+        lookup:
+            targetEntity: Lists\LookupBundle\Entity\Lookup
+            joinColumn:
+                name: organization_sign_id
+                referencedColumnName: id
+        scope:
+            targetEntity: Lists\LookupBundle\Entity\Lookup
+            joinColumn:
+                name: scope_id
+                referencedColumnName: id
+        organizationType:
+            targetEntity: OrganizationType
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                organization_type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        group:
+            targetEntity: OrganizationGroup
+            cascade: {  }
+            inversedBy: organizations
+            joinColumns:
+                group_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        creator:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                creator_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        parent:
+            targetEntity: Organization
+            inversedBy: children
+        ownership:
+            targetEntity: OrganizationOwnership
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                ownership_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    oneToMany:
+        children:
+            targetEntity: Organization
+            mappedBy: parent
+        organizationUsers:
+            targetEntity: OrganizationUser
+            mappedBy: organization
+    manyToMany:
+        organizationsigns:
+            targetEntity: Lists\LookupBundle\Entity\Lookup
+            inversedBy: null
+            joinTable:
+              name: organization_organizationsign
+              joinColumns:
+                organization_id:
+                  referencedColumnName: id
+              inverseJoinColumns:
+                organization_sign_id:
+                  referencedColumnName: id
+#        users:
+#            targetEntity: SD\UserBundle\Entity\User
+#            inversedBy: organizations
+#            joinTable:
+#              name: organization_user
+#              joinColumns:
+#                organization_id:
+#                  referencedColumnName: id
+#              inverseJoinColumns:
+#                user_id:
+#                  referencedColumnName: id
+    lifecycleCallbacks:
+            prePersist: [ doOnPrePersist ]

@@ -1,0 +1,39 @@
+SD\TaskBundle\Entity\Comment:
+    type:  entity
+    table: comment
+    repositoryClass: SD\TaskBundle\Entity\CommentRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+    fields:
+        createDatetime:
+            type: datetime
+            nullable: false
+            column: create_datetime
+        value:
+            type: text
+            nullable: false
+        model:
+            type: string
+            nullable: false
+            length: 255
+        modelId:
+            type: integer
+            nullable: false
+        additionField:
+            type: string
+            nullable: true
+            length: 255
+            column: addition_field
+    manyToOne:
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false

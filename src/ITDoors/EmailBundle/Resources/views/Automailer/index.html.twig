@@ -1,0 +1,44 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ITDoorsEmailBundle' %}
+{% block title %}{% trans %}List of email history send{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Email <small>history send</small>{% endtrans %}
+    </h3>
+{% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="{{ path('it_doors_email_history') }}" title="{% trans %}Email history send{% endtrans %}">{% trans %}Email history send{% endtrans %}</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.css') }}">
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src ="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.min.js') }}"></script>
+    <script type="text/javascript" src ="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/lang/summernote-ru-RU.js') }}"></script>
+    <script type="text/javascript" src= "{{ asset('templates/metronic/scripts/form-dropzone.js') }}"></script>
+{% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group">
+                <a href="{{ path('automailer_new') }}" clas="fa fa-plus" title="{% trans %}Create email{% endtrans %}">{% trans %}Create email{% endtrans %}</a>
+            </div>
+            <div id="messages_list" data-url="{{ path('it_doors_automailer_list') }}">   
+                {{ render(controller('ITDoorsEmailBundle:Automailer:list')) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

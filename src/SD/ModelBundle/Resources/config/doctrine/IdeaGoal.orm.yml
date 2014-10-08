@@ -1,0 +1,24 @@
+SD\ModelBundle\Entity\IdeaGoal:
+    type: entity
+    table: idea_goal
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+    manyToMany:
+        idea:
+            targetEntity: Idea
+            cascade: {  }
+            mappedBy: goal
+            inversedBy: null
+            joinTable: null
+            orderBy: null
+    lifecycleCallbacks: {  }

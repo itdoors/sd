@@ -1,0 +1,56 @@
+Dashboard: Рабочий стол
+Team Contacts: Контакты команды
+Contacts <small>show team contacts</small>: Контакты <small>список доступных контактов</small>
+My Contacts: Мои контакты
+My Contacts <small>show contacts</small>: Мои контакты <small>список доступных контактов</small>
+Contacts on contacts: Отображаются все доступные Вам контакты. Доступными контактами считаются контакты у которых в полях Создатель и Владелец указано Ваше Имя.
+Show contacts: Просмотреть контакты
+Show Contacts: Просмотреть контакты
+Contact edit: Редактирование контакта
+Edit Contact: Редактирование контакта
+New Contact: Создание контакта
+Loading data. Please wait: Данные загружаются. Пожалуйста подождите...
+
+Save: Сохранить
+Cancel: Отменить
+FirstName: Имя
+First name: Имя
+First Name: Имя
+LastName: Фамилия
+Last name: Фамилия
+Last Name: Фамилия
+SurName: Отчество
+Middle name: Отчество
+Middle Name: Отчество
+Position: Должность
+Phone: Телефон
+Phone1: Мобильный
+Phone 1: Мобильный
+Mobile: Мобильный
+Phone2: Телефон
+Phone 2: Телефон
+Email: Email
+Birthday: Дата рождения
+Enter Birthday: Введите дату рождения
+Creator: Создатель
+Createdatetime: Дата создания
+Owner: Владелец
+Select Owner: Выберите нового владельца
+Organization: Организация
+Contact type: Тип контакта
+Level of contact: Уровень контакта
+Organization Name: Название организации
+Shared: Контакт виден для всех организаций группы
+
+Action: Действия
+Delete: Удалить
+Add New: Добавить новый
+
+Organization cant be empty: Поле "Организация" не может быть пустым.
+Enter Phone or Phone mob or email: Укажите пожалуйста контактрые данные (Мобильный, Телефон либо Email).
+Contact level: Уровень контакта
+
+Enter level: Укажите пожалуйста "Уровень контакта"
+Create New Contact: Создать новый контакт
+Add contact: Добавить контакт
+Export all: Экспортировать всех

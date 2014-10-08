@@ -1,0 +1,47 @@
+<td>
+    <a id="dogovor_list_new" class="btn green ajax-form"
+       data-toggle="modal"
+       href="#form_modal_dop_dogovor"
+       data-target_holder="dopDogovorFormTpl"
+       data-form_name="dopDogovorEditForm"
+       data-post_function="updateList"
+       data-post_target_id="dop-dogovor-element-{{ item.id }}"
+       data-model="DopDogovor"
+       data-model-id="{{ item.id }}"
+    >
+        {{ item.id }}
+    </a>
+</td>
+<td>{{ item.dopDogovorType }}</td>
+<td>{{ item.number }}</td>
+<td>{{ item.startdatetime|date('d.m.Y') }}</td>
+<td>{{ item.activedatetime|date('d.m.Y') }}</td>
+<td>{{ item.subject }}</td>
+<td>
+    {% if item.dopDogovorIsActive %}
+        {% trans from 'messages'%}Active{% endtrans %}
+    {% else %}
+        {% trans from 'messages'%}Not Active{% endtrans %}
+    {% endif %}
+</td>
+<td>{{ item.creatorFullName }}</td>
+<td>{{ item.sallerFullName }}</td>
+<td>{{ item.total }}</td>
+<td class="see-document-{{ item.id }}">
+    {% if item.filepath %}
+        <a href="/uploads/dogovor/{{ item.filepath }}" target="_blank">
+            {% trans from 'messages' %}See document{% endtrans %}
+        </a>
+    {% endif %}
+</td>
+<td>
+    {% if not item.departmentCount %}
+        <a
+                class="ajax-delete btn red"
+                href="javascript:;"
+                data-params='{"model":"DopDogovor","id":{{ item.id }}}'
+                >
+            {% trans from 'messages' %}Delete{% endtrans %}
+        </a>
+    {% endif %}
+</td>

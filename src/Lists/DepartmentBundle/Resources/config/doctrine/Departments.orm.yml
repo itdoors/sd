@@ -1,0 +1,114 @@
+Lists\DepartmentBundle\Entity\Departments:
+    type: entity
+    table: departments
+    repositoryClass: Lists\DepartmentBundle\Entity\DepartmentsRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        mpk:
+            type: string
+            length: 20
+            fixed: false
+            nullable: false
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        fullname:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        address:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        square:
+            type: float
+            nullable: true
+        isdeleted:
+            type: boolean
+            nullable: true
+        addedField:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: added_field
+        statusDate:
+            type: date
+            nullable: true
+            column: status_date
+        description:
+            type: text
+            nullable: true
+        coordinates:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        organizationId:
+            type: integer
+            column: organization_id
+    oneToMany:
+        mpks:
+            targetEntity: Lists\MpkBundle\Entity\Mpk
+            cascade: {  }
+            mappedBy: department
+            inversedBy: null
+            joinColumns:
+                id:
+                    referencedColumnName: department_id
+            orphanRemoval: false
+    manyToOne:
+        city:
+            targetEntity: Lists\CityBundle\Entity\City
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                city_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        type:
+            targetEntity: DepartmentsType
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                departments_type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        organization:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                organization_id:
+                    referencedColumnName: id
+        status:
+            targetEntity: DepartmentsStatus
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                status_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        opermanager:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                opermanager_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,215 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ITDoorsEmailBundle' %}
+{% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+{% block title %}{% trans %}List of email history send{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Email <small>history send</small>{% endtrans %}
+    </h3>
+{% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="{{ path('it_doors_email_history') }}" title="{% trans %}Email history send{% endtrans %}">{% trans %}Email history send{% endtrans %}</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/dropzone/css/dropzone.css') }}">
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/lang/summernote-ru-RU.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/dropzone/dropzone.js') }}"></script>
+{% endblock %}
+{% block body %}
+    <script>
+        $(document).ready(function() {
+        $('.textear-edit').summernote({
+        lang: 'ru-RU',
+                'disableDragAndDrop': true,
+                'disableLinkTarget': true,
+                'onblur': function() {
+                /** Костыль для страховки */
+                $('.textear-edit').text($('.textear-edit').code());
+                }
+        });
+                $('#addFiles').dropzone({
+        url: '{{ path('file_upload') }}',
+                maxFilesize: 10,
+                paramName: 'file',
+                addRemoveLinks: true,
+                //previewsContainer: '#fileAllLoad',
+              //  previewTemplate: "<div class=\"dz-preview dz-file-preview\"> \n\
+              //                          <div class=\"dz-details\">\n\
+                //                     <div class=\"dz-filename\"><span data-dz-name></span></div>\n\
+                  //                     <div class=\"dz-size\" data-dz-size></div>\n\
+                    //                  <img data-dz-thumbnail />\n\
+                      //               </div>\n\
+                        //             <div class=\"dz-progress\"><span class=\"dz-upload\" data-dz-uploadprogress></span></div>\n\
+                          //           <div class=\"dz-success-mark\"><span>✔</span></div>\n\
+                            //         <div class=\"dz-error-mark\"><span>✘</span></div>\n\
+                              //       <div class=\"dz-error-message\"><span data-dz-errormessage></span></div>\n\
+                                //   div>",
+                //params: {
+                //    "model": "email"
+                //},
+                acceptedFiles: 'application/pdf, application/x-pdf, image/png, image/jpeg, image/gif, audio/mpeg, application/msword, application/vnd.ms-excel',
+                removedfile: function(file) {
+                if (file.status !== 'error') {
+                var result = JSON.parse(file.xhr.response);
+                        var _callback = function(data) {
+                        var _ref = file.previewElement;
+                                if ((_ref) !== null) {
+                        _ref.parentNode.removeChild(file.previewElement);
+                        }
+                        return this._updateMaxFilesReachedClass();
+                        };
+                        $.post('{{ path('file_delete') }}', {name: result.name}, _callback);
+                } else {
+                var _ref = file.previewElement;
+                        if ((_ref) !== null) {
+                _ref.parentNode.removeChild(file.previewElement);
+                }
+                return this._updateMaxFilesReachedClass();
+                }
+                },
+                init: function() {
+                var div_a = $('#fileAllLoad');
+                        // var files = '{{  app.session.get('files_upload')| raw  }}';
+                        //files = JSON.parse(files);
+                        var files = {{ filesLoad | json_encode() |raw }};
+                        console.log(files);
+                        //var fileInput = document.getElementById("prev-load");
+                        //console.log(fileInput.files);
+                        for (fil in files) {
+                if (files[fil] !== '') {
+                //this.addFile(files[fil]);
+                        div_a.append('<div><a href="/files/upload/' + files[fil].name + '">' + files[fil].nameOrig + '</a> <a href="" class="del-file" data-name="' + files[fil].name + '">{% trans %}Delete{% endtrans %}</a></div>');
+           
+                        $('.del-file').on('click', function(){
+                            var obj = $(this);
+                            $.post('{{ path('file_delete') }}', {name: obj.data('name')}, function(){
+                                obj.parent('div').remove();
+                            });
+                                return false;
+                        });
+                        // fileInput[0] = 'http://sd.dev/files/upload/files/'+files[fil];
+                        //console.log(fileInput.files);
+                        //console.log(File.getAsDataURL('http://sd.dev/files/upload/files/'+files[fil]));
+                        //console.log(document.ReadURL.readFile('http://sd.dev/files/upload/files/'+files[fil]));
+
+                        //var reader = new FileReader();
+
+                        // Начинаем считывать изображение
+                        //file =  reader.readAsDataURL('http://sd.dev/files/upload/files/'+files[fil]);
+                        // console.log(file);
+                        // this.addFile('http://sd.dev/files/upload/files/'+files[fil]);
+
+                        //console.log(document.getAsDataURL('/app/share/upload/files/'+files[fil]));
+                        // this.addFile('/app/share/upload/files/'+files[fil]);
+                }
+
+                //this.files.push('/app/share/upload/files/'+files[fil]);
+                //this.on("addedfile", function(dfdf) { alert("Added file."); });
+                }
+                console.log(this);
+                }
+
+        });
+                // var files = '{{  app.session.get('files_upload') }}';
+                // files = files.split(',');
+                //for (fil in files) {
+                //   if (files[fil] !== '') {
+
+                //     }}
+
+
+        });
+    </script>
+    <h3>{% trans %}Create new email{% endtrans %}</h3>
+    <div class="row">
+        <div class="portlet-body">
+            <form action="{{ path('automailer_create') }}" method="post" {{ form_enctype(form) }}>
+                <div class="panel-body">
+                    {% if form.vars.valid %}
+                    {% else %}
+                        <div class="alert alert-danger">
+                            <button class="close" data-close="alert"></button>
+                            {{ form_errors(form) }}
+                        </div>
+                    {% endif %}
+                    {#% if filesform.vars.valid %}
+                    {% else %}
+                        <div class="alert alert-danger">
+                            <button class="close" data-close="alert"></button>
+                            {{ form_errors(filesform) }}
+                        </div>
+                    {% endif %#}
+
+                    <div class="form-group">
+                        {{ form_label(form.fromEmail, 'Email send', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.fromEmail, {'attr' : {'class' : 'form-control', 'placeholder': 'Email send'} } ) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.fromName, 'Name send', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.fromName, {'attr' : {'class' : 'form-control', 'placeholder': 'Name send'} } ) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.toEmail, 'To Email', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.toEmail, {'attr' : {'class' : 'form-control', 'placeholder': 'To Email'} } ) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.subject, 'Subject', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.subject, {'attr' : {'class' : 'form-control', 'placeholder': 'Subject'} } ) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.body, 'Text', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.body, {'attr' : {'class' : 'form-control textear-edit', 'placeholder': 'Text'} } ) }}
+                    </div>
+
+
+                    <div id="fileAllLoad">
+
+                    </div>
+
+
+                    <div id="addFiles" class="dropzone" style="max-height: 100px;" >
+                        <div style="display: none;">
+                            {% for key,file in  app.session.get('files_upload')|json_encode() %}
+                                {% if file is not empty %}
+                                    <input type="file" multiple 
+                                           value="http://sd.dev/files/upload/files/{{  file }}" 
+                                           id="prev-load">
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    {{ form_widget (form._token) }}
+                    {#{ form_widget (filesform._token) }#}
+                </div>
+                <div class="form-actions">
+                    <button type="submit">{% trans %}To send{% endtrans %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('it_doors_email_history') }}">
+                {% trans %}Back to the list{% endtrans %}
+            </a>
+        </li>
+    </ul>
+{% endblock %}

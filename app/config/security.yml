@@ -1,0 +1,48 @@
+security:
+    encoders:
+        FOS\UserBundle\Model\UserInterface: sha1
+
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SALESADMIN:  ROLE_SALES
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    providers:
+        fos_userbundle:
+            id: fos_user.user_provider.username_email
+            
+
+    firewalls:
+        login_firewall:
+            pattern:    ^/login$
+            anonymous:  ~
+        main:
+            pattern: ^/*
+            form_login:
+                provider: fos_userbundle
+                csrf_provider: form.csrf_provider
+                default_target_path: /
+                always_use_default_target_path: true
+            logout:       true
+            anonymous:    false
+            
+    access_control:
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/lists/salesadmin, role: ROLE_SALESADMIN }
+        - { path: ^/lists/salesdispatcher, role: ROLE_SALESDISPATCHER }
+        - { path: ^/lists/sales, role: [ROLE_SALES, ROLE_OPER] }
+        - { path: ^/lists/dogovor, roles: 'ROLE_DOGOVORADMIN, ROLE_CONTROLLING, ROLE_CONTROLLING_OPER' }
+        - { path: ^/lists/dogovor/made, role: ROLE_DOGOVORADMIN }
+        - { path: ^/lists/dogovor/admin, roles: 'ROLE_DOGOVORADMIN, ROLE_CONTROLLING, ROLE_CONTROLLING_OPER' }
+        - { path: ^/$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/dashboard/vote/add/party, role: ROLE_ARTICLEADMIN }
+        - { path: ^/cron-manager, role: ROLE_CRONADMIN }
+        - { path: ^/lists/competitors/organization/new, roles: 'ROLE_INTRANETADMIN, ROLE_DOGOVORADMIN' }
+        - { path: ^/sd/calendar/shared, role: ROLE_SALESADMIN }
+        - { path: ^/controlling, roles: 'ROLE_CONTROLLING, ROLE_CONTROLLING_OPER' }
+        - { path: ^/controlling/invoice/analytic, role: ROLE_CONTROLLING }
+        - { path: ^/holiday, role: ROLE_HRADMIN }
+        

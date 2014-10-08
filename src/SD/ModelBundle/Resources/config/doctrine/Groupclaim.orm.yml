@@ -1,0 +1,80 @@
+SD\ModelBundle\Entity\Groupclaim:
+    type: entity
+    table: groupclaim
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 150
+            fixed: false
+            nullable: false
+        formula:
+            type: text
+            nullable: true
+        message:
+            type: text
+            nullable: true
+        isDeleted:
+            type: boolean
+            nullable: true
+            column: is_deleted
+    manyToMany:
+        departments:
+            targetEntity: Departments
+            cascade: {  }
+            mappedBy: null
+            inversedBy: groupclaim
+            joinTable:
+                name: groupclaim_departments
+                joinColumns:
+                    -
+                        name: groupclaim_id
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    -
+                        name: departments_id
+                        referencedColumnName: id
+            orderBy: null
+    manyToOne:
+        claimtype:
+            targetEntity: Claimtype
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                claimtype_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        client:
+            targetEntity: Client
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                client_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        contractImportance:
+            targetEntity: ContractImportance
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contract_importance_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        groupclaimwork:
+            targetEntity: Groupclaimwork
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                groupclaimwork_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

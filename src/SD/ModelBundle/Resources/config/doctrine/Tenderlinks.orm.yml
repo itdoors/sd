@@ -1,0 +1,26 @@
+SD\ModelBundle\Entity\Tenderlinks:
+    type: entity
+    table: tenderlinks
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 200
+            fixed: false
+            nullable: false
+    manyToOne:
+        tendercategory:
+            targetEntity: Tendercategory
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                tendercategory_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

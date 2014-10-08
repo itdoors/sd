@@ -1,0 +1,6 @@
+Lists\OrganizationBundle\Entity\Organization:
+    properties:
+        name:
+            - NotBlank: { groups: [new, edit] }
+        edrpou:
+            - Lists\OrganizationBundle\Validator\UniqueEdrpou: {  groups: [new, edit]}

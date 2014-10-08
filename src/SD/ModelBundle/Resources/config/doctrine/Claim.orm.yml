@@ -1,0 +1,147 @@
+SD\ModelBundle\Entity\Claim:
+    type: entity
+    table: claim
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        createdatetime:
+            type: datetime
+            nullable: false
+        isclosedclient:
+            type: boolean
+            nullable: true
+        closedatetime:
+            type: datetime
+            nullable: true
+        description:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        stuffdescription:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        isclosedstuff:
+            type: boolean
+            nullable: true
+        ourcosts:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        billNumber:
+            type: string
+            length: 100
+            fixed: false
+            nullable: true
+            column: bill_number
+        billDescription:
+            type: string
+            length: 100
+            fixed: false
+            nullable: true
+            column: bill_description
+        smetaNumber:
+            type: string
+            length: 100
+            fixed: false
+            nullable: true
+            column: smeta_number
+        smetaCosts:
+            type: string
+            length: 100
+            fixed: false
+            nullable: true
+            column: smeta_costs
+        aktDate:
+            type: datetime
+            nullable: true
+            column: akt_date
+        mpk:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+        billDate:
+            type: datetime
+            nullable: true
+            column: bill_date
+    manyToMany:
+        works:
+            targetEntity: Works
+            cascade: {  }
+            mappedBy: claim
+            inversedBy: null
+            joinTable: null
+            orderBy: null
+    manyToOne:
+        claimtype:
+            targetEntity: Claimtype
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                claimtype_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        contractImportance:
+            targetEntity: ContractImportance
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                contract_importance_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        departments:
+            targetEntity: Departments
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                departments_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        organizationImportance:
+            targetEntity: OrganizationImportance
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                organization_importance_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        organizationType:
+            targetEntity: OrganizationType
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                organization_type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        smetaStatus:
+            targetEntity: Status
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                smeta_status_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        status:
+            targetEntity: Status
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                status_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

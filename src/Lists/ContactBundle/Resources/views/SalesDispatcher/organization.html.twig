@@ -1,0 +1,106 @@
+    {% trans_default_domain 'ListsContactBundle' %}
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+        });
+    </script>
+
+    <div id="form_modal_contact" class="modal fade" role="basic" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">{% trans from 'ListsContactBundle' %}Contact edit{% endtrans %}</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="modelContactFormTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+    </div>
+
+    {% if organizationId %}
+    {% else %}
+        <div class="navigation">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    {% endif %}
+
+	<div class="table-scrollable" style="clear: right"  id="organization-contact-list">
+        <table class="table table-striped table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>#</th>
+                {% if organizationId %}
+                {% else %}
+                    <th>{% trans %}Organization{% endtrans %}</th>
+                {% endif %}
+                <th>{% trans %}LastName{% endtrans %}</th>
+                <th>{% trans %}FirstName{% endtrans %}</th>
+                <th>{% trans %}SurName{% endtrans %}</th>
+                <th>{% trans %}Position{% endtrans %}</th>
+                <th>{% trans %}Mobile{% endtrans %}</th>
+                <th>{% trans %}Phone{% endtrans %}</th>
+                <th>{% trans %}Email{% endtrans %}</th>
+                <th>{% trans %}Birthday{% endtrans %}</th>
+                <th>{% trans %}Contact type{% endtrans %}</th>
+                <th>{% trans %}Contact level{% endtrans %}</th>
+                <th>{% trans %}Owner{% endtrans %}</th>
+                {% if organizationId %}
+                {% else %}
+                    <th>{% trans %}Creator{% endtrans %}</th>
+                {% endif %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in pagination %}
+            <tr id="ModelContact{{ item.0.id }}"
+                data-url="{{ path('lists_' ~ baseRoutePrefix ~ '_contact_ajax_organization_element', {
+                    id: item.0.id,
+                    organizationId: organizationId
+                }) }}"
+            >
+                {{  include(
+                    'ListsContactBundle:' ~ baseTemplate ~ ':organizationElement.html.twig',
+                        {
+                            item: item,
+                            baseRoutePrefix: baseRoutePrefix,
+                            organizationId: organizationId
+                        }
+                    )
+                }}
+            </tr>
+            {% endfor %}
+            {% if departmentContacts is defined %}
+                {% for item in departmentContacts %}
+                    <tr id="ModelContact{{ item.0.id }}"
+                            data-url="{{ path('lists_' ~ baseRoutePrefix ~ '_contact_ajax_department_organization_element', {
+                            id: item.0.id,
+                            organizationId: organizationId,
+                        }) }}"
+                            >
+                        {{  include(
+                        'ListsContactBundle:' ~ baseTemplate ~ ':organizationElement.html.twig',
+                            {
+                                item: item,
+                                baseRoutePrefix: baseRoutePrefix,
+                                organizationId: organizationId,
+                                modelName: 'departments'
+                            }
+                        )
+                        }}
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+    {% if organizationId %}
+    {% else %}
+        <div class="navigation">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    {% endif %}

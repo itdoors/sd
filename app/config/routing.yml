@@ -1,0 +1,119 @@
+sd_activity:
+    resource: "@SDActivityBundle/Resources/config/routing.yml"
+    prefix:   /
+
+it_doors_sip:
+    resource: "@ITDoorsSipBundle/Resources/config/routing.yml"
+    prefix:   /
+
+sd_task:
+    resource: "@SDTaskBundle/Resources/config/routing.yml"
+    prefix:   /
+
+lists_document:
+    resource: "@ListsDocumentBundle/Resources/config/routing.yml"
+    prefix:   /
+
+it_doors_history:
+    resource: "@ITDoorsHistoryBundle/Resources/config/routing.yml"
+    prefix:   /
+
+it_doors_cron:
+    resource: "@ITDoorsCronBundle/Resources/config/routing.yml"
+    prefix:   /cron-manager
+
+lists_article:
+    resource: "@ListsArticleBundle/Resources/config/routing.yml"
+    prefix:   /
+
+lists_companystructure:
+    resource: "@ListsCompanystructureBundle/Resources/config/routing.yml"
+    prefix:   /
+
+lists_grafik:
+    resource: "@ListsGrafikBundle/Resources/config/routing.yml"
+    prefix:   /
+
+lists_individual:
+    resource: "@ListsIndividualBundle/Resources/config/routing.yml"
+    prefix:   /
+
+it_doors_controlling:
+    resource: "@ITDoorsControllingBundle/Resources/config/routing.yml"
+    prefix:   /
+
+it_doors_oper:
+    resource: "@ITDoorsOperBundle/Resources/config/routing.yml"
+    prefix:   /
+
+it_doors_email:
+    resource: "@ITDoorsEmailBundle/Resources/config/routing.yml"
+    prefix:   /
+
+it_doors_ajax:
+    resource: "@ITDoorsAjaxBundle/Resources/config/routing.yml"
+    prefix:   /
+
+lists_report:
+    resource: "@ListsReportBundle/Resources/config/routing.yml"
+    prefix:   /
+
+lists_department:
+    resource: "@ListsDepartmentBundle/Resources/config/routing.yml"
+    prefix:   /
+
+lists_dogovor:
+    resource: "@ListsDogovorBundle/Resources/config/routing.yml"
+    prefix:   /
+
+sd_calendar:
+    resource: "@SDCalendarBundle/Resources/config/routing.yml"
+    prefix:   /
+
+lists_contact:
+    resource: "@ListsContactBundle/Resources/config/routing.yml"
+    prefix:   /
+
+lists_team:
+    resource: "@ListsTeamBundle/Resources/config/routing.yml"
+    prefix:   /
+
+sd_common:
+    resource: "@SDCommonBundle/Resources/config/routing.yml"
+    prefix:   /
+
+#sd_model:
+#    resource: "@SDModelBundle/Resources/config/routing.yml"
+#    prefix:   /
+
+lists_handling:
+    resource: "@ListsHandlingBundle/Resources/config/routing.yml"
+    prefix:   /
+
+lists_lookup:
+    resource: "@ListsLookupBundle/Resources/config/routing.yml"
+    prefix:   /
+
+lists_region:
+    resource: "@ListsRegionBundle/Resources/config/routing.yml"
+    prefix:   /
+
+sd_dashboard:
+    resource: "@SDDashboardBundle/Resources/config/routing.yml"
+    prefix:   /
+
+sd_user:
+    resource: "@SDUserBundle/Resources/config/routing.yml"
+    prefix:   /
+
+lists_city:
+    resource: "@ListsCityBundle/Resources/config/routing.yml"
+    prefix:   /
+
+lists_organization:
+    resource: "@ListsOrganizationBundle/Resources/config/routing.yml"
+    prefix:   /
+
+fos_user_group:
+    resource: "@FOSUserBundle/Resources/config/routing/group.xml"
+    prefix: /group

@@ -1,0 +1,42 @@
+Lists\HandlingBundle\Entity\HandlingMoreInfoType:
+    type: entity
+    table: handling_more_info_type
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 128
+            fixed: false
+            nullable: false
+        dataType:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: data_type
+        enumChoices:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: enum_choices
+        handlingResultId:
+            type: integer
+            nullable: true
+            column: handling_result_id
+    manyToOne:
+        handlingResult:
+            targetEntity: HandlingResult
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                handling_result_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

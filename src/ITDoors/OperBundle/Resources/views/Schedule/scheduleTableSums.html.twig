@@ -1,0 +1,89 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
+{% if sumOfficially is defined %}
+<td class="sums{{ idCoworker }}{{ idReplacement }}">
+    {{ sumOfficially }}
+</td>
+{% endif %}
+<td class="sums{{ idCoworker }}{{ idReplacement }}">
+    {% if accrual['officially']['plus'] > 0 %}
+        <span style="color: green">+ {{ accrual['officially']['plus'] }}</span>
+        <br>
+    {% endif %}
+    {% if accrual['officially']['minus'] > 0 %}
+        <span style="color: red">- {{ accrual['officially']['minus'] }}</span>
+    {% endif %}
+
+</td>
+
+<td class="sums{{ idCoworker }}{{ idReplacement }}">
+    {{ salaryOfficially }}
+</td>
+
+<td class="sums{{ idCoworker }}{{ idReplacement }}">
+    {{ plannedAccrualOfficially }}
+</td>
+
+{% if sumNotOfficially is defined %}
+<td class="sums{{ idCoworker }}{{ idReplacement }}">
+    {{ sumNotOfficially }}
+</td>
+{% endif %}
+
+<td class="sums{{ idCoworker }}{{ idReplacement }}">
+    {{ plannedAccrual }}
+</td>
+
+<td class="sums{{ idCoworker }}{{ idReplacement }}">
+    {% if accrual['notOfficially']['plus'] > 0 %}
+        <span style="color: green">+ {{ accrual['notOfficially']['plus'] }}</span>
+        <br>
+    {% endif %}
+    {% if accrual['notOfficially']['minus'] > 0 %}
+        <span style="color: red">- {{ accrual['notOfficially']['minus'] }}</span>
+    {% endif %}
+
+</td>
+
+<td class="sums{{ idCoworker }}{{ idReplacement }}">
+    {% if canEdit %}
+    <a href="#" class="salary_editing{{ idCoworker }}{{ idReplacement }}" data-type="text" data-pk="{{ idMonthInfo }}" data-param='{"aaa": 1}' data-value="" data-placement="right" data-original-title="{% trans %}Input value{% endtrans %}">
+        {{ salaryNotOfficially }}
+    </a>
+    {% else %}
+        {{ salaryNotOfficially }}
+    {% endif %}
+
+</td>
+<td class="sums{{ idCoworker }}{{ idReplacement }}">
+    {{ totalSalary }}
+</td>
+
+<script>
+    $(document).ready(function(){
+
+        $.fn.editable.defaults.inputclass = 'form-control';
+        $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
+
+        $('.salary_editing{{ idCoworker }}{{ idReplacement }}').editable({
+            url: '{{ path('it_doors_oper_schedule_ajax_editing_salary') }}'
+        });
+
+        $('.salary_editing{{ idCoworker }}{{ idReplacement }}').on('save', function(e, params) {
+            var idCoworker = {{ idCoworker }};
+            var idReplacement = {{ idReplacement }};
+            var date = $('#info_input').data('date');
+            var idDepartment = {% if idDepartment is defined %}{{ idDepartment }}{% else %}$('#info_input').data('id_department'){% endif %};
+
+            var params = {
+                "date": date,
+                "idCoworker": idCoworker,
+                "idReplacement": idReplacement,
+                "idDepartment": idDepartment
+            }
+            var sendData = {
+                "params": params
+            }
+            updateSums(sendData, idCoworker, idReplacement);
+        })
+    });
+</script>

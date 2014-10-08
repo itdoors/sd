@@ -1,0 +1,70 @@
+Lists\DogovorBundle\Entity\DogovorDepartment:
+    type: entity
+    table: dogovor_department
+    repositoryClass: Lists\DogovorBundle\Entity\DogovorDepartmentRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        isActive:
+            type: boolean
+            nullable: true
+            column: is_active
+        comment:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        createdatetime:
+            type: datetime
+            nullable: true
+        dogovorId:
+            type: integer
+            column: dogovor_id
+        dopDogovorId:
+            type: integer
+            column: dop_dogovor_id
+        departmentId:
+            type: integer
+            column: department_id
+    manyToOne:
+        department:
+            targetEntity: Lists\DepartmentBundle\Entity\Departments
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                department_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        dogovor:
+            targetEntity: Dogovor
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                dogovor_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        dopDogovor:
+            targetEntity: DopDogovor
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                dop_dogovor_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

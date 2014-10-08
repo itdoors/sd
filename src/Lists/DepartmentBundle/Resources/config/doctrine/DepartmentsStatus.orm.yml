@@ -1,0 +1,27 @@
+Lists\DepartmentBundle\Entity\DepartmentsStatus:
+    type: entity
+    table: departments_status
+    repositoryClass : Lists\DepartmentBundle\Entity\DepartmentsStatusRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        slug:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        description:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+    lifecycleCallbacks: {  }

@@ -1,0 +1,44 @@
+List of email templates: Список email шаблонов
+Email <small>list of templates</small>: Список <small>email шаблонов</small>
+Dashboard: Рабочий стол
+Email templates: Шаблоны email
+Email Tamplate: Email Шаблон
+Add New: Новый шаблон
+
+Save: Сохранить
+Cancel: Отмена
+Add: Добавить
+Alias: Название шаблона
+Subject: Тема письма
+Action: Действия
+Add note: Редактировать
+Delete: Удалить
+Text: Текст сообщения
+Variables: Переменные
+Create email: Создать письмо
+
+List of email history send: Список отправки Email
+Email <small>history send</small>: Email <small>история отправок</small>
+Email history send: История отравки Email
+
+Fromemail: Email отравителя
+Toemail: Email получателя
+Createdat: Дата создания
+Fromname: Имя отравителя
+Sentat: Дата отравки
+Status: Статус
+Actions: Действия
+Send: Отравлено
+To send: Отправить
+Create new email: Создать новое письмо
+Error send: Ошибка отравки
+In send: В очереди
+Edit: Редактировать
+Show: Просмотреть
+From: Отправитель
+Back to the list: Назад к списку
+Email send: Email отправителя
+Name send: Имя отправителя
+To Email: Email получатля
+Add files: Прикрепить файлы
+In progress: Отправляется (возможно зависли)

@@ -1,0 +1,79 @@
+sd_task_homepage:
+    path:     /tasks
+    defaults: { _controller: SDTaskBundle:Task:index }
+
+sd_task_table:
+    path:     /tasks/table
+    defaults: { _controller: SDTaskBundle:Task:taskTable }
+
+sd_task_table_dashboard:
+    path:     /tasks/table/dashboard
+    defaults: { _controller: SDTaskBundle:Task:taskTableDashboard }
+
+sd_task_table_dashboard_rows_ajax:
+    path:     /tasks/table/dashboard/ajax
+    defaults: { _controller: SDTaskBundle:Task:renderDashboardTaskRowsAjax }
+
+sd_task_modal:
+    path:     /tasks/modal
+    defaults: { _controller: SDTaskBundle:Task:taskModal }
+
+sd_task_set_viewed:
+    path:     /tasks/set/viewed
+    defaults: { _controller: SDTaskBundle:Task:setIsViewedTask }
+
+sd_task_set_stage:
+    path:     /tasks/set/stage
+    defaults: { _controller: SDTaskBundle:Task:taskStageUpdate }
+
+sd_task_change_date:
+    path:     /tasks/change/date
+    defaults: { _controller: SDTaskBundle:Task:taskChangeDateRequest }
+
+sd_task_answer_date:
+    path:     /tasks/answer/date
+    defaults: { _controller: SDTaskBundle:Task:answerDate }
+
+sd_task_add_comment:
+    path:     /tasks/add/comment
+    defaults: { _controller: SDTaskBundle:Task:addComment }
+
+sd_task_page:
+    path:     /tasks/task/{id}
+    defaults: { _controller: SDTaskBundle:Task:showTaskPage}
+
+sd_task_view:
+    path:     /tasks/view/task
+    defaults: { _controller: SDTaskBundle:Task:taskView}
+
+sd_task_list:
+    path:     /tasks/list
+    defaults: { _controller: SDTaskBundle:Task:taskList}
+
+sd_task_files:
+    path:     /tasks/taskfiles/{id}
+    defaults: { _controller: SDTaskBundle:Task:renderListOfFiles}
+
+sd_task_change_date_calendar:
+    path:     /tasks/change/date/calendar
+    defaults: { _controller: SDTaskBundle:Task:changeDate }
+
+sd_task_editable:
+    path:     /tasks/editable
+    defaults: { _controller: SDTaskBundle:Task:editableTask }
+
+sd_task_sign_up:
+    path:     /tasks/sign/up
+    defaults: { _controller: SDTaskBundle:Task:signUpTask }
+
+sd_task_delete_file:
+    path:     /tasks/delete
+    defaults: { _controller: SDTaskBundle:Task:deleteFile }
+
+sd_task_add_viewer:
+    path:     /tasks/add/viewer
+    defaults: { _controller: SDTaskBundle:Task:addViewer }
+
+sd_task_set_pattern:
+    path:     /tasks/set/pattern
+    defaults: { _controller: SDTaskBundle:Task:setPattern }

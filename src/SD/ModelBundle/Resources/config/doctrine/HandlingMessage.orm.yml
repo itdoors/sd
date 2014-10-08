@@ -1,0 +1,58 @@
+SD\ModelBundle\Entity\HandlingMessage:
+    type: entity
+    table: handling_message
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        createdatetime:
+            type: datetime
+            nullable: true
+        description:
+            type: text
+            nullable: true
+        createdate:
+            type: date
+            nullable: true
+        filepath:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+        filename:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+    manyToOne:
+        handling:
+            targetEntity: Handling
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                handling_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        type:
+            targetEntity: HandlingMessageType
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SfGuardUser
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

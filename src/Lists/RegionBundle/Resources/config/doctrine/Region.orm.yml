@@ -1,0 +1,23 @@
+Lists\RegionBundle\Entity\Region:
+    type: entity
+    table: Region
+    repositoryClass : Lists\RegionBundle\Entity\RegionRepository
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        name:
+            type: string(100)
+            nullable: false
+        square:
+            type: float
+        population:
+            type: float
+        flag:
+            type: string
+            length: 255
+    manyToMany:
+        companystructure:
+            targetEntity: Lists\CompanystructureBundle\Entity\Companystructure
+            mappedBy: region

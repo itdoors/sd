@@ -1,0 +1,217 @@
+Dashboard: Рабочий стол
+My Organizations: Мои организации
+Team Organizations: Организации команды
+Organization <small>list of team organization</small>: Организации <small>список организаций команды</small>
+Organization <small>list of organization</small>: Организации <small>список доступных пользователю организаций</small>
+List of Organizations: Список организаций
+Create Organization: Создание организации
+Organization <small>create organization</small>: Организация <small>создание организации</small>
+MPK: МПК
+Enter MPK: Ввдедите МПК
+City: Город
+Enter City: Введите город
+Region: Область
+Enter Region: Введите область
+Name: Наименование
+Short Name: Короткое
+Scope: Деятельность
+Enter Scope: Введите деятельность
+Select Organization scope: Выберите деятельность
+Organization List: Организации
+
+Organization name: Название организации
+Organization Name: Название организации
+"Organization name": "Название организации"
+Full Organization name: Полное наименование
+Enter organization name: Введите название организации
+
+Organization short name: Сокращенное название
+Enter organization short name: Введите короткое название
+
+Organization type: Тип организации
+Enter organization type: Введите тип организации
+Select organization type: Выберите тип организации
+Select organization: Выберите организацию
+
+Legal Address: Юридический адрес
+Enter Legal Address: Введите юридический адрес
+
+Select city: Выберите город
+Mailing Address: Почтовый адрес
+Enter Mailing Address: Введите почтовый адрес
+Enter Physical Address: Введите физический адрес
+Physical Address: Физический адрес
+Enter Phone: Введите телефон
+Phone: Телефон
+
+Organization Group: Группа влияния
+Select Organization Group: Выберите группу влияния
+Select Organization GroupSelect a control group that owns the organization: Выберите группу влияния к которой принадлежит данная организация
+Enter Organization Description: Введите заметки по орнанизации
+Organization Description: Заметки
+Organization details: Реквизиты
+Enter INN Certificate: Введите номер свидетельства НДС
+INN Certificate: Номер свидетельства НДС
+Enter INN: Введите Индивидульный Налоговый Номер
+INN: ИНН
+Certificate: Свидетельство
+
+
+Enter Organization Site: Введите адрес сайта
+Site: Сайт
+
+Сompany details: Реквизиты компании
+Enter edrpou: Введите код ЄДРПОУ (ЗКПО)
+Edrpou: ЄДРПОУ
+
+Show Organization: Просмотр организации
+Organization <small>show organization</small>: Организация <small>просмотр сведений</small>
+Managers: Менеджеры
+Contracts: Контракты
+
+Actions: Действие
+Address: Адрес
+Users: Пользователи
+
+Organization: Организация
+
+No matches found: Совпадений ненайдено
+
+Managers: Менеджеры
+Manager: Менеджер
+Enter Name: Введите название
+Contacts: Контакты
+Managers on organization: Список менеджеров, которые имеют доступ к данной организации и могут создавать Обращения. При создании организации, создавший менеджер автоматически добавляется в этот список. Назначение менеджера на организацию в полномочиях Администратора отдела продаж.
+Contacts on sales organization: Список контактных лиц по данной организации. К которым Вы имеете доступ.
+Contacts on sales dispatcher: Список контактных лиц по данной организации в разрезе команды.
+Contacts on sales admin: Список контактных лиц по данной организации.
+Contacts on organization: Список контактных лиц в данной организации
+Action: Действие
+
+LastName, FirstName: Фамилия, Имя
+
+FirstName: Имя
+LastName: Фамилия
+SurName: Отчество
+Position: Должность
+Phone: Телефон
+Mobile: Мобильный
+Email: Email
+Birthday: Дата рождения
+Description: Заметки
+Creator: Кто создал
+Create Date Time: Дата создания
+Create New Contact: Создать контакт
+
+Filters: Фильтры
+Clear Filter: Очистить
+Filter: Фильтр
+General information: Общая информация
+for example: например
+Сontact details: Контактные данные
+
+You have some form errors. Please check below.: В форме обнаружены ошибки. Пожалуйста, проверьте.
+This field is required.: Это поле обязательно к заполнению
+Save: Сохранить
+Cancel: Отменить
+Add New: Добавить
+Delete: Удалить
+Enter filter parameters and press Filter button.: Выберите параметры фильтра и нажмите кнопку Фильтр
+Handling list link: Обращения
+Child organization: Дочерняя организация
+Organization child: Дочерняя организация
+Set child organization: Установить дочернюю организацию
+Child organization cant be empty: Дочерняя организация не может быть пустой
+You've picked the same organization: Организация не может быть дочерней относительно самой себя. Перепроверьте выбранные данные.
+
+Enter value: Введите значение
+
+Select a control group that owns the organization: Выберите группу влияния
+
+Creator (date create): Кто создал (дата создания)
+(limit 50 chars):  (ограничено 50 символами)
+
+Add New organization: Добавить организацию
+Projects: Проекты
+Enter manager: Введите менеджера
+Add contact: Добавить контакт
+Select scope: Выберите деятельность
+
+Competitors: Конкуренты
+Competitors <small>list of organization</small>: Конкуренты <small>список организаций</small>
+Add competitor: Добавить конкурентов
+
+Organization lookup: Вид организации
+Select lookup: Выберите вид
+
+Organization with edrpou: Организация с ЕДРПОУ
+already exists: уже существует
+
+Transfer organizations: Перенос организаций
+Select user: Выберите пользователя
+Enter user: Введите пользователя
+Select user for set organizarions: Выберите пользователя для просмотра его организаций
+Transfer: Перенести
+already exists: уже существует
+
+Role: Роль
+Enter share: Введите процент участия
+Percentage of participation: Процент участия
+
+This user is already a manager: Этот пользователь уже является менеджером
+
+Change part: Процент участия
+Dogovors: Договора
+serviceName: Услуга
+Is interested: Заинтересованы
+Is working: Работаем
+Evaluation: Оценка
+Competitor: Конкурент
+End date: Дата окончания
+Responsible: Ответственный
+Description: Примечание
+Actions: Действия
+Add service cover: Добавить
+Service cant be empty: Заполните поле "Услуга"
+Enter Description: Примечание
+Enter Responsible: Ответственный
+Enter Competitor: Конкурент
+Enter End Date: Дата окончания
+Enter Is interested: Заинтересованы?
+Enter Is working: Работаем?
+Evaluation: Оценка
+Enter Service: Услуга
+Service cover: Покрытие услугами
+Contractors: Подрядчики
+Contractor <small>list of contractors</small>: Подрядчики <small>список подрядчиков</small>
+List of contractors: Список подрядчиков
+Add contractor: Добавить подрядчика
+Create contractor: Создание подрядчика
+Contractor <small>create contractor</small>: Подрядчики <small>create подрядчика</small>
+COEA: КВЭД
+Type: Тип
+Date: Дата
+File: Файл
+Add document: Добавить документ
+See document: Просмотерть документ
+Upload new document: Загрузить новый документ
+Enter type: Введите тип
+Upload a new document? The old document will be removed.: Загрузить новый документ? Старый будет удален.
+Add scope: Добавить деятельность
+Add kved: Добавить КВЭД
+Add: Добавить
+Code: Код
+Contractor: Подрядчик
+Show contractor: Просмотр подрядчика
+Documents: Документы
+Date created: Дата создания
+Enter date: Выберите дату
+Ownership: Форма собственности
+Ownership short: ФC
+Select ownership: Выберите форму собственности
+View: Вид
+Select view organization: Выберите вид организации
+View organization: Вид организации
+Select view: Выберите вид
+Enter view organizarion: Введите вид организации
+Kveds: Кведы

@@ -1,0 +1,127 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsHandlingBundle' %}
+{% block title %}{% trans %}Show Handling{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+	<ul class="page-breadcrumb breadcrumb">
+		<li>
+			<i class="fa fa-home"></i>
+			<a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+			<i class="fa fa-angle-right"></i>
+		</li>
+		<li>
+			<a href="{{ path('lists_' ~ baseRoutePrefix ~ '_handling_index') }}" title="{% trans %}My Handlings{% endtrans %}">{% trans %}My Handlings{% endtrans %}</a>
+			<i class="fa fa-angle-right"></i>
+		</li>
+		<li><a href="{{ path('lists_sales_handling_show', { id : handling.0.id }) }}"  title="{% trans %}Show Handling{% endtrans %}">{% trans %}Show Handling{% endtrans %}</a></li>
+	</ul>
+{% endblock %}
+{% block page_title %}
+	<h3 class="page-title">
+		{% trans %}Handling <small>show handling</small>{% endtrans %}
+	</h3>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
+{% endblock %}
+
+{% block body %}
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="tabbable tabbable-custom boxless">
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#tab_0" data-toggle="tab">{% trans %}Handling{% endtrans %}</a></li>
+					<li><a href="#tab_1" data-toggle="tab">{% trans %}Managers{% endtrans %}</a></li>
+					<li><a href="#tab_2" data-toggle="tab">{% trans %}Contacts{% endtrans %}</a></li>
+					<li><a href="#tab_3" data-toggle="tab">{% trans %}Organization{% endtrans %}</a></li>
+                    <li><a href="#tab_4" data-toggle="tab">{% trans %}Competitors{% endtrans %}</a></li>
+				</ul>
+				<div class="tab-content">
+
+                    {{  include(
+                        'ListsHandlingBundle:' ~ baseTemplate ~ ':edit.html.twig',
+                        {
+                            handling: handling,
+                            handlingServices: handlingServices
+                        }
+                        )
+                    }}
+					<!--tabpane-->
+                    {{  include(
+                        'ListsHandlingBundle:' ~ baseTemplate ~ ':managers.html.twig',
+                            {
+                                handling: handling,
+                                baseTemplate: baseTemplate,
+                                baseRoutePrefix: baseRoutePrefix
+                            }
+                        )
+                    }}
+					<!--tabpane-->
+                    {{  include(
+                        'ListsHandlingBundle:' ~ baseTemplate ~ ':contacts.html.twig',
+                        {
+                            handling: handling,
+                            baseTemplate: baseTemplate,
+                            baseRoutePrefix: baseRoutePrefix
+                        }
+                        )
+                    }}
+                    <!--tabpane-->
+                    <div class="tab-pane" id="tab_3">
+                        {{  include(
+                            'ListsOrganizationBundle:' ~ baseTemplate ~ ':edit.html.twig',
+                                {
+                                    organization: organization,
+                                    showMoreInfoIds: showMoreInfoIds,
+                                    lookups: lookups
+                                }
+                            )
+                        }}
+                    </div>
+                    <!--tabpane-->
+                    <div class="tab-pane" id="tab_4">
+                        {{  render(controller(
+                            'ListsHandlingBundle:Competitor:Index',
+                                {
+                                    handlingId: handling.0.id
+                                }
+                            ))
+                        }}
+                    </div>
+                    <!--tabpane-->
+				</div>
+				<!--tab-content-->
+			</div>
+			<!--tabbale-->
+		</div>
+	</div>
+	<!--row-->
+        <div class="row">
+        {{  include(
+            'ListsHandlingBundle:' ~ baseTemplate ~ ':messages.html.twig',
+            {
+                handling: handling,
+            }
+            )
+        }}
+        </div>
+{#    {{ form(handlingMessageForm) }}#}
+
+{% endblock body %}

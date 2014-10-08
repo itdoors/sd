@@ -1,0 +1,74 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ITDoorsEmailBundle' %}
+{% block title %}{% trans %}List of email history send{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Email <small>history send</small>{% endtrans %}
+    </h3>
+{% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li>
+            <a href="{{ path('it_doors_email_history') }}" title="{% trans %}Email history send{% endtrans %}">{% trans %}Email history send{% endtrans %}</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.css') }}">
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/lang/summernote-ru-RU.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/scripts/form-dropzone.js') }}"></script>
+{% endblock %}
+{% block body %}
+
+    <form action="{{ path('automailer_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+        <div class="panel-body">
+            <div class="form-group">
+                {{ form_label(edit_form.fromEmail, 'Email send', {'attr': {'class': 'control-label'}}) }}
+                {{ form_widget(edit_form.fromEmail, {'attr' : {'class' : 'form-control', 'placeholder': 'Email send'} } ) }}
+
+            </div>
+            <div class="form-group">
+                {{ form_label(edit_form.fromName, 'Name send', {'attr': {'class': 'control-label'}}) }}
+                {{ form_widget(edit_form.fromName, {'attr' : {'class' : 'form-control', 'placeholder': 'Name send'} } ) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(edit_form.toEmail, 'To Email', {'attr': {'class': 'control-label'}}) }}
+                {{ form_widget(edit_form.toEmail, {'attr' : {'class' : 'form-control', 'placeholder': 'To Email'} } ) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(edit_form.subject, 'Subject', {'attr': {'class': 'control-label'}}) }}
+                {{ form_widget(edit_form.subject, {'attr' : {'class' : 'form-control', 'placeholder': 'Subject'} } ) }}
+            </div>
+        </div>
+        <p>
+            <button type="submit">{% trans %}Edit{% endtrans %}</button>
+        </p>
+    </form>
+
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('it_doors_email_history') }}">
+                {% trans %}Back to the list{% endtrans %}
+            </a>
+        </li>
+        <li>
+            <form action="{{ path('automailer_delete', { 'id': entity.id }) }}" method="post">
+                {{ form_widget(delete_form) }}
+                <button type="submit">{% trans %}Delete{% endtrans %}</button>
+            </form>
+        </li>
+    </ul>
+{% endblock %}

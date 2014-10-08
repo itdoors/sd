@@ -1,0 +1,261 @@
+{% trans_default_domain 'SDUserBundle' %}
+
+{% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+<script>
+    $(document).ready(function(){
+        function avatar() {
+            // Create variables (in this scope) to hold the API and image size
+            var jcrop_api,
+                boundx,
+                boundy,
+                // Grab some information about the preview pane
+                $block = $('#prewAvatar'),
+                $preview = $('#preview-pane'),
+                $pcnt = $('#preview-pane .preview-container'),
+                $pimg = $('#preview-pane .preview-container img'),
+
+                xsize = $pcnt.width(),
+                ysize = $pcnt.height(),
+        
+                $html = '<div id="preview-pane"><div class="preview-container"><img src="" id="imgPrev" /></div></div>';
+
+                console.log('init',[xsize,ysize]);
+                
+                $block.prepend($html);
+
+            $('#avatar').Jcrop({
+                onChange: updatePreview,
+                onSelect: updatePreview,
+                aspectRatio: xsize / ysize,
+                setSelect: [ 0, 0, 247, 247 ],
+                minSize: [247,247]
+              },function(){
+                // Use the API to get the real image size
+                var bounds = this.getBounds();
+                boundx = bounds[0];
+                boundy = bounds[1];
+                // Store the API in the jcrop_api variable
+                jcrop_api = this;
+                // Move the preview into the jcrop container for css positioning
+                $preview.appendTo(jcrop_api.ui.holder);
+              });
+
+              function updatePreview(c)
+              {
+                $('#userAvatarForm_x').val(c.x);
+                $('#userAvatarForm_y').val(c.y);
+                $('#userAvatarForm_w').val(c.w);
+                $('#userAvatarForm_h').val(c.h);
+                
+                $('#userAvatarFormTpl').submit(function(){
+                    if (parseInt($('#userAvatarForm_w').val())) return true;
+                    alert('Please select a crop region then press submit.');
+                    return false;
+                });
+
+                if (parseInt(c.w) > 0)
+                {
+                  var rx = xsize / c.w;
+                  var ry = ysize / c.h;
+
+                console.log(rx + ' + '+ry);
+
+                  $pimg.css({
+                    width: Math.round(rx * boundx) + 'px',
+                    height: Math.round(ry * boundy) + 'px',
+                    marginLeft: '-' + Math.round(rx * c.x) + 'px',
+                    marginTop: '-' + Math.round(ry * c.y) + 'px'
+                  });
+                }
+              };
+          };
+      avatar();
+       var handleResponsive = function() {
+      if ($(window).width() <= 1024 && $(window).width() >= 678) {
+        $('.responsive-1024').each(function(){
+          $(this).attr("data-class", $(this).attr("class"));
+          $(this).attr("class", 'responsive-1024 col-md-12');
+        }); 
+      } else {
+        $('.responsive-1024').each(function(){
+          if ($(this).attr("data-class")) {
+            $(this).attr("class", $(this).attr("data-class"));  
+            $(this).removeAttr("data-class");
+          }
+        });
+      }
+    };
+     handleResponsive();
+
+ });
+</script>
+{{ form_start(form, {
+        'action' : path('sd_common_ajax_form'),
+        'attr' : {
+            'method' : 'POST',
+            'class' : 'ajax-form-entity',
+            'data-post_function': postFunction,
+            'data-post_target_id': postTargetId,
+            'data-target_id': targetId
+    }
+    }) }}
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet">
+                <div class="portlet-body">
+                    {% if form.vars.valid %}
+                    {% else %}
+                    <div class="alert alert-danger">
+                        <button class="close" data-close="alert"></button>
+                        {{ form_errors(form) }}
+                    </div>
+                    {% endif %}
+                    <div class="row">
+                       <div class="col-md-6 responsive-1024">
+                            {% if app.user.photo %}
+                                <img src="{{ app.user.getWebPathOriginal() }}?v={{ 'now' | date('U') }}" id="avatar" alt="Jcrop Example"/>
+                            {% else %}
+                                <img src="{{ asset( userprofiles_url ~  'no_avatar_big.png') }}" id="avatar" alt="Jcrop Example"/>
+                            {% endif %}
+                       </div>
+                       <div class="col-md-6 responsive-1024">
+                           <div id="preview-pane">
+                                <div class="preview-container">
+                                    {% if app.user.photo %}
+                                        <img src="{{ app.user.getWebPathOriginal() }}?v={{ 'now' | date('U') }}"/>
+                                    {% else %}
+                                       <img src="{{ asset( userprofiles_url ~  'no_avatar_big.png') }}" id="avatar" alt="Jcrop Example"/>
+                                    {% endif %}
+                                </div>
+                           </div>
+                            <div style="margin: 45px 0px 0px 182px;" id="prewAvatar">
+                                <script>
+                                    $(document).ready(function(){
+                                        $(function () {
+                                            $('#userAvatarForm_photo').fileupload({
+                                                disableImageResize: false, 
+                                                previewMaxWidth: 320, 
+                                                previewMaxHeight: 320,
+
+                                                dataType: 'json',
+                                                fail: function (e, data) {
+                                                    alert('Error upload');
+                                                },
+                                            done: function (e, data) {
+                                                $('#userAvatarForm_loadPhoto').val(data.result.fileName);
+                                                $('#avatar').attr('src', data.result.file).attr('style', '');
+                                                $('#prewAvatar').attr('style','margin:255px 0px 0px 182px;');
+                                                JcropAPI = $('#avatar').data('Jcrop');
+                                                JcropAPI.destroy();
+                                                $('#preview-pane').remove();
+                                                function avatar(url) {
+                                                            // Create variables (in this scope) to hold the API and image size
+                                                            var jcrop_api,
+                                                                boundx,
+                                                                boundy,
+                                                                // Grab some information about the preview pane
+                                                                $block = $('#prewAvatar'),
+                                                                $html = '<div id="preview-pane"><div class="preview-container"><img src="'+url+'" id="imgPrev" /></div></div>';
+
+                                                                console.log('init',[xsize,ysize]);
+
+                                                                $block.prepend($html);
+
+                                                                var $preview = $block.find('#preview-pane');
+                                                                var $pcnt = $block.find('#preview-pane .preview-container');
+                                                                var $pimg = $block.find('#preview-pane .preview-container img');
+
+                                                                var xsize = $pcnt.width(),
+                                                                ysize = $pcnt.height();
+
+                                                            $('#avatar').Jcrop({
+                                                                onChange: updatePreview,
+                                                                onSelect: updatePreview,
+                                                                aspectRatio: xsize / ysize,
+                                                                setSelect: [ 0, 0, 247, 247 ],
+                                                                minSize: [247,247]
+                                                              },function(){
+                                                                // Use the API to get the real image size
+                                                                var bounds = this.getBounds();
+                                                                boundx = bounds[0];
+                                                                boundy = bounds[1];
+                                                                // Store the API in the jcrop_api variable
+                                                                jcrop_api = this;
+                                                                // Move the preview into the jcrop container for css positioning
+                                                                $preview.appendTo(jcrop_api.ui.holder);
+                                                              });
+
+                                                              function updatePreview(c)
+                                                              {
+                                                                    $('#userAvatarForm_x').val(c.x);
+                                                                    $('#userAvatarForm_y').val(c.y);
+                                                                    $('#userAvatarForm_w').val(c.w);
+                                                                    $('#userAvatarForm_h').val(c.h);
+
+                                                                    $('#userAvatarFormTpl').submit(function(){
+                                                                        if (parseInt($('#userAvatarForm_w').val())) return true;
+                                                                        alert('Please select a crop region then press submit.');
+                                                                        return false;
+                                                                    });
+
+                                                                if (parseInt(c.w) > 0)
+                                                                {
+                                                                  var rx = xsize / c.w;
+                                                                  var ry = ysize / c.h;
+
+                                                                  $pimg.css({
+                                                                    width: Math.round(rx * boundx) + 'px',
+                                                                    height: Math.round(ry * boundy) + 'px',
+                                                                    marginLeft: '-' + Math.round(rx * c.x) + 'px',
+                                                                    marginTop: '-' + Math.round(ry * c.y) + 'px'
+                                                                  });
+                                                                }
+                                                              };
+                                                          };
+                                                      avatar(data.result.file);
+
+                                                if(data.result.error !== undefined) {
+                                                   // $.each(data.result.error, function (index, error) {
+                                                        alert(data.result.error);
+                                                       // $('<p/>').text(file.name).appendTo('#files');
+
+                                                    //});
+                                                }
+                                            },
+                                            add: function (e, data) {
+                                                //if(confirm('{% trans %}Upload a new document? The old document will be removed.{% endtrans %}')){data.submit();}
+                                                data.submit();
+                                                }
+                                            })
+                                                .prop('disabled', !$.support.fileInput)
+                                                .parent().addClass($.support.fileInput ? undefined : 'disabled');
+                                        }).bind('fileuploadprocessalways', function(e, data){
+
+                                        });
+                                    });
+                                </script>
+                                <span class="btn btn-success fileinput-button">
+                                    <i class="glyphicon glyphicon-plus"></i>
+                                    <span>{% trans %}Upload new avatar{% endtrans %}</span>
+                                    {{ form_widget(form.photo, {'attr' : {'name' : 'photo', 'data-url': path('fos_user_upload_photo')} }  ) }}
+                                </span>
+                
+                       </div>
+                       </div>
+                   </div>
+                    <input type="hidden" name="formName" value="{{ formName }}">
+                    <input type="hidden" name="postFunction" value="{{ postFunction }}">
+                    <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
+                    <input type="hidden" name="targetId" value="{{ targetId }}">
+                    <input type="hidden" name="defaultData" value='{{ defaultData|json_encode|raw }}'>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    {{ form_widget(form.save, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
+    {{ form_widget(form.cancel, { 'label': 'Cancel', 'attr': {'class': 'btn default sd-cancel-btn', 'data-dismiss':'modal'} } ) }}
+</div>
+{{ form_end(form) }}

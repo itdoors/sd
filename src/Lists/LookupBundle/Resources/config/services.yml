@@ -1,0 +1,10 @@
+parameters:
+    lists_lookup.repository.class: Lists\LookupBundle\Entity\LookupRepository
+    lists_lookup.repository.entity: Lists\LookupBundle\Entity\Lookup
+
+services:
+    lists_lookup.repository:
+        class: %lists_lookup.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_lookup.repository.entity% ]

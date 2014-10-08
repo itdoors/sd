@@ -1,0 +1,168 @@
+Customer: Заказчик
+Performer: Исполнитель
+Add rerformer: Добавить ответственого
+Invoice amount: Сумма счета
+№ and date invoice: № и дата счета
+№ and date ABP/BH: № и дата<br>АВР/РП
+Date ABP/BH: Дата АВР/РП
+Agency: Представительство
+№ and date contract: № и дата<br> договора
+Date contract: Дата договора
+№ contract: № договора
+Deferment: Отстрочка
+Original ABP/BH: Оригинал<br> АВР/РП
+Original ABP/BN: Оригинал АВР/РП
+Notes: Примечания
+Add: Добавить
+Expected date of payment:  Ожидаемая<br> дата оплаты
+The actual date of payment: Фактическая<br> дата оплаты
+Expected date of Payment:  Ожидаемая дата оплаты
+Fact date of payment: Фактическая дата оплаты
+pay: Оплаченые
+on: есть
+off: нет
+Delete: Удалить
+Add note: Добавить примечание
+Select data: Выберите дату
+Controlling: Управление
+debtors: дебиторы
+Debtors: Дебиторы
+clear: очистить
+List of debtors: Список дебиторов
+Invoice <small>list of debtors</small>:  Счета <small>список дебиторов</small>
+from: от 
+to: до
+court: Суды
+day: День
+days: Дней
+Count: Количество
+For more information: Дополнительные сведения
+Number evidence: Номер свидетельства
+Responsible: Ответственный
+Add responsible: Добавить ответственого
+Select responsible:  Выберите ответственого
+Create New Contact: Создать контакт
+Dogovor: Договор
+Contacts client: Контакты клиента
+History: История
+Dashboard: Рабочий стол
+
+Creator: Кто создал
+Short Name: Короткое
+Organization type: Тип организации
+Scope: Деятельность
+Organization Group: Группа влияния
+City: Город
+Legal Address: Юридический адрес
+Mailing Address: Почтовый адрес
+Physical Address: Физический адрес
+Phone: Телефон
+Site: Сайт
+Edrpou: ЄДРПОУ
+INN: Свидетельство
+INN Certificate: Номер свидетельства НДС
+Organization Description: Заметки
+Note: Примечание
+invoice: счет
+Invoice: Счет
+Invoices: Счета
+
+Organization name: Название организации
+Number invoice: Номер счета
+Summa: Сумма
+Date: Дата
+Date_end: Ожидаемая дата оплаты
+Date_fact: Фактическая дата оплаты
+Status: Статус
+In coutr: В суде
+Not in coutr: Не в суде
+Pay: Оплачен
+Not pay: Не оплачен
+
+Save: Сохранить
+Cancel: Отменить
+Create New Message: Создать примечание
+Current Message: Новое примечание
+FirstName: Имя
+LastName: Фамилия
+SurName: Отчество
+Position: Должность
+Phone: Телефон
+Phone1: Мобильный
+Phone 1: Мобильный
+Mobile: Мобильный
+Phone2: Телефон
+Phone 2: Телефон
+Email: Email
+Birthday: Дата рождения
+Enter Birthday: Введите дату рождения
+Creator: Создатель
+Createdatetime: Дата создания
+Owner: Владелец
+Select Owner: Выберите нового владельца
+Organization: Организация
+Contact type: Тип контакта
+Organization Name: Название организации
+Shared: Контакт виден для всех организаций группы
+Name: Название
+MPK: МПК
+
+Add Contact: Добавить контакт
+Number act: Номер Акта
+Total amount: Общая сумма
+Bank: Банк
+Send notifications: Отправлять уведомления
+
+Changes are saved: Изменения сохранены
+No payments: Нет платежей
+Payments: Оплачено
+
+Enter customer: Введите заказчика
+Enter performer: Введите исполнителя
+Enter invoice number: Введите номер счета
+Enter number act: Введите номер акта
+Enter companystructure: Введите отвественного
+
+№ invoice: № счета
+Date invoice: Дата счета
+Analitic: Аналитика
+Grafic of debtors: Графики дебиторов
+Invoice <small>grafic of debtors</small>:  Счета <small>графики дебиторов</small>
+Enter date range: Введите диапазон дат
+
+Group for days: Групировка по дням
+Group for months: Групировка по месяцам
+Graphik: График
+Summa act: Сумма по актам
+Debt: Долг (остаток)
+Customer not found: Заказчик не найден
+Dogovor not found: Договор не найден
+Enter daterange: Введите период
+
+Planned date <br> of Pay: Плановая дата <br> оплаты
+Actual date <br> of payment: Факт дата <br> оплаты
+The debt <br> initial: Сумма долга <br> начальная
+The amount <br> paid: Сумма <br> оплачена
+Days <br> overdue: Дней <br> просрочено
+Remaining <br> debt: Остаток <br> долга
+Please enter at least one parameter in the filter: Пожалуйста, введите хотя бы один параметр в фильтре
+How to specify accounts found: По указаным параметрам счетов не найдено
+Invoice for the customer: Счет на оплату покупателю
+
+Jan: Янв
+Feb: Фев
+Mar: Мар
+Apr: Апр
+May: Май
+Jun: Июн
+Jul: Июл
+Aug: Авг
+Sep: Сен
+Oct: Окт
+Nov: Ноя
+Dec: Дек
+
+Status invoice: Статус счета
+Select status: Выберите статус
+Loyal: Лояльный
+Problem: Проблемный

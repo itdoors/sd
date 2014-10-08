@@ -1,0 +1,34 @@
+{% trans_default_domain 'ListsHandlingBundle' %}
+    {% for item in messages %}
+    <div class="portlet box {% if (item.createdate | date('U')) <= ("now"|date("U")) and item.isFutureMessage %}
+                    red
+                {% elseif (item.createdate | date('U')) <= ("now"|date("U")) %}green{% else %}yellow{% endif %}"
+                id="handling_message_{{ item.id }}">
+        <div class="portlet-title">
+            <div class="caption">
+                #{{ item.id }} |
+                {{ item.createdate|date('d.m.Y, H:i') }} {{ item.createdatetime == '' ? '' : '(' ~ item.createdatetime|date('d.m.Y, H:i') ~ ')'}} | {{ item.type }} | {{ item.user }}
+                {% if item.isBusinessTrip %}
+                    | {% trans %}Business trip{% endtrans %}
+                {% endif %}
+            </div>
+            <div class="tools"><a class="collapse" href="" title="{% trans %}Filters{% endtrans %}"></a></div>
+        </div>
+        <div class="portlet-body">
+            {{ item.description }} <br />
+            {% if item.filepath %}
+                <a href="/uploads/handling_message/{{ item.handlingId }}/{{ item.filepath }}" target="_blank">
+                    {% if item.filename %}
+                        {{ item.filename }}
+                    {% else %}
+                        {% trans %}File{% endtrans %}
+                    {% endif %}
+                </a>
+                <br />
+            {% endif %}
+            {% if calls[item.id] is defined %}
+                {% trans %}Listen to the conversation{% endtrans %}: <audio src="{{ call_url ~ calls[item.id].fileName ~ '.' ~ call_extension}}" controls></audio>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}

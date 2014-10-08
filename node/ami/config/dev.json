@@ -1,0 +1,25 @@
+{
+    "global": {
+        "exec": {
+            "path": "/var/www/webroot/ci/current/app/console itdoors:sip:history"
+        }
+    },
+    "mongodb": {
+        "host": "mongodb-itdoors.jelastic.neohost.net",
+        "port": 27017,
+        "db": "ami",
+        "collectionCalls": "calls",
+        "username": "admin",
+        "password": "JZhv0jvAtP"
+    },
+    "ami": {
+        "host": "95.67.67.170",
+        "port": "5038",
+        "user": "itdoors",
+        "password": "itdoors25",
+        "groupName": "ITDoor"
+    },
+    "socket": {
+        "listen": "8888"
+    }
+}

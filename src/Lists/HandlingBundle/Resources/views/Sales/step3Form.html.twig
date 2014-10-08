@@ -1,0 +1,214 @@
+{% trans_default_domain 'ListsHandlingBundle' %}
+<script type="text/javascript">
+    $(document).ready(function (){
+
+        $('#handlingSalesWizardForm_handlingServices').select2({
+            placeholder: "Select a Service",
+            allowClear: true
+        });
+
+        $('.date-picker').datepicker({
+            rtl: Metronic.isRTL(),
+            autoclose: true,
+            format: "dd.m.yyyy",
+            pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+            language: 'ru',
+            endDate: new Date(),
+            weekStart: 1
+        });
+    })
+
+</script>
+
+
+<!-- BEGIN FORM-->
+{% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+    {{ form_start(form,
+    {
+    'action': path('lists_sales_handling_create_step3'),
+    'attr': {'class' : 'horizontal-form'}
+    })
+    }}
+<div class="portlet-body form">
+    <div class="form-body">
+        {% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+        {% if form.vars.valid is sameas(false) %}
+            <div class="alert alert-danger">
+                <button class="close" data-close="alert"></button>
+                {% trans %}You have some form errors. Please check below.{% endtrans %}
+                {{ form_errors(form) }}
+            </div>
+        {% endif %}
+        <h4 class="form-section">{% trans %}General information{% endtrans %}</h4>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group{% if form.type.vars.errors|length %} has-error{% endif %}">
+                    {{ form_label(form.createdate, 'Handling Create DateTime', {'attr': {'class': 'control-label'}}) }}
+
+                    <div class="input-group input-medium date date-picker">
+                        {{ form_widget(form.createdate, {'attr': {
+                            'class': 'form-control',
+                            'data-required': '1',
+                            'placeholder': 'Enter Handling Create DateTime',
+                            'readonly': 'readonly'
+                        }}) }}
+                        <span class="input-group-btn">
+                        <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+                        </span>
+                    </div>
+                    {% if form.createdate.vars.errors|length %}
+                        {{ form_errors(form.createdate) }}
+                    {% else %}
+                        <span class="help-block">{% trans %}Enter Handling Create DateTime{% endtrans %}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <!--/span-->
+            <div class="col-md-6">
+                <div class="form-group">
+                    {# Create User - current user - only show#}
+                    {{ form_label(form.user, 'Create User', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.user, {'attr': {'class': 'form-control', 'placeholder': 'Enter organization short name'}}) }}
+                </div>
+            </div>
+            <!--/span-->
+        </div>
+        <!--/row-->
+        <div class="row">
+            <div class="col-md-6">
+                {# Тип обращения #}
+                <div class="form-group">
+                    {{ form_label(form.type, 'Handling Type', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.type, {'attr': {'class': 'form-control', 'data-required': '0', 'placeholder': 'Enter Handling Type'}}) }}
+                    <span class="help-block">{% trans %}Enter Handling Type{% endtrans %}</span>
+                </div>
+            </div>
+            <!--/span-->
+            <div class="col-md-6">
+                <div class="form-group">
+                    {# Organization only show #}
+                    {{ form_label(form.organization, 'Organization Name', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.organization, {'attr': {'class': 'form-control', 'placeholder': 'Enter organization short name'}}) }}
+                </div>
+            </div>
+            <!--/span-->
+        </div>
+        <!--/row-->
+        <div class="row">
+            <div class="col-md-6{% if form.handlingServices.vars.errors|length %} has-error{% endif %}">
+                <div class="form-group">
+                    {{ form_label(form.handlingServices, 'Service offered', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.handlingServices, {'attr': {
+                    'class': 'form-control select2',
+                    'data-required': '1',
+                    'placeholder': 'Service offered',
+                    'multiple': 'multiple'
+                    }}) }}
+                    {% if form.handlingServices.vars.errors|length %}
+                        {{ form_errors(form.handlingServices) }}
+                    {% else %}
+                        <span class="help-block">{% trans %}Select offered services{% endtrans %}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <!--/span-->
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form_label(form.result, 'Result', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.result, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Result'}}) }}
+                    <span class="help-block">{% trans %}Select project result, if has{% endtrans %}</span>
+                </div>
+            </div>
+            <!--/span-->
+        </div>
+        <!--/row-->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form_label(form.description, 'Notice', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.description, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter Notice'}}) }}
+                </div>
+
+            </div>
+            <!--/span-->
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form_label(form.resultString, 'Result description', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.resultString, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Result Description'}}) }}
+                </div>
+            </div>
+            <!--/span-->
+        </div>
+        <!--/row-->
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="form-group{% if form.type.vars.errors|length %} has-error{% endif %}">
+                    {{ form_label(form.status, 'Status', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.status, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter Status'}}) }}
+                    {% if form.createdate.vars.errors|length %}
+                        {{ form_errors(form.createdate) }}
+                    {% else %}
+                        <span class="help-block">{% trans %}Select project status{% endtrans %}</span>
+                    {% endif %}
+
+                </div>
+            </div>
+            <!--/span-->
+            <div class="col-md-6">
+                {# Бюджет - сюда нужно money control #}
+                <div class="form-group">
+                    {{ form_label(form.budget, 'Budget without VAT', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.budget, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Budget without VAT'}}) }}
+                    <span class="help-block">{% trans %}Enter Budget without VAT{% endtrans %}</span>
+                </div>
+            </div>
+            <!--/span-->
+        </div>
+        <!--/row-->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    {{ form_label(form.statusDescription, 'Status Description', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.statusDescription, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Status Description'}}) }}
+                </div>
+            </div>
+            <!--/span-->
+            <div class="col-md-6{% if form.square.vars.errors|length %} has-error{% endif %}">
+                <div class="form-group">
+                    {% if form.square.vars.errors|length %}
+                        {{ form_errors(form.square) }}
+                    {% endif %}
+                    {{ form_label(form.square, 'Square', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.square, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Square'}}) }}
+                    <span class="help-block">{% trans %}Enter Square{% endtrans %}"</span>
+                </div>
+            </div>
+            <!--/span-->
+        </div>
+        <!--/row-->
+        <div class="row">
+            <div class="col-md-6">
+
+            </div>
+            <!--/span-->
+            <div class="col-md-6">
+
+            </div>
+            <!--/span-->
+        </div>
+    </div>
+</div>
+<div class="form-actions fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-offset-3 col-md-9">
+                <a href="{{ path('lists_sales_handling_create_step2') }}" class="btn default button-previous">
+                    <i class="m-icon-swapleft"></i> Back
+                </a>
+                {{ form_widget(form.create, { 'label': 'Continue', 'attr': {'class': 'btn blue'} } ) }}
+            </div>
+        </div>
+    </div>
+</div>
+{{ form_end(form) }}

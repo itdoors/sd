@@ -1,0 +1,88 @@
+.portlet.calendar .fc-event.sd-event-next {
+    border: 0 none;
+    color: #FFFFFF;
+}
+
+.portlet.calendar .fc-event.sd-event-prev {
+    border: 0 none;
+    color: #FFFFFF;
+}
+
+.portlet.calendar .fc-event.sd-event-green {
+    background-color: #35AA47;
+}
+.sd-event-green {
+    background-color: #35AA47;
+}
+.portlet.calendar .fc-event.sd-event-blue {
+    background-color: #69A4E0;
+}
+.sd-event-blue {
+    background-color: #69A4E0;
+}
+.portlet.calendar .fc-event.sd-event-yellow {
+    background-color: #FFB848;
+}
+.sd-event-yellow {
+    background-color: #FFB848;
+}
+.portlet.calendar .fc-event.sd-event-red {
+    background-color: #E02222;
+}
+.sd-event-red {
+    background-color: #E02222;
+}
+.portlet.calendar .fc-event.sd-event-grey {
+    background-color: #999999;
+}
+.sd-event-grey {
+    background-color: #999999;
+}
+
+.sd-event-text-div{
+    display: block;
+    height: 26px;
+    font-size: 14px;
+    font-weight: bold;
+    float: left;
+    color: #FFFFFF;
+    padding: 4px;
+}
+.sd-rotate {
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+
+    /* also accepts left, right, top, bottom coordinates; not required, but a good idea for styling */
+    -webkit-transform-origin: 50% 50%;
+    -moz-transform-origin: 50% 50%;
+    -ms-transform-origin: 50% 50%;
+    -o-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+
+    /* Should be unset in IE9+ I think. */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+
+.itdoors-week-number-1 {
+    background-color: #006600;
+    color: #ffffff;
+    align-content: center;
+}
+.itdoors-week-number-2 {
+    background-color: #002a80;
+    color: #ffffff;
+    align-content: center;
+}
+.itdoors-week-number-3 {
+    background-color: #935f24;
+    color: #ffffff;
+    align-content: center;
+}
+.itdoors-week-number-4 {
+    background-color: #99a4ac;
+    color: #ffffff;
+    align-content: center;
+}

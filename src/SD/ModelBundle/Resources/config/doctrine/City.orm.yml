@@ -1,0 +1,57 @@
+SD\ModelBundle\Entity\City:
+    type: entity
+    table: city
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        population:
+            type: float
+            nullable: true
+        square:
+            type: float
+            nullable: true
+        density:
+            type: float
+            nullable: true
+        citytype:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+    manyToMany:
+        stuff:
+            targetEntity: Stuff
+            cascade: {  }
+            mappedBy: city
+            inversedBy: null
+            joinTable: null
+            orderBy: null
+    manyToOne:
+        district:
+            targetEntity: District
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                district_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        region:
+            targetEntity: Region
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                region_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

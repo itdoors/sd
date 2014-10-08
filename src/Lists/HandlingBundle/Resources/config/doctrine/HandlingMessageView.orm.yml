@@ -1,0 +1,54 @@
+Lists\HandlingBundle\Entity\HandlingMessageView:
+    type: entity
+    table: handling_message_view
+    repositoryClass: Lists\HandlingBundle\Entity\HandlingMessageViewRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        handlingId:
+            type: integer
+            nullable: true
+            column: handling_id
+        createdate:
+            type: datetime
+            nullable: true
+        typeName:
+            type: string
+            length: 128
+            column: type_name
+            nullable: true
+        typeSlug:
+            type: string
+            length: 128
+            column: type_slug
+            nullable: true
+        typeStayactiontime:
+            type: integer
+            nullable: true
+            column: type_stayactiontime
+            nullable: true
+        userId:
+            type: integer
+            nullable: true
+            column: user_id
+        additionalType:
+            type: string
+            length: 3
+            nullable: true
+            column: additional_type
+        userFullName:
+            type: string
+            length: 128
+            column: user_full_name
+            nullable: true
+    oneToOne:
+        handling:
+          targetEntity: Handling
+          inversedBy: null
+          joinColumn:
+            handling_id:
+                referencedColumnName: id

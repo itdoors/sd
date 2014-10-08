@@ -1,0 +1,82 @@
+SD\UserBundle\Entity\User:
+    type:  entity
+    table: fos_user
+    repositoryClass: SD\UserBundle\Entity\UserRepository
+    id:
+        id:
+            type: integer
+            generator: { strategy: IDENTITY }
+    fields:
+        firstName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: first_name
+        lastName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+            column: last_name
+        middleName:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: middle_name
+        position:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        photo:
+            type: string
+            length: 255
+            nullable: true
+        isBlocked:
+            type: boolean
+            nullable: true
+            column: is_blocked
+        isFired:
+            type: boolean
+            nullable: true
+            column: is_fired
+        birthday:
+            type: date
+            nullable: true
+        peerId:
+            type: integer
+            nullable: true
+            column: peer_id
+        peerPassword:
+            type: string
+            length: 255
+            nullable: true
+            column: peer_password
+    manyToMany:
+        groups:
+            targetEntity: Group
+            joinTable:
+                name: fos_user_group
+                joinColumns:
+                    user_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    group_id:
+                        referencedColumnName: id
+        teams:
+            targetEntity: Lists\TeamBundle\Entity\Team
+            mappedBy: users
+    oneToOne:
+        stuff:
+            targetEntity: Stuff
+            mappedBy: user
+    oneToMany:
+        organizationUsers:
+            targetEntity: Lists\OrganizationBundle\Entity\OrganizationUser
+            mappedBy: user
+        handlingUsers:
+            targetEntity: Lists\HandlingBundle\Entity\HandlingUser
+            mappedBy: user
+    lifecycleCallbacks: {  }

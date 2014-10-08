@@ -1,0 +1,26 @@
+# src/ITDoors/EmailBundle/Resources/config/doctrine/Email.orm.yml
+ITDoors\EmailBundle\Entity\Email:
+    type: entity
+    table: email
+    gedmo:
+        soft_deleteable:
+          field_name: deletedAt
+          time_aware: false
+    repositoryClass: ITDoors\EmailBundle\Entity\EmailRepository
+    id:
+        id:
+            type: integer
+            generator: { strategy: IDENTITY }
+    fields:
+        alias:
+            type: string
+            length: 255
+            unique: true
+        subject:
+            type: string
+            length: 255
+        text:
+            type: text
+        deletedAt:
+            type: datetime
+            nullable: true

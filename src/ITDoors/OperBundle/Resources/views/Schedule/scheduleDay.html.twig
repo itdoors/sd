@@ -1,0 +1,995 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
+<script type="text/javascript" src="{{ asset('bundles/itdoorsoper/js/multiDatePicker/bootstrap-datepicker.js')}} "></script>
+<script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.js') }}"></script>
+<link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.css')}}" />
+
+<script>
+    $(document).ready(function(){
+        function updateTableCell(hrefId) {
+            if (!hrefId) {
+                var href = $('#'+$('#info_one_day').data('id_table_href'));
+            }
+            else {
+                var href = $('#'+hrefId);
+            }
+
+            var params = href.data('params');
+            var sendData = {
+                'params': params
+            }
+            $.ajax({
+                type: 'POST',
+                url: $('#info_input').data('url_reload_href'),
+                data: sendData,
+
+                beforeSend: function() {
+                    //ITDoorsAjax.blockUI($('#'+idLastHref));
+                },
+                success: function(data) {
+                    //alert(data);
+                    //ITDoorsAjax.unblockUI($('#'+idLastHref));
+                    data = JSON.parse(data);
+                    if (data.success == 0) {
+
+                    } else {
+                        //alert(data.html)
+                        href.html(data.html);
+                    }
+                }
+
+            })
+            var idCoworker = $('#addButton').data('id_coworker');
+            var idReplacement = $('#info_one_day').data('id_replacement');
+
+            updateSums(sendData, idCoworker, idReplacement);
+        }
+
+        $('#day_header_date').html($('#info_one_day').data('header'));
+
+        $('.timepiker-cool').timepicker({
+            autoclose: true,
+            minuteStep: 5,
+            showSeconds: false,
+            showMeridian: false
+        });
+        $('#newFromTime').timepicker({
+            autoclose: true,
+            minuteStep: 5,
+            showSeconds: false,
+            showMeridian: false,
+            defaultTime: '09:00'
+        });
+        $('#newToTime').timepicker({
+            autoclose: true,
+            minuteStep: 5,
+            showSeconds: false,
+            showMeridian: false,
+            defaultTime: '18:00'
+        });
+
+        var currentDate = $('#addButton').data('date');
+        var currentDateParts = currentDate.split('-');
+        var minDate = new Date(currentDateParts[0], parseInt(currentDateParts[1])-1, +1); //one day next before month
+        var maxDate = new Date(currentDateParts[0], parseInt(currentDateParts[1]), 0); // one day before next month
+
+/*
+        var currentTime = new Date()
+        alert(currentTime.getFullYear()+' '+currentTime.getMonth());
+        var minDate = new Date(currentTime.getFullYear(), currentTime.getMonth(), +1); //one day next before month
+        var maxDate = new Date(currentTime.getFullYear(), currentTime.getMonth() +1, 0); // one day before next month
+*/
+
+        $('#copy_graf').datepicker({
+            startDate: minDate,
+            endDate: maxDate,
+            format: 'yyyy/mm/dd',
+            multidate: true,
+            weekStart: 1,
+            language: "ru"
+        }).on('show', function(e){
+            var message = $('#copy_graf').data('message');
+            $('#copy_graf').html(message);
+            $('#copy_graf_submit').show( 'slide', {}, 500);
+            $('#copy_graf_cancel').show( 'slide', {}, 500);
+        }).on('hide', function(e){
+            var text = $('#copy_graf').data('text');
+            $('#copy_graf').html(text);
+            //setTimeout("$('#copy_graf_submit').hide( 'slide', {}, 500 );",2000);
+        });
+
+        $('#copy_graf_cancel').die('click');
+        $('#copy_graf_cancel').live('click', function(e){
+            $('#copy_graf_cancel').hide( 'slide', {}, 500 );
+            $('#copy_graf_submit').hide( 'slide', {}, 500 );
+        })
+
+        $('#copy_graf_submit').die('click');
+        $('#copy_graf_submit').live('click', function(e){
+            $('#copy_error').hide('blind', {}, 500);
+            $('#copy_finished').hide('blind', {}, 500);
+            $('#copy_graf_cancel').hide( 'slide', {}, 500 );
+
+            $(this).hide( 'slide', {}, 500 );
+            var dates = $('#copy_graf').datepicker('getDates');
+            //alert(dates);
+
+            var idCoworker = $('#addButton').data('id_coworker');
+            var idDepartment = $('#addButton').data('id_department');
+            var date = $('#addButton').data('date');
+            var idReplacement = $('#info_one_day').data('id_replacement');
+
+            var sendData = {
+                'idCoworker': idCoworker,
+                'idDepartment': idDepartment,
+                'currentDate': date,
+                'dates': dates,
+                'idReplacement': idReplacement
+            }
+            $.ajax({
+                type: 'POST',
+                url: $('#info_one_day').data('url_copy'),
+                data: sendData,
+
+                beforeSend: function() {
+                    //ITDoorsAjax.blockUI($('#'+idLastHref));
+                },
+                success: function(data) {
+                    //alert(data);
+                    for (index = 0; index < dates.length; ++index) {
+                        var tempDate = new Date(dates[index]);
+                        updateTableCell('link'+tempDate.getDate()+idCoworker+idReplacement);
+                    }
+                    data = JSON.parse(data);
+                    if (data.errors == 1) {
+                        var message = '';
+                        for (var i=0; i<data.errorDay.length; i++) {
+                            message += data.errorDay[i] + '; ';
+                        }
+                        $('#copy_dates_error').html(message);
+                        $('#copy_error').show('blind', {}, 500);
+                    } else {
+                        $('#copy_finished').show('blind', {}, 500);
+                    }
+
+                }
+
+            })
+        })
+
+
+
+        $('.editButton').die('click');
+        $('.editButton').live('click', function(e){
+            e.preventDefault();
+
+            var parent = $(this).parent("td").parent("tr");
+            var spanFrom = parent.find('.timeFrom');
+            var spanTo = parent.find('.timeTo');
+            var inputFrom = parent.find('.timeFromInput');
+            var inputTo = parent.find('.timeToInput');
+            var spinClass ="fa fa-spinner fa-spin";
+            var editClass = "fa-edit";
+            var checkClass = "fa-check-circle-o";
+            var deleteButton = parent.find(".deleteButton");
+            var cancelButton = parent.find(".cancelButton");
+            var editButton = parent.find(".editButton");
+            var spinner = parent.find(".spinner");
+            var checkButton = parent.find(".checkButton");
+            var notOfficially = $(this).data('not_officially')
+            $(this).addClass('notDisplayed');
+            checkButton.removeClass('notDisplayed');
+
+            spanFrom.addClass('notDisplayed');
+            spanTo.addClass('notDisplayed');
+            inputFrom.removeClass('notDisplayed');
+            inputTo.removeClass('notDisplayed');
+
+            inputFrom.val(spanFrom.html()) ;
+            inputTo.val(spanTo.html());
+            var checked = "";
+            if (notOfficially) {
+                checked = "checked";
+            }
+            parent.after('<tr class="temp_row_checkbox"><td colspan="7">' +
+                    '{% trans %}NotOfficially{% endtrans %}: <input type="checkbox" class="temp_checkbox" '+checked+'> </td></tr>');
+
+            deleteButton.addClass('notDisplayed');
+            cancelButton.removeClass('notDisplayed');
+
+
+        })
+
+        $('.cancelButton').die('click');
+        $('.cancelButton').live('click', function(e){
+            e.preventDefault();
+
+            var parent = $(this).parent("td").parent("tr");
+            var spanFrom = parent.find('.timeFrom');
+            var spanTo = parent.find('.timeTo');
+            var inputFrom = parent.find('.timeFromInput');
+            var inputTo = parent.find('.timeToInput');
+            var spinClass ="fa fa-spinner fa-spin";
+            var editClass = "fa-edit";
+            var checkClass = "fa-check-circle-o";
+            var deleteButton = parent.find(".deleteButton");
+            var cancelButton = parent.find(".cancelButton");
+            var editButton = parent.find(".editButton");
+            var spinner = parent.find(".spinner");
+            var checkButton = parent.find(".checkButton");
+
+            $(this).addClass('notDisplayed');
+            checkButton.addClass('notDisplayed');
+            deleteButton.removeClass('notDisplayed');
+            editButton.removeClass('notDisplayed');
+
+            inputFrom.addClass('notDisplayed');
+            inputTo.addClass('notDisplayed');
+            spanFrom.removeClass('notDisplayed');
+            spanTo.removeClass('notDisplayed');
+
+            parent.next().remove();//remove the temp checkbox
+        })
+
+        $('.checkButton').die('click');
+        $('.checkButton').live('click', function(e){
+            e.preventDefault();
+
+            var parent = $(this).parent("td").parent("tr");
+            var spanFrom = parent.find('.timeFrom');
+            var spanTo = parent.find('.timeTo');
+            var inputFrom = parent.find('.timeFromInput');
+            var inputTo = parent.find('.timeToInput');
+            var spinClass ="fa fa-spinner fa-spin";
+            var editClass = "fa-edit";
+            var checkClass = "fa-check-circle-o";
+            var deleteButton = parent.find(".deleteButton");
+            var cancelButton = parent.find(".cancelButton");
+            var editButton = parent.find(".editButton");
+            var spinner = parent.find(".spinner");
+            var checkButton = parent.find(".checkButton");
+
+            $(this).addClass('notDisplayed');
+            cancelButton.addClass('notDisplayed');
+            spinner.removeClass('notDisplayed');
+
+
+            var timeFrom = inputFrom.val();
+            var timeTo = inputTo.val();
+            var officially = parent.next().find('.temp_checkbox').prop("checked");
+
+            var url = $(this).data('url');
+            var idTimeGrafik = $(this).data('id_grafik_time');
+
+            var idCoworker = $('#addButton').data('id_coworker');
+            var idDepartment = $('#addButton').data('id_department');
+            var date = $('#addButton').data('date');
+            var idReplacement = $('#info_one_day').data('id_replacement');
+
+            var sendData = {
+                'idCoworker': idCoworker,
+                'idDepartment': idDepartment,
+                'date': date,
+                'officially': !officially,
+                'fromTime': timeFrom,
+                'toTime' : timeTo,
+                'idTimeGrafik' : idTimeGrafik,
+                'idReplacement': idReplacement
+            }
+            $('.alert').hide( 'blind', {}, 500 );
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data) {
+                    //alert(data);
+                    spinner.addClass('notDisplayed');
+
+                    data = JSON.parse(data);
+                    if (data.success == 0) {
+                        if (data.error == 'no_official_permitted') {
+                            $('#non_official_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'wrong_from_to_time') {
+                            $('#wrong_date_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'fired') {
+                            $('#fired_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'subtime_having') {
+                            $('#subtime_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'advance_passed') {
+                            $('#advance_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'payment_passed') {
+                            $('#payment_error').toggle( 'blind', {}, 500 );
+                        }
+
+                        checkButton.removeClass('notDisplayed');
+                        cancelButton.removeClass('notDisplayed');
+                    }
+                    else {
+                        var tempHtml = $('#tbody_content').html();
+                        parent.next().remove();
+                        parent.replaceWith(data.html)
+/*
+                        $('.timepiker-cool').timepicker({
+                            autoclose: true,
+                            minuteStep: 5,
+                            showSeconds: false,
+                            showMeridian: false
+                        });
+*/
+                        updateTableCell(false)
+/*
+                        editButton.removeClass('notDisplayed');
+                        deleteButton.removeClass('notDisplayed');
+
+                        spanFrom.text(inputFrom.val());
+                        spanTo.text(inputTo.val());
+                        spanFrom.removeClass('notDisplayed');
+                        spanTo.removeClass('notDisplayed');
+                        inputFrom.addClass('notDisplayed');
+                        inputTo.addClass('notDisplayed');
+*/
+
+                    }
+                }
+            })
+
+            //alert (timeFrom + timeTo+ officially)
+        })
+
+
+
+
+
+        $('.deleteButton').die('click');
+        $('.deleteButton').live('click', function(e){
+            var parent = $(this).parent("td").parent("tr");
+            var deleteButton = parent.find(".deleteButton");
+            var cancelButton = parent.find(".cancelButton");
+            var editButton = parent.find(".editButton");
+            var spinner = parent.find(".spinner");
+            var checkButton = parent.find(".checkButton");
+
+
+            e.preventDefault();
+            $('.alert').hide( 'blind', {}, 500 );
+
+            var message = '{% trans %}Do you confirm deleting{% endtrans %}?'
+            if (confirm(message)) {
+                var url = $(this).data('url');
+                var idGrafikTime = $(this).data('id_grafik_time');
+
+                var idCoworker = $('#addButton').data('id_coworker');
+                var idDepartment = $('#addButton').data('id_department');
+                var date = $('#addButton').data('date');
+                var idReplacement = $('#info_one_day').data('id_replacement');
+                var sendData = {
+                    'idCoworker': idCoworker,
+                    'idDepartment': idDepartment,
+                    'date': date,
+                    'idGrafikTime': idGrafikTime,
+                    'idReplacement': idReplacement
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: sendData,
+
+                    beforeSend: function() {
+                        spinner.removeClass('notDisplayed');
+                        editButton.addClass('notDisplayed');
+                        deleteButton.addClass('notDisplayed');
+                    },
+                    success: function(data) {
+                        //alert(data);
+                        ITDoorsAjax.unblockUI($(parent));
+                        data = JSON.parse(data);
+                        if (data.success == 0) {
+                            if (data.error == 'no_entity_found') {
+                                spinner.addClass('notDisplayed');
+                                editButton.removeClass('notDisplayed');
+                                deleteButton.removeClass('notDisplayed');
+                                alert('Oops, error happened');
+                            }
+                            if (data.error == 'advance_passed') {
+                                $('#advance_error').toggle( 'blind', {}, 500 );
+                            }
+                            if (data.error == 'payment_passed') {
+                                $('#payment_error').toggle( 'blind', {}, 500 );
+                            }
+                        }
+                        else {
+                            parent.remove();
+                            updateTableCell(false)
+                        }
+                    }
+                })
+
+            } else {
+                return false;
+            }
+            //ajax here
+        })
+
+        // set effect from select menu value
+        $( "#add_button" ).click(function() {
+            changeAddButtonValue();
+            return false;
+        });
+        function changeAddButtonValue() {
+            var options = {};
+            if ($("#add_button").html() == '{% trans %}Cancel{% endtrans %}') {
+                $( "#add_div" ).hide( 'blind', options, 500 );
+                $("#add_button").html('{% trans %}Add{% endtrans %}');
+            } else {
+                $( "#add_div" ).show( 'blind', options, 500 );
+                $("#add_button").html('{% trans %}Cancel{% endtrans %}');
+            }
+        }
+        function hideAddButton() {
+            var options = {};
+            $( "#add_div" ).hide( 'blind', options, 500 );
+            $("#add_button").html('{% trans %}Add{% endtrans %}');
+        }
+
+        $('#addButton').die('click');
+        $('#addButton').live('click', function(e){
+            $('.alert').hide( 'blind', {}, 500 );
+            var timeFrom = $('#newFromTime').val();
+            var timeTo = $('#newToTime').val();
+            var officially = $('#officially').prop("checked");
+
+            var url = $(this).data('url');
+            var idCoworker = $(this).data('id_coworker');
+            var idDepartment = $(this).data('id_department');
+            var date = $(this).data('date');
+            var idReplacement = $('#info_one_day').data('id_replacement');
+
+            var sendData ={
+                'idCoworker': idCoworker,
+                'idDepartment': idDepartment,
+                'date': date,
+                'officially': !officially,//change due to fast fixes before staging
+                'fromTime': timeFrom,
+                'toTime' : timeTo,
+                'idReplacement': idReplacement
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+
+                beforeSend: function() {
+                    ITDoorsAjax.blockUI($('#add_div'));
+                },
+                success: function(data) {
+                    //alert(data);
+                    ITDoorsAjax.unblockUI($('#add_div'));
+                    data = JSON.parse(data);
+                    if (data.success == 0) {
+                        if (data.error == 'no_official_permitted') {
+                            $('#non_official_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'wrong_from_to_time') {
+                            $('#wrong_date_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'fired') {
+                            $('#fired_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'subtime_having') {
+                            $('#subtime_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'advance_passed') {
+                            $('#advance_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'payment_passed') {
+                            $('#payment_error').toggle( 'blind', {}, 500 );
+                        }
+                    }
+                    else {
+                        //alert(data.html)
+                        var tempHtml = $('#tbody_content').html();
+                        $('#tbody_content').html(data.html+tempHtml);
+/*
+                        $('.timepiker-cool').timepicker({
+                            autoclose: true,
+                            minuteStep: 5,
+                            showSeconds: false,
+                            showMeridian: false
+                        });
+*/
+                        hideAddButton()
+
+                        updateTableCell(false)
+
+                    }
+                }
+            })
+
+        })
+
+        $('.statusButton').die('click');
+        $('.statusButton').live('click', function(e) {
+            e.preventDefault();
+
+            var url = $('#statusHolder').data('url');
+            var status = $(this).data('status');
+            var message = $(this).data('message');
+
+            var idCoworker = $('#addButton').data('id_coworker');
+            var idDepartment = $('#addButton').data('id_department');
+            var date = $('#addButton').data('date');
+            var idReplacement = $('#info_one_day').data('id_replacement');
+
+            var sendData = {
+                'idCoworker': idCoworker,
+                'idDepartment': idDepartment,
+                'date': date,
+                'status': status,
+                'idReplacement': idReplacement
+            }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                beforeSend: function() {
+                    //ITDoorsAjax.blockUI($('#add_div'));
+                },
+                success: function(data) {
+                    data = JSON.parse(data);
+                    if (data.success == 0) {
+                        if (data.error == 'advance_passed') {
+                            $('#advance_error').toggle( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'payment_passed') {
+                            $('#payment_error').toggle( 'blind', {}, 500 );
+                        }
+                    } else {
+
+                        $('#status_span').html(message);
+                        $('#status_changed').show( 'blind', {}, 500 );
+                        updateTableCell(false);
+
+                        if (status != 'ok') {
+                            $('#add_button').addClass('notDisplayed');
+                            $('#one_day_table').addClass('notDisplayed');
+                            $('#status_name_holder').removeClass('notDisplayed');
+                            hideAddButton()
+                            $('#status_name_holder').removeClass('notDisplayed');
+
+                            $('#status_name').html(message);
+                            $('#has_cooperation_block').hide();
+                            $('#has_not_cooperation_block').hide();
+
+                        } else {
+                            $('#tbody_content').html('');
+                            $('#add_button').removeClass('notDisplayed');
+                            $('#one_day_table').removeClass('notDisplayed');
+                            $('#status_name_holder').addClass('notDisplayed');
+
+                            $('#has_cooperation_block').hide();
+                            $('#has_not_cooperation_block').hide();
+                            $('#has_not_cooperation_block').show();
+                        }
+                    }
+
+                }
+            })
+
+        })
+
+        function changeCooperateButtonValue() {
+            var options = {};
+            if ($("#cooperate_button").html() == '{% trans %}Cancel{% endtrans %}') {
+                $( "#cooperation_holder" ).hide( 'blind', options, 500 );
+                $("#cooperate_button").html('{% trans %}Add cooperation{% endtrans %}');
+                $(this).removeClass('red');
+                $(this).addClass('yellow')
+
+            } else {
+                $( "#cooperation_holder" ).show( 'blind', options, 500 );
+                $("#cooperate_button").html('{% trans %}Cancel{% endtrans %}');
+                $(this).removeClass('yellow');
+                $(this).addClass('red');
+            }
+        }
+
+        function str_replace(search, replace, subject) {
+            return subject.split(search).join(replace);
+        }
+
+        $('#cooperate_button_submit').die('click');
+        $('#cooperate_button_submit').live('click', function(e) {
+            var idCoworker = $('#info_one_day').data('id_coworker');
+            var idReplacement = $('#info_one_day').data('id_replacement');
+
+            var idCooperation = $('#coworker_list option:selected').val();
+            var date = $('#info_one_day').data('date')
+            var idDepartment = $('#info_one_day').data('id_department');
+            var url = $('#info_one_day').data('url_change_cooperation');
+
+            var percent = $('#percent_cooperation').val();
+            percent = str_replace(',' ,'.' ,percent);
+            percent = parseFloat(percent);
+            if (!percent) {
+                percent = 0;
+            }
+            if (idCooperation == idCoworker) {
+                alert($('#info_one_day').data('message_cooperation_error'));
+            } else if (percent<1 || percent>50) {
+                alert($('#info_one_day').data('message_percent_error'));
+            } else {
+
+                var sendData = {
+                    'idCoworker': idCoworker,
+                    'idDepartment': idDepartment,
+                    'date': date,
+                    'idCooperation': idCooperation,
+                    'idReplacement': idReplacement,
+                    'percent': percent
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: sendData,
+                    beforeSend: function() {
+                        //ITDoorsAjax.blockUI($('#add_div'));
+                    },
+                    success: function(data) {
+                        data = JSON.parse(data);
+                        if (data.success == 0) {
+                            if (data.error == 'advance_passed') {
+                                $('#advance_error').show( 'blind', {}, 500 );
+                            }
+                            if (data.error == 'payment_passed') {
+                                $('#payment_error').show( 'blind', {}, 500 );
+                            }
+                        } else {
+                            var fio_mpk_cooperation = $('#coworker_list option:selected').html() +' ['+percent+'%]';
+                            $('#fio_mpk_cooperation').html(fio_mpk_cooperation);
+                            $('#has_cooperation_block').show();
+                            $('#has_not_cooperation_block').hide();
+                            updateTableCell(false)
+                        }
+                    }
+
+                })
+            }
+        })
+
+        $('#delete_cooperate_button').die('click');
+        $('#delete_cooperate_button').live('click', function(e) {
+            var idCoworker = $('#info_one_day').data('id_coworker');
+            var idReplacement = $('#info_one_day').data('id_replacement');
+
+            var date = $('#info_one_day').data('date')
+            var idDepartment = $('#info_one_day').data('id_department');
+            var url = $('#info_one_day').data('url_change_cooperation');
+
+            var sendData = {
+                'idCoworker': idCoworker,
+                'idDepartment': idDepartment,
+                'date': date,
+                'idCooperation': 0,
+                'idReplacement': idReplacement,
+                'percent': 0
+            }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                beforeSend: function() {
+                    //ITDoorsAjax.blockUI($('#add_div'));
+                },
+                success: function(data) {
+                    data = JSON.parse(data);
+                    if (data.success == 0) {
+                        if (data.error == 'advance_passed') {
+                            $('#advance_error').show( 'blind', {}, 500 );
+                        }
+                        if (data.error == 'payment_passed') {
+                            $('#payment_error').show( 'blind', {}, 500 );
+                        }
+                    } else {
+                        $('#has_cooperation_block').hide();
+                        $('#has_not_cooperation_block').show();
+                        updateTableCell(false)
+                    }
+                }
+
+            })
+        });
+
+        $('#cooperate_button').die('click');
+        $('#cooperate_button').live('click', function(e) {
+            e.preventDefault();
+            changeCooperateButtonValue()
+            if ($(this).hasClass('yellow')) {
+                $(this).removeClass('yellow');
+                $(this).addClass('red')
+
+            } else {
+                $(this).removeClass('red');
+                $(this).addClass('yellow')
+            }
+        })
+
+        $('#coworker_list').select2();
+
+    })
+
+</script>
+
+{% if canEdit %}
+<div>
+    <a class="btn purple {% if status != 'ok' %}notDisplayed{% endif %}" id="add_button">{% trans %}Add{% endtrans %}</a>
+<li class="btn-group" style="float: right; ">
+    <a class="btn green notDisplayed" style="margin-right: 10px;" id="copy_graf_submit">{% trans %}Copy{% endtrans %}</a>
+    <a class="btn red notDisplayed" style="margin-right: 10px;" id="copy_graf_cancel">{% trans %}Cancel{% endtrans %}</a>
+    <a class="btn green" style="margin-right: 10px; width: 200px;" id="copy_graf"
+       data-message="{% trans %}Select dates{% endtrans %}"
+       data-text="{% trans %}Copy graf{% endtrans %}"
+
+            >{% trans %}Copy graf{% endtrans %}</a>
+
+    <button type="button" class="btn blue dropdown-toggle " data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true">
+							<span>
+								{% trans %}Actions{% endtrans %}
+							</span>
+        <i class="fa fa-angle-down"></i>
+    </button>
+    <ul class="dropdown-menu pull-right" role="menu" id="statusHolder" data-url="{{ path('it_doors_oper_schedule_update_status_coworker') }}">
+        <li>
+            <a href="#" class="statusButton" data-status="sick" data-message="{% trans %}Sick{% endtrans %}">
+                {% trans %}Sick{% endtrans %} (тн)
+            </a>
+        </li>
+        <li>
+            <a href="#" class="statusButton" data-status="skip" data-message="{% trans %}Skip{% endtrans %}">
+                {% trans %}Skip{% endtrans %} (пр)
+            </a>
+        </li>
+        <li>
+            <a href="#" class="statusButton" data-status="fired" data-message="{% trans %}Fired{% endtrans %}">
+                {% trans %}Fired{% endtrans %} (ув)
+            </a>
+        </li>
+        <li>
+            <a href="#" class="statusButton" data-status="vacation" data-message="{% trans %}Vacation{% endtrans %}">
+                {% trans %}Vacation{% endtrans %} (в)
+            </a>
+        </li>
+        <li>
+            <a href="#" class="statusButton" data-status="ownVacation" data-message="{% trans %}Own vacation{% endtrans %}">
+                {% trans %}Own vacation{% endtrans %} (на)
+            </a>
+        </li>
+        <li class="divider">
+        </li>
+        <li>
+            <a href="#" class="statusButton" data-status="ok" data-message="{% trans %}Cleared{% endtrans %}">
+                {% trans %}Clear{% endtrans %}
+            </a>
+        </li>
+    </ul>
+</li>
+</div>
+<div class="clear"></div>
+<div style="height: 50px; width: 100%; margin-top: 10px; display: none;" id="add_div">
+    <table width="60%">
+        <tr>
+            <td><b>{% trans %}Range{% endtrans %}:</b></td>
+            <td>
+                {% trans %}From{% endtrans %}
+                <input class="input-sm" size="5" id="newFromTime" value="09:00" type="text">
+            </td>
+            <td>
+                {% trans %}To{% endtrans %}
+                <input class="input-sm" size="5" id="newToTime" value="18:00" type="text">
+            </td>
+            <td>
+                <b>{% trans %}NotOfficially{% endtrans %}:</b>
+                <input type="checkbox" id="officially">
+            </td>
+            <td>
+                <button class="btn blue" id="addButton"
+                        data-id_coworker="{{ idCoworker }}"
+                        data-date="{{ date }}"
+                        data-id_department="{{ idDepartment }}"
+                        data-url="{{ path('it_doors_oper_schedule_add_new_time') }}">{% trans %}Add{% endtrans %}</button>
+            </td>
+        </tr>
+    </table>
+
+
+</div>
+<br>
+<div class="alert alert-danger notDisplayed" id="non_official_error">
+    <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Non-official person cant  work officially{% endtrans %}
+</div>
+<div class="alert alert-danger notDisplayed" id="wrong_date_error">
+    <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Wrong from-to time{% endtrans %}
+</div>
+<div class="alert alert-danger notDisplayed" id="fired_error">
+    <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Coworker was fired{% endtrans %}
+</div>
+<div class="alert alert-danger notDisplayed" id="subtime_error">
+    <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}This time is already busy{% endtrans %}
+</div>
+<div class="alert alert-danger notDisplayed" id="copy_error">
+    <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Dates, what haven't been copied{% endtrans %}:
+    <span id="copy_dates_error"></span>
+</div>
+<div class="alert alert-danger notDisplayed" id="advance_error">
+    <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Advance passed{% endtrans %}:
+</div>
+<div class="alert alert-danger notDisplayed" id="payment_error">
+    <strong>{% trans %}Error{% endtrans %}</strong> {% trans %}Payment passed{% endtrans %}:
+</div>
+
+<div class="alert alert-success notDisplayed" id="status_changed">
+    <strong>{% trans %}Success{% endtrans %}</strong> {% trans %}Status changed for{% endtrans %}:
+    "<span id="status_span"></span>"
+</div>
+<div class="alert alert-success notDisplayed" id="copy_finished">
+    <strong>{% trans %}Success{% endtrans %}</strong> {% trans %}All dates where copied{% endtrans %}
+</div>
+{% endif %}
+
+
+
+<style>
+    .action_button{
+        cursor: pointer;
+    }
+    .action_button:hover{
+        color: red;
+    }
+    .fa-check-circle-o:hover{
+        color: green;
+    }
+
+    .td_not_officialy{
+        color: blue;
+    }
+
+    .td_officialy{
+        color: green;
+    }
+    .clear{
+        height:0;
+        font-size:1px;
+        line-height:0px;
+        clear:both;
+    }
+
+    .notDisplayed{
+        display: none;
+    }
+    .timeFrom, .timeTo{
+        /*width: 25px;*/
+    }
+</style>
+
+{% if mpk is not empty %}
+    ({{ mpk }})
+{% endif %}
+{{ fio }}
+
+    <span id="has_cooperation_block" {% if cooperation.exists==false %}class="notDisplayed"{% endif %}>
+        <u>{% trans %}Cooperate{% endtrans %}</u>
+        <span id="fio_mpk_cooperation">
+            {% if cooperation.exists %}
+                {% if cooperation.mpk is not empty %}
+                    ({{ cooperation.mpk }})
+                {% endif %}
+                {{ cooperation.fio }} [{{ cooperation.percent }}%]
+            {% endif %}
+        </span>
+        {% if canEdit %}
+            <a class="btn red " style="margin: 0px 10px 0px 10px;" id="delete_cooperate_button">{% trans %}Delete cooperation{% endtrans %}</a>
+        {% endif %}
+    </span>
+    <span id="has_not_cooperation_block" {% if cooperation.exists %}class="notDisplayed"{% endif %}>
+        {% if canEdit %}
+            <a class="btn yellow " style="margin: 0px 10px 0px 10px;" id="cooperate_button">{% trans %}Add cooperation{% endtrans %}</a>
+            <div id="cooperation_holder" class="notDisplayed">
+                <br>
+                {% trans %}Cooperate coworker{% endtrans %}:
+                <select id="coworker_list" style="width: 300px;">
+                    {% for filterCoworker in filterCoworkers %}
+                        <option value="{{ filterCoworker.id }}">
+                            {% if filterCoworker.mpkName is not empty %}
+                                ({{ filterCoworker.mpkName }})
+                            {% endif %}
+                            {{ filterCoworker.lastName }} {{ filterCoworker.firstName }} {{ filterCoworker.middleName }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <input type="text" id="percent_cooperation" placeholder="{% trans %}Value{% endtrans %} (%)" size="10" style="margin-left: 5px;">
+                <a class="btn blue" style="margin: 0px 10px 0px 10px;" id="cooperate_button_submit">{% trans %}Add{% endtrans %}</a>
+            </div>
+        {% endif %}
+    </span>
+
+
+<div id="status_name_holder" style="margin-bottom: 150px; text-align: center;" class="{% if status == 'ok' %}notDisplayed{% endif %}">
+    <h1>
+        {% trans %}Status{% endtrans %}: <span id="status_name"
+              data-sick="{% trans %}Sick{% endtrans %} (тн)"
+              data-fired="{% trans %}Fired{% endtrans %} (ув)"
+              data-skip="{% trans %}Skip{% endtrans %} (пр)"
+              date-vacation="{% trans %}Vacation{% endtrans %} (в)"
+              date-own_vacation="{% trans %}Own vacation{% endtrans %} (на)">
+            {% if status == 'vacation' %}
+                {% trans %}Vacation{% endtrans %}
+            {% elseif status == 'ownVacation' %}
+                {% trans %}Own vacation{% endtrans %}
+            {% elseif status == 'sick' %}
+                {% trans %}Sick{% endtrans %}
+            {% elseif status == 'skip' %}
+                {% trans %}Skip{% endtrans %}
+            {% elseif status == 'fired' %}
+                {% trans %}Fired{% endtrans %}
+            {% endif %}
+        </span>
+    </h1>
+</div>
+<br>
+<table id="one_day_table" class="table table-striped table-hover table-bordered {% if status != 'ok' %}notDisplayed{% endif %}" style="margin-top: 10px;">
+    <thead>
+        <tr>
+            <th colspan="2">{% trans %}Range{% endtrans %}</th>
+            <th>{% trans %}Sum{% endtrans %}</th>
+            <th>{% trans %}Day kind{% endtrans %}</th>
+            <th>{% trans %}Evening kind{% endtrans %}</th>
+            <th>{% trans %}Night kind{% endtrans %}</th>
+            {% if canEdit %}
+                <th></th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody id="tbody_content">
+    {% if coworkerDayTime is defined%}
+        {% for oneDayTime in coworkerDayTime %}
+
+            {{ render(controller('ITDoorsOperBundle:OperSchedule:scheduleTableRow', {
+            'oneDayTime': oneDayTime,
+            'canEdit': canEdit
+            })) }}
+
+        {% endfor %}
+
+    {% endif %}
+
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="2">{% trans %}Range{% endtrans %}</th>
+            <th>{% trans %}Sum{% endtrans %}</th>
+            <th>{% trans %}Day kind{% endtrans %}</th>
+            <th>{% trans %}Evening kind{% endtrans %}</th>
+            <th>{% trans %}Night kind{% endtrans %}</th>
+            {% if canEdit %}
+                <th></th>
+            {% endif %}
+        </tr>
+    </tfoot>
+</table>
+<input type="hidden" id="info_one_day"
+       data-id_table_href ="{{ idLink }}"
+       data-url_copy = "{{ path('it_doors_oper_schedule_copy_month_dates') }}"
+       data-id_replacement="{{ idReplacement }}"
+       data-header="{{ day }} {{ monthName|trans }} {{ year }} - {{ stringDay|trans }} "
+       data-id_coworker="{{ idCoworker }}"
+       data-date="{{ date }}"
+       data-id_department="{{ idDepartment }}"
+       data-message_cooperation_error = "{% trans %}Self cooperation not allowed{% endtrans %}"
+       data-url_change_cooperation= "{{ path('it_doors_oper_schedule_change_cooperation') }}"
+       data-message_percent_error = "{% trans %}Allowed percent range{% endtrans %}: 1%-50%"
+        >

@@ -1,0 +1,16 @@
+parameters:
+    lists_team.form.class: Lists\TeamBundle\Form\TeamFormType
+    lists_team.repository.class: Lists\TeamBundle\Entity\TeamRepository
+    lists_team.repository.entity: Lists\TeamBundle\Entity\Team
+
+services:
+    lists_team.form.teamForm:
+        class: %lists_team.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: teamForm }
+    lists_team.repository:
+        class: %lists_team.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_team.repository.entity% ]

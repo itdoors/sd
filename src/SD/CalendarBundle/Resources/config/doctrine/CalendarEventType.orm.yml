@@ -1,0 +1,26 @@
+SD\CalendarBundle\Entity\CalendarEventType:
+    type:  entity
+    table: calendar_event_type
+    repositoryClass: SD\CalendarBundle\Entity\CalendarEventTypeRepository
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            length: 128
+            nullable: false
+        color:
+            type: string
+            length: 255
+            nullable: false
+        slug:
+            type: string
+            length: 16
+            nullable: false
+        modelName:
+            type: string
+            length: 16
+            nullable: true

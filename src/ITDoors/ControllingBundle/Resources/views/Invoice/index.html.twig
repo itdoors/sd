@@ -1,0 +1,115 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ITDoorsControllingBundle' %}
+{% block title %}{% trans %}List of debtors{% endtrans %} {% endblock %}
+{% block page_title %}
+<h3 class="page-title">
+        {% trans %}Invoice <small>list of debtors</small>{% endtrans %}
+</h3>
+{% endblock %}
+
+{% block page_breadcrumbs %}
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+         <i class="fa fa-home"></i>
+         <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        <i class="fa fa-angle-right"></i>
+    </li>
+    <li>
+        <a href="{{ path('it_doors_controlling_invoice') }}" title="{% trans %}Invoices{% endtrans %}">{% trans %}Invoices{% endtrans %}</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/css/datepicker.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="actions">
+                    <div class="btn-group">
+                        <a class="btn default yellow-stripe" href="{{ path('it_doors_controlling_invoice_export_exel')}}"{# data-toggle="dropdown"#}>
+                            <i class="fa fa-share"></i>
+                            <span class="hidden-480">{% trans %}Export to Excel{% endtrans %}</span>
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+                            <script>
+            $(document).ready(function(){
+                $('.daterangepicker').daterangepicker(
+                        {
+                            ranges: {
+                            'Текущий месяц': [moment().startOf('month'), moment().endOf('month')],
+                            'Текущий год': [moment().startOf('year'), moment().endOf('year')]
+                           },
+                           format: "DD.MM.YYYY",
+                            startDate: moment().startOf('year'),
+                            endDate: moment().endOf('year'),
+                            locale: {
+                                applyLabel: 'ОК',
+                                cancelLabel: 'Отмена',
+                                fromLabel: 'от',
+                                toLabel: 'до',
+                                customRangeLabel: 'Выбрать диапазон',
+                                daysOfWeek: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб','Вс'],
+                                monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                                firstDay: 1
+                            }
+                        }
+                );
+
+            });
+        </script>
+        <style>
+            .input-daterange{
+                outline: 0;
+                height: auto;
+                min-height: 32px;
+                padding: 6px 6px;
+                line-height: 20px;
+                font-size: 14px;
+                font-weight: normal;
+                vertical-align: top;
+                font-size: 100%;
+                color: #666;
+                outline: 0;
+                border: 0;
+                -webkit-box-shadow: none;
+                -moz-box-shadow: none;
+                box-shadow: none;
+                background: transparent !important;
+                border: 1px solid #e5e5e5;
+                top: 0px;
+                left: 15px;
+                width: 250px;
+                margin: 0;
+            }
+        </style>
+        {{ ajax_filter_render(filter, namespace, {
+            'datatable_ajax_tab': 'ITDoorsAjax.updateList'
+        }) }}
+        <div class="tabbable tabbable-custom boxless">
+            <div class="tab-content" id="datatable_ajax_tab" data-url="{{ url('it_doors_controlling_invoice_show_tab') }}">
+                 {{ render(controller('ITDoorsControllingBundle:Invoice:showtab')) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

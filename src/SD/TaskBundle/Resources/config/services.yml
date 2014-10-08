@@ -1,0 +1,30 @@
+parameters:
+#    sd_task.example.class: SD\TaskBundle\Example
+    sd_task.task.form.class: SD\TaskBundle\Form\TaskForm
+    sd_task.task.file.form.class: SD\TaskBundle\Form\TaskFileForm
+    sd_task.task.file.service.class: SD\TaskBundle\Services\TaskFileService
+    sd_task.task.service.class: SD\TaskBundle\Services\TaskService
+
+services:
+#    sd_task.example:
+#        class: %sd_task.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
+    sd_task.form.taskForm:
+        class: %sd_task.task.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: taskForm1 }
+
+    sd_task.form.taskFileForm:
+        class: %sd_task.task.file.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: taskFileForm }
+
+    task.file.form.service:
+        class: %sd_task.task.file.service.class%
+        arguments: [@service_container]
+
+    task.service:
+        class: %sd_task.task.service.class%
+        arguments: [@service_container]

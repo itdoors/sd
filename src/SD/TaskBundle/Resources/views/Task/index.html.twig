@@ -1,0 +1,413 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'SDTaskBundle' %}
+{% block title %} {% trans %}List tasks{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li><a href="" title="{% trans   %}Tasks{% endtrans %}">{% trans %}Tasks{% endtrans %}</a></li>
+    </ul>
+{% endblock %}
+{% block page_title %}
+{#
+    <h3 class="page-title">
+        {% trans %}Tasks{% endtrans %} <small>{% trans %}Tasks list{% endtrans %}</small>
+    </h3>
+#}
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/itdoorsoper/css/details.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/admin/pages/css/todo.css') }}" />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
+    <script src="{{ asset('bundles/itdoorsoper/js/tabs_department_info.js')}}" ></script>
+{% endblock %}
+
+{% block body %}
+    <style>
+        .notDisplayed{
+            display: none;
+        }
+    </style>
+    <script>
+        $(document).ready(function(){
+            $('.task-item').die('click')
+            $('.task-item').live('click', function(e){
+                clearTaskContent();
+                showSpinner()
+                var obj = this;
+                var id = $(obj).data('id');
+                var url = $('#more_info_input').data('url_get_task_view');
+                var sendData = {
+                    'id': id
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: sendData,
+                    success: function(data1) {
+                        //alert(data1)
+                        data = JSON.parse(data1);
+                        if (data.success == 1) {
+                            hideSpinner();
+                            setTaskContent(data.html);
+                        } else {
+                            //$('#copy_etalon_finished').show('blind', {}, 500);
+                        }
+                    }
+                })
+            })
+            $('#taskFilterButton').die('click');
+            $('#taskFilterButton').bind('click', function(e){
+                e.preventDefault();
+
+                var spinner = $('#spinner');
+                spinner.removeClass('notDisplayed');
+
+                var filtersCheckboxes = $('.roleFilter:checked');
+                var filter = new Array();
+                var filterRole = new Array();
+
+                for (var i=0; i<filtersCheckboxes.length; i++) {
+                    filterRole.push(filtersCheckboxes[i].value);
+                }
+
+                var showClosed = $("#oldFilter").prop("checked");
+                if (showClosed) {
+                    showClosed = 1;
+                } else {
+                    showClosed = 0;
+                }
+                filter = {
+                    'role': filterRole
+                }
+                var url = $('#more_info_input').data('url_get_task_list');
+                var sendData = {
+                    'filter': filter,
+                    'showClosed': showClosed
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: sendData,
+                    success: function(data1) {
+                        spinner.addClass('notDisplayed');
+                        setTaskListContent(data1);
+
+                        //data = JSON.parse(data1);
+
+/*
+                        if (data.success == 1) {
+                            //console.log(data.html);
+                            spinner.addClass('notDisplayed');
+                            setTaskListContent(data.html);
+                            //ITDoorsAjax.unblockUI($('#tasks_list'));
+                            //$('#tasks_list').html('').html(data.html);
+                            //$('#form_modal_task_view').modal('show');
+                        } else {
+                            alert('error');
+                            //$('#copy_etalon_finished').show('blind', {}, 500);
+                        }
+*/
+
+                    }
+
+                })
+            })
+
+
+        })
+
+        function setTaskContent(html) {
+            $('#task_holder').html('')
+            $('#task_holder').html(html)
+        }
+
+        function setTaskListContent(html) {
+            $('.todo-tasklist').html('')
+            $('.todo-tasklist').html(html)
+        }
+
+        function clearTaskContent() {
+            $('#task_holder').html('')
+        }
+
+        function showSpinner() {
+            var spinner = $('#spinner');
+            spinner.removeClass('notDisplayed');
+        }
+
+        function hideSpinner() {
+            var spinner = $('#spinner');
+            spinner.addClass('notDisplayed');
+        }
+
+    </script>
+
+{#
+    {{ ajax_form_render_btn({
+        'selector' : '#create_task_btn',
+        'formType' : 'taskForm1',
+        'successFunctions' : {
+            'list_files' : 'ITDoorsAjax.updateList'
+        },
+        'serviceDefault' : {
+            'alias' : 'task.form.service',
+            'method' : 'addFormDefaults'
+        },
+        'serviceSave' : {
+            'alias' : 'task.form.service',
+            'method' : 'saveForm'
+        },
+        'target' : '#task_holder'
+        })
+    }}
+#}
+
+    <div id="form_modal_task" class="modal fade" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">{% trans %}Create task{% endtrans %}</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="taskFormTpl1"></div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+    </div>
+
+
+    <!-- END PAGE HEADER-->
+    <!-- BEGIN PAGE CONTENT-->
+    <div class="row">
+    <div class="col-md-12">
+    <!-- BEGIN TODO SIDEBAR -->
+    <div class="todo-sidebar">
+        <div class="portlet light">
+            <div class="portlet-title">
+                <div class="caption" data-toggle="collapse" data-target=".todo-project-list-content">
+                    <span class="caption-subject font-green-sharp bold uppercase">{% trans %}Tasks{% endtrans %} </span>
+                    <span class="caption-helper visible-sm-inline-block visible-xs-inline-block">click to view project list</span>
+                </div>
+                <div class="actions">
+                    <div class="btn-group">
+                        <a class="btn green-haze btn-circle btn-sm todo-projects-config" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                            <i class="fa fa-filter{#icon-settings#}"></i> &nbsp; <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu hold-on-click dropdown-checkboxes pull-right">
+
+                            {% for taskRole in allTaskRoles %}
+                                {% if taskRole == 'author' %}
+                                    {% set icon = 'fa-pencil' %}
+                                    {% set label = 'label-danger' %}
+                                    {% set checked = '' %}
+                                {% elseif taskRole == 'performer' %}
+                                    {% set icon = 'fa-rocket' %}
+                                    {% set label = 'label-info' %}
+                                    {% set checked = 'checked' %}
+                                {% elseif taskRole == 'controller' %}
+                                    {% set icon = 'fa-crosshairs' %}
+                                    {% set label = 'label-warning' %}
+                                    {% set checked = '' %}
+                                    {#
+                                        {% elseif taskUserRole == 'done' %}
+                                            {% set icon = 'orange' %}
+                                            fa-eye
+                                    #}
+                                {% endif %}
+                                <li><label><input type="checkbox" class="roleFilter" value="{{ taskRole }}" {{ checked }}/>{{ taskRole|trans }}</label></li>
+                            {% endfor %}
+                            {#
+                                            <label><input type="checkbox" id="set_filters_on"/>{% trans %}All{% endtrans %}</label>
+                            #}
+                            {#
+                                            <label><input type="checkbox"/> System</label>
+                            #}
+                            <li class="divider">
+                            </li>
+                            <li>
+                                <label><input type="checkbox" id="oldFilter" value="1"/>{% trans %}Show closed{% endtrans %}</label>
+                            </li>
+                            <li class="divider">
+                            </li>
+                            <li>
+                                <a class="btn red" id="taskFilterButton" >
+                                    <span style="color: white;">{% trans %}Filter{% endtrans %}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-body todo-project-list-content">
+                <div class="todo-project-list">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li class="active">
+                            <a href="">
+                                <span class="badge badge-active"> {{ countTasks }} </span>
+                                {% trans %}Tasks{% endtrans %}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="alert('Документы в разработке')">
+                                <span class="badge badge-active"> 0 </span>
+                                {% trans %}Documents{% endtrans %}
+                            </a>
+                        </li>
+                        {#
+                                                {% for taskRole in allTaskRoles %}
+                                                    {% if taskRole == 'author' %}
+                                                        {% set icon = 'fa-pencil' %}
+                                                        {% set label = 'badge-danger' %}
+                                                    {% elseif taskRole == 'performer' %}
+                                                        {% set icon = 'fa-rocket' %}
+                                                        {% set label = 'badge-info' %}
+                                                    {% elseif taskRole == 'controller' %}
+                                                        {% set icon = 'fa-crosshairs' %}
+                                                        {% set label = 'badge-warning' %}
+                                                        &#123;&#35;
+                                                            {% elseif taskUserRole == 'done' %}
+                                                                {% set icon = 'orange' %}
+                                                                fa-eye
+                                                        &#35;&#125;
+                                                    {% endif %}
+                                                    <li &#123;&#35;class="active"&#35;&#125;>
+                                                        <a href="#">
+                                                            <span class="{{ label }} badge &#123;&#35;badge-active&#35;&#125;"> 1 </span>
+                                                            {{ taskRole|trans }}
+                                                        </a>
+                                                    </li>
+                                                {% endfor %}
+                        #}
+                    </ul>
+                </div>
+                <h3>{% trans %}Keys{% endtrans %}</h3>
+                <span class="badge badge-danger badge-active">&nbsp;  </span> - {% trans %}author{% endtrans %}<br>
+                <span class="badge badge-info badge-active">&nbsp;  </span> - {% trans %}performer{% endtrans %}<br>
+                <span class="badge badge-warning badge-active">&nbsp;  </span> - {% trans %}controller{% endtrans %}<br>
+                <span class="badge badge-success badge-active">&nbsp;  </span> - {% trans %}matcher{% endtrans %}<br>
+                <span class="badge badge-default badge-active">&nbsp;  </span> - {% trans %}viewer{% endtrans %}<br>
+            </div>
+        </div>
+    </div>
+    <!-- END TODO SIDEBAR -->
+    <!-- BEGIN TODO CONTENT -->
+    <div class="todo-content">
+    <div class="portlet light">
+    <!-- PROJECT HEAD -->
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-bar-chart font-green-sharp hide"></i>
+             &nbsp;
+            <span class="caption-subject font-green-sharp bold uppercase">
+                {% trans %}Tasks list{% endtrans %}
+            </span>
+            <span class="caption-helper">
+                <i class="fa fa-spinner fa-spin notDisplayed" id="spinner"></i>
+            </span>
+        </div>
+        <div class="actions">
+            <div class="btn-group">
+                <a class="btn green-haze btn-circle btn-sm ajax-form"
+                   {#data-toggle="modal"#}
+                   {#href="#form_modal_task"#}
+                   data-target_holder="task_holder"
+                   data-form_name="taskForm1"
+                   data-post_function="updateList"
+                   data-post_target_id="task_list"
+                        >{% trans %}Create task{% endtrans %}
+                    <i class="fa fa-plus"></i>
+                </a>
+
+{#
+                <button class="btn green-haze btn-circle btn-sm ajax-form" href="#" id="create_task_btn" >
+                    {% trans %}Create task{% endtrans %}
+                    <i class="fa fa-plus"></i>
+                </button>
+#}
+
+            </div>
+        </div>
+    </div>
+    <!-- end PROJECT HEAD -->
+    <div class="portlet-body">
+    <div class="row">
+    <div class="col-md-5 col-sm-4">
+        <div class="scroller" style="max-height: 600px; min-height: 500px;" data-always-visible="0" data-rail-visible="0" data-handle-color="#dae3e7">
+            <div class="todo-tasklist" data-url="{{ path('sd_task_list') }}" id="task_list">
+
+                {% for taskUserRole in tasksUserRole %}
+                    {{
+                    include('SDTaskBundle:Task:taskListItem.html.twig',
+                    {
+                    'taskUserRole' : taskUserRole
+                    }
+                    )
+                    }}
+
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+    <div class="todo-tasklist-devider">
+    </div>
+    <div class="col-md-7 col-sm-8" id="task_holder">
+        <div style="color:#666666;"><< {% trans %}Choose any task from the list{% endtrans %}</div>
+{#
+        <div class="scroller" style="max-height: 600px;" data-always-visible="0" data-rail-visible="0" data-handle-color="#dae3e7"
+                >
+#}
+
+{#
+    {{
+        include('SDTaskBundle:Task:taskView.html.twig',
+            {
+                'taskUserRole' : tasksUserRole[0]
+            }
+        )
+    }}
+#}
+{#
+        </div>
+#}
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <!-- END TODO CONTENT -->
+    </div>
+    </div>
+
+    <input type="hidden" id="more_info_input"
+           data-url_task_modal="{{ path('sd_task_modal') }}"
+           data-url_task_table="{{ path('sd_task_table')}}"
+           data-url_get_task_view="{{ path('sd_task_view')}}"
+           data-url_get_task_list="{{ path('sd_task_list')}}"
+            >
+
+{% endblock body %}

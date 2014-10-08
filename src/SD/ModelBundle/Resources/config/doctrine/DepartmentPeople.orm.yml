@@ -1,0 +1,175 @@
+SD\ModelBundle\Entity\DepartmentPeople:
+    type: entity
+    table: department_people
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        number:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        positionString:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: position_string
+        typeString:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: type_string
+        contacts:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        year:
+            type: integer
+            unsigned: false
+            nullable: true
+        month:
+            type: integer
+            unsigned: false
+            nullable: true
+        salary:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        birthday:
+            type: date
+            nullable: true
+        employmentTypeId:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: employment_type_id
+        bonus:
+            type: float
+            nullable: true
+        fine:
+            type: float
+            nullable: true
+        isCleanSalary:
+            type: boolean
+            nullable: true
+            column: is_clean_salary
+        normaDays:
+            type: integer
+            unsigned: false
+            nullable: true
+            column: norma_days
+        firstName:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            column: first_name
+        middleName:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            column: middle_name
+        lastName:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            column: last_name
+        isFromOneC:
+            type: boolean
+            nullable: true
+            column: is_from_one_c
+        isApproved:
+            type: boolean
+            nullable: true
+            column: is_approved
+        drfo:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+        phone:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+        address:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        admissionDate:
+            type: date
+            nullable: true
+            column: admission_date
+        dismissalDate:
+            type: date
+            nullable: true
+            column: dismissal_date
+        personCode:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            column: person_code
+    manyToOne:
+        department:
+            targetEntity: Departments
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                department_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        parent:
+            targetEntity: DepartmentPeople
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                parent_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        salaryType:
+            targetEntity: Lookup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                salary_type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        type:
+            targetEntity: Lookup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        position:
+            targetEntity: DepartmentPeoplePosition
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                position_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

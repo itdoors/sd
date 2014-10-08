@@ -1,0 +1,60 @@
+#sd_user_index:
+#    pattern:  /user/index
+#    defaults: { _controller: SDUserBundle:User:index }
+    
+sd_user_stuff:
+    pattern:  /user/stuff
+    defaults: { _controller: SDUserBundle:User:stuff }
+    
+sd_user_stufflist:
+    pattern:  /user/stuff/list
+    defaults: { _controller: SDUserBundle:User:stufflist }
+
+sd_user_show:
+    pattern:  /user/show/{id}
+    defaults: { _controller: SDUserBundle:User:show }
+    requirements:
+        id: \d+
+    
+sd_user_show_tabs:
+    pattern:  /user/show/tabs
+    defaults: { _controller: SDUserBundle:User:showtabs }
+    
+sd_user_show_contactinfo:
+    pattern:  /user/show/contactinfo
+    defaults: { _controller: SDUserBundle:User:contactinfo }
+
+sd_user_new_stuff:
+    pattern:  /user/newstuff
+    defaults: { _controller: SDUserBundle:User:newstuff }
+    
+sd_user_new:
+    pattern:  /user/new
+    defaults: { _controller: SDUserBundle:User:new }
+
+sd_user_change_password_form:
+    pattern:  /user/change_password_form/{id}
+    defaults: { _controller: SDUserBundle:User:changePasswordForm }
+
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+fos_user_profile:
+    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+    prefix: /profile
+
+fos_user_register:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: /register
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /resetting
+
+fos_user_change_password:
+    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+    prefix: /profile
+    
+fos_user_upload_photo:
+    pattern:  /user/photo/upload
+    defaults: { _controller: SDUserBundle:User:uploadPhoto }

@@ -1,0 +1,7 @@
+sd_dashboard_homepage:
+    pattern:  /
+    defaults: { _controller: SDDashboardBundle:Default:index }
+
+sd_dashboard_calendar_task:
+    pattern:  /sd/dashboard/calendar/task
+    defaults: { _controller: SDDashboardBundle:Default:generateTasksCalendar }

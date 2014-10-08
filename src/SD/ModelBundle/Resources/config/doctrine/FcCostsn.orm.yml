@@ -1,0 +1,33 @@
+SD\ModelBundle\Entity\FcCostsn:
+    type: entity
+    table: fc_costsn
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        value:
+            type: float
+            nullable: false
+    manyToOne:
+        fcCostsnTypes:
+            targetEntity: FcCostsntypes
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                fc_costsn_types_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        financeClaim:
+            targetEntity: FinanceClaim
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                finance_claim_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

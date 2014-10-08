@@ -1,0 +1,30 @@
+SD\ModelBundle\Entity\DocDocumentGroupSfGroups:
+    type: entity
+    table: doc_document_group_sf_groups
+    fields:
+        actionkey:
+            id: true
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+    oneToOne:
+        docdocumentgroup:
+            targetEntity: DocDocumentGroup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                docdocumentgroup_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        sfguardgroup:
+            targetEntity: SfGuardGroup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                sfguardgroup_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

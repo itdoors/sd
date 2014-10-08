@@ -1,0 +1,319 @@
+{% trans_default_domain 'ListsHandlingBundle' %}
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+        $.fn.editable.defaults.inputclass = 'form-control';
+        $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
+
+        {% if canEdit %}
+
+            setProgress = function(response)
+            {
+                if (response.handling.progress)
+                {
+                    var targetProcess = $('.progress-bar.progress-bar-success');
+                    targetProcess.attr('aria-valuenow', response.handling.progress);
+                    targetProcess.css('width', response.handling.progress + '%');
+                    targetProcess.find('span').html(response.handling.progressString);
+                }
+
+            };
+
+            $('#serviceOffered, #resultString, #statusDescription, #square, #description, #chance, #budget').editable({
+                url: '{{ path('sd_common_ajax_handling_save') }}'
+            });
+
+            $('#pf1, #employees').editable({
+                url: '{{ path('sd_common_ajax_handling_save') }}'
+            });
+
+            $('#statusId').editable({
+                url: '{{ path('sd_common_ajax_handling_save') }}',
+                source: '{{ path('sd_common_ajax_handling_status') }}'
+            });
+
+            $('#resultId').editable({
+                url: '{{ path('sd_common_ajax_handling_save') }}',
+                source: '{{ path('sd_common_ajax_handling_result') }}'
+            });
+
+            $('#statusId').on('save', function(e, params) {
+
+                // Progress
+                var response = JSON.parse(params.response);
+
+                setProgress(response);
+            });
+
+            $('#resultId').on('save', function(e, params) {
+
+                var showMoreInfoIds = $(this).data('show-more-info-ids');
+
+                var moreInfoHref = $(this).parent().find('a.more-info');
+
+                if ($.inArray(params.newValue, showMoreInfoIds)) {
+                    moreInfoHref.show();
+                } else {
+                    moreInfoHref.hide();
+                }
+
+                var moreInfoHrefParams = {
+                    handlingId: $(this).data('pk'),
+                    resultId: params.newValue
+                };
+
+                moreInfoHref.data('params', moreInfoHrefParams);
+
+                // Progress
+                var response = JSON.parse(params.response);
+
+                setProgress(response);
+            });
+
+            $('#typeId').editable({
+                url: '{{ path('sd_common_ajax_handling_save') }}',
+                source: '{{ path('sd_common_ajax_handling_type') }}'
+            });
+
+            $('#handlingServices').editable({
+                url: '{{ path('sd_common_ajax_handling_service_save') }}',
+                source: {{ handlingServices|json_encode|raw }},
+                select2: {
+                    multiple: true,
+                    width: '250px'
+                }
+            });
+
+            $('#isMarketing').editable({
+                url: '{{ path('sd_common_ajax_handling_save') }}',
+                source: {{  handling.isMarketingChoices|json_encode|raw }}
+            });
+
+            $('.sd-editable').editable({
+                url: '{{ path('sd_common_ajax_handling_save') }}'
+            });
+
+            $('.sd-dogovor-date').live('mouseover', function(e){
+
+                e.preventDefault();
+
+                $(this).on('shown', function(e, editable) {
+
+                    var input = editable.input.$input;
+
+                    input.attr('readonly', 'readonly');
+
+                    input.datepicker({
+                        rtl: Metronic.isRTL(),
+                        autoclose: true,
+                        format: "dd.mm.yyyy",
+                        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+                        language: 'ru',
+                        startView: 'decade',
+                        //endDate: new Date(),
+                        weekStart: 1
+                    });
+                });
+            });
+        {% endif %}
+    });
+
+</script>
+
+<div id="form_modal_more_info" class="modal fade" role="basic" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">{% trans  from 'ListsHandlingBundle' %}More info{% endtrans %}</h4>
+            </div>
+            <div class="modal-body">
+                <div id="moreInfoTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+
+<div class="tab-pane active" id="tab_0">
+    <div class="col-md-12">
+        <table id="handling" class="table table-bordered table-striped">
+            <tbody>
+            <tr> {# 1 #}
+                <td style="width:15%">{% trans %}Handling ID{% endtrans %}</td>
+                <td style="width:35%">{{ handling.0.id }}</td>
+                <td style="width:15%">{% trans %}Handling Status{% endtrans %}</td>
+                <td style="width:35%">
+                    <a href="#" id="statusId" data-type="select" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.statusId }}" data-placement="right" data-original-title="{% trans %}Select Handling Status{% endtrans %}">
+                        {{ handling.0.status }}
+                        {% if handling.0.statusChangeDate %}
+                            {{ handling.0.statusChangeDate|date("d.m.y, H:i") }}
+                        {% endif %}
+                    </a>
+                </td>
+            </tr>
+            <tr> {# 2 #}
+                <td>{% trans %}Organization Name{% endtrans %}</td>
+                <td>{{ handling.organizationName }}</td>
+                <td>{% trans %}Status Description{% endtrans %}</td>
+                <td><a href="#" id="statusDescription" data-type="textarea" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.statusDescription }}" data-placement="right" data-original-title="{% trans %}Enter Status{% endtrans %}">{{ handling.0.statusDescription }}</a>
+                </td>
+            </tr>
+            <tr> {# 3 #}
+                <td>{% trans %}Create User{% endtrans %}</td>
+                <td>{{ handling.creatorFullName }}</td>
+                <td>{% trans %}Result{% endtrans %}</td>
+                <td>
+                    <a  href="#"
+                        id="resultId"
+                        data-type="select"
+                        data-pk="{{ handling.0.id }}"
+                        data-value="{{ handling.0.resultId }}"
+                        data-original-title="{% trans %}Select type{% endtrans %}"
+                        data-show-more-info-ids="{{ showMoreInfoIds|json_encode|raw }}"
+
+                            >
+                        {{ handling.0.result }}
+                    </a>
+                    <a  class="more-info btn"
+                            {% if handling.0.resultId not in showMoreInfoIds %}
+                                style="display: none"
+                            {% endif %}
+                        data-toggle="modal"
+                        href="#form_modal_more_info"
+                        data-target_holder="moreInfoTpl"
+                        data-params='{"handlingId":{{ handling.0.id }},"resultId":{{ handling.0.resultId }}}'
+                        data-url-more-info="{{ path('sd_common_ajax_handling_more_info') }}"
+                            >
+                        {% trans from 'ListsHandlingBundle' %}Show more info{% endtrans %}
+                    </a>
+                </td>
+            </tr>
+            <tr> {# 4 #}
+                <td>{% trans %}Create Date{% endtrans %}</td>
+                <td>{{ handling.0.createdate == '' ? '' : handling.0.createdate|date("d.m.y") }} {{ handling.0.createdatetime == '' ? '' : '(' ~ handling.0.createdatetime|date("d.m.y, H:i") ~ ')' }}</td> {# Create Date Time (Real Date time) TASK 323 #}
+                <td>{% trans %}Result Description{% endtrans %}</td>
+                <td><a href="#" id="resultString" data-type="textarea" data-pk="{{ handling.0.id }}" data-placement="right" data-original-title="{% trans %}Enter Status{% endtrans %}">{{ handling.0.resultString }}</a></td>
+            </tr>
+            <tr>{# 5 #}
+                <td>{% trans %}Handling Type{% endtrans %}</td> {# Тип : прямой вход, гостендер, ...#}
+                <td>
+                    <a href="#" id="typeId" data-type="select" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.typeId }}" data-original-title="{% trans %}Select Handling Type{% endtrans %}">
+                        {{ handling.0.type }}
+                    </a>
+                </td>
+                <td>{% trans %}Chance{% endtrans %}</td> {# 306 #}
+                {% set progress = (handling.resultProgress is not null) ? handling.resultProgress : handling.progress %}
+                {% set percentageString = handling.resultPercentageString ? handling.resultPercentageString : handling.percentageString %}
+                <td>
+                    <div style="width: {{ progress }}%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="{{ progress }}" role="progressbar" class="progress-bar progress-bar-success">
+                        <span class="">{{ percentageString|e }}</span>
+                    </div>
+                </td>
+            </tr>
+            <tr> {# 6 #}
+                <td>{% trans %}Service offered{% endtrans %}</td>
+                <td>
+                    <a href="#" id="handlingServices" data-type="select2" data-pk="{{ handling.0.id }}" data-placement="right" data-value="{{ handling.serviceIds }}" data-placeholder="{% trans %}Select Service Offered{% endtrans %}" data-original-title="{% trans %}Select Service Offered{% endtrans %}">{{ handling.serviceList }}</a>
+                    <span class="help-block">Если предлагаемых услуг нет в списке - обратитесь к администратору.</span>
+
+                </td>
+                <td>{% trans %}Budget without VAT{% endtrans %}</td>
+                <td>
+                    <a href="#" id="budget" data-type="text" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.budget }}" data-original-title="{% trans %}Enter Budget{% endtrans %}">
+                        {{ handling.0.budget }}
+                    </a>
+                </td>
+            </tr>
+            <tr> {# 7 #}
+                <td>{% trans %}Square{% endtrans %}</td>
+                <td>
+                    <a href="#" id="square" data-type="text" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.square }}" data-original-title="{% trans %}Enter Square{% endtrans %}">
+                        {{ handling.0.square }}
+                    </a>
+                </td>
+                <td>{% trans %}PF1{% endtrans %}</td>
+                <td>
+                    <a href="#" id="pf1" data-type="text" data-pk="{{ handling.0.id }}" data-placement="right" data-value="{{ handling.0.pf1 }}" data-placeholder="{% trans %}Enter pf1{% endtrans %}">{{ handling.0.pf1 }}</a>
+                </td>
+            </tr>
+            <tr>{# 8 #}
+                <td>{% trans %}Count employees{% endtrans %}</td>
+                <td>
+                    <a href="#" id="employees" data-type="text" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.employees }}" data-original-title="{% trans %}Enter count employees{% endtrans %}">
+                        {{ handling.0.employees }}
+                    </a>
+                </td>
+                <td>{% trans %}Is Marketing{% endtrans %}</td>
+                <td>
+                    {% if handling.0.isMarketing %}
+                        {% set isMarketing ='Yes' %}
+                    {% else %}
+                        {% set isMarketing ='No' %}
+                    {% endif %}
+                    <a href="#" id="isMarketing" data-type="select" data-pk="{{ handling.0.id }}" data-value="{{ isMarketing }}" data-placement="right" data-original-title="{% trans %}Is Marketing{% endtrans %}">
+                        {{ isMarketing|trans({}, 'messages') }}
+                    </a>
+                </td>                
+            </tr> {# 9 #}
+            <tr>
+                <td>{% trans %}Notice{% endtrans %}</td>
+                <td>
+                    <a href="#" id="description" data-type="textarea" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.description }}" data-original-title="{% trans %}Enter Handling Notice{% endtrans %}">{{ handling.0.description }}</a>
+                </td>
+                <td>{% trans %}Launch date{% endtrans %}</td>
+                <td>
+                    <a href="#"
+                       class="sd-dogovor-date sd-editable {% if handling.0.launchDate is empty %} editable-empty {% endif %}"
+                       data-name="launchDateString"
+                       data-type="text"
+                       data-pk="{{ handling.0.id }}"
+                            {% if handling.0.launchDate %}
+                                data-value="{{ handling.0.launchDate|date("d.m.Y") }}"
+                            {% endif %}
+                       data-original-title="{% trans %}Edit{% endtrans %}"
+                            >
+                        {% if handling.0.launchDate %}
+                            {{ handling.0.launchDate|date("d.m.Y") }}
+                        {% else %}
+                            {% trans from 'messages' %}Enter value{% endtrans %}
+                        {% endif %}
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                
+                <td>                </td>
+                <td>                </td>
+                <td>{% trans %}Closed{% endtrans %}</td>
+                <td>
+                    {% if canEdit %}
+                        {% trans %}No{% endtrans %}
+                    {% else %}
+                        {% trans %}Yes{% endtrans %}
+                    {% endif %}
+                    {{ handling.closerFullname }}
+                    {% if handling.closedatetime %}
+                        {{ handling.closedatetime|date("d.m.y, H:i") }}
+                    {% endif %}
+                </td>
+            </tr>
+            {#<tr> 
+                <td>{% trans %}Service offered{% endtrans %} old</td>
+                <td>
+                    <a href="#" id="serviceOffered" data-type="textarea" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.serviceOffered }}" data-original-title="{% trans %}Select type{% endtrans %}">{{ handling.0.serviceoffered }}</a>
+                </td>
+                <td>{% trans %}Chance{% endtrans %} old</td>
+                <td><a href="#" id="chance" data-type="text" data-pk="{{ handling.0.id }}" data-value="{{ handling.0.chance }}" data-original-title="{% trans %}Enter Сhance{% endtrans %}">
+                        {{ handling.0.chance }}
+                    </a>
+                </td>
+            </tr>#}
+
+            </tbody>
+        </table>
+    </div>
+</div>

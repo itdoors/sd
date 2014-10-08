@@ -1,0 +1,35 @@
+SD\ModelBundle\Entity\HandlingMoreInfo:
+    type: entity
+    table: handling_more_info
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        value:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+    manyToOne:
+        handling:
+            targetEntity: Handling
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                handling_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        handlingMoreInfoType:
+            targetEntity: HandlingMoreInfoType
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                handling_more_info_type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

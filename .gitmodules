@@ -1,0 +1,6 @@
+[submodule "src/ITDoors/AjaxBundle"]
+	path = src/ITDoors/AjaxBundle
+	url = https://github.com/itdoors/AjaxBundle.git
+[submodule "src/ITDoors/CommonBundle"]
+	path = src/ITDoors/CommonBundle
+	url = https://github.com/itdoors/CommonBundle.git

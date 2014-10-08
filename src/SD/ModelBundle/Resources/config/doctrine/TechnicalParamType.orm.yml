@@ -1,0 +1,19 @@
+SD\ModelBundle\Entity\TechnicalParamType:
+    type: entity
+    table: technical_param_type
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        sort:
+            type: bigint
+            nullable: true
+    lifecycleCallbacks: {  }

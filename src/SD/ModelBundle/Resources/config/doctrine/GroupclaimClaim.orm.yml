@@ -1,0 +1,33 @@
+SD\ModelBundle\Entity\GroupclaimClaim:
+    type: entity
+    table: groupclaim_claim
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        createdatetime:
+            type: datetime
+            nullable: false
+    manyToOne:
+        claim:
+            targetEntity: Claim
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                claim_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        groupclaim:
+            targetEntity: Groupclaim
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                groupclaim_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

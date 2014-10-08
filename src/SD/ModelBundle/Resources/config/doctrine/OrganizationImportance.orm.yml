@@ -1,0 +1,33 @@
+SD\ModelBundle\Entity\OrganizationImportance:
+    type: entity
+    table: organization_importance
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        duration:
+            type: bigint
+            nullable: true
+    manyToOne:
+        importance:
+            targetEntity: Importance
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                importance_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        organization:
+            targetEntity: Organization
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                organization_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,64 @@
+{% trans_default_domain 'ListsDogovorBundle' %}
+<td>
+    <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_dogovor_show', { id: item.dogovorId }) }}">
+        {{ item.dogovorId|e }}
+    </a>
+</td>
+<td>{{ item.dogovorNumber|e }}</td>
+<td>
+    {% if item.organizationId %}
+        <a href="{{ path('lists_dogovor_admin_organization_show', { id: item.organizationId }) }}" target="_blank">
+            {{ item.organizationName|e }}
+        </a>
+    {% endif %}
+</td>
+<td>
+    {% if item.customerId %}
+        <a href="{{ path('lists_dogovor_admin_organization_show', { id: item.customerId }) }}" target="_blank">
+            {{ item.customerName|e }}
+        </a>
+    {% endif %}
+</td>
+<td>
+    {% if item.performerId %}
+        <a href="{{ path('lists_dogovor_admin_organization_show', { id: item.performerId }) }}" target="_blank">
+            {{ item.performerName|e }}
+        </a>
+    {% endif %}
+</td>
+<td>{{ item.dogovorStartdatetime == '' ? '' : item.dogovorStartdatetime|date('d.m.Y') }}</td>
+<td>{{ item.dogovorStopdatetime == '' ? '' : item.dogovorStopdatetime|date('d.m.Y') }}</td>
+<td>
+    {% if item.dogovorProlongation %}
+        {% trans from 'messages'%}Yes{% endtrans %}
+    {% else %}
+        {% trans from 'messages'%}No{% endtrans %}
+    {% endif %}
+</td>
+<td>{{ item.dogovorProlongationDate == '' ? '' : item.dogovorProlongationDate|date('d.m.Y') }}</td>
+<td>
+    {% if item.dogovorIsActive %}
+        <span class="label label-success">{% trans from 'messages'%}Active{% endtrans %}</span>
+    {% else %}
+        <span class="label label-default">{% trans from 'messages'%}Not Active{% endtrans %}</span>
+    {% endif %}
+</td>
+<td>{{ item.dogovorSubject|e }}</td>
+<td>{{ item.dogovorType|e }}</td>
+<td>
+    {% set needToProlongate = (item.dogovorProlongationDate|date('U') - "now"|date('U')) < prolongation_limit %}
+    {% if needToProlongate %}
+        <a class="btn green ajax-form"
+           data-toggle="modal"
+           href="#form_dogovor_history"
+           data-target_holder="dogovorHistoryFormTpl"
+           data-form_name="dogovorHistoryForm"
+           data-post_function="updateList"
+           data-post_target_id="dogovorItem{{ item.dogovorId }}"
+           data-model="Dogovor"
+           data-model-id="{{ item.dogovorId }}"
+                >
+            {% trans %}Prolongate{% endtrans %}
+        </a>
+    {% endif %}
+</td>

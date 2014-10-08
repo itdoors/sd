@@ -1,0 +1,55 @@
+Lists\HandlingBundle\Entity\HandlingUser:
+    type: entity
+    table: handling_user
+    repositoryClass: Lists\HandlingBundle\Entity\HandlingUserRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        part:
+            type: integer
+            nullable: true
+        userId:
+            type: bigint
+            nullable: false
+            column: user_id
+        lookupId:
+            type: bigint
+            nullable: true
+            column: lookup_id
+        handlingId:
+            type: bigint
+            nullable: false
+            column: handling_id
+    manyToOne:
+        lookup:
+            targetEntity: Lists\LookupBundle\Entity\Lookup
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                lookup_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        handling:
+            targetEntity: Handling
+            cascade: {  }
+            mappedBy: null
+            inversedBy: handlingUsers
+            joinColumns:
+                handling_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: handlingUsers
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

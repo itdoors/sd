@@ -1,0 +1,68 @@
+parameters:
+    lists_contact.organization.form.class: Lists\ContactBundle\Form\ModelContactOrganizationFormType
+    lists_contact.organization.user.form.class: Lists\ContactBundle\Form\ModelContactOrganizationUserFormType
+    lists_contact.organization.edit.form.class: Lists\ContactBundle\Form\ModelContactOrganizationEditForm
+    lists_contact.organization.admin.form.class: Lists\ContactBundle\Form\ModelContactOrganizationAdminFormType
+    lists_contact.organization.wizard.form.class: Lists\ContactBundle\Form\ModelContactOrganizationWizardForm
+    lists_contact.handling.form.class: Lists\ContactBundle\Form\ModelContactHandlingFormType
+
+    lists_contact.repository.class: Lists\ContactBundle\Entity\ModelContactRepository
+    lists_contact.repository.entity: Lists\ContactBundle\Entity\ModelContact
+
+    lists_contact.level.repository.class: Lists\ContactBundle\Entity\ModelContactLevelRepository
+    lists_contact.level.repository.entity: Lists\ContactBundle\Entity\ModelContactLevel
+
+    lists_contact.contact.service.class: Lists\ContactBundle\Services\ModelContactService
+
+services:
+    lists_contact.form.modelContactOrganizationForm:
+        class: %lists_contact.organization.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: modelContactOrganizationForm }
+
+    lists_contact.form.modelContactOrganizationEditForm:
+        class: %lists_contact.organization.edit.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: modelContactOrganizationEditForm }
+
+    lists_contact.form.modelContactOrganizationAdminForm:
+        class: %lists_contact.organization.admin.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: modelContactOrganizationAdminForm }
+            
+    lists_contact.form.modelContactOrganizationUserForm:
+        class: %lists_contact.organization.user.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: modelContactOrganizationUserForm }
+
+    lists_contact.form.modelContactOrganizationWizardForm:
+        class: %lists_contact.organization.wizard.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: modelContactOrganizationWizardForm }
+
+    lists_contact.form.modelContactHandlingForm:
+        class: %lists_contact.handling.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: modelContactHandlingForm }
+
+    lists_contact.repository:
+        class: %lists_contact.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %lists_contact.repository.entity% ]
+
+    lists_contact.level.repository:
+       class: %lists_contact.level.repository.class%
+       factory_service: doctrine # this is an instance of Registry
+       factory_method: getRepository
+       arguments: [ %lists_contact.level.repository.entity% ]
+
+    lists_contact.contact.service:
+        class: %lists_contact.contact.service.class%
+        arguments: [@service_container]

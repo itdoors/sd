@@ -1,0 +1,131 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsTeamBundle' %}
+{% block title %}{% trans %}New Team{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_team_edit', {id: 0}) }}" title="{% trans %}Teams{% endtrans %}">{% trans %}New Team{% endtrans %}</a></li>
+    </ul>
+{% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Team <small>create new Team</small>{% endtrans %}
+    </h3>
+{% endblock %}
+
+{# Подключаем заебательский плагин для добавления юзеров#}
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/jquery-multi-select/css/multi-select.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-multi-select/js/jquery.multi-select.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-multi-select/js/jquery.quicksearch.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#teamForm_users').multiSelect({
+                selectableHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+                selectionHeader: "<input type='text' class='form-control search-input' autocomplete='off' placeholder='search...'>",
+                afterInit: function (ms) {
+                    var that = this,
+                            $selectableSearch = that.$selectableUl.prev(),
+                            $selectionSearch = that.$selectionUl.prev(),
+                            selectableSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selectable:not(.ms-selected)',
+                            selectionSearchString = '#' + that.$container.attr('id') + ' .ms-elem-selection.ms-selected';
+                    that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+                            .on('keydown', function (e) {
+                                if (e.which === 40) {
+                                    that.$selectableUl.focus();
+                                    return false;
+                                }
+                            });
+                    that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+                            .on('keydown', function (e) {
+                                if (e.which == 40) {
+                                    that.$selectionUl.focus();
+                                    return false;
+                                }
+                            });
+                },
+                afterSelect: function () {
+                    this.qs1.cache();
+                    this.qs2.cache();
+                },
+                afterDeselect: function () {
+                    this.qs1.cache();
+                    this.qs2.cache();
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="portlet box blue">
+                <div class="portlet-title">
+                    <div class="caption"><i class="fa fa-reorder"></i>{% trans %}Create Team{% endtrans %}</div>
+                    <div class="tools">
+                        <a class="collapse" href="javascript:;"></a>
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <!-- BEGIN FORM-->
+                    {{ form_start(form,
+                    {
+                    'action': path('lists_' ~ baseRoutePrefix ~ '_team_edit', { id: id }),
+                    'attr': {'class': 'form-horizontal form-row-seperated'}
+                    })
+                    }}
+                    <div class="form-body">
+                        <div class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            {% trans %}You have some form errors. Please check below.{% endtrans %}
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">{% trans %}Team Name{% endtrans %}<span class="required">*</span></label>
+                            <div class="col-md-4">
+                                {{ form_widget(form.name, {'attr': {'class' : 'form-control'} }) }}
+                                <span class="help-block"{% trans %}>Enter Team Name{% endtrans %}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">{% trans %}Description{% endtrans %}</label>
+                            <div class="col-md-4">
+                                {{ form_widget(form.description, {'attr': {'class' : 'form-control'} }) }}
+                                <span class="help-block"{% trans %}>Enter Description{% endtrans %}</span>
+                            </div>
+                        </div>
+                        <div class="form-group last">
+                            <label class="control-label col-md-3">{% trans %}Team Members{% endtrans %}</label>
+                            <div class="col-md-9">
+                                {{ form_widget(form.users, { 'attr': {'class':'multi-select'} }) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="col-md-offset-3 col-md-9">
+                                    {{ form_widget(form.save, { 'label': 'Submit', 'attr': {'class': 'btn green'}} ) }}
+                                    <a href="{{ path(baseRoute) }}"  class="btn default">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock body %}

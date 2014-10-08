@@ -1,0 +1,7 @@
+# src/ITDoors/EmailBundle/Resources/config/validation.yml
+ITDoors\EmailBundle\Entity\File:
+    properties:
+        file:
+            - File:
+                maxSize: 10000000
+                mimeTypes: [application/pdf, application/x-pdf, image/png, image/jpeg, image/gif, audio/mpeg, application/msword, application/vnd.ms-excel]

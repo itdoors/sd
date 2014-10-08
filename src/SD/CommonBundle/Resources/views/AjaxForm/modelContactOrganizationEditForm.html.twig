@@ -1,0 +1,344 @@
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+        $('#modelContactOrganizationEditForm_birthday_year, #modelContactOrganizationEditForm_birthday_month, #modelContactOrganizationEditForm_birthday_day').select2({
+            allowClear: true
+        });
+
+        $('#modelContactOrganizationEditForm_type').select2({
+            allowClear: true
+        });
+
+        $('#modelContactOrganizationEditForm_level').select2({
+            allowClear: true
+        });
+
+        $('#modelContactOrganizationEditForm_phone1, #modelContactOrganizationEditForm_phone2').select2({
+            minimumInputLength: 2,
+            allowClear: true,
+            initSelection: function (element, callback) {
+
+                var data = {id: element.data('id'), text: element.data('text')};
+
+                callback(data);
+            },
+            ajax: {
+                url: '{{ path('sd_common_ajax_contact_phone') }}',
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        query: term,
+                        organizationId: $('#modelContactOrganizationEditForm_modelId').val()
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        })
+
+        $('#modelContactOrganizationEditForm_email').select2({
+            minimumInputLength: 2,
+            allowClear: true,
+            initSelection: function (element, callback) {
+
+                var data = {id: element.data('id'), text: element.data('text')};
+
+                callback(data);
+            },
+            ajax: {
+                url: '{{ path('sd_common_ajax_contact_email') }}',
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        query: term,
+                        organizationId: $('#modelContactOrganizationEditForm_modelId').val()
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        })
+
+        $(".date-picker").inputmask("d.m.y", {
+            "placeholder": "*"
+        });
+
+        {% if form.isNew is defined %}
+
+            $('#modelContactOrganizationEditForm_modelId').select2({
+                minimumInputLength: 2,
+                ajax: {
+                    url: '{{ path('sd_common_ajax_organization_for_contacts') }}',
+                    dataType: 'json',
+                    data: function (term, page) {
+                        return {
+                            q: term
+                        };
+                    },
+                    results: function (data, page) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            })
+
+        {% endif %}
+
+        {% if form.owner is defined %}
+
+        $('#modelContactOrganizationEditForm_owner').select2({
+            minimumInputLength: 2,
+            initSelection: function (element, callback) {
+                // the input tag has a value attribute preloaded that points to a preselected movie's id
+                // this function resolves that id attribute to an object that select2 can render
+                // using its formatResult renderer - that way the movie name is shown preselected
+                var id = $(element).val();
+                if (id !== "") {
+                    $.ajax("{{ path('sd_common_ajax_user_by_id') }}", {
+                        data: {
+                            id: id
+                        },
+                        dataType: "json"
+                    }).done(function (data) {
+                                callback(data)
+                            });
+                }
+            },
+            ajax: {
+                url: '{{ path('sd_common_ajax_user') }}',
+                dataType: 'json',
+                quietMillis: 30,
+                data: function (term, page) {
+                    return {
+                        query: term
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        })
+
+        {% endif %}
+
+        $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+
+        $('.make-switch input').uniform();
+
+        //$('.make-switch input').bootstrapSwitch('setSizeClass', '');
+    });
+</script>
+
+<div class="row ">
+    <div class="col-md-12">
+        {#<div class="portlet box yellow">
+            <div class="portlet-title"><div class="caption"><i class="fa fa-edit"></i>
+                    {% if form.isNew is defined %}
+                        {% trans  from 'ListsContactBundle' %}New Contact{% endtrans %}
+                    {% else %}
+                        {% trans  from 'ListsContactBundle' %}Edit Contact{% endtrans %}
+                    {% endif %}
+
+                </div>
+            </div>#}
+            <div class="portlet-body">
+                {% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+                {% if form.vars.valid is sameas(false) %}
+                    <div class="alert alert-danger">
+                        <button class="close" data-close="alert"></button>
+                        {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                        {{ form_errors(form) }}
+                        {% if form.phone1.vars.errors|length %}
+                            {{ form_errors(form.phone1) }}
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {{ form_start(form, {
+                        'action' : path('sd_common_ajax_form'),
+                        'attr' : {
+                        'method' : 'POST',
+                        'class' : 'ajax-form-entity',
+                        'data-post_function': postFunction,
+                        'data-post_target_id': postTargetId,
+                        'data-target_id': targetId
+                    }
+                }) }}
+                <div class="form-body row">
+                    {% if form.isNew is defined %}
+                        <div class="form-group col-md-12{% if form.modelId.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.modelId, 'Organization Name', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.modelId, {'attr' : {
+                                'class' : 'form-control',
+                                'placeholder': "Organization"
+                            }}) }}
+                            {% if form.modelId.vars.errors|length %}
+                                {{ form_errors(form.modelId) }}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if form.creatorDisabled is defined %}
+                        <div class="form-group col-md-6">
+                            {{  form_label(form.creatorDisabled, 'Creator', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.creatorDisabled, {'attr' : {'class' : 'form-control', 'placeholder': "Creator"}}) }}
+                        </div>
+                    {% endif %}
+
+                    {% if form.createdatetimeDisable is defined %}
+                        <div class="form-group col-md-6">
+                            {{  form_label(form.createdatetimeDisable, 'Createdatetime', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.createdatetimeDisable, {'attr' : {'class' : 'form-control', 'placeholder': "Createdatetime"}}) }}
+                        </div>
+                    {% endif %}
+
+                    {% if form.ownerDisable is defined %}
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.ownerDisable, 'Owner', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.ownerDisable, {'attr' : {'class' : 'form-control', 'placeholder': "Owner"}}) }}
+                        </div>
+                    {% endif %}
+
+                    {% if form.owner is defined %}
+                        <div class="form-group col-md-6">
+                            {{  form_label(form.owner, 'Owner', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.owner, {'attr' : {'class' : 'form-control', 'placeholder': "Owner"}}) }}
+                        </div>
+                    {% else %}
+                        {% if is_granted('ROLE_SALES') != true and is_granted('ROLE_OPER') != true %}
+                            <div class="form-group col-md-6" style="height: 60px;"></div>
+                        {% endif %}
+                    {% endif %}
+
+                    <div class="form-group col-md-6">
+                        {{ form_label(form.lastName, 'Last Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.lastName, {'attr' : {'class' : 'form-control', 'placeholder': "Last name"}}) }}
+                    </div>
+                    
+                    <div class="form-group col-md-6">
+                        {{  form_label(form.firstName, 'First Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.firstName, {'attr' : {'class' : 'form-control', 'placeholder': "First name"}}) }}
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        {{ form_label(form.middleName, 'Middle Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.middleName, {'attr' : {'class' : 'form-control', 'placeholder': "Middle name"}}) }}
+                    </div>
+                    
+                    <div class="form-group col-md-6">
+                        {{ form_label(form.birthday, 'Birthday', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.birthday, {'attr': {
+                            'class': 'form-control date-picker',
+                            'data-required': '0',
+                            'placeholder': 'Enter Birthday',
+                        }}) }}
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        {{ form_label(form.level, 'Contact level', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.level, {'attr' : {'class' : 'form-control', 'placeholder': "Contact level"}}) }}
+                    </div>
+                    
+                    <div class="form-group col-md-6">
+                        {{ form_label(form.position, 'Position', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.position, {'attr' : {'class' : 'form-control', 'placeholder': "Position"}}) }}
+                    </div>
+                    
+                    <div class="form-group col-md-6" style="margin-bottom: 16px;">
+                        {{ form_label(form.type, 'Contact type', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': "Contact type"}}) }}
+                    </div>
+
+                    <div class="form-group col-md-6">
+
+                        {% if form.vars.value.phone1 is defined %}
+                            {% set phone1 = form.vars.value.phone1 %}
+                        {% else %}
+                            {% set phone1 = '' %}
+                        {% endif %}
+                            {{ form_label(form.phone1, 'Phone 1', {'attr': {'class': 'control-label'}}) }}
+                       
+                        {{ form_widget(form.phone1, {'attr' : {
+                            'class' : 'form-control',
+                            'placeholder': "Phone 1",
+                            'data-text':  phone1,
+                            'data-id':  phone1,
+                            'novalidate':'novalidate'
+                        }}) }}
+                    </div>
+
+                    <div class="form-group col-md-6">
+
+                        {% if form.vars.value.phone1 is defined %}
+                            {% set phone2 = form.vars.value.phone2 %}
+                        {% else %}
+                            {% set phone2 = '' %}
+                        {% endif %}
+
+                        {{ form_label(form.phone2, 'Phone 2', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.phone2, {'attr' : {
+                            'class' : 'form-control',
+                            'placeholder': "Phone 2",
+                            'data-text':  phone2,
+                            'data-id':  phone2
+                        }}) }}
+                    </div>
+
+                    <div class="form-group col-md-6">
+
+                        {% if form.vars.value.email is defined %}
+                            {% set email = form.vars.value.email %}
+                        {% else %}
+                            {% set email = '' %}
+                        {% endif %}
+
+                        {{ form_label(form.email, 'Email', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.email, {'attr' : {
+                            'class' : 'form-control',
+                            'placeholder': "Email",
+                            'data-text':  email,
+                            'data-id':  email
+                        }}) }}
+                    </div>
+
+                    {% if form.isShared is defined %}
+                    <div class="form-group col-md-6">
+                        {{ form_label(form.isShared, 'Shared', {'attr': {'class': 'control-label'}}) }}
+                        <div class="make-switch" data-on-label="Yes" data-off-label="No">
+                            {{ form_widget(form.isShared, {'attr' : {'placeholder': "Shared"}}) }}
+                        </div>
+
+                    </div>
+                    {% endif %}
+
+                    <input type="hidden" name="formName" value="{{ formName }}">
+                    <input type="hidden" name="postFunction" value="{{ postFunction }}">
+                    <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
+                    <input type="hidden" name="targetId" value="{{ targetId }}">
+                    <input type="hidden" name="model" value="{{ model }}">
+                    <input type="hidden" name="modelId" value="{{ modelId }}">
+                </div>
+                <div class="form-actions">
+                    {{ form_widget(form.add, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
+                    {{ form_widget(form.cancel, { 'label': 'Cancel', 'attr':
+                        {
+                            'class': 'btn default sd-cancel-btn',
+                            'data-dismiss': "modal"
+                        }
+                    } ) }}
+                </div>
+                {{ form_end(form) }}
+
+            </div>
+       {# </div>#}
+    </div>
+</div>

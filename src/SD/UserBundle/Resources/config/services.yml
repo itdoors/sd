@@ -1,0 +1,57 @@
+parameters:
+    sd_user.repository.class: SD\UserBundle\Entity\UserRepository
+    sd_user.repository.entity: SD\UserBundle\Entity\User
+    sd_user.form.class: SD\UserBundle\Form\ChangePasswordForm
+    sd_user.form.new.class: SD\UserBundle\Form\UserNewForm
+    sd_user.form.new.stuff.class: SD\UserBundle\Form\UserNewStuffForm
+    stuff.filter.form.class: SD\UserBundle\Form\StuffFilterForm
+    sd_user.form.avatar.class: SD\UserBundle\Form\UserAvatarForm
+    sd_user_contactinfo.form.class: SD\UserBundle\Form\UserContactinfoForm
+    sd_user.service.class: SD\UserBundle\Services\UserService
+
+services:
+    sd_user.repository:
+        class: %sd_user.repository.class%
+        factory_service: doctrine # this is an instance of Registry
+        factory_method: getRepository
+        arguments: [ %sd_user.repository.entity% ]
+
+    sd_user.form.changePasswordForm:
+        class: %sd_user.form.class%
+        arguments: [%sd_user.repository.entity%, @service_container]
+        tags:
+            - { name: form.type, alias: changePasswordForm }
+
+    sd_user.form.userNewForm:
+        class: %sd_user.form.new.class%
+        arguments: [%sd_user.repository.entity%, @service_container]
+        tags:
+            - { name: form.type, alias: userNewForm }
+            
+    sd_user.form.userNewStuffForm:
+        class: %sd_user.form.new.stuff.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: userNewStuffForm }
+            
+    sd.user.form.stuffFilterForm:
+        class: %stuff.filter.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: stuffFilterForm }
+            
+    sd.user.form.userAvatarForm:
+        class: %sd_user.form.avatar.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: userAvatarForm }
+            
+    sd.user.form.userContactinfoForm:
+        class: %sd_user_contactinfo.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: userContactinfoForm }
+            
+    sd_user.service:
+        class: %sd_user.service.class%
+        arguments: [@service_container]

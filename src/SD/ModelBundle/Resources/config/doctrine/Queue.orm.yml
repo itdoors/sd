@@ -1,0 +1,45 @@
+SD\ModelBundle\Entity\Queue:
+    type: entity
+    table: queue
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        objectModel:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            column: object_model
+        objectSubmodel:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            column: object_submodel
+        objectId:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            column: object_id
+        params:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        createdatetime:
+            type: datetime
+            nullable: true
+        status:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+        percent:
+            type: bigint
+            nullable: true
+    lifecycleCallbacks: {  }

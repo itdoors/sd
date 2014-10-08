@@ -1,0 +1,27 @@
+# src/ITDoors/ControllingBundle/Resources/config/doctrine/InvoicePayments.orm.yml
+ITDoors\ControllingBundle\Entity\InvoicePayments:
+    type: entity
+    table: invoice_payments
+    repositoryClass: ITDoors\ControllingBundle\Entity\InvoicePaymentsRepository
+    id:
+        id:
+            type: integer
+            generator: { strategy: IDENTITY }
+    fields:
+        invoiceId:
+            type: integer
+            column: invoice_id
+        summa:
+            type: float
+            length: 20
+        date:
+            type: date
+        bank:
+            type: text
+    manyToOne:
+        invoice:
+            targetEntity: Invoice
+            inversedBy: payments
+            joinColumn:
+                name: invoice_id
+                referencedColumnName: id

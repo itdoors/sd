@@ -1,0 +1,208 @@
+Lists\HandlingBundle\Entity\Handling:
+    type: entity
+    table: handling
+    repositoryClass: Lists\HandlingBundle\Entity\HandlingRepository
+    gedmo:
+        soft_deleteable:
+          field_name: deletedAt
+          time_aware: false
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        number:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+        createdatetime:
+            type: datetime
+            nullable: false
+        closedatetime:
+            type: datetime
+            nullable: true
+        statusDescription:
+            type: text
+            nullable: true
+            column: status_description
+        statusChangeDate:
+            type: datetime
+            nullable: true
+            column: status_change_date
+        serviceOffered:
+            type: text
+            nullable: true
+            column: service_offered
+        budget:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+        square:
+            type: float
+            nullable: true
+        chance:
+            type: text
+            nullable: true
+        worktimeWithclient:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            column: worktime_withclient
+        description:
+            type: text
+            nullable: true
+        resultString:
+            type: text
+            nullable: true
+            column: result_string
+        statusAdmin:
+            type: boolean
+            nullable: true
+            column: status_admin
+        isClosed:
+            type: boolean
+            nullable: true
+            column: is_closed
+        budgetClient:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            column: budget_client
+        lastHandlingDate:
+            type: datetime
+            nullable: true
+            column: last_handling_date
+        nextHandlingDate:
+            type: datetime
+            nullable: true
+            column: next_handling_date
+        createdate:
+            type: date
+            nullable: false
+            column: createdate
+        organization_id:
+            type: integer
+            nullable: true
+            column: organization_id
+        result_id:
+            type: integer
+            nullable: true
+            column: result_id
+        status_id:
+            type: integer
+            nullable: true
+            column: status_id
+        type_id:
+            type: integer
+            nullable: true
+            column: type_id
+        isMarketing:
+            type: boolean
+            nullable: true
+            default: false
+            column: is_marketing
+        pf1:
+            type: float
+            nullable: true
+            column: pf1
+        launchDate:
+            type: date
+            nullable: true
+            column: launch_date
+        employees:
+            type: integer
+            nullable: true
+        deletedAt:
+            type: datetime
+            nullable: true
+    oneToMany:
+        HandlingMessages:
+          targetEntity: HandlingMessage
+          mappedBy: handling
+        handlingUsers:
+          targetEntity: HandlingUser
+          mappedBy: handling
+    manyToOne:
+        organization:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                organization_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        result:
+            targetEntity: HandlingResult
+            cascade: {  }
+            inversedBy: handlings
+            joinColumns:
+                result_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        status:
+            targetEntity: HandlingStatus
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                status_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        type:
+            targetEntity: HandlingType
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        closer:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                closer_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    manyToMany:
+#        users:
+#            targetEntity: SD\UserBundle\Entity\User
+#            inversedBy: handlings
+#            joinTable:
+#              name: handling_user
+#              joinColumns:
+#                handling_id:
+#                  referencedColumnName: id
+#              inverseJoinColumns:
+#                user_id:
+#                  referencedColumnName: id
+        handlingServices:
+            targetEntity: HandlingService
+            inversedBy: handlings
+            joinTable:
+              name: handling_handling_service
+              joinColumns:
+                handling_id:
+                  referencedColumnName: id
+              inverseJoinColumns:
+                service_id:
+                  referencedColumnName: id
+    lifecycleCallbacks: {  }

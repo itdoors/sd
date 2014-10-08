@@ -1,0 +1,16 @@
+SD\ModelBundle\Entity\Tendercategory:
+    type: entity
+    table: tendercategory
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        name:
+            type: string
+            length: 200
+            fixed: false
+            nullable: false
+    lifecycleCallbacks: {  }

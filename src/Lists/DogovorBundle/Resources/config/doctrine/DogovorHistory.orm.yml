@@ -1,0 +1,62 @@
+Lists\DogovorBundle\Entity\DogovorHistory:
+    type: entity
+    table: dogovor_history
+    repositoryClass: Lists\DogovorBundle\Entity\DogovorHistoryRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        createdatetime:
+            type: datetime
+            nullable: false
+        prolongationTerm:
+            type: string
+            length: 255
+            fixed: false
+            nullable: true
+            column: prolongation_term
+        prolongationDateFrom:
+            type: datetime
+            nullable: true
+            column: prolongation_date_from
+        prolongationDateTo:
+            type: datetime
+            nullable: true
+            column: prolongation_date_to
+        dogovorId:
+            type: integer
+            column: dogovor_id
+        dopDogovorId:
+            type: integer
+            column: dop_dogovor_id
+            nullable: true
+    manyToOne:
+        dogovor:
+            targetEntity: Dogovor
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                dogovor_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        dopDogovor:
+            targetEntity: DopDogovor
+            cascade: {  }
+            joinColumns:
+                dop_dogovor_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

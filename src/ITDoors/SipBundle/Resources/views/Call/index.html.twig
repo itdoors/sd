@@ -1,0 +1,95 @@
+{% extends "::call.html.twig" %}
+{% trans_default_domain 'ITDoorsSipBundle' %}
+{% block title %}{% trans %}Jingle{% endtrans %} {% endblock %}
+{% block page_title %}
+<h3 class="page-title">
+        {% trans %}Jingle{% endtrans %} <small>{{ phone }}</small>
+</h3>
+{% endblock %}
+{% block page_breadcrumbs %}
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
+{% endblock %}
+
+{% block js_page_init_scripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            onDial = function() {
+                var uniqueId = ITDoorsSip.getUniqueId();
+                {% if formName %}
+                    var obj = $('#{{formName}}_uniqueId');
+                    if (obj.length !== undefined) {
+                        obj.val(uniqueId);
+                    }
+                {% endif %}
+            };            
+            ITDoorsSip.initIO('{{ app.user.peerId }}', '{{ params.modelName }}', '{{ params.modelId }}', onDial);
+
+            
+            callbackHangup = function() {
+                {% if formName %}
+                    var obj = $('#{{formName}}_uniqueId');
+                    if (obj.length === undefined) {
+                        close();
+                    }else{
+                        $('.hangup-btn').hide();
+                         window.onbeforeunload = closeForm;
+                    }
+                {% else %}
+                    close();
+                {% endif %}
+              
+            };
+            ITDoorsSip.initSIP('{{ app.user.peerId }}', '{{ app.user.peerPassword }}', '{{ phone }}', callbackHangup);
+
+            function closeForm(){
+                var obj = $('#{{formName}}_uniqueId');
+                    if (obj.length !== undefined) {
+                        return '{% trans %}Attention !!! If you close the window, the appeal does not survive{% endtrans %}.';
+                    }else{
+                        close();
+                    }
+            }
+            function closeIt(){
+               return '{% trans %}Attention !!! If you close the window, the call will be terminated{% endtrans %}.';
+            }
+            window.onbeforeunload = closeIt;
+            $('#managers_list_new').click();
+        });
+    </script>
+{% endblock %}
+{% block body %}
+    <a href="#" class="hangup-btn"></a>
+    {% if formName %}
+        <div class="btn-group" style="margin-bottom:10px;">
+            <button id="managers_list_new" class="btn green ajax-form" style="display: none"
+                    data-target_holder="messageFormTpl{{ params.modelId }}"
+                    data-form_name="{{ formName }}"
+                    data-default='{"{{ params.modelName }}_id":{{ params.modelId }},"mindate":"{{ "now"|date('U') }}", "uniqueId":""}'
+                    data-post_function="updateList"
+                    data-post_target_id="messages_list"
+                    ><i class="fa fa-plus"></i>
+            </button>
+        </div>
+        <div style="display: none" id="messageFormTpl{{ params.modelId }}"></div>
+    {% endif %}
+{% endblock %}

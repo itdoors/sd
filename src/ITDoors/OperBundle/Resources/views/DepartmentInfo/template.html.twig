@@ -1,0 +1,80 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ITDoorsOperBundle' %}
+{% block title %} {% trans %}Show departments{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li><a href="{{ path('it_doors_oper_homepage') }}" title="{% trans   %}Departments{% endtrans %}">{% trans   %}Departments{% endtrans %}</a><i class="fa fa-angle-right"></i></li>
+        <li><a href="">{{ departmentName }}</a></li>
+    </ul>
+{% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Department{% endtrans %} <small>{% trans %}Show departments{% endtrans %}</small>
+    </h3>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/itdoorsoper/css/details.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}} " />
+
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
+
+{#
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.js') }}"></script>
+#}
+{#
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
+#}
+    <script src="{{ asset('bundles/itdoorsoper/js/tabs_department_info.js')}}" ></script>
+
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tabbable tabbable-custom boxless">
+                <ul class="nav nav-tabs" id="ajax_tabs">
+                    <li class="active"><a href="#tab_0" data-block="tab_content" data-url="{{ url('it_doors_oper_department_info_basic', {'id' : idDepartment}) }}" data-toggle="tab">{% trans %}Basic{% endtrans %}</a></li>
+                    <li><a href="#tab_1" data-toggle="tab">{% trans %}Tech parameters{% endtrans %}</a></li>
+                    <li><a href="#tab_2" data-block="tab_content" data-url="{{ url('it_doors_oper_dogovor', {'id' : idDepartment}) }}" data-toggle="tab">{% trans %}Documents{% endtrans %}</a></li>
+                    <li ><a id="schedule_block" href="#tab_3" data-block="tab_content" data-url="{{ url('it_doors_oper_schedule', {'id' : idDepartment}) }}" data-toggle="tab">{% trans %}Schedule{% endtrans %}</a></li>
+                    <li><a href="#tab_3" data-toggle="tab">{% trans %}Audit{% endtrans %}</a></li>
+                    <li><a href="#tab_3" data-toggle="tab">{% trans %}Labor protection{% endtrans %}</a></li>
+                    <li><a href="#tab_3" data-toggle="tab">{% trans %}Calculation{% endtrans %}</a></li>
+                    <li><a href="#tab_3" data-toggle="tab">{% trans %}Logistik{% endtrans %}</a></li>
+                    <li><a href="#tab_3" data-toggle="tab">{% trans %}Final result{% endtrans %}</a></li>
+                    <li><a href="#tab_3" data-toggle="tab">{% trans %}Resposible{% endtrans %}</a></li>
+                    <li><a href="#tab_3" data-toggle="tab" data-block="tab_content" data-url="{{ url('it_doors_oper_department_info_coworkers', {'id' : idDepartment}) }}">{% trans %}Co-workers{% endtrans %}</a></li>
+                    <li><a href="#tab_4" data-toggle="tab" data-block="tab_content" data-url="{{ url('lists_sales_contact_ajax_department', {'departmentId' : idDepartment}) }}">{% trans %}Contacts{% endtrans %}</a></li>
+                </ul>
+                <div class="tab-content" id="tab_content">
+                    {{ render(controller('ITDoorsOperBundle:OperDepartmentInfo:basic', {
+                        'id': idDepartment
+                    })) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

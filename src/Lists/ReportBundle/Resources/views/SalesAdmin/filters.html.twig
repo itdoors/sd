@@ -1,0 +1,51 @@
+{% trans_default_domain 'ListsOrganizationBundle' %}
+
+<script>
+    $(document).ready(function(){
+        SD.select2('#' + '{{ filterForm.vars.name }}' + '_usersString', {
+            multiple: true
+        });
+    });
+</script>
+
+<div class="row ">
+    <div class="col-md-12">
+        <div class="portlet box yellow">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-reorder"></i>
+                    {{ 'Filters'|trans({}, 'messages') }}
+                </div>
+                <div class="tools"><a class="collapse" href="" title="{% trans %}Filters{% endtrans %}"></a></div>
+            </div>
+            <div class="portlet-body">
+                <p>{% trans %}Enter filter parameters and press Filter button.{% endtrans %}</p>
+                {{ form_start(filterForm,
+                    {
+                        'action': path('lists_' ~ baseRoutePrefix ~ '_report_handling_status_filter'),
+                        'attr': {'novalidate': 'novalidate', 'class': 'form-inline', 'role': 'form'}
+                    })
+                }}
+                <div class="row">
+                    {{ form_errors(filterForm) }}
+
+                    <div class="form-group col-md-3">
+                        {{ form_widget(filterForm.usersString, {'attr': {
+                            'class': 'form-control select2 input-middle',
+                            'placeholder': 'Enter Manager',
+                            'data-url': path('sd_common_ajax_user'),
+                            'data-url-by-id': path('sd_common_ajax_user_by_ids')
+                        }}) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        {{ form_widget(filterForm.save, { 'label': 'Filter', 'attr': {'class': 'btn green'}} ) }}
+                        {{ form_widget(filterForm.reset, { 'label': 'Clear Filter', 'attr': {'class': 'btn'}} ) }}
+                    </div>
+                </div>
+                {{ form_end(filterForm) }}
+            </div>
+        </div>
+    </div>
+</div>

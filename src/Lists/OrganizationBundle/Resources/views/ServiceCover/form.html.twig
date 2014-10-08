@@ -1,0 +1,25 @@
+{% trans_default_domain 'ListsOrganizationBundle' %}
+<a class="btn green" id="service-cover-form-add-btn" href="#">
+    <i class="fa fa-plus"></i>
+    {% trans %}Add service cover{% endtrans %}
+</a>
+<div id="service-cover-form-holder" style="display: none"></div>
+{{ ajax_form_render_btn({
+    'selector' : '#service-cover-form-add-btn',
+    'formType' : 'organizationServiceCoverType',
+    'successFunctions' : {
+        'service-cover-list' : 'ITDoorsAjax.updateList'
+    },
+    'serviceDefault' : {
+        'alias' : 'organization.service.cover.service',
+        'method' : 'addFormDefaults'
+    },
+    'serviceSave' : {
+        'alias' : 'organization.service.cover.service',
+        'method' : 'saveForm'
+    },
+    'defaults' : {
+        'organizationId' : organizationId
+    },
+    'target' : '#service-cover-form-holder'
+}) }}
