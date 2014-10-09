@@ -166,7 +166,7 @@
                             {% else %}
                                 <img src="{{ asset( userprofiles_url ~  'no_avatar.png') }}" class="img-responsive" alt=""/>
                             {% endif %}
-                            {% if app.user.id == item.id %}
+                            {% if app.user.id == item.id or is_granted('ROLE_HRADMIN') %}
                             <a 
                                 id="managers_list_new"
                                 data-toggle="modal"
@@ -174,7 +174,7 @@
                                 data-target_holder="userAvatarFormTpl"
                                 data-target_holder="changeAvatar"
                                 data-form_name="userAvatarForm"
-                                data-default='{"user_id":{{ item.id }}}'
+                                data-default='{"user_id":{{ item.id }},"url":"{{ item.photo is not empty ? userprofiles_url ~ item.id ~ '/original_' ~ item.photo : '' }}"}'
 
                                 {#data-post_function="updateList"
                                 data-post_target_id="messages_list"#}

@@ -385,7 +385,11 @@ class UserController extends BaseController
         $errorList = $this->get('validator')->validateValue($file, $imgConstraint);
 
         if (count($errorList) == 0) {
-            $user = $this->getUser();
+            $data = $request->request->get('userAvatarForm');
+
+            $user = $this->getDoctrine()
+                ->getRepository('SDUserBundle:User')
+                ->find($data['user_id']);
 
             if ($file) {
                 $directory = $this->container->getParameter('project.web.dir');
