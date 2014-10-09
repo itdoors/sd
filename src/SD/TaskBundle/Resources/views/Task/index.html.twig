@@ -201,10 +201,11 @@
                     <span class="caption-subject font-green-sharp bold uppercase">{% trans %}Tasks{% endtrans %} </span>
                     <span class="caption-helper visible-sm-inline-block visible-xs-inline-block">click to view project list</span>
                 </div>
+{#
                 <div class="actions">
                     <div class="btn-group">
                         <a class="btn green-haze btn-circle btn-sm todo-projects-config" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                            <i class="fa fa-filter{#icon-settings#}"></i> &nbsp; <i class="fa fa-angle-down"></i>
+                            <i class="fa fa-filter&#123;&#35;icon-settings&#35;&#125;"></i> &nbsp; <i class="fa fa-angle-down"></i>
                         </a>
                         <ul class="dropdown-menu hold-on-click dropdown-checkboxes pull-right">
 
@@ -221,20 +222,20 @@
                                     {% set icon = 'fa-crosshairs' %}
                                     {% set label = 'label-warning' %}
                                     {% set checked = '' %}
-                                    {#
+                                    &#123;&#35;
                                         {% elseif taskUserRole == 'done' %}
                                             {% set icon = 'orange' %}
                                             fa-eye
-                                    #}
+                                    &#35;&#125;
                                 {% endif %}
                                 <li><label><input type="checkbox" class="roleFilter" value="{{ taskRole }}" {{ checked }}/>{{ taskRole|trans }}</label></li>
                             {% endfor %}
-                            {#
+                            &#123;&#35;
                                             <label><input type="checkbox" id="set_filters_on"/>{% trans %}All{% endtrans %}</label>
-                            #}
-                            {#
+                            &#35;&#125;
+                            &#123;&#35;
                                             <label><input type="checkbox"/> System</label>
-                            #}
+                            &#35;&#125;
                             <li class="divider">
                             </li>
                             <li>
@@ -250,8 +251,61 @@
                         </ul>
                     </div>
                 </div>
+#}
             </div>
             <div class="portlet-body todo-project-list-content">
+                <div class="">
+                    <ul class="nav nav-pills nav-stacked">
+                        {% for taskRole in allTaskRoles %}
+                            {% if taskRole == 'author' %}
+                                {% set icon = 'fa-pencil' %}
+                                {% set badge = 'badge-danger' %}
+                                {% set checked = '' %}
+                            {% elseif taskRole == 'performer' %}
+                                {% set icon = 'fa-rocket' %}
+                                {% set badge = 'badge-info' %}
+                                {% set checked = 'checked' %}
+                            {% elseif taskRole == 'controller' %}
+                                {% set icon = 'fa-crosshairs' %}
+                                {% set badge = 'badge-warning' %}
+                                {% set checked = '' %}
+                            {% elseif taskRole == 'matcher' %}
+                                {% set icon = 'fa-crosshairs' %}
+                                {% set badge = 'badge-success' %}
+                                {% set checked = '' %}
+                            {% elseif taskRole == 'viewer' %}
+                                {% set icon = 'fa-crosshairs' %}
+                                {% set badge = 'badge-default' %}
+                                {% set checked = '' %}
+                            {% endif %}
+                            <li>
+{#
+                                <input type="checkbox" class="roleFilter" value="{{ taskRole }}" {{ checked }}/>
+#}
+                                    <span class="badge badge-active {{ badge }}" style="float: right; margin-top: 2px"> 5 </span>
+                                    {{ taskRole|trans }}
+                            </li>
+                        {% endfor %}
+{#
+                        <li class="divider">
+                        </li>
+                        <li>
+                            <label><input type="checkbox" id="oldFilter" value="1"/>{% trans %}Show closed{% endtrans %}</label>
+                        </li>
+                        <li class="divider">
+                        </li>
+
+                        <li>
+                            <a class="btn red" id="taskFilterButton" >
+                                <span style="color: white;">{% trans %}Filter{% endtrans %}</span>
+                            </a>
+                        </li>
+#}
+
+                    </ul>
+                </div>
+
+{#
                 <div class="todo-project-list">
                     <ul class="nav nav-pills nav-stacked">
                         <li class="active">
@@ -266,6 +320,7 @@
                                 {% trans %}Documents{% endtrans %}
                             </a>
                         </li>
+#}
                         {#
                                                 {% for taskRole in allTaskRoles %}
                                                     {% if taskRole == 'author' %}
@@ -291,8 +346,10 @@
                                                     </li>
                                                 {% endfor %}
                         #}
+{#
                     </ul>
                 </div>
+#}
                 <h3>{% trans %}Keys{% endtrans %}</h3>
                 <span class="badge badge-danger badge-active">&nbsp;  </span> - {% trans %}author{% endtrans %}<br>
                 <span class="badge badge-info badge-active">&nbsp;  </span> - {% trans %}performer{% endtrans %}<br>
