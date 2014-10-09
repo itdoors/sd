@@ -1992,6 +1992,10 @@ class AjaxController extends BaseFilterController
     {
         $data = $request->request->get($form->getName());
 
+        $user = $this->getDoctrine()
+            ->getRepository('SDUserBundle:User')
+            ->find($data['user_id']);
+
         $isUpload = $data['loadPhoto'] !== '' ? $data['loadPhoto'] : null;
 
         $widthSave = $heightSave = 247;

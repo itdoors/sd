@@ -113,8 +113,8 @@
                     {% endif %}
                     <div class="row">
                        <div class="col-md-6 responsive-1024">
-                            {% if app.user.photo %}
-                                <img src="{{ app.user.getWebPathOriginal() }}?v={{ 'now' | date('U') }}" id="avatar" alt="Jcrop Example"/>
+                            {% if form.url.vars.value is not empty %}
+                                <img src="{{ form.url.vars.value }}?v={{ 'now' | date('U') }}" id="avatar" alt="Jcrop Example"/>
                             {% else %}
                                 <img src="{{ asset( userprofiles_url ~  'no_avatar_big.png') }}" id="avatar" alt="Jcrop Example"/>
                             {% endif %}
@@ -122,8 +122,8 @@
                        <div class="col-md-6 responsive-1024">
                            <div id="preview-pane">
                                 <div class="preview-container">
-                                    {% if app.user.photo %}
-                                        <img src="{{ app.user.getWebPathOriginal() }}?v={{ 'now' | date('U') }}"/>
+                                    {% if form.url.vars.value is not empty %}
+                                        <img src="{{ form.url.vars.value }}?v={{ 'now' | date('U') }}"/>
                                     {% else %}
                                        <img src="{{ asset( userprofiles_url ~  'no_avatar_big.png') }}" id="avatar" alt="Jcrop Example"/>
                                     {% endif %}
