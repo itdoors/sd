@@ -124,4 +124,14 @@ class ControllerTaskAccess extends BasicTaskAccess
 
         return false;
     }
+
+    /**
+     * @return bool
+     */
+    public function canAddResolution()
+    {
+
+        return true;
+    }
+
 }

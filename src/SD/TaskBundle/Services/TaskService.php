@@ -175,8 +175,9 @@ class TaskService
      *
      * @param SD/TaskBundle/Entity/TaskUserRole[] $taskUserRoles
      * @param string                              $type
+     * @param array                               $additionalInfo
      */
-    public function sendEmailInform($taskUserRoles, $type)
+    public function sendEmailInform($taskUserRoles, $type, $additionalInfo = null)
     {
         /** @var EntityManager $em */
         $em = $this->container->get('doctrine')->getManager();
@@ -247,6 +248,39 @@ class TaskService
                 );
 
             }
+        } elseif ($type == 'resolution') {
+            $subject = $translator->trans('You got resolution', array(), 'SDTaskBundle');
+
+            foreach ($taskUserRoles as $taskUserRole) {
+                $text = '<b>'.$translator->trans('You got resolution to task', array(), 'SDTaskBundle').':</b> ';
+                $text .= $taskUserRole->getTask()->getTitle();
+                $text .= "<br>";
+                $text .= '<b>'.$translator->trans('Your role', array(), 'SDTaskBundle').':</b> ';
+                $text .= $translator->trans($taskUserRole->getRole(), array(), 'SDTaskBundle');
+                $text .= "<br>";
+                $text .= '<b>'.$translator->trans('Resolution', array(), 'SDTaskBundle').':</b> ';
+                $text .= $additionalInfo['resolution'];
+
+                $emails = array();
+                $userEmail = $taskUserRole->getUser()->getEmail();
+                if ($userEmail) {
+                    $emails[] = $userEmail;
+                }
+
+                $emailService->send(
+                    null,
+                    'empty-template',
+                    array (
+                        'users' => $emails,
+                        'variables' => array (
+                            '${subject}$' => $subject,
+                            '${text}$' => $text
+                        )
+                    )
+                );
+
+            }
+
         }
 
         $cron = $this->container->get('it_doors_cron.service');
