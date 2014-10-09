@@ -248,7 +248,7 @@ class OrganizationRepository extends EntityRepository
             ->addSelect('ownership.name as ownershipName')
             ->addSelect('ownership.shortname as ownershipShortname')
             ->addSelect('creator.id as creatorId')
-            ->addSelect('view.name as viewName')
+//            ->addSelect('view.name as viewName')
             ->addSelect('c.name as cityName')
             ->addSelect('r.name as regionName')
 //            ->addSelect('oUser.userId as managerId')
@@ -305,7 +305,7 @@ class OrganizationRepository extends EntityRepository
 //            ->leftJoin('oUser.user', 'users')
 //            ->leftJoin('oUser.role', 'role')
             ->leftJoin('o.ownership', 'ownership')
-            ->leftJoin('Lists\LookupBundle\Entity\Lookup', 'view', 'WITH', $subQueryCase)
+//            ->leftJoin('Lists\LookupBundle\Entity\Lookup', 'view', 'WITH', $subQueryCase)
             ->leftJoin('o.creator', 'creator')
             ->andWhere('o.parent_id is null');
     }
