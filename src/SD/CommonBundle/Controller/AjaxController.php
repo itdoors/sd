@@ -2026,32 +2026,41 @@ class AjaxController extends BaseFilterController
         $src = $directory.'/original_'.$user->getPhoto();
         $size = getimagesize($src);
         $format = strtolower(substr($size['mime'], strpos($size['mime'], '/')+1));
+        $coeff = 1;
+        if ($size[0] > 600) {
+           $coeff =  $size[0]/600;
+        }
 
         $icfunc = 'imagecreatefrom' . $format;
 
         if (!function_exists($icfunc)) {
-            return 3;
+            return 'Not found function ' . $icfunc;
         }
         $imgOriginal = $icfunc($src);
 
         $imgResize = imagecreatetruecolor($widthSave, $heightSave);
+
+        $x = intval($data['x'])*$coeff;
+        $y = intval($data['y'])*$coeff;
+        $w = intval($data['w'])*$coeff;
+        $h = intval($data['h'])*$coeff;
 
         imagecopyresampled(
             $imgResize,
             $imgOriginal,
             0,
             0,
-            intval($data['x']),
-            intval($data['y']),
+            $x,
+            $y,
             $widthSave,
             $heightSave,
-            intval($data['w']),
-            intval($data['h'])
+            $w,
+            $h
         );
 
         $icfunc = "image".$format;
         if (!function_exists($icfunc)) {
-            return 3;
+            return 'Not found function ' . $icfunc;
         }
         $icfunc($imgResize, $directory.'/'.$user->getPhoto());
 
