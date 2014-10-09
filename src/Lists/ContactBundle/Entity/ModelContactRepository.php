@@ -78,8 +78,16 @@ class ModelContactRepository extends EntityRepository
     {
         $sql
             ->select('mc')
-            ->addSelect('o.id as organizationId')
-            ->addSelect('o.name as organizationName')
+            ->addSelect(
+                '
+                (
+                    SELECT o.name
+                    FROM  Lists\OrganizationBundle\Entity\Organization o
+                    WHERE mc.modelId = o.id
+                )as organizationName
+                '
+            )
+            ->addSelect('mc.modelId as organizationId')
             ->addSelect("CONCAT(CONCAT(creator.lastName, ' '), creator.firstName) as creatorFullName")
             ->addSelect("CONCAT(CONCAT(owner.lastName, ' '), owner.firstName) as ownerFullName")
             ->addSelect("owner.id as ownerId");
@@ -104,15 +112,20 @@ class ModelContactRepository extends EntityRepository
      */
     public function processBaseQuery($sql)
     {
+//        $subQueryCase = $sql->expr()->andx(
+//            $sql->expr()->eq('mc.modelId', 'o.id'),
+//            $sql->expr()->eq('mc.modelName', ':modelName')
+//        );
+
         $sql
             ->leftJoin('mc.user', 'creator')
             ->leftJoin('mc.owner', 'owner')
             ->leftJoin('mc.type', 'modelContactType')
             ->leftJoin('mc.level', 'modelContactLevel')
-            ->leftJoin('ListsOrganizationBundle:Organization', 'o', 'WITH', 'o.id = mc.modelId')
+            //->leftJoin('Lists\OrganizationBundle\Entity\Organization', 'o', 'WITH', $subQueryCase)
             //->leftJoin('o.users', 'users')
             ->where('mc.modelName = :modelName')
-            ->andWhere('o.id = mc.modelId')
+//            ->andWhere('o.id = mc.modelId')
             ->setParameter(':modelName', self::MODEL_ORGANIZATION);
 
     }

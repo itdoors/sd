@@ -2032,7 +2032,7 @@ class AjaxController extends BaseFilterController
         $format = strtolower(substr($size['mime'], strpos($size['mime'], '/')+1));
         $coeff = 1;
         if ($size[0] > 600) {
-           $coeff =  $size[0]/600;
+            $coeff = $size[0]/600;
         }
 
         $icfunc = 'imagecreatefrom' . $format;
