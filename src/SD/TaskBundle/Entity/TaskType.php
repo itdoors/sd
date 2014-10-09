@@ -3,11 +3,12 @@
 namespace SD\TaskBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use SD\TaskBundle\Interfaces\Serializable;
 
 /**
  * TaskType
  */
-class TaskType
+class TaskType implements Serializable
 {
 
     /**
@@ -50,5 +51,18 @@ class TaskType
     public function getName ()
     {
         return $this->name;
+    }
+
+    /**
+     * sleep method
+     *
+     * @return array
+     */
+    public function customSerialize()
+    {
+        return array(
+            'id' => $this->getId(),
+            'name' => $this->getName()
+        );
     }
 }

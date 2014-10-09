@@ -3,6 +3,7 @@
 namespace SD\TaskBundle\Classes;
 
 use SD\TaskBundle\Entity\Stage;
+use SD\TaskBundle\Interfaces\Serializable;
 use SD\TaskBundle\Interfaces\TaskAccessInterface;
 use SD\TaskBundle\Entity\Task;
 use SD\TaskBundle\Entity\TaskUserRole;
@@ -10,7 +11,7 @@ use SD\TaskBundle\Entity\TaskUserRole;
 /**
  * BasicTaskAccess class
  */
-class BasicTaskAccess implements TaskAccessInterface
+class BasicTaskAccess implements TaskAccessInterface, Serializable
 {
 
     protected $taskUserRole;
@@ -219,5 +220,26 @@ class BasicTaskAccess implements TaskAccessInterface
 
         return false;
 
+    }
+
+    public function customSerialize() {
+        return array(
+            'isViewed' => $this->isViewed(),
+            'canSetDone' => $this->canSetDone(),
+            'canSetUndone' => $this->canSetUndone(),
+            'canSetClosed' => $this->canSetClosed(),
+            'canUploadFiles' => $this->canUploadFiles(),
+            'canSetChecking' => $this->canSetChecking(),
+            'canMakeDateRequest' => $this->canMakeDateRequest(),
+            'canAnswerDateRequest' => $this->canAnswerDateRequest(),
+            'canLeaveComment' => $this->canLeaveComment(),
+            'canSignUp' => $this->canSignUp(),
+            'canRefuseSignUp' => $this->canRefuseSignUp(),
+            'canEditHeader' => $this->canEditHeader(),
+            'canEditDescription' => $this->canEditDescription(),
+            'canEditEndDate' => $this->canEditEndDate(),
+            'canDeleteFile' => $this->canDeleteFile(),
+            'canAddViewer' => $this->canAddViewer()
+        );
     }
 }

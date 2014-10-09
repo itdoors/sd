@@ -3,11 +3,12 @@
 namespace SD\TaskBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use SD\TaskBundle\Interfaces\Serializable;
 
 /**
  * Stage
  */
-class Stage
+class Stage implements Serializable
 {
 
     /**
@@ -112,5 +113,19 @@ class Stage
     {
 
         return $this->getName();
+    }
+
+    /**
+     * sleep method
+     *
+     * @return array
+     */
+    public function customSerialize()
+    {
+        return array(
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'model' => $this->getModel()
+        );
     }
 }

@@ -23,8 +23,6 @@
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
-    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
-    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/itdoorsoper/css/details.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/admin/pages/css/todo.css') }}" />
 {% endblock %}
@@ -38,25 +36,76 @@
 {% endblock %}
 
 {% block body %}
+    <script src="{{ asset('templates/core/angular/angular.js') }}"></script>
+    <script src="{{ asset('templates/core/angular/angular-route.js') }}"></script>
+    <script src="{{ asset('templates/core/angular/angular-animate.js') }}"></script>
+
     <style>
         .notDisplayed{
             display: none;
         }
+/*
+        .task-item{
+            -webkit-transition: opacity 1s;
+            -moz-transition: opacity 1s;
+            -o-transition: opacity 1s;
+            transition: opacity 1s;
+            opacity: 1;
+        }
+        .task-item.ng-enter{
+            opacity: 0.3;
+            transition-delay: 0.3s;
+        }
+        .task-item.ng-enter-active{
+            opacity: 0.3;
+        }
+        .task-item.ng-enter-stagger {
+
+        }
+*/
     </style>
-    <script src="{{ asset('templates/core/angular/angular.js') }}"></script>
     <script>
-        var taskApp = angular.module('taskApp', []);
+        var taskApp = angular.module('taskApp', ['ngRoute', 'ngAnimate']);
+
+        taskApp.config(function($routeProvider) {
+            $routeProvider.
+                    when('/', {
+                        template: '<div style="color:#666666;">&lt;&lt; Выберите задачу из списка</div>',
+                        controller: 'TaskCtrl'
+                    }).
+                    when('/                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ', {
+                        templateUrl: '{{ url('sd_task_angular_view') }}',
+                        controller: 'TaskViewCtrl'
+                    }).
+                    otherwise({
+                        redirectTo: '/'
+                    });
+        });
+        taskApp.controller('TaskViewCtrl', function ($scope, $http, $routeParams) {
+            var id = $routeParams.idTaskUserRole;
+
+            console.log(id)
+        })
 
         taskApp.controller('TaskCtrl', function ($scope, $http, $interval) {
             $scope.tasksUserRole = [];
-
+            $scope.customFilter = {};
+            $scope.tasksCount = {
+                'author': 0,
+                'performer': 0,
+                'matcher': 0,
+                'controller': 0,
+                'viewer': 0
+            };
 
             var intervalActivity;
             $scope.updateTasks = function() {
                 $http({method: 'GET', url: '{{ path('sd_task_get_tasks_api') }}'}).
                         success(function(data, status, headers, config) {
                             //$scope.activities = data;
+                            $scope.tasksUserRole = data;
                             console.log(data)
+                            $scope.recountTasks();
 
                             // this callback will be called asynchronously
                             // when the response is available
@@ -66,7 +115,30 @@
                             // or server returns response with an error status.
                         });
             }
+
+            $scope.recountTasks = function() {
+                for (var i =0; i<$scope.tasksUserRole.length; i++) {
+                    var key = $scope.tasksUserRole[i].role.name+'';
+                    $scope.tasksCount[key] += 1;
+
+                    $scope.tasksUserRole[i].altColorRole = 'info';
+                    //insert alt colors to tasks
+                    if (key == 'performer') {
+                        $scope.tasksUserRole[i].altColorRole = 'blue';
+                    } else if (key == 'controller') {
+                        $scope.tasksUserRole[i].altColorRole = 'yellow';
+                    } else if (key == 'matcher') {
+                        $scope.tasksUserRole[i].altColorRole = 'green';
+                    } else if (key == 'viewer') {
+                        $scope.tasksUserRole[i].altColorRole = 'grey';
+                    } else if (key == 'author') {
+                        $scope.tasksUserRole[i].altColorRole = 'red';
+                    }
+                }
+                //console.log($scope.tasksCount);
+            }
             $scope.updateTasks();
+
 //            intervalActivity = $interval($scope.updateActivity, 2000)
 
             /*
@@ -78,7 +150,11 @@
              }
              */
 
-
+            $scope.filterRole = function(role) {
+                $scope.customFilter.role = {};
+                $scope.customFilter.role.name = role;
+                console.log($scope.customFilter);
+            }
 
         });
 
@@ -252,45 +328,32 @@
                 </div>
             </div>
             <div class="portlet-body todo-project-list-content">
-                <div class="todo-project-list">
+                <div class="">
                     <ul class="nav nav-pills nav-stacked">
-                        <li class="active">
-                            <a href="">
-                                <span class="badge badge-active"> {{ countTasks }} </span>
-                                {% trans %}Tasks{% endtrans %}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" onclick="alert('Документы в разработке')">
-                                <span class="badge badge-active"> 0 </span>
-                                {% trans %}Documents{% endtrans %}
-                            </a>
-                        </li>
-                        {#
-                                                {% for taskRole in allTaskRoles %}
-                                                    {% if taskRole == 'author' %}
-                                                        {% set icon = 'fa-pencil' %}
-                                                        {% set label = 'badge-danger' %}
-                                                    {% elseif taskRole == 'performer' %}
-                                                        {% set icon = 'fa-rocket' %}
-                                                        {% set label = 'badge-info' %}
-                                                    {% elseif taskRole == 'controller' %}
-                                                        {% set icon = 'fa-crosshairs' %}
-                                                        {% set label = 'badge-warning' %}
-                                                        &#123;&#35;
-                                                            {% elseif taskUserRole == 'done' %}
-                                                                {% set icon = 'orange' %}
-                                                                fa-eye
-                                                        &#35;&#125;
-                                                    {% endif %}
-                                                    <li &#123;&#35;class="active"&#35;&#125;>
-                                                        <a href="#">
-                                                            <span class="{{ label }} badge &#123;&#35;badge-active&#35;&#125;"> 1 </span>
-                                                            {{ taskRole|trans }}
-                                                        </a>
-                                                    </li>
-                                                {% endfor %}
-                        #}
+                        {% for taskRole in allTaskRoles %}
+                            {% if taskRole == 'author' %}
+                                {% set icon = 'fa-pencil' %}
+                                {% set badge = 'badge-danger' %}
+                            {% elseif taskRole == 'performer' %}
+                                {% set icon = 'fa-rocket' %}
+                                {% set badge = 'badge-info' %}
+                            {% elseif taskRole == 'controller' %}
+                                {% set icon = 'fa-crosshairs' %}
+                                {% set badge = 'badge-warning' %}
+                            {% elseif taskRole == 'matcher' %}
+                                {% set icon = 'fa-crosshairs' %}
+                                {% set badge = 'badge-success' %}
+                            {% elseif taskRole == 'viewer' %}
+                                {% set icon = 'fa-crosshairs' %}
+                                {% set badge = 'badge-default' %}
+                            {% endif %}
+                            <li data-ng-click="filterRole('{{ taskRole }}')">
+                                <a href="">
+                                    <span class="badge badge-active {{ badge }}" style="float: right; margin-top: 2px"> {{ '{{ tasksCount["'~taskRole~'"] }}' }} </span>
+                                    {{ taskRole|trans }}
+                                </a>
+                            </li>
+                        {% endfor %}
                     </ul>
                 </div>
                 <h3>{% trans %}Keys{% endtrans %}</h3>
@@ -313,11 +376,20 @@
              &nbsp;
             <span class="caption-subject font-green-sharp bold uppercase">
                 {% trans %}Tasks list{% endtrans %}
+{#
+                <div class="input-icon right" style="">
+                    <i class="icon-magnifier"></i>
+                    <input type="text" class="form-control input-circle"
+                           ng-model="search" placeholder="{% trans %}Search{% endtrans %}...">
+                </div>
+#}
             </span>
             <span class="caption-helper">
                 <i class="fa fa-spinner fa-spin notDisplayed" id="spinner"></i>
             </span>
+
         </div>
+
         <div class="actions">
             <div class="btn-group">
                 <a class="btn green-haze btn-circle btn-sm ajax-form"
@@ -347,57 +419,46 @@
     <div class="col-md-5 col-sm-4">
         <div class="scroller" style="max-height: 600px; min-height: 500px;" data-always-visible="0" data-rail-visible="0" data-handle-color="#dae3e7">
             <div class="todo-tasklist" data-url="{{ path('sd_task_list') }}" id="task_list">
-
-                <div class="todo-tasklist-item todo-tasklist-item-border-{{ color }} task-item" data-id="{{ taskUserRole.id }}" style="border-width: 3px;">
-                    <img class="todo-userpic pull-left" src="{{ asset( userprofiles_url ~ taskUserRole.user.id ~ '/image29_' ~ taskUserRole.user.photo) }}" width="27px" height="27px">
-                    <div class="todo-tasklist-item-title">
-                        {{ taskUserRole.task.title }} <span style="color: #577688">(ID:{{ taskUserRole.task.id }}) </span>
+                <a href="{{ path('sd_task_homepage') }}#/{{ '{{ taskUserRole.id }}' }}"
+                   ng-repeat="taskUserRole in tasksUserRole | filter:customFilter" style="text-decoration: none;">
+                    <div class="todo-tasklist-item todo-tasklist-item-border-{{'{{ taskUserRole.altColorRole }}' }} task-item"
+                         style="border-width: 3px; margin-bottom: 5px;">
+                        <img class="todo-userpic pull-left"
+                             src="{{ userprofiles_url}}{{ '{{ taskUserRole.user.id }}'}}{{ '/image29_'}}{{ '{{ taskUserRole.user.photo }}' }}"
+                             width="27px" height="27px">
+                        <div class="todo-tasklist-item-title">
+                            {{ '{{ taskUserRole.task.title }}' }} <span style="color: #577688">(ID:{{ '{{ taskUserRole.task.id }}' }}) </span>
+                        </div>
+                        <div class="todo-tasklist-item-text">
+                            <span ng-if="taskUserRole.task.description.length > 100">
+                                {{ '{{ taskUserRole.task.description.slice(0, 50) }}' }}...
+                            </span>
+                            <span ng-if="taskUserRole.task.description.length <= 100">
+                                {{ '{{ taskUserRole.task.description }}' }}
+                            </span>
+                        </div>
+                        <div class="todo-tasklist-controls pull-left">
+    {#
+            <span class="todo-tasklist-date"><i class="fa fa-calendar"></i>
+                {{
+                include('SDTaskBundle:Task:taskEndDateLast.html.twig',
+                {
+                'taskUserRole' : taskUserRole
+                }
+                )
+                }}
+            </span>
+    #}
+                            <span class="label label-sm label-{{'{{ taskUserRole.altColorStage }}' }}">{{ '{{ taskUserRole.task.stage.name }}' }}</span>
+                        </div>
                     </div>
-                    <div class="todo-tasklist-item-text">
-                        {{ taskUserRole.task.description|length > 100 ? taskUserRole.task.description|slice(0, 50) ~ '...' : taskUserRole.task.description  }}
-
-                        {#
-                                {% if taskUserRole.role = 'controller' %}
-                                    <br>
-                                    {% trans %}Performer{% endtrans %}:
-                                {% endif %}
-                        #}
-                    </div>
-                    <div class="todo-tasklist-controls pull-left">
-{#
-        <span class="todo-tasklist-date"><i class="fa fa-calendar"></i>
-            {{
-            include('SDTaskBundle:Task:taskEndDateLast.html.twig',
-            {
-            'taskUserRole' : taskUserRole
-            }
-            )
-            }}
-        </span>
-#}
-                        <span class="label label-sm {{ labelStage }}">{{ stage|trans }}</span>
-                    </div>
-                </div>
-
-{#
-                {% for taskUserRole in tasksUserRole %}
-                    {{
-                    include('SDTaskBundle:Task:taskListItem.html.twig',
-                    {
-                    'taskUserRole' : taskUserRole
-                    }
-                    )
-                    }}
-
-                {% endfor %}
-#}
-
+                </a>
             </div>
         </div>
     </div>
     <div class="todo-tasklist-devider">
     </div>
-    <div class="col-md-7 col-sm-8" id="task_holder">
+    <div class="col-md-7 col-sm-8" id="task_holder" ng-view="">
         <div style="color:#666666;"><< {% trans %}Choose any task from the list{% endtrans %}</div>
 {#
         <div class="scroller" style="max-height: 600px;" data-always-visible="0" data-rail-visible="0" data-handle-color="#dae3e7"

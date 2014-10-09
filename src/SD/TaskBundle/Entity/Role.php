@@ -3,11 +3,12 @@
 namespace SD\TaskBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use SD\TaskBundle\Interfaces\Serializable;
 
 /**
  * Role
  */
-class Role
+class Role implements Serializable
 {
 
     /**
@@ -85,5 +86,19 @@ class Role
     {
 
         return $this->name;
+    }
+
+    /**
+     * sleep method
+     *
+     * @return array
+     */
+    public function customSerialize()
+    {
+        return array(
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'model' => $this->getModel()
+        );
     }
 }

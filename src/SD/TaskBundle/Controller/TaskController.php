@@ -1156,4 +1156,28 @@ class TaskController extends Controller
 
         return new Response(json_encode($return));
     }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function angularTaskViewAction(Request $request)
+    {
+/*        $data = json_decode($request->getContent(), true);
+        $request->request->replace($data);
+
+        $info['id'] = $request->request->get('id');*/
+
+/*        $taskUserRole = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:TaskUserRole')
+            ->find($id);
+
+        $info = $this->getTaskUserRoleInfo($id);
+*/
+        $info['id'] = 'new task here';
+
+        return $this->render('SDTaskBundle:Angular:taskView.html.twig', $info);
+    }
+
 }

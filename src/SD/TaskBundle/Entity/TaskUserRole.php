@@ -3,11 +3,12 @@
 namespace SD\TaskBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use SD\TaskBundle\Interfaces\Serializable;
 
 /**
  * TaskUserRole
  */
-class TaskUserRole
+class TaskUserRole implements Serializable
 {
 
     /**
@@ -132,5 +133,20 @@ class TaskUserRole
     public function getIsViewed ()
     {
         return $this->isViewed;
+    }
+
+    /**
+     * sleep method
+     *
+     * @return array
+     */
+    public function customSerialize()
+    {
+        return array(
+            'id' => $this->getId(),
+            'task' => $this->getTask()->customSerialize(),
+            'role' => $this->getRole()->customSerialize(),
+            'user' => $this->getUser()->customSerialize()
+        );
     }
 }

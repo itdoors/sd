@@ -81,3 +81,7 @@ sd_task_set_pattern:
 sd_task_get_tasks_api:
     path:     /tasks/get/tasks/api
     defaults: { _controller: SDTaskBundle:TaskApi:getTasksApi }
+
+sd_task_angular_view:
+    path:     /tasks/angular/view
+    defaults: { _controller: SDTaskBundle:Task:angularTaskView }

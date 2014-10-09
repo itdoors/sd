@@ -25,79 +25,18 @@ class TaskApiController extends Controller
         $filterArray = array (
             'user' => $user
         );
-
         $tasksUserRoleRepo = $this->getDoctrine()
             ->getRepository('SDTaskBundle:TaskUserRole');
 
         $tasksUserRole = $tasksUserRoleRepo->getEntitiesListByFilter($filterArray);
 
-        return new JsonResponse($tasksUserRole);
-    }
-    /**
-     * Renders the index page with count of tasks and its list
-     *
-     * @return Response
-     */
-    public function indexAction ()
-    {
-        $user = $this->getUser();
+        $return = array();
 
-        $filterArray = array (
-            'user' => $user
-        );
-
-        $info = $this->getTasksInfoForTable($filterArray);
-
-        $tasksUserRoleRepo = $this->getDoctrine()
-            ->getRepository('SDTaskBundle:TaskUserRole');
-
-        $countTasks = $tasksUserRoleRepo->countTasksByRoleAndUser($user->getId(), 'performer');
-        $countTasks += $tasksUserRoleRepo->countTasksByRoleAndUser($user->getId(), 'controller');
-        $countTasks += $tasksUserRoleRepo->countTasksByRoleAndUser($user->getId(), 'matcher');
-
-
-        $info['countTasks'] = $countTasks;
-
-        return $this->render('SDTaskBundle:Task:index.html.twig', $info);
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function taskListAction(Request $request)
-    {
-        $filter = $request->request->get('filter');
-        $user = $this->getUser();
-
-        $filterArray = array (
-            'user' => $user
-        );
-
-        $filterArray['showClosed'] = (bool) $request->request->get('showClosed');
-
-        if ($filter) {
-            if (count($filter['role'])) {
-                foreach ($filter['role'] as $filterRole) {
-                    $role = $this->getDoctrine()
-                        ->getRepository('SDTaskBundle:Role')
-                        ->findOneBy(array (
-                            'name' => $filterRole,
-                            'model' => 'task'
-                        ));
-                    $filterArray['role'][] = $role;
-                }
-            }
+        foreach ($tasksUserRole as $taskUserRole) {
+            $return[] = $taskUserRole->customSerialize();
         }
 
-        $info = $this->getTasksInfoForTable($filterArray);
-
-/*        $return = array();
-        $return['html'] =
-        $return['success'] = 1;*/
-
-        return new Response($this->renderView('SDTaskBundle:Task:taskList.html.twig', $info));
+        return new JsonResponse($return);
     }
 
     /**

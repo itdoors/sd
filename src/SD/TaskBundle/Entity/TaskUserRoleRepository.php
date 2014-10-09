@@ -90,13 +90,13 @@ class TaskUserRoleRepository extends EntityRepository
             ->setParameter(':roleMatching', $roleMatching);*/
 
 
-        if (isset($filterArray['role']) && count($filterArray['role'])) {
+/*        if (isset($filterArray['role']) && count($filterArray['role'])) {
             $sql->andWhere('r IN (:role)')
                 ->setParameter(':role', $filterArray['role']);
         } else {
             $sql->andWhere('r.name IN (:role)')
                 ->setParameter(':role', array('performer'));
-        }
+        }*/
 
         if (isset($filterArray['user'])) {
             $sql->andWhere('u = :user')

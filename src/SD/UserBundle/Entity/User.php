@@ -12,11 +12,12 @@ use FOS\UserBundle\Model\User as BaseUser;
 use Lists\HandlingBundle\Entity\HandlingUser;
 use Lists\OrganizationBundle\Entity\OrganizationUser;
 use Lists\TeamBundle\Entity\Team;
+use SD\TaskBundle\Interfaces\Serializable;
 
 /**
  * User
  */
-class User extends BaseUser
+class User extends BaseUser implements Serializable
 {
     /**
      * __construct()
@@ -565,5 +566,16 @@ class User extends BaseUser
     public function getPeerPassword()
     {
         return $this->peerPassword;
+    }
+
+    /**
+     * @return array
+     */
+    public function customSerialize() {
+        return array(
+            'id' => $this->getId(),
+            'name' => $this->getFullname(),
+            'photo' => $this->getPhoto()
+        );
     }
 }

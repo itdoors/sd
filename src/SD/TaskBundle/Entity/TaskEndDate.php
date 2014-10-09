@@ -133,4 +133,18 @@ class TaskEndDate
     {
         return $this->stage;
     }
+
+    /**
+     * sleep method
+     *
+     * @return array
+     */
+    public function customSerialize()
+    {
+        return array(
+            'id' => $this->getId(),
+            'changeDateTime' => $this->getChangeDateTime(),
+            'endDateTime' => $this->getEndDateTime()
+        );
+    }
 }

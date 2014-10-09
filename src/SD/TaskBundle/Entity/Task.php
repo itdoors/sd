@@ -3,11 +3,12 @@
 namespace SD\TaskBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use SD\TaskBundle\Interfaces\Serializable;
 
 /**
  * Task
  */
-class Task
+class Task implements Serializable
 {
 
     /**
@@ -267,5 +268,29 @@ class Task
     public function getStartDate ()
     {
         return $this->startDate;
+    }
+
+    /**
+     * sleep method
+     *
+     * @return array
+     */
+    public function customSerialize()
+    {
+        $return = array(
+            'id'=>$this->getId(),
+            'createDateTime' => $this->getCreateDate(),
+            'startDateTime' => $this->getStartDate(),
+            'title' => $this->getTitle(),
+            'description' => $this->getDescription(),
+            'author' => $this->getAuthor()->customSerialize(),
+            'stage' => $this->getStage()->customSerialize()
+        );
+        $return['taskEndDates'] = array();
+        foreach ($this->getTaskEndDates() as $taskEndDate) {
+            $return['taskEndDates'][] = $taskEndDate->customSerialize();
+        }
+            //'type' => $this->getType()->customSerialize()
+        return $return;
     }
 }
