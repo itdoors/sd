@@ -294,9 +294,9 @@ class OrganizationRepository extends EntityRepository
      */
     public function processBaseQuery ($sql)
     {
-        $subQueryCase = $sql->expr()->andx(
-            $sql->expr()->eq('view.id', 'o.organizationSignId')
-        );
+//        $subQueryCase = $sql->expr()->andx(
+//            $sql->expr()->eq('view.id', 'o.organizationSignId')
+//        );
         $sql
             ->leftJoin('o.city', 'c')
             ->leftJoin('c.region', 'r')

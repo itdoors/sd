@@ -217,7 +217,7 @@ class HandlingRepository extends BaseRepository
             ->leftJoin('h.status', 'status')
             ->leftJoin('h.result', 'result')
             ->leftJoin('h.handlingUsers', 'handlingUsers')
-             ->leftJoin('Lists\HandlingBundle\Entity\HandlingMessage', 'hm', 'WITH', $subQueryCase)
+             ->leftJoin('h.HandlingMessages', 'hm', 'WITH', $subQueryCase)
             ->leftJoin('handlingUsers.user', 'users')
             ->leftJoin('handlingUsers.lookup', 'lookup');
 
