@@ -19,3 +19,4 @@ SD\CalendarBundle\Entity\Holiday:
             column: short_description
         description:
             type: text
+            nullable: true

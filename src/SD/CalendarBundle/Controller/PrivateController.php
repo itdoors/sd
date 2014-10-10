@@ -206,8 +206,8 @@ class PrivateController extends SalesController
             $events[] = array(
                 'hover_title' => '',
                 'title' => $name,
-                'start' => date('Y').'-'.$holiday->getMonth().'-'.$holiday->getDay(),
-                'end' => date('Y').'-'.$holiday->getMonth().'-'.$holiday->getDay(),
+                'start' => date('Y').'-'.$holiday->getDate()->format('m').'-'.$holiday->getDate()->format('d'),
+                'end' => date('Y').'-'.$holiday->getDate()->format('m').'-'.$holiday->getDate()->format('d'),
                 'allDay' => true
                 );
         }

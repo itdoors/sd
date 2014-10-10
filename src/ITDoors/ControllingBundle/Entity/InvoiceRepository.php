@@ -262,6 +262,19 @@ class InvoiceRepository extends EntityRepository
                             ->setParameter(':dateFrom', $from)
                             ->setParameter(':dateTo', $to);
                         break;
+                    case 'act':
+                        if (in_array($value, array(0,1))) {
+                            $sql->andWhere(
+                                "i.id in (
+                                    SELECT iao.id
+                                    FROM ITDoorsControllingBundle:Invoice iao
+                                    INNER JOIN ITDoorsControllingBundle:InvoiceAct ia
+                                    WHERE iao.id = ia.invoiceId
+                                    AND ia.original = :orininal
+                                )"
+                            )->setParameter(':orininal', $value);
+                        }
+                        break;
                 }
             }
         }
@@ -1055,6 +1068,55 @@ class InvoiceRepository extends EntityRepository
         $res->andWhere("i.dateFact is not NULL")
             ->andWhere("i.dateFact >= :date")->setParameter(':date', $date)
             ->orderBy('i.customerName', 'ASC');
+
+        return $res->getQuery();
+    }
+    /**
+     * Returns results for interval future invoice
+     *
+     * @param array   $filters
+     * @param integer $companystryctyre
+     * 
+     * @return mixed[]
+     */
+    public function getInvoiceAll ($filters, $companystryctyre)
+    {
+        $res = $this->createQueryBuilder('i');
+        /** select */
+        $this->selectInvoicePeriod($res);
+        /** join */
+        $this->joinInvoicePeriod($res);
+        /** where */
+        $this->processFilters($res, $filters);
+        if ($companystryctyre) {
+            $res
+                ->leftJoin('i.invoicecompanystructure', 'i_ics')
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:companystructureId) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:companystructureId)
+                            )
+                    '
+                )
+                ->setParameter(':companystructureId', $companystryctyre);
+        }
+        $res->orderBy('i.customerName', 'ASC');
 
         return $res->getQuery();
     }
@@ -2010,6 +2072,9 @@ class InvoiceRepository extends EntityRepository
             case 'all':
                 $result['entities'] = $this->getAll($filters, $companystryctyre);
                 $result['count'] = $this->getAllCount($filters, $companystryctyre);
+                break;
+            case 'allExel':
+                $result['entities'] = $this->getInvoiceAll($filters, $companystryctyre);
                 break;
             default:
                 $result['entities'] = $this->getInvoiceEmptyData($period, $companystryctyre);

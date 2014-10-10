@@ -26,11 +26,6 @@ class Holiday
     private $shortDescription;
 
     /**
-     * @var string
-     */
-    private $description;
-
-    /**
      * Get id
      *
      * @return integer 
@@ -83,28 +78,6 @@ class Holiday
     {
         return $this->shortDescription;
     }
-    /**
-     * Set description
-     *
-     * @param string $description
-     * 
-     * @return Holiday
-     */
-    public function setDescription ($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-    /**
-     * Get description
-     *
-     * @return string 
-     */
-    public function getDescription ()
-    {
-        return $this->description;
-    }
 
     /**
      * @var \DateTime
@@ -132,5 +105,34 @@ class Holiday
     public function getDate ()
     {
         return $this->date;
+    }
+    /**
+     * @var string
+     */
+    private $description;
+
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * 
+     * @return Holiday
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 }
