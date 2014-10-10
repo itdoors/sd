@@ -152,7 +152,7 @@ class ModelContactRepository extends EntityRepository
     public function processOrganizationQuery($sql, $organizationId)
     {
         $sql
-            ->andWhere('o.id = :organizationId')
+            ->andWhere('mc.modelId = :organizationId')
             ->setParameter(':organizationId', $organizationId);
 
         $orgIds = $this->getIdsInGroup($organizationId);
