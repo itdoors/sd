@@ -34,9 +34,12 @@ class TaskController extends Controller
         $tasksUserRoleRepo = $this->getDoctrine()
             ->getRepository('SDTaskBundle:TaskUserRole');
 
-        $countTasks = $tasksUserRoleRepo->countTasksByRoleAndUser($user->getId(), 'performer');
-        $countTasks += $tasksUserRoleRepo->countTasksByRoleAndUser($user->getId(), 'controller');
-        $countTasks += $tasksUserRoleRepo->countTasksByRoleAndUser($user->getId(), 'matcher');
+        $countTasks = array();
+        $countTasks['performer'] = $tasksUserRoleRepo->countTasksByRoleAndUser($user->getId(), 'performer');
+        $countTasks['controller'] = $tasksUserRoleRepo->countTasksByRoleAndUser($user->getId(), 'controller');
+        $countTasks['matcher'] = $tasksUserRoleRepo->countTasksByRoleAndUser($user->getId(), 'matcher');
+        $countTasks['author'] = $tasksUserRoleRepo->countTasksByRoleAndUser($user->getId(), 'author');
+        $countTasks['viewer'] = $tasksUserRoleRepo->countTasksByRoleAndUser($user->getId(), 'viewer');
         $info['countTasks'] = $countTasks;
 
         return $this->render('SDTaskBundle:Task:index.html.twig', $info);
@@ -692,7 +695,7 @@ class TaskController extends Controller
      *
      * @return Response
      */
-    public function addCommentAction (Request $request)
+    public function addCommentAction(Request $request)
     {
         $id = $request->request->get('id');
         $commentValue = $request->request->get('comment');
@@ -702,6 +705,52 @@ class TaskController extends Controller
 
         return new Response(json_encode($return));
     }
+
+    /**
+     * Insert resolution
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function addResolutionAction(Request $request)
+    {
+        $id = $request->request->get('id');
+        $commentValue = $request->request->get('comment');
+        $translator = $this->get('translator');
+
+        if ($commentValue) {
+            $comment = $translator->trans('Resolution', array(), 'SDTaskBundle').': '.$commentValue;
+        }
+
+        $this->insertComment($id, $comment);
+
+        $em = $this->getDoctrine()->getManager();
+        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
+
+        $roleRepository = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:Role');
+
+        $performerRole = $roleRepository
+            ->findOneBy(array(
+                'name' => 'performer',
+                'model' => 'task'
+            ));
+
+        $taskUserRolePerformer = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
+            array (
+                'task' => $taskUserRole->getTask(),
+                'role' => $performerRole
+            )
+        );
+
+        $this->sendEmail($taskUserRolePerformer, 'resolution', array('resolution' => $commentValue));
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
+
 
     /**
      * @param int    $idTaskUserRole
@@ -1045,11 +1094,12 @@ class TaskController extends Controller
     /**
      * @param SD/TaskBundle/Entity/TaskUserRole[] $taskUserRoles
      * @param string                              $type
+     * @param array                               $additionalInfo
      */
-    private function sendEmail($taskUserRoles, $type)
+    private function sendEmail($taskUserRoles, $type, $additionalInfo = null)
     {
         $taskService = $this->get('task.service');
-        $taskService->sendEmailInform($taskUserRoles, $type);
+        $taskService->sendEmailInform($taskUserRoles, $type, $additionalInfo);
     }
 
     /**

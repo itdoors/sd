@@ -23,7 +23,6 @@
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
-    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/itdoorsoper/css/details.css')}}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/admin/pages/css/todo.css') }}" />
@@ -35,15 +34,15 @@
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
-    <script src="{{ asset('bundles/itdoorsoper/js/tabs_department_info.js')}}" ></script>
 {% endblock %}
 
 {% block body %}
     <style>
         .notDisplayed{
             display: none;
+        }
+        .leftTriangle{
+
         }
     </style>
     <script>
@@ -53,6 +52,7 @@
                 clearTaskContent();
                 showSpinner()
                 var obj = this;
+                lightUpTask(obj);
                 var id = $(obj).data('id');
                 var url = $('#more_info_input').data('url_get_task_view');
                 var sendData = {
@@ -74,67 +74,76 @@
                     }
                 })
             })
-            $('#taskFilterButton').die('click');
-            $('#taskFilterButton').bind('click', function(e){
+            $('.roleFilter').die('click');
+            $('.roleFilter').bind('click', function(e){
                 e.preventDefault();
+                var obj = this;
 
-                var spinner = $('#spinner');
-                spinner.removeClass('notDisplayed');
-
-                var filtersCheckboxes = $('.roleFilter:checked');
-                var filter = new Array();
-                var filterRole = new Array();
-
-                for (var i=0; i<filtersCheckboxes.length; i++) {
-                    filterRole.push(filtersCheckboxes[i].value);
-                }
-
-                var showClosed = $("#oldFilter").prop("checked");
-                if (showClosed) {
-                    showClosed = 1;
+                if ($(obj).data('status')) {
+                    $(obj).data('status', 0);
+                    $(obj).find('.arrow').css('display', 'none');
+                    $(obj).find('.roleTitle').css('color', 'grey');
                 } else {
-                    showClosed = 0;
+                    $(obj).data('status', 1);
+                    $(obj).find('.arrow').css('display', 'inline');
+                    $(obj).find('.roleTitle').css('color', 'inherit');
                 }
-                filter = {
-                    'role': filterRole
-                }
-                var url = $('#more_info_input').data('url_get_task_list');
-                var sendData = {
-                    'filter': filter,
-                    'showClosed': showClosed
-                }
+                updateTaskList();
 
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: sendData,
-                    success: function(data1) {
-                        spinner.addClass('notDisplayed');
-                        setTaskListContent(data1);
 
-                        //data = JSON.parse(data1);
-
-/*
-                        if (data.success == 1) {
-                            //console.log(data.html);
-                            spinner.addClass('notDisplayed');
-                            setTaskListContent(data.html);
-                            //ITDoorsAjax.unblockUI($('#tasks_list'));
-                            //$('#tasks_list').html('').html(data.html);
-                            //$('#form_modal_task_view').modal('show');
-                        } else {
-                            alert('error');
-                            //$('#copy_etalon_finished').show('blind', {}, 500);
-                        }
-*/
-
-                    }
-
-                })
             })
 
+            $('#oldFilter').die('click');
+            $('#oldFilter').bind('click', function(e){
+                //e.preventDefault();
+                updateTaskList();
+            })
 
         })
+
+
+        function updateTaskList() {
+            var spinner = $('#spinner');
+            spinner.removeClass('notDisplayed');
+            var filterRole = new Array();
+
+            var filters = $('.roleFilter');
+
+            //var nothingChecked = true;
+            $.each(filters, function(key, filter) {
+                if ($(filter).data('status')) {
+                    filterRole.push($(filter).data('value'));
+                    //nothingChecked = false
+                }
+            });
+
+            var showClosed = $("#oldFilter").prop("checked");
+            if (showClosed) {
+                showClosed = 1;
+            } else {
+                showClosed = 0;
+            }
+            filter = {
+                'role': filterRole
+            }
+            var url = $('#more_info_input').data('url_get_task_list');
+            var sendData = {
+                'filter': filter,
+                'showClosed': showClosed
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data1) {
+                    spinner.addClass('notDisplayed');
+                    setTaskListContent(data1);
+                    clearTaskContent();
+                }
+
+            })
+        }
 
         function setTaskContent(html) {
             $('#task_holder').html('')
@@ -160,27 +169,12 @@
             spinner.addClass('notDisplayed');
         }
 
-    </script>
+        function lightUpTask(obj) {
+            $('.task-item').css('box-shadow', '0px 0px 0px')
+            $(obj).css('box-shadow', '0px 0px 15px #72A5D1')
+        }
 
-{#
-    {{ ajax_form_render_btn({
-        'selector' : '#create_task_btn',
-        'formType' : 'taskForm1',
-        'successFunctions' : {
-            'list_files' : 'ITDoorsAjax.updateList'
-        },
-        'serviceDefault' : {
-            'alias' : 'task.form.service',
-            'method' : 'addFormDefaults'
-        },
-        'serviceSave' : {
-            'alias' : 'task.form.service',
-            'method' : 'saveForm'
-        },
-        'target' : '#task_holder'
-        })
-    }}
-#}
+    </script>
 
     <div id="form_modal_task" class="modal fade" tabindex="-1" role="basic" aria-hidden="true">
         <div class="modal-dialog">
@@ -212,10 +206,11 @@
                     <span class="caption-subject font-green-sharp bold uppercase">{% trans %}Tasks{% endtrans %} </span>
                     <span class="caption-helper visible-sm-inline-block visible-xs-inline-block">click to view project list</span>
                 </div>
+{#
                 <div class="actions">
                     <div class="btn-group">
                         <a class="btn green-haze btn-circle btn-sm todo-projects-config" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                            <i class="fa fa-filter{#icon-settings#}"></i> &nbsp; <i class="fa fa-angle-down"></i>
+                            <i class="fa fa-filter&#123;&#35;icon-settings&#35;&#125;"></i> &nbsp; <i class="fa fa-angle-down"></i>
                         </a>
                         <ul class="dropdown-menu hold-on-click dropdown-checkboxes pull-right">
 
@@ -232,20 +227,20 @@
                                     {% set icon = 'fa-crosshairs' %}
                                     {% set label = 'label-warning' %}
                                     {% set checked = '' %}
-                                    {#
+                                    &#123;&#35;
                                         {% elseif taskUserRole == 'done' %}
                                             {% set icon = 'orange' %}
                                             fa-eye
-                                    #}
+                                    &#35;&#125;
                                 {% endif %}
                                 <li><label><input type="checkbox" class="roleFilter" value="{{ taskRole }}" {{ checked }}/>{{ taskRole|trans }}</label></li>
                             {% endfor %}
-                            {#
+                            &#123;&#35;
                                             <label><input type="checkbox" id="set_filters_on"/>{% trans %}All{% endtrans %}</label>
-                            #}
-                            {#
+                            &#35;&#125;
+                            &#123;&#35;
                                             <label><input type="checkbox"/> System</label>
-                            #}
+                            &#35;&#125;
                             <li class="divider">
                             </li>
                             <li>
@@ -261,8 +256,66 @@
                         </ul>
                     </div>
                 </div>
+#}
             </div>
             <div class="portlet-body todo-project-list-content">
+                <div class="">
+                    <ul class="nav nav-pills nav-stacked">
+
+                        {% for taskRole in allTaskRoles %}
+                            {% set checked = false %}
+                            {% if taskRole == 'author' %}
+                                {% set icon = 'fa-pencil' %}
+                                {% set badge = 'badge-danger' %}
+                            {% elseif taskRole == 'performer' %}
+                                {% set icon = 'fa-rocket' %}
+                                {% set badge = 'badge-info' %}
+                                {% set checked = true %}
+                            {% elseif taskRole == 'controller' %}
+                                {% set icon = 'fa-crosshairs' %}
+                                {% set badge = 'badge-warning' %}
+                            {% elseif taskRole == 'matcher' %}
+                                {% set icon = 'fa-crosshairs' %}
+                                {% set badge = 'badge-success' %}
+                            {% elseif taskRole == 'viewer' %}
+                                {% set icon = 'fa-crosshairs' %}
+                                {% set badge = 'badge-default' %}
+                            {% endif %}
+                            <li>
+{#
+                                <input type="checkbox" class="roleFilter" value="{{ taskRole }}" {{ checked }}/>
+#}                              <a href="#" class="roleFilter" data-value="{{ taskRole }}" data-status="{% if checked != true %}0{% else %}1{% endif %}">
+                                    <span class="arrow" style="color: grey; {% if checked != true %}display: none;{% endif %}"> ></span>
+                                    <span class="badge badge-active {{ badge }}" style="float: right; margin-top: 2px"> {{ countTasks[''~taskRole] }} </span>
+                                    <span class="roleTitle" {% if checked != true %}style="color: grey"{% endif %}>{{ taskRole|trans }}</span>
+
+
+                                </a>
+                            </li>
+                        {% endfor %}
+                        <br>
+                        <label><input type="checkbox" id="oldFilter" value="1"/>{% trans %}Show closed{% endtrans %}</label>
+
+                        {#
+                                                <li class="divider">
+                                                </li>
+                                                <li>
+                                                    <label><input type="checkbox" id="oldFilter" value="1"/>{% trans %}Show closed{% endtrans %}</label>
+                                                </li>
+                                                <li class="divider">
+                                                </li>
+
+                                                <li>
+                                                    <a class="btn red" id="taskFilterButton" >
+                                                        <span style="color: white;">{% trans %}Filter{% endtrans %}</span>
+                                                    </a>
+                                                </li>
+                        #}
+
+                    </ul>
+                </div>
+
+{#
                 <div class="todo-project-list">
                     <ul class="nav nav-pills nav-stacked">
                         <li class="active">
@@ -277,6 +330,7 @@
                                 {% trans %}Documents{% endtrans %}
                             </a>
                         </li>
+#}
                         {#
                                                 {% for taskRole in allTaskRoles %}
                                                     {% if taskRole == 'author' %}
@@ -302,8 +356,11 @@
                                                     </li>
                                                 {% endfor %}
                         #}
+{#
                     </ul>
                 </div>
+#}
+                <br>
                 <h3>{% trans %}Keys{% endtrans %}</h3>
                 <span class="badge badge-danger badge-active">&nbsp;  </span> - {% trans %}author{% endtrans %}<br>
                 <span class="badge badge-info badge-active">&nbsp;  </span> - {% trans %}performer{% endtrans %}<br>
@@ -357,7 +414,7 @@
     <div class="row">
     <div class="col-md-5 col-sm-4">
         <div class="scroller" style="max-height: 600px; min-height: 500px;" data-always-visible="0" data-rail-visible="0" data-handle-color="#dae3e7">
-            <div class="todo-tasklist" data-url="{{ path('sd_task_list') }}" id="task_list">
+            <div class="todo-tasklist" data-url="{{ path('sd_task_list') }}" id="task_list" style="padding-top: 5px;">
 
                 {% for taskUserRole in tasksUserRole %}
                     {{

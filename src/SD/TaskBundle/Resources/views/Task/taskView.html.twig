@@ -137,6 +137,30 @@
         })
 
 
+        $('#task_add_resolution').die('click');
+        $('#task_add_resolution').live('click', function(e){
+            var id = $('#task_modal_info_holder').data('id');
+            var url = $('#task_modal_info_holder').data('url-add_resolution');
+            var comment = getComment();
+            var sendData = {
+                'id': id,
+                'comment': comment
+            }
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data1) {
+                    //alert(data1)
+                    data = JSON.parse(data1);
+                    if (data.success == 1) {
+                        //insertComment()
+                        updateTask();
+                    }
+                }
+
+            })
+        })
         $('.changeDateCalendar').die('click');
         $('.changeDateCalendar').live('click', function(e){
             var value = $('#new_date_holder').val();
@@ -514,21 +538,22 @@
         <br><br>
         {% if access.canLeaveComment %}
             <div class="form-group">
-                    <div class="col-md-12" style="background-color: #f6fbfc;">
-                        <br><br>
-                        <ul class="media-list">
-                            <li class="media">
-                                <img class="todo-userpic pull-left" src="{{ web_image( taskUserRole.user.photo is not empty ? userprofiles_url ~ taskUserRole.user.id ~ '/' ~ taskUserRole.user.photo : userprofiles_url ~ 'no_photo.png').resize(27, 27) }}" width="27px" height="27px">
-                                <div class="media-body">
-                                    <textarea id="comment" class="form-control todo-taskbody-taskdesc" rows="4" placeholder="Введите комментарий к действию"></textarea>
-                                </div>
-                            </li>
-                        </ul>
-                        {#
-                                            <button type="button" class="pull-right btn btn-sm btn-circle green-haze"> &nbsp; Submit &nbsp; </button>
-                        #}
-                    </div>
+                <div class="col-md-12" style="background-color: #f6fbfc;">
+                    <br><br>
+                    <ul class="media-list">
+                        <li class="media">
+                            <img class="todo-userpic pull-left" src="{{ web_image( taskUserRole.user.photo is not empty ? userprofiles_url ~ taskUserRole.user.id ~ '/' ~ taskUserRole.user.photo : userprofiles_url ~ 'no_photo.png').resize(27, 27) }}" width="27px" height="27px">
+                            <div class="media-body">
+                                <textarea id="comment" class="form-control todo-taskbody-taskdesc" rows="4" placeholder="Введите комментарий к действию"></textarea>
+                            </div>
+                        </li>
+                    </ul>
+                    {#
+                                        <button type="button" class="pull-right btn btn-sm btn-circle green-haze"> &nbsp; Submit &nbsp; </button>
+                    #}
+                    <span style="color: grey">{% trans %}Your actions{% endtrans %}</span>:
                 </div>
+            </div>
         {% endif %}
         <div class="form-group">
             <div class="col-md-12" style="background-color: #f6fbfc;">
@@ -551,6 +576,9 @@
                     {% endif %}
                     {% if access.canRefuseSignUp %}
                         <button id="task_sign_up" data-status="0" class="signUpButton btn btn-circle btn-sm green-haze" style="margin-top:5px;">{% trans %}Refuse sign up{% endtrans %}</button>
+                    {% endif %}
+                    {% if access.canAddResolution %}
+                        <button id="task_add_resolution" class="btn btn-circle btn-sm green-haze" style="margin-top:5px;">{% trans %}Add resolution{% endtrans %}</button>
                     {% endif %}
                     {% if access.canMakeDateRequest %}
                         {% set textDate = 'Change the end date'|trans %}
@@ -712,4 +740,5 @@
        data-url_sign_up="{{ path('sd_task_sign_up') }}"
        data-url_task_delete_file="{{ path('sd_task_delete_file') }}"
        data-url_add_viewer="{{ path('sd_task_add_viewer') }}"
+       data-url-add_resolution="{{ path('sd_task_add_resolution') }}"
         >

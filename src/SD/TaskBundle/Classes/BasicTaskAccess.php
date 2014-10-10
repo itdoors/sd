@@ -170,6 +170,16 @@ class BasicTaskAccess implements TaskAccessInterface
     }
 
     /**
+     * @return bool
+     */
+    public function canAddResolution()
+    {
+
+        return false;
+    }
+
+
+    /**
      * @return null|Stage
      */
     public function getLastCommitStage()
