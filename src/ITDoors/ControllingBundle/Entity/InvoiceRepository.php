@@ -249,7 +249,7 @@ class InvoiceRepository extends EntityRepository
                             break;
                         }
                         $arr = explode(',', $value);
-                        $sql->innerJoin('i.invoicecompanystructure', 'ics_fil');
+                        $sql->leftJoin('i.invoicecompanystructure', 'ics_fil');
                         $sql->innerJoin('ics_fil.companystructure', 'cs_fil');
                         $sql->andWhere("cs_fil.id in (:companystructures)");
                         $sql->setParameter(':companystructures', $arr);
@@ -344,19 +344,20 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoicePeriod($res);
         /** join */
         $this->joinInvoicePeriod($res);
-        /** where */
-        $this->whereInvoicePeriod($res, $periodmin, $periodmax);
         /** filters */
         $this->processFilters($res, $filters);
+        /** where */
+        $this->whereInvoicePeriod($res, $periodmin, $periodmax);
         /** controlling_oper (role) */
         if ($companystryctyre) {
-            $res
-                ->innerJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere(
+            if (!isset($filters['companystructure'])) {
+                $res->innerJoin('i.invoicecompanystructure', 'ics_fil');
+            }
+            $res->andWhere(
                     '
-                        i_ics.companystructureId = (:company) 
+                        ics_fil.companystructureId = (:company) 
                         or
-                        i_ics.companystructureId in 
+                        ics_fil.companystructureId in 
                             (
                                 SELECT
                                     cc.id
@@ -400,15 +401,18 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoicePeriod($invoices);
         /** join */
         $this->joinInvoicePeriod($invoices);
-
+        /** filters */
+        $this->processFilters($invoices, $filters);
+        /** controlling_oper (role) */
         if ($companystryctyre) {
-            $invoices
-                ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere(
+            if (!isset($filters['companystructure'])) {
+                $invoices->innerJoin('i.invoicecompanystructure', 'ics_fil');
+            }
+            $invoices->andWhere(
                     '
-                        i_ics.companystructureId = (:company) 
+                        ics_fil.companystructureId = (:company) 
                         or
-                        i_ics.companystructureId in 
+                        ics_fil.companystructureId in 
                             (
                                 SELECT
                                     cc.id
@@ -429,7 +433,6 @@ class InvoiceRepository extends EntityRepository
                 )
                 ->setParameter(':company', $companystryctyre);
         }
-        $this->processFilters($invoices, $filters);
 
         $res = $invoices
             ->orderBy('i.customerName', 'ASC')
@@ -535,8 +538,7 @@ class InvoiceRepository extends EntityRepository
         }
 
         $date = date('Y-m-d', time() - 2592000);
-        $res
-            ->andWhere("i.dateFact >= :date or i.dateFact is NULL")
+        $res->andWhere("i.dateFact >= :date or i.dateFact is NULL")
             ->setParameter(':date', $date);
 
         return $res
@@ -615,19 +617,22 @@ class InvoiceRepository extends EntityRepository
 
         /** select */
         $this->selectInvoicePeriodCount($rescount);
-        /** where */
-        $this->whereInvoicePeriod($rescount, $periodmin, $periodmax);
-
         /** join */
         $this->joinInvoicePeriod($rescount);
+        /** filters*/
+        $this->processFilters($rescount, $filters);
+        /** where */
+        $this->whereInvoicePeriod($rescount, $periodmin, $periodmax);
+        /** controlling_oper (role) */
         if ($companystryctyre) {
-            $rescount
-                ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere(
+            if (!isset($filters['companystructure'])) {
+                $rescount->innerJoin('i.invoicecompanystructure', 'ics_fil');
+            }
+            $rescount->andWhere(
                     '
-                        i_ics.companystructureId = (:company) 
+                        ics_fil.companystructureId = (:company) 
                         or
-                        i_ics.companystructureId in 
+                        ics_fil.companystructureId in 
                             (
                                 SELECT
                                     cc.id
@@ -648,7 +653,7 @@ class InvoiceRepository extends EntityRepository
                 )
                 ->setParameter(':company', $companystryctyre);
         }
-        $this->processFilters($rescount, $filters);
+        
 
         return $rescount
                 ->getQuery()->getSingleScalarResult();
@@ -667,17 +672,20 @@ class InvoiceRepository extends EntityRepository
 
         /** select */
         $this->selectInvoicePeriodCount($rescount);
-
         /** join */
         $this->joinInvoicePeriod($rescount);
+        /** filters*/
+        $this->processFilters($rescount, $filters);
+        /** controlling_oper (role) */
         if ($companystryctyre) {
-            $rescount
-                ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere(
+            if (!isset($filters['companystructure'])) {
+                $rescount->innerJoin('i.invoicecompanystructure', 'ics_fil');
+            }
+            $rescount->andWhere(
                     '
-                        i_ics.companystructureId = (:company) 
+                        ics_fil.companystructureId = (:company) 
                         or
-                        i_ics.companystructureId in 
+                        ics_fil.companystructureId in 
                             (
                                 SELECT
                                     cc.id
@@ -698,7 +706,7 @@ class InvoiceRepository extends EntityRepository
                 )
                 ->setParameter(':company', $companystryctyre);
         }
-        $this->processFilters($rescount, $filters);
+        
 
         return $rescount
                 ->getQuery()->getSingleScalarResult();
@@ -763,13 +771,14 @@ class InvoiceRepository extends EntityRepository
         $this->whereInvoicePeriod($res, $periodmin, $periodmax);
         /** controlling_oper (role)*/
         if ($companystryctyre) {
-            $res
-                ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere(
+            if (!isset($filters['companystructure'])) {
+                $res->leftJoin('i.invoicecompanystructure', 'ics_fil');
+            }
+            $res->andWhere(
                     '
-                        i_ics.companystructureId = (:companystructureId) 
+                        ics_fil.companystructureId = (:companystructureId) 
                         or
-                        i_ics.companystructureId in 
+                        ics_fil.companystructureId in 
                             (
                                 SELECT
                                     cc.id
@@ -853,13 +862,18 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoicePeriod($res);
         /** join */
         $this->joinInvoicePeriod($res);
+        /** filters */
+        $this->processFilters($res, $filters);
+        /** controlling_oper (role)*/
         if ($companystryctyre) {
-            $res->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere(
+            if (!isset($filters['companystructure'])) {
+                $res->leftJoin('i.invoicecompanystructure', 'ics_fil');
+            }
+            $res->andWhere(
                     '
-                        i_ics.companystructureId = (:companystructureId) 
+                        ics_fil.companystructureId = (:companystructureId) 
                         or
-                        i_ics.companystructureId in 
+                        ics_fil.companystructureId in 
                             (
                                 SELECT
                                     cc.id
@@ -880,7 +894,7 @@ class InvoiceRepository extends EntityRepository
                 )
                 ->setParameter(':companystructureId', $companystryctyre);
         }
-        $this->processFilters($res, $filters);
+        
 
         return $res
                 ->andWhere("i.court = :id")
@@ -905,16 +919,18 @@ class InvoiceRepository extends EntityRepository
         $this->selectInvoiceSum($res);
         /** join */
         $this->joinInvoicePeriod($res);
-
+        /** filters */
         $this->processFilters($res, $filters);
+        /** controlling_oper (role)*/
         if ($companystryctyre) {
-            $res
-                ->leftJoin('i.invoicecompanystructure', 'i_ics')
-                ->andWhere(
+            if (!isset($filters['companystructure'])) {
+                $res->leftJoin('i.invoicecompanystructure', 'ics_fil');
+            }
+            $res->andWhere(
                     '
-                        i_ics.companystructureId = (:companystructureId) 
+                        ics_fil.companystructureId = (:companystructureId) 
                         or
-                        i_ics.companystructureId in 
+                        ics_fil.companystructureId in 
                             (
                                 SELECT
                                     cc.id
