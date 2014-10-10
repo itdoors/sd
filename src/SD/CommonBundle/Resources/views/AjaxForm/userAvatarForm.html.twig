@@ -144,7 +144,7 @@
                                                 },
                                             done: function (e, data) {
                                                 $('#userAvatarForm_loadPhoto').val(data.result.fileName);
-                                                $('#avatar').attr('src', {{ web_image(data.result.file).resize(600, 600)}}).attr('style', '');
+                                                $('#avatar').attr('src', data.result.file).attr('style', 'width: 600px');
                                                 $('#prewAvatar').attr('style','margin:255px 0px 0px 182px;');
                                                 JcropAPI = $('#avatar').data('Jcrop');
                                                 JcropAPI.destroy();
