@@ -106,7 +106,8 @@
         </thead>
         <tbody role="alert" aria-live="polite" aria-relevant="all">
             {% for entity in entities %}
-            <tr class="{{ cycle(['odd', 'even'], entity.invoiceId) }}">
+                {% set days = (('now'|date('U')-entity.delayDate|date('U'))/86400)|round(0, 'floor') %}
+            <tr class="{{ cycle(['odd', 'even'], entity.invoiceId) }}{{ days > 60  ? (entity.status is empty ? ' warning' : ' success' ): ''}}">
                 <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceId }}</a> {{ entity.date is empty ? '' : entity.date|date("d.m.y") }}</td>
                 <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceCustomerName }} {{ '(' ~ entity.customerName ~ ')' }}</a></td>
                 <td class="">{{ entity.performerName }}</td>
@@ -125,7 +126,6 @@
                  <td class="">
                     {{ entity.delayDate is empty ? '' :  entity.delayDate|date("d.m.y")  }}
                     {% if entity.delayDays is not empty %}<br>({{ entity.delayDays}}{{ entity.delayDaysType }}) {% endif %}
-                    {% set days = (('now'|date('U')-entity.delayDate|date('U'))/86400)|round(0, 'floor') %}
                     <br>({% if entity.dateFact is empty %}{{ days > 0 ? days : 0 }}{% else %}0{% endif %})
                 </td>
                 <td class="">

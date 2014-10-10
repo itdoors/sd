@@ -28,29 +28,13 @@
 
 {% block js_page_level_plugins %}
     {{ parent() }}
-    {#<script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
-    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
-   <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.js') }}"></script>
-    #} <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/flot/jquery.flot.categories.min.js') }}"></script>
 {% endblock %}
 
 {% block body %}
 <div class="row">
     <div class="col-md-12">
-        {#<div class="portlet">
-            <div class="portlet-title">
-                <div class="actions">
-                    <div class="btn-group">
-                        <a class="btn default yellow-stripe" href="{{ path('it_doors_controlling_invoice_export_exel')}}">
-                            <i class="fa fa-share"></i>
-                            <span class="hidden-480">{% trans %}Export to Excel{% endtrans %}</span>
-                            <i class="fa fa-angle-down"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>#}
         <script>
             $(document).ready(function(){
                 $('.daterangepicker').daterangepicker(
