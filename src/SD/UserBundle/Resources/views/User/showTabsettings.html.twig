@@ -9,10 +9,10 @@
                     <span class="after">
                     </span>
                 </li>
-                <li>
+                {#<li>
                     <a data-toggle="tab" href="#tab_2-2">
                         <i class="fa fa-picture-o"></i>{% trans %}Change Avatar{% endtrans %}</a>
-                </li>
+                </li>#}
                 <li>
                     <a data-toggle="tab" href="#tab_3-3">
                         <i class="fa fa-lock"></i>{% trans %}Change Password{% endtrans %}</a>
@@ -39,9 +39,8 @@
                         {{ render(controller('SDUserBundle:User:contactinfo')) }}
                     </div>
                 </div>
-                <div id="tab_2-2" class="tab-pane">
+                {#<div id="tab_2-2" class="tab-pane">
                     <p>В разработке</p>
-                    {#
                     <p>
                         Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod.
                     </p>
