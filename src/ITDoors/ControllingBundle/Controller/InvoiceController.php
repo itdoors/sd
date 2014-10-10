@@ -678,8 +678,8 @@ class InvoiceController extends BaseFilterController
                 $invoices = array();
             } else {
                 $result = $invoice->getEntittyCountSum($period.'Exel', $filters, $companystryctyre);
-            $entities = $result['entities'];
-            $invoices = $entities->getResult();
+                $entities = $result['entities'];
+                $invoices = $entities->getResult();
             }
         } else {
             $result = $invoice->getEntittyCountSum($period, $filters, $companystryctyre);
