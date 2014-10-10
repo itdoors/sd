@@ -1066,6 +1066,55 @@ class InvoiceRepository extends EntityRepository
      * 
      * @return mixed[]
      */
+    public function getInvoiceAll ($filters, $companystryctyre)
+    {
+        $res = $this->createQueryBuilder('i');
+        /** select */
+        $this->selectInvoicePeriod($res);
+        /** join */
+        $this->joinInvoicePeriod($res);
+        /** where */
+        $this->processFilters($res, $filters);
+        if ($companystryctyre) {
+            $res
+                ->leftJoin('i.invoicecompanystructure', 'i_ics')
+                ->andWhere(
+                    '
+                        i_ics.companystructureId = (:companystructureId) 
+                        or
+                        i_ics.companystructureId in 
+                            (
+                                SELECT
+                                    cc.id
+                                FROM
+                                    ListsCompanystructureBundle:Companystructure cp
+                                LEFT JOIN 
+                                    ListsCompanystructureBundle:Companystructure cc 
+                                WHERE
+                                    cp.root = cc.root
+                                AND
+                                    cp.lft < cc.lft
+                                AND 
+                                    cp.rgt > cc.rgt
+                                AND
+                                    cp in (:companystructureId)
+                            )
+                    '
+                )
+                ->setParameter(':companystructureId', $companystryctyre);
+        }
+        $res->orderBy('i.customerName', 'ASC');
+
+        return $res->getQuery();
+    }
+    /**
+     * Returns results for interval future invoice
+     *
+     * @param array   $filters
+     * @param integer $companystryctyre
+     * 
+     * @return mixed[]
+     */
     public function getInvoiceFlow ($filters, $companystryctyre)
     {
         $date = date('Y-m-d');
@@ -2010,6 +2059,9 @@ class InvoiceRepository extends EntityRepository
             case 'all':
                 $result['entities'] = $this->getAll($filters, $companystryctyre);
                 $result['count'] = $this->getAllCount($filters, $companystryctyre);
+                break;
+            case 'allExel':
+                $result['entities'] = $this->getInvoiceAll($filters, $companystryctyre);
                 break;
             default:
                 $result['entities'] = $this->getInvoiceEmptyData($period, $companystryctyre);

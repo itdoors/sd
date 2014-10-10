@@ -17,20 +17,22 @@
                     weekStart: 1
                 }
             });
-            $('.status-edit').editable({
-                url: '{{ path('sd_common_ajax_invoice_save') }}',
-                source: [
-                    {value: 1, text: '{% trans %}In coutr{% endtrans %}'},
-                    {value: 0, text: 'Empty'}
-                ]
-            });
-            $('.status-invoice').editable({
-                url: '{{ path('sd_common_ajax_invoice_save') }}',
-                source: [
-                    {value: 1, text: '{% trans %}Problem{% endtrans %}'},
-                    {value: 2, text: '{% trans %}Loyal{% endtrans %}'}
-                ]
-            });
+            {% if is_granted('ROLE_CONTROLLING') %}
+                $('.status-edit').editable({
+                    url: '{{ path('sd_common_ajax_invoice_save') }}',
+                    source: [
+                        {value: 1, text: '{% trans %}In coutr{% endtrans %}'},
+                        {value: 0, text: 'Empty'}
+                    ]
+                });
+                $('.status-invoice').editable({
+                    url: '{{ path('sd_common_ajax_invoice_save') }}',
+                    source: [
+                        {value: 1, text: '{% trans %}Problem{% endtrans %}'},
+                        {value: 2, text: '{% trans %}Loyal{% endtrans %}'}
+                    ]
+                });
+            {% endif %}
             });
             
 </script>
@@ -197,6 +199,7 @@
                 </td>
                 <td class="">{{ entity.dateFact is empty ? '' : entity.dateFact|date("d.m.Y") }}</td>
                 <td class="">
+                    {% if is_granted('ROLE_CONTROLLING') %}
                     <a href="#" 
                        id="court" 
                        class="status-edit" 
@@ -211,8 +214,16 @@
                             Empty
                         {% endif%}
                     </a>
+                    {% else %}
+                        {% if entity.court ==  true %}
+                            {% trans %}In coutr{% endtrans %}
+                        {% else%}
+                            Empty
+                        {% endif%}
+                    {% endif %}
                 </td>
                 <td class="">
+                    {% if is_granted('ROLE_CONTROLLING') %}
                     <a href="#" 
                        id="status" 
                        class="status-invoice" 
@@ -229,6 +240,15 @@
                             Empty
                         {% endif%}
                     </a>
+                    {% else %}
+                        {% if entity.status ==  1 %}
+                            {% trans %}Problem{% endtrans %}
+                        {% elseif entity.status ==  2 %}
+                            {% trans %}Loyal{% endtrans %}
+                        {% else%}
+                            Empty
+                        {% endif%}
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}
