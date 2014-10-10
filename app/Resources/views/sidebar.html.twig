@@ -714,7 +714,7 @@
                     <span class="title">{% trans %}My tasks{% endtrans %}</span>
                 </a>
             </li>
-            {% if is_granted('ROLE_HRADMIN') %}
+            {% if is_granted('ROLE_HRADMIN') or is_granted('ROLE_HOLIDAY') %}
                 <li{% if
                 path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_holiday_index')
                 %} class="active"{% endif %}>

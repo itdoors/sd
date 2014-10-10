@@ -2081,7 +2081,7 @@ class AjaxController extends BaseFilterController
      */
     public function holidayFormSave($form, $user, $request)
     {
-        if (!$this->getUser()->hasRole('ROLE_HRADMIN')) {
+        if (!$this->getUser()->hasRole('ROLE_HRADMIN') && !$this->getUser()->hasRole('ROLE_HOLIDAY')) {
             throw new Symfony\Component\HttpKernel\Exception\HttpException(403, "No access");
         }
         $data = $form->getData();
@@ -3338,7 +3338,7 @@ class AjaxController extends BaseFilterController
      */
     public function holidayDelete($params)
     {
-        if (!$this->getUser()->hasRole('ROLE_HRADMIN')) {
+        if (!$this->getUser()->hasRole('ROLE_HRADMIN') && !$this->getUser()->hasRole('ROLE_HOLIDAY')) {
             throw new Symfony\Component\HttpKernel\Exception\HttpException(403, "No access");
         }
         $id = $params['id'];
