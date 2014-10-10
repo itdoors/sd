@@ -19,6 +19,10 @@ ITDoors\ControllingBundle\Entity\Invoice:
         sum:
             type: float
             length: 20
+        debitSum:
+            type: float
+            length: 20
+            column: debit_sum
         date:
             type: datetime
         delayDate:

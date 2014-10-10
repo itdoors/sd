@@ -213,6 +213,8 @@ class InvoiceService
         if ($summaPaymens >= $summaActs) {
             $invoiceNew->setDateFact($dateFact);
         }
+        $debtSum = ($summaActs ? $summaActs[1] : 0 )-($summaPaymens ? $summaPaymens[1] : 0);
+        $invoiceNew->setDebitSum($debtSum >= 0 ? $debtSum : 0);
 
         if (!empty($invoice->delayDate) && $invoice->delayDate != 'null') {
             $invoiceNew->setDelayDate(new \DateTime(trim($invoice->delayDate)));
@@ -1008,13 +1010,15 @@ class InvoiceService
         foreach ($invoices as $key => $invoice) {
             echo ($count-$key).' number:'.$invoice->getInvoiceId()." id:".$invoice->getId();
 
-            $debtSum = $em->getRepository('ITDoorsControllingBundle:InvoiceAct')
+            $actSum = $em->getRepository('ITDoorsControllingBundle:InvoiceAct')
                 ->getSum($invoice->getId());
             $paySum = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')
                 ->getSum($invoice->getId());
-            if ($paySum >= $debtSum) {
+            $debtSum = ($actSum ? $actSum[1] : 0 )-($paySum ? $paySum[1] : 0);
+            $invoice->setDebitSum($debtSum >=0 ? $debtSum : 0);
+            if ($paySum >= $actSum) {
                 $date = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')
-                ->dateLastPay($invoice->getId());
+                    ->dateLastPay($invoice->getId());
                 if (key_exists('date', $date[0])) {
                     $date = $date[0]['date'];
                 } else {
