@@ -118,7 +118,7 @@
                     {{ entity.paymentsSumma|number_format(2, ',', ' ')  }}
                 </td>
                 <td class="">
-                    {{ (entity.sumActs-entity.paymentsSumma)|number_format(2, ',', ' ')  }}
+                    {{ (entity.debitSum)|number_format(2, ',', ' ')  }}
                 </td>
                  <td class="">
                     {{ entity.delayDate is empty ? '' :  entity.delayDate|date("d.m.y")  }}

@@ -22,18 +22,7 @@ class InvoiceRepository extends EntityRepository
      */
     public function selectInvoiceSum (QueryBuilder $res)
     {
-        $res
-            ->select(
-                'SUM(case when detals_summ.summa is not NULL then detals_summ.summa else 0 end)'
-                . '-'
-                . 'SUM(case when psum.summa is not NULL then psum.summa else 0 end)'
-                . ' as summa'
-            )
-            ->leftJoin('i.acts', 'acts_summ')
-            ->leftJoin('acts_summ.detals', 'detals_summ')
-            ->leftJoin('i.payments', 'psum');
-
-        return $res;
+        return $res->select('SUM(i.debitSum) as summa');
     }
     /**
      * Returns results for interval future invoice
@@ -66,6 +55,7 @@ class InvoiceRepository extends EntityRepository
             ->addSelect('i.invoiceId')
             ->addSelect('i.date')
             ->addSelect('i.bank')
+            ->addSelect('i.debitSum')
             ->addSelect('i.delayDate')
             ->addSelect('i.delayDays')
             ->addSelect('i.delayDaysType')
@@ -201,8 +191,7 @@ class InvoiceRepository extends EntityRepository
     public function whereInvoicePeriod (QueryBuilder $res, $periodmin, $periodmax)
     {
         $date = date('Y-m-d');
-        $res
-            ->andWhere(":date -  i.delayDate >= :periodmin");
+        $res->andWhere(":date -  i.delayDate >= :periodmin");
         if ($periodmax != 0) {
             $res->andWhere(':date -  i.delayDate <= :periodmax')
                 ->setParameter(':periodmax', $periodmax);
@@ -260,8 +249,8 @@ class InvoiceRepository extends EntityRepository
                             break;
                         }
                         $arr = explode(',', $value);
-                        $sql->leftJoin('i.invoicecompanystructure', 'ics_fil');
-                        $sql->leftJoin('ics_fil.companystructure', 'cs_fil');
+                        $sql->innerJoin('i.invoicecompanystructure', 'ics_fil');
+                        $sql->innerJoin('ics_fil.companystructure', 'cs_fil');
                         $sql->andWhere("cs_fil.id in (:companystructures)");
                         $sql->setParameter(':companystructures', $arr);
                         break;
@@ -357,9 +346,12 @@ class InvoiceRepository extends EntityRepository
         $this->joinInvoicePeriod($res);
         /** where */
         $this->whereInvoicePeriod($res, $periodmin, $periodmax);
+        /** filters */
+        $this->processFilters($res, $filters);
+        /** controlling_oper (role) */
         if ($companystryctyre) {
             $res
-                ->leftJoin('i.invoicecompanystructure', 'i_ics')
+                ->innerJoin('i.invoicecompanystructure', 'i_ics')
                 ->andWhere(
                     '
                         i_ics.companystructureId = (:company) 
@@ -385,7 +377,6 @@ class InvoiceRepository extends EntityRepository
                 )
                 ->setParameter(':company', $companystryctyre);
         }
-        $this->processFilters($res, $filters);
 
         return $res
                 ->orderBy('i.customerName', 'ASC')->getQuery();
@@ -764,13 +755,13 @@ class InvoiceRepository extends EntityRepository
 
         /** select */
         $this->selectInvoiceSum($res);
-
+        /** join */
         $this->joinInvoicePeriod($res);
-
+        /** filters */
         $this->processFilters($res, $filters);
-
         /** where */
         $this->whereInvoicePeriod($res, $periodmin, $periodmax);
+        /** controlling_oper (role)*/
         if ($companystryctyre) {
             $res
                 ->leftJoin('i.invoicecompanystructure', 'i_ics')
