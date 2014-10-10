@@ -261,6 +261,18 @@ class InvoiceRepository extends EntityRepository
                         $sql->andWhere('i.delayDate BETWEEN :dateFrom AND :dateTo')
                             ->setParameter(':dateFrom', $from)
                             ->setParameter(':dateTo', $to);
+                    case 'act':
+                        if (in_array($value, array(0,1))){
+                            $sql->andWhere(
+                                "i.id in (
+                                    SELECT iao.id
+                                    FROM ITDoorsControllingBundle:Invoice iao
+                                    INNER JOIN ITDoorsControllingBundle:InvoiceAct ia
+                                    WHERE iao.id = ia.invoiceId
+                                    AND ia.original = :orininal
+                                )"
+                            )->setParameter(':orininal', $value);
+                        }
                         break;
                 }
             }

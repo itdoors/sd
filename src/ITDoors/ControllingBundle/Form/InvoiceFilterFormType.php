@@ -37,6 +37,8 @@ class InvoiceFilterFormType extends AbstractType
     {
         $router = $this->container->get('router');
 
+        $translator = $this->container->get('translator');
+
         $builder
             ->add('invoiceId', 'text', array(
                 'attr' => array(
@@ -111,9 +113,19 @@ class InvoiceFilterFormType extends AbstractType
             ->add('daterange', 'text', array(
                 'attr' => array(
                     'empty_value' =>  '',
-                    'class' => 'daterangepicker input-daterange',
+                    'class' => '',
                     'placeholder' => 'Enter date range'
                 )
+            ))
+            ->add('act', 'choice', array(
+                    'attr' => array(
+                        'class' => 'form-control input-middle',
+                    ),
+                    'choices' => array(
+                        '' => $translator->trans('Select status act', array(), 'ITDoorsControllingBundle'),
+                        '0' => $translator->trans('Acts places without', array(), 'ITDoorsControllingBundle'),
+                        '1' => $translator->trans('Acts in stock', array(), 'ITDoorsControllingBundle')
+                    )
             ));
 
         $builder
