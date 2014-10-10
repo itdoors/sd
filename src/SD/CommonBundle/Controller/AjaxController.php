@@ -2087,11 +2087,7 @@ class AjaxController extends BaseFilterController
         $data = $form->getData();
         $formData = $request->request->get($form->getName());
 
-        $date = explode('.', $formData['date']);
-        if (!key_exists(1, $date)) {
-            return true;
-        }
-        $data->setDate(new \DateTime(date('Y').'-'.$date[0].'-'.$date[1].'00:00:00'));
+        $data->setDate(new \DateTime($formData['date'].'.'.date('Y')));
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
         $em->flush();
