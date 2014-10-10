@@ -2030,10 +2030,7 @@ class AjaxController extends BaseFilterController
         $src = $directory.'/original_'.$user->getPhoto();
         $size = getimagesize($src);
         $format = strtolower(substr($size['mime'], strpos($size['mime'], '/')+1));
-        $coeff = 1;
-        if ($size[0] > 600) {
-            $coeff = $size[0]/600;
-        }
+        $coeff = $size[0]/600;
 
         $icfunc = 'imagecreatefrom' . $format;
 
