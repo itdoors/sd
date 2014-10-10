@@ -187,6 +187,7 @@
 
                 <div class="form-actions">
                     {{ form_widget(form.create, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
+                    <a class="btn default" href="{{ path('sd_user_stuff')}}">{% trans%}Repeal{% endtrans%}</a>
                 </div>
                 {{ form_end(form) }}
             </div>
