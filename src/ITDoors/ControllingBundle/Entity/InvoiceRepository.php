@@ -653,7 +653,6 @@ class InvoiceRepository extends EntityRepository
             )
             ->setParameter(':company', $companystryctyre);
         }
-        
 
         return $rescount
                 ->getQuery()->getSingleScalarResult();
@@ -706,7 +705,6 @@ class InvoiceRepository extends EntityRepository
             )
             ->setParameter(':company', $companystryctyre);
         }
-        
 
         return $rescount
                 ->getQuery()->getSingleScalarResult();
