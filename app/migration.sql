@@ -1090,8 +1090,6 @@ ALTER TABLE pattern_user_role ADD CONSTRAINT FK_1F606499A76ED395 FOREIGN KEY (us
 -- staging ++++++
 -- prod ++++++
 ALTER TABLE invoice ADD status INT DEFAULT NULL;
--- staging ----
 -- prod ++++++
 ALTER TABLE invoice ADD debit_sum DOUBLE PRECISION NOT NULL DEFAULT 0;
--- staging ----
--- prod -----
+-- prod ++++++
