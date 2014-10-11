@@ -351,6 +351,7 @@
         );
 
         $('#viewer_select').select2();
+        {% if access.canEditDescription %}
 
         $('#wyswyg').summernote({
             height: 200,
@@ -374,6 +375,7 @@
                 //['help', ['help']] //no help button
             ]
         }).code($('#description_text').html());
+        {% endif %}
 
     })
 
