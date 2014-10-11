@@ -17,20 +17,22 @@
                     weekStart: 1
                 }
             });
-            $('.status-edit').editable({
-                url: '{{ path('sd_common_ajax_invoice_save') }}',
-                source: [
-                    {value: 1, text: '{% trans %}In coutr{% endtrans %}'},
-                    {value: 0, text: 'Empty'}
-                ]
-            });
-            $('.status-invoice').editable({
-                url: '{{ path('sd_common_ajax_invoice_save') }}',
-                source: [
-                    {value: 1, text: '{% trans %}Problem{% endtrans %}'},
-                    {value: 2, text: '{% trans %}Loyal{% endtrans %}'}
-                ]
-            });
+            {% if is_granted('ROLE_CONTROLLING') %}
+                $('.status-edit').editable({
+                    url: '{{ path('sd_common_ajax_invoice_save') }}',
+                    source: [
+                        {value: 1, text: '{% trans %}In coutr{% endtrans %}'},
+                        {value: 0, text: 'Empty'}
+                    ]
+                });
+                $('.status-invoice').editable({
+                    url: '{{ path('sd_common_ajax_invoice_save') }}',
+                    source: [
+                        {value: 1, text: '{% trans %}Problem{% endtrans %}'},
+                        {value: 2, text: '{% trans %}Loyal{% endtrans %}'}
+                    ]
+                });
+            {% endif %}
             });
             
 </script>
@@ -104,7 +106,8 @@
         </thead>
         <tbody role="alert" aria-live="polite" aria-relevant="all">
             {% for entity in entities %}
-            <tr class="{{ cycle(['odd', 'even'], entity.invoiceId) }}">
+                {% set days = (('now'|date('U')-entity.delayDate|date('U'))/86400)|round(0, 'floor') %}
+            <tr class="{{ cycle(['odd', 'even'], entity.invoiceId) }}{{ days > 60  ? (entity.status is empty ? ' warning' : ' success' ): ''}}">
                 <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceId }}</a> {{ entity.date is empty ? '' : entity.date|date("d.m.y") }}</td>
                 <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceCustomerName }} {{ '(' ~ entity.customerName ~ ')' }}</a></td>
                 <td class="">{{ entity.performerName }}</td>
@@ -118,12 +121,11 @@
                     {{ entity.paymentsSumma|number_format(2, ',', ' ')  }}
                 </td>
                 <td class="">
-                    {{ (entity.sumActs-entity.paymentsSumma)|number_format(2, ',', ' ')  }}
+                    {{ (entity.debitSum)|number_format(2, ',', ' ')  }}
                 </td>
                  <td class="">
                     {{ entity.delayDate is empty ? '' :  entity.delayDate|date("d.m.y")  }}
                     {% if entity.delayDays is not empty %}<br>({{ entity.delayDays}}{{ entity.delayDaysType }}) {% endif %}
-                    {% set days = (('now'|date('U')-entity.delayDate|date('U'))/86400)|round(0, 'floor') %}
                     <br>({% if entity.dateFact is empty %}{{ days > 0 ? days : 0 }}{% else %}0{% endif %})
                 </td>
                 <td class="">
@@ -197,6 +199,7 @@
                 </td>
                 <td class="">{{ entity.dateFact is empty ? '' : entity.dateFact|date("d.m.Y") }}</td>
                 <td class="">
+                    {% if is_granted('ROLE_CONTROLLING') %}
                     <a href="#" 
                        id="court" 
                        class="status-edit" 
@@ -211,8 +214,16 @@
                             Empty
                         {% endif%}
                     </a>
+                    {% else %}
+                        {% if entity.court ==  true %}
+                            {% trans %}In coutr{% endtrans %}
+                        {% else%}
+                            Empty
+                        {% endif%}
+                    {% endif %}
                 </td>
                 <td class="">
+                    {% if is_granted('ROLE_CONTROLLING') %}
                     <a href="#" 
                        id="status" 
                        class="status-invoice" 
@@ -229,6 +240,15 @@
                             Empty
                         {% endif%}
                     </a>
+                    {% else %}
+                        {% if entity.status ==  1 %}
+                            {% trans %}Problem{% endtrans %}
+                        {% elseif entity.status ==  2 %}
+                            {% trans %}Loyal{% endtrans %}
+                        {% else%}
+                            Empty
+                        {% endif%}
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}

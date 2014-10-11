@@ -5,6 +5,7 @@ namespace SD\CalendarBundle\Controller;
 use ITDoors\AjaxBundle\Controller\BaseFilterController;
 use Doctrine\ORM\EntityManager;
 use SD\CalendarBundle\Entity\Holiday;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class HolidayController
@@ -66,21 +67,16 @@ class HolidayController extends BaseFilterController
 
         $pk = $this->get('request')->request->get('pk');
         $name = $this->get('request')->request->get('name');
-
+        $value = $this->get('request')->request->get('value');
         /** @var Holiday $object */
         $object = $this->getDoctrine()
             ->getRepository('SDCalendarBundle:Holiday')
             ->find($pk);
 
         if ($name == 'date') {
-            $data = explode('.', $this->get('request')->request->get('value'));
-            $object->setDay($data[0]);
-            $value = $data[1];
-            $methodSet = 'setMonth';
-        } else {
-            $value = $this->get('request')->request->get('value');
-            $methodSet = 'set' . ucfirst($name);
+            $value = new \DateTime($value.'.'.date('Y'));
         }
+        $methodSet = 'set' . ucfirst($name);
 
         $object->$methodSet($value);
 

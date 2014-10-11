@@ -86,13 +86,13 @@
                         '<div style="text-align:right;width:70px;position:absolute;left:' + 
                         ((o.left - 70) > 310 ? o.left-70  : 210) + 
                         'px;top:' + (o.top-18)+ 
-                        'px;color:#666;font-size:smaller">{{ (item.allSumma )|number_format(2, ',', ' ') }}</div>'); 
+                        'px;color:#4ECF91;font-size:11px">{{ (item.allSumma )|number_format(2, ',', ' ') }}</div>'); 
                  o = plot.pointOffset({ x:  {{ ( item.allSummDebit ? item.allSummDebit : 0 ) }}  , y: {{key}}});
                 $("#chart_5").append(
                         '<div style="text-align:right;width:70px;position:absolute;left:' + 
                         ((o.left -70)  > 310 ? o.left-70  : 210) + 
                         'px;top:' + (o.top+8)+ 
-                        'px;color:#000;font-size:smaller">{{ ( item.allSummDebit ? item.allSummDebit : 0 )|number_format(2, ',', ' ')}}</div>'); 
+                        'px;color:#F8564F;font-size:11px">{{ ( item.allSummDebit ? item.allSummDebit : 0 )|number_format(2, ',', ' ')}}</div>'); 
                  o = plot.pointOffset({ x:  0   , y: {{key}}});
           
            {% endfor %}

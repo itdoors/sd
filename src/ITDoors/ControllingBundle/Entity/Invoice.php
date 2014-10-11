@@ -895,4 +895,33 @@ class Invoice
     {
         return $this->status;
     }
+    /**
+     * @var float
+     */
+    private $debitSum;
+
+
+    /**
+     * Set debitSum
+     *
+     * @param float $debitSum
+     * 
+     * @return Invoice
+     */
+    public function setDebitSum($debitSum)
+    {
+        $this->debitSum = $debitSum;
+
+        return $this;
+    }
+
+    /**
+     * Get debitSum
+     *
+     * @return float 
+     */
+    public function getDebitSum()
+    {
+        return $this->debitSum;
+    }
 }

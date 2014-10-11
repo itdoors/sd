@@ -482,7 +482,7 @@ class User extends BaseUser
 
         $fileExtension = $this->getFile()->getClientOriginalExtension();
 
-        $filename = md5(microtime()) . '.' . $fileExtension;
+        $filename = uniqid() . '.' . $fileExtension;
 
         $uploadDir = $this->getUploadRootDir();
 
@@ -516,7 +516,7 @@ class User extends BaseUser
 
         $fileExtension = $this->getFile()->getClientOriginalExtension();
 
-        $filename = $this->id . '.' . $fileExtension;
+        $filename = uniqid() . '.' . $fileExtension;
 
         $uploadDir = $this->getUploadRootDir().'/temp';
         if (!is_dir($uploadDir)) {

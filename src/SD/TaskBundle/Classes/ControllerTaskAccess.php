@@ -133,5 +133,4 @@ class ControllerTaskAccess extends BasicTaskAccess
 
         return true;
     }
-
 }

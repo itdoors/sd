@@ -39,7 +39,9 @@ class HolidayForm extends AbstractType
             ->add('date', 'text')
             ->add('name', 'text')
             ->add('shortDescription', 'textarea')
-            ->add('description', 'textarea');
+            ->add('description', 'textarea', array(
+                'required' => false
+            ));
         $builder
             ->add('create', 'submit')
             ->add('cancel', 'button');

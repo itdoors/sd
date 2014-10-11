@@ -213,6 +213,8 @@ class InvoiceService
         if ($summaPaymens >= $summaActs) {
             $invoiceNew->setDateFact($dateFact);
         }
+        $debtSum = ($summaActs ? $summaActs[1] : 0 )-($summaPaymens ? $summaPaymens[1] : 0);
+        $invoiceNew->setDebitSum($debtSum >= 0 ? $debtSum : 0);
 
         if (!empty($invoice->delayDate) && $invoice->delayDate != 'null') {
             $invoiceNew->setDelayDate(new \DateTime(trim($invoice->delayDate)));
@@ -594,38 +596,14 @@ class InvoiceService
         );
         $days = date("w") < 5 ? (int) date("w") : 0;
         $toMonday = 0;
-        if ($days !== 0) {
-            $summa = $invoice->getSummaTo(
-                date('Y-m-d'),
-                date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + 5 - $days, date('Y')))
-            );
-            $tabs['toFriday'] = array (
-                'blockupdate' => 'ajax-tab-holder-2',
-                'tab' => 'toFriday',
-                'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
-                'text' => $translator->trans('Until Friday') . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
-            );
-        } else {
+        if ($days == 0) {
             if (date("w") == 0) {
                 $toMonday = 0;
-                $days = 1;
             } elseif (date("w") == 6) {
-                $days = 2;
                 $toMonday = 7;
             } elseif (date("w") == 5) {
-                $days = 3;
                 $toMonday = 7;
             }
-            $summa = $invoice->getSummaTo(
-                date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y'))),
-                date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + 5 + $days, date('Y')))
-            );
-            $tabs['nextWeek'] = array (
-                'blockupdate' => 'ajax-tab-holder-2',
-                'tab' => 'nextWeek',
-                'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
-                'text' => $translator->trans('Next week') . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
-            );
         }
         $days =  1 - date("w") + $toMonday;
         if ($days > 0) {
@@ -648,7 +626,7 @@ class InvoiceService
             );
         }
         $days = 3 - date("w")+$toMonday;
-        if ($days !== 0) {
+        if ($days > 0) {
             $summa = $invoice->getSumma(date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y'))));
             $tabs['wednesday'] = array (
                 'blockupdate' => 'ajax-tab-holder-2',
@@ -658,7 +636,7 @@ class InvoiceService
             );
         }
         $days = 4 - date("w")+$toMonday;
-        if ($days !== 0) {
+        if ($days > 0) {
             $summa = $invoice->getSumma(date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y'))));
             $tabs['thursday'] = array (
                 'blockupdate' => 'ajax-tab-holder-2',
@@ -668,7 +646,7 @@ class InvoiceService
             );
         }
         $days = 5 - date("w")+$toMonday;
-        if ($days !== 0) {
+        if ($days > 0) {
             $summa = $invoice->getSumma(date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y'))));
             $tabs['friday'] = array (
                 'blockupdate' => 'ajax-tab-holder-2',
@@ -677,13 +655,6 @@ class InvoiceService
                 'text' => $translator->trans('Friday') . '<br>' . number_format($summa[0]['summa'], 2, ',', ' ')
             );
         }
-//        $summa = $invoice->getSumma(date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + 1, date('Y'))));
-//        $tabs['tomorrow'] = array (
-//            'blockupdate' => 'ajax-tab-holder-2',
-//            'tab' => 'tomorrow',
-//            'url' => $this->container->get('router')->generate('it_doors_controlling_invoice_expected_pay_show'),
-//            'text' => $translator->trans('Tomorrow') . ' ' . number_format($summa[0]['summa'], 2, ',', ' ')
-//        );
 
         return $tabs;
     }
@@ -1008,13 +979,15 @@ class InvoiceService
         foreach ($invoices as $key => $invoice) {
             echo ($count-$key).' number:'.$invoice->getInvoiceId()." id:".$invoice->getId();
 
-            $debtSum = $em->getRepository('ITDoorsControllingBundle:InvoiceAct')
+            $actSum = $em->getRepository('ITDoorsControllingBundle:InvoiceAct')
                 ->getSum($invoice->getId());
             $paySum = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')
                 ->getSum($invoice->getId());
-            if ($paySum >= $debtSum) {
+            $debtSum = ($actSum ? $actSum[1] : 0 )-($paySum ? $paySum[1] : 0);
+            $invoice->setDebitSum($debtSum >=0 ? $debtSum : 0);
+            if ($paySum >= $actSum) {
                 $date = $em->getRepository('ITDoorsControllingBundle:InvoicePayments')
-                ->dateLastPay($invoice->getId());
+                    ->dateLastPay($invoice->getId());
                 if (key_exists('date', $date[0])) {
                     $date = $date[0]['date'];
                 } else {

@@ -516,8 +516,6 @@ class InvoiceController extends BaseFilterController
                         'startcolor' => array ('rgb' => 'f5f5f5')
                 ));
             }
-//            $phpExcelObject->getActiveSheet()->getDefaultRowDimension($str)->setRowHeight(40);
-//            $phpExcelObject->getActiveSheet()->getDefaultRowDimension($str)->setRowHeight(-1);
             $invoice['actOriginals'] = str_replace('t', 'есть', $invoice['actOriginals']);
             $invoice['actOriginals'] = str_replace('f', 'нет', $invoice['actOriginals']);
             $phpExcelObject->getActiveSheet()
@@ -653,16 +651,41 @@ class InvoiceController extends BaseFilterController
      */
     public function exportExelAction ()
     {
+        /** @var InvoiceRepository $invoices */
+//        $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')->getForExel($companystryctyre);
+
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
+        $filterNamespace = $this->container->getParameter($this->getNamespace());
+
+        $filters = $this->getFilters($filterNamespace);
+        if (empty($filters)) {
+            $filters['isFired'] = 'No fired';
+            $this->setFilters($filterNamespace, $filters);
+        }
         $companystryctyre = null;
         if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
             $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
         }
 
-        /** @var InvoiceRepository $invoices */
-        $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')->getForExel($companystryctyre);
+        $period = $this->getTab($filterNamespace);
+
+        /** @var InvoiceRepository $invoice */
+        $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
+        if ($period === 'all') {
+            if (isset($filters['isFired'])) {
+                $invoices = array();
+            } else {
+                $result = $invoice->getEntittyCountSum($period.'Exel', $filters, $companystryctyre);
+                $entities = $result['entities'];
+                $invoices = $entities->getResult();
+            }
+        } else {
+            $result = $invoice->getEntittyCountSum($period, $filters, $companystryctyre);
+            $entities = $result['entities'];
+            $invoices = $entities->getResult();
+        }
 
         return $this->getExel($invoices);
     }
