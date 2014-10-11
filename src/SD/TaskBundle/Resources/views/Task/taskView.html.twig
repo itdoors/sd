@@ -2,6 +2,11 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
 <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
 <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
+{% if access.canEditDescription %}
+<link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.css') }}">
+<script type="text/javascript" src ="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.min.js') }}"></script>
+<script type="text/javascript" src ="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/lang/summernote-ru-RU.js') }}"></script>
+{% endif %}
 <script>
     $(document).ready(function(){
         $('#task_set_viewed').die('click')
@@ -193,6 +198,47 @@
             })
         })
 
+        $('#description_edit_text').die('click');
+        $('#description_edit_text').live('click', function(e){
+            $('#edit_description_div').removeClass('notDisplayed');
+            $('#description_div').addClass('notDisplayed');
+        })
+
+        $('#cancel_edit_description').die('click');
+        $('#cancel_edit_description').live('click', function(e){
+            $('#edit_description_div').addClass('notDisplayed');
+            $('#description_div').removeClass('notDisplayed');
+        })
+
+        $('#save_edit_description').die('click');
+        $('#save_edit_description').live('click', function(e){
+            var description = $('#wyswyg').code();
+            var id = $('#task_modal_info_holder').data('id');
+            var url = $('#task_modal_info_holder').data('url_sd_task_editable');
+
+            showSpinner();
+
+            var sendData = {
+                'pk': id,
+                'name': 'description',
+                'value': description
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: sendData,
+                success: function(data1) {
+                    //alert(data1)
+                    data = JSON.parse(data1);
+                    if (data.success == 1) {
+                        updateTask();
+                    } else {
+                        //$('#copy_etalon_finished').show('blind', {}, 500);
+                    }
+                }
+            })
+        })
 
         function getComment() {
             var comment = $('#comment').val();
@@ -305,10 +351,38 @@
         );
 
         $('#viewer_select').select2();
+
+        $('#wyswyg').summernote({
+            height: 200,
+            lang: 'ru-RU',
+            'disableDragAndDrop': true,
+            'disableLinkTarget': true,
+            'onblur': function(){
+                /*
+                 $('.wyswyg').text($('.textear-edit').code());
+                 */
+            },
+            toolbar: [
+                //['style', ['style']], // no style button
+                ['style', ['bold', 'italic', 'underline']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['insert', ['link']], // no insert buttons
+                ['table', ['table']] // no table button
+                //['help', ['help']] //no help button
+            ]
+        }).code($('#description_text').html());
+
     })
 
 </script>
-
+<style>
+    .notDisplayed{
+        display: none;
+    }
+</style>
 
 {#
 <div class="scroller" style="max-height: 600px" data-always-visible="0" data-rail-visible="0" data-handle-color="#dae3e7"
@@ -366,7 +440,24 @@
         <!-- TASK DESC -->
         <div class="form-group">
             {# sorry for this shitty twig style, but I had to hide empty spaces #}
-            <div class="col-md-12" style="white-space: pre-line">{% if access.canEditDescription %}
+            <div class="col-md-12" >
+                {% if access.canEditDescription %}
+
+                    <div id="description_div">
+                        <span id="description_text" style="white-space: pre-line">{{ taskUserRole.task.description|raw }}</span>
+                        <span id="description_edit_text">
+                            <br><br>
+                            <a href="#">{% trans %}Edit description{% endtrans %} <i class="fa fa-edit"></i></a>
+                        </span>
+                    </div>
+                    <div id="edit_description_div" class="notDisplayed">
+                        <div id="wyswyg" ></div>
+                        <br>
+                        <a class="btn btn-circle btn-sm green-haze" id="save_edit_description"
+                           style="margin-right: 10px;">{% trans %}Save changes{% endtrans %}</a>
+                        <a class="btn btn-circle btn-sm green-haze" id="cancel_edit_description">{% trans %}Cancel{% endtrans %}</a>
+                    </div>
+{#
                     <a href="#" id="description" data-type="textarea"
                        data-pk="{{ taskUserRole.id }}" data-placement="top"
                        data-original-title="{% trans %}Enter description{% endtrans %}"
@@ -376,7 +467,10 @@
                             url: '{{ path('sd_task_editable') }}'
                         });
                     </script>
-                {% else %}{{ taskUserRole.task.description }}{% endif %}
+#}
+                {% else %}
+                    {{ taskUserRole.task.description|raw }}
+                {% endif %}
                 <br><br>
             </div>
         </div>
@@ -741,4 +835,5 @@
        data-url_task_delete_file="{{ path('sd_task_delete_file') }}"
        data-url_add_viewer="{{ path('sd_task_add_viewer') }}"
        data-url-add_resolution="{{ path('sd_task_add_resolution') }}"
+       data-url_sd_task_editable="{{ path('sd_task_editable') }}"
         >

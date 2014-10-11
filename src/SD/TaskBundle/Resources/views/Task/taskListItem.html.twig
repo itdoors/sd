@@ -35,7 +35,9 @@
          {{ taskUserRole.task.title|length > 30 ? taskUserRole.task.title|slice(0, 30) ~ '...' : taskUserRole.task.title }} <span style="color: #577688">(ID:{{ taskUserRole.task.id }}) </span>
     </div>
     <div class="todo-tasklist-item-text">
+{#
         {{ taskUserRole.task.description|length > 100 ? taskUserRole.task.description|slice(0, 50) ~ '...' : taskUserRole.task.description  }}
+#}
 
 {#
         {% if taskUserRole.role = 'controller' %}

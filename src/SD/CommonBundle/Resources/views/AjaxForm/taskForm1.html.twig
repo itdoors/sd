@@ -1,7 +1,10 @@
 {% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
 <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
+<link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.css') }}">
 <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js')}}"></script>
 <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
+<script type="text/javascript" src ="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.min.js') }}"></script>
+<script type="text/javascript" src ="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/lang/summernote-ru-RU.js') }}"></script>
 
 <script>
         $(document).ready(function(){
@@ -67,7 +70,7 @@
 
             function setTaskPattern(data) {
                 $('#' + '{{ form.vars.name }}' + '_title').val(data.title);
-                $('#' + '{{ form.vars.name }}' + '_description').val(data.description);
+                $('.wyswyg').code(data.description);
 
                 if (data.performer) {
                     $('#' + '{{ form.vars.name }}' + '_performer').select2("val", data.performer)
@@ -92,6 +95,33 @@
 
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            $('.wyswyg').summernote({
+                height: 200,
+                lang: 'ru-RU',
+                'disableDragAndDrop': true,
+                'disableLinkTarget': true,
+                'onblur': function(){
+/*
+                    $('.wyswyg').text($('.textear-edit').code());
+*/
+                },
+                toolbar: [
+                    //['style', ['style']], // no style button
+                    ['style', ['bold', 'italic', 'underline']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['insert', ['link']], // no insert buttons
+                    ['table', ['table']], // no table button
+                    //['help', ['help']] //no help button
+                ]
+            });
+        });
+    </script>
+
 <style>
     .patterns-animation{
         opacity: 0.6;
@@ -146,7 +176,7 @@
                     </div>
                     <div class="form-group col-md-12">
                         {{ form_label(form.description, 'Description'|trans({}, 'SDCalendarBundle'), {'attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(form.description, {'attr' : {'class' : 'form-control', 'placeholder': 'Enter description'|trans({}, 'SDCalendarBundle')} } ) }}
+                        {{ form_widget(form.description, {'attr' : {'class' : 'form-control wyswyg', 'placeholder': 'Enter description'|trans({}, 'SDCalendarBundle')} } ) }}
                         <span class="help-block">{{ form_errors(form.description) }}</span>
                     </div>
                     <div class="form-group col-md-12">
