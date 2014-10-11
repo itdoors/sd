@@ -113,8 +113,6 @@ class TaskController extends Controller
 
         $info['comments'] = $comments;
 
-        $info['comments'] = $comments;
-
         $info['taskUserRole'] = $taskUserRole;
 
         $return = array();

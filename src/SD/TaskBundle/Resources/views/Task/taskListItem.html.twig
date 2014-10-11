@@ -30,12 +30,14 @@
 {% endif %}
 
 <div class="todo-tasklist-item todo-tasklist-item-border-{{ color }} task-item" data-id="{{ taskUserRole.id }}" style="border-width: 3px;">
-    <img class="todo-userpic pull-left" src="{{ web_image( taskUserRole.user.photo is not empty ? userprofiles_url ~ taskUserRole.user.id ~ '/' ~ taskUserRole.user.photo : userprofiles_url ~ 'no_photo.png').resize(27, 27) }}">
+    <img class="todo-userpic pull-left" src="{{ web_image( taskUserRole.user.photo is not empty ? userprofiles_url ~ taskUserRole.user.id ~ '/' ~ taskUserRole.user.photo : userprofiles_url ~ 'no_avatar.png').resize(27, 27) }}">
     <div class="todo-tasklist-item-title">
          {{ taskUserRole.task.title|length > 30 ? taskUserRole.task.title|slice(0, 30) ~ '...' : taskUserRole.task.title }} <span style="color: #577688">(ID:{{ taskUserRole.task.id }}) </span>
     </div>
     <div class="todo-tasklist-item-text">
+{#
         {{ taskUserRole.task.description|length > 100 ? taskUserRole.task.description|slice(0, 50) ~ '...' : taskUserRole.task.description  }}
+#}
 
 {#
         {% if taskUserRole.role = 'controller' %}
