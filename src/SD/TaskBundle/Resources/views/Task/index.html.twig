@@ -79,15 +79,25 @@
                 e.preventDefault();
                 var obj = this;
 
+                var roleFilters =  $('.roleFilter');
+                $.each(roleFilters, function(key, filter) {
+                    $(filter).data('status', 0);
+                    $(filter).find('.arrow').css('display', 'none');
+                    $(filter).find('.roleTitle').css('color', 'grey');
+                });
+/*
                 if ($(obj).data('status')) {
                     $(obj).data('status', 0);
                     $(obj).find('.arrow').css('display', 'none');
                     $(obj).find('.roleTitle').css('color', 'grey');
                 } else {
+*/
                     $(obj).data('status', 1);
                     $(obj).find('.arrow').css('display', 'inline');
                     $(obj).find('.roleTitle').css('color', 'inherit');
+/*
                 }
+*/
                 updateTaskList();
 
 
