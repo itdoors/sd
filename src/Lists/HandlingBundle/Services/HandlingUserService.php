@@ -58,6 +58,10 @@ class HandlingUserService
     {
         /** @var EntityManager $em */
         $em = $this->container->get('doctrine.orm.entity_manager');
+
+        /** @var User $authUser */
+        $authUser = $this->container->get('security.context')->getToken()->getUser();
+
         $user = $em->getRepository('SDUserBundle:User')->find($userId);
         $handling = $em->getRepository('ListsHandlingBundle:Handling')->find($handlingId);
 
@@ -70,6 +74,7 @@ class HandlingUserService
                 'lookupId' => $lookup->getId(),
                 ));
 
+        $part = 100;
         if (!$mainManager) {
             $mainManager = $em
                 ->getRepository('ListsHandlingBundle:HandlingUser')
@@ -81,11 +86,11 @@ class HandlingUserService
                 $mainManager = new HandlingUser();
                 $mainManager->setUser($user);
                 $mainManager->setHandling($handling);
-                $mainManager->setPart(100);
+                $mainManager->setPart($part);
                 $mainManager->setLookup($lookup);
             } else {
                 $mainManager->setLookup($lookup);
-                $mainManager->setPart(100);
+                $mainManager->setPart($part);
             }
         } else {
             $oldManager = $em
@@ -106,8 +111,8 @@ class HandlingUserService
                     $mainManager->setPart(100);
                 }
             }
-            /** @var User $authUser */
-            $authUser = $this->container->get('security.context')->getToken()->getUser();
+
+            $this->sendEmailRemoveManagerProject($handlingId, $mainManager->getUser()->getEmail(), $authUser);
 
             $history = new History();
             $history->setCreatedatetime(new \DateTime());
@@ -121,7 +126,57 @@ class HandlingUserService
 
             $mainManager->setUser($user);
         }
+        $this->sendEmailAddManagerProject($handlingId, $user->getEmail(), $authUser, $part);
+
         $em->persist($mainManager);
         $em->flush();
+
+        $cron = $this->container->get('it_doors_cron.service');
+        $cron->addSendEmails();
+    }
+    private function sendEmailAddManagerProject($handlingId, $email, $user, $part)
+    {
+        $emailService = $this->container->get('it_doors_email.service');
+        $url = $this->container->get('router')->generate(
+            'lists_sales_handling_show',
+            array('id' => $handlingId),
+            true
+        );
+        $emailService->send(
+            null,
+            'add-manager-project',
+            array(
+                'users' => array(
+                    $email
+                ),
+                'variables' => array(
+                    '${lastName}$' => $user->getLastName(),
+                    '${firstName}$' => $user->getFirstName(),
+                    '${middleName}$' => $user->getMiddleName(),
+                    '${part}$' => (int) $part,
+                    '${id}$' => $handlingId,
+                    '${url}$' => '<a href="' . $url . '">' . $url . '</a>',
+                )
+            )
+        );
+    }
+    private function sendEmailRemoveManagerProject($handlingId, $email, $user)
+    {
+        $emailService = $this->container->get('it_doors_email.service');
+        $emailService->send(
+            null,
+            'remove-manager-project',
+            array(
+                'users' => array(
+                    $email
+                ),
+                'variables' => array(
+                    '${lastName}$' => $user->getLastName(),
+                    '${firstName}$' => $user->getFirstName(),
+                    '${middleName}$' => $user->getMiddleName(),
+                    '${id}$' => $handlingId,
+                )
+            )
+        );
     }
 }
