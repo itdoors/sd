@@ -48,6 +48,7 @@ class UserController extends BaseController
             $filters['status'] = $status->getId();
             $this->setFilters($namespase, $filters);
         }
+
         return $this->render('SDUserBundle:' . $this->baseTemplate . ':stuff.html.twig', array(
                 'baseTemplate' => $this->baseTemplate,
                 'namespase' => $namespase,

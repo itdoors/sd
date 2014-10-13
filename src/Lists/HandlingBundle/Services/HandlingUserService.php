@@ -134,6 +134,13 @@ class HandlingUserService
         $cron = $this->container->get('it_doors_cron.service');
         $cron->addSendEmails();
     }
+    /**
+     * 
+     * @param integer $handlingId
+     * @param string  $email
+     * @param object  $user
+     * @param integer $part
+     */
     private function sendEmailAddManagerProject($handlingId, $email, $user, $part)
     {
         $emailService = $this->container->get('it_doors_email.service');
@@ -160,6 +167,12 @@ class HandlingUserService
             )
         );
     }
+    /**
+     * 
+     * @param integer $handlingId
+     * @param string  $email
+     * @param object  $user
+     */
     private function sendEmailRemoveManagerProject($handlingId, $email, $user)
     {
         $emailService = $this->container->get('it_doors_email.service');
