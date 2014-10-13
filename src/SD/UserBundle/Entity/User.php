@@ -53,16 +53,6 @@ class User extends BaseUser
     private $position;
 
     /**
-     * @var boolean
-     */
-    private $isBlocked;
-
-    /**
-     * @var boolean
-     */
-    private $isFired;
-
-    /**
      * @var \DateTime
      */
     private $birthday;
@@ -190,54 +180,6 @@ class User extends BaseUser
     public function getPosition()
     {
         return $this->position;
-    }
-
-    /**
-     * Set isBlocked
-     *
-     * @param boolean $isBlocked
-     *
-     * @return User
-     */
-    public function setIsBlocked($isBlocked)
-    {
-        $this->isBlocked = $isBlocked;
-
-        return $this;
-    }
-
-    /**
-     * Get isBlocked
-     *
-     * @return boolean
-     */
-    public function getIsBlocked()
-    {
-        return $this->isBlocked;
-    }
-
-    /**
-     * Set isFired
-     *
-     * @param boolean $isFired
-     *
-     * @return User
-     */
-    public function setIsFired($isFired)
-    {
-        $this->isFired = $isFired;
-
-        return $this;
-    }
-
-    /**
-     * Get isFired
-     *
-     * @return boolean
-     */
-    public function getIsFired()
-    {
-        return $this->isFired;
     }
 
     /**

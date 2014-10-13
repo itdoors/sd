@@ -213,8 +213,9 @@ class InvoiceService
         if ($summaPaymens >= $summaActs) {
             $invoiceNew->setDateFact($dateFact);
         }
-        $debtSum = ($summaActs ? $summaActs[1] : 0 )-($summaPaymens ? $summaPaymens[1] : 0);
+        $debtSum = ($summaActs ? $summaActs : 0 )-($summaPaymens ? $summaPaymens : 0);
         $invoiceNew->setDebitSum($debtSum >= 0 ? $debtSum : 0);
+        echo ' debtSum: '.$debtSum;
 
         if (!empty($invoice->delayDate) && $invoice->delayDate != 'null') {
             $invoiceNew->setDelayDate(new \DateTime(trim($invoice->delayDate)));

@@ -36,7 +36,6 @@ Personale phone: Персональный телефон
 Inside phone: Внутрений телефон
 Fired: Уволен
 fired: Уволен
-No fired: Работает
 Active: Активный
 Blocked: Заблокирован
 blocked: заблокирован
@@ -110,3 +109,6 @@ Birthdays: Дни рожденья
 Upload photo: Загрузить фото
 Change photo: Изменить фото
 Repeal: Отмена
+Worked: Работает
+Decree: В декрете
+All: Все

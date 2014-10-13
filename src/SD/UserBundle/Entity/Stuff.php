@@ -383,4 +383,33 @@ class Stuff
     {
         return (string) $this->getId();
     }
+    /**
+     * @var \Lists\LookupBundle\Entity\Lookup
+     */
+    private $status;
+
+
+    /**
+     * Set status
+     *
+     * @param \Lists\LookupBundle\Entity\Lookup $status
+     * 
+     * @return Stuff
+     */
+    public function setStatus(\Lists\LookupBundle\Entity\Lookup $status = null)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return \Lists\LookupBundle\Entity\Lookup 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
 }
