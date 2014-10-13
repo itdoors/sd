@@ -81,6 +81,7 @@ class DogovorRepository extends EntityRepository
         $sql
             ->select('d.id as dogovorId')
             ->addSelect('d.number as dogovorNumber')
+            ->addSelect('d.filepath')
             ->addSelect('d.startdatetime as dogovorStartdatetime')
             ->addSelect('d.stopdatetime as dogovorStopdatetime')
             ->addSelect('d.prolongationDate as dogovorProlongationDate')
