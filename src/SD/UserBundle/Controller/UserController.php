@@ -60,7 +60,7 @@ class UserController extends BaseController
             $em = $this->getDoctrine()->getManager();
             $status = $em->getRepository('ListsLookupBundle:Lookup')
                 ->findOneBy(array('lukey' => 'worked'));
-            $filters['isFired'] = $status->getId();
+            $filters['status'] = $status->getId();
             $this->setFilters($namespase, $filters);
         }
         $users = $this->get('sd_user.repository')->getAllForUserQuery($filters);
