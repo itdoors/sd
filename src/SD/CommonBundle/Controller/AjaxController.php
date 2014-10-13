@@ -1790,6 +1790,11 @@ class AjaxController extends BaseFilterController
                 $value = null;
             }
         }
+        if ($name == 'status') {
+            $value = $this->getDoctrine()
+            ->getRepository('ListsLookupBundle:Lookup:Stuff')
+            ->find((int) $value);
+        }
 
         $user->$methodSet($value);
 

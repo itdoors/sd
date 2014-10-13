@@ -98,9 +98,11 @@ class TaskForm extends AbstractType
                 'query_builder' => function (\SD\UserBundle\Entity\UserRepository $repository) {
                         return $repository->createQueryBuilder('u')
                             ->innerJoin('u.stuff', 's')
-                            ->where('u.isFired = false')
-                            ->orWhere('u.isFired is NULL')
-                            ->orderBy('u.lastName', 'asc');
+                            ->leftJoin('s.status', 'st')
+                            ->where('st.lukey = :status')
+                            ->orWhere('s.status_id is NULL')
+                            ->orderBy('u.lastName', 'asc')
+                            ->setParameter(':status', "worked");
                             //->setParameter(':fired', true, \PDO::PARAM_BOOL);
                 }
             ));
@@ -112,9 +114,11 @@ class TaskForm extends AbstractType
                 'query_builder' => function (\SD\UserBundle\Entity\UserRepository $repository) {
                         return $repository->createQueryBuilder('u')
                             ->innerJoin('u.stuff', 's')
-                            ->where('u.isFired = false')
-                            ->orWhere('u.isFired is NULL')
-                            ->orderBy('u.lastName', 'asc');
+                            ->leftJoin('s.status', 'st')
+                            ->where('st.lukey = :status')
+                            ->orWhere('s.status_id is NULL')
+                            ->orderBy('u.lastName', 'asc')
+                            ->setParameter(':status', "worked");
                         //->setParameter(':fired', true, \PDO::PARAM_BOOL);
                 }
             ));
@@ -129,10 +133,15 @@ class TaskForm extends AbstractType
                 'query_builder' => function (\SD\UserBundle\Entity\UserRepository $repository) {
                         return $repository->createQueryBuilder('u')
                             ->innerJoin('u.stuff', 's')
-                            ->where('u.isFired = false')
-                            ->orWhere('u.isFired is NULL')
-                            ->orderBy('u.lastName', 'asc');
+                            ->leftJoin('s.status', 'st')
+                            ->where('st.lukey = :status')
+                            ->orWhere('s.status_id is NULL')
+                            ->orderBy('u.lastName', 'asc')
+                            ->setParameter(':status', "worked");
                         //->setParameter(':fired', true, \PDO::PARAM_BOOL);
+                        
+                            
+                            
                 }
             ));
 

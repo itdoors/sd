@@ -1093,3 +1093,24 @@ ALTER TABLE invoice ADD status INT DEFAULT NULL;
 -- prod ++++++
 ALTER TABLE invoice ADD debit_sum DOUBLE PRECISION NOT NULL DEFAULT 0;
 -- prod ++++++
+INSERT INTO "public".lookup (lukey, "name", "group") 
+	VALUES ('fired', 'Уволен', 'user_status');
+INSERT INTO "public".lookup (lukey, "name", "group") 
+	VALUES ('worked', 'Работает', 'user_status');
+INSERT INTO "public".lookup (lukey, "name", "group") 
+	VALUES ('decree', 'В декрете', 'user_status');
+-- prod ++++++
+ALTER TABLE stuff ADD status_id INT DEFAULT NULL;
+ALTER TABLE stuff ADD CONSTRAINT FK_5941F83E6BF700BD FOREIGN KEY (status_id) REFERENCES lookup (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_5941F83E6BF700BD ON stuff (status_id);
+COMMENT ON COLUMN stuff.status_id IS 'lookup_id';
+
+UPDATE stuff SET status_id = 67 FROM fos_user fu WHERE fu.id = stuff.user_id AND fu.is_fired  =  true;
+UPDATE stuff SET status_id = 68 FROM fos_user fu WHERE fu.id = stuff.user_id AND fu.is_fired  =  false;
+
+ALTER table fos_user DROP COLUMN is_fired;
+
+UPDATE fos_user SET locked = is_blocked  WHERE fos_user.id = fos_user.id AND is_blocked is not NULL;
+ALTER table fos_user DROP COLUMN is_blocked;
+-- prod ------
+

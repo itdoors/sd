@@ -146,7 +146,7 @@ class MigrateCommand extends ContainerAwareCommand
         $password = trim($user['password']);
         $isActive = $user['is_active'] ? $user['is_active'] : false;
         $isBlocked = $user['is_blocked'] ? $user['is_blocked'] : false;
-        $isFired = $user['is_fired'] ? $user['is_fired'] : null;
+//        $isFired = $user['is_fired'] ? $user['is_fired'] : null;
         $birthday = $user['birthday'] ? new \DateTime(trim($user['birthday'])) : null;
 
         /** @var FOSUser $userFOS */
@@ -172,8 +172,8 @@ class MigrateCommand extends ContainerAwareCommand
         $userFOS->setPassword($password);
         $userFOS->setSalt($salt);
         $userFOS->setPosition($position);
-        $userFOS->setIsBlocked($isBlocked);
-        $userFOS->setIsFired($isFired);
+        $userFOS->setLocked($isBlocked);
+//        $userFOS->setIsFired($isFired);
         $userFOS->setEnabled($isActive);
 
         if ($birthday) {

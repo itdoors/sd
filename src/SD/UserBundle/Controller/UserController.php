@@ -56,7 +56,11 @@ class UserController extends BaseController
         $namespase = $this->filterNamespace;
         $filters = $this->getFilters($namespase);
         if (empty($filters)) {
-            $filters['isFired'] = 'No fired';
+            /** @var EntityManager $em */
+            $em = $this->getDoctrine()->getManager();
+            $status = $em->getRepository('ListsLookupBundle:Lookup')
+                ->findOneBy(array('lukey' => 'worked'));
+            $filters['isFired'] = $status->getId();
             $this->setFilters($namespase, $filters);
         }
         $users = $this->get('sd_user.repository')->getAllForUserQuery($filters);

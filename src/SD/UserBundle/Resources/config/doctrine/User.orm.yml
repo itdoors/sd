@@ -34,14 +34,6 @@ SD\UserBundle\Entity\User:
             type: string
             length: 255
             nullable: true
-        isBlocked:
-            type: boolean
-            nullable: true
-            column: is_blocked
-        isFired:
-            type: boolean
-            nullable: true
-            column: is_fired
         birthday:
             type: date
             nullable: true
