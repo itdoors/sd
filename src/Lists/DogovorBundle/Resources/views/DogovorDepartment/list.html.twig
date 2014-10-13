@@ -16,7 +16,7 @@
     {% for item in items %}
         <tr>
             <td>{{ item.id }}</td>
-            <td>{{ item.createdatetime|date('d.m.Y') }}</td>
+            <td>{{ item.createdatetime is empty ? '' : item.createdatetime|date('d.m.Y') }}</td>
             <td>{{ item.dogovorNumber|e }}</td>
             <td>#{{ item.dopDogovorString }}</td>
             <td>{{ item.department }}</td>

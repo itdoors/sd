@@ -5250,6 +5250,8 @@ class AjaxController extends BaseFilterController
 
                 $newData->setDepartment($department);
 
+                $newData->setCreatedatetime(new \DateTime());
+
                 $em->persist($newData);
 
                 $insert = true;
