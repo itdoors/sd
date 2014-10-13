@@ -135,6 +135,7 @@ class HandlingUserService
         $cron->addSendEmails();
     }
     /**
+     * sendEmailAddManagerProject
      * 
      * @param integer $handlingId
      * @param string  $email
@@ -168,6 +169,7 @@ class HandlingUserService
         );
     }
     /**
+     * sendEmailRemoveManagerProject
      * 
      * @param integer $handlingId
      * @param string  $email
