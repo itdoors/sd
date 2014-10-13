@@ -46,6 +46,13 @@
 <td>{{ item.dogovorSubject|e }}</td>
 <td>{{ item.dogovorType|e }}</td>
 <td>
+    {% if item.filepath %}
+        <a href="/uploads/dogovor/{{ item.filepath }}" target="_blank">
+            {% trans %}See document{% endtrans %}
+        </a>
+    {% endif %}
+</td>
+<td>
     {% set needToProlongate = (item.dogovorProlongationDate|date('U') - "now"|date('U')) < prolongation_limit %}
     {% if needToProlongate %}
         <a class="btn green ajax-form"

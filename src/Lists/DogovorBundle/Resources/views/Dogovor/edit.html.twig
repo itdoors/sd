@@ -154,6 +154,13 @@
                 <a href="#" id="customerId"  data-type="select2" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.customerName }}" data-placement="right" data-original-title="{% trans %}Enter Customer{% endtrans %}">
                     {{ dogovor.customerName }}
                 </a>
+                {% set role = 'sales' %}
+                {% if is_granted('ROLE_SALESADMIN') %}
+                    {% set role = 'sales_admin' %}
+                {% elseif is_granted('ROLE_DOGOVORADMIN') %}
+                    {% set role = 'dogovor_admin' %}
+                {% endif %}
+                <a href="{{ path('lists_' ~ role ~ '_organization_show', { id:dogovor.customerId }) }}" target="_blank">({% trans %}Open{% endtrans%})</a>
             </td>
             <td>{% trans %}Performer{% endtrans %}</td>
             <td>
