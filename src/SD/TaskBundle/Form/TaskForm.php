@@ -138,10 +138,7 @@ class TaskForm extends AbstractType
                             ->orWhere('s.status_id is NULL')
                             ->orderBy('u.lastName', 'asc')
                             ->setParameter(':status', "worked");
-                        //->setParameter(':fired', true, \PDO::PARAM_BOOL);
-                        
-                            
-                            
+                        //->setParameter(':fired', true, \PDO::PARAM_BOOL); 
                 }
             ));
 
