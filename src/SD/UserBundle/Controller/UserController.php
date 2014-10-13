@@ -39,7 +39,15 @@ class UserController extends BaseController
     public function stuffAction()
     {
         $namespase = $this->filterNamespace;
-
+        $filters = $this->getFilters($namespase);
+        if (empty($filters)) {
+            /** @var EntityManager $em */
+            $em = $this->getDoctrine()->getManager();
+            $status = $em->getRepository('ListsLookupBundle:Lookup')
+                ->findOneBy(array('lukey' => 'worked'));
+            $filters['status'] = $status->getId();
+            $this->setFilters($namespase, $filters);
+        }
         return $this->render('SDUserBundle:' . $this->baseTemplate . ':stuff.html.twig', array(
                 'baseTemplate' => $this->baseTemplate,
                 'namespase' => $namespase,
