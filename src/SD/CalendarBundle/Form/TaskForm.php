@@ -69,7 +69,7 @@ class TaskForm extends AbstractType
                             ->innerJoin('u.stuff', 's')
                             ->leftJoin('s.status', 'st')
                             ->where('st.lukey = :status')
-                            ->orWhere('s.status_id is NULL')
+                            ->orWhere('st.id is NULL')
                             ->orderBy('u.lastName', 'asc')
                             ->setParameter(':status', "worked");
                 }
