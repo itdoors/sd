@@ -25,8 +25,8 @@ class UserRepository extends EntityRepository
                 ->select('u', 'stuff')
                 ->innerJoin('u.stuff', 'stuff')
                 ->leftJoin('stuff.status', 'st')
-                ->where('st.lukey = :status OR st.id IS NULL')
-                ->setParameter(':status', 'worked')
+//                ->where('st.lukey = :status OR st.id IS NULL')
+//                ->setParameter(':status', 'worked')
                 ->orderBy('u.lastName', 'ASC');
     }
     /**

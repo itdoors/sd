@@ -1719,7 +1719,7 @@ class AjaxController extends BaseFilterController
             ->getRepository('SDUserBundle:User')
             ->find($pk);
 
-        if (!$value) {
+        if (!$value && $name != 'locked') {
             $methodGet = 'get' . ucfirst($name);
             $type = gettype($user->$methodGet());
 
