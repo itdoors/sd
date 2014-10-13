@@ -25,7 +25,7 @@ class UserRepository extends EntityRepository
                 ->select('u', 'stuff')
                 ->innerJoin('u.stuff', 'stuff')
                 ->leftJoin('stuff.status', 'st')
-                ->where('st.lukey = :status OR stuff.status_id IS NULL')
+                ->where('st.lukey = :status OR st.id IS NULL')
                 ->setParameter(':status', 'worked')
                 ->orderBy('u.lastName', 'ASC');
     }
@@ -292,7 +292,7 @@ class UserRepository extends EntityRepository
             ->innerJoin('u.stuff', 'stuff')
             ->leftJoin('stuff.status', 'st')
             ->where('u.birthday is not null')
-            ->andWhere('st.lukey = :status OR stuff.status_id IS NULL')
+            ->andWhere('st.lukey = :status OR st.id IS NULL')
             ->setParameter(':status', 'worked');
         if (date('Y', $startTimestamp) == date('Y', $endTimestamp)) {
             $res->andWhere('dayofyear(u.birthday) >= :dayofyearStart')
@@ -316,7 +316,7 @@ class UserRepository extends EntityRepository
             ->innerJoin('u.stuff', 's')
             ->leftJoin('s.status', 'st')
             ->where('st.lukey = :status')
-            ->orWhere('s.status_id is NULL')
+            ->orWhere('st.id is NULL')
             ->setParameter(':status', 'worked')
             ->orderBy('u.lastName', 'asc');
 
