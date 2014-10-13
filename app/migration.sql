@@ -1112,5 +1112,5 @@ ALTER table fos_user DROP COLUMN is_fired;
 
 UPDATE fos_user SET locked = is_blocked  WHERE fos_user.id = fos_user.id AND is_blocked is not NULL;
 ALTER table fos_user DROP COLUMN is_blocked;
--- prod ------
+-- prod ++++++
 
