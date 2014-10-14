@@ -33,6 +33,7 @@
                     <input type="hidden" name="postFunction" value="{{ postFunction }}">
                     <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
                     <input type="hidden" name="targetId" value="{{ targetId }}">
+                    <input type="hidden" name="defaultData" value="{{ defaultData | json_encode() }}">
                 </div>
                 <div class="form-actions">
                     {{ form_widget(form.add, { 'label': 'Add', 'attr': {'class': 'btn blue'} } ) }}

@@ -1201,7 +1201,7 @@ class AjaxController extends BaseFilterController
 
         $objects = $companystructure->createQueryBuilder('c')
             ->andWhere('lower(c.name) LIKE :q')
-            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->setParameter(':q', '%' . mb_strtolower($searchText, 'UTF-8') . '%')
             ->orderBy('c.root, c.lft', 'ASC')
             ->getQuery()
             ->getResult();
@@ -2800,7 +2800,11 @@ class AjaxController extends BaseFilterController
         $data = $form->getData();
 
         $formData = $request->request->get($form->getName());
-
+        if ($user->hasRole('ROLE_HRADMIN')) {
+            $user = $this->getDoctrine()
+            ->getRepository('SDUserBundle:User')
+            ->find((int) $data['user']);
+        }
         $userContact = new Usercontactinfo();
         $userContact->setValue($data['value']);
         $userContact->setUser($user);
