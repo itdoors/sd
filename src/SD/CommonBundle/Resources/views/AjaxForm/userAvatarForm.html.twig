@@ -17,7 +17,7 @@
                 xsize = $pcnt.width(),
                 ysize = $pcnt.height(),
         
-                $html = '<div id="preview-pane"><div class="preview-container"><img src="" id="imgPrev" style="width:600px;" /></div></div>';
+                $html = '<div id="preview-pane"><div class="preview-container"><img src="" id="imgPrev" /></div></div>';
 
                 console.log('init',[xsize,ysize]);
                 
@@ -90,8 +90,8 @@
  });
 </script>
 <style>
-    #imgPrev{
-        width: 600px
+    #imgPrev, #avatar{
+        width: 600px;
     }
 </style>
 {{ form_start(form, {
@@ -119,18 +119,18 @@
                     <div class="row">
                        <div class="col-md-6 responsive-1024">
                             {% if form.url.vars.value is not empty %}
-                                <img src="{{ web_image(form.url.vars.value) }}?v={{ 'now' | date('U') }}" style="width: 600px;" id="avatar" alt="Jcrop Example"/>
+                                <img src="{{ web_image(form.url.vars.value) }}?v={{ 'now' | date('U') }}" id="avatar" alt="Jcrop Example"/>
                             {% else %}
-                                <img src="{{ asset( userprofiles_url ~  'no_avatar_big.png') }}" style="width: 600px;" id="avatar" alt="Jcrop Example"/>
+                                <img src="{{ asset( userprofiles_url ~  'no_avatar_big.png') }}" id="avatar" alt="Jcrop Example"/>
                             {% endif %}
                        </div>
                        <div class="col-md-6 responsive-1024">
                            <div id="preview-pane">
                                 <div class="preview-container">
                                     {% if form.url.vars.value is not empty %}
-                                        <img src="{{ form.url.vars.value }}?v={{ 'now' | date('U') }}" id="imgPrev" style="width: 600px;" />
+                                        <img src="{{ form.url.vars.value }}?v={{ 'now' | date('U') }}" id="imgPrev"  />
                                     {% else %}
-                                       <img src="{{ asset( userprofiles_url ~  'no_avatar_big.png') }}" id="imgPrev" style="width: 600px;" alt="Jcrop Example"/>
+                                       <img src="{{ asset( userprofiles_url ~  'no_avatar_big.png') }}" id="imgPrev" alt="Jcrop Example"/>
                                     {% endif %}
                                 </div>
                            </div>
@@ -149,10 +149,11 @@
                                                 },
                                             done: function (e, data) {
                                                 $('#userAvatarForm_loadPhoto').val(data.result.fileName);
-                                                $('#avatar').attr('src', data.result.file).attr('style', 'width: 600px');
+                                                //$('#avatar').attr('src', data.result.file).attr('style', '');
                                                 $('#prewAvatar').attr('style','margin:255px 0px 0px 182px;');
                                                 JcropAPI = $('#avatar').data('Jcrop');
                                                 JcropAPI.destroy();
+                                                $('#avatar').attr('src', data.result.file).attr('style', '');
                                                 $('#preview-pane').remove();
                                                 function avatar(url) {
                                                             // Create variables (in this scope) to hold the API and image size
@@ -161,7 +162,7 @@
                                                                 boundy,
                                                                 // Grab some information about the preview pane
                                                                 $block = $('#prewAvatar'),
-                                                                $html = '<div id="preview-pane"><div class="preview-container"><img src="'+url+'" id="imgPrev" style="width: 600px;" /></div></div>';
+                                                                $html = '<div id="preview-pane"><div class="preview-container"><img src="'+url+'" id="imgPrev" /></div></div>';
 
                                                                 console.log('init',[xsize,ysize]);
 
