@@ -2800,7 +2800,11 @@ class AjaxController extends BaseFilterController
         $data = $form->getData();
 
         $formData = $request->request->get($form->getName());
-
+        if ($user->hasRole('ROLE_HRADMIN')) {
+            $user = $this->getDoctrine()
+                ->getRepository('SDUserBundle:User')
+                ->find((int) $data['user_id']);
+        }
         $userContact = new Usercontactinfo();
         $userContact->setValue($data['value']);
         $userContact->setUser($user);
