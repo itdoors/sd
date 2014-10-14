@@ -718,10 +718,19 @@
                 <li{% if
                 path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_holiday_index')
                 %} class="active"{% endif %}>
-                    <a href="{{ path('sd_holiday_index') }}">
-                        <i class="icon-pencil"></i>
-                        <span class="title">{% trans %}Holidays{% endtrans %}</span>
-                    </a>
+                    <a href="javascript:;">
+                    <i class="icon-pencil"></i>
+                    <span class="title">{% trans %}Catalog{% endtrans %}</span>
+                    <span class="arrow "></span>
+                </a>
+                    <ul  class="sub-menu">
+                        <li{% if  path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('sd_holiday_index') %} class="active"{% endif %}>
+                            <a href="{{ path('sd_holiday_index') }}">
+                                <i class="icon-pencil"></i>
+                                <span class="title">{% trans %}Holidays{% endtrans %}</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             {% endif %}
 

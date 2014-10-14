@@ -39,6 +39,15 @@ class UserController extends BaseController
     public function stuffAction()
     {
         $namespase = $this->filterNamespace;
+        $filters = $this->getFilters($namespase);
+        if (empty($filters)) {
+            /** @var EntityManager $em */
+            $em = $this->getDoctrine()->getManager();
+            $status = $em->getRepository('ListsLookupBundle:Lookup')
+                ->findOneBy(array('lukey' => 'worked'));
+            $filters['status'] = $status->getId();
+            $this->setFilters($namespase, $filters);
+        }
 
         return $this->render('SDUserBundle:' . $this->baseTemplate . ':stuff.html.twig', array(
                 'baseTemplate' => $this->baseTemplate,
@@ -56,7 +65,11 @@ class UserController extends BaseController
         $namespase = $this->filterNamespace;
         $filters = $this->getFilters($namespase);
         if (empty($filters)) {
-            $filters['isFired'] = 'No fired';
+            /** @var EntityManager $em */
+            $em = $this->getDoctrine()->getManager();
+            $status = $em->getRepository('ListsLookupBundle:Lookup')
+                ->findOneBy(array('lukey' => 'worked'));
+            $filters['status'] = $status->getId();
             $this->setFilters($namespase, $filters);
         }
         $users = $this->get('sd_user.repository')->getAllForUserQuery($filters);
@@ -103,7 +116,7 @@ class UserController extends BaseController
 
         $isCurrentUser = $id == $this->getUser()->getId();
 
-        $isAdmin = $item->hasRole('ROLE_HRADMIN');
+        $isAdmin = $this->getUser()->hasRole('ROLE_HRADMIN');
 
         /** @var UserService $service */
         $service = $this->container->get($this->service);

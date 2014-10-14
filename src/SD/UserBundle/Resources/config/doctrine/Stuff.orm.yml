@@ -65,9 +65,18 @@ SD\UserBundle\Entity\Stuff:
             referencedColumnName: id
     manyToOne:
         companystructure:
-          targetEntity: Lists\CompanystructureBundle\Entity\Companystructure
-          cascade: {  }
-          inversedBy: null
-          joinColumn:
-            companystructure_id:
-                referencedColumnName: id
+            targetEntity: Lists\CompanystructureBundle\Entity\Companystructure
+            cascade: {  }
+            inversedBy: null
+            joinColumn:
+                companystructure_id:
+                    referencedColumnName: id
+        status:
+            targetEntity: Lists\LookupBundle\Entity\Lookup
+            cascade: {  }
+            inversedBy: null
+            joinColumn:
+                status:
+                    referencedColumnName: id
+                    
+            

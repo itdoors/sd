@@ -36,7 +36,6 @@ Personale phone: Персональный телефон
 Inside phone: Внутрений телефон
 Fired: Уволен
 fired: Уволен
-No fired: Работает
 Active: Активный
 Blocked: Заблокирован
 blocked: заблокирован
@@ -106,7 +105,11 @@ Enter termination date: Введите дату увольнения
 
 FIO: Ф.И.О
 Phone: Телефон
-Birthdays: Дни рожденья
+Birthdays: Дни рождения
 Upload photo: Загрузить фото
 Change photo: Изменить фото
 Repeal: Отмена
+Worked: Работает
+Decree: В декрете
+All: Все
+Password changed successfully!: Пароль успешно изменен!

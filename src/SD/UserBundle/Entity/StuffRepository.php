@@ -25,10 +25,12 @@ class StuffRepository extends EntityRepository
                 ->select('s')
                 ->leftJoin('s.user', 'u')
                 ->leftJoin('s.companystructure', 'c')
+                ->leftJoin('s.status', 'st')
                 ->where('s.companystructureId = :companystructureId')
                 ->andWhere('c.stuffId is NULL or c.stuffId != s.id')
-                ->andWhere("u.isFired is NULL or u.isFired = false")
+                ->andWhere("st.id is NULL or st.lukey = :status")
                 ->setParameter(':companystructureId', $companystructureId)
+                ->setParameter(':status', 'worked')
                 ->orderBy('u.lastName')
                 ->getQuery()->getResult();
     }

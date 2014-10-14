@@ -45,8 +45,8 @@
                     <td>{{ item.email|e }}</td>
                     <td>{{ item.position|e }}</td>
                     <td>{{ item.company|e }}</td>
-                    <td>{% if item.isBlocked %}{% trans %}blocked{% endtrans %}{% else %}{% trans %}active{% endtrans %}{% endif %}</td>
-                    <td>{% if item.isFired %}{% trans %}fired{% endtrans %}{% else %}{% trans %}No fired{% endtrans %}{% endif %}</td>
+                    <td>{% if item.locked %}{% trans %}blocked{% endtrans %}{% else %}{% trans %}active{% endtrans %}{% endif %}</td>
+                    <td>{{ item.statusName|e }}</td>
                 </tr>
             {% endfor %}
         </table>

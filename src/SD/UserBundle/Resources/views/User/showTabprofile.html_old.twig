@@ -2,11 +2,12 @@
 {% if isAdmin %}
 <script>
     $(document).ready(function(){
-        $('#isFired').editable({
-            url: '{{ path('sd_common_ajax_user_save') }}',
+         $('#status').editable({
+            url: '{{ path('sd_common_ajax_stuff_save') }}',
             source: [
-                {value: 1, text: '{% trans %}Fired{% endtrans %}'},
-                {value: 0, text: '{% trans %}No fired{% endtrans %}'}
+                {value: 67, text: '{% trans %}Fired{% endtrans %}'},
+                {value: 68, text: '{% trans %}Worked{% endtrans %}'},
+                {value: 69, text: '{% trans %}Decree{% endtrans %}'},
             ],
             select2: {
                 placeholder: '{% trans %}Select status fired{% endtrans %}',
@@ -14,7 +15,7 @@
                 width: 250
             }
         });
-        $('#isBlocked').editable({
+        $('#locked').editable({
             url: '{{ path('sd_common_ajax_user_save') }}',
             source: [
                 {value: 1, text: '{% trans %}Blocked{% endtrans %}'},
@@ -361,21 +362,21 @@
                                                 <td>
                                                     {% if isAdmin %}
                                                         <a href="#" 
-                                                            id="isBlocked" 
+                                                            id="locked" 
                                                             class="status-edit" 
                                                             data-type="select" 
                                                             data-pk="{{ item.id }}"
-                                                            data-value="{{ item.isBlocked }}" 
+                                                            data-value="{{ item.locked }}" 
                                                             data-placement="right" 
                                                             data-original-title="{% trans %}Select status blocked{% endtrans %}">
-                                                             {% if item.isBlocked ==  true %}
+                                                             {% if item.locked ==  true %}
                                                                  {% trans %}Blocked{% endtrans %}
                                                              {% else%}
                                                                  {% trans %}Active{% endtrans %}
                                                              {% endif%}
                                                          </a>
                                                     {% else %}
-                                                        {{ item.isBlocked  ? 'Blocked'| trans() : 'Active'| trans() }}
+                                                        {{ item.locked  ? 'Blocked'| trans() : 'Active'| trans() }}
                                                     {% endif %}
                                                 </td>
                                             </tr>
@@ -535,7 +536,7 @@
                                                         class="sd-stuff-date sd-stuff-editable {% if item.dateFire is empty %} editable-empty {% endif %}"
                                                         data-name="dateFire"
                                                         data-type="text"
-                                                        data-pk="{{ item.dateFire }}"
+                                                        data-pk="{{ item.stuffId }}"
                                                              {% if item.dateFire %}
                                                                  data-value="{{ item.dateFire|date("d.m.Y") }}"
                                                              {% endif %}
@@ -559,21 +560,17 @@
                                                 <td>
                                                     {% if isAdmin %}
                                                          <a href="#" 
-                                                            id="isFired" 
+                                                            id="status" 
                                                             class="status-edit" 
                                                             data-type="select" 
-                                                            data-pk="{{ item.id }}"
-                                                            data-value="{{ item.isFired }}" 
+                                                            data-pk="{{ item.stuffId }}"
+                                                            data-value="{{ item.status }}" 
                                                             data-placement="right" 
                                                             data-original-title="{% trans %}Select status fired{% endtrans %}">
-                                                             {% if item.isFired ==  true %}
-                                                                 {% trans %}Fired{% endtrans %}
-                                                             {% else%}
-                                                                 {% trans %}No fired{% endtrans %}
-                                                             {% endif%}
+                                                             {{ item.statusName }}
                                                          </a>
                                                     {% else %}
-                                                        {{ item.isFired  ? 'Fired'|trans() : 'No fired'|trans() }}
+                                                        {{ item.statusName }}
                                                     {% endif %}
                                                 </td>
                                             </tr>

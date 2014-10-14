@@ -1719,7 +1719,7 @@ class AjaxController extends BaseFilterController
             ->getRepository('SDUserBundle:User')
             ->find($pk);
 
-        if (!$value) {
+        if (!$value && $name != 'locked') {
             $methodGet = 'get' . ucfirst($name);
             $type = gettype($user->$methodGet());
 
@@ -1789,6 +1789,11 @@ class AjaxController extends BaseFilterController
             if (in_array($type, array('integer'))) {
                 $value = null;
             }
+        }
+        if ($name == 'status') {
+            $value = $this->getDoctrine()
+            ->getRepository('ListsLookupBundle:Lookup:Stuff')
+            ->find((int) $value);
         }
 
         $user->$methodSet($value);
@@ -1998,7 +2003,7 @@ class AjaxController extends BaseFilterController
 
         $isUpload = $data['loadPhoto'] !== '' ? $data['loadPhoto'] : null;
 
-        $widthSave = $heightSave = 247;
+        $widthSave = $heightSave = 820;
 
         $projectDir = $this->container->getParameter('project.dir');
         $userprofiles = $this->container->getParameter('userprofiles.file.path');
@@ -4865,11 +4870,9 @@ class AjaxController extends BaseFilterController
         /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
         $userManager = $this->container->get('fos_user.user_manager');
         $userManager->updateUser($data);
-
-        $this->get('session')->set(
-            'noticePassword',
-            'Password changed successfully!'
-        );
+        $translator = $this->get('translator');
+        $text = $translator->trans('Password changed successfully!', array(), 'SDUserBundle');
+        $this->get('session')->set('noticePassword', $text);
 
         return true;
     }
@@ -5244,6 +5247,8 @@ class AjaxController extends BaseFilterController
                 $department = $dr->find($departmentId);
 
                 $newData->setDepartment($department);
+
+                $newData->setCreatedatetime(new \DateTime());
 
                 $em->persist($newData);
 

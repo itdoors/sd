@@ -23,8 +23,10 @@ class UserRepository extends EntityRepository
     {
         return $this->createQueryBuilder('u')
                 ->select('u', 'stuff')
-                ->where('u.isFired = FALSE OR u.isFired IS NULL')
                 ->innerJoin('u.stuff', 'stuff')
+                ->leftJoin('stuff.status', 'st')
+//                ->where('st.lukey = :status OR st.id IS NULL')
+//                ->setParameter(':status', 'worked')
                 ->orderBy('u.lastName', 'ASC');
     }
     /**
@@ -58,8 +60,9 @@ class UserRepository extends EntityRepository
                 ->addselect('u.birthday')
                 ->addselect('u.position')
                 ->addselect('u.username')
-                ->addselect('u.isFired')
-                ->addselect('u.isBlocked')
+                ->addselect('st.name as statusName')
+                ->addselect('st.id as status')
+                ->addselect('u.locked')
                 ->addselect('s.id as stuffId')
                 ->addselect('s.issues')
                 ->addselect('s.mobilephone')
@@ -71,6 +74,7 @@ class UserRepository extends EntityRepository
                 ->addselect('s.education')
                 ->addselect('c.name as companyName')
                 ->leftJoin('u.stuff', 's')
+                ->leftJoin('s.status', 'st')
                 ->leftJoin('s.companystructure', 'c')
                 ->where('u.id = :id')
                 ->setParameter(':id', $id)
@@ -88,6 +92,7 @@ class UserRepository extends EntityRepository
         return $this->createQueryBuilder('u')
                 ->select('u', 'stuff')
                 ->innerJoin('u.stuff', 'stuff')
+                ->leftJoin('stuff.status', 'status')
                 ->innerJoin('u.organizationUsers', 'organizationUsers')
                 ->innerJoin('organizationUsers.organization', 'organizations')
                 ->where('organizations.id = :organizationId')
@@ -126,8 +131,9 @@ class UserRepository extends EntityRepository
             ->addSelect('u.position')
             ->addSelect('s.mobilephone')
             ->addSelect('u.email')
-            ->addSelect('u.isBlocked')
-            ->addSelect('u.isFired')
+            ->addSelect('u.locked')
+            ->addselect('st.name as statusName')
+            ->addselect('st.id as status')
             ->addSelect('c.name as company');
     }
     /**
@@ -148,6 +154,7 @@ class UserRepository extends EntityRepository
     public function processBaseQuery (QueryBuilder $sql)
     {
         $sql->innerJoin('u.stuff', 's')
+            ->leftJoin('s.status', 'st')
             ->leftJoin('s.companystructure', 'c');
         /* ->leftJoin('o.city', 'c')
           ->leftJoin('c.region', 'r'); */
@@ -202,16 +209,16 @@ class UserRepository extends EntityRepository
                         $sql->setParameter(':company', $valueArr);
                         break;
                     case 'isActive':
-                        $sql->andWhere("u.isBlocked = :active");
+                        $sql->andWhere("u.locked = :active");
                         $sql->setParameter(':active', ($value == 'active' ? 0 : 1));
                         break;
-                    case 'isFired':
-                        if ($value !== 'fired') {
-                            $sql->andWhere("u.isFired is NULL or u.isFired = :fired");
+                    case 'status':
+                        if ($value == 68) {
+                            $sql->andWhere("st.id is NULL or st.id = :status");
                         } else {
-                            $sql->andWhere("u.isFired = :fired");
+                            $sql->andWhere("st.id = :status");
                         }
-                        $sql->setParameter(':fired', ($value == 'fired' ? 1 : 0));
+                        $sql->setParameter(':status', $value);
                         break;
                     default:
                         $sql->andWhere("u.id IN (:userIds)");
@@ -282,8 +289,11 @@ class UserRepository extends EntityRepository
     {
         $res = $this->createQueryBuilder('u')
             ->select('u')
+            ->innerJoin('u.stuff', 'stuff')
+            ->leftJoin('stuff.status', 'st')
             ->where('u.birthday is not null')
-            ->andWhere('u.isFired = FALSE OR u.isFired IS NULL');
+            ->andWhere('st.lukey = :status OR st.id IS NULL')
+            ->setParameter(':status', 'worked');
         if (date('Y', $startTimestamp) == date('Y', $endTimestamp)) {
             $res->andWhere('dayofyear(u.birthday) >= :dayofyearStart')
                 ->andWhere('dayofyear(u.birthday) <= :dayofyearStop');
@@ -291,8 +301,8 @@ class UserRepository extends EntityRepository
             $res->andWhere('(dayofyear(u.birthday) >= :dayofyearStart) or (dayofyear(u.birthday) <= :dayofyearStop)');
         }
         $res
-            ->setParameter(':dayofyearStart', date('z', $startTimestamp))
-            ->setParameter(':dayofyearStop', date('z', $endTimestamp));
+            ->setParameter(':dayofyearStart', date('z', $startTimestamp)+1)
+            ->setParameter(':dayofyearStop', date('z', $endTimestamp)+1);
 
         return $res->getQuery()->getResult();
     }
@@ -304,8 +314,10 @@ class UserRepository extends EntityRepository
     {
         $result = $this->createQueryBuilder('u')
             ->innerJoin('u.stuff', 's')
-            ->where('u.isFired = false')
-            ->orWhere('u.isFired is NULL')
+            ->leftJoin('s.status', 'st')
+            ->where('st.lukey = :status')
+            ->orWhere('st.id is NULL')
+            ->setParameter(':status', 'worked')
             ->orderBy('u.lastName', 'asc');
 
         return $result->getQuery()->getResult();

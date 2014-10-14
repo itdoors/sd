@@ -120,18 +120,19 @@ class StuffFilterForm extends AbstractType
                     'active' => $translator->trans("Active", array(), 'SDUserBundle.ru'),
                     'blocked' => $translator->trans("Blocked", array(), 'SDUserBundle.ru'),
                 ),
-                'empty_value' => ''
+                'empty_value' => $translator->trans("All", array(), 'SDUserBundle.ru')
             ))
-            ->add('isFired', 'choice', array(
+            ->add('status', 'choice', array(
                 'attr' => array(
                     'class' => 'form-control select2 input-middle',
-                    'placeholder' => 'Fired'
+                    'placeholder' => 'Status'
                 ),
                 'choices' => array(
-                    'fired' => $translator->trans("Fired", array(), 'SDUserBundle.ru'),
-                    'No fired' => $translator->trans("No fired", array(), 'SDUserBundle.ru'),
+                    67 => $translator->trans("Fired", array(), 'SDUserBundle.ru'),
+                    68 => $translator->trans("Worked", array(), 'SDUserBundle.ru'),
+                    69 => $translator->trans("Decree", array(), 'SDUserBundle.ru'),
                 ),
-                'empty_value' => ''
+                'empty_value' => $translator->trans("All", array(), 'SDUserBundle.ru')
             ))
             ->add('submit', 'submit')
             ->add('reset', 'submit');
