@@ -227,96 +227,56 @@ class TaskController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
-        $userId = $this->getUser()->getId();
+        $user = $this->getUser();
+        $userId = $user->getId();
 
-        $roleRepository = $this->getDoctrine()
-            ->getRepository('SDTaskBundle:Role');
-
-        $performerRole = $roleRepository
-            ->findOneBy(array (
-            'name' => 'performer',
-            'model' => 'task'
-        ));
-
-        $controllerRole = $roleRepository
-            ->findOneBy(array (
-            'name' => 'controller',
-            'model' => 'task'
-        ));
-
-        $authorRole = $roleRepository
-            ->findOneBy(array(
-            'name' => 'author',
-            'model' => 'task'
-        ));
-
-        $matcherRole = $roleRepository
-            ->findOneBy(array(
-                'name' => 'matcher',
-                'model' => 'task'
-            ));
-
-        $viewerRole = $roleRepository
-            ->findOneBy(array(
-                'name' => 'viewer',
-                'model' => 'task'
-            ));
-
-        $taskUserRoleController = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
+        $tasksUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
             array (
-                'task' => $taskUserRole->getTask(),
-                'role' => $controllerRole
+                'task' => $taskUserRole->getTask()
             )
         );
 
-        $taskUserRolePerformer = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
-            array (
-                'task' => $taskUserRole->getTask(),
-                'role' => $performerRole
-            )
-        );
+        foreach ($tasksUserRole as $taskUserRoleFromTask) {
+            $role = $taskUserRoleFromTask->getRole();
+            if ($role == 'controller') {
+                $taskUserRoles['taskUserRoleController'][] = $taskUserRoleFromTask;
+            } elseif ($role == 'performer') {
+                $taskUserRoles['taskUserRolePerformer'][] = $taskUserRoleFromTask;
+            } elseif ($role == 'matcher') {
+                $taskUserRoles['taskUserRoleMatcher'][] = $taskUserRoleFromTask;
+            } elseif ($role == 'author') {
+                $taskUserRoles['taskUserRoleAuthor'][] = $taskUserRoleFromTask;
+            } elseif ($role == 'viewer') {
+                $taskUserRoles['taskUserRoleViewer'][] = $taskUserRoleFromTask;
+            }
 
-        $taskUserRoleAuthor = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
-            array (
-                'task' => $taskUserRole->getTask(),
-                'role' => $authorRole
-            )
-        );
-
-        $taskUserRoleMatcher = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
-            array (
-                'task' => $taskUserRole->getTask(),
-                'role' => $matcherRole
-            )
-        );
-
-        $taskUserRoleViewer = $em->getRepository('SDTaskBundle:TaskUserRole')->findBy(
-            array (
-                'task' => $taskUserRole->getTask(),
-                'role' => $viewerRole
-            )
-        );
+            if ($taskUserRoleFromTask->getUser() == $user){
+                $accesses[] = TaskAccessFactory::createAccess($em, $taskUserRole);
+            }
+        }
 
         $matchingInfo = array();
         $taskCommitRepo = $em->getRepository('SDTaskBundle:TaskCommit');
-        foreach ($taskUserRoleMatcher as $key => $tur) {
+        if (isset($taskUserRoles['matcher'])) {
+            foreach ($taskUserRoles['matcher'] as $key => $tur) {
 
-            $taskCommit = $taskCommitRepo->findOneBy(array(
-                'taskUserRole' => $tur
-            ), array(
-                'id' => 'DESC'
-            ));
+                $taskCommit = $taskCommitRepo->findOneBy(array(
+                    'taskUserRole' => $tur
+                ), array(
+                    'id' => 'DESC'
+                ));
 
-            if (!$taskCommit) {
-                $matchingInfo[$key] = 'none';
-            } else {
-                if ($taskCommit->getStage() == 'refused_sign_up') {
-                    $matchingInfo[$key] = 'refused';
-                } elseif ($taskCommit->getStage() == 'sign_up') {
-                    $matchingInfo[$key] = 'agree';
+                if (!$taskCommit) {
+                    $matchingInfo[$key] = 'none';
+                } else {
+                    if ($taskCommit->getStage() == 'refused_sign_up') {
+                        $matchingInfo[$key] = 'refused';
+                    } elseif ($taskCommit->getStage() == 'sign_up') {
+                        $matchingInfo[$key] = 'agree';
+                    }
                 }
-            }
 
+            }
         }
 
         $comment = $this->getLastTaskComment($taskUserRole->getTask()->getId());
@@ -334,21 +294,16 @@ class TaskController extends Controller
         }
 
 
-        $access = TaskAccessFactory::createAccess($em, $taskUserRole);
 
-        $info = array (
+
+        $info = array_merge($taskUserRoles,array (
             'taskUserRole' => $taskUserRole,
-            'taskUserRoleController' => $taskUserRoleController,
-            'taskUserRolePerformer' => $taskUserRolePerformer,
-            'taskUserRoleAuthor' => $taskUserRoleAuthor,
-            'taskUserRoleMatcher' => $taskUserRoleMatcher,
-            'taskUserRoleViewer' => $taskUserRoleViewer,
             'matchingInfo' => $matchingInfo,
             'userId' => $userId,
             'comment' => $comment,
-            'access' => $access,
+            'accesses' => $accesses,
             'usersCanBeViewed' => $usersCanBeViewed
-        );
+        ));
 
         return $info;
     }

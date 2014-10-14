@@ -532,7 +532,7 @@
         <div class="form-group">
             <div class="col-md-12">
                 <b>{% trans %}Performer{% endtrans %}</b> :
-                {% if taskUserRolePerformer|length %}
+                {% if taskUserRolePerformer is defined and taskUserRolePerformer|length %}
                     {% for performer in taskUserRolePerformer %}
                         {{ performer.user }}
 
@@ -548,7 +548,7 @@
         <div class="form-group">
             <div class="col-md-12">
                 <b>{% trans %}Controller{% endtrans %}</b>:
-                {% if taskUserRoleController|length %}
+                {% if taskUserRoleController is defined and taskUserRoleController|length %}
                     {% for controller in taskUserRoleController %}
                         {{ controller.user }}
                         {% if controller.isViewed !=true %}
@@ -559,13 +559,13 @@
                 {% endif %}
 
                 <br><br>
-                <b>{% trans %}Author{% endtrans %}</b>: {% if taskUserRoleAuthor|length %}
+                <b>{% trans %}Author{% endtrans %}</b>: {% if taskUserRoleAuthor is defined and taskUserRoleAuthor|length %}
                     {% for author in taskUserRoleAuthor %}
                         {{ author.user }}
                     {% endfor %}
                 {% endif %}
 
-                {% if taskUserRoleMatcher|length %}
+                {% if taskUserRoleMatcher is defined and taskUserRoleMatcher|length %}
                 <br>
                 <b>{% trans %}Matcher{% endtrans %}</b>:
                     {% for key,matcher in taskUserRoleMatcher %}
@@ -584,7 +584,7 @@
                     {% endfor %}
                 {% endif %}
 
-                {% if taskUserRoleViewer|length %}
+                {% if taskUserRoleViewer is defined and taskUserRoleViewer|length %}
                     <br>
                     <b>{% trans %}Viewer{% endtrans %}</b>:
                     {% for viewer in taskUserRoleViewer %}
