@@ -60,4 +60,24 @@ interface TaskAccessInterface
      * @return bool
      */
     public function canEditEndDate();
+    /**
+     * @return bool
+     */
+    public function canMakeDateRequest();
+    /**
+     * @return bool
+     */
+    public function canAddResolution();
+    /**
+     * @return bool
+     */
+    public function getLastCommitStage();
+    /**
+     * @return bool
+     */
+    public function canDeleteFile();
+    /**
+     * @return bool
+     */
+    public function canAddViewer();
 }

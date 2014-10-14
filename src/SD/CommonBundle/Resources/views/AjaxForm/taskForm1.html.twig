@@ -29,6 +29,41 @@
                     }
                 );
 
+            $('#' + '{{ form.vars.name }}' + '_performer').die('change')
+            $('#' + '{{ form.vars.name }}' + '_performer').live('change', function(e) {
+                if (conflictsPerformerController()) {
+                    $('#' + '{{ form.vars.name }}' + '_performer').select2("val", "");
+                    alert('Performer cannot be controller')
+                }
+            })
+
+            $('#' + '{{ form.vars.name }}' + '_controller').die('change')
+            $('#' + '{{ form.vars.name }}' + '_controller').live('change', function(e) {
+                if (conflictsPerformerController()) {
+                    $('#' + '{{ form.vars.name }}' + '_controller').select2("val", "");
+                    alert('Controller cannot be performer')
+                }
+            })
+
+            function conflictsPerformerController() {
+                var idPerformer = $('#' + '{{ form.vars.name }}' + '_performer').val();
+                var idController = $('#' + '{{ form.vars.name }}' + '_controller').val();
+
+                if (idController == idPerformer) {
+                    return true;
+                }
+                return false;
+            }
+
+            function conflictsAuthorMatcher() {
+                var idPerformer = $('#' + '{{ form.vars.name }}' + '_performer').val();
+                var idController = $('#' + '{{ form.vars.name }}' + '_controller').val();
+
+                if (idController == idPerformer) {
+                    return true;
+                }
+                return false;
+            }
             /*
             $('#' + '{{ form.vars.name }}' + '_performer').attr("multiple", true);
              */
@@ -115,7 +150,7 @@
                     ['para', ['ul', 'ol', 'paragraph']],
                     ['height', ['height']],
                     ['insert', ['link']], // no insert buttons
-                    ['table', ['table']], // no table button
+                    ['table', ['table']] // no table button
                     //['help', ['help']] //no help button
                 ]
             });

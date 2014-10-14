@@ -2,6 +2,7 @@
 
 namespace SD\TaskBundle\Controller;
 
+use SD\TaskBundle\Classes\ComparatorTaskAccess;
 use SD\TaskBundle\Classes\TaskAccessFactory;
 use SD\TaskBundle\Entity\Comment;
 use SD\TaskBundle\Entity\TaskCommit;
@@ -235,7 +236,7 @@ class TaskController extends Controller
                 'task' => $taskUserRole->getTask()
             )
         );
-
+        $accesses = array();
         foreach ($tasksUserRole as $taskUserRoleFromTask) {
             $role = $taskUserRoleFromTask->getRole();
             if ($role == 'controller') {
@@ -250,15 +251,15 @@ class TaskController extends Controller
                 $taskUserRoles['taskUserRoleViewer'][] = $taskUserRoleFromTask;
             }
 
-            if ($taskUserRoleFromTask->getUser() == $user){
-                $accesses[] = TaskAccessFactory::createAccess($em, $taskUserRole);
+            if ($taskUserRoleFromTask->getUser() == $user) {
+                $accesses[] = TaskAccessFactory::createAccess($em, $taskUserRoleFromTask);
             }
         }
 
         $matchingInfo = array();
         $taskCommitRepo = $em->getRepository('SDTaskBundle:TaskCommit');
-        if (isset($taskUserRoles['matcher'])) {
-            foreach ($taskUserRoles['matcher'] as $key => $tur) {
+        if (isset($taskUserRoles['taskUserRoleMatcher'])) {
+            foreach ($taskUserRoles['taskUserRoleMatcher'] as $key => $tur) {
 
                 $taskCommit = $taskCommitRepo->findOneBy(array(
                     'taskUserRole' => $tur
@@ -294,19 +295,20 @@ class TaskController extends Controller
         }
 
 
+        $access = new ComparatorTaskAccess($accesses);
 
-
-        $info = array_merge($taskUserRoles,array (
+        $info = array_merge($taskUserRoles, array (
             'taskUserRole' => $taskUserRole,
             'matchingInfo' => $matchingInfo,
             'userId' => $userId,
             'comment' => $comment,
-            'accesses' => $accesses,
+            'access' => $access,
             'usersCanBeViewed' => $usersCanBeViewed
         ));
 
         return $info;
     }
+
     /**
      * @param int $idTask
      *
@@ -335,11 +337,27 @@ class TaskController extends Controller
     public function setIsViewedTaskAction (Request $request)
     {
         $id = $request->request->get('id');
-
         $em = $this->getDoctrine()->getManager();
-        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
-        $taskUserRole->setIsViewed(true);
-        $em->persist($taskUserRole);
+
+        $repository = $em->getRepository('SDTaskBundle:TaskUserRole');
+        $taskUserRole = $repository->find($id);
+        $task = $taskUserRole->getTask();
+        $user = $taskUserRole->getUser();
+
+        $taskUserRolesAll = $repository->findBy(array(
+            'task' => $task,
+            'user' => $user
+        ));
+
+        if ($taskUserRolesAll) {
+            foreach ($taskUserRolesAll as $tur) {
+                $tur->setIsViewed(true);
+                $em->persist($tur);
+            }
+        } else {
+            //exception (no tur found)
+        }
+
         $em->flush();
 
         //if all performers viewed, then task is performing
@@ -496,7 +514,7 @@ class TaskController extends Controller
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
 
         $task = $taskUserRole->getTask();
-
+        $user = $taskUserRole->getUser();
         $stageRequest = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array (
             'name' => 'request',
             'model' => 'task_end_date'
@@ -543,7 +561,21 @@ class TaskController extends Controller
         $newTaskEndDate->setEndDateTime($newDate);
         $translator = $this->get('translator');
 
-        if ($taskUserRole->getRole() == 'controller') {
+        $roleRepository = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:Role');
+
+        $controllerRole = $roleRepository
+            ->findOneBy(array(
+                'name' => 'controller',
+                'model' => 'task'
+            ));
+
+        $taskUserRoleController = $em->getRepository('SDTaskBundle:TaskUserRole')->findOneBy(array(
+            'task' => $task,
+            'user' => $user,
+            'role' => $controllerRole
+        ));
+        if ($taskUserRole->getRole() == 'controller' || $taskUserRoleController) {
             $newTaskEndDate->setStage($stageDate);
             $comment = $translator->trans('Changed the end date', array(), 'SDTaskBundle').
                 ' :'.$newDate->format('d-m-Y H:i');
@@ -553,7 +585,7 @@ class TaskController extends Controller
             $this->insertComment($id, $comment);
         } else {
             $newTaskEndDate->setStage($stageRequest);
-            $stageDateRequest = $em->getRepository('SDTaskBundle:Stage')->findOneby(array (
+            $stageDateRequest = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array (
                 'name' => 'date request',
                 'model' => 'task',
             ));
@@ -928,8 +960,30 @@ class TaskController extends Controller
 
         $translator = $this->get('translator');
         $em = $this->getDoctrine()->getManager();
+        $roleRepository = $em->getRepository('SDTaskBundle:Role');
 
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
+        $task = $taskUserRole->getTask();
+        $user = $taskUserRole->getUser();
+        $role = $taskUserRole->getRole();
+
+        if ($role != 'matcher') {
+            /* need to find matcher */
+            $matcherRole = $roleRepository
+                ->findOneBy(array(
+                    'name' => 'matcher',
+                    'model' => 'task'
+                ));
+
+            $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->findOneBy(array(
+                'task' => $task,
+                'user' => $user,
+                'role' => $matcherRole
+            ));
+            if (!$taskUserRole) {
+                var_dump('exception');
+            }
+        }
 
         $taskCommitRepo = $em->getRepository('SDTaskBundle:TaskCommit');
         $taskCommit = $taskCommitRepo->findOneBy(array(
@@ -945,7 +999,7 @@ class TaskController extends Controller
             $stageName = 'refused_sign_up';
             $comment = $translator->trans('Refused to signed up', array(), 'SDTaskBundle');
         }
-        $stage = $em->getRepository('SDTaskBundle:Stage')->findOneby(array (
+        $stage = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array (
             'name' => $stageName,
             'model' => 'task_commit',
         ));
@@ -967,7 +1021,6 @@ class TaskController extends Controller
         $em->flush();
 
         if ($needToCheckSignUps) {
-            $roleRepository = $em->getRepository('SDTaskBundle:Role');
             $matcherRole = $roleRepository
                 ->findOneBy(array(
                     'name' => 'matcher',
@@ -998,7 +1051,7 @@ class TaskController extends Controller
 
             if ($canBePerforming) {
                 $task = $taskUserRole->getTask();
-                $stageCreated = $em->getRepository('SDTaskBundle:Stage')->findOneby(array (
+                $stageCreated = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array (
                     'name' => 'created',
                     'model' => 'task',
                 ));

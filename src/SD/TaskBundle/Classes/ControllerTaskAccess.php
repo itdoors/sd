@@ -130,7 +130,14 @@ class ControllerTaskAccess extends BasicTaskAccess
      */
     public function canAddResolution()
     {
+        if ($this->isViewed()) {
+            if ($this->getStage() == 'created' || $this->getStage() == 'performing' ||
+                $this->getStage() == 'date request' || $this->getStage() == 'checking') {
 
-        return true;
+                return true;
+            }
+        }
+
+        return false;
     }
 }
