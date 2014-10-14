@@ -110,7 +110,7 @@
 {% endif %}
 <style type="text/css">
     #avatar, #preview-pane .preview-container img{
-        max-width: 600px;
+        width: 600px;
     }
     .jcrop-holder #preview-pane {
       display: block;
@@ -163,7 +163,7 @@
                     <ul class="list-unstyled profile-nav">
                         <li>
                             {% if item.photo is not empty %}
-                                <img src="{{ web_image( userprofiles_url ~ item.id ~ '/' ~ item.photo).resize(247,247) }}" class="img-responsive" alt=""/>
+                                <img src="{{ web_image( userprofiles_url ~ item.id ~ '/' ~ item.photo).resize(820) }}" class="img-responsive" alt=""/>
                             {% else %}
                                 <img src="{{ asset( userprofiles_url ~  'no_avatar.png') }}" class="img-responsive" alt=""/>
                             {% endif %}

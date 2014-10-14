@@ -2003,7 +2003,7 @@ class AjaxController extends BaseFilterController
 
         $isUpload = $data['loadPhoto'] !== '' ? $data['loadPhoto'] : null;
 
-        $widthSave = $heightSave = 247;
+        $widthSave = $heightSave = 820;
 
         $projectDir = $this->container->getParameter('project.dir');
         $userprofiles = $this->container->getParameter('userprofiles.file.path');
@@ -4870,11 +4870,9 @@ class AjaxController extends BaseFilterController
         /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
         $userManager = $this->container->get('fos_user.user_manager');
         $userManager->updateUser($data);
-
-        $this->get('session')->set(
-            'noticePassword',
-            'Password changed successfully!'
-        );
+        $translator = $this->get('translator');
+        $text = $translator->trans('Password changed successfully!', array(), 'SDUserBundle');
+        $this->get('session')->set('noticePassword', $text);
 
         return true;
     }
