@@ -339,16 +339,20 @@
             minView:1,
             rtl: Metronic.isRTL(),
             autoclose: true,
-            format: "dd.mm.yyyy hh:ii:ss",
+            format: "dd.mm.yyyy hh:ii",
             pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
             language: 'ru',
             minuteStep: 30,
             weekStart: 1,
             startDate: new Date()
-        }).on('changeDate', function(ev){
-                    //.val($('.datatime-picker').val()+':00');
-                }
-        );
+        }).on('changeDate', function(date){
+            console.log('_____')
+            var newDate = new Date(date.date.setMinutes(0));
+            console.log(newDate)
+            var newDate = new Date(newDate.setSeconds(0));
+            console.log(newDate)
+
+        })
 
         $('#viewer_select').select2();
         {% if access.canEditDescription %}

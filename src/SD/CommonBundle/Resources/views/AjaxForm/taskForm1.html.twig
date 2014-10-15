@@ -12,13 +12,19 @@
                         minView:1,
                         rtl: Metronic.isRTL(),
                         autoclose: true,
-                        format: "dd.mm.yyyy hh:ii:ss",
+                        format: "dd.mm.yyyy hh:ii",
                         pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
                         language: 'ru',
                         minuteStep: 30,
                         weekStart: 1,
                         startDate: new Date()
                     }).on('changeDate', function(date){
+                        console.log('_____')
+                        var newDate = new Date(date.date.setMinutes(0));
+                        console.log(newDate)
+                        var newDate = new Date(newDate.setSeconds(0));
+                        console.log(newDate)
+
 /*
                         var currentDate = date.date;
                         currentDate = currentDate.setMinutes(0);
@@ -33,7 +39,7 @@
             $('#' + '{{ form.vars.name }}' + '_performer').live('change', function(e) {
                 if (conflictsPerformerController()) {
                     $('#' + '{{ form.vars.name }}' + '_performer').select2("val", "");
-                    alert('Performer cannot be controller')
+                    alert('{% trans from 'SDTaskBundle' %}Performer cannot be controller{% endtrans %}')
                 }
             })
 
@@ -41,7 +47,7 @@
             $('#' + '{{ form.vars.name }}' + '_controller').live('change', function(e) {
                 if (conflictsPerformerController()) {
                     $('#' + '{{ form.vars.name }}' + '_controller').select2("val", "");
-                    alert('Controller cannot be performer')
+                    alert('{% trans from 'SDTaskBundle' %}Controller cannot be performer{% endtrans %}')
                 }
             })
 
@@ -172,6 +178,9 @@
 
     .notDisplayed{
         display: none;
+    }
+    .help-block{
+        color:red;
     }
 </style>
             <div class="portlet-body">

@@ -155,12 +155,12 @@ class TaskForm extends AbstractType
             ->add('startDate', 'datetime', array(
                 'data' => new \DateTime(),
                 'widget' => 'single_text',
-                'format' => 'dd.MM.yyyy HH:mm:ss'
+                'format' => 'dd.MM.yyyy HH:mm'
             ))
             ->add('endDate', 'datetime', array(
                 'mapped' => false,
                 'widget' => 'single_text',
-                'format' => 'dd.MM.yyyy HH:mm:ss'
+                'format' => 'dd.MM.yyyy HH:mm'
             ))
             ->add('files', 'file', array(
                 'mapped' => false,

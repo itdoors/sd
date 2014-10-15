@@ -436,6 +436,23 @@ class TaskController extends Controller
         $em = $this->getDoctrine()->getManager();
         $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($id);
         $task = $taskUserRole->getTask();
+        if ($stage == 'checking') {
+            $user = $taskUserRole->getUser();
+            $controllerRole = $em->getRepository('SDTaskBundle:Role')
+                ->findOneBy(array(
+                    'name' => 'controller',
+                    'model' => 'task'
+                ));
+
+            $taskUserRolesController = $em->getRepository('SDTaskBundle:TaskUserRole')->findOneBy(array(
+                'task' => $task,
+                'user' => $user,
+                'role' => $controllerRole
+            ));
+            if ($taskUserRolesController) {
+                $stage = 'done';
+            }
+        }
 
         if ($stage == 'done' || $stage == 'undone' || $stage == 'closed' || $stage == 'checking') {
             $this->closeDateRequest($id);

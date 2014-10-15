@@ -87,9 +87,12 @@ class ControllerTaskAccess extends BasicTaskAccess
      */
     public function canSetChecking()
     {
-        if ($this->getStage() == 'checking') {
+        if ($this->isViewed()) {
 
-            return true;
+            if ($this->getStage() == 'checking') {
+
+                return true;
+            }
         }
 
         return false;
