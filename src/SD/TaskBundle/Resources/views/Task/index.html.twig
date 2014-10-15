@@ -295,7 +295,7 @@
 {#
                                 <input type="checkbox" class="roleFilter" value="{{ taskRole }}" {{ checked }}/>
 #}                              <a href="#" class="roleFilter" data-value="{{ taskRole }}" data-status="{% if checked != true %}0{% else %}1{% endif %}">
-                                    <span class="arrow" style="color: grey; {% if checked != true %}display: none;{% endif %}"> ></span>
+                                    <span class="arrow" style="color: grey; {% if checked != true %}display: none;{% endif %}">{# >#}</span>
                                     <span class="badge badge-active {{ badge }}" style="float: right; margin-top: 2px"> {{ countTasks[''~taskRole] }} </span>
                                     <span class="roleTitle" {% if checked != true %}style="color: grey"{% endif %}>{{ taskRole|trans }}</span>
 
@@ -306,70 +306,9 @@
                         <br>
                         <label><input type="checkbox" id="oldFilter" value="1"/>{% trans %}Show closed{% endtrans %}</label>
 
-                        {#
-                                                <li class="divider">
-                                                </li>
-                                                <li>
-                                                    <label><input type="checkbox" id="oldFilter" value="1"/>{% trans %}Show closed{% endtrans %}</label>
-                                                </li>
-                                                <li class="divider">
-                                                </li>
-
-                                                <li>
-                                                    <a class="btn red" id="taskFilterButton" >
-                                                        <span style="color: white;">{% trans %}Filter{% endtrans %}</span>
-                                                    </a>
-                                                </li>
-                        #}
-
                     </ul>
                 </div>
 
-{#
-                <div class="todo-project-list">
-                    <ul class="nav nav-pills nav-stacked">
-                        <li class="active">
-                            <a href="">
-                                <span class="badge badge-active"> {{ countTasks }} </span>
-                                {% trans %}Tasks{% endtrans %}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" onclick="alert('Документы в разработке')">
-                                <span class="badge badge-active"> 0 </span>
-                                {% trans %}Documents{% endtrans %}
-                            </a>
-                        </li>
-#}
-                        {#
-                                                {% for taskRole in allTaskRoles %}
-                                                    {% if taskRole == 'author' %}
-                                                        {% set icon = 'fa-pencil' %}
-                                                        {% set label = 'badge-danger' %}
-                                                    {% elseif taskRole == 'performer' %}
-                                                        {% set icon = 'fa-rocket' %}
-                                                        {% set label = 'badge-info' %}
-                                                    {% elseif taskRole == 'controller' %}
-                                                        {% set icon = 'fa-crosshairs' %}
-                                                        {% set label = 'badge-warning' %}
-                                                        &#123;&#35;
-                                                            {% elseif taskUserRole == 'done' %}
-                                                                {% set icon = 'orange' %}
-                                                                fa-eye
-                                                        &#35;&#125;
-                                                    {% endif %}
-                                                    <li &#123;&#35;class="active"&#35;&#125;>
-                                                        <a href="#">
-                                                            <span class="{{ label }} badge &#123;&#35;badge-active&#35;&#125;"> 1 </span>
-                                                            {{ taskRole|trans }}
-                                                        </a>
-                                                    </li>
-                                                {% endfor %}
-                        #}
-{#
-                    </ul>
-                </div>
-#}
                 <br>
                 <h3>{% trans %}Keys{% endtrans %}</h3>
                 <span class="badge badge-danger badge-active">&nbsp;  </span> - {% trans %}author{% endtrans %}<br>
@@ -408,14 +347,6 @@
                         >{% trans %}Create task{% endtrans %}
                     <i class="fa fa-plus"></i>
                 </a>
-
-{#
-                <button class="btn green-haze btn-circle btn-sm ajax-form" href="#" id="create_task_btn" >
-                    {% trans %}Create task{% endtrans %}
-                    <i class="fa fa-plus"></i>
-                </button>
-#}
-
             </div>
         </div>
     </div>
@@ -434,7 +365,6 @@
                     }
                     )
                     }}
-
                 {% endfor %}
 
             </div>

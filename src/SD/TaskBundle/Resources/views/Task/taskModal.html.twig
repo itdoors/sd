@@ -328,7 +328,7 @@
     </tr>
     <tr>
         <td>{% trans %}Description{% endtrans %}</td>
-        <td colspan="3">{{ taskUserRole.task.description }}</td>
+        <td colspan="3">{{ taskUserRole.task.description|raw }}</td>
     </tr>
     <tr>
         <td>{% trans %}Creator{% endtrans %}</td>
@@ -343,7 +343,7 @@
     <tr>
         <td>{% trans %}Performer{% endtrans %}</td>
         <td colspan="3">
-            {% if taskUserRolePerformer|length %}
+            {% if taskUserRolePerformer is defined and taskUserRolePerformer|length %}
                 {% for performer in taskUserRolePerformer %}
                     {{ performer.user }}
 
@@ -358,7 +358,7 @@
     <tr>
         <td>{% trans %}Controller{% endtrans %}</td>
         <td colspan="3">
-            {% if taskUserRoleController|length %}
+            {% if taskUserRoleController is defined and taskUserRoleController|length %}
                 {% for controller in taskUserRoleController %}
                     {{ controller.user }}
                     {% if controller.isViewed !=true %}
@@ -370,7 +370,7 @@
         </td>
     </tr>
 
-    {% if taskUserRoleMatcher|length %}
+    {% if taskUserRoleMatcher is defined and taskUserRoleMatcher|length %}
     <tr>
         <td>{% trans %}Matcher{% endtrans %}:</td>
         <td colspan="3">
@@ -392,7 +392,7 @@
     </tr>
     {% endif %}
 
-    {% if taskUserRoleViewer|length %}
+    {% if taskUserRoleViewer is defined and taskUserRoleViewer|length %}
     <tr>
         <td>{% trans %}Viewer{% endtrans %}</td>
         <td colspan="3">
