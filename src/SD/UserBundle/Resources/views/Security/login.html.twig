@@ -2,18 +2,18 @@
 {% trans_default_domain 'SDUserBundle' %}
 {% block fos_user_content %}
     <div>
-    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-        {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
-        <a href="{{ path('fos_user_security_logout') }}">
-            {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
-        </a>
-    {% else %}
-        {#<a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>#}
-    {% endif %}
-</div>
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
+            <a href="{{ path('fos_user_security_logout') }}">
+                {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+            </a>
+        {% else %}
+            {#<a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>#}
+        {% endif %}
+    </div>
 
 <!-- BEGIN LOGIN FORM -->
-<form action="{{ path("fos_user_security_check") }}" method="post">
+<form class="login-form" action="{{ path("fos_user_security_check") }}" method="post">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
     <h3 class="form-title">{% trans %}Login to your account{% endtrans %}</h3>
     {% if error %}
@@ -55,13 +55,13 @@
 </form>
 <!-- END LOGIN FORM -->
 <!-- BEGIN FORGOT PASSWORD FORM -->
-<form class="forget-form" action="index.html" method="post">
+<form class="forget-form" action="{{ path("fos_user_resetting_send_email") }}" method="post">
     <h3>{% trans %}Forget Password ?{% endtrans %}</h3>
     <p>{% trans %}Enter your e-mail address below to reset your password.{% endtrans %}</p>
     <div class="form-group">
         <div class="input-icon">
             <i class="icon-envelope"></i>
-            <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Email" name="email" />
+            <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Email" name="username" />
         </div>
     </div>
     <div class="form-actions">
