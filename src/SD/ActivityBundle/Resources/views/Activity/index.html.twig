@@ -2,13 +2,14 @@
 
 <script src="{{ asset('templates/core/angular/angular.js') }}"></script>
 <script src="{{ asset('templates/core/angular/angular-route.js') }}"></script>
+<script src="{{ asset('templates/core/angular/angular-sanitize.js') }}"></script>
 {#
 <script src="{{ asset('templates/core/angulat/angular-animate.js') }}"></script>
 #}
 
 
 <script>
-    var activityApp = angular.module('activityApp', []);
+    var activityApp = angular.module('activityApp', ['ngSanitize']);
 
     activityApp.controller('ActivityCtrl', function ($scope, $http, $interval) {
         $scope.activities = [];
@@ -45,7 +46,17 @@
 
 
 </script>
-
+<style>
+    .message li{
+        background-color: transparent;
+/*
+        margin: 0px 0px 0px 0px;
+*/
+    }
+    .message li{
+        display: inline; !important
+    }
+</style>
 
         <div class="portlet light bordered" ng-app="activityApp" ng-controller="ActivityCtrl">
         <div class="portlet-title">
@@ -92,7 +103,7 @@
                         </div>
                         <div class="cont-col2">
                             <div class="desc">
-                                <span style="white-space: pre-line">{{ '{{activity.message}}' }}.</span> {#<span class="label label-sm label-warning ">
+                                <span style="white-space: pre-line" ng-bind-html="activity.message" class="message">{#{{ '{{activity.message}}' }}.#}</span> {#<span class="label label-sm label-warning ">
                                                             Take action <i class="fa fa-share"></i>
                                                             </span>#}
                             </div>

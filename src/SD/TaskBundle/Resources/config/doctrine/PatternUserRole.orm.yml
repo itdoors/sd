@@ -7,10 +7,6 @@ SD\TaskBundle\Entity\PatternUserRole:
             type: integer
             generator:
                 strategy: IDENTITY
-    fields:
-        isViewed:
-            type: boolean
-            column: is_viewed
     manyToOne:
         taskPattern:
             targetEntity: SD\TaskBundle\Entity\TaskPattern

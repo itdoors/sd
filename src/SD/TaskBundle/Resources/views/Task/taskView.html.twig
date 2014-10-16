@@ -339,18 +339,23 @@
             minView:1,
             rtl: Metronic.isRTL(),
             autoclose: true,
-            format: "dd.mm.yyyy hh:ii:ss",
+            format: "dd.mm.yyyy hh:ii",
             pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
             language: 'ru',
             minuteStep: 30,
             weekStart: 1,
             startDate: new Date()
-        }).on('changeDate', function(ev){
-                    //.val($('.datatime-picker').val()+':00');
-                }
-        );
+        }).on('changeDate', function(date){
+            console.log('_____')
+            var newDate = new Date(date.date.setMinutes(0));
+            console.log(newDate)
+            var newDate = new Date(newDate.setSeconds(0));
+            console.log(newDate)
+
+        })
 
         $('#viewer_select').select2();
+        {% if access.canEditDescription %}
 
         $('#wyswyg').summernote({
             height: 200,
@@ -374,6 +379,7 @@
                 //['help', ['help']] //no help button
             ]
         }).code($('#description_text').html());
+        {% endif %}
 
     })
 
@@ -530,7 +536,7 @@
         <div class="form-group">
             <div class="col-md-12">
                 <b>{% trans %}Performer{% endtrans %}</b> :
-                {% if taskUserRolePerformer|length %}
+                {% if taskUserRolePerformer is defined and taskUserRolePerformer|length %}
                     {% for performer in taskUserRolePerformer %}
                         {{ performer.user }}
 
@@ -546,7 +552,7 @@
         <div class="form-group">
             <div class="col-md-12">
                 <b>{% trans %}Controller{% endtrans %}</b>:
-                {% if taskUserRoleController|length %}
+                {% if taskUserRoleController is defined and taskUserRoleController|length %}
                     {% for controller in taskUserRoleController %}
                         {{ controller.user }}
                         {% if controller.isViewed !=true %}
@@ -557,13 +563,13 @@
                 {% endif %}
 
                 <br><br>
-                <b>{% trans %}Author{% endtrans %}</b>: {% if taskUserRoleAuthor|length %}
+                <b>{% trans %}Author{% endtrans %}</b>: {% if taskUserRoleAuthor is defined and taskUserRoleAuthor|length %}
                     {% for author in taskUserRoleAuthor %}
                         {{ author.user }}
                     {% endfor %}
                 {% endif %}
 
-                {% if taskUserRoleMatcher|length %}
+                {% if taskUserRoleMatcher is defined and taskUserRoleMatcher|length %}
                 <br>
                 <b>{% trans %}Matcher{% endtrans %}</b>:
                     {% for key,matcher in taskUserRoleMatcher %}
@@ -582,7 +588,7 @@
                     {% endfor %}
                 {% endif %}
 
-                {% if taskUserRoleViewer|length %}
+                {% if taskUserRoleViewer is defined and taskUserRoleViewer|length %}
                     <br>
                     <b>{% trans %}Viewer{% endtrans %}</b>:
                     {% for viewer in taskUserRoleViewer %}

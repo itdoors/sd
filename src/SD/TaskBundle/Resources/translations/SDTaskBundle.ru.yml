@@ -156,3 +156,5 @@ You got resolution to task: Вам написали резолюцию к зад
 Edit description: Редактировать описание
 Save changes: Сохранить изменения
 Cancel: Отменить
+Performer cannot be controller: Исполнитель не может одновременно быть контролирующим
+Controller cannot be performer: Контролирующий не может одновременно быть исполнителем
