@@ -1,15 +1,17 @@
-{% trans_default_domain 'FOSUserBundle' %}
+{% trans_default_domain 'SDUserBundle' %}
 {% block subject %}
     {% autoescape false %}
     {{ 'resetting.email.subject'|trans }}
     {% endautoescape %}
 {% endblock %}
 
-{% block body_text %}  
+{% block body_text %}
 {% endblock %}
 
 {% block body_html %}
-    {% include 'email.html.twig' with {html: 'resetting.email.message'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl})} %}
+    {% autoescape 'html' %}
+        {% include 'email.html.twig' with {html: 'resetting.email.message'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl})} %}
+    {% endautoescape %}
 {% endblock %}
     
 

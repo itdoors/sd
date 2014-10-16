@@ -35,6 +35,10 @@ sd_user_new:
 sd_user_change_password_form:
     pattern:  /user/change_password_form/{id}
     defaults: { _controller: SDUserBundle:User:changePasswordForm }
+    
+sd_user_resetting_send_email:
+    pattern:  /resetting/user/send-email
+    defaults: { _controller: SDUserBundle:Resetting:sendEmail }
 
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"

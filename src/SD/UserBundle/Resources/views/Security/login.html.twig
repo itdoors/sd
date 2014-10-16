@@ -55,13 +55,13 @@
 </form>
 <!-- END LOGIN FORM -->
 <!-- BEGIN FORGOT PASSWORD FORM -->
-<form class="forget-form" action="{{ path("fos_user_resetting_send_email") }}" method="post">
+<form class="forget-form" action="{{ path("sd_user_resetting_send_email") }}" method="post">
     <h3>{% trans %}Forget Password ?{% endtrans %}</h3>
-    <p>{% trans %}Enter your e-mail address below to reset your password.{% endtrans %}</p>
+    <p>{% trans %}Enter your e-mail address or username below to reset your password.{% endtrans %}</p>
     <div class="form-group">
         <div class="input-icon">
             <i class="icon-envelope"></i>
-            <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Email" name="username" />
+            <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="{% trans %}Email or username{% endtrans %}" name="username" />
         </div>
     </div>
     <div class="form-actions">

@@ -92,7 +92,7 @@ class EmailService
             $mailer = $this->container->get('mailer');
             $errors = $validator->validateValue($email, $emailConstraint);
             if (count($errors) > 0) {
-                echo $email.' - '.$errors[0]->getMessage()."\n";
+//                echo $email.' - '.$errors[0]->getMessage()."\n";
                                 continue;
             }
             $message = Swift_Message::newInstance()

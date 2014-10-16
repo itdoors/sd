@@ -1,17 +1,17 @@
 {% trans_default_domain 'SDUserBundle' %}
-<form action="{{ path("fos_user_resetting_send_email") }}" method="post">
+<form action="{{ path("sd_user_resetting_send_email") }}" method="post">
     <h3>{% trans %}Forget Password ?{% endtrans %}</h3>
-    <p>{% trans %}Enter your e-mail address below to reset your password.{% endtrans %}</p>
+    <p>{% trans %}Enter your e-mail address or username below to reset your password.{% endtrans %}</p>
     {% if invalid_username is defined %}
         <div class="alert alert-danger display-hide" style="display: block;">
                 <button class="close" data-close="alert"></button>
-                <span>{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'FOSUserBundle') }}</span>
+                <span>{{ 'resetting.request.invalid_username'|trans({'%username%': invalid_username}, 'SDUserBundle') }}</span>
         </div>
     {% endif %}
     <div class="form-group">
         <div class="input-icon">
             <i class="icon-envelope"></i>
-            <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Email" name="username" />
+            <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="{% trans %}Email or username{% endtrans %}" name="username" />
         </div>
     </div>
     <div class="form-actions">
