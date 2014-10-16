@@ -6,6 +6,7 @@
         <th>{% trans from 'messages' %}Createdatetime{% endtrans %} </th>
         <th>{% trans %}Dogovor{% endtrans %} </th>
         <th>{% trans %}Dop Dogovor{% endtrans %} </th>
+        <th>{% trans %}MPK{% endtrans %} </th>
         <th>{% trans %}Department{% endtrans %} </th>
         <th>{% trans from 'messages' %}Creator{% endtrans %} </th>
         <th>{% trans %}Comments{% endtrans %} </th>
@@ -19,6 +20,7 @@
             <td>{{ item.createdatetime is empty ? '' : item.createdatetime|date('H:i d.m.Y') }}</td>
             <td>{{ item.dogovorNumber|e }}</td>
             <td>#{{ item.dopDogovorString }}</td>
+            <td>{{ item.mpk }}</td>
             <td>{{ item.department }}</td>
             <td>{{ item.creatorFullName }}</td>
             <td>{{ item.comment }}</td>

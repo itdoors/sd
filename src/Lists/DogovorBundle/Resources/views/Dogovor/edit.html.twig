@@ -167,6 +167,7 @@
                 <a href="#" id="performerId"  data-type="select2" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.performerName }}" data-placement="right" data-original-title="{% trans %}Enter Performer{% endtrans %}">
                     {{ dogovor.performerName }}
                 </a>
+                 <a href="{{ path('lists_' ~ role ~ '_organization_show', { id:dogovor.performerId }) }}" target="_blank">({% trans %}Open{% endtrans%})</a>
             </td>
         </tr>
         <tr> {# 4 #}

@@ -1,39 +1,36 @@
 {% extends "FOSUserBundle::layout.html.twig" %}
-
 {% trans_default_domain 'SDUserBundle' %}
-
 {% block fos_user_content %}
-{% if error %}
-    <div>{{ error|trans }}</div>
-{% endif %}
     <div>
-    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-        {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
-        <a href="{{ path('fos_user_security_logout') }}">
-            {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
-        </a>
-    {% else %}
-        <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
-    {% endif %}
-</div>
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+            {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
+            <a href="{{ path('fos_user_security_logout') }}">
+                {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+            </a>
+        {% else %}
+            {#<a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>#}
+        {% endif %}
+    </div>
 
 <!-- BEGIN LOGIN FORM -->
-<form action="{{ path("fos_user_security_check") }}" method="post">
+<form class="login-form" action="{{ path("fos_user_security_check") }}" method="post">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
     <h3 class="form-title">{% trans %}Login to your account{% endtrans %}</h3>
-    <div class="alert alert-error hide">
-        <button class="close" data-dismiss="alert"></button>
-        <span>{% trans %}Enter valid username and password.{% endtrans %}</span>
-    </div>
-    <div class="form-group">
+    {% if error %}
+        <div class="alert alert-danger display-hide" style="display: block;">
+                <button class="close" data-close="alert"></button>
+                <span>{{  error.messageKey|trans(error.messageData, 'security') }}</span>
+        </div>
+    {% endif %}
+    <div class="form-group{% if error %} has-error{% endif %}">
         <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
         <label class="control-label visible-ie8 visible-ie9">{% trans %}User name{% endtrans %}</label>
         <div class="input-icon">
             <i class="fa fa-user"></i>
-            <input class="form-control placeholder-no-fix" type="text" id="username" autocomplete="off" placeholder="{% trans %}Username{% endtrans %}" name="_username" value="{{ last_username }}" required="required"/>
+            <input class="form-control placeholder-no-fix" type="text" id="username" autocomplete="off" placeholder="{% trans %}Username{% endtrans %}" name="_username" value="{{ last_username }}" required="required" />
         </div>
     </div>
-    <div class="form-group">
+    <div class="form-group{% if error %} has-error{% endif %}">
         <label class="control-label visible-ie8 visible-ie9">{% trans %}Password{% endtrans %}</label>
         <div class="input-icon">
             <i class="fa fa-lock"></i>
@@ -58,13 +55,13 @@
 </form>
 <!-- END LOGIN FORM -->
 <!-- BEGIN FORGOT PASSWORD FORM -->
-<form class="forget-form" action="index.html" method="post">
+<form class="forget-form" action="{{ path("sd_user_resetting_send_email") }}" method="post">
     <h3>{% trans %}Forget Password ?{% endtrans %}</h3>
-    <p>{% trans %}Enter your e-mail address below to reset your password.{% endtrans %}</p>
+    <p>{% trans %}Enter your e-mail address or username below to reset your password.{% endtrans %}</p>
     <div class="form-group">
         <div class="input-icon">
             <i class="icon-envelope"></i>
-            <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Email" name="email" />
+            <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="{% trans %}Email or username{% endtrans %}" name="username" />
         </div>
     </div>
     <div class="form-actions">

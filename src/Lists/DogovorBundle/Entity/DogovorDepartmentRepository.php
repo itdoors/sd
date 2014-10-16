@@ -30,6 +30,7 @@ class DogovorDepartmentRepository extends EntityRepository
             ->addSelect("CONCAT(CONCAT(city.name, '|'), d.address) as department")
             ->addSelect("CONCAT(CONCAT(user.lastName, ' '), user.firstName) as creatorFullName")
             ->addSelect('dd.comment as comment')
+            ->addSelect('d.mpk')
             ->leftJoin('dd.dogovor', 'dogovor')
             ->leftJoin('dd.dopDogovor', 'dopDogovor')
             ->leftJoin('dd.department', 'd')

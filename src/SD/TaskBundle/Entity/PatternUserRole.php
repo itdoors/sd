@@ -15,11 +15,6 @@ class PatternUserRole
     private $id;
 
     /**
-     * @var boolean
-     */
-    private $isViewed;
-
-    /**
      * @var \SD\TaskBundle\Entity\TaskPattern
      */
     private $taskPattern;
@@ -43,30 +38,6 @@ class PatternUserRole
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set isViewed
-     *
-     * @param boolean $isViewed
-     *
-     * @return PatternUserRole
-     */
-    public function setIsViewed($isViewed)
-    {
-        $this->isViewed = $isViewed;
-
-        return $this;
-    }
-
-    /**
-     * Get isViewed
-     *
-     * @return boolean 
-     */
-    public function getIsViewed()
-    {
-        return $this->isViewed;
     }
 
     /**

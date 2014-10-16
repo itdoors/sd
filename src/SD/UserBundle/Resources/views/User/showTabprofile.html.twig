@@ -5,20 +5,6 @@
         $('#changeAvatar').on('hidden.bs.modal', function () {
             document.location.reload();
         });
-        
-        $('#status').editable({
-            url: '{{ path('sd_common_ajax_stuff_save') }}',
-            source: [
-                {value: 67, text: '{% trans %}Fired{% endtrans %}'},
-                {value: 68, text: '{% trans %}Worked{% endtrans %}'},
-                {value: 69, text: '{% trans %}Decree{% endtrans %}'}
-            ],
-            select2: {
-                placeholder: '{% trans %}Select status fired{% endtrans %}',
-                minimumInputLength: 0,
-                width: 250
-            }
-        });
         $('#locked').editable({
             url: '{{ path('sd_common_ajax_user_save') }}',
             source: [
@@ -36,29 +22,45 @@
             url: '{{ path('sd_common_ajax_user_save') }}',
             emptytext: '{% trans %}Enter value{% endtrans %}'
         });
-        $('#mobilephone, #phonePersonal, #phoneInside, #education, #issues, #birthPlace').editable({
-            url: '{{ path('sd_common_ajax_stuff_save') }}',
-            emptytext: '{% trans %}Enter value{% endtrans %}'
-        });
         
-        $('.sd-stuff-editable').editable({
-            url: '{{ path('sd_common_ajax_stuff_save') }}'
-        });
+        
         $('.sd-user-editable').editable({
             url: '{{ path('sd_common_ajax_user_save') }}'
         });
-        
-        $('#companystructureId').editable({
-            url: '{{ path('sd_common_ajax_stuff_save') }}',
-            source: '{{ path('sd_common_ajax_company_structure') }}',
-            emptytext: '{% trans %}Enter value{% endtrans %}',
-            select2: {
-                placeholder: '{% trans %}Select companystructure{% endtrans %}',
-                minimumInputLength: 0,
-                width: 250,
-                allowClear: true
-            }
-        });
+        {% if item.stuffId is not empty %}
+            $('#status').editable({
+                url: '{{ path('sd_common_ajax_stuff_save') }}',
+                emptytext: '{% trans %}Enter value{% endtrans %}',
+                source: [
+                    {value: 67, text: '{% trans %}Fired{% endtrans %}'},
+                    {value: 68, text: '{% trans %}Worked{% endtrans %}'},
+                    {value: 69, text: '{% trans %}Decree{% endtrans %}'}
+                ],
+                select2: {
+                    placeholder: '{% trans %}Select status fired{% endtrans %}',
+                    minimumInputLength: 0,
+                    width: 250
+                }
+            });
+            $('#mobilephone, #phonePersonal, #phoneInside, #education, #issues, #birthPlace').editable({
+                url: '{{ path('sd_common_ajax_stuff_save') }}',
+                emptytext: '{% trans %}Enter value{% endtrans %}'
+            });
+            $('.sd-stuff-editable').editable({
+                url: '{{ path('sd_common_ajax_stuff_save') }}'
+            });
+            $('#companystructureId').editable({
+                url: '{{ path('sd_common_ajax_stuff_save') }}',
+                source: '{{ path('sd_common_ajax_company_structure') }}',
+                emptytext: '{% trans %}Enter value{% endtrans %}',
+                select2: {
+                    placeholder: '{% trans %}Select companystructure{% endtrans %}',
+                    minimumInputLength: 0,
+                    width: 250,
+                    allowClear: true
+                }
+            });
+        {% endif %}
         
         $('.sd-stuff-date').live('mouseover', function(e){
 
@@ -210,6 +212,7 @@
                                 <div class="portlet-body">
                                     <table class="table table-striped table-bordered table-advance table-hover">
                                         <tbody>
+                                            {% if item.stuffId is not empty %}
                                             <tr>
                                                 <td class="hidden-xs">
                                                     {% trans %}Subdivision{% endtrans %} 
@@ -224,6 +227,7 @@
                                                     {% endif %}
                                                 </td>
                                             </tr>
+                                            {% endif %}
                                             {% if isAdmin %}
                                             <tr>                                                                                                
                                                 <td class="hidden-xs">
@@ -319,6 +323,7 @@
                                                     {% endif %}
                                                 </td>
                                             </tr>
+                                            {% if item.stuffId is not empty %}
                                             <tr>                                                                                                
                                                 <td class="hidden-xs">
                                                     {% trans %}Mobile phone{% endtrans %} 
@@ -375,6 +380,7 @@
                                                     {% endif %}
                                                 </td>
                                             </tr>
+                                            {% endif %}
                                              {% if isAdmin %}
                                              <tr>                                                                                                
                                                 <td class="hidden-xs">
@@ -400,6 +406,7 @@
                                                 </td>
                                             </tr>
                                             {% endif %}
+                                            {% if item.stuffId is not empty %}
                                             <tr>  
                                                 <td class="hidden-xs">
                                                     {% trans %}Education{% endtrans %} 
@@ -498,6 +505,7 @@
                                                     {% endif %}
                                                 </td>
                                             </tr>
+                                            {% endif %}
                                             
                                             {% for contact in usercontactinfo %}
                                                 <tr>

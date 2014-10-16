@@ -34,7 +34,9 @@ class UserNewStuffForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $user = $this->container->get('security.context')->getToken()->getUser();
+//        $user = $this->container->get('security.context')->getToken()->getUser();
+
+        $repository = $this->container->get('doctrine')->getRepository('ListsCompanystructureBundle:Companystructure');
 
         $builder
             ->add('lastName', null, array(
@@ -80,8 +82,11 @@ class UserNewStuffForm extends AbstractType
                 'class' => 'ListsCompanystructureBundle:Companystructure',
                 'empty_value' => '',
                 'required' => true,
-                'query_builder' => function (CompanystructureRepository $repository) {
-                    return  $repository->createQueryBuilder('cs');
+                'property' => 'name_for_list',
+                'query_builder' => function ($repository) use ($repository) {
+
+                return $repository->createQueryBuilder('c')
+                    ->orderBy('c.root, c.lft', 'ASC');
                 }
             ));
 

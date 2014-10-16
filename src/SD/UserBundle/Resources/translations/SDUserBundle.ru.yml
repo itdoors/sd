@@ -12,7 +12,7 @@ to reset your password.: для сброса пароля.
 
 
 Forget Password ?: Забыли пароль?
-Enter your e-mail address below to reset your password.: Введите Ваш e-mail для восстановления пароля
+Enter your e-mail address or username below to reset your password.: Введите Ваш e-mail либо логин для восстановления пароля
 Back: Назад
 Submit: ОК
 Login: Вход
@@ -113,3 +113,40 @@ Worked: Работает
 Decree: В декрете
 All: Все
 Password changed successfully!: Пароль успешно изменен!
+
+# Password resetting
+resetting:
+    password_already_requested: Пароль для данного пользователя уже запрашивался за последние 24 часа.
+    check_email: Письмо на адрес %email% уже отправлено. Оно содержит ссылку, при переходе по которой пароль будет сброшен.
+    request:
+        invalid_username: Пользователь "%username%" не существует.
+        username: "Имя пользователя:"
+        submit: Сбросить пароль
+    reset:
+        submit: Изменить пароль
+    flash:
+        success: Пароль успешно сброшен
+    email:
+        subject: Сброс пароля
+        message: |
+            Приветствуем, %username%!
+            <br>
+            Для сброса пароля, пожалуйста, перейдите по ссылке
+            <br>
+            <table style="margin-bottom: 10px;width: 580px">
+                <tbody>
+                    <tr> 
+                        <td class="panel" style="padding: 10px !important; background: #ECF8FF; border: 0;">
+                        <span style="color: rgb(22, 52, 59); font-family: Arial; font-size: 12px; line-height: 15px;">%confirmationUrl%</span><br></td>
+                        <td class="expander"> 
+                        </td>   
+                    </tr>  
+                </tbody>
+            </table>
+            <br>
+            Если переход по ссылке не работает, скопируйте и вставьте ссылку в адресную строку браузера.
+            
+    new_password: Новый пароль
+    new_password_confirmation: Подтвердите пароль
+    
+Email or username: Email либо логин
