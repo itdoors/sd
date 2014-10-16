@@ -2284,12 +2284,12 @@ class AjaxController extends BaseFilterController
         $em->flush();
         $em->refresh($data);
 
-/*        if (isset($formData['usersFromOurSide']) || isset($formData['contactMany'])) {
-            //specially for kiwa
+        if (isset($formData['usersFromOurSide']) || isset($formData['contactMany'])) {
+            //specially for manachinskiy
             $user = $data->getUser();
             $performer = $this->getDoctrine()
                 ->getRepository('SDUserBundle:User')
-                ->find(362);
+                ->find(7);
 
             $task = new \SD\CalendarBundle\Entity\Task();
             $task->setCreateDateTime(new \DateTime());
@@ -2303,7 +2303,7 @@ class AjaxController extends BaseFilterController
             $task->setTaskType('personal');
             $em->persist($task);
             $em->flush();
-        }*/
+        }
 
         if (isset($formData['usersFromOurSide'])) {
             //$usersFromOurSide = explode(',', $formData['usersFromOurSide']);

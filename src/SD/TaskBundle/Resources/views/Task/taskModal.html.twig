@@ -315,7 +315,7 @@
     </tr>
     <tr>
         <td>{% trans %}Date start{% endtrans %}</td>
-        <td colspan="3">{{ taskUserRole.task.startDate|date('d.m.Y') }}</td>
+        <td colspan="3">{{ taskUserRole.task.startDate|date('d.m.Y H:i') }}</td>
     </tr>
     <tr>
         <td>{% trans %}Date stop{% endtrans %}</td>
@@ -417,7 +417,7 @@
         <td colspan="3">{{ taskUserRole.task.stage|trans }}</td>
     </tr>
     <tr>
-        <td colspan="4"><a href="{{ path('sd_task_homepage', {}, true) }}{#{{ path('sd_task_page', {'id' : taskUserRole.id }) }}#}">{% trans %}Link to page{% endtrans %}</a></td>
+        <td colspan="4"><a href="{{ path('sd_task_homepage') }}?id={{ taskUserRole.id }}{#{{ path('sd_task_page', {'id' : taskUserRole.id }) }}#}">{% trans %}Link to page{% endtrans %}</a></td>
     </tr>
     {#
         {% if task.handlingMessage is not empty %}
@@ -435,7 +435,7 @@
 
 {% if comment is not empty %}
     <div>
-        Последний комментарий ( {{ comment.user }}): <br>
+        {% trans %}Last comment{% endtrans %} ( {{ comment.user }}): <br>
         "{{ comment.value|raw }}"
         <br><br>
     </div>
@@ -506,7 +506,10 @@
     {% endif %}
 {% endif %}
 #}
+<a href="#" class="btn green" data-dismiss="modal" aria-hidden="true" style="float: right">{% trans %}Close{% endtrans %}</a>
+
 <br><br>
+
 <input type="hidden" id="task_modal_info_holder"
        data-id="{{ taskUserRole.id }}"
        data-url_task_set_viewed="{{ path('sd_task_set_viewed') }}"

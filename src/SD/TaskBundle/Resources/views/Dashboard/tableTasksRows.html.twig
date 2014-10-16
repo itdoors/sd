@@ -53,6 +53,7 @@
                         {% else %}
                         {{ taskUserRole.task.title }}
                         {% endif %}
+                        <span style="color: #577688">(ID:{{ taskUserRole.task.id }}) </span>
                         <span class="label label-sm {{ labelStage }} ">
 														{{ stage|trans }} {#<i class="fa fa-share"></i>#}
 														</span>

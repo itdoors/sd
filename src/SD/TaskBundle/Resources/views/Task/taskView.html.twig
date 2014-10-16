@@ -49,6 +49,12 @@
             $('#add_viewer_holder').toggle('blind', {}, 300)
         })
 
+        $('#cancel_add_viewer').die('click');
+        $('#cancel_add_viewer').live('click', function(e){
+            $('#add_viewer_holder').hide('blind', {}, 300)
+        })
+
+
         $('.answerButton').die('click');
         $('.answerButton').live('click', function(e){
             var answer = $(this).data('value');
@@ -115,30 +121,35 @@
             var url = $('#task_modal_info_holder').data('url_add_viewer');
 
             var viewer = $("#viewer_select").select2("val");
+            if (viewer) {
 
-            var sendData = {
-                'id': id,
-                'viewer' : viewer
-            }
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: sendData,
-                success: function(data1) {
-                    //alert(data1)
-                    data = JSON.parse(data1);
-                    if (data.success == 1) {
-                        updateTask();
-                    } else {
-                        if (data.error == 'already_in_task') {
-                            alert('{% trans %}This user already taking part in task{% endtrans %}');
+                var sendData = {
+                    'id': id,
+                    'viewer' : viewer
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: sendData,
+                    success: function(data1) {
+                        //alert(data1)
+                        data = JSON.parse(data1);
+                        if (data.success == 1) {
+                            updateTask();
                         } else {
-                            alert('error');
+                            if (data.error == 'already_in_task') {
+                                alert('{% trans %}This user already taking part in task{% endtrans %}');
+                            } else {
+                                alert('error');
+                            }
                         }
                     }
-                }
 
-            })
+                })
+            } else {
+                alert('{% trans %}Choose coworker{% endtrans %}');
+            }
+
         })
 
 
@@ -721,15 +732,17 @@
                         <br><br>
                     <div id="add_viewer_holder" style="display: none;">
                         <div class="form-group">
-                            <div class="col-md-10">
-                                <select id="viewer_select">
+                            <div class="col-md-8">
+                                <select id="viewer_select" data-placeholder="{% trans %}Choose coworker{% endtrans %}">
+                                    <option selected></option>
                                     {% for user in usersCanBeViewed %}
                                         <option value="{{ user.id }}">{{ user }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 <button class="btn btn-circle btn-sm btn-default" id="add_viewer_submit">{% trans %}Add{% endtrans %}</button>
+                                <button class="btn btn-circle btn-sm btn-default" id="cancel_add_viewer">{% trans %}Cancel{% endtrans %}</button>
                             </div>
                             <br><br>
                         </div>
@@ -737,8 +750,6 @@
                     </div>
                 </div>
             </div>
-
-
         {% endif %}
 
     </div>
@@ -777,7 +788,7 @@
                                                                             <button type="button" class="todo-comment-btn btn btn-circle btn-default btn-xs">&nbsp; Reply &nbsp;</button>
                                         #}
                                         <p class="todo-comment-head">
-                                            <span class="todo-comment-username">{{ comment.user }}</span> &nbsp; <span class="todo-comment-date">{{ comment.createDatetime|date('H:i d-m-Y') }}</span>
+                                            <span class="todo-comment-username">{{ comment.user }}</span> &nbsp; <span class="todo-comment-date">{{ comment.createDatetime|date('d-m-Y H:i ') }}</span>
                                         </p>
                                         <p class="todo-text-color" style="white-space: pre-line">{{ comment.value|raw  }} <br></p>
                                     </div>
