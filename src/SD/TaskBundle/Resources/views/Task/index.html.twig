@@ -54,6 +54,7 @@
                 var obj = this;
                 lightUpTask(obj);
                 var id = $(obj).data('id');
+                SD.addGetParam('id', id);
                 var url = $('#more_info_input').data('url_get_task_view');
                 var sendData = {
                     'id': id
@@ -373,7 +374,13 @@
     <div class="todo-tasklist-devider">
     </div>
     <div class="col-md-7 col-sm-8" id="task_holder">
+        {% if preloadIdTaskUserRole %}
+            {{ render(controller('SDTaskBundle:Task:taskView', {
+            'id': preloadIdTaskUserRole
+            })) }}
+        {% else %}
         <div style="color:#666666;"><< {% trans %}Choose any task from the list{% endtrans %}</div>
+        {% endif %}
 {#
         <div class="scroller" style="max-height: 600px;" data-always-visible="0" data-rail-visible="0" data-handle-color="#dae3e7"
                 >

@@ -109,8 +109,9 @@ class ActivitySentenceMaker
             ->find($comment->getModelId());
 
         $taskTitle = $task->getTitle();
+        $taskId = $task->getId();
 
-        $message = $taskTitle."\n ".$user.': '.$value;
+        $message = $taskTitle.' (ID: '.$taskId.')'."\n ".$user.': '.$value;
 
         $returnActivity = new ActivityHolder($message, $date);
 

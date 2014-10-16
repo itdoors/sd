@@ -223,6 +223,11 @@ class PrivateController extends SalesController
                 'name' => 'accepted',
                 'model' => 'task_end_date'
             ));
+        $rolePerformerController = $em->getRepository('SDTaskBundle:Role')
+            ->findBy(array(
+                'name' => array('performer', 'controller'),
+                'model' => 'task'
+            ));
         //var_dump(count($taskUserRoles));die();
         foreach ($taskUserRoles as $taskUserRole) {
             $task = $taskUserRole->getTask();
@@ -233,6 +238,18 @@ class PrivateController extends SalesController
             }
             if ($stage == 'matching' && ($role == 'performer' || $role='controller')) {
                 continue;
+            }
+            if ($role == 'author') {
+                $userTask = $taskUserRole->getUser();
+                $otherTaskUserRoles = $em->getRepository('SDTaskBundle:TaskUserRole')
+                    ->findBy(array(
+                        'user' => $userTask,
+                        'task' => $task,
+                        'role' => $rolePerformerController
+                    ));
+                if ($otherTaskUserRoles) {
+                    continue;
+                }
             }
             $endDate = $em->getRepository('SDTaskBundle:TaskEndDate')
                 ->findOneBy(array(

@@ -196,6 +196,12 @@ class TaskService
                 $text .= '<b>'.$translator->trans('Your role', array (), 'SDTaskBundle').':</b> ';
                 $text .= $translator->trans($taskUserRole->getRole(), array(), 'SDTaskBundle');
 
+                $url = $this->container->get('router')->generate(
+                    'sd_task_homepage'
+                ).'?id='.$taskUserRole->getId();
+                $text .= '<b>'.$translator->trans('Link to task', array (), 'SDTaskBundle').':</b> ';
+                $text .= '<a href="'.$url.'">'.$translator->trans('Link', array(), 'SDTaskBundle').'</a>';
+
                 $emails = array();
                 $userEmail = $taskUserRole->getUser()->getEmail();
                 if ($userEmail) {
@@ -229,6 +235,12 @@ class TaskService
                 $text .= '<b>'.$translator->trans('Final stage', array(), 'SDTaskBundle').':</b> ';
                 $text .= $translator->trans($taskUserRole->getTask()->getStage(), array(), 'SDTaskBundle');
 
+                $url = $this->container->get('router')->generate(
+                    'sd_task_homepage'
+                ).'?id='.$taskUserRole->getId();
+                $text .= '<b>'.$translator->trans('Link to task', array (), 'SDTaskBundle').':</b> ';
+                $text .= '<a href="'.$url.'">'.$translator->trans('Link', array(), 'SDTaskBundle').'</a>';
+
                 $emails = array();
                 $userEmail = $taskUserRole->getUser()->getEmail();
                 if ($userEmail) {
@@ -260,6 +272,196 @@ class TaskService
                 $text .= "<br>";
                 $text .= '<b>'.$translator->trans('Resolution', array(), 'SDTaskBundle').':</b> ';
                 $text .= $additionalInfo['resolution'];
+
+                $url = $this->container->get('router')->generate(
+                    'sd_task_homepage'
+                ).'?id='.$taskUserRole->getId();
+                $text .= '<b>'.$translator->trans('Link to task', array (), 'SDTaskBundle').':</b> ';
+                $text .= '<a href="'.$url.'">'.$translator->trans('Link', array(), 'SDTaskBundle').'</a>';
+
+                $emails = array();
+                $userEmail = $taskUserRole->getUser()->getEmail();
+                if ($userEmail) {
+                    $emails[] = $userEmail;
+                }
+
+                $emailService->send(
+                    null,
+                    'empty-template',
+                    array (
+                        'users' => $emails,
+                        'variables' => array (
+                            '${subject}$' => $subject,
+                            '${text}$' => $text
+                        )
+                    )
+                );
+
+            }
+
+        } elseif ($type == 'matching') {
+            $subject = $translator->trans('New matching result', array(), 'SDTaskBundle');
+
+            foreach ($taskUserRoles as $taskUserRole) {
+                $text = '<b>'.$translator->trans('Task', array(), 'SDTaskBundle').':</b> ';
+                $text .= $taskUserRole->getTask()->getTitle();
+                $text .= "<br>";
+
+                $text .= '<b>'.$translator->trans('New matching result', array(), 'SDTaskBundle').':</b> ';
+                if ($additionalInfo['status']) {
+                    $statusText = 'Signed up';
+                } else {
+                    $statusText = 'Refused sign up';
+                }
+                $text .= $translator->trans($statusText, array(), 'SDTaskBundle');
+                $text .= "<br>";
+                $text .= '<b>'.$translator->trans('Your role', array(), 'SDTaskBundle').':</b> ';
+                $text .= $translator->trans($taskUserRole->getRole(), array(), 'SDTaskBundle');
+                $text .= "<br>";
+                if ($additionalInfo['message']) {
+                    $text .= '<b>'.$translator->trans('Comment', array(), 'SDTaskBundle').':</b> ';
+                    $text .= $additionalInfo['message'];
+                }
+
+                $url = $this->container->get('router')->generate(
+                    'sd_task_homepage'
+                ).'?id='.$taskUserRole->getId();
+                $text .= '<b>'.$translator->trans('Link to task', array (), 'SDTaskBundle').':</b> ';
+                $text .= '<a href="'.$url.'">'.$translator->trans('Link', array(), 'SDTaskBundle').'</a>';
+
+                $emails = array();
+                $userEmail = $taskUserRole->getUser()->getEmail();
+                if ($userEmail) {
+                    $emails[] = $userEmail;
+                }
+
+                $emailService->send(
+                    null,
+                    'empty-template',
+                    array (
+                        'users' => $emails,
+                        'variables' => array (
+                            '${subject}$' => $subject,
+                            '${text}$' => $text
+                        )
+                    )
+                );
+
+            }
+
+        } elseif ($type == 'date_request') {
+            $subject = $translator->trans('New date request', array(), 'SDTaskBundle');
+
+            foreach ($taskUserRoles as $taskUserRole) {
+                $text = '<b>'.$translator->trans('Task', array(), 'SDTaskBundle').':</b> ';
+                $text .= $taskUserRole->getTask()->getTitle();
+                $text .= "<br>";
+
+                $text .= '<b>'.$translator->trans('Requested date', array(), 'SDTaskBundle').':</b> ';
+
+                $text .= $additionalInfo['date']->format('d-m-Y H:i');
+                $text .= "<br>";
+                $text .= '<b>'.$translator->trans('Your role', array(), 'SDTaskBundle').':</b> ';
+                $text .= $translator->trans($taskUserRole->getRole(), array(), 'SDTaskBundle');
+                $text .= "<br>";
+                if ($additionalInfo['message']) {
+                    $text .= '<b>'.$translator->trans('Comment', array(), 'SDTaskBundle').':</b> ';
+                    $text .= $additionalInfo['message'];
+                }
+
+                $url = $this->container->get('router')->generate(
+                    'sd_task_homepage'
+                ).'?id='.$taskUserRole->getId();
+                $text .= '<b>'.$translator->trans('Link to task', array (), 'SDTaskBundle').':</b> ';
+                $text .= '<a href="'.$url.'">'.$translator->trans('Link', array(), 'SDTaskBundle').'</a>';
+
+                $emails = array();
+                $userEmail = $taskUserRole->getUser()->getEmail();
+                if ($userEmail) {
+                    $emails[] = $userEmail;
+                }
+
+                $emailService->send(
+                    null,
+                    'empty-template',
+                    array (
+                        'users' => $emails,
+                        'variables' => array (
+                            '${subject}$' => $subject,
+                            '${text}$' => $text
+                        )
+                    )
+                );
+
+            }
+
+        } elseif ($type == 'changing_date') {
+            $subject = $translator->trans('New date end', array(), 'SDTaskBundle');
+
+            foreach ($taskUserRoles as $taskUserRole) {
+                $text = '<b>'.$translator->trans('Task', array(), 'SDTaskBundle').':</b> ';
+                $text .= $taskUserRole->getTask()->getTitle();
+                $text .= "<br>";
+
+                $text .= '<b>'.$translator->trans('New date end', array(), 'SDTaskBundle').':</b> ';
+
+                $text .= $additionalInfo['date']->format('d-m-Y H:i');
+                $text .= "<br>";
+                $text .= '<b>'.$translator->trans('Your role', array(), 'SDTaskBundle').':</b> ';
+                $text .= $translator->trans($taskUserRole->getRole(), array(), 'SDTaskBundle');
+                $text .= "<br>";
+                if ($additionalInfo['message']) {
+                    $text .= '<b>'.$translator->trans('Comment', array(), 'SDTaskBundle').':</b> ';
+                    $text .= $additionalInfo['message'];
+                }
+
+                $url = $this->container->get('router')->generate(
+                    'sd_task_homepage'
+                ).'?id='.$taskUserRole->getId();
+                $text .= '<b>'.$translator->trans('Link to task', array (), 'SDTaskBundle').':</b> ';
+                $text .= '<a href="'.$url.'">'.$translator->trans('Link', array(), 'SDTaskBundle').'</a>';
+
+                $emails = array();
+                $userEmail = $taskUserRole->getUser()->getEmail();
+                if ($userEmail) {
+                    $emails[] = $userEmail;
+                }
+
+                $emailService->send(
+                    null,
+                    'empty-template',
+                    array (
+                        'users' => $emails,
+                        'variables' => array (
+                            '${subject}$' => $subject,
+                            '${text}$' => $text
+                        )
+                    )
+                );
+
+            }
+
+        } elseif ($type == 'new_file') {
+            $subject = $translator->trans('New file uploaded', array(), 'SDTaskBundle');
+
+            foreach ($taskUserRoles as $taskUserRole) {
+                $text = '<b>'.$translator->trans('Task', array(), 'SDTaskBundle').':</b> ';
+                $text .= $taskUserRole->getTask()->getTitle();
+                $text .= "<br>";
+
+                $text .= '<b>'.$translator->trans('File name', array(), 'SDTaskBundle').':</b> ';
+
+                $text .= $additionalInfo['fileName'];
+                $text .= "<br>";
+                $text .= '<b>'.$translator->trans('Your role', array(), 'SDTaskBundle').':</b> ';
+                $text .= $translator->trans($taskUserRole->getRole(), array(), 'SDTaskBundle');
+                $text .= "<br>";
+
+                $url = $this->container->get('router')->generate(
+                    'sd_task_homepage'
+                ).'?id='.$taskUserRole->getId();
+                $text .= '<b>'.$translator->trans('Link to task', array (), 'SDTaskBundle').':</b> ';
+                $text .= '<a href="'.$url.'">'.$translator->trans('Link', array(), 'SDTaskBundle').'</a>';
 
                 $emails = array();
                 $userEmail = $taskUserRole->getUser()->getEmail();

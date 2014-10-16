@@ -79,5 +79,24 @@ class TaskFileService
         $em->persist($data);
         $em->flush();
 
+        $roleRepository = $em->getRepository('SDTaskBundle:Role');
+
+        $controllerRole = $roleRepository
+            ->findOneBy(array(
+                'name' => 'controller',
+                'model' => 'task'
+            ));
+
+        $taskUserRoleController = $em->getRepository('SDTaskBundle:TaskUserRole')->findOneBy(array(
+            'task' => $task,
+            'role' => $controllerRole
+        ));
+        $userController = $taskUserRoleController->getUser();
+        if ($userController != $user && $task->getStage() != 'matching') {
+            $taskService = $this->container->get('task.service');
+            $info = array('fileName' => $data->getName());
+            $taskService->sendEmailInform(array($taskUserRoleController), 'new_file', $info);
+        }
+
     }
 }
