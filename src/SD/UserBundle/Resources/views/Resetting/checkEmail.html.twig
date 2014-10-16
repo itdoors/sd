@@ -1,0 +1,12 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% trans_default_domain 'SDUserBundle' %}
+
+{% block fos_user_content %}
+<p>
+{{ 'resetting.check_email'|trans({'%email%': email}) }}
+</p>
+<a type="button" id="back-btn" href="{{ path("fos_user_security_login") }}" class="btn">
+    <i class="m-icon-swapleft"></i> {% trans from 'SDUserBundle' %}Back{% endtrans %}
+</a>
+{% endblock %}

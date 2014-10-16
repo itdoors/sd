@@ -6,6 +6,7 @@ security:
         ROLE_ADMIN:       ROLE_USER
         ROLE_SALESADMIN:  ROLE_SALES
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_USER: [ROLE_SALESADMIN, ROLE_SALESDISPATCHER, ROLE_SALES, ROLE_OPER, ROLE_DOGOVORADMIN, ROLE_CONTROLLING, ROLE_CONTROLLING_OPER]
 
     providers:
         fos_userbundle:
@@ -14,7 +15,10 @@ security:
 
     firewalls:
         login_firewall:
-            pattern:    ^/login$
+            pattern: ^/login$
+            anonymous:  ~
+        resetting_firewall:
+            pattern: ^/resetting
             anonymous:  ~
         main:
             pattern: ^/*
@@ -28,6 +32,7 @@ security:
             
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/lists/salesadmin, role: ROLE_SALESADMIN }
         - { path: ^/lists/salesdispatcher, role: ROLE_SALESDISPATCHER }
         - { path: ^/lists/sales, role: [ROLE_SALES, ROLE_OPER] }
@@ -36,7 +41,6 @@ security:
         - { path: ^/lists/dogovor/admin, roles: 'ROLE_DOGOVORADMIN, ROLE_CONTROLLING, ROLE_CONTROLLING_OPER' }
         - { path: ^/$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/dashboard/vote/add/party, role: ROLE_ARTICLEADMIN }
         - { path: ^/cron-manager, role: ROLE_CRONADMIN }

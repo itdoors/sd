@@ -167,6 +167,16 @@ fos_user:
     user_class: SD\UserBundle\Entity\User
     group:
         group_class: SD\UserBundle\Entity\Group
+    from_email:
+        address: %email.from%
+        sender_name: %name.from%
+    resetting:
+        token_ttl: 86400
+        email:
+            from_email: # Use this node only if you don't want the global email address for the resetting email
+                address:  %email.from%
+                sender_name: %name.from%
+            template:   FOSUserBundle:Resetting:email.txt.twig
 
 knp_paginator:
     page_range: 5                      # default page range used in pagination control
