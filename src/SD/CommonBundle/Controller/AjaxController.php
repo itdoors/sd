@@ -2973,7 +2973,9 @@ class AjaxController extends BaseFilterController
              /** @var Stuff $stuff */
             $stuff = $em
                 ->getRepository('SDUserBundle:Stuff')
-                ->findOneBy(array('user' => $formData['user'], 'companystructureId' => $formData['companystructureId']));
+                ->findOneBy(
+                    array('user' => $formData['user'], 'companystructureId' => $formData['companystructureId'])
+                );
             if (!$stuff) {
                 return false;
             }
