@@ -200,9 +200,18 @@ class ArticleRepository extends EntityRepository
                 $res->expr()->eq('v.modelId', 'a.id'),
                 $res->expr()->eq('v.modelName', ':text')
             );
+        $subQueryCasef = $res->expr()
+            ->andx(
+                $res->expr()->eq('vf.modelId', 'a.id'),
+                $res->expr()->eq('vf.modelName', ':text')
+            );
 
         return $res
-                ;
+            ->leftJoin('Lists\ArticleBundle\Entity\Vote', 'v', 'WITH', $subQueryCase)
+            ->leftJoin('Lists\ArticleBundle\Entity\Vote', 'vf', 'WITH', $subQueryCasef)
+                ->andwhere('v.userId = :user')
+                ->setParameter(':text', 'article')
+                ->setParameter(':user', $userId);
     }
 
     /** Returns results for interval future invoice

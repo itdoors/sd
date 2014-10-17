@@ -2979,7 +2979,7 @@ class AjaxController extends BaseFilterController
             }
             $companystructure->setStuff($stuff);
         }
-       
+
         $em->persist($companystructure);
         $em->flush();
 
