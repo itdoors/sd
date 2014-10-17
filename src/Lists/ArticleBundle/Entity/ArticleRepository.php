@@ -201,10 +201,8 @@ class ArticleRepository extends EntityRepository
                 $res->expr()->eq('v.modelName', ':text')
             );
 
-        return $res->innerJoin('Lists\ArticleBundle\Entity\Vote', 'v', 'WITH', $subQueryCase)
-                ->andwhere('v.userId = :user')
-                ->setParameter(':text', 'article')
-                ->setParameter(':user', $userId);
+        return $res
+                ;
     }
 
     /** Returns results for interval future invoice

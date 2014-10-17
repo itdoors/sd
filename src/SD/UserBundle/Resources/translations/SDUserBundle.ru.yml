@@ -60,6 +60,7 @@ Password again: Повторить новый пароль
 Save: Сохранить
 
 Change Password: Сменить пароль
+Changed password: Смена пароля
 
 Place of birth: Место рождения
 Hire Date: Дата приема на работу
@@ -146,7 +147,7 @@ resetting:
             <br>
             Если переход по ссылке не работает, скопируйте и вставьте ссылку в адресную строку браузера.
             
-    new_password: Новый пароль
+    new_password: Введите новый пароль
     new_password_confirmation: Подтвердите пароль
     
 Email or username: Email либо логин
