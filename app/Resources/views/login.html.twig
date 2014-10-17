@@ -127,7 +127,16 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
                            $('#fos_user_resetting_form_plainPassword_second').attr('disabled', false);
                            if ($('#fos_user_resetting_form_plainPassword_second').val() === $('#fos_user_resetting_form_plainPassword_first').val()){
                                $('#fos_user_resetting_form_submit').attr('disabled', false);
+                               $('#fos_user_resetting_form_plainPassword_second_error').hide();
+                               $('#fos_user_resetting_form_plainPassword_second').parent('.form-group').removeClass('has-error');
                            } else {
+                               if ($('#fos_user_resetting_form_plainPassword_second').val() === '') {
+                                   $('#fos_user_resetting_form_plainPassword_second_error').hide();
+                                   $('#fos_user_resetting_form_plainPassword_second').parent('.form-group').removeClass('has-error');
+                               } else {
+                                    $('#fos_user_resetting_form_plainPassword_second').parent('.form-group').addClass('has-error');
+                                    $('#fos_user_resetting_form_plainPassword_second_error').show();
+                               }
                                $('#fos_user_resetting_form_submit').attr('disabled', 'disabled');
                            }
                        } else {
@@ -169,8 +178,28 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
             $('#fos_user_resetting_form_plainPassword_second').keyup(function(){
                 if ($('#fos_user_resetting_form_plainPassword_second').val() === $('#fos_user_resetting_form_plainPassword_first').val() && $('#fos_user_resetting_form_plainPassword_second').val() !== ''){
                     $('#fos_user_resetting_form_submit').attr('disabled', false);
+                    $('#fos_user_resetting_form_plainPassword_second_error').hide();
+                    $(this).parent('.form-group').removeClass('has-error');
                 } else {
+                    if ($('#fos_user_resetting_form_plainPassword_second').val() === '') {
+                        $('#fos_user_resetting_form_plainPassword_second_error').hide();
+                        $(this).parent('.form-group').removeClass('has-error');
+                    }
                     $('#fos_user_resetting_form_submit').attr('disabled', 'disabled');
+                }
+            });
+            $('#fos_user_resetting_form_plainPassword_second').on('change', function(){
+                if ($('#fos_user_resetting_form_plainPassword_second').val() === $('#fos_user_resetting_form_plainPassword_first').val() && $('#fos_user_resetting_form_plainPassword_second').val() !== ''){
+                    $('#fos_user_resetting_form_plainPassword_second_error').hide();
+                    $(this).parent('.form-group').removeClass('has-error');
+                } else {
+                    if ($('#fos_user_resetting_form_plainPassword_second').val() === '') {
+                        $(this).parent('.form-group').removeClass('has-error');
+                        $('#fos_user_resetting_form_plainPassword_second_error').hide();
+                    } else {
+                        $(this).parent('.form-group').addClass('has-error');
+                        $('#fos_user_resetting_form_plainPassword_second_error').show();
+                    }
                 }
             });
         });
