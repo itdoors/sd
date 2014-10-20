@@ -98,6 +98,25 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 
 	{% block js_page_init_scripts %}
     <script>
+        jQuery.extend(jQuery.validator.messages, {
+            required: "{% trans %}This field is required.{% endtrans %}",
+            remote: "Please fix this field.",
+            email: "{% trans %}Please enter a valid email address.{% endtrans %}",
+            url: "Please enter a valid URL.",
+            date: "Please enter a valid date.",
+            dateISO: "Please enter a valid date (ISO).",
+            number: "Please enter a valid number.",
+            digits: "Please enter only digits.",
+            creditcard: "Please enter a valid credit card number.",
+            equalTo: "Please enter the same value again.",
+            accept: "Please enter a value with a valid extension.",
+            maxlength: jQuery.validator.format("Please enter no more than {0} characters."),
+            minlength: jQuery.validator.format("Please enter at least {0} characters."),
+            rangelength: jQuery.validator.format("Please enter a value between {0} and {1} characters long."),
+            range: jQuery.validator.format("Please enter a value between {0} and {1}."),
+            max: jQuery.validator.format("Please enter a value less than or equal to {0}."),
+            min: jQuery.validator.format("Please enter a value greater than or equal to {0}.")
+        });
         jQuery(document).ready(function() {
             App.init();
             Login.init();
@@ -108,7 +127,16 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
                            $('#fos_user_resetting_form_plainPassword_second').attr('disabled', false);
                            if ($('#fos_user_resetting_form_plainPassword_second').val() === $('#fos_user_resetting_form_plainPassword_first').val()){
                                $('#fos_user_resetting_form_submit').attr('disabled', false);
+                               $('#fos_user_resetting_form_plainPassword_second_error').hide();
+                               $('#fos_user_resetting_form_plainPassword_second').parent('.form-group').removeClass('has-error');
                            } else {
+                               if ($('#fos_user_resetting_form_plainPassword_second').val() === '') {
+                                   $('#fos_user_resetting_form_plainPassword_second_error').hide();
+                                   $('#fos_user_resetting_form_plainPassword_second').parent('.form-group').removeClass('has-error');
+                               } else {
+                                    $('#fos_user_resetting_form_plainPassword_second').parent('.form-group').addClass('has-error');
+                                    $('#fos_user_resetting_form_plainPassword_second_error').show();
+                               }
                                $('#fos_user_resetting_form_submit').attr('disabled', 'disabled');
                            }
                        } else {
@@ -119,7 +147,7 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
                    }
                 },
                 ui: {
-                    verdicts: ["Простой", "Слабый", "Нормльный", "Средний", "Сложный"],
+                    verdicts: ["Простой", "Слабый", "Нормальный", "Средний", "Сложный"],
                     showVerdictsInsideProgressBar: true,
                     showErrors: true,
                     
@@ -150,8 +178,28 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
             $('#fos_user_resetting_form_plainPassword_second').keyup(function(){
                 if ($('#fos_user_resetting_form_plainPassword_second').val() === $('#fos_user_resetting_form_plainPassword_first').val() && $('#fos_user_resetting_form_plainPassword_second').val() !== ''){
                     $('#fos_user_resetting_form_submit').attr('disabled', false);
+                    $('#fos_user_resetting_form_plainPassword_second_error').hide();
+                    $(this).parent('.form-group').removeClass('has-error');
                 } else {
+                    if ($('#fos_user_resetting_form_plainPassword_second').val() === '') {
+                        $('#fos_user_resetting_form_plainPassword_second_error').hide();
+                        $(this).parent('.form-group').removeClass('has-error');
+                    }
                     $('#fos_user_resetting_form_submit').attr('disabled', 'disabled');
+                }
+            });
+            $('#fos_user_resetting_form_plainPassword_second').on('change', function(){
+                if ($('#fos_user_resetting_form_plainPassword_second').val() === $('#fos_user_resetting_form_plainPassword_first').val() && $('#fos_user_resetting_form_plainPassword_second').val() !== ''){
+                    $('#fos_user_resetting_form_plainPassword_second_error').hide();
+                    $(this).parent('.form-group').removeClass('has-error');
+                } else {
+                    if ($('#fos_user_resetting_form_plainPassword_second').val() === '') {
+                        $(this).parent('.form-group').removeClass('has-error');
+                        $('#fos_user_resetting_form_plainPassword_second_error').hide();
+                    } else {
+                        $(this).parent('.form-group').addClass('has-error');
+                        $('#fos_user_resetting_form_plainPassword_second_error').show();
+                    }
                 }
             });
         });

@@ -113,7 +113,7 @@ class InvoiceFilterFormType extends AbstractType
             ->add('daterange', 'text', array(
                 'attr' => array(
                     'empty_value' =>  '',
-                    'class' => '',
+                    'class' => 'daterangepicker input-daterange',
                     'placeholder' => 'Enter date range'
                 )
             ))

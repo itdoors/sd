@@ -2973,14 +2973,21 @@ class AjaxController extends BaseFilterController
             return true;
         }
 
-        /** @var Stuff $stuff */
-        $stuff = $em
-            ->getRepository('SDUserBundle:Stuff')
-            ->findOneBy(array('user' => $formData['user'], 'companystructureId' => $formData['companystructureId']));
-        if (!$stuff) {
-            return false;
+        if (empty($formData['user'])) {
+            $companystructure->setStuff(null);
+        } else {
+             /** @var Stuff $stuff */
+            $stuff = $em
+                ->getRepository('SDUserBundle:Stuff')
+                ->findOneBy(
+                    array('user' => $formData['user'], 'companystructureId' => $formData['companystructureId'])
+                );
+            if (!$stuff) {
+                return false;
+            }
+            $companystructure->setStuff($stuff);
         }
-        $companystructure->setStuff($stuff);
+
         $em->persist($companystructure);
         $em->flush();
 

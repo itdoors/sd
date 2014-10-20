@@ -588,7 +588,7 @@
                     </ul>
                 </li>
             {% endif %}
-            {% if is_granted('ROLE_SALESADMIN') %}
+            {% if is_granted('ROLE_ADMIN') %}
                 <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_email_templates') or path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_email_history')  %} class="active"{% endif %}>
                     <a href="javascript:;">
                         <i class="fa fa-tachometer"></i>
