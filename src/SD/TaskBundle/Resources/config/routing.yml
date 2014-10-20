@@ -81,3 +81,7 @@ sd_task_set_pattern:
 sd_task_add_resolution:
     path:     /tasks/add/resolution
     defaults: { _controller: SDTaskBundle:Task:addResolution }
+
+sd_task_list_item:
+    path:     /tasks/item/list
+    defaults: { _controller: SDTaskBundle:Task:listItem }

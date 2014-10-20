@@ -260,9 +260,9 @@ class PrivateController extends SalesController
             $events[] = array(
                 'hover_title' => '',
                 'title' => $taskUserRole->getTask()->getTitle(),
-                'start' => $endDate->getEndDateTime()->format('Y-m-d'),
-                'end' => $endDate->getEndDateTime()->format('Y-m-d'),
-                'url' => $this->generateUrl('sd_task_homepage')
+                'start' => $endDate->getEndDateTime()->format('Y-m-d H:i'),
+                'end' => $endDate->getEndDateTime()->format('Y-m-d H:i'),
+                'url' => $this->generateUrl('sd_task_homepage').'?id='.$taskUserRole->getId()
                 //'allDay' => true
             );
         }
