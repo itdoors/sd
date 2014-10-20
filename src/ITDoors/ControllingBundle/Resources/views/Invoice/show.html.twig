@@ -36,55 +36,6 @@
             });
             
 </script>
-<style>
-    .table-new {
-        display: block;position: relative;width: 100%;border: 1px solid #ddd;
-    }
-    .table-new>thead {
-        display: block;float: left;
-    }
-    .table-new>thead>tr {
-        display: block;
-        border-radius: 0;
-        box-shadow: none;
-        border: 0;
-        background-color: #eaeaea;
-        border-left: 1px solid #cecece;
-    }
-    .table-new>thead>tr>th {
-        display: block;
-        text-align: right;
-        background-color: #eaeaea;
-        border-left: 1px solid #cecece;
-        border: 0 !important;
-        border-bottom: 1px solid #ddd !important;
-        border-right: 1px solid #ddd !important;
-        font-size: 13px !important;
-        padding: 5px;
-        width: auto !important;
-        margin: 0;
-        vertical-align: top;
-    }
-    .table-new>tbody {
-        display: block;
-        width: auto;
-        position: relative;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-    .table-new>tbody>tr{
-        display: inline-block;
-        vertical-align: top;
-        margin-left: -5px;
-    }
-    .table-new>tbody>tr>td{
-        border-bottom: 1px solid #ddd;
-        padding: 5px;
-        min-height: 1.25em;
-        text-align: left;
-        display: block;
-    }
-</style>
 <div class="navigation">
     {{ ajax_paginator_render(
             entities, namespasePagin, {
@@ -93,31 +44,67 @@
             )
     }}
 </div>
-<div class="portlet-body flip-scroll">
-    <table class="table-new">
-        <thead class="">
-            <tr style="display: block;">
-                <th>{% trans %}№ and date invoice{% endtrans %}</th>
-                <th>{% trans %}Customer{% endtrans %}</th>
-                <th>{% trans %}Performer{% endtrans %}</th>
-                <th>{% trans %}Invoice amount{% endtrans %}</th>
-                <th>{% trans %}Summa act{% endtrans %}</th>
-                <th>{% trans %}Payments{% endtrans %}</th>
-                <th>{% trans %}Debt{% endtrans %}</th>
-                <th><br>{% trans %}Deferment{% endtrans %}<br><br></th>
-                <th>{% trans %}№ and date ABP/BH{% endtrans %}</th>
-                <th>{% trans %}Original ABP/BH{% endtrans %}</th>
-                <th>{% trans %}Responsible{% endtrans %}</th>
-                <th>{% trans %}Bank{% endtrans %}</th>
-                <th>{% trans %}№ and date contract{% endtrans %}</th>
-                <th>{% trans %}Notes{% endtrans %}</th>
-                <th>{% trans %}Expected date of payment{% endtrans %}</th>
-                <th>{% trans %}The actual date of payment{% endtrans %}</th>
-                <th>{% trans %}Status{% endtrans %}</th>
-                <th>{% trans %}Status invoice{% endtrans %}</th>
+<div class="table-scrollable">
+    <table class="table table-striped table-bordered table-hover dataTable" aria-describedby="datatable_ajax_info">
+        <thead>
+            <tr role="row" class="heading">
+                <th width="5%" class="sorting_desc" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                {% trans %}№ and date invoice{% endtrans %}
+                </th>
+                <th width="5%" class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">
+                    {% trans %}Customer{% endtrans %}
+                </th>
+                <th width="5%" class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">
+                    {% trans %}Performer{% endtrans %}
+                </th>
+                <th width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}Invoice amount{% endtrans %}
+                </th>
+                <th width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}Summa act{% endtrans %}
+                </th>
+                 <th width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}Payments{% endtrans %}
+                </th>
+                <th width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}Debt{% endtrans %}
+                </th>
+                <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}Deferment{% endtrans %}
+                </th>
+                <th width="5%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                    {% trans %}№ and date ABP/BH{% endtrans %}
+                </th>
+                <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                {% trans %}Original ABP/BH{% endtrans %}
+                </th>
+                <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                {% trans %}Responsible{% endtrans %}
+                </th>
+                <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                {% trans %}Bank{% endtrans %}
+                </th>
+                <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                {% trans %}№ and date contract{% endtrans %}
+                </th>
+                <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                {% trans %}Notes{% endtrans %}
+                </th>
+                <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                {% trans %}Expected date of payment{% endtrans %}
+                </th>
+                <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                {% trans %}The actual date of payment{% endtrans %}
+                </th>
+                <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                {% trans %}Status{% endtrans %}
+                </th>
+                <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
+                {% trans %}Status invoice{% endtrans %}
+                </th>
             </tr>
         </thead>
-        <tbody>
+        <tbody role="alert" aria-live="polite" aria-relevant="all">
             {% for entity in entities %}
                 {% set days = (('now'|date('U')-entity.delayDate|date('U'))/86400)|round(0, 'floor') %}
             <tr class="{{ cycle(['odd', 'even'], entity.invoiceId) }}{{ days > 60  ? (entity.status is empty ? ' warning' : ' success' ): ''}}">
