@@ -8,12 +8,15 @@
             $('.datatime-picker').datetimepicker({
                         rtl: Metronic.isRTL(),
                         autoclose: true,
-                        format: "dd.mm.yyyy hh:ii:ss",
+                        format: "dd.mm.yyyy hh:ii",
                         pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
                         language: 'ru',
                         weekStart: 1,
                         startDate: d
-                    });
+                    }).on('changeDate', function(date){
+                var newDate = new Date(date.date.setSeconds(0));
+
+            })
             $('#' + '{{ form.vars.name }}' + '_performer').select2();
         });
     </script>

@@ -181,8 +181,39 @@
         }
 
         function lightUpTask(obj) {
-            $('.task-item').css('box-shadow', '0px 0px 0px')
-            $(obj).css('box-shadow', '0px 0px 15px #72A5D1')
+            $('.task-item').css('box-shadow', '0px 0px 0px');
+            $(obj).css('box-shadow', '0px 0px 15px #72A5D1');
+        }
+
+        function updateTaskListsItems(idTask) {
+            var tasks = $('.task_'+idTask);
+            var url = $('#more_info_input').data('url_update_task_item');
+
+            $.each(tasks, function(key, task) {
+                var id = $(task).data('id');
+                var sendData = {
+                    'id': id
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: sendData,
+                    success: function(data1) {
+                        //alert(data1)
+                        data = JSON.parse(data1);
+                        if (data.success == 1) {
+                            var css = $(task).css('box-shadow');
+                            var idDiv = $(task).attr('id');
+                            $(task).replaceWith(data.html);
+                            $('#'+idDiv).css('box-shadow', css);
+                        } else {
+                            alert('error');
+                        }
+                    }
+                })
+
+            });
         }
 
     </script>
@@ -412,6 +443,7 @@
            data-url_task_table="{{ path('sd_task_table')}}"
            data-url_get_task_view="{{ path('sd_task_view')}}"
            data-url_get_task_list="{{ path('sd_task_list')}}"
+           data-url_update_task_item="{{ path('sd_task_list_item') }}"
             >
 
 {% endblock body %}

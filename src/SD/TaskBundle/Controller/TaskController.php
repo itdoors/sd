@@ -90,6 +90,34 @@ class TaskController extends Controller
 
     /**
      * @param Request $request
+     *
+     * @return Response
+     */
+    public function listItemAction(Request $request)
+    {
+        $id = $request->request->get('id');
+
+        $user = $this->getUser();
+        $filterArray = array (
+            'user' => $user
+        );
+
+        $tasksUserRoleRepo = $this->getDoctrine()
+            ->getRepository('SDTaskBundle:TaskUserRole');
+
+        $taskUserRole = $tasksUserRoleRepo->find($id);
+
+        $info['taskUserRole'] = $taskUserRole;
+
+        $return['html'] = $this->renderView('SDTaskBundle:Task:taskListItem.html.twig', $info);
+
+        $return['success'] = 1;
+
+        return new Response(json_encode($return));
+    }
+
+    /**
+     * @param Request $request
      * @param int     $id
      *
      * @return Response
@@ -179,6 +207,8 @@ class TaskController extends Controller
             'allTaskRoles' => $allTaskRoles
         );
     }
+
+
 
     /**
      * @param Request $request
@@ -686,21 +716,8 @@ class TaskController extends Controller
      */
     protected function insertComment($idTaskUserRole, $commentValue, $model = 'Task')
     {
-        $em = $this->getDoctrine()->getManager();
-        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->find($idTaskUserRole);
-
-        $idTask = $taskUserRole->getTask()->getId();
-        $user = $this->getUser();
-        $comment = new Comment();
-
-        $comment->setValue($commentValue);
-        $comment->setCreateDatetime(new \DateTime());
-        $comment->setModel($model);
-        $comment->setModelId($idTask);
-        $comment->setUser($user);
-
-        $em->persist($comment);
-        $em->flush();
+        $taskService = $this->get('task.service');
+        $taskService->insertCommentToTask($idTaskUserRole, $commentValue, $model);
     }
 
     /**
@@ -1115,6 +1132,18 @@ class TaskController extends Controller
 
         $taskFile = $em->getRepository('SDTaskBundle:TaskFile')->find($id);
 
+        //comment to deleted file
+        $taskUserRole = $em->getRepository('SDTaskBundle:TaskUserRole')->findOneBy(array(
+                'task' => $taskFile->getTask(),
+                'user' => $taskFile->getUser()
+            ));
+
+        $taskService = $this->get('task.service');
+        $translator = $this->get('translator');
+        $commentValue = $translator->trans('Deleted file', array(), 'SDTaskBundle').': '.$taskFile->getName();
+        $taskService->insertCommentToTask($taskUserRole->getId(), $commentValue);
+
+
         $em->remove($taskFile);
         $em->flush();
 
@@ -1169,6 +1198,13 @@ class TaskController extends Controller
         $em->refresh($taskUserRoleViewer);
 
         $this->sendEmail(array($taskUserRoleViewer), 'new');
+
+        //add comment
+        $taskService = $this->get('task.service');
+        $translator = $this->get('translator');
+        $commentValue = $translator->trans('Added viewer', array(), 'SDTaskBundle').': '.$userViewer;
+        $taskService->insertCommentToTask($taskUserRole->getId(), $commentValue);
+
 
         $return['success'] = 1;
 

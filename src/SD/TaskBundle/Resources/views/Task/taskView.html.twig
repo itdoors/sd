@@ -319,10 +319,12 @@
 
         function updateTask() {
             var id = $('#task_modal_info_holder').data('id');
+            var taskId = $('#task_modal_info_holder').data('task_id');
             var url = $('#more_info_input').data('url_get_task_view');
 
             clearTaskContent();
             showSpinner();
+            updateTaskListsItems(taskId);
 
             var sendData = {
                 'id': id
@@ -393,6 +395,7 @@
         {% endif %}
 
     })
+
 
 </script>
 <style>
@@ -758,7 +761,7 @@
         <ul class="nav nav-tabs ">
             <li class="active">
                 <a href="#tab_1" data-toggle="tab">
-                    {% trans %}Comments{% endtrans %} </a>
+                    {% trans %}Protocol{% endtrans %} </a>
             </li>
             <li>
                 <a href="#tab_2" data-toggle="tab">

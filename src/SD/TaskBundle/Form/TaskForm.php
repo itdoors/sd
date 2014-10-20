@@ -55,7 +55,7 @@ class TaskForm extends AbstractType
                 'mapped' => false,
                 'class' => 'SD\UserBundle\Entity\User',
                 'empty_value' => '',
-                'data' => $user,
+                //'data' => $user,
                 'query_builder' => function (\SD\UserBundle\Entity\UserRepository $repository) use ($userId) {
                         return $repository->createQueryBuilder('u')
                             ->where('u.id = :user')
