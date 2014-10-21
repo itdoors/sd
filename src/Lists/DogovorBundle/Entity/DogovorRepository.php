@@ -213,6 +213,30 @@ class DogovorRepository extends EntityRepository
                                 ->setParameter(':datestart', $dateStart)
                                 ->setParameter(':datestop', $dateStop);
                         break;
+                    case 'dateRangeForType':
+                        $dateArr = explode('-', $value);
+                        $dateStart = new \DateTime(str_replace('.', '-', $dateArr[0]));
+                        $dateStop = new \DateTime('23:59:59 '.str_replace('.', '-', $dateArr[1]));
+                        if (isset($filters['typeDate']) && $filters['typeDate'] == 'startdatetime') {
+                            $sql->andWhere("d.startdatetime BETWEEN :datestart AND :datestop");
+                        } else if (isset($filters['typeDate']) && $filters['typeDate'] == 'stopdatetime') {
+                            $sql->andWhere("d.stopdatetime BETWEEN :datestart AND :datestop");
+                        } else if (isset($filters['typeDate']) && $filters['typeDate'] == 'prologation') {
+                            $sql->andWhere("d.prolongationDate BETWEEN :datestart AND :datestop");
+                        } else {
+                            $sql->andWhere(
+                                "
+                                    d.startdatetime BETWEEN :datestart AND :datestop
+                                    or
+                                    d.stopdatetime BETWEEN :datestart AND :datestop
+                                    or
+                                    d.prolongationDate BETWEEN :datestart AND :datestop
+                                "
+                            );
+                        }
+                        $sql->setParameter(':datestart', $dateStart)
+                            ->setParameter(':datestop', $dateStop);
+                        break;
                     case 'subject':
                             $sql
                                 ->andWhere("d.subject LIKE :subject")
