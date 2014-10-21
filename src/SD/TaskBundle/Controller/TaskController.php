@@ -38,11 +38,16 @@ class TaskController extends Controller
             ->getRepository('SDTaskBundle:TaskUserRole');
 
         $countTasks = array();
-        $countTasks['performer'] = $tasksUserRoleRepo->countTasksByRoleAndUser($user->getId(), 'performer');
-        $countTasks['controller'] = $tasksUserRoleRepo->countTasksByRoleAndUser($user->getId(), 'controller');
-        $countTasks['matcher'] = $tasksUserRoleRepo->countTasksByRoleAndUser($user->getId(), 'matcher');
-        $countTasks['author'] = $tasksUserRoleRepo->countTasksByRoleAndUser($user->getId(), 'author');
-        $countTasks['viewer'] = $tasksUserRoleRepo->countTasksByRoleAndUser($user->getId(), 'viewer');
+        $filterArray['role'] = 'performer';
+        $countTasks['performer'] = $tasksUserRoleRepo->getEntitiesListFilter1($filterArray, 'count');
+        $filterArray['role'] = 'controller';
+        $countTasks['controller'] = $tasksUserRoleRepo->getEntitiesListFilter1($filterArray, 'count');
+        $filterArray['role'] = 'matcher';
+        $countTasks['matcher'] = $tasksUserRoleRepo->getEntitiesListFilter1($filterArray, 'count');
+        $filterArray['role'] = 'author';
+        $countTasks['author'] = $tasksUserRoleRepo->getEntitiesListFilter1($filterArray, 'count');
+        $filterArray['role'] = 'viewer';
+        $countTasks['viewer'] = $tasksUserRoleRepo->getEntitiesListFilter1($filterArray, 'count');
         $info['countTasks'] = $countTasks;
         $info['preloadIdTaskUserRole'] = $preloadIdTaskUserRole;
 
@@ -67,15 +72,18 @@ class TaskController extends Controller
 
         if ($filter) {
             if (count($filter['role'])) {
-                foreach ($filter['role'] as $filterRole) {
+                $filterArray['role'] = $filter['role'][0];
+
+
+/*                foreach ($filter['role'] as $filterRole) {
                     $role = $this->getDoctrine()
                         ->getRepository('SDTaskBundle:Role')
                         ->findOneBy(array (
                             'name' => $filterRole,
                             'model' => 'task'
                         ));
-                    $filterArray['role'][] = $role;
-                }
+                    $filterArray['role'][] = $filterRole;
+                }*/
             }
         }
 
@@ -194,7 +202,7 @@ class TaskController extends Controller
         $tasksUserRoleRepo = $this->getDoctrine()
             ->getRepository('SDTaskBundle:TaskUserRole');
 
-        $tasksUserRole = $tasksUserRoleRepo->getEntitiesListByFilter($filterArray);
+        $tasksUserRole = $tasksUserRoleRepo->getEntitiesListFilter1($filterArray);
 
         $allTaskRoles = $this->getDoctrine()
             ->getRepository('SDTaskBundle:Role')
@@ -226,15 +234,7 @@ class TaskController extends Controller
 
         if ($filter) {
             if (count($filter['role'])) {
-                foreach ($filter['role'] as $filterRole) {
-                    $role = $this->getDoctrine()
-                        ->getRepository('SDTaskBundle:Role')
-                        ->findOneBy(array (
-                            'name' => $filterRole,
-                            'model' => 'task'
-                        ));
-                    $filterArray['role'][] = $role;
-                }
+                $filterArray['role'] = $filter['role'][0];
             }
         }
 
