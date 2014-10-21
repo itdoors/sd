@@ -29,7 +29,7 @@
     {% set labelStage = 'label-warning' %}
 {% endif %}
 
-<div class="todo-tasklist-item todo-tasklist-item-border-{{ color }} task-item" data-id="{{ taskUserRole.id }}" style="border-width: 3px;">
+<div class="todo-tasklist-item todo-tasklist-item-border-{{ color }} task-item task_{{ taskUserRole.task.id }}" data-id="{{ taskUserRole.id }}" style="border-width: 3px;" id="taskListItem_{{ taskUserRole.id }}">
     <img class="todo-userpic pull-left" src="{{ web_image( taskUserRole.user.photo is not empty ? userprofiles_url ~ taskUserRole.user.id ~ '/' ~ taskUserRole.user.photo : userprofiles_url ~ 'no_avatar.png').resize(27, 27) }}">
     <div class="todo-tasklist-item-title">
          {{ taskUserRole.task.title|length > 30 ? taskUserRole.task.title|slice(0, 30) ~ '...' : taskUserRole.task.title }} <span style="color: #577688">(ID:{{ taskUserRole.task.id }}) </span>

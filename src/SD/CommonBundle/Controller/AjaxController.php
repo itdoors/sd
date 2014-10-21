@@ -2712,6 +2712,12 @@ class AjaxController extends BaseFilterController
         $taskUserRole->setTask($data);
         $taskUserRole->setIsViewed(true);
         $em->persist($taskUserRole);
+        $em->flush();
+
+        $taskService = $this->get('task.service');
+        $translator = $this->get('translator');
+        $commentValue = $translator->trans('Created task', array(), 'SDTaskBundle');
+        $taskService->insertCommentToTask($taskUserRole->getId(), $commentValue);
 
         //var_dump($formData['performer']);die();
         //foreach ($formData['performer'] as $performer) {

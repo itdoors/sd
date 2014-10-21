@@ -79,6 +79,20 @@ class TaskFileService
         $em->persist($data);
         $em->flush();
 
+        //comment to uploaded file
+        $taskUserRole = $this->container
+            ->get('doctrine')->getManager()
+            ->getRepository('SDTaskBundle:TaskUserRole')->findOneBy(array(
+                'task' => $task,
+                'user' => $user
+            ));
+        $taskService = $this->container->get('task.service');
+        $translator = $this->container->get('translator');
+        $commentValue = $translator->trans('Uploaded file', array(), 'SDTaskBundle').': '.$data->getName();
+        $taskService->insertCommentToTask($taskUserRole->getId(), $commentValue);
+
+
+
         $roleRepository = $em->getRepository('SDTaskBundle:Role');
 
         $controllerRole = $roleRepository
@@ -91,6 +105,7 @@ class TaskFileService
             'task' => $task,
             'role' => $controllerRole
         ));
+        //sending file to controller role
         $userController = $taskUserRoleController->getUser();
         if ($userController != $user && $task->getStage() != 'matching') {
             $taskService = $this->container->get('task.service');

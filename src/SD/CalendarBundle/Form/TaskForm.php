@@ -86,11 +86,11 @@ class TaskForm extends AbstractType
 
             ->add('startDateTime', 'datetime', array(
                 'widget' => 'single_text',
-                'format' => 'dd.MM.yyyy HH:mm:ss'
+                'format' => 'dd.MM.yyyy HH:mm'
             ))
             ->add('stopDateTime', 'datetime', array(
                 'widget' => 'single_text',
-                'format' => 'dd.MM.yyyy HH:mm:ss'
+                'format' => 'dd.MM.yyyy HH:mm'
             ));
 
         $builder->addEventListener(
