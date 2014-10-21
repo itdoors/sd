@@ -142,7 +142,11 @@ class TaskUserRoleRepository extends EntityRepository
                 ->setParameter(':user', $filterArray['user']);
         }
 
-        //$sql->orderBy('t.createDate', 'DESC');
+        if ($type == 'count') {
+            //$sql->orderBy('t.createDate', 'DESC');
+        } else {
+            $sql->orderBy('t.createDate', 'DESC');
+        }
 
         if ($type == 'count') {
             return $sql->getQuery()->getSingleScalarResult();
