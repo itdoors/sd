@@ -24,6 +24,31 @@
             minimumInputLength: 0,
             allowClear: true
         });
+        SD.select2('#' + '{{ filterForm.vars.name }}' + '_typeDate', {
+            minimumInputLength: 0,
+            allowClear: true
+        });
+         $('.daterangepickers').daterangepicker(
+                    {
+                        ranges: {
+                            'Текущий месяц': [moment().startOf('month'), moment().endOf('month')]
+                           },
+                        startDate: moment().subtract('days', 29),
+                        endDate: moment(),
+                        format: 'YYYY.MM.DD',
+                        timePicker: false,
+                        locale: {
+                            applyLabel: 'ОК',
+                            cancelLabel: 'Отмена',
+                            fromLabel: 'от',
+                            toLabel: 'до',
+                            customRangeLabel: 'Выбрать диапазон',
+                            daysOfWeek: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб','Вс'],
+                            monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                            firstDay: 1
+                        }
+                    }
+            );
     });
 </script>
 
@@ -86,7 +111,7 @@
                             'placeholder': 'Prolongation',
                         }}) }}
                     </div>
-                     </div>
+                </div>
                 <div class="row" style="margin-top: 10px">
                     <div class="form-group col-md-3">
                         {{ form_widget(filterForm.dogovorType, {'attr': {
@@ -101,11 +126,26 @@
                         }}) }}
                     </div>
                     <div class="form-group col-md-3">
-                        {#'data-url': path('sd_common_ajax_dogovor_subject'),#}
                         {{ form_widget(filterForm.subject, {'attr': {
                             'class': 'form-control fixer',
                             
                             'placeholder': 'Enter subject',
+                        }}) }}
+                    </div>
+                    <div class="form-group col-md-3">
+                        {{ form_widget(filterForm.typeDate, {'attr': {
+                            'class': 'form-control select2 fixer',
+                            
+                            'placeholder': 'Select date',
+                        }}) }}
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 10px">
+                    <div class="form-group col-md-3">
+                        {{ form_widget(filterForm.dateRangeForType, {'attr': {
+                            'class': 'form-control fixer daterangepickers',
+                            
+                            'placeholder': 'Select date range',
                         }}) }}
                     </div>
                     <div class="form-group col-md-3">
