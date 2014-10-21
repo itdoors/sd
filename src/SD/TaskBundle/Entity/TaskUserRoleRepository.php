@@ -106,7 +106,7 @@ class TaskUserRoleRepository extends EntityRepository
 
             } elseif ($filterArray['role'] == 'controller') {
                 $sql->andWhere('s.name IN (:controllingStage)')
-                    ->setParameter(':controllingStage', array('performing', 'controlling', 'checking'))
+                    ->setParameter(':controllingStage', array('performing', 'created', 'checking'))
                     ->andWhere('r.name = (:controllingRole)')
                     ->setParameter(':controllingRole', 'controller');
             } elseif ($filterArray['role'] == 'matcher') {
