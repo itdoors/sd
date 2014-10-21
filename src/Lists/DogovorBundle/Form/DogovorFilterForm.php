@@ -40,7 +40,7 @@ class DogovorFilterForm extends AbstractType
         /** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
         $lr = $this->container->get('lists_lookup.repository');
 
-        $translator = $this->container->get('translator');
+//        $translator = $this->container->get('translator');
 
         $builder
             ->add('number')
@@ -56,7 +56,16 @@ class DogovorFilterForm extends AbstractType
                 'class' => 'ListsLookupBundle:Lookup',
                 'query_builder' => $lr->getOnlyDogovorTypeQuery(),
                 'empty_value' =>  ''
-            ));
+            ))
+            ->add('typeDate', 'choice', array(
+                'choices'   => array(
+                    'startdatetime' => 'Startdatetime',
+                    'stopdatetime' => 'Stopdatetime',
+                    'prologation' => 'Prolongation Date',
+                ),
+                'empty_value' =>  ''
+            ))
+            ->add('dateRangeForType', 'text');
 
         $builder
             ->add('save', 'submit')
