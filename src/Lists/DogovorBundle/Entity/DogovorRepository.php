@@ -219,9 +219,9 @@ class DogovorRepository extends EntityRepository
                         $dateStop = new \DateTime('23:59:59 '.str_replace('.', '-', $dateArr[1]));
                         if (isset($filters['typeDate']) && $filters['typeDate'] == 'startdatetime') {
                             $sql->andWhere("d.startdatetime BETWEEN :datestart AND :datestop");
-                        } else if (isset($filters['typeDate']) && $filters['typeDate'] == 'stopdatetime') {
+                        } elseif (isset($filters['typeDate']) && $filters['typeDate'] == 'stopdatetime') {
                             $sql->andWhere("d.stopdatetime BETWEEN :datestart AND :datestop");
-                        } else if (isset($filters['typeDate']) && $filters['typeDate'] == 'prologation') {
+                        } elseif (isset($filters['typeDate']) && $filters['typeDate'] == 'prologation') {
                             $sql->andWhere("d.prolongationDate BETWEEN :datestart AND :datestop");
                         } else {
                             $sql->andWhere(
