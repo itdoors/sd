@@ -106,7 +106,7 @@ class TaskUserRoleRepository extends EntityRepository
 
             } elseif ($filterArray['role'] == 'controller') {
                 $sql->andWhere('s.name IN (:controllingStage)')
-                    ->setParameter(':controllingStage', array('performing', 'created', 'checking'))
+                    ->setParameter(':controllingStage', array('performing', 'created', 'checking', 'date_request'))
                     ->andWhere('r.name = (:controllingRole)')
                     ->setParameter(':controllingRole', 'controller');
             } elseif ($filterArray['role'] == 'matcher') {
@@ -127,7 +127,7 @@ class TaskUserRoleRepository extends EntityRepository
                     ->setParameter(':sign_up', 'sign_up');
             } elseif ($filterArray['role'] == 'performer') {
                 $sql->andWhere('s.name IN (:performingStage)')
-                    ->setParameter(':performingStage', array('created', 'performing'))
+                    ->setParameter(':performingStage', array('created', 'performing', 'date_request'))
                     ->andWhere('r.name = (:performingRole)')
                     ->setParameter(':performingRole', 'performer');
             } elseif ($filterArray['role'] == 'viewer') {
