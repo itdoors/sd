@@ -303,40 +303,53 @@
             <div class="portlet-body todo-project-list-content">
                 <div class="">
                     <ul class="nav nav-pills nav-stacked">
+                        <li>
+                            <a href="#" class="roleFilter" data-value="author" data-status="{#{% if checked != true %}#}0{#{% else %}1{% endif %}#}">
+                                <span class="badge badge-active badge-danger" style="float: right; margin-top: 2px"> {{ countTasks['author'] }} </span>
+                                <span class="roleTitle" style="color: grey">{{ 'I am author'|trans }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="roleFilter" data-value="performer" data-status="{#{% if checked != true %}#}0{#{% else %}1{% endif %}#}">
+                                <span class="badge badge-active badge-info" style="float: right; margin-top: 2px"> {{ countTasks['performer'] }} </span>
+                                <span class="roleTitle" style="color: grey">{{ 'On performing'|trans }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="roleFilter" data-value="controller" data-status="{#{% if checked != true %}#}0{#{% else %}1{% endif %}#}">
+                                <span class="badge badge-active badge-warning" style="float: right; margin-top: 2px"> {{ countTasks['controller'] }} </span>
+                                <span class="roleTitle" style="color: grey">{{ 'On controlling'|trans }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="roleFilter" data-value="matcher" data-status="{#{% if checked != true %}#}0{#{% else %}1{% endif %}#}">
+                                <span class="badge badge-active badge-success" style="float: right; margin-top: 2px"> {{ countTasks['matcher'] }} </span>
+                                <span class="roleTitle" style="color: grey">{{ 'On matching'|trans }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="roleFilter" data-value="viewer" data-status="{#{% if checked != true %}#}0{#{% else %}1{% endif %}#}">
+                                <span class="badge badge-active badge-default" style="float: right; margin-top: 2px"> {{ countTasks['viewer'] }} </span>
+                                <span class="roleTitle" style="color: grey">{{ 'On viewing'|trans }}</span>
+                            </a>
+                        </li>
 
-                        {% for taskRole in allTaskRoles %}
-                            {% set checked = false %}
-                            {% if taskRole == 'author' %}
-                                {% set icon = 'fa-pencil' %}
-                                {% set badge = 'badge-danger' %}
-                            {% elseif taskRole == 'performer' %}
-                                {% set icon = 'fa-rocket' %}
-                                {% set badge = 'badge-info' %}
-                                {% set checked = true %}
-                            {% elseif taskRole == 'controller' %}
-                                {% set icon = 'fa-crosshairs' %}
-                                {% set badge = 'badge-warning' %}
-                            {% elseif taskRole == 'matcher' %}
-                                {% set icon = 'fa-crosshairs' %}
-                                {% set badge = 'badge-success' %}
-                            {% elseif taskRole == 'viewer' %}
-                                {% set icon = 'fa-crosshairs' %}
-                                {% set badge = 'badge-default' %}
-                            {% endif %}
-                            <li>
-{#
-                                <input type="checkbox" class="roleFilter" value="{{ taskRole }}" {{ checked }}/>
-#}                              <a href="#" class="roleFilter" data-value="{{ taskRole }}" data-status="{% if checked != true %}0{% else %}1{% endif %}">
-                                    <span class="arrow" style="color: grey; {% if checked != true %}display: none;{% endif %}">{# >#}</span>
-                                    <span class="badge badge-active {{ badge }}" style="float: right; margin-top: 2px"> {{ countTasks[''~taskRole] }} </span>
-                                    <span class="roleTitle" {% if checked != true %}style="color: grey"{% endif %}>{{ taskRole|trans }}</span>
-
-
-                                </a>
-                            </li>
-                        {% endfor %}
+                        <li>
+                            <a href="#" class="roleFilter" data-value="" data-status="{#{% if checked != true %}0{% else %}#}1{#{% endif %}#}">
+                                <span class="arrow" style="color: grey; {#{% if checked != true %}display: none;{% endif %}#}">{# >#}</span>
+                                <span class="roleTitle">{% trans %}Whole list{% endtrans %}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="roleFilter" data-value="old" data-status="{#{% if checked != true %}0{% else %}#}0{#{% endif %}#}">
+                                <span class="arrow" style="color: grey; {#{% if checked != true %}display: none;{% endif %}#}">{# >#}</span>
+                                <span class="roleTitle" style="color: grey">{% trans %}Сlosed tasks{% endtrans %}</span>
+                            </a>
+                        </li>
                         <br>
+{#
                         <label><input type="checkbox" id="oldFilter" value="1"/>{% trans %}Show closed{% endtrans %}</label>
+#}
 
                     </ul>
                 </div>
