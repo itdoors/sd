@@ -27,7 +27,16 @@
     {% endif %}
 </td>
 <td>{{ item.dogovorStartdatetime == '' ? '' : item.dogovorStartdatetime|date('d.m.Y') }}</td>
-<td>{{ item.dogovorStopdatetime == '' ? '' : item.dogovorStopdatetime|date('d.m.Y') }}</td>
+<td>
+    {% if 
+        item.dogovorStopdatetime == ''
+        or
+        'now'|date_modify("-2 mont")|date('U') > item.dogovorStopdatetime|date('U') and item.dogovorIsActive and item.dogovorProlongationDate == ''
+    %}
+        <div class="label label-sm label-danger"><i class="fa fa-bell-o"></i></div>
+    {% endif %}
+    {{ item.dogovorStopdatetime == '' ? '' : item.dogovorStopdatetime|date('d.m.Y') }}
+</td>
 <td>
     {% if item.dogovorProlongation %}
         {% trans from 'messages'%}Yes{% endtrans %}
@@ -35,7 +44,20 @@
         {% trans from 'messages'%}No{% endtrans %}
     {% endif %}
 </td>
-<td>{{ item.dogovorProlongationDate == '' ? '' : item.dogovorProlongationDate|date('d.m.Y') }}</td>
+<td>
+    {% if 
+        item.dogovorIsActive
+        and
+        (
+            item.dogovorProlongationDate == ''
+            or
+            'now'|date_modify("-2 mont")|date('U') > item.dogovorProlongationDate|date('U')
+        )
+    %}
+        <div class="label label-sm label-danger"><i class="fa fa-bell-o"></i></div>
+    {% endif %}
+    {{ item.dogovorProlongationDate == '' ? '' : item.dogovorProlongationDate|date('d.m.Y') }}
+</td>
 <td>
     {% if item.dogovorIsActive %}
         <span class="label label-success">{% trans from 'messages'%}Active{% endtrans %}</span>
