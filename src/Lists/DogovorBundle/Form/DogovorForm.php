@@ -114,12 +114,59 @@ class DogovorForm extends AbstractType
 
                 $translator = $container->get('translator');
 
+                $customer = $data->getCustomer();
+
+                $performer = $data->getPerformer();
+
                 if ($data->getStartdatetime() >= $data->getStopdatetime() && $data->getStartdatetime()) {
                     $msgString = "Start date can't be greater then stop date";
 
                     $msg = $translator->trans($msgString, array(), 'ListsDogovorBundle');
 
                     $form->addError(new FormError($msg));
+                }
+                if ($customer && $customer->getEdrpou() == '') {
+                    $msgString = "Customer dont have edrpou";
+
+                    $msg = $translator->trans($msgString, array(), 'ListsOrganizationBundle');
+
+                    $form->addError(new FormError($msg));
+                }
+                if ($performer && $performer->getEdrpou() == '') {
+                    $msgString = "Performer dont have edrpou";
+
+                    $msg = $translator->trans($msgString, array(), 'ListsOrganizationBundle');
+
+                    $form->addError(new FormError($msg));
+                }
+                if (
+                        $performer
+                        &&
+                        $performer->getEdrpou() !== ''
+                        &&
+                        $customer
+                        &&
+                        $customer->getEdrpou() !== ''
+                        &&
+                        $data->getNumber()
+                        &&
+                        $data->getStartdatetime()
+                    ) {
+                    $em = $container->get('doctrine')->getManager();
+                    $dogovor = $em->getRepository('ListsDogovorBundle:Dogovor')
+                        ->findBy(array(
+                            'customer' => $customer,
+                            'performer' => $performer,
+                            'number' => $data->getNumber(),
+                            'startdatetime' => $data->getStartdatetime()
+                        ));
+                    if ($dogovor) {
+                        $msgString = "This document has already been added <a>df</a>";
+
+                        $msg = $translator->trans($msgString, array(), 'ListsDogovorBundle');
+
+                        $form->addError(new FormError($msg));
+                    }
                 }
             }
         );
