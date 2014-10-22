@@ -84,9 +84,12 @@ class TaskService
                 $text .= "<br>";
                 $text .= '<b>'.$translator->trans('Your role', array (), 'SDTaskBundle').':</b> ';
                 $text .= $translator->trans($taskUserRole->getRole(), array(), 'SDTaskBundle');
+                $text .= "<br>";
 
                 $url = $this->container->get('router')->generate(
-                    'sd_task_homepage'
+                    'sd_task_homepage',
+                    array(),
+                    true
                 ).'?id='.$taskUserRole->getId();
                 $text .= '<b>'.$translator->trans('Link to task', array (), 'SDTaskBundle').':</b> ';
                 $text .= '<a href="'.$url.'">'.$translator->trans('Link', array(), 'SDTaskBundle').'</a>';
@@ -125,7 +128,9 @@ class TaskService
                 $text .= $translator->trans($taskUserRole->getTask()->getStage(), array(), 'SDTaskBundle');
 
                 $url = $this->container->get('router')->generate(
-                    'sd_task_homepage'
+                    'sd_task_homepage',
+                    array(),
+                    true
                 ).'?id='.$taskUserRole->getId();
                 $text .= '<b>'.$translator->trans('Link to task', array (), 'SDTaskBundle').':</b> ';
                 $text .= '<a href="'.$url.'">'.$translator->trans('Link', array(), 'SDTaskBundle').'</a>';
@@ -163,7 +168,9 @@ class TaskService
                 $text .= $additionalInfo['resolution'];
 
                 $url = $this->container->get('router')->generate(
-                    'sd_task_homepage'
+                    'sd_task_homepage',
+                    array(),
+                    true
                 ).'?id='.$taskUserRole->getId();
                 $text .= '<b>'.$translator->trans('Link to task', array (), 'SDTaskBundle').':</b> ';
                 $text .= '<a href="'.$url.'">'.$translator->trans('Link', array(), 'SDTaskBundle').'</a>';
@@ -213,7 +220,9 @@ class TaskService
                 }
 
                 $url = $this->container->get('router')->generate(
-                    'sd_task_homepage'
+                    'sd_task_homepage',
+                    array(),
+                    true
                 ).'?id='.$taskUserRole->getId();
                 $text .= '<b>'.$translator->trans('Link to task', array (), 'SDTaskBundle').':</b> ';
                 $text .= '<a href="'.$url.'">'.$translator->trans('Link', array(), 'SDTaskBundle').'</a>';
@@ -259,7 +268,9 @@ class TaskService
                 }
 
                 $url = $this->container->get('router')->generate(
-                    'sd_task_homepage'
+                    'sd_task_homepage',
+                    array(),
+                    true
                 ).'?id='.$taskUserRole->getId();
                 $text .= '<b>'.$translator->trans('Link to task', array (), 'SDTaskBundle').':</b> ';
                 $text .= '<a href="'.$url.'">'.$translator->trans('Link', array(), 'SDTaskBundle').'</a>';
@@ -305,7 +316,9 @@ class TaskService
                 }
 
                 $url = $this->container->get('router')->generate(
-                    'sd_task_homepage'
+                    'sd_task_homepage',
+                    array(),
+                    true
                 ).'?id='.$taskUserRole->getId();
                 $text .= '<b>'.$translator->trans('Link to task', array (), 'SDTaskBundle').':</b> ';
                 $text .= '<a href="'.$url.'">'.$translator->trans('Link', array(), 'SDTaskBundle').'</a>';
@@ -347,7 +360,9 @@ class TaskService
                 $text .= "<br>";
 
                 $url = $this->container->get('router')->generate(
-                    'sd_task_homepage'
+                    'sd_task_homepage',
+                    array(),
+                    true
                 ).'?id='.$taskUserRole->getId();
                 $text .= '<b>'.$translator->trans('Link to task', array (), 'SDTaskBundle').':</b> ';
                 $text .= '<a href="'.$url.'">'.$translator->trans('Link', array(), 'SDTaskBundle').'</a>';
@@ -372,6 +387,90 @@ class TaskService
 
             }
 
+        }
+
+        $cron = $this->container->get('it_doors_cron.service');
+        $cron->addSendEmails();
+    }
+
+    /**
+     * @return void
+     */
+    public function informEndTask()
+    {
+        $em = $this->container->get('doctrine')->getManager();
+
+        $taskUserRoleRepo = $em->getRepository('SDTaskBundle:TaskUserRole');
+        $taskEndDateRepo = $em->getRepository('SDTaskBundle:TaskEndDate');
+
+        $stageAcceptedDate = $em->getRepository('SDTaskBundle:Stage')
+            ->findBy(
+                array(
+                    'name' => 'accepted',
+                    'model' => 'task_end_date'
+                ),
+                array(
+                    'id' => 'DESC'
+                )
+            );
+
+        $informTaskUserRoles = $taskUserRoleRepo->getInformEntities();
+
+        $translator = $this->container->get('translator');
+        $emailService = $this->container->get('it_doors_email.service');
+
+        $subject = $translator->trans('Task end date soon', array(), 'SDTaskBundle');
+
+        if (count($informTaskUserRoles)) {
+            foreach ($informTaskUserRoles as $taskUserRole) {
+                $dateEnd = $taskEndDateRepo->findOneBy(
+                    array(
+                        'task' => $taskUserRole->getTask(),
+                        'stage' => $stageAcceptedDate
+                    ),
+                    array(
+                        'id' => 'DESC'
+                    )
+                );
+                $text = '<i>'.$translator->trans('End date to this task is soon', array(), 'SDTaskBundle').':</i> ';
+                $text .= "<br>";
+
+                $text .= '<b>'.$translator->trans('Task', array(), 'SDTaskBundle').':</b> ';
+                $text .= $taskUserRole->getTask()->getTitle();
+                $text .= "<br>";
+
+                $text .= '<b>'.$translator->trans('Task end date', array(), 'SDTaskBundle').':</b> ';
+                $text .= $dateEnd->getEndDateTime()->format('d-m-Y H:i');
+                $text .= "<br>";
+
+                $url = $this->container->get('router')->generate(
+                    'sd_task_homepage',
+                    array(),
+                    true
+                ).'?id='.$taskUserRole->getId();
+                $text .= '<b>'.$translator->trans('Link to task', array (), 'SDTaskBundle').':</b> ';
+                $text .= '<a href="'.$url.'">'.$translator->trans('Link', array(), 'SDTaskBundle').'</a>';
+
+                $emails = array();
+                $userEmail = $taskUserRole->getUser()->getEmail();
+                if ($userEmail) {
+                    $emails[] = $userEmail;
+                }
+
+                $emailService->send(
+                    null,
+                    'empty-template',
+                    array (
+                        'users' => $emails,
+                        'variables' => array (
+                            '${subject}$' => $subject,
+                            '${text}$' => $text
+                        )
+                    )
+                );
+
+
+            }
         }
 
         $cron = $this->container->get('it_doors_cron.service');

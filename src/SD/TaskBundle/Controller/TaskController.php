@@ -505,14 +505,21 @@ class TaskController extends Controller
             $this->closeDateRequest($id);
         }
 
+        $translator = $this->get('translator');
+
         $stageName = $stage;
+        $additionalComment = '';
+        if ($stage == 'checking') {
+            $additionalComment = $translator->trans('Make task done', array(), 'SDTaskBundle').'. '.
+                $translator->trans('Checking by controller', array(), 'SDTaskBundle').'.';
+        }
+
         $stage = $em->getRepository('SDTaskBundle:Stage')->findOneBy(array(
             'name' => $stage,
             'model' => 'task'
         ));
-        $translator = $this->get('translator');
 
-        $comment = $translator->trans('Changed the task stage', array(), 'SDTaskBundle');
+        $comment = $additionalComment."\n".$translator->trans('Changed the task stage', array(), 'SDTaskBundle');
         $stageTrans = $translator->trans($stageName, array(), 'SDTaskBundle');
         $text = $comment.' :'.$stageTrans;
         if ($commentValue) {
