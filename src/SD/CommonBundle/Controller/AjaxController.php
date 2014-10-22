@@ -3940,8 +3940,9 @@ class AjaxController extends BaseFilterController
 
         $pk = $this->get('request')->request->get('pk');
         $name = $this->get('request')->request->get('name');
-        $value = $this->get('request')->request->get('value');
+        $valueTemp = $this->get('request')->request->get('value');
 
+        $value = trim($valueTemp);
         $methodSet = 'set' . ucfirst($name);
 
         $object = $this->getDoctrine()
@@ -3952,12 +3953,12 @@ class AjaxController extends BaseFilterController
             $methodGet = 'get' . ucfirst($name);
             $type = gettype($object->$methodGet());
 
-            if (in_array($type, array('integer'))) {
+            if (in_array($type, array('integer', 'object'))) {
                 $value = null;
             }
         }
 
-        $object->$methodSet(trim($value));
+        $object->$methodSet($value);
 
         $validator = $this->get('validator');
 
