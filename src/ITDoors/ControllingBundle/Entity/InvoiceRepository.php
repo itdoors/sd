@@ -2183,10 +2183,22 @@ class InvoiceRepository extends EntityRepository
                 break;
             case 'contacts':
                 $subQueryCase = $entitie->expr()->andx(
-                    $entitie->expr()->eq('mc.modelId', 'customer.id'),
                     $entitie->expr()->orX(
-                        $entitie->expr()->eq('mc.modelName', ':text'),
-                        $entitie->expr()->eq('mc.modelName', ':textdepartments')
+                        $entitie->expr()->andx(
+                            $entitie->expr()->eq('mc.modelName', ':text'),
+                            $entitie->expr()->eq('mc.modelId', 'customer.id')
+                        ),
+                        $entitie->expr()->andx(
+                            $entitie->expr()->eq('mc.modelName', ':textdepartments'),
+                            $entitie->expr()->in(
+                                'mc.modelId',
+                                '
+                                  SELECT dep.id
+                                  FROM Lists\DepartmentBundle\Entity\Departments dep
+                                  WHERE dep.organizationId = customer.id
+                                '
+                            )
+                        )
                     )
                 );
                 $subQuerySendEmail = $entitie->expr()->andx(
