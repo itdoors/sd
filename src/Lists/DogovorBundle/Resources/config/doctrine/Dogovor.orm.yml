@@ -107,6 +107,7 @@ Lists\DogovorBundle\Entity\Dogovor:
         organizationId:
             type: integer
             column: organization_id
+            nullable: true
         cityId:
             type: integer
             column: city_id

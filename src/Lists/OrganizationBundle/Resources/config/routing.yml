@@ -15,6 +15,9 @@ lists_sales_organization_show:
     pattern:  /lists/sales/organization/show/{id}
     defaults: { _controller: ListsOrganizationBundle:Sales:show }
 
+lists_sales_organization_show_empty:
+    pattern:  /lists/salesdispatcher/organization/show/
+
 lists_sales_organization_filter:
     pattern:  /lists/sales/organization/filter
     defaults: { _controller: ListsOrganizationBundle:Sales:filter }
@@ -73,6 +76,9 @@ lists_sales_dispatcher_organization_show:
     pattern:  /lists/salesdispatcher/organization/show/{id}
     defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:show }
 
+lists_sales_dispatcher_organization_show_empty:
+    pattern:  /lists/salesdispatcher/organization/show/
+
 lists_sales_dispatcher_organization_filter:
     pattern:  /lists/salesdispatcher/organization/filter
     defaults: { _controller: ListsOrganizationBundle:SalesDispatcher:filter }
@@ -106,6 +112,9 @@ lists_sales_admin_organization_new:
 lists_sales_admin_organization_show:
     pattern:  /lists/salesadmin/organization/show/{id}
     defaults: { _controller: ListsOrganizationBundle:SalesAdmin:show }
+
+lists_sales_admin_organization_show_empty:
+    pattern:  /lists/salesdispatcher/organization/show/
 
 lists_sales_admin_organization_filter:
     pattern:  /lists/salesadmin/organization/filter
@@ -156,6 +165,9 @@ lists_dogovor_admin_organization_show:
     pattern:  /lists/dogovor/admin/organization/show/{id}
     defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:show }
 
+lists_dogovor_admin_organization_show_empty:
+    pattern:  /lists/salesdispatcher/organization/show/
+
 lists_dogovor_admin_organization_filter:
     pattern:  /lists/dogovor/admin/organization/filter
     defaults: { _controller: ListsOrganizationBundle:DogovorAdmin:filter }
@@ -192,6 +204,9 @@ lists_competitors_organization_new:
 lists_competitors_organization_show:
     pattern:  /lists/competitors/organization/show/{id}
     defaults: { _controller: ListsOrganizationBundle:Competitors:show }
+
+lists_competitors_organization_show_empty:
+    pattern:  /lists/salesdispatcher/organization/show/
 
 lists_competitors_organization_filter:
     pattern:  /lists/competitors/organization/filter
