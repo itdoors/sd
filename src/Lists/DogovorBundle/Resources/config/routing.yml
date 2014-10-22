@@ -31,6 +31,15 @@ lists_dogovor_list_for_organization:
     pattern:  /lists/dogovor/for/organization/{id}
     defaults: { _controller: ListsDogovorBundle:Dogovor:forOrganization }
 
+lists_dogovor_dogovor_index_danger:
+    pattern:  /lists/dogovor/dogovor/danger/index
+    defaults: { _controller: ListsDogovorBundle:Dogovor:listDanger }
+    
+lists_dogovor_ajax_element_danger:
+    pattern:  /lists/dogovor/ajax/danger/element/{id}
+    defaults: { _controller: ListsDogovorBundle:Dogovor:elementDanger }
+
+    
 #DOP DOGOVOR ROUTE
 lists_dogovor_dopdogovor_list:
     pattern:  /lists/dogovor/dopdogovor/list/{dogovorId}

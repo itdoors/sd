@@ -85,7 +85,11 @@
         });
     </script>
 {%  endif %}
-
+{% if app.user.hasRole('ROLE_DOGOVORADMIN') %}
+    <div id="datatable_ajax_dogovor" data-url="{{ url('lists_dogovor_dogovor_index_danger') }}">
+        {{ render(controller('ListsDogovorBundle:Dogovor:listDanger')) }}
+    </div>
+{%  endif %}
 {% if debitors %}
     <div class="portlet box blue">
         <div class="portlet-title">

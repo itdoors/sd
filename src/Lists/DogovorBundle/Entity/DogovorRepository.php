@@ -70,6 +70,58 @@ class DogovorRepository extends EntityRepository
 
         return $query;
     }
+    /**
+     * Returns dogovor collection depending on filter
+     *
+     * @param mixed[] $filters
+     * @param int     $id
+     *
+     * @return Query
+     */
+    public function getAllDanger()
+    {
+        $date = new \DateTime();
+        /** @var \Doctrine\ORM\QueryBuilder $sql*/
+        $sql = $this->createQueryBuilder('d');
+        $sqlCount = $this->createQueryBuilder('d');
+
+        $this->processSelect($sql);
+        $this->processCount($sqlCount);
+
+        $this->processBaseQuery($sql);
+        $this->processBaseQuery($sqlCount);
+        $sql
+            ->andWhere(
+                'd.stopdatetime is NULL'
+                . ' OR '
+                . '(d.stopdatetime < :date AND d.isActive = true AND d.prolongationDate is NULL)'
+                . ' OR '
+                . '(d.isActive = true AND d.prolongationDate is NULL AND d.stopdatetime < :date)'
+                . ' OR '
+                . '(d.isActive = true AND d.prolongationDate < :date)'
+            )
+            ->setParameter(':date', $date->modify('-2 month'));
+        $sqlCount
+            ->andWhere(
+                'd.stopdatetime is NULL'
+                . ' OR '
+                . '(d.stopdatetime < :date AND d.isActive = true AND d.prolongationDate is NULL)'
+                . ' OR '
+                . '(d.isActive = true AND d.prolongationDate is NULL AND d.stopdatetime < :date)'
+                . ' OR '
+                . '(d.isActive = true AND d.prolongationDate < :date)'
+            )
+            ->setParameter(':date', $date->modify('-2 month'));
+
+        $this->processOrdering($sql);
+
+        $query = array(
+            'entities' => $sql->getQuery(),
+            'count' => $sqlCount->getQuery()->getSingleScalarResult()
+        );
+
+        return $query;
+    }
 
     /**
      * Processes sql query. adding select

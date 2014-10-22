@@ -25,14 +25,14 @@ Edit: Редактировать
 Organization: Организация
 Customer: Заказчик
 Performer: Исполнитель
-Startdatetime: Дата заключения
+Startdatetime: Заключения
 Enter Startdatetime: Введите дату заключения
-Stopdatetime: Дата окончания
+Stopdatetime: Окончания
 Enter Stopdatetime: Введите дату окончания
 Launch Date: Дата запуска
 Enter Launch Date: Введите дату запуска
 Prolongation: Пролонгация
-Prolongation Date: Дата Пролонгации
+Prolongation Date: Конечная
 Enter Prolongation Date: Укажите дату пролонгации
 Status: Статус
 Subject: Предмет
@@ -119,3 +119,5 @@ Document: Документ
 Select date range: Выберите диапазон даты
 Select date: Выберите тип даты
 This document has already been added: Этот договор уже добавлен
+Change last date dogovor: Изменение конечной даты договора
+Last date action dogovors: Конечная дата действия договора
