@@ -1,4 +1,10 @@
 {% trans_default_domain 'ListsDogovorBundle' %}
+{% set roleUser = 'sales' %}
+{% if is_granted('ROLE_SALESADMIN') %}
+    {% set roleUser = 'sales_admin' %}
+{% elseif is_granted('ROLE_DOGOVORADMIN') %}
+    {% set roleUser = 'dogovor_admin' %}
+{% endif %}
 <script type="text/javascript">
     $(document).ready(function(){
 
@@ -16,6 +22,12 @@
                 placeholder: '{% trans %}Select Organization{% endtrans %}',
                 minimumInputLength: 2,
                 width: 250
+            },
+            success: function(response, newValue) {
+                var url = "{{ path('lists_' ~ roleUser ~ '_organization_show_empty') }}"+newValue;
+                var id = $(this).attr('id');
+                $('#'+id+'Url').remove();
+                $(' <a id="'+id+'Url" target="_blank" href="'+url+'">({% trans %}Open{% endtrans%})</a>').insertAfter($(this));
             }
         });
         $('#organizationId').editable({
@@ -154,14 +166,8 @@
                 <a href="#" id="customerId"  data-type="select2" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.customerName }}" data-placement="right" data-original-title="{% trans %}Enter Customer{% endtrans %}">
                     {{ dogovor.customerName }}
                 </a>
-                {% set role = 'sales' %}
-                {% if is_granted('ROLE_SALESADMIN') %}
-                    {% set role = 'sales_admin' %}
-                {% elseif is_granted('ROLE_DOGOVORADMIN') %}
-                    {% set role = 'dogovor_admin' %}
-                {% endif %}
                 {% if  dogovor.customerName %}
-                    <a href="{{ path('lists_' ~ role ~ '_organization_show', { id:dogovor.customerId }) }}" target="_blank">({% trans %}Open{% endtrans%})</a>
+                    <a id="customerIdUrl" href="{{ path('lists_' ~ roleUser ~ '_organization_show', { id:dogovor.customerId }) }}" target="_blank">({% trans %}Open{% endtrans%})</a>
                 {% endif %}
             </td>
             <td>{% trans %}Performer{% endtrans %}</td>
@@ -170,7 +176,7 @@
                     {{ dogovor.performerName }}
                 </a>
                 {% if  dogovor.performerName %}
-                    <a href="{{ path('lists_' ~ role ~ '_organization_show', { id:dogovor.performerId }) }}" target="_blank">({% trans %}Open{% endtrans%})</a>
+                    <a id="performerIdUrl"  href="{{ path('lists_' ~ roleUser ~ '_organization_show', { id:dogovor.performerId }) }}" target="_blank">({% trans %}Open{% endtrans%})</a>
                 {% endif %}
             </td>
         </tr>
