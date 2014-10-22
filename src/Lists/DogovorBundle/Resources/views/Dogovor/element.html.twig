@@ -31,7 +31,7 @@
     {% if 
         item.dogovorStopdatetime == ''
         or
-        item.dogovorProlongation and 'now'|date_modify("-2 mont")|date('U') > item.dogovorStopdatetime|date('U') and item.dogovorIsActive and item.dogovorProlongationDate == ''
+        'now'|date_modify("-2 mont")|date('U') > item.dogovorStopdatetime|date('U') and item.dogovorIsActive and item.dogovorProlongationDate == ''
     %}
         <div class="label label-sm label-danger"><i class="fa fa-bell-o"></i></div>
     {% endif %}
@@ -46,8 +46,6 @@
 </td>
 <td>
     {% if 
-        item.dogovorProlongation
-        and
         item.dogovorIsActive
         and
         (
