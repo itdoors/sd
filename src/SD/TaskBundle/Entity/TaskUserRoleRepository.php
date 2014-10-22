@@ -70,6 +70,9 @@ class TaskUserRoleRepository extends EntityRepository
             $sql = $this->getBaseQueryListFilter();
         }
 
+
+        $user = $filterArray['user'];
+
         if (isset($filterArray['role']) && $filterArray['role'] == 'old') {
             $sql->where('s.name IN (:stage)')
                 ->setParameter(':stage', $notViewingStages);
@@ -122,6 +125,7 @@ class TaskUserRoleRepository extends EntityRepository
                             LEFT JOIN tc.stage as stageTaskCommit
                             WHERE t.id = tCommit.id
                                 AND stageTaskCommit.name = :sign_up
+                                AND turCommit.user = :user
                         )'
                     )
                     ->setParameter(':sign_up', 'sign_up');
@@ -137,10 +141,8 @@ class TaskUserRoleRepository extends EntityRepository
             }
         }
 
-        if (isset($filterArray['user'])) {
             $sql->andWhere('u = :user')
-                ->setParameter(':user', $filterArray['user']);
-        }
+                ->setParameter(':user', $user);
 
         if ($type == 'count') {
             //$sql->orderBy('t.createDate', 'DESC');

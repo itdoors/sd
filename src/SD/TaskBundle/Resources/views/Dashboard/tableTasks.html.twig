@@ -162,8 +162,16 @@
                                 fa-eye
                         #}
                     {% endif %}
-                <label><input type="checkbox" class="roleFilter" value="{{ taskRole }}"/>{{ taskRole|trans }}</label>
                 {% endfor %}
+
+                <label><input type="radio" name="taskFilter" class="roleFilter" value="author"/>{{ 'I am author'|trans }}</label>
+                <label><input type="radio" name="taskFilter" class="roleFilter" value="performer"/>{{ 'On performing'|trans }}</label>
+                <label><input type="radio" name="taskFilter" class="roleFilter" value="controller"/>{{ 'On controlling'|trans }}</label>
+                <label><input type="radio" name="taskFilter" class="roleFilter" value="matcher"/>{{ 'On matching'|trans }}</label>
+                <label><input type="radio" name="taskFilter" class="roleFilter" value="viewer"/>{{ 'On viewing'|trans }}</label>
+                <label><input type="radio" name="taskFilter" class="roleFilter" value="" checked/>{{ 'Whole list'|trans }}</label>
+                <label><input type="radio" name="taskFilter" class="roleFilter" value="old"/>{{ 'Сlosed tasks'|trans }}</label>
+
 {#
                 <label><input type="checkbox" id="set_filters_on"/>{% trans %}All{% endtrans %}</label>
 #}
