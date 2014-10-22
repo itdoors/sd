@@ -160,14 +160,18 @@
                 {% elseif is_granted('ROLE_DOGOVORADMIN') %}
                     {% set role = 'dogovor_admin' %}
                 {% endif %}
-                <a href="{{ path('lists_' ~ role ~ '_organization_show', { id:dogovor.customerId }) }}" target="_blank">({% trans %}Open{% endtrans%})</a>
+                {% if  dogovor.customerName %}
+                    <a href="{{ path('lists_' ~ role ~ '_organization_show', { id:dogovor.customerId }) }}" target="_blank">({% trans %}Open{% endtrans%})</a>
+                {% endif %}
             </td>
             <td>{% trans %}Performer{% endtrans %}</td>
             <td>
                 <a href="#" id="performerId"  data-type="select2" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.performerName }}" data-placement="right" data-original-title="{% trans %}Enter Performer{% endtrans %}">
                     {{ dogovor.performerName }}
                 </a>
-                 <a href="{{ path('lists_' ~ role ~ '_organization_show', { id:dogovor.performerId }) }}" target="_blank">({% trans %}Open{% endtrans%})</a>
+                {% if  dogovor.performerName %}
+                    <a href="{{ path('lists_' ~ role ~ '_organization_show', { id:dogovor.performerId }) }}" target="_blank">({% trans %}Open{% endtrans%})</a>
+                {% endif %}
             </td>
         </tr>
         <tr> {# 4 #}
