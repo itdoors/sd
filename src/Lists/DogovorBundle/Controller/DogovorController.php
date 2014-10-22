@@ -63,16 +63,20 @@ class DogovorController extends BaseController
     {
         $baseFilter = $this->container->get('it_doors_ajax.base_filter_service');
      
-        $namespace = 'Danger';
+        $namespace = 'dogovorDanger';
 
         /** @var \Lists\DogovorBundle\Entity\DogovorRepository $repository */
         $repository = $this->getDoctrine()
             ->getRepository('ListsDogovorBundle:Dogovor');
 
-        /** @var \Doctrine\ORM\Query */
-        $items = $repository->getAllDanger();
-        $entities = $items['entities'];
-        $count = $items['count'];
+        if ($this->getUser()->hasRole('ROLE_DOGOVORADMIN')) {
+            /** @var \Doctrine\ORM\Query */
+            $items = $repository->getAllDanger();
+            $entities = $items['entities'];
+            $count = $items['count'];
+        } else {
+            throw new \Exception('You don`t have needed');
+        }
         
         $page = $baseFilter->getPaginator($namespace);
         if (!$page) {
