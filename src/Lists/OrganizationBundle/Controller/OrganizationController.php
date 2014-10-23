@@ -46,6 +46,7 @@ class OrganizationController extends BaseController
         $organizationsRepository = $em
             ->getRepository('ListsOrganizationBundle:Organization');
 
+        $departmensQuery = array();
         if (empty($filters)) {
             $filters['isFired'] = 'No fired';
             $this->setFilters($namespase, $filters);
@@ -59,11 +60,13 @@ class OrganizationController extends BaseController
 
                 /** @var \SD\UserBundle\Entity\User $user */
                 $user = $em->getRepository('SDUserBundle:User')->find($userId);
-                
 
-                $departmensQuery = $user->getStuff()->getStuffDepartments()->getDepartments();
-                
-                echo count($departmensQuery);die;
+                $stuffDepartmensQuery = $user->getStuff()->getStuffDepartments();
+                foreach ($stuffDepartmensQuery as $stuff) {
+                    $departments = $stuff->getDepartments();
+                    $departmensQuery[$departments->getId()] = $departments;
+
+                }
             } else {
                 $departmensQuery = array();
             }
@@ -90,37 +93,64 @@ class OrganizationController extends BaseController
         $userIdOld = $filters['user'];
         $userId = $request->get('userId');
         $organizationIds = $request->get('organizations');
+        $departmensIds = $request->get('departmens');
 
-        if (empty($userIdOld) || empty($userId) || empty($organizationIds)) {
+        if (empty($userIdOld) || empty($userId) || (empty($organizationIds) && empty($departmensIds))) {
             return new Response(json_encode(array('error' => 'error data')));
         }
         $em = $this->getDoctrine()->getManager();
         /** @var \SD\UserBundle\Entity\User $u */
         $u = $this->getDoctrine()->getRepository('SDUserBundle:User')->find($userId);
-        /** @var \Lists\OrganizationBundle\Entity\OrganizationUserRepository $oU */
-        $oU = $this->getDoctrine()
-            ->getRepository('ListsOrganizationBundle:OrganizationUser');
+        
+        if (!empty($organizationIds)) {
+            /** @var \Lists\OrganizationBundle\Entity\OrganizationUserRepository $oU */
+            $oU = $this->getDoctrine()
+                ->getRepository('ListsOrganizationBundle:OrganizationUser');
 
-        $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')
-            ->findOneBy(array('lukey' => 'manager_organization'));
+            $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')
+                ->findOneBy(array('lukey' => 'manager_organization'));
 
-        foreach ($organizationIds as $organizationId) {
-            $organizationUser = $oU->findOneBy(array(
-                'organizationId' => $organizationId,
-                'userId' => $userIdOld
-                    ));
-            if (!$organizationUser) {
-                $organization = $this->getDoctrine()
-                    ->getRepository('ListsOrganizationBundle:Organization')->find($organizationId);
-                $organizationUser = new OrganizationUser();
-                $organizationUser->setLookup($lookup);
-                $organizationUser->setOrganization($organization);
+            foreach ($organizationIds as $organizationId) {
+                $organizationUser = $oU->findOneBy(array(
+                    'organizationId' => $organizationId,
+                    'userId' => $userIdOld
+                        ));
+                if (!$organizationUser) {
+                    $organization = $this->getDoctrine()
+                        ->getRepository('ListsOrganizationBundle:Organization')->find($organizationId);
+                    $organizationUser = new OrganizationUser();
+                    $organizationUser->setLookup($lookup);
+                    $organizationUser->setOrganization($organization);
+                }
+                $organizationUser->setUser($u);
+                $em->persist($organizationUser);
+
+                $serviceHandlingUser = $this->container->get('lists_handling.user.service');
+                $serviceHandlingUser->changeManagerProject($organizationId, $userId);
             }
-            $organizationUser->setUser($u);
-            $em->persist($organizationUser);
-
-            $serviceHandlingUser = $this->container->get('lists_handling.user.service');
-            $serviceHandlingUser->changeManagerProject($organizationId, $userId);
+        }
+        if ($this->getUser()->hasRole('ROLE_HRADMIN') && !empty($departmensIds)) {
+            $userOld = $em
+                    ->getRepository('SDUserBundle:User')
+                    ->find($userIdOld);
+            $user = $em
+                    ->getRepository('SDUserBundle:User')
+                    ->find($userId);
+            foreach ($departmensIds as $departmenId) {
+                $department = $em
+                    ->getRepository('ListsDepartmentBundle:Department')
+                    ->find($departmenId);
+                $stuffDepartments = $em
+                    ->getRepository('SDUserBundle:StuffDepartments')
+                    ->findBy(array (
+                        'stuff' => $userOld,
+                        'departments' => $department
+                    ));
+                foreach ($stuffDepartments as $stuffDepartment) {
+                    $stuffDepartment->setStuff($user);
+                    $em->persist($stuffDepartment);
+                }
+            }
         }
         $em->flush();
 

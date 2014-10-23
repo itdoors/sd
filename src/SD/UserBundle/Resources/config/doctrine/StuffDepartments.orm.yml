@@ -21,6 +21,7 @@ SD\UserBundle\Entity\StuffDepartments:
                 claimtype_id:
                     referencedColumnName: id
             orphanRemoval: false
+    manyToOne:
         stuff:
             targetEntity: Stuff
             cascade: {  }
@@ -30,7 +31,6 @@ SD\UserBundle\Entity\StuffDepartments:
                 stuff_id:
                     referencedColumnName: id
             orphanRemoval: false
-    manyToOne:
         departments:
             targetEntity: Lists\DepartmentBundle\Entity\Departments
             cascade: {  }
