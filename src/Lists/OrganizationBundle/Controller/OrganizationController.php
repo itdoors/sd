@@ -59,8 +59,11 @@ class OrganizationController extends BaseController
 
                 /** @var \SD\UserBundle\Entity\User $user */
                 $user = $em->getRepository('SDUserBundle:User')->find($userId);
+                
 
                 $departmensQuery = $user->getStuff()->getStuffDepartments()->getDepartments();
+                
+                echo count($departmensQuery);die;
             } else {
                 $departmensQuery = array();
             }

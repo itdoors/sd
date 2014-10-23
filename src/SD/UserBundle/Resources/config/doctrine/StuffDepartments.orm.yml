@@ -21,15 +21,6 @@ SD\UserBundle\Entity\StuffDepartments:
                 claimtype_id:
                     referencedColumnName: id
             orphanRemoval: false
-        departments:
-            targetEntity: Lists\DepartmentBundle\Entity\Departments
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                departments_id:
-                    referencedColumnName: id
-            orphanRemoval: false
         stuff:
             targetEntity: Stuff
             cascade: {  }
@@ -37,6 +28,16 @@ SD\UserBundle\Entity\StuffDepartments:
             inversedBy: stuffDepartments
             joinColumns:
                 stuff_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    manyToOne:
+        departments:
+            targetEntity: Lists\DepartmentBundle\Entity\Departments
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                departments_id:
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks: {  }
