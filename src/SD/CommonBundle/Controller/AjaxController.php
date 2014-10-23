@@ -3735,7 +3735,7 @@ class AjaxController extends BaseFilterController
             $methodGet = 'get' . ucfirst($name);
             $type = gettype($object->$methodGet());
 
-            if (in_array($type, array('integer'))) {
+            if (in_array($type, array('integer', 'object'))) {
                 $value = null;
             }
         }
