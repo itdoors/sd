@@ -85,7 +85,7 @@
         });
     </script>
 {%  endif %}
-{% if app.user.hasRole('ROLE_DOGOVORADMIN') or app.user.hasRole('ROLE_OPER') or app.user.hasRole('ROLE_SALES') %}
+{% if app.user.hasRole('ROLE_DOGOVORADMIN') or app.user.hasRole('ROLE_SALES') %}
     <div id="datatable_ajax_dogovor" data-url="{{ url('lists_dogovor_dogovor_index_danger') }}">
         {{ render(controller('ListsDogovorBundle:Dogovor:listDanger')) }}
     </div>
