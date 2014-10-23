@@ -129,6 +129,9 @@ class InvoiceController extends BaseFilterController
         $companystryctyre = null;
         if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
             $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
+            if (in_array($companystryctyre, array(45, 46, 47))) {
+                $companystryctyre = 3;
+            }
         }
 
         $period = $this->getTab($filterNamespace);
