@@ -277,4 +277,50 @@ class TaskUserRoleRepository extends EntityRepository
 
         return $sql->getQuery()->getResult();
     }
+
+    /**
+     * @return array
+     */
+    public function getInformEntities()
+    {
+        $notViewingStages = $this->notViewingStages;
+        $viewingRoleMatching = $this->viewingRoleMatching;
+
+        $currentDate = new \DateTime();
+        $nextHour = new \DateTime();
+        $nextHour->add(new \DateInterval('PT1H'));
+        $sql = $this->createQueryBuilder('tur')
+            ->leftJoin('tur.role', 'r')
+            ->leftJoin('tur.task', 't')
+            ->leftJoin('t.stage', 's')
+            ->leftJoin('t.taskEndDates', 'ted')
+            ->leftJoin('tur.user', 'u');
+
+        $sql->where('s.name NOT IN (:stage)')
+            ->setParameter(':stage', $notViewingStages);
+
+        $sql->andWhere('(r.name IN (:viewingRoleMatching) OR s.name != :stageMatching)')
+            ->setParameter(':stageMatching', 'matching')
+            ->setParameter(':viewingRoleMatching', $viewingRoleMatching);
+
+        $sql->andWhere('r.name = :performerRole')
+            ->setParameter(':performerRole', 'performer')
+            ->andWhere('ted.endDateTime > :currentValue')
+            ->andWhere('ted.endDateTime < :nextHour')
+            ->setParameter(':currentValue', $currentDate)
+            ->setParameter(':nextHour', $nextHour)
+            ->andWhere(
+                'ted.id IN (
+                            SELECT MAX(tedInner.id) FROM \SD\TaskBundle\Entity\TaskEndDate tedInner
+                                LEFT JOIN tedInner.task taskTedInner
+                                LEFT JOIN tedInner.stage stageTedInner
+                            WHERE taskTedInner.id = t.id
+                                AND stageTedInner.name = :stageAccepted
+                            )'
+            )
+            ->setParameter(':stageAccepted', 'accepted');
+
+
+        return $sql->getQuery()->getResult();
+    }
 }
