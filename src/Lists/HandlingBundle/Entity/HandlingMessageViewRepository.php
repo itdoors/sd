@@ -84,6 +84,16 @@ class HandlingMessageViewRepository extends EntityRepository
                                 ListsHandlingBundle:HandlingMessage hm1
                             WHERE
                                 hm1.handling_id = hmv.handlingId
+                            AND 
+                                hm1.createdate = 
+                                (
+                                    SELECT
+                                        MAX(hm2.createdate)
+                                    FROM
+                                        ListsHandlingBundle:HandlingMessage hm2
+                                    WHERE
+                                        hm2.handling_id = hmv.handlingId
+                                )
                         )'
                 );
         }
