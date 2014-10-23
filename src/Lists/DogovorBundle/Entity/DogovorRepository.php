@@ -73,12 +73,23 @@ class DogovorRepository extends EntityRepository
     /**
      * Returns dogovor collection depending on filter
      *
-     * @param mixed[] $filters
-     * @param int     $id
+     * @param integer $id
      *
      * @return Query
      */
-    public function getAllDanger()
+    public function getAllForManagerOrganization($id)
+    {
+        $sql = $this->createQueryBuilder('d')
+            ->select;
+    }
+    /**
+     * Returns dogovor collection depending on filter
+     *
+     * @param integer $idManager manager organization
+     *
+     * @return Query
+     */
+    public function getAllDanger($idManager)
     {
         $date = new \DateTime();
         /** @var \Doctrine\ORM\QueryBuilder $sql*/
@@ -90,6 +101,16 @@ class DogovorRepository extends EntityRepository
 
         $this->processBaseQuery($sql);
         $this->processBaseQuery($sqlCount);
+        if ($idManager) {
+            $sql
+                ->leftJoin('o.organizationUsers', 'manager')
+                ->andWhere('manager.userId = (:idManager)')
+                ->setParameter(':idManager', $idManager);
+            $sqlCount
+                ->leftJoin('o.organizationUsers', 'manager')
+                ->andWhere('manager.userId = (:idManager)')
+                ->setParameter(':idManager', $idManager);
+        }
         $sql
             ->andWhere(
                 'd.stopdatetime is NULL'

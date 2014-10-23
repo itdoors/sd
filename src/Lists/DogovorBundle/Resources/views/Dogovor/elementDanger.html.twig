@@ -1,8 +1,12 @@
 {% trans_default_domain 'ListsDogovorBundle' %}
 <td>
+    {% if is_granted('ROLE_DOGOVORADMIN') %}
     <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_dogovor_show', { id: item.dogovorId }) }}" data-value="{{ item.dogovorId|e }}">
         {{ item.dogovorId|e }}
     </a>
+    {% else %}
+        {{ item.dogovorId|e }}
+    {% endif %}
 </td>
 <td>{{ item.dogovorNumber|e }}</td>
 <td>
@@ -61,6 +65,7 @@
     {% endif %}
 </td>
 <td>{{ item.dogovorSubject|e }}</td>
+{% if is_granted('ROLE_DOGOVORADMIN') %}
 <td>
     {% set needToProlongate = (item.dogovorProlongationDate|date('U') - "now"|date('U')) < prolongation_limit %}
     {% if needToProlongate %}
@@ -78,3 +83,4 @@
         </a>
     {% endif %}
 </td>
+{% endif %}

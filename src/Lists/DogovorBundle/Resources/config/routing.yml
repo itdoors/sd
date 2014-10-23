@@ -32,11 +32,11 @@ lists_dogovor_list_for_organization:
     defaults: { _controller: ListsDogovorBundle:Dogovor:forOrganization }
 
 lists_dogovor_dogovor_index_danger:
-    pattern:  /lists/dogovor/dogovor/danger/index
+    pattern:  /lists/dogovor/danger/dogovor/index
     defaults: { _controller: ListsDogovorBundle:Dogovor:listDanger }
     
 lists_dogovor_ajax_element_danger:
-    pattern:  /lists/dogovor/ajax/danger/element/{id}
+    pattern:  /lists/dogovor/danger/ajax/element/{id}
     defaults: { _controller: ListsDogovorBundle:Dogovor:elementDanger }
 
     

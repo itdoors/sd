@@ -1,5 +1,5 @@
 {% trans_default_domain 'ListsDogovorBundle' %}
-
+{% if is_granted('ROLE_DOGOVORADMIN') %}
 <div id="form_dogovor_history" class="modal fade" role="basic" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -15,6 +15,7 @@
         <!-- /.modal-content -->
     </div>
 </div>
+{% endif %}
 <div class="portlet box blue">
     <div class="portlet-title">
         <div class="caption"><i class="fa fa-globe"></i> {% trans %}Dogovor list{% endtrans %}</div>
@@ -45,7 +46,9 @@
                     <th>{% trans %}Prolongation Date{% endtrans %} </th>
                     <th>{% trans %}Status{% endtrans %} </th>
                     <th>{% trans %}Subject{% endtrans %} </th>
+                    {% if is_granted('ROLE_DOGOVORADMIN') %}
                     <th>{% trans %}Actions{% endtrans %} </th>
+                    {% endif %}
                 </tr>
                 </thead>
                 <tbody>

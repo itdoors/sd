@@ -62,21 +62,24 @@ class DogovorController extends BaseController
     public function listDangerAction()
     {
         $baseFilter = $this->container->get('it_doors_ajax.base_filter_service');
-     
+
         $namespace = 'dogovorDanger';
 
         /** @var \Lists\DogovorBundle\Entity\DogovorRepository $repository */
         $repository = $this->getDoctrine()
             ->getRepository('ListsDogovorBundle:Dogovor');
-
-        if ($this->getUser()->hasRole('ROLE_DOGOVORADMIN')) {
-            /** @var \Doctrine\ORM\Query */
-            $items = $repository->getAllDanger();
-            $entities = $items['entities'];
-            $count = $items['count'];
-        } else {
+        $idManager = null;
+        if ($this->getUser()->hasRole('ROLE_SALES')) {
+            $idManager = $this->getUser()->getId();
+        }
+        if ($this->getUser()->hasRole('ROLE_OPER')) {
+        }
+        if (!$this->getUser()->hasRole('ROLE_DOGOVORADMIN') && !$this->getUser()->hasRole('ROLE_OPER') && !$this->getUser()->hasRole('ROLE_SALES')) {
             throw new \Exception('You don`t have needed');
         }
+        $items = $repository->getAllDanger($idManager);
+        $entities = $items['entities'];
+        $count = $items['count'];
         
         $page = $baseFilter->getPaginator($namespace);
         if (!$page) {
