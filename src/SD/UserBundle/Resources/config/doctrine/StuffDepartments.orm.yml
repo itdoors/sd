@@ -31,10 +31,10 @@ SD\UserBundle\Entity\StuffDepartments:
                     referencedColumnName: id
             orphanRemoval: false
         stuff:
-            targetEntity: SD\UserBundle\Entity\Stuff
+            targetEntity: Stuff
             cascade: {  }
             mappedBy: null
-            inversedBy: null
+            inversedBy: stuffDepartments
             joinColumns:
                 stuff_id:
                     referencedColumnName: id

@@ -9,7 +9,7 @@
             var blockupdate = $('#datatable_ajax');
              $.ajax({
                 type: 'POST',
-                url: "{{ url('lists_sales_admin_organization_transfer_for_user') }}",
+                url: "{{ url('lists_organization_transfer_for_user') }}",
                 dataType: 'json',
                 data: {
                     organizations: organizations,
@@ -55,6 +55,7 @@
             });
     });
 </script>
+{% if organizations|length > 0 %}
 <div class="table-responsive col-md-12">
     <table class="table table-striped table-bordered table-advance table-hover">
         <thead>
@@ -66,7 +67,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for item in pagination %}
+            {% for item in organizations %}
                 <tr {% if loop.index is odd %}class="color"{% endif %}>
                     <td><input type="checkbox" name="organizations[]" value="{{ item.organizationId|e }}"></td>
                     <td><a target="_blank"
@@ -80,7 +81,30 @@
         </tbody>
     </table>
 </div>
+{% endif %}
+{% if departmens|length > 0 %}
+<div class="table-responsive col-md-12">
+    <table class="table table-striped table-bordered table-advance table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans %}ID{% endtrans %}{{ departmens.name}} </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in departmens %}
+                <tr {% if loop.index is odd %}class="color"{% endif %}>
+                    <td><input type="checkbox" name="departmens[]" value="{{ item.id|e }}"></td>
+                    <td>{{ item.id|e }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% if organizations|length > 0 or departmens|length > 0 %}
 <div class="table-responsive col-md-6">
     <input id="userTo" value="">
     <button type="submit" id="TransferSubmit" name="organizationUserFilterForm[submit]" class="btn blue">{%trans%}Transfer{% endtrans %}</button>
 </div>
+{% endif %}

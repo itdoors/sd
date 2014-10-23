@@ -58,11 +58,14 @@ SD\UserBundle\Entity\Stuff:
             column: companystructure_id
     oneToOne:
         user:
-          targetEntity: User
-          inversedBy: stuff
-          joinColumn:
-            name: user_id
-            referencedColumnName: id
+            targetEntity: User
+            inversedBy: stuff
+            joinColumn:
+                name: user_id
+                referencedColumnName: id
+        stuffDepartments:
+            targetEntity: StuffDepartments
+            mappedBy: stuff
     manyToOne:
         companystructure:
             targetEntity: Lists\CompanystructureBundle\Entity\Companystructure
