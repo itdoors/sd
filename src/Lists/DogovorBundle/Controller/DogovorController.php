@@ -74,13 +74,19 @@ class DogovorController extends BaseController
         }
         if ($this->getUser()->hasRole('ROLE_OPER')) {
         }
-        if (!$this->getUser()->hasRole('ROLE_DOGOVORADMIN') && !$this->getUser()->hasRole('ROLE_OPER') && !$this->getUser()->hasRole('ROLE_SALES')) {
+        if (
+            !$this->getUser()->hasRole('ROLE_DOGOVORADMIN')
+            &&
+            !$this->getUser()->hasRole('ROLE_OPER')
+            &&
+            !$this->getUser()->hasRole('ROLE_SALES')
+        ) {
             throw new \Exception('You don`t have needed');
         }
         $items = $repository->getAllDanger($idManager);
         $entities = $items['entities'];
         $count = $items['count'];
-        
+
         $page = $baseFilter->getPaginator($namespace);
         if (!$page) {
             $page = 1;
