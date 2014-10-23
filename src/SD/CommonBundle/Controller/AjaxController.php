@@ -4221,7 +4221,12 @@ class AjaxController extends BaseFilterController
         $name = $this->get('request')->request->get('name');
 
         if ($name == 'DateEnd') {
-            $value = new \DateTime($this->get('request')->request->get('value'));
+            $value = $this->get('request')->request->get('value');
+            if (empty($value)) {
+                $value = null;
+            } else {
+                $value = new \DateTime($this->get('request')->request->get('value'));
+            }
         } elseif ($name == 'court') {
             $value = (boolean) $this->get('request')->request->get('value');
         } else {
