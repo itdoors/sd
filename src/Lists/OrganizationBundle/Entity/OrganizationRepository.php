@@ -30,7 +30,6 @@ class OrganizationRepository extends EntityRepository
         $this->processSelect($sql);
 
         $this->processBaseQuery($sql);
-        
 
         if (sizeof($userIds)) {
             $this->processUserQuery($sql, $userIds);

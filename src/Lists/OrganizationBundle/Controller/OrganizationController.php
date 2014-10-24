@@ -106,7 +106,7 @@ class OrganizationController extends BaseController
         $em = $this->getDoctrine()->getManager();
         /** @var \SD\UserBundle\Entity\User $u */
         $u = $this->getDoctrine()->getRepository('SDUserBundle:User')->find($userId);
-        
+
         if (!empty($organizationIds)) {
             /** @var \Lists\OrganizationBundle\Entity\OrganizationUserRepository $oU */
             $oU = $this->getDoctrine()
