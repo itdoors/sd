@@ -61,10 +61,17 @@ class OrganizationController extends BaseController
                 /** @var \SD\UserBundle\Entity\User $user */
                 $user = $em->getRepository('SDUserBundle:User')->find($userId);
 
-                $stuffDepartmensQuery = $user->getStuff()->getStuffDepartments();
+                $stuffDepartmensQuery = $user->getStuff()->getStuffDepartments(array(''));
+                $organizations = array();
                 foreach ($stuffDepartmensQuery as $stuff) {
                     $departments = $stuff->getDepartments();
-                    $departmensQuery[$departments->getId()] = $departments;
+                    $organizations[$departments->getOrganizationId()][$departments->getId()] = $departments;
+                }
+                /* order by organization */
+                foreach ($organizations as $organization) {
+                    foreach ($organization as $key => $dep) {
+                        $departmensQuery[$key] = $dep;
+                    }
                 }
             } else {
                 $departmensQuery = array();
