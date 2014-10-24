@@ -412,4 +412,33 @@ class Stuff
     {
         return $this->status;
     }
+    /**
+     * @var \SD\UserBundle\Entity\StuffDepartments
+     */
+    private $stuffDepartments;
+
+
+    /**
+     * Set stuffDepartments
+     *
+     * @param \SD\UserBundle\Entity\StuffDepartments $stuffDepartments
+     * 
+     * @return Stuff
+     */
+    public function setStuffDepartments(\SD\UserBundle\Entity\StuffDepartments $stuffDepartments = null)
+    {
+        $this->stuffDepartments = $stuffDepartments;
+
+        return $this;
+    }
+
+    /**
+     * Get stuffDepartments
+     *
+     * @return \SD\UserBundle\Entity\StuffDepartments 
+     */
+    public function getStuffDepartments()
+    {
+        return $this->stuffDepartments;
+    }
 }
