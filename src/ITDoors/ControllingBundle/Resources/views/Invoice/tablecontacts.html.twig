@@ -1,5 +1,6 @@
 <div id="contact_list" data-url="{{ url('it_doors_controlling_invoice_invoice_show', {block: 'contacts' }) }}">
 {% trans_default_domain 'ITDoorsControllingBundle' %}
+{% if hasCustomer %}
 <script>
     $(document).ready(function(){
         $('input[name="emailsForSed[]"]').on('click', function(){
@@ -79,4 +80,9 @@
         </table>
     </div>
     </div>
+{% else %}
+    <div class="note note-danger">
+        <h4 class="block">{% trans %}Customer not found{% endtrans %}</h4>
+    </div>
+{% endif %}
 </div>
