@@ -132,17 +132,9 @@ lists_sales_admin_organization_ajax_users:
     pattern:  /lists/salesadmin/organization/ajax/users/{organizationId}
     defaults: { _controller: ListsOrganizationBundle:SalesAdmin:organizationUsers }
 
-lists_sales_admin_organization_transfer:
-    pattern:  /lists/salesadmin/organization/transfer
-    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:organizationTransfer }
-
 lists_sales_admin_organization_for_user:
     pattern:  /lists/salesadmin/organization/for/user
     defaults: { _controller: ListsOrganizationBundle:SalesAdmin:organizationForUser }
-
-lists_sales_admin_organization_transfer_for_user:
-    pattern:  /lists/salesadmin/organization/transfer/for/user
-    defaults: { _controller: ListsOrganizationBundle:SalesAdmin:organizationTransferForUser }
 
 lists_sales_admin_organization_export_excel:
     pattern:  /lists/salesadmin/organization/export/excel
@@ -253,4 +245,17 @@ lists_contractor_index:
 #lists_contractor_show_list_kved:
 #    pattern:  /lists/contractor/show/list/kved/{id}
 #    defaults: { _controller: ListsOrganizationBundle:Contractor:listKved }
-    
+
+# organization
+
+lists_organization_transfer:
+    pattern:  /lists/organization/transfer
+    defaults: { _controller: ListsOrganizationBundle:Organization:organizationTransfer }
+
+lists_organization_for_user:
+    pattern:  /lists/organization/for/user
+    defaults: { _controller: ListsOrganizationBundle:Organization:organizationForUser }
+
+lists_organization_transfer_for_user:
+    pattern:  /lists/organization/transfer/for/user
+    defaults: { _controller: ListsOrganizationBundle:Organization:organizationTransferForUser }

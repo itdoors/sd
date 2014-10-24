@@ -48,4 +48,5 @@ security:
         - { path: ^/controlling, roles: 'ROLE_CONTROLLING, ROLE_CONTROLLING_OPER' }
         - { path: ^/controlling/invoice/analytic, role: ROLE_CONTROLLING }
         - { path: ^/holiday, roles: 'ROLE_HRADMIN, ROLE_HOLIDAY' }
+        - { path: ^/lists/organization, roles: 'ROLE_SALESADMIN, ROLE_HRADMIN' }
         

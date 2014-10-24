@@ -30,13 +30,17 @@ class OrganizationRepository extends EntityRepository
         $this->processSelect($sql);
 
         $this->processBaseQuery($sql);
-        $sql->where('o.organizationSignId != 61 or o.organizationSignId is NULL')
-            ->andWhere('role.lukey = :lukey')
-            ->setParameter(':lukey', 'manager_organization');
 
         if (sizeof($userIds)) {
             $this->processUserQuery($sql, $userIds);
         }
+        $sql
+            ->leftJoin('o.organizationUsers', 'oUser')
+            ->leftJoin('oUser.user', 'users')
+            ->leftJoin('oUser.role', 'role')
+            ->where('o.organizationSignId != 61 or o.organizationSignId is NULL')
+            ->andWhere('role.lukey = :lukey')
+            ->setParameter(':lukey', 'manager_organization');
 
         $this->processFilters($sql, $filters);
 
