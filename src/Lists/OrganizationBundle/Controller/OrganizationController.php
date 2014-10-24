@@ -154,8 +154,21 @@ class OrganizationController extends BaseController
                         'departments' => $department
                     ));
                 foreach ($stuffDepartments as $stuffDepartment) {
-                    $stuffDepartment->setStuff($stuff);
-                    $em->persist($stuffDepartment);
+                    $stuffDepartmentOld = $em
+                    ->getRepository('SDUserBundle:StuffDepartments')
+                    ->findBy(array (
+                        'stuff' => $stuffOld,
+                        'departments' => $department,
+                        'claimtype' => $stuffDepartment->getClaimtype(),
+                        'userkey' => $stuffDepartment->getUserkey(),
+                    ));
+                    if ($stuffDepartmentOld) {
+                        $em->remove($stuffDepartment);
+                    } else {
+                        $stuffDepartment->setStuff($stuff);
+                        $em->persist($stuffDepartment);
+                    }
+                    
                 }
             }
         }
