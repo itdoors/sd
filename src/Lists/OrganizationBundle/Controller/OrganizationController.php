@@ -65,12 +65,10 @@ class OrganizationController extends BaseController
                 foreach ($stuffDepartmensQuery as $stuff) {
                     $departments = $stuff->getDepartments();
                     $departmensQuery[$departments->getId()] = $departments;
-
                 }
             } else {
                 $departmensQuery = array();
             }
-            
         }
 
         return $this->render('ListsOrganizationBundle:Organization:organizationForUser.html.twig', array(
@@ -133,21 +131,23 @@ class OrganizationController extends BaseController
             $userOld = $em
                     ->getRepository('SDUserBundle:User')
                     ->find($userIdOld);
-            $user = $em
-                    ->getRepository('SDUserBundle:User')
-                    ->find($userId);
+            if (!$userOld) {
+                throw new Exception('User not found', 404);
+            }
+            $stuffOld = $userOld->getStuff();
+            $stuff = $u->getStuff();
             foreach ($departmensIds as $departmenId) {
                 $department = $em
-                    ->getRepository('ListsDepartmentBundle:Department')
+                    ->getRepository('ListsDepartmentBundle:Departments')
                     ->find($departmenId);
                 $stuffDepartments = $em
                     ->getRepository('SDUserBundle:StuffDepartments')
                     ->findBy(array (
-                        'stuff' => $userOld,
+                        'stuff' => $stuffOld,
                         'departments' => $department
                     ));
                 foreach ($stuffDepartments as $stuffDepartment) {
-                    $stuffDepartment->setStuff($user);
+                    $stuffDepartment->setStuff($stuff);
                     $em->persist($stuffDepartment);
                 }
             }
