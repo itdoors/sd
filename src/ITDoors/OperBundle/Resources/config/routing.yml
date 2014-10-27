@@ -26,6 +26,12 @@ it_doors_oper_department_info_coworker_table:
     pattern:  /oper/department/info/coworker/table/{id}
     defaults: { _controller: ITDoorsOperBundle:OperDepartmentInfo:userInfoTable }
 
+it_doors_oper_department_info_resposible:
+    pattern:  /oper/department/info/resposible/{id}
+    defaults: { _controller: ITDoorsOperBundle:OperDepartmentInfo:resposible }
+    requirements:
+        id:  \d+
+
 it_doors_oper_schedule:
     pattern:  /oper/schedule/{id}
     defaults: { _controller: ITDoorsOperBundle:OperSchedule:index }

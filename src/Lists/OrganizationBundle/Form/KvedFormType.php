@@ -31,7 +31,7 @@ class KvedFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-         /** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
+         z/** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
         $lr = $this->container->get('lists_lookup.repository');
 
         $builder

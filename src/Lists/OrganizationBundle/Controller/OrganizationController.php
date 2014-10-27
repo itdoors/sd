@@ -160,7 +160,6 @@ class OrganizationController extends BaseController
                         'stuff' => $stuffOld,
                         'departments' => $department,
                         'claimtype' => $stuffDepartment->getClaimtype(),
-                        'userkey' => $stuffDepartment->getUserkey(),
                     ));
                     if ($stuffDepartmentOld) {
                         $em->remove($stuffDepartment);

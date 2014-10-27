@@ -3355,6 +3355,45 @@ class AjaxController extends BaseFilterController
      *
      * @return void
      */
+    public function stuffDepartmensDelete($params)
+    {
+//        if ($this->getUser()->hasRole('ROLE_HRADMIN')) {
+//            throw new \Exception('You don`t have access', 403);
+//        }
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        $departmentId = $params['departmentId'];
+        $stuffId = $params['stuffId'];
+
+        /** @var Department $department */
+        $department = $em
+            ->getRepository('ListsDepartmentBundle:Departments')
+            ->find($departmentId);
+        /** @var Stuff $stuff */
+        $stuff = $em
+            ->getRepository('SDUserBundle:Stuff')
+            ->find($stuffId);
+        /** @var StuffDepartments $objects */
+        $objects = $em
+            ->getRepository('SDUserBundle:StuffDepartments')
+            ->findBy(array(
+                'departments' => $department,
+                'stuff' => $stuff
+            ));
+        foreach ($objects as $object) {
+            $em->remove($object);
+        }
+
+        $em->flush();
+    }
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
     public function holidayDelete($params)
     {
         if (!$this->getUser()->hasRole('ROLE_HRADMIN') && !$this->getUser()->hasRole('ROLE_HOLIDAY')) {

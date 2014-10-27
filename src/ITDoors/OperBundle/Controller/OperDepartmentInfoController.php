@@ -188,6 +188,81 @@ class OperDepartmentInfoController extends BaseFilterController
             'counter' => $counter
         ));
     }
+    /**
+     * resposibleAction
+     *
+     * @param integer $id
+     *
+     * @return mixed[]
+     */
+    public function resposibleAction($id)
+    {
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        $department = $em->getRepository('ListsDepartmentBundle:Departments')->find($id);
+        if (!$department) {
+            throw new \Exception('Departmen not found', 404);
+        }
+
+        $stuffDepartments = $em->getRepository('SDUserBundle:StuffDepartments')
+            ->findBy(array('departments' => $department));
+
+        $result = array();
+        foreach ($stuffDepartments as $stuffDepartment) {
+            $idStuff = $stuffDepartment->getStuff()->getId();
+            $userkey = $stuffDepartment->getUserkey();
+            if (!isset($result[$idStuff])) {
+                $result[$idStuff] = array();
+            }
+            if (!isset($result[$idStuff]['userkey'])) {
+                $result[$idStuff]['userkey'] = array();
+            }
+            if (!isset($result[$idStuff]['userkey'][$userkey])) {
+                $result[$idStuff]['userkey'][$userkey] = array();
+            }
+            $result[$idStuff]['userkey'][$userkey][] = $stuffDepartment;
+            $result[$idStuff]['user'] = $stuffDepartment->getStuff()->getUser();
+            $result[$idStuff]['stuffId'] = $stuffDepartment->getStuff()->getId();
+            
+            
+        }
+//        $filterNamespace = $this->container->getParameter($this->getNamespace());
+//
+//        $filters = $this->getFilters($filterNamespace);
+//
+//        $page = $this->getPaginator($filterNamespace);
+//        if (!$page) {
+//            $page = 1;
+//        }
+//
+//        /** @var $departmentPeopleRepository \Lists\DepartmentBundle\Entity\DepartmentPeopleRepository   */
+//        $departmentPeopleRepository = $this->getDoctrine()
+//            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
+//
+//        $query = $departmentPeopleRepository->getFilteredDepartmentPeopleQuery($id, $filters);
+//
+//        $paginator = $this->get('knp_paginator');
+//
+//        $countDepartments = $departmentPeopleRepository->getFilteredDepartmentPeopleQuery($id, $filters, 'count')
+//                                                       ->getSingleScalarResult();
+//
+//        $query->setHint('knp_paginator.count', $countDepartments);
+//
+//        $pagination = $paginator->paginate(
+//            $query,
+//            $page,
+//            20
+//        );
+//
+//        $counter = ($page -1)*20; //counter for raw in table
+
+        
+        return $this->render('ITDoorsOperBundle:DepartmentInfo:resposible.html.twig', array(
+            'stuffDepartments' => $result,
+            'departmentId' => $id
+        ));
+    }
 
     /**
      * Render table for user (individual) info by id
