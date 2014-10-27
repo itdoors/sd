@@ -239,9 +239,12 @@ class InvoiceController extends BaseFilterController
 
         $entitie = $invoice->getInfoForTab($invoiceid, $tab);
 
+        $hasCustomer = $invoice->find($invoiceid)->getCustomer() ? true : false;;
+
         return $this->render('ITDoorsControllingBundle:Invoice:table' . $tab . '.html.twig', array (
                 'namespaceTab' => $namespaceTab,
                 'entitie' => $entitie,
+                'hasCustomer' => $hasCustomer,
                 'block' => $tab
         ));
     }
