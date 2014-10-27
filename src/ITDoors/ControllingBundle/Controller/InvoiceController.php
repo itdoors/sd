@@ -59,10 +59,7 @@ class InvoiceController extends BaseFilterController
         $service = $this->container->get($this->service);
         $companystryctyre = null;
         if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
-            $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
-            if (in_array($companystryctyre, array(45, 46, 47))) {
-                $companystryctyre = 3;
-            }
+            $companystryctyre = $this->getCompanystructure();
         }
         $tabs = $service->getTabsInvoices($companystryctyre, $filters);
 
@@ -99,10 +96,7 @@ class InvoiceController extends BaseFilterController
         $service = $this->container->get($this->service);
         $companystryctyre = null;
         if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
-            $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
-            if (in_array($companystryctyre, array(45, 46, 47))) {
-                $companystryctyre = 3;
-            }
+            $companystryctyre = $this->getCompanystructure();
         }
         $tabs = $service->getTabsInvoices($companystryctyre, $filters);
 
@@ -134,10 +128,7 @@ class InvoiceController extends BaseFilterController
         }
         $companystryctyre = null;
         if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
-            $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
-            if (in_array($companystryctyre, array(45, 46, 47))) {
-                $companystryctyre = 3;
-            }
+            $companystryctyre = $this->getCompanystructure();
         }
 
         $period = $this->getTab($filterNamespace);
@@ -197,10 +188,7 @@ class InvoiceController extends BaseFilterController
         $service = $this->container->get($this->service);
         $companystryctyre = null;
         if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
-            $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
-            if (in_array($companystryctyre, array(45, 46, 47))) {
-                $companystryctyre = 3;
-            }
+            $companystryctyre = $this->getCompanystructure();
         }
         $service->getTabsInvoices($companystryctyre);
 
@@ -378,10 +366,7 @@ class InvoiceController extends BaseFilterController
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
         $companystryctyre = null;
         if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
-            $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
-            if (in_array($companystryctyre, array(45, 46, 47))) {
-                $companystryctyre = 3;
-            }
+            $companystryctyre = $this->getCompanystructure();
         }
         $result = $invoice->getEntittyCountSum($tab, null, $companystryctyre);
         $entities = $result['entities'];
@@ -428,10 +413,7 @@ class InvoiceController extends BaseFilterController
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
         $companystryctyre = null;
         if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
-            $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
-            if (in_array($companystryctyre, array(45, 46, 47))) {
-                $companystryctyre = 3;
-            }
+            $companystryctyre = $this->getCompanystructure();
         }
         $result = $invoice->getEntittyCountSum($tab, null, $companystryctyre);
         $entities = $result['entities'];
@@ -684,10 +666,7 @@ class InvoiceController extends BaseFilterController
         }
         $companystryctyre = null;
         if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
-            $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
-            if (in_array($companystryctyre, array(45, 46, 47))) {
-                $companystryctyre = 3;
-            }
+            $companystryctyre = $this->getCompanystructure();
         }
 
         $period = $this->getTab($filterNamespace);
@@ -726,10 +705,7 @@ class InvoiceController extends BaseFilterController
 
         $companystryctyre = null;
         if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
-            $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
-            if (in_array($companystryctyre, array(45, 46, 47))) {
-                $companystryctyre = 3;
-            }
+            $companystryctyre = $this->getCompanystructure();
         }
 
         /** @var InvoiceRepository $invoices */
@@ -754,10 +730,7 @@ class InvoiceController extends BaseFilterController
 
         $companystryctyre = null;
         if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
-            $companystryctyre = $this->getUser()->getStuff()->getCompanystructure()->getId();
-            if (in_array($companystryctyre, array(45, 46, 47))) {
-                $companystryctyre = 3;
-            }
+            $companystryctyre = $this->getCompanystructure();
         }
 
         /** @var InvoiceRepository $invoices */
@@ -799,5 +772,21 @@ class InvoiceController extends BaseFilterController
         $em->flush();
 
         return new Response(json_encode(array ('id' => $sendEmail->getId())));
+    }
+    /**
+     * getCompanystructure
+     * 
+     * @return Companystructure
+     */
+    private function getCompanystructure()
+    {
+        $companystryctyre = $this->getUser()->getStuff()->getCompanystructure();
+        if ($companystryctyre->getLevel() > 1) {
+            $repository = $this->getDoctrine()->getManager()
+                ->getRepository('ListsCompanystructureBundle:companystructure');
+            $companystryctyre = $repository->getParent($companystryctyre, 1);
+        }
+        
+        return $companystryctyre;
     }
 }
