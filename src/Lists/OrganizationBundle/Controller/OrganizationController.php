@@ -159,7 +159,7 @@ class OrganizationController extends BaseController
                     ->findBy(array (
                         'stuff' => $stuffOld,
                         'departments' => $department,
-                        'claimtype' => $stuffDepartment->getClaimtype(),
+                        'claimtypes' => $stuffDepartment->getClaimtypes(),
                     ));
                     if ($stuffDepartmentOld) {
                         $em->remove($stuffDepartment);

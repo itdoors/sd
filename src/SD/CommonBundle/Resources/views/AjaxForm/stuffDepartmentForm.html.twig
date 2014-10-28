@@ -1,42 +1,28 @@
 {% trans_default_domain 'SDUserBundle' %}
 <script>
     $(document).ready(function(){
-      /*  $('#stuffDepartmentForm_stuff').select2({
-            minimumInputLength: 2,
-            initSelection: function (element, callback) {
-                var id = $(element).val();
-                if (id !== "") {
-                    $.ajax("{{ path('sd_common_ajax_user_by_id') }}", {
-                        data: {
-                            id: id
-                        },
-                        dataType: "json"
-                    }).done(function (data) {
-                                callback(data);
-                            });
-                    }
-            },
-            ajax: {
-                url: '{{ path('sd_common_ajax_user_by_id') }}',
-                dataType: 'json',
-                data: function (term, page) {
-                    return {
-                        q: term
-                    };
-                },
-                results: function (data, page) {
-                    return {
-                        results: data
-                    };
-                }
-            }
+        var arr = $('#' + '{{ form.vars.name }}' + '_claimtype option');
+        var gSiteIDs = [];
+        $.each(arr, function(key, value){
+            gSiteIDs.push($(value).val());
+            $(value).prop('selected', true);
         });
-        $('#stuffDepartmentForm_stuff').select2({
-            minimumInputLength: 0
+            
+        SD.select2('#' + '{{ form.vars.name }}' + '_stuff', {
+            multiple: true
         });
-        $('#stuffDepartmentForm_stuff').select2({
-            minimumInputLength: 0
-        });*/
+        $('#' + '{{ form.vars.name }}' + '_claimtype').select2({
+            minimumInputLength: 0,
+            width: 200
+        });
+        $('#' + '{{ form.vars.name }}' + '_userkey').select2({
+            minimumInputLength: 0,
+            width: 200
+        });
+        $('#select-all-claimtype').die('click');
+        $('#select-all-claimtype').live('click', function () {
+            $('#' + '{{ form.vars.name }}' + '_claimtype').select2("val", []);      
+        });
 
     });
 </script>
@@ -80,21 +66,24 @@
                     </div>
                     <div class="form-body row">
                         <div class="form-group col-md-3">
-                            {{ form_label(form.stuff, 'stuff', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_label(form.stuff, 'Stuff', {'attr': {'class': 'control-label'}}) }}
                             <div class="input-group input-medium">
                                 {{ form_widget(form.stuff, {'attr' : {'class' : 'itdoors-select2 can-be-reseted submit-field'}}) }}
                             </div>
                         </div>
                         <div class="form-group col-md-3">
-                            {{ form_label(form.userkey, 'userkey', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_label(form.userkey, 'Role', {'attr': {'class': 'control-label'}}) }}
                             <div class="input-group input-medium">
                                 {{ form_widget(form.userkey) }}
                             </div>
                         </div>
                         <div class="form-group col-md-3">
-                            {{ form_label(form.claimtype, 'stuff', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_label(form.claimtype, 'Organization type', {'attr': {'class': 'control-label'}}) }}
                             <div class="input-group input-medium">
                                 {{ form_widget(form.claimtype) }}
+                                <a id="select-all-claimtype" class="btn green">
+                                        {% trans %}Clear{% endtrans %}
+                                </a>
                             </div>
                         </div>
                     </div>

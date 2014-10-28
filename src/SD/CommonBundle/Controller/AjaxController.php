@@ -46,6 +46,7 @@ use Lists\OrganizationBundle\Entity\OrganizationUser;
 use ITDoors\HistoryBundle\Entity\History;
 use Lists\DogovorBundle\Entity\DogovorCompanystructure;
 use ITDoors\SipBundle\Entity\Call;
+use SD\UserBundle\Entity\StuffDepartments;
 
 /**
  * AjaxController class.
@@ -4973,6 +4974,54 @@ class AjaxController extends BaseFilterController
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
+    /**
+     * Saves stuffDepartment ajax form
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function stuffDepartmentFormSave($form, $user, $request)
+    {
+        if (!$user->hasRole('ROLE_HRADMIN')) {
+            throw new Exception('You don`t have access', 403);
+        }
+        $em = $this->getDoctrine()->getManager();
+
+        $formData = $request->request->get($form->getName());
+
+        $claimtypes = $formData['claimtype'];
+        $userkey = $formData['userkey'];
+        $stuffId = (int) $formData['stuff'];
+        $departmenId = (int) $formData['departments'];
+        
+        $departmen =  $em->getRepository('ListsDepartmentBundle:Departments')->find($departmenId);
+        $suff = $em->getRepository('SDUserBundle:User')->find($stuffId)->getStuff();
+        $oldStuffDepartmens = $em->getRepository('SDUserBundle:StuffDepartments')
+            ->findBy(array(
+                'stuff' => $suff,
+                'departments' => $departmen
+            ));
+        foreach ($oldStuffDepartmens as $oldStuffDepartmen) {
+            $em->remove($oldStuffDepartmen);
+        }
+        $em->flush();
+        foreach ($claimtypes as $claimtype) {
+            $claim = $em->getRepository('SDUserBundle:Claimtype')->find((int) $claimtype);
+            
+            $stuffDepartmen = new StuffDepartments();
+            $stuffDepartmen->setDepartments($departmen);
+            $stuffDepartmen->setStuff($suff);
+            $stuffDepartmen->setClaimtypes($claim);
+            $stuffDepartmen->setUserkey($userkey);
+            $em->persist($stuffDepartmen);
+        }
         $em->flush();
 
         return true;

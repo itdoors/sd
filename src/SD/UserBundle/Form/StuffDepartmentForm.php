@@ -29,12 +29,11 @@ class StuffDepartmentForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $translator = $this->container->get('translator');
-
         $router = $this->container->get('router');
         
         $em = $this->container->get('doctrine')->getManager();
-        $claimtypes = $em->getRepository('SDUserBundle:Claimtype')->findAll('return-an-array');
+        $claimtypes = $em->getRepository('SDUserBundle:Claimtype')->createQueryBuilder('c');
+
         $builder
             ->add('stuff', 'text', array(
                 'attr' => array(
@@ -43,12 +42,11 @@ class StuffDepartmentForm extends AbstractType
                     'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 2,
-                        'allowClear' => true,
-                        'width' => '200px',
-                        'multiple' => 'multiple'
+                        'width' => '200px'
                     )),
                     'placeholder' => 'Enter fio',
-                )
+                ),
+                'mapped' => false
             ))
             ->add('userkey', 'choice', array(
                 'choices' => array(
@@ -56,8 +54,11 @@ class StuffDepartmentForm extends AbstractType
                     'stuff' => 'stuff'
                 )
             ))
-            ->add('claimtype', 'choice', array(
-                'choices' => $claimtypes
+            ->add('claimtype', 'entity', array(
+                'class' => 'SDUserBundle:Claimtype',
+                'query_builder' => $claimtypes,
+                'multiple' => 'multiple',
+                'mapped' => false
             ))
             
             ->add('departments', 'hidden', array(
@@ -74,7 +75,7 @@ class StuffDepartmentForm extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'SD\UserBundle\Entity\StuffDepartments',
+            'data_class' => null,
             'translation_domain' => 'SDUserBundle'
         ));
     }
