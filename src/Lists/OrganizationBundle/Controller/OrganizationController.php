@@ -166,8 +166,7 @@ class OrganizationController extends BaseController
                     } else {
                         $stuffDepartment->setStuff($stuff);
                         $em->persist($stuffDepartment);
-                    }
-                    
+                    } 
                 }
             }
         }

@@ -30,7 +30,7 @@ class StuffDepartmentForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $router = $this->container->get('router');
-        
+
         $em = $this->container->get('doctrine')->getManager();
         $claimtypes = $em->getRepository('SDUserBundle:Claimtype')->createQueryBuilder('c');
 
@@ -60,7 +60,6 @@ class StuffDepartmentForm extends AbstractType
                 'multiple' => 'multiple',
                 'mapped' => false
             ))
-            
             ->add('departments', 'hidden', array(
             ));
 

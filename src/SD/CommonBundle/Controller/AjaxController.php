@@ -5000,7 +5000,7 @@ class AjaxController extends BaseFilterController
         $userkey = $formData['userkey'];
         $stuffId = (int) $formData['stuff'];
         $departmenId = (int) $formData['departments'];
-        
+
         $departmen =  $em->getRepository('ListsDepartmentBundle:Departments')->find($departmenId);
         $suff = $em->getRepository('SDUserBundle:User')->find($stuffId)->getStuff();
         $oldStuffDepartmens = $em->getRepository('SDUserBundle:StuffDepartments')
@@ -5014,7 +5014,7 @@ class AjaxController extends BaseFilterController
         $em->flush();
         foreach ($claimtypes as $claimtype) {
             $claim = $em->getRepository('SDUserBundle:Claimtype')->find((int) $claimtype);
-            
+
             $stuffDepartmen = new StuffDepartments();
             $stuffDepartmen->setDepartments($departmen);
             $stuffDepartmen->setStuff($suff);

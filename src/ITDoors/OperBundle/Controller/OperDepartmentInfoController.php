@@ -224,40 +224,8 @@ class OperDepartmentInfoController extends BaseFilterController
             $result[$idStuff]['userkey'][$userkey][] = $stuffDepartment;
             $result[$idStuff]['user'] = $stuffDepartment->getStuff()->getUser();
             $result[$idStuff]['stuffId'] = $stuffDepartment->getStuff()->getId();
-            
-            
         }
-//        $filterNamespace = $this->container->getParameter($this->getNamespace());
-//
-//        $filters = $this->getFilters($filterNamespace);
-//
-//        $page = $this->getPaginator($filterNamespace);
-//        if (!$page) {
-//            $page = 1;
-//        }
-//
-//        /** @var $departmentPeopleRepository \Lists\DepartmentBundle\Entity\DepartmentPeopleRepository   */
-//        $departmentPeopleRepository = $this->getDoctrine()
-//            ->getRepository('ListsDepartmentBundle:DepartmentPeople');
-//
-//        $query = $departmentPeopleRepository->getFilteredDepartmentPeopleQuery($id, $filters);
-//
-//        $paginator = $this->get('knp_paginator');
-//
-//        $countDepartments = $departmentPeopleRepository->getFilteredDepartmentPeopleQuery($id, $filters, 'count')
-//                                                       ->getSingleScalarResult();
-//
-//        $query->setHint('knp_paginator.count', $countDepartments);
-//
-//        $pagination = $paginator->paginate(
-//            $query,
-//            $page,
-//            20
-//        );
-//
-//        $counter = ($page -1)*20; //counter for raw in table
 
-        
         return $this->render('ITDoorsOperBundle:DepartmentInfo:resposible.html.twig', array(
             'stuffDepartments' => $result,
             'departmentId' => $id
