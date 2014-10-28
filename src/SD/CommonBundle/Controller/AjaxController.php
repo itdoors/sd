@@ -4631,7 +4631,43 @@ class AjaxController extends BaseFilterController
                 }
             ));
     }
+    /**
+     * Adds children to {formName}ProcessDefaults depending on defaults in request
+     *
+     * @param Form    $form
+     * @param mixed[] $defaultData
+     *
+     * @return void
+     */
+    public function departmentFormProcessDefaults($form, $defaultData)
+    {
+        $organizationId = $defaultData['organizationId'];
 
+        /** @var \Lists\OrganizationBundle\Entity\Organization $organization */
+        $organization = $this->getDoctrine()->getRepository('ListsOrganizationBundle:Organization')
+            ->find($organizationId);
+        if ($organization) {
+            $form
+                ->add('organization', 'text', array(
+                    'data' => (string) $organization,
+                    'disabled' => true
+                ));
+        }
+        $repository = $this->getDoctrine()->getRepository('SDUserBundle:User');
+
+        $form
+            ->add('opermanager', 'entity', array(
+                'class' => 'SDUserBundle:User',
+                'empty_value' => '',
+                'required' => false,
+                'query_builder' => function ($repository) use ($repository) {
+
+                return $repository->createQueryBuilder('u')
+                    ->innerJoin('u.stuff', 's')
+                    ->orderBy('u.lastName');
+                }
+            ));
+    }
     /**
      * Renders handling more information
      *
@@ -5022,6 +5058,33 @@ class AjaxController extends BaseFilterController
             $stuffDepartmen->setUserkey($userkey);
             $em->persist($stuffDepartmen);
         }
+        $em->flush();
+
+        return true;
+    }
+    /**
+     * Saves departmentForm ajax form
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function departmentFormSave($form, $user, $request)
+    {
+        if (!$user->hasRole('ROLE_DOGOVORADMIN')) {
+            throw new Exception('You don`t have access', 403);
+        }
+        $em = $this->getDoctrine()->getManager();
+
+        $data = $form->getData();
+        $formData = $request->request->get($form->getName());
+
+        $organization = $em->getRepository('ListsOrganizationBundle:Organization')->find((int) $formData['organizationId']);
+        
+        $data->setOrganization($organization);
+        $em->persist($data);
         $em->flush();
 
         return true;

@@ -1,6 +1,12 @@
 Lists\DepartmentBundle\Entity\Departments:
+    constraints:
+            - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: mpk
     properties:
         name:
-            - NotBlank: { groups: [new, edit] }
-        edrpou:
-            - Lists\DepartmentBundle\Validator\UniqueEdrpou: {  groups: [new, edit]}
+            - NotBlank: ~
+        city:
+            - NotBlank: ~
+        address:
+            - NotBlank: ~
+        mpk:
+            - NotBlank: ~
