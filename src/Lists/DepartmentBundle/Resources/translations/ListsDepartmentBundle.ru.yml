@@ -1,0 +1,21 @@
+Status: Статус
+Oper manager: Опер менеджер
+My search: Поиск
+Prev: Предыдущая
+Next: Следущая
+First: Первая
+Last: Последняя
+All: Все
+records: шт.
+Showing _START_ to _END_ of _TOTAL_ entries: Отображается с _START_ по _END_ из  _TOTAL_
+No matching records found: Записей не найдено
+filtered from _MAX_ total entries: всего записей _MAX_
+
+MPK: МПК
+Name: Наименование
+City: Город
+Address: Адрес
+Type: Тип
+Date: Дата
+Description: Заметки
+Dop MPK: Доп. МПК

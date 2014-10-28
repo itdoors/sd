@@ -1,0 +1,109 @@
+{% trans_default_domain 'ListsDepartmentBundle' %}
+<script>
+    $(document).ready(function(){
+        var initTableDepartment = function () {
+            var table = $('#table-departments');
+
+            table.dataTable({
+                "bStateSave": true,
+
+                "columns": [{
+                    "orderable": true
+                }, {
+                    "orderable": true
+                }, {
+                    "orderable": false
+                }, {
+                    "orderable": true
+                }, {
+                    "orderable": true
+                }, {
+                    "orderable": true
+                }, {
+                    "orderable": true
+                }, {
+                    "orderable": false
+                }, {
+                    "orderable": false
+                }, {
+                    "orderable": true
+                }, {
+                    "orderable": true
+                }],
+                "lengthMenu": [
+                    [10, 15, 20, -1],
+                    [10, 15, 20, "{% trans %}All{% endtrans %}"]
+                ],
+                "pageLength": 15,            
+                "pagingType": "bootstrap_full_number",
+                "language": {
+                    "search": "{% trans %}My search{% endtrans %}: ",
+                    "lengthMenu": "  _MENU_ {% trans %}records{% endtrans %}",
+                    "sInfo": "{% trans %}Showing _START_ to _END_ of _TOTAL_ entries{% endtrans %}",
+                    "sZeroRecords": "{% trans %}No matching records found{% endtrans %}",
+                    "sInfoEmpty": "{% trans %}No matching records found{% endtrans %}",
+                    "sInfoFiltered": "({% trans %}filtered from _MAX_ total entries{% endtrans %})",
+                    "paginate": {
+                        "previous":"{% trans %}Prev{% endtrans %}",
+                        "next": "{% trans %}Next{% endtrans %}",
+                        "last": "{% trans %}Last{% endtrans %}",
+                        "first": "{% trans %}First{% endtrans %}"
+                    }
+                },
+                "columnDefs": [{
+                    'orderable': false,
+                    'targets': [0]
+                }, {
+                    "searchable": false,
+                    "targets": [0]
+                }],
+                "order": [
+                    [1, "asc"]
+                ]
+            });
+        };
+        initTableDepartment();
+    });
+</script>
+<table class="table table-striped table-bordered table-advance table-hover" id="table-departments">
+    <thead>
+        <tr>
+            <th>{% trans %}ID{% endtrans %} </th>
+            <th>{% trans %}MPK{% endtrans %} </th>
+            <th>{% trans %}Dop MPK{% endtrans %} </th>
+            <th>{% trans %}Name{% endtrans %} </th>
+            <th>{% trans %}City{% endtrans %} </th>
+            <th>{% trans %}Address{% endtrans %} </th>
+            <th>{% trans %}Type{% endtrans %} </th>
+            <th>{% trans %}Date{% endtrans %} </th>
+            <th>{% trans %}Description{% endtrans %} </th>
+            <th>{% trans %}Status{% endtrans %} </th>
+            <th>{% trans %}Oper manager{% endtrans %} </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in departments %}
+            <tr {% if loop.index is odd %}class="color"{% endif %}>
+                <td>
+                    <a class="btn green button_wide" href="{{ path('it_doors_oper_department_info', {'id' : item.id})  }}">
+                        {{ item.id }}
+                    </a>
+                </td>
+                <td>{{ item.mpk|e }}</td>
+                <td>
+                    {% for mpk in item.mpks %}
+                        {{ mpk|e }}<br>
+                    {% endfor %}
+                </td>
+                <td>{{ item.name|e }}</td>
+                <td>{{ item.city|e }}</td>
+                <td>{{ item.address|e }}</td>
+                <td>{{ item.type|e }}</td>
+                <td>{{ item.statusDate is null ? '' : item.statusDate|date('d.m.Y') }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.status }}</td>
+                <td>{{ item.opermanager }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

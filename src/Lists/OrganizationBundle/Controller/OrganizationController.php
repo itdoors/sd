@@ -177,4 +177,37 @@ class OrganizationController extends BaseController
 
         return new Response(json_encode($result));
     }
+    /**
+     * Renders departments
+     * 
+     * @param integer $id Organization.id
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function departmentsAction($id)
+    {
+        return $this->render('ListsOrganizationBundle:Organization:departments.html.twig', array(
+            'organizationId' => $id
+        ));
+    }
+    /**
+     * Renders departments list
+     * 
+     * @param integer $id Organization.id
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function departmentsListAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $organization = $em->getRepository('ListsOrganizationBundle:Organization')->find($id);
+        if (!$organization) {
+            throw new Exception('Organization not found', 404);
+        }
+        $departments = $organization->getDepartments();
+
+        return $this->render('ListsDepartmentBundle:Department:departmentsListDataTable.html.twig', array(
+            'departments' => $departments
+        ));
+    }
 }

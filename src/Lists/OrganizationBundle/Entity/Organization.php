@@ -1100,4 +1100,43 @@ class Organization
     {
         return $this->organizationsigns;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $departments;
+
+
+    /**
+     * Add departments
+     *
+     * @param \Lists\DepartmentBundle\Entity\Departments $departments
+     * 
+     * @return Organization
+     */
+    public function addDepartmen(\Lists\DepartmentBundle\Entity\Departments $departments)
+    {
+        $this->departments[] = $departments;
+
+        return $this;
+    }
+
+    /**
+     * Remove departments
+     *
+     * @param \Lists\DepartmentBundle\Entity\Departments $departments
+     */
+    public function removeDepartmen(\Lists\DepartmentBundle\Entity\Departments $departments)
+    {
+        $this->departments->removeElement($departments);
+    }
+
+    /**
+     * Get departments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDepartments()
+    {
+        return $this->departments;
+    }
 }

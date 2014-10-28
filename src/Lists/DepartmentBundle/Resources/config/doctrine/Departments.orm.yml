@@ -89,7 +89,7 @@ Lists\DepartmentBundle\Entity\Departments:
             targetEntity: Lists\OrganizationBundle\Entity\Organization
             cascade: {  }
             mappedBy: null
-            inversedBy: null
+            inversedBy: departments
             joinColumns:
                 organization_id:
                     referencedColumnName: id

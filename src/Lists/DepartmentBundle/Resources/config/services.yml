@@ -7,6 +7,7 @@ parameters:
     lists_departmentStatus.repository.entity: Lists\DepartmentBundle\Entity\DepartmentsStatus
     lists_departmentPeople.repository.class: Lists\DepartmentBundle\Entity\DepartmentPeopleRepository
     lists_departmentPeople.repository.entity: Lists\DepartmentBundle\Entity\DepartmentPeople
+    lists_department.department.form.class: Lists\DepartmentBundle\Form\DepartmentForm
 services:
     lists_department.repository:
         class: %lists_department.repository.class%
@@ -28,3 +29,8 @@ services:
         factory_service: doctrine # this is an instance of Registry
         factory_method: getRepository
         arguments: [ %lists_departmentPeople.repository.entity% ]
+    lists_department.form.departmentForm:
+        class: %lists_department.department.form.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: departmentForm }
