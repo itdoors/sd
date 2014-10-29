@@ -556,9 +556,9 @@ class Departments
     /**
      * onPrePersist
      */
-    function onPrePersist()
+    public function onPrePersist()
     {
-        if ($this->isdeleted == null ) {
+        if ($this->isdeleted == null) {
             $this->isdeleted = false;
         }
         if (!empty($this->statusDate) && gettype($this->statusDate) == 'string') {
