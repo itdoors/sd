@@ -5081,8 +5081,9 @@ class AjaxController extends BaseFilterController
         $data = $form->getData();
         $formData = $request->request->get($form->getName());
 
-        $organization = $em->getRepository('ListsOrganizationBundle:Organization')->find((int) $formData['organizationId']);
-        
+        $organization = $em->getRepository('ListsOrganizationBundle:Organization')
+            ->find((int) $formData['organizationId']);
+
         $data->setOrganization($organization);
         $em->persist($data);
         $em->flush();

@@ -553,10 +553,11 @@ class Departments
     {
         return $this->mpk;
     }
-    /*
+    /**
      * onPrePersist
      */
-    function onPrePersist() {
+    function onPrePersist()
+    {
         if ($this->isdeleted == null ) {
             $this->isdeleted = false;
         }
