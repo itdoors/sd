@@ -251,7 +251,21 @@
             </td>
             <td><span class="text-muted">{% trans %}Enter Organization Description{% endtrans %}</span></td>
         </tr>
-       
+       <tr>
+            <td>{% trans %}Child organization{% endtrans %}</td>
+            <td>
+                {{  include(
+                        'ListsOrganizationBundle:Organization:organizationChild.html.twig',
+                            {
+                                organization: organization,
+                                baseTemplate: baseTemplate,
+                                baseRoutePrefix: baseRoutePrefix
+                            }
+                        )
+                    }}
+            </td>
+            <td><span class="text-muted">{% trans %}Enter child organization{% endtrans %}</span></td>
+        </tr>
         </tbody>
     </table>
 </div>

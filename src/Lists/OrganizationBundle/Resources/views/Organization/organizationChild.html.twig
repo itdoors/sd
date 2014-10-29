@@ -1,0 +1,34 @@
+
+<a id="child_organization_new" class="btn green ajax-form"
+   data-toggle="modal"
+   href="#form_modal_child_organization"
+   data-target_holder="organizationChildFormTpl"
+   data-form_name="organizationChildForm"
+   data-default='{"organizationId":{{ organization.id }} }'
+   data-post_function=""
+   data-post_target_id=""
+>
+    {% trans from 'ListsOrganizationBundle' %}Set child organization{% endtrans %} <i class="fa fa-comments"></i>
+</a>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $.fn.modal.Constructor.prototype.enforceFocus = function() {};
+    });
+</script>
+
+<div id="form_modal_child_organization" class="modal fade" role="basic" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">{% trans from 'ListsOrganizationBundle' %}Set child organization{% endtrans %}</h4>
+            </div>
+            <div class="modal-body">
+                <div id="organizationChildFormTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>

@@ -4750,6 +4750,9 @@ class AjaxController extends BaseFilterController
      */
     public function organizationChildFormSave(Form $form, User $user, Request $request)
     {
+        if (!$user->hasRole('ROLE_SALESADMIN') && !$user->hasRole('ROLE_DOGOVORADMIN')) {
+            throw new Exception('You don`t have access', 403);
+        }
         $data = $form->getData();
 
         $organizationId = $data['organizationId'];
