@@ -1,5 +1,5 @@
 {% trans_default_domain 'ITDoorsOperBundle' %}
-
+{% if accessEdit %}
 <script type="text/javascript">
 
     $(document).ready(function(){
@@ -7,7 +7,7 @@
         $.fn.editable.defaults.inputclass = 'form-control';
         $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
 
-        $('#description').editable({
+        $('#description, #address').editable({
             url: '{{ path('sd_common_ajax_editable_department') }}'
         });
 
@@ -34,24 +34,24 @@
             }
         });
 
-
         $('#typeId').editable({
             url: '{{ path('sd_common_ajax_handling_save') }}',
             source: '{{ path('sd_common_ajax_handling_type') }}'
         });
-
-        $('#opermanager').editable({
-            url: '{{ path('sd_common_ajax_editable_department') }}',
-            source: '{{ path('sd_common_ajax_user') }}',
-            select2: {
-                multiple: false,
-                width: '250px'
-            }
-        });
-    })
+        {% if is_granted('ROLE_SUPERVISOR') %}
+            $('#opermanager').editable({
+                url: '{{ path('sd_common_ajax_editable_department') }}',
+                source: '{{ path('sd_common_ajax_user') }}',
+                select2: {
+                    multiple: false,
+                    width: '250px'
+                }
+            });
+        {% endif %}
+    });
 
 </script>
-
+{% endif %}
 
 <div class="tab-pane active" id="tab_0">
     <div class="col-md-12">
@@ -99,9 +99,13 @@
                 </td>
                 <td style="width:15%">{% trans %}Object type{% endtrans %}</td>
                 <td style="width:35%">
-                    <a href="#" id="type" data-type="select" data-pk="{{ department.0.id }}" data-value="" data-placement="right" data-original-title="{% trans %}Select Type{% endtrans %}">
+                    {% if accessEdit %}
+                        <a href="#" id="type" data-type="select" data-pk="{{ department.0.id }}" data-value="" data-placement="right" data-original-title="{% trans %}Select Type{% endtrans %}">
+                            {{ department.0.typeName }}
+                        </a>
+                    {% else %}
                         {{ department.0.typeName }}
-                    </a>
+                    {% endif %}
                 </td>
             </tr>
             <tr> {# 2 #}
@@ -117,7 +121,11 @@
                 <td>{{ department.0.regionName }}</td>
                 <td>{% trans %}Description{% endtrans %}</td>
                 <td>
-                    <a href="#" id="description" data-type="textarea" data-pk="{{ department.0.id }}" data-value="{{ department.0.description }}" data-placement="right" data-original-title="{% trans %}Enter Description{% endtrans %}">{{ department.0.description }}</a>
+                    {% if accessEdit %}
+                        <a href="#" id="description" data-type="textarea" data-pk="{{ department.0.id }}" data-value="{{ department.0.description }}" data-placement="right" data-original-title="{% trans %}Enter Description{% endtrans %}">{{ department.0.description }}</a>
+                    {% else %}
+                        {{ department.0.description }}
+                    {% endif %}
                 </td>
             </tr>
             <tr> {# 4 #}
@@ -125,13 +133,23 @@
                 <td>{{ department.0.cityName }}</td>
                 <td>{% trans %}Oper manager{% endtrans %}</td>
                 <td>
-                    <a href="#" id="opermanager" data-type="select2" data-pk="{{ department.0.id }}" data-placement="right" data-value="" data-placeholder="{% trans %}Select opermanger{% endtrans %}" data-original-title="{% trans %}Type opermanger{% endtrans %}">{{ department.0.opermanagerName }}</a>
+                    {% if is_granted('ROLE_SUPERVISOR') %}
+                        <a href="#" id="opermanager" data-type="select2" data-pk="{{ department.0.id }}" data-placement="right" data-value="" data-placeholder="{% trans %}Select opermanger{% endtrans %}" data-original-title="{% trans %}Type opermanger{% endtrans %}">
+                            {{ department.0.opermanagerName }}
+                        </a>
+                    {% else %}
+                        {{ department.0.opermanagerName }}
+                    {% endif %}
                 </td>
             </tr>
             <tr>{# 5 #}
                 <td>{% trans %}Address{% endtrans %}</td>
                 <td>
-                    {{ department.0.address }}
+                    {% if accessEdit %}
+                        <a href="#" id="address" data-type="text" data-pk="{{ department.0.id }}" data-value="{{ department.0.address }}" data-placement="right" data-original-title="{% trans %}Enter address{% endtrans %}">{{ department.0.address }}</a>
+                    {% else %}
+                        {{ department.0.address }}
+                    {% endif %}
                 </td>
                 <td>{% trans %}Rs{% endtrans %}</td>
                 <td>
@@ -141,9 +159,13 @@
             <tr> {# 6 #}
                 <td>{% trans %}Status{% endtrans %}</td>
                 <td>
-                    <a href="#" id="status" data-type="select" data-pk="{{ department.0.id }}" data-value="" data-placement="right" data-original-title="{% trans %}Select status{% endtrans %}">
+                    {% if accessEdit %}
+                        <a href="#" id="status" data-type="select" data-pk="{{ department.0.id }}" data-value="" data-placement="right" data-original-title="{% trans %}Select status{% endtrans %}">
+                            {{ department.0.statusName }}
+                        </a>
+                    {% else %}
                         {{ department.0.statusName }}
-                    </a>
+                    {% endif %}
                 </td>
                 <td>{% trans %}Edrpou{% endtrans %}</td>
                 <td>
@@ -153,6 +175,7 @@
             <tr>{# 7 #}
                 <td>{% trans %}Status Date{% endtrans %}</td>
                 <td>
+                    {% if accessEdit %}
                     <a href="#" id="statusDate" data-type="date" data-pk="{{ department.0.id }}"
                        data-original-title="{% trans %}Enter Status Date{% endtrans %}"
                        data-format="dd-mm-yyyy"
@@ -163,12 +186,13 @@
                        ">
                         {% if department.0.statusDate is not empty %}
                             {{ department.0.statusDate|date('d-m-Y') }}
-{#
-                        {% else %}
-                            {% trans %}Not defined{% endtrans %}
-#}
                         {% endif %}
                     </a>
+                    {% else %}
+                        {% if department.0.statusDate is not empty %}
+                            {{ department.0.statusDate|date('d-m-Y') }}
+                        {% endif %}
+                    {% endif %}
                 </td>
                 <td>{% trans %}Inn{% endtrans %}</td>
                 <td>

@@ -4631,7 +4631,43 @@ class AjaxController extends BaseFilterController
                 }
             ));
     }
+    /**
+     * Adds children to {formName}ProcessDefaults depending on defaults in request
+     *
+     * @param Form    $form
+     * @param mixed[] $defaultData
+     *
+     * @return void
+     */
+    public function departmentFormProcessDefaults($form, $defaultData)
+    {
+        $organizationId = $defaultData['organizationId'];
 
+        /** @var \Lists\OrganizationBundle\Entity\Organization $organization */
+        $organization = $this->getDoctrine()->getRepository('ListsOrganizationBundle:Organization')
+            ->find($organizationId);
+        if ($organization) {
+            $form
+                ->add('organization', 'text', array(
+                    'data' => (string) $organization,
+                    'disabled' => true
+                ));
+        }
+        $repository = $this->getDoctrine()->getRepository('SDUserBundle:User');
+
+        $form
+            ->add('opermanager', 'entity', array(
+                'class' => 'SDUserBundle:User',
+                'empty_value' => '',
+                'required' => false,
+                'query_builder' => function ($repository) use ($repository) {
+
+                return $repository->createQueryBuilder('u')
+                    ->innerJoin('u.stuff', 's')
+                    ->orderBy('u.lastName');
+                }
+            ));
+    }
     /**
      * Renders handling more information
      *
@@ -4714,6 +4750,9 @@ class AjaxController extends BaseFilterController
      */
     public function organizationChildFormSave(Form $form, User $user, Request $request)
     {
+        if (!$user->hasRole('ROLE_SALESADMIN') && !$user->hasRole('ROLE_DOGOVORADMIN')) {
+            throw new Exception('You don`t have access', 403);
+        }
         $data = $form->getData();
 
         $organizationId = $data['organizationId'];
@@ -5000,7 +5039,7 @@ class AjaxController extends BaseFilterController
         $userkey = $formData['userkey'];
         $stuffId = (int) $formData['stuff'];
         $departmenId = (int) $formData['departments'];
-        
+
         $departmen =  $em->getRepository('ListsDepartmentBundle:Departments')->find($departmenId);
         $suff = $em->getRepository('SDUserBundle:User')->find($stuffId)->getStuff();
         $oldStuffDepartmens = $em->getRepository('SDUserBundle:StuffDepartments')
@@ -5014,7 +5053,7 @@ class AjaxController extends BaseFilterController
         $em->flush();
         foreach ($claimtypes as $claimtype) {
             $claim = $em->getRepository('SDUserBundle:Claimtype')->find((int) $claimtype);
-            
+
             $stuffDepartmen = new StuffDepartments();
             $stuffDepartmen->setDepartments($departmen);
             $stuffDepartmen->setStuff($suff);
@@ -5022,6 +5061,34 @@ class AjaxController extends BaseFilterController
             $stuffDepartmen->setUserkey($userkey);
             $em->persist($stuffDepartmen);
         }
+        $em->flush();
+
+        return true;
+    }
+    /**
+     * Saves departmentForm ajax form
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function departmentFormSave($form, $user, $request)
+    {
+        if (!$user->hasRole('ROLE_DOGOVORADMIN')) {
+            throw new Exception('You don`t have access', 403);
+        }
+        $em = $this->getDoctrine()->getManager();
+
+        $data = $form->getData();
+        $formData = $request->request->get($form->getName());
+
+        $organization = $em->getRepository('ListsOrganizationBundle:Organization')
+            ->find((int) $formData['organizationId']);
+
+        $data->setOrganization($organization);
+        $em->persist($data);
         $em->flush();
 
         return true;

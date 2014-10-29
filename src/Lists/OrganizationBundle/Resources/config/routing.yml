@@ -259,3 +259,9 @@ lists_organization_for_user:
 lists_organization_transfer_for_user:
     pattern:  /lists/organization/transfer/for/user
     defaults: { _controller: ListsOrganizationBundle:Organization:organizationTransferForUser }
+
+lists_organization_departments_list:
+    pattern:  /lists/organization/departments/list/{id}
+    defaults: { _controller: ListsOrganizationBundle:Organization:departmentsList }
+    requirements:
+        id:  \d+

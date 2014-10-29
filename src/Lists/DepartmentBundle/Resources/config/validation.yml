@@ -1,0 +1,12 @@
+Lists\DepartmentBundle\Entity\Departments:
+    constraints:
+            - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: mpk
+    properties:
+        name:
+            - NotBlank: ~
+        city:
+            - NotBlank: ~
+        address:
+            - NotBlank: ~
+        mpk:
+            - NotBlank: ~

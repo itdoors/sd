@@ -1124,3 +1124,13 @@ ALTER TABLE stuff_departments DROP CONSTRAINT stuff_departments_pkey;
 ALTER TABLE stuff_departments ADD PRIMARY KEY (id);
 CREATE UNIQUE INDEX stuff_departments_unique ON stuff_departments (departments_id, stuff_id, claimtype_id, userkey);
 -- prod +++++++
+ALTER TABLE departments ALTER city_id TYPE INT;
+ALTER TABLE departments ALTER departments_type_id TYPE BIGINT;
+ALTER TABLE departments ALTER organization_id TYPE INT;
+ALTER TABLE departments ALTER organization_id SET NOT NULL;
+ALTER TABLE departments ALTER status_id TYPE BIGINT;
+ALTER TABLE departments ALTER isdeleted SET  DEFAULT 0;
+ALTER TABLE departments ALTER isdeleted SET NOT NULL;
+ALTER TABLE departments ADD CONSTRAINT FK_16AEB8D43C0D92A3 FOREIGN KEY (opermanager_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE departments ALTER city_id SET NOT NULL;
+-- prod ---------

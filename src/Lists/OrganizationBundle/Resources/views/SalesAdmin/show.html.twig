@@ -52,12 +52,13 @@
 					<li class="active"><a href="#tab_0" data-toggle="tab">{% trans %}Organization{% endtrans %}</a></li>
 					<li><a href="#tab_1" data-toggle="tab">{% trans %}Managers{% endtrans %}</a></li>
 					<li><a href="#tab_2" data-toggle="tab">{% trans %}Contacts{% endtrans %}</a></li>
-					<li><a href="#tab_3" data-toggle="tab">{% trans %}Child organization{% endtrans %}</a></li>
+					{#<li><a href="#tab_3" data-toggle="tab">{% trans %}Child organization{% endtrans %}</a></li>#}
                                         <li><a href="#tab_4" data-toggle="tab">{% trans %}Dogovors{% endtrans %}</a></li>
                                         <li><a href="#tab_5" data-toggle="tab">{% trans %}Projects{% endtrans %}</a></li>
                                         <li><a href="#tab_6" data-toggle="tab">{% trans %}Service cover{% endtrans %}</a></li>
                                         <li><a href="#tab_7" data-toggle="tab">{% trans %}Documents{% endtrans %}</a></li>
                                         <li><a href="#tab_8" data-toggle="tab">{% trans %}COEA{% endtrans %}</a></li>
+                                        <li><a href="#tab_9" data-toggle="tab">{% trans %}Departmens{% endtrans %}</a></li>
 				</ul>
 				<div class="tab-content">
                     <div class="tab-pane active" id="tab_0">
@@ -91,7 +92,7 @@
                         )
                     }}
 					<!--tabpane-->
-                    {{  include(
+                    {#{  include(
                         'ListsOrganizationBundle:' ~ baseTemplate ~ ':organizationChild.html.twig',
                             {
                                 organization: organization,
@@ -99,7 +100,7 @@
                                 baseRoutePrefix: baseRoutePrefix
                             }
                         )
-                    }}
+                    }#}
                     <div class="tab-pane" id="tab_4">
                         {{ render(controller('ListsDogovorBundle:Dogovor:forOrganization', { id:organization.id })) }}
                     </div>
@@ -159,6 +160,9 @@
                         <div data-url="{{ path('lists_sales_organization_show_list_kved', { id:organization.id } )}}" id="updateListKved">
                             {{ render(controller('ListsOrganizationBundle:Sales:listKved', { id:organization.id })) }}
                         </div>
+                    </div>
+                    <div class="tab-pane" id="tab_9">
+                        {{ render(controller('ListsOrganizationBundle:Organization:departments', { id:organization.id })) }}
                     </div>
                     <!--tabpane-->
                 </div>
