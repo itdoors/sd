@@ -69,12 +69,21 @@ class OperDepartmentInfoController extends BaseFilterController
      */
     public function basicAction($id)
     {
+        $accessEdit = false;
         $filterNamespace = $this->container->getParameter($this->getNamespace());
         $this->clearPaginator($filterNamespace);
         $repository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments');
-
         $department = $repository->getDepartmentInfoById($id);
+        $oper = $this->getDoctrine()
+            ->getRepository('SDUserBundle:StuffDepartments')
+            ->findOneBy(array(
+                'stuff' => $this->getUser()->getStuff(),
+                'departments' => $id
+            ));
+        if ($oper || $this->getUser()->hasRole('ROLE_SUPERVISOR')) {
+            $accessEdit = true;
+        }
         $mpks = $repository->find($id)->getMpks();
         $oldMpks = false;
         foreach ($mpks as $mpk) {
@@ -85,6 +94,7 @@ class OperDepartmentInfoController extends BaseFilterController
         }
 
         return $this->render('ITDoorsOperBundle:DepartmentInfo:basic.html.twig', array(
+            'accessEdit' => $accessEdit,
             'department' => $department,
             'mpks' => $mpks,
             'oldMpks' => $oldMpks
