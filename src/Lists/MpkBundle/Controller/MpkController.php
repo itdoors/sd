@@ -63,7 +63,7 @@ class MpkController extends BaseFilterController
             $value = $this->getDoctrine()
                 ->getRepository('ListsOrganizationBundle:Organization')
                 ->find((int) $value);
-        } elseif (in_array($name,  array('startDate','endDate'))) {
+        } elseif (in_array($name,  array('startDate', 'endDate'))) {
             if (empty($value)) {
                 $value = null;
             } else {

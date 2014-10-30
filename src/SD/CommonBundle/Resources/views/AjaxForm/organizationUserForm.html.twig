@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="portlet-body">
-
+                <div class="row ">
                 {{ form_start(form, {
                     'action' : path('sd_common_ajax_form'),
                     'attr' : {
@@ -55,6 +55,7 @@
                     <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
                     <input type="hidden" name="targetId" value="{{ targetId }}">
                 {{ form_end(form) }}
+                </div>
             </div>
         </div>
     </div>
