@@ -76,7 +76,7 @@ class DogovorForm extends AbstractType
                 'format' => 'dd.MM.yyyy'
             ))
             ->add('dogovorType', null, array(
-                'query_builder' => $lr->getOnlyDogovorTypeQuery()
+                'query_builder' => $lr->getOnlyDogovorTypeGroupQuery()
             ))
             ->add('city', 'hidden_entity', array(
                 'entity' => 'ListsCityBundle:City',
