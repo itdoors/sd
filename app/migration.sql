@@ -1141,3 +1141,15 @@ ALTER TABLE mpk DROP CONSTRAINT mpk_name_key;
 CREATE UNIQUE INDEX mpk_unique_idx ON mpk (name, self_organization_id);
 ALTER TABLE departments ALTER name DROP NOT NULL;
 -- prod ++++++++
+UPDATE "public".lookup SET "lukey" = 'one-off' WHERE id = 13;
+UPDATE "public".lookup SET "lukey" = 'complex' WHERE id = 14;
+UPDATE "public".lookup SET "lukey" = 'with_contractors' WHERE id = 15;
+UPDATE "public".lookup SET "lukey" = 'internal' WHERE id = 16;
+UPDATE "public".lookup SET "lukey" = 'rent' WHERE id = 17;
+UPDATE "public".lookup SET "lukey" = 'disinfection' WHERE id = 24;
+UPDATE "public".lookup SET "lukey" = 'supply' WHERE id = 71;
+UPDATE "public".lookup SET "lukey" = 'privacy' WHERE id = 72;
+UPDATE "public".lookup SET "lukey" = 'loan' WHERE id = 73;
+UPDATE "public".lookup SET "lukey" = 'rent_legal_address' WHERE id = 74;
+UPDATE "public".lookup SET "lukey" = 'domestic_services' WHERE id = 75;
+-- prod ++++++

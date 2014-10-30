@@ -54,7 +54,7 @@ class DogovorFilterForm extends AbstractType
             ))
             ->add('dogovorType', 'entity', array(
                 'class' => 'ListsLookupBundle:Lookup',
-                'query_builder' => $lr->getOnlyDogovorTypeQuery(),
+                'query_builder' => $lr->getOnlyDogovorTypeGroupQuery(),
                 'empty_value' =>  ''
             ))
             ->add('typeDate', 'choice', array(

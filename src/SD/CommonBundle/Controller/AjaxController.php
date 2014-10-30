@@ -565,7 +565,7 @@ class AjaxController extends BaseFilterController
         /** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
         $lr = $this->container->get('lists_lookup.repository');
 
-        $dogovorTypes = $lr->getOnlyDogovorTypeQuery()
+        $dogovorTypes = $lr->getOnlyDogovorTypeGroupQuery()
             ->getQuery()
             ->getResult();
 
