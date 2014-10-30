@@ -4669,6 +4669,33 @@ class AjaxController extends BaseFilterController
             ));
     }
     /**
+     * Adds children to {formName}ProcessDefaults depending on defaults in request
+     *
+     * @param Form    $form
+     * @param mixed[] $defaultData
+     *
+     * @return void
+     */
+    public function mpkFormProcessDefaults($form, $defaultData)
+    {
+        $departmentId = $defaultData['departmentId'];
+
+        /** @var \Lists\DepartmentBundle\Entity\Departments $department */
+        $department = $this->getDoctrine()->getRepository('ListsDepartmentBundle:Departments')
+            ->find($departmentId);
+        if ($department) {
+            $form
+                ->add('department', 'text', array(
+                    'data' => (string) $department,
+                    'disabled' => true
+                ))
+                ->add('departmentId', 'hidden', array(
+                    'data' => $departmentId,
+                    'mapped' => false
+                ));
+        }
+    }
+    /**
      * Renders handling more information
      *
      * @param Request $request
@@ -5088,6 +5115,34 @@ class AjaxController extends BaseFilterController
             ->find((int) $formData['organizationId']);
 
         $data->setOrganization($organization);
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
+    /**
+     * Saves mpkForm ajax form
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function mpkFormSave($form, $user, $request)
+    {
+        if (!$user->hasRole('ROLE_DOGOVORADMIN')) {
+            throw new Exception('You don`t have access', 403);
+        }
+        $em = $this->getDoctrine()->getManager();
+
+        $data = $form->getData();
+        $formData = $request->request->get($form->getName());
+
+        $department = $em->getRepository('ListsDepartmentBundle:Departments')
+            ->find((int) $formData['departmentId']);
+
+        $data->setDepartment($department);
         $em->persist($data);
         $em->flush();
 
@@ -5755,6 +5810,14 @@ class AjaxController extends BaseFilterController
                 $value = $this->getDoctrine()
                     ->getRepository('SDUserBundle:User')
                     ->find($value);
+            }
+        } elseif ($name == 'city') {
+            if (!$value) {
+                $value = null;
+            } else {
+                $value = $this->getDoctrine()
+                    ->getRepository('ListsCityBundle:City')
+                    ->find((int) $value);
             }
         } elseif ($name == 'statusDate') {
             $value = new \DateTime($value);

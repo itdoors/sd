@@ -1134,3 +1134,10 @@ ALTER TABLE departments ALTER isdeleted SET NOT NULL;
 ALTER TABLE departments ADD CONSTRAINT FK_16AEB8D43C0D92A3 FOREIGN KEY (opermanager_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE departments ALTER city_id SET NOT NULL;
 -- prod +++++++
+ALTER TABLE mpk ALTER self_organization_id TYPE BIGINT;
+ALTER TABLE mpk ALTER name SET NOT NULL;
+-- prod ++++++
+ALTER TABLE mpk DROP CONSTRAINT mpk_name_key;
+CREATE UNIQUE INDEX mpk_unique_idx ON mpk (name, self_organization_id);
+ALTER TABLE departments ALTER name DROP NOT NULL;
+-- prod ++++++++
