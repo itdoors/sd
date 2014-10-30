@@ -18,7 +18,7 @@ Lists\DepartmentBundle\Entity\Departments:
             type: string
             length: 255
             fixed: false
-            nullable: false
+            nullable: true
         fullname:
             type: string
             length: 255

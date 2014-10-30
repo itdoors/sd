@@ -190,6 +190,20 @@
                     {{ department.0.rs }}
                 </td>
             </tr>
+            <tr>{# 5 #}
+                <td>{% trans %}Name{% endtrans %}</td>
+                <td>
+                    {% if is_granted('ROLE_DOGOVORADMIN') %}
+                        <a href="#" id="name" data-type="text" data-pk="{{ department.0.id }}" data-value="{{ department.0.name }}" data-placement="right" data-original-title="{% trans %}Enter name{% endtrans %}">{{ department.0.name }}</a>
+                    {% else %}
+                        {{ department.0.name }}
+                    {% endif %}
+                </td>
+                <td>{% trans %}Edrpou{% endtrans %}</td>
+                <td>
+                    {{ department.0.edrpou }}
+                </td>
+            </tr>
             <tr> {# 6 #}
                 <td>{% trans %}Status{% endtrans %}</td>
                 <td>
@@ -201,9 +215,9 @@
                         {{ department.0.statusName }}
                     {% endif %}
                 </td>
-                <td>{% trans %}Edrpou{% endtrans %}</td>
+                <td>{% trans %}Inn{% endtrans %}</td>
                 <td>
-                    {{ department.0.edrpou }}
+                    {{ department.0.inn }}
                 </td>
             </tr>
             <tr>{# 7 #}
@@ -228,9 +242,9 @@
                         {% endif %}
                     {% endif %}
                 </td>
-                <td>{% trans %}Inn{% endtrans %}</td>
+                <td>{% trans %}Organization address{% endtrans %}</td>
                 <td>
-                    {{ department.0.inn }}
+                    {{ department.0.organizationAddress }}
                 </td>
             </tr> {# 8 #}
             <tr>
@@ -238,10 +252,8 @@
                 <td>
                     {{ department.0.certificate }}
                 </td>
-                <td>{% trans %}Organization address{% endtrans %}</td>
-                <td>
-                    {{ department.0.organizationAddress }}
-                </td>
+                <td></td>
+                <td></td>
             </tr>
 
             </tbody>
