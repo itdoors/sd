@@ -1140,5 +1140,4 @@ ALTER TABLE mpk ALTER name SET NOT NULL;
 ALTER TABLE mpk DROP CONSTRAINT mpk_name_key;
 CREATE UNIQUE INDEX mpk_unique_idx ON mpk (name, self_organization_id);
 ALTER TABLE departments ALTER name DROP NOT NULL;
-
--- prod ----------
+-- prod ++++++++
