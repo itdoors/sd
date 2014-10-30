@@ -7,7 +7,7 @@
         $.fn.editable.defaults.inputclass = 'form-control';
         $.fn.editable.defaults.emptytext = '{% trans %}Enter value{% endtrans %}';
 
-        $('#description, #address').editable({
+        $('#description, #address, #name').editable({
             url: '{{ path('sd_common_ajax_editable_department') }}'
         });
 
