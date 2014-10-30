@@ -1136,4 +1136,8 @@ ALTER TABLE departments ALTER city_id SET NOT NULL;
 -- prod +++++++
 ALTER TABLE mpk ALTER self_organization_id TYPE BIGINT;
 ALTER TABLE mpk ALTER name SET NOT NULL;
+
+ALTER TABLE mpk DROP CONSTRAINT mpk_name_key;
+CREATE UNIQUE INDEX mpk_unique_idx ON mpk (name, self_organization_id);
+
 -- prod ++++++

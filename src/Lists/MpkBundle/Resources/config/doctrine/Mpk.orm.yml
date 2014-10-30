@@ -14,10 +14,11 @@ Lists\MpkBundle\Entity\Mpk:
             length: 50
             fixed: false
             nullable: false
-            unique: true
         active:
             type: boolean
             nullable: false
+            options:
+                default: 0
         startDate:
             type: date
             nullable: true
@@ -41,5 +42,8 @@ Lists\MpkBundle\Entity\Mpk:
                 self_organization_id:
                     referencedColumnName: id
             orphanRemoval: false
+    uniqueConstraints:
+        mpk_unique_idx:
+          columns: [name, self_organization_id]
     lifecycleCallbacks:
          prePersist: [ onPrePersist ]
