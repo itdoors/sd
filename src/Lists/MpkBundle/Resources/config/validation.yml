@@ -1,0 +1,11 @@
+Lists\MpkBundle\Entity\Mpk:
+    getters:
+        datesValid:
+            - "True": { message: "The start date must be before the end date" }
+    constraints:
+            - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: name
+    properties:
+        name:
+            - NotBlank: ~
+        active:
+            - NotBlank: ~

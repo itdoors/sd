@@ -57,7 +57,23 @@ class MpkRepository extends EntityRepository
                     ->setParameter(':department', $id);
             }
         }
-            $sql = $sql->getQuery();
+        $sql = $sql->getQuery();
+
+        return $sql->getResult();
+    }
+    /**
+     * Searches mpk from fixed department
+     *
+     * @param integer $id
+     *
+     * @return mixed[]
+     */
+    public function getMpkForDepartment($id)
+    {
+        $sql = $this->createQueryBuilder('m')
+            ->andWhere('m.department = :department')
+            ->setParameter(':department', $id)
+            ->getQuery();
 
         return $sql->getResult();
     }

@@ -41,4 +41,5 @@ Lists\MpkBundle\Entity\Mpk:
                 self_organization_id:
                     referencedColumnName: id
             orphanRemoval: false
-    lifecycleCallbacks: {  }
+    lifecycleCallbacks:
+         prePersist: [ onPrePersist ]

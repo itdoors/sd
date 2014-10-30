@@ -13,7 +13,11 @@
             language: 'ru',
             weekStart: 1
         });
-        $('#' + '{{ form.vars.name }}' + '_city, #' + '{{ form.vars.name }}' + '_type, #' + '{{ form.vars.name }}' + '_status, #' + '{{ form.vars.name }}' + '_opermanager').select2({
+        $('#' + '{{ form.vars.name }}' + '_organization').select2({
+            minimumInputLength: 2,
+            allowClear: true
+        });
+        $('#' + '{{ form.vars.name }}' + '_active').select2({
             allowClear: true
         });
     });
@@ -48,80 +52,61 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
+                            {{ form_label(form.department, 'Department', {'attr': {'class': 'control-label'}}) }} <span class="required"> * </span>
+                            {{ form_widget(form.department, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.department) }}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
                             {{ form_label(form.organization, 'Organization', {'attr': {'class': 'control-label'}}) }} <span class="required"> * </span>
                             {{ form_widget(form.organization, {'attr': {'class': 'form-control'}}) }}
                             {{ form_errors(form.organization) }}
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="form-group">
-                            {{ form_label(form.name, 'Name', {'attr': {'class': 'control-label'}}) }}
-                            {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Enter name'}}) }}
+                            {{ form_label(form.name, 'Mpk', {'attr': {'class': 'control-label'}}) }} <span class="required"> * </span>
+                            {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Enter mpk'}}) }}
                             {{ form_errors(form.name) }}
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="form-group">
-                            {{ form_label(form.city, 'City', {'attr': {'class': 'control-label'}}) }} <span class="required"> * </span>
-                            {{ form_widget(form.city, {'attr': {'class': 'form-control select2','style':'display: block;', 'placeholder': 'Enter city'}}) }}
-                            {{ form_errors(form.city) }}
+                            {{ form_label(form.active, 'Status', {'attr': {'class': 'control-label'}}) }} <span class="required"> * </span>
+                            {{ form_widget(form.active, {'attr': {'class': 'form-control', 'placeholder': 'Enter status'}}) }}
+                            {{ form_errors(form.active) }}
                         </div>
                     </div>
-                    <div class="col-md-3">
+
+                    <div class="col-md-6">
                         <div class="form-group">
-                            {{ form_label(form.address, 'Address', {'attr': {'class': 'control-label'}}) }} <span class="required"> * </span>
-                            {{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': 'Enter address'}}) }}
-                            {{ form_errors(form.address) }}
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            {{ form_label(form.mpk, 'MPK', {'attr': {'class': 'control-label'}}) }} <span class="required"> * </span>
-                            {{ form_widget(form.mpk, {'attr': {'class': 'form-control', 'placeholder': 'Enter MPK'}}) }}
-                            {{ form_errors(form.mpk) }}
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            {{ form_label(form.type, 'Type', {'attr': {'class': 'control-label'}}) }}
-                            {{ form_widget(form.type, {'attr': {'class': 'form-control', 'placeholder': 'Enter type'}}) }}
-                            {{ form_errors(form.type) }}
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            {{ form_label(form.statusDate, 'Date', {'attr': {'class': 'control-label'} }) }}
+                            {{ form_label(form.startDate, 'Start date', {'attr': {'class': 'control-label'} }) }}
                             <div class="input-group date form_date">
-                                {{ form_widget(form.statusDate, {'attr' : {
+                                {{ form_widget(form.startDate, {'attr' : {
                                 'class' : 'form-control',
-                                'placeholder': 'Enter date'
+                                'placeholder': 'Enter date start'
                                 }}) }}
                                 <span class="input-group-btn">
                                     <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
                                 </span>
                             </div>
-                            {{ form_errors(form.statusDate) }}
+                            {{ form_errors(form.startDate) }}
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="form-group">
-                            {{ form_label(form.status, 'Status', {'attr': {'class': 'control-label'} }) }}
-                            {{ form_widget(form.status, {'attr': {'class': 'form-control', 'placeholder': 'Enter status'}}) }}
-                            {{ form_errors(form.status) }}
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            {{ form_label(form.opermanager, 'Oper manager', {'attr': {'class': 'control-label'} }) }}
-                            {{ form_widget(form.opermanager, {'attr': {'class': 'form-control', 'placeholder': 'Enter opermanager'}}) }}
-                            {{ form_errors(form.opermanager) }}
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            {{ form_label(form.description, 'Description', {'attr': {'class': 'control-label'}}) }}
-                            {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Enter description'}}) }}
-                            {{ form_errors(form.description) }}
+                            {{ form_label(form.endDate, 'Stop date', {'attr': {'class': 'control-label'} }) }}
+                            <div class="input-group date form_date">
+                                {{ form_widget(form.endDate, {'attr' : {
+                                'class' : 'form-control',
+                                'placeholder': 'Enter date stop'
+                                }}) }}
+                                <span class="input-group-btn">
+                                    <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+                                </span>
+                            </div>
+                            {{ form_errors(form.endDate) }}
                         </div>
                     </div>
                 </div>

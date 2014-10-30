@@ -81,7 +81,7 @@ class OperDepartmentInfoController extends BaseFilterController
                 'stuff' => $this->getUser()->getStuff(),
                 'departments' => $id
             ));
-        if ($oper || $this->getUser()->hasRole('ROLE_SUPERVISOR')) {
+        if ($oper || $this->getUser()->hasRole('ROLE_DOGOVORADMIN')) {
             $accessEdit = true;
         }
         $mpks = $repository->find($id)->getMpks();
