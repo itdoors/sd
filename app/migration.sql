@@ -1153,3 +1153,6 @@ UPDATE "public".lookup SET "lukey" = 'loan' WHERE id = 73;
 UPDATE "public".lookup SET "lukey" = 'rent_legal_address' WHERE id = 74;
 UPDATE "public".lookup SET "lukey" = 'domestic_services' WHERE id = 75;
 -- prod ++++++
+ALTER TABLE invoice_payments ALTER bank SET NOT NULL;
+ALTER TABLE invoice ADD guid VARCHAR(512) DEFAULT NULL;
+-- prod ++++

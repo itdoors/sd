@@ -16,6 +16,10 @@ ITDoors\ControllingBundle\Entity\Invoice:
             type: string
             length: 255
             column: invoice_id
+        guid:
+            type: string
+            nullable: true
+            length: 512
         sum:
             type: float
             length: 20

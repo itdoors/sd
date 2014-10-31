@@ -924,4 +924,33 @@ class Invoice
     {
         return $this->debitSum;
     }
+    /**
+     * @var string
+     */
+    private $guid;
+
+
+    /**
+     * Set guid
+     *
+     * @param string $guid
+     * 
+     * @return Invoice
+     */
+    public function setGuid($guid)
+    {
+        $this->guid = $guid;
+
+        return $this;
+    }
+
+    /**
+     * Get guid
+     *
+     * @return string 
+     */
+    public function getGuid()
+    {
+        return $this->guid;
+    }
 }
