@@ -2,10 +2,12 @@
 
 namespace Lists\DepartmentBundle\Entity;
 
+use ITDoors\HelperBundle\Classes\HiddenFields;
+
 /**
  * Departments
  */
-class Departments
+class Departments extends HiddenFields
 {
     /**
      * @var integer

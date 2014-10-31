@@ -163,7 +163,8 @@ class DogovorForm extends AbstractType
                     if ($dogovor) {
                         $msgString = "This document has already been added";
 
-                        $msg = $translator->trans($msgString, array(), 'ListsDogovorBundle').' ID: '.$dogovor[0]->getId();
+                        $msg = $translator->trans($msgString, array(), 'ListsDogovorBundle').
+                            ' ID: '.$dogovor[0]->getId();
 
                         $form->addError(new FormError($msg));
                     }

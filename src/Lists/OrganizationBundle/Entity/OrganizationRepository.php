@@ -941,20 +941,4 @@ class OrganizationRepository extends EntityRepository
 
         return $res;
     }
-    /**
-     * Searches organization by $q
-     *
-     * @param string $userId
-     *
-     * @return mixed[]
-     */
-    public function isManager ($userId)
-    {
-        $sql = $this->createQueryBuilder('o')
-            ->where('lower(o.name) LIKE :q')
-            ->setParameter(':q', mb_strtolower($q, 'UTF-8') . '%')
-            ->getQuery();
-
-        return $sql->getResult();
-    }
 }
