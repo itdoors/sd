@@ -97,7 +97,7 @@ class UserNewStuffForm extends AbstractType
 
         $builder
             ->add('create', 'submit');
-         $builder->addEventListener(
+        $builder->addEventListener(
             FormEvents::POST_SUBMIT,
             function (FormEvent $event) use ($container) {
                     /* @var User $newUser */
@@ -105,14 +105,14 @@ class UserNewStuffForm extends AbstractType
                     $form = $event->getForm();
                     $em = $container->get('doctrine')->getManager();
                     $emailUser = $em->getRepository('SDUserBundle:User')
-                                    ->findOneBy(array('email' => $newUser->getEmail()));
+                        ->findOneBy(array('email' => $newUser->getEmail()));
                     if ($emailUser) {
-                            $form->get('email')->addError(new FormError($emailUser));
+                        $form->get('email')->addError(new FormError($emailUser));
                     }
                     $usernameUser = $em->getRepository('SDUserBundle:User')
-                                    ->findOneBy(array('username' => $newUser->getUserName()));
+                        ->findOneBy(array('username' => $newUser->getUserName()));
                     if ($usernameUser) {
-                            $form->get('username')->addError(new FormError($usernameUser));
+                        $form->get('username')->addError(new FormError($usernameUser));
                     }
             }
         );
