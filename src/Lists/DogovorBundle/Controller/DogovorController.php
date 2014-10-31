@@ -16,6 +16,8 @@ class DogovorController extends BaseController
     protected $baseRoute = 'lists_dogovor_dogovor_index';
     protected $baseRoutePrefix = 'dogovor';
     protected $baseTemplate = 'Dogovor';
+     /** @var KnpPaginatorBundle $paginator */
+    protected $paginator = 'knp_paginator';
 
     /**
      * indexAction
@@ -50,6 +52,76 @@ class DogovorController extends BaseController
             'filterFormName' => $this->filterFormName,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
+        ));
+    }
+    /**
+     * listDangerAction
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listDangerAction()
+    {
+        $baseFilter = $this->container->get('it_doors_ajax.base_filter_service');
+
+        $namespace = 'dogovorDanger';
+
+        /** @var \Lists\DogovorBundle\Entity\DogovorRepository $repository */
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:Dogovor');
+        $idManager = null;
+        if ($this->getUser()->hasRole('ROLE_SALES')) {
+            $idManager = $this->getUser()->getId();
+        }
+        if ($this->getUser()->hasRole('ROLE_OPER')) {
+        }
+        if (
+            !$this->getUser()->hasRole('ROLE_DOGOVORADMIN')
+            &&
+            !$this->getUser()->hasRole('ROLE_OPER')
+            &&
+            !$this->getUser()->hasRole('ROLE_SALES')
+        ) {
+            throw new \Exception('You don`t have needed');
+        }
+        $items = $repository->getAllDanger($idManager);
+        $entities = $items['entities'];
+        $count = $items['count'];
+
+        $page = $baseFilter->getPaginator($namespace);
+        if (!$page) {
+            $page = 1;
+        }
+        $paginator = $this->container->get($this->paginator);
+        $entities->setHint($this->paginator . '.count', $count);
+        $pagination = $paginator->paginate($entities, $page, 20);
+
+        return $this->render('ListsDogovorBundle:Dogovor:listDanger.html.twig', array(
+            'pagination' => $pagination,
+            'namespace' => $namespace,
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix,
+        ));
+    }
+    /**
+     * Renders single element of dogovor list
+     *
+     * @param int $id
+     *
+     * @return string
+     */
+    public function elementDangerAction($id)
+    {
+        /** @var DogovorRepository $dr */
+        $dr = $this->get('lists_dogovor.repository');
+
+        $itemQuery = $dr->getAllForDogovorQuery(array(), $id);
+
+        $item = $itemQuery->getSingleResult();
+
+        return $this->render('ListsDogovorBundle:Dogovor:elementDanger.html.twig', array(
+            'item' => $item,
+            'baseTemplate' => $this->baseTemplate,
+            'baseRoutePrefix' => $this->baseRoutePrefix
         ));
     }
 

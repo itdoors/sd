@@ -1,6 +1,6 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'ListsOrganizationBundle' %}
-{% block title %}{% trans %}List of rganizations{% endtrans %} {% endblock %}
+{% block title %}{% trans %}Transfer organizations{% endtrans %} {% endblock %}
 {% block page_breadcrumbs %}
     <ul class="page-breadcrumb breadcrumb">
         <li>
@@ -59,8 +59,8 @@
     </script>
     <div class="row">
         <div class="col-md-12">
-            <div id="datatable_ajax"  data-url="{{ url('lists_sales_admin_organization_for_user') }}">
-                {{ render(controller('ListsOrganizationBundle:SalesAdmin:organizationForUser')) }}
+            <div id="datatable_ajax"  data-url="{{ url('lists_organization_for_user') }}">
+                {{ render(controller('ListsOrganizationBundle:Organization:organizationForUser')) }}
             </div>
         </div>
     </div>

@@ -94,6 +94,10 @@ lists_handling:
     resource: "@ListsHandlingBundle/Resources/config/routing.yml"
     prefix:   /
 
+lists_mpk:
+    resource: "@ListsMpkBundle/Resources/config/routing.yml"
+    prefix:   /
+
 lists_lookup:
     resource: "@ListsLookupBundle/Resources/config/routing.yml"
     prefix:   /

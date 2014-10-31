@@ -46,6 +46,7 @@ use Lists\OrganizationBundle\Entity\OrganizationUser;
 use ITDoors\HistoryBundle\Entity\History;
 use Lists\DogovorBundle\Entity\DogovorCompanystructure;
 use ITDoors\SipBundle\Entity\Call;
+use SD\UserBundle\Entity\StuffDepartments;
 
 /**
  * AjaxController class.
@@ -564,7 +565,7 @@ class AjaxController extends BaseFilterController
         /** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
         $lr = $this->container->get('lists_lookup.repository');
 
-        $dogovorTypes = $lr->getOnlyDogovorTypeQuery()
+        $dogovorTypes = $lr->getOnlyDogovorTypeGroupQuery()
             ->getQuery()
             ->getResult();
 
@@ -3355,6 +3356,45 @@ class AjaxController extends BaseFilterController
      *
      * @return void
      */
+    public function stuffDepartmensDelete($params)
+    {
+//        if ($this->getUser()->hasRole('ROLE_HRADMIN')) {
+//            throw new \Exception('You don`t have access', 403);
+//        }
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        $departmentId = $params['departmentId'];
+        $stuffId = $params['stuffId'];
+
+        /** @var Department $department */
+        $department = $em
+            ->getRepository('ListsDepartmentBundle:Departments')
+            ->find($departmentId);
+        /** @var Stuff $stuff */
+        $stuff = $em
+            ->getRepository('SDUserBundle:Stuff')
+            ->find($stuffId);
+        /** @var StuffDepartments $objects */
+        $objects = $em
+            ->getRepository('SDUserBundle:StuffDepartments')
+            ->findBy(array(
+                'departments' => $department,
+                'stuff' => $stuff
+            ));
+        foreach ($objects as $object) {
+            $em->remove($object);
+        }
+
+        $em->flush();
+    }
+    /**
+     * Deletes {entityName}Delete instance
+     *
+     * @param mixed[] $params
+     *
+     * @return void
+     */
     public function holidayDelete($params)
     {
         if (!$this->getUser()->hasRole('ROLE_HRADMIN') && !$this->getUser()->hasRole('ROLE_HOLIDAY')) {
@@ -3735,7 +3775,7 @@ class AjaxController extends BaseFilterController
             $methodGet = 'get' . ucfirst($name);
             $type = gettype($object->$methodGet());
 
-            if (in_array($type, array('integer'))) {
+            if (in_array($type, array('integer', 'object'))) {
                 $value = null;
             }
         }
@@ -4221,7 +4261,12 @@ class AjaxController extends BaseFilterController
         $name = $this->get('request')->request->get('name');
 
         if ($name == 'DateEnd') {
-            $value = new \DateTime($this->get('request')->request->get('value'));
+            $value = $this->get('request')->request->get('value');
+            if (empty($value)) {
+                $value = null;
+            } else {
+                $value = new \DateTime($this->get('request')->request->get('value'));
+            }
         } elseif ($name == 'court') {
             $value = (boolean) $this->get('request')->request->get('value');
         } else {
@@ -4586,7 +4631,70 @@ class AjaxController extends BaseFilterController
                 }
             ));
     }
+    /**
+     * Adds children to {formName}ProcessDefaults depending on defaults in request
+     *
+     * @param Form    $form
+     * @param mixed[] $defaultData
+     *
+     * @return void
+     */
+    public function departmentFormProcessDefaults($form, $defaultData)
+    {
+        $organizationId = $defaultData['organizationId'];
 
+        /** @var \Lists\OrganizationBundle\Entity\Organization $organization */
+        $organization = $this->getDoctrine()->getRepository('ListsOrganizationBundle:Organization')
+            ->find($organizationId);
+        if ($organization) {
+            $form
+                ->add('organization', 'text', array(
+                    'data' => (string) $organization,
+                    'disabled' => true
+                ));
+        }
+        $repository = $this->getDoctrine()->getRepository('SDUserBundle:User');
+
+        $form
+            ->add('opermanager', 'entity', array(
+                'class' => 'SDUserBundle:User',
+                'empty_value' => '',
+                'required' => false,
+                'query_builder' => function ($repository) use ($repository) {
+
+                return $repository->createQueryBuilder('u')
+                    ->innerJoin('u.stuff', 's')
+                    ->orderBy('u.lastName');
+                }
+            ));
+    }
+    /**
+     * Adds children to {formName}ProcessDefaults depending on defaults in request
+     *
+     * @param Form    $form
+     * @param mixed[] $defaultData
+     *
+     * @return void
+     */
+    public function mpkFormProcessDefaults($form, $defaultData)
+    {
+        $departmentId = $defaultData['departmentId'];
+
+        /** @var \Lists\DepartmentBundle\Entity\Departments $department */
+        $department = $this->getDoctrine()->getRepository('ListsDepartmentBundle:Departments')
+            ->find($departmentId);
+        if ($department) {
+            $form
+                ->add('department', 'text', array(
+                    'data' => (string) $department,
+                    'disabled' => true
+                ))
+                ->add('departmentId', 'hidden', array(
+                    'data' => $departmentId,
+                    'mapped' => false
+                ));
+        }
+    }
     /**
      * Renders handling more information
      *
@@ -4669,6 +4777,9 @@ class AjaxController extends BaseFilterController
      */
     public function organizationChildFormSave(Form $form, User $user, Request $request)
     {
+        if (!$user->hasRole('ROLE_SALESADMIN') && !$user->hasRole('ROLE_DOGOVORADMIN')) {
+            throw new Exception('You don`t have access', 403);
+        }
         $data = $form->getData();
 
         $organizationId = $data['organizationId'];
@@ -4928,6 +5039,110 @@ class AjaxController extends BaseFilterController
         $data->setCreateDateTime(new \DateTime(date('Y-m-d H:i:s')));
 
         $em = $this->getDoctrine()->getManager();
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
+    /**
+     * Saves stuffDepartment ajax form
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function stuffDepartmentFormSave($form, $user, $request)
+    {
+        if (!$user->hasRole('ROLE_HRADMIN')) {
+            throw new Exception('You don`t have access', 403);
+        }
+        $em = $this->getDoctrine()->getManager();
+
+        $formData = $request->request->get($form->getName());
+
+        $claimtypes = $formData['claimtype'];
+        $userkey = $formData['userkey'];
+        $stuffId = (int) $formData['stuff'];
+        $departmenId = (int) $formData['departments'];
+
+        $departmen =  $em->getRepository('ListsDepartmentBundle:Departments')->find($departmenId);
+        $suff = $em->getRepository('SDUserBundle:User')->find($stuffId)->getStuff();
+        $oldStuffDepartmens = $em->getRepository('SDUserBundle:StuffDepartments')
+            ->findBy(array(
+                'stuff' => $suff,
+                'departments' => $departmen
+            ));
+        foreach ($oldStuffDepartmens as $oldStuffDepartmen) {
+            $em->remove($oldStuffDepartmen);
+        }
+        $em->flush();
+        foreach ($claimtypes as $claimtype) {
+            $claim = $em->getRepository('SDUserBundle:Claimtype')->find((int) $claimtype);
+
+            $stuffDepartmen = new StuffDepartments();
+            $stuffDepartmen->setDepartments($departmen);
+            $stuffDepartmen->setStuff($suff);
+            $stuffDepartmen->setClaimtypes($claim);
+            $stuffDepartmen->setUserkey($userkey);
+            $em->persist($stuffDepartmen);
+        }
+        $em->flush();
+
+        return true;
+    }
+    /**
+     * Saves departmentForm ajax form
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function departmentFormSave($form, $user, $request)
+    {
+        if (!$user->hasRole('ROLE_DOGOVORADMIN')) {
+            throw new Exception('You don`t have access', 403);
+        }
+        $em = $this->getDoctrine()->getManager();
+
+        $data = $form->getData();
+        $formData = $request->request->get($form->getName());
+
+        $organization = $em->getRepository('ListsOrganizationBundle:Organization')
+            ->find((int) $formData['organizationId']);
+
+        $data->setOrganization($organization);
+        $em->persist($data);
+        $em->flush();
+
+        return true;
+    }
+    /**
+     * Saves mpkForm ajax form
+     *
+     * @param Form    $form
+     * @param User    $user
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function mpkFormSave($form, $user, $request)
+    {
+        if (!$user->hasRole('ROLE_DOGOVORADMIN')) {
+            throw new Exception('You don`t have access', 403);
+        }
+        $em = $this->getDoctrine()->getManager();
+
+        $data = $form->getData();
+        $formData = $request->request->get($form->getName());
+
+        $department = $em->getRepository('ListsDepartmentBundle:Departments')
+            ->find((int) $formData['departmentId']);
+
+        $data->setDepartment($department);
         $em->persist($data);
         $em->flush();
 
@@ -5595,6 +5810,14 @@ class AjaxController extends BaseFilterController
                 $value = $this->getDoctrine()
                     ->getRepository('SDUserBundle:User')
                     ->find($value);
+            }
+        } elseif ($name == 'city') {
+            if (!$value) {
+                $value = null;
+            } else {
+                $value = $this->getDoctrine()
+                    ->getRepository('ListsCityBundle:City')
+                    ->find((int) $value);
             }
         } elseif ($name == 'statusDate') {
             $value = new \DateTime($value);

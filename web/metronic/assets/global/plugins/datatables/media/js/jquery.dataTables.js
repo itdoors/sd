@@ -10725,7 +10725,7 @@
 			 *      $('#example').dataTable( {
 			 *        "language": {
 			 *          "infoEmpty": "No entries to show"
-			 *        }
+			 *        }total entrie
 			 *      } );
 			 *    } );
 			 */

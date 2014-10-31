@@ -142,4 +142,27 @@ class CompanystructureRepository extends NestedTreeRepository
 
         return $entity;
     }
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @param ListsCompanystructureBundle:Companystructure $node
+     * @param integer                                      $level
+     * 
+     * @return Companystructure
+     */
+    public function getParent ($node, $level)
+    {
+        $result = null;
+        if ($node->getLevel() == 0) {
+            $result = null;
+        } elseif ($node->getLevel() == $level) {
+            $result = $node;
+        } elseif ($node->getLevel() > $level) {
+            $result = $this->getParent($node->getParent(), $level);
+        } else {
+            throw new \Exception('Wrong param');
+        }
+
+        return $result;
+    }
 }

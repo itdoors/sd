@@ -49,7 +49,7 @@
         item.dogovorIsActive
         and
         (
-            item.dogovorProlongationDate == ''
+            item.dogovorProlongationDate == '' and 'now'|date_modify("-2 mont")|date('U') > item.dogovorStopdatetime|date('U')
             or
             'now'|date_modify("-2 mont")|date('U') > item.dogovorProlongationDate|date('U')
         )

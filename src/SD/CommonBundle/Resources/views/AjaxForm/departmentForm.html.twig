@@ -1,0 +1,142 @@
+{% trans_default_domain 'ListsDepartmentBundle' %}
+{% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+
+<script type="text/javascript">
+
+    $(document).ready(function (){
+
+        $(".form_date").datepicker({
+            autoclose: true,
+            isRTL: Metronic.isRTL(),
+            format: "dd.mm.yyyy",
+            pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+            language: 'ru',
+            weekStart: 1
+        });
+        $('#' + '{{ form.vars.name }}' + '_city, #' + '{{ form.vars.name }}' + '_type, #' + '{{ form.vars.name }}' + '_status, #' + '{{ form.vars.name }}' + '_opermanager').select2({
+            allowClear: true
+        });
+    });
+
+
+</script>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title"><div class="caption"><i class="fa fa-cogs"></i>{% trans %}Add department{% endtrans %}</div></div>
+            <div class="portlet-body">
+                {% if form.vars.valid %}
+                {% else %}
+                <div class="alert alert-danger">
+                    <button class="close" data-close="alert"></button>
+                    {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                    {{ form_errors(form) }}
+                </div>
+                {% endif %}
+
+                {{ form_start(form, {
+                    'action' : path('sd_common_ajax_form'),
+                    'attr' : {
+                        'method' : 'POST',
+                        'class' : 'ajax-form-entity',
+                        'data-post_function': postFunction,
+                        'data-post_target_id': postTargetId,
+                        'data-target_id': targetId
+                }
+                }) }}
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            {{ form_label(form.organization, 'Organization', {'attr': {'class': 'control-label'}}) }} <span class="required"> * </span>
+                            {{ form_widget(form.organization, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(form.organization) }}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {{ form_label(form.name, 'Name', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Enter name'}}) }}
+                            {{ form_errors(form.name) }}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {{ form_label(form.city, 'City', {'attr': {'class': 'control-label'}}) }} <span class="required"> * </span>
+                            {{ form_widget(form.city, {'attr': {'class': 'form-control select2','style':'display: block;', 'placeholder': 'Enter city'}}) }}
+                            {{ form_errors(form.city) }}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {{ form_label(form.address, 'Address', {'attr': {'class': 'control-label'}}) }} <span class="required"> * </span>
+                            {{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': 'Enter address'}}) }}
+                            {{ form_errors(form.address) }}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {{ form_label(form.mpk, 'MPK', {'attr': {'class': 'control-label'}}) }} <span class="required"> * </span>
+                            {{ form_widget(form.mpk, {'attr': {'class': 'form-control', 'placeholder': 'Enter MPK'}}) }}
+                            {{ form_errors(form.mpk) }}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {{ form_label(form.type, 'Type', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.type, {'attr': {'class': 'form-control', 'placeholder': 'Enter type'}}) }}
+                            {{ form_errors(form.type) }}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {{ form_label(form.statusDate, 'Date', {'attr': {'class': 'control-label'} }) }}
+                            <div class="input-group date form_date">
+                                {{ form_widget(form.statusDate, {'attr' : {
+                                'class' : 'form-control',
+                                'placeholder': 'Enter date'
+                                }}) }}
+                                <span class="input-group-btn">
+                                    <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
+                                </span>
+                            </div>
+                            {{ form_errors(form.statusDate) }}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {{ form_label(form.status, 'Status', {'attr': {'class': 'control-label'} }) }}
+                            {{ form_widget(form.status, {'attr': {'class': 'form-control', 'placeholder': 'Enter status'}}) }}
+                            {{ form_errors(form.status) }}
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            {{ form_label(form.opermanager, 'Oper manager', {'attr': {'class': 'control-label'} }) }}
+                            {{ form_widget(form.opermanager, {'attr': {'class': 'form-control', 'placeholder': 'Enter opermanager'}}) }}
+                            {{ form_errors(form.opermanager) }}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            {{ form_label(form.description, 'Description', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Enter description'}}) }}
+                            {{ form_errors(form.description) }}
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="formName" value="{{ formName }}">
+                <input type="hidden" name="postFunction" value="{{ postFunction }}">
+                <input type="hidden" name="postTargetId" value="{{ postTargetId }}">
+                <input type="hidden" name="targetId" value="{{ targetId }}">
+                <input type="hidden" name="defaultData" value='{{ defaultData|json_encode|raw }}'>
+
+                <div class="form-actions">
+                    {{ form_widget(form.create, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
+                    {{ form_widget(form.cancel, { 'label': 'Cancel', 'attr': {'class': 'btn default sd-cancel-btn'} } ) }}
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>

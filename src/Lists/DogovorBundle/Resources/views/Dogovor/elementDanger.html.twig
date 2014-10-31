@@ -1,0 +1,86 @@
+{% trans_default_domain 'ListsDogovorBundle' %}
+<td>
+    {% if is_granted('ROLE_DOGOVORADMIN') %}
+    <a href="{{ path('lists_' ~ baseRoutePrefix ~ '_dogovor_show', { id: item.dogovorId }) }}" data-value="{{ item.dogovorId|e }}">
+        {{ item.dogovorId|e }}
+    </a>
+    {% else %}
+        {{ item.dogovorId|e }}
+    {% endif %}
+</td>
+<td>{{ item.dogovorNumber|e }}</td>
+<td>
+    {% if item.customerId %}
+        <a href="{{ path('lists_dogovor_admin_organization_show', { id: item.customerId }) }}" target="_blank">
+            {{ item.customerName|e }}
+        </a>
+    {% endif %}
+</td>
+<td>
+    {% if item.performerId %}
+        <a href="{{ path('lists_dogovor_admin_organization_show', { id: item.performerId }) }}" target="_blank">
+            {{ item.performerName|e }}
+        </a>
+    {% endif %}
+</td>
+<td>{{ item.dogovorStartdatetime == '' ? '' : item.dogovorStartdatetime|date('d.m.Y') }}</td>
+<td>
+    {% if 
+        item.dogovorStopdatetime == ''
+        or
+        'now'|date_modify("-2 mont")|date('U') > item.dogovorStopdatetime|date('U') and item.dogovorIsActive and item.dogovorProlongationDate == ''
+    %}
+        <div class="label label-sm label-danger"><i class="fa fa-bell-o"></i></div>
+    {% endif %}
+    {{ item.dogovorStopdatetime == '' ? '' : item.dogovorStopdatetime|date('d.m.Y') }}
+</td>
+<td>
+    {% if item.dogovorProlongation %}
+        {% trans from 'messages'%}Yes{% endtrans %}
+    {% else %}
+        {% trans from 'messages'%}No{% endtrans %}
+    {% endif %}
+</td>
+<td>
+    {% if 
+        item.dogovorIsActive
+        and
+        item.dogovorStopdatetime != ''
+        and
+        (
+            item.dogovorProlongationDate == '' and 'now'|date_modify("-2 mont")|date('U') > item.dogovorStopdatetime|date('U')
+            or
+            'now'|date_modify("-2 mont")|date('U') > item.dogovorProlongationDate|date('U')
+        )
+    %}
+        <div class="label label-sm label-danger"><i class="fa fa-bell-o"></i></div>
+    {% endif %}
+    {{ item.dogovorProlongationDate == '' ? '' : item.dogovorProlongationDate|date('d.m.Y') }}
+</td>
+<td>
+    {% if item.dogovorIsActive %}
+        <span class="label label-success">{% trans from 'messages'%}Active{% endtrans %}</span>
+    {% else %}
+        <span class="label label-default">{% trans from 'messages'%}Not Active{% endtrans %}</span>
+    {% endif %}
+</td>
+<td>{{ item.dogovorSubject|e }}</td>
+{% if is_granted('ROLE_DOGOVORADMIN') %}
+<td>
+    {% set needToProlongate = (item.dogovorProlongationDate|date('U') - "now"|date('U')) < prolongation_limit %}
+    {% if needToProlongate %}
+        <a class="btn green ajax-form"
+           data-toggle="modal"
+           href="#form_dogovor_history"
+           data-target_holder="dogovorHistoryFormTpl"
+           data-form_name="dogovorHistoryForm"
+           data-post_function="updateList"
+           data-post_target_id="dogovorItem{{ item.dogovorId }}"
+           data-model="Dogovor"
+           data-model-id="{{ item.dogovorId }}"
+                >
+            {% trans %}Prolongate{% endtrans %}
+        </a>
+    {% endif %}
+</td>
+{% endif %}

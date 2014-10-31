@@ -28,6 +28,7 @@
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
 {% endblock %}
@@ -53,7 +54,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">{% trans from 'ListsDogovorBundle' %}Prolongation{% endtrans %}</h4>
+                    <h4 class="modal-title">{% trans from 'ListsDogovorBundle' %}Change last date dogovor{% endtrans %}</h4>
                 </div>
                 <div class="modal-body">
                     <div id="dogovorHistoryFormTpl" data-text="{% trans from 'messages' %}Loading data. Please wait{% endtrans %}">

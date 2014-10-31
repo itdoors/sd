@@ -71,6 +71,7 @@ class DepartmentsRepository extends EntityRepository
             ->select('d.id as id')
             ->addSelect('d.statusDate as statusDate')
             ->addSelect('d.coordinates')
+            ->addSelect('d.name')
             ->addSelect('m.name as mpk')
             ->addSelect('m.active as mpkActive')
             ->addSelect('d.address as address')

@@ -14,14 +14,9 @@ class StuffDepartments
     private $userkey;
 
     /**
-     * @var integer
-     */
-    private $id;
-
-    /**
      * @var \SD\UserBundle\Entity\Claimtype
      */
-    private $claimtype;
+    private $claimtypes;
 
     /**
      * @var \Lists\DepartmentBundle\Entity\Departments
@@ -59,51 +54,27 @@ class StuffDepartments
     }
 
     /**
-     * Set id
+     * Set claimtypes
      *
-     * @param integer $id
+     * @param \SD\UserBundle\Entity\Claimtype $claimtypes
      *
      * @return StuffDepartments
      */
-    public function setId($id)
+    public function setClaimtypes(\SD\UserBundle\Entity\Claimtype $claimtypes = null)
     {
-        $this->id = $id;
+        $this->claimtypes = $claimtypes;
 
         return $this;
     }
 
     /**
-     * Get id
+     * Get claimtypes
      *
-     * @return integer 
+     * @return \SD\UserBundle\Entity\Claimtype
      */
-    public function getId()
+    public function getClaimtypes()
     {
-        return $this->id;
-    }
-
-    /**
-     * Set claimtype
-     *
-     * @param \SD\UserBundle\Entity\Claimtype $claimtype
-     *
-     * @return StuffDepartments
-     */
-    public function setClaimtype(\SD\UserBundle\Entity\Claimtype $claimtype = null)
-    {
-        $this->claimtype = $claimtype;
-
-        return $this;
-    }
-
-    /**
-     * Get claimtype
-     *
-     * @return \SD\UserBundle\Entity\Claimtype 
-     */
-    public function getClaimtype()
-    {
-        return $this->claimtype;
+        return $this->claimtypes;
     }
 
     /**
@@ -152,5 +123,18 @@ class StuffDepartments
     public function getStuff()
     {
         return $this->stuff;
+    }
+    /**
+     * @var integer
+     */
+    private $id;
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 }

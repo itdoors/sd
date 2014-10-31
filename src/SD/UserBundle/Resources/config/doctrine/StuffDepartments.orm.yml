@@ -1,24 +1,28 @@
 SD\UserBundle\Entity\StuffDepartments:
     type: entity
     table: stuff_departments
-    fields:
-        userkey:
-            type: string
-            length: 25
-            fixed: false
-            nullable: false
+    id:
         id:
             id: true
             type: bigint
             nullable: false
-    oneToOne:
-        claimtype:
-            targetEntity: SD\UserBundle\Entity\Claimtype
+            generator:
+                strategy: IDENTITY
+    fields:
+        userkey:
+            type: string
+            length: 25
+            fixed: false        
+            nullable: false
+    manyToOne:
+        stuff:
+            targetEntity: Stuff
             cascade: {  }
             mappedBy: null
-            inversedBy: null
+            inversedBy: stuffDepartments
             joinColumns:
-                claimtype_id:
+                stuff_id:
+                    nullable: false
                     referencedColumnName: id
             orphanRemoval: false
         departments:
@@ -28,15 +32,21 @@ SD\UserBundle\Entity\StuffDepartments:
             inversedBy: null
             joinColumns:
                 departments_id:
+                    nullable: false
                     referencedColumnName: id
             orphanRemoval: false
-        stuff:
-            targetEntity: SD\UserBundle\Entity\Stuff
+        claimtypes:
+            targetEntity: Claimtype
             cascade: {  }
             mappedBy: null
             inversedBy: null
             joinColumns:
-                stuff_id:
+                claimtype_id:
+                    nullable: false
                     referencedColumnName: id
             orphanRemoval: false
+    uniqueConstraints:
+        stuff_departments_unique:
+          columns: [ departments_id, stuff_id, claimtype_id, userkey ]
     lifecycleCallbacks: {  }
+    

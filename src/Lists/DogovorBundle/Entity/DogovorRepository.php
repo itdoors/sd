@@ -70,6 +70,79 @@ class DogovorRepository extends EntityRepository
 
         return $query;
     }
+    /**
+     * Returns dogovor collection depending on filter
+     *
+     * @param integer $id
+     *
+     * @return Query
+     */
+    public function getAllForManagerOrganization($id)
+    {
+        $sql = $this->createQueryBuilder('d')
+            ->select;
+    }
+    /**
+     * Returns dogovor collection depending on filter
+     *
+     * @param integer $idManager manager organization
+     *
+     * @return Query
+     */
+    public function getAllDanger($idManager)
+    {
+        $date = new \DateTime();
+        /** @var \Doctrine\ORM\QueryBuilder $sql*/
+        $sql = $this->createQueryBuilder('d');
+        $sqlCount = $this->createQueryBuilder('d');
+
+        $this->processSelect($sql);
+        $this->processCount($sqlCount);
+
+        $this->processBaseQuery($sql);
+        $this->processBaseQuery($sqlCount);
+        if ($idManager) {
+            $sql
+                ->leftJoin('o.organizationUsers', 'manager')
+                ->andWhere('manager.userId = (:idManager)')
+                ->setParameter(':idManager', $idManager);
+            $sqlCount
+                ->leftJoin('o.organizationUsers', 'manager')
+                ->andWhere('manager.userId = (:idManager)')
+                ->setParameter(':idManager', $idManager);
+        }
+        $sql
+            ->andWhere(
+                'd.stopdatetime is NULL'
+                . ' OR '
+                . '(d.stopdatetime < :date AND d.isActive = true AND d.prolongationDate is NULL)'
+                . ' OR '
+                . '(d.isActive = true AND d.prolongationDate is NULL AND d.stopdatetime < :date)'
+                . ' OR '
+                . '(d.isActive = true AND d.prolongationDate < :date)'
+            )
+            ->setParameter(':date', $date->modify('-2 month'));
+        $sqlCount
+            ->andWhere(
+                'd.stopdatetime is NULL'
+                . ' OR '
+                . '(d.stopdatetime < :date AND d.isActive = true AND d.prolongationDate is NULL)'
+                . ' OR '
+                . '(d.isActive = true AND d.prolongationDate is NULL AND d.stopdatetime < :date)'
+                . ' OR '
+                . '(d.isActive = true AND d.prolongationDate < :date)'
+            )
+            ->setParameter(':date', $date->modify('-2 month'));
+
+        $this->processOrdering($sql);
+
+        $query = array(
+            'entities' => $sql->getQuery(),
+            'count' => $sqlCount->getQuery()->getSingleScalarResult()
+        );
+
+        return $query;
+    }
 
     /**
      * Processes sql query. adding select

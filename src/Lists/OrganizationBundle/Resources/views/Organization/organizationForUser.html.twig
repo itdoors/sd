@@ -1,0 +1,153 @@
+{% trans_default_domain 'ListsOrganizationBundle' %}
+<script>
+    $(document).ready(function(){
+        $('#TransferSubmit').on('click', function(){
+            $(this).attr('disabled', true);
+            var _this = this;
+           var organizations = $('input[name="organizations[]"]:checked').map(function(){
+                    return $(this).val();
+                }).toArray();
+           var departmens = $('input[name="departmens[]"]:checked').map(function(){
+                    return $(this).val();
+                }).toArray();
+            var userId = $('#userTo').val();
+            var blockupdate = $('#datatable_ajax');
+             $.ajax({
+                type: 'POST',
+                url: "{{ url('lists_organization_transfer_for_user') }}",
+                dataType: 'json',
+                data: {
+                    departmens: departmens,
+                    organizations: organizations,
+                    userId: userId
+                },
+                beforeSend: function() {
+                    ITDoorsAjax.blockUI(blockupdate);
+                },
+                success: function(json) {
+                    ITDoorsAjax.unblockUI(blockupdate);
+                    if (json.success) {
+                        $.ajax({
+                        type: 'POST',
+                        url: blockupdate.data('url'),
+                        success: function(response) {
+                            blockupdate.html(response);
+                            ITDoorsAjax.unblockUI(blockupdate);
+                        }
+                    });
+                    }else if(json.error){
+                        $(_this).removeAttr('disabled');
+                        alert(json.error);
+                    }
+                }
+            });
+        });
+        $('#userTo').select2({
+                width: '200px',
+                minimumInputLength: 2,
+                ajax: {
+                    url: '{{ path('sd_common_ajax_user') }}',
+                    dataType: 'json',
+                    data: function (term, page) {
+                        return {
+                            query: term
+                        };
+                    },
+                    results: function (data, page) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+            $('.all-checkbox').change(function(){
+                var name = $(this).data('name');
+                $('input[name="'+name+'[]"]').prop('checked', $(this).prop('checked'));
+                $.each($('input[name="'+name+'[]"]'), function(key, val){
+                        $(val).uniform();
+                });
+            });
+    });
+</script>
+{% if organizations|length > 0 %}
+<div class="table-responsive col-md-12">
+    <div class="portlet box green">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-edit"></i>
+                {% trans %}Transfer organizations{% endtrans %} 
+            </div>
+            <div class="tools"><a class="collapse" href="" title="{% trans %}Organizations{% endtrans %} "></a></div>
+        </div>
+        <div class="portlet-body">
+            <table class="table table-striped table-bordered table-advance table-hover">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" data-name="organizations" class="all-checkbox"></th>
+                        <th>{% trans %}ID{% endtrans %} </th>
+                        <th>{% trans %}Name{% endtrans %} </th>
+                        <th>{% trans %}Edrpou{% endtrans %} </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in organizations %}
+                        <tr {% if loop.index is odd %}class="color"{% endif %}>
+                            <td><input type="checkbox" class="mail-checkbox" name="organizations[]" value="{{ item.organizationId|e }}"></td>
+                            <td><a target="_blank"
+                                    href="{{ path('lists_sales_admin_organization_show', { id: item.organizationId }) }}">
+                                    {{ item.organizationId|e }}
+                                </a>
+                            </td>
+                            <td>{{ item.organizationName|e }}</td>
+                            <td>{{ item.edrpou|e }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% if departmens|length > 0 %}
+<div class="table-responsive col-md-12">
+    <div class="portlet box green">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-edit"></i>
+                {% trans %}Transfer departmens{% endtrans %} 
+            </div>
+            <div class="tools"><a class="collapse" href="" title="{% trans %}Departmens{% endtrans %} "></a></div>
+        </div>
+        <div class="portlet-body">
+            <table class="table table-striped table-bordered table-advance table-hover">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" data-name="departmens" class="all-checkbox"></th>
+                        <th>{% trans %}MPK{% endtrans %} </th>
+                        <th>{% trans %}City{% endtrans %} </th>
+                        <th>{% trans %}Address{% endtrans %} </th>
+                        <th>{% trans %}Organization{% endtrans %} </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in departmens %}
+                        <tr {% if loop.index is odd %}class="color"{% endif %}>
+                            <td><input type="checkbox" class="departmens"  name="departmens[]" value="{{ item.id|e }}"></td>
+                            <td>{{ item.mpk|e }}</td>
+                            <td>{{ item.city|e }}</td>
+                            <td>{{ item.address|e }}</td>
+                            <td>{{ item.organization|e }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% if organizations|length > 0 or departmens|length > 0 %}
+<div class="table-responsive col-md-6">
+    <input id="userTo" value="">
+    <button type="submit" id="TransferSubmit" name="organizationUserFilterForm[submit]" class="btn blue">{%trans%}Transfer{% endtrans %}</button>
+</div>
+{% endif %}

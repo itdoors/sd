@@ -205,4 +205,32 @@ class Mpk
     {
         return $this->name;
     }
+    /**
+     * onPrePersist
+     */
+    public function onPrePersist()
+    {
+        if ($this->active == null) {
+            $this->active = false;
+        }
+        if (!empty($this->startDate) && gettype($this->startDate) == 'string') {
+            $this->startDate = new \DateTime($this->startDate);
+        }
+        if (!empty($this->endDate) && gettype($this->endDate) == 'string') {
+            $this->endDate = new \DateTime($this->endDate);
+        }
+    }
+    /**
+     * isDatesValid
+     * 
+     * @return boolean
+     */
+    public function isDatesValid()
+    {
+        if (!empty($this->startDate) && !empty($this->endDate)) {
+            return ($this->startDate < $this->endDate);
+        } else {
+            return true;
+        }
+    }
 }

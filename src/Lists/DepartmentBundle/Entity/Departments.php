@@ -513,7 +513,7 @@ class Departments extends HiddenFields
      */
     public function __toString()
     {
-        return $this->name;
+        return (string) $this->name;
     }
 
     /**
@@ -554,5 +554,17 @@ class Departments extends HiddenFields
     public function getMpk()
     {
         return $this->mpk;
+    }
+    /**
+     * onPrePersist
+     */
+    public function onPrePersist()
+    {
+        if ($this->isdeleted == null) {
+            $this->isdeleted = false;
+        }
+        if (!empty($this->statusDate) && gettype($this->statusDate) == 'string') {
+            $this->statusDate = new \DateTime($this->statusDate);
+        }
     }
 }

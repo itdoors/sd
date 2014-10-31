@@ -393,4 +393,24 @@ class Companystructure
      * @ORM\Column(name="root", type="integer", nullable=true)
      */
     private $root;
+    /**
+     * Set lvl
+     * 
+     * @param string $level
+     *
+     * @return string 
+     */
+    public function setLevel($level)
+    {
+        $this->lvl = $level;
+    }
+    /**
+     * Get lvl
+     *
+     * @return string 
+     */
+    public function getLevel()
+    {
+        return $this->lvl;
+    }
 }

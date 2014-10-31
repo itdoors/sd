@@ -1,0 +1,32 @@
+{% trans_default_domain 'ListsMpkBundle' %}
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+    <h4 class="modal-title">{% trans %}Mpk list{% endtrans %}</h4>
+</div>
+<div class="modal-body">
+    {% if is_granted('ROLE_DOGOVORADMIN') %}
+        <div class="btn-group">
+            <button id="managers_list_new" class="btn green ajax-form"
+                    data-target_holder="mpkTpl"
+                    data-form_name="mpkForm"
+                    data-default='{"departmentId":"{{ departmentId }}"}'
+                    data-post_function="updateList"
+                    data-post_target_id="listMPK"
+                    style="margin-bottom: 10px;"
+                    >
+                    {% trans %}Add{% endtrans %} <i class="fa fa-plus"></i>
+            </button>
+        </div>
+        <div style="display: none" id="mpkTpl"></div>
+    {% endif %}
+    <div  id="listMPK" data-url="{{ path('lists_mpk_list', { departmentId:departmentId}) }}">
+        {{ render(controller('ListsMpkBundle:Mpk:list', {
+            'departmentId': departmentId
+        })) }}
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn default" data-dismiss="modal">{% trans %}Close{% endtrans %}</button>
+</div>
+        
+    
