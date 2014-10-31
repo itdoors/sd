@@ -498,7 +498,6 @@
                 var event = $('#current_organizer').data('current_organizer_event');
                 var id = event.id;
 
-                $('#calendar').fullCalendar('removeEvents', event._id);
 
                 SD.blockUI($('#moreInfoTpl'));
                 $.ajax({
@@ -517,6 +516,7 @@
                             }
                         } else {
                             $('#form_modal_more_info').modal('hide');
+                            $('#calendar').fullCalendar('removeEvents', event._id);
                         }
                         SD.unblockUI($('#moreInfoTpl'));
                     }
