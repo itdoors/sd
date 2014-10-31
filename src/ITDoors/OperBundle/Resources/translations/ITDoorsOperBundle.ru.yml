@@ -269,3 +269,6 @@ Action: Действие
 Claimtype: Услуги
 Userkey: Роль
 User: Пользователь
+Add comment: Добавить комментарий
+No departments available: Нет доступных отделений
+Can't delete, because of existing comment: Невозможно удалить событие, если в нем есть комментарии

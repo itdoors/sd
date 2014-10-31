@@ -214,6 +214,18 @@ class OperOrganizerController extends Controller
 
         $organizer = $organizerRepo->find($idOrganizer);
 
+        $comments = $this->getDoctrine()
+            ->getRepository('ITDoorsOperBundle:CommentOrganizer')
+            ->findBy(array(
+                'organizer' => $organizer
+            ));
+        if ($comments) {
+            $return['success'] = 0;
+            $return['error'] = 'comment';
+
+            return new Response(json_encode($return));
+        }
+
         $em = $this->getDoctrine()->getManager();
         $em->remove($organizer);
         $em->flush();
@@ -237,7 +249,7 @@ class OperOrganizerController extends Controller
 
         $organizer = $organizerRepo->find($idOrganizer);
 
-        $comments= $this->getDoctrine()
+        $comments = $this->getDoctrine()
             ->getRepository('ITDoorsOperBundle:CommentOrganizer')
             ->findBy(array(
                 'organizer' => $organizer
