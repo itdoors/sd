@@ -12,6 +12,10 @@ ITDoors\ControllingBundle\Entity\Invoice:
             type: integer
             generator: { strategy: IDENTITY }
     fields:
+        updateDatetime:
+            type: datetime
+            nullable: true
+            column: update_datetime
         invoiceId:
             type: string
             length: 255
@@ -28,6 +32,8 @@ ITDoors\ControllingBundle\Entity\Invoice:
             type: float
             length: 20
             column: debit_sum
+            options:
+                default: 0
         date:
             type: datetime
         delayDate:

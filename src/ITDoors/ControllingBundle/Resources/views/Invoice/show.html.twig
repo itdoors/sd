@@ -107,7 +107,7 @@
         <tbody role="alert" aria-live="polite" aria-relevant="all">
             {% for entity in entities %}
                 {% set days = (('now'|date('U')-entity.delayDate|date('U'))/86400)|round(0, 'floor') %}
-            <tr class="{{ cycle(['odd', 'even'], entity.invoiceId) }}{{ days > 60  ? (entity.status is empty ? ' warning' : ' success' ): ''}}">
+            <tr class="{{ cycle(['odd', 'even'], entity.invoiceId) }}{{ days > 60 and entity.dateFact is empty  ? (entity.status is empty ? ' warning' : ' success' ): ''}}">
                 <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceId }}</a> {{ entity.date is empty ? '' : entity.date|date("d.m.y") }}</td>
                 <td class=""><a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">{{ entity.invoiceCustomerName }} {{ '(' ~ entity.customerName ~ ')' }}</a></td>
                 <td class="">{{ entity.performerName }}</td>
