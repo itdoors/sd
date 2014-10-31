@@ -19,6 +19,7 @@ ITDoors\ControllingBundle\Entity\Invoice:
         guid:
             type: string
             nullable: true
+            unique: true
             length: 512
         sum:
             type: float
