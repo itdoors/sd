@@ -1,0 +1,39 @@
+ITDoors\OperBundle\Entity\OperOrganizer:
+    type: entity
+    table: oper_organizer
+    repositoryClass: ITDoors\OperBundle\Entity\OperOrganizerRepository
+    fields:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        startDatetime:
+            type: datetime
+            nullable: false
+            column: start_datetime
+        endDatetime:
+            type: datetime
+            nullable: false
+            column: end_datetime
+    manyToOne:
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        department:
+            targetEntity: Lists\DepartmentBundle\Entity\Departments
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                department_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

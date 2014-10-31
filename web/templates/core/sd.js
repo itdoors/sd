@@ -15,7 +15,7 @@ var SD = (function() {
         daterangeEndClass: 'sd-daterange-end',
         ajaxFormUrl: '',
         ajaxDeleteUrl: '',
-        assetsDir: '',
+        assetsDir: 'templates/metronic/img/ajax-loading.gif',
         loadingImgPath: ''
     };
 

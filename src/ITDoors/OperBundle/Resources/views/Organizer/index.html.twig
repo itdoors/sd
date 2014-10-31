@@ -1,0 +1,650 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ITDoorsOperBundle' %}
+{% block title %} {% trans %}Organizer{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+            <i class="fa fa-angle-right"></i>
+        </li>
+        <li><a href="" title="{% trans   %}Organizer{% endtrans %}">{% trans   %}Organizer{% endtrans %}</a></li>
+    </ul>
+{% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Organizer{% endtrans %} <small>{% trans %}Organizer{% endtrans %}</small>
+    </h3>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/itdoorsoper/css/details.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/fullcalendar/fullcalendar/fullcalendar.css')}} "  />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/jquery-notific8/jquery.notific8.min.css')}}"/>
+
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/fullcalendar/fullcalendar/fullcalendar.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/fullcalendar/fullcalendar/fullcalendar.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-notific8/jquery.notific8.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/admin/pages/scripts/ui-notific8.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="portlet box green-meadow calendar">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-gift"></i>Calendar
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-12">
+                            <!-- BEGIN DRAGGABLE EVENTS PORTLET-->
+                            <h3 class="event-form-title">{% trans %}Drag departments to calendar{% endtrans %}</h3>
+                            <div id="external-events">
+{#
+                                <form class="inline-form">
+                                    <input type="text" value="" class="form-control" placeholder="Event Title..." id="event_title"/><br/>
+                                    <a href="javascript:;" id="event_add" class="btn default">
+                                        Add Event </a>
+                                </form>
+                                <hr/>
+#}
+                                <div id="event_box">
+{#
+                                    {{ include('ITDoorsOperBundle:Organizer:departmentBlock.html.twig', {departments: departments}) }}
+#}
+                                </div>
+{#
+                                <label for="drop-remove">
+                                    <input type="checkbox" id="drop-remove"/>remove after drop </label>
+                                <hr class="visible-xs"/>
+#}
+                            </div>
+                            <!-- END DRAGGABLE EVENTS PORTLET-->
+                        </div>
+                        <div class="col-md-9 col-sm-12">
+                            <div id="calendar" class="has-toolbar">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END CALENDAR PORTLET-->
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+    <script>
+        var Calendar = function() {
+
+
+            return {
+                //main function to initiate the module
+                init: function() {
+                    Calendar.initCalendar();
+                },
+
+                initCalendar: function() {
+
+                    if (!jQuery().fullCalendar) {
+                        return;
+                    }
+
+                    var date = new Date();
+                    var d = date.getDate();
+                    var m = date.getMonth();
+                    var y = date.getFullYear();
+
+                    var h = {};
+
+                    if (Metronic.isRTL()) {
+                        if ($('#calendar').parents(".portlet").width() <= 720) {
+                            $('#calendar').addClass("mobile");
+                            h = {
+                                right: 'title, prev, next',
+                                center: '',
+                                left: 'month, today'
+                            };
+                        } else {
+                            $('#calendar').removeClass("mobile");
+                            h = {
+                                right: 'title',
+                                center: '',
+                                left: 'month, today, prev,next'
+                            };
+                        }
+                    } else {
+                        if ($('#calendar').parents(".portlet").width() <= 720) {
+                            $('#calendar').addClass("mobile");
+                            h = {
+                                left: 'title, prev, next',
+                                center: '',
+                                right: 'today,month'
+                            };
+                        } else {
+                            $('#calendar').removeClass("mobile");
+                            h = {
+                                left: 'title',
+                                center: '',
+                                right: 'prev,next,today,month'
+                            };
+                        }
+                    }
+
+                    var initDrag = function(el) {
+                        // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+                        // it doesn't need to have a start or end
+                        var eventObject = {
+                            title: $.trim(el.text()) // use the element's text as the event title
+                        };
+                        // store the Event Object in the DOM element so we can get to it later
+                        el.data('eventObject', eventObject);
+                        // make the event draggable using jQuery UI
+                        el.draggable({
+                            zIndex: 999,
+                            scroll: false,
+                            helper: 'clone',
+                            appendTo: 'body',
+                            revert: true, // will cause the event to go back to its
+                            revertDuration: 0 //  original position after the drag
+                        });
+                    };
+
+                    var addEvent = function(title) {
+                        title = title.length === 0 ? "Untitled Event" : title;
+                        var html = $('<div class="external-event label label-default">' + title + '</div>');
+                        jQuery('#event_box').append(html);
+                        initDrag(html);
+                    };
+
+                    var loadComments = function() {
+                        $('#comment_block').html('');
+                        $('#spinner').show();
+                        var event = $('#current_organizer').data('current_organizer_event');
+                        var id = event.id;
+
+                        $.ajax({
+                            type: 'POST',
+                            url: $('#info_input').data('url_get_comments'),
+                            data: {
+                                id: id
+                            },
+                            success: function(data) {
+                                data = JSON.parse(data);
+                                if (data.success == 0) {
+                                    alert('error');
+                                } else {
+                                    $('#spinner').hide();
+                                    $('#comment_block').html(data.html);
+                                }
+                            }
+
+                        })
+                    }
+
+
+                    $('#external-events div.external-event').each(function() {
+                        initDrag($(this));
+                    });
+
+/*
+                    $('#event_add').unbind('click').click(function() {
+                        var title = $('#event_title').val();
+                        addEvent(title);
+                    });
+*/
+
+                    //predefined events
+                    /*$('#event_box').html("");
+                    addEvent("My Event 1");
+                    addEvent("My Event 2");
+                    addEvent("My Event 3");
+                    addEvent("My Event 4");
+                    addEvent("My Event 5");
+                    addEvent("My Event 6");*/
+
+                    $('#calendar').fullCalendar('destroy'); // destroy the calendar
+                    $('#calendar').fullCalendar({ //re-initialize the calendar
+                        lang: 'ru',
+                        header: h,
+                        defaultView: 'month', // change default view with available options from http://arshaw.com/fullcalendar/docs/views/Available_Views/
+                        slotMinutes: 15,
+                        editable: false,
+                        lazyFetching: false,
+                        droppable: true, // this allows things to be dropped onto the calendar !!!
+                        drop: function(date, allDay) { // this function is called when something is dropped
+
+                            // retrieve the dropped element's stored Event Object
+                            var originalEventObject = $(this).data('eventObject');
+                            // we need to copy it, so that multiple events don't have a reference to the same object
+                            var copiedEventObject = $.extend({}, originalEventObject);
+
+                            // assign it the date that was reported
+                            copiedEventObject.start = new Date(date.setHours(9));
+                            copiedEventObject.end = new Date(date.setHours(13));
+                            copiedEventObject.allDay = false;
+                            copiedEventObject.className = $(this).attr("data-class");
+                            copiedEventObject.data_id = $(this).data('id');
+
+                            // render the event on the calendar
+                            // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+
+
+                            // is the "remove after drop" checkbox checked?
+                            /*if ($('#drop-remove').is(':checked')) {*/
+                                // if so, remove the element from the "Draggable Events" list
+
+
+                            var id = $(this).data('id');
+                            var obj = $(this);
+                            $.ajax({
+                                type: 'POST',
+                                url: $('#info_input').data('url_insert_event'),
+                                data: {
+                                    id: id,
+                                    date: date
+                                },
+                                success: function(data) {
+                                    data = JSON.parse(data);
+                                    if (data.success == 0) {
+
+                                    } else {
+                                        copiedEventObject.id = data.id;
+                                        $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+                                        obj.css('opacity', '0.4');
+                                    }
+                                }
+
+                            })
+                        },
+                        displayEventEnd: {
+                            month: true,
+                            basicWeek: true,
+                            'default': true
+                        },
+                        firstDay: 1,
+                        events: {
+                            url: '{{ url('it_doors_oper_organizer_events') }}'
+                        }/*,
+                        eventRender: function (event, element) {
+                            element.find('.fc-event-title').html(event.title);
+                        }*/,
+                        loading: function(isLoading, view){
+                            var date = view.start;
+                            var idUser = $('#info_input').data('user_id');
+
+                            if (isLoading)
+                            {
+                                $('#calendar').fullCalendar( 'removeEvents').fullCalendar('removeEventSources');  //Removes all event sources
+                                SD.blockUI($('div.calendar'));
+                                SD.blockUI($('#event_box'));
+                                $.ajax({
+                                    type: 'POST',
+                                    url: $('#info_input').data('url_rendered_departments'),
+                                    data: {
+                                        idUser: idUser,
+                                        date: date
+                                    },
+                                    success: function(data) {
+                                        data = JSON.parse(data);
+                                        if (data.success == 0) {
+                                            alert('error');
+                                        } else {
+                                            $('#event_box').html(data.html);
+                                            SD.unblockUI($('#event_box'));
+                                            $('#external-events div.external-event').each(function() {
+                                                initDrag($(this));
+                                            });
+
+                                        }
+                                    }
+
+                                })
+
+                            }
+                            else
+                            {
+                                SD.unblockUI($('div.calendar'));
+                            }
+                        },
+                        monthNames: ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],
+                        monthNamesShort: ["Янв.","Фев.","Мар.","Апр.","Май","Июн.","Июл.","Авг.","Сен.","Окт.","Ноя.","Дек."],
+                        dayNamesShort: ["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
+                        dayNames: ['Воскресенье','Понедельник','Вторник','Среда','Четвер','Пятница','Суббота'],
+                        buttonText: {
+                            prev: "&nbsp;&#9668;&nbsp;",
+                                next: "&nbsp;&#9658;&nbsp;",
+                                prevYear: "&nbsp;&lt;&lt;&nbsp;",
+                                nextYear: "&nbsp;&gt;&gt;&nbsp;",
+                                today: "Сегодня",
+                                month: "Месяц",
+                                week: "Неделя",
+                                day: "День"
+                        },
+                        titleFormat: {
+                            month: 'MMMM yyyy',
+                                    week: "MMM d[ yyyy]{ '&#8212;'[ MMM] d yyyy}",
+                                    day: 'dddd d MMM yyyy'
+                        },
+                        timeFormat: {
+                            agenda: 'HH:mm{ - H:mm}',
+                            month: 'HH:mm{ - H:mm}'
+                        },
+                        axisFormat: 'HH',
+                        allDayText: 'Весь день',
+                        eventClick: function(event, element) {
+/*
+                            $(this).attr('data-post_target_id', 'ModelContact'+event.id);
+                            $(this).attr('data-post_function', 'updateList');
+                            $(this).attr('data-post_target_id', 'calendarBlock');
+                            $(this).attr('data-form_name', 'taskForm');
+                            $(this).attr('data-model', 'Task');
+*/
+
+                            var id = event.id;
+
+                            $('#title_range').text(event.title);
+                            var hoursStart = event.start.getHours();
+                            var minutesStart = event.start.getMinutes();
+                            $("#slider-range").slider('values',0, hoursStart*60+minutesStart);
+                            var hoursEnd = event.end.getHours();
+                            var minutesEnd = event.end.getMinutes();
+                            $("#slider-range").slider('values',1,hoursEnd*60+minutesEnd);
+                            var month = transformTime(event.start.getMonth()+1);
+                            var day = transformTime(event.start.getDay());
+                            var year = event.start.getFullYear();
+
+                            function transformTime (num) {
+                                if (num < 10) {
+                                    num = '0' + num;
+                                }
+
+                                return num;
+                            }
+
+                            hoursStart = transformTime(hoursStart);
+                            minutesStart = transformTime(minutesStart);
+                            hoursEnd = transformTime(hoursEnd);
+                            minutesEnd = transformTime(minutesEnd);
+                            $('#amount').text(hoursStart+':'+minutesStart+' - '+hoursEnd+':'+minutesEnd);
+
+                            $('#modal_title_helper').text(day+'-'+month+'-'+year);
+
+                            $('#current_organizer').data('current_organizer_event', event);
+
+                            $('#form_modal_more_info').modal('show');
+
+                            $('#calendar').fullCalendar('renderEvent', event, true);
+                            $('#comment_value').val('');
+                            loadComments();
+                        }
+
+                    });
+
+                }
+
+            };
+
+        }();
+    </script>
+    <script>
+
+        $(document).ready(function() {
+            // initiate layout and plugins
+            Calendar.init();
+
+            $( "#slider-range" ).slider({
+                range: true,
+                min: 0,
+                max: 1440,
+                step: 30,
+                slide: function( event, ui ) {
+                    var hours1 = Math.floor(ui.values[0] / 60);
+                    var minutes1 = ui.values[0] - (hours1 * 60);
+
+                    if(hours1 < 10) hours1= '0' + hours1;
+                    if(minutes1 < 10) minutes1 = '0' + minutes1;
+
+                    if(minutes1 == 0) minutes1 = '00';
+
+                    var hours2 = Math.floor(ui.values[1] / 60);
+                    var minutes2 = ui.values[1] - (hours2 * 60);
+
+                    if(hours2 < 10) hours2= '0' + hours2;
+                    if(minutes2 < 10) minutes2 = '0' + minutes2;
+
+                    if(minutes2 == 0) minutes2 = '00';
+
+                    jQuery('#amount').text(hours1+':'+minutes1+' - '+hours2+':'+minutes2 );
+                }
+            });
+
+            $('#save_organizer').die('click').live('click', function (e) {
+                function transformTime (num) {
+                    if (num < 10) {
+                        num = '0' + num;
+                    }
+
+                    return num;
+                }
+
+                var event = $('#current_organizer').data('current_organizer_event');
+                var id = event.id;
+                var startMinutesTotal = $("#slider-range").slider('values',0);
+                var endMinutesTotal = $("#slider-range").slider('values',1);
+
+                var startHours = Math.floor(startMinutesTotal / 60);
+                var endHours = Math.floor(endMinutesTotal / 60);
+                var startMinutes = startMinutesTotal - (startHours * 60);
+                var endMinutes = endMinutesTotal - (endHours * 60);
+
+                var startDate = event.start;
+                var startDate = new Date(startDate.setHours(startHours));
+                var startDate = new Date(startDate.setMinutes(startMinutes));
+
+                event.start = startDate;
+
+                var endDate = event.end;
+                var endDate = new Date(endDate.setHours(endHours));
+                var endDate = new Date(endDate.setMinutes(endMinutes));
+
+                event.end = endDate;
+
+                console.log(startDate);
+                console.log(endDate);
+
+                $('#calendar').fullCalendar('renderEvent', event, true);
+
+                SD.blockUI($('#moreInfoTpl'));
+                $.ajax({
+                    type: 'POST',
+                    url: $('#info_input').data('url_edit_event'),
+                    data: {
+                        id: id,
+                        start: startDate,
+                        end: endDate
+                    },
+                    success: function(data) {
+                        data = JSON.parse(data);
+                        if (data.success == 0) {
+                            alert('error');
+                        } else {
+                            $('#form_modal_more_info').modal('hide');
+                        }
+                        SD.unblockUI($('#moreInfoTpl'));
+                    }
+
+                })
+
+            })
+
+            $('#delete_organizer').die('click').live('click', function (e) {
+
+                var event = $('#current_organizer').data('current_organizer_event');
+                var id = event.id;
+
+                $('#calendar').fullCalendar('removeEvents', event._id);
+
+                SD.blockUI($('#moreInfoTpl'));
+                $.ajax({
+                    type: 'POST',
+                    url: $('#info_input').data('url_delete_event'),
+                    data: {
+                        id: id
+                    },
+                    success: function(data) {
+                        data = JSON.parse(data);
+                        if (data.success == 0) {
+                            alert('error');
+                        } else {
+                            $('#form_modal_more_info').modal('hide');
+                        }
+                        SD.unblockUI($('#moreInfoTpl'));
+                    }
+
+                })
+
+            })
+
+
+            $('#add_comment').die('click').live('click', function (e) {
+
+                var event = $('#current_organizer').data('current_organizer_event');
+                var id = event.id;
+                var comment = $('#comment_value').val();
+
+
+                if (comment.length > 0) {
+                    SD.blockUI($('#comment_value'));
+                    $.ajax({
+                        type: 'POST',
+                        url: $('#info_input').data('url_add_comment'),
+                        data: {
+                            id: id,
+                            comment: comment
+                        },
+                        success: function(data) {
+                            data = JSON.parse(data);
+                            if (data.success == 0) {
+                                alert('error');
+                            } else {
+                                $('#comment_value').val('');
+                                loadComments();
+                                SD.unblockUI($('#comment_value'));
+
+                            }
+                        }
+
+                    })
+                }
+
+            })
+
+            function loadComments() {
+                $('#comment_block').html('');
+                $('#spinner').show();
+                var event = $('#current_organizer').data('current_organizer_event');
+                var id = event.id;
+
+                $.ajax({
+                    type: 'POST',
+                    url: $('#info_input').data('url_get_comments'),
+                    data: {
+                        id: id
+                    },
+                    success: function(data) {
+                        data = JSON.parse(data);
+                        if (data.success == 0) {
+                            alert('error');
+                        } else {
+                            $('#spinner').hide();
+                            $('#comment_block').html(data.html);
+                        }
+                    }
+
+                })
+            }
+
+        });
+
+    </script>
+
+    <style>
+        .fc-event-time{
+            text-decoration: underline;
+        }
+        .fc-event-time:hover{
+            color:green;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+
+    <div id="form_modal_more_info" class="modal fade" role="basic" aria-hidden="true">
+        <div class="modal-dialog" >
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">{% trans %}Edit time{% endtrans %} <span id="modal_title_helper"></span></h4>
+                </div>
+                <div class="modal-body" >
+                    <div id="moreInfoTpl">
+
+                        <h5 id="title_range">Department 1</h5>
+
+                        <p id="amount"></p>
+                        <div id="slider-range"></div>
+                        <input type="hidden" data-current_organizer_event="" id="current_organizer">
+                    </div>
+                    <br><br>
+                    <a class="btn green left_float" id="save_organizer">{% trans %}Save{% endtrans %}</a>
+                    <a class="btn grey left_float" id="delete_organizer" style="margin-left: 20px;">{% trans %}Delete{% endtrans %}</a>
+                    <a class="btn red right_float" data-dismiss="modal" aria-hidden="true">{% trans %}Cancel{% endtrans %}</a>
+                    <br><br>
+                    <div style="clear:both;"></div>
+                    <hr>
+
+                    <div>
+                        {% trans %}Add comment{% endtrans %}:<br>
+                        <textarea style="width:80%" rows="5" id="comment_value"></textarea>
+                        <button class="btn green right_float" id="add_comment">{% trans %}Add comment{% endtrans %}</button>
+                        <div style="clear:both;"></div>
+                    </div>
+                    <hr>
+                    <br>
+                    <div style="clear:both;"></div>
+                    <span id="spinner">{% trans %}loading{% endtrans %} <i class="fa fa-spinner fa-spin"></i></span>
+                    <div id="comment_block">
+
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+    </div>
+
+    <input type="hidden" id="info_input"
+        data-user_id="{{ app.user.id }}"
+        data-url_insert_event="{{ path('it_doors_oper_organizer_insert') }}"
+        data-url_rendered_departments="{{ path('it_doors_oper_rendered_departments') }}"
+        data-url_edit_event="{{ path('it_doors_oper_edit_organizer') }}"
+        data-url_delete_event="{{ path('it_doors_oper_delete_organizer') }}"
+        data-url_add_comment="{{ path('it_doors_oper_add_comment') }}"
+        data-url_get_comments="{{ path('it_doors_oper_get_comments') }}"
+            >
+{% endblock body %}
