@@ -120,14 +120,24 @@ class InvoiceService
         $em = $this->container->get('doctrine')->getManager();
         $invoiceNew = $em->getRepository('ITDoorsControllingBundle:Invoice')
             ->findOneBy(array (
-            'invoiceId' => trim($invoice->invoiceId),
-            'date' => new \DateTime(trim($invoice->date))
+            'guid' => trim($invoice->guid)
         ));
+        if (!$invoiceNew) {
+            $invoiceNew = $em->getRepository('ITDoorsControllingBundle:Invoice')
+                ->findOneBy(array (
+                'invoiceId' => trim($invoice->invoiceId),
+                'date' => new \DateTime(trim($invoice->date))
+            ));
+            if ($invoiceNew) {
+                $invoiceNew->setGuid(trim($invoice->guid));
+            }
+        }
         $summaPaymens = 0;
         $dateFact = new \DateTime(trim($invoice->date));
         if (!$invoiceNew) {
             $invoiceNew = new Invoice();
             $invoiceNew->setCourt(0);
+            $invoiceNew->setGuid(trim($invoice->guid));
             $invoiceNew->setInvoiceId(trim($invoice->invoiceId));
 
             if (count($invoice->payments) > 0) {
@@ -213,9 +223,9 @@ class InvoiceService
         if ($summaPaymens >= $summaActs) {
             $invoiceNew->setDateFact($dateFact);
         }
-        $debtSum = ($summaActs ? $summaActs : 0 )-($summaPaymens ? $summaPaymens : 0);
+        $debtSum = round(($summaActs ? $summaActs : 0 )-($summaPaymens ? $summaPaymens : 0), 2);
         $invoiceNew->setDebitSum($debtSum >= 0 ? $debtSum : 0);
-        echo ' debtSum: '.$debtSum;
+        echo ' debtSum: '.$debtSum .' ~ ';
 
         if (!empty($invoice->delayDate) && $invoice->delayDate != 'null') {
             $invoiceNew->setDelayDate(new \DateTime(trim($invoice->delayDate)));
