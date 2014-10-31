@@ -25,6 +25,7 @@ class InvoiceService
     protected $container;
     protected $messageTemplate;
     protected $arrCostumersForSendMessages;
+    protected $updateDatetime;
     /** @var KnpPaginatorBundle $paginator */
     protected $paginator = 'knp_paginator';
 
@@ -66,6 +67,7 @@ class InvoiceService
      */
     public function parserFile ()
     {
+        $this->updateDatetime = new \DateTime();
         $this->updateIvoiceInfo();
         $em = $this->container->get('doctrine')->getManager();
         $directory = $this->container->getParameter('1C.file.path');
@@ -207,6 +209,7 @@ class InvoiceService
             }
         }
 
+        $invoiceNew->setUpdateDatetime($this->updateDatetime);
         $invoiceNew->setDogovorGuid(trim($invoice->dogovorGuid));
         $invoiceNew->setDogovorNumber(trim($invoice->dogovorNumber));
         $invoiceNew->setDogovorName(trim($invoice->dogovorName));
@@ -453,6 +456,8 @@ class InvoiceService
             unset($json[$key]);
             unset($invoiceNew);
         }
+        echo 'Delete deleted invoice' . "\n";
+        $this->deleteInvoice();
         echo 'Try add email for send' . "\n";
         $this->sendEmails();
         echo 'Try add cron for send email' . "\n";
@@ -976,6 +981,22 @@ class InvoiceService
             if ($countInvoice == 1000) {
                 $em->flush();
                 $countInvoice = 0;
+            }
+        }
+        $em->flush();
+    }
+    /**
+     * deleteInvoice
+     */
+    private function deleteInvoice ()
+    {
+        $em = $this->container->get('doctrine')->getManager();
+        $em->getConnection()->getConfiguration()->setSQLLogger(null);
+        $invoices = $em->getRepository('ITDoorsControllingBundle:Invoice')->findAll();
+
+        foreach ($invoices as $invoice) {
+            if ($invoice->getUpdateDatetime() != $this->updateDatetime && $invoice->getDateFact() == null) {
+                $em->remove($invoice);
             }
         }
         $em->flush();

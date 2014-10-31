@@ -929,7 +929,6 @@ class Invoice
      */
     private $guid;
 
-
     /**
      * Set guid
      *
@@ -952,5 +951,33 @@ class Invoice
     public function getGuid()
     {
         return $this->guid;
+    }
+    /**
+     * @var \DateTime
+     */
+    private $updateDatetime;
+
+    /**
+     * Set updateDatetime
+     *
+     * @param \DateTime $updateDatetime
+     * 
+     * @return Invoice
+     */
+    public function setUpdateDatetime($updateDatetime)
+    {
+        $this->updateDatetime = $updateDatetime;
+
+        return $this;
+    }
+
+    /**
+     * Get updateDatetime
+     *
+     * @return \DateTime 
+     */
+    public function getUpdateDatetime()
+    {
+        return $this->updateDatetime;
     }
 }

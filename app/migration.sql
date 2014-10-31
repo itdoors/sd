@@ -1155,4 +1155,6 @@ UPDATE "public".lookup SET "lukey" = 'domestic_services' WHERE id = 75;
 -- prod ++++++
 ALTER TABLE invoice_payments ALTER bank SET NOT NULL;
 ALTER TABLE invoice ADD guid VARCHAR(512) DEFAULT NULL;
+CREATE UNIQUE INDEX UNIQ_906517442B6FCFB2 ON invoice (guid);
+ALTER TABLE invoice ADD update_datetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL;
 -- prod ++++
