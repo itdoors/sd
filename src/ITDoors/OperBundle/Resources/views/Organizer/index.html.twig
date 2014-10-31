@@ -510,7 +510,11 @@
                     success: function(data) {
                         data = JSON.parse(data);
                         if (data.success == 0) {
-                            alert('error');
+                            if (data.error = 'comment') {
+                                alert("{% trans %}Can't delete, because of existing comment{% endtrans %}")
+                            } else {
+                                alert('error');
+                            }
                         } else {
                             $('#form_modal_more_info').modal('hide');
                         }
@@ -616,6 +620,10 @@
                     <a class="btn grey left_float" id="delete_organizer" style="margin-left: 20px;">{% trans %}Delete{% endtrans %}</a>
                     <a class="btn red right_float" data-dismiss="modal" aria-hidden="true">{% trans %}Cancel{% endtrans %}</a>
                     <br><br>
+                    <div style="clear:both;"></div>
+                    <br>
+                    <hr>
+                    <a class="btn blue left_float" onclick="alert('В разработке')" >Расширеный отчет посещения</a>
                     <div style="clear:both;"></div>
                     <hr>
 
