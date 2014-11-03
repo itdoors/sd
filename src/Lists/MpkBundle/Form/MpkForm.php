@@ -32,6 +32,9 @@ class MpkForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $translator = $this->container->get('translator');
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $org */
+        $org = $this->container->get('doctrine')->getManager()
+            ->getRepository('Lists\OrganizationBundle\Entity\Organization');
 
         $builder
             ->add('name', 'text')
@@ -54,7 +57,8 @@ class MpkForm extends AbstractType
             ->add('organization', 'entity', array(
                 'class'=>'Lists\OrganizationBundle\Entity\Organization',
                 'property'=>'name',
-                'empty_value' => ''
+                'empty_value' => '',
+                'query_builder' => $org->getOrganizationSignOwnQuery()
             ))
             ->add('department', 'entity', array(
                 'class'=>'Lists\DepartmentBundle\Entity\Departments',

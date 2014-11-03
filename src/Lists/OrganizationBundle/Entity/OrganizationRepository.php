@@ -51,6 +51,21 @@ class OrganizationRepository extends EntityRepository
         return $query;
     }
     /**
+     * Get organization by own
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getOrganizationSignOwnQuery()
+    {
+        $query = $this->createQueryBuilder('o')
+            ->innerJoin('o.lookup', 'sign')
+            ->where('sign.lukey = :lukey')
+            ->setParameter(':lukey', 'organization_sign_own')
+            ->orderBy('o.name');
+
+        return $query;
+    }
+    /**
      * @param int[]   $userIds
      * @param mixed[] $filters
      *
