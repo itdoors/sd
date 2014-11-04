@@ -39,18 +39,55 @@ class OperOrganizerRepository extends EntityRepository
         return $sql->getQuery()->getResult();
     }
 
-    public function getStatistic($from, $to, $filter) {
-        $sql = $this->createQueryBuilder('o')
-            ->select('COUNT(o.id)');
+    public function getStatistic($date, $filter = null) {
 
-        $sql->leftJoin('o.department', 'd')
-            ->leftJoin('o.user', 'u');
+        $sql = $this->createQueryBuilder('organizer')
+/*            ->select('
+            CASE
+            when COUNT(organizer.id) = 0
+                    then 3
+                    else COUNT(organizer.id)  as count
+            ');
+            //->addSelect('DATE(organizer.startDatetime)');*/
+        ->select( 'COUNT(organizer.id)');
 
-        $sql->where('o.id IN (
-            SELECT
-        )');
+/*        $sql->leftJoin('organizer.department', 'd')
+            ->leftJoin('organizer.user', 'u');*/
 
+        $sql->where('DATE(organizer.startDatetime) = :date')
+            ->setParameter(':date', $date);
+        //$sql->groupBy('organizer.id');
+
+        return $sql->getQuery()->getSingleScalarResult();
 
 
     }
+
+    public function getTotalVisits() {
+
+        $sql = $this->createQueryBuilder('organizer')
+            ->select( 'COUNT(organizer.id)');
+
+        return $sql->getQuery()->getSingleScalarResult();
+    }
+
+
+    public function getTotalVisitsCommented() {
+
+        $sql = $this->createQueryBuilder('organizer')
+            ->select( 'COUNT(DISTINCT organizer.id)')
+
+            ->innerJoin('ITDoorsOperBundle:CommentOrganizer', 'co', 'WITH', 'co.id = organizer.id');
+
+        return $sql->getQuery()->getSingleScalarResult();
+    }
+
+    public function getAveragePerDayVisits() {
+
+        $sql = $this->createQueryBuilder('organizer')
+            ->select( 'COUNT(organizer.id)');
+
+        return $sql->getQuery()->getSingleScalarResult();
+    }
+
 }
