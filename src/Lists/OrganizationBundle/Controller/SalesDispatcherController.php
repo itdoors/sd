@@ -50,6 +50,9 @@ class SalesDispatcherController extends SalesController
         /** @var \SD\UserBundle\Entity\User $user */
         $user = $this->getUser();
 
+         /** @var \Lists\TeamBundle\Entity\TeamRepository $teamRepository */
+        $teamRepository = $this->get('lists_team.repository');
+
         $teamUserIds = $teamRepository->getMyTeamIdsByUser($user);
 
         /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */

@@ -13,11 +13,270 @@ use Lists\OrganizationBundle\Entity\OrganizationUser;
 class OrganizationController extends BaseController
 {
     protected $filterNamespace = 'organization.filters';
-    protected $filterFormName = 'organizationSalesAdminFilterForm';
-    protected $baseRoute = 'lists_sales_admin_organization_index';
-    protected $baseRoutePrefix = 'sales_admin';
-    protected $baseTemplate = 'SalesAdmin';
+    protected $filterFormName = 'organizationSalesFilterForm';
+     /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function indexAction ()
+    {
+        $isAddOrganization = false;
+        $isExportToExcel = false;
 
+        $namespase = $this->filterNamespace;
+        $user = $this->getUser();
+        if ($user->hasRole('ROLE_SALESADMIN') || $user->hasRole('ROLE_DOGOVORADMIN') || $user->hasRole('ROLE_CONTROLLING') || $user->hasRole('ROLE_CONTROLLING_OPER')) {
+            $this->filterFormName = 'organizationSalesAdminFilterForm';
+        }
+
+        return $this->render('ListsOrganizationBundle:Organization:index.html.twig', array (
+                'namespase' => $namespase,
+                'isAddOrganization' => $isAddOrganization,
+                'isExportToExcel' => $isExportToExcel,
+                'filter' => $this->filterFormName
+        ));
+    }
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listAction ()
+    {
+        $isShowUrl = true;
+        $isShowProject = true;
+
+        $namespase = $this->filterNamespace;
+        $filters = $this->getFilters($namespase);
+        if (empty($filters)) {
+            $filters['isFired'] = 'No fired';
+            $this->setFilters($namespase, $filters);
+        }
+
+        $page = $this->getPaginator($namespase);
+        if (!$page) {
+            $page = 1;
+        }
+        /** @var \SD\UserBundle\Entity\User $user */
+        $user = $this->getUser();
+
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $organizationsRepository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+        $userId = $user->getId();
+        if ($user->hasRole('ROLE_SALESADMIN') || $user->hasRole('ROLE_DOGOVORADMIN') || $user->hasRole('ROLE_CONTROLLING') || $user->hasRole('ROLE_CONTROLLING_OPER')) {
+            $userId = null;
+        }
+        /** @var \Doctrine\ORM\Query */
+        $organizationsQuery = $organizationsRepository->getAllForSalesQuery($userId, $filters);
+        /** @var \Knp\Component\Pager\Paginator $paginator */
+        $paginator = $this->get('knp_paginator');
+
+        $pagination = $paginator->paginate(
+            $organizationsQuery,
+            $page,
+            20
+        );
+
+        return $this->render('ListsOrganizationBundle:Organization:list.html.twig', array (
+                'pagination' => $pagination,
+                'namespase' => $namespase,
+                'isShowUrl' => $isShowUrl,
+                'isShowProject' => $isShowProject
+        ));
+    }
+    /**
+     * Executes new action
+     *
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function newAction (Request $request)
+    {
+        $user = $this->getUser();
+
+        $form = $this->createForm('organizationSalesForm');
+        if ($user->hasRole('ROLE_DOGOVORADMIN')) {
+            $form = $this->createForm('organizationDogovorAdminForm');
+        }
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            /** @var \Lists\OrganizationBundle\Entity\Organization $organization */
+            $organization = $form->getData();
+
+            $user = $this->getUser();
+
+            $organization->setCreator($user);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($organization);
+            $em->flush();
+
+            $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')
+                ->findOneBy(array ('lukey' => 'manager_organization'));
+            $manager = new OrganizationUser();
+            $manager->setOrganization($organization);
+            $manager->setUser($user);
+            $manager->setRole($lookup);
+            $em->persist($manager);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('lists_organization_show', array (
+                'id' => $organization->getId()
+            )));
+        }
+
+        return $this->render('ListsOrganizationBundle:Organization:new.html.twig', array (
+                'filterForm' => $form->createView(),
+                'filterFormName' => $this->filterFormName
+        ));
+    }
+    /**
+     * Saves object to db
+     *
+     * @return mixed[]
+     */
+    public function ajaxSaveAction()
+    {
+        $translator = $this->get('translator');
+
+        $pk = $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        $methodSet = 'set' . ucfirst($name);
+
+        $organization = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization')
+            ->find($pk);
+        if ($name == 'organizationsign') {
+            $methodSet = 'add' . ucfirst($name);
+            $lookups = $organization->getOrganizationsigns();
+            foreach ($lookups as $lookup) {
+                $organization->removeOrganizationsign($lookup);
+            }
+            foreach ($value as $val) {
+                $lookups = $this->getDoctrine()
+                ->getRepository('ListsLookupBundle:Lookup')->find($val);
+                $organization->$methodSet($lookups);
+            }
+        } else {
+
+            if (!$value) {
+                $methodGet = 'get' . ucfirst($name);
+                $type = gettype($organization->$methodGet());
+
+                if (in_array($type, array('integer'))) {
+                    $value = null;
+                }
+            }
+
+            $organization->$methodSet(trim($value));
+        }
+        $validator = $this->get('validator');
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors */
+        $errors = $validator->validate($organization, array('edit'));
+
+        if (sizeof($errors)) {
+            $return = $this->getFirstError($errors);
+
+            return new Response($return, 406);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($organization);
+
+        try {
+            $em->flush();
+        } catch (\ErrorException $e) {
+            $return = array('msg' => $translator->trans('Wrong input data'));
+
+            return new Response(json_encode($return));
+        }
+
+        $return = array('success' => 1);
+
+        return new Response(json_encode($return));
+    }
+    /**
+     * Executes show action
+     *
+     * @param int $id
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
+    public function showAction ($id)
+    {
+        $isEdit = true;
+        $isAddContacts = false;
+        $isAddManager = false;
+        $isAddDocument = false;
+        $isAddKVED = false;
+
+        $this->get('sd.security_access')->hasAccessToOrganizationAndThrowException($id);
+
+        /** @var \Lists\OrganizationBundle\Entity\Organization $organization */
+        $organization = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization')
+            ->find($id);
+
+        if ($organization->getParent()) {
+            return $this->redirect($this->generateUrl('lists_organization_show', array (
+                'id' => $organization->getParentId()
+            )));
+        }
+        $lookups = $this->getDoctrine()
+                ->getRepository('ListsLookupBundle:Lookup')->getGroupOrganizationQuery()->getQuery()->getResult();
+
+        $managerForm = $this->createForm('organizationUserForm');
+
+        return $this->render('ListsOrganizationBundle:Organization:show.html.twig', array (
+                'organization' => $organization,
+                'lookups' => $lookups,
+                'filterFormName' => $this->filterFormName,
+                'managerForm' => $managerForm->createView(),
+                'isEdit' => $isEdit,
+                'isAddManager' => $isAddManager,
+                'isAddContacts' => $isAddContacts,
+                'isAddDocument' => $isAddDocument,
+                'isAddKVED' => $isAddKVED
+        ));
+    }
+    /**
+     * Renders organizationUsers list
+     *
+     * @param int $organizationId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function organizationUsersAction ($organizationId)
+    {
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationUserRepository $organizationUser */
+        $organizationUser = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:OrganizationUser');
+
+        $organizationUsers = $organizationUser->getOrganizationUsersQuery($organizationId)
+            ->getQuery()
+            ->getResult();
+
+        $lookup = $this->getDoctrine()->getRepository('ListsLookupBundle:lookup')
+            ->findOneBy(array ('lukey' => 'manager_organization'));
+
+        $managerOrganization = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:OrganizationUser')
+            ->findOneBy(array (
+                'organizationId' => $organizationId,
+                'roleId' => $lookup->getId(),
+                'userId' => $this->getUser()->getId(),
+            ));
+
+        return $this->render('ListsOrganizationBundle:Organization:organizationUsers.html.twig', array (
+                'organizationUsers' => $organizationUsers,
+                'organizationId' => $organizationId,
+                'managerOrganization' => $managerOrganization
+        ));
+    }
     /**
      * Renders organization list
      * 
@@ -185,8 +444,14 @@ class OrganizationController extends BaseController
      */
     public function departmentsAction($id)
     {
+        $isAddDepartment = false;
+        if ($this->getUser()->hasRole('ROLE_DOGOVORADMIN')) {
+            $isAddDepartment = true;
+        }
+
         return $this->render('ListsOrganizationBundle:Organization:departments.html.twig', array(
-            'organizationId' => $id
+            'organizationId' => $id,
+            'isAddDepartment' => $isAddDepartment
         ));
     }
     /**
@@ -207,6 +472,68 @@ class OrganizationController extends BaseController
 
         return $this->render('ListsDepartmentBundle:Department:departmentsListDataTable.html.twig', array(
             'departments' => $departments
+        ));
+    }
+    /**
+     * @param integer $id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+
+    public function listKvedAction($id)
+    {
+        $kvedOrganizationRepo = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:KvedOrganization');
+
+        $organization = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization')
+            ->find($id);
+
+        $kvedOrganizations = $kvedOrganizationRepo->findBy(array(
+            'organization' => $organization
+        ));
+
+        $kveds = array();
+
+        foreach ($kvedOrganizations as $kvedOrganization) {
+            $kved = $kvedOrganization->getKved();
+            $kveds[] = $kved;
+        }
+
+        return $this->render('ListsOrganizationBundle:Organization:listKved.html.twig', array(
+            'kveds' => $kveds,
+            'organizationId' => $id
+        ));
+    }
+    /**
+     * @param integer $id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listDocumentAction($id)
+    {
+        /** @var DogovorRepository $dr */
+        $documentsOrganizationRepo = $this->getDoctrine()
+            ->getRepository('ListsDocumentBundle:DocumentsOrganization');
+
+        $organization = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization')
+            ->find($id);
+
+        $documentsOrganization = $documentsOrganizationRepo->findBy(array(
+            'organization' => $organization
+        ));
+
+        $docs = array();
+
+        foreach ($documentsOrganization as $documentOrganization) {
+            $doc = $documentOrganization->getDocuments();
+            $docs[] = $doc;
+        }
+
+        return $this->render('ListsOrganizationBundle:Organization:listDocument.html.twig', array(
+            'documents' => $docs,
+            'organizationId' => $id
         ));
     }
 }

@@ -1,4 +1,5 @@
 {% trans_default_domain 'ListsOrganizationBundle' %}
+{% if isEdit %}
 <script type="text/javascript">
 
     $(document).ready(function(){
@@ -48,6 +49,7 @@
         });
     });
 </script>
+{% endif %}
 <table class="table table-striped table-bordered table-advance table-hover">
     <thead>
         <tr>
@@ -80,6 +82,7 @@
                 {% else %}
                     {% set isInterested ='No' %}
                 {% endif %}
+                {% if isEdit %}
                 <a href="#"
                    class="itdoors-editable"
                    data-name="isInterested"
@@ -90,8 +93,11 @@
                    data-value="{{ isInterested }}"
                    data-original-title="{% trans %}Enter Is interested{% endtrans %}"
                 >
+                {% endif %}
                     {{ isInterested|trans({}, 'messages') }}
+                {% if isEdit %}
                 </a>
+                {% endif %}
             </td>
             <td>
                 {% if not serviceCover.id or serviceCover.isWorking is empty %}
@@ -101,6 +107,7 @@
                 {% else %}
                     {% set isWorking ='No' %}
                 {% endif %}
+                {% if isEdit %}
                 <a href="#"
                    class="itdoors-editable"
                    data-name="isWorking"
@@ -111,10 +118,14 @@
                    data-value="{{ isWorking }}"
                    data-original-title="{% trans %}Enter Is working{% endtrans %}"
                 >
+                {% endif %}
                     {{ isWorking|trans({}, 'messages') }}
+                {% if isEdit %}
                 </a>
+                {% endif %}
             </td>
             <td>
+                {% if isEdit %}
                 <a href="#"
                    class="itdoors-editable"
                    data-name="evaluation"
@@ -124,11 +135,15 @@
                    data-url="{{ path('sd_common_ajax_organization_service_cover_save', { organizationId: organizationId, serviceId: serviceItem.id }) }}"
                    data-value="{{ serviceCover.evaluation }}"
                    data-original-title="{% trans %}Evaluation{% endtrans %}"
-                        >
+                >
+                {% endif %}
                     {{ serviceCover.evaluation }}
+                {% if isEdit %}
                 </a>
+                {% endif %}
             </td>
             <td>
+                {% if isEdit %}
                 <a href="#"
                    class="itdoors-editable-competitor"
                    data-name="competitorId"
@@ -138,11 +153,15 @@
                    data-url="{{ path('sd_common_ajax_organization_service_cover_save', { organizationId: organizationId, serviceId: serviceItem.id }) }}"
                    data-value="{{ serviceCover.competitorId }}"
                    data-original-title="{% trans %}Competitor{% endtrans %}"
-                        >
+                >
+                {% endif %}
                     {{ serviceCover.competitorName }}
+                {% if isEdit %}
                 </a>
+                {% endif %}
             </td>
             <td>
+                {% if isEdit %}
                 <a href="#"
                    class="itdoors-date itdoors-editable {% if serviceCover.endDate %}{% else %} editable-empty {% endif %}"
                    data-name="endDateString"
@@ -154,14 +173,16 @@
                     {% endif %}
                    data-original-title="{% trans %}Edit{% endtrans %}"
                 >
+                {% endif %}
                     {% if serviceCover.endDate %}
                         {{ serviceCover.endDate|date("d.m.Y") }}
-                    {% else %}
-                        {% trans from 'messages' %}Enter value{% endtrans %}
                     {% endif %}
+                {% if isEdit %}
                 </a>
+                {% endif %}
             </td>
             <td>
+                {% if isEdit %}
                 <a href="#"
                    class="itdoors-editable"
                    data-name="responsible"
@@ -171,10 +192,14 @@
                    data-value="{{ serviceCover.responsible }}"
                    data-original-title="{% trans %}Responsible{% endtrans %}"
                 >
+                {% endif %}
                     {{ serviceCover.responsible }}
+                {% if isEdit %}
                 </a>
+                {% endif %}
             </td>
             <td>
+                {% if isEdit %}
                 <a href="#"
                    class="itdoors-editable"
                    data-name="description"
@@ -184,8 +209,11 @@
                    data-value="{{ serviceCover.description }}"
                    data-original-title="{% trans %}Description{% endtrans %}"
                 >
+                {% endif %}
                     {{ serviceCover.description }}
+                {% if isEdit %}
                 </a>
+                {% endif %}
             </td>
         </tr>
     {% endfor %}

@@ -247,6 +247,37 @@ lists_contractor_index:
 #    defaults: { _controller: ListsOrganizationBundle:Contractor:listKved }
 
 # organization
+lists_organization_index:
+    pattern:  /lists/organization/index
+    defaults: { _controller: ListsOrganizationBundle:Organization:index }
+    
+lists_organization_index_list:
+    pattern:  /lists/organization/index/list
+    defaults: { _controller: ListsOrganizationBundle:Organization:list }
+
+lists_organization_new:
+    pattern:  /lists/organization/new
+    defaults: { _controller: ListsOrganizationBundle:Organization:new }
+
+lists_organization_show:
+    pattern:  /lists/organization/show/{id}
+    defaults: { _controller: ListsOrganizationBundle:Organization:show }
+
+lists_organization_ajax_users:
+    pattern:  /lists/organization/ajax/users/{organizationId}
+    defaults: { _controller: ListsOrganizationBundle:Organization:organizationUsers }
+
+lists_organization_show_list_document:
+    pattern:  /lists/organization/show/list/document/{id}
+    defaults: { _controller: ListsOrganizationBundle:Organization:listDocument }
+
+lists_organization_show_list_kved:
+    pattern:  /lists/organization/show/list/kved/{id}
+    defaults: { _controller: ListsOrganizationBundle:Organization:listKved }
+
+lists_organization_ajax_save:
+    pattern:  /lists/organization/ajax/save
+    defaults: { _controller: ListsOrganizationBundle:Organization:ajaxSave }
 
 lists_organization_transfer:
     pattern:  /lists/organization/transfer

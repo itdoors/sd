@@ -514,15 +514,15 @@
                                 app.request.attributes.get('_route_params').id is defined
                                 and
                                 (
-                                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_admin_organization_show',app.request.attributes.get('_route_params'))
+                                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_show',app.request.attributes.get('_route_params'))
                                     or
                                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_dogovor_show',app.request.attributes.get('_route_params'))
                                 )
                             )
                                 or
-                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_admin_organization_index')
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_index')
                                 or
-                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_admin_organization_new')
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_new')
                     %} class="active"{% endif %}>
                     <a href="javascript:;">
                         <i class="icon-pencil"></i>
@@ -572,14 +572,14 @@
                             (
                                 app.request.attributes.get('_route_params').id is defined
                                 and
-                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_admin_organization_show',app.request.attributes.get('_route_params'))
+                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_show',app.request.attributes.get('_route_params'))
                             )
                                 or
-                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_admin_organization_index')
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_index')
                                 or
-                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_admin_organization_new')
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_new')
                             %} class="active"{% endif %}>
-                            <a href="{{ path('lists_dogovor_admin_organization_index') }}" title="{% trans %}Organizations{% endtrans %}">
+                            <a href="{{ path('lists_organization_index') }}" title="{% trans %}Organizations{% endtrans %}">
                                 <i class="fa fa-comments"></i>
                                 {% trans %}Organizations{% endtrans %}
                             </a>
