@@ -38,4 +38,19 @@ class OperOrganizerRepository extends EntityRepository
 
         return $sql->getQuery()->getResult();
     }
+
+    public function getStatistic($from, $to, $filter) {
+        $sql = $this->createQueryBuilder('o')
+            ->select('COUNT(o.id)');
+
+        $sql->leftJoin('o.department', 'd')
+            ->leftJoin('o.user', 'u');
+
+        $sql->where('o.id IN (
+            SELECT
+        )');
+
+
+
+    }
 }

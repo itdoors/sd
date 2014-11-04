@@ -30,8 +30,17 @@ class OperOrganizerController extends Controller
 
         $departments = $this->getDepartmentsForOrganizer($date, $user);
 
+        $supervisor = $user->hasRole('ROLE_SUPERVISOR');
+
+        $usersOper = array();
+        if ($supervisor) {
+            $usersOper = $this->opermanagerList();
+        }
+
         return $this->render('ITDoorsOperBundle:Organizer:index.html.twig', array (
-            'departments' => $departments
+            'departments' => $departments,
+            'supervisor' => $supervisor,
+            'usersOper' => $usersOper
         ));
     }
 
@@ -73,7 +82,7 @@ class OperOrganizerController extends Controller
         $accessService = $this->get('access.service');
 
 
-        $allowedDepartmentsId = $accessService->getAllowedDepartmentsId();
+        $allowedDepartmentsId = $accessService->getAllowedDepartmentsId($user);
 
         $repository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments');
@@ -108,10 +117,13 @@ class OperOrganizerController extends Controller
     public function insertOrganizerDataAction(Request $request)
     {
         $idDepartment = $request->request->get('id');
+        $idUser = $request->request->get('idUser');
 
         $date = $request->request->get('date');
 
-        $user = $this->getUser();
+        $user = $this->getDoctrine()
+            ->getRepository('SDUserBundle:User')
+            ->find($idUser);
 
         $department = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments')->find($idDepartment);
@@ -142,13 +154,19 @@ class OperOrganizerController extends Controller
     }
 
     /**
+     * @param Request $request
+     *
      * @return Response
      */
-    public function getOrganizerEventsAction()
+    public function getOrganizerEventsAction(Request $request)
     {
+        $idUser = $request->request->get('idUser');
+
+
         $events = array();
 
-        $user = $this->getUser();
+        $user = $this->getDoctrine()
+            ->getRepository('SDUserBundle:User')->find($idUser);
 
         $organizerRepo = $this->getDoctrine()
             ->getRepository('ITDoorsOperBundle:OperOrganizer');
@@ -294,5 +312,26 @@ class OperOrganizerController extends Controller
         $return['success'] = 1;
 
         return new Response(json_encode($return));
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     */
+    private function opermanagerList()
+    {
+        $return = array();
+
+        $usersOper = $this->getDoctrine()
+            ->getRepository('SDUserBundle:User')
+            ->findByRole('ROLE_SALES');
+
+        array_walk($usersOper, function ($userOper, $key) use (&$return) {
+            $return[] = array('id' =>  $userOper->getId(), 'fullName' => $userOper->getFullName());
+        });
+
+
+        return $return;
     }
 }
