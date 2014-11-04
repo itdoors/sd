@@ -30,3 +30,4 @@ nbproject/*
 /components/
 /web/cache/*
 /web/uploads/userprofiles/*
+/tests/_output/

@@ -77,7 +77,7 @@ class HolidayRepository extends EntityRepository
             $res->andWhere('dayofyear(h.date) >= :dayofyearStart')
                 ->andWhere('dayofyear(h.date) <= :dayofyearStop');
         } else {
-            $res->andWhere('dayofyear(h.date) >= :dayofyearStart) or (dayofyear(u.birthday) <= :dayofyearStop)');
+            $res->andWhere('(dayofyear(h.date) >= :dayofyearStart) or (dayofyear(u.birthday) <= :dayofyearStop)');
         }
         $res->setParameter(':dayofyearStart', date('z', $startTimestamp)+1)
             ->setParameter(':dayofyearStop', date('z', $endTimestamp)+1);
