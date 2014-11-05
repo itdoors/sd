@@ -17,13 +17,6 @@ class SalesOrganizationAccess extends BasicOrganizationAccess
     /**
      * @return bool
      */
-    public function canAddManagerOrganization ()
-    {
-        return true;
-    }
-    /**
-     * @return bool
-     */
     public function canExportToExcel ()
     {
         return true;
