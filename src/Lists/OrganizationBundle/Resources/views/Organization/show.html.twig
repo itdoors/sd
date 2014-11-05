@@ -70,8 +70,6 @@
                     {% set role = 'Sales' %}
                     {% if is_granted('ROLE_SALESADMIN') %}
                         {% set role = 'SalesAdmin' %}
-                    {% elseif is_granted('ROLE_DOGOVORADMIN') %}
-                        {% set role = 'DogovorAdmin' %}
                     {% endif %}
                     <div class="tab-pane" id="tab_5">{{ render(controller('ListsHandlingBundle:' ~ role ~ ':forOrganization', { id:organization.id })) }}</div>
                     {# tab_6 #}

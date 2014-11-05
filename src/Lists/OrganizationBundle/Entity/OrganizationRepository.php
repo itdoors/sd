@@ -960,4 +960,69 @@ class OrganizationRepository extends EntityRepository
 
         return $res;
     }
+    /**
+     * Returns results for interval future invoice
+     * 
+     * @return mixed[]
+     */
+    public function getWithoutContactsForInvoice ($companystryctyreId)
+    {
+        $res = $this->createQueryBuilder('o')
+            ->select('o.id')
+            ->addSelect('o.edrpou')
+            ->addSelect('o.name as customerName')
+            ->where(
+                'o.id in (
+                    SELECT i.customerId 
+                    FROM  ITDoorsControllingBundle:Invoice i
+                    LEFT JOIN i.invoicecompanystructure ic
+                    LEFT JOIN ic.companystructure c
+                    WHERE c.id in (:companystructureId)
+                    or
+                    c.id in 
+                        (
+                            SELECT
+                                cc.id
+                            FROM
+                                ListsCompanystructureBundle:Companystructure cp
+                            LEFT JOIN 
+                                ListsCompanystructureBundle:Companystructure cc 
+                            WHERE
+                                cp.root = cc.root
+                            AND
+                                cp.lft < cc.lft
+                            AND 
+                                cp.rgt > cc.rgt
+                            AND
+                                cp in (:companystructureId)
+                        )
+                )'
+            )
+            ->andWhere(
+                'o.id not in (
+                    SELECT mco.modelId
+                    FROM  ListsContactBundle:ModelContact mco
+                    WHERE mco.modelName = :modelNameOrganization
+                    AND mco.modelId is not null
+                )'
+            )
+            ->andWhere(
+                'o.id not in (
+                    SELECT do.id
+                    FROM  ListsContactBundle:ModelContact mcd
+                    LEFT JOIN  Lists\DepartmentBundle\Entity\Departments d 
+                        WITH mcd.modelName = :modelNameDepartments AND mcd.modelId = d.id
+                    LEFT JOIN d.organization as do
+                    WHERE do.id is not null
+                )'
+            )
+            ->setParameter(':modelNameOrganization', 'organization')
+            ->setParameter(':modelNameDepartments', 'departments')
+            ->setParameter(':companystructureId', $companystryctyreId)
+            ->orderBy('customerName')
+            ->getQuery()
+            ->getResult();
+
+        return $res;
+    }
 }
