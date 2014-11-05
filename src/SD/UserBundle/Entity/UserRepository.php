@@ -322,4 +322,20 @@ class UserRepository extends EntityRepository
 
         return $result->getQuery()->getResult();
     }
+
+    /**
+     * @param string $role
+     *
+     * @return array
+     */
+    public function findByRole($role) {
+        $qb = $this->createQueryBuilder('u');
+
+        $qb->select('u')
+            ->leftJoin('u.groups', 'g')
+            ->where('g.roles LIKE :roles')
+            ->setParameter(':roles', '%"' . $role . '"%');
+
+        return $qb->getQuery()->getResult();
+    }
 }

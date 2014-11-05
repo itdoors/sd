@@ -542,6 +542,16 @@
                     </a>
                 </li>
 
+                {% if is_granted('ROLE_SUPERVISOR') %}
+                    <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_oper_statistic')
+                    %} class="active"{% endif %}>
+                        <a href="{{ path('it_doors_oper_statistic') }}">
+                            <i class="fa fa-bar-chart-o"></i>
+                            <span class="title">{% trans %}Statistic{% endtrans %}</span>
+                        </a>
+                    </li>
+                {% endif %}
+
                 {% if is_granted('ROLE_OPER') %}
                     <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('it_doors_oper_coworker')
                     %} class="active"{% endif %}>

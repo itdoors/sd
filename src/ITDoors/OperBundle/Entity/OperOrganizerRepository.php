@@ -38,4 +38,59 @@ class OperOrganizerRepository extends EntityRepository
 
         return $sql->getQuery()->getResult();
     }
+
+    public function getStatistic($date, $filter = null) {
+
+        $sql = $this->createQueryBuilder('organizer')
+/*            ->select('
+            CASE
+            when COUNT(organizer.id) = 0
+                    then 3
+                    else COUNT(organizer.id)  as count
+            ');
+            //->addSelect('DATE(organizer.startDatetime)');*/
+        ->select( 'COUNT(organizer.id)');
+
+/*        $sql->leftJoin('organizer.department', 'd')
+            ->leftJoin('organizer.user', 'u');*/
+
+        $sql->where('DATE(organizer.startDatetime) = :date')
+            ->setParameter(':date', $date)
+            ->andWhere('organizer.isVisited = true');
+        //$sql->groupBy('organizer.id');
+
+        return $sql->getQuery()->getSingleScalarResult();
+
+
+    }
+
+    public function getTotalVisits() {
+
+        $sql = $this->createQueryBuilder('organizer')
+            ->select( 'COUNT(organizer.id)');
+
+        return $sql->getQuery()->getSingleScalarResult();
+    }
+
+
+    public function getTotalVisitsCommented() {
+
+        $sql = $this->createQueryBuilder('organizer')
+            ->select( 'COUNT(DISTINCT organizer.id)')
+
+            ->where('organizer.isVisited = true');
+
+        return $sql->getQuery()->getSingleScalarResult();
+    }
+
+    public function getAveragePerDayVisits() {
+
+        $sql = $this->createQueryBuilder('organizer')
+            ->select('COUNT(organizer.id) as countAll')
+            ->addSelect('MIN(organizer.startDatetime) as minDate')
+            ->addSelect('MAX(organizer.endDatetime) as maxDate');
+
+        return $sql->getQuery()->getSingleResult();
+    }
+
 }

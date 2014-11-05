@@ -25,12 +25,17 @@ class AccessService
         $this->container = $container;
         $this->em = $this->container->get('doctrine.orm.entity_manager');
     }
+
     /**
+     * @param null|User $user
+     *
      * @return array|bool
      */
-    public function getAllowedDepartmentsId ()
+    public function getAllowedDepartmentsId ($user = null)
     {
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        if (!$user) {
+            $user = $this->container->get('security.context')->getToken()->getUser();
+        }
         $idUser = $user->getId();
         //->getUser();
         $checkOper = $user->hasRole('ROLE_OPER');
