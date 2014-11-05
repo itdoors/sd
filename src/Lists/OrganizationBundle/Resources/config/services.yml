@@ -4,7 +4,7 @@ parameters:
     lists_organization.sales.admin.filter.form.class: Lists\OrganizationBundle\Form\OrganizationSalesAdminFilterFormType
     lists_organization.form.sales.class: Lists\OrganizationBundle\Form\OrganizationSalesFormType
     lists_organization.form.contractor.class: Lists\OrganizationBundle\Form\OrganizationContractorFilterFormType
-    lists_organization.form.dogovoradmin.class: Lists\OrganizationBundle\Form\OrganizationDogovorAdminFormType
+#lists_organization.form.dogovoradmin.class: Lists\OrganizationBundle\Form\OrganizationDogovorAdminFormType
     lists_organization.form.user.class: Lists\OrganizationBundle\Form\OrganizationUserFormType
     lists_organization.service.cover.form.class: Lists\OrganizationBundle\Form\OrganizationServiceCoverType
     lists_organization.form.user.sales.admin.class: Lists\OrganizationBundle\Form\OrganizationUserSalesAdminFormType
@@ -22,6 +22,7 @@ parameters:
     lists_organization.service_cover.repository.entity: Lists\OrganizationBundle\Entity\OrganizationServiceCover
     
     lists_organization.user.service.class: Lists\OrganizationBundle\Services\OrganizationUserService
+    lists_organization.service.class: Lists\OrganizationBundle\Services\OrganizationService
 
     lists_organization.service.cover.service.class: Lists\OrganizationBundle\Services\OrganizationServiceCoverService
 
@@ -55,11 +56,11 @@ services:
         tags:
             - { name: form.type, alias: organizationContractorFilterFormType }
 
-    lists_organization.form.organizationDogovorAdminForm:
-        class: %lists_organization.form.dogovoradmin.class%
-        arguments: [@service_container]
-        tags:
-            - { name: form.type, alias: organizationDogovorAdminForm }
+#lists_organization.form.organizationDogovorAdminForm:
+#    class: %lists_organization.form.dogovoradmin.class%
+#   arguments: [@service_container]
+#   tags:
+#        - { name: form.type, alias: organizationDogovorAdminForm }
 
     lists_organization.form.organizationUserForm:
         class: %lists_organization.form.user.class%
@@ -75,6 +76,10 @@ services:
             
     lists_organization.user.service:
         class: %lists_organization.user.service.class%
+        arguments: [ @service_container ]
+        
+    lists_organization.service:
+        class: %lists_organization.service.class%
         arguments: [ @service_container ]
         
     lists_organization.form.organizationUserFilterForm:

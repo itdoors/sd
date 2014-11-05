@@ -3,13 +3,12 @@
 namespace Lists\OrganizationBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Lists\OrganizationBundle\Controller\SalesController;
 use Lists\OrganizationBundle\Entity\OrganizationUser;
 
 /**
  * Class SalesController
  */
-class CompetitorsController extends SalesController
+class CompetitorsController extends OrganizationController
 {
 
     protected $filterNamespace = 'organization.competitors.filters';
@@ -17,9 +16,13 @@ class CompetitorsController extends SalesController
     protected $baseTemplate = 'Competitors';
 
     /**
+     * indexAction
+     * 
+     * @param string $type
+     * 
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction()
+    public function indexAction($type)
     {
         $namespase = $this->filterNamespace;
         $filter = $this->filterFormName;
@@ -28,14 +31,17 @@ class CompetitorsController extends SalesController
                 'namespase' => $namespase,
                 'filter' => $filter,
                 'baseTemplate' => $this->baseTemplate,
+                'type' => $type,
                 'baseRoutePrefix' => $this->baseRoutePrefix,
         ));
     }
 
     /**
+     * @param string $type
+     * 
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listAction()
+    public function listAction($type)
     {
         $namespase = $this->filterNamespace;
         $filters = $this->getFilters($namespase);
@@ -67,6 +73,7 @@ class CompetitorsController extends SalesController
         return $this->render('ListsOrganizationBundle:' . $this->baseTemplate . ':list.html.twig', array(
                 'pagination' => $pagination,
                 'namespase' => $namespase,
+                'type' => $type,
                 'baseTemplate' => $this->baseTemplate,
                 'baseRoutePrefix' => $this->baseRoutePrefix
         ));

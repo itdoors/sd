@@ -38,6 +38,7 @@ class ServiceCoverController extends BaseFilterController
      */
     public function listAction($organizationId)
     {
+        $isEdit = false;
         /** @var OrganizationServiceCoverRepository $oscr */
         $oscr = $this->get('organization.service_cover.repository');
         /** @var HandlingServiceRepository $handlingServiceRepository */
@@ -72,7 +73,8 @@ class ServiceCoverController extends BaseFilterController
             'allServices' => $allServices,
             'boolChoices' => json_encode($baseService->getYesNoChoices()),
             'numberChoices' => json_encode($baseService->getNumberChoices(1, 10)),
-            'select2Competitor' => json_encode($select2Competitor)
+            'select2Competitor' => json_encode($select2Competitor),
+            'isEdit' => $isEdit
         ));
     }
 

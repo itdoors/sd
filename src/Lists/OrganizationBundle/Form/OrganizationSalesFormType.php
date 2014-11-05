@@ -32,7 +32,9 @@ class OrganizationSalesFormType extends AbstractType
         $lr = $this->container->get('lists_lookup.repository');
 
         $builder
-            ->add('name')
+            ->add('name', 'text', array(
+                'required' => true
+            ))
             ->add('address')
             ->add('mailingAddress')
             ->add('ownership', 'entity', array(
@@ -76,8 +78,7 @@ class OrganizationSalesFormType extends AbstractType
             ->add('phone')
             ->add('physicalAddress');
         $builder
-            ->add('save', 'submit')
-            ->add('cancel', 'submit');
+            ->add('save', 'submit');
     }
 
     /**

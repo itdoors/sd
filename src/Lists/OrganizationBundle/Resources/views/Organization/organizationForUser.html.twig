@@ -94,7 +94,7 @@
                         <tr {% if loop.index is odd %}class="color"{% endif %}>
                             <td><input type="checkbox" class="mail-checkbox" name="organizations[]" value="{{ item.organizationId|e }}"></td>
                             <td><a target="_blank"
-                                    href="{{ path('lists_sales_admin_organization_show', { id: item.organizationId }) }}">
+                                    href="{{ path('lists_organization_show', { id: item.organizationId }) }}">
                                     {{ item.organizationId|e }}
                                 </a>
                             </td>

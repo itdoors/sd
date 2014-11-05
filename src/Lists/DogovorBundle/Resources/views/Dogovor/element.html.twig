@@ -7,21 +7,21 @@
 <td>{{ item.dogovorNumber|e }}</td>
 <td>
     {% if item.organizationId %}
-        <a href="{{ path('lists_dogovor_admin_organization_show', { id: item.organizationId }) }}" target="_blank">
+        <a href="{{ path('lists_organization_show', { id: item.organizationId }) }}" target="_blank">
             {{ item.organizationName|e }}
         </a>
     {% endif %}
 </td>
 <td>
     {% if item.customerId %}
-        <a href="{{ path('lists_dogovor_admin_organization_show', { id: item.customerId }) }}" target="_blank">
+        <a href="{{ path('lists_organization_show', { id: item.customerId }) }}" target="_blank">
             {{ item.customerName|e }}
         </a>
     {% endif %}
 </td>
 <td>
     {% if item.performerId %}
-        <a href="{{ path('lists_dogovor_admin_organization_show', { id: item.performerId }) }}" target="_blank">
+        <a href="{{ path('lists_organization_show', { id: item.performerId }) }}" target="_blank">
             {{ item.performerName|e }}
         </a>
     {% endif %}
