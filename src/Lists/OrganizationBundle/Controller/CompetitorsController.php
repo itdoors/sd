@@ -16,6 +16,7 @@ class CompetitorsController extends OrganizationController
     protected $baseTemplate = 'Competitors';
 
     /**
+     * indexAction
      * 
      * @param string $type
      * 

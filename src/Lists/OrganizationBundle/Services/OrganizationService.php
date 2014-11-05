@@ -27,6 +27,7 @@ class OrganizationService
         $this->container = $container;
     }
     /**
+     * chechAccess
      * 
      * @param User         $user
      * @param Organization $organization

@@ -15,8 +15,10 @@ class OrganizationController extends BaseController
     protected $filterNamespace = 'organization.filters';
     protected $filterFormName = 'organizationSalesFilterForm';
     /**
+     * indexAction
+     * 
      * @param string $type
-
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction ($type)
@@ -37,8 +39,10 @@ class OrganizationController extends BaseController
         ));
     }
     /**
+     * listAction
+     * 
      * @param string $type
-
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listAction ($type)
