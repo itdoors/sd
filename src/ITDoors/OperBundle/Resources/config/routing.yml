@@ -179,3 +179,7 @@ it_doors_oper_add_comment:
 it_doors_oper_get_comments:
     pattern:  /oper/get/comments
     defaults: { _controller: ITDoorsOperBundle:OperOrganizer:renderComments }
+
+it_doors_oper_statistic:
+    pattern:  /oper/statistic/index
+    defaults: { _controller: ITDoorsOperBundle:OperStatistic:index }

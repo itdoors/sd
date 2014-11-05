@@ -17,6 +17,10 @@ ITDoors\OperBundle\Entity\OperOrganizer:
             type: datetime
             nullable: false
             column: end_datetime
+        isVisited:
+            type: boolean
+            options:
+                default: false
     manyToOne:
         user:
             targetEntity: SD\UserBundle\Entity\User

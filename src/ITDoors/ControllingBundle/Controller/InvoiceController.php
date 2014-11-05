@@ -792,4 +792,26 @@ class InvoiceController extends BaseFilterController
 
         return $companystryctyre;
     }
+    /**
+     * customersWithoutContactsAction
+     * 
+     * @return render
+     */
+    public function customersWithoutContactsAction  ()
+    {
+        if (!$this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+            throw new Exception('No access', 403);
+        }
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        $companystryctyre = $this->getCompanystructure();
+        /** @var InvoiceRepository $invoice */
+        $customer = $em->getRepository('ListsOrganizationBundle:Organization')
+            ->getWithoutContactsForInvoice($companystryctyre->getId());
+
+        return $this->render('ITDoorsControllingBundle:Invoice:customersWithoutContacts.html.twig', array (
+            'customer' => $customer
+        ));
+    }
 }

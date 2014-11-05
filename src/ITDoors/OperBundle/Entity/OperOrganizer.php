@@ -9,6 +9,14 @@ use Doctrine\ORM\Query;
  */
 class OperOrganizer
 {
+
+    /**
+     * constructor
+     */
+    public function __construct() {
+        $this->setIsVisited(false);
+    }
+
     /**
      * @var integer
      */
@@ -139,5 +147,33 @@ class OperOrganizer
     public function getDepartment()
     {
         return $this->department;
+    }
+    /**
+     * @var boolean
+     */
+    private $isVisited;
+
+
+    /**
+     * Set isVisited
+     *
+     * @param boolean $isVisited
+     * @return OperOrganizer
+     */
+    public function setIsVisited($isVisited)
+    {
+        $this->isVisited = $isVisited;
+    
+        return $this;
+    }
+
+    /**
+     * Get isVisited
+     *
+     * @return boolean 
+     */
+    public function getIsVisited()
+    {
+        return $this->isVisited;
     }
 }

@@ -14,4 +14,11 @@ class ControllingOperOrganizationAccess extends BasicOrganizationAccess
     {
         return true;
     }
+    /**
+     * @return bool
+     */
+    public function canSee ()
+    {
+        return true;
+    }
 }
