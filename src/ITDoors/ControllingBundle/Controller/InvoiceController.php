@@ -807,7 +807,8 @@ class InvoiceController extends BaseFilterController
 
         $companystryctyre = $this->getCompanystructure();
         /** @var InvoiceRepository $invoice */
-        $customer = $em->getRepository('ListsOrganizationBundle:Organization')->getWithoutContactsForInvoice($companystryctyre->getId());
+        $customer = $em->getRepository('ListsOrganizationBundle:Organization')
+            ->getWithoutContactsForInvoice($companystryctyre->getId());
 
         return $this->render('ITDoorsControllingBundle:Invoice:customersWithoutContacts.html.twig', array (
             'customer' => $customer

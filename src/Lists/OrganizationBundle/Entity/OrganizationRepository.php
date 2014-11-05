@@ -963,6 +963,8 @@ class OrganizationRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      * 
+     * @param integer $companystryctyreId
+     * 
      * @return mixed[]
      */
     public function getWithoutContactsForInvoice ($companystryctyreId)
