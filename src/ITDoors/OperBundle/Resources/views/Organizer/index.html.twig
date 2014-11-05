@@ -338,6 +338,7 @@
                         axisFormat: 'HH',
                         allDayText: 'Весь день',
                         eventClick: function(event, element) {
+                            $('#add_comment_block').hide();
 /*
                             $(this).attr('data-post_target_id', 'ModelContact'+event.id);
                             $(this).attr('data-post_function', 'updateList');
@@ -561,6 +562,8 @@
                             if (data.success == 0) {
                                 alert('error');
                             } else {
+                                event.color = 'green';
+                                $('#calendar').fullCalendar('renderEvent', event, true);
                                 $('#comment_value').val('');
                                 loadComments();
                                 SD.unblockUI($('#comment_value'));
@@ -583,8 +586,10 @@
             });
 
 
+            $('#add_comment_block_button').die('click').live('click', function (e) {
+                $('#add_comment_block').toggle('slide', {}, 500);
+            });
         });
-
     </script>
 
     <style>
@@ -622,11 +627,12 @@
                     <div style="clear:both;"></div>
                     <br>
                     <hr>
-                    <a class="btn blue left_float" onclick="alert('В разработке')" >Расширеный отчет посещения</a>
+                    <a class="btn blue left_float" id="add_comment_block_button">Внести отчет о посещении</a>
+                    <a class="btn blue right_float" onclick="alert('В разработке')" >Расширеный отчет посещения</a>
                     <div style="clear:both;"></div>
                     <hr>
 
-                    <div>
+                    <div id="add_comment_block" style="display: none">
                         {% trans %}Add comment{% endtrans %}:<br>
                         <textarea style="width:80%" rows="5" id="comment_value"></textarea>
                         <button class="btn green right_float" id="add_comment">{% trans %}Add comment{% endtrans %}</button>

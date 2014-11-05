@@ -55,7 +55,8 @@ class OperOrganizerRepository extends EntityRepository
             ->leftJoin('organizer.user', 'u');*/
 
         $sql->where('DATE(organizer.startDatetime) = :date')
-            ->setParameter(':date', $date);
+            ->setParameter(':date', $date)
+            ->andWhere('organizer.isVisited = true');
         //$sql->groupBy('organizer.id');
 
         return $sql->getQuery()->getSingleScalarResult();
@@ -77,7 +78,7 @@ class OperOrganizerRepository extends EntityRepository
         $sql = $this->createQueryBuilder('organizer')
             ->select( 'COUNT(DISTINCT organizer.id)')
 
-            ->innerJoin('ITDoorsOperBundle:CommentOrganizer', 'co', 'WITH', 'co.id = organizer.id');
+            ->where('organizer.isVisited = true');
 
         return $sql->getQuery()->getSingleScalarResult();
     }
@@ -85,9 +86,11 @@ class OperOrganizerRepository extends EntityRepository
     public function getAveragePerDayVisits() {
 
         $sql = $this->createQueryBuilder('organizer')
-            ->select( 'COUNT(organizer.id)');
+            ->select('COUNT(organizer.id) as countAll')
+            ->addSelect('MIN(organizer.startDatetime) as minDate')
+            ->addSelect('MAX(organizer.endDatetime) as maxDate');
 
-        return $sql->getQuery()->getSingleScalarResult();
+        return $sql->getQuery()->getSingleResult();
     }
 
 }

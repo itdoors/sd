@@ -31,7 +31,7 @@ class OperStatisticController extends Controller
 
 
         $graph = array();
-        $numDays = 21;
+        $numDays = 30; // number of days in graph
         for ($i = $numDays; $i>=0; $i--) {
 
             $date = new \DateTime();
@@ -40,20 +40,37 @@ class OperStatisticController extends Controller
             $numVisits = $statisticRepo->getStatistic($date);
 
             $key = $numDays - $i;
-            $graph[$key]['year'] = $date->format('Y-m-d');
+            $graph[$key]['year'] = $date->format('d-m');
             $graph[$key]['visits'] = $numVisits;
             //$test[$i]['expenses'] = 5;
         }
         $graph = json_encode($graph);
-
+        // total statistic
         $totalVisits = $statisticRepo->getTotalVisits();
         $totalVisitsCommented = $statisticRepo->getTotalVisitsCommented();
+
+
+        // avarage visits per day counting
+        $averageInfo = $statisticRepo->getAveragePerDayVisits();
+        $count = $averageInfo['countAll'];
+        $minDate = new \DateTime($averageInfo['minDate']);
+        $maxDate = new \DateTime($averageInfo['maxDate']);
+
+        $interval = $maxDate->diff($minDate);
+        $daysCount = $interval->format('%d');
+
+        if (!$daysCount) {
+            $averagePerDay = 0;
+        } else {
+            $averagePerDay = $count/$daysCount;
+        }
 
 
         return $this->render('ITDoorsOperBundle:Statistic:index.html.twig', array (
             'test' => $graph,
             'totalVisits' => $totalVisits,
-            'totalVisitsCommented' => $totalVisitsCommented
+            'totalVisitsCommented' => $totalVisitsCommented,
+            'averagePerDay' => $averagePerDay
         ));
     }
 

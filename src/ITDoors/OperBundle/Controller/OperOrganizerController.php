@@ -52,7 +52,10 @@ class OperOrganizerController extends Controller
     public function getRenderedDepartmentsAction(Request $request)
     {
         $idUser = $request->request->get('idUser');
-        $date = new \DateTime($request->request->get('date'));
+        $dateSended = $request->request->get('date');
+
+        $date = explode('(', $dateSended)[0];
+        $date = new \DateTime($date);
 
         $user = $this->getDoctrine()
             ->getRepository('SDUserBundle:User')
@@ -176,12 +179,17 @@ class OperOrganizerController extends Controller
         ));
 
         foreach ($organizersData as $organizerData) {
+            $color = '';
+            if ($organizerData->getIsVisited()) {
+                $color = 'green';
+            }
             $events[] = array(
                 'title' => $organizerData->getDepartment()->getName(),
                 'start' => $organizerData->getStartDatetime()->format('Y-m-d H:i:s'),
                 'end' => $organizerData->getEndDatetime()->format('Y-m-d H:i:s'),
                 'allDay' => false,
-                'id' => $organizerData->getId()
+                'id' => $organizerData->getId(),
+                'color' => $color
             );
         }
 
@@ -237,14 +245,14 @@ class OperOrganizerController extends Controller
             ->findBy(array(
                 'organizer' => $organizer
             ));
-        if ($comments) {
-            $return['success'] = 0;
-            $return['error'] = 'comment';
-
-            return new Response(json_encode($return));
-        }
 
         $em = $this->getDoctrine()->getManager();
+
+        if ($comments) {
+            foreach ($comments as $comment) {
+                $em->remove($comment);
+            }
+        }
         $em->remove($organizer);
         $em->flush();
 
@@ -298,6 +306,10 @@ class OperOrganizerController extends Controller
 
         $organizer = $organizerRepo->find($idOrganizer);
 
+        //if ($organizer->getUser() == $this->getUser()) {
+        $organizer->setIsVisited(true);
+        //}
+
         $em = $this->getDoctrine()->getManager();
 
         $organizerComment = new CommentOrganizer();
@@ -307,6 +319,9 @@ class OperOrganizerController extends Controller
         $organizerComment->setValue($comment);
 
         $em->persist($organizerComment);
+
+        $em->persist($organizer);
+
         $em->flush();
 
         $return['success'] = 1;

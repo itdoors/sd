@@ -1,6 +1,6 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'ITDoorsOperBundle' %}
-{% block title %} {% trans %}Organizer{% endtrans %} {% endblock %}
+{% block title %} {% trans %}Statistic{% endtrans %} {% endblock %}
 {% block page_breadcrumbs %}
     <ul class="page-breadcrumb breadcrumb">
         <li>
@@ -53,7 +53,7 @@
             <div class="tabbable tabbable-custom boxless">
                 <ul class="nav nav-tabs" id="ajax_tabs">
                     <li class="active"><a href="#tab_total" data-toggle="tab">{% trans %}Total{% endtrans %}</a></li>
-                    <li><a href="#tab_custom" data-toggle="tab">{% trans %}Custom{% endtrans %}</a></li>
+                    <li><a href="#tab_custom" data-toggle="tab">{% trans %}Filter{% endtrans %}</a></li>
                 </ul>
                 <div class="tab-content" id="tab_content">
                     <div class="tab-pane active" id="tab_total">
@@ -107,7 +107,7 @@
                                     </div>
                                     <div class="details">
                                         <div class="number">
-                                            549
+                                            {{ averagePerDay }}
                                         </div>
                                         <div class="desc">
                                             Avarage Visits Per Day
@@ -127,7 +127,7 @@
                                     </div>
                                     <div class="details">
                                         <div class="number">
-                                            +89%
+                                            +XX%
                                         </div>
                                         <div class="desc">
                                             Comparing to last month
