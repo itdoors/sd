@@ -1,6 +1,11 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'ListsOrganizationBundle' %}
 {% block title %}{% trans %}Create Organization{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Organization <small>create organization</small>{% endtrans %}
+    </h3>
+{% endblock %}
 {% block page_breadcrumbs %}
     <ul class="page-breadcrumb breadcrumb">
         <li>
@@ -8,14 +13,9 @@
             <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
             <i class="fa fa-angle-right"></i>
         </li>
-		<li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_index') }}" title="{% trans %}Organization List{% endtrans %}">{% trans %}Organization List{% endtrans %}</a><i class="fa fa-angle-right"></i></li>
-        <li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_new') }}" title="{% trans %}Create Organization{% endtrans %}">{% trans %}Create Organization{% endtrans %}</a></li>
+		<li><a href="{{ path('lists_organization_index') }}" title="{% trans %}My Organizations{% endtrans %}">{% trans %}My Organizations{% endtrans %}</a><i class="fa fa-angle-right"></i></li>
+        <li><a href="{{ path('lists_organization_new') }}" title="{% trans %}Create Organization{% endtrans %}">{% trans %}Create Organization{% endtrans %}</a></li>
     </ul>
-{% endblock %}
-{% block page_title %}
-    <h3 class="page-title">
-        {% trans %}Organization <small>create organization</small>{% endtrans %}
-    </h3>
 {% endblock %}
 
 {% block css_page_level_plugin %}
@@ -27,7 +27,7 @@
 {% block js_page_level_plugins %}
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
-    <script src="{{ asset('metronic/assets/global/plugins/bootstrap-select/bootstrap-select.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.js') }}" type="text/javascript"></script>
 {% endblock %}
 
 {% block body %}
@@ -40,10 +40,11 @@
                 tickIcon: 'fa-check',
                 noneSelectedText: '{% trans %}Select view organization{% endtrans %}'
             });
-            $('#organizationSalesForm_ownership').select2({
+            
+            $('#organizationSalesForm_organizationType, #organizationSalesForm_scope, #organizationSalesForm_city, #organizationSalesForm_group, #organizationSalesForm_ownership').select2({
                 allowClear: true
             });
-            
+
             $('#organizationSalesForm_name, #organizationSalesForm_shortname').select2({
                 minimumInputLength: 2,
                 allowClear: true,
@@ -68,10 +69,8 @@
             });
         });
     </script>
-
     <div class="row">
     <div class="col-md-12">
-
         <div class="portlet box blue">
             <div class="portlet-title">
                 <div class="caption"><i class="fa fa-reorder"></i>{% trans %}Create Organization{% endtrans %}</div>
@@ -83,10 +82,10 @@
                 <!-- BEGIN FORM-->
                 {% form_theme filterForm 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
                 {{ form_start(filterForm,
-                    {
-                        'action': path('lists_' ~ baseRoutePrefix ~ '_organization_new'),
-                        'attr': {'novalidate': 'novalidate', 'class' : 'horizontal-form'}
-                    })
+                {
+                'action': path('lists_organization_new'),
+                'attr': {'novalidate': 'novalidate', 'class' : 'horizontal-form'}
+                })
                 }}
                 {{ form_errors(filterForm) }}
                 <div class="form-body">
@@ -104,12 +103,12 @@
                             </div>
                         </div>
                         <div class="col-md-6
-                            {% if filterForm.name.vars.errors|length %}
-                                has-error
-                            {% endif %}">
+                                {% if filterForm.name.vars.errors|length %}
+                                    has-error
+                                {% endif %}">
                             <div class="form-group">
-                                {{ form_label(filterForm.name, 'Organization Name'|trans ~ ' *', {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(filterForm.name, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter organization name'}}) }}
+                                {{ form_label(filterForm.name, 'Organization name'|trans ~ ' *', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(filterForm.name, {'attr': {'class': 'form-control', 'placeholder': 'Enter organization name'}}) }}
                                 <span class="help-block">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп"</span>
                                 {{ form_errors(filterForm.name) }}
                             </div>
@@ -125,7 +124,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 {{ form_label(filterForm.organizationType, 'Organization type', {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(filterForm.organizationType, {'attr': {'class': 'form-control select2me', 'placeholder': 'Select organization type'}}) }}
+                                {{ form_widget(filterForm.organizationType, {'attr': {'class': 'form-control select2', 'placeholder': 'Select organization type'}}) }}
                                 <span class="help-block">{% trans %}Select organization type{% endtrans %}</span>
                             </div>
                         </div>
@@ -133,14 +132,14 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 {{ form_label(filterForm.scope, 'Scope', {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(filterForm.scope, {'attr': {'class': 'form-control select2me','placeholder': 'Select Organization scope'}}) }}
+                                {{ form_widget(filterForm.scope, {'attr': {'class': 'form-control select2','placeholder': 'Select Organization scope'}}) }}
                                 <span class="help-block">{% trans %}Select Organization scope{% endtrans %}</span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 {{ form_label(filterForm.group, 'Organization Group', {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(filterForm.group, {'attr': {'class': 'form-control select2me','placeholder': 'Select Organization Group'}}) }}
+                                {{ form_widget(filterForm.group, {'attr': {'class': 'form-control select2','placeholder': 'Select Organization Group'}}) }}
                                 <span class="help-block">{% trans %}Select Organization Group{% endtrans %}</span>
                             </div>
                         </div>
@@ -151,19 +150,6 @@
                                 <span class="help-block">{% trans %}Select view organization{% endtrans %}</span>
                             </div>
                         </div>
-                        {#% if filterForm.lookup is defined %}
-                            <div class="col-md-6
-                                {% if filterForm.lookup.vars.errors|length %}
-                                    has-error
-                                {% endif %}">
-                                <div class="form-group">
-                                    {{ form_label(filterForm.lookup, 'Organization lookup', {'attr': {'class': 'control-label'}}) }}
-                                    {{ form_widget(filterForm.lookup, {'attr': {'class': 'form-control select2me','placeholder': 'Select lookup'}}) }}
-                                    <span class="help-block">{% trans %}Select lookup{% endtrans %}</span>
-                                    {{ form_errors(filterForm.lookup) }}
-                                </div>
-                            </div>
-                        {% endif %#}
                         <!--/span-->
                     </div>
                     <!--/row-->
@@ -172,7 +158,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 {{ form_label(filterForm.city, 'City', {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(filterForm.city, {'attr': {'class': 'form-control select2me','placeholder': 'Select city'}}) }}
+                                {{ form_widget(filterForm.city, {'attr': {'class': 'form-control select2','placeholder': 'Select city'}}) }}
                                 <span class="help-block">{% trans %}Select city{% endtrans %}</span>
                             </div>
                         </div>
@@ -230,12 +216,9 @@
                     </div>
                     <!--/row-->
 
-                    <h3 class="form-section">{% trans %}Сontact details{% endtrans %}</h3>
+                    <h3 class="form-section">{% trans %}Organization details{% endtrans %}</h3>
                     <div class="row">
-                        <div class="col-md-6
-                            {% if filterForm.edrpou.vars.errors|length %}
-							    has-error
-							{% endif %}">
+                        <div class="col-md-6{% if filterForm.edrpou.vars.errors|length %} has-error{% endif %}">
                             <div class="form-group">
                                 {{ form_label(filterForm.edrpou, 'Edrpou', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(filterForm.edrpou, {'attr': {'class': 'form-control'}}) }}
@@ -274,7 +257,6 @@
 
                     <div class="form-actions right">
                         {{ form_widget(filterForm.save, { 'label': 'Save', 'attr': {'class': 'btn blue'}} ) }}
-                        {{ form_widget(filterForm.cancel, { 'label': 'Cancel', 'attr': {'class': 'btn default'}} ) }}
                     </div>
                     {{ form_end(filterForm) }}
                     <!-- END FORM-->
