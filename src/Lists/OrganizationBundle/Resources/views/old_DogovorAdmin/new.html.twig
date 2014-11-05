@@ -1,6 +1,11 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'ListsOrganizationBundle' %}
 {% block title %}{% trans %}Create Organization{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Organization <small>create organization</small>{% endtrans %}
+    </h3>
+{% endblock %}
 {% block page_breadcrumbs %}
     <ul class="page-breadcrumb breadcrumb">
         <li>
@@ -11,11 +16,6 @@
 		<li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_index') }}" title="{% trans %}Organization List{% endtrans %}">{% trans %}Organization List{% endtrans %}</a><i class="fa fa-angle-right"></i></li>
         <li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_organization_new') }}" title="{% trans %}Create Organization{% endtrans %}">{% trans %}Create Organization{% endtrans %}</a></li>
     </ul>
-{% endblock %}
-{% block page_title %}
-    <h3 class="page-title">
-        {% trans %}Organization <small>create organization</small>{% endtrans %}
-    </h3>
 {% endblock %}
 
 {% block css_page_level_plugin %}

@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <h3>{% trans %}Contacts{% endtrans %}</h3>
         <p>{% trans %}Contacts on organization{% endtrans %}</p>
-        {% if isAddContacts %}
+        {% if access.canAddContacts %}
         <div class="table-toolbar">
             <div class="btn-group" style="margin-bottom: 10px;">
                 <button id="managers_list_new" class="btn green ajax-form"

@@ -1,5 +1,5 @@
 {% trans_default_domain 'ListsOrganizationBundle' %}
-{% if isEdit %}
+{% if access.canEdit %}
 <script type="text/javascript">
 
     $(document).ready(function(){
@@ -94,11 +94,11 @@
             <tr>
                 <td>{% trans %}Ownership{% endtrans %}</td>
                 <td>
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     <a href="#" id="ownershipId" data-type="select2" data-pk="{{ organization.id }}" data-original-title="{% trans %}Ownership{% endtrans %}">
                     {% endif %}
                        {% if organization.ownership %}{{ organization.ownership.shortname }} {{ '(' ~ organization.ownership ~ ')' }}{% endif%}
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     </a>
                     {% endif %}
                 </td>
@@ -107,11 +107,11 @@
             <tr>
                 <td style="width:15%">{% trans %}Organization name{% endtrans %}</td>
                 <td style="width:50%">
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     <a href="#" id="name" data-type="text" data-pk="{{ organization.id }}" data-placement="right" data-placeholder="{% trans %}Enter organization name{% endtrans %}" data-original-title="{% trans %}Enter organization name{% endtrans %}">
                     {% endif %}
                         {{ organization.name }}
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     </a>
                     {% endif %}
                 </td>
@@ -120,11 +120,11 @@
             <tr>
                 <td>{% trans %}Short Name{% endtrans %}</td>
                 <td>
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     <a href="#" id="shortname" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Enter organization short name{% endtrans %}">
                     {% endif %}
                         {{ organization.shortname }}
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     </a>
                     {% endif %}
                 </td>
@@ -133,7 +133,7 @@
             <tr>
                 <td>{% trans %}View{% endtrans %}</td>
                 <td>
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     <a href="#" id="organizationsign" data-type="select2" data-pk="{{ organization.id }}" data-value="
                        {% for key, lookup in organization.organizationsigns %}
                             {{key > 0 ? ',' : '' }}{{lookup.id}}
@@ -141,7 +141,7 @@
                        data-original-title="{% trans %}View{% endtrans %}">
                     {% endif %}
                         {{ organization.organizationsigns | join(', ') }}
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     </a>
                     {% endif %}
                 </td>
@@ -150,11 +150,11 @@
             <tr>
                 <td>{% trans %}Organization type{% endtrans %}</td>
                 <td>
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     <a href="#" id="organizationTypeId" data-type="select" data-pk="{{ organization.id }}" data-value="" data-original-title="{% trans %}Enter organization type{% endtrans %}">
                     {% endif %}
                         {{ organization.organizationType }}
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     </a>
                     {% endif %}
                 </td>
@@ -163,11 +163,11 @@
             <tr>
                 <td>{% trans %}Scope{% endtrans %}</td>
                 <td>
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     <a href="#" id="scopeId" data-type="select2" data-pk="{{ organization.id }}" data-value="{{ organization.scopeId }}" data-original-title="{% trans %}Select scope{% endtrans %}">
                     {% endif %}
                         {{ organization.scope }}
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     </a>
                     {% endif %}
                 </td>
@@ -176,11 +176,11 @@
             <tr>
                 <td>{% trans %}Organization Group{% endtrans %}</td>
                 <td>
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     <a href="#" id="groupId" data-type="select2" data-pk="{{ organization.id }}" data-value="{{ organization.groupId }}" data-original-title="{% trans %}Select Organization Group{% endtrans %}">
                     {% endif %}
                         {{ organization.group }}
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     </a>
                     {% endif %}
                 </td>
@@ -189,11 +189,11 @@
             <tr>
                 <td>{% trans %}City{% endtrans %}</td>
                 <td>
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     <a href="#" id="cityId" data-type="select2" data-pk="{{ organization.id }}" data-value="BS" data-original-title="{% trans %}Select city{% endtrans %}">
                     {% endif %}
                         {{ organization.city }}
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     </a>
                     {% endif %}
                 </td>
@@ -202,11 +202,11 @@
             <tr>
                 <td>{% trans %}Legal Address{% endtrans %}</td>
                 <td>
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     <a href="#" id="address" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Enter Legal Address{% endtrans %}">
                     {% endif %}
                         {{ organization.address }}
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     </a>
                     {% endif %}
                 </td>
@@ -215,11 +215,11 @@
             <tr>
                 <td>{% trans %}Mailing Address{% endtrans %}</td>
                 <td>
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     <a href="#" id="mailingAddress" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Enter Mailing Address{% endtrans %}">
                     {% endif %}
                         {{ organization.mailingAddress }}
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     </a>
                     {% endif %}
                 </td>
@@ -228,11 +228,11 @@
             <tr>
                 <td>{% trans %}Physical Address{% endtrans %}</td>
                 <td>
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     <a href="#" id="physicalAddress" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Enter Physical Address{% endtrans %}">
                     {% endif %}
                         {{ organization.physicalAddress }}
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     </a>
                     {% endif %}
                 </td>
@@ -241,11 +241,11 @@
             <tr>
                 <td>{% trans %}Phone{% endtrans %}</td>
                 <td>
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     <a href="#" id="phone" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Enter Phone{% endtrans %}">
                     {% endif %}
                         {{ organization.phone }}
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     </a>
                     {% endif %}
                 </td>
@@ -254,11 +254,11 @@
             <tr>
                 <td>{% trans %}Site{% endtrans %}</td>
                 <td>
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     <a href="#" id="site" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Enter Organization Site{% endtrans %}">
                     {% endif %}
                         {{ organization.site }}
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     </a>
                     {% endif %}
                 </td>
@@ -267,11 +267,11 @@
             <tr>
                 <td>{% trans %}Edrpou{% endtrans %}</td>
                 <td>
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     <a href="#" id="edrpou" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Enter edrpou{% endtrans %}">
                     {% endif %}
                         {{ organization.edrpou }}
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     </a>
                     {% endif %}
                 </td>
@@ -280,11 +280,11 @@
             <tr>
                 <td>{% trans %}INN{% endtrans %}</td>
                 <td>
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     <a href="#" id="inn" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Enter INN{% endtrans %}">
                     {% endif %}
                         {{ organization.inn }}
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     </a>
                     {% endif %}
                 </td>
@@ -293,11 +293,11 @@
             <tr>
                 <td>{% trans %}Certificate{% endtrans %}</td>
                 <td>
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     <a href="#" id="certificate" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}INN Certificate{% endtrans %}">
                     {% endif %}
                         {{ organization.certificate }}
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     </a>
                     {% endif %}
                 </td>
@@ -306,11 +306,11 @@
             <tr>
                 <td>{% trans %}Organization Description{% endtrans %}</td>
                 <td>
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     <a href="#" id="shortDescription" data-type="text" data-pk="{{ organization.id }}" data-original-title="{% trans %}Organization Description{% endtrans %}">
                     {% endif %}
                         {{ organization.shortDescription }}
-                    {% if isEdit %}
+                    {% if access.canEdit %}
                     </a>
                     {% endif %}
                 </td>

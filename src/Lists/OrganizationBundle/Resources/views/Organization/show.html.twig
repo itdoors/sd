@@ -6,9 +6,8 @@
 		<li>
 			<i class="fa fa-home"></i>
 			<a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
-			<i class="fa fa-angle-right"></i>
 		</li>
-		<li><a href="{{ path('lists_organization_index') }}" title="{% trans %}My Organizations{% endtrans %}">{% trans %}My Organizations{% endtrans %}</a><i class="fa fa-angle-right"></i></li>
+		<li><a href="{{ path('lists_organization_index') }}" title="{% trans %}My Organizations{% endtrans %}">{% trans %}My Organizations{% endtrans %}</a></li>
 		<li><a href="{{ path('lists_organization_show', { id : organization.id }) }}" title="{% trans %}Show Organization{% endtrans %}">{% trans %}Show Organization{% endtrans %}</a></li>
 	</ul>
 {% endblock %}
@@ -24,7 +23,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}}" />
-    <link href="{{ asset('metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css')}}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-select/bootstrap-select.min.css')}}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/jquery-file-upload/css/style.css')}}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/jquery-file-upload/css/jquery.fileupload.css')}}"/>
 {% endblock %}
@@ -79,7 +78,7 @@
                     <div class="tab-pane" id="tab_6">{{ render(controller('ListsOrganizationBundle:ServiceCover:Index', { organizationId: organization.id })) }}</div>
                     {# tab_7 #}
                     <div class="tab-pane" id="tab_7">
-                        {% if isAddDocument %}
+                        {% if access.canAddDocument %}
                         <script>
                             $(document).ready(function(){
                                 $(function () {
@@ -109,7 +108,7 @@
                     </div>
                     {# tab_8 #}
                     <div class="tab-pane" id="tab_8">
-                        {% if isAddKVED %}
+                        {% if access.canAddKVED %}
                         <div class="table-toolbar">
                             <div class="btn-group">
                                 <button id="managers_list_new" class="btn green ajax-form"

@@ -5,12 +5,12 @@
         <h3>{% trans %}Managers{% endtrans %}</h3>
         <p>{% trans %}Managers on organization{% endtrans %}</p>
         <div id="managers_list"
-             data-url="{{ path('lists_sales_organization_ajax_users', {
+             data-url="{{ path('lists_organization_ajax_users', {
                 organizationId: organization.id
              }) }}"
              data-params='{"organizationId":{{ organization.id }}'
         >
-            {{ render(controller('ListsOrganizationBundle:' ~ baseTemplate ~ ':OrganizationUsers', {
+            {{ render(controller('ListsOrganizationBundle:Organization:OrganizationUsers', {
                 organizationId: organization.id
             })) }}
         </div>

@@ -223,3 +223,6 @@ Transfer departmens: Перенос отделений
 Departmens: Отделения
 Enter child organization: Укажите дочернюю организацию
 Organizations: Организации
+Organization not found: Организация не найдена
+You don`t access: У Вас нет доступа
+Organization <small>not found</small>: Организация <small>не найдена</small>

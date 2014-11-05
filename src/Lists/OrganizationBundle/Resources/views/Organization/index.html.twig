@@ -6,9 +6,8 @@
         <li>
             <i class="fa fa-home"></i>
             <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
-            <i class="fa fa-angle-right"></i>
         </li>
-        <li><a href="{{ path('lists_organization_index') }}" title="{% trans %}Organizations{% endtrans %}">{% trans %}Organizations{% endtrans %}</a></li>
+        <li><a href="{{ path('lists_organization_index', {type: type}) }}" title="{% trans %}Organizations{% endtrans %}">{% trans %}Organizations{% endtrans %}</a></li>
     </ul>
 {% endblock %}
 {% block page_title %}
@@ -33,7 +32,7 @@
     {{ ajax_filter_render(filter, namespase, {
         'datatable_ajax': 'ITDoorsAjax.updateList'
     }) }}
-    {% if isAddOrganization %}
+    {% if access.canAddOrganization %}
         <div class="table-toolbar">
             <div class="btn-group">
                 <a class="btn green" id="add_organization" href="{{ path('lists_organization_new') }}">
@@ -42,12 +41,12 @@
             </div>
         </div>
     {% endif %}
-    {% if isExportToExcel %}
+    {% if access.canExportToExcel %}
     <div class="portlet">
         <div class="portlet-title">
             <div class="actions">
                 <div class="btn-group">
-                    <a class="btn default yellow-stripe" href="{{ path('lists_organization_export_excel')}}">
+                    <a class="btn default yellow-stripe" href="{{ path('lists_organization_export_excel', {type: type})}}">
                         <i class="fa fa-share"></i>
                         <span class="hidden-480">{% trans %}Export to Excel{% endtrans %}</span>
                         <i class="fa fa-angle-down"></i>
@@ -59,8 +58,8 @@
     {% endif %}
     <div class="row">
         <div class="col-md-12">
-            <div id="datatable_ajax"  data-url="{{ url('lists_organization_index_list') }}">
-                {{ render(controller('ListsOrganizationBundle:Organization:list')) }}
+            <div id="datatable_ajax"  data-url="{{ url('lists_organization_index_list', { type: type }) }}">
+                {{ render(controller('ListsOrganizationBundle:Organization:list', { type: type })) }}
             </div>
         </div>
     </div>

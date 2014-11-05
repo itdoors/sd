@@ -108,8 +108,8 @@
                                 {% endif %}">
                             <div class="form-group">
                                 {{ form_label(filterForm.name, 'Organization name'|trans ~ ' *', {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(filterForm.name, {'attr': {'class': 'form-control', 'data-required': '1', 'placeholder': 'Enter organization name'}}) }}
-                                <span class="help-block">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп" {% trans %}(limit 50 chars){% endtrans %}</span>
+                                {{ form_widget(filterForm.name, {'attr': {'class': 'form-control', 'placeholder': 'Enter organization name'}}) }}
+                                <span class="help-block">{% trans %}for example{% endtrans %}: ООО "Импел Гриффин Групп"</span>
                                 {{ form_errors(filterForm.name) }}
                             </div>
                         </div>
@@ -257,7 +257,6 @@
 
                     <div class="form-actions right">
                         {{ form_widget(filterForm.save, { 'label': 'Save', 'attr': {'class': 'btn blue'}} ) }}
-                        {{ form_widget(filterForm.cancel, { 'label': 'Cancel', 'attr': {'class': 'btn default'}} ) }}
                     </div>
                     {{ form_end(filterForm) }}
                     <!-- END FORM-->

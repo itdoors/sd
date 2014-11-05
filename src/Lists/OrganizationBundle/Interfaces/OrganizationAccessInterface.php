@@ -10,74 +10,41 @@ interface OrganizationAccessInterface
     /**
      * @return bool
      */
-    public function isViewed();
-
+    public function canSee();
     /**
      * @return bool
      */
-    public function canSetDone();
+    public function canSeeAll();
     /**
      * @return bool
      */
-    public function canSetUndone();
+    public function canEdit();
     /**
      * @return bool
      */
-    public function canSetClosed();
+    public function canAddContacts();
     /**
      * @return bool
      */
-    public function canUploadFiles();
+    public function canAddDocument();
     /**
      * @return bool
      */
-    public function canLeaveComment();
+    public function canAddKVED();
     /**
      * @return bool
      */
-    public function canSetChecking();
+    public function canAddManagerOrganization();
     /**
      * @return bool
      */
-    public function canAnswerDateRequest();
+    public function canAddOrganization();
     /**
      * @return bool
      */
-    public function canSignUp();
+    public function canExportToExcel();
     /**
      * @return bool
      */
-    public function canRefuseSignUp();
-    /**
-     * @return bool
-     */
-    public function canEditHeader();
-    /**
-     * @return bool
-     */
-    public function canEditDescription();
-    /**
-     * @return bool
-     */
-    public function canEditEndDate();
-    /**
-     * @return bool
-     */
-    public function canMakeDateRequest();
-    /**
-     * @return bool
-     */
-    public function canAddResolution();
-    /**
-     * @return bool
-     */
-    public function getLastCommitStage();
-    /**
-     * @return bool
-     */
-    public function canDeleteFile();
-    /**
-     * @return bool
-     */
-    public function canAddViewer();
+    public function filterFormName();
 }
