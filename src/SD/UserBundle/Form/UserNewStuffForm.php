@@ -10,6 +10,9 @@ use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Lists\CompanystructureBundle\Entity\CompanystructureRepository;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 /**
  * UserNewForm
@@ -35,6 +38,8 @@ class UserNewStuffForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 //        $user = $this->container->get('security.context')->getToken()->getUser();
+
+        $container = $this->container;
 
         $repository = $this->container->get('doctrine')->getRepository('ListsCompanystructureBundle:Companystructure');
 
@@ -92,6 +97,28 @@ class UserNewStuffForm extends AbstractType
 
         $builder
             ->add('create', 'submit');
+        
+        $builder->addEventListener(
+        		FormEvents::POST_SUBMIT,
+        		function (FormEvent $event) use ($container) {
+        			/** @var User $newUser */
+        			$newUser = $event->getData();
+        			$form = $event->getForm();
+        			$translator = $container->get('translator');
+        			$em = $container->get('doctrine')->getManager();
+        			$existingUser = $em->getRepository('SDUserBundle:User')
+        							->findOneBy(array('email' => $newUser->getEmail()));
+        			if ($existingUser) {
+        				$form->get('email')->addError(new FormError($existingUser));
+        			}
+        			$existingUser = $em->getRepository('SDUserBundle:User')
+        			->findOneBy(array('username' => $newUser->getUserName()));
+        			if ($existingUser) {
+        				$form->get('username')->addError(new FormError($existingUser));
+        			}
+        		}
+        );
+        
     }
 
     /**

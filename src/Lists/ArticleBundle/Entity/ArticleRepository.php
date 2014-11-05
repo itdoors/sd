@@ -98,6 +98,72 @@ class ArticleRepository extends EntityRepository
             'count' => $count->getQuery()->getSingleScalarResult()
         );
     }
+    
+    /** Returns results for interval future invoice
+     *
+     * @param QueryBuilder $res Description
+     * @param User $user
+     *
+     * @return QueryBuilder
+     */
+    private function selectBlogPage(QueryBuilder $res, User $user)
+    {
+    	$subQueryCase = $res->expr()
+    	->andx(
+    			$res->expr()->eq('n.news', 'a.id')
+    	);
+    	
+    	return $res
+    	->select('a.id')
+    	->addSelect('a.title')
+    	->addSelect('a.datePublick')
+    	->addSelect('a.dateUnpublick')
+    	->addSelect('u.firstName')
+    	->addSelect('u.lastName')
+    	->addSelect('u.middleName')
+    	->leftJoin('Lists\ArticleBundle\Entity\NewsFosUser', 'n', 'WITH', $subQueryCase)
+    	->where('a.datePublick < :date')
+    	->andWhere('a.dateUnpublick > :date or a.dateUnpublick is NULL')
+    	->andWhere('a.type = :type')
+    	->andWhere('n.user = :id')
+//     	->add('from', 'Lists\ArticleBundle\Entity\NewsFosUser u LEFT JOIN u.news r')
+    	
+//     	->leftJoin('Lists\ArticleBundle\Entity\Vote', 'v', 'WITH', $subQueryCase)
+    	->setParameter(':type', 'blog')
+    	->setParameter(':id', $user->getId())
+    	->setParameter(':date', date('Y-m-d H:i:s'));
+    	
+//     	return $res
+//     	->leftJoin('Lists\ArticleBundle\Entity\Vote', 'v', 'WITH', $subQueryCase)
+//     	->leftJoin('Lists\ArticleBundle\Entity\Vote', 'vf', 'WITH', $subQueryCasef)
+//     	->andwhere('v.userId = :user')
+//     	->setParameter(':text', 'article')
+//     	->setParameter(':user', $userId);
+    }
+    
+    /**
+     * Returns new blog articles for current user 
+     *
+     * @return array
+     */
+    public function getBlog($user)
+    {
+    	$sql = $this->createQueryBuilder('a');
+    	$count = $this->createQueryBuilder('a');
+    	
+    	$this->selectBlogPage($sql, $user);
+    	$this->countPage($count);
+    	
+    	$this->joinHistoryPage($sql);
+    	
+//     	$this->whereBlogPage($sql, $user);
+    	$this->whereHistoryPage($count);
+    
+    	return array(
+            'articles' => $sql->orderBy('a.datePublick', 'Desc')->getQuery(),
+            'count' => $count->getQuery()->getSingleScalarResult()
+        );
+    }
 
     /**
      * Returns results for interval future invoice

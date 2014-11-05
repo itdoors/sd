@@ -1,0 +1,5 @@
+fos_user:
+    username:
+        already_used: Логин уже используется пользователем
+    email:
+        already_used: Email уже используется пользователем

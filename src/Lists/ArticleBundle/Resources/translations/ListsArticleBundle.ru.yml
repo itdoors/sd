@@ -59,3 +59,19 @@ Term stop: Срок окончания
 Select rating: Выберите оценку
 
 Selected users will be sent a notification: Выбранным пользователям будут отправлены уведомления
+
+#Роли пользователей
+Roles: Роли пользователей
+SALES: продажники
+SALESADMIN: админ продаж
+SALESDISPATCHER: продаж диспетчер
+DOGOVORADMIN: договор админ
+OPER: опер
+SUPERVISOR: супервайзер
+CONTROLLING: контроллинг
+ARTICLEADMIN: артикл админ
+CRONADMIN: крон админ
+HRADMIN: HR админ
+CONTROLLING_OPER: контр опер
+HOLIDAY: холидей
+ADMIN: админ

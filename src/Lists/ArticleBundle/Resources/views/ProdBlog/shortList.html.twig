@@ -1,0 +1,37 @@
+<!-- BEGIN INBOX DROPDOWN -->
+	<li class="dropdown dropdown-extended dropdown-inbox" id="header_inbox_bar">
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
+			data-close-others="true">
+		<i class="fa fa-envelope"></i>
+		{% if items|length > 0 %}
+			<span class="badge badge-default">{{items|length}}</span>
+		{% endif %}
+		</a>
+		<ul class="dropdown-menu extended inbox">
+			<li>
+				<p>You have {{items|length}} new messages</p>
+			</li>
+			<li>
+				<ul class="dropdown-menu-list scroller" style="height: 250px;">
+				{% if items|length > 0 %}
+					{% for i in 0..(items|length-1) %}
+						<li>  
+							<a href="{{path('list_article_blog_show',{'id':items[i].id})}}">
+							<span class="photo"><img src="{{ asset('templates/metronic/img/avatar2.jpg') }}" class="img-circle" alt=""/></span>
+							<span class="subject">
+								<span class="from">{{items[i].lastName}} {{items[i].firstName}} {{items[i].middleName}}</span>
+								<span class="time">{{items[i].datePublick|date('d-m-Y')}}</span>
+							</span>
+							<span class="message">{{items[i].title}}</span>  
+							</a>
+						</li>
+					{% endfor %}
+				{% endif %}
+				</ul>
+			</li>
+			<li class="external">   
+				<a href="{{path('list_article_blog')}}">See all messages <i class="m-icon-swapright"></i></a>
+			</li>
+		</ul>
+	</li>
+<!-- END INBOX DROPDOWN -->

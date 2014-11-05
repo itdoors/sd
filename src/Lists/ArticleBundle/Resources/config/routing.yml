@@ -30,3 +30,24 @@ list_article_vote_decision_show:
 list_article_vote_decision_add:
     pattern:  /dashboard/vote/decision/add
     defaults: { _controller: ListsArticleBundle:Decision:add }
+    
+# Product Blog
+list_article_blog:
+    pattern:  /dashboard/blog
+    defaults: { _controller: ListsArticleBundle:ProdBlog:index }
+    
+list_article_blog_list:
+    pattern:  /dashboard/blog/list
+    defaults: { _controller: ListsArticleBundle:ProdBlog:list }
+
+list_article_blog_show:
+    pattern:  /dashboard/blog/show/{id}
+    defaults: { _controller: ListsArticleBundle:ProdBlog:show }
+    
+list_article_blog_add:
+    pattern:  /dashboard/blog/add
+    defaults: { _controller: ListsArticleBundle:ProdBlog:add }
+    
+list_article_blog_viewed:
+    pattern:  /dashboard/blog/viewed/{id}
+    defaults: { _controller: ListsArticleBundle:ProdBlog:setViewed }
