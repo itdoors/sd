@@ -45,7 +45,7 @@
             <div class="portlet box green-meadow calendar">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-gift"></i>Calendar
+                        <i class="fa fa-gift"></i>{% trans %}Calendar{% endtrans %}
                     </div>
                 </div>
                 <div class="portlet-body">
@@ -53,6 +53,14 @@
                         <div class="col-md-3 col-sm-12">
                             <!-- BEGIN DRAGGABLE EVENTS PORTLET-->
                             <h3 class="event-form-title">{% trans %}Drag departments to calendar{% endtrans %}</h3>
+                            {% if supervisor == true %}
+                                <select id="user_select" style="width: 100%">
+                                    <option selected></option>
+                                    {% for user in usersOper %}
+                                        <option value="{{ user.id }}">{{ user.fullName }}</option>
+                                    {% endfor %}
+                                </select><br><br>
+                            {% endif %}
                             <div id="external-events">
 {#
                                 <form class="inline-form">
@@ -172,32 +180,6 @@
                         initDrag(html);
                     };
 
-                    var loadComments = function() {
-                        $('#comment_block').html('');
-                        $('#spinner').show();
-                        var event = $('#current_organizer').data('current_organizer_event');
-                        var id = event.id;
-
-                        $.ajax({
-                            type: 'POST',
-                            url: $('#info_input').data('url_get_comments'),
-                            data: {
-                                id: id
-                            },
-                            success: function(data) {
-                                data = JSON.parse(data);
-                                if (data.success == 0) {
-                                    alert('error');
-                                } else {
-                                    $('#spinner').hide();
-                                    $('#comment_block').html(data.html);
-                                }
-                            }
-
-                        })
-                    }
-
-
                     $('#external-events div.external-event').each(function() {
                         initDrag($(this));
                     });
@@ -252,12 +234,14 @@
 
                             var id = $(this).data('id');
                             var obj = $(this);
+                            var idUser = $('#info_input').data('user_id');
                             $.ajax({
                                 type: 'POST',
                                 url: $('#info_input').data('url_insert_event'),
                                 data: {
                                     id: id,
-                                    date: date
+                                    date: date,
+                                    idUser: idUser
                                 },
                                 success: function(data) {
                                     data = JSON.parse(data);
@@ -279,7 +263,13 @@
                         },
                         firstDay: 1,
                         events: {
-                            url: '{{ url('it_doors_oper_organizer_events') }}'
+                            url: '{{ url('it_doors_oper_organizer_events') }}',
+                            data: {
+                                'idUser': function() {
+                                    return $('#info_input').data('user_id');
+                                }
+                            },
+                            type: "POST"
                         }/*,
                         eventRender: function (event, element) {
                             element.find('.fc-event-title').html(event.title);
@@ -348,6 +338,7 @@
                         axisFormat: 'HH',
                         allDayText: 'Весь день',
                         eventClick: function(event, element) {
+                            $('#add_comment_block').hide();
 /*
                             $(this).attr('data-post_target_id', 'ModelContact'+event.id);
                             $(this).attr('data-post_function', 'updateList');
@@ -403,6 +394,30 @@
         }();
     </script>
     <script>
+        function loadComments() {
+            $('#comment_block').html('');
+            $('#spinner').show();
+            var event = $('#current_organizer').data('current_organizer_event');
+            var id = event.id;
+
+            $.ajax({
+                type: 'POST',
+                url: $('#info_input').data('url_get_comments'),
+                data: {
+                    id: id
+                },
+                success: function(data) {
+                    data = JSON.parse(data);
+                    if (data.success == 0) {
+                        alert('error');
+                    } else {
+                        $('#spinner').hide();
+                        $('#comment_block').html(data.html);
+                    }
+                }
+
+            })
+        }
 
         $(document).ready(function() {
             // initiate layout and plugins
@@ -498,7 +513,6 @@
                 var event = $('#current_organizer').data('current_organizer_event');
                 var id = event.id;
 
-                $('#calendar').fullCalendar('removeEvents', event._id);
 
                 SD.blockUI($('#moreInfoTpl'));
                 $.ajax({
@@ -517,6 +531,7 @@
                             }
                         } else {
                             $('#form_modal_more_info').modal('hide');
+                            $('#calendar').fullCalendar('removeEvents', event._id);
                         }
                         SD.unblockUI($('#moreInfoTpl'));
                     }
@@ -547,6 +562,8 @@
                             if (data.success == 0) {
                                 alert('error');
                             } else {
+                                event.color = 'green';
+                                $('#calendar').fullCalendar('renderEvent', event, true);
                                 $('#comment_value').val('');
                                 loadComments();
                                 SD.unblockUI($('#comment_value'));
@@ -559,33 +576,20 @@
 
             })
 
-            function loadComments() {
-                $('#comment_block').html('');
-                $('#spinner').show();
-                var event = $('#current_organizer').data('current_organizer_event');
-                var id = event.id;
+            $('#user_select').select2({
+                placeholder: "{% trans %}Select an opermanager{% endtrans %}"
+            }).on("change", function(e) {
+                var idUser = $(this).val();
+                $('#info_input').data('user_id', idUser);
+                $('#calendar').fullCalendar('refetchEvents');
+                // what you would like to happen
+            });
 
-                $.ajax({
-                    type: 'POST',
-                    url: $('#info_input').data('url_get_comments'),
-                    data: {
-                        id: id
-                    },
-                    success: function(data) {
-                        data = JSON.parse(data);
-                        if (data.success == 0) {
-                            alert('error');
-                        } else {
-                            $('#spinner').hide();
-                            $('#comment_block').html(data.html);
-                        }
-                    }
 
-                })
-            }
-
+            $('#add_comment_block_button').die('click').live('click', function (e) {
+                $('#add_comment_block').toggle('slide', {}, 500);
+            });
         });
-
     </script>
 
     <style>
@@ -623,14 +627,15 @@
                     <div style="clear:both;"></div>
                     <br>
                     <hr>
-                    <a class="btn blue left_float" onclick="alert('В разработке')" >Расширеный отчет посещения</a>
+                    <a class="btn blue left_float" id="add_comment_block_button">Внести отчет о посещении</a>
+                    <a class="btn blue right_float" onclick="alert('В разработке')" >Расширеный отчет посещения</a>
                     <div style="clear:both;"></div>
                     <hr>
 
-                    <div>
-                        {% trans %}Add comment{% endtrans %}:<br>
+                    <div id="add_comment_block" style="display: none">
+                        {% trans %}Add report{% endtrans %}:<br>
                         <textarea style="width:80%" rows="5" id="comment_value"></textarea>
-                        <button class="btn green right_float" id="add_comment">{% trans %}Add comment{% endtrans %}</button>
+                        <button class="btn green right_float" id="add_comment">{% trans %}Submit{% endtrans %}</button>
                         <div style="clear:both;"></div>
                     </div>
                     <hr>
