@@ -15,13 +15,15 @@ class OrganizationController extends BaseController
     protected $filterNamespace = 'organization.filters';
     protected $filterFormName = 'organizationSalesFilterForm';
     /**
+     * @param string $type
+
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction ($type)
     {
         $service = $this->get('lists_organization.service');
         $access = $service->chechAccess($this->getUser());
-        
+
         if (empty($type)) {
             $this->filterFormName = $access->filterFormName();
         }
@@ -35,6 +37,8 @@ class OrganizationController extends BaseController
         ));
     }
     /**
+     * @param string $type
+
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listAction ($type)
@@ -69,7 +73,6 @@ class OrganizationController extends BaseController
             } else {
                 throw new \Exception('No access', 403);
             }
-            
         }
         /** @var \Doctrine\ORM\Query */
         $organizationsQuery = $organizationsRepository->getAllForSalesQuery($userId, $filters);
@@ -102,7 +105,7 @@ class OrganizationController extends BaseController
 
         $service = $this->get('lists_organization.service');
         $access = $service->chechAccess($user);
-        
+
         if (!$access->canAddOrganization()) {
             throw new \Exception('No access');
         }
@@ -228,13 +231,13 @@ class OrganizationController extends BaseController
 
         $service = $this->get('lists_organization.service');
         $access = $service->chechAccess($this->getUser(), $organization);
-        
+
         if (!$access->canSee()) {
             return $this->render('ListsOrganizationBundle:Organization:noAccess.html.twig', array(
                 'organization' => $organization
             ));
         }
-        
+
         if ($organization->getParent()) {
             return $this->redirect($this->generateUrl('lists_organization_show', array (
                 'id' => $organization->getParentId()
@@ -548,6 +551,8 @@ class OrganizationController extends BaseController
     }
     /**
      * Renders organizationUsers list
+     * 
+     * @param string $type
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -569,7 +574,7 @@ class OrganizationController extends BaseController
         if ($access->canExportToExcel()) {
             throw new \Exception('No access', 403);
         }
-         
+
         /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
         $organizationsRepository = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization');
@@ -581,7 +586,6 @@ class OrganizationController extends BaseController
             } else {
                 throw new \Exception('No access', 403);
             }
-            
         }
         /** @var \Doctrine\ORM\Query */
         $organizations = $organizationsRepository->getAllForSalesQuery($userId, $filters)->getResult();

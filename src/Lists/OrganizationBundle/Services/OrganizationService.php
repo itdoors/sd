@@ -26,6 +26,13 @@ class OrganizationService
     {
         $this->container = $container;
     }
+    /**
+     * 
+     * @param User         $user
+     * @param Organization $organization
+     * 
+     * @return mixed[]
+     */
     public function chechAccess(User $user, Organization $organization = null)
     {
         $role = array();

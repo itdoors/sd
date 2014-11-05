@@ -16,6 +16,9 @@ class CompetitorsController extends OrganizationController
     protected $baseTemplate = 'Competitors';
 
     /**
+     * 
+     * @param string $type
+     * 
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction($type)
@@ -33,6 +36,8 @@ class CompetitorsController extends OrganizationController
     }
 
     /**
+     * @param string $type
+     * 
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listAction($type)
