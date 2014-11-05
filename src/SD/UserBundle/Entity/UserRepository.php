@@ -334,7 +334,7 @@ class UserRepository extends EntityRepository
         $qb->select('u')
             ->leftJoin('u.groups', 'g')
             ->where('g.roles LIKE :roles')
-            ->setParameter('roles', '%"' . $role . '"%');
+            ->setParameter(':roles', '%"' . $role . '"%');
 
         return $qb->getQuery()->getResult();
     }

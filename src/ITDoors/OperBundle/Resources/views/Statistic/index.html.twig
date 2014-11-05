@@ -70,7 +70,7 @@
                                             {{ totalVisits }}
                                         </div>
                                         <div class="desc">
-                                            Total Visits
+                                            {% trans %}Total Visits{% endtrans %}
                                         </div>
                                     </div>
 {#
@@ -90,7 +90,7 @@
                                             {{ totalVisitsCommented }}
                                         </div>
                                         <div class="desc">
-                                            Total Visits With Comments
+                                            {% trans %}Total Visits With Comments{% endtrans %}
                                         </div>
                                     </div>
 {#
@@ -103,14 +103,14 @@
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div class="dashboard-stat green-haze">
                                     <div class="visual">
-                                        <i class="fa fa-shopping-cart"></i>
+                                        <i class="fa fa-tachometer"></i>
                                     </div>
                                     <div class="details">
                                         <div class="number">
-                                            {{ averagePerDay }}
+                                            {{ averagePerDay|number_format(2) }}
                                         </div>
                                         <div class="desc">
-                                            Avarage Visits Per Day
+                                            {% trans %}Avarage Visits Per Day{% endtrans %}
                                         </div>
                                     </div>
 {#
@@ -130,7 +130,7 @@
                                             +XX%
                                         </div>
                                         <div class="desc">
-                                            Comparing to last month
+                                            {% trans %}Comparing to last month{% endtrans %}
                                         </div>
                                     </div>
 {#
@@ -151,8 +151,8 @@
                             <div class="portlet-title">
                                 <div class="caption">
                                     <i class="icon-bar-chart font-green-haze"></i>
-                                    <span class="caption-subject bold uppercase font-green-haze"> Line & Area</span>
-                                    <span class="caption-helper">duration on value axis</span>
+                                    <span class="caption-subject bold uppercase font-green-haze">{% trans %}Visits statistic{% endtrans %}</span>
+                                    <span class="caption-helper">last 30 days</span>
                                 </div>
                                 {#
                                                                 <div class="tools">
@@ -180,7 +180,7 @@
                     </div>
 
                     <div class="tab-pane" id="tab_custom">
-                        sdfasdf1
+                        в разработке
                     </div>
                 </div>
             </div>

@@ -577,7 +577,7 @@
             })
 
             $('#user_select').select2({
-                placeholder: "Select a opermanager"
+                placeholder: "{% trans %}Select an opermanager{% endtrans %}"
             }).on("change", function(e) {
                 var idUser = $(this).val();
                 $('#info_input').data('user_id', idUser);
@@ -633,9 +633,9 @@
                     <hr>
 
                     <div id="add_comment_block" style="display: none">
-                        {% trans %}Add comment{% endtrans %}:<br>
+                        {% trans %}Add report{% endtrans %}:<br>
                         <textarea style="width:80%" rows="5" id="comment_value"></textarea>
-                        <button class="btn green right_float" id="add_comment">{% trans %}Add comment{% endtrans %}</button>
+                        <button class="btn green right_float" id="add_comment">{% trans %}Submit{% endtrans %}</button>
                         <div style="clear:both;"></div>
                     </div>
                     <hr>

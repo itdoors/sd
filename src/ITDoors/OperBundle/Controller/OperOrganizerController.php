@@ -340,10 +340,12 @@ class OperOrganizerController extends Controller
 
         $usersOper = $this->getDoctrine()
             ->getRepository('SDUserBundle:User')
-            ->findByRole('ROLE_SALES');
+            ->findByRole('ROLE_OPER');
 
         array_walk($usersOper, function ($userOper, $key) use (&$return) {
-            $return[] = array('id' =>  $userOper->getId(), 'fullName' => $userOper->getFullName());
+            if ($userOper->getStuff()) {
+                $return[] = array('id' =>  $userOper->getId(), 'fullName' => $userOper->getFullName());
+            }
         });
 
 
