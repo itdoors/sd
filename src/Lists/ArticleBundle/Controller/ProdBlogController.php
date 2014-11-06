@@ -175,7 +175,7 @@ class ProdBlogController extends BaseController
 		$filterNamespace = $this->container->getParameter($this->getNamespace());
 	
 		$em = $this->getDoctrine()->getManager();
-		$artivles = $em->getRepository('ListsArticleBundle:Article')->getBlog($this->getUser());
+		$artivles = $em->getRepository('ListsArticleBundle:Article')->getBlog($this->getUser())->getResult();
 	
 // 		$namespasePagin = $filterNamespace . 'P';
 // 		$page = $this->getPaginator($namespasePagin);
