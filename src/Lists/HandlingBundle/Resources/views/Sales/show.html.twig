@@ -86,11 +86,12 @@
                     <!--tabpane-->
                     <div class="tab-pane" id="tab_3">
                         {{  include(
-                            'ListsOrganizationBundle:' ~ baseTemplate ~ ':edit.html.twig',
+                            'ListsOrganizationBundle:Organization:edit.html.twig',
                                 {
                                     organization: organization,
                                     showMoreInfoIds: showMoreInfoIds,
-                                    lookups: lookups
+                                    lookups: lookups,
+                                    access: accessOrganization
                                 }
                             )
                         }}
