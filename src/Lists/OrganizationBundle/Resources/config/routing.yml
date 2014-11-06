@@ -294,14 +294,17 @@ lists_organization_departments_list:
     defaults: { _controller: ListsOrganizationBundle:Organization:departmentsList }
     requirements:
         id:  \d+
+
 lists_organization_export_excel:
     pattern:  /lists/organization/export/excel/{type}
     defaults: { _controller: ListsOrganizationBundle:Organization:exportExcel, type: '' }
     requirements:
         type: my|
     
-
 lists_organization_service_cover_list:
     pattern:  /lists/sales/organization/service/cover/list/{organizationId}
     defaults: { _controller: ListsOrganizationBundle:ServiceCover:list }
     methods:   [GET, POST]
+
+lists_organization_show_empty:
+    pattern:  /lists/organization/show/
