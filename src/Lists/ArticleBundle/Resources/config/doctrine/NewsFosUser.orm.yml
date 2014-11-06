@@ -23,7 +23,7 @@ Lists\ArticleBundle\Entity\NewsFosUser:
             targetEntity: SD\UserBundle\Entity\User
             inversedBy: null
             joinColumns:
-                role_id:
+                user_id:
                     referencedColumnName: id
             orphanRemoval: false
        
