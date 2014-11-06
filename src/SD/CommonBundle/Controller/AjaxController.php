@@ -2192,12 +2192,16 @@ class AjaxController extends BaseFilterController
      */
     public function dogovorHistoryFormSave($form, $user, $request)
     {
+        $service = $this->get('lists_dogovor.service');
+        $access = $service->checkAccess($user);
+        
+        if (!$access->canProlongate()) {
+            throw new \Exception('No access', 403);
+        }
         /** @var Dogovor $dogovor */
         $dogovor = $form->getData();
 
         $requestParams = $request->request->get($form->getName());
-
-        $user = $this->getUser();
 
         $dogovorHistory = new DogovorHistory();
 

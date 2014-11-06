@@ -24,7 +24,7 @@ class OrganizationController extends BaseController
     public function indexAction ($type)
     {
         $service = $this->get('lists_organization.service');
-        $access = $service->chechAccess($this->getUser());
+        $access = $service->checkAccess($this->getUser());
 
         if (empty($type)) {
             $this->filterFormName = $access->filterFormName();
@@ -71,7 +71,7 @@ class OrganizationController extends BaseController
         $userId = $user->getId();
         if (empty($type)) {
             $service = $this->get('lists_organization.service');
-            $access = $service->chechAccess($user);
+            $access = $service->checkAccess($user);
             if ($access->canSeeAll()) {
                 $userId = null;
             } else {
@@ -108,7 +108,7 @@ class OrganizationController extends BaseController
         $user = $this->getUser();
 
         $service = $this->get('lists_organization.service');
-        $access = $service->chechAccess($user);
+        $access = $service->checkAccess($user);
 
         if (!$access->canAddOrganization()) {
             throw new \Exception('No access');
@@ -234,7 +234,7 @@ class OrganizationController extends BaseController
         }
 
         $service = $this->get('lists_organization.service');
-        $access = $service->chechAccess($this->getUser(), $organization);
+        $access = $service->checkAccess($this->getUser(), $organization);
 
         if (!$access->canSee()) {
             return $this->render('ListsOrganizationBundle:Organization:noAccess.html.twig', array(
@@ -573,7 +573,7 @@ class OrganizationController extends BaseController
         $user = $this->getUser();
 
         $service = $this->get('lists_organization.service');
-        $access = $service->chechAccess($this->getUser());
+        $access = $service->checkAccess($this->getUser());
 
         if ($access->canExportToExcel()) {
             throw new \Exception('No access', 403);

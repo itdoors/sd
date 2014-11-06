@@ -22,6 +22,8 @@ class DogovorDepartmentController extends BaseController
      */
     public function listAction($dogovorId)
     {
+        $service = $this->get('lists_dogovor.service');
+        $access = $service->checkAccess($this->getUser());
         /** @var \Lists\DogovorBundle\Entity\DogovorDepartmentRepository $repository */
         $repository = $this->getDoctrine()
             ->getRepository('ListsDogovorBundle:DogovorDepartment');
@@ -31,10 +33,11 @@ class DogovorDepartmentController extends BaseController
 
         $items = $query->getResult();
 
-        return $this->render('ListsDogovorBundle:' . $this->baseTemplate. ':list.html.twig', array(
+        return $this->render('ListsDogovorBundle:DogovorDepartment:list.html.twig', array(
             'items' => $items,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
+            'access' => $access
         ));
     }
 }

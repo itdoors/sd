@@ -30,7 +30,7 @@ class DogovorHistoryController extends BaseController
             ->getListByDogovorId($dogovorId)
             ->getResult();
 
-        return $this->render('ListsDogovorBundle:' . $this->baseTemplate . ':list.html.twig', array(
+        return $this->render('ListsDogovorBundle:DogovorHistory:list.html.twig', array(
             'items' => $items,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix

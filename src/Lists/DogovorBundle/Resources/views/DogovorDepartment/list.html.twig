@@ -10,7 +10,9 @@
         <th>{% trans %}Department{% endtrans %} </th>
         <th>{% trans from 'messages' %}Creator{% endtrans %} </th>
         <th>{% trans %}Comments{% endtrans %} </th>
+        {% if access.canEdit %}
         <th>{% trans from 'messages' %}Actions{% endtrans %} </th>
+        {% endif %}
     </tr>
     </thead>
     <tbody>
@@ -24,6 +26,7 @@
             <td>{{ item.department }}</td>
             <td>{{ item.creatorFullName }}</td>
             <td>{{ item.comment }}</td>
+            {% if access.canEdit %}
             <td>
                 <a
                         class="ajax-delete btn red"
@@ -33,6 +36,7 @@
                     {% trans from 'messages' %}Delete{% endtrans %}
                 </a>
             </td>
+            {% endif %}
         </tr>
     {% endfor %}
     </tbody>

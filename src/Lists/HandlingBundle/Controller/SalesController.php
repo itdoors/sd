@@ -257,7 +257,7 @@ class SalesController extends BaseController
                 ->getRepository('ListsLookupBundle:Lookup')->getGroupOrganizationQuery()->getQuery()->getResult();
         
         $service = $this->get('lists_organization.service');
-        $accessOrganization = $service->chechAccess($this->getUser(), $organization);
+        $accessOrganization = $service->checkAccess($this->getUser(), $organization);
         
 
         return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':show.html.twig', array (
