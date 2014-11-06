@@ -122,10 +122,10 @@ class OperOrganizerController extends Controller
         $idDepartment = $request->request->get('id');
         $idUser = $request->request->get('idUser');
 
-        $date = $request->request->get('date');
+        $dateSended = $request->request->get('date');
 
         $date = explode('(', $dateSended)[0];
-        $date = new \DateTime($date);
+        //$date = new \DateTime($date);
 
         $user = $this->getDoctrine()
             ->getRepository('SDUserBundle:User')
