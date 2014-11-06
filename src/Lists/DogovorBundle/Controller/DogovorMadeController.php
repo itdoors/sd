@@ -67,7 +67,6 @@ class DogovorMadeController extends BaseController
             10
         );
 
-
         $pageDop = $this->getPaginator($namespaseDop);
         if (!$pageDop) {
             $pageDop = 1;

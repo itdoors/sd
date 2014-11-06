@@ -13,7 +13,8 @@ class OperOrganizer
     /**
      * constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->setIsVisited(false);
     }
 
@@ -158,12 +159,13 @@ class OperOrganizer
      * Set isVisited
      *
      * @param boolean $isVisited
+     * 
      * @return OperOrganizer
      */
     public function setIsVisited($isVisited)
     {
         $this->isVisited = $isVisited;
-    
+
         return $this;
     }
 

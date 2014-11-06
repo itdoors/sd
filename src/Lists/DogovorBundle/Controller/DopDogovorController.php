@@ -26,7 +26,7 @@ class DopDogovorController extends BaseController
     {
         $service = $this->get('lists_dogovor.service');
         $access = $service->checkAccess($this->getUser());
-        
+
         /** @var \Lists\DogovorBundle\Entity\DopDogovorRepository $repository */
         $repository = $this->getDoctrine()
             ->getRepository('ListsDogovorBundle:DopDogovor');

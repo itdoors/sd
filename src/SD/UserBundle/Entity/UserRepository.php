@@ -324,11 +324,14 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * findByRole
+     * 
      * @param string $role
      *
      * @return array
      */
-    public function findByRole($role) {
+    public function findByRole($role)
+    {
         $qb = $this->createQueryBuilder('u');
 
         $qb->select('u')

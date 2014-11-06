@@ -38,8 +38,16 @@ class OperOrganizerRepository extends EntityRepository
 
         return $sql->getQuery()->getResult();
     }
-
-    public function getStatistic($date, $filter = null) {
+    /**
+     * getStatistic
+     * 
+     * @param \DateTime $date
+     * @param mixed[]   $filter
+     * 
+     * @return integer
+     */
+    public function getStatistic($date, $filter = null)
+    {
 
         $sql = $this->createQueryBuilder('organizer')
 /*            ->select('
@@ -49,7 +57,7 @@ class OperOrganizerRepository extends EntityRepository
                     else COUNT(organizer.id)  as count
             ');
             //->addSelect('DATE(organizer.startDatetime)');*/
-        ->select( 'COUNT(organizer.id)');
+        ->select('COUNT(organizer.id)');
 
 /*        $sql->leftJoin('organizer.department', 'd')
             ->leftJoin('organizer.user', 'u');*/
@@ -63,27 +71,42 @@ class OperOrganizerRepository extends EntityRepository
 
 
     }
-
-    public function getTotalVisits() {
+    /**
+     * getTotalVisits
+     * 
+     * @return integer
+     */
+    public function getTotalVisits()
+    {
 
         $sql = $this->createQueryBuilder('organizer')
-            ->select( 'COUNT(organizer.id)');
+            ->select('COUNT(organizer.id)');
 
         return $sql->getQuery()->getSingleScalarResult();
     }
 
-
-    public function getTotalVisitsCommented() {
+    /**
+     * getTotalVisitsCommented
+     * 
+     * @return integer
+     */
+    public function getTotalVisitsCommented()
+    {
 
         $sql = $this->createQueryBuilder('organizer')
-            ->select( 'COUNT(DISTINCT organizer.id)')
+            ->select('COUNT(DISTINCT organizer.id)')
 
             ->where('organizer.isVisited = true');
 
         return $sql->getQuery()->getSingleScalarResult();
     }
-
-    public function getAveragePerDayVisits() {
+    /**
+     * getAveragePerDayVisits
+     * 
+     * @return array
+     */
+    public function getAveragePerDayVisits()
+    {
 
         $sql = $this->createQueryBuilder('organizer')
             ->select('COUNT(organizer.id) as countAll')
@@ -92,5 +115,4 @@ class OperOrganizerRepository extends EntityRepository
 
         return $sql->getQuery()->getSingleResult();
     }
-
 }

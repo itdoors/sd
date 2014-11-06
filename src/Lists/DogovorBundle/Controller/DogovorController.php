@@ -28,11 +28,11 @@ class DogovorController extends BaseController
     {
         $service = $this->get('lists_dogovor.service');
         $access = $service->checkAccess($this->getUser());
-        
+
         if (!$access->canSeeList()) {
             throw new \Exception('No access', 403);
         }
-        
+
         $page = $this->get('request')->query->get('page', 1);
 
         $filterForm = $this->processFilters();
@@ -70,7 +70,7 @@ class DogovorController extends BaseController
     {
         $service = $this->get('lists_dogovor.service');
         $access = $service->checkAccess($this->getUser());
-        
+
         if (!$access->canSeeDanger()) {
             throw new \Exception('No access', 403);
         }
@@ -117,7 +117,7 @@ class DogovorController extends BaseController
     {
         $service = $this->get('lists_dogovor.service');
         $access = $service->checkAccess($this->getUser());
-        
+
         if (!$access->canSeeDanger()) {
             throw new \Exception('No access', 403);
         }
@@ -146,7 +146,7 @@ class DogovorController extends BaseController
     {
         $service = $this->get('lists_dogovor.service');
         $access = $service->checkAccess($this->getUser());
-        
+
         if (!$access->canAddDogovor()) {
             return $this->render('ListsDogovorBundle:Dogovor:noAccess.html.twig');
         }
@@ -202,12 +202,12 @@ class DogovorController extends BaseController
 
         /** @var \Lists\DogovorBundle\Entity\Dogovor $object */
         $object = $dogovorRepository->getDogovorById($id);
-        
+
         $dogovor = $dogovorRepository->find($id);
 
         $service = $this->get('lists_dogovor.service');
         $access = $service->checkAccess($this->getUser(), $dogovor);
-        
+
         if (!$access->canSee()) {
             return $this->render('ListsDogovorBundle:Dogovor:noAccess.html.twig');
         }

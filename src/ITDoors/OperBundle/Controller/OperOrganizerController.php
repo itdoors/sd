@@ -330,7 +330,7 @@ class OperOrganizerController extends Controller
     }
 
     /**
-     * @param Request $request
+     * opermanagerList
      *
      * @return Response
      */

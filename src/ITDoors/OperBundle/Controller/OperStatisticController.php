@@ -73,5 +73,4 @@ class OperStatisticController extends Controller
             'averagePerDay' => $averagePerDay
         ));
     }
-
 }

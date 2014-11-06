@@ -2194,7 +2194,7 @@ class AjaxController extends BaseFilterController
     {
         $service = $this->get('lists_dogovor.service');
         $access = $service->checkAccess($user);
-        
+
         if (!$access->canProlongate()) {
             throw new \Exception('No access', 403);
         }
