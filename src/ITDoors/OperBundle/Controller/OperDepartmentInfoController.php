@@ -298,4 +298,34 @@ class OperDepartmentInfoController extends BaseFilterController
 
         return $response;
     }
+
+    /**
+     * Render reports for department
+     *
+     * @param integer $id
+     *
+     * @return mixed[]
+     */
+    public function reportListAction($id)
+    {
+
+        $department = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:Departments')->find($id);
+
+        $organizer = $this->getDoctrine()
+            ->getRepository('ITDoorsOperBundle:OperOrganizer')->findBy(array(
+                'department' => $department
+            ));
+        $organizerReports = array();
+        if ($organizer) {
+            $organizerReports = $this->getDoctrine()
+                ->getRepository('ITDoorsOperBundle:CommentOrganizer')->findBy(array(
+                    'organizer' => $organizer
+                ));
+        }
+
+        return $this->render('ITDoorsOperBundle:DepartmentInfo:reports.html.twig', array(
+            'organizerReports' => $organizerReports
+        ));
+    }
 }
