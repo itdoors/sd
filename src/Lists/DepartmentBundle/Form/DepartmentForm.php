@@ -32,7 +32,9 @@ class DepartmentForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', 'text')
+            ->add('name', 'text', array(
+                'required' => false
+            ))
             ->add('city', 'entity', array(
                 'class'=>'Lists\CityBundle\Entity\City',
                 'property'=>'name',

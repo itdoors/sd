@@ -1,0 +1,29 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
+{#
+<div class="scroller" style="height: 600px; border: 1px solid #e1e1e1; padding: 10px" data-always-visible="1" data-rail-visible="0" id="feeds_holder">
+#}
+<div style="height: 600px; border: 1px solid #e1e1e1; padding: 10px; overflow-y: scroll; overflow-x: visible;" id="feeds_holder">
+    <h3>{% trans %}Departments{% endtrans %}</h3>
+
+    {% set currentOrganization = '' %}
+    {% for department in departments %}
+        {% if currentOrganization != department.organization %}
+            {% set currentOrganization = department.organization  %}
+            <br>
+            <h4>{{ currentOrganization }}</h4>
+        {% endif %}
+        <div class="{#department-droppable department-draggable#}external-event"
+             style="background-color: #eeeeee; border: 1px solid #4db3a2 ;color:#333333; margin: 5px; padding: 5px;
+             {% if department.getSelected == true %}
+                     opacity: 0.4;
+             {% endif %}
+                     "
+             data-id ="{{ department.id }}"
+                >
+            {{ department.name }}
+        </div>
+    {% else %}
+        <i>{% trans %}No departments available{% endtrans %}</i>
+    {% endfor %}
+
+</div>

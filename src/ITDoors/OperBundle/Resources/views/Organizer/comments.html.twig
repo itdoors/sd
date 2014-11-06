@@ -1,0 +1,19 @@
+
+        <ul class="media-list">
+            {% for comment in comments %}
+                <li class="media">
+                    <a class="pull-left" href="{{ path('sd_user_show',{ 'id': comment.user.id}) }}">
+                        <img class="todo-userpic" src="{{ web_image(comment.user.photo is not empty ?  userprofiles_url ~ comment.user.id ~ '/' ~ comment.user.photo : userprofiles_url ~ 'no_avatar.png').resize(27, 27) }}" width="27px" height="27px">
+                    </a>
+                    <div class="media-body todo-comment">
+                        {#
+                                                            <button type="button" class="todo-comment-btn btn btn-circle btn-default btn-xs">&nbsp; Reply &nbsp;</button>
+                        #}
+                        <p class="todo-comment-head">
+                            <span class="todo-comment-username">{{ comment.user }}</span> &nbsp; <span class="todo-comment-date">{{ comment.createDatetime|date('d-m-Y H:i ') }} </span>
+                        </p>
+                        <p class="todo-text-color" style="white-space: pre-line">{{ comment.value|raw  }} <br></p>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>

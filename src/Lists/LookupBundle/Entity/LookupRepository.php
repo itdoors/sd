@@ -22,6 +22,7 @@ class LookupRepository extends EntityRepository
     const KEY__ORGANIZATION_SIGN_COMPETITOR = 'organization_sign_competitor';
     const GROUP__MANAGER = 'manager_role';
     const GROUP__ORGANIZATION = 'organization_sign';
+    const GROUP__DOGOVOR = 'dogovor_type';
 
     /**
      * Returns choices for scope
@@ -73,6 +74,15 @@ class LookupRepository extends EntityRepository
     {
         return $this->getLookupByLukeyQuery(self::KEY__DOGOVOR);
     }
+    /**
+     * Returns choices for dogovor_type
+     *
+     * @return Query
+     */
+    public function getOnlyDogovorTypeGroupQuery()
+    {
+        return $this->getLookupByGroupQuery(self::GROUP__DOGOVOR);
+    }
 
     /**
      * Returns choices for competitor
@@ -110,7 +120,7 @@ class LookupRepository extends EntityRepository
         return $query;
     }
     /**
-     * Get lookup by group
+     * Get lookup by lukey
      *
      * @param string $group
      *

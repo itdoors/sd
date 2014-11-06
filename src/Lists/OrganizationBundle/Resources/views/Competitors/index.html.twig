@@ -44,8 +44,8 @@
         {% endif %}
     <div class="row">
         <div class="col-md-12">
-            <div id="datatable_ajax"  data-url="{{ url('lists_' ~ baseRoutePrefix ~ '_organization_index_list') }}">
-                {{ render(controller('ListsOrganizationBundle:' ~ baseTemplate ~ ':list')) }}
+            <div id="datatable_ajax"  data-url="{{ url('lists_' ~ baseRoutePrefix ~ '_organization_index_list',{type:type}) }}">
+                {{ render(controller('ListsOrganizationBundle:' ~ baseTemplate ~ ':list',{type:type})) }}
             </div>
         </div>
     </div>

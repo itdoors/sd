@@ -1,3 +1,7 @@
+it_doors_helper:
+    resource: "@ITDoorsHelperBundle/Resources/config/routing.yml"
+    prefix:   /
+
 sd_activity:
     resource: "@SDActivityBundle/Resources/config/routing.yml"
     prefix:   /
@@ -88,6 +92,10 @@ sd_common:
 
 lists_handling:
     resource: "@ListsHandlingBundle/Resources/config/routing.yml"
+    prefix:   /
+
+lists_mpk:
+    resource: "@ListsMpkBundle/Resources/config/routing.yml"
     prefix:   /
 
 lists_lookup:

@@ -55,7 +55,8 @@ class AppKernel extends Kernel
             new ITDoors\SipBundle\ITDoorsSipBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new SD\ActivityBundle\SDActivityBundle(),
-            new Gregwar\ImageBundle\GregwarImageBundle()
+            new Gregwar\ImageBundle\GregwarImageBundle(),
+            new ITDoors\HelperBundle\ITDoorsHelperBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

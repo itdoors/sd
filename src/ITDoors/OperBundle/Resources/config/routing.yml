@@ -147,3 +147,39 @@ it_doors_oper_supervisor_coworkers_export:
 it_doors_oper_supervisor_contacts_excel:
     pattern:  /oper/supervisor/contacts/excel
     defaults: { _controller: ITDoorsOperBundle:OperDepartmentInfo:getAllContactsExcel }
+
+it_doors_oper_organizer_index:
+    pattern:  /oper/organizer/
+    defaults: { _controller: ITDoorsOperBundle:OperOrganizer:index }
+
+it_doors_oper_organizer_events:
+    pattern:  /oper/organizer/events
+    defaults: { _controller: ITDoorsOperBundle:OperOrganizer:getOrganizerEvents }
+
+it_doors_oper_organizer_insert:
+    pattern:  /oper/organizer/insert
+    defaults: { _controller: ITDoorsOperBundle:OperOrganizer:insertOrganizerData }
+
+it_doors_oper_rendered_departments:
+    pattern:  /oper/rendered/departments
+    defaults: { _controller: ITDoorsOperBundle:OperOrganizer:getRenderedDepartments }
+
+it_doors_oper_edit_organizer:
+    pattern:  /oper/edit/organizer
+    defaults: { _controller: ITDoorsOperBundle:OperOrganizer:editOrganizer }
+
+it_doors_oper_delete_organizer:
+    pattern:  /oper/delete/organizer
+    defaults: { _controller: ITDoorsOperBundle:OperOrganizer:deleteOrganizer }
+
+it_doors_oper_add_comment:
+    pattern:  /oper/add/comment
+    defaults: { _controller: ITDoorsOperBundle:OperOrganizer:addComment }
+
+it_doors_oper_get_comments:
+    pattern:  /oper/get/comments
+    defaults: { _controller: ITDoorsOperBundle:OperOrganizer:renderComments }
+
+it_doors_oper_statistic:
+    pattern:  /oper/statistic/index
+    defaults: { _controller: ITDoorsOperBundle:OperStatistic:index }

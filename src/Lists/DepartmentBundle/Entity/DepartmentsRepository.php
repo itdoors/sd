@@ -71,6 +71,7 @@ class DepartmentsRepository extends EntityRepository
             ->select('d.id as id')
             ->addSelect('d.statusDate as statusDate')
             ->addSelect('d.coordinates')
+            ->addSelect('d.name')
             ->addSelect('m.name as mpk')
             ->addSelect('m.active as mpkActive')
             ->addSelect('d.address as address')
@@ -274,5 +275,28 @@ class DepartmentsRepository extends EntityRepository
         $query = $sql->getQuery();
 
         return $query->getResult();
+    }
+
+    /**
+     * @param array $allowedDepartments
+     *
+     * @return array
+     */
+    public function getDepartmentsFromAccess($allowedDepartments)
+    {
+        $sql = $this->createQueryBuilder('d');
+        $sql->leftJoin('d.organization', 'o');
+        if ($allowedDepartments !== false) {
+            if (count($allowedDepartments)>0) {
+                $sql->andWhere('d.id in (:idsDepartments)');
+                $sql->setParameter(':idsDepartments', $allowedDepartments);
+            }
+        } else {
+            $sql->andWhere('d.id < 0');
+        }
+
+        $sql->orderBy('o.name', 'ASC');
+
+        return $sql->getQuery()->getResult();
     }
 }

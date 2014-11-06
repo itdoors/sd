@@ -2,10 +2,12 @@
 
 namespace Lists\DepartmentBundle\Entity;
 
+use ITDoors\HelperBundle\Classes\HiddenFields;
+
 /**
  * Departments
  */
-class Departments
+class Departments extends HiddenFields
 {
     /**
      * @var integer
@@ -511,7 +513,7 @@ class Departments
      */
     public function __toString()
     {
-        return $this->name;
+        return (string) $this->name;
     }
 
     /**

@@ -76,7 +76,7 @@ class DogovorForm extends AbstractType
                 'format' => 'dd.MM.yyyy'
             ))
             ->add('dogovorType', null, array(
-                'query_builder' => $lr->getOnlyDogovorTypeQuery()
+                'query_builder' => $lr->getOnlyDogovorTypeGroupQuery()
             ))
             ->add('city', 'hidden_entity', array(
                 'entity' => 'ListsCityBundle:City',
@@ -163,7 +163,8 @@ class DogovorForm extends AbstractType
                     if ($dogovor) {
                         $msgString = "This document has already been added";
 
-                        $msg = $translator->trans($msgString, array(), 'ListsDogovorBundle');
+                        $msg = $translator->trans($msgString, array(), 'ListsDogovorBundle').
+                            ' ID: '.$dogovor[0]->getId();
 
                         $form->addError(new FormError($msg.' ID: '.$dogovor[0]->getId()));
                     }
