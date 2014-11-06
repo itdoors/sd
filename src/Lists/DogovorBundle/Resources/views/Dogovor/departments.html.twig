@@ -1,4 +1,5 @@
 {% trans_default_domain 'ListsDogovorBundle' %}
+{% if access.canEdit %}
 <script type="text/javascript">
     $(document).ready(function(){
         $.fn.modal.Constructor.prototype.enforceFocus = function() {};
@@ -36,14 +37,7 @@
         <!-- /.modal-content -->
     </div>
 </div>
-
-<div id="dogovor-department-list"
-     data-url="{{ path('lists_dogovor_department_list', {
-        dogovorId: dogovor.id
-     }) }}"
-     data-params='{"dogovorId":{{ dogovor.id }}}'
-        >
-    {{ render(controller('ListsDogovorBundle:DogovorDepartment:List', {
-        dogovorId: dogovor.id,
-    })) }}
+{% endif %}
+<div id="dogovor-department-list" data-url="{{ path('lists_dogovor_department_list', { dogovorId: dogovor.id }) }}" data-params='{"dogovorId":{{ dogovor.id }}}'>
+    {{ render(controller('ListsDogovorBundle:DogovorDepartment:List', { dogovorId: dogovor.id })) }}
 </div>

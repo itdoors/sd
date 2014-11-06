@@ -1,10 +1,5 @@
 {% trans_default_domain 'ListsDogovorBundle' %}
-{% set roleUser = 'sales' %}
-{% if is_granted('ROLE_SALESADMIN') %}
-    {% set roleUser = 'sales_admin' %}
-{% elseif is_granted('ROLE_DOGOVORADMIN') %}
-    {% set roleUser = 'dogovor_admin' %}
-{% endif %}
+{% if access.canEdit %}
 <script type="text/javascript">
     $(document).ready(function(){
 
@@ -24,7 +19,7 @@
                 width: 250
             },
             success: function(response, newValue) {
-                var url = "{{ path('lists_' ~ roleUser ~ '_organization_show_empty') }}"+newValue;
+                var url = "{{ path('lists_organization_show_empty') }}"+newValue;
                 var id = $(this).attr('id');
                 $('#'+id+'Url').remove();
                 $(' <a id="'+id+'Url" target="_blank" href="'+url+'">({% trans %}Open{% endtrans%})</a>').insertAfter($(this));
@@ -117,7 +112,7 @@
         });
     });
 </script>
-
+{% endif %}
 <div class="col-md-12">
     <table id="dogovor" class="table table-bordered table-striped">
         <tbody>
@@ -137,52 +132,77 @@
                 {% else %}
                     {% set prolongation ='No' %}
                 {% endif %}
+                {% if access.canEdit %}
                 <a href="#" id="prolongation" data-type="select" data-pk="{{ dogovor.id }}" data-value="{{ prolongation }}" data-placement="right" data-original-title="{% trans %}Prolongation{% endtrans %}">
+                {% endif %}
                     {{ prolongation|trans({}, 'messages')  }}
+                {% if access.canEdit %}
                 </a>
+                {% endif %}
 
+                {% if access.canEdit %}
                 (<a href="#" id="prolongationTerm" data-type="text" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.prolongationTerm }}" data-placement="right" data-original-title="{% trans %}Enter Prolongation Term In Days{% endtrans %}">
+                {% endif %}
                     {{ dogovor.prolongationTerm }}
+                {% if access.canEdit %}
                 </a>)
+                {% endif %}
             </td>
         </tr>
         <tr> {# 2 #}
             <td>{% trans %}Dogovor Number{% endtrans %}</td>
             <td>
+                {% if access.canEdit %}
                 <a href="#" id="number" class="sd-editable" data-type="text" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.number }}" data-placement="right" data-original-title="{% trans %}Enter Number{% endtrans %}">
+                {% endif %}
                     {{ dogovor.number }}
+                {% if access.canEdit %}
                 </a>
+                {% endif %}
             </td>
             <td>{% trans %}Organization{% endtrans %}</td>
             <td>
+                {% if access.canEdit %}
                 <a href="#" id="organizationId" data-type="select2" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.organizationName }}" data-placement="right" data-original-title="{% trans %}Enter Organization{% endtrans %}">
+                 {% endif %}
                     {{ dogovor.organizationName }}
+                {% if access.canEdit %}
                 </a>
+                {% endif %}
             </td>
         </tr>
         <tr> {# 3 #}
             <td>{% trans %}Customer{% endtrans %}</td>
             <td>
+                {% if access.canEdit %}
                 <a href="#" id="customerId"  data-type="select2" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.customerName }}" data-placement="right" data-original-title="{% trans %}Enter Customer{% endtrans %}">
+                {% endif %}
                     {{ dogovor.customerName }}
+                {% if access.canEdit %}
                 </a>
+                {% endif %}
                 {% if  dogovor.customerName %}
-                    <a id="customerIdUrl" href="{{ path('lists_' ~ roleUser ~ '_organization_show', { id:dogovor.customerId }) }}" target="_blank">({% trans %}Open{% endtrans%})</a>
+                    <a id="customerIdUrl" href="{{ path('lists_organization_show', { id:dogovor.customerId }) }}" target="_blank">({% trans %}Open{% endtrans%})</a>
                 {% endif %}
             </td>
             <td>{% trans %}Performer{% endtrans %}</td>
             <td>
+                {% if access.canEdit %}
                 <a href="#" id="performerId"  data-type="select2" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.performerName }}" data-placement="right" data-original-title="{% trans %}Enter Performer{% endtrans %}">
+                {% endif %}
                     {{ dogovor.performerName }}
+                {% if access.canEdit %}
                 </a>
+                {% endif %}
                 {% if  dogovor.performerName %}
-                    <a id="performerIdUrl"  href="{{ path('lists_' ~ roleUser ~ '_organization_show', { id:dogovor.performerId }) }}" target="_blank">({% trans %}Open{% endtrans%})</a>
+                    <a id="performerIdUrl"  href="{{ path('lists_organization_show', { id:dogovor.performerId }) }}" target="_blank">({% trans %}Open{% endtrans%})</a>
                 {% endif %}
             </td>
         </tr>
         <tr> {# 4 #}
             <td>{% trans %}Startdatetime{% endtrans %}</td>
             <td>
+                {% if access.canEdit %}
                 <a href="#"
                    class="sd-dogovor-date sd-editable {% if dogovor.startdatetime is empty %} editable-empty {% endif %}"
                    data-name="startdatetimeString"
@@ -193,15 +213,19 @@
                     {% endif %}
                    data-original-title="{% trans %}Edit{% endtrans %}"
                 >
+                {% endif %}
                     {% if dogovor.startdatetime %}
                         {{ dogovor.startdatetime|date("d.m.Y") }}
                     {% else %}
                         {% trans from 'messages' %}Enter value{% endtrans %}
                     {% endif %}
+                {% if access.canEdit %}
                 </a>
+                {% endif %}
             </td>
             <td>{% trans %}Stopdatetime{% endtrans %}</td>
             <td>
+                {% if access.canEdit %}
                 <a href="#"
                    class="sd-dogovor-date sd-editable {% if dogovor.stopdatetime is empty %} editable-empty {% endif %}"
                    data-name="stopdatetimeString"
@@ -211,32 +235,43 @@
                             data-value="{{ dogovor.stopdatetime|date("d.m.Y") }}"
                         {% endif %}
                    data-original-title="{% trans %}Edit{% endtrans %}"
-                        >
+                >
+                {% endif %}
                     {% if dogovor.stopdatetime %}
                         {{ dogovor.stopdatetime|date("d.m.Y") }}
                     {% else %}
                         {% trans from 'messages' %}Enter value{% endtrans %}
                     {% endif %}
+                {% if access.canEdit %}
                 </a>
+                {% endif %}
             </td>
         </tr>
         <tr> {# 5 #}
             <td>{% trans from 'messages' %}City{% endtrans %}</td>
             <td>
+                {% if access.canEdit %}
                 <a href="#" id="cityId"
                    data-type="select2"
                    data-pk="{{ dogovor.id }}"
                    data-value="{{ dogovor.cityName }}"
                    data-placement="right"
                    data-original-title="{% trans from 'messages' %}Enter City{% endtrans %}">
+                {% endif %}
                     {{ dogovor.cityName }}
+               {% if access.canEdit %}
                 </a>
+                {% endif %}
             </td>
             <td>{% trans %}Subject{% endtrans %}</td>
             <td>
+                {% if access.canEdit %}
                 <a href="#" id="subject" class="sd-editable" data-type="text" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.subject }}" data-placement="right" data-original-title="{% trans %}Enter Subject{% endtrans %}">
+                {% endif %}
                     {{ dogovor.subject }}
+                {% if access.canEdit %}
                 </a>
+                {% endif %}
             </td>
         </tr>
         <tr> {# 6 #}
@@ -247,6 +282,7 @@
                         {% trans %}See document{% endtrans %}
                     </a>
                 {% endif %}
+                {% if access.canEdit %}
                 <script>
                     $(document).ready(function(){
                         $(function () {
@@ -277,13 +313,18 @@
                     <i class="glyphicon glyphicon-plus"></i>
                     <span>{% trans %}Upload new document{% endtrans %}</span>
                     <input id="fileupload" type="file" name="dogovor" data-url="{{ path('sd_common_ajax_dogovor_upload_file', {'id': dogovor.id}) }}">
-                </span>
+                </span>                
+                {% endif %}
             </td>
             <td>{% trans %}Dogovor Type{% endtrans %}</td>
             <td>
+                {% if access.canEdit %}
                 <a href="#" id="dogovorTypeId" data-type="select2" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.type }}" data-placement="right" data-original-title="{% trans %}Enter Dogovor Type{% endtrans %}">
+                {% endif %}
                     {{ dogovor.type }}
+                {% if access.canEdit %}
                 </a>
+                {% endif %}
             </td>
         </tr>
         <tr> {# 7 #}
@@ -294,25 +335,37 @@
                 {% else %}
                     {% set isActive ='No' %}
                 {% endif %}
+                {% if access.canEdit %}
                 <a href="#" id="isActive" data-type="select" data-pk="{{ dogovor.id }}" data-value="{{ isActive }}" data-placement="right" data-original-title="{% trans %}Is Active{% endtrans %}">
+                {% endif %}
                     {{ isActive|trans({}, 'messages') }}
+                {% if access.canEdit %}
                 </a>
+                {% endif %}
             </td>
             <td>{% trans %}Mashtab{% endtrans %}</td>
             <td>
+                {% if access.canEdit %}
                 <a href="#" id="mashtab" data-type="select" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.mashtab }}" data-placement="right" data-original-title="{% trans %}Enter Dogovor Mashtab{% endtrans %}">
+                {% endif %}
                     {% if (dogovor.mashtabChoices[dogovor.mashtab]) %}
                         {{ dogovor.mashtabChoices[dogovor.mashtab] }}
                     {% endif %}
+                {% if access.canEdit %}
                 </a>
+                {% endif %}
             </td>
         </tr>
         <tr> {# 8 #}
             <td>{% trans %}Saller{% endtrans %}</td>
             <td>
+                {% if access.canEdit %}
                 <a href="#" id="sallerId"  data-type="select2" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.sallerName }}" data-placement="right" data-original-title="{% trans %}Enter Saller{% endtrans %}">
+                {% endif %}
                     {{ dogovor.sallerName }}
+                {% if access.canEdit %}
                 </a>
+                {% endif %}
             </td>
             <td></td>
             <td></td>

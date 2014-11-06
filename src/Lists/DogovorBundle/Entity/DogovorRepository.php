@@ -152,7 +152,8 @@ class DogovorRepository extends EntityRepository
     public function processSelect($sql)
     {
         $sql
-            ->select('d.id as dogovorId')
+            ->select('d.id')
+            ->addSelect('d.id as dogovorId')
             ->addSelect('d.number as dogovorNumber')
             ->addSelect('d.filepath')
             ->addSelect('d.startdatetime as dogovorStartdatetime')

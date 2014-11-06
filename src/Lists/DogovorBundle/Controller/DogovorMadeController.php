@@ -25,32 +25,10 @@ class DogovorMadeController extends BaseController
     {
         $namespase = $this->getNamespace().'Made';
         $filter = $this->filterFormName;
-        //$filterNamespace = $this->container->getParameter($namespase);
 
-
-//        /** @var \Lists\DogovorBundle\Entity\DogovorRepository $repository */
-//        $repository = $this->getDoctrine()
-//            ->getRepository('ListsDogovorBundle:Dogovor');
-//
-//        /** @var \Doctrine\ORM\Query */
-//        $query = $repository->getAllForDogovorQuery($this->getFilters());
-//
-//        /** @var \Knp\Component\Pager\Paginator $paginator */
-//        $paginator  = $this->get('knp_paginator');
-//
-//        $pagination = $paginator->paginate(
-//            $query,
-//            $page,
-//            20
-//        );
-
-        return $this->render('ListsDogovorBundle:' . $this->baseTemplate. ':index.html.twig', array(
+        return $this->render('ListsDogovorBundle:DogovorMade:index.html.twig', array(
             'namespase' => $namespase,
-            'filter' => $filter,
-//            'filterForm' => $filterForm->createView(),
-//            'filterFormName' => $this->filterFormName,
-//            'baseTemplate' => $this->baseTemplate,
-//            'baseRoutePrefix' => $this->baseRoutePrefix,
+            'filter' => $filter
         ));
     }
 
@@ -65,7 +43,7 @@ class DogovorMadeController extends BaseController
         $namespaseDogovor = $this->getNamespace().'1';
         $namespaseDop = $this->getNamespace().'2';
 
-         /** @var \Knp\Component\Pager\Paginator $paginator */
+        /** @var \Knp\Component\Pager\Paginator $paginator */
         $paginator  = $this->get('knp_paginator');
 
         $filters = $this->getFilters($namespase);
@@ -78,41 +56,41 @@ class DogovorMadeController extends BaseController
         if (!$pageDogovor) {
             $pageDogovor = 1;
         }
-        $pageDop = $this->getPaginator($namespaseDop);
-        if (!$pageDop) {
-            $pageDop = 1;
-        }
-
          /** @var DogovorRepository $dogovor */
         $dogovor = $this->getDoctrine()
             ->getRepository('ListsDogovorBundle:Dogovor');
-
         /** @var Query $dogovorQuery*/
         $dogovorQuery = $dogovor->getAllForDogovorQuery($filters);
-
         $dogovors = $paginator->paginate(
             $dogovorQuery,
             $pageDogovor,
             10
         );
+
+        $pageDop = $this->getPaginator($namespaseDop);
+        if (!$pageDop) {
+            $pageDop = 1;
+        }
          /** @var DopDogovorRepository $dop */
         $dop = $this->getDoctrine()
             ->getRepository('ListsDogovorBundle:DopDogovor');
-
         /** @var Query $dogovorQuery*/
         $dopQuery = $dop->getAllForDopDogovorQuery($filters);
-
         $dopDogovors = $paginator->paginate(
             $dopQuery,
             $pageDop,
             10
         );
 
-        return $this->render('ListsDogovorBundle:' . $this->baseTemplate. ':list.html.twig', array(
+        $service = $this->get('lists_dogovor.service');
+        $access = $service->checkAccess($this->getUser());
+
+        return $this->render('ListsDogovorBundle:DogovorMade:list.html.twig', array(
             'dogovors' => $dogovors,
             'namespaseDogovor' => $namespaseDogovor,
             'dopDogovors' => $dopDogovors,
-            'namespaseDop' => $namespaseDop
+            'namespaseDop' => $namespaseDop,
+            'access' => $access
         ));
     }
 }

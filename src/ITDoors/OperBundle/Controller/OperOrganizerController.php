@@ -277,6 +277,7 @@ class OperOrganizerController extends Controller
             ->getRepository('ITDoorsOperBundle:OperOrganizer');
 
         $organizer = $organizerRepo->find($idOrganizer);
+        $department = $organizer->getDepartment();
 
         $comments = $this->getDoctrine()
             ->getRepository('ITDoorsOperBundle:CommentOrganizer')
@@ -285,7 +286,8 @@ class OperOrganizerController extends Controller
             ));
 
         $return['html'] = $this->renderView('ITDoorsOperBundle:Organizer:comments.html.twig', array (
-            'comments' => $comments
+            'comments' => $comments,
+            'department'=> $department
         ));
 
         $return['success'] = 1;
@@ -333,7 +335,7 @@ class OperOrganizerController extends Controller
     }
 
     /**
-     * @param Request $request
+     * opermanagerList
      *
      * @return Response
      */

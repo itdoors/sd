@@ -1,5 +1,5 @@
 {% trans_default_domain 'ListsDogovorBundle' %}
-{% if is_granted('ROLE_DOGOVORADMIN') %}
+{% if access.canProlongate %}
 <div id="form_dogovor_history" class="modal fade" role="basic" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -46,7 +46,7 @@
                     <th>{% trans %}Prolongation Date{% endtrans %} </th>
                     <th>{% trans %}Status{% endtrans %} </th>
                     <th>{% trans %}Subject{% endtrans %} </th>
-                    {% if is_granted('ROLE_DOGOVORADMIN') %}
+                    {% if access.canProlongate %}
                     <th>{% trans %}Actions{% endtrans %} </th>
                     {% endif %}
                 </tr>
@@ -55,12 +55,12 @@
                 {% for item in pagination %}
                     <tr {% if loop.index is odd %}class="color"{% endif %}
                         id="dogovorItem{{ item.dogovorId|e }}"
-                        data-url="{{ path('lists_' ~ baseRoutePrefix ~ '_ajax_element_danger', {
+                        data-url="{{ path('lists_dogovor_ajax_element_danger', {
                             id: item.dogovorId,
                         }) }}"
                     >
                         {{  include(
-                            'ListsDogovorBundle:' ~ baseTemplate ~ ':elementDanger.html.twig',
+                            'ListsDogovorBundle:Dogovor:elementDanger.html.twig',
                                 {
                                     item: item,
                                     baseRoutePrefix: baseRoutePrefix,
