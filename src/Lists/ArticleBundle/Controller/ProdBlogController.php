@@ -175,32 +175,37 @@ class ProdBlogController extends BaseController
 		$filterNamespace = $this->container->getParameter($this->getNamespace());
 	
 		$em = $this->getDoctrine()->getManager();
-		$artivles = $em->getRepository('ListsArticleBundle:Article')->getBlog($this->getUser());
-		var_dump($artivles);die();
-// 		if ($artivles) {
-// 			$artivles = $artivles->getResult();
-// 		} else {
-// 			$artivles = [];
-// 		}
-		
-		
-		
-		
-	
-// 		$namespasePagin = $filterNamespace . 'P';
-// 		$page = $this->getPaginator($namespasePagin);
-// 		if (!$page) {
-// 			$page = 1;
-// 		}
-	
-// 		$paginator = $this->container->get($this->paginator);
-// 		$artivles['articles']->setHint($this->paginator . '.count', $artivles['count']);
-// 		$pagination = $paginator->paginate($artivles['articles'], $page, 20);
+		$newNFUs = $em->getRepository('ListsArticleBundle:NewsFosUser')
+						->findBy(array(
+							'user' => $this->getUser()
+						));
+		$items = [];
+		foreach ($newNFUs as $nfu) {
+			$item = ['article' => $nfu->getNews(), 'viewed' => $nfu->getViewed()];
+			if (!in_array($item, $items)) {
+				$items[] = $item;
+			}
+		}
+		usort($items, array("Lists\ArticleBundle\Controller\ProdBlogController", "_sort"));
 	
 		return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':list.html.twig', array(
-				'items' => $artivles//$pagination,
-// 				'namespasePagin' => $namespasePagin
+				'items' => $items
 		));
+	}
+	
+	private function _sort($a, $b) {
+		if ($a['viewed'] == null && $b['viewed'] != null) {
+			return -1;
+		} elseif ($a['viewed'] == null && $b['viewed'] != null) {
+			return 1;
+		}
+		$a = $a['article']->getDatePublick();
+		$b = $b['article']->getDatePublick();
+		if ($a == $b) {
+			return 0;
+		} else {
+			return ($a > $b) ? -1 : 1;
+		}
 	}
 	
     /**
@@ -227,10 +232,16 @@ class ProdBlogController extends BaseController
     public function shortListAction() 
     {
     	$em = $this->getDoctrine()->getManager();
-    	$artivles = $em->getRepository('ListsArticleBundle:Article')->getBlog($this->getUser());
-    	
+    	$newNFUs = $em->getRepository('ListsArticleBundle:NewsFosUser')->findBy(array('user' => $this->getUser(), 'viewed' => null ));
+    	$articles = [];
+    	foreach ($newNFUs as $nfu) {
+    		$article = $nfu->getNews();
+    		if (!in_array($article, $articles)) {
+    			$articles[] = $article;
+    		}
+    	}
     	return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':shortList.html.twig', array(
-    			'items' => $artivles['articles']->getArrayResult()
+    			'items' => $articles
     	));
     }
     

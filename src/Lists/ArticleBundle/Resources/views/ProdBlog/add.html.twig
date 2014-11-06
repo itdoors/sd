@@ -1,9 +1,9 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'ListsArticleBundle' %}
-{% block title %}{% trans %}New{% endtrans %} {% endblock %}
+{% block title %}{% trans %}Add{% endtrans %} {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
-        {% trans %}System News <small>new</small>{% endtrans %}
+        {% trans %}My news{% endtrans %} <small>{% trans %}add{% endtrans %}</small>
     </h3>
 {% endblock %}
 
@@ -15,11 +15,11 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a href="{{ path('list_article_blog') }}" title="{% trans %}News{% endtrans %}">{% trans %}News{% endtrans %}</a>
+            <a href="{{ path('list_article_blog') }}" title="{% trans %}My news{% endtrans %}">{% trans %}My news{% endtrans %}</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a href="" title="{% trans %}New{% endtrans %}">{% trans %}New{% endtrans %}</a>
+            <a href="" title="{% trans %}Add{% endtrans %}">{% trans %}Add{% endtrans %}</a>
         </li>
     </ul>
 {% endblock %}
@@ -48,7 +48,7 @@
     <div class="portlet box blue">
         <div class="portlet-title">
             <div class="caption">
-                <i class="fa fa-gift"></i>{% trans %}New{% endtrans %}
+                <i class="fa fa-gift"></i>{% trans %}Add{% endtrans %}
             </div>
         </div>
         <div class="portlet-body form">
@@ -144,7 +144,7 @@
             </div>
             <div class="form-body">
                 <div class="form-group">
-                    <label class="required control-label col-md-3">{% trans %}Changes{% endtrans%}</label>
+                    <label class="required control-label col-md-3">{% trans %}Text{% endtrans%}</label>
                     <div class="col-md-9">
                         {{ form_widget(form.text, {'attr' : {'id' : 'select2','class' : 'form-control textear-edit', 'placeholder': "Changes"| trans}}) }}
                         {% if form.text.vars.errors|length %}{{ form_errors(form.text) }}{% endif %}

@@ -849,16 +849,15 @@
                                 <span class="title">{% trans %}Holidays{% endtrans %}</span>
                             </a>
                         </li>
-                        <li{% if  path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('sd_holiday_index') %} class="active"{% endif %}>
-                            <a href="{{ path('list_article_blog') }}">
-                                <i class="icon-pencil"></i>
-                                <span class="title">{% trans %}Product Blog{% endtrans %}</span>
-                            </a>
-                        </li>
                     </ul>
                 </li>
             {% endif %}
-
+			<li{% if  path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) == path('list_article_blog') %} class="active"{% endif %}>
+                            <a href="{{ path('list_article_blog') }}">
+                                <i class="icon-pencil"></i>
+                                <span class="title">{% trans %}My news{% endtrans %}</span>
+                            </a>
+            </li>
     </ul>
         <!-- END SIDEBAR MENU -->
     </div>

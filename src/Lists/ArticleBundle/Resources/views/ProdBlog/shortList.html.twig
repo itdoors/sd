@@ -9,7 +9,7 @@
 		</a>
 		<ul class="dropdown-menu extended inbox">
 			<li>
-				<p>You have {{items|length}} new messages</p>
+				<p>{% trans %}You have{% endtrans %} {{items|length}} {% trans %}new messages{% endtrans %}</p>
 			</li>
 			<li>
 				<ul class="dropdown-menu-list scroller" style="height: 250px;">
@@ -17,9 +17,15 @@
 					{% for i in 0..(items|length-1) %}
 						<li>  
 							<a href="{{path('list_article_blog_show',{'id':items[i].id})}}">
-							<span class="photo"><img src="{{ asset('templates/metronic/img/avatar2.jpg') }}" class="img-circle" alt=""/></span>
+							<span class="photo">
+							{% if items[i].getUser.photo is not empty %}
+                            	<img class="img-circle" alt="" src="{{ web_image(app.user.getWebPath()).resize(29,29) }}"/>
+                        	{% else %}
+                            	<img src="{{ asset( userprofiles_url ~  'no_avatar.png') }}"/>
+                       	 	{% endif %}
+							</span>
 							<span class="subject">
-								<span class="from">{{items[i].lastName}} {{items[i].firstName}} {{items[i].middleName}}</span>
+								<span class="from">{{items[i].getUser()}}</span>
 								<span class="time">{{items[i].datePublick|date('d-m-Y')}}</span>
 							</span>
 							<span class="message">{{items[i].title}}</span>  
@@ -30,7 +36,7 @@
 				</ul>
 			</li>
 			<li class="external">   
-				<a href="{{path('list_article_blog')}}">See all messages <i class="m-icon-swapright"></i></a>
+				<a href="{{path('list_article_blog')}}">{% trans %}See all messages {% endtrans %}<i class="m-icon-swapright"></i></a>
 			</li>
 		</ul>
 	</li>
