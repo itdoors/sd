@@ -1036,7 +1036,7 @@ class AjaxController extends BaseFilterController
     /**
      * Returns json users list
      *
-     * @return string
+     * @return Response
      */
     public function userFIOAction()
     {
@@ -1047,7 +1047,7 @@ class AjaxController extends BaseFilterController
 
         $objects = $repository->getOnlyStuff()
             ->andWhere('lower(u.firstName) LIKE :q OR lower(u.lastName) LIKE :q OR lower(u.middleName) LIKE :q')
-            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->setParameter(':q', '%'. mb_strtolower($searchText, 'UTF-8') . '%')
             ->getQuery()
             ->getResult();
 

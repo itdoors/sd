@@ -376,7 +376,7 @@ class UserController extends BaseController
         ));
     }
     /**
-     * Executes new action
+     * Executes uploadPhoto action
      * 
      * @param Request $request
      * 
