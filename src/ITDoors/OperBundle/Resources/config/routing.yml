@@ -183,3 +183,7 @@ it_doors_oper_get_comments:
 it_doors_oper_statistic:
     pattern:  /oper/statistic/index
     defaults: { _controller: ITDoorsOperBundle:OperStatistic:index }
+
+it_doors_oper_department_report_list:
+    pattern:  /oper/department/info/report/{id}
+    defaults: { _controller: ITDoorsOperBundle:OperDepartmentInfo:reportList }
