@@ -194,9 +194,9 @@ class ProdBlogController extends BaseController
 	}
 	
 	private function _sort($a, $b) {
-		if ($a['viewed'] == null && $b['viewed'] != null) {
+		if (!$a['viewed'] && $b['viewed']) {
 			return -1;
-		} elseif ($a['viewed'] == null && $b['viewed'] != null) {
+		} elseif ($a['viewed'] && !$b['viewed']) {
 			return 1;
 		}
 		$a = $a['article']->getDatePublick();
