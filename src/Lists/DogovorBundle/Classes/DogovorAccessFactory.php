@@ -20,6 +20,8 @@ class DogovorAccessFactory
                 $access[] = new AdminDogovorAccess();
             } elseif ($role == 'manager_organization') {
                 $access[] = new ManagerOrganizationAccess();
+            } elseif ($role == 'controlling') {
+                $access[] = new ControllingDogovorAccess();
             } elseif ($role == 'oper') {
                 $access[] = new OperDogovorAccess();
             } else {
