@@ -6,9 +6,8 @@
         <li>
             <i class="fa fa-home"></i>
             <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans from 'messages' %}Dashboard{% endtrans %}">{% trans from 'messages' %}Dashboard{% endtrans %}</a>
-            <i class="fa fa-angle-right"></i>
         </li>
-        <li><a href="{{ path('lists_' ~ baseRoutePrefix ~ '_dogovor_index') }}" title="{% trans %}Dogovor list{% endtrans %}">{% trans %}Dogovor list{% endtrans %}</a></li>
+        <li><a href="{{ path('lists_dogovor_dogovor_index') }}" title="{% trans %}Dogovor list{% endtrans %}">{% trans %}Dogovor list{% endtrans %}</a></li>
     </ul>
 {% endblock %}
 {% block page_title %}
@@ -35,7 +34,7 @@
 
 {% block body %}
     {{  include(
-        'ListsDogovorBundle:' ~ baseTemplate ~ ':filters.html.twig',
+        'ListsDogovorBundle:Dogovor:filters.html.twig',
             {
                 filterForm: filterForm,
                 filterFormName: filterFormName

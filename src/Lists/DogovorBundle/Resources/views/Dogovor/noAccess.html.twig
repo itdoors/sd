@@ -1,0 +1,29 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsDogovorBundle' %}
+{% block title %}{% trans %}Dogovor list{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans from 'messages' %}Dashboard{% endtrans %}">{% trans from 'messages' %}Dashboard{% endtrans %}</a>
+        </li>
+        <li><a href="{{ path('lists_dogovor_dogovor_index') }}" title="{% trans %}Dogovor list{% endtrans %}">{% trans %}Dogovor list{% endtrans %}</a></li>
+    </ul>
+{% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Dogovor list <small>dogovor list</small>{% endtrans %}
+    </h3>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tab-content ajax-tab-holder">
+                <div class="note note-danger">
+                    <h4 class="block">{% trans %}You don`t access{% endtrans %}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

@@ -29,7 +29,6 @@ class OperStatisticController extends Controller
             ->getRepository('ITDoorsOperBundle:OperOrganizer');
 
 
-
         $graph = array();
         $numDays = 30; // number of days in graph
         for ($i = $numDays; $i>=0; $i--) {
@@ -73,5 +72,4 @@ class OperStatisticController extends Controller
             'averagePerDay' => $averagePerDay
         ));
     }
-
 }

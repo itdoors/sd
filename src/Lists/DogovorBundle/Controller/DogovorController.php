@@ -26,6 +26,13 @@ class DogovorController extends BaseController
      */
     public function indexAction()
     {
+        $service = $this->get('lists_dogovor.service');
+        $access = $service->checkAccess($this->getUser());
+
+        if (!$access->canSeeList()) {
+            throw new \Exception('No access', 403);
+        }
+
         $page = $this->get('request')->query->get('page', 1);
 
         $filterForm = $this->processFilters();
@@ -61,28 +68,24 @@ class DogovorController extends BaseController
      */
     public function listDangerAction()
     {
+        $service = $this->get('lists_dogovor.service');
+        $access = $service->checkAccess($this->getUser());
+
+        if (!$access->canSeeDanger()) {
+            throw new \Exception('No access', 403);
+        }
+
         $baseFilter = $this->container->get('it_doors_ajax.base_filter_service');
 
         $namespace = 'dogovorDanger';
 
         /** @var \Lists\DogovorBundle\Entity\DogovorRepository $repository */
-        $repository = $this->getDoctrine()
-            ->getRepository('ListsDogovorBundle:Dogovor');
+        $repository = $this->getDoctrine()->getRepository('ListsDogovorBundle:Dogovor');
         $idManager = null;
         if ($this->getUser()->hasRole('ROLE_SALES')) {
             $idManager = $this->getUser()->getId();
         }
-        if ($this->getUser()->hasRole('ROLE_OPER')) {
-        }
-        if (
-            !$this->getUser()->hasRole('ROLE_DOGOVORADMIN')
-            &&
-            !$this->getUser()->hasRole('ROLE_OPER')
-            &&
-            !$this->getUser()->hasRole('ROLE_SALES')
-        ) {
-            throw new \Exception('You don`t have needed');
-        }
+
         $items = $repository->getAllDanger($idManager);
         $entities = $items['entities'];
         $count = $items['count'];
@@ -100,6 +103,7 @@ class DogovorController extends BaseController
             'namespace' => $namespace,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
+            'access' => $access
         ));
     }
     /**
@@ -111,6 +115,12 @@ class DogovorController extends BaseController
      */
     public function elementDangerAction($id)
     {
+        $service = $this->get('lists_dogovor.service');
+        $access = $service->checkAccess($this->getUser());
+
+        if (!$access->canSeeDanger()) {
+            throw new \Exception('No access', 403);
+        }
         /** @var DogovorRepository $dr */
         $dr = $this->get('lists_dogovor.repository');
 
@@ -134,6 +144,12 @@ class DogovorController extends BaseController
      */
     public function newAction(Request $request)
     {
+        $service = $this->get('lists_dogovor.service');
+        $access = $service->checkAccess($this->getUser());
+
+        if (!$access->canAddDogovor()) {
+            return $this->render('ListsDogovorBundle:Dogovor:noAccess.html.twig');
+        }
         $form = $this->createForm('dogovorForm');
 
         $form->handleRequest($request);
@@ -162,7 +178,7 @@ class DogovorController extends BaseController
             )));
         }
 
-        return $this->render('ListsDogovorBundle:' . $this->baseTemplate . ':new.html.twig', array(
+        return $this->render('ListsDogovorBundle:Dogovor:new.html.twig', array(
             'form' => $form->createView(),
             'filterFormName' => $this->filterFormName,
             'baseRoutePrefix' => $this->baseRoutePrefix,
@@ -180,20 +196,31 @@ class DogovorController extends BaseController
     public function showAction($id)
     {
         /** @var DogovorRepository $dogovorRepository */
-        $dogovorRepository = $this->get('lists_dogovor.repository');
+        $dogovorRepository = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('ListsDogovorBundle:Dogovor');
 
         /** @var \Lists\DogovorBundle\Entity\Dogovor $object */
-        $object = $dogovorRepository
-            ->getDogovorById($id);
+        $object = $dogovorRepository->getDogovorById($id);
 
-        $object['isActiveChoices'] = $dogovorRepository->getIsActiveChoices();
-        $object['prolongationChoices'] = $dogovorRepository->getProlongationChoices();
-        $object['mashtabChoices'] = $dogovorRepository->getMashtabChoices();
+        $dogovor = $dogovorRepository->find($id);
 
-        return $this->render('ListsDogovorBundle:' . $this->baseTemplate . ':show.html.twig', array(
+        $service = $this->get('lists_dogovor.service');
+        $access = $service->checkAccess($this->getUser(), $dogovor);
+
+        if (!$access->canSee()) {
+            return $this->render('ListsDogovorBundle:Dogovor:noAccess.html.twig');
+        }
+
+        $object['isActiveChoices'] = $service->getIsActiveChoices();
+        $object['prolongationChoices'] = $service->getProlongationChoices();
+        $object['mashtabChoices'] = $service->getMashtabChoices();
+
+        return $this->render('ListsDogovorBundle:Dogovor:show.html.twig', array(
             'dogovor' => $object,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
+            'access' => $access
         ));
     }
 

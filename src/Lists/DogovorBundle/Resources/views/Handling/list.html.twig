@@ -4,7 +4,9 @@
     <tr>
         <th>{% trans %}ID{% endtrans %}</th>
         <th>{% trans %}Handling{% endtrans %}</th>
+        {% if access.canEdit %}
         <th>{% trans %}Actions{% endtrans %}</th>
+        {% endif %}
     </tr>
     </thead>
     <tbody>
@@ -12,6 +14,7 @@
         <tr>
             <td>{{ result.id }}</td>
             <td>{{ result.handling }}</td>
+            {% if access.canEdit %}
             <td>
                 <a
                         class="ajax-delete"
@@ -21,6 +24,7 @@
                     {% trans %}Delete{% endtrans %}
                 </a>
             </td>
+            {% endif %}
         </tr>
     {% endfor %}
     </tbody>
