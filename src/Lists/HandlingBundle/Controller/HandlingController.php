@@ -900,6 +900,7 @@ class HandlingController extends BaseController
                         return $this->redirect($this->generateUrl('lists_handling_create_step3'));
                     }
                 }
+
                 return $this->redirect($this->generateUrl('lists_handling_create_step2'));
             } elseif (!$organizationUser) {
                 $noAccess = $translator->trans(
