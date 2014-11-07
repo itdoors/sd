@@ -138,11 +138,16 @@ class PrivateController extends SalesController
                 ->getAllMessages($userIds, $startTimestamp, $endTimestamp, $filters);
 
             foreach ($handlingMessages as $handlingMessage) {
+                $url = $this->generateUrl('lists_handling_show', array(
+                        'id' => $handlingMessage['handlingId'],
+                        'type' => 'my'
+                    ));
+                
                 $events[] = array(
                     'hover_title' => $this->getEventHoverTitle($handlingMessage),
                     'title' => $this->getEventTitle($handlingMessage),
                     'start' => $this->getEventStart($handlingMessage)->format('Y-m-d H:i:s'),
-                    'url' => $this->getEventUrl($handlingMessage),
+                    'url' => $url,
                     'className' => $this->getEventCssClass($handlingMessage),
 //                    'allDay' => false,s
                 );

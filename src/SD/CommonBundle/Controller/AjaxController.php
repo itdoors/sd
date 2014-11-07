@@ -3085,8 +3085,8 @@ class AjaxController extends BaseFilterController
 
         $email = $this->get('it_doors_email.service');
         $url = $this->generateUrl(
-            'lists_sales_handling_show',
-            array('id' => $handling->getId()),
+            'lists_handling_show',
+            array('id' => $handling->getId(), 'type' => 'my'),
             true
         );
         $email->send(
@@ -3932,8 +3932,8 @@ class AjaxController extends BaseFilterController
             $em->refresh($object);
             $email = $this->get('it_doors_email.service');
             $url = $this->generateUrl(
-                'lists_sales_handling_show',
-                array('id' => $object->getHandlingId()),
+                'lists_handling_show',
+                array('id' => $object->getHandlingId(), 'type' => 'my'),
                 true
             );
             $email->send(

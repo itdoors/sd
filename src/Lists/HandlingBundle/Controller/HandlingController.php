@@ -233,8 +233,9 @@ class HandlingController extends BaseController
             $em->persist($manager);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('lists_sales_handling_show', array (
-                        'id' => $object->getId()
+            return $this->redirect($this->generateUrl('lists_handling_show', array (
+                        'id' => $object->getId(),
+                        'type' => 'my',
             )));
         }
 
@@ -308,7 +309,7 @@ class HandlingController extends BaseController
 
             $usersFromOurSide['message' . $message->getId()] = $usersFromOurSideTemp;
 
-            if ($message->getType()->getId() === 1) {
+            if ($message->getType() && $message->getType()->getId() === 1) {
                 $call = $this->getDoctrine()
                     ->getRepository('ITDoorsSipBundle:Call')
                     ->findOneBy(array('modelName' => 'handling_message' ,'modelId' => $message->getId()));
@@ -426,7 +427,7 @@ class HandlingController extends BaseController
         $data = $request->request->get($form->getName());
 
         if (!sizeof($data)) {
-            return $this->redirect($this->generateUrl('lists_sales_admin_report_advanced_range'));
+            return $this->redirect($this->generateUrl('lists_report_advanced_range'));
         }
 
         $from = new \DateTime($data['from']);
@@ -714,5 +715,25 @@ class HandlingController extends BaseController
             'name' => $string,
             'text' => $string
         );
+    }
+    /**
+     * Executes list action for dashboard
+     *
+     * @param integer $id Organization.id
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function forOrganizationAction ($id)
+    {
+        /** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
+        $handlingRepository = $this->getDoctrine()
+            ->getRepository('ListsHandlingBundle:Handling');
+
+        /** @var \Doctrine\ORM\Query $handlings */
+        $handlings = $handlingRepository->getForOrganization($id);
+
+        return $this->render('ListsHandlingBundle:Handling:forOrganization.html.twig', array (
+                'handlings' => $handlings
+        ));
     }
 }
