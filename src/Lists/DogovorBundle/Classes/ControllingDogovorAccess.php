@@ -28,5 +28,4 @@ class ControllingDogovorAccess extends BasicDogovorAccess
     {
         return true;
     }
-
 }

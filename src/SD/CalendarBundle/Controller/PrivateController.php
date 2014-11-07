@@ -142,7 +142,7 @@ class PrivateController extends SalesController
                         'id' => $handlingMessage['handlingId'],
                         'type' => 'my'
                     ));
-                
+
                 $events[] = array(
                     'hover_title' => $this->getEventHoverTitle($handlingMessage),
                     'title' => $this->getEventTitle($handlingMessage),

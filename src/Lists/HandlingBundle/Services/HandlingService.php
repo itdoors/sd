@@ -30,7 +30,7 @@ class HandlingService
      /**
      * checkAccess
      * 
-     * @param User    $user
+     * @param User     $user
      * @param Handling $handling
      * 
      * @return mixed[]
@@ -39,7 +39,7 @@ class HandlingService
     {
         $role = array();
         $role[] = 'base';
-        if ($handling) {            
+        if ($handling) {
             $handlingUsers = $handling->getHandlingUsers();
             foreach ($handlingUsers as $handlingUser) {
                 $rol = $handlingUser->getLookup();

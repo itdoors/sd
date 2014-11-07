@@ -32,10 +32,10 @@ class HandlingController extends BaseController
     {
         /** @var \SD\UserBundle\Entity\User $user */
         $user = $this->getUser();
-        
+
         $service = $this->get('lists_handling.service');
         $access = $service->checkAccess($user);
-        
+
         if (!$access->canSeeList() && empty($type) && !$access->canSeeListMy()) {
             return $this->render('ListsHandlingBundle:Handling:noAccess.html.twig');
         }
@@ -49,7 +49,7 @@ class HandlingController extends BaseController
         /** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
         $handlingRepository = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:Handling');
-        
+
         $userId = null;
         if ($type == 'my') {
             $userId = $user->getId();
@@ -93,8 +93,8 @@ class HandlingController extends BaseController
     /**
      * Executes show action
      *
-     * @param string  $type
      * @param int     $id
+     * @param string  $type
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -110,13 +110,12 @@ class HandlingController extends BaseController
         $object = $handlingRepository->getHandlingShow($id);
         /** @var \Lists\HandlingBundle\Entity\Handling $handling */
         $handling = $handlingRepository->find($id);
-        
         /** @var \SD\UserBundle\Entity\User $user */
         $user = $this->getUser();
-        
+
         $service = $this->get('lists_handling.service');
         $access = $service->checkAccess($user, $handling);
-        
+
         if (!$access->canSee()) {
             return $this->render('ListsHandlingBundle:Handling:noAccess.html.twig');
         }
@@ -181,7 +180,7 @@ class HandlingController extends BaseController
 
         // Get organization filter
         $filters = $this->getFilters();
-        
+
         $organizationId = (int) $filters['organization_id'];
 
         if (!isset($filters['organization_id']) || !$filters['organization_id']) {
@@ -191,7 +190,7 @@ class HandlingController extends BaseController
         $organization = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Organization')
             ->find($organizationId);
-        
+
         if (!$organization) {
             throw new \Excepton('Organization don`t found', 403);
         }
@@ -202,7 +201,7 @@ class HandlingController extends BaseController
         if (!$access->canAddHandling()) {
             return $this->render('ListsHandlingBundle:Handling:noAccess.html.twig');
         }
-        
+
         $form = $this->createForm('handlingSalesForm');
 
         $form
@@ -263,15 +262,14 @@ class HandlingController extends BaseController
             ->getRepository('ListsHandlingBundle:HandlingUser');
 
         $handlingUsers = $handlingUser->getHandlingUsersQuery($handlingId)
-            ->getQuery()
-            ->getResult();
-        
+            ->getQuery()->getResult();
+
         /** @var HandlingRepository $handlingRepository */
         $handlingRepository = $this->get('handling.repository');
 
         /** @var \Lists\HandlingBundle\Entity\Handling $handling */
         $handling = $handlingRepository->find($handlingId);
-        
+
         $service = $this->get('lists_handling.service');
         $access = $service->checkAccess($this->getUser(), $handling);
 
@@ -518,10 +516,10 @@ class HandlingController extends BaseController
     {
         /** @var \SD\UserBundle\Entity\User $user */
         $user = $this->getUser();
-        
+
         $service = $this->get('lists_handling.service');
         $access = $service->checkAccess($user);
-        
+
         $userId = $user->getId();
         if ($access->canExportToExelAll) {
             $userId = null;
@@ -858,6 +856,7 @@ class HandlingController extends BaseController
     {
         $isPost = $request->getMethod() == 'POST';
 
+        $userId = $this->getUser()->getId();
         $initSelection = array ();
         $noAccess = false;
         if ($isPost) {
@@ -884,7 +883,7 @@ class HandlingController extends BaseController
                     ->getRepository('ListsOrganizationBundle:OrganizationUser')
                     ->findOneBy(array (
                         'organizationId' => $organization['organizationId'],
-                        'userId' => $this->getUser()->getId(),
+                        'userId' => $userId,
                     )) : null;
             /** @var Translator $translator */
             $translator = $this->container->get('translator');
@@ -892,16 +891,15 @@ class HandlingController extends BaseController
             if ($this->isValidWizardOrganization() && ($organizationUser || !$managerOrganization)) {
                 if (is_numeric($organization['organizationId'])) {
                     $organizationContacts = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
-                        ->getMyOrganizationsContacts($this->getUser()->getId(), $organization['organizationId'])->getResult();
+                        ->getMyOrganizationsContacts($userId, $organization['organizationId'])->getResult();
 
                     $departmentContacts = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
                         ->getMyDepartmentByOrganizationContacts($organization['organizationId']);
-                    
+
                     if (count($organizationContacts) != 0 || count($departmentContacts) != 0) {
                         return $this->redirect($this->generateUrl('lists_handling_create_step3'));
                     }
                 }
-                
                 return $this->redirect($this->generateUrl('lists_handling_create_step2'));
             } elseif (!$organizationUser) {
                 $noAccess = $translator->trans(
