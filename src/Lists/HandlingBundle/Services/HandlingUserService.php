@@ -146,8 +146,8 @@ class HandlingUserService
     {
         $emailService = $this->container->get('it_doors_email.service');
         $url = $this->container->get('router')->generate(
-            'lists_sales_handling_show',
-            array('id' => $handlingId),
+            'lists_handling_show',
+            array('id' => $handlingId, type => 'my'),
             true
         );
         $emailService->send(

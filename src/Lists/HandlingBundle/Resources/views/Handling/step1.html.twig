@@ -1,0 +1,207 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsHandlingBundle' %}
+{% block title %}{% trans %}Create Handling{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        </li>
+        <li>
+            <a href="{{ path('lists_handling_index', {type:'my'}) }}" title="{% trans %}My Handlings{% endtrans %}">{% trans %}My Handlings{% endtrans %}</a>
+        </li>
+        <li>
+            <a href="" title="{% trans %}Create Handling{% endtrans %}">{% trans %}Create Handling{% endtrans %}</a>
+        </li>
+    </ul>
+{% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Handling <small>create handling</small>{% endtrans %}
+    </h3>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
+{% endblock %}
+
+{% block body %}
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#organizationId').select2({
+                minimumInputLength: 2,
+                placeholder: '{% trans %}Enter organization name{% endtrans %}',
+                width: '400px',
+                ajax: {
+                    url: '{{ path('sd_common_ajax_organization_for_wizard') }}',
+                    dataType: 'json',
+                    data: function (term, page) {
+                        return {
+                            q: term
+                        };
+                    },
+                    results: function (data, page) {
+                        return {
+                            results: data
+                        };
+                    }
+                }
+                {% if initSelection|length %}
+                ,
+                initSelection: function (element, callback) {
+
+                    var data = {{ initSelection|json_encode|raw }};
+
+                    callback(data);
+                }
+                {% endif %}
+            });
+
+            $('#organizationId').on("select2-selecting", function(e) {
+
+                $('#inform-exist-organization').addClass('display-none');
+                $('#inform-new-organization').addClass('display-none');
+
+                var organizationName = e.object.name;
+
+                if (e.object.id)
+                {
+                    targetId = '#inform-exist-organization';
+                }
+                else
+                {
+                    targetId = '#inform-new-organization';
+                }
+
+                var target = $(targetId);
+
+                target.removeClass('display-none');
+
+                target.html(target.html().replace('%organization%', organizationName));
+
+                $('#organizationName').val(organizationName);
+            });
+        })
+    </script>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet box blue" id="form_wizard_1">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-reorder"></i> {% trans %}Form Wizard create handling{% endtrans %} - <span class="step-title">{% trans %}Step{% endtrans %} 1 {% trans %}of{% endtrans %} 4</span>
+                    </div>
+                    <div class="tools hidden-xs">
+                        <a href="javascript:;" class="collapse"></a>
+                        <a href="javascript:;" class="reload"></a>
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <form action="{{ path('lists_handling_create_step1') }}" class="form-horizontal" method="POST">
+                        <div class="form-wizard">
+                            <div class="form-body">
+                                <ul class="nav nav-pills nav-justified steps">
+                                    <li class="active">
+                                        <a href="{{ path('lists_handling_create_step1') }}" class="step active">
+                                            <span class="number">1</span>
+                                            <span class="desc"><i class="fa fa-check"></i> {% trans %}Check and create organization{% endtrans %}</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('lists_handling_create_step2') }}" class="step">
+                                            <span class="number">2</span>
+                                            <span class="desc"><i class="fa fa-check"></i> {% trans %}Add contact persons{% endtrans %}</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('lists_handling_create_step3') }}" class="step">
+                                            <span class="number">3</span>
+                                            <span class="desc"><i class="fa fa-check"></i> {% trans %}Create Handling{% endtrans %}</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('lists_handling_create_step4') }}" class="step">
+                                            <span class="number">4</span>
+                                            <span class="desc"><i class="fa fa-check"></i> {% trans %}Creating Message{% endtrans %}</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div id="bar" class="progress progress-striped" role="progressbar">
+                                    <div class="progress-bar progress-bar-success" style="width: 25%;"></div>
+                                </div>
+                                <div class="tab-content">
+                                    {% if noAccess %}
+                                    <div class="alert alert-success" style="color: white;background-color: #d84a38;">
+                                        <button class="close" data-dismiss="alert"></button>
+                                        {{noAccess}}
+                                    </div>
+                                    {% endif %}
+                                    <div class="alert alert-success display-none" id="inform-exist-organization">
+                                        <button class="close" data-dismiss="alert"></button>
+                                        {% trans %}<strong>Note</strong> Select exist organization{% endtrans %} <strong>%organization%</strong>
+                                    </div>
+                                    <div class="alert alert-success display-none" id="inform-new-organization">
+                                        <button class="close" data-dismiss="alert"></button>
+                                        {% trans %}<strong>Note</strong> will create a new business{% endtrans %} <strong> %organization% </strong>
+                                    </div>
+                                    <div class="alert alert-error display-none" id="inform-no-organization">{#issue 411#}
+                                        <button class="close" data-dismiss="alert"></button>
+                                        {% trans %}<strong>Error</strong> no enter field organization{% endtrans %}
+                                    </div>
+
+                                    <div class="tab-pane active" id="tab1">
+                                        <h3 class="block">{% trans %}Enter Organization Name{% endtrans %}</h3>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">{% trans %}Organization Name{% endtrans %} <span class="required"> *</span></label>
+                                            <div class="col-md-5">
+
+                                                <input type="hidden" name="organizationId" id="organizationId" required="required"
+                                                       {% if initSelection|length %}
+                                                            value="{{ initSelection.text }}"
+                                                       {% endif %}
+                                                />
+                                                <input type="hidden" name="organizationName" id="organizationName" />
+                                            <span class="help-block"> С целью уменьшения дубликатов организаций подходите к заполнению ответсвенно. В данном поле поиск производится по Полному названию организации и по короткому.
+                                             Также отображается ответсвенный менеджер (или тот, который добавил) организации. </span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-3"></div>
+                                            <div class="col-md-4 offset-md-4"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions fluid">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <input type="submit" class="btn blue button-next" value="Continue">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

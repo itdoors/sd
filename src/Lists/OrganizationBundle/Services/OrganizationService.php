@@ -42,7 +42,7 @@ class OrganizationService
             $managers = $organization->getOrganizationUsers();
             foreach ($managers as $manager) {
                 $rol = $manager->getRole();
-                if ($rol->getLukey() == 'manager_organization' && $manager->getUser() == $user) {
+                if ($rol && $rol->getLukey() == 'manager_organization' && $manager->getUser() == $user) {
                     $role[] = 'managerOrganization';
                 }
             }

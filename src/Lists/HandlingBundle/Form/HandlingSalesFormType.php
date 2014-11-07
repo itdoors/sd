@@ -32,7 +32,7 @@ class HandlingSalesFormType extends AbstractType
         $container = $this->container;
 
         /** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
-        $lr = $container->get('lists_lookup.repository');
+//        $lr = $container->get('lists_lookup.repository');
 
         $builder
             ->add('organization', 'text', array(
