@@ -1,0 +1,101 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsHandlingBundle' %}
+{% block title %}{% trans %}Create Handling{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        </li>
+        <li><a href="{{ path('lists_handling_index', {type:'my'}) }}" title="{% trans %}My Handlings{% endtrans %}">{% trans %}My Handlings{% endtrans %}</a></li>
+        <li>
+            <a href="{{ path('lists_handling_create_step1') }}" title="{% trans %}Create Handling{% endtrans %}">{% trans %}Create Handling{% endtrans %}</a>
+        </li>
+    </ul>
+{% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Handling <small>create handling</small>{% endtrans %}
+    </h3>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet box blue" id="form_wizard_1">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-reorder"></i> {% trans %}Form Wizard create handling{% endtrans %} - <span class="step-title">{% trans %}Step{% endtrans %} 2 {% trans %}of{% endtrans %} 4</span>
+                    </div>
+                    <div class="tools hidden-xs">
+                        <a href="javascript:;" class="collapse"></a>
+                        <a href="#portlet-config" data-toggle="modal" class="config"></a>
+                        <a href="javascript:;" class="reload"></a>
+                        <a href="javascript:;" class="remove"></a>
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <div class="form-wizard">
+                        <div class="form-body">
+                            <ul class="nav nav-pills nav-justified steps">
+                                <li>
+                                    <a href="{{ path('lists_handling_create_step1') }}" class="step">
+                                        <span class="number">1</span>
+                                        <span class="desc"><i class="fa fa-check"></i> {% trans %}Check and create organization{% endtrans %}</span>
+                                    </a>
+                                </li>
+                                <li  class="active">
+                                    <a href="{{ path('lists_handling_create_step2') }}" class="step active">
+                                        <span class="number">2</span>
+                                        <span class="desc"><i class="fa fa-check"></i> {% trans %}Add contact persons{% endtrans %}</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('lists_handling_create_step3') }}" class="step">
+                                        <span class="number">3</span>
+                                        <span class="desc"><i class="fa fa-check"></i> {% trans %}Create Handling{% endtrans %}</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('lists_handling_create_step4') }}" class="step">
+                                        <span class="number">4</span>
+                                        <span class="desc"><i class="fa fa-check"></i> {% trans %}Creating Message{% endtrans %}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div id="bar" class="progress progress-striped" role="progressbar">
+                                <div class="progress-bar progress-bar-success" style="width: 50%;"></div>
+                            </div>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab1">
+                                    <h3 class="block">{% trans %}Create contacts on organization{% endtrans %}</h3>
+                                        {{ include('ListsHandlingBundle:Handling:step2Form.html.twig') }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

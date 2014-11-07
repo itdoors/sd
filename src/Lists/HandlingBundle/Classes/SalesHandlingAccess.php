@@ -1,11 +1,11 @@
 <?php
 
-namespace Lists\DogovorBundle\Classes;
+namespace Lists\HandlingBundle\Classes;
 
 /**
- * ControllingDogovorAccess class
+ * SalesHandlingAccess class
  */
-class ControllingDogovorAccess extends BasicDogovorAccess
+class SalesHandlingAccess extends BasicHandlingAccess
 {
     /**
      * @return bool
@@ -17,14 +17,14 @@ class ControllingDogovorAccess extends BasicDogovorAccess
     /**
      * @return bool
      */
-    public function canSeeList ()
+    public function canSeeListMy ()
     {
         return true;
     }
     /**
      * @return bool
      */
-    public function canSeeDanger ()
+    public function canExportToExelAll ()
     {
         return true;
     }
