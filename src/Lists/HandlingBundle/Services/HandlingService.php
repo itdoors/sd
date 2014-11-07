@@ -43,10 +43,10 @@ class HandlingService
             $handlingUsers = $handling->getHandlingUsers();
             foreach ($handlingUsers as $handlingUser) {
                 $rol = $handlingUser->getLookup();
-                if ($rol->getLukey() == 'manager_project' && $handlingUser->getUser() == $user) {
+                if ($rol && $rol->getLukey() == 'manager_project' && $handlingUser->getUser() == $user) {
                     $role[] = 'manager_project';
                 }
-                if ($rol->getLukey() == 'manager' && $handlingUser->getUser() == $user) {
+                if ($rol && $rol->getLukey() == 'manager' && $handlingUser->getUser() == $user) {
                     $role[] = 'manager';
                 }
             }

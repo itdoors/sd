@@ -30,15 +30,8 @@
             </div>
         {% endif %}
         
-        <div id="messages_list"
-             data-url="{{ path('lists_handling_ajax_messages', {
-                handlingId: handling.0.id
-             }) }}"
-             data-params='{"handlingId":{{ handling.0.id }}'
-                >
-            {{ render(controller('ListsHandlingBundle:Handling:MessagesList', {
-                handlingId: handling.0.id
-            })) }}
+        <div id="messages_list" data-url="{{ path('lists_handling_ajax_messages', { handlingId: handling.0.id }) }}" data-params='{"handlingId":{{ handling.0.id }}'>
+            {{ render(controller('ListsHandlingBundle:Handling:messagesList', { handlingId: handling.0.id })) }}
         </div>
     </div>
 </div>
