@@ -1,3 +1,35 @@
+lists_handling_index:
+    pattern:  /lists/handling/index/{type}
+    defaults: { _controller: ListsHandlingBundle:Handling:index, type: '' }
+    requirements:
+        type: my|''
+
+lists_handling_show:
+    pattern:  /lists/handling/show/{id}/{type}
+    defaults: { _controller: ListsHandlingBundle:Handling:show, type: '' }
+    requirements:
+        type: my|''
+
+lists_handling_export_excel:
+    pattern:  /lists/handling/export/excel
+    defaults: { _controller: ListsHandlingBundle:Handling:exportExcel }
+
+lists_handling_filter:
+    pattern:  /lists/handling/filter
+    defaults: { _controller: ListsHandlingBundle:Handling:filter }
+
+lists_handling_new:
+    pattern:  /lists/handling/new
+    defaults: { _controller: ListsHandlingBundle:Handling:new }
+
+lists_handling_ajax_users:
+    pattern:  /lists/sales/handling/ajax/users/{handlingId}
+    defaults: { _controller: ListsHandlingBundle:Handling:handlingUsers }
+
+lists_handling_ajax_messages:
+    pattern:  /lists/handling/ajax/messages/{handlingId}
+    defaults: { _controller: ListsHandlingBundle:Handling:messagesList }
+
 #SALES ROUTERS
 lists_sales_handling_index:
     pattern:  /lists/sales/handling/index

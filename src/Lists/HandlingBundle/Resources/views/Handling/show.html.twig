@@ -1,0 +1,72 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsHandlingBundle' %}
+{% block title %}{% trans %}Show Handling{% endtrans %} {% endblock %}
+{% block page_breadcrumbs %}
+	<ul class="page-breadcrumb breadcrumb">
+		<li>
+			<i class="fa fa-home"></i>
+			<a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+		</li>
+		<li><a href="{{ path('lists_handling_index', {type:type}) }}" title="{% trans %}Handlings{% endtrans %}">{% trans %}Handlings{% endtrans %}</a></li>
+		<li><a href=""  title="{% trans %}Show Handling{% endtrans %}">{% trans %}Show Handling{% endtrans %}</a></li>
+	</ul>
+{% endblock %}
+{% block page_title %}
+	<h3 class="page-title">
+		{% trans %}Handling <small>show handling</small>{% endtrans %}
+	</h3>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
+{% endblock %}
+
+{% block body %}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="tabbable tabbable-custom boxless">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_0" data-toggle="tab">{% trans %}Handling{% endtrans %}</a></li>
+                <li><a href="#tab_1" data-toggle="tab">{% trans %}Managers{% endtrans %}</a></li>
+                <li><a href="#tab_2" data-toggle="tab">{% trans %}Contacts{% endtrans %}</a></li>
+                <li><a href="#tab_3" data-toggle="tab">{% trans %}Organization{% endtrans %}</a></li>
+                <li><a href="#tab_4" data-toggle="tab">{% trans %}Competitors{% endtrans %}</a></li>
+            </ul>
+            <div class="tab-content">
+
+                {{  include('ListsHandlingBundle:Handling:edit.html.twig') }}
+                {{  include('ListsHandlingBundle:Handling:managers.html.twig') }}
+                {{  include('ListsHandlingBundle:Handling:contacts.html.twig') }}
+                <div class="tab-pane" id="tab_3">
+                    {{  include('ListsOrganizationBundle:Organization:edit.html.twig', {access: accessOrganization}) }}
+                </div>
+                <div class="tab-pane" id="tab_4">
+                    {{  render(controller('ListsHandlingBundle:Competitor:Index',{ handlingId: handling.0.id } ))}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    {{  include('ListsHandlingBundle:Handling:messages.html.twig') }}
+</div>
+{#    {{ form(handlingMessageForm) }}#}
+
+{% endblock body %}

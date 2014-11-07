@@ -1,3 +1,16 @@
+lists_contact_ajax_handling:
+    pattern:  /lists/contact/ajax/handling/{handlingId}
+    defaults: { _controller: ListsContactBundle:Contact:handling }
+
+lists_contact_ajax_organization_element:
+    pattern:  /lists/contact/ajax/organization_element/{id}/{organizationId}
+    defaults: { _controller: ListsContactBundle:Contact:organizationElement, organizationId: 0 }
+
+lists_contact_ajax_department_organization_element:
+    pattern:  /lists/contact/ajax/department_organization_element/{id}/{organizationId}
+    defaults: { _controller: ListsContactBundle:Contact:departmentOrganizationElement, organizationId: 0 }
+
+
 #SALES ROUTES
 
 lists_sales_contact_index:
