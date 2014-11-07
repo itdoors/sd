@@ -78,13 +78,7 @@
                         class="model-object-holder"
                             >
                         {{  include(
-                        'ListsContactBundle:' ~ baseTemplate ~ ':organizationElement.html.twig',
-                            {
-                                item: item,
-                                baseRoutePrefix: baseRoutePrefix,
-                                organizationId: organizationId,
-                                modelName: 'departments'
-                            }
+                        'ListsContactBundle:Contact:organizationElement.html.twig',{ item: item, baseRoutePrefix: baseRoutePrefix,organizationId: organizationId,modelName: 'departments'}
                         )
                         }}
                     </tr>

@@ -1,0 +1,162 @@
+{# trans_default_domain 'ListsContactBundle'  #}
+{% trans_default_domain 'ListsHandlingBundle' %}
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+        $('#modelContactOrganizationWizardForm_birthday_year, #modelContactOrganizationWizardForm_birthday_month, #modelContactOrganizationWizardForm_birthday_day').select2({
+            allowClear: true
+        });
+
+        $('#modelContactOrganizationWizardForm_type').select2({
+            allowClear: true
+        });
+
+        $('#modelContactOrganizationWizardForm_phone1, #modelContactOrganizationWizardForm_phone2').select2({
+            minimumInputLength: 2,
+            allowClear: true,
+            ajax: {
+                url: '{{ path('sd_common_ajax_contact_phone') }}',
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        query: term
+                        //organizationId: $('#modelContactOrganizationWizardForm_modelId').val()
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        })
+
+        $('#modelContactOrganizationWizardForm_email').select2({
+            minimumInputLength: 2,
+            allowClear: true,
+            ajax: {
+                url: '{{ path('sd_common_ajax_contact_email') }}',
+                dataType: 'json',
+                data: function (term, page) {
+                    return {
+                        query: term,
+                        organizationId: $('#modelContactOrganizationWizardForm_modelId').val()
+                    };
+                },
+                results: function (data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        })
+
+
+        $(".date-picker").inputmask("d.m.y", {
+            "placeholder": "*"
+        });
+    });
+
+</script>
+
+    <div class="form-group">
+        <div class="portlet-body">
+            {% if form.vars.valid is sameas(false) %}
+                    <div class="alert alert-danger">
+                        <button class="close" data-close="alert"></button>
+                        {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                        {{ form_errors(form) }}
+                        {% if form.phone1.vars.errors|length %}
+                            {{ form_errors(form.phone1) }}
+                        {% endif %}
+                        {% if form.level.vars.errors|length %}
+                            {{ form_errors(form.level) }}
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+            {{ form_start(form, {
+                    'action' : path('lists_handling_create_step2'),
+                    'attr' : {
+                        'method' : 'POST'
+                    }
+            }) }}
+            <div class="form-body row">
+                {% if form.organization.vars.block_prefixes.1 != 'hidden' %}
+                    <div class="form-group col-md-12">
+                        {{ form_label(form.organization, 'Organization Name', {'attr': {'class': 'control-label'}}) }}
+                        {{ form_widget(form.organization, {'attr' : {'class' : 'form-control', 'placeholder': "Organization" }}) }}
+                    </div>
+                {% endif %}
+
+                <div class="form-group col-md-3">
+                    {{  form_label(form.firstName, 'First Name', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.firstName, {'attr' : {'class' : 'form-control', 'placeholder': "First name"}}) }}
+                </div>
+
+                <div class="form-group col-md-3">
+                    {{ form_label(form.lastName, 'Last Name', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.lastName, {'attr' : {'class' : 'form-control', 'placeholder': "Last name"}}) }}
+                </div>
+
+                <div class="form-group col-md-3">
+                    {{ form_label(form.middleName, 'Middle Name', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.middleName, {'attr' : {'class' : 'form-control', 'placeholder': "Middle name"}}) }}
+                </div>
+
+                <div class="form-group col-md-3">
+                    {{ form_label(form.birthday, 'Birthday', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.birthday, {'attr': {
+                        'class': 'form-control date-picker',
+                        'data-required': '0',
+                        'placeholder': 'Enter Birthday',
+                    }}) }}
+                </div>
+                        
+                <div class="form-group col-md-4">
+                    {{ form_label(form.level, 'Level of contact', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.level, {'attr' : {'class' : 'form-control', 'placeholder': "Level of contact"}}) }}
+                </div>
+                
+                <div class="form-group col-md-4">
+                    {{ form_label(form.position, 'Position', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.position, {'attr' : {'class' : 'form-control', 'placeholder': "Position"}}) }}
+                </div>
+                
+                <div class="form-group col-md-4">
+                    {{ form_label(form.type, 'Contact type', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.type, {'attr' : {'class' : 'form-control', 'placeholder': "Contact type"}}) }}
+                </div>
+
+                <div class="form-group col-md-4">
+                    {{ form_label(form.phone1, 'Phone 1', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.phone1, {'attr' : {'class' : 'form-control', 'placeholder': "Phone 1"}}) }}
+                </div>
+
+                <div class="form-group col-md-4">
+                    {{ form_label(form.phone2, 'Phone 2', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.phone2, {'attr' : {'class' : 'form-control', 'placeholder': "Phone 2"}}) }}
+                </div>
+
+                <div class="form-group col-md-4">
+                    {{ form_label(form.email, 'Email', {'attr': {'class': 'control-label'}}) }}
+                    {{ form_widget(form.email, {'attr' : {'class' : 'form-control', 'placeholder': "Email"}}) }}
+                </div>
+
+            </div>
+        </div>
+        <div class="form-actions fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-offset-3 col-md-9">
+                        <a href="{{ path('lists_handling_create_step1') }}" class="btn default button-previous">
+                            <i class="m-icon-swapleft"></i> Back
+                        </a>
+                        {{ form_widget(form.add, { 'label': 'Continue', 'attr': {'class': 'btn blue'} } ) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>

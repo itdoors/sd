@@ -1,6 +1,10 @@
 lists_contact_ajax_handling:
     pattern:  /lists/contact/ajax/handling/{handlingId}
     defaults: { _controller: ListsContactBundle:Contact:handling }
+    
+lists_contact_ajax_organization:
+    pattern:  /lists/contact/ajax/organization/{organizationId}
+    defaults: { _controller: ListsContactBundle:Contact:organization }
 
 lists_contact_ajax_organization_element:
     pattern:  /lists/contact/ajax/organization_element/{id}/{organizationId}

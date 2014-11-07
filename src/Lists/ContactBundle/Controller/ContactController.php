@@ -76,4 +76,59 @@ class ContactController extends BaseController
                 'modelName' => ModelContactRepository::MODEL_DEPARTMENT
             ));
     }
+    /**
+     * @param int $organizationId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function organizationAction($organizationId)
+    {
+        $this->refreshFiltersIfAjax();
+        $page = $this->getFilterValueByKey('page', 1);
+
+        $user = $this->getUser();
+
+        $organizationContacts = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
+            ->getMyOrganizationsContacts($user->getId(), $organizationId);
+
+        if ($organizationId) {
+            $departmentContacts = $this->getDoctrine()->getRepository('ListsContactBundle:ModelContact')
+                ->getMyDepartmentByOrganizationContacts($organizationId);
+        } else {
+            $departmentContacts = array();
+        }
+
+        if (!$organizationId) {
+            /** @var \Knp\Component\Pager\Paginator $paginator */
+            $paginator  = $this->get('knp_paginator');
+
+            $pagination = $paginator->paginate(
+                $organizationContacts,
+                $page,
+                20
+            );
+        } else {
+            $pagination = $organizationContacts->getResult();
+        }
+
+        return $this->render('ListsContactBundle:Contact:organization.html.twig', array(
+            'pagination' => $pagination,
+            'organizationId' => $organizationId,
+            'departmentContacts' => $departmentContacts
+        ));
+    }
+    /**
+     * If ajax request we need to remove $page var from filters
+     */
+    public function refreshFiltersIfAjax()
+    {
+        /** @var \Symfony\Component\HttpFoundation\Request $request */
+        $request = $this->get('request');
+
+        $isAjax = $request->isXmlHttpRequest();
+
+        if ($isAjax) {
+            $this->removeFromFilters('page');
+        }
+    }
 }

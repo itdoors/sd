@@ -50,6 +50,11 @@ lists_handling_create_step4:
     pattern:  /lists/handling/create/step4
     defaults: { _controller: ListsHandlingBundle:Handling:step4 }
 
+lists_handling_add_organization_filter:
+    pattern:  /lists/handling/add_organization_filter/{organizationId}
+    defaults: { _controller: ListsHandlingBundle:Handling:addOrganizationFilter }
+
+
 
 handling_service:
     resource: "@ListsHandlingBundle/Resources/config/routing/handlingservice.yml"
@@ -64,22 +69,22 @@ handling_service:
 #lists_sales_handling_new:
 #    pattern:  /lists/sales/handling/new
 #    defaults: { _controller: ListsHandlingBundle:Sales:new }
-
-lists_sales_handling_create_step1:
-    pattern:  /lists/sales/handling/create/step1
-    defaults: { _controller: ListsHandlingBundle:Sales:step1 }
-
-lists_sales_handling_create_step2:
-    pattern:  /lists/sales/handling/create/step2
-    defaults: { _controller: ListsHandlingBundle:Sales:step2 }
-
-lists_sales_handling_create_step3:
-    pattern:  /lists/sales/handling/create/step3
-    defaults: { _controller: ListsHandlingBundle:Sales:step3 }
-
-lists_sales_handling_create_step4:
-    pattern:  /lists/sales/handling/create/step4
-    defaults: { _controller: ListsHandlingBundle:Sales:step4 }
+#
+#lists_sales_handling_create_step1:
+#    pattern:  /lists/sales/handling/create/step1
+#    defaults: { _controller: ListsHandlingBundle:Sales:step1 }
+#
+#lists_sales_handling_create_step2:
+#    pattern:  /lists/sales/handling/create/step2
+#    defaults: { _controller: ListsHandlingBundle:Sales:step2 }
+#
+#lists_sales_handling_create_step3:
+#    pattern:  /lists/sales/handling/create/step3
+#    defaults: { _controller: ListsHandlingBundle:Sales:step3 }
+#
+#lists_sales_handling_create_step4:
+#    pattern:  /lists/sales/handling/create/step4
+#    defaults: { _controller: ListsHandlingBundle:Sales:step4 }
 #
 #lists_sales_handling_show:
 #    pattern:  /lists/sales/handling/show/{id}

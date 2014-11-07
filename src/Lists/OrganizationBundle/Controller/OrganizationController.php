@@ -235,7 +235,7 @@ class OrganizationController extends BaseController
 
         $service = $this->get('lists_organization.service');
         $access = $service->checkAccess($this->getUser(), $organization);
-
+        
         if (!$access->canSee()) {
             return $this->render('ListsOrganizationBundle:Organization:noAccess.html.twig', array(
                 'organization' => $organization
