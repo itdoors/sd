@@ -430,6 +430,15 @@
                 </ul>
             </li>
         {% endif %}
+        {% if is_granted('ROLE_DOGOVORADMIN_VIEWER') %}
+            <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_dogovor_index')
+                %} class="active"{% endif %}>
+                <a href="{{ path('lists_dogovor_dogovor_index') }}" title="{% trans %}Dogovor List{% endtrans %}">
+                    <i class="fa fa-comments"></i>
+                    {% trans %}Dogovor List{% endtrans %}
+                </a>
+            </li>
+        {% endif %}
         {% if is_granted('ROLE_DOGOVORADMIN') %}
             <li{% if 
                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_dogovor_index')
