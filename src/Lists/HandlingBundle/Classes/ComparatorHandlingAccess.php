@@ -33,6 +33,19 @@ class ComparatorHandlingAccess extends BasicHandlingAccess
     /**
      * @return bool
      */
+    public function canSeeReport ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canSeeReport()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
     public function canAdd ()
     {
         foreach ($this->accesses as $access) {

@@ -19,6 +19,13 @@ class BasicHandlingAccess implements HandlingAccessInterface
     /**
      * @return bool
      */
+    public function canSeeReport ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
     public function canEdit ()
     {
         return false;

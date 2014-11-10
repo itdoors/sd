@@ -17,6 +17,13 @@ class SalesAdminHandlingAccess extends BasicHandlingAccess
     /**
      * @return bool
      */
+    public function canSeeReport ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
     public function canAdd ()
     {
         return true;
