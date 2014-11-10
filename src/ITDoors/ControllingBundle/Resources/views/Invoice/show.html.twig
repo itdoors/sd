@@ -1,11 +1,12 @@
 {% trans_default_domain 'ITDoorsControllingBundle' %}
 <script>
     $(document).ready(function() {
-        $('.datesave').editable({
-            type: 'date',
-            name: 'DateEnd',
-            url: '{{ path('sd_common_ajax_invoice_save') }}',
-            emptytext: '{% trans from 'messages' %}Enter value{% endtrans %}',
+        {% if access.canEdit %}
+            $('.datesave').editable({
+                type: 'date',
+                name: 'DateEnd',
+                url: '{{ path('sd_common_ajax_invoice_save') }}',
+                emptytext: '{% trans from 'messages' %}Enter value{% endtrans %}',
                 clear: '{% trans from 'ITDoorsControllingBundle' %}clear{% endtrans %}<i class="icon-remove fa fa-times" style="font-size:12px"></i>',
                 datepicker: {
                     rtl: Metronic.isRTL(),
@@ -17,23 +18,26 @@
                     weekStart: 1
                 }
             });
-            {% if is_granted('ROLE_CONTROLLING') %}
-                $('.status-edit').editable({
-                    url: '{{ path('sd_common_ajax_invoice_save') }}',
-                    source: [
-                        {value: 1, text: '{% trans %}In coutr{% endtrans %}'},
-                        {value: 0, text: 'Empty'}
-                    ]
-                });
-                $('.status-invoice').editable({
-                    url: '{{ path('sd_common_ajax_invoice_save') }}',
-                    source: [
-                        {value: 1, text: '{% trans %}Problem{% endtrans %}'},
-                        {value: 2, text: '{% trans %}Loyal{% endtrans %}'}
-                    ]
-                });
-            {% endif %}
+        {% endif %}
+        {% if access.canChangeStatusCourt %}
+            $('.status-edit').editable({
+                url: '{{ path('sd_common_ajax_invoice_save') }}',
+                source: [
+                    {value: 1, text: '{% trans %}In coutr{% endtrans %}'},
+                    {value: 0, text: 'Empty'}
+                ]
             });
+        {% endif %}
+        {% if access.canChangeStatus %}
+            $('.status-invoice').editable({
+                url: '{{ path('sd_common_ajax_invoice_save') }}',
+                source: [
+                    {value: 1, text: '{% trans %}Problem{% endtrans %}'},
+                    {value: 2, text: '{% trans %}Loyal{% endtrans %}'}
+                ]
+            });
+        {% endif %}
+    });
             
 </script>
 <div class="navigation">
@@ -93,15 +97,11 @@
                 <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
                 {% trans %}Expected date of payment{% endtrans %}
                 </th>
-                <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
-                {% trans %}The actual date of payment{% endtrans %}
-                </th>
-                <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
-                {% trans %}Status{% endtrans %}
-                </th>
-                <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
-                {% trans %}Status invoice{% endtrans %}
-                </th>
+                <th>{% trans %}The actual date of payment{% endtrans %}</th>
+                {% if access.canChangeStatusCourt %}
+                <th>{% trans %}Status{% endtrans %}</th>
+                {% endif %}
+                <th>{% trans %}Status invoice{% endtrans %}</th>
             </tr>
         </thead>
         <tbody role="alert" aria-live="polite" aria-relevant="all">
@@ -150,8 +150,10 @@
                     {% endif %}
                 </td>
                 <td class="">
-                    {% if is_granted('ROLE_CONTROLLING') %}
-                    <a id="managers_list_new" class="fa ajax-form fa-plus" title="{% trans %}Add note{% endtrans %}"
+                    {% if access.canAddResponsible %}
+                    <a id="managers_list_new"
+                       class="fa ajax-form fa-plus"
+                       title="{% trans %}Add note{% endtrans %}"
                        data-toggle="modal"
                        href="#form_modal"
                        data-target_holder="invoiceMessageFormTpl"
@@ -159,8 +161,8 @@
                        data-form_name="invoiceCompanystructureForm"
                        data-post_function="updateList"
                        data-post_target_id="datatable_ajax"
-                       ></a><br>
-                       {% endif %}
+                    ></a><br>
+                    {% endif %}
                     {% set responsibles = entity.responsibles|split(',') %}
                     {% for responsible in responsibles %}
                     <a href="{{ path('it_doors_controlling_invoice_invoice', {invoiceid:entity.id}) }}">
@@ -177,6 +179,7 @@
                     {{ entity.dogovorStartDatetime is empty ? '' :  entity.dogovorStartDatetime|date("d.m.y") }}
                 </td>
                 <td class="">
+                    {% if access.canAddNote %}
                     <a id="managers_list_new" class="fa ajax-form fa-plus" title="{% trans %}Add note{% endtrans %}"
                        data-toggle="modal"
                        href="#form_modal"
@@ -185,21 +188,26 @@
                        data-form_name="invoiceMessageForm"
                        data-post_function="updateList"
                        data-post_target_id="datatable_ajax"
-                       ></a>
+                    ></a>
+                    {% endif %}
                        {{ entity.descriptiondate is empty ? '' : '('~entity.descriptiondate |date("d.m.y")~')'}} {{ entity.description |raw('html') }}
                 </td>
                 <td class="">
+                    {% if access.canEdit %}
                     <a href="#" 
                        class="datesave fa fa-plus" data-pk="{{ entity.id }}"
                        data-original-title="{% trans %}Select data{% endtrans %}"
                        data-date="{{entity.dateEnd|date("d.m.Y")}}"
                        data-format="dd.mm.yyyy"> 
+                    {% endif %}
                         {{ entity.dateEnd is empty ? '' : entity.dateEnd|date("d.m.Y") }}
+                    {% if access.canEdit %}
                     </a>
+                    {% endif %}
                 </td>
                 <td class="">{{ entity.dateFact is empty ? '' : entity.dateFact|date("d.m.Y") }}</td>
+                {% if access.canChangeStatusCourt %}
                 <td class="">
-                    {% if is_granted('ROLE_CONTROLLING') %}
                     <a href="#" 
                        id="court" 
                        class="status-edit" 
@@ -214,16 +222,10 @@
                             Empty
                         {% endif%}
                     </a>
-                    {% else %}
-                        {% if entity.court ==  true %}
-                            {% trans %}In coutr{% endtrans %}
-                        {% else%}
-                            Empty
-                        {% endif%}
-                    {% endif %}
                 </td>
+                {% endif %}
                 <td class="">
-                    {% if is_granted('ROLE_CONTROLLING') %}
+                    {% if access.canChangeStatus %}
                     <a href="#" 
                        id="status" 
                        class="status-invoice" 
@@ -245,8 +247,6 @@
                             {% trans %}Problem{% endtrans %}
                         {% elseif entity.status ==  2 %}
                             {% trans %}Loyal{% endtrans %}
-                        {% else%}
-                            Empty
                         {% endif%}
                     {% endif %}
                 </td>
