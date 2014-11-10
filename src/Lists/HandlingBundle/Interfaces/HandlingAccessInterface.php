@@ -14,6 +14,10 @@ interface HandlingAccessInterface
     /**
      * @return bool
      */
+    public function canSeeReport();
+    /**
+     * @return bool
+     */
     public function canEdit();
     /**
      * @return bool

@@ -405,6 +405,14 @@ class HandlingController extends BaseController
      */
     public function reportSimpleAction()
     {
+        /** @var \Lists\HandlingBundle\Services\HandlingService $service */
+        $service = $this->get('lists_handling.service');
+        $access = $service->checkAccess($this->getUser());
+
+        if (!$access->canSeeReport()) {
+            return $this->render('ListsHandlingBundle:Handling:noAccess.html.twig');
+        }
+
         /** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
         $handlingRepository = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:Handling');
@@ -414,10 +422,8 @@ class HandlingController extends BaseController
 
         $results = $handlingQuery->getResult();
 
-        return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':reportSimple.html.twig', array(
-                'results' => $results,
-                'baseRoutePrefix' => $this->baseRoutePrefix,
-                'baseTemplate' => $this->baseTemplate
+        return $this->render('ListsHandlingBundle:Handling:reportSimple.html.twig', array(
+                'results' => $results
             ));
     }
 
@@ -426,12 +432,18 @@ class HandlingController extends BaseController
      */
     public function reportAdvancedRangeAction()
     {
+        /** @var \Lists\HandlingBundle\Services\HandlingService $service */
+        $service = $this->get('lists_handling.service');
+        $access = $service->checkAccess($this->getUser());
+
+        if (!$access->canSeeReport()) {
+            return $this->render('ListsHandlingBundle:Handling:noAccess.html.twig');
+        }
+
         $form = $this->createForm('handlingReportDateRangeForm');
 
-        return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':reportAdvancedRange.html.twig', array(
-                'form' => $form->createView(),
-                'baseRoutePrefix' => $this->baseRoutePrefix,
-                'baseTemplate' => $this->baseTemplate
+        return $this->render('ListsHandlingBundle:Handling:reportAdvancedRange.html.twig', array(
+                'form' => $form->createView()
             ));
     }
 
@@ -442,12 +454,20 @@ class HandlingController extends BaseController
      */
     public function reportAdvancedDoneAction(Request $request)
     {
+        /** @var \Lists\HandlingBundle\Services\HandlingService $service */
+        $service = $this->get('lists_handling.service');
+        $access = $service->checkAccess($this->getUser());
+
+        if (!$access->canSeeReport()) {
+            return $this->render('ListsHandlingBundle:Handling:noAccess.html.twig');
+        }
+
         $form = $this->createForm('handlingReportDateRangeForm');
 
         $data = $request->request->get($form->getName());
 
         if (!sizeof($data)) {
-            return $this->redirect($this->generateUrl('lists_report_advanced_range'));
+            return $this->redirect($this->generateUrl('lists_handling_report_advanced_range'));
         }
 
         $from = new \DateTime($data['from']);
@@ -467,9 +487,7 @@ class HandlingController extends BaseController
         $types = $this->getDoctrine()->getRepository('ListsHandlingBundle:HandlingMessageType')
             ->getList();
 
-        return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':reportAdvancedDone.html.twig', array(
-                'baseRoutePrefix' => $this->baseRoutePrefix,
-                'baseTemplate' => $this->baseTemplate,
+        return $this->render('ListsHandlingBundle:Handling:reportAdvancedDone.html.twig', array(
                 'results' => $results,
                 'types' => $types,
                 'from' => $from,

@@ -30,8 +30,8 @@ lists_handling_ajax_messages:
     pattern:  /lists/handling/ajax/messages/{handlingId}
     defaults: { _controller: ListsHandlingBundle:Handling:messagesList }
 
-lists_report_advanced_done:
-    pattern:  /lists/report/advanced/done
+lists_handling_report_advanced_done:
+    pattern:  /lists/handling/report/advanced/done
     defaults: { _controller: ListsHandlingBundle:Handling:reportAdvancedDone }
 
 lists_handling_create_step1:
@@ -57,6 +57,10 @@ lists_handling_add_organization_filter:
 lists_handling_report_advanced_range:
     pattern:  /lists/handling/report/advanced/range
     defaults: { _controller: ListsHandlingBundle:Handling:reportAdvancedRange }
+
+lists_handling_report_simple:
+    pattern:  /lists/handling/report/simple
+    defaults: { _controller: ListsHandlingBundle:Handling:reportSimple }
 
 
 handling_service:

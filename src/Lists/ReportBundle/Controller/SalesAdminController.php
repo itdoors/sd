@@ -32,9 +32,7 @@ class SalesAdminController extends BaseFilterController
         /** @var HandlingRepository $handlingRepository */
         $handlingRepository = $this->get('handling.repository');
 
-        $filterForm = $this->processFilters();
-
-        $filters = $this->getFilters();
+        $filterForm = $this->createForm($this->filterFormName);
 
         $filters['progressNOT'] = 100;
         $filters['isClosed'] = 'FALSE';

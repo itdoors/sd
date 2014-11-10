@@ -315,14 +315,13 @@
                     </li>
                 </ul>
             </li>
-            {#
             <li{% if 
                    
                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_advanced_range')
                     or
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_advanced_done')
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_advanced_done')
                     or
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_sales_admin_report_simple')
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_simple')
                     or
                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_handling_status')
                     or
@@ -337,19 +336,19 @@
                 </a>
                 <ul class="sub-menu">
                     <li{% if 
-                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_sales_admin_report_advanced_range')
+                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_advanced_range')
                         or
-                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_sales_admin_report_advanced_done')
+                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_advanced_done')
                         %} class="active"{% endif %}>
-                        <a href="{{ path('lists_sales_admin_report_advanced_range') }}" title="{% trans %}Activity{% endtrans %}">
+                        <a href="{{ path('lists_handling_report_advanced_range') }}" title="{% trans %}Activity{% endtrans %}">
                             <i class="fa fa-comments"></i>
                             {% trans %}Activity{% endtrans %}
                         </a>
                     </li>
                     <li{% if 
-                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_sales_admin_report_simple')
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_simple')
                         %} class="active"{% endif %}>
-                        <a href="{{ path('lists_sales_admin_report_simple') }}" title="{% trans %}All projects{% endtrans %}">
+                        <a href="{{ path('lists_handling_report_simple') }}" title="{% trans %}All projects{% endtrans %}">
                             <i class="fa fa-comments"></i>
                             {% trans %}All projects{% endtrans %}
                         </a>
@@ -379,7 +378,7 @@
                         </a>
                     </li>
                 </ul>
-            </li>#}
+            </li>
         {% endif %}
         {% if is_granted('ROLE_INTRANET') %}
             <li class="">
