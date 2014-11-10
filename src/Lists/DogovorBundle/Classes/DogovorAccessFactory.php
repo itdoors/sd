@@ -26,6 +26,8 @@ class DogovorAccessFactory
                 $access[] = new OperDogovorAccess();
             } elseif ($role == 'sales') {
                 $access[] = new SalesDogovorAccess();
+            } elseif ($role == 'dogovor_viewer') {
+                $access[] = new ViewerDogovorAccess();
             } else {
                 $access[] = new BasicDogovorAccess();
             }
