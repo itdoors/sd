@@ -14,4 +14,11 @@ class ViewerDogovorAccess extends BasicDogovorAccess
     {
         return true;
     }
+    /**
+     * @return bool
+     */
+    public function canSeeList ()
+    {
+        return true;
+    }
 }
