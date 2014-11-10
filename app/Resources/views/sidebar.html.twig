@@ -624,7 +624,7 @@
             </ul>
         </li>
         {% endif %}
-            {% if is_granted('ROLE_CONTROLLING') or is_granted('ROLE_CONTROLLING_OPER') %}
+            {% if is_granted('ROLE_CONTROLLING') or is_granted('ROLE_CONTROLLING_OPER') or is_granted('ROLE_CONTROLLING_VIEWER') %}
                 <li{% if 
                             path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_dogovor_index')
                             or
