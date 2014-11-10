@@ -371,7 +371,7 @@ class HandlingController extends BaseController
     public function closeAction($id)
     {
         if (!$id) {
-            return $this->redirect($this->generateUrl('lists_' . $this->baseRoutePrefix . '_handling_index'));
+            return $this->redirect($this->generateUrl('lists_handling_handling_index'));
         }
 
         $user = $this->getUser();
