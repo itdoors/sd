@@ -4791,7 +4791,7 @@ class AjaxController extends BaseFilterController
         $organizationChildId = $data['organizationChildId'];
 
         $em = $this->getDoctrine()->getManager();
-        
+
         $manager = $em->getRepository('ListsLookupBundle:Lookup')
             ->findOneBy(array(
                 'lukey' => 'manager'

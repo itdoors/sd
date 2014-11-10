@@ -257,7 +257,7 @@ class InvoiceController extends BaseFilterController
         $entitie = $invoice->getInfoForTab($invoiceid, $tab);
 
         $hasCustomer = $invoice->find($invoiceid)->getCustomer() ? true : false;
-        
+
         /** @var OrganizationService $serviceOrganization */
         $serviceOrganization = $this->get('lists_organization.service');
         $accessOrganization = $serviceOrganization->checkAccess($this->getUser());
