@@ -35,7 +35,7 @@ security:
         - { path: ^/lists/salesadmin, role: ROLE_SALESADMIN }
         - { path: ^/lists/salesdispatcher, role: ROLE_SALESDISPATCHER }
         - { path: ^/lists/sales, role: [ROLE_SALES, ROLE_OPER] }
-        - { path: ^/lists/dogovor, roles: 'ROLE_DOGOVORADMIN, ROLE_CONTROLLING, ROLE_CONTROLLING_OPER, ROLE_SALES' }
+        - { path: ^/lists/dogovor, roles: 'ROLE_DOGOVORADMIN, ROLE_DOGOVOR_VIEWER,  ROLE_CONTROLLING, ROLE_CONTROLLING_OPER, ROLE_SALES' }
         - { path: ^/lists/dogovor/made, role: ROLE_DOGOVORADMIN }
         - { path: ^/lists/dogovor/admin, roles: 'ROLE_DOGOVORADMIN, ROLE_CONTROLLING, ROLE_CONTROLLING_OPER' }
         - { path: ^/$, role: IS_AUTHENTICATED_ANONYMOUSLY }
