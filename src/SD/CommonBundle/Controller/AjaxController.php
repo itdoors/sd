@@ -4791,6 +4791,11 @@ class AjaxController extends BaseFilterController
         $organizationChildId = $data['organizationChildId'];
 
         $em = $this->getDoctrine()->getManager();
+        
+        $manager = $em->getRepository('ListsLookupBundle:Lookup')
+            ->findOneBy(array(
+                'lukey' => 'manager'
+            ));
 
         /** @var Connection $connection */
         $connection = $em->getConnection();
@@ -4943,7 +4948,8 @@ class AjaxController extends BaseFilterController
             UPDATE
                 organization_user
             SET
-                organization_id = :organizationId
+                organization_id = :organizationId,
+                role_id = :roleId
             WHERE
                 organization_id = :organizationChildId AND
             NOT EXISTS (
@@ -4957,6 +4963,7 @@ class AjaxController extends BaseFilterController
             )";
             $statement = $connection->prepare($sql);
             $statement->execute(array(
+                ':roleId' => $manager->getId(),
                 ':organizationId' => $organizationId,
                 ':organizationChildId' => $organizationChildId
             ));
