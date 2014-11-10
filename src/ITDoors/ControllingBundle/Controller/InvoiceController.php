@@ -16,6 +16,8 @@ use PHPExcel_Style_Alignment;
 use PHPExcel_Style_Fill;
 use Symfony\Component\HttpFoundation\Request;
 use Lists\ContactBundle\Entity\ModelContactSendEmail;
+use ITDoors\ControllingBundle\Services\ControllingService;
+use Lists\OrganizationBundle\Services\OrganizationService;
 
 /**
  * InvoiceController
@@ -57,8 +59,11 @@ class InvoiceController extends BaseFilterController
         }
 
         $service = $this->container->get($this->service);
+        /** @var ControllingService $serviceControlling */
+        $serviceControlling = $this->get('it_doors_controlling.service');
+        $access = $serviceControlling->checkAccess($this->getUser());
         $companystryctyre = null;
-        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+        if (!$access->canSeeAll()) {
             $companystryctyre = $this->getCompanystructure();
         }
         $tabs = $service->getTabsInvoices($companystryctyre, $filters);
@@ -77,6 +82,7 @@ class InvoiceController extends BaseFilterController
      */
     public function showtabAction ()
     {
+
         $filterNamespace = $this->container->getParameter($this->getNamespace());
 
         $filter = $this->filterFormName;
@@ -94,8 +100,12 @@ class InvoiceController extends BaseFilterController
         }
 
         $service = $this->container->get($this->service);
+
+        /** @var ControllingService $serviceControlling */
+        $serviceControlling = $this->get('it_doors_controlling.service');
+        $access = $serviceControlling->checkAccess($this->getUser());
         $companystryctyre = null;
-        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+        if (!$access->canSeeAll()) {
             $companystryctyre = $this->getCompanystructure();
         }
         $tabs = $service->getTabsInvoices($companystryctyre, $filters);
@@ -126,8 +136,11 @@ class InvoiceController extends BaseFilterController
             $filters['isFired'] = 'No fired';
             $this->setFilters($filterNamespace, $filters);
         }
+        /** @var ControllingService $serviceControlling */
+        $serviceControlling = $this->get('it_doors_controlling.service');
+        $access = $serviceControlling->checkAccess($this->getUser());
         $companystryctyre = null;
-        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+        if (!$access->canSeeAll()) {
             $companystryctyre = $this->getCompanystructure();
         }
 
@@ -166,7 +179,8 @@ class InvoiceController extends BaseFilterController
             return $this->render('ITDoorsControllingBundle:Invoice:show.html.twig', array (
                     'period' => $period,
                     'entities' => $pagination,
-                    'namespasePagin' => $namespasePagin
+                    'namespasePagin' => $namespasePagin,
+                    'access' => $access
             ));
         }
     }
@@ -183,13 +197,15 @@ class InvoiceController extends BaseFilterController
     {
         $session = $this->get('session');
         $session->set('invoiceid', $invoiceid);
-
-        /** @var InvoiceService $service */
-        $service = $this->container->get($this->service);
+        /** @var ControllingService $serviceControlling */
+        $serviceControlling = $this->get('it_doors_controlling.service');
+        $access = $serviceControlling->checkAccess($this->getUser());
         $companystryctyre = null;
-        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+        if (!$access->canSeeAll()) {
             $companystryctyre = $this->getCompanystructure();
         }
+        /** @var InvoiceService $service */
+        $service = $this->container->get($this->service);
         $service->getTabsInvoices($companystryctyre);
 
         $filterNamespace = $this->container->getParameter($this->getNamespace());
@@ -212,7 +228,8 @@ class InvoiceController extends BaseFilterController
                 'tab' => $tab,
                 'invoiceid' => $invoiceid,
                 'invoice' => $invoiceObj,
-                'namespaceTab' => $namespaceTab
+                'namespaceTab' => $namespaceTab,
+                'access' => $access
         ));
     }
     /**
@@ -241,11 +258,21 @@ class InvoiceController extends BaseFilterController
 
         $hasCustomer = $invoice->find($invoiceid)->getCustomer() ? true : false;
 
+        /** @var OrganizationService $serviceOrganization */
+        $serviceOrganization = $this->get('lists_organization.service');
+        $accessOrganization = $serviceOrganization->checkAccess($this->getUser());
+
+        /** @var ControllingService $serviceControlling */
+        $serviceControlling = $this->get('it_doors_controlling.service');
+        $access = $serviceControlling->checkAccess($this->getUser());
+
         return $this->render('ITDoorsControllingBundle:Invoice:table' . $tab . '.html.twig', array (
                 'namespaceTab' => $namespaceTab,
                 'entitie' => $entitie,
                 'hasCustomer' => $hasCustomer,
-                'block' => $tab
+                'block' => $tab,
+                'accessOrganization' => $accessOrganization,
+                'access' => $access
         ));
     }
     /**
@@ -367,8 +394,11 @@ class InvoiceController extends BaseFilterController
 
         /** @var InvoiceRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
+        /** @var ControllingService $serviceControlling */
+        $serviceControlling = $this->get('it_doors_controlling.service');
+        $access = $serviceControlling->checkAccess($this->getUser());
         $companystryctyre = null;
-        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+        if (!$access->canSeeAll()) {
             $companystryctyre = $this->getCompanystructure();
         }
         $result = $invoice->getEntittyCountSum($tab, null, $companystryctyre);
@@ -414,8 +444,11 @@ class InvoiceController extends BaseFilterController
 
         /** @var InvoiceRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
+        /** @var ControllingService $serviceControlling */
+        $serviceControlling = $this->get('it_doors_controlling.service');
+        $access = $serviceControlling->checkAccess($this->getUser());
         $companystryctyre = null;
-        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+        if (!$access->canSeeAll()) {
             $companystryctyre = $this->getCompanystructure();
         }
         $result = $invoice->getEntittyCountSum($tab, null, $companystryctyre);
@@ -667,8 +700,11 @@ class InvoiceController extends BaseFilterController
             $filters['isFired'] = 'No fired';
             $this->setFilters($filterNamespace, $filters);
         }
+        /** @var ControllingService $serviceControlling */
+        $serviceControlling = $this->get('it_doors_controlling.service');
+        $access = $serviceControlling->checkAccess($this->getUser());
         $companystryctyre = null;
-        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+        if (!$access->canSeeAll()) {
             $companystryctyre = $this->getCompanystructure();
         }
 
@@ -706,8 +742,11 @@ class InvoiceController extends BaseFilterController
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
+        /** @var ControllingService $serviceControlling */
+        $serviceControlling = $this->get('it_doors_controlling.service');
+        $access = $serviceControlling->checkAccess($this->getUser());
         $companystryctyre = null;
-        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+        if (!$access->canSeeAll()) {
             $companystryctyre = $this->getCompanystructure();
         }
 
@@ -731,8 +770,11 @@ class InvoiceController extends BaseFilterController
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
 
+        /** @var ControllingService $serviceControlling */
+        $serviceControlling = $this->get('it_doors_controlling.service');
+        $access = $serviceControlling->checkAccess($this->getUser());
         $companystryctyre = null;
-        if ($this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+        if (!$access->canSeeAll()) {
             $companystryctyre = $this->getCompanystructure();
         }
 
