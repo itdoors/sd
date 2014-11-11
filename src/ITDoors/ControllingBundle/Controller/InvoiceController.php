@@ -377,7 +377,7 @@ class InvoiceController extends BaseFilterController
         if (!$accessControlling->canSeeExpectedData()) {
             throw new \Exception('No access', 403);
         }
-        
+
         $namespaceTab = $this->container->getParameter($this->getNamespace()).'expecteddata';
         $tab = $this->getTab($namespaceTab);
         if (!$tab) {
