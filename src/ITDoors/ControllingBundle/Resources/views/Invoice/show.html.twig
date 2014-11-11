@@ -42,7 +42,7 @@
 </script>
 <div class="navigation">
     {{ ajax_paginator_render(
-            entities, namespasePagin, {
+            entities, namespaceInvoice, {
                     'datatable_ajax': 'ITDoorsAjax.updateList'
                 }
             )
@@ -52,11 +52,17 @@
     <table class="table table-striped table-bordered table-hover dataTable" aria-describedby="datatable_ajax_info">
         <thead>
             <tr role="row" class="heading">
-                <th width="5%" class="sorting_desc" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
-                {% trans %}№ and date invoice{% endtrans %}
+                <th>
+                    {% trans %}№ and date invoice{% endtrans %}
+                    {{ ajax_ordering('invoiceId', namespaceInvoice, {
+                        'datatable_ajax_tab': 'ITDoorsAjax.updateList'
+                        }, true) }}
                 </th>
-                <th width="5%" class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">
+                <th>
                     {% trans %}Customer{% endtrans %}
+                    {{ ajax_ordering('customer', namespaceInvoice, {
+                        'datatable_ajax_tab': 'ITDoorsAjax.updateList'
+                        }, true) }}
                 </th>
                 <th width="5%" class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">
                     {% trans %}Performer{% endtrans %}
@@ -82,17 +88,29 @@
                 <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
                 {% trans %}Original ABP/BH{% endtrans %}
                 </th>
-                <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
-                {% trans %}Responsible{% endtrans %}
+                <th>
+                    {% trans %}Responsible{% endtrans %}
+                    {{ ajax_ordering('responsible', namespaceInvoice, {
+                        'datatable_ajax_tab': 'ITDoorsAjax.updateList'
+                        }, true) }}
                 </th>
-                <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
-                {% trans %}Bank{% endtrans %}
+                <th>
+                    {% trans %}Bank{% endtrans %}
+                    {{ ajax_ordering('bank', namespaceInvoice, {
+                        'datatable_ajax_tab': 'ITDoorsAjax.updateList'
+                        }, true) }}
                 </th>
-                <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
-                {% trans %}№ and date contract{% endtrans %}
+                <th>
+                    {% trans %}№ and date contract{% endtrans %}
+                    {{ ajax_ordering('dogovorNumber', namespaceInvoice, {
+                        'datatable_ajax_tab': 'ITDoorsAjax.updateList'
+                        }, true) }}
                 </th>
-                <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
-                {% trans %}Notes{% endtrans %}
+                <th>
+                    {% trans %}Notes{% endtrans %}
+                    {{ ajax_ordering('notes', namespaceInvoice, {
+                        'datatable_ajax_tab': 'ITDoorsAjax.updateList'
+                        }, true) }}
                 </th>
                 <th width="10%" class="sorting" role="columnheader" tabindex="0" aria-controls="datatable_ajax" rowspan="1" colspan="1">
                 {% trans %}Expected date of payment{% endtrans %}
@@ -258,7 +276,7 @@
                 </div>
     <div class="navigation">
         {{ ajax_paginator_render(
-            entities, namespasePagin, {
+            entities, namespaceInvoice, {
                     'datatable_ajax': 'ITDoorsAjax.updateList'
                 }
             )

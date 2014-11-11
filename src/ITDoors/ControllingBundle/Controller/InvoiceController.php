@@ -161,12 +161,14 @@ class InvoiceController extends BaseFilterController
                     'filters' => $filters
             ));
         } else {
-            $result = $invoice->getEntittyCountSum($period, $filters, $companystryctyre);
+            $baseFilters = $this->get('it_doors_ajax.base_filter_service');
+            $orders = $baseFilters->getOrdering($filterNamespace);
+
+            $result = $invoice->getEntittyCountSum($period, $filters, $companystryctyre, $orders);
             $entities = $result['entities'];
             $count = $result['count'];
 
-            $namespasePagin = $filterNamespace;
-            $page = $this->getPaginator($namespasePagin);
+            $page = $this->getPaginator($filterNamespace);
             if (!$page) {
                 $page = 1;
             }
@@ -179,7 +181,7 @@ class InvoiceController extends BaseFilterController
             return $this->render('ITDoorsControllingBundle:Invoice:show.html.twig', array (
                     'period' => $period,
                     'entities' => $pagination,
-                    'namespasePagin' => $namespasePagin,
+                    'namespaceInvoice' => $filterNamespace,
                     'access' => $access
             ));
         }
