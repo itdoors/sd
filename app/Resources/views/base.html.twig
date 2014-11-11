@@ -269,26 +269,26 @@
                 });
 
                 if (!sessionStorage.getItem("showed")) {
-					jQuery.ajax({
-						dataType: "json",
-						type: "GET",
-						url: "{{ path('list_article_blog_last') }}",
-						success: function(article) {
-							if (article) {
-								jQuery('#modtitle').html(article.title);
-								jQuery('#moreInfoTpl').html(article.text);
-	                            jQuery('#form_modal_1').modal('show');
-	                            jQuery("#showed").click(function() {
-	            					sessionStorage.setItem("showed", true);
-	            					jQuery.ajax({
-		            					type: "POST",
-	            						url: "{{ path('list_article_blog') }}" + "/viewed/" + article.id
-	            					});
-	            				});
-							}
-						}
-					});
-				}
+                    jQuery.ajax({
+                        dataType: "json",
+                        type: "GET",
+                        url: "{{ path('list_article_blog_last') }}",
+                        success: function(article) {
+                            if (article) {
+                                jQuery('#modtitle').html(article.title);
+                                jQuery('#moreInfoTpl').html(article.text);
+                                jQuery('#form_modal_1').modal('show');
+                                jQuery("#showed").click(function() {
+                                    sessionStorage.setItem("showed", true);
+                                    jQuery.ajax({
+                                        type: "POST",
+                                        url: "{{ path('list_article_blog') }}" + "/viewed/" + article.id
+                                    });
+                                });
+                            }
+                        }
+                    });
+                }
 
                 //console.log('ITDoorsSip', ITDoorsSip);
                 //Index.initJQVMAP(); // init index page's custom scripts
