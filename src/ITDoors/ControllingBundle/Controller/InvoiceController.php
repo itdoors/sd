@@ -858,8 +858,8 @@ class InvoiceController extends BaseFilterController
         /** @var ControllingService $serviceControlling */
         $serviceControlling = $this->get('it_doors_controlling.service');
         $access = $serviceControlling->checkAccess($this->getUser());
-        if (!$access->canSeeAll()) {
-            throw new Exception('No access', 403);
+        if (!$access->canSeeCustomersWithoutContacts()) {
+            throw new \Exception('No access', 403);
         }
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
