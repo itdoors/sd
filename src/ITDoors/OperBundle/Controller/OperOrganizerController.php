@@ -208,8 +208,12 @@ class OperOrganizerController extends Controller
     {
         $idOrganizer = $request->request->get('id');
 
-        $start = $request->request->get('start');
-        $end = $request->request->get('end');
+        $startSended = $request->request->get('start');
+        $endSended = $request->request->get('end');
+
+        $start = explode('(', $startSended)[0];
+        $end = explode('(', $endSended)[0];
+
 
         $organizerRepo = $this->getDoctrine()
             ->getRepository('ITDoorsOperBundle:OperOrganizer');
