@@ -21,4 +21,11 @@ class ControllingOperAccess extends BasicControllingAccess
     {
         return true;
     }
+    /**
+     * @return bool
+     */
+    public function canSeeCustomersWithoutContacts ()
+    {
+        return true;
+    }
 }

@@ -49,4 +49,18 @@ class ControllingAccess extends BasicControllingAccess
     {
         return true;
     }
+    /**
+     * @return bool
+     */
+    public function canSeeExpectedData ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeExpectedPay ()
+    {
+        return true;
+    }
 }

@@ -59,14 +59,7 @@
                             id: item.dogovorId,
                         }) }}"
                     >
-                        {{  include(
-                            'ListsDogovorBundle:Dogovor:elementDanger.html.twig',
-                                {
-                                    item: item,
-                                    baseRoutePrefix: baseRoutePrefix,
-                                }
-                            )
-                        }}
+                        {{  include( 'ListsDogovorBundle:Dogovor:elementDanger.html.twig') }}
                     </tr>
                 {% endfor %}
                 </tbody>

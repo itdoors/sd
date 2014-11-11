@@ -254,6 +254,46 @@ class InvoiceRepository extends EntityRepository
                         $sql->andWhere("cs_fil.id in (:companystructures)");
                         $sql->setParameter(':companystructures', $arr);
                         break;
+                    case 'withoutResponsible':
+                        if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        if (isset($filters['companystructure']) && !empty($filters['companystructure'])) {
+                            $sql->andWhere("ics_fil.companystructureId is NULL");
+                        } else {
+                            $sql->leftJoin('i.invoicecompanystructure', 'ics_1');
+                            $sql->andWhere("ics_1.companystructureId is NULL");
+                        }
+                        break;
+                    case '3daysWithoutNote':
+                        $date = new \DateTime();
+                        $sql->andWhere('h.createdate < :dateMesage or h.createdate is null')
+                            ->setParameter(':dateMesage', $date->modify('-3 days'));
+                        break;
+                    case 'withoutContacts':
+                        $sql
+                            ->andWhere(
+                                'customer.id not in (
+                                    SELECT mco.modelId
+                                    FROM  ListsContactBundle:ModelContact mco
+                                    WHERE mco.modelName = :modelNameOrganization
+                                    AND mco.modelId is not null
+                                )'
+                            )
+                            ->andWhere(
+                                'customer.id not in (
+                                    SELECT do.id
+                                    FROM  ListsContactBundle:ModelContact mcd
+                                    LEFT JOIN  Lists\DepartmentBundle\Entity\Departments departments_contact 
+                                        WITH mcd.modelName = :modelNameDepartments
+                                        AND mcd.modelId = departments_contact.id
+                                    LEFT JOIN departments_contact.organization as do
+                                    WHERE do.id is not null
+                                )'
+                            )
+                            ->setParameter(':modelNameOrganization', 'organization')
+                            ->setParameter(':modelNameDepartments', 'departments');
+                        break;
                     case 'daterange':
                         $daterange = explode('-', $value);
                         $from = new \DateTime($daterange[0]);

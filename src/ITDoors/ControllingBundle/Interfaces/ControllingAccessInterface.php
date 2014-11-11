@@ -31,4 +31,16 @@ interface ControllingAccessInterface
      * @return bool
      */
     public function canChangeStatus();
+    /**
+     * @return bool
+     */
+    public function canSeeExpectedData();
+    /**
+     * @return bool
+     */
+    public function canSeeExpectedPay();
+    /**
+     * @return bool
+     */
+    public function canSeeCustomersWithoutContacts();
 }

@@ -95,4 +95,43 @@ class ComparatorControllingAccess extends BasicControllingAccess
 
         return false;
     }
+    /**
+     * @return bool
+     */
+    public function canSeeExpectedData ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canSeeExpectedData()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeExpectedPay ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canSeeExpectedPay()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeCustomersWithoutContacts ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canSeeCustomersWithoutContacts()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
