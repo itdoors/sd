@@ -1,40 +1,6 @@
 {% trans_default_domain 'SDDashboardBundle' %}
 
-{% set masterRole = 'Sales' %}
-{% set isCrm = false %}
-{% set debitors = false %}
-
-{% if app.user.hasRole('ROLE_SALES') %}
-    {% set isCrm = true %}
-{%  endif %}
-
-{% if app.user.hasRole('ROLE_CONTROLLING') %}
-    {% set debitors = true %}
-{%  endif %}
-
-{% if app.user.hasRole('ROLE_SALESDISPATCHER') %}
-    {% set masterRole = 'SalesDispatcher' %}
-    {% set isCrm = true %}
-{%  endif %}
-
-{% if app.user.hasRole('ROLE_SALESADMIN') %}
-    {% set masterRole = 'SalesAdmin' %}
-    {% set isCrm = true %}
-{%  endif %}
-
-{% set masterRoleRoute = masterRole|lower %}
-
-{% if app.user.hasRole('ROLE_CRM') %}
-    <a href="{{ path('lists_organization_index') }}">
-        {% trans %}Organizations list{% endtrans %}
-    </a>
-{% endif %}
-
-{% if app.user.hasGroup('admin') %}
-    user has group admin
-{% endif %}
-
-{% if isCrm %}
+{% if access.canSeeMyActions %}
     <div class="portlet box blue">
         <div class="portlet-title">
             <div class="caption"><i class="fa fa-globe"></i> {% trans %}My Actions{% endtrans %}</div>
@@ -75,7 +41,6 @@
             </div>
         </div>
     </div>
-
     <script type="text/javascript">
         $(document).ready(function() {
             $.fn.modal.Constructor.prototype.enforceFocus = function() {
@@ -83,12 +48,12 @@
         });
     </script>
 {%  endif %}
-{% if app.user.hasRole('ROLE_DOGOVORADMIN') or app.user.hasRole('ROLE_SALES') %}
+{% if access.canSeeDogovorListDanger %}
     <div id="datatable_ajax_dogovor" data-url="{{ url('lists_dogovor_dogovor_index_danger') }}">
         {{ render(controller('ListsDogovorBundle:Dogovor:listDanger')) }}
     </div>
 {%  endif %}
-{% if app.user.hasRole('ROLE_CONTROLLING_OPER')  %}
+{% if access.canSeeCustomersWithoutContacts %}
     <div class="portlet box blue">
         <div class="portlet-title">
             <div class="caption"><i class="fa fa-globe"></i> {% trans %}List of customers without contacts{% endtrans %}</div>
@@ -101,7 +66,7 @@
         </div>
     </div>
 {% endif %}
-{% if debitors %}
+{% if access.canSeeInvoiceNeedStitch %}
     <div class="portlet box blue">
         <div class="portlet-title">
             <div class="caption"><i class="fa fa-globe"></i> {% trans %}Invoice need stitch{% endtrans %}</div>
@@ -113,6 +78,8 @@
             {{ render(controller('ITDoorsControllingBundle:Invoice:Expecteddata')) }}
         </div>
     </div>
+{% endif %}
+{% if access.canSeeInvoiceExpectedPayments %}
     <div class="portlet box blue">
         <div class="portlet-title">
             <div class="caption"><i class="fa fa-globe"></i> {% trans %}List expected payments{% endtrans %}</div>
@@ -125,14 +92,15 @@
         </div>
     </div>
 {% endif %}
- 
-<div>
-    <div class="row" id="calendarBlock" data-url="{{ path('sd_dashboard_calendar_task') }}">
-            {{ render(controller('SDDashboardBundle:Default:generateTasksCalendar')) }}
+{% if access.canSeeTasksCalendar %}
+    <div>
+        <div class="row" id="calendarBlock" data-url="{{ path('sd_dashboard_calendar_task') }}">
+                {{ render(controller('SDDashboardBundle:Default:generateTasksCalendar')) }}
+        </div>
     </div>
-</div>
-<script>
-    jQuery(document).ready(function() {
-        Tasks.initDashboardWidget();
-    });
-</script>
+    <script>
+        jQuery(document).ready(function() {
+            Tasks.initDashboardWidget();
+        });
+    </script>
+{% endif %}

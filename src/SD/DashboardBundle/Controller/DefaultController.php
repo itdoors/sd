@@ -16,7 +16,12 @@ class DefaultController extends Controller
      */
     public function indexAction ()
     {
-        return $this->render('SDDashboardBundle:Default:index.html.twig');
+        $service = $this->get('sd_dashboard.service');
+        $access = $service->checkAccess($this->getUser());
+
+        return $this->render('SDDashboardBundle:Default:index.html.twig', array(
+            'access' => $access
+        ));
     }
     /**
      * generateTasksCalendarAction
