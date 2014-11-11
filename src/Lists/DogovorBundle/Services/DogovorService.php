@@ -108,8 +108,14 @@ class DogovorService
                 }
             }
         }
+        if ($user->hasRole('ROLE_CONTROLLING')) {
+            $role[] = 'controlling';
+        }
         if ($user->hasRole('ROLE_DOGOVORADMIN')) {
             $role[] = 'admin';
+        }
+        if ($user->hasRole('ROLE_SALES')) {
+            $role[] = 'sales';
         }
         if ($user->hasRole('ROLE_OPER')) {
             $role[] = 'oper';
