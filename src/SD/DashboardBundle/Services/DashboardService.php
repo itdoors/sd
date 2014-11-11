@@ -28,8 +28,7 @@ class DashboardService
     /**
      * checkAccess
      * 
-     * @param User         $user
-     * @param Organization $organization
+     * @param User $user
      * 
      * @return mixed[]
      */
