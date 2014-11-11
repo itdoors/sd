@@ -286,6 +286,8 @@ class DepartmentsRepository extends EntityRepository
     {
         $sql = $this->createQueryBuilder('d');
         $sql->leftJoin('d.organization', 'o');
+        $sql->leftJoin('d.status', 's');
+
         if ($allowedDepartments !== false) {
             if (count($allowedDepartments)>0) {
                 $sql->andWhere('d.id in (:idsDepartments)');
@@ -294,6 +296,8 @@ class DepartmentsRepository extends EntityRepository
         } else {
             $sql->andWhere('d.id < 0');
         }
+        $sql->andWhere('s.slug = :active');
+        $sql->setParameter(':active', 'active');
 
         $sql->orderBy('o.name', 'ASC');
 
