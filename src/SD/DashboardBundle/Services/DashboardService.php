@@ -36,20 +36,11 @@ class DashboardService
     {
         $role = array();
         $role[] = 'base';
-        if ($user->hasRole('ROLE_CONTROLLING_OPER')) {
-            $role[] = 'controlling_oper';
-        }
-        if ($user->hasRole('ROLE_CONTROLLING')) {
-            $role[] = 'controlling';
-        }
         if ($user->hasRole('ROLE_SALES')) {
             $role[] = 'sales';
         }
         if ($user->hasRole('ROLE_SALESADMIN')) {
             $role[] = 'sales_admin';
-        }
-        if ($user->hasRole('ROLE_DOGOVORADMIN')) {
-            $role[] = 'dogovor_admin';
         }
 
         return DashboardAccessFactory::createAccess($role);

@@ -342,6 +342,13 @@ class InvoiceController extends BaseFilterController
      */
     public function expectedpayAction ()
     {
+        /** @var ControllingService $serviceControlling */
+        $serviceControlling = $this->get('it_doors_controlling.service');
+        $accessControlling = $serviceControlling->checkAccess($this->getUser());
+        if (!$accessControlling->canSeeExpectedPay()) {
+            throw new \Exception('No access', 403);
+        }
+
         $namespaceTab = $this->container->getParameter($this->getNamespace()).'expectedpay';
         $tab = $this->getTab($namespaceTab);
         if (!$tab) {
@@ -364,6 +371,13 @@ class InvoiceController extends BaseFilterController
      */
     public function expecteddataAction ()
     {
+        /** @var ControllingService $serviceControlling */
+        $serviceControlling = $this->get('it_doors_controlling.service');
+        $accessControlling = $serviceControlling->checkAccess($this->getUser());
+        if (!$accessControlling->canSeeExpectedData()) {
+            throw new \Exception('No access', 403);
+        }
+        
         $namespaceTab = $this->container->getParameter($this->getNamespace()).'expecteddata';
         $tab = $this->getTab($namespaceTab);
         if (!$tab) {
@@ -841,7 +855,10 @@ class InvoiceController extends BaseFilterController
      */
     public function customersWithoutContactsAction  ()
     {
-        if (!$this->getUser()->hasRole('ROLE_CONTROLLING_OPER')) {
+        /** @var ControllingService $serviceControlling */
+        $serviceControlling = $this->get('it_doors_controlling.service');
+        $access = $serviceControlling->checkAccess($this->getUser());
+        if (!$access->canSeeAll()) {
             throw new Exception('No access', 403);
         }
         /** @var EntityManager $em */

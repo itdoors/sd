@@ -51,4 +51,25 @@ class BasicControllingAccess implements ControllingAccessInterface
     {
         return false;
     }
+    /**
+     * @return bool
+     */
+    public function canSeeExpectedData ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeExpectedPay ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canSeeCustomersWithoutContacts ()
+    {
+        return false;
+    }
 }
