@@ -76,6 +76,26 @@
                             $('.textear-edit').text($('.textear-edit').code());
                         }
                     });
+                    $('.textear-edit').summernote({
+                        'onImageUpload': function(files, editor, welEditable) {
+                            sendFile(files[0],editor,welEditable);
+                        }
+                    });
+                    function sendFile(file,editor,welEditable) {
+                        data = new FormData();
+                        data.append("file", file);
+                        $.ajax({
+                            data: data,
+                            type: "POST",
+                            url: "{{ path('list_article_blog_upload') }}",
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            success: function(url) {
+                                    editor.insertImage(welEditable, url);
+                            }
+                        });
+                    }
                 });
             </script>
             {% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
@@ -99,7 +119,7 @@
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Autor{% endtrans%}</label>
                     <div class="col-md-9">
-                        {{ form_widget(form.userId, {'attr' : {'id' : 'select2','class' : 'form-control', 'placeholder': "Autor"| trans}}) }}
+                        {{ form_widget(form.userId, {'attr' : {'class' : 'form-control', 'disabled':'disabled', 'placeholder': app.user | trans}}) }}
                         {% if form.userId.vars.errors|length %}{{ form_errors(form.userId) }}{% endif %}
                     </div>
                 </div>
@@ -138,6 +158,15 @@
                         {{ form_widget(form.roles, {'attr' : {'id' : 'select2','class' : 'form-control select2', 'placeholder': "Roles"| trans}}) }}
                         {% if form.textShort.vars.errors|length %}{{ form_errors(form.textShort) }}{% endif %}
                     </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group">
+				    <label class="required control-label col-md-3">{% trans%}Voteable{%endtrans%}</label>
+				    <div class="col-md-9">
+				        {{ form_widget(form.vote, {'attr' : {'id' :'select2','class' : 'form-control', 'placeholder': "Roles"|trans}}) }}
+				        {% if form.textShort.vars.errors|length %}{{form_errors(form.textShort) }}{% endif %}
+				    </div>
                 </div>
             </div>
             <div class="form-body">

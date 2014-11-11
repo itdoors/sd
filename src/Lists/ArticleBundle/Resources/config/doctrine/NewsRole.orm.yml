@@ -7,6 +7,10 @@ Lists\ArticleBundle\Entity\NewsRole:
             id: true
             generator:
                 strategy: AUTO
+        vote:
+            type: boolean
+            nullable: true
+            column: vote
             
     manyToOne:
         news:

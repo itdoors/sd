@@ -135,7 +135,22 @@
 				</div>
 			</div>
 			<!-- END PAGE HEADER-->
-			
+			{% block modal %}
+				<div id="form_modal_1" class="modal fade" role="basic"aria-hidden="true">
+					<div class="modal-dialog modal-lg" style="">
+						<div class="modal-content">
+							<div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+								<h4 id="modtitle" class="modal-title">title</h4>
+							</div>
+							<div class="modal-body">
+								<div id="moreInfoTpl">test</div>
+								<br> <a id="showed" class="btn btn-cl green"data-dismiss="modal" aria-hidden="true">{% trans %}Ok{%endtrans %}</a> <br>
+							</div>
+						</div>
+					</div>
+				</div>
+            {% endblock %}
 			{% block body %}{% endblock %}
         </div>
 		</div>
@@ -146,7 +161,7 @@
 	<!-- BEGIN FOOTER -->
 	<div class="page-footer">
 		<div class="page-footer-inner">
-			2013 &copy; ITDoors <a href="http://itdoors.com.ua" target="_blank">www.itdoors.com.ua</a>.
+			{{ "now"|date("Y") }} &copy; ITDoors <a href="http://itdoors.com.ua" target="_blank">www.itdoors.com.ua</a>.
 		</div>
 		<div class="page-footer-tools">
 			<span class="go-top">
@@ -252,6 +267,28 @@
                         }
                     }
                 });
+
+                if (!sessionStorage.getItem("showed")) {
+					jQuery.ajax({
+						dataType: "json",
+						type: "GET",
+						url: "{{ path('list_article_blog_last') }}",
+						success: function(article) {
+							if (article) {
+								jQuery('#modtitle').html(article.title);
+								jQuery('#moreInfoTpl').html(article.text);
+	                            jQuery('#form_modal_1').modal('show');
+	                            jQuery("#showed").click(function() {
+	            					sessionStorage.setItem("showed", true);
+	            					jQuery.ajax({
+		            					type: "POST",
+	            						url: "{{ path('list_article_blog') }}" + "/viewed/" + article.id
+	            					});
+	            				});
+							}
+						}
+					});
+				}
 
                 //console.log('ITDoorsSip', ITDoorsSip);
                 //Index.initJQVMAP(); // init index page's custom scripts

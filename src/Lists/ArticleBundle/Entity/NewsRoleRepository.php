@@ -1,5 +1,4 @@
 <?php
-
 namespace Lists\ArticleBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;

@@ -1,5 +1,4 @@
 <?php
-
 namespace Lists\ArticleBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -9,31 +8,35 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class NewsFosUser
 {
+
     /**
+     *
      * @var integer
      */
     private $id;
 
     /**
+     *
      * @var \DateTime
      */
     private $viewed;
 
     /**
+     *
      * @var \Lists\ArticleBundle\Entity\Article
      */
     private $news;
 
     /**
+     *
      * @var \SD\UserBundle\Entity\User
      */
     private $user;
 
-
     /**
      * Get id
-     *
-     * @return integer 
+     * 
+     * @return integer
      */
     public function getId()
     {
@@ -42,21 +45,22 @@ class NewsFosUser
 
     /**
      * Set viewed
-     *
-     * @param \DateTime $viewed
+     * 
+     * @param \DateTime $viewed    
+     *         
      * @return NewsFosUser
      */
     public function setViewed($viewed)
     {
         $this->viewed = $viewed;
-    
+        
         return $this;
     }
 
     /**
      * Get viewed
-     *
-     * @return \DateTime 
+     * 
+     * @return \DateTime
      */
     public function getViewed()
     {
@@ -65,21 +69,22 @@ class NewsFosUser
 
     /**
      * Set news
-     *
-     * @param \Lists\ArticleBundle\Entity\Article $news
+     * 
+     * @param \Lists\ArticleBundle\Entity\Article $news  
+     *           
      * @return NewsFosUser
      */
     public function setNews(\Lists\ArticleBundle\Entity\Article $news = null)
     {
         $this->news = $news;
-    
+        
         return $this;
     }
 
     /**
      * Get news
-     *
-     * @return \Lists\ArticleBundle\Entity\Article 
+     * 
+     * @return \Lists\ArticleBundle\Entity\Article
      */
     public function getNews()
     {
@@ -88,21 +93,22 @@ class NewsFosUser
 
     /**
      * Set user
+     * 
+     * @param \SD\UserBundle\Entity\User $user            
      *
-     * @param \SD\UserBundle\Entity\User $user
      * @return NewsFosUser
      */
     public function setUser(\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-    
+        
         return $this;
     }
 
     /**
      * Get user
-     *
-     * @return \SD\UserBundle\Entity\User 
+     * 
+     * @return \SD\UserBundle\Entity\User
      */
     public function getUser()
     {

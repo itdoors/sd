@@ -3,6 +3,7 @@
 namespace Lists\ArticleBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use SD\UserBundle\Entity\Group;
 
 /**
  * NewsRole
@@ -38,7 +39,8 @@ class NewsRole
     /**
      * Set news
      *
-     * @param integer $newsId
+     * @param Article $news
+     * 
      * @return NewsRole
      */
     public function setNews($news)
@@ -61,7 +63,8 @@ class NewsRole
     /**
      * Set role
      *
-     * @param integer $role
+     * @param array $roles
+     * 
      * @return NewsRole
      */
     public function setRoles($roles)
@@ -79,5 +82,34 @@ class NewsRole
     public function getRoles()
     {
         return $this->roles;
+    }
+    
+    /**
+     * @var boolean
+     */
+    private $vote;
+    
+    /**
+     * Set vote
+     *
+     * @param boolean $vote
+     * 
+     * @return NewsRole
+     */
+    public function setVote($vote)
+    {
+        $this->vote = $vote;
+    
+        return $this;
+    }
+    
+    /**
+     * Get vote
+     *
+     * @return boolean
+     */
+    public function getVote()
+    {
+        return $this->vote;
     }
 }

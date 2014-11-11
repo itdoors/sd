@@ -51,3 +51,11 @@ list_article_blog_add:
 list_article_blog_viewed:
     pattern:  /dashboard/blog/viewed/{id}
     defaults: { _controller: ListsArticleBundle:ProdBlog:setViewed }
+    
+list_article_blog_upload:
+    pattern:  /dashboard/blog/upload
+    defaults: { _controller: ListsArticleBundle:ProdBlog:upload }
+    
+list_article_blog_last:
+    pattern:  /dashboard/blog/last
+    defaults: { _controller: ListsArticleBundle:ProdBlog:getLastNew }

@@ -1190,3 +1190,6 @@ ALTER TABLE invoice ADD update_datetime TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT N
 
 ALTER TABLE oper_organizer ADD isVisited BOOLEAN DEFAULT 'false' NOT NULL;
 -- prod -----
+
+ALTER TABLE news_role ADD vote BOOLEAN DEFAULT NULL;
+-- prod -----

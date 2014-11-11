@@ -1,5 +1,4 @@
 <?php
-
 namespace Lists\ArticleBundle\Form;
 
 use Symfony\Component\DependencyInjection\Container;
@@ -12,10 +11,11 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  */
 class ArticleBlogFormType extends AbstractType
 {
+
     protected $container;
 
     /**
-     * @param Container $container
+     * @param Container $container            
      */
     public function __construct(Container $container)
     {
@@ -23,47 +23,54 @@ class ArticleBlogFormType extends AbstractType
     }
 
     /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
+     * @param FormBuilderInterface $builder            
+     * @param array                $options            
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $router = $this->container->get('router');
-        $builder
-            ->add('userId', 'text', array(
-                'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field control-label col-md-3',
-                    'data-url' => $router->generate('sd_common_ajax_user_fio'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_id'),
-                    'data-params' => json_encode(array(
-                        'minimumInputLength' => 0,
-                        'allowClear' => true
-                    )),
-                    'placeholder' => 'Enter fio'
-                )
-            ))
+        $builder->add('userId', 'text', array(
+            'attr' => array(
+                'class' => 'itdoors-select2 can-be-reseted submit-field control-label col-md-3',
+                'data-url' => $router->generate('sd_common_ajax_user_fio'),
+                'data-url-by-id' => $router->generate('sd_common_ajax_user_by_id'),
+                'data-params' => json_encode(array(
+                    'minimumInputLength' => 0,
+                    'allowClear' => true
+                )),
+                'placeholder' => 'Enter fio'
+            )
+        ))
             ->add('datePublick', 'text', array())
             ->add('title', 'text', array())
-            ->add('textShort', 'textarea', array( 'required' => true ))
+            ->add('vote', 'checkbox', array(
+            'required' => false,
+            'mapped' => false
+        ))
+            ->add('textShort', 'textarea', array(
+            'required' => true
+        ))
             ->add('roles', 'entity', array(
-            		'class'=>'SD\UserBundle\Entity\Group',
-            		'property'=>'name',
-            		'empty_value' => '',
-            		'mapped' => false,
-            		'multiple' => true,
-            		'required' => true
-            ))
+            'class' => 'SD\UserBundle\Entity\Group',
+            'property' => 'name',
+            'empty_value' => '',
+            'mapped' => false,
+            'multiple' => true,
+            'required' => false
+        ))
             ->add('text', 'textarea', array());
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * @param OptionsResolverInterface $resolver            
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'Lists\ArticleBundle\Entity\Article',
-            'validation_groups' => array('new'),
+            'validation_groups' => array(
+                'new'
+            ),
             'translation_domain' => 'ListsArticleBundle'
         ));
     }
@@ -75,5 +82,4 @@ class ArticleBlogFormType extends AbstractType
     {
         return 'articleBlogForm';
     }
-    
 }
