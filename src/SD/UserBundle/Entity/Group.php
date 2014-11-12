@@ -35,17 +35,18 @@ class Group extends BaseGroup
     {
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Add users
      *
      * @param \SD\UserBundle\Entity\User $users
+     * 
      * @return Group
      */
     public function addUser(\SD\UserBundle\Entity\User $users)
     {
         $this->users[] = $users;
-    
+
         return $this;
     }
 
