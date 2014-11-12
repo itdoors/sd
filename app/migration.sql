@@ -1133,7 +1133,6 @@ ALTER TABLE comment_organizer ADD CONSTRAINT FK_353082697323D87A FOREIGN KEY (op
 CREATE INDEX IDX_353082697323D87A ON comment_organizer (operorganizer_id);
 
 -- prod ++++
--- senj ----
 
 ALTER TABLE stuff_departments ADD id BIGSERIAL NOT NULL;
 ALTER TABLE stuff_departments DROP CONSTRAINT stuff_departments_pkey;
@@ -1162,7 +1161,7 @@ ALTER TABLE news_fos_user ADD CONSTRAINT FK_DC44C728B5A459A0 FOREIGN KEY (news_i
 ALTER TABLE news_fos_user ADD CONSTRAINT FK_DC44C728D60322AC FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE news_role ADD CONSTRAINT FK_82B47CE1B5A459A0 FOREIGN KEY (news_id) REFERENCES article (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE news_role ADD CONSTRAINT FK_82B47CE1D60322AC FOREIGN KEY (role_id) REFERENCES fos_group (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
--- prod ---------
+-- prod +++++++++
 ALTER TABLE mpk ALTER self_organization_id TYPE BIGINT;
 ALTER TABLE mpk ALTER name SET NOT NULL;
 -- prod ++++++
@@ -1192,4 +1191,4 @@ ALTER TABLE oper_organizer ADD isVisited BOOLEAN DEFAULT 'false' NOT NULL;
 -- prod ++++
 
 ALTER TABLE news_role ADD vote BOOLEAN DEFAULT NULL;
--- prod -----
+-- prod ++++++
