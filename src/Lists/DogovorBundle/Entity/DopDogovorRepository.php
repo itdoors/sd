@@ -144,13 +144,14 @@ class DopDogovorRepository extends EntityRepository
             ->addSelect(
                 '(
                 SELECT
-                    COUNT(ddd.id) as countId
+                    COUNT(ddd.id)
                 FROM
                     ListsDogovorBundle:DogovorDepartment ddd
                 WHERE
                     ddd.dopDogovorId = dd.id
                 ) as departmentCount'
-            );
+            )
+            ;
     }
     /**
      * Processes sql query. adding select
