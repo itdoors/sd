@@ -388,13 +388,7 @@ class ProdBlogController extends BaseController
         if ($form->isValid()) {
             try {
                 $party = $form->getData();
-
-                if ($this->getUser()->hasRole('ROLE_ARTICLEADMIN')) {
-                    $user = $em->getRepository('SDUserBundle:User')->find($party->getUserId());
-                    $party->setUser($user);
-                } else {
-                    $party->setUser($this->getUser());
-                }
+                $party->setUser($this->getUser());
                 $party->setType($this->articleType);
                 if (method_exists($party, 'getDatePublick') && $party->getDatePublick() != '') {
                     $party->setDatePublick(new \DateTime($party->getDatePublick()));

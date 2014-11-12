@@ -97,28 +97,26 @@ class UserNewStuffForm extends AbstractType
 
         $builder
             ->add('create', 'submit');
-        
+
         $builder->addEventListener(
-        		FormEvents::POST_SUBMIT,
-        		function (FormEvent $event) use ($container) {
-        			/** @var User $newUser */
-        			$newUser = $event->getData();
-        			$form = $event->getForm();
-        			$translator = $container->get('translator');
-        			$em = $container->get('doctrine')->getManager();
-        			$existingUser = $em->getRepository('SDUserBundle:User')
-        							->findOneBy(array('email' => $newUser->getEmail()));
-        			if ($existingUser) {
-        				$form->get('email')->addError(new FormError($existingUser));
-        			}
-        			$existingUser = $em->getRepository('SDUserBundle:User')
-        			->findOneBy(array('username' => $newUser->getUserName()));
-        			if ($existingUser) {
-        				$form->get('username')->addError(new FormError($existingUser));
-        			}
-        		}
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) use ($container) {
+                /** @var User $newUser */
+                $newUser = $event->getData();
+                $form = $event->getForm();
+                $em = $container->get('doctrine')->getManager();
+                $existingUser = $em->getRepository('SDUserBundle:User')
+                    ->findOneBy(array('email' => $newUser->getEmail()));
+                if ($existingUser) {
+                    $form->get('email')->addError(new FormError($existingUser));
+                }
+                $existingUser = $em->getRepository('SDUserBundle:User')
+                    ->findOneBy(array('username' => $newUser->getUserName()));
+                if ($existingUser) {
+                        $form->get('username')->addError(new FormError($existingUser));
+                }
+            }
         );
-        
     }
 
     /**
