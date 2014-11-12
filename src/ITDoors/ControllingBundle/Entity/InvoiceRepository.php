@@ -2071,7 +2071,7 @@ class InvoiceRepository extends EntityRepository
      * 
      * @return mixed[]
      */
-    public function getEntittyCountSum ($period, $filters, $companystryctyre, $orders)
+    public function getEntittyCountSum ($period, $filters, $companystryctyre, $orders = null)
     {
         $result = array ();
         switch ($period) {
