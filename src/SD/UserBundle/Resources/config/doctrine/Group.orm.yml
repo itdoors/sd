@@ -6,3 +6,7 @@ SD\UserBundle\Entity\Group:
             type: integer
             generator:
                 strategy: IDENTITY
+    manyToMany:
+        users:
+            targetEntity: User
+            mappedBy: groups

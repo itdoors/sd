@@ -49,6 +49,7 @@ SD\UserBundle\Entity\User:
     manyToMany:
         groups:
             targetEntity: Group
+            inversedBy: users
             joinTable:
                 name: fos_user_group
                 joinColumns:

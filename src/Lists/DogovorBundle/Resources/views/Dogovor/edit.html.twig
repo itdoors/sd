@@ -118,7 +118,7 @@
         <tbody>
         <tr> {# 0 #}
             <td>{% trans %}Date create{% endtrans %}</td>
-            <td>{{ dogovor.createDateTime is empty ? '' : dogovor.createDateTime|date('d.m.Y H:i') }}</td>
+            <td>{{ dogovor.createDateTime is empty ? "" : dogovor.createDateTime|date('d.m.Y H:i') }}</td>
             <td>{% trans %}Creator{% endtrans %}</td>
             <td>{{ dogovor.creatorLastName }} {{ dogovor.creatorFirstName }} {{ dogovor.creatorMiddleName }}</td>
         </tr>

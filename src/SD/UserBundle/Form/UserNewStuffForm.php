@@ -97,22 +97,23 @@ class UserNewStuffForm extends AbstractType
 
         $builder
             ->add('create', 'submit');
+
         $builder->addEventListener(
             FormEvents::POST_SUBMIT,
             function (FormEvent $event) use ($container) {
-                /* @var User $newUser */
+                /** @var User $newUser */
                 $newUser = $event->getData();
                 $form = $event->getForm();
                 $em = $container->get('doctrine')->getManager();
-                $emailUser = $em->getRepository('SDUserBundle:User')
+                $existingUser = $em->getRepository('SDUserBundle:User')
                     ->findOneBy(array('email' => $newUser->getEmail()));
-                if ($emailUser) {
-                    $form->get('email')->addError(new FormError($emailUser));
+                if ($existingUser) {
+                    $form->get('email')->addError(new FormError($existingUser));
                 }
-                $usernameUser = $em->getRepository('SDUserBundle:User')
+                $existingUser = $em->getRepository('SDUserBundle:User')
                     ->findOneBy(array('username' => $newUser->getUserName()));
-                if ($usernameUser) {
-                    $form->get('username')->addError(new FormError($usernameUser));
+                if ($existingUser) {
+                        $form->get('username')->addError(new FormError($existingUser));
                 }
             }
         );

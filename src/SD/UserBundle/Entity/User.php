@@ -58,11 +58,6 @@ class User extends BaseUser
     private $birthday;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $groups;
-
-    /**
      * Set id
      *
      * @param string $id
