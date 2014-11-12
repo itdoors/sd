@@ -47,20 +47,20 @@ class ProdBlogController extends BaseController
          * @var EventManager $em
          */
         $em = $this->getDoctrine()->getManager();
-        
+
         /**
          * ArticleRepository $aR
          */
         $aR = $em->getRepository('ListsArticleBundle:Article');
-        
+
         /**
          * User $user
          */
         $user = $this->getUser();
-        
+
         $article = $aR->getArticle($id);
         $voteValue = $aR->getVote($id, $user->getId());
-        
+
         /**
          * VoteRepository $vR
          */
@@ -100,9 +100,9 @@ class ProdBlogController extends BaseController
                 )
             ))
                 ->getForm();
-            
+
             $form->handleRequest($request);
-            
+
             if ($form->isValid()) {
                 /**
                  *
@@ -110,19 +110,19 @@ class ProdBlogController extends BaseController
                  */
                 $connection = $this->getDoctrine()->getConnection();
                 $connection->beginTransaction();
-                
+
                 try {
                     $formData = $request->request->get($form->getName());
                     $user = $this->getUser();
                     $value = $formData['value'];
-                    
+
                     $vote = new Vote();
                     $vote->setUser($user);
                     $vote->setModelName('article');
                     $vote->setModelid($id);
                     $vote->setValue($value);
                     $vote->setDateCreate(new \DateTime(date('Y-m-d H:i:s')));
-                    
+
                     $ration = $em->getRepository('ListsArticleBundle:Ration')->findOneBy(array(
                         'articleId' => $id
                     ));
@@ -130,7 +130,7 @@ class ProdBlogController extends BaseController
                         $ration = new Ration();
                         $ration->setArticle($em->getRepository('ListsArticleBundle:Article')->find($id));
                     }
-                    
+
                     if (in_array($value, array(
                         1,
                         2,
@@ -141,7 +141,8 @@ class ProdBlogController extends BaseController
                         if (! $rationResult) {
                             $rationResult = $vR->getVoteForArticle($id);
                             if (! empty($rationResult['countVote'])) {
-                                $rationResult['average'] = round($rationResult['sumVote'] / $rationResult['countVote'], 2);
+                                $rationResult['average'] =
+                                    round($rationResult['sumVote'] / $rationResult['countVote'], 2);
                                 $ratValue = $article['value'];
                             }
                         }
@@ -149,7 +150,7 @@ class ProdBlogController extends BaseController
                         $rationResult['countVote'] = $rationResult['countVote'] + 1;
                         $rationResult['average'] = round($rationResult['sumVote'] / $rationResult['countVote'], 2);
                         $ratValue = round((($rationResult['countVote'] - 1) * $rationResult['average']) + 1, 2);
-                        
+
                         $ration->setValue($ratValue);
                         $em->persist($vote);
                         $em->persist($ration);
@@ -165,14 +166,14 @@ class ProdBlogController extends BaseController
                     $em->close();
                     throw $e;
                 }
-                
+
                 return $this->redirect($this->generateUrl('list_article_blog_show', array(
                     'id' => $id
                 )));
             }
             $formView = $form->createView();
         }
-        
+
         /**
          * NewFosUser $nfu
          */
@@ -181,14 +182,14 @@ class ProdBlogController extends BaseController
             'news' => $articleEntity,
             'user' => $user
         ));
-        
+
         /**
          * NewRole $nr
          */
         $nr = $em->getRepository('ListsArticleBundle:NewsRole')->findOneBy(array(
             'news' => $articleEntity
         ));
-        
+
         return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':show.html.twig', array(
             'item' => $article,
             'vote' => $voteValue,
@@ -207,7 +208,7 @@ class ProdBlogController extends BaseController
     public function listAction()
     {
         $filterNamespace = $this->container->getParameter($this->getNamespace());
-        
+
         $em = $this->getDoctrine()->getManager();
         $newNFUs = $em->getRepository('ListsArticleBundle:NewsFosUser')->findBy(array(
             'user' => $this->getUser()
@@ -224,9 +225,9 @@ class ProdBlogController extends BaseController
         }
         usort($items, array(
             "Lists\ArticleBundle\Controller\ProdBlogController",
-            "_sort"
+            "mysort"
         ));
-        
+
         return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':list.html.twig', array(
             'items' => $items
         ));
@@ -240,7 +241,7 @@ class ProdBlogController extends BaseController
      *
      * @return integer
      */
-    private function _sort($a, $b)
+    private function mysort($a, $b)
     {
         if (! $a['viewed'] && $b['viewed']) {
             return - 1;
@@ -272,14 +273,14 @@ class ProdBlogController extends BaseController
             'news' => $article,
             'user' => $user
         ));
-        
+
         foreach ($newsFosUsers as $nfu) {
             $nfu->setViewed(new \DateTime(date('Y-m-d H:i:s')));
             $em->persist($nfu);
         }
-        
+
         $em->flush();
-        
+
         return $this->redirect($this->generateUrl('list_article_blog'));
     }
 
@@ -304,7 +305,7 @@ class ProdBlogController extends BaseController
         }
         usort($articles, array(
             "Lists\ArticleBundle\Controller\ProdBlogController",
-            "__sort"
+            "mysort1"
         ));
         if (isset($articles[0])) {
             $reports = [
@@ -312,7 +313,7 @@ class ProdBlogController extends BaseController
                 'text' => $articles[0]->getText(),
                 'id' => $articles[0]->getId()
             ];
-            
+
             return new Response(json_encode($reports));
         } else {
             return new Response(null);
@@ -340,9 +341,9 @@ class ProdBlogController extends BaseController
         }
         usort($articles, array(
             "Lists\ArticleBundle\Controller\ProdBlogController",
-            "__sort"
+            "mysort1"
         ));
-        
+
         return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':shortList.html.twig', array(
             'items' => $articles
         ));
@@ -356,7 +357,7 @@ class ProdBlogController extends BaseController
      *
      * @return integer
      */
-    private function __sort($a, $b)
+    private function mysort1($a, $b)
     {
         $a = $a->getDatePublick();
         $b = $b->getDatePublick();
@@ -380,14 +381,14 @@ class ProdBlogController extends BaseController
          * @var EntityManager $em
          */
         $em = $this->getDoctrine()->getManager();
-        
+
         $form = $this->createForm('article' . ucfirst($this->articleType) . 'Form');
         $form->handleRequest($request);
-        
+
         if ($form->isValid()) {
             try {
                 $party = $form->getData();
-                
+
                 if ($this->getUser()->hasRole('ROLE_ARTICLEADMIN')) {
                     $user = $em->getRepository('SDUserBundle:User')->find($party->getUserId());
                     $party->setUser($user);
@@ -400,7 +401,7 @@ class ProdBlogController extends BaseController
                 }
                 $party->setDateCreate(new \DateTime(date('Y-m-d H:i:s')));
                 $em->persist($party);
-                
+
                 $part = $request->request->get($form->getName());
                 if (isset($part['roles'])) {
                     $_roles = $part['roles'];
@@ -411,7 +412,7 @@ class ProdBlogController extends BaseController
                 } else {
                     $roles = $em->getRepository('SDUserBundle:Group')->findAll();
                 }
-                
+
                 foreach ($roles as $role) {
                     $newsRole = new NewsRole();
                     $newsRole->setNews($party);
@@ -419,9 +420,9 @@ class ProdBlogController extends BaseController
                     if (isset($part['vote'])) {
                         $newsRole->setVote($part['vote']);
                     }
-                    
+
                     $fetchedUsers = $role->getUsers()->toArray();
-                    
+
                     foreach ($fetchedUsers as $user) {
                         $nfu = new NewsFosUser();
                         $nfu->setNews($newsRole->getNews());
@@ -435,10 +436,10 @@ class ProdBlogController extends BaseController
                 $em->close();
                 throw $e;
             }
-            
+
             return $this->redirect($this->generateUrl('list_article_blog'));
         }
-        
+
         return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':add.html.twig', array(
             'form' => $form->createView()
         ));
@@ -467,7 +468,7 @@ class ProdBlogController extends BaseController
         move_uploaded_file($location, $destination);
         $directory = $this->container->getParameter('blogfiles.file.path');
         $destination = $directory . $filename;
-        
+
         return new Response($destination);
     }
 

@@ -34,11 +34,11 @@
 {% block body %}
     <div class="row">
         <div class="col-md-12">
-{#             {% if is_granted('ROLE_ARTICLEADMIN') %}#}
+            {% if is_granted('ROLE_ARTICLEADMIN') %}
                 <a class="btn btn-cl green" href="{{ path('list_article_blog_add') }}" title="{% trans %}Add{% endtrans %}">
                     {% trans %}Add{% endtrans %}
                 </a>
-{#             {% endif %}#}
+            {% endif %}
             <div class="tab-content ajax-tab-holder" id="datatable_ajax" data-url="{{ url('list_article_blog_list') }}">
                 {{ render(controller('ListsArticleBundle:ProdBlog:list')) }}
             </div>

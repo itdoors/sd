@@ -53,7 +53,7 @@ class NewsFosUser
     public function setViewed($viewed)
     {
         $this->viewed = $viewed;
-        
+
         return $this;
     }
 
@@ -77,7 +77,7 @@ class NewsFosUser
     public function setNews(\Lists\ArticleBundle\Entity\Article $news = null)
     {
         $this->news = $news;
-        
+
         return $this;
     }
 
@@ -101,7 +101,7 @@ class NewsFosUser
     public function setUser(\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
-        
+
         return $this;
     }
 
