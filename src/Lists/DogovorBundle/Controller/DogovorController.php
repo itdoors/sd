@@ -101,8 +101,6 @@ class DogovorController extends BaseController
         return $this->render('ListsDogovorBundle:Dogovor:listDanger.html.twig', array(
             'pagination' => $pagination,
             'namespace' => $namespace,
-            'baseTemplate' => $this->baseTemplate,
-            'baseRoutePrefix' => $this->baseRoutePrefix,
             'access' => $access
         ));
     }

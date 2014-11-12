@@ -7,7 +7,7 @@ parameters:
     some.extension: ITDoors\ControllingBundle\Twig\Extension\VarsExtension
     itdoors_controlling.invoice.filter.form.class: ITDoors\ControllingBundle\Form\InvoiceFilterFormType
     itdoors_controlling.invoice.filter.for.analytic.form.class: ITDoors\ControllingBundle\Form\InvoiceFilterForAnalyticFormType
-
+    itdoors_controlling.service.class: ITDoors\ControllingBundle\Services\ControllingService
 services:
     it_doors_controlling.repository:
         class: %it_doors_controlling.repository.class%
@@ -48,3 +48,7 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: invoiceFilterForAnalyticForm }
+            
+    it_doors_controlling.service:
+        class: %itdoors_controlling.service.class%
+        arguments: [@service_container]

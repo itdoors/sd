@@ -7,7 +7,7 @@
 			<i class="fa fa-home"></i>
 			<a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
 		</li>
-		<li><a href="{{ path('lists_organization_index') }}" title="{% trans %}My Organizations{% endtrans %}">{% trans %}My Organizations{% endtrans %}</a></li>
+		<li><a href="{{ path('lists_organization_index', {type:'my'}) }}" title="{% trans %}My Organizations{% endtrans %}">{% trans %}My Organizations{% endtrans %}</a></li>
 		<li><a href="{{ path('lists_organization_show', { id : organization.id }) }}" title="{% trans %}Show Organization{% endtrans %}">{% trans %}Show Organization{% endtrans %}</a></li>
 	</ul>
 {% endblock %}
@@ -67,11 +67,7 @@
                     {# tab_4 #}
                     <div class="tab-pane" id="tab_4">{{ render(controller('ListsDogovorBundle:Dogovor:forOrganization', { id:organization.id })) }}</div>
                     {# tab_5 #}
-                    {% set role = 'Sales' %}
-                    {% if is_granted('ROLE_SALESADMIN') %}
-                        {% set role = 'SalesAdmin' %}
-                    {% endif %}
-                    <div class="tab-pane" id="tab_5">{{ render(controller('ListsHandlingBundle:' ~ role ~ ':forOrganization', { id:organization.id })) }}</div>
+                    <div class="tab-pane" id="tab_5">{{ render(controller('ListsHandlingBundle:Handling:forOrganization', { id:organization.id })) }}</div>
                     {# tab_6 #}
                     <div class="tab-pane" id="tab_6">{{ render(controller('ListsOrganizationBundle:ServiceCover:Index', { organizationId: organization.id })) }}</div>
                     {# tab_7 #}

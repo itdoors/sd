@@ -19,7 +19,7 @@ class AdminDogovorAccess extends BasicDogovorAccess
      */
     public function canEdit ()
     {
-        return false;
+        return true;
     }
     /**
      * @return bool

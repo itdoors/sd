@@ -122,21 +122,24 @@ class InvoiceService
         $em = $this->container->get('doctrine')->getManager();
         $invoiceNew = $em->getRepository('ITDoorsControllingBundle:Invoice')
             ->findOneBy(array (
-            'guid' => trim($invoice->guid)
-        ));
+                'guid' => trim($invoice->guid)
+            ));
         if (!$invoiceNew) {
+            echo ' - guid: "'.trim($invoice->guid).'" - not found ';
             $invoiceNew = $em->getRepository('ITDoorsControllingBundle:Invoice')
                 ->findOneBy(array (
                 'invoiceId' => trim($invoice->invoiceId),
                 'date' => new \DateTime(trim($invoice->date))
             ));
             if ($invoiceNew) {
+                echo ' - guid: "'.trim($invoice->guid).'" - update old invoice ';
                 $invoiceNew->setGuid(trim($invoice->guid));
             }
         }
         $summaPaymens = 0;
         $dateFact = new \DateTime(trim($invoice->date));
         if (!$invoiceNew) {
+            echo ' - guid: "'.trim($invoice->guid).'" - create new ';
             $invoiceNew = new Invoice();
             $invoiceNew->setCourt(0);
             $invoiceNew->setGuid(trim($invoice->guid));

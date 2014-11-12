@@ -59,6 +59,13 @@ class ManagerOrganizationAccess extends BasicOrganizationAccess
     /**
      * @return bool
      */
+    public function canAddHandling ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
     public function canExportToExcel ()
     {
         return true;

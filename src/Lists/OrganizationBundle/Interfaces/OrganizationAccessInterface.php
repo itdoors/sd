@@ -42,6 +42,10 @@ interface OrganizationAccessInterface
     /**
      * @return bool
      */
+    public function canAddHandling();
+    /**
+     * @return bool
+     */
     public function canExportToExcel();
     /**
      * @return bool

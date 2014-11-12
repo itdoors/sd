@@ -1,206 +1,261 @@
-#SALES ROUTERS
-lists_sales_handling_index:
-    pattern:  /lists/sales/handling/index
-    defaults: { _controller: ListsHandlingBundle:Sales:index }
+lists_handling_index:
+    pattern:  /lists/handling/index/{type}
+    defaults: { _controller: ListsHandlingBundle:Handling:index, type: '' }
+    requirements:
+        type: my|''
 
-lists_sales_handling_new:
-    pattern:  /lists/sales/handling/new
-    defaults: { _controller: ListsHandlingBundle:Sales:new }
+lists_handling_show:
+    pattern:  /lists/handling/show/{id}/{type}
+    defaults: { _controller: ListsHandlingBundle:Handling:show, type: '' }
+    requirements:
+        type: my|''
 
-lists_sales_handling_create_step1:
-    pattern:  /lists/sales/handling/create/step1
-    defaults: { _controller: ListsHandlingBundle:Sales:step1 }
+lists_handling_export_excel:
+    pattern:  /lists/handling/export/excel
+    defaults: { _controller: ListsHandlingBundle:Handling:exportExcel }
 
-lists_sales_handling_create_step2:
-    pattern:  /lists/sales/handling/create/step2
-    defaults: { _controller: ListsHandlingBundle:Sales:step2 }
+lists_handling_filter:
+    pattern:  /lists/handling/filter
+    defaults: { _controller: ListsHandlingBundle:Handling:filter }
 
-lists_sales_handling_create_step3:
-    pattern:  /lists/sales/handling/create/step3
-    defaults: { _controller: ListsHandlingBundle:Sales:step3 }
+lists_handling_new:
+    pattern:  /lists/handling/new
+    defaults: { _controller: ListsHandlingBundle:Handling:new }
 
-lists_sales_handling_create_step4:
-    pattern:  /lists/sales/handling/create/step4
-    defaults: { _controller: ListsHandlingBundle:Sales:step4 }
-
-lists_sales_handling_show:
-    pattern:  /lists/sales/handling/show/{id}
-    defaults: { _controller: ListsHandlingBundle:Sales:show }
-
-lists_sales_handling_filter:
-    pattern:  /lists/sales/handling/filter
-    defaults: { _controller: ListsHandlingBundle:Sales:filter }
-
-
-lists_sales_handling_filter_clear:
-    pattern:  /lists/sales/handling/filter_clear
-    defaults: { _controller: ListsHandlingBundle:Sales:filterClear }
-
-lists_sales_handling_add_organization_filter:
-    pattern:  /lists/sales/handling/add_organization_filter/{organizationId}
-    defaults: { _controller: ListsHandlingBundle:Sales:addOrganizationFilter }
-
-lists_sales_handling_ajax_users:
+lists_handling_ajax_users:
     pattern:  /lists/sales/handling/ajax/users/{handlingId}
-    defaults: { _controller: ListsHandlingBundle:Sales:handlingUsers }
+    defaults: { _controller: ListsHandlingBundle:Handling:handlingUsers }
 
-lists_sales_handling_ajax_messages:
-    pattern:  /lists/sales/handling/ajax/messages/{handlingId}
-    defaults: { _controller: ListsHandlingBundle:Sales:messagesList }
+lists_handling_ajax_messages:
+    pattern:  /lists/handling/ajax/messages/{handlingId}
+    defaults: { _controller: ListsHandlingBundle:Handling:messagesList }
 
-lists_sales_tender_index:
-    pattern:  /lists/sales/tender
-    defaults: { _controller: ListsHandlingBundle:Sales:tenderList }
+lists_handling_report_advanced_done:
+    pattern:  /lists/handling/report/advanced/done
+    defaults: { _controller: ListsHandlingBundle:Handling:reportAdvancedDone }
 
-lists_sales_report_index:
-    pattern:  /lists/sales/repost
-    defaults: { _controller: ListsHandlingBundle:Sales:reportList }
+lists_handling_create_step1:
+    pattern:  /lists/handling/create/step1
+    defaults: { _controller: ListsHandlingBundle:Handling:step1 }
 
-lists_sales_handling_for_organization:
-    pattern:  /lists/sales/handling/for/organization/{id}
-    defaults: { _controller: ListsHandlingBundle:Sales:forOrganization }
-    
-lists_sales_handling_export_excel:
-    pattern:  /lists/sales/handling/export/excel
-    defaults: { _controller: ListsHandlingBundle:Sales:exportExcel }
+lists_handling_create_step2:
+    pattern:  /lists/handling/create/step2
+    defaults: { _controller: ListsHandlingBundle:Handling:step2 }
 
-#SALES DISPATCHER ROUTES
+lists_handling_create_step3:
+    pattern:  /lists/handling/create/step3
+    defaults: { _controller: ListsHandlingBundle:Handling:step3 }
 
-lists_sales_dispatcher_handling_index:
-    pattern:  /lists/salesdispatcher/handling/index
-    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:index }
+lists_handling_create_step4:
+    pattern:  /lists/handling/create/step4
+    defaults: { _controller: ListsHandlingBundle:Handling:step4 }
 
-lists_sales_dispatcher_handling_new:
-    pattern:  /lists/salesdispatcher/handling/new
-    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:new }
+lists_handling_add_organization_filter:
+    pattern:  /lists/handling/add_organization_filter/{organizationId}
+    defaults: { _controller: ListsHandlingBundle:Handling:addOrganizationFilter }
 
+lists_handling_report_advanced_range:
+    pattern:  /lists/handling/report/advanced/range
+    defaults: { _controller: ListsHandlingBundle:Handling:reportAdvancedRange }
 
-lists_sales_dispatcher_handling_show:
-    pattern:  /lists/salesdispatcher/handling/show/{id}
-    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:show }
+lists_handling_report_simple:
+    pattern:  /lists/handling/report/simple
+    defaults: { _controller: ListsHandlingBundle:Handling:reportSimple }
 
-lists_sales_dispatcher_handling_filter:
-    pattern:  /lists/salesdispatcher/handling/filter
-    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:filter }
-
-
-lists_sales_dispatcher_handling_filter_clear:
-    pattern:  /lists/salesdispatcher/handling/filter_clear
-    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:filterClear }
-
-lists_sales_dispatcher_handling_add_organization_filter:
-    pattern:  /lists/salesdispatcher/handling/add_organization_filter/{organizationId}
-    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:addOrganizationFilter }
-
-lists_sales_dispatcher_handling_ajax_users:
-    pattern:  /lists/salesdispatcher/handling/ajax/users/{handlingId}
-    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:handlingUsers }
-
-lists_sales_dispatcher_handling_ajax_messages:
-    pattern:  /lists/salesdispatcher/handling/ajax/messages/{handlingId}
-    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:messagesList }
-
-lists_sales_dispatcher_tender_index:
-    pattern:  /lists/salesdispatcher/tender
-    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:tenderList }
-
-
-lists_sales_dispatcher_handling_add_organization_filter:
-    pattern:  /lists/salesdispatcher/handling/add_organization_filter/{organizationId}
-    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:addOrganizationFilter }
-
-lists_sales_dispatcher_tender_index:
-    pattern:  /lists/salesdispatcher/tender
-    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:tenderList }
-
-lists_sales_dispatcher_report_index:
-    pattern:  /lists/salesdispatcher/report
-    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:report }
-
-#SALES ADMIN ROUTES
-
-lists_sales_admin_handling_index:
-    pattern:  /lists/salesadmin/handling/index
-    defaults: { _controller: ListsHandlingBundle:SalesAdmin:index }
-
-lists_sales_admin_handling_new:
-    pattern:  /lists/salesadmin/handling/new
-    defaults: { _controller: ListsHandlingBundle:SalesAdmin:new }
-
-
-lists_sales_admin_handling_show:
-    pattern:  /lists/salesadmin/handling/show/{id}
-    defaults: { _controller: ListsHandlingBundle:SalesAdmin:show }
-
-lists_sales_admin_handling_filter:
-    pattern:  /lists/salesadmin/handling/filter
-    defaults: { _controller: ListsHandlingBundle:SalesAdmin:filter }
-
-
-lists_sales_admin_handling_filter_clear:
-    pattern:  /lists/salesadmin/handling/filter_clear
-    defaults: { _controller: ListsHandlingBundle:SalesAdmin:filterClear }
-
-lists_sales_admin_handling_add_organization_filter:
-    pattern:  /lists/salesadmin/handling/add_organization_filter/{organizationId}
-    defaults: { _controller: ListsHandlingBundle:SalesAdmin:addOrganizationFilter }
-
-lists_sales_admin_handling_ajax_users:
-    pattern:  /lists/salesadmin/handling/ajax/users/{handlingId}
-    defaults: { _controller: ListsHandlingBundle:SalesAdmin:handlingUsers }
-
-lists_sales_admin_handling_ajax_messages:
-    pattern:  /lists/salesadmin/handling/ajax/messages/{handlingId}
-    defaults: { _controller: ListsHandlingBundle:SalesAdmin:messagesList }
-
-lists_sales_admin_tender_index:
-    pattern:  /lists/salesadmin/tender
-    defaults: { _controller: ListsHandlingBundle:SalesAdmin:tenderList }
-
-lists_sales_admin_handling_add_organization_filter:
-    pattern:  /lists/salesadmin/handling/add_organization_filter/{organizationId}
-    defaults: { _controller: ListsHandlingBundle:SalesAdmin:addOrganizationFilter }
-
-lists_sales_admin_tender_index:
-    pattern:  /lists/salesadmin/tender
-    defaults: { _controller: ListsHandlingBundle:SalesAdmin:tenderList }
-
-lists_sales_admin_report_index:
-    pattern:  /lists/salesadmin/report
-    defaults: { _controller: ListsHandlingBundle:SalesAdmin:report }
-
-lists_sales_admin_report_simple:
-    pattern:  /lists/salesadmin/report/simple
-    defaults: { _controller: ListsHandlingBundle:SalesAdmin:reportSimple }
-
-lists_sales_admin_report_advanced_done:
-    pattern:  /lists/salesadmin/report/advanced/done
-    defaults: { _controller: ListsHandlingBundle:SalesAdmin:reportAdvancedDone }
-
-lists_sales_admin_report_advanced_range:
-    pattern:  /lists/salesadmin/report/advanced/range
-    defaults: { _controller: ListsHandlingBundle:SalesAdmin:reportAdvancedRange }
-
-lists_sales_admin_handling_export_excel:
-    pattern:  /lists/salesadmin/handling/export/excel
-    defaults: { _controller: ListsHandlingBundle:SalesAdmin:exportExcel }
-    
-lists_salesadmin_handling_close:
-    pattern:  /lists/salesadmin/handling/close/{id}
-    defaults: { _controller: ListsHandlingBundle:SalesAdmin:close }
-
-lists_salesadmin_handling_open:
-    pattern:  /lists/salesadmin/handling/open/{id}
-    defaults: { _controller: ListsHandlingBundle:SalesAdmin:close }
 
 handling_service:
     resource: "@ListsHandlingBundle/Resources/config/routing/handlingservice.yml"
     prefix:   /lists/salesadmin/handlingservice/
+    
+    
+#SALES ROUTERS
+#lists_sales_handling_index:
+#    pattern:  /lists/sales/handling/index
+#    defaults: { _controller: ListsHandlingBundle:Sales:index }
+#
+#lists_sales_handling_new:
+#    pattern:  /lists/sales/handling/new
+#    defaults: { _controller: ListsHandlingBundle:Sales:new }
+#
+#lists_sales_handling_create_step1:
+#    pattern:  /lists/sales/handling/create/step1
+#    defaults: { _controller: ListsHandlingBundle:Sales:step1 }
+#
+#lists_sales_handling_create_step2:
+#    pattern:  /lists/sales/handling/create/step2
+#    defaults: { _controller: ListsHandlingBundle:Sales:step2 }
+#
+#lists_sales_handling_create_step3:
+#    pattern:  /lists/sales/handling/create/step3
+#    defaults: { _controller: ListsHandlingBundle:Sales:step3 }
+#
+#lists_sales_handling_create_step4:
+#    pattern:  /lists/sales/handling/create/step4
+#    defaults: { _controller: ListsHandlingBundle:Sales:step4 }
+#
+#lists_sales_handling_show:
+#    pattern:  /lists/sales/handling/show/{id}
+#    defaults: { _controller: ListsHandlingBundle:Sales:show }
+#
+#lists_sales_handling_filter:
+#    pattern:  /lists/sales/handling/filter
+#    defaults: { _controller: ListsHandlingBundle:Sales:filter }
+#
+#
+#lists_sales_handling_filter_clear:
+#    pattern:  /lists/sales/handling/filter_clear
+#    defaults: { _controller: ListsHandlingBundle:Sales:filterClear }
+#
+#lists_sales_handling_add_organization_filter:
+#    pattern:  /lists/sales/handling/add_organization_filter/{organizationId}
+#    defaults: { _controller: ListsHandlingBundle:Sales:addOrganizationFilter }
+#
+#lists_sales_handling_ajax_users:
+#    pattern:  /lists/sales/handling/ajax/users/{handlingId}
+#    defaults: { _controller: ListsHandlingBundle:Sales:handlingUsers }
+#
+#lists_sales_handling_ajax_messages:
+#    pattern:  /lists/sales/handling/ajax/messages/{handlingId}
+#    defaults: { _controller: ListsHandlingBundle:Sales:messagesList }
+#
+#lists_sales_tender_index:
+#    pattern:  /lists/sales/tender
+#    defaults: { _controller: ListsHandlingBundle:Sales:tenderList }
+#
+#lists_sales_report_index:
+#    pattern:  /lists/sales/repost
+#    defaults: { _controller: ListsHandlingBundle:Sales:reportList }
+#
+#lists_sales_handling_for_organization:
+#    pattern:  /lists/sales/handling/for/organization/{id}
+#    defaults: { _controller: ListsHandlingBundle:Sales:forOrganization }
+#    
+#lists_sales_handling_export_excel:
+#    pattern:  /lists/sales/handling/export/excel
+#    defaults: { _controller: ListsHandlingBundle:Sales:exportExcel }
 
+#SALES DISPATCHER ROUTES
+#
+#lists_sales_dispatcher_handling_index:
+#    pattern:  /lists/salesdispatcher/handling/index
+#    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:index }
+#
+#lists_sales_dispatcher_handling_new:
+#    pattern:  /lists/salesdispatcher/handling/new
+#    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:new }
+#
+#
+#lists_sales_dispatcher_handling_show:
+#    pattern:  /lists/salesdispatcher/handling/show/{id}
+#    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:show }
+#
+#lists_sales_dispatcher_handling_filter:
+#    pattern:  /lists/salesdispatcher/handling/filter
+#    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:filter }
+#
+#
+#lists_sales_dispatcher_handling_filter_clear:
+#    pattern:  /lists/salesdispatcher/handling/filter_clear
+#    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:filterClear }
+#
+#lists_sales_dispatcher_handling_add_organization_filter:
+#    pattern:  /lists/salesdispatcher/handling/add_organization_filter/{organizationId}
+#    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:addOrganizationFilter }
+#
+#lists_sales_dispatcher_handling_ajax_users:
+#    pattern:  /lists/salesdispatcher/handling/ajax/users/{handlingId}
+#    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:handlingUsers }
+#
+#lists_sales_dispatcher_handling_ajax_messages:
+#    pattern:  /lists/salesdispatcher/handling/ajax/messages/{handlingId}
+#    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:messagesList }
+#
+#lists_sales_dispatcher_tender_index:
+#    pattern:  /lists/salesdispatcher/tender
+#    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:tenderList }
+#
+#
+#lists_sales_dispatcher_handling_add_organization_filter:
+#    pattern:  /lists/salesdispatcher/handling/add_organization_filter/{organizationId}
+#    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:addOrganizationFilter }
+#
+#lists_sales_dispatcher_tender_index:
+#    pattern:  /lists/salesdispatcher/tender
+#    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:tenderList }
+#
+#lists_sales_dispatcher_report_index:
+#    pattern:  /lists/salesdispatcher/report
+#    defaults: { _controller: ListsHandlingBundle:SalesDispatcher:report }
+
+#SALES ADMIN ROUTES
+#
+#lists_sales_admin_handling_index:
+#    pattern:  /lists/salesadmin/handling/index
+#    defaults: { _controller: ListsHandlingBundle:SalesAdmin:index }
+#
+#lists_sales_admin_handling_new:
+#    pattern:  /lists/salesadmin/handling/new
+#    defaults: { _controller: ListsHandlingBundle:SalesAdmin:new }
+#
+#
+#lists_sales_admin_handling_show:
+#    pattern:  /lists/salesadmin/handling/show/{id}
+#    defaults: { _controller: ListsHandlingBundle:SalesAdmin:show }
+#
+#lists_sales_admin_handling_filter:
+#    pattern:  /lists/salesadmin/handling/filter
+#    defaults: { _controller: ListsHandlingBundle:SalesAdmin:filter }
+#
+#
+#lists_sales_admin_handling_filter_clear:
+#    pattern:  /lists/salesadmin/handling/filter_clear
+#    defaults: { _controller: ListsHandlingBundle:SalesAdmin:filterClear }
+#
+#lists_sales_admin_handling_add_organization_filter:
+#    pattern:  /lists/salesadmin/handling/add_organization_filter/{organizationId}
+#    defaults: { _controller: ListsHandlingBundle:SalesAdmin:addOrganizationFilter }
+#
+#lists_sales_admin_handling_ajax_users:
+#    pattern:  /lists/salesadmin/handling/ajax/users/{handlingId}
+#    defaults: { _controller: ListsHandlingBundle:SalesAdmin:handlingUsers }
+#
+#lists_sales_admin_handling_ajax_messages:
+#    pattern:  /lists/salesadmin/handling/ajax/messages/{handlingId}
+#    defaults: { _controller: ListsHandlingBundle:SalesAdmin:messagesList }
+#
+#lists_sales_admin_tender_index:
+#    pattern:  /lists/salesadmin/tender
+#    defaults: { _controller: ListsHandlingBundle:SalesAdmin:tenderList }
+#
+#lists_sales_admin_report_simple:
+#    pattern:  /lists/salesadmin/report/simple
+#    defaults: { _controller: ListsHandlingBundle:SalesAdmin:reportSimple }
+#
+#lists_sales_admin_report_advanced_done:
+#    pattern:  /lists/salesadmin/report/advanced/done
+#    defaults: { _controller: ListsHandlingBundle:SalesAdmin:reportAdvancedDone }
+#
+#lists_sales_admin_report_advanced_range:
+#    pattern:  /lists/salesadmin/report/advanced/range
+#    defaults: { _controller: ListsHandlingBundle:SalesAdmin:reportAdvancedRange }
+#
+#lists_sales_admin_handling_export_excel:
+#    pattern:  /lists/salesadmin/handling/export/excel
+#    defaults: { _controller: ListsHandlingBundle:SalesAdmin:exportExcel }
+#    
+#lists_salesadmin_handling_close:
+#    pattern:  /lists/salesadmin/handling/close/{id}
+#    defaults: { _controller: ListsHandlingBundle:SalesAdmin:close }
+#
+#lists_salesadmin_handling_open:
+#    pattern:  /lists/salesadmin/handling/open/{id}
+#    defaults: { _controller: ListsHandlingBundle:SalesAdmin:close }
+#
+#
 # Dogovor Admin Route
-lists_dogovor_admin_handling_add_organization_filter:
-    pattern:  /lists/sales/handling/add_organization_filter/{organizationId}
-    defaults: { _controller: ListsHandlingBundle:Sales:addOrganizationFilter }
+#lists_dogovor_admin_handling_add_organization_filter:
+#    pattern:  /lists/sales/handling/add_organization_filter/{organizationId}
+#    defaults: { _controller: ListsHandlingBundle:Sales:addOrganizationFilter }
 
 #Competitor
 lists_handling_competitor_list:
@@ -211,6 +266,3 @@ lists_handling_competitor_form:
     pattern:  /lists/sales/handling/competitor/{handlingId}
     defaults: { _controller: ListsHandlingBundle:Competitor:form }
 
-lists_private_handling_show:
-    pattern:  /lists/private/handling/show/{id}
-    defaults: { _controller: ListsHandlingBundle:Sales:show }

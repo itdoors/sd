@@ -121,7 +121,7 @@ class DogovorRepository extends EntityRepository
                 . ' OR '
                 . '(d.isActive = true AND d.prolongationDate < :date)'
             )
-            ->setParameter(':date', $date->modify('-2 month'));
+            ->setParameter(':date', $date->modify('-3 month'));
         $sqlCount
             ->andWhere(
                 'd.stopdatetime is NULL'
@@ -132,7 +132,7 @@ class DogovorRepository extends EntityRepository
                 . ' OR '
                 . '(d.isActive = true AND d.prolongationDate < :date)'
             )
-            ->setParameter(':date', $date->modify('-2 month'));
+            ->setParameter(':date', $date->modify('-3 month'));
 
         $this->processOrdering($sql);
 

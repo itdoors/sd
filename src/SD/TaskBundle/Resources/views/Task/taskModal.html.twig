@@ -424,7 +424,7 @@
             <tr>
                 <td>{% trans %}Link{% endtrans %}</td>
                 <td colspan="3">
-                    <a target="_blank" href="{{ path('lists_sales_handling_show', {'id':task.handlingMessage.handling.id}) }}#handling_message_{{ task.handlingMessage.id }}">
+                    <a target="_blank" href="{{ path('lists_handling_show', {'id':task.handlingMessage.handling.id}) }}#handling_message_{{ task.handlingMessage.id }}">
                         {% trans %}Go to{% endtrans %}
                     </a>
                 </td>

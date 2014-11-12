@@ -1,23 +1,25 @@
 {% trans_default_domain 'ITDoorsControllingBundle' %}
 <script>
     $(document).ready(function() {
-        $('.datesave').editable({
-            type: 'date',
-            name: 'DateEnd',
-            url: '{{ path('sd_common_ajax_invoice_save') }}',
-            emptytext: '{% trans from 'messages' %}Enter value{% endtrans %}',
-                        clear: '{% trans from 'ITDoorsControllingBundle' %}clear{% endtrans %}<i class="icon-remove fa fa-times" style="font-size:12px"></i>',
-                        datepicker: {
-                            rtl: Metronic.isRTL(),
-                            autoclose: true,
-                            format: "dd.mm.yyyy",
-                            pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
-                            language: "{{ app.request.locale }}",
-                            startView: 'month',
-                            weekStart: 1
-                        }
-                    });
-                });
+        {% if access.canEdit %}
+            $('.datesave').editable({
+                type: 'date',
+                name: 'DateEnd',
+                url: '{{ path('sd_common_ajax_invoice_save') }}',
+                emptytext: '{% trans from 'messages' %}Enter value{% endtrans %}',
+                clear: '{% trans from 'ITDoorsControllingBundle' %}clear{% endtrans %}<i class="icon-remove fa fa-times" style="font-size:12px"></i>',
+                datepicker: {
+                    rtl: Metronic.isRTL(),
+                    autoclose: true,
+                    format: "dd.mm.yyyy",
+                    pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+                    language: "{{ app.request.locale }}",
+                    startView: 'month',
+                    weekStart: 1
+                }
+            });
+        {% endif %}
+    });            
 </script>
 <div class="col-md-12">
     <table id="handling" class="table table-bordered table-striped">
@@ -48,13 +50,19 @@
             </tr>
             <tr>
                 <td>{% trans %}Date_end{% endtrans %}</td>
-                <td><a href="#" 
+                <td>
+                    {% if access.canEdit %}
+                    <a href="#" 
                        class="datesave fa fa-plus" data-pk="{{ entitie.id }}"
                        data-original-title="{% trans %}Select data{% endtrans %}"
                        data-date="{{entitie.dateEnd|date("d.m.Y")}}"
-                       data-format="dd.mm.yyyy"> 
+                       data-format="dd.mm.yyyy">
+                    {% endif %}
                         {{ entitie.dateEnd is empty ? '' : entitie.dateEnd|date("d.m.Y") }}
-                    </a></td>
+                    {% if access.canEdit %}
+                    </a>
+                    {% endif %}
+                </td>
             </tr>
             <tr>
                 <td>{% trans %}Date_fact{% endtrans %}</td>

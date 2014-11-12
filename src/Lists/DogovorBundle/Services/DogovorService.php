@@ -114,6 +114,9 @@ class DogovorService
         if ($user->hasRole('ROLE_DOGOVORADMIN')) {
             $role[] = 'admin';
         }
+        if ($user->hasRole('ROLE_DOGOVOR_VIEWER')) {
+            $role[] = 'dogovor_viewer';
+        }
         if ($user->hasRole('ROLE_SALES')) {
             $role[] = 'sales';
         }

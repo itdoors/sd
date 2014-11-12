@@ -1,0 +1,68 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsHandlingBundle' %}
+{% block title %}{% trans %}List of actions{% endtrans %}{% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Action <small>period of actions</small>{% endtrans %} <small>{{ from | date('d.m.Y')}} - {{ to | date('d.m.Y')}}</small>
+    </h3>
+{% endblock %}
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        </li>
+        <li><a href="" title="{% trans %}Actions{% endtrans %}">{% trans %}Actions{% endtrans %}</a></li>
+    </ul>
+{% endblock %}
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/select2/select2_metro.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/css/datetimepicker.css')}} " />
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/jquery.dataTables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/data-tables/DT_bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('templates/metronic/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.ru.js')}} "></script>
+{% endblock %}
+
+
+{% block body %}
+
+    {% trans_default_domain 'ListsHandlingBundle' %}
+<div class="table-scrollable">
+    <table class="table table-striped table-bordered table-advance table-hover" id="report-activity-content">
+        <thead>
+            <tr>
+                <th>{% trans %}ID{% endtrans %}</th>
+                <th>{% trans %}Organization{% endtrans %}</th>
+                <th>{% trans %}Date{% endtrans %}</th>
+                <th>{% trans %}View action{% endtrans %}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for result in results %}
+            <tr>
+                <td colspan="4">{{ result.user }}</td>
+            </tr>
+            {% for action in result.actions %}
+                <tr>
+                    <td>{{ action.id }}</td>
+                    <td><a href="{{ path('lists_handling_show', { id : action.handling.id }) }}" title="{% trans %}Show Handling{% endtrans %}">{{ action.handling.organization }}</a></td>
+                    <td>{{ action.createdate | date('H:i d.m.Y') }}</td>
+                    <td><a href="{{ path('lists_handling_show', { id : action.handling.id }) }}#handling_message_{{ action.id }}"  title="{% trans %}Show action{% endtrans %}">{{ action.type }}</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock body %}
