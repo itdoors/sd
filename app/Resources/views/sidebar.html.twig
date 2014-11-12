@@ -33,10 +33,16 @@
                         or
                         path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_new')
                         or
+                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_new')
+                        or
                         (
                             app.request.attributes.get('_route_params').id is defined
                             and
-                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_show',app.request.attributes.get('_route_params'))
+                            (
+                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_show',app.request.attributes.get('_route_params'))
+                                or
+                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_show',app.request.attributes.get('_route_params'))
+                            )
                         )
                         or
                         (
@@ -44,7 +50,11 @@
                             and
                             app.request.attributes.get('_route_params').type == 'my'
                             and
-                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_index',app.request.attributes.get('_route_params'))
+                            (
+                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_index',app.request.attributes.get('_route_params'))
+                                or
+                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_index',app.request.attributes.get('_route_params'))
+                            )
                         )
                     
                 %} class="active"{% endif %}>
@@ -54,8 +64,14 @@
                     <span class="arrow "></span>
                 </a>
                 <ul class="sub-menu">
-                    <li>
-                        <a href="{{ path('lists_sales_handling_index') }}" title="{% trans %}My Handlings{% endtrans %}">
+                    <li{% if
+                            app.request.attributes.get('_route_params').type is defined
+                            and
+                            app.request.attributes.get('_route_params').type == 'my'
+                            and
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_index',app.request.attributes.get('_route_params'))
+                            %} class="active"{% endif %}>
+                        <a href="{{ path('lists_handling_index', {type:'my'}) }}" title="{% trans %}My Handlings{% endtrans %}">
                             <i class="icon-pencil"></i>
                             {% trans %}My Handlings{% endtrans %}
                         </a>
@@ -140,7 +156,7 @@
             </li>
         {% endif %}
 
-        {% if is_granted('ROLE_SALESDISPATCHER') %}
+        {#% if is_granted('ROLE_SALESDISPATCHER') %}
             <li class="">
                 <a href="javascript:;">
                     <i class="icon-pencil"></i>
@@ -179,7 +195,7 @@
                             <i class="fa fa-calendar"></i>
                             {% trans %}Team Calendar{% endtrans %}</a>
                     </li>#}
-                    <li>
+                    {#<li>
                         <a href="{{ path('lists_sales_dispatcher_report_index') }}" title="{% trans %}Team Reports{% endtrans %}">
                             <i class="fa fa-bar-chart-o"></i>
                             {% trans %}Team Reports{% endtrans %}</a>
@@ -191,12 +207,14 @@
                     </li>
                 </ul>
             </li>
-        {% endif %}
+        {% endif %#}
         {% if is_granted('ROLE_SALESADMIN') %}
             <li{% if
                         path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_calendar_shared_index')
                         or
                         path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_new')
+                        or
+                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_new')
                         or
                         (
                             app.request.attributes.get('_route_params').id is defined
@@ -209,7 +227,11 @@
                             and
                             app.request.attributes.get('_route_params').type is empty
                             and
-                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_index',app.request.attributes.get('_route_params'))
+                            (
+                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_index',app.request.attributes.get('_route_params'))
+                                or
+                                path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_index',app.request.attributes.get('_route_params'))
+                            )
                         )
                         %} class="active"{% endif %}>
                 <a href="javascript:;">
@@ -226,8 +248,14 @@
                             {% trans %}Shared calendar{% endtrans %}
                         </a>
                     </li>
-                    <li>
-                        <a href="{{ path('lists_sales_admin_handling_index') }}" title="{% trans %}Projects{% endtrans %}">
+                    <li{% if
+                            app.request.attributes.get('_route_params').type is defined
+                            and
+                            app.request.attributes.get('_route_params').type is empty
+                            and
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_index',app.request.attributes.get('_route_params'))
+                            %} class="active"{% endif %}>
+                        <a href="{{ path('lists_handling_index', {type:''}) }}" title="{% trans %}Projects{% endtrans %}">
                             <i class="fa fa-comments"></i>
                             {% trans %}Projects{% endtrans %}
                         </a>
@@ -262,7 +290,7 @@
                             {% trans %}Organizations{% endtrans %}
                         </a>
                     </li>			
-                    <li>
+                    {#<li>
                         <a href="{{ path('lists_sales_admin_tender_index') }}" title="{% trans %}Tenders{% endtrans %}">
                             <i class="fa fa-gavel"></i>
                             {% trans %}Tenders{% endtrans %}
@@ -289,11 +317,11 @@
             </li>
             <li{% if 
                    
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_sales_admin_report_advanced_range')
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_advanced_range')
                     or
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_sales_admin_report_advanced_done')
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_advanced_done')
                     or
-                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_sales_admin_report_simple')
+                    path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_simple')
                     or
                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_report_sales_admin_handling_status')
                     or
@@ -308,19 +336,19 @@
                 </a>
                 <ul class="sub-menu">
                     <li{% if 
-                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_sales_admin_report_advanced_range')
+                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_advanced_range')
                         or
-                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_sales_admin_report_advanced_done')
+                        path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_advanced_done')
                         %} class="active"{% endif %}>
-                        <a href="{{ path('lists_sales_admin_report_advanced_range') }}" title="{% trans %}Activity{% endtrans %}">
+                        <a href="{{ path('lists_handling_report_advanced_range') }}" title="{% trans %}Activity{% endtrans %}">
                             <i class="fa fa-comments"></i>
                             {% trans %}Activity{% endtrans %}
                         </a>
                     </li>
                     <li{% if 
-                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_sales_admin_report_simple')
+                            path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_simple')
                         %} class="active"{% endif %}>
-                        <a href="{{ path('lists_sales_admin_report_simple') }}" title="{% trans %}All projects{% endtrans %}">
+                        <a href="{{ path('lists_handling_report_simple') }}" title="{% trans %}All projects{% endtrans %}">
                             <i class="fa fa-comments"></i>
                             {% trans %}All projects{% endtrans %}
                         </a>
@@ -400,6 +428,15 @@
                             {% trans %}My Team{% endtrans %}</a>
                     </li>
                 </ul>
+            </li>
+        {% endif %}
+        {% if is_granted('ROLE_DOGOVOR_VIEWER') %}
+            <li{% if path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_dogovor_index')
+                %} class="active"{% endif %}>
+                <a href="{{ path('lists_dogovor_dogovor_index') }}" title="{% trans %}Dogovor List{% endtrans %}">
+                    <i class="fa fa-comments"></i>
+                    {% trans %}Dogovor List{% endtrans %}
+                </a>
             </li>
         {% endif %}
         {% if is_granted('ROLE_DOGOVORADMIN') %}
@@ -596,7 +633,7 @@
             </ul>
         </li>
         {% endif %}
-            {% if is_granted('ROLE_CONTROLLING') or is_granted('ROLE_CONTROLLING_OPER') %}
+            {% if is_granted('ROLE_CONTROLLING') or is_granted('ROLE_CONTROLLING_OPER') or is_granted('ROLE_CONTROLLING_VIEWER') %}
                 <li{% if 
                             path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_dogovor_dogovor_index')
                             or

@@ -124,6 +124,19 @@ class ComparatorOrganizationAccess extends BasicOrganizationAccess
     /**
      * @return bool
      */
+    public function canAddHandling ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canAddHandling()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
     public function canExportToExcel ()
     {
         foreach ($this->accesses as $access) {

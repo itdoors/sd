@@ -23,7 +23,6 @@ ITDoors\ControllingBundle\Entity\Invoice:
         guid:
             type: string
             nullable: true
-            unique: true
             length: 512
         sum:
             type: float
@@ -150,3 +149,6 @@ ITDoors\ControllingBundle\Entity\Invoice:
         acts:
             targetEntity: InvoiceAct
             mappedBy: invoice
+    uniqueConstraints:
+        unique_invoice_idx:
+          columns: [ guid, deletedAt ]

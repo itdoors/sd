@@ -11,11 +11,9 @@
     <li>
         <i class="fa fa-home"></i>
         <a href="{{ path('it_doors_controlling_invoice') }}" title="{% trans %}Controlling{% endtrans %}">{% trans %}Controlling{% endtrans %}</a>
-        <i class="fa fa-angle-right"></i>
     </li>
     <li>
         <a href="{{ path('it_doors_controlling_invoice') }}" title="{% trans %}Invoices{% endtrans %}">{% trans %}Invoices{% endtrans %}</a>
-        <i class="fa fa-angle-right"></i>
     </li>
     <li>
         <a href="{{ path('it_doors_controlling_invoice_invoice',{invoiceid:invoiceid}) }}" title="{% trans %}Invoice{% endtrans %}">{% trans %}Invoice{% endtrans %} {{ invoice.invoiceId}} ({{  invoice.date is empty ? '' : invoice.date|date('d.m.y') }})</a>
@@ -109,6 +107,7 @@
     <div class="tab-pane" id="tab_1">
         <div class="col-md-12">
             <h3>{% trans %} Notes {% endtrans %}</h3>
+            {% if access.canAddNote %}
             <div class="table-toolbar">
                 <div class="btn-group">
                     <button id="managers_list_new" class="btn green ajax-form"
@@ -124,8 +123,9 @@
                 <div style="display: none" id="invoiceMessageFormTpl">
                 </div>
             </div>
+            {% endif %}
             <div id="messages_list" data-url="{{ url('it_doors_controlling_invoice_invoice_lastaction') }}">
-                        {{ render(controller('ITDoorsControllingBundle:Invoice:lastaction')) }}
+                {{ render(controller('ITDoorsControllingBundle:Invoice:lastaction')) }}
             </div>
         </div>
     </div>

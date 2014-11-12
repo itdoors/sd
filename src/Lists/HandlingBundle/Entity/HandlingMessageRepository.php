@@ -25,7 +25,7 @@ class HandlingMessageRepository extends EntityRepository
         return $this->createQueryBuilder('hm')
             ->where('hm.handling_id = :handlingId')
             ->setParameter(':handlingId', $handlingId)
-            ->orderBy('hm.createdatetime')
+            ->orderBy('hm.createdate', 'DESC')
             ->getQuery()
             ->getResult();
     }

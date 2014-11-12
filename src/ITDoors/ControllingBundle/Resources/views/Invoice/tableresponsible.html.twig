@@ -2,7 +2,7 @@
 {% trans_default_domain 'ITDoorsControllingBundle' %}
     <div class="col-md-12">
         <div class="table-toolbar">
-            {% if is_granted('ROLE_CONTROLLING') %}
+            {% if access.canAddResponsible %}
             <div class="btn-group">
                 <button id="managers_list_new" class="btn green ajax-form"
                         data-target_holder="invoiceCompanystructureFormTpl"
@@ -20,9 +20,9 @@
             <table id="handling" class="table table-bordered table-striped">
                 <thead>
                     <tr  role="row" class="heading">
-                        <td class="sorting_disabled" role="columnheader" rowspan="1" colspan="1">{% trans %}Name{% endtrans %}</td>
-                        {% if is_granted('ROLE_CONTROLLING') %}
-                        <td class="sorting_disabled" role="columnheader" rowspan="1" colspan="1"></td>
+                        <td>{% trans %}Name{% endtrans %}</td>
+                        {% if access.canAddResponsible %}
+                        <td></td>
                         {% endif %}
                     </tr>
                 </thead>
@@ -30,7 +30,7 @@
                     {% for responsible in entitie %}
                             <tr>
                                 <td> {{ responsible.name }}</td>          
-                                {% if is_granted('ROLE_CONTROLLING') %}     
+                                {% if access.canAddResponsible %}   
                                 <td>
                                     {% if  responsible.id is not empty %}
                                     <a

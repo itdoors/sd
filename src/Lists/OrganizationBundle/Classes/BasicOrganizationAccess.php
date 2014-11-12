@@ -68,6 +68,13 @@ class BasicOrganizationAccess implements OrganizationAccessInterface
     /**
      * @return bool
      */
+    public function canAddHandling ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
     public function canExportToExcel ()
     {
         return false;
