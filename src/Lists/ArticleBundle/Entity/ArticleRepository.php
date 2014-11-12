@@ -79,15 +79,15 @@ class ArticleRepository extends EntityRepository
     {
         $sql = $this->createQueryBuilder('a');
         $count = $this->createQueryBuilder('a');
-        
+
         $this->selectHistoryPage($sql);
         $this->countPage($count);
-        
+
         $this->joinHistoryPage($sql);
-        
+
         $this->whereHistoryPage($sql);
         $this->whereHistoryPage($count);
-        
+
         return array(
             'articles' => $sql->orderBy('a.datePublick', 'Desc')->getQuery(),
             'count' => $count->getQuery()->getSingleScalarResult()
@@ -104,7 +104,7 @@ class ArticleRepository extends EntityRepository
     private function selectBlogPage(QueryBuilder $res, User $user)
     {
         $subQueryCase = $res->expr()->andx($res->expr()->eq('n.news', 'a.id'));
-        
+
         return $res->select('a.id')
             ->addSelect('a.title')
             ->addSelect('a.datePublick')
@@ -133,13 +133,13 @@ class ArticleRepository extends EntityRepository
     {
         $sql = $this->createQueryBuilder('a');
         $count = $this->createQueryBuilder('a');
-        
+
         $this->selectBlogPage($sql, $user);
         $this->countPage($count);
-        
+
         $this->joinHistoryPage($sql);
         $this->whereHistoryPage($count);
-        
+
         return array(
             'articles' => $sql->orderBy('a.datePublick', 'Desc')
                 ->getQuery()
@@ -158,11 +158,11 @@ class ArticleRepository extends EntityRepository
     public function getArticle($id)
     {
         $sql = $this->createQueryBuilder('a');
-        
+
         $this->selectHistoryPage($sql);
-        
+
         $this->joinHistoryPage($sql);
-        
+
         return $sql->addSelect('a.text')
             ->where('a.id = :id')
             ->setParameter(':id', $id)
@@ -181,12 +181,12 @@ class ArticleRepository extends EntityRepository
     public function getVote($id, $userId)
     {
         $sql = $this->createQueryBuilder('a');
-        
+
         $subQueryCase = $sql->expr()->andx(
             $sql->expr()->eq('v.modelId', 'a.id'),
             $sql->expr()->eq('v.modelName', ':text')
         );
-        
+
         return $sql->select('v.id')
             ->addSelect('v.value')
             ->addSelect('v.dateCreate as date')
@@ -247,7 +247,7 @@ class ArticleRepository extends EntityRepository
             $res->expr()->eq('vf.modelId', 'a.id'),
             $res->expr()->eq('vf.modelName', ':text')
         );
-        
+
         return $res->leftJoin('Lists\ArticleBundle\Entity\Vote', 'v', 'WITH', $subQueryCase)
             ->leftJoin('Lists\ArticleBundle\Entity\Vote', 'vf', 'WITH', $subQueryCasef)
             ->andwhere('v.userId = :user')
@@ -280,19 +280,19 @@ class ArticleRepository extends EntityRepository
     {
         $sql = $this->createQueryBuilder('a');
         $count = $this->createQueryBuilder('a');
-        
+
         $this->selectDecisionPage($sql);
         $this->countPage($count);
-        
+
         $this->joinDecisionPage($sql);
-        
+
         if ($userId) {
             $this->joinInnerDecisionPage($sql, $userId);
             $this->joinInnerDecisionPage($count, $userId);
         }
         $this->whereDecisionPage($sql);
         $this->whereDecisionPage($count);
-        
+
         return array(
             'articles' => $sql->orderBy('a.datePublick', 'Desc')->getQuery(),
             'count' => $count->getQuery()->getSingleScalarResult()
@@ -309,7 +309,7 @@ class ArticleRepository extends EntityRepository
     public function getDecisionForCalendar($userId)
     {
         $sql = $this->createQueryBuilder('a');
-        
+
         $sql->select('a.id')
             ->addSelect('a.title')
             ->addSelect('a.dateUnpublick');
@@ -321,7 +321,7 @@ class ArticleRepository extends EntityRepository
             ->andWhere('a.type = :type')
             ->setParameter(':type', 'decision')
             ->setParameter(':date', date('Y-m-d H:i:s'));
-        
+
         return $sql->orderBy('a.datePublick', 'Desc')
             ->getQuery()
             ->getResult();

@@ -46,7 +46,7 @@ class NewsRole
     public function setNews($news)
     {
         $this->news = $news;
-    
+
         return $this;
     }
 
@@ -70,7 +70,7 @@ class NewsRole
     public function setRoles($roles)
     {
         $this->roles = $roles;
-    
+
         return $this;
     }
 
@@ -83,12 +83,12 @@ class NewsRole
     {
         return $this->roles;
     }
-    
+
     /**
      * @var boolean
      */
     private $vote;
-    
+
     /**
      * Set vote
      *
@@ -99,10 +99,10 @@ class NewsRole
     public function setVote($vote)
     {
         $this->vote = $vote;
-    
+
         return $this;
     }
-    
+
     /**
      * Get vote
      *
