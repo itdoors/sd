@@ -256,7 +256,7 @@ class InvoiceRepository extends EntityRepository
                 switch ($key) {
                     case 'customer':
                         if (!$value) {
-                            continue;
+                            break;
                         }
                         $arr = explode(',', $value);
                         $sql->andWhere("customer.id in (:customerIds)");
@@ -264,6 +264,9 @@ class InvoiceRepository extends EntityRepository
                         break;
                     case 'performer':
                         if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        if (!$value) {
                             break;
                         }
                         $arr = explode(',', $value);
@@ -274,13 +277,16 @@ class InvoiceRepository extends EntityRepository
                         if (isset($value[0]) && !$value[0]) {
                             break;
                         }
+                        if (!$value) {
+                            break;
+                        }
                         $arr = explode(',', $value);
                         $sql->andWhere('i.id in (:ids)');
                         $sql->setParameter(':ids', $arr);
                         break;
                     case 'actNumber':
                         if (!$value) {
-                            continue;
+                            break;
                         }
                         $arr = explode(',', $value);
                         $sql->innerJoin('i.acts', 'i_act_number');
@@ -291,6 +297,9 @@ class InvoiceRepository extends EntityRepository
                         if (isset($value[0]) && !$value[0]) {
                             break;
                         }
+                        if (!$value) {
+                            break;
+                        }
                         $arr = explode(',', $value);
                         $sql->leftJoin('i.invoicecompanystructure', 'ics_fil');
                         $sql->innerJoin('ics_fil.companystructure', 'cs_fil');
@@ -299,7 +308,10 @@ class InvoiceRepository extends EntityRepository
                         break;
                     case 'withoutContacts':
                         if (!$value) {
-                            continue;
+                            break;
+                        }
+                        if (!$value) {
+                            break;
                         }
                         $sql
                             ->andWhere(
@@ -326,7 +338,7 @@ class InvoiceRepository extends EntityRepository
                         break;
                     case 'daterange':
                         if (!$value) {
-                            continue;
+                            break;
                         }
                         $daterange = explode('-', $value);
                         $from = new \DateTime($daterange[0]);
