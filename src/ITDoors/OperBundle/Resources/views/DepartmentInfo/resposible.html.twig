@@ -1,6 +1,6 @@
 {% trans_default_domain 'ITDoorsOperBundle' %}
 <div data-url="{{ url('it_doors_oper_department_info_resposible', {'id' : departmentId}) }}" id="tab_department">
-    {% if is_granted('ROLE_HRADMIN') %}
+    {% if is_granted('ROLE_HRADMIN') or is_granted('ROLE_SUPERVISOR')  %}
         <div class="btn-group">
             <button id="managers_list_new" class="btn green ajax-form"
                     data-target_holder="stuffDepartmentTpl"
@@ -23,7 +23,7 @@
                     <th>{% trans %}User{% endtrans %}</th>
                     <th>{% trans %}Userkey{% endtrans %}</th>
                     <th>{% trans %}Claimtype{% endtrans %}</th>
-                    {% if is_granted('ROLE_HRADMIN') %}
+                    {% if is_granted('ROLE_HRADMIN')  or is_granted('ROLE_SUPERVISOR')%}
                     <th>{% trans %}Action{% endtrans %}</th>
                     {% endif %}
                 </tr>
@@ -47,7 +47,7 @@
                                 {% endfor %}
                             {% endfor %}
                         </td>
-                        {% if is_granted('ROLE_HRADMIN') %}
+                        {% if is_granted('ROLE_HRADMIN')  or is_granted('ROLE_SUPERVISOR')%}
                         <td>
                              <a
                                 class="ajax-delete fa fa-trash-o"
