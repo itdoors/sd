@@ -283,6 +283,7 @@
                                         type: "POST",
                                         url: "{{ path('list_article_blog') }}" + "/viewed/" + article.id
                                     });
+                                    location.reload();
                                 });
                             }
                         }

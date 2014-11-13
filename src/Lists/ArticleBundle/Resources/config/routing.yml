@@ -48,6 +48,14 @@ list_article_blog_add:
     pattern:  /dashboard/blog/add
     defaults: { _controller: ListsArticleBundle:ProdBlog:add }
     
+list_article_blog_edit:
+    pattern:  /dashboard/blog/edit/{id}
+    defaults: { _controller: ListsArticleBundle:ProdBlog:edit }
+    
+list_article_blog_delete:
+    pattern:  /dashboard/blog/delete/{id}
+    defaults: { _controller: ListsArticleBundle:ProdBlog:delete }
+
 list_article_blog_viewed:
     pattern:  /dashboard/blog/viewed/{id}
     defaults: { _controller: ListsArticleBundle:ProdBlog:setViewed }

@@ -12,6 +12,7 @@ use Lists\ArticleBundle\Entity\ArticleRepository;
 use Lists\ArticleBundle\Entity\Vote;
 use Lists\ArticleBundle\Entity\Ration;
 use SD\UserBundle\Entity\User;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Class ProdBlogController
@@ -390,9 +391,6 @@ class ProdBlogController extends BaseController
                 $party = $form->getData();
                 $party->setUser($this->getUser());
                 $party->setType($this->articleType);
-                if (method_exists($party, 'getDatePublick') && $party->getDatePublick() != '') {
-                    $party->setDatePublick(new \DateTime($party->getDatePublick()));
-                }
                 $party->setDateCreate(new \DateTime(date('Y-m-d H:i:s')));
                 $em->persist($party);
 
@@ -437,6 +435,106 @@ class ProdBlogController extends BaseController
         return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':add.html.twig', array(
             'form' => $form->createView()
         ));
+    }
+
+    /**
+     * Edits blog article
+     *
+     * @param integer $id
+     *
+     * @return string
+     */
+    public function editAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $article = $em->getRepository('ListsArticleBundle:Article')->find($id);
+        $newsRoles = $em->getRepository('ListsArticleBundle:NewsRole')->findBy(array(
+            'news' => $article
+        ));
+        foreach ($newsRoles as $nr) {
+            $role = $nr->getRoles();
+            $roles[] = ['id' => $role->getId(), 'name' => $role->getName()];
+        }
+
+        if (!$article) {
+            throw $this->createNotFoundException(
+                'Unable to find Article entity.'
+            );
+        }
+        if ($article->getUser() != $this->getUser()) {
+            throw new AccessDeniedException(
+                'You have no permission to edit this article!'
+            );
+        }
+
+        $form = $this->createForm('article' . ucfirst($this->articleType) . 'Form', $article);
+        $request = $this->getRequest();
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            try {
+                $party = $form->getData();
+                $party->setUserId($article->getUser()->getId());
+                $party->setDateUpdate(new \DateTime(date('Y-m-d H:i:s')));
+
+                $em->persist($party);
+                $em->flush();
+            } catch (\Exception $e) {
+                $em->close();
+                throw $e;
+            }
+
+            return $this->redirect($this->generateUrl('list_article_blog'));
+        }
+
+        return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':edit.html.twig', array(
+            'article' => $article,
+            'roles' => $roles,
+            'form' => $form->createView()
+        ));
+    }
+
+    /**
+     * Deletes blog article
+     *
+     * @param integer $id
+     *
+     * @return string
+     */
+    public function deleteAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $article = $em->getRepository('ListsArticleBundle:Article')->find($id);
+
+        if (!$article) {
+            throw $this->createNotFoundException(
+                'Unable to find Article entity.'
+            );
+        }
+        if ($article->getUser() != $this->getUser()) {
+            throw new AccessDeniedException(
+                'You have no permission to edit this article!'
+            );
+        }
+
+        $newsFosUsers = $em->getRepository('ListsArticleBundle:NewsFosUser')->findBy(array(
+            'news' => $article
+        ));
+        foreach ($newsFosUsers as $nfu) {
+            $em->remove($nfu);
+        }
+
+        $newsRoles = $em->getRepository('ListsArticleBundle:NewsRole')->findBy(array(
+            'news' => $article
+        ));
+        foreach ($newsRoles as $nr) {
+            $em->remove($nr);
+        }
+
+        $em->remove($article);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('list_article_blog'));
     }
 
     /**

@@ -50,4 +50,5 @@ security:
         - { path: ^/holiday, roles: 'ROLE_HRADMIN, ROLE_HOLIDAY' }
         - { path: ^/lists/organization, roles: 'ROLE_OPER, ROLE_SALES, ROLE_SALESADMIN, ROLE_HRADMIN, ROLE_CONTROLLING' }
         - { path: ^/dashboard/blog/add, role: ROLE_ARTICLEADMIN }
+        - { path: ^/dashboard/blog/edit, role: ROLE_ARTICLEADMIN }
         
