@@ -4,6 +4,12 @@ lists_handling_index:
     requirements:
         type: my|''
 
+lists_handling_list:
+    pattern:  /lists/handling/list/{type}
+    defaults: { _controller: ListsHandlingBundle:Handling:list, type: '' }
+    requirements:
+        type: my|''
+
 lists_handling_show:
     pattern:  /lists/handling/show/{id}/{type}
     defaults: { _controller: ListsHandlingBundle:Handling:show, type: '' }
