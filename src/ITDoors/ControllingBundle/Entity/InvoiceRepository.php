@@ -252,11 +252,12 @@ class InvoiceRepository extends EntityRepository
         if (sizeof($filters)) {
 
             foreach ($filters as $key => $value) {
-                if (!$value && $key != 'act') {
-                    continue;
-                }
+                
                 switch ($key) {
                     case 'customer':
+                        if (!$value) {
+                            continue;
+                        }
                         $arr = explode(',', $value);
                         $sql->andWhere("customer.id in (:customerIds)");
                         $sql->setParameter(':customerIds', $arr);
@@ -278,6 +279,9 @@ class InvoiceRepository extends EntityRepository
                         $sql->setParameter(':ids', $arr);
                         break;
                     case 'actNumber':
+                        if (!$value) {
+                            continue;
+                        }
                         $arr = explode(',', $value);
                         $sql->innerJoin('i.acts', 'i_act_number');
                         $sql->andWhere("i_act_number.number in (:actNumbers)");
@@ -294,6 +298,9 @@ class InvoiceRepository extends EntityRepository
                         $sql->setParameter(':companystructures', $arr);
                         break;
                     case 'withoutContacts':
+                        if (!$value) {
+                            continue;
+                        }
                         $sql
                             ->andWhere(
                                 'customer.id not in (
@@ -318,6 +325,9 @@ class InvoiceRepository extends EntityRepository
                             ->setParameter(':modelNameDepartments', 'departments');
                         break;
                     case 'daterange':
+                        if (!$value) {
+                            continue;
+                        }
                         $daterange = explode('-', $value);
                         $from = new \DateTime($daterange[0]);
                         $to = new \DateTime($daterange[1]);
@@ -326,7 +336,7 @@ class InvoiceRepository extends EntityRepository
                             ->setParameter(':dateTo', $to);
                         break;
                     case 'act':
-                        if (in_array($value, array(0,1))) {
+                        if (in_array($value, array(0,1)) && $value !== null) {
                             $sql->andWhere(
                                 "i.id in (
                                     SELECT iao.id
