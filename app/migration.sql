@@ -1192,3 +1192,6 @@ ALTER TABLE oper_organizer ADD isVisited BOOLEAN DEFAULT 'false' NOT NULL;
 
 ALTER TABLE news_role ADD vote BOOLEAN DEFAULT NULL;
 -- prod ++++++
+
+CREATE TABLE itd_js_error (id SERIAL NOT NULL, create_datetime TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, url TEXT NOT NULL, message TEXT DEFAULT NULL, extra TEXT DEFAULT NULL, PRIMARY KEY(id));
+-- prod ++++++
