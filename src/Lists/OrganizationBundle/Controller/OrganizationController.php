@@ -323,7 +323,7 @@ class OrganizationController extends BaseController
             ->getRepository('ListsOrganizationBundle:Organization');
 
         $departmensQuery = array();
-        if (empty($filters)) {
+        if (empty($filters) || empty($filters['user'])) {
             $filters['isFired'] = 'No fired';
             $this->setFilters($namespase, $filters);
             $organizationsQuery = array();

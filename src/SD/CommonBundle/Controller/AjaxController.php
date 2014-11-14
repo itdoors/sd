@@ -5066,7 +5066,7 @@ class AjaxController extends BaseFilterController
      */
     public function stuffDepartmentFormSave($form, $user, $request)
     {
-        if (!$user->hasRole('ROLE_HRADMIN')) {
+        if (!$user->hasRole('ROLE_HRADMIN') && !$user->hasRole('ROLE_SUPERVISOR')) {
             throw new Exception('You don`t have access', 403);
         }
         $em = $this->getDoctrine()->getManager();

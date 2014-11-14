@@ -28,6 +28,7 @@ class HandlingSalesFilterFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $router = $this->container->get('router');
         /** @var \Lists\LookupBundle\Entity\LookupRepository $lr */
         $lr = $this->container->get('lists_lookup.repository');
 
@@ -35,29 +36,62 @@ class HandlingSalesFilterFormType extends AbstractType
         $ur = $this->container->get('sd_user.repository');
 
         $builder
-            ->add('organization_id', 'hidden')
-            ->add('city', 'entity', array(
-                'class' => 'Lists\CityBundle\Entity\City',
-                'mapped' => false,
-                'property' => 'name'
+            ->add('organization', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_organization_for_contacts'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_organization_by_ids'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 2,
+                        'allowClear' => true,
+                        'width' => '100%',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter Organiztion',
+                )
             ))
-            ->add('scope', 'entity', array(
-                'class' => 'Lists\LookupBundle\Entity\Lookup',
-                'property' => 'name',
-                'mapped' => false,
-                'query_builder' => $lr->getOnlyScopeQuery()
+            ->add('city', 'text', array(
+                'attr' => array(
+                    'class' => 'form-control itdoors-select2',
+                    'data-url' => $router->generate('sd_common_ajax_city'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_city_by_id'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 2,
+                        'allowClear' => true,
+                        'width' => '100%',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter City'
+                )
             ))
-            ->add('users', 'entity', array(
-                'class' => 'SD\UserBundle\Entity\User',
-                'mapped' => false,
-                'multiple' => true,
-                'property' => 'fullname',
-                'query_builder' => $ur->getOnlyStuff()
+            ->add('scope', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_scope'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_scope_by_id'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 0,
+                        'allowClear' => true,
+                        'width' => '100%',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter Scope',
+                )
+            ))
+            ->add('users', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_user_fio'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 2,
+                        'allowClear' => true,
+                        'width' => '100%',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter Manager',
+                )
             ));
-
-        $builder
-            ->add('save', 'submit')
-            ->add('reset', 'submit');
     }
 
     /**
@@ -66,7 +100,7 @@ class HandlingSalesFilterFormType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Lists\HandlingBundle\Entity\Handling',
+            'data_class' => null,
             'validation_groups' => false,
             'csrf_protection' => false,
             'translation_domain' => 'ListsHandlingBundle'

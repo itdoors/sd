@@ -56,7 +56,7 @@ class OperStatisticController extends Controller
         $maxDate = new \DateTime($averageInfo['maxDate']);
 
         $interval = $maxDate->diff($minDate);
-        $daysCount = $interval->format('%d');
+        $daysCount = $interval->format('%a');
 
         if (!$daysCount) {
             $averagePerDay = 0;

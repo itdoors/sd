@@ -257,9 +257,13 @@ class DogovorController extends BaseController
         $dr = $this->get('lists_dogovor.repository');
 
         $dogovors = $dr->getDogovorByOrganizationCustomerPerformerId($id);
+        
+        $service = $this->get('lists_dogovor.service');
+        $access = $service->checkAccess($this->getUser());
 
         return $this->render('ListsDogovorBundle:Dogovor:forOrganization.html.twig', array(
-            'dogovors' => $dogovors
+            'dogovors' => $dogovors,
+            'access' => $access
         ));
     }
 }

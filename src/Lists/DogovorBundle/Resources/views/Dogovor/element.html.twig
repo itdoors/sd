@@ -74,6 +74,7 @@
         </a>
     {% endif %}
 </td>
+{% if access.canProlongate %}
 <td>
     {% set needToProlongate = (item.dogovorProlongationDate|date('U') - "now"|date('U')) < prolongation_limit %}
     {% if needToProlongate %}
@@ -91,3 +92,4 @@
         </a>
     {% endif %}
 </td>
+{% endif %}

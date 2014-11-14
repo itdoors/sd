@@ -252,17 +252,21 @@ class InvoiceRepository extends EntityRepository
         if (sizeof($filters)) {
 
             foreach ($filters as $key => $value) {
-                if (!$value) {
-                    continue;
-                }
+                
                 switch ($key) {
                     case 'customer':
+                        if (!$value) {
+                            break;
+                        }
                         $arr = explode(',', $value);
                         $sql->andWhere("customer.id in (:customerIds)");
                         $sql->setParameter(':customerIds', $arr);
                         break;
                     case 'performer':
                         if (isset($value[0]) && !$value[0]) {
+                            break;
+                        }
+                        if (!$value) {
                             break;
                         }
                         $arr = explode(',', $value);
@@ -273,11 +277,17 @@ class InvoiceRepository extends EntityRepository
                         if (isset($value[0]) && !$value[0]) {
                             break;
                         }
+                        if (!$value) {
+                            break;
+                        }
                         $arr = explode(',', $value);
                         $sql->andWhere('i.id in (:ids)');
                         $sql->setParameter(':ids', $arr);
                         break;
                     case 'actNumber':
+                        if (!$value) {
+                            break;
+                        }
                         $arr = explode(',', $value);
                         $sql->innerJoin('i.acts', 'i_act_number');
                         $sql->andWhere("i_act_number.number in (:actNumbers)");
@@ -287,6 +297,9 @@ class InvoiceRepository extends EntityRepository
                         if (isset($value[0]) && !$value[0]) {
                             break;
                         }
+                        if (!$value) {
+                            break;
+                        }
                         $arr = explode(',', $value);
                         $sql->leftJoin('i.invoicecompanystructure', 'ics_fil');
                         $sql->innerJoin('ics_fil.companystructure', 'cs_fil');
@@ -294,6 +307,12 @@ class InvoiceRepository extends EntityRepository
                         $sql->setParameter(':companystructures', $arr);
                         break;
                     case 'withoutContacts':
+                        if (!$value) {
+                            break;
+                        }
+                        if (!$value) {
+                            break;
+                        }
                         $sql
                             ->andWhere(
                                 'customer.id not in (
@@ -318,6 +337,9 @@ class InvoiceRepository extends EntityRepository
                             ->setParameter(':modelNameDepartments', 'departments');
                         break;
                     case 'daterange':
+                        if (!$value) {
+                            break;
+                        }
                         $daterange = explode('-', $value);
                         $from = new \DateTime($daterange[0]);
                         $to = new \DateTime($daterange[1]);
@@ -326,7 +348,7 @@ class InvoiceRepository extends EntityRepository
                             ->setParameter(':dateTo', $to);
                         break;
                     case 'act':
-                        if (in_array($value, array(0,1))) {
+                        if (in_array($value, array(0,1)) && $value !== null) {
                             $sql->andWhere(
                                 "i.id in (
                                     SELECT iao.id
@@ -2071,7 +2093,7 @@ class InvoiceRepository extends EntityRepository
      * 
      * @return mixed[]
      */
-    public function getEntittyCountSum ($period, $filters, $companystryctyre, $orders)
+    public function getEntittyCountSum ($period, $filters, $companystryctyre, $orders = null)
     {
         $result = array ();
         switch ($period) {

@@ -17,8 +17,8 @@ use Lists\HandlingBundle\Entity\HandlingMessage;
  */
 class HandlingController extends BaseController
 {
-    protected $filterNamespace = 'handling.sales.admin.filters';
-    protected $filterFormName = 'handlingSalesAdminFilterForm';
+    protected $filterNamespace = 'handling.sales.filters';
+    protected $filterFormName = 'handlingSalesFilterForm';
     protected $wizardOrganizationNamespace = 'sales.wizard.organization';
     protected $wizardHandlingNamespace = 'sales.wizard.handling';
     /**
@@ -30,6 +30,7 @@ class HandlingController extends BaseController
      */
     public function indexAction($type)
     {
+         $filterNamespace = $this->filterNamespace;
         /** @var \SD\UserBundle\Entity\User $user */
         $user = $this->getUser();
 
@@ -40,12 +41,45 @@ class HandlingController extends BaseController
             return $this->render('ListsHandlingBundle:Handling:noAccess.html.twig');
         }
 
-        $filters = $this->getFilters();
+        return $this->render('ListsHandlingBundle:Handling:index.html.twig', array(
+                'filter' => $this->filterFormName,
+                'access' => $access,
+                'type' => $type,
+                'filterNamespace' => $filterNamespace
+            ));
+    }
+    /**
+     * indexAction
+     * 
+     * @param string $type
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listAction($type)
+    {
+        $filterNamespace = $this->filterNamespace;
+        /** @var \SD\UserBundle\Entity\User $user */
+        $user = $this->getUser();
 
-        $page = $this->get('request')->query->get('page', 1);
+        $service = $this->get('lists_handling.service');
+        $access = $service->checkAccess($user);
 
-        $filterForm = $this->processFilters();
+        if (!$access->canSeeList() && empty($type) && !$access->canSeeListMy()) {
+            return $this->render('ListsHandlingBundle:Handling:noAccess.html.twig');
+        }
+        $baseFilter = $this->container->get('it_doors_ajax.base_filter_service');
+        $filters = $baseFilter->getFilters($filterNamespace);
+        
+        if (empty($filters)) {
+            $filters['isFired'] = 'No fired';
+            $this->setFilters($filterNamespace, $filters);
+        }
 
+        $page = $baseFilter->getPaginator($filterNamespace);
+        if (!$page) {
+            $page = 1;
+        }
+            
         /** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
         $handlingRepository = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:Handling');
@@ -67,24 +101,25 @@ class HandlingController extends BaseController
             20
         );
 
-        $canAddNew = $this->getFilterValueByKey('organization_id') ? true : false;
+        $canAddNew = $this->getFilterValueByKey('organization') ? true : false;
         if ($canAddNew) {
             /** @var \Lists\OrganizationBundle\Entity\OrganizationUserRepository $manager */
             $manager = $this->getDoctrine()
                 ->getRepository('ListsOrganizationBundle:OrganizationUser')
                 ->findOneBy(array(
-                    'organizationId' => $this->getFilterValueByKey('organization_id'),
+                    'organizationId' => $this->getFilterValueByKey('organization'),
                     'userId' => $this->getUser()->getId()
                 ));
             if (!$manager) {
                 $canAddNew = false;
             }
         }
+        
+//        $baseFilter = $this->container->get('it_doors_ajax.base_filter_service');
 
-        return $this->render('ListsHandlingBundle:Handling:index.html.twig', array(
+        return $this->render('ListsHandlingBundle:Handling:list.html.twig', array(
+                'filterNamespace' => $filterNamespace,
                 'pagination' => $pagination,
-                'filterForm' => $filterForm->createView(),
-                'filterFormName' => $this->filterFormName,
                 'canAddNew' => $canAddNew,
                 'access' => $access,
                 'type' => $type
@@ -501,30 +536,30 @@ class HandlingController extends BaseController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listAction()
-    {
-        // Get organization filter
-        /** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
-        $handlingRepository = $this->getDoctrine()
-            ->getRepository('ListsHandlingBundle:Handling');
-
-        $filters['progressNOT'] = 100;
-        $filters['chanceNOT'] = array(0, 100);
-        $filters['isClosed'] = 'FALSE';
-
-        /** @var \Doctrine\ORM\Query $handlingQuery */
-        $handlingQuery = $handlingRepository->getAllForSalesQuery(null, $filters);
-
-        $pagination = $handlingQuery->getResult();
-
-        /** @var \Knp\Component\Pager\Paginator $paginator */
-
-        return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':list.html.twig', array(
-                'pagination' => $pagination,
-                'baseRoutePrefix' => $this->baseRoutePrefix,
-                'baseTemplate' => $this->baseTemplate,
-            ));
-    }
+//    public function listAction()
+//    {
+//        // Get organization filter
+//        /** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
+//        $handlingRepository = $this->getDoctrine()
+//            ->getRepository('ListsHandlingBundle:Handling');
+//
+//        $filters['progressNOT'] = 100;
+//        $filters['chanceNOT'] = array(0, 100);
+//        $filters['isClosed'] = 'FALSE';
+//
+//        /** @var \Doctrine\ORM\Query $handlingQuery */
+//        $handlingQuery = $handlingRepository->getAllForSalesQuery(null, $filters);
+//
+//        $pagination = $handlingQuery->getResult();
+//
+//        /** @var \Knp\Component\Pager\Paginator $paginator */
+//
+//        return $this->render('ListsHandlingBundle:' . $this->baseTemplate . ':list.html.twig', array(
+//                'pagination' => $pagination,
+//                'baseRoutePrefix' => $this->baseRoutePrefix,
+//                'baseTemplate' => $this->baseTemplate,
+//            ));
+//    }
      /**
      * Renders organizationUsers list
      * 

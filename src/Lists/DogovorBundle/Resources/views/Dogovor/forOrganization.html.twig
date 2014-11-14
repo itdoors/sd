@@ -16,7 +16,9 @@
                 <th>{% trans %}Subject{% endtrans %} </th>
                 <th>{% trans %}Dogovor Type{% endtrans %} </th>
                 <th>{% trans %}Document{% endtrans %} </th>
+                {% if access.canProlongate %}
                 <th>{% trans %}Actions{% endtrans %} </th>
+                {% endif %}
             </tr>
             </thead>
             <tbody>
@@ -27,14 +29,7 @@
                         id: item.dogovorId,
                     }) }}"
                 >
-                    {{  include(
-                        'ListsDogovorBundle:Dogovor:element.html.twig',
-                            {
-                                item: item,
-                                baseRoutePrefix: 'dogovor',
-                            }
-                        )
-                    }}
+                    {{  include( 'ListsDogovorBundle:Dogovor:element.html.twig') }}
                 </tr>
             {% endfor %}
             </tbody>
