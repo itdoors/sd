@@ -39,10 +39,8 @@
                 minimumInputLength: 2,
                 ajax: {
                     url: '{{ path('sd_common_ajax_user_all_stuff') }}',
-//                     contentType: "application/json; charset=utf-8",
                     dataType: 'json',
                     data: function (term, page) {
-                        console.log(term);
                         return {
                             query: term
                         };

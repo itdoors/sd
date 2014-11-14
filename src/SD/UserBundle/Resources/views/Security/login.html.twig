@@ -78,9 +78,15 @@
 	</div>
 	
 	<div id="block_non_chrome" style="display:none">
-		<h3 class="form-title" align="center">{% trans %}Sorry{% endtrans %}!</h3>
-		<h4 align="center"><a href="http://www.google.com.ua/intl/ru/chrome/?brand=CHMB&utm_campaign=ua&utm_source=ua-ha-emea-ru-bk&utm_medium=ha">
-				{% trans %}Google Chrome needed{% endtrans %}!</a><br><br>
-		</h4>
+		<h2 class="form-title" align="center">{% trans %}Sorry{% endtrans %}!</h2>
+		<h5 align="center"><br>
+		      {% trans %}Google Chrome needed{% endtrans %}.<br><br><br>
+		</h5>
+		<h5 align="center">
+		      {% trans %}Download Chrome{% endtrans %}<br>
+		      <a href="http://www.google.com.ua/intl/ru/chrome/?brand=CHMB&utm_campaign=ua&utm_source=ua-ha-emea-ru-bk&utm_medium=ha">
+				{% trans %}chrome{% endtrans %}
+		      </a><br><br>
+		</h5>
 	</div>
 {% endblock fos_user_content %}

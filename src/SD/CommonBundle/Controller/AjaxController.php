@@ -1019,8 +1019,8 @@ class AjaxController extends BaseFilterController
         $repository = $this->container->get('sd_user.repository');
 
         $objects = $repository->getAllUsersStuff()
-//             ->andWhere('lower(u.firstName) LIKE :q OR lower(u.lastName) LIKE :q')
-//             ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
+            ->andWhere('lower(u.firstName) LIKE :q OR lower(u.lastName) LIKE :q')
+            ->setParameter(':q', mb_strtolower($searchText, 'UTF-8') . '%')
             ->getQuery()
             ->getResult();
 
