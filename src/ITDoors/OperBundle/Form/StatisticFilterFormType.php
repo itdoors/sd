@@ -45,39 +45,25 @@ class StatisticFilterFormType extends AbstractType
         /** @var Router $router */
         $router = $this->container->get('router');
 
+
         $builder
-            ->add('mpk', 'hidden', array(
+            ->add('user', 'hidden', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url'  => $router->generate('sd_common_ajax_oper_department_mpk'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_mpk_by_id'),
+                    'data-url'  => $router->generate('it_doors_oper_ajax_get_oper_manager'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
                     'data-params' => json_encode(array(
-                        'minimumInputLength' => 2,
+                        'minimumInputLength' => 0,
                         'allowClear' => true,
                         'width' => '200px',
                         'multiple' => 'multiple'
                     )),
-                    'data-id-department' => 3,
-                    'placeholder' => 'Enter mpk',
+                    'placeholder' => 'Enter opermanager'
                 )
             ));
-
         $builder
-            ->add('coworker', 'hidden', array(
-                'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url'  => $router->generate('sd_common_ajax_oper_department_individual'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_oper_department_individual_by_id'),
-                    'data-params' => json_encode(array(
-                        'minimumInputLength' => 2,
-                        'allowClear' => true,
-                        'width' => '200px',
-                        'multiple' => 'multiple'
-                    )),
-                    'placeholder' => 'Enter indvidual',
-                )
+            ->add('daterange', 'daterange', array(
             ));
-
     }
 
     /**
@@ -99,6 +85,6 @@ class StatisticFilterFormType extends AbstractType
      */
     public function getName()
     {
-        return 'CoworkerFilterFormType';
+        return 'StatisticFilterFormType';
     }
 }
