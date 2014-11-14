@@ -3292,17 +3292,22 @@ class AjaxController extends BaseFilterController
             ->find($id);
 
           /** @var Invoice $invoice */
-        $invoice = $em
-            ->getRepository('ITDoorsControllingBundle:Invoice')
-            ->find($object->getInvoiceId());
+        $invoice = $object->getInvoice();
 
-        if ($invoice && $invoice->getDogovorId()) {
+        if ($invoice && $invoice->getDogovor()) {
             /** @var Dogovor $dogovor */
-            $dogovor = $em
-               ->getRepository('ListsDogovorBundle:Dogovor')
-               ->find($invoice->getDogovorId());
+            $dogovor = $invoice->getDogovor();
 
             if ($dogovor) {
+                $dogovorCompany =  $em
+                    ->getRepository('ListsDogovorBundle:DogovorCompanystructure')
+                    ->findOneBy(array(
+                        'dogovorId' => $invoice->getDogovorId(),
+                        'companystructureId' => $object->getCompanystructureId()
+                    ));
+                if ($dogovorCompany) {
+                    $em->remove($dogovorCompany);
+                }
                 /** @var Invoice $invoices */
                 $invoices = $em
                 ->getRepository('ITDoorsControllingBundle:Invoice')

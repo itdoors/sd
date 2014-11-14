@@ -58,6 +58,7 @@ class AppKernel extends Kernel
             new Gregwar\ImageBundle\GregwarImageBundle(),
             new ITDoors\HelperBundle\ITDoorsHelperBundle(),
             new Main\ErrorBundle\MainErrorBundle(),//idp
+            new Main\FilterBundle\MainFilterBundle(),//idp
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

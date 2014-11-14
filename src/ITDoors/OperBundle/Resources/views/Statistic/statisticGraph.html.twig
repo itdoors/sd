@@ -1,0 +1,82 @@
+<!-- BEGIN CHART PORTLET-->
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-bar-chart font-green-haze"></i>
+            <span class="caption-subject bold uppercase font-green-haze">{% trans %}Visits statistic{% endtrans %}</span>
+            <span class="caption-helper">{#last 30 days#}</span>
+        </div>
+        {#
+                                        <div class="tools">
+                                            <a href="javascript:;" class="collapse">
+                                            </a>
+                                            <a href="#portlet-config" data-toggle="modal" class="config">
+                                            </a>
+                                            <a href="javascript:;" class="reload">
+                                            </a>
+                                            <a href="javascript:;" class="fullscreen">
+                                            </a>
+                                            <a href="javascript:;" class="remove">
+                                            </a>
+                                        </div>
+        #}
+    </div>
+    <div class="portlet-body">
+        {% set chartId = 'now'|date('U') %}
+        <div id="chart_{{ chartId }}" class="chart" style="height: 400px;">
+        </div>
+    </div>
+</div>
+<!-- END CHART PORTLET-->
+<script>
+    jQuery(document).ready(function() {
+        AmCharts.makeChart("chart_{{ chartId }}", {
+            "type": "serial",
+            "theme": "light",
+            //"pathToImages": "/lib/3/images/",
+            "autoMargins": false,
+            "marginLeft":30,
+            "marginRight":8,
+            "marginTop":10,
+            "marginBottom":46,
+
+            "dataProvider": {{ graph|raw }},
+            "startDuration": 1,
+            "graphs": [{
+                "alphaField": "alpha",
+                "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
+                "dashLengthField": "dashLengthColumn",
+                "fillAlphas": 1,
+                "title": "Visits",
+                "type": "column",
+                "valueField": "visits"
+            }, {
+                "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
+                "bullet": "round",
+                "dashLengthField": "dashLengthLine",
+                "lineThickness": 3,
+                "bulletSize": 7,
+                "bulletBorderAlpha": 1,
+                "bulletColor": "#FFFFFF",
+                "useLineColorForBulletBorder": true,
+                "bulletBorderThickness": 3,
+                "fillAlphas": 0,
+                "lineAlpha": 1,
+                "title": "Expenses",
+                "valueField": "expenses"
+            }],
+            "categoryField": "year",
+            "categoryAxis": {
+                "gridPosition": "start",
+                "axisAlpha":1,
+                "tickLength":0,
+                autoWrap: true
+            }
+        });
+        /*
+         $('#chart_2').closest('.portlet').find('.fullscreen').click(function() {
+         chart.invalidateSize();
+         });
+         */
+    })
+</script>
