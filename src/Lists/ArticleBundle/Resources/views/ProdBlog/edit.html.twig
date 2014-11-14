@@ -1,0 +1,198 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsArticleBundle' %}
+{% block title %}{% trans %}Edit{% endtrans %} {% endblock %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}My news{% endtrans %} <small>{% trans %}edit{% endtrans %}</small>
+    </h3>
+{% endblock %}
+
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        </li>
+        <li>
+            <a href="{{ path('list_article_blog') }}" title="{% trans %}My news{% endtrans %}">{% trans %}My news{% endtrans %}</a>
+        </li>
+        <li>
+            <a href="" title="{% trans %}Edit{% endtrans %}">{% trans %}Edit{% endtrans %}</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/css/datepicker.css')}} " />
+
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/lang/summernote-ru-RU.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.js') }}"></script>
+
+{% endblock %}
+
+{% block body %}
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-gift"></i>{% trans %}Edit{% endtrans %}
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <script>
+                $(document).ready(function() {
+                	$('#articleBlogForm_roles').select2({
+                        allowClear: true
+                    });
+                    SD.select2('#' + '{{ form.vars.name }}' + '_userId', {
+                        multiple: false
+                    });
+                    $('.itdoors-date-picker').datepicker({
+                        rtl: Metronic.isRTL(),
+                        autoclose: true,
+                        format: "dd.mm.yyyy",
+                        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+                        language: 'ru',
+                        startView: 'decade',
+                        weekStart: 1
+                    });
+//                     $('.itdoors-date-picker').datepicker( "setDate", new Date());
+                    $('.textear-edit').summernote({
+                        lang: 'ru-RU',
+                        'disableDragAndDrop': true,
+                        'disableLinkTarget': true,
+                        'onblur': function() {
+                            /** Костыль для страховки */
+                            $('.textear-edit').text($('.textear-edit').code());
+                        }
+                    });
+                    $('.textear-edit').summernote({
+                        'onImageUpload': function(files, editor, welEditable) {
+                            sendFile(files[0],editor,welEditable);
+                        }
+                    });
+                    function sendFile(file,editor,welEditable) {
+                        data = new FormData();
+                        data.append("file", file);
+                        $.ajax({
+                            data: data,
+                            type: "POST",
+                            url: "{{ path('list_article_blog_upload') }}",
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            success: function(url) {
+                                    editor.insertImage(welEditable, url);
+                            }
+                        });
+                    }
+                });
+            </script>
+            {% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+            {% if form.vars.valid %}
+            {% else %}
+                <div class="alert alert-danger">
+                    <button class="close" data-close="alert"></button>
+                    {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                    {{ form_errors(form) }}
+                </div>
+            {% endif %}
+
+            {{ form_start(form, {
+                    'action' : path('list_article_blog_edit',{'id':article.id}),
+                    'attr' : {
+                        'method' : 'POST',
+                        'class' : 'form-horizontal form-row-seperated'
+                    }
+            }) }}
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Autor{% endtrans%}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.userId, {'attr' : {'class' : 'form-control', 'disabled':'disabled', 'placeholder': app.user | trans}}) }}
+                        {% if form.userId.vars.errors|length %}{{ form_errors(form.userId) }}{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Date publick{% endtrans%}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.datePublick, {'attr' : {'id' : 'datepic','class' : 'form-control itdoors-date-picker'}}) }}
+                        {% if form.datePublick.vars.errors|length %}{{ form_errors(form.datePublick) }}{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Title{% endtrans%}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.title, {'attr' : {'class' : 'form-control', 'placeholder': "Title"| trans}}) }}
+                        {% if form.title.vars.errors|length %}{{ form_errors(form.title) }}{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Text short{% endtrans%}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.textShort, {'attr' : {'id' : 'select2','class' : 'form-control', 'placeholder': "Text short"| trans}}) }}
+                        {% if form.textShort.vars.errors|length %}{{ form_errors(form.textShort) }}{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Roles{% endtrans%}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.roles, {'attr' : {'id' : 'select2','class' : 'form-control select2', 'disabled':'disabled'}}) }}
+                        {% if form.textShort.vars.errors|length %}{{ form_errors(form.textShort) }}{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group">
+				    <label class="required control-label col-md-3">{% trans%}Voteable{%endtrans%}</label>
+				    <div class="col-md-9">
+				        {{ form_widget(form.vote, {'attr' : {'id' :'select2','class' : 'form-control', 'disabled':'disabled', 'placeholder': "Roles"|trans}}) }}
+				        {% if form.textShort.vars.errors|length %}{{form_errors(form.textShort) }}{% endif %}
+				    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Text{% endtrans%}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.text, {'attr' : {'id' : 'select2','class' : 'form-control textear-edit', 'placeholder': "Changes"| trans}}) }}
+                        {% if form.text.vars.errors|length %}{{ form_errors(form.text) }}{% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-offset-3 col-md-9">
+                            <button type="submit" class="btn green"><i class="fa fa-pencil"></i> {% trans %}Edit{% endtrans %}</button>
+                            <a class="btn btn-cl green" href="{{ path('list_article_blog') }}" title="{% trans %}Cancel{% endtrans %}">
+                                {% trans %}Cancel{% endtrans %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock body %}
