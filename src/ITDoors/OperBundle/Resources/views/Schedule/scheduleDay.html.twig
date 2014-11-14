@@ -4,6 +4,7 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.css')}}" />
 
 <script>
+{% if canEdit %}
     $(document).ready(function(){
         function updateTableCell(hrefId) {
             if (!hrefId) {
@@ -722,7 +723,7 @@
         $('#coworker_list').select2();
 
     })
-
+{% endif %}
 </script>
 
 {% if canEdit %}
@@ -924,8 +925,8 @@
               data-sick="{% trans %}Sick{% endtrans %} (тн)"
               data-fired="{% trans %}Fired{% endtrans %} (ув)"
               data-skip="{% trans %}Skip{% endtrans %} (пр)"
-              date-vacation="{% trans %}Vacation{% endtrans %} (в)"
-              date-own_vacation="{% trans %}Own vacation{% endtrans %} (на)">
+              data-vacation="{% trans %}Vacation{% endtrans %} (в)"
+              data-own_vacation="{% trans %}Own vacation{% endtrans %} (на)">
             {% if status == 'vacation' %}
                 {% trans %}Vacation{% endtrans %}
             {% elseif status == 'ownVacation' %}
