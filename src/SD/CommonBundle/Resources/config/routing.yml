@@ -361,3 +361,11 @@ sd_common_ajax_invoice_by_act_numbers:
 sd_common_ajax_invoice_by_ids:
     pattern:  /ajax/invoice_by_ids
     defaults: { _controller: SDCommonBundle:Ajax:invoiceByIds }
+
+sd_common_ajax_department:
+    pattern:  /ajax/department
+    defaults: { _controller: SDCommonBundle:Ajax:department }
+
+sd_common_ajax_department_by_ids:
+    pattern:  /ajax/department_by_ids
+    defaults: { _controller: SDCommonBundle:Ajax:getDepartmentsByIdsAjax }
