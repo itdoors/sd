@@ -50,7 +50,9 @@ class OperOrganizerRepository extends EntityRepository
     {
 
         $sql = $this->createQueryBuilder('organizer')
-        ->select('COUNT(organizer.id)');
+        ->select('COUNT(organizer.id)')
+        ->leftJoin('organizer.department', 'd')
+        ->leftJoin('d.organization', 'o');
 
         $sql->where('DATE(organizer.startDatetime) = :date')
             ->setParameter(':date', $date)
@@ -62,6 +64,17 @@ class OperOrganizerRepository extends EntityRepository
                 $sql = $sql->andWhere('organizer.user IN (:user)')
                     ->setParameter(':user', $users);
             }
+            if (isset($filters['organization']) && $filters['organization']) {
+                $organizations = explode(',', $filters['organization']);
+                $sql = $sql->andWhere('o.id IN (:organization)')
+                    ->setParameter(':organization', $organizations);
+            }
+            if (isset($filters['department']) && $filters['department']) {
+                $departments = explode(',', $filters['department']);
+                $sql = $sql->andWhere('d.id IN (:department)')
+                    ->setParameter(':department', $departments);
+            }
+
         }
 
         return $sql->getQuery()->getSingleScalarResult();
@@ -141,6 +154,11 @@ class OperOrganizerRepository extends EntityRepository
                 $organizations = explode(',', $filters['organization']);
                 $sql = $sql->andWhere('o.id IN (:organization)')
                     ->setParameter(':organization', $organizations);
+            }
+            if (isset($filters['department']) && $filters['department']) {
+                $departments = explode(',', $filters['department']);
+                $sql = $sql->andWhere('d.id IN (:department)')
+                    ->setParameter(':department', $departments);
             }
             if (isset($filters['daterange']) && $filters['daterange']) {
                 if ($filters['daterange']['start'] || $filters['daterange']['end']) {

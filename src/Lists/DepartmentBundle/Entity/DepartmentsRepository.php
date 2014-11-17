@@ -303,4 +303,21 @@ class DepartmentsRepository extends EntityRepository
 
         return $sql->getQuery()->getResult();
     }
+
+
+    public function getSearchQuery($q)
+    {
+        $sql = $this->createQueryBuilder('d')
+            ->leftJoin('d.status', 's')
+            ->where('lower(d.name) LIKE :q')
+            ->orWhere('lower(d.address) LIKE :q')
+
+            ->andWhere('s.slug = :active')
+
+            ->setParameter(':active', 'active')
+            ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%');
+
+        return $sql->getQuery()->getResult();
+    }
+
 }

@@ -79,7 +79,21 @@ class StatisticFilterFormType extends AbstractType
                     'placeholder' => 'Enter organization',
                 )
             ));
-
+        $builder
+            ->add('department', 'hidden', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url'  => $router->generate('sd_common_ajax_department'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_department_by_ids'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 2,
+                        'allowClear' => true,
+                        'width' => '200px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter department',
+                )
+            ));
     }
 
     /**

@@ -448,7 +448,7 @@ class OrganizationRepository extends EntityRepository
      *
      * @return mixed[]
      */
-    public function getSearchQuery ($q, $organizationSignId = null)
+    public function getSearchQuery($q, $organizationSignId = null)
     {
         $sql = $this->createQueryBuilder('o')
             ->where('lower(o.name) LIKE :q')
