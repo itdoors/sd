@@ -2,6 +2,7 @@
 
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+use ITDoors\GeoBundle\ITDoorsGeoBundle;
 
 class AppKernel extends Kernel
 {
@@ -57,6 +58,7 @@ class AppKernel extends Kernel
             new SD\ActivityBundle\SDActivityBundle(),
             new Gregwar\ImageBundle\GregwarImageBundle(),
             new ITDoors\HelperBundle\ITDoorsHelperBundle(),
+            new ITDoors\GeoBundle\ITDoorsGeoBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
