@@ -119,16 +119,29 @@ class OperOrganizerRepository extends EntityRepository
         return $sql->getQuery()->getSingleResult();
     }
 
-
+    /**
+     * @param $sql
+     * @param $filters
+     *
+     * @return mixed
+     */
     private function addFilters($sql, $filters)
     {
+        $sql = $sql
+            ->leftJoin('organizer.department', 'd')
+            ->leftJoin('d.organization', 'o');
+
         if (count($filters)) {
             if (isset($filters['user']) && $filters['user']) {
                 $users = explode(',', $filters['user']);
                 $sql = $sql->andWhere('organizer.user IN (:user)')
                     ->setParameter(':user', $users);
             }
-
+            if (isset($filters['organization']) && $filters['organization']) {
+                $organizations = explode(',', $filters['organization']);
+                $sql = $sql->andWhere('o.id IN (:organization)')
+                    ->setParameter(':organization', $organizations);
+            }
             if (isset($filters['daterange']) && $filters['daterange']) {
                 if ($filters['daterange']['start'] || $filters['daterange']['end']) {
                     $start = $filters['daterange']['start'];
