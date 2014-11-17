@@ -30,7 +30,7 @@ class HandlingController extends BaseController
      */
     public function indexAction($type)
     {
-         $filterNamespace = $this->filterNamespace;
+        $filterNamespace = $this->filterNamespace;
         /** @var \SD\UserBundle\Entity\User $user */
         $user = $this->getUser();
 
