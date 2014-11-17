@@ -357,7 +357,6 @@ class OperOrganizerController extends Controller
             }
         });
 
-
         return $return;
     }
 }

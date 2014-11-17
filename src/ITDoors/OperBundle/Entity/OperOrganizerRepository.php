@@ -46,26 +46,23 @@ class OperOrganizerRepository extends EntityRepository
      * 
      * @return integer
      */
-    public function getStatistic($date, $filter = null)
+    public function getStatistic($date, $filters = null)
     {
 
         $sql = $this->createQueryBuilder('organizer')
-/*            ->select('
-            CASE
-            when COUNT(organizer.id) = 0
-                    then 3
-                    else COUNT(organizer.id)  as count
-            ');
-            //->addSelect('DATE(organizer.startDatetime)');*/
         ->select('COUNT(organizer.id)');
-
-/*        $sql->leftJoin('organizer.department', 'd')
-            ->leftJoin('organizer.user', 'u');*/
 
         $sql->where('DATE(organizer.startDatetime) = :date')
             ->setParameter(':date', $date)
             ->andWhere('organizer.isVisited = true');
         //$sql->groupBy('organizer.id');
+        if (count($filters)) {
+            if (isset($filters['user']) && $filters['user']) {
+                $users = explode(',', $filters['user']);
+                $sql = $sql->andWhere('organizer.user IN (:user)')
+                    ->setParameter(':user', $users);
+            }
+        }
 
         return $sql->getQuery()->getSingleScalarResult();
 
@@ -76,11 +73,13 @@ class OperOrganizerRepository extends EntityRepository
      * 
      * @return integer
      */
-    public function getTotalVisits()
+    public function getTotalVisits($filters = null)
     {
 
         $sql = $this->createQueryBuilder('organizer')
             ->select('COUNT(organizer.id)');
+
+        $sql = $this->addFilters($sql, $filters);
 
         return $sql->getQuery()->getSingleScalarResult();
     }
@@ -90,13 +89,15 @@ class OperOrganizerRepository extends EntityRepository
      * 
      * @return integer
      */
-    public function getTotalVisitsCommented()
+    public function getTotalVisitsCommented($filters = null)
     {
 
         $sql = $this->createQueryBuilder('organizer')
             ->select('COUNT(DISTINCT organizer.id)')
 
             ->where('organizer.isVisited = true');
+
+        $sql = $this->addFilters($sql, $filters);
 
         return $sql->getQuery()->getSingleScalarResult();
     }
@@ -105,7 +106,7 @@ class OperOrganizerRepository extends EntityRepository
      * 
      * @return array
      */
-    public function getAveragePerDayVisits()
+    public function getAveragePerDayVisits($filters = null)
     {
 
         $sql = $this->createQueryBuilder('organizer')
@@ -113,6 +114,37 @@ class OperOrganizerRepository extends EntityRepository
             ->addSelect('MIN(organizer.startDatetime) as minDate')
             ->addSelect('MAX(organizer.endDatetime) as maxDate');
 
+        $sql = $this->addFilters($sql, $filters);
+
         return $sql->getQuery()->getSingleResult();
+    }
+
+
+    private function addFilters($sql, $filters)
+    {
+        if (count($filters)) {
+            if (isset($filters['user']) && $filters['user']) {
+                $users = explode(',', $filters['user']);
+                $sql = $sql->andWhere('organizer.user IN (:user)')
+                    ->setParameter(':user', $users);
+            }
+
+            if (isset($filters['daterange']) && $filters['daterange']) {
+                if ($filters['daterange']['start'] || $filters['daterange']['end']) {
+                    $start = $filters['daterange']['start'];
+                    $end = $filters['daterange']['end'];
+
+                    $sql = $sql
+                        ->andWhere('organizer.startDatetime >= :start')
+                        ->setParameter(':start', $start)
+                        ->andWhere('organizer.endDatetime <= :end')
+                        ->setParameter(':end', $end)
+
+                    ;
+                }
+            }
+
+        }
+        return $sql;
     }
 }
