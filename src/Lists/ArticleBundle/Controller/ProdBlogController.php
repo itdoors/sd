@@ -237,7 +237,7 @@ class ProdBlogController extends BaseController
                 ));
                 $item = [
                     'article' => $article,
-                    'viewed' => $nfu ? $nfu->getViewed() : null
+                    'viewed' => $nfu ? $nfu->getViewed() : -1
                 ];
                 if (! in_array($item, $items)) {
                     $items[] = $item;
