@@ -143,4 +143,14 @@ class Region
     {
         return $this->districts;
     }
+
+    /**
+     * __toString
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }
