@@ -40,4 +40,14 @@ ITDoors\OperBundle\Entity\OperOrganizer:
                 department_id:
                     referencedColumnName: id
             orphanRemoval: false
+            nullable: true
+        type:
+            targetEntity: ITDoors\OperBundle\Entity\OperOrganizerType
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                type_id:
+                    referencedColumnName: id
+            orphanRemoval: false
     lifecycleCallbacks: {  }

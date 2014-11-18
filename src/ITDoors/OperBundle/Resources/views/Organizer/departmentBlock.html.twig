@@ -19,11 +19,24 @@
              {% endif %}
                      "
              data-id ="{{ department.id }}"
-             >
+             data-type="department"
+                >
             {{ department.name }}
         </div>
     {% else %}
         <i>{% trans %}No departments available{% endtrans %}</i>
     {% endfor %}
 
+</div>
+<div class="external-event no-hiding"
+     style="background-color: #eeeeee; border: 1px solid #4db3a2 ;color:#333333; margin: 5px; padding: 5px;"
+     data-type="once"
+        >
+    {% trans %}Once visit{% endtrans %}
+</div>
+<div class="external-event no-hiding"
+     style="background-color: #eeeeee; border: 1px solid #4db3a2 ;color:#333333; margin: 5px; padding: 5px;"
+     data-type="other"
+        >
+    {% trans %}Other{% endtrans %}
 </div>

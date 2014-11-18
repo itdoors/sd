@@ -1,5 +1,7 @@
 {% trans_default_domain 'ITDoorsOperBundle' %}
+{% if department is not empty%}
 <a href="{{ path('it_doors_oper_department_info', {'id' : department.id}) }}#tab_5">{% trans %}All reports{% endtrans %}</a>
+{% endif %}
 <br><br>
 <ul class="media-list">
     {% for comment in comments %}
