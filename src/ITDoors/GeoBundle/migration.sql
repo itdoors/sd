@@ -42,3 +42,18 @@ my_geo left join geo_district on
 my_geo.reg = geo_district.name
 where my_geo.city is not null
 order by my_geo.city;
+
+UPDATE geo_district SET name = REPLACE(name,'ҝ','ї');
+UPDATE geo_district SET name = REPLACE(name,'ә','є');
+UPDATE geo_district SET name = REPLACE(name,'Ә','Є');
+UPDATE geo_district SET name = REPLACE(name,'Ҝ','Ї');
+
+UPDATE geo_city SET name = REPLACE(name,'ҝ','ї');
+UPDATE geo_city SET name = REPLACE(name,'ә','є');
+UPDATE geo_city SET name = REPLACE(name,'Ә','Є');
+UPDATE geo_city SET name = REPLACE(name,'Ҝ','Ї');
+
+UPDATE geo_region SET name = REPLACE(name,'ҝ','ї');
+UPDATE geo_region SET name = REPLACE(name,'ә','є');
+UPDATE geo_region SET name = REPLACE(name,'Ә','Є');
+UPDATE geo_region SET name = REPLACE(name,'Ҝ','Ї');
