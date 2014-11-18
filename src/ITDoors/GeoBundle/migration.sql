@@ -57,3 +57,7 @@ UPDATE geo_region SET name = REPLACE(name,'ҝ','ї');
 UPDATE geo_region SET name = REPLACE(name,'ә','є');
 UPDATE geo_region SET name = REPLACE(name,'Ә','Є');
 UPDATE geo_region SET name = REPLACE(name,'Ҝ','Ї');
+
+ALTER TABLE geo_city RENAME COLUMN lat to temp;
+ALTER TABLE geo_city RENAME COLUMN long to lat;
+ALTER TABLE geo_city RENAME COLUMN temp to long;
