@@ -121,6 +121,7 @@ class OperOrganizerController extends Controller
     {
         $idDepartment = $request->request->get('id');
         $idUser = $request->request->get('idUser');
+        $typeString = $request->request->get('type');
 
         $dateSended = $request->request->get('date');
 
@@ -131,8 +132,17 @@ class OperOrganizerController extends Controller
             ->getRepository('SDUserBundle:User')
             ->find($idUser);
 
-        $department = $this->getDoctrine()
-            ->getRepository('ListsDepartmentBundle:Departments')->find($idDepartment);
+        $type = $this->getDoctrine()
+            ->getRepository('ITDoorsOperBundle:OperOrganizerType')
+            ->findOneBy(array(
+                'name' => $typeString
+            ));
+
+        $department = null;
+        if ($idDepartment) {
+            $department = $this->getDoctrine()
+                ->getRepository('ListsDepartmentBundle:Departments')->find($idDepartment);
+        }
 
         $startDatetime = new \DateTime($date);
         $startDatetime->setTime(9, 0, 0);
@@ -146,6 +156,7 @@ class OperOrganizerController extends Controller
             $organizerData->setDepartment($department);
             $organizerData->setStartDatetime($startDatetime);
             $organizerData->setEndDatetime($endDatetime);
+            $organizerData->setType($type);
         /*}*/
 
         $em = $this->getDoctrine()->getManager();
@@ -181,19 +192,34 @@ class OperOrganizerController extends Controller
             'user' => $user
         ));
 
+        $translator = $this->get('translator');
+
         foreach ($organizersData as $organizerData) {
             $color = '';
             if ($organizerData->getIsVisited()) {
                 $color = 'green';
             }
+            if ($organizerData->getType()->getName() == 'once') {
+                $title = $translator->trans('Once visit', array(), 'ITDoorsOperBundle');
+            } elseif ($organizerData->getType()->getName() == 'other') {
+                $title = $translator->trans('Other', array(), 'ITDoorsOperBundle');
+            } elseif ($organizerData->getType()->getName() == 'department') {
+                $department = $organizerData->getDepartment();
+                if ($department) {
+                    $title = $department->getName();
+                } else {
+                    $title = 'error';
+                }
+            }
             $events[] = array(
-                'title' => $organizerData->getDepartment()->getName(),
+                'title' => $title,
                 'start' => $organizerData->getStartDatetime()->format('Y-m-d H:i:s'),
                 'end' => $organizerData->getEndDatetime()->format('Y-m-d H:i:s'),
                 'allDay' => false,
                 'id' => $organizerData->getId(),
                 'color' => $color
             );
+
         }
 
         return new Response(json_encode($events));

@@ -1,3 +1,4 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
 <!-- BEGIN CHART PORTLET-->
 <div class="portlet light bordered">
     <div class="portlet-title">
@@ -50,20 +51,6 @@
                 "title": "Visits",
                 "type": "column",
                 "valueField": "visits"
-            }, {
-                "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
-                "bullet": "round",
-                "dashLengthField": "dashLengthLine",
-                "lineThickness": 3,
-                "bulletSize": 7,
-                "bulletBorderAlpha": 1,
-                "bulletColor": "#FFFFFF",
-                "useLineColorForBulletBorder": true,
-                "bulletBorderThickness": 3,
-                "fillAlphas": 0,
-                "lineAlpha": 1,
-                "title": "Expenses",
-                "valueField": "expenses"
             }],
             "categoryField": "year",
             "categoryAxis": {

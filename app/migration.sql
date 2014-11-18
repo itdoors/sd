@@ -1195,3 +1195,14 @@ ALTER TABLE news_role ADD vote BOOLEAN DEFAULT NULL;
 
 CREATE TABLE itd_js_error (id SERIAL NOT NULL, create_datetime TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, url TEXT NOT NULL, message TEXT DEFAULT NULL, extra TEXT DEFAULT NULL, PRIMARY KEY(id));
 -- prod ++++++
+
+CREATE TABLE oper_organizer_type (id SERIAL NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id));
+ALTER TABLE oper_organizer ADD type_id INT DEFAULT NULL;
+ALTER TABLE oper_organizer ALTER isvisited SET  DEFAULT 'false';
+ALTER TABLE oper_organizer ADD CONSTRAINT FK_907B76AEC54C8C93 FOREIGN KEY (type_id) REFERENCES oper_organizer_type (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_907B76AEC54C8C93 ON oper_organizer (type_id);
+
+INSERT INTO oper_organizer_type (name) VALUES ('department'), ('once'), ('other')
+UPDATE oper_organizer SET type_id = (SELECT id FROM oper_organizer_type WHERE name='department')
+
+-- prod ++++++

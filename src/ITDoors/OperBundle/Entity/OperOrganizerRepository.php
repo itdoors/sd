@@ -28,13 +28,18 @@ class OperOrganizerRepository extends EntityRepository
 
         $sql->leftJoin('do.department', 'd')
             ->leftJoin('do.user', 'u')
+            ->leftJoin('do.type', 't')
 
             ->where('u = (:user)')
             ->setParameter(':user', $user)
             ->andWhere('MONTH(do.startDatetime) = :month')
             ->setParameter(':month', $month)
             ->andWhere('YEAR(do.startDatetime) = :year')
-            ->setParameter(':year', $year);
+            ->setParameter(':year', $year)
+            ->andWhere('t.name = (:type)')
+            ->setParameter(':type', 'department');
+
+
 
         return $sql->getQuery()->getResult();
     }
@@ -52,11 +57,15 @@ class OperOrganizerRepository extends EntityRepository
         $sql = $this->createQueryBuilder('organizer')
         ->select('COUNT(organizer.id)')
         ->leftJoin('organizer.department', 'd')
-        ->leftJoin('d.organization', 'o');
+        ->leftJoin('d.organization', 'o')
+        ->leftJoin('organizer.type', 't');
 
         $sql->where('DATE(organizer.startDatetime) = :date')
             ->setParameter(':date', $date)
-            ->andWhere('organizer.isVisited = true');
+            ->andWhere('organizer.isVisited = true')
+            ->andWhere('t.name = (:type)')
+            ->setParameter(':type', 'department');
+
         //$sql->groupBy('organizer.id');
         if (count($filters)) {
             if (isset($filters['user']) && $filters['user']) {
@@ -142,7 +151,11 @@ class OperOrganizerRepository extends EntityRepository
     {
         $sql = $sql
             ->leftJoin('organizer.department', 'd')
+            ->leftJoin('organizer.type', 't')
             ->leftJoin('d.organization', 'o');
+
+        $sql = $sql->andWhere('t.name = (:type)')
+            ->setParameter(':type', 'department');
 
         if (count($filters)) {
             if (isset($filters['user']) && $filters['user']) {
