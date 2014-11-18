@@ -1,7 +1,0 @@
-parameters:
-#    it_doors_geo.example.class: ITDoors\GeoBundle\Example
-
-services:
-#    it_doors_geo.example:
-#        class: %it_doors_geo.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]

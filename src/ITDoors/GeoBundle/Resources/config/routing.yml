@@ -1,3 +1,0 @@
-it_doors_geo_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: ITDoorsGeoBundle:Default:index }
