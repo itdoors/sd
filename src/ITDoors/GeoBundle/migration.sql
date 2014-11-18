@@ -1,3 +1,12 @@
+CREATE TABLE my_geo (
+    obl character varying(50),
+    reg character varying(50),
+    city character varying(50),
+    long double precision,
+    lat double precision
+);
+COPY my_geo("obl","reg","city","long","lat") FROM '/ua.csv' with delimiter ';' csv;
+
 CREATE SEQUENCE geo_city_id_seq INCREMENT BY 1 MINVALUE 1 START 1;
 CREATE SEQUENCE geo_district_id_seq INCREMENT BY 1 MINVALUE 1 START 1;
 CREATE SEQUENCE geo_region_id_seq INCREMENT BY 1 MINVALUE 1 START 1;
