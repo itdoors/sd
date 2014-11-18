@@ -222,6 +222,7 @@
                             copiedEventObject.allDay = false;
                             copiedEventObject.className = $(this).attr("data-class");
                             copiedEventObject.data_id = $(this).data('id');
+                            copiedEventObject.type = $(this).data('type');
 
                             // render the event on the calendar
                             // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
@@ -235,13 +236,15 @@
                             var id = $(this).data('id');
                             var obj = $(this);
                             var idUser = $('#info_input').data('user_id');
+                            var type = $(this).data('type');
                             $.ajax({
                                 type: 'POST',
                                 url: $('#info_input').data('url_insert_event'),
                                 data: {
                                     id: id,
                                     date: date,
-                                    idUser: idUser
+                                    idUser: idUser,
+                                    type: type
                                 },
                                 success: function(data) {
                                     data = JSON.parse(data);
@@ -250,6 +253,7 @@
                                     } else {
                                         copiedEventObject.id = data.id;
                                         $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+                                        if (!obj.hasClass('no-hiding')) {}
                                         obj.css('opacity', '0.4');
                                     }
                                 }
