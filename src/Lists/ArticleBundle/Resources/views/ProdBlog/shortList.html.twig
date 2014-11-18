@@ -17,7 +17,7 @@
                     <a href="{{path('list_article_blog_show',{'id':items[i].id})}}">
                         <span class="photo">
                             {% if items[i].getUser.photo is not empty %}
-                            <img class="img-circle" alt="" src="{{ web_image(app.user.getWebPath()).resize(29,29) }}" />
+                            <img class="img-circle" alt="" src="{{ web_image(items[i].getUser.getWebPath()).resize(29,29) }}" />
                             {% else %}
                             <img src="{{ asset( userprofiles_url ~  'no_avatar.png') }}" />
                             {% endif %}

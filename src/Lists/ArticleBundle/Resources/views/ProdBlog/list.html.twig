@@ -39,7 +39,11 @@
                     <td>{{item.article.getUser()}}</td>
                     <td>{{ item.article.datePublick == '' ? '' : item.article.datePublick | date('d-m-Y')}}</td>
                     {% if item.viewed is empty %}
-                    	<td><span style="color:red">{% trans %}new{% endtrans %}</span></td>
+                        {% if not is_granted('ROLE_ARTICLEADMIN') %}
+                            <td><span style="color:red">{% trans %}new{% endtrans %}</span></td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
                     {% else %}
                     	<td>{{item.viewed | date('d-m-Y H:i')}}</td>
                     {% endif %}

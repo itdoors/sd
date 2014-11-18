@@ -198,8 +198,8 @@ class ProdBlogController extends BaseController
             'rationResult' => $rationResult,
             'votes' => $votes,
             'ratValue' => $ratValue,
-            'viewed' => $nfu->getViewed(),
-            'voteable' => $nr->getVote()
+            'viewed' => $nfu ? $nfu->getViewed() : -1,
+            'voteable' => $nr ? $nr->getVote() : null
         ));
     }
 
@@ -209,10 +209,11 @@ class ProdBlogController extends BaseController
     public function listAction()
     {
         $filterNamespace = $this->container->getParameter($this->getNamespace());
+        $user = $this->getUser();
 
         $em = $this->getDoctrine()->getManager();
         $newNFUs = $em->getRepository('ListsArticleBundle:NewsFosUser')->findBy(array(
-            'user' => $this->getUser()
+            'user' => $user
         ));
         $items = [];
         foreach ($newNFUs as $nfu) {
@@ -222,6 +223,25 @@ class ProdBlogController extends BaseController
             ];
             if (! in_array($item, $items)) {
                 $items[] = $item;
+            }
+        }
+        if ($user->hasRole('ROLE_ARTICLEADMIN')) {
+            $myArticles = $em->getRepository('ListsArticleBundle:Article')->findBy(array(
+                'user' => $user,
+                'type' => 'blog'
+            ));
+            foreach ($myArticles as $article) {
+                $nfu = $em->getRepository('ListsArticleBundle:NewsFosUser')->findOneBy(array(
+                        'user' => $user,
+                        'news' => $article
+                ));
+                $item = [
+                    'article' => $article,
+                    'viewed' => $nfu ? $nfu->getViewed() : null
+                ];
+                if (! in_array($item, $items)) {
+                    $items[] = $item;
+                }
             }
         }
         usort($items, array(
@@ -451,6 +471,7 @@ class ProdBlogController extends BaseController
         $newsRoles = $em->getRepository('ListsArticleBundle:NewsRole')->findBy(array(
             'news' => $article
         ));
+        $roles = [];
         foreach ($newsRoles as $nr) {
             $role = $nr->getRoles();
             $roles[] = ['id' => $role->getId(), 'name' => $role->getName()];
@@ -489,7 +510,7 @@ class ProdBlogController extends BaseController
 
         return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':edit.html.twig', array(
             'article' => $article,
-            'roles' => $roles,
+            'roles' => $roles ? $roles : null,
             'form' => $form->createView()
         ));
     }
