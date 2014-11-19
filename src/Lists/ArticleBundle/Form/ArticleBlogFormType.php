@@ -41,7 +41,10 @@ class ArticleBlogFormType extends AbstractType
                 'placeholder' => 'Enter fio'
             )
         ))
-            ->add('datePublick', 'text', array())
+            ->add('datePublick', 'date', array(
+                'widget' => 'single_text',
+                'format' => 'dd.MM.yyyy'
+            ))
             ->add('title', 'text', array())
             ->add('vote', 'checkbox', array(
             'required' => false,

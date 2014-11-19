@@ -1,3 +1,7 @@
+it_doors_geo:
+    resource: "@ITDoorsGeoBundle/Resources/config/routing.yml"
+    prefix:   /
+
 it_doors_helper:
     resource: "@ITDoorsHelperBundle/Resources/config/routing.yml"
     prefix:   /

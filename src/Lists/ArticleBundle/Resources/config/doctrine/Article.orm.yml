@@ -56,3 +56,4 @@ Lists\ArticleBundle\Entity\Article:
         ration:
             targetEntity: Ration
             mappedBy: article
+            orphanRemoval: true

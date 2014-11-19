@@ -19,11 +19,9 @@ Lists\ArticleBundle\Entity\NewsRole:
             joinColumns:
                 news_id:
                     referencedColumnName: id
-            orphanRemoval: false
         roles:
             targetEntity: SD\UserBundle\Entity\Group
             inversedBy: null
             joinColumns:
                 role_id:
                     referencedColumnName: id
-            orphanRemoval: false
