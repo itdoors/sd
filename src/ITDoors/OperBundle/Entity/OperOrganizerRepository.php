@@ -154,8 +154,14 @@ class OperOrganizerRepository extends EntityRepository
             ->leftJoin('organizer.type', 't')
             ->leftJoin('d.organization', 'o');
 
+        if (isset($filters['type']) && $filters['type']) {
+            $type = $filters['type'];
+        } else {
+            $type = 'department';
+        }
+
         $sql = $sql->andWhere('t.name = (:type)')
-            ->setParameter(':type', 'department');
+            ->setParameter(':type', $type);
 
         if (count($filters)) {
             if (isset($filters['user']) && $filters['user']) {

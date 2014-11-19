@@ -206,7 +206,16 @@ class OperOrganizerController extends Controller
             } elseif ($organizerData->getType()->getName() == 'department') {
                 $department = $organizerData->getDepartment();
                 if ($department) {
-                    $title = $department->getName();
+                    $title = '';
+                    $mpks = $department->getMpks();
+                    if ($mpks) {
+                        foreach ($mpks as $mpk) {
+                            if ($mpk->getActive()) {
+                                $title .= $mpk->getName().' ';
+                            }
+                        }
+                    }
+                    $title .= $department->getName();
                 } else {
                     $title = 'error';
                 }
