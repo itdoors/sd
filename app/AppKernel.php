@@ -57,8 +57,9 @@ class AppKernel extends Kernel
             new SD\ActivityBundle\SDActivityBundle(),
             new Gregwar\ImageBundle\GregwarImageBundle(),
             new ITDoors\HelperBundle\ITDoorsHelperBundle(),
-            new Main\ErrorBundle\MainErrorBundle(),//idp
-            new Main\FilterBundle\MainFilterBundle(),//idp
+            new Main\ErrorBundle\MainErrorBundle(),
+            new Main\FilterBundle\MainFilterBundle(),
+            new ITDoors\GeoBundle\ITDoorsGeoBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

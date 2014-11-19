@@ -1,9 +1,9 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'ListsArticleBundle' %}
-{% block title %}{% trans %}Add{% endtrans %} {% endblock %}
+{% block title %}{% trans %}Edit{% endtrans %} {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
-        {% trans %}My news{% endtrans %} <small>{% trans %}add{% endtrans %}</small>
+        {% trans %}My news{% endtrans %} <small>{% trans %}edit{% endtrans %}</small>
     </h3>
 {% endblock %}
 
@@ -17,7 +17,7 @@
             <a href="{{ path('list_article_blog') }}" title="{% trans %}My news{% endtrans %}">{% trans %}My news{% endtrans %}</a>
         </li>
         <li>
-            <a href="" title="{% trans %}Add{% endtrans %}">{% trans %}Add{% endtrans %}</a>
+            <a href="" title="{% trans %}Edit{% endtrans %}">{% trans %}Edit{% endtrans %}</a>
         </li>
     </ul>
 {% endblock %}
@@ -46,7 +46,7 @@
     <div class="portlet box blue">
         <div class="portlet-title">
             <div class="caption">
-                <i class="fa fa-gift"></i>{% trans %}Add{% endtrans %}
+                <i class="fa fa-gift"></i>{% trans %}Edit{% endtrans %}
             </div>
         </div>
         <div class="portlet-body form">
@@ -67,7 +67,7 @@
                         startView: 'decade',
                         weekStart: 1
                     });
-                    $('.itdoors-date-picker').datepicker( "setDate", new Date());
+//                     $('.itdoors-date-picker').datepicker( "setDate", new Date());
                     $('.textear-edit').summernote({
                         lang: 'ru-RU',
                         'disableDragAndDrop': true,
@@ -110,10 +110,10 @@
             {% endif %}
 
             {{ form_start(form, {
-                    'action' : path('list_article_blog_add'),
+                    'action' : path('list_article_blog_edit',{'id':article.id}),
                     'attr' : {
                         'method' : 'POST',
-                        'class' : 'form-horizontal form-row-seperated',
+                        'class' : 'form-horizontal form-row-seperated'
                     }
             }) }}
             <div class="form-body">
@@ -156,7 +156,7 @@
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Roles{% endtrans%}</label>
                     <div class="col-md-9">
-                        {{ form_widget(form.roles, {'attr' : {'id' : 'select2','class' : 'form-control select2', 'placeholder': "Roles"| trans}}) }}
+                        {{ form_widget(form.roles, {'attr' : {'id' : 'select2','class' : 'form-control select2', 'disabled':'disabled'}}) }}
                         {% if form.textShort.vars.errors|length %}{{ form_errors(form.textShort) }}{% endif %}
                     </div>
                 </div>
@@ -165,7 +165,7 @@
                 <div class="form-group">
 				    <label class="required control-label col-md-3">{% trans%}Voteable{%endtrans%}</label>
 				    <div class="col-md-9">
-				        {{ form_widget(form.vote, {'attr' : {'id' :'select2','class' : 'form-control', 'placeholder': "Roles"|trans}}) }}
+				        {{ form_widget(form.vote, {'attr' : {'id' :'select2','class' : 'form-control', 'disabled':'disabled', 'placeholder': "Roles"|trans}}) }}
 				        {% if form.textShort.vars.errors|length %}{{form_errors(form.textShort) }}{% endif %}
 				    </div>
                 </div>
@@ -184,7 +184,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="col-md-offset-3 col-md-9">
-                            <button type="submit" class="btn green"><i class="fa fa-pencil"></i>{% trans %}Add{% endtrans %}</button>
+                            <button type="submit" class="btn green"><i class="fa fa-pencil"></i> {% trans %}Edit{% endtrans %}</button>
                             <a class="btn btn-cl green" href="{{ path('list_article_blog') }}" title="{% trans %}Cancel{% endtrans %}">
                                 {% trans %}Cancel{% endtrans %}
                             </a>

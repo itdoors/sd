@@ -23,6 +23,11 @@
                 <th width="15%" class="sorting_disabled" role="columnheader" tabindex="0" rowspan="1" colspan="1">
                     {% trans %}Viewed on{% endtrans %}
                 </th>
+            {% if is_granted('ROLE_ARTICLEADMIN') %}
+                <th width="15%" class="sorting_disabled" role="columnheader" tabindex="0" rowspan="1" colspan="1">
+                    {% trans %}Actions{% endtrans %}
+                </th>
+            {% endif %}
             </tr>
         </thead>
         <tbody role="alert" aria-live="polite" aria-relevant="all">
@@ -34,9 +39,23 @@
                     <td>{{item.article.getUser()}}</td>
                     <td>{{ item.article.datePublick == '' ? '' : item.article.datePublick | date('d-m-Y')}}</td>
                     {% if item.viewed is empty %}
-                    	<td><span style="color:red">{% trans %}new{% endtrans %}</span></td>
-                    {% else %}
+                        <td><span style="color:red">{% trans %}new{% endtrans %}</span></td>
+                    {% elseif item.viewed.timestamp is defined %}
                     	<td>{{item.viewed | date('d-m-Y H:i')}}</td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    {% if is_granted('ROLE_ARTICLEADMIN') %}
+                        {% if item.article.getUser() == app.getUser() %}
+                            <td align="center">
+                                <a href="{{ path('list_article_blog_edit',{'id':item.article.id}) }}" 
+                                   title="{% trans %}Edit{% endtrans %}"><i class="icon-pencil"></i>
+                                </a>
+                                <a href="{{ path('list_article_blog_delete',{'id':item.article.id}) }}" 
+                                   title="{% trans %}Delete{% endtrans %}"><i class="icon-trash"></i>
+                                </a>
+                            </td>
+                        {% endif %}
                     {% endif %}
                 </tr>
             {% endfor %}

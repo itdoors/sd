@@ -316,6 +316,13 @@ class DogovorRepository extends EntityRepository
                                 ->andWhere("d.subject LIKE :subject")
                                 ->setParameter(':subject', "{$value}%");
                         break;
+                    case 'isActive':
+                        if ($value == 'true') {
+                            $sql->andWhere("d.isActive = TRUE");
+                        } elseif ($value == 'false') {
+                            $sql->andWhere("d.isActive = FALSE");
+                        }
+                        break;
 
                 }
             }
