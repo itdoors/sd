@@ -252,7 +252,7 @@ class InvoiceRepository extends EntityRepository
         if (sizeof($filters)) {
 
             foreach ($filters as $key => $value) {
-                
+
                 switch ($key) {
                     case 'customer':
                         if (!$value) {

@@ -238,7 +238,7 @@ class DogovorController extends BaseController
         $itemQuery = $dr->getAllForDogovorQuery(array(), $id);
 
         $item = $itemQuery->getSingleResult();
-        
+
         $dogovorRepository = $this->getDoctrine()
             ->getManager()
             ->getRepository('ListsDogovorBundle:Dogovor');

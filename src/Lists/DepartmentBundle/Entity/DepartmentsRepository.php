@@ -304,7 +304,13 @@ class DepartmentsRepository extends EntityRepository
         return $sql->getQuery()->getResult();
     }
 
-
+    /**
+     * getSearchQuery
+     * 
+     * @param string $q
+     * 
+     * @return array
+     */
     public function getSearchQuery($q)
     {
         $sql = $this->createQueryBuilder('d')
@@ -319,5 +325,4 @@ class DepartmentsRepository extends EntityRepository
 
         return $sql->getQuery()->getResult();
     }
-
 }
