@@ -524,22 +524,24 @@ class InvoiceController extends BaseFilterController
             ->setCellValue('D2', '1C')
             ->setCellValue('E1', $translator->trans('Performer', array (), 'ITDoorsControllingBundle'))
             ->setCellValue('F1', $translator->trans('Invoice amount', array (), 'ITDoorsControllingBundle'))
-            ->setCellValue('G1', $translator->trans('№ ABP/BH', array (), 'ITDoorsControllingBundle'))
-            ->setCellValue('H1', $translator->trans('Date ABP/BH', array (), 'ITDoorsControllingBundle'))
-            ->setCellValue('I1', $translator->trans('Original ABP/BN', array (), 'ITDoorsControllingBundle'))
-            ->setCellValue('J1', $translator->trans('Responsible', array (), 'ITDoorsControllingBundle'))
-            ->setCellValue('K1', $translator->trans('№ contract', array (), 'ITDoorsControllingBundle'))
-            ->setCellValue('K2', 'DebtControll')
-            ->setCellValue('L2', '1C')
-            ->setCellValue('M1', $translator->trans('Date contract', array (), 'ITDoorsControllingBundle'))
-            ->setCellValue('M2', 'DebtControll')
-            ->setCellValue('N2', '1C')
-            ->setCellValue('O1', $translator->trans('Deferment', array (), 'ITDoorsControllingBundle'))
-            ->setCellValue('P1', $translator->trans('Notes', array (), 'ITDoorsControllingBundle'))
-            ->setCellValue('Q1', $translator->trans('Expected date of Payment', array (), 'ITDoorsControllingBundle'))
-            ->setCellValue('R1', $translator->trans('Fact date of payment', array (), 'ITDoorsControllingBundle'))
-            ->setCellValue('S1', $translator->trans('Status', array (), 'ITDoorsControllingBundle'));
+            ->setCellValue('G1', $translator->trans('Debt', array (), 'ITDoorsControllingBundle'))
+            ->setCellValue('H1', $translator->trans('№ ABP/BH', array (), 'ITDoorsControllingBundle'))
+            ->setCellValue('I1', $translator->trans('Date ABP/BH', array (), 'ITDoorsControllingBundle'))
+            ->setCellValue('J1', $translator->trans('Original ABP/BN', array (), 'ITDoorsControllingBundle'))
+            ->setCellValue('K1', $translator->trans('Responsible', array (), 'ITDoorsControllingBundle'))
+            ->setCellValue('L1', $translator->trans('№ contract', array (), 'ITDoorsControllingBundle'))
+            ->setCellValue('L2', 'DebtControll')
+            ->setCellValue('M2', '1C')
+            ->setCellValue('N1', $translator->trans('Date contract', array (), 'ITDoorsControllingBundle'))
+            ->setCellValue('N2', 'DebtControll')
+            ->setCellValue('O2', '1C')
+            ->setCellValue('P1', $translator->trans('Deferment', array (), 'ITDoorsControllingBundle'))
+            ->setCellValue('Q1', $translator->trans('Notes', array (), 'ITDoorsControllingBundle'))
+            ->setCellValue('R1', $translator->trans('Expected date of Payment', array (), 'ITDoorsControllingBundle'))
+            ->setCellValue('S1', $translator->trans('Fact date of payment', array (), 'ITDoorsControllingBundle'))
+            ->setCellValue('T1', $translator->trans('Status', array (), 'ITDoorsControllingBundle'));
         $phpExcelObject->getActiveSheet()->getRowDimension('1')->setRowHeight(40);
+        $phpExcelObject->getActiveSheet()->getRowDimension('2')->setRowHeight(40);
         $phpExcelObject->getActiveSheet()->mergeCells('A1:A2');
         $phpExcelObject->getActiveSheet()->mergeCells('B1:B2');
         $phpExcelObject->getActiveSheet()->mergeCells('C1:D1');
@@ -549,13 +551,14 @@ class InvoiceController extends BaseFilterController
         $phpExcelObject->getActiveSheet()->mergeCells('H1:H2');
         $phpExcelObject->getActiveSheet()->mergeCells('I1:I2');
         $phpExcelObject->getActiveSheet()->mergeCells('J1:J2');
-        $phpExcelObject->getActiveSheet()->mergeCells('K1:L1');
-        $phpExcelObject->getActiveSheet()->mergeCells('M1:N1');
-        $phpExcelObject->getActiveSheet()->mergeCells('O1:O2');
+        $phpExcelObject->getActiveSheet()->mergeCells('K1:K2');
+        $phpExcelObject->getActiveSheet()->mergeCells('L1:M1');
+        $phpExcelObject->getActiveSheet()->mergeCells('N1:O1');
         $phpExcelObject->getActiveSheet()->mergeCells('P1:P2');
         $phpExcelObject->getActiveSheet()->mergeCells('Q1:Q2');
         $phpExcelObject->getActiveSheet()->mergeCells('R1:R2');
         $phpExcelObject->getActiveSheet()->mergeCells('S1:S2');
+        $phpExcelObject->getActiveSheet()->mergeCells('T1:T2');
         $str = 2;
 
         foreach ($invoices as $invoice) {
@@ -577,6 +580,7 @@ class InvoiceController extends BaseFilterController
                 ->setCellValueByColumnAndRow(++$col, $str, $invoice['invoiceCustomerName'])
                 ->setCellValueByColumnAndRow(++$col, $str, $invoice['performerName'])
                 ->setCellValueByColumnAndRow(++$col, $str, $invoice['sum'])
+                ->setCellValueByColumnAndRow(++$col, $str, $invoice['debitSum'])
                 ->setCellValueByColumnAndRow(++$col, $str, $invoice['actNumbers'])
                 ->setCellValueByColumnAndRow(++$col, $str, $invoice['actDates'])
                 ->setCellValueByColumnAndRow(++$col, $str, $invoice['actOriginals'])
@@ -644,18 +648,18 @@ class InvoiceController extends BaseFilterController
             ),
         );
 
-        $phpExcelObject->getActiveSheet()->getStyle('A1:S' . $str)->applyFromArray($styleArray);
+        $phpExcelObject->getActiveSheet()->getStyle('A1:T' . $str)->applyFromArray($styleArray);
 
         $phpExcelObject->getActiveSheet()
-            ->getStyle('A2:S' . $str)
+            ->getStyle('A2:T' . $str)
             ->getAlignment()
             ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
         $phpExcelObject->getActiveSheet()
-            ->getStyle('A1:S2')
+            ->getStyle('A1:T2')
             ->getAlignment()
             ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $phpExcelObject->getActiveSheet()
-            ->getStyle('A1:S2')
+            ->getStyle('A1:T2')
             ->getAlignment()
             ->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
         $phpExcelObject->getActiveSheet()
@@ -671,8 +675,8 @@ class InvoiceController extends BaseFilterController
 //        $phpExcelObject->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
 //        $phpExcelObject->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
 //        $phpExcelObject->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
-        $phpExcelObject->getActiveSheet()->getStyle('A1:S' . $str)->getAlignment()->setWrapText(true);
-        $phpExcelObject->getActiveSheet()->getStyle('A1:S2')->getFill()
+        $phpExcelObject->getActiveSheet()->getStyle('A1:T' . $str)->getAlignment()->setWrapText(true);
+        $phpExcelObject->getActiveSheet()->getStyle('A1:T2')->getFill()
             ->applyFromArray(array ('type' => PHPExcel_Style_Fill::FILL_SOLID,
                 'startcolor' => array ('rgb' => 'eeeeee')
         ));

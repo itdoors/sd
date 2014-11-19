@@ -188,12 +188,13 @@ class OperOrganizer
      * Set type
      *
      * @param \ITDoors\OperBundle\Entity\OperOrganizerType $type
+     * 
      * @return OperOrganizer
      */
     public function setType(\ITDoors\OperBundle\Entity\OperOrganizerType $type = null)
     {
         $this->type = $type;
-    
+
         return $this;
     }
 

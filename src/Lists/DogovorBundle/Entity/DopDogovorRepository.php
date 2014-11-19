@@ -150,8 +150,7 @@ class DopDogovorRepository extends EntityRepository
                 WHERE
                     ddd.dopDogovorId = dd.id
                 ) as departmentCount'
-            )
-            ;
+            );
     }
     /**
      * Processes sql query. adding select
