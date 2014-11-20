@@ -94,6 +94,22 @@ class StatisticFilterFormType extends AbstractType
                     'placeholder' => 'Enter department',
                 )
             ));
+
+        $builder
+            ->add('mpk', 'hidden', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url'  => $router->generate('sd_common_ajax_mpk'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_mpk_by_id'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 2,
+                        'allowClear' => true,
+                        'width' => '200px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter mpk',
+                )
+            ));
     }
 
     /**

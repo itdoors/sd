@@ -58,6 +58,14 @@
 #}
 	{% endblock %}
 	<!-- END THEME STYLES -->
+
+{#
+    <script src="{{ asset('metronic/assets/global/plugins/pace/pace.min.js') }}"
+            data-pace-options='{ "ajax": false, eventLag: false }'
+            type="text/javascript"></script>
+    <link href="{{ asset('metronic/assets/global/plugins/pace/themes/pace-theme-barber-shop.css') }}" rel="stylesheet" type="text/css"/>
+#}
+
     <script src="{{ asset('metronic/assets/global/plugins/jquery-1.11.0.min.js') }}" type="text/javascript"></script>
 	<link rel="shortcut icon" href="favicon.ico" />
 
@@ -127,6 +135,7 @@
 						 {% trans %}Default <small>default template</small>{% endtrans %}  
 					</h3>
 					{% endblock %}
+                    <div class="page-bar">
 					{% block page_breadcrumbs %}
 					<ul class="page-breadcrumb breadcrumb">
 						<li>
@@ -137,6 +146,7 @@
 						<li><a href="#">Dashboard</a></li>						
 					</ul>
 					{% endblock %}
+                    </div>
 					<!-- END PAGE TITLE & BREADCRUMB-->
 				</div>
 			</div>

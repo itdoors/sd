@@ -195,3 +195,11 @@ it_doors_oper_ajax_get_oper_manager:
 it_doors_oper_statistic_render_filter_result:
     pattern:  /oper/statistic/render/filter/result
     defaults: { _controller: ITDoorsOperBundle:OperStatistic:renderFilterResult }
+
+it_doors_oper_statistic_coworker_render_filter_result:
+    pattern:  /oper/statistic/render/filter/coworker/result
+    defaults: { _controller: ITDoorsOperBundle:OperStatistic:renderFilterCoworkerResult }
+
+it_doors_oper_statistic_report_export:
+    pattern:  /oper/statistic/report/export
+    defaults: { _controller: ITDoorsOperBundle:OperStatistic:exportReport }
