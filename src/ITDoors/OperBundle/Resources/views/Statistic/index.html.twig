@@ -2,6 +2,7 @@
 {% trans_default_domain 'ITDoorsOperBundle' %}
 {% block title %} {% trans %}Statistic{% endtrans %} {% endblock %}
 {% block page_breadcrumbs %}
+
     <ul class="page-breadcrumb breadcrumb">
         <li>
             <i class="fa fa-home"></i>
@@ -9,6 +10,28 @@
         </li>
         <li><a href="" title="{% trans   %}Statistic{% endtrans %}">{% trans   %}Statistic{% endtrans %}</a></li>
     </ul>
+    <div class="page-toolbar">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-fit-height grey-salt dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true">
+                {% trans %}Actions{% endtrans %} <i class="fa fa-angle-down"></i>
+            </button>
+            <ul class="dropdown-menu pull-right" role="menu">
+                <li>
+                    <a href="{{ path('it_doors_oper_statistic_report_export') }}">{% trans %}Export reports{% endtrans %}</a>
+                </li>
+{#
+                <li>
+                    <a href="#">Something else here</a>
+                </li>
+                <li class="divider">
+                </li>
+                <li>
+                    <a href="#">Separated link</a>
+                </li>
+#}
+            </ul>
+        </div>
+    </div>
 {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
@@ -43,17 +66,13 @@
 
 {% block body %}
 
-
-
-
-
-
     <div class="row">
         <div class="col-md-12">
             <div class="tabbable tabbable-custom boxless">
                 <ul class="nav nav-tabs" id="ajax_tabs">
                     <li class="active"><a href="#tab_total" data-toggle="tab">{% trans %}Total{% endtrans %}</a></li>
-                    <li><a href="#tab_custom" data-toggle="tab">{% trans %}Filter{% endtrans %}</a></li>
+                    <li><a href="#tab_filter" data-toggle="tab">{% trans %}Filter{% endtrans %}</a></li>
+                    <li><a href="#tab_coworker" data-toggle="tab">{% trans %}Coworkers{% endtrans %}</a></li>
                 </ul>
                 <div class="tab-content" id="tab_content">
                     <div class="tab-pane active" id="tab_total">
@@ -62,12 +81,20 @@
 
                     </div>
 
-                    <div class="tab-pane" id="tab_custom">
+                    <div class="tab-pane" id="tab_filter">
 
                         {{ render(controller('ITDoorsOperBundle:OperStatistic:filterPage', {
 
                         })) }}
                     </div>
+
+                    <div class="tab-pane" id="tab_coworker">
+
+                        {{ render(controller('ITDoorsOperBundle:OperStatistic:coworkerPage', {
+
+                        })) }}
+                    </div>
+
                 </div>
             </div>
         </div>

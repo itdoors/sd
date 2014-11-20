@@ -17,13 +17,14 @@ use Symfony\Component\Validator\Constraints\DateTime;
 class OperStatisticController extends Controller
 {
     protected $filterNamespace = 'oper.statistic';
+    protected $filterCoworkerNamespace = 'oper.statistic.coworker';
 
     /**
      * indexAction
      *
      * @return mixed[]
      */
-    public function indexAction ()
+    public function indexAction()
     {
 
         // total statistic
@@ -32,18 +33,24 @@ class OperStatisticController extends Controller
         return $this->render('ITDoorsOperBundle:Statistic:index.html.twig', $info);
     }
 
-    public function filterPageAction() {
+    public function filterPageAction()
+    {
 
 
+        return $this->render('ITDoorsOperBundle:Statistic:filterPage.html.twig', array());
+    }
 
-        return $this->render('ITDoorsOperBundle:Statistic:filterPage.html.twig', array (
-        ));
+    public function coworkerPageAction()
+    {
+
+        return $this->render('ITDoorsOperBundle:Statistic:coworkerPage.html.twig', array());
     }
 
     /**
      * @return array
      */
-    public function getOperManagerAjaxAction() {
+    public function getOperManagerAjaxAction()
+    {
         $searchText = $this->get('request')->query->get('query');
 
         /** @var \SD\UserBundle\Entity\UserRepository $repository */
@@ -74,7 +81,8 @@ class OperStatisticController extends Controller
     }
 
 
-    public function renderFilterResultAction() {
+    public function renderFilterResultAction()
+    {
         $filterService = $this->get('itd.base_filter_service');
         $filters = $filterService->getFilters($this->filterNamespace);
 
@@ -85,8 +93,21 @@ class OperStatisticController extends Controller
         return new Response($html);
     }
 
+    public function renderFilterCoworkerResultAction()
+    {
+        $filterService = $this->get('itd.base_filter_service');
+        $filters = $filterService->getFilters($this->filterCoworkerNamespace);
 
-    private function getStatisticInfo($filters = null) {
+
+        $info = $this->getStatisticCoworkerInfo($filters);
+
+        $html = $this->renderView('ITDoorsOperBundle:Statistic:coworkerGraph.html.twig', $info);
+        return new Response($html);
+    }
+
+
+    private function getStatisticInfo($filters = null)
+    {
 
         $statisticRepo = $this->getDoctrine()
             ->getRepository('ITDoorsOperBundle:OperOrganizer');
@@ -107,7 +128,7 @@ class OperStatisticController extends Controller
         if (!$daysCount) {
             $averagePerDay = 0;
         } else {
-            $averagePerDay = $count/$daysCount;
+            $averagePerDay = $count / $daysCount;
         }
 
         //graph part
@@ -126,26 +147,114 @@ class OperStatisticController extends Controller
                 }
             }
         }
-        for ($i = $numDays; $i>=0; $i--) {
+
+        $filtersOther = $filters;
+        $filtersOther['type'] = 'other';
+        $filtersOnce = $filters;
+        $filtersOnce['type'] = 'once';
+
+        for ($i = $numDays; $i >= 0; $i--) {
 
             $date = clone($toDayGraph);
-            $date->sub(new \DateInterval('P'.$i.'D'));
+            $date->sub(new \DateInterval('P' . $i . 'D'));
 
             $numVisits = $statisticRepo->getStatistic($date, $filters);
+
+            $numVisitsOther = $statisticRepo->getStatistic($date, $filtersOther);
+
+            $numVisitsOnce = $statisticRepo->getStatistic($date, $filtersOnce);
 
             $key = $numDays - $i;
             $graph[$key]['year'] = $date->format('d-m');
             $graph[$key]['visits'] = $numVisits;
-            //$test[$i]['expenses'] = 5;
+
+            $graph[$key]['visitsOther'] = $numVisitsOther;
+            $graph[$key]['visitsOnce'] = $numVisitsOnce;
+
         }
         $graph = json_encode($graph);
 
 
-        return array (
+        return array(
             'graph' => $graph,
             'totalVisits' => $totalVisits,
             'totalVisitsCommented' => $totalVisitsCommented,
             'averagePerDay' => $averagePerDay
         );
+    }
+
+    private function getStatisticCoworkerInfo($filters = null)
+    {
+        $statisticRepo = $this->getDoctrine()
+            ->getRepository('ITDoorsOperBundle:OperOrganizer');
+
+        $operManagers = $this->opermanagerList();
+        $graph = array();
+        $counter = 0;
+        foreach ($operManagers as $operManager) {
+            if (isset($filters['user']) && $filters['user']) {
+                $users = explode(',', $filters['user']);
+                if (!in_array($operManager['id'], $users)) {
+                    continue;
+                }
+            }
+
+            $visits = $statisticRepo->getCoworkerStatistic($operManager, $filters);
+
+            $graph[$counter]['user'] = $operManager['fullName'];
+            $graph[$counter]['visits'] = $visits;
+
+            $counter++;
+        }
+
+        $numElements = $counter;
+        $graph = json_encode($graph);
+
+        return array(
+            'graph' => $graph,
+            'numElements' => $numElements
+        );
+
+    }
+
+
+    /**
+     * opermanagerList
+     *
+     * @return Response
+     */
+    private function opermanagerList()
+    {
+        $return = array();
+
+        $usersOper = $this->getDoctrine()
+            ->getRepository('SDUserBundle:User')
+            ->findByRole('ROLE_OPER');
+
+        array_walk($usersOper, function ($userOper, $key) use (&$return) {
+            if ($userOper->getStuff()) {
+                $return[] = array('id' =>  $userOper->getId(), 'fullName' => $userOper->getFullName());
+            }
+        });
+
+        return $return;
+    }
+
+
+    public function exportReportAction() {
+        $statisticRepo = $this->getDoctrine()
+            ->getRepository('ITDoorsOperBundle:CommentOrganizer');
+
+        $reports = $statisticRepo->getReports();
+
+        $serviceExport = $this->get('itdoors_common.export.service');
+
+        $excelObject = $serviceExport->getExcel($reports, 'ITDoorsOperBundle');
+
+
+
+        $response = $serviceExport->getResponse($excelObject, 'Reports');
+
+        return $response;
     }
 }
