@@ -289,3 +289,13 @@ Enter department: Введите отделение
 Once visit: Разовые работы
 Other: Прочее
 Visits: Посещения
+Export reports: Экспорт отчетов
+typeName: Тип
+organizationName: Организация
+departmentName: Название отделения
+departmentAddress: Адресс Отделения
+startDatetime: Дата начала посещения
+endDatetime: Дата окончания посещения
+userName: Пользователь
+commentValue: Комментарий
+commentDate: Дата комментария

@@ -1,0 +1,81 @@
+{% trans_default_domain 'ITDoorsOperBundle' %}
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-bar-chart font-green-haze"></i>
+            <span class="caption-subject bold uppercase font-green-haze">{% trans %}Visits statistic{% endtrans %}</span>
+            <span class="caption-helper">{% trans %}Coworkers{% endtrans %}{#last 30 days#}</span>
+        </div>
+        {#
+                                        <div class="tools">
+                                            <a href="javascript:;" class="collapse">
+                                            </a>
+                                            <a href="#portlet-config" data-toggle="modal" class="config">
+                                            </a>
+                                            <a href="javascript:;" class="reload">
+                                            </a>
+                                            <a href="javascript:;" class="fullscreen">
+                                            </a>
+                                            <a href="javascript:;" class="remove">
+                                            </a>
+                                        </div>
+        #}
+    </div>
+    <div class="portlet-body">
+        {% set chartId = 'now'|date('U') %}
+        <div id="chart3_{{ chartId }}" class="chart" style="height: {{ 150 + 30*numElements }}px">
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+var chart = AmCharts.makeChart("chart3_{{ chartId }}", {
+    "type": "serial",
+    "theme": "light",
+    //"handDrawn": true,
+    //"handDrawScatter": 3,
+    "legend": {
+        "useGraphSettings": true,
+        "markerSize": 12,
+        "valueWidth": 0,
+        "verticalGap": 0
+    },
+    "dataProvider": {{ graph|raw }},
+    "valueAxes": [{
+        "minorGridAlpha": 0.08,
+        "minorGridEnabled": true,
+        "position": "top",
+        "axisAlpha": 0
+    }],
+    "startDuration": 1,
+    "graphs": [{
+        "balloonText": "<span style='font-size:13px;'>[[title]] ([[category]]):<b>[[value]]</b></span>",
+        "title": "{% trans %}Visits{% endtrans %}",
+        "type": "column",
+        "fillAlphas": 0.8,
+
+        "valueField": "visits"
+    }
+    /*, {
+        "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b></span>",
+        "bullet": "round",
+        "bulletBorderAlpha": 1,
+        "bulletColor": "#FFFFFF",
+        "useLineColorForBulletBorder": true,
+        "fillAlphas": 0,
+        "lineThickness": 2,
+        "lineAlpha": 1,
+        "bulletSize": 7,
+        "title": "Expenses",
+        "valueField": "expenses"
+    }*/
+    ],
+    "rotate": true,
+    "categoryField": "user",
+    "categoryAxis": {
+        "gridPosition": "start"
+    }
+});
+</script>

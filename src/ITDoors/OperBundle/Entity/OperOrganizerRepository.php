@@ -62,16 +62,31 @@ class OperOrganizerRepository extends EntityRepository
 
         $sql->where('DATE(organizer.startDatetime) = :date')
             ->setParameter(':date', $date)
-            ->andWhere('organizer.isVisited = true')
-            ->andWhere('t.name = (:type)')
-            ->setParameter(':type', 'department');
+            ->andWhere('organizer.isVisited = true');
 
+        if (isset($filters['type']) && $filters['type']) {
+            $type = $filters['type'];
+        } else {
+            $type = 'department';
+        }
+
+        $sql = $sql->andWhere('t.name = (:type)')
+            ->setParameter(':type', $type);
         //$sql->groupBy('organizer.id');
         if (count($filters)) {
             if (isset($filters['user']) && $filters['user']) {
                 $users = explode(',', $filters['user']);
                 $sql = $sql->andWhere('organizer.user IN (:user)')
                     ->setParameter(':user', $users);
+            }
+            if (isset($filters['mpk']) && $filters['mpk']) {
+                $mpk = explode(',', $filters['mpk']);
+                $sql = $sql->andWhere('d.id IN (
+                    SELECT dep.id FROM \Lists\MpkBundle\Entity\Mpk mpk
+                    left join mpk.department dep
+                    WHERE mpk IN (:mpk)
+                    )')
+                    ->setParameter(':mpk', $mpk);
             }
             if (isset($filters['organization']) && $filters['organization']) {
                 $organizations = explode(',', $filters['organization']);
@@ -169,6 +184,16 @@ class OperOrganizerRepository extends EntityRepository
                 $sql = $sql->andWhere('organizer.user IN (:user)')
                     ->setParameter(':user', $users);
             }
+            if (isset($filters['mpk']) && $filters['mpk']) {
+                $mpk = explode(',', $filters['mpk']);
+                $sql = $sql->andWhere('d.id IN (
+                    SELECT dep.id FROM \Lists\MpkBundle\Entity\Mpk mpk
+                    left join mpk.department dep
+                    WHERE mpk IN (:mpk)
+                    )')
+                    ->setParameter(':mpk', $mpk);
+            }
+
             if (isset($filters['organization']) && $filters['organization']) {
                 $organizations = explode(',', $filters['organization']);
                 $sql = $sql->andWhere('o.id IN (:organization)')
@@ -185,9 +210,9 @@ class OperOrganizerRepository extends EntityRepository
                     $end = $filters['daterange']['end'];
 
                     $sql = $sql
-                        ->andWhere('organizer.startDatetime >= :start')
+                        ->andWhere('DATE(organizer.startDatetime) >= :start')
                         ->setParameter(':start', $start)
-                        ->andWhere('organizer.endDatetime <= :end')
+                        ->andWhere('DATE(organizer.endDatetime) <= :end')
                         ->setParameter(':end', $end)
 
                     ;
@@ -196,5 +221,19 @@ class OperOrganizerRepository extends EntityRepository
 
         }
         return $sql;
+    }
+
+
+
+    public function getCoworkerStatistic($operManager, $filters = null)
+    {
+        $sql = $this->createQueryBuilder('organizer')
+            ->select('COUNT( organizer.id)')
+            ->where('organizer.isVisited = true');
+
+        $filters['user'] = $operManager['id'];
+        $sql = $this->addFilters($sql, $filters);
+
+        return $sql->getQuery()->getSingleScalarResult();
     }
 }
