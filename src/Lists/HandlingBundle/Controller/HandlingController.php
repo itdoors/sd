@@ -1390,4 +1390,15 @@ class HandlingController extends BaseController
                 'form' => $form->createView()
         ));
     }
+    /**
+     * Checks if organization is new
+     *
+     * @return bool
+     */
+    public function isNewWizardOrganization ()
+    {
+        $organization = $this->getWizardOrganization();
+
+        return $organization['organizationId'] ? false : true;
+    }
 }
