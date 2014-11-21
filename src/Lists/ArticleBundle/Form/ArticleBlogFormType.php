@@ -47,20 +47,24 @@ class ArticleBlogFormType extends AbstractType
             ))
             ->add('title', 'text', array())
             ->add('vote', 'checkbox', array(
-            'required' => false,
-            'mapped' => false
+                'required' => false,
+                'mapped' => false
         ))
             ->add('textShort', 'textarea', array(
-            'required' => true
+                'required' => true
         ))
-            ->add('roles', 'entity', array(
-            'class' => 'SD\UserBundle\Entity\Group',
-            'property' => 'name',
-            'empty_value' => '',
-            'mapped' => false,
-            'multiple' => true,
-            'required' => false
+            ->add('companyList', 'hidden', array(
+                'required' => false,
+                'mapped' => false
         ))
+//             ->add('roles', 'entity', array(
+//             'class' => 'SD\UserBundle\Entity\Group',
+//             'property' => 'name',
+//             'empty_value' => '',
+//             'mapped' => false,
+//             'multiple' => true,
+//             'required' => false
+//         ))
             ->add('text', 'textarea', array());
     }
 

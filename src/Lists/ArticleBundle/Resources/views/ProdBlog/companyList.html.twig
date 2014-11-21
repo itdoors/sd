@@ -1,0 +1,64 @@
+{% trans_default_domain 'ListsComapnystructureBundle' %} 
+{# modal window #}
+    <div id="form_modal" class="modal fade" role="basic" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="stuffFormTpl" data-text="{% trans from 'ListsContactBundle' %}Loading data. Please wait{% endtrans %}">
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+    </div>
+                    
+    <script>
+        $(document).ready(function(){
+            $("#tree").jstree({
+            "core" : {
+                "themes" : {
+                    "responsive": true
+                }, 
+                // so that create works
+                "check_callback" : true,
+                'data' : {
+                    'url' : function (node) {
+                      return '{{ path('list_companystructure_employees_get_list') }}';
+                    },
+                    'data' : function (node) {
+                      return { 'parent' : node.id };
+                    }
+                }
+            },
+            "types" : {
+                "default" : {
+                    "icon" : "fa fa-folder icon-state-warning icon-lg"
+                },
+                "file" : {
+                    "icon" : "fa fa-file icon-state-warning icon-lg"
+                }
+            },
+            "state" : { "key" : "demo3" },/*,
+            "plugins" : [ "dnd", "state", "types" ]*/
+            "plugins" : [ "checkbox", "wholerow"]
+            });
+            $('a[data-href]').live('click', function(){
+            	    document.location.href = $(this).attr('href');
+            });
+            $("#tree").click(function () {
+                var selected = $('#tree').jstree(true).get_selected();
+                $("#articleBlogForm_companyList").val(selected);
+                console.log($("#articleBlogForm_companyList").val());
+            });
+         });
+    </script>
+    <div class="row">
+        <div class="col-md-12">
+                <div class="portlet-body">
+                    <div id="tree" class="tree-demo" style="overflow: auto"></div>
+                </div>
+        </div>
+    </div>

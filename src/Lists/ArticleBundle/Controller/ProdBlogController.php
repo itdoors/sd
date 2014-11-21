@@ -13,6 +13,8 @@ use Lists\ArticleBundle\Entity\Vote;
 use Lists\ArticleBundle\Entity\Ration;
 use SD\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Lists\CompanystructureBundle\Entity\Companystructure;
+use \Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Class ProdBlogController
@@ -342,6 +344,34 @@ class ProdBlogController extends BaseController
     }
 
     /**
+     * List of users already viewed the article
+     * 
+     * @param integer $id
+     *
+     * @return JSON
+     */
+    public function whoViewedAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $article = $em->getRepository('ListsArticleBundle:Article')->find($id);
+        $nfu = $em->getRepository('ListsArticleBundle:NewsFosUser')->findBy(
+            array('news' => $article),
+            array('viewed' => 'ASC')
+        );
+        $nfu = array_unique($nfu);
+        $response = [];
+        foreach ($nfu as $nf) {
+            if ($nf->getViewed() != null) {
+                $response[] = ['user' => $nf->getUser()->__toString(),
+                           'viewed' => $nf->getViewed()->format('d-m-y H:i')
+                ];
+            }
+        }
+
+        return new Response(json_encode($response));
+    }
+
+    /**
      * List of unviewed news
      * 
      * @return string
@@ -390,6 +420,16 @@ class ProdBlogController extends BaseController
     }
 
     /**
+     * Renders company structure for adding form
+     *
+     * @return string
+     */
+    public function companyListAction()
+    {
+        return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':companyList.html.twig');
+    }
+
+    /**
      * Adds new article into blog
      * 
      * @param Request $request            
@@ -414,35 +454,89 @@ class ProdBlogController extends BaseController
                 $party->setDateCreate(new \DateTime(date('Y-m-d H:i:s')));
                 $em->persist($party);
 
+//                 $roles = [];
+//                 $part = $request->request->get($form->getName());
+//                 if (isset($part['roles'])) {
+//                     $_roles = $part['roles'];
+//                     foreach ($_roles as $role) {
+//                         $fetchedRole = $em->getRepository('SDUserBundle:Group')->find($role);
+//                         $roles[] = $fetchedRole;
+//                     }
+//                 } else {
+//                     $roles = $em->getRepository('SDUserBundle:Group')->findAll();
+//                 }
+
+//                 foreach ($roles as $role) {
+//                     $newsRole = new NewsRole();
+//                     $newsRole->setNews($party);
+//                     $newsRole->setRoles($role);
+//                     if (isset($part['vote'])) {
+//                         $newsRole->setVote($part['vote']);
+//                     }
+
+//                     $fetchedUsers = $role->getUsers()->toArray();
+
+//                     foreach ($fetchedUsers as $user) {
+//                         $nfu = new NewsFosUser();
+//                         $nfu->setNews($newsRole->getNews());
+//                         $nfu->setUser($user);
+//                         $em->persist($nfu);
+//                     }
+//                     $em->persist($newsRole);
+//                 }
+
                 $part = $request->request->get($form->getName());
-                if (isset($part['roles'])) {
-                    $_roles = $part['roles'];
-                    foreach ($_roles as $role) {
-                        $fetchedRole = $em->getRepository('SDUserBundle:Group')->find($role);
-                        $roles[] = $fetchedRole;
-                    }
-                } else {
-                    $roles = $em->getRepository('SDUserBundle:Group')->findAll();
-                }
-
-                foreach ($roles as $role) {
-                    $newsRole = new NewsRole();
-                    $newsRole->setNews($party);
-                    $newsRole->setRoles($role);
-                    if (isset($part['vote'])) {
-                        $newsRole->setVote($part['vote']);
+                if (isset($part['companyList'])) {
+                    $stuffs = [];
+                    $nodes = [];
+                    $items = explode(',', $part['companyList']);
+                    foreach ($items as $item) {
+                        if (preg_match("/stuff/i", $item)) {
+                            $stuff = explode('_', $item);
+                            $stuffs[] = (integer) $stuff[1];
+                        } else {
+                            $nodes[] = (integer) $item;
+                        }
                     }
 
-                    $fetchedUsers = $role->getUsers()->toArray();
+                    $employees = [];
+                    $stuffRepository = $this->getDoctrine()->getRepository('SDUserBundle:Stuff');
+                    foreach ($stuffs as $stuff) {
+                        $employees[] = $stuffRepository->find($stuff);
+                    }
 
-                    foreach ($fetchedUsers as $user) {
+                    $companyStructures = [];
+                    $companyRepository = $this->getDoctrine()->getRepository(
+                        'ListsCompanystructureBundle:Companystructure'
+                    );
+                    foreach ($nodes as $node) {
+                        $companyStructure = $companyRepository->find($node);
+                        if ($companyStructure != null) {
+                            $companyStructures[] = $companyStructure;
+                        }
+                    }
+
+                    $nodes = [];
+                    foreach ($companyStructures as $companyStructure) {
+                        $nodes = array_merge($nodes, $this->fetchAllChildren($companyStructure)->toArray());
+                    }
+
+                    foreach ($nodes as $node) {
+                        $employees[] = $node->getStuff();
+                        $employees = array_merge(
+                            $employees,
+                            $stuffRepository->getStuffForCompanystructure($node->getId())
+                        );
+                    }
+
+                    foreach ($employees as $stuff) {
                         $nfu = new NewsFosUser();
-                        $nfu->setNews($newsRole->getNews());
-                        $nfu->setUser($user);
+                        $nfu->setNews($party);
+                        $nfu->setUser($stuff->getUser());
                         $em->persist($nfu);
                     }
-                    $em->persist($newsRole);
                 }
+
                 $em->flush();
             } catch (\Exception $e) {
                 $em->close();
@@ -455,6 +549,31 @@ class ProdBlogController extends BaseController
         return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':add.html.twig', array(
             'form' => $form->createView()
         ));
+    }
+
+    /**
+     * Recursive Companystructure fetcher
+     * 
+     * @param Companystructure                             $parent
+     * @param \Doctrine\Common\Collections\ArrayCollection $parentChildren
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    private function fetchAllChildren(Companystructure $parent, $parentChildren = null)
+    {
+        if ($parentChildren == null) {
+            $parentChildren = new ArrayCollection();
+        }
+        if ($parent->getChildren()->count() > 0) {
+            foreach ($parent->getChildren() as $child) {
+                $this->fetchAllChildren($child, $parentChildren);
+            }
+            $parentChildren->add($parent);
+        } else {
+            $parentChildren->add($parent);
+        }
+
+        return $parentChildren;
     }
 
     /**

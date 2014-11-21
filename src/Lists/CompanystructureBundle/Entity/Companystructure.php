@@ -99,6 +99,15 @@ class Companystructure
         return $this->id;
     }
     /**
+     * Get children
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection()
+     */
+    public function getChildren ()
+    {
+        return $this->children;
+    }
+    /**
      * Set name
      *
      * @param string $name

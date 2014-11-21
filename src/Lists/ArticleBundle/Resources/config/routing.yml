@@ -60,6 +60,10 @@ list_article_blog_viewed:
     pattern:  /dashboard/blog/viewed/{id}
     defaults: { _controller: ListsArticleBundle:ProdBlog:setViewed }
     
+list_article_blog_whoViewed:
+    pattern:  /dashboard/blog/whoViewed/{id}
+    defaults: { _controller: ListsArticleBundle:ProdBlog:whoViewed }    
+    
 list_article_blog_upload:
     pattern:  /dashboard/blog/upload
     defaults: { _controller: ListsArticleBundle:ProdBlog:upload }
