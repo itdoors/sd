@@ -588,14 +588,14 @@ class ProdBlogController extends BaseController
     {
         $em = $this->getDoctrine()->getManager();
         $article = $em->getRepository('ListsArticleBundle:Article')->find($id);
-        $newsRoles = $em->getRepository('ListsArticleBundle:NewsRole')->findBy(array(
-            'news' => $article
-        ));
-        $roles = [];
-        foreach ($newsRoles as $nr) {
-            $role = $nr->getRoles();
-            $roles[] = ['id' => $role->getId(), 'name' => $role->getName()];
-        }
+//         $newsRoles = $em->getRepository('ListsArticleBundle:NewsRole')->findBy(array(
+//             'news' => $article
+//         ));
+//         $roles = [];
+//         foreach ($newsRoles as $nr) {
+//             $role = $nr->getRoles();
+//             $roles[] = ['id' => $role->getId(), 'name' => $role->getName()];
+//         }
 
         if (!$article) {
             throw $this->createNotFoundException(
@@ -630,7 +630,7 @@ class ProdBlogController extends BaseController
 
         return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':edit.html.twig', array(
             'article' => $article,
-            'roles' => $roles ? $roles : null,
+//             'roles' => $roles ? $roles : null,
             'form' => $form->createView()
         ));
     }
