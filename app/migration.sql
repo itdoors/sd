@@ -1192,3 +1192,9 @@ ALTER TABLE oper_organizer ADD isVisited BOOLEAN DEFAULT 'false' NOT NULL;
 
 ALTER TABLE news_role ADD vote BOOLEAN DEFAULT NULL;
 -- prod ++++++
+
+CREATE SEQUENCE news_companystructure_id_seq INCREMENT BY 1 MINVALUE 1 START 1;
+CREATE TABLE news_companystructure (id INT NOT NULL, news_id INT DEFAULT NULL, companystructure_id BIGINT DEFAULT NULL, vote BOOLEAN DEFAULT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_DD0A01A9B5A459A0 ON news_companystructure (news_id);
+CREATE INDEX IDX_DD0A01A939A87BEA ON news_companystructure (companystructure_id);
+-- prod ------

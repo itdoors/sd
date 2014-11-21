@@ -15,6 +15,7 @@ use SD\UserBundle\Entity\User;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Lists\CompanystructureBundle\Entity\Companystructure;
 use \Doctrine\Common\Collections\ArrayCollection;
+use Lists\ArticleBundle\Entity\NewsCompanystructure;
 
 /**
  * Class ProdBlogController
@@ -178,7 +179,7 @@ class ProdBlogController extends BaseController
         }
 
         /**
-         * NewFosUser $nfu
+         * NewsFosUser $nfu
          */
         $articleEntity = $aR->find($id);
         $nfu = $em->getRepository('ListsArticleBundle:NewsFosUser')->findOneBy(array(
@@ -187,11 +188,25 @@ class ProdBlogController extends BaseController
         ));
 
         /**
-         * NewRole $nr
+         * NewsRole $nr
          */
         $nr = $em->getRepository('ListsArticleBundle:NewsRole')->findOneBy(array(
             'news' => $articleEntity
         ));
+
+        /**
+         * NewsCompanystructure $nc
+         */
+        $nc = $em->getRepository('ListsArticleBundle:NewsCompanystructure')->findOneBy(array(
+                        'news' => $articleEntity
+        ));
+
+        $voteable = null;
+        if ($nr != null) {
+            $voteable = $nr->getVote();
+        } elseif ($nc != null) {
+            $voteable = $nc->getVote();
+        }
 
         return $this->render('ListsArticleBundle:' . $this->baseTemplate . ':show.html.twig', array(
             'item' => $article,
@@ -201,7 +216,7 @@ class ProdBlogController extends BaseController
             'votes' => $votes,
             'ratValue' => $ratValue,
             'viewed' => $nfu ? $nfu->getViewed() : -1,
-            'voteable' => $nr ? $nr->getVote() : null
+            'voteable' => $voteable
         ));
     }
 
@@ -527,6 +542,13 @@ class ProdBlogController extends BaseController
                             $employees,
                             $stuffRepository->getStuffForCompanystructure($node->getId())
                         );
+                        $nc = new NewsCompanystructure();
+                        $nc->setNews($party);
+                        $nc->setCompanystructure($node);
+                        if (isset($part['vote'])) {
+                            $nc->setVote($part['vote']);
+                        }
+                        $em->persist($nc);
                     }
 
                     $employees = array_unique($employees);
