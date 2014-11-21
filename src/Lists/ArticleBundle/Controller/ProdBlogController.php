@@ -687,9 +687,15 @@ class ProdBlogController extends BaseController
             $em->remove($nfu);
         }
 
-        $newsRoles = $em->getRepository('ListsArticleBundle:NewsRole')->findBy(array(
+        $newsRoles = $em->getRepository('ListsArticleBundle:NewsCompanystructure')->findBy(array(
             'news' => $article
         ));
+        if ($newsRoles == null) {
+            $newsRoles = $em->getRepository('ListsArticleBundle:NewsRole')->findBy(array(
+                'news' => $article
+            ));
+        }
+        
         foreach ($newsRoles as $nr) {
             $em->remove($nr);
         }
