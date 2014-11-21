@@ -149,7 +149,19 @@ class OperOrganizerRepository extends EntityRepository
         $sql = $this->createQueryBuilder('organizer')
             ->select('COUNT(organizer.id) as countAll')
             ->addSelect('MIN(organizer.startDatetime) as minDate')
-            ->addSelect('MAX(organizer.endDatetime) as maxDate');
+            ->addSelect('MAX(organizer.endDatetime) as maxDate')
+            ->where('organizer.isVisited = true');
+        if (!isset($filters['daterange']) || !$filters['daterange']) {
+                $end = new \DateTime();
+                $start = clone($end);
+                $start->sub(new \DateInterval('P' . 30 . 'D'));
+                $sql = $sql
+                    ->andWhere('DATE(organizer.startDatetime) >= :start')
+                    ->setParameter(':start', $start)
+                    ->andWhere('DATE(organizer.endDatetime) <= :end')
+                    ->setParameter(':end', $end)
+                ;
+            }
 
         $sql = $this->addFilters($sql, $filters);
 

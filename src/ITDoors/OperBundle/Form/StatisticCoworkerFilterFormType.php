@@ -61,6 +61,22 @@ class StatisticCoworkerFilterFormType extends AbstractType
                     'placeholder' => 'Enter opermanager'
                 )
             ));
+/*        $builder
+            ->add('companyStructure', 'hidden', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url'  => $router->generate('sd_common_ajax_company_structure'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_company_structure_by_id'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 0,
+                        'allowClear' => true,
+                        'width' => '200px',
+                        'multiple' => 'multiple'
+                    )),
+                    'placeholder' => 'Enter company structure',
+                )
+            ));*/
+
         $builder
             ->add('daterange', 'daterange', array(
             ));
