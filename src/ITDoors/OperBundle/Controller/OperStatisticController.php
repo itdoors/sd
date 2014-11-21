@@ -124,8 +124,8 @@ class OperStatisticController extends Controller
 
         $interval = $maxDate->diff($minDate);
         $daysCount = $interval->format('%a');
-
-        if (!$daysCount) {
+        $daysCount++;
+        if ($daysCount < 0) {
             $averagePerDay = 0;
         } else {
             $averagePerDay = $count / $daysCount;
@@ -144,6 +144,12 @@ class OperStatisticController extends Controller
                     $intervalGraph = $end->diff($start);
                     $numDays = $intervalGraph->format('%a');
                     $toDayGraph = $end;
+                    //changing average due to filter
+                    if ($numDays+1 < 0) {
+                        $averagePerDay = 0;
+                    } else {
+                        $averagePerDay = $count / ($numDays + 1);
+                    }
                 }
             }
         }
@@ -191,6 +197,12 @@ class OperStatisticController extends Controller
         $operManagers = $this->opermanagerList();
         $graph = array();
         $counter = 0;
+
+        $filtersOther = $filters;
+        $filtersOther['type'] = 'other';
+        $filtersOnce = $filters;
+        $filtersOnce['type'] = 'once';
+
         foreach ($operManagers as $operManager) {
             if (isset($filters['user']) && $filters['user']) {
                 $users = explode(',', $filters['user']);
@@ -200,12 +212,24 @@ class OperStatisticController extends Controller
             }
 
             $visits = $statisticRepo->getCoworkerStatistic($operManager, $filters);
+            $visitsOnce = $statisticRepo->getCoworkerStatistic($operManager, $filtersOnce);
+            $visitsOther = $statisticRepo->getCoworkerStatistic($operManager, $filtersOther);
+
 
             $graph[$counter]['user'] = $operManager['fullName'];
             $graph[$counter]['visits'] = $visits;
+            $graph[$counter]['visitsOnce'] = $visitsOnce;
+            $graph[$counter]['visitsOther'] = $visitsOther;
 
             $counter++;
         }
+
+
+        usort($graph, function ($item1,$item2)
+        {
+            if ($item1['visits'] == $item2['visits']) return 0;
+            return ($item1['visits'] < $item2['visits']) ? 1 : -1;
+        });
 
         $numElements = $counter;
         $graph = json_encode($graph);

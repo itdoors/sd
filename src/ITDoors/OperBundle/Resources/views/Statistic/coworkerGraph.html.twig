@@ -23,7 +23,7 @@
     </div>
     <div class="portlet-body">
         {% set chartId = 'now'|date('U') %}
-        <div id="chart3_{{ chartId }}" class="chart" style="height: {{ 150 + 30*numElements }}px">
+        <div id="chart3_{{ chartId }}" class="chart" style="height: {{ 150 + 40*numElements }}px">
         </div>
     </div>
 </div>
@@ -40,7 +40,8 @@ var chart = AmCharts.makeChart("chart3_{{ chartId }}", {
         "useGraphSettings": true,
         "markerSize": 12,
         "valueWidth": 0,
-        "verticalGap": 0
+        "verticalGap": 0,
+        "position": "top"
     },
     "dataProvider": {{ graph|raw }},
     "valueAxes": [{
@@ -57,6 +58,24 @@ var chart = AmCharts.makeChart("chart3_{{ chartId }}", {
         "fillAlphas": 0.8,
 
         "valueField": "visits"
+    },
+    {
+        "lineColor": "yellow",
+        "balloonText": "<span style='font-size:13px;'>[[title]] ([[category]]):<b>[[value]]</b></span>",
+        "title": "{% trans %}Once visit{% endtrans %}",
+        "type": "column",
+        "fillAlphas": 0.8,
+
+        "valueField": "visitsOnce"
+    },
+    {
+        "lineColor": "green",
+        "balloonText": "<span style='font-size:13px;'>[[title]] ([[category]]):<b>[[value]]</b></span>",
+        "title": "{% trans %}Other{% endtrans %}",
+        "type": "column",
+        "fillAlphas": 0.8,
+
+        "valueField": "visitsOther"
     }
     /*, {
         "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b></span>",
