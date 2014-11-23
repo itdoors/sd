@@ -59,6 +59,7 @@ class DogovorController extends BaseController
             'filterFormName' => $this->filterFormName,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
+            'access' => $access
         ));
     }
     /**
@@ -238,10 +239,20 @@ class DogovorController extends BaseController
 
         $item = $itemQuery->getSingleResult();
 
+        $dogovorRepository = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('ListsDogovorBundle:Dogovor');
+
+        $dogovor = $dogovorRepository->find($id);
+
+        $service = $this->get('lists_dogovor.service');
+        $access = $service->checkAccess($this->getUser(), $dogovor);
+
         return $this->render('ListsDogovorBundle:' . $this->baseTemplate . ':element.html.twig', array(
             'item' => $item,
             'baseTemplate' => $this->baseTemplate,
-            'baseRoutePrefix' => $this->baseRoutePrefix
+            'baseRoutePrefix' => $this->baseRoutePrefix,
+            'access' => $access
         ));
     }
     /**
@@ -257,7 +268,7 @@ class DogovorController extends BaseController
         $dr = $this->get('lists_dogovor.repository');
 
         $dogovors = $dr->getDogovorByOrganizationCustomerPerformerId($id);
-        
+
         $service = $this->get('lists_dogovor.service');
         $access = $service->checkAccess($this->getUser());
 

@@ -30,7 +30,7 @@ class HandlingController extends BaseController
      */
     public function indexAction($type)
     {
-         $filterNamespace = $this->filterNamespace;
+        $filterNamespace = $this->filterNamespace;
         /** @var \SD\UserBundle\Entity\User $user */
         $user = $this->getUser();
 
@@ -69,7 +69,7 @@ class HandlingController extends BaseController
         }
         $baseFilter = $this->container->get('it_doors_ajax.base_filter_service');
         $filters = $baseFilter->getFilters($filterNamespace);
-        
+
         if (empty($filters)) {
             $filters['isFired'] = 'No fired';
             $this->setFilters($filterNamespace, $filters);
@@ -79,7 +79,7 @@ class HandlingController extends BaseController
         if (!$page) {
             $page = 1;
         }
-            
+
         /** @var \Lists\HandlingBundle\Entity\HandlingRepository $handlingRepository */
         $handlingRepository = $this->getDoctrine()
             ->getRepository('ListsHandlingBundle:Handling');
@@ -114,7 +114,7 @@ class HandlingController extends BaseController
                 $canAddNew = false;
             }
         }
-        
+
 //        $baseFilter = $this->container->get('it_doors_ajax.base_filter_service');
 
         return $this->render('ListsHandlingBundle:Handling:list.html.twig', array(
@@ -1389,5 +1389,16 @@ class HandlingController extends BaseController
         return $this->render('ListsHandlingBundle:Handling:step4.html.twig', array (
                 'form' => $form->createView()
         ));
+    }
+    /**
+     * Checks if organization is new
+     *
+     * @return bool
+     */
+    public function isNewWizardOrganization ()
+    {
+        $organization = $this->getWizardOrganization();
+
+        return $organization['organizationId'] ? false : true;
     }
 }

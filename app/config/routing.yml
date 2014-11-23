@@ -129,3 +129,7 @@ lists_organization:
 fos_user_group:
     resource: "@FOSUserBundle/Resources/config/routing/group.xml"
     prefix: /group
+
+itd:
+    resource: "@MainErrorBundle/Resources/config/routing.yml"
+    prefix: /

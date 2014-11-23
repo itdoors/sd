@@ -2,15 +2,38 @@
 {#
 <div class="scroller" style="height: 600px; border: 1px solid #e1e1e1; padding: 10px" data-always-visible="1" data-rail-visible="0" id="feeds_holder">
 #}
-<div style="height: 600px; border: 1px solid #e1e1e1; padding: 10px; overflow-y: scroll; overflow-x: visible;" id="feeds_holder">
+<div class="external-event no-hiding"
+     style="background-color: #eeeeee; border: 1px solid #4db3a2 ;color:#333333; margin: 5px; padding: 5px;"
+     data-type="once"
+        >
+    {% trans %}Once visit{% endtrans %}
+</div>
+<div class="external-event no-hiding"
+     style="background-color: #eeeeee; border: 1px solid #4db3a2 ;color:#333333; margin: 5px; padding: 5px;"
+     data-type="other"
+        >
+    {% trans %}Other{% endtrans %}
+</div>
+
+<div style="height: 600px; margin-top:10px; border: 1px solid #e1e1e1; padding: 10px; overflow-y: scroll; overflow-x: visible;" id="feeds_holder">
     <h3>{% trans %}Departments{% endtrans %}</h3>
 
     {% set currentOrganization = '' %}
+    {% set counter = 0 %}
     {% for department in departments %}
+
         {% if currentOrganization != department.organization %}
             {% set currentOrganization = department.organization  %}
             <br>
-            <h4>{{ currentOrganization }}</h4>
+            {% if department != departments|first %}
+                </span>
+            {% endif %}
+            <h4><i class="fa fa-plus toggler" data-toggler_block="block_{{ counter }}"
+                        style="cursor: pointer;"
+                        ></i> {{ currentOrganization }}</h4>
+
+            <span class="toogle_organization" id="block_{{ counter }}" style="display: none;">
+            {% set counter = counter + 1 %}
         {% endif %}
         <div class="{#department-droppable department-draggable#}external-event"
              style="background-color: #eeeeee; border: 1px solid #4db3a2 ;color:#333333; margin: 5px; padding: 5px;
@@ -19,11 +42,45 @@
              {% endif %}
                      "
              data-id ="{{ department.id }}"
-             >
+             data-type="department"
+                >
+            {% set mpks = department.mpks %}
+            {% if mpks is not empty %}
+                {% for mpk in mpks %}
+                    {% if mpk.active == true %}
+                        {{ mpk.name }}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
             {{ department.name }}
         </div>
+        {% if department == departments|last %}
+            </span>
+        {% endif %}
     {% else %}
         <i>{% trans %}No departments available{% endtrans %}</i>
     {% endfor %}
 
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('.toggler').die('click');
+        $('.toggler').live('click', function (e) {
+            if ($(this).hasClass('fa-plus')) {
+                $(this).removeClass('fa-plus');
+                $(this).addClass('fa-minus');
+            } else {
+                $(this).removeClass('fa-minus');
+                $(this).addClass('fa-plus');
+            }
+
+            var id = $(this).data('toggler_block');
+            $('#'+id).toggle('blind', {}, 100);
+            //alert('sdf');
+        });
+
+
+    })
+
+</script>

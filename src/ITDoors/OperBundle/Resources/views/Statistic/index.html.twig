@@ -2,6 +2,7 @@
 {% trans_default_domain 'ITDoorsOperBundle' %}
 {% block title %} {% trans %}Statistic{% endtrans %} {% endblock %}
 {% block page_breadcrumbs %}
+
     <ul class="page-breadcrumb breadcrumb">
         <li>
             <i class="fa fa-home"></i>
@@ -9,6 +10,31 @@
         </li>
         <li><a href="" title="{% trans   %}Statistic{% endtrans %}">{% trans   %}Statistic{% endtrans %}</a></li>
     </ul>
+    {% if is_granted('ROLE_SUPERVISOR') %}
+    <div class="page-toolbar">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-fit-height grey-salt dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true">
+                {% trans %}Actions{% endtrans %} <i class="fa fa-angle-down"></i>
+            </button>
+            <ul class="dropdown-menu pull-right" role="menu">
+                <li>
+                    <a href="{{ path('it_doors_oper_statistic_report_export') }}">{% trans %}Export reports{% endtrans %}</a>
+                </li>
+
+{#
+                <li>
+                    <a href="#">Something else here</a>
+                </li>
+                <li class="divider">
+                </li>
+                <li>
+                    <a href="#">Separated link</a>
+                </li>
+#}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
 {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
@@ -43,204 +69,39 @@
 
 {% block body %}
 
-
-
-
-
-
     <div class="row">
         <div class="col-md-12">
             <div class="tabbable tabbable-custom boxless">
                 <ul class="nav nav-tabs" id="ajax_tabs">
                     <li class="active"><a href="#tab_total" data-toggle="tab">{% trans %}Total{% endtrans %}</a></li>
-                    <li><a href="#tab_custom" data-toggle="tab">{% trans %}Filter{% endtrans %}</a></li>
+                    <li><a href="#tab_filter" data-toggle="tab">{% trans %}Filter{% endtrans %}</a></li>
+                    <li><a href="#tab_coworker" data-toggle="tab">{% trans %}Coworkers{% endtrans %}</a></li>
                 </ul>
                 <div class="tab-content" id="tab_content">
                     <div class="tab-pane active" id="tab_total">
 
-
-                        <div class="row">
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <div class="dashboard-stat blue-madison" style="height: 110px;">
-                                    <div class="visual">
-                                        <i class="fa fa-comments"></i>
-                                    </div>
-                                    <div class="details">
-                                        <div class="number">
-                                            {{ totalVisits }}
-                                        </div>
-                                        <div class="desc">
-                                            {% trans %}Total Visits{% endtrans %}
-                                        </div>
-                                    </div>
-{#
-                                    <a class="more" href="#">
-                                        View more <i class="m-icon-swapright m-icon-white"></i>
-                                    </a>
-#}
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <div class="dashboard-stat red-intense" style="height: 110px;">
-                                    <div class="visual">
-                                        <i class="fa fa-bar-chart-o"></i>
-                                    </div>
-                                    <div class="details">
-                                        <div class="number">
-                                            {{ totalVisitsCommented }}
-                                        </div>
-                                        <div class="desc">
-                                            {% trans %}Total Visits With Comments{% endtrans %}
-                                        </div>
-                                    </div>
-{#
-                                    <a class="more" href="#">
-                                        View more <i class="m-icon-swapright m-icon-white"></i>
-                                    </a>
-#}
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <div class="dashboard-stat green-haze" style="height: 110px;">
-                                    <div class="visual">
-                                        <i class="fa fa-tachometer"></i>
-                                    </div>
-                                    <div class="details">
-                                        <div class="number">
-                                            {{ averagePerDay|number_format(2) }}
-                                        </div>
-                                        <div class="desc">
-                                            {% trans %}Avarage Visits Per Day{% endtrans %}
-                                        </div>
-                                    </div>
-{#
-                                    <a class="more" href="#">
-                                        View more <i class="m-icon-swapright m-icon-white"></i>
-                                    </a>
-#}
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                <div class="dashboard-stat purple-plum" style="height: 110px;">
-                                    <div class="visual">
-                                        <i class="fa fa-globe"></i>
-                                    </div>
-                                    <div class="details">
-                                        <div class="number">
-                                            +XX%
-                                        </div>
-                                        <div class="desc">
-                                            {% trans %}Comparing to last month{% endtrans %}
-                                        </div>
-                                    </div>
-{#
-                                    <a class="more" href="#">
-                                        View more <i class="m-icon-swapright m-icon-white"></i>
-                                    </a>
-#}
-                                </div>
-                            </div>
-                        </div>
-
-
-
-
-
-                        <!-- BEGIN CHART PORTLET-->
-                        <div class="portlet light bordered">
-                            <div class="portlet-title">
-                                <div class="caption">
-                                    <i class="icon-bar-chart font-green-haze"></i>
-                                    <span class="caption-subject bold uppercase font-green-haze">{% trans %}Visits statistic{% endtrans %}</span>
-                                    <span class="caption-helper">last 30 days</span>
-                                </div>
-                                {#
-                                                                <div class="tools">
-                                                                    <a href="javascript:;" class="collapse">
-                                                                    </a>
-                                                                    <a href="#portlet-config" data-toggle="modal" class="config">
-                                                                    </a>
-                                                                    <a href="javascript:;" class="reload">
-                                                                    </a>
-                                                                    <a href="javascript:;" class="fullscreen">
-                                                                    </a>
-                                                                    <a href="javascript:;" class="remove">
-                                                                    </a>
-                                                                </div>
-                                #}
-                            </div>
-                            <div class="portlet-body">
-                                <div id="chart_2" class="chart" style="height: 400px;">
-                                </div>
-                            </div>
-                        </div>
-                        <!-- END CHART PORTLET-->
-
+                        {{ include('ITDoorsOperBundle:Statistic:componentsTogether.html.twig') }}
 
                     </div>
 
-                    <div class="tab-pane" id="tab_custom">
-                        в разработке
+                    <div class="tab-pane" id="tab_filter">
+
+                        {{ render(controller('ITDoorsOperBundle:OperStatistic:filterPage', {
+
+                        })) }}
                     </div>
+
+                    <div class="tab-pane" id="tab_coworker">
+
+                        {{ render(controller('ITDoorsOperBundle:OperStatistic:coworkerPage', {
+
+                        })) }}
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
-
-
-    <script>
-    jQuery(document).ready(function() {
-        AmCharts.makeChart("chart_2", {
-            "type": "serial",
-            "theme": "light",
-            //"pathToImages": "/lib/3/images/",
-            "autoMargins": false,
-            "marginLeft":30,
-            "marginRight":8,
-            "marginTop":10,
-            "marginBottom":46,
-
-            "dataProvider": {{ test|raw }},
-            "startDuration": 1,
-            "graphs": [{
-                "alphaField": "alpha",
-                "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
-                "dashLengthField": "dashLengthColumn",
-                "fillAlphas": 1,
-                "title": "Visits",
-                "type": "column",
-                "valueField": "visits"
-            }, {
-                "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b> [[additional]]</span>",
-                "bullet": "round",
-                "dashLengthField": "dashLengthLine",
-                "lineThickness": 3,
-                "bulletSize": 7,
-                "bulletBorderAlpha": 1,
-                "bulletColor": "#FFFFFF",
-                "useLineColorForBulletBorder": true,
-                "bulletBorderThickness": 3,
-                "fillAlphas": 0,
-                "lineAlpha": 1,
-                "title": "Expenses",
-                "valueField": "expenses"
-            }],
-            "categoryField": "year",
-            "categoryAxis": {
-                "gridPosition": "start",
-                "axisAlpha":1,
-                "tickLength":0,
-                autoWrap: true
-            }
-        });
-                /*
-         $('#chart_2').closest('.portlet').find('.fullscreen').click(function() {
-         chart.invalidateSize();
-         });
-         */
-    })
-    </script>
-
 
 
 {% endblock body %}

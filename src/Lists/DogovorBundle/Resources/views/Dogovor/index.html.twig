@@ -96,14 +96,7 @@
                         id: item.dogovorId,
                     }) }}"
                 >
-                    {{  include(
-                        'ListsDogovorBundle:' ~ baseTemplate ~ ':element.html.twig',
-                            {
-                                item: item,
-                                baseRoutePrefix: baseRoutePrefix,
-                            }
-                        )
-                    }}
+                    {{  include('ListsDogovorBundle:' ~ baseTemplate ~ ':element.html.twig')}}
                 </tr>
             {% endfor %}
             </tbody>

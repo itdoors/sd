@@ -15,11 +15,11 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Routing\Router;
 
 /**
- * StatisticFilterFormType class
+ * StatisticCoworkerFilterFormType class
  *
  * Construct, generate form to filter coworkers
  */
-class StatisticFilterFormType extends AbstractType
+class StatisticCoworkerFilterFormType extends AbstractType
 {
     /**
      * @var Container $container
@@ -61,54 +61,24 @@ class StatisticFilterFormType extends AbstractType
                     'placeholder' => 'Enter opermanager'
                 )
             ));
-        $builder
-            ->add('daterange', 'daterange', array(
-            ));
-        $builder
-            ->add('organization', 'hidden', array(
+/*        $builder
+            ->add('companyStructure', 'hidden', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url'  => $router->generate('sd_common_ajax_organization'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_organization_by_ids'),
+                    'data-url'  => $router->generate('sd_common_ajax_company_structure'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_company_structure_by_id'),
                     'data-params' => json_encode(array(
-                        'minimumInputLength' => 2,
+                        'minimumInputLength' => 0,
                         'allowClear' => true,
                         'width' => '200px',
                         'multiple' => 'multiple'
                     )),
-                    'placeholder' => 'Enter organization',
+                    'placeholder' => 'Enter company structure',
                 )
-            ));
-        $builder
-            ->add('department', 'hidden', array(
-                'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url'  => $router->generate('sd_common_ajax_department'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_department_by_ids'),
-                    'data-params' => json_encode(array(
-                        'minimumInputLength' => 2,
-                        'allowClear' => true,
-                        'width' => '200px',
-                        'multiple' => 'multiple'
-                    )),
-                    'placeholder' => 'Enter department',
-                )
-            ));
+            ));*/
 
         $builder
-            ->add('mpk', 'hidden', array(
-                'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url'  => $router->generate('sd_common_ajax_mpk'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_mpk_by_id'),
-                    'data-params' => json_encode(array(
-                        'minimumInputLength' => 2,
-                        'allowClear' => true,
-                        'width' => '200px',
-                        'multiple' => 'multiple'
-                    )),
-                    'placeholder' => 'Enter mpk',
-                )
+            ->add('daterange', 'daterange', array(
             ));
     }
 
@@ -131,6 +101,6 @@ class StatisticFilterFormType extends AbstractType
      */
     public function getName()
     {
-        return 'StatisticFilterFormType';
+        return 'StatisticCoworkerFilterFormType';
     }
 }

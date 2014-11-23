@@ -20,8 +20,6 @@
 /logs
 /build.properties
 /*~
-/nbproject
-nbproject/*
 /app/share/1c/debt/
 /web/uploads/dogovor/
 /web/uploads/handling_message/
@@ -35,3 +33,5 @@ nbproject/*
 .buildpath
 .project
 .settings/
+/web/uploads/logo/organization/
+/web/uploads/logo/trademark/

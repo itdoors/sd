@@ -178,4 +178,33 @@ class OperOrganizer
     {
         return $this->isVisited;
     }
+    /**
+     * @var \ITDoors\OperBundle\Entity\OperOrganizerType
+     */
+    private $type;
+
+
+    /**
+     * Set type
+     *
+     * @param \ITDoors\OperBundle\Entity\OperOrganizerType $type
+     * 
+     * @return OperOrganizer
+     */
+    public function setType(\ITDoors\OperBundle\Entity\OperOrganizerType $type = null)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return \ITDoors\OperBundle\Entity\OperOrganizerType 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 }

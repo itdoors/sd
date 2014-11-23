@@ -3292,17 +3292,22 @@ class AjaxController extends BaseFilterController
             ->find($id);
 
           /** @var Invoice $invoice */
-        $invoice = $em
-            ->getRepository('ITDoorsControllingBundle:Invoice')
-            ->find($object->getInvoiceId());
+        $invoice = $object->getInvoice();
 
-        if ($invoice && $invoice->getDogovorId()) {
+        if ($invoice && $invoice->getDogovor()) {
             /** @var Dogovor $dogovor */
-            $dogovor = $em
-               ->getRepository('ListsDogovorBundle:Dogovor')
-               ->find($invoice->getDogovorId());
+            $dogovor = $invoice->getDogovor();
 
             if ($dogovor) {
+                $dogovorCompany =  $em
+                    ->getRepository('ListsDogovorBundle:DogovorCompanystructure')
+                    ->findOneBy(array(
+                        'dogovorId' => $invoice->getDogovorId(),
+                        'companystructureId' => $object->getCompanystructureId()
+                    ));
+                if ($dogovorCompany) {
+                    $em->remove($dogovorCompany);
+                }
                 /** @var Invoice $invoices */
                 $invoices = $em
                 ->getRepository('ITDoorsControllingBundle:Invoice')
@@ -6235,4 +6240,49 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($return));
     }
+
+
+    /**
+     * @return Response
+     */
+    public function getDepartmentsByIdsAjaxAction()
+    {
+        $ids = explode(',', $this->get('request')->query->get('id'));
+
+        $repository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:Departments');
+
+        $objects = $repository
+            ->findBy(array(
+                'id' => $ids
+            ));
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] = $this->serializeObject($object);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    public function departmentAction() {
+        $searchText = $this->get('request')->query->get('query');
+
+        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $departmentRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:Departments');
+
+        $departments = $departmentRepository->getSearchQuery($searchText);
+
+        $result = array();
+
+        foreach ($departments as $department) {
+            $result[] = $this->serializeObject($department);
+        }
+
+        return new Response(json_encode($result));
+
+    }
+
 }
