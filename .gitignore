@@ -32,3 +32,6 @@ nbproject/*
 /web/uploads/userprofiles/*
 /tests/_output/
 /web/uploads/blogimages/
+.buildpath
+.project
+.settings/
