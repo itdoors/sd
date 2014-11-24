@@ -148,7 +148,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Execute show action
+     * Execute showtabs action
      * 
      * @return string
      */
@@ -188,7 +188,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Execute show action
+     * Execute contactinfo action
      * 
      * @return string
      */
@@ -308,7 +308,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Executes new action
+     * Executes newstuff action
      * 
      * @param Request $request
      * 
