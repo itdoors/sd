@@ -1,0 +1,27 @@
+Lists\ArticleBundle\Entity\NewsCompanystructure:
+    type: entity
+    table: news_companystructure
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        vote:
+            type: boolean
+            nullable: true
+            column: vote
+            
+    manyToOne:
+        news:
+            targetEntity: Lists\ArticleBundle\Entity\Article
+            inversedBy: null
+            joinColumns:
+                news_id:
+                    referencedColumnName: id
+        companystructure:
+            targetEntity: Lists\CompanystructureBundle\Entity\Companystructure
+            inversedBy: null
+            joinColumns:
+                companystructure_id:
+                    referencedColumnName: id

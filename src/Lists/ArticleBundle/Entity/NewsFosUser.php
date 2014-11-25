@@ -114,4 +114,15 @@ class NewsFosUser
     {
         return $this->user;
     }
+
+    /**
+     * __toString
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->user->getId()
+              .$this->news->getId();
+    }
 }

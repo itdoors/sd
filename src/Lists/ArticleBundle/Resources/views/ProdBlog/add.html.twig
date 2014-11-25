@@ -24,7 +24,8 @@
 
 {% block css_page_level_plugin %}
     {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/jstree/dist/themes/default/style.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
     <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/css/datepicker.css')}} " />
@@ -33,6 +34,7 @@
 
 {% block js_page_level_plugins %}
     {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jstree/dist/jstree.js')}}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/lang/summernote-ru-RU.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
@@ -152,12 +154,20 @@
                     </div>
                 </div>
             </div>
+{#             <div class="form-body">#}
+{#                 <div class="form-group">#}
+{#                     <label class="required control-label col-md-3">{% trans %}Roles{% endtrans%}</label>#}
+{#                     <div class="col-md-9">#}
+{#                         {{ form_widget(form.roles, {'attr' : {'id' : 'select2','class' : 'form-control select2', 'placeholder': "Roles"| trans}}) }}#}
+{#                         {% if form.textShort.vars.errors|length %}{{ form_errors(form.textShort) }}{% endif %}#}
+{#                     </div>#}
+{#                 </div>#}
+{#             </div>#}
             <div class="form-body">
                 <div class="form-group">
-                    <label class="required control-label col-md-3">{% trans %}Roles{% endtrans%}</label>
-                    <div class="col-md-9">
-                        {{ form_widget(form.roles, {'attr' : {'id' : 'select2','class' : 'form-control select2', 'placeholder': "Roles"| trans}}) }}
-                        {% if form.textShort.vars.errors|length %}{{ form_errors(form.textShort) }}{% endif %}
+                    <label class="required control-label col-md-3">{% trans %}Receivers{% endtrans %}</label>
+                    <div class="col-md-9" id="table_ajax" data-url="{{ url('list_companystructure_employees_list') }}">
+                        {{ render(controller('ListsArticleBundle:ProdBlog:companyList')) }}
                     </div>
                 </div>
             </div>

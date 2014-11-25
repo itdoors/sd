@@ -30,5 +30,8 @@
 /web/uploads/userprofiles/*
 /tests/_output/
 /web/uploads/blogimages/
+.buildpath
+.project
+.settings/
 /web/uploads/logo/organization/
 /web/uploads/logo/trademark/
