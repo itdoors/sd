@@ -1,212 +1,194 @@
 <!DOCTYPE html>
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
-<!--[if !IE]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<!--[if !IE]><!-->
+<html lang="en" class="no-js">
+<!--<![endif]-->
 <!-- BEGIN HEAD -->
 
-{# itd=platform twig extension to log js errors #}
-{{ itd_js_error_handler() }}
+{# itd=platform twig extension to log js errors #} {{ itd_js_error_handler() }}
 
 <head>
-	<meta charset="utf-8" />
-	<title>{% block title %}Default title{% endblock %}</title>
-	<!--[if IE]>
+<meta charset="utf-8" />
+<title>{% block title %}Default title{% endblock %}</title>
+<!--[if IE]>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<![endif]-->
-	<meta content="width=device-width, initial-scale=1.0" name="viewport" />
-	<meta content="" name="description" />
-	<meta content="" name="author" />
-	<meta name="MobileOptimized" content="320">
-	
-	
-	<!-- BEGIN GLOBAL MANDATORY STYLES -->  
-	{% block css_global %}
-        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>
-        <link href="{{ asset('metronic/assets/global/plugins/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css"/>
-        <link href="{{ asset('metronic/assets/global/plugins/simple-line-icons/simple-line-icons.min.css') }}" rel="stylesheet" type="text/css"/>
-        <link href="{{ asset('metronic/assets/global/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css"/>
-        <link href="{{ asset('metronic/assets/global/plugins/uniform/css/uniform.default.css') }}" rel="stylesheet" type="text/css"/>
-        <link href="{{ asset('metronic/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css') }}" rel="stylesheet" type="text/css"/>
-        <link href="{{ asset('metronic/assets/global/plugins/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css"/>
-        <link href="{{ asset('metronic/assets/global/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.css') }}" rel="stylesheet" type="text/css"/>
-	{% endblock %}
-	<!-- END GLOBAL MANDATORY STYLES -->
-	<!-- BEGIN PAGE LEVEL PLUGIN STYLES --> 
-	{% block css_page_level_plugin %} 
-		<link href="{{ asset('metronic/assets/global/plugins/gritter/css/jquery.gritter.css') }}" rel="stylesheet" type="text/css"/>
-		<link href="{{ asset('metronic/assets/global/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css') }}" rel="stylesheet" type="text/css" />
-		<link href="{{ asset('metronic/assets/global/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css') }}" rel="stylesheet" type="text/css" />
-		<link href="{{ asset('bundles/itdoorssip/css/itdoors.sip.css') }}" rel="stylesheet" type="text/css"/>
-		<!--<link href="{{ asset('metronic/assets/global/plugins/jqvmap/jqvmap/jqvmap.css') }}" rel="stylesheet" type="text/css"/>-->
-{#
-		<link href="{{ asset('metronic/assets/global/plugins/jquery-easypiechart/jquery.easypiechart.css') }}" rel="stylesheet" type="text/css"/>
-#}
-	{% endblock %}
-	<!-- END PAGE LEVEL PLUGIN STYLES -->
-	
-	<!-- BEGIN THEME STYLES --> 
-	{% block css_theme_styles %}
-        <link href="{{ asset('metronic/assets/global/css/components.css') }}" rel="stylesheet" type="text/css"/>
-        <link href="{{ asset('metronic/assets/global/css/plugins.css') }}" rel="stylesheet" type="text/css"/>
-        <link href="{{ asset('metronic/assets/admin/layout/css/layout.css') }}" rel="stylesheet" type="text/css"/>
-        <link id="style_color" href="{{ asset('metronic/assets/admin/layout/css/themes/darkblue.css') }}" rel="stylesheet" type="text/css"/>
-        <link href="{{ asset('metronic/assets/admin/layout/css/custom.css') }}" rel="stylesheet" type="text/css"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<meta content="" name="description" />
+<meta content="" name="author" />
+<meta name="MobileOptimized" content="320">
 
 
-{#
-		<link href="{{ asset('templates/metronic/css/style-responsive.css') }}" rel="stylesheet" type="text/css"/>
-#}
-	{% endblock %}
-	<!-- END THEME STYLES -->
+<!-- BEGIN GLOBAL MANDATORY STYLES -->
+{% block css_global %}
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
+<link href="{{ asset('metronic/assets/global/plugins/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('metronic/assets/global/plugins/simple-line-icons/simple-line-icons.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('metronic/assets/global/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('metronic/assets/global/plugins/uniform/css/uniform.default.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('metronic/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('metronic/assets/global/plugins/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('metronic/assets/global/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+<!-- END GLOBAL MANDATORY STYLES -->
+<!-- BEGIN PAGE LEVEL PLUGIN STYLES -->
+{% block css_page_level_plugin %}
+<link href="{{ asset('metronic/assets/global/plugins/gritter/css/jquery.gritter.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('metronic/assets/global/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('metronic/assets/global/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('bundles/itdoorssip/css/itdoors.sip.css') }}" rel="stylesheet" type="text/css" />
+<!--<link href="{{ asset('metronic/assets/global/plugins/jqvmap/jqvmap/jqvmap.css') }}" rel="stylesheet" type="text/css"/>-->
+{# <link href="{{ asset('metronic/assets/global/plugins/jquery-easypiechart/jquery.easypiechart.css') }}" rel="stylesheet" type="text/css"/> #} {% endblock %}
+<!-- END PAGE LEVEL PLUGIN STYLES -->
 
-{#
-    <script src="{{ asset('metronic/assets/global/plugins/pace/pace.min.js') }}"
-            data-pace-options='{ "ajax": false, eventLag: false }'
-            type="text/javascript"></script>
-    <link href="{{ asset('metronic/assets/global/plugins/pace/themes/pace-theme-barber-shop.css') }}" rel="stylesheet" type="text/css"/>
+<!-- BEGIN THEME STYLES -->
+{% block css_theme_styles %}
+<link href="{{ asset('metronic/assets/global/css/components.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('metronic/assets/global/css/plugins.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('metronic/assets/admin/layout/css/layout.css') }}" rel="stylesheet" type="text/css" />
+<link id="style_color" href="{{ asset('metronic/assets/admin/layout/css/themes/darkblue.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('metronic/assets/admin/layout/css/custom.css') }}" rel="stylesheet" type="text/css" />
+
+
+{# <link href="{{ asset('templates/metronic/css/style-responsive.css') }}" rel="stylesheet" type="text/css"/> #} {% endblock %}
+<!-- END THEME STYLES -->
+
+{# <script src="{{ asset('metronic/assets/global/plugins/pace/pace.min.js') }}" data-pace-options='{ "ajax": false, eventLag: false }' type="text/javascript"></script> <link href="{{ asset('metronic/assets/global/plugins/pace/themes/pace-theme-barber-shop.css') }}" rel="stylesheet" type="text/css"/>
 #}
 
-    <script src="{{ asset('metronic/assets/global/plugins/jquery-1.11.0.min.js') }}" type="text/javascript"></script>
-	<link rel="shortcut icon" href="favicon.ico" />
+<script src="{{ asset('metronic/assets/global/plugins/jquery-1.11.0.min.js') }}" type="text/javascript"></script>
+<link rel="shortcut icon" href="favicon.ico" />
 
 
-    {% block google_analytics %}
-{#
-        <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-            ga('create', 'UA-46376346-1', 'griffin.ua');
-            ga('send', 'pageview');
-
-        </script>
-#}
-    {% endblock %}
+{% block google_analytics %} {# <script> (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o), m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga'); ga('create', 'UA-46376346-1', 'griffin.ua'); ga('send', 'pageview'); </script> #} {% endblock %}
 </head>
 <!-- END HEAD -->
 <!-- BEGIN BODY -->
 <body class="page-header-fixed page-quick-sidebar-over-content">
     {% block header %}
     <!-- BEGIN HEADER -->
-	<div class="page-header navbar navbar-fixed-top">
-		<!-- BEGIN TOP NAVIGATION BAR -->
-		<div class="page-header-inner">
-			<!-- BEGIN LOGO -->
+    <div class="page-header navbar navbar-fixed-top">
+        <!-- BEGIN TOP NAVIGATION BAR -->
+        <div class="page-header-inner">
+            <!-- BEGIN LOGO -->
             <div class="page-logo">
                 <a href="{{ path('sd_dashboard_homepage') }}">
-                    <img src="{{ asset('/templates/core/img/logo-small-gray.png') }}" alt="{% trans %}Impel Griffin logotype{% endtrans %}" class="logo-default"/>
+                    <img src="{{ asset('/templates/core/img/logo-small-gray.png') }}" alt="{% trans %}Impel Griffin logotype{% endtrans %}" class="logo-default" />
                 </a>
                 <div class="menu-toggler sidebar-toggler hide">
                     <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
                 </div>
             </div>
-			<!-- END LOGO -->
+            <!-- END LOGO -->
             <!-- BEGIN RESPONSIVE MENU TOGGLER -->
-            <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
-            </a>
+            <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse"> </a>
 
             {% include 'menu_horizonal.html.twig' %}
 
-		</div>
-		<!-- END TOP NAVIGATION BAR -->
-	</div>
+        </div>
+        <!-- END TOP NAVIGATION BAR -->
+    </div>
     {% endblock %}
-	<!-- END HEADER -->
-	<div class="clearfix"></div>
-	<!-- BEGIN CONTAINER -->
-	<div class="page-container row-fluid" >
-        {% block menu %}
-		    {% include 'sidebar.html.twig' %}
-        {% endblock %}
-		<!-- BEGIN PAGE -->
+    <!-- END HEADER -->
+    <div class="clearfix"></div>
+    <!-- BEGIN CONTAINER -->
+    <div class="page-container row-fluid">
+        {% block menu %} {% include 'sidebar.html.twig' %} {% endblock %}
+        <!-- BEGIN PAGE -->
         <div class="page-content-wrapper">
 
-        <div class="page-content">
-			{# {% include 'modal.html.twig' %} #}
-			{# {% include 'style_customizer.html.twig' %} #}
-			<!-- BEGIN PAGE HEADER-->
-			<div class="row">
-				<div class="col-md-12">
-					<!-- BEGIN PAGE TITLE & BREADCRUMB-->
-					{% block page_title %}
-					<h3 class="page-title">
-						 {% trans %}Default <small>default template</small>{% endtrans %}  
-					</h3>
-					{% endblock %}
-                    <div class="page-bar">
-					{% block page_breadcrumbs %}
-					<ul class="page-breadcrumb breadcrumb">
-						<li>
-							<i class="fa fa-home"></i>
-							<a href="{{ path('sd_dashboard_homepage') }}">{% trans %}Home{% endtrans %}</a> 
-							<i class="fa fa-angle-right"></i>
-						</li>
-						<li><a href="#">Dashboard</a></li>						
-					</ul>
-					{% endblock %}
+            <div class="page-content">
+                {# {% include 'modal.html.twig' %} #} {# {% include 'style_customizer.html.twig' %} #}
+                <!-- BEGIN PAGE HEADER-->
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                        {% block page_title %}
+                        <h3 class="page-title">
+                            {% trans %}Default
+                            <small>default template</small>
+                            {% endtrans %}
+                        </h3>
+                        {% endblock %}
+                        <div class="page-bar">
+                            {% block page_breadcrumbs %}
+                            <ul class="page-breadcrumb breadcrumb">
+                                <li>
+                                    <i class="fa fa-home"></i>
+                                    <a href="{{ path('sd_dashboard_homepage') }}">{% trans %}Home{% endtrans %}</a>
+                                    <i class="fa fa-angle-right"></i>
+                                </li>
+                                <li>
+                                    <a href="#">Dashboard</a>
+                                </li>
+                            </ul>
+                            {% endblock %}
+                        </div>
+                        <!-- END PAGE TITLE & BREADCRUMB-->
                     </div>
-					<!-- END PAGE TITLE & BREADCRUMB-->
-				</div>
-			</div>
-			<!-- END PAGE HEADER-->
-			{% block modal %}
-				<div id="form_modal_1" class="modal fade" role="basic"aria-hidden="true">
-					<div class="modal-dialog modal-lg" style="">
-						<div class="modal-content">
-							<div class="modal-header">
+                </div>
+                <!-- END PAGE HEADER-->
+                {% block modal %}
+                <div id="form_modal_1" class="modal fade" role="basic" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" style="">
+                        <div class="modal-content">
+                            <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-								<h4 id="modtitle" class="modal-title">title</h4>
-							</div>
-							<div class="modal-body">
-								<div id="moreInfoTplArticle" style="overflow:auto">test</div>
-								<br> <a id="showed" class="btn btn-cl green"data-dismiss="modal" aria-hidden="true">{% trans %}Ok{%endtrans %}</a> <br>
-							</div>
-						</div>
-					</div>
-				</div>
-            {% endblock %}
-			{% block body %}{% endblock %}
+                                <h4 id="modtitle" class="modal-title">title</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div id="moreInfoTplArticle" style="overflow: auto">test</div>
+                                <br>
+                                <a id="showed" class="btn btn-cl green" data-dismiss="modal" aria-hidden="true">{% trans %}Ok{%endtrans %}</a>
+                                <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endblock %} {% block body %}{% endblock %}
+            </div>
         </div>
-		</div>
-		<!-- END PAGE -->
-	</div>
+        <!-- END PAGE -->
+    </div>
 
-	<!-- END CONTAINER -->
-	<!-- BEGIN FOOTER -->
-	<div class="page-footer">
-		<div class="page-footer-inner">
-			{{ "now"|date("Y") }} &copy; ITDoors <a href="http://itdoors.com.ua" target="_blank">www.itdoors.com.ua</a>.
-		</div>
-		<div class="page-footer-tools">
-			<span class="go-top">
-			<i class="fa fa-angle-up"></i>
-			</span>
-		</div>
-	</div>
-	<!-- END FOOTER -->
-	<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
-	<!-- BEGIN CORE PLUGINS -->
-	{% block js_core_plugins %}
-	<!--[if lt IE 9]>
+    <!-- END CONTAINER -->
+    <!-- BEGIN FOOTER -->
+    <div class="page-footer">
+        <div class="page-footer-inner">
+            {{ "now"|date("Y") }} &copy; ITDoors
+            <a href="http://itdoors.com.ua" target="_blank">www.itdoors.com.ua</a>
+            .
+        </div>
+        <div class="page-footer-tools">
+            <span class="go-top">
+                <i class="fa fa-angle-up"></i>
+            </span>
+        </div>
+    </div>
+    <!-- END FOOTER -->
+    <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+    <!-- BEGIN CORE PLUGINS -->
+    {% block js_core_plugins %}
+    <!--[if lt IE 9]>
 	<script src="{{ asset('metronic/assets/global/plugins/respond.min.js') }}"></script>
 	<script src="{{ asset('metronic/assets/global/plugins/excanvas.min.js') }}"></script>
 	<![endif]-->
-	<script src="{{ asset('metronic/assets/global/plugins/jquery-migrate-1.2.1.min.js') }}" type="text/javascript"></script>
-	<!-- IMPORTANT! Load jquery-ui-1.10.3.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
-	<script src="{{ asset('metronic/assets/global/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('metronic/assets/global/plugins/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('metronic/assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js') }}" type="text/javascript" ></script>
-	<script src="{{ asset('metronic/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('metronic/assets/global/plugins/jquery.blockui.min.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('metronic/assets/global/plugins/jquery.cokie.min.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('metronic/assets/global/plugins/uniform/jquery.uniform.min.js') }}" type="text/javascript" ></script>
-	{% endblock %}
-	<!-- END CORE PLUGINS -->
-	<!-- BEGIN PAGE LEVEL PLUGINS -->
-	{% block js_page_level_plugins %}
-	<!--<script src="{{ asset('metronic/assets/global/plugins/jqvmap/jqvmap/jquery.vmap.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('metronic/assets/global/plugins/jquery-migrate-1.2.1.min.js') }}" type="text/javascript"></script>
+    <!-- IMPORTANT! Load jquery-ui-1.10.3.custom.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+    <script src="{{ asset('metronic/assets/global/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('metronic/assets/global/plugins/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('metronic/assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('metronic/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('metronic/assets/global/plugins/jquery.blockui.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('metronic/assets/global/plugins/jquery.cokie.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('metronic/assets/global/plugins/uniform/jquery.uniform.min.js') }}" type="text/javascript"></script>
+    {% endblock %}
+    <!-- END CORE PLUGINS -->
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    {% block js_page_level_plugins %}
+    <!--<script src="{{ asset('metronic/assets/global/plugins/jqvmap/jqvmap/jquery.vmap.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('metronic/assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.russia.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('metronic/assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.world.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('metronic/assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.europe.js') }}" type="text/javascript"></script>
@@ -214,44 +196,40 @@
 	<script src="{{ asset('metronic/assets/global/plugins/jqvmap/jqvmap/maps/jquery.vmap.usa.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('metronic/assets/global/plugins/jqvmap/jqvmap/data/jquery.vmap.sampledata.js') }}" type="text/javascript"></script>
 	-->
-	<script src="{{ asset('metronic/assets/global/plugins/flot/jquery.flot.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('metronic/assets/global/plugins/flot/jquery.flot.resize.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('metronic/assets/global/plugins/jquery.pulsate.min.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('metronic/assets/global/plugins/bootstrap-daterangepicker/moment.min.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('metronic/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('metronic/assets/global/plugins/gritter/js/jquery.gritter.js') }}" type="text/javascript"></script>
-	<!-- IMPORTANT! fullcalendar depends on jquery-ui-1.10.3.custom.min.js for drag & drop support -->
-	<script src="{{ asset('metronic/assets/global/plugins/fullcalendar/fullcalendar/fullcalendar.min.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('metronic/assets/global/plugins/jquery-easypiechart/jquery.easypiechart.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('metronic/assets/global/plugins/jquery.sparkline.min.js') }}" type="text/javascript"></script>
-	{% endblock %}
-	<!-- END PAGE LEVEL PLUGINS -->
+    <script src="{{ asset('metronic/assets/global/plugins/flot/jquery.flot.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('metronic/assets/global/plugins/flot/jquery.flot.resize.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('metronic/assets/global/plugins/jquery.pulsate.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('metronic/assets/global/plugins/bootstrap-daterangepicker/moment.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('metronic/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('metronic/assets/global/plugins/gritter/js/jquery.gritter.js') }}" type="text/javascript"></script>
+    <!-- IMPORTANT! fullcalendar depends on jquery-ui-1.10.3.custom.min.js for drag & drop support -->
+    <script src="{{ asset('metronic/assets/global/plugins/fullcalendar/fullcalendar/fullcalendar.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('metronic/assets/global/plugins/jquery-easypiechart/jquery.easypiechart.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('metronic/assets/global/plugins/jquery.sparkline.min.js') }}" type="text/javascript"></script>
+    {% endblock %}
+    <!-- END PAGE LEVEL PLUGINS -->
 
-	<!-- BEGIN PAGE LEVEL SCRIPTS -->
-	{% block js_page_level_scripts %}
-	<script src="{{ asset('metronic/assets/global/scripts/datatable.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('metronic/assets/global/scripts/metronic.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('metronic/assets/admin/layout/scripts/layout.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('templates/core/sd.js?v=1.02') }}" type="text/javascript"></script>
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+    {% block js_page_level_scripts %}
+    <script src="{{ asset('metronic/assets/global/scripts/datatable.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('metronic/assets/global/scripts/metronic.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('metronic/assets/admin/layout/scripts/layout.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('templates/core/sd.js?v=1.02') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/itdoorsajax/js/jquery.forms.js') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/itdoorsajax/js/itdoors.ajax.js?v=1.01') }}" type="text/javascript"></script>
     <script src="{{ asset('bundles/itdoorshistory/js/itdoors_history.js?v=1.01') }}" type="text/javascript"></script>
-{#
-    <script src="{{ asset('bundles/itdoorssip/sipml/sipml-api.js')}} " type="text/javascript"></script>
-    <script src="{{ asset('bundles/itdoorssip/js/itdoors.sip.js?v=1.01') }}" type="text/javascript"></script>
-#}
+    {# <script src="{{ asset('bundles/itdoorssip/sipml/sipml-api.js')}} " type="text/javascript"></script> <script src="{{ asset('bundles/itdoorssip/js/itdoors.sip.js?v=1.01') }}" type="text/javascript"></script> #}
     <script src="{{ asset('metronic/assets/global/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js') }}" type="text/javascript"></script>
-{#
-    <script src="http://{{ ami_host }}:{{ ami_port }}/socket.io/socket.io.js" type="text/javascript"></script>
-#}
-	{% endblock %}
-	<!-- END PAGE LEVEL SCRIPTS -->
-    <link href="{{ asset('templates/core/css/custom.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('templates/core/css/sd.css') }}" rel="stylesheet" type="text/css"/>
-	<!-- END JAVASCRIPTS -->
+    <script src="{{ asset('metronic/assets/global/plugins/jquery-idle-timeout/jquery.idletimeout.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('metronic/assets/global/plugins/jquery-idle-timeout/jquery.idletimer.js') }}" type="text/javascript"></script>
+    {# <script src="http://{{ ami_host }}:{{ ami_port }}/socket.io/socket.io.js" type="text/javascript"></script> #} {% endblock %}
+    <!-- END PAGE LEVEL SCRIPTS -->
+    <link href="{{ asset('templates/core/css/custom.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('templates/core/css/sd.css') }}" rel="stylesheet" type="text/css" />
+    <!-- END JAVASCRIPTS -->
 
     {% block js_page_init_scripts %}
-        <script>
+    <script>
             jQuery(document).ready(function() {
                 Metronic.init(); // init metronic core components
                 Layout.init(); // init current layout
@@ -289,6 +267,23 @@
                     }
                 });
 */
+                UIIdleTimeout.init();
+                $(document).on('mouseleave', function(){
+                	$('#idle-modal-title').html('{% trans %}Want to leave?{% endtrans %}');
+                	$('#idle-modal-body').html('{% trans %}Session will be closed automatically.{% endtrans %}');
+                	$('#idle-timeout-dialog').modal('show');
+                	$(window).on('beforeunload', function() {
+                    	$.ajax({
+                    		type: "POST",
+                            url: "{{ path('sd_user_session_kill') }}",
+                            async : false,
+                       });
+                    });
+                	$('#idle-timeout-dialog-keepalive').on('click', function () { 
+                		$(window).unbind('beforeunload');
+                    });
+                });
+
                 if (!sessionStorage.getItem("showed")) {
                     jQuery.ajax({
                         dataType: "json",
@@ -322,6 +317,54 @@
                 //Index.initIntro();
                 //Tasks.initDashboardWidget();
             });
+    </script>
+    <script>
+        var UIIdleTimeout = function () {
+
+            return {
+
+                //main function to initiate the module
+                init: function () {
+
+                    // cache a reference to the countdown element so we don't have to query the DOM for it on each ping.
+                    var $countdown;
+
+                    $('body').append('<div class="modal fade" id="idle-timeout-dialog" data-backdrop="static"><div class="modal-dialog modal-small"><div class="modal-content"><div class="modal-header"><h4 id="idle-modal-title" class="modal-title">{% trans %}Your session is about to expire.{% endtrans %}</h4></div><div id="idle-modal-body" class="modal-body"><p><i class="fa fa-warning"></i> {% trans %}You session will be locked in{% endtrans %} <span id="idle-timeout-counter"></span> {% trans %}seconds.{% endtrans %}</p><p>{% trans %}Do you want to continue your session?{% endtrans %}</p></div><div class="modal-footer"><button id="idle-timeout-dialog-logout" type="button" class="btn btn-default">{% trans %}No, Logout{% endtrans %}</button><button id="idle-timeout-dialog-keepalive" type="button" class="btn btn-primary" data-dismiss="modal">{% trans %}Yes, Keep Working{% endtrans %}</button></div></div></div></div>');
+                            
+                    // start the idle timer plugin
+                    $.idleTimeout('#idle-timeout-dialog', '.modal-content button:last', {
+                        idleAfter: 5, // 5 seconds
+                        timeout: 30000, //30 seconds to timeout
+                        pollingInterval: 5, // 5 seconds
+                        keepAliveURL: 'demo/idletimeout_keepalive.php',
+                        serverResponseEquals: 'OK',
+                        onTimeout: function(){
+                            window.location = "{{ path('fos_user_security_logout') }}";
+                        },
+                        onIdle: function(){
+                        	$('#idle-modal-body').html('<p><i class="fa fa-warning"></i> {% trans %}You session will be locked in{% endtrans %} <span id="idle-timeout-counter"></span> {% trans %}seconds.{% endtrans %}</p><p>{% trans %}Do you want to continue your session?{% endtrans %}</p>');
+                            $('#idle-timeout-dialog').modal('show');
+                            $countdown = $('#idle-timeout-counter');
+
+                            $('#idle-timeout-dialog-keepalive').on('click', function () { 
+                                $('#idle-timeout-dialog').modal('hide');
+                            });
+
+                            $('#idle-timeout-dialog-logout').on('click', function () { 
+                                $('#idle-timeout-dialog').modal('hide');
+                                $.idleTimeout.options.onTimeout.call(this);
+                            });
+                        },
+                        onCountdown: function(counter){
+                            $countdown.html(counter); // update the counter
+                        }
+                    });
+                    
+                }
+
+            };
+
+        }();
         </script>
     {% endblock %}
 </body>

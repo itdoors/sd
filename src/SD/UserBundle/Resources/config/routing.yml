@@ -64,3 +64,7 @@ fos_user:
 fos_user_upload_photo:
     pattern:  /user/photo/upload
     defaults: { _controller: SDUserBundle:User:uploadPhoto }
+
+sd_user_session_kill:
+    pattern:  /user/session/kill
+    defaults: { _controller: SDUserBundle:User:sessionKill }

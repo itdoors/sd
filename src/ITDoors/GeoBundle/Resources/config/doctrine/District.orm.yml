@@ -6,7 +6,7 @@ ITDoors\GeoBundle\Entity\District:
             type: integer
             id: true
             generator:
-                strategy: AUTO
+                strategy: IDENTITY
         name:
             type: string
             length: 255

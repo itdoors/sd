@@ -175,3 +175,13 @@ You have: У Вас
 new messages: новых сообщений
 See all messages: Просмотреть все
 Ok: Ознакомлен!
+
+# Истечение сессий
+Your session is about to expire.: Время Вашей сессии истекло.
+You session will be locked in: Сессия будет заблокирована через
+seconds.: секунд.
+Do you want to continue your session?: Хотите продолжить?
+No, Logout: Нет, выйти
+Yes, Keep Working: Да, продолжить
+Want to leave?: Уже уходите?
+Session will be closed automatically.: Сессия будет закрыта автоматически.

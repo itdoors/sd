@@ -425,4 +425,29 @@ class UserController extends BaseController
 
         return new Response(json_encode($result));
     }
+
+    /**
+     * Executes sessionKill action
+     * 
+     * @param Request $request
+     * 
+     * @return Response
+     */
+    public function sessionKillAction(Request $request)
+    {
+        $session = $request->getSession();
+        $em = $this->getDoctrine()->getManager();
+        $loginRecord = $session->get('loginRecord');
+
+        if ($loginRecord) {
+            $loginRecord->setLogedOut(new \DateTime(date('Y-m-d H:i:s')));
+
+            $em->merge($loginRecord);
+            $em->flush();
+        }
+        $session->invalidate();
+        $session->clear();
+
+        return new Response();
+    }
 }
