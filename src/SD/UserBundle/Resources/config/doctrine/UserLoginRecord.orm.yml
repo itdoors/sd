@@ -1,0 +1,27 @@
+SD\UserBundle\Entity\UserLoginRecord:
+    type: entity
+    table: login_statistic
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: IDENTITY
+        logedIn:
+            type: datetime
+        logedOut:
+            type: datetime
+            nullable: true
+        clientIp:
+            type: string
+            length: 25
+        
+    manyToOne:
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+       

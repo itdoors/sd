@@ -271,7 +271,7 @@
                 $(document).on('mouseleave', function(){
                 	$('#idle-modal-title').html('{% trans %}Want to leave?{% endtrans %}');
                 	$('#idle-modal-body').html('{% trans %}Session will be closed automatically.{% endtrans %}');
-                	$('#idle-timeout-dialog').modal('show');
+                    $('#idle-timeout-dialog').modal('show');
                 	$(window).on('beforeunload', function() {
                     	$.ajax({
                     		type: "POST",
