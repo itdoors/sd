@@ -77,10 +77,7 @@
                         data-id="{{ item.0.id }}"
                         class="model-object-holder"
                             >
-                        {{  include(
-                        'ListsContactBundle:Contact:organizationElement.html.twig',{ item: item, baseRoutePrefix: baseRoutePrefix,organizationId: organizationId,modelName: 'departments'}
-                        )
-                        }}
+                        {{  include( 'ListsContactBundle:Contact:organizationElement.html.twig',{ modelName: 'departments'}) }}
                     </tr>
                 {% endfor %}
             {% endif %}
