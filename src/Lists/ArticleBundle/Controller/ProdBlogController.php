@@ -695,7 +695,7 @@ class ProdBlogController extends BaseController
                 'news' => $article
             ));
         }
-        
+
         foreach ($newsRoles as $nr) {
             $em->remove($nr);
         }

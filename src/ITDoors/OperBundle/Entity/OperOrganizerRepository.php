@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
 class OperOrganizerRepository extends EntityRepository
 {
 
-    /**
+    zz/**
      * @param \Datetime $date
      * @param User      $user
      *
