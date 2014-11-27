@@ -51,7 +51,13 @@ Users <small>user profile</small>: Пользователи <small>профил�
 
 Profile: Главный профиль
 Plan: План
+Login History: История входов
 Settings profile: Настройки профиля
+
+LogedIn: Вход
+LogedOut: Выход
+this cumputer: этот
+IP: Компьютер
 
 Current password: Текущий пароль
 New password: Новый пароль

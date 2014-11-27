@@ -450,4 +450,28 @@ class UserController extends BaseController
 
         return new Response();
     }
+
+    /**
+     * Executes showLogin action
+     *
+     * @param integer $id
+     *
+     * @return string
+     */
+    public function showLoginHistoryAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getDoctrine()->getRepository('SDUserBundle:User')->find($id);
+        $userLoginRecords = $em->getRepository('SDUserBundle:UserLoginRecord')->findBy(
+            array('user' => $user),
+            array('logedIn' => 'DESC'),
+            100 //limit
+        );
+        $currentIp = $this->getRequest()->getClientIp();
+
+        return $this->render('SDUserBundle:' . $this->baseTemplate . ':loginHistoryList.html.twig', array(
+                'items' => $userLoginRecords,
+                'currentIp' => $currentIp
+        ));
+    }
 }
