@@ -1,4 +1,6 @@
 security:
+    session_fixation_strategy:  none
+    
     encoders:
         FOS\UserBundle\Model\UserInterface: sha1
 

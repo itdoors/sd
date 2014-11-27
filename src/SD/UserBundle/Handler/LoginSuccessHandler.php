@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Router;
 use SD\UserBundle\Entity\UserLoginRecord;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use SD\UserBundle\Entity\UserActivityRecord;
 
 /**
  * LoginSuccessHandler
@@ -44,11 +45,17 @@ class LoginSuccessHandler
         $request = $event->getRequest();
         $session = $request->getSession();
         $loginRecord = new UserLoginRecord();
+        $activityRecord = new UserActivityRecord();
 
         $loginRecord->setUser($user);
+        $loginRecord->setSessionId($session->getId());
         $loginRecord->setLogedIn(new \DateTime(date('Y-m-d H:i:s')));
         $loginRecord->setClientIp($request->getClientIp());
 
+        $activityRecord->setLastActivity($loginRecord->getLogedIn());
+        $activityRecord->setUser($user);
+
+        $em->persist($activityRecord);
         $em->persist($loginRecord);
         $em->flush();
 

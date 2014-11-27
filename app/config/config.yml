@@ -33,6 +33,11 @@ parameters:
     call.port: "81"
     call.directory: "m"
     call.extension: "mp3"
+    pdo.db_options:
+        db_table:    session
+        db_id_col:   session_id
+        db_data_col: session_value
+        db_time_col: session_time
 
 framework:
     #esi:             ~
@@ -49,7 +54,8 @@ framework:
         #assets_version: SomeVersionScheme
     default_locale:  "%locale%"
     trusted_proxies: ~
-    session: ~
+    session: 
+        handler_id: session.handler.pdo
     fragments:       ~
     http_method_override: true
     serializer:
@@ -192,13 +198,26 @@ knp_paginator:
         sortable: ITDoorsCommonBundle:Pagination:sortable_link.html.twig # sort link template
 
 services:
+    pdo:
+        class: PDO
+        arguments:
+            - "pgsql:host=%database_host%;port=%database_port%;dbname=%database_name%"
+            - "%database_user%"
+            - "%database_password%"
+        calls:
+            - [setAttribute, [3, 2]] # \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION
+
+    session.handler.pdo:
+        class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
+        arguments: ["@pdo", "%pdo.db_options%"]
+        
     get_set_method_normalizer:
       class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
       tags:
          - { name: serializer.normalizer }
          
     gedmo.listener.softdeleteable:
-        class:        Gedmo\SoftDeleteable\SoftDeleteableListener
+        class: Gedmo\SoftDeleteable\SoftDeleteableListener
         tags:
             - { name: doctrine.event_subscriber, connection: default }
         calls:

@@ -1197,8 +1197,6 @@ CREATE SEQUENCE news_companystructure_id_seq INCREMENT BY 1 MINVALUE 1 START 1;
 CREATE TABLE news_companystructure (id SERIAL NOT NULL, news_id INT DEFAULT NULL, companystructure_id BIGINT DEFAULT NULL, vote BOOLEAN DEFAULT NULL, PRIMARY KEY(id));
 CREATE INDEX IDX_DD0A01A9B5A459A0 ON news_companystructure (news_id);
 CREATE INDEX IDX_DD0A01A939A87BEA ON news_companystructure (companystructure_id);
-CREATE TABLE login_statistic (id SERIAL NOT NULL, user_id INT DEFAULT NULL, logedIn TIMESTAMP(0) WITHOUT TIME ZONE, logedOut TIMESTAMP(0) WITHOUT TIME ZONE, clientIp VARCHAR(25) NOT NULL, PRIMARY KEY(id));
-CREATE INDEX IDX_4056C69A76ED395 ON login_statistic (user_id);
 -- prod ------
 
 CREATE TABLE itd_js_error (id SERIAL NOT NULL, create_datetime TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, url TEXT NOT NULL, message TEXT DEFAULT NULL, extra TEXT DEFAULT NULL, PRIMARY KEY(id));
@@ -1214,3 +1212,19 @@ INSERT INTO oper_organizer_type (name) VALUES ('department'), ('once'), ('other'
 UPDATE oper_organizer SET type_id = (SELECT id FROM oper_organizer_type WHERE name='department')
 
 -- prod ++++++
+
+CREATE TABLE session (
+    session_id character varying(255) NOT NULL,
+    session_value text NOT NULL,
+    session_time integer NOT NULL,
+    CONSTRAINT session_pkey PRIMARY KEY (session_id)
+);
+CREATE TABLE login_statistic (id SERIAL NOT NULL, user_id INT DEFAULT NULL, logedIn TIMESTAMP(0) WITHOUT TIME ZONE, logedOut TIMESTAMP(0) WITHOUT TIME ZONE, clientIp VARCHAR(25) NOT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_4056C69A76ED395 ON login_statistic (user_id);
+CREATE TABLE login_user_activity (id SERIAL NOT NULL, lastActivity TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id));
+ALTER TABLE login_statistic ADD sessionid VARCHAR(255);
+ALTER TABLE login_statistic ALTER logedin SET NOT NULL;
+ALTER TABLE login_statistic ADD CONSTRAINT FK_4056C69A76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE login_user_activity ADD user_id INT DEFAULT NULL;
+ALTER TABLE login_user_activity ADD CONSTRAINT FK_6AEB0E35A76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+-- prod ------
