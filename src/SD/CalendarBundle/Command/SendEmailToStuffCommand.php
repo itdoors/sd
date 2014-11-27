@@ -36,11 +36,11 @@ class SendEmailToStuffCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         $holiday = $this->getContainer()->get('sd_calendar.holiday.service');
-
+        
         $res = $holiday->sendEmailToStuff();
 
         $output->writeln($res);
+        
     }
 }

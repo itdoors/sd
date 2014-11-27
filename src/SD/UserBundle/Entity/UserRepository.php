@@ -295,14 +295,40 @@ class UserRepository extends EntityRepository
             ->andWhere('st.lukey = :status OR st.id IS NULL')
             ->setParameter(':status', 'worked');
         if (date('Y', $startTimestamp) == date('Y', $endTimestamp)) {
-            $res->andWhere('dayofyear(u.birthday) >= :dayofyearStart')
-                ->andWhere('dayofyear(u.birthday) <= :dayofyearStop');
+            $res->andWhere(
+                "CASE "
+                . "WHEN dayofyear(u.birthday) < 60 "
+                . "THEN 0 "
+                . "ELSE 366 - dayofyear(CAST(CONCAT('31-12-', YEAR(u.birthday)) as date)) "
+                . "END + dayofyear(u.birthday) >= :dayofyearStart"
+                )
+                ->andWhere(
+                "CASE "
+                . "WHEN dayofyear(u.birthday) < 60 "
+                . "THEN 0 "
+                . "ELSE 366 - dayofyear(CAST(CONCAT('31-12-', YEAR(u.birthday)) as date) ) "
+                . "END + dayofyear(u.birthday) <= :dayofyearStop"
+                );
         } else {
-            $res->andWhere('(dayofyear(u.birthday) >= :dayofyearStart) or (dayofyear(u.birthday) <= :dayofyearStop)');
+            $res->andWhere(
+                "CASE "
+                . "WHEN dayofyear(u.birthday) < 60 "
+                . "THEN 0 "
+                . "ELSE 366 - dayofyear(CAST(CONCAT('31-12-', YEAR(u.birthday)) as date)) "
+                . "END + dayofyear(u.birthday) <= :dayofyearStart"
+                . " OR "
+                . "CASE "
+                . "WHEN dayofyear(u.birthday) < 60 "
+                . "THEN 0 "
+                . "ELSE 366 - dayofyear(CAST(CONCAT('31-12-', YEAR(u.birthday)) as date) ) "
+                . "END + dayofyear(u.birthday) >= :dayofyearStop"
+                );
         }
+        $dayofyearStart = date('z', $startTimestamp)+1;
+        $dayofyearStop = date('z', $endTimestamp)+1;
         $res
-            ->setParameter(':dayofyearStart', date('z', $startTimestamp)+1)
-            ->setParameter(':dayofyearStop', date('z', $endTimestamp)+1);
+            ->setParameter(':dayofyearStart', $dayofyearStart > 60 && !date('L', $startTimestamp) ? $dayofyearStart+1 : $dayofyearStart)
+            ->setParameter(':dayofyearStop', $dayofyearStop > 60 && !date('L', $dayofyearStop) ? $dayofyearStop+1 : $dayofyearStop);
 
         return $res->getQuery()->getResult();
     }
