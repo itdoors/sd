@@ -34,10 +34,13 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
         $em = $this->container->get('doctrine')->getManager();
         $session = $request->getSession();
         $loginRecord = $session->get('loginRecord');
+        $userActivityRecord = $em->getRepository('SDUserBundle:UserActivityRecord')
+                                    ->findOneBy(array('user' => $loginRecord->getUser()));
 
         if ($loginRecord) {
             $loginRecord->setLogedOut(new \DateTime(date('Y-m-d H:i:s')));
 
+            $em->remove($userActivityRecord);
             $em->merge($loginRecord);
             $em->flush();
         }
