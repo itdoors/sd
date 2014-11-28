@@ -78,14 +78,14 @@ class HolidayRepository extends EntityRepository
                     "CASE "
                     . "WHEN dayofyear(h.date) < 60 "
                     . "THEN 0 "
-                    . "ELSE 366 - dayofyear(CAST(CONCAT('31-12-', YEAR(h.date)) as date)) "
+                    . "ELSE 366 - dayofyear(CAST(CONCAT(YEAR(h.date), '-12-31') as date)) "
                     . "END + dayofyear(h.date) >= :dayofyearStart"
                 )
                 ->andWhere(
                     "CASE "
                     . "WHEN dayofyear(h.date) < 60 "
                     . "THEN 0 "
-                    . "ELSE 366 - dayofyear(CAST(CONCAT('31-12-', YEAR(h.date)) as date) ) "
+                    . "ELSE 366 - dayofyear(CAST(CONCAT(YEAR(h.date), '-12-31') as date) ) "
                     . "END + dayofyear(h.date) <= :dayofyearStop"
                 );
         } else {
@@ -93,13 +93,13 @@ class HolidayRepository extends EntityRepository
                 "CASE "
                 . "WHEN dayofyear(h.date) < 60 "
                 . "THEN 0 "
-                . "ELSE 366 - dayofyear(CAST(CONCAT('31-12-', YEAR(h.date)) as date)) "
+                . "ELSE 366 - dayofyear(CAST(CONCAT(YEAR(h.date), '-12-31') as date)) "
                 . "END + dayofyear(h.date) <= :dayofyearStart"
                 . " OR "
                 . "CASE "
                 . "WHEN dayofyear(h.date) < 60 "
                 . "THEN 0 "
-                . "ELSE 366 - dayofyear(CAST(CONCAT('31-12-', YEAR(h.date)) as date) ) "
+                . "ELSE 366 - dayofyear(CAST(CONCAT(YEAR(h.date), '-12-31') as date) ) "
                 . "END + dayofyear(h.date) >= :dayofyearStop"
                 );
         }
