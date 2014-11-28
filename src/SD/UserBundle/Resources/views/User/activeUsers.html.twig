@@ -1,58 +1,104 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'SDUserBundle' %}
-{% block title %}{% trans %}List of stuff{% endtrans %} {% endblock %}
+{% block title %}{% trans %}List of stuff{% endtrans %}{% endblock %}
 {% block page_title %}
-    <h3 class="page-title">
-        {% trans %}Stuff <small>online</small>{% endtrans %}
-    </h3>
+<h3 class="page-title">
+    {% trans %}Stuff <small>online</small>{% endtrans %}
+</h3>
 {% endblock %}
 {% block page_breadcrumbs %}
-    <ul class="page-breadcrumb breadcrumb">
-        <li>
-            <i class="fa fa-home"></i>
-            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
-            <i class="fa fa-angle-right"></i>
-        </li>
-        <li><a href="" title="{% trans %}List of stuff{% endtrans %}">{% trans %}List of stuff{% endtrans %}</a></li>
-    </ul>
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+        <i class="fa fa-home"></i>
+        <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        <i class="fa fa-angle-right"></i>
+    </li>
+    <li>
+        <a href="" title="{% trans %}List of stuff{% endtrans %}">{% trans %}List of stuff{% endtrans %}</a>
+    </li>
+</ul>
 {% endblock %}
-
 {% block css_page_level_plugin %}
-    {{ parent() }}
-    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+{{ parent() }}
+<link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
 {% endblock %}
-
 {% block body %}
-    <div class="table-scrollable" style="clear: right">
-        {% if items|length %}
-            <table class="table table-striped table-bordered table-advance table-hover">
-                <thead>
-                <tr>
-                    <th>{% trans %}ID{% endtrans %} </th>
-                    <th>{% trans %}Last name{% endtrans %} </th>
-                    <th>{% trans %}First name{% endtrans %} </th>
-                    <th>{% trans %}Mobile phone{% endtrans %} </th>
-                    <th>{% trans %}Position{% endtrans %} </th>
-                    <th>{% trans %}Subdivision{% endtrans %} </th>
-                    <th>{% trans %}LogedIn{% endtrans %}</th>
-                </tr>
-                </thead>
-                {% for item in items %}
-                    <tr {% if loop.index is odd %}class="color"{% endif %}>
-                        <td>
-                            <a href="{{ path('sd_user_show', { id : item['user'].id }) }}">
-                                {{ item['user'].id|e }}
-                            </a>
-                        </td>
-                        <td>{{ item['user'].lastName|e }}</td>
-                        <td>{{ item['user'].firstName|e }}</td>
-                        <td>{{ item['user'].stuff.mobilephone|default('') }} </td>
-                        <td>{{ item['user'].position|default('') }}</td>
-                        <td>{{ item['user'].stuff.companystructure|default('') }}</td>
-                        <td>{{ item['logedIn'] | date('d-m-Y H:i') }}</td>
-                    </tr>
-                {% endfor %}
-            </table>
+{% if is_granted('ROLE_ADMIN') %} 
+<a class="btn btn-lg green" id="kill">{% trans %}Kill{% endtrans %}</a>
+{% endif %}
+<div class="table-scrollable" style="clear: right">
+    {% if items|length %}
+    <table class="table table-striped table-bordered table-advance table-hover" id="users">
+        <thead>
+            <tr>
+            {% if is_granted('ROLE_ADMIN') %} 
+                <th>
+                    <input type="checkbox" class="group-checkable" data-name="users">
+                </th>
+            {% endif %}
+                <th>{% trans %}ID{% endtrans %}</th>
+                <th>{% trans %}Last name{% endtrans %}</th>
+                <th>{% trans %}First name{% endtrans %}</th>
+                <th>{% trans %}Mobile phone{% endtrans %}</th>
+                <th>{% trans %}Position{% endtrans %}</th>
+                <th>{% trans %}Subdivision{% endtrans %}</th>
+                <th>{% trans %}LogedIn{% endtrans %}</th>
+            </tr>
+        </thead>
+        {% for item in items %}
+        <tr  {% if loop.index is odd %} class="color" {% endif %}>
+        {% if is_granted('ROLE_ADMIN') %} 
+            <td>
+                <input name="users[]" type="checkbox" class="checkboxes" value="{{ item.user.id }}">
+            </td>
         {% endif %}
-    </div>
+            <td>
+                <a href="{{ path('sd_user_show', { id : item.user.id }) }}"> {{ item.user.id|e }} </a>
+            </td>
+            <td>{{ item.user.lastName|e }}</td>
+            <td>{{ item.user.firstName|e }}</td>
+            <td>{{ item.user.stuff.mobilephone|default('') }}</td>
+            <td>{{ item.user.position|default('') }}</td>
+            <td>{{ item.user.stuff.companystructure|default('') }}</td>
+            <td>{{ item.lastActivity | date('d-m-Y H:i') }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</div>
+
+<script>
+        $(document).ready(function(){
+            $('.group-checkable').change(function(){
+                var name = $(this).data('name');
+                $('input[name="'+name+'[]"]').prop('checked', $(this).prop('checked'));
+                $.each($('input[name="'+name+'[]"]'), function(key, val){
+                        $(val).uniform();
+                });
+            });
+            $('#kill').click(function(){
+            	var users = $('input[name="users[]"]:checked').map(function(){
+                    return $(this).val();
+                }).toArray();
+            	$.ajax({
+                    type: 'POST',
+                    url: "{{ url('sd_user_kill_users') }}",
+                    dataType: 'json',
+                    data: {
+                        users: users
+                    },
+                    beforeSend: function () {
+                    	SD.blockUI($('#users'));
+                    },
+                    success: function(response) {
+                        $.each($('input[name="users[]"]:checked'), function(){
+                            $(this).closest("tr").remove();
+                        });
+                    	SD.unblockUI($('#users'));
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock body %}
+

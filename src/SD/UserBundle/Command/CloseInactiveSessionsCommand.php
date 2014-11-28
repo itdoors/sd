@@ -49,9 +49,9 @@ class CloseInactiveSessionsCommand extends ContainerAwareCommand
             $lastActivity = $lastActivityTimestamp['max'];
             $currentTime = new \DateTime("now");
             $currentTime = $currentTime->getTimestamp();
-            $timeout = 1 * 60;//minutes
+            $timeout = 20;//minutes
 
-            if (($currentTime - $lastActivity) > $timeout) {
+            if (($currentTime - $lastActivity) > $timeout * 60) {
                 foreach ($userLoginRecords as $userLoginRecord) {
                     $userTime = new \DateTime();
                     $userTime->setTimestamp($currentTime);

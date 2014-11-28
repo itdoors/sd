@@ -442,11 +442,10 @@ class UserController extends BaseController
             array('logedIn' => 'DESC'),
             100 //limit
         );
-        $currentIp = $this->getRequest()->getClientIp();
 
         return $this->render('SDUserBundle:' . $this->baseTemplate . ':loginHistoryList.html.twig', array(
                 'items' => $userLoginRecords,
-                'currentIp' => $currentIp
+                'currentIp' => $this->getRequest()->getClientIp()
         ));
     }
 
@@ -461,24 +460,48 @@ class UserController extends BaseController
         $userLoginRecordRepository = $this->getDoctrine()->getRepository('SDUserBundle:UserLoginRecord');
         $userActivityRecords = $this->getDoctrine()->getRepository('SDUserBundle:UserActivityRecord')->findAll();
 
-        $items = [];
-        foreach ($userActivityRecords as $userActivityRecord) {
-            $user = $userActivityRecord->getUser();
-            $userLoginRecords = $userLoginRecordRepository->findBy(
-                array('user' => $user, 'logedOut' => null),
-                array('logedIn' => 'DESC')
-            );
-            if (count($userLoginRecords) > 0) {
-                $logedIn = $userLoginRecords[0]->getLogedIn();
-                $items[] = [
-                    'user' => $user,
-                    'logedIn' => $logedIn
-                ];
+        return $this->render('SDUserBundle:' . $this->baseTemplate . ':activeUsers.html.twig', array(
+                        'items' => $userActivityRecords
+        ));
+    }
+
+    /**
+     * Executes kill action
+     * 
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function killAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $userRepository = $em->getRepository('SDUserBundle:User');
+        $userLoginRecordsRepository = $em->getRepository('SDUserBundle:UserLoginRecord');
+        $userActivityRecordsRepository = $em->getRepository('SDUserBundle:UserActivityRecord');
+
+        $users = [];
+        foreach ($request->get('users') as $userId) {
+            $user = $userRepository->find($userId);
+            $userActivityRecord = $userActivityRecordsRepository->findOneBy(array(
+                        'user' => $user
+            ));
+            $userLoginRecords = $userLoginRecordsRepository->findBy(array(
+                        'user' => $user,
+                        'logedOut' => null
+            ));
+            foreach ($userLoginRecords as $userLoginRecord) {
+                $userLoginRecord->setLogedOut(new \DateTime("now"));
+                $em->merge($userLoginRecord);
+
+                $sql = 'DELETE FROM session WHERE session_id =:session_id';
+                $em->getConnection()->prepare($sql)->execute(array(
+                                'session_id' => $userLoginRecord->getSessionId()
+                ));
             }
+            $em->remove($userActivityRecord);
+            $em->flush();
         }
 
-        return $this->render('SDUserBundle:' . $this->baseTemplate . ':activeUsers.html.twig', array(
-                        'items' => $items
-        ));
+        return new Response();
     }
 }
