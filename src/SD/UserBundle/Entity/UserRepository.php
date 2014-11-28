@@ -299,14 +299,14 @@ class UserRepository extends EntityRepository
                 "CASE "
                 . "WHEN dayofyear(u.birthday) < 60 "
                 . "THEN 0 "
-                . "ELSE 366 - dayofyear(CAST(CONCAT('31-12-', YEAR(u.birthday)) as date)) "
+                . "ELSE 366 - dayofyear(CAST(CONCAT(YEAR(u.birthday), '-12-31') as date)) "
                 . "END + dayofyear(u.birthday) >= :dayofyearStart"
                 )
                 ->andWhere(
                 "CASE "
                 . "WHEN dayofyear(u.birthday) < 60 "
                 . "THEN 0 "
-                . "ELSE 366 - dayofyear(CAST(CONCAT('31-12-', YEAR(u.birthday)) as date) ) "
+                . "ELSE 366 - dayofyear(CAST(CONCAT(YEAR(u.birthday), '-12-31') as date) ) "
                 . "END + dayofyear(u.birthday) <= :dayofyearStop"
                 );
         } else {
@@ -314,13 +314,13 @@ class UserRepository extends EntityRepository
                 "CASE "
                 . "WHEN dayofyear(u.birthday) < 60 "
                 . "THEN 0 "
-                . "ELSE 366 - dayofyear(CAST(CONCAT('31-12-', YEAR(u.birthday)) as date)) "
+                . "ELSE 366 - dayofyear(CAST(CONCAT(YEAR(u.birthday), '-12-31') as date)) "
                 . "END + dayofyear(u.birthday) <= :dayofyearStart"
                 . " OR "
                 . "CASE "
                 . "WHEN dayofyear(u.birthday) < 60 "
                 . "THEN 0 "
-                . "ELSE 366 - dayofyear(CAST(CONCAT('31-12-', YEAR(u.birthday)) as date) ) "
+                . "ELSE 366 - dayofyear(CAST(CONCAT(YEAR(u.birthday), '-12-31') as date) ) "
                 . "END + dayofyear(u.birthday) >= :dayofyearStop"
                 );
         }
