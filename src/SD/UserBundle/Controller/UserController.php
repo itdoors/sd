@@ -474,4 +474,36 @@ class UserController extends BaseController
                 'currentIp' => $currentIp
         ));
     }
+
+    /**
+     * Executes activeUsers action
+     *
+     * @return string
+     */
+    public function activeUsersAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $userLoginRecordRepository = $this->getDoctrine()->getRepository('SDUserBundle:UserLoginRecord');
+        $userActivityRecords = $this->getDoctrine()->getRepository('SDUserBundle:UserActivityRecord')->findAll();
+
+        $items = [];
+        foreach ($userActivityRecords as $userActivityRecord) {
+            $user = $userActivityRecord->getUser();
+            $userLoginRecords = $userLoginRecordRepository->findBy(
+                array('user' => $user, 'logedOut' => null),
+                array('logedIn' => 'DESC')
+            );
+            if (count($userLoginRecords) > 0) {
+                $logedIn = $userLoginRecords[0]->getLogedIn();
+                $items[] = [
+                    'user' => $user,
+                    'logedIn' => $logedIn
+                ];
+            }
+        }
+
+        return $this->render('SDUserBundle:' . $this->baseTemplate . ':activeUsers.html.twig', array(
+                        'items' => $items
+        ));
+    }
 }

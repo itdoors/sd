@@ -72,3 +72,7 @@ sd_user_session_kill:
 sd_user_show_login_history:
     pattern:  /user/loginHistory/{id}
     defaults: { _controller: SDUserBundle:User:showLoginHistory }
+    
+sd_user_active_users:
+    pattern:  /user/activeUsers
+    defaults: { _controller: SDUserBundle:User:activeUsers }
