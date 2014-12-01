@@ -59,12 +59,14 @@ class UserService
             'url' => $this->container->get('router')->generate('sd_user_show_tabs'),
             'text' => $translator->trans('Plan', array(), 'SDUserBundle')
         );
-        $tabs['loginHistory'] = array(
+        if ($options['currentUser']) {
+            $tabs['loginHistory'] = array(
              'blockupdate' => 'ajax-tab-holder',
              'tab' => 'loginHistory',
              'url' => $this->container->get('router')->generate('sd_user_show_tabs'),
              'text' => $translator->trans('Login History', array(), 'SDUserBundle')
-        );
+            );
+        }
 //        if($pass){
 //          $tabs['pass'] = array(
 //            'blockupdate' => 'ajax-tab-holder',
