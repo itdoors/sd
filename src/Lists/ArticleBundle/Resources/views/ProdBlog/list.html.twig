@@ -92,9 +92,11 @@
                             	    SD.unblockUI($('#news_table'));
                             	    var height = "";
                             	    if (nfus.length > 30) height = "; height: 600px;";
-                            	    var body = "<div style=\"overflow:auto" + height + "\"><br><table width=\"100%\">";
+                            	    var body = "<div style=\"overflow:auto;" + height + "\"><br><table width=\"100%\">";
                                     for (nfu in nfus) {
-                                        var str = "<tr><td>" + nfus[nfu].user + "</td>" + "<td style=\"align:right\">" + nfus[nfu].viewed + "</td></tr>";
+                                    	var user = nfus[nfu].user;
+                                    	var userString = user.substr(0, user.indexOf(" ") + 2) + ".";
+                                        var str = "<tr><td>" + userString + "</td>" + "<td style=\"align:right\">" + nfus[nfu].viewed + "</td></tr>";
                                         body += str;
                                     }
                                     body += "</table></div>";

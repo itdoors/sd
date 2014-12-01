@@ -134,6 +134,7 @@ class UserController extends BaseController
         } else {
             $options['settings'] = false;
         }
+        $options['currentUser'] = $isCurrentUser;
         $tabs = $service->getTabs($options);
 
         return $this->render('SDUserBundle:' . $this->baseTemplate . ':show.html.twig', array(
@@ -148,7 +149,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Execute show action
+     * Execute showtabs action
      * 
      * @return string
      */
@@ -188,7 +189,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Execute show action
+     * Execute contactinfo action
      * 
      * @return string
      */
@@ -308,7 +309,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Executes new action
+     * Executes newstuff action
      * 
      * @param Request $request
      * 

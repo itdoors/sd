@@ -441,4 +441,35 @@ class Stuff
     {
         return $this->stuffDepartments;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->stuffDepartments = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add stuffDepartments
+     *
+     * @param \SD\UserBundle\Entity\StuffDepartments $stuffDepartments
+     * 
+     * @return Stuff
+     */
+    public function addStuffDepartment(\SD\UserBundle\Entity\StuffDepartments $stuffDepartments)
+    {
+        $this->stuffDepartments[] = $stuffDepartments;
+
+        return $this;
+    }
+
+    /**
+     * Remove stuffDepartments
+     *
+     * @param \SD\UserBundle\Entity\StuffDepartments $stuffDepartments
+     */
+    public function removeStuffDepartment(\SD\UserBundle\Entity\StuffDepartments $stuffDepartments)
+    {
+        $this->stuffDepartments->removeElement($stuffDepartments);
+    }
 }

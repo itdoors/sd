@@ -797,6 +797,24 @@
                             <span class="title">{% trans %}Stuff{% endtrans %}</span>
                         </a>
                     </li>
+                    <li{% if
+                             path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_active_users')
+                        %} class="active"{% endif %}>
+                        <a href="{{ path('sd_user_active_users') }}" title="{% trans %}Active users{% endtrans %}">
+                            <i class="icon-pencil"></i>
+                            {% trans %}Active users{% endtrans %}
+                        </a>
+                    </li>
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <li{% if
+                             path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_time_online')
+                        %} class="active"{% endif %}>
+                        <a href="{{ path('sd_user_time_online') }}" title="{% trans %}Time online{% endtrans %}">
+                            <i class="icon-pencil"></i>
+                            {% trans %}Time online{% endtrans %}
+                        </a>
+                    </li>
+                    {% endif %}
                     {% if is_granted('ROLE_HRADMIN') or is_granted('ROLE_SALESADMIN') %}
                     <li{% if
                              path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_organization_transfer')

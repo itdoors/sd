@@ -1,4 +1,6 @@
 security:
+    session_fixation_strategy:  none
+    
     encoders:
         FOS\UserBundle\Model\UserInterface: sha1
 
@@ -19,14 +21,17 @@ security:
         resetting_firewall:
             pattern: ^/resetting
             anonymous:  ~
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
         main:
             pattern: ^/*
             form_login:
                 provider: fos_userbundle
                 csrf_provider: form.csrf_provider
-                default_target_path: /
-                always_use_default_target_path: true
-            logout:       true
+            logout:
+                invalidate_session: true
+                success_handler: sd_user.handler.logout_success_handler
             anonymous:    false
             
     access_control:
@@ -51,4 +56,5 @@ security:
         - { path: ^/lists/organization, roles: 'ROLE_OPER, ROLE_SALES, ROLE_SALESADMIN, ROLE_HRADMIN, ROLE_CONTROLLING, ROLE_CONTROLLING_OPER, ROLE_DOGOVORADMIN' }
         - { path: ^/dashboard/blog/add, role: ROLE_ARTICLEADMIN }
         - { path: ^/dashboard/blog/edit, role: ROLE_ARTICLEADMIN }
+        - { path: ^/user/timeOnline, role: ROLE_ADMIN }
         

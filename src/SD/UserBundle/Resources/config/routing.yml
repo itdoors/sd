@@ -64,3 +64,23 @@ fos_user:
 fos_user_upload_photo:
     pattern:  /user/photo/upload
     defaults: { _controller: SDUserBundle:User:uploadPhoto }
+
+sd_user_show_login_history:
+    pattern:  /user/loginHistory/{id}
+    defaults: { _controller: SDUserBundle:UserStatistic:showLoginHistory }
+    
+sd_user_active_users:
+    pattern:  /users/online
+    defaults: { _controller: SDUserBundle:UserStatistic:activeUsers }
+    
+sd_user_kill_users:
+    pattern:  /user/kill
+    defaults: { _controller: SDUserBundle:UserStatistic:kill }
+    
+sd_user_time_online:
+    pattern:  /user/timeOnline
+    defaults: { _controller: SDUserBundle:UserStatistic:timeOnline }
+    
+sd_user_keep_alive:
+    pattern:  /user/keepAlive
+    defaults: { _controller: SDUserBundle:UserStatistic:keepAlive }
