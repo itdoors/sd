@@ -1,3 +1,7 @@
+it_doors_cron_bcc:
+    resource: "@BCCCronManagerBundle/Resources/config/routing.xml"
+    prefix:   /
+    
 it_doors_geo:
     resource: "@ITDoorsGeoBundle/Resources/config/routing.yml"
     prefix:   /
