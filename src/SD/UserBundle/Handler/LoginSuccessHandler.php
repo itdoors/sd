@@ -44,21 +44,28 @@ class LoginSuccessHandler
         $user = $event->getAuthenticationToken()->getUser();
         $request = $event->getRequest();
         $session = $request->getSession();
-        $loginRecord = new UserLoginRecord();
-        $activityRecord = new UserActivityRecord();
 
-        $loginRecord->setUser($user);
-        $loginRecord->setSessionId($session->getId());
-        $loginRecord->setLogedIn(new \DateTime(date('Y-m-d H:i:s')));
-        $loginRecord->setClientIp($request->getClientIp());
-
-        $activityRecord->setLastActivity($loginRecord->getLogedIn());
-        $activityRecord->setUser($user);
-
-        $em->persist($activityRecord);
-        $em->persist($loginRecord);
-        $em->flush();
-
-        $session->set('loginRecord', $loginRecord);
+        $userActivityRecords = $em->getRepository('SDUserBundle:UserActivityRecord')->findBy(array(
+                        'user' => $user
+        ));
+        
+        if (count($userActivityRecords) == 0) {
+            $loginRecord = new UserLoginRecord();
+            $activityRecord = new UserActivityRecord();
+            
+            $loginRecord->setUser($user);
+            $loginRecord->setSessionId($session->getId());
+            $loginRecord->setLogedIn(new \DateTime(date('Y-m-d H:i:s')));
+            $loginRecord->setClientIp($request->getClientIp());
+            
+            $activityRecord->setLastActivity($loginRecord->getLogedIn());
+            $activityRecord->setUser($user);
+            
+            $em->persist($activityRecord);
+            $em->persist($loginRecord);
+            $em->flush();
+            
+            $session->set('loginRecord', $loginRecord);
+        }
     }
 }

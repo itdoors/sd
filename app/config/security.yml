@@ -35,7 +35,7 @@ security:
             anonymous:    false
             
     access_control:
-        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/lists/salesadmin, role: ROLE_SALESADMIN }
         - { path: ^/lists/salesdispatcher, role: ROLE_SALESDISPATCHER }
