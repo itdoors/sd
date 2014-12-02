@@ -4,7 +4,7 @@
 
 {% block page_title %}
     <h3 class="page-title">
-        {% trans %}Stuff <small>online</small>{% endtrans %}
+        {% trans %}Time <small>online</small>{% endtrans %}
     </h3>
 {% endblock %}
 
@@ -29,24 +29,147 @@
 
 {% block js_page_level_plugins %}
     {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/amcharts/amcharts/amcharts.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/amcharts/amcharts/serial.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepaginator/bootstrap-datepaginator.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/moment.min.js') }}"></script>
     <script>
     $(document).ready(function(){
     	var options = {
-    		    width: 800
+    		    width: 800,
+    		    onSelectedDateChanged: function(event, date) {
+    		    	var dataProvider = [{
+                        "year": "{{ app.user }}",
+                        "income": 23.5,
+                        "expenses": 18.1
+                    }, {
+                        "year": "{{ app.user }}",
+                        "income": 26.2,
+                        "expenses": 22.8
+                    }, {
+                        "year": "{{ app.user }}",
+                        "income": 30.1,
+                        "expenses": 23.9
+                    }, {
+                        "year": "{{ app.user }}",
+                        "income": 29.5,
+                        "expenses": 25.1
+                    }, {
+                        "year": "{{ app.user }}",
+                        "income": 26.2,
+                        "expenses": 22.8
+                    }, {
+                        "year": "{{ app.user }}",
+                        "income": 30.1,
+                        "expenses": 23.9
+                    }, {
+                        "year": "{{ app.user }}",
+                        "income": 29.5,
+                        "expenses": 25.1
+                    }, {
+                        "year": "{{ app.user }}",
+                        "income": 24.6,
+                        "expenses": 8
+                    }];
+    		    	ChartsAmcharts.init(dataProvider);
+    		      }
     		  }
         $('#datepaginator_sample_3').datepaginator(options);
+    	ChartsAmcharts.init([{
+            "year": "{{ app.user }}",
+            "income": 29.5,
+            "expenses": 25.1
+        }]);
     });
+    var ChartsAmcharts = function() {
+        var initChartSample4 = function(dataProvider) {
+            var chart = AmCharts.makeChart("chart_4", {
+                "type": "serial",
+                "theme": "light",
+    
+    
+                "handDrawn": true,
+                "handDrawScatter": 3,
+                "legend": {
+                    "useGraphSettings": true,
+                    "markerSize": 12,
+                    "valueWidth": 0,
+                    "verticalGap": 0
+                },
+                "dataProvider": dataProvider,
+                "valueAxes": [{
+                    "minorGridAlpha": 0.08,
+                    "minorGridEnabled": true,
+                    "position": "top",
+                    "axisAlpha": 0
+                }],
+                "startDuration": 1,
+                "graphs": [{
+                    "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b></span>",
+                    "title": "Total",
+                    "type": "column",
+                    "fillAlphas": 0.8,
+    
+                    "valueField": "income"
+                }, {
+                    "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b></span>",
+                    "bullet": "round",
+                    "bulletBorderAlpha": 1,
+                    "bulletColor": "#FFFFFF",
+                    "useLineColorForBulletBorder": true,
+                    "fillAlphas": 0,
+                    "lineThickness": 2,
+                    "lineAlpha": 1,
+                    "bulletSize": 7,
+                    "title": "Online",
+                    "valueField": "expenses"
+                }],
+                "rotate": true,
+                "categoryField": "year",
+                "categoryAxis": {
+                    "gridPosition": "start"
+                }
+            });
+    
+            $('#chart_4').closest('.portlet').find('.fullscreen').click(function() {
+                chart.invalidateSize();
+            });
+        }
+        return {
+            init: function(dataProvider) {
+                initChartSample4(dataProvider);
+            }
+        };
+    }();
     </script>
 {% endblock %}
 
 {% block body %}
-<div class="row">
+    {{ ajax_filter_render('stuffFilterForm', namespase, {
+        'datatable_ajax': 'ITDoorsAjax.updateList'
+    }) }}
+    <div class="row">
         <div class="col-md-12">
-                <div id="datepaginator_sample_3" class="datepaginator-sm" align="center"></div>
+            <div id="datatable_ajax"  data-url="{{ url('sd_user_stufflist') }}">
+                {{ render(controller('SDUserBundle:' ~ baseTemplate ~ ':stufflist')) }}
+            </div>
         </div>
-</div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+    		<!-- BEGIN CHART PORTLET-->
+    		<div class="portlet light bordered">
+    			<div class="portlet-body">
+    				<div id="chart_4" class="chart" style="height: 400px; overflow: hidden; text-align: left;">
+    				</div>
+    			</div>
+    		</div>
+    		<!-- END CHART PORTLET-->
+    	</div>
+    	<div class="col-md-12">
+            <div id="datepaginator_sample_3" class="datepaginator-sm" align="center"></div>
+        </div>
+    </div>
 {% endblock body %}
 

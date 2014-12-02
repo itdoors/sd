@@ -62,6 +62,7 @@ class UserStatisticController extends BaseController
     public function killAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $pdo = $this->container->get('session.handler.pdo');
         $userRepository = $em->getRepository('SDUserBundle:User');
         $userLoginRecordsRepository = $em->getRepository('SDUserBundle:UserLoginRecord');
         $userActivityRecordsRepository = $em->getRepository('SDUserBundle:UserActivityRecord');
@@ -82,10 +83,7 @@ class UserStatisticController extends BaseController
                     $userLoginRecord->setLogedOut(new \DateTime("now"));
                     $em->merge($userLoginRecord);
 
-                    $sql = 'DELETE FROM session WHERE session_id =:session_id';
-                    $em->getConnection()->prepare($sql)->execute(array(
-                                    'session_id' => $userLoginRecord->getSessionId()
-                    ));
+                    $pdo->destroy($userLoginRecord->getSessionId());
                 }
                 $em->remove($userActivityRecord);
                 $em->flush();
@@ -121,6 +119,8 @@ class UserStatisticController extends BaseController
         $userActivityRecords = $this->getDoctrine()->getRepository('SDUserBundle:UserActivityRecord')->findAll();
 
         return $this->render('SDUserBundle:' . $this->baseTemplate . ':timeOnline.html.twig', array(
+                        'baseTemplate' => 'User',
+                        'namespase' => 'stuffFilterForm'
         ));
     }
 }

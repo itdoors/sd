@@ -33,7 +33,7 @@ security:
                 invalidate_session: true
                 success_handler: sd_user.handler.logout_success_handler
             anonymous:    false
-            
+
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }

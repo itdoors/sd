@@ -26,6 +26,7 @@ class CloseInactiveSessionsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $em = $this->getContainer()->get('doctrine')->getManager();
+        $pdo = $this->getContainer()->get('session.handler.pdo');
         $userActivityRecords = $em->getRepository('SDUserBundle:UserActivityRecord')->findAll();
 
         foreach ($userActivityRecords as $userActivityRecord) {
@@ -49,7 +50,7 @@ class CloseInactiveSessionsCommand extends ContainerAwareCommand
             $lastActivity = $lastActivityTimestamp['max'];
             $currentTime = new \DateTime("now");
             $currentTime = $currentTime->getTimestamp();
-            $timeout = 20;//minutes
+            $timeout = 6;//minutes
 
             if (($currentTime - $lastActivity) > $timeout * 60) {
                 foreach ($userLoginRecords as $userLoginRecord) {
@@ -58,10 +59,7 @@ class CloseInactiveSessionsCommand extends ContainerAwareCommand
                     $userLoginRecord->setLogedOut($userTime);
                     $em->merge($userLoginRecord);
 
-                    $sql = 'DELETE FROM session WHERE session_id =:session_id';
-                    $em->getConnection()->prepare($sql)->execute(array(
-                                    'session_id' => $userLoginRecord->getSessionId()
-                    ));
+                    $pdo->destroy($userLoginRecord->getSessionId());
                 }
                 $em->remove($userActivityRecord);
                 $em->flush();
