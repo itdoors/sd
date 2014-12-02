@@ -14,4 +14,11 @@ class ManagerAccess extends BasicHandlingAccess
     {
         return true;
     }
+    /**
+     * @return bool
+     */
+    public function canEdit ()
+    {
+        return true;
+    }
 }
