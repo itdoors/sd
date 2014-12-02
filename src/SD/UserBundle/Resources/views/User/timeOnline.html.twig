@@ -76,11 +76,7 @@
     		      }
     		  }
         $('#datepaginator_sample_3').datepaginator(options);
-    	ChartsAmcharts.init([{
-            "year": "{{ app.user }}",
-            "income": 29.5,
-            "expenses": 25.1
-        }]);
+    	ChartsAmcharts.init([]);
     });
     var ChartsAmcharts = function() {
         var initChartSample4 = function(dataProvider) {
@@ -139,6 +135,7 @@
         return {
             init: function(dataProvider) {
                 initChartSample4(dataProvider);
+                $("a[title='JavaScript charts']").remove();
             }
         };
     }();
@@ -152,11 +149,9 @@
     <div class="row">
         <div class="col-md-12">
             <div id="datatable_ajax"  data-url="{{ url('sd_user_stufflist') }}">
-                {{ render(controller('SDUserBundle:' ~ baseTemplate ~ ':stufflist')) }}
+                {{ render(controller('SDUserBundle:UserStatistic:timeOnlineList')) }}
             </div>
         </div>
-    </div>
-    <div class="row">
         <div class="col-md-12">
     		<!-- BEGIN CHART PORTLET-->
     		<div class="portlet light bordered">
