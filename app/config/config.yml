@@ -142,7 +142,9 @@ doctrine:
                         array_to_string: ITDoors\CommonBundle\DQL\ArrayToStringDQL
                         array: ITDoors\CommonBundle\DQL\ArrayDQL
                         select_next_handling_message_date: SD\CommonBundle\DQL\SelectNextHandlingMessageDateDQL
-                    #datetime_functions:
+                        cast: Oro\ORM\Query\AST\Functions\Cast
+                    datetime_functions:
+                        date:  Oro\ORM\Query\AST\Functions\SimpleFunction
                     numeric_functions:
                         dayofyear: Oro\ORM\Query\AST\Functions\SimpleFunction
                         year: Oro\ORM\Query\AST\Functions\SimpleFunction

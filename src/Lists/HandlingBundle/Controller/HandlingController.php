@@ -11,6 +11,8 @@ use Lists\HandlingBundle\Entity\HandlingResult;
 use Lists\ContactBundle\Entity\ModelContactRepository;
 use Lists\HandlingBundle\Entity\Handling;
 use Lists\HandlingBundle\Entity\HandlingMessage;
+use Lists\OrganizationBundle\Entity\Organization;
+use Lists\OrganizationBundle\Entity\OrganizationUser;
 
 /**
  * Class HandlingController
