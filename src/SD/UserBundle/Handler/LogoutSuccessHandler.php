@@ -32,17 +32,27 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
     public function onLogoutSuccess(Request $request)
     {
         $em = $this->container->get('doctrine')->getManager();
+        $pdo = $this->container->get('session.handler.pdo');
         $session = $request->getSession();
-        $loginRecord = $session->get('loginRecord');
-        $userActivityRecord = $em->getRepository('SDUserBundle:UserActivityRecord')
-                                    ->findOneBy(array('user' => $loginRecord->getUser()));
+        if ($session->get('loginRecord')) {
+            $user = $session->get('loginRecord')->getUser();
+            $userActivityRecords = $em->getRepository('SDUserBundle:UserActivityRecord')
+                                        ->findBy(array('user' => $user));
+            if (count($userActivityRecords) > 0) {
+                $userLoginRecordsRepository = $em->getRepository('SDUserBundle:UserLoginRecord');
+                $userLoginRecords = $userLoginRecordsRepository->findBy(array(
+                                'user' => $user,
+                                'logedOut' => null
+                ));
+                foreach ($userLoginRecords as $userLoginRecord) {
+                    $userLoginRecord->setLogedOut(new \DateTime("now"));
+                    $em->merge($userLoginRecord);
+                }
 
-        if ($loginRecord) {
-            $loginRecord->setLogedOut(new \DateTime(date('Y-m-d H:i:s')));
-
-            $em->remove($userActivityRecord);
-            $em->merge($loginRecord);
-            $em->flush();
+                $em->remove($userActivityRecords[0]);
+                $em->flush();
+                $pdo->destroy($session->getId());
+            }
         }
 
         return new RedirectResponse($request->headers->get('referer'));

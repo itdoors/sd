@@ -14,6 +14,9 @@ class UserStatisticController extends BaseController
 
     protected $baseTemplate = 'User';
 
+    /** @var KnpPaginatorBundle $paginator */
+    protected $paginator = 'knp_paginator';
+
     /**
      * Executes showLoginHistory action
      *
@@ -122,6 +125,43 @@ class UserStatisticController extends BaseController
         return $this->render('SDUserBundle:' . $this->baseTemplate . ':timeOnline.html.twig', array(
                         'baseTemplate' => 'User',
                         'namespase' => 'stuffFilterForm'
+        ));
+    }
+
+    /**
+     * timeOnlineListAction
+     *
+     * @return string
+     */
+    public function timeOnlineListAction()
+    {
+        $namespase = $this->filterNamespace;
+        $filters = $this->getFilters($namespase);
+        if (empty($filters)) {
+            /** @var EntityManager $em */
+            $em = $this->getDoctrine()->getManager();
+            $status = $em->getRepository('ListsLookupBundle:Lookup')
+            ->findOneBy(array('lukey' => 'worked'));
+            $filters['status'] = $status->getId();
+            $this->setFilters($namespase, $filters);
+        }
+        $users = $this->get('sd_user.repository')->getAllForUserQuery($filters);
+        $entities = $users['entity'];
+        $count = $users['count'];
+
+        $page = $this->getPaginator($namespase);
+        if (!$page) {
+            $page = 1;
+        }
+
+        $paginator = $this->container->get($this->paginator);
+        $entities->setHint($this->paginator . '.count', $count);
+        $pagination = $paginator->paginate($entities, $page, 10);
+
+        return $this->render('SDUserBundle:' . $this->baseTemplate . ':timeOnlineList.html.twig', array(
+                        'namespase' => $namespase,
+                        'items' => $pagination,
+                        'baseTemplate' => $this->baseTemplate
         ));
     }
 }
