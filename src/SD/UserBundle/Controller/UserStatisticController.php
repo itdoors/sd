@@ -4,6 +4,7 @@ namespace SD\UserBundle\Controller;
 
 use ITDoors\AjaxBundle\Controller\BaseFilterController as BaseController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * UserStatisticController
