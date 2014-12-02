@@ -596,7 +596,17 @@ class InvoiceService
         /** @var InvoicecronRepository $invoice */
         $invoice = $em->getRepository('ITDoorsControllingBundle:Invoice');
 
-        $summa = $invoice->getSumma($date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') - 1, date('Y'))));
+        $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + 3, date('Y')));
+$su = 0;
+        $summa = $invoice->getSumma($date);
+//        foreach ($summa as $it){
+//            $su = $su+$it->getDebitSum();
+//            echo $it->getDebitSum()
+//                .'-'.$it->getId()
+//                .'-'.$it->getDelayDate()->format('d.m.Y')
+//                .'-'.($it->getDateEnd()?$it->getDateEnd()->format('d.m.Y'):'0')
+//                .' <br>';
+//        } echo '==='.$su; die;
 
         $translator = $this->container->get('translator');
         $tabs = array ();
