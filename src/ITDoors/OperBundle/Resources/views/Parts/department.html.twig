@@ -9,6 +9,13 @@
         )
     }}
 </div>
+
+{% if is_granted('ROLE_SUPERVISOR') %}
+    <div style="float:left;">
+        <a href="{{ path('it_doors_oper_department_all_export') }}" class="btn purple">{% trans from 'ITDoorsOperBundle' %}Export{% endtrans %}</a>
+    </div>
+{% endif %}
+
 <div class="clear"></div>
 <div class="table-scrollable" id="department-table">
     <table class="table table-striped table-hover table-bordered">
