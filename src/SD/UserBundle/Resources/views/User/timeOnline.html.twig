@@ -41,6 +41,7 @@
     var users = [];
     function generateChartData(start, end) {
         if (users.length > 0) {
+            $('#inactive-string').remove();
         	$.ajax({
                 type: 'GET',
                 url: "{{ url('sd_user_statistic_for_users') }}",
@@ -240,6 +241,9 @@
             </div>
         </div>
         <div class="col-md-4">
+            <div id="inactive-string">
+                <h4>Неактивные пользователи:</h4>
+            </div>
             <div id="reportrange" class="btn default">
                 <i class="fa fa-calendar"></i>
                 &nbsp; <span>{% trans %}Range{% endtrans %}</span>
