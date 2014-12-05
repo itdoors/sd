@@ -6,6 +6,8 @@ use ITDoors\AjaxBundle\Controller\BaseFilterController as BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Lists\OrganizationBundle\Entity\OrganizationUser;
+use PHPExcel_Style_Border;
+use PHPExcel_Style_Alignment;
 
 /**
  * Class SalesAdminController
