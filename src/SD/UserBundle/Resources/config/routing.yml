@@ -81,6 +81,18 @@ sd_user_time_online:
     pattern:  /user/timeOnline
     defaults: { _controller: SDUserBundle:UserStatistic:timeOnline }
     
+sd_user_time_online_list:
+    pattern:  /user/timeOnline/list
+    defaults: { _controller: SDUserBundle:UserStatistic:timeOnlineList }
+    
+sd_user_statistic_for_users:
+    pattern:  /user/timeOnline/statistic
+    defaults: { _controller: SDUserBundle:UserStatistic:statisticForUsers }
+    
+sd_user_find_inactive_users:
+    pattern:  /user/timeOnline/inactiveUsers
+    defaults: { _controller: SDUserBundle:UserStatistic:findInactiveUsers }
+    
 sd_user_keep_alive:
     pattern:  /user/keepAlive
     defaults: { _controller: SDUserBundle:UserStatistic:keepAlive }

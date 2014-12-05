@@ -61,6 +61,10 @@ IP: Компьютер
 Kill: Разлогинить
 Stuff <small>online</small>: Сотрудники <small>он-лайн</small>
 Time <small>online</small>: Время <small>он-лайн</small>
+Range: Период
+Add to chart: Добавить к сравнению
+Total: От первого входа до последнего выхода
+Online: Суммарное время активных действий
 
 Current password: Текущий пароль
 New password: Новый пароль
