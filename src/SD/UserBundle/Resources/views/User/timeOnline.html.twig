@@ -33,54 +33,142 @@
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/amcharts/amcharts/serial.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
     <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepaginator/bootstrap-datepaginator.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-daterangepicker/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
     <script>
+    var chart;
+    var users = [];
+    function generateChartData(start, end) {
+        if (users.length > 0) {
+            $('#inactive-string').remove();
+        	$.ajax({
+                type: 'GET',
+                url: "{{ url('sd_user_statistic_for_users') }}",
+                dataType: 'json',
+                data: {
+                    users: users,
+                    start: start.unix(),
+                    end: end.unix()
+                },
+                beforeSend: function () {
+                	SD.blockUI($('#chart_4'));
+                },
+                success: function(response) {
+                	response.forEach(
+                    	    function addHumanize(value) {
+                        	    value.totalHumanize = parseInt(value.total/60) + " ч. " + value.total%60 + " мин.";
+                        	    value.onlineHumanize = parseInt(value.online/60) + " ч. " + value.online%60 + " мин.";
+                        	}
+                        );
+                    $('#chart_4').height(80 + response.length*40);
+                	ChartsAmcharts.init(response);
+                	SD.unblockUI($('#chart_4'));
+                }
+            });
+        } else {
+        	$.ajax({
+                type: 'GET',
+                url: "{{ url('sd_user_find_inactive_users') }}",
+                dataType: 'json',
+                data: {
+                    users: users,
+                    start: start.unix(),
+                    end: end.unix()
+                },
+                beforeSend: function () {
+                	SD.blockUI($('#chart_4'));
+                },
+                success: function(response) {
+                	response.forEach(
+                    	    function addHumanize(value) {
+                        	    value.totalHumanize = parseInt(value.total/60) + " ч. " + value.total%60 + " мин.";
+                        	    value.onlineHumanize = parseInt(value.online/60) + " ч. " + value.online%60 + " мин.";
+                        	}
+                        );
+                	$('#chart_4').height(80 + response.length*40);
+                	ChartsAmcharts.init(response);
+                	SD.unblockUI($('#chart_4'));
+                }
+            });
+        }
+    }
+    
     $(document).ready(function(){
-    	var options = {
-    		    width: 800,
-    		    onSelectedDateChanged: function(event, date) {
-    		    	var dataProvider = [{
-                        "year": "{{ app.user }}",
-                        "income": 23.5,
-                        "expenses": 18.1
-                    }, {
-                        "year": "{{ app.user }}",
-                        "income": 26.2,
-                        "expenses": 22.8
-                    }, {
-                        "year": "{{ app.user }}",
-                        "income": 30.1,
-                        "expenses": 23.9
-                    }, {
-                        "year": "{{ app.user }}",
-                        "income": 29.5,
-                        "expenses": 25.1
-                    }, {
-                        "year": "{{ app.user }}",
-                        "income": 26.2,
-                        "expenses": 22.8
-                    }, {
-                        "year": "{{ app.user }}",
-                        "income": 30.1,
-                        "expenses": 23.9
-                    }, {
-                        "year": "{{ app.user }}",
-                        "income": 29.5,
-                        "expenses": 25.1
-                    }, {
-                        "year": "{{ app.user }}",
-                        "income": 24.6,
-                        "expenses": 8
-                    }];
-    		    	ChartsAmcharts.init(dataProvider);
-    		      }
-    		  }
-        $('#datepaginator_sample_3').datepaginator(options);
-    	ChartsAmcharts.init([]);
+    	ComponentsPickers.init();
     });
+    var ComponentsPickers = function () {
+    	var handleDatePickers = function () {
+
+            if (jQuery().datepicker) {
+                $('.date-picker').datepicker({
+                    rtl: Metronic.isRTL(),
+                    orientation: "left",
+                    autoclose: true
+                });
+                //$('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
+            }
+
+            /* Workaround to restrict daterange past date select: http://stackoverflow.com/questions/11933173/how-to-restrict-the-selectable-date-ranges-in-bootstrap-datepicker */
+        }
+    	var handleDateRangePickers = function () {
+            if (!jQuery().daterangepicker) {
+                return;
+            }
+            $('#reportrange').daterangepicker({
+                opens: (Metronic.isRTL() ? 'left' : 'right'),
+                startDate: moment().hour(0).minutes(0).seconds(0).subtract('days', 29),
+                endDate: moment().hour(23).minutes(59).seconds(59),
+                minDate: '01/01/2014',
+                maxDate: '12/31/2025',
+                dateLimit: {
+                    days: 60
+                },
+                showDropdowns: true,
+                showWeekNumbers: true,
+                timePicker: true,
+                timePickerIncrement: 1,
+                timePicker12Hour: false,
+                ranges: {
+                    'Сегодня': [moment().hour(0).minutes(0).seconds(0), moment().hour(23).minutes(59).seconds(59)],
+                    'Вчера': [moment().hour(0).minutes(0).seconds(0).subtract('days', 1), moment().hour(23).minutes(59).seconds(59).subtract('days', 1)],
+                    'Последние 7 дней': [moment().hour(0).minutes(0).seconds(0).subtract('days', 6), moment().hour(23).minutes(59).seconds(59)],
+                    'Последние 30 дней': [moment().hour(0).minutes(0).seconds(0).subtract('days', 29), moment().hour(23).minutes(59).seconds(59)],
+                    'Текущий месяц': [moment().startOf('month'), moment().endOf('month')],
+                    'Прошлый месяц': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                },
+                buttonClasses: ['btn'],
+                applyClass: 'green',
+                cancelClass: 'default',
+                format: 'MM/DD/YYYY',
+                separator: ' до ',
+                locale: {
+                    applyLabel: 'Применить',
+                    fromLabel: 'С',
+                    cancelLabel: 'Отменить',
+                    toLabel: 'До',
+                    customRangeLabel: 'Вручную',
+                    daysOfWeek: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+                    monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                    firstDay: 1
+                }
+            },
+            function (start, end) {
+                $('#reportrange span').html(start.format('DD/MM/YY') + ' - ' + end.format('DD/MM/YY'));
+		    	generateChartData(start, end);
+            }
+        );
+    	}
+        return {
+            init: function () {
+            	handleDatePickers();
+                handleDateRangePickers();
+            }
+        };
+    }();
     var ChartsAmcharts = function() {
         var initChartSample4 = function(dataProvider) {
-            var chart = AmCharts.makeChart("chart_4", {
+            chart = AmCharts.makeChart("chart_4", {
                 "type": "serial",
                 "theme": "light",
     
@@ -102,14 +190,14 @@
                 }],
                 "startDuration": 1,
                 "graphs": [{
-                    "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b></span>",
-                    "title": "Total",
+                    "balloonText": "<span style='font-size:13px;'>[[title]] y [[name]]:<b>[[totalHumanize]]</b></span>",
+                    "title": "{% trans %}Total{% endtrans %}",
                     "type": "column",
                     "fillAlphas": 0.8,
     
-                    "valueField": "income"
+                    "valueField": "total"
                 }, {
-                    "balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]]</b></span>",
+                    "balloonText": "<span style='font-size:13px;'>[[title]] y [[name]]:<b>[[onlineHumanize]]</b></span>",
                     "bullet": "round",
                     "bulletBorderAlpha": 1,
                     "bulletColor": "#FFFFFF",
@@ -118,11 +206,11 @@
                     "lineThickness": 2,
                     "lineAlpha": 1,
                     "bulletSize": 7,
-                    "title": "Online",
-                    "valueField": "expenses"
+                    "title": "{% trans %}Online{% endtrans %}",
+                    "valueField": "online"
                 }],
                 "rotate": true,
-                "categoryField": "year",
+                "categoryField": "name",
                 "categoryAxis": {
                     "gridPosition": "start"
                 }
@@ -148,23 +236,30 @@
     }) }}
     <div class="row">
         <div class="col-md-12">
-            <div id="datatable_ajax"  data-url="{{ url('sd_user_stufflist') }}">
+            <div id="datatable_ajax"  data-url="{{ url('sd_user_time_online_list') }}">
                 {{ render(controller('SDUserBundle:UserStatistic:timeOnlineList')) }}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div id="inactive-string">
+                <h4>Неактивные пользователи:</h4>
+            </div>
+            <div id="reportrange" class="btn default">
+                <i class="fa fa-calendar"></i>
+                &nbsp; <span>{% trans %}Range{% endtrans %}</span>
+                <b class="fa fa-angle-down"></b>
             </div>
         </div>
         <div class="col-md-12">
     		<!-- BEGIN CHART PORTLET-->
     		<div class="portlet light bordered">
     			<div class="portlet-body">
-    				<div id="chart_4" class="chart" style="height: 400px; overflow: hidden; text-align: left;">
+    				<div id="chart_4" class="chart" style="height: 120px; overflow: hidden; text-align: left;">
     				</div>
     			</div>
     		</div>
     		<!-- END CHART PORTLET-->
     	</div>
-    	<div class="col-md-12">
-            <div id="datepaginator_sample_3" class="datepaginator-sm" align="center"></div>
-        </div>
     </div>
 {% endblock body %}
 
