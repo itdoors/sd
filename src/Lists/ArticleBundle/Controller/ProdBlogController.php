@@ -553,10 +553,12 @@ class ProdBlogController extends BaseController
 
                     $employees = array_unique($employees);
                     foreach ($employees as $stuff) {
-                        $nfu = new NewsFosUser();
-                        $nfu->setNews($party);
-                        $nfu->setUser($stuff->getUser());
-                        $em->persist($nfu);
+                        if ($stuff) {
+                            $nfu = new NewsFosUser();
+                            $nfu->setNews($party);
+                            $nfu->setUser($stuff->getUser());
+                            $em->persist($nfu);
+                        }
                     }
                 }
 
