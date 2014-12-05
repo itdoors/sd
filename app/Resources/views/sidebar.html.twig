@@ -805,7 +805,7 @@
                             {% trans %}Active users{% endtrans %}
                         </a>
                     </li>
-                    {% if is_granted('ROLE_ADMIN') %}
+                    {% if is_granted('ROLE_SUPERVISOR') %}
                     <li{% if
                              path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('sd_user_time_online')
                         %} class="active"{% endif %}>
