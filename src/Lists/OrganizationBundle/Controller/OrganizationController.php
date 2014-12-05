@@ -575,7 +575,7 @@ class OrganizationController extends BaseController
         $service = $this->get('lists_organization.service');
         $access = $service->checkAccess($this->getUser());
 
-        if ($access->canExportToExcel()) {
+        if (!$access->canExportToExcel()) {
             throw new \Exception('No access', 403);
         }
 
