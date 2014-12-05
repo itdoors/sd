@@ -646,7 +646,7 @@ class OrganizationController extends BaseController
                 ->setCellValueByColumnAndRow(++$col, $str, $organization['organizationName']);
             $phpExcelObject->getActiveSheet()->getCellByColumnAndRow($col, $str)->getHyperlink()
                 ->setUrl($this->generateUrl(
-                    'lists_' . $this->baseRoutePrefix . '_organization_show',
+                    'lists_organization_show',
                     array ('id' => $organization['organizationId']),
                     true
                 ));
