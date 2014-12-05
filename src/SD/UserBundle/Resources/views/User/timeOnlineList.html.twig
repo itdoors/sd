@@ -66,6 +66,7 @@
 
 <script>
     $(document).ready(function(){
+    	$('.checkboxes, .group-checkable').uniform();
         $('.group-checkable').change(function(){
             var name = $(this).data('name');
             $('input[name="'+name+'[]"]').prop('checked', $(this).prop('checked'));
