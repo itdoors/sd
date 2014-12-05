@@ -200,7 +200,7 @@ class UserStatisticController extends BaseController
                 $user = $userRepository->find($userId);
                 $userStatistic[] = [
                                 'id' => $user->getId(),
-                                'name' => $user->__toString(), 
+                                'name' => $user->__toString(),
                                 'online' => $totalLogedTime[0]['online'],
                                 'total' => $totalLogedTime[0]['total']
                 ];
@@ -209,7 +209,7 @@ class UserStatisticController extends BaseController
 
         return new Response(json_encode($userStatistic));
     }
-    
+
     /**
      * Executes findInactiveUsers action
      *
@@ -221,7 +221,7 @@ class UserStatisticController extends BaseController
     {
         $em = $this->getDoctrine()->getManager();
         $userRepository = $em->getRepository('SDUserBundle:User');
-    
+
         $userStatistic = [];
         $end = (new \DateTime)->setTimestamp($request->get('end'));
         $start = (new \DateTime)->setTimestamp($request->get('start'));
@@ -238,12 +238,13 @@ class UserStatisticController extends BaseController
         $inactiveUsers  = $qb
             ->select('partial user.{id, firstName, lastName}')
             ->from('SDUserBundle:User', 'user')
+            ->join('user.stuff', 'stuff')
             ->where($qb->expr()->notIn('user.id', $nots->getDQL()))
             ->setParameters(array(
                 'start' => $start,
                 'end' => $end
             ))
-            ->getQuery()    
+            ->getQuery()
             ->getArrayResult();
 
         foreach ($inactiveUsers as $inactiveUser) {
