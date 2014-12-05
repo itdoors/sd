@@ -203,3 +203,7 @@ it_doors_oper_statistic_coworker_render_filter_result:
 it_doors_oper_statistic_report_export:
     pattern:  /oper/statistic/report/export
     defaults: { _controller: ITDoorsOperBundle:OperStatistic:exportReport }
+
+it_doors_oper_department_all_export:
+    pattern:  /oper/department/all/export
+    defaults: { _controller: ITDoorsOperBundle:OperInfo:exportDepartmentInfo }
