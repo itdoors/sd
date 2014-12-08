@@ -74,6 +74,7 @@
                 </td>
             </tr>
                 {% set headerDone = false %}
+                {% set hasDopDogovor = false %}
                 {% for dogovorDepartment in dogovorsDepartment %}
                     {% set dogovorMain = dogovorDepartment.dogovor %}
                     {% set dopDogovor = dogovorDepartment.dopDogovor %}
@@ -107,6 +108,7 @@
                                     <tbody>
                         {% endif %}
                         {% set headerDone = true %}
+                        {% set hasDopDogovor = true %}
                                     <tr>
                                         <td>{{ dopDogovor.id }}</td>
                                         <td>{{ dopDogovor.dopDogovorType }}</td>
@@ -134,15 +136,15 @@
                     {% endif %}
 
                 {% endfor %}
+                {% if hasDopDogovor %}
+                    
                                  </tbody>
                                 </table>
+                                 </td> 
                             </tr>
+                            {% endif %}
             {% endif %}
         {% endfor %}
-
-
-
     </tbody>
 </table>
-
 </div>
