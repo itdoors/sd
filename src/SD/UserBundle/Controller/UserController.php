@@ -393,7 +393,7 @@ class UserController extends BaseController
         $result = array();
 
         $em = $this->getDoctrine()->getManager();
-        $files=$request->files->get('userAvatarForm');
+        $files = $request->files->get('userAvatarForm');
 
         $file = $files['photo'];
         $errorList = $this->get('validator')->validateValue($file, $imgConstraint);
