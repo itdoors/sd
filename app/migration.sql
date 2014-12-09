@@ -1230,4 +1230,4 @@ ALTER TABLE login_user_activity ADD CONSTRAINT FK_6AEB0E35A76ED395 FOREIGN KEY (
 -- prod ++++++++
 
 ALTER TABLE login_statistic ADD cause VARCHAR(25);
--- prod -----
+-- prod +++++++
