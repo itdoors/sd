@@ -320,9 +320,10 @@
                     $.idleTimeout('#idle-timeout-dialog', '.modal-content button:last', {
                         idleAfter: 300, // 5 min
                         timeout: 30000, //30 seconds to timeout
-                        pollingInterval: 600, // 10 min
+                        pollingInterval: 300, // 10 min
                         keepAliveURL: '{{ path('sd_user_keep_alive') }}',
                         serverResponseEquals: 'OK',
+                        failedRequests: 100,
                         onTimeout: function(){
                             window.location = "{{ path('fos_user_security_logout') }}";
                         },
