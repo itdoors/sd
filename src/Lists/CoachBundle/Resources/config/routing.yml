@@ -1,0 +1,19 @@
+lists_coach_index:
+    path:     /training/index
+    defaults: { _controller: ListsCoachBundle:CoachReport:index }
+
+lists_coach_report_list:
+    path:     /training/reports
+    defaults: { _controller: ListsCoachBundle:CoachReport:list }
+
+lists_coach_report_add:
+    path:     /training/reports/add
+    defaults: { _controller: ListsCoachBundle:CoachReport:add }
+
+lists_coach_report_show:
+    path:     /training/reports/{id}
+    defaults: { _controller: ListsCoachBundle:CoachReport:show }
+
+lists_coach_report_edit:
+    path:     /training/reports/edit/{id}
+    defaults: { _controller: ListsCoachBundle:CoachReport:edit }

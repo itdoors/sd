@@ -1,0 +1,11 @@
+parameters:
+    lists_coach.action.service.class: Lists\CoachBundle\Services\ActionService
+    lists_coach.coach.service.class: Lists\CoachBundle\Services\CoachService
+
+services:
+    lists_coach.action.service:
+        class: %lists_coach.action.service.class%
+        arguments: [@service_container]
+    lists_coach.coach.service:
+        class: %lists_coach.coach.service.class%
+        arguments: [@service_container]

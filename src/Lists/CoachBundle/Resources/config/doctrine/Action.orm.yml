@@ -1,0 +1,52 @@
+Lists\CoachBundle\Entity\Action:
+    type: entity
+    table: coach_action
+    id:
+        id:
+            type: integer
+            generator: { strategy: IDENTITY }
+    fields:
+        title:
+            type: string
+            length: 255
+        text:
+            type: text
+            nullable: true
+        startedAt:
+            type: datetime
+            nullable: true
+        finishedAt:
+            type: datetime
+            nullable: true
+    manyToMany:
+        individuals:
+            targetEntity: Lists\IndividualBundle\Entity\Individual
+            joinTable:
+                name: coach_action_individual
+                joinColumns:
+                    coach_action_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    individual_id:
+                        referencedColumnName: id
+    manyToOne:
+        executor:
+            targetEntity: SD\UserBundle\Entity\User
+            joinColumn:
+                name: user_id
+                referencedColumnName: id
+        topic:
+            targetEntity: Lists\CoachBundle\Entity\ActionTopic
+            inversedBy: actions
+        type:
+            targetEntity: Lists\CoachBundle\Entity\ActionType
+            inversedBy: actions
+        department:
+            targetEntity: Lists\DepartmentBundle\Entity\Departments
+            joinColumn:
+                name: department_id
+                referencedColumnName: id
+    oneToOne:
+        coachReport:
+            targetEntity: Lists\CoachBundle\Entity\CoachReport
+            mappedBy: action

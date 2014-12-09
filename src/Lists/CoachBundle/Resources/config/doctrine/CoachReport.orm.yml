@@ -1,0 +1,29 @@
+Lists\CoachBundle\Entity\CoachReport:
+    type: entity
+    table: coach_report
+    id:
+        id:
+            type: integer
+            generator: { strategy: IDENTITY }
+    fields:
+        title:
+            type: string
+            length: 255
+        text:
+            type: text
+            nullable: true
+        created:
+            type: datetime
+    manyToOne:
+        author:
+            targetEntity: SD\UserBundle\Entity\User
+            joinColumn:
+                name: user_id
+                referencedColumnName: id
+    oneToOne:
+        action:
+            targetEntity: Lists\CoachBundle\Entity\Action
+            inversedBy: coachReport
+            joinColumn:
+                name: action_id
+                referencedColumnName: id
