@@ -18,6 +18,10 @@ SD\UserBundle\Entity\UserLoginRecord:
         sessionId:
             type: string
             length: 255
+        cause:
+            type: string
+            length: 25
+            nullable: true
         
     manyToOne:
         user:

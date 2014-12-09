@@ -86,6 +86,7 @@ class UserStatisticController extends BaseController
                 ));
                 foreach ($userLoginRecords as $userLoginRecord) {
                     $userLoginRecord->setLogedOut(new \DateTime("now"));
+                    $userLoginRecord->setCause('mouse_inactivity');
                     $em->merge($userLoginRecord);
 
                     $pdo->destroy($userLoginRecord->getSessionId());

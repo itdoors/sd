@@ -1228,3 +1228,6 @@ ALTER TABLE login_statistic ADD CONSTRAINT FK_4056C69A76ED395 FOREIGN KEY (user_
 ALTER TABLE login_user_activity ADD user_id INT DEFAULT NULL;
 ALTER TABLE login_user_activity ADD CONSTRAINT FK_6AEB0E35A76ED395 FOREIGN KEY (user_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 -- prod ++++++++
+
+ALTER TABLE login_statistic ADD cause VARCHAR(25);
+-- prod -----
