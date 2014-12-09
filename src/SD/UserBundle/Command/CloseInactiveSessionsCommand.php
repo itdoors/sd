@@ -57,6 +57,7 @@ class CloseInactiveSessionsCommand extends ContainerAwareCommand
                     $userTime = new \DateTime();
                     $userTime->setTimestamp($currentTime);
                     $userLoginRecord->setLogedOut($userTime);
+                    $userLoginRecord->setCause('cron');
                     $em->merge($userLoginRecord);
 
                     $pdo->destroy($userLoginRecord->getSessionId());

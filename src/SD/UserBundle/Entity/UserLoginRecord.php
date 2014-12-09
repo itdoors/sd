@@ -146,7 +146,6 @@ class UserLoginRecord
      */
     private $sessionId;
 
-
     /**
      * Set sessionId
      *
@@ -169,5 +168,34 @@ class UserLoginRecord
     public function getSessionId()
     {
         return $this->sessionId;
+    }
+    /**
+     * @var string
+     */
+
+    private $cause;
+
+    /**
+     * Set cause
+     *
+     * @param string $cause
+     * 
+     * @return UserLoginRecord
+     */
+    public function setCause($cause)
+    {
+        $this->cause = $cause;
+
+        return $this;
+    }
+
+    /**
+     * Get cause
+     *
+     * @return string 
+     */
+    public function getCause()
+    {
+        return $this->cause;
     }
 }
