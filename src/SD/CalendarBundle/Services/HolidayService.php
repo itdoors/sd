@@ -110,7 +110,6 @@ class HolidayService
 
         $users = $em->getRepository('SDUserBundle:User')
             ->getBirthdaysForCalendar($startTimestamp, $endTimestamp);
-        var_dump($users[0]->getFirstname());
         $html = '';
         if (count($users) > 0) {
             $html = $templating->render(
