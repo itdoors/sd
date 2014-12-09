@@ -46,7 +46,9 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
                 ));
                 foreach ($userLoginRecords as $userLoginRecord) {
                     $userLoginRecord->setLogedOut(new \DateTime("now"));
-                    $userLoginRecord->setCause('self_logout');
+                    if (!$userLoginRecord->getCause()) {
+                        $userLoginRecord->setCause('self_logout/inactivity');
+                    }
                     $em->merge($userLoginRecord);
                 }
 
