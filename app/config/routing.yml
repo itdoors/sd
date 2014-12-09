@@ -1,3 +1,7 @@
+lists_coach:
+    resource: "@ListsCoachBundle/Resources/config/routing.yml"
+    prefix:   /
+    
 it_doors_geo:
     resource: "@ITDoorsGeoBundle/Resources/config/routing.yml"
     prefix:   /
