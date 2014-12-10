@@ -369,3 +369,11 @@ sd_common_ajax_department:
 sd_common_ajax_department_by_ids:
     pattern:  /ajax/department_by_ids
     defaults: { _controller: SDCommonBundle:Ajax:getDepartmentsByIdsAjax }
+    
+sd_common_ajax_department_by_id:
+    pattern:  /ajax/department_by_id
+    defaults: { _controller: SDCommonBundle:Ajax:getDepartmentByIdAjax }
+    
+sd_common_ajax_departments_by_city_id:
+    pattern:  /ajax/departments_by_city_id
+    defaults: { _controller: SDCommonBundle:Ajax:getDepartmentsByCityIdAjax }

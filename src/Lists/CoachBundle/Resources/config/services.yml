@@ -1,6 +1,7 @@
 parameters:
     lists_coach.action.service.class: Lists\CoachBundle\Services\ActionService
     lists_coach.coach.service.class: Lists\CoachBundle\Services\CoachService
+    lists_coach.form.report.class: Lists\CoachBundle\Form\CoachReportFormType
 
 services:
     lists_coach.action.service:
@@ -9,3 +10,8 @@ services:
     lists_coach.coach.service:
         class: %lists_coach.coach.service.class%
         arguments: [@service_container]
+    lists_coach.form.report:
+        class: %lists_coach.form.report.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: coachReportForm }

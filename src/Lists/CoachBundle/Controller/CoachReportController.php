@@ -3,6 +3,7 @@
 namespace Lists\CoachBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * CoachReportController
@@ -32,7 +33,9 @@ class CoachReportController extends Controller
      */
     public function listAction()
     {
-        return $this->render('ListsCoachBundle:Report:list.html.twig', array());
+        return $this->render('ListsCoachBundle:Report:list.html.twig', array(
+                        'items' => []
+        ));
     }
 
     /**
@@ -52,9 +55,15 @@ class CoachReportController extends Controller
      *
      * @return string
      */
-    public function addAction()
+    public function addAction(Request $request)
     {
-        return $this->render('ListsCoachBundle:Report:add.html.twig', array());
+        $em = $this->getDoctrine()->getManager();
+        
+        $form = $this->createForm('coachReportForm');
+        $form->handleRequest($request);
+        return $this->render('ListsCoachBundle:Report:add.html.twig', array(
+                        'form' => $form->createView()
+        ));
     }
 
     /**

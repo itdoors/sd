@@ -6266,10 +6266,48 @@ class AjaxController extends BaseFilterController
         return new Response(json_encode($result));
     }
 
+    /**
+     * @return Response
+     */
+    public function getDepartmentByIdAjaxAction()
+    {
+        $id = $this->get('request')->query->get('id');
+
+        $object = $this->getDoctrine()
+        ->getRepository('ListsDepartmentBundle:Departments')->find($id);
+
+        $result = $this->serializeObject($object);
+
+        return new Response(json_encode($result));
+    }
+    
+    /**
+     * @return Response
+     */
+    public function getDepartmentsByCityIdAjaxAction()
+    {
+        $cityId = $this->get('request')->query->get('cityId');
+        $searchText = $this->get('request')->query->get('query');
+
+        $result = [];
+        $departments = $this
+                ->getDoctrine()
+                ->getRepository('ListsDepartmentBundle:Departments')
+                ->getDepartmentsForCityQuery($searchText, $cityId);
+
+        foreach ($departments as $department) {
+            $result[] = $this->serializeObject($department);
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * @return Response
+     */
     public function departmentAction() {
         $searchText = $this->get('request')->query->get('query');
 
-        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
         $departmentRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments');
 
