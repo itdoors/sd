@@ -3,6 +3,7 @@
 namespace ITDoors\ControllingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * InvoiceMessage
@@ -239,5 +240,122 @@ class InvoiceMessage
     public function getContact ()
     {
         return $this->contact;
+    }
+    /**
+     * @var string
+     */
+    private $file;
+
+
+    /**
+     * Set file
+     *
+     * @param string $file
+     * 
+     * @return InvoiceMessage
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    /**
+     * Get file
+     *
+     * @return string 
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+    /**
+     * getAbsolutePath
+     *
+     * @return null|string
+     */
+    public function getAbsolutePath ()
+    {
+        return null === $this->getFile() ? null : $this->getUploadRootDir() . '/' . $this->getFile();
+    }
+    /**
+     * getWebPath
+     *
+     * @return null|string
+     */
+    public function getWebPath ()
+    {
+        return null === $this->getFile() ? null : $this->getUploadDir() . '/' . $this->getFile();
+    }
+    /**
+     * getUploadRootDir
+     *
+     * @return string
+     */
+    protected function getUploadRootDir ()
+    {
+        $dir = __DIR__ . '/../../../../web' . $this->getUploadDir();
+
+        return $dir;
+    }
+    /**
+     * getUploadDir
+     *
+     * @return string
+     */
+    protected function getUploadDir ()
+    {
+        $uploadDir = __DIR__ . '/../../../../web/uploads';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755);
+        }
+        if (!is_dir($uploadDir.'/invoice')) {
+            mkdir($uploadDir.'/invoice', 0755);
+        }
+        if (!is_dir($uploadDir.'/invoice/scan')) {
+            mkdir($uploadDir.'/invoice/scan', 0755);
+        }
+        if (!is_dir($uploadDir.'/invoice/scan/'.$this->getInvoiceId())) {
+            mkdir($uploadDir.'/invoice/scan/'.$this->getInvoiceId(), 0755);
+        }
+
+        return '/uploads/invoice/scan/'.$this->getInvoiceId();
+    }
+
+    private $fileTepm;
+
+    /**
+     * Sets fileTepm.
+     *
+     * @param UploadedFile $fileTepm
+     */
+    public function setFileTepm (UploadedFile $fileTepm = null)
+    {
+        $this->fileTepm = $fileTepm;
+    }
+    /**
+     * Get fileTepm.
+     *
+     * @return UploadedFile
+     */
+    public function getFileTepm ()
+    {
+        return $this->fileTepm;
+    }
+    /**
+     * upload
+     */
+    public function upload ()
+    {
+        if (null === $this->getFileTepm()) {
+            return;
+        }
+        $fileExtension = $this->getFileTepm()->getClientOriginalExtension();
+        $filename = uniqid() . '.' . $fileExtension;
+        $uploadDir = $this->getUploadRootDir();
+        $this->getFileTepm()->move($uploadDir, $filename);
+        $this->setFile($filename);
+        $this->fileTepm = null;
     }
 }

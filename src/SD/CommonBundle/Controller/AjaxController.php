@@ -2527,18 +2527,18 @@ class AjaxController extends BaseFilterController
      */
     public function invoiceMessageFormSave(Form $form, $user, $request)
     {
-        /** @var InvoiceMessage $data */
-        $data = $form->getData();
+        /** @var InvoiceMessage $invoiceMessage */
+        $invoiceMessage = $form->getData();
 
         $formData = $request->request->get($form->getName());
 
-        $invoiceId = $data->getInvoiceId();
+        $invoiceId = $invoiceMessage->getInvoiceId();
 
         /** @var Invoice $invoice */
         $invoice = $this->getDoctrine()
             ->getRepository('ITDoorsControllingBundle:Invoice')
             ->find($invoiceId);
-        $data->setInvoice($invoice);
+        $invoiceMessage->setInvoice($invoice);
 
         $contactid = $formData['contactid'];
 
@@ -2547,17 +2547,23 @@ class AjaxController extends BaseFilterController
             $contact = $this->getDoctrine()
                 ->getRepository('ListsContactBundle:ModelContact')
                 ->find($contactid);
-            $data->setContact($contact);
+            $invoiceMessage->setContact($contact);
+        }
+        $file = $form['file']->getData();
+
+        if ($file) {
+            $invoiceMessage->setFileTepm($file);
+            $invoiceMessage->upload();
         }
 
-        $data->setUser($this->getUser());
+        $invoiceMessage->setUser($this->getUser());
 
-        $data->setNote($formData['note']);
+        $invoiceMessage->setNote($formData['note']);
 
-        $data->setCreatedate(new \DateTime());
+        $invoiceMessage->setCreatedate(new \DateTime());
 
         $em = $this->getDoctrine()->getManager();
-        $em->persist($data);
+        $em->persist($invoiceMessage);
         $em->flush();
 
         return true;
@@ -6265,8 +6271,13 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($result));
     }
-
-    public function departmentAction() {
+    /**
+     * departmentAction
+     * 
+     * @return Response
+     */
+    public function departmentAction()
+    {
         $searchText = $this->get('request')->query->get('query');
 
         /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
@@ -6284,5 +6295,4 @@ class AjaxController extends BaseFilterController
         return new Response(json_encode($result));
 
     }
-
 }

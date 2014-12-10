@@ -301,14 +301,14 @@ class UserRepository extends EntityRepository
                 . "THEN 0 "
                 . "ELSE 366 - dayofyear(CAST(CONCAT(YEAR(u.birthday), '-12-31') as date)) "
                 . "END + dayofyear(u.birthday) >= :dayofyearStart"
-                )
-                ->andWhere(
+            )
+            ->andWhere(
                 "CASE "
                 . "WHEN dayofyear(u.birthday) < 60 "
                 . "THEN 0 "
                 . "ELSE 366 - dayofyear(CAST(CONCAT(YEAR(u.birthday), '-12-31') as date) ) "
                 . "END + dayofyear(u.birthday) <= :dayofyearStop"
-                );
+            );
         } else {
             $res->andWhere(
                 "CASE "
@@ -322,13 +322,19 @@ class UserRepository extends EntityRepository
                 . "THEN 0 "
                 . "ELSE 366 - dayofyear(CAST(CONCAT(YEAR(u.birthday), '-12-31') as date) ) "
                 . "END + dayofyear(u.birthday) >= :dayofyearStop"
-                );
+            );
         }
         $dayofyearStart = date('z', $startTimestamp)+1;
         $dayofyearStop = date('z', $endTimestamp)+1;
         $res
-            ->setParameter(':dayofyearStart', $dayofyearStart > 60 && !date('L', $startTimestamp) ? $dayofyearStart+1 : $dayofyearStart)
-            ->setParameter(':dayofyearStop', $dayofyearStop > 60 && !date('L', $dayofyearStop) ? $dayofyearStop+1 : $dayofyearStop);
+            ->setParameter(
+                ':dayofyearStart',
+                $dayofyearStart > 60 && !date('L', $startTimestamp) ? $dayofyearStart+1 : $dayofyearStart
+            )
+            ->setParameter(
+                ':dayofyearStop',
+                $dayofyearStop > 60 && !date('L', $dayofyearStop) ? $dayofyearStop+1 : $dayofyearStop
+            );
 
         return $res->getQuery()->getResult();
     }

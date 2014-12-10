@@ -7,6 +7,12 @@
             </div>
             <div class="tools"><a class="collapse" href="" title="Фильтры"></a></div>
         </div>
-        <div class="portlet-body">{{messag.note|raw('html')}} </div>
+        <div class="portlet-body">
+            {{messag.note|raw('html')}}
+            {% if messag.file is not empty %}
+                <br><br>
+                <a href="{{ messag.object.getWebPath }}">{% trans %}Scan document{% endtrans %}</a>
+            {% endif %}
+        </div>
     </div>
 {% endfor%}

@@ -28,6 +28,11 @@ ITDoors\ControllingBundle\Entity\InvoiceMessage:
             length: 255
         createdate:
             type: datetime
+        file:
+            type: string
+            length: 255
+            nullable: true
+            comment: скан докумената
     manyToOne:
         invoice:
             targetEntity: ITDoors\ControllingBundle\Entity\Invoice

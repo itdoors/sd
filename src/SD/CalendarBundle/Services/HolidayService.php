@@ -64,7 +64,6 @@ class HolidayService
         if (empty($text)) {
             return;
         }
-        
 
         $users = $em->getRepository('SDUserBundle:User')
                 ->getOnlyStuff()

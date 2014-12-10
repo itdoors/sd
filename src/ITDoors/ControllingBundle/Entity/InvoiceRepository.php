@@ -136,6 +136,7 @@ class InvoiceRepository extends EntityRepository
             ->addSelect('d.startdatetime as dogovorStartDatetime')
             ->addSelect('i.dogovorDate as invoiceDogovorDate')
             ->addSelect('h.note as description')
+            ->addSelect('h.file')
             ->addSelect('h.createdate as descriptiondate');
 
         return $res;
@@ -1424,6 +1425,8 @@ class InvoiceRepository extends EntityRepository
                     $days = 4;
                 } elseif (date("w") == 2) {
                     $days = 2;
+                } elseif (date("w") == 3) {
+                    $days = 1;
                 } elseif (date("w") == 6) {
                     $days = 5;
                 } elseif (date("w") == 5) {
@@ -1441,13 +1444,17 @@ class InvoiceRepository extends EntityRepository
                     $days = 5;
                 } elseif (date("w") == 2) {
                     $days = 3;
+                } elseif (date("w") == 3) {
+                    $days = 2;
+                } elseif (date("w") == 4) {
+                    $days = 1;
                 } elseif (date("w") == 6) {
                     $days = 6;
                 } elseif (date("w") == 5) {
                     $days = 7;
                 }
                 $date = date('Y-m-d', mktime(0, 0, 0, date("m"), date('d') + $days, date('Y')));
-                
+
                 $res
                     ->andWhere("i.delayDate = :date or i.dateEnd = :date")
                     ->setParameter(':date', $date)

@@ -208,7 +208,11 @@
                        data-post_target_id="datatable_ajax"
                     ></a>
                     {% endif %}
-                       {{ entity.descriptiondate is empty ? '' : '('~entity.descriptiondate |date("d.m.y")~')'}} {{ entity.description |raw('html') }}
+                       {{ entity.descriptiondate is empty ? '' : '('~entity.descriptiondate |date("d.m.y")~')'}}
+                       {{ entity.description |raw('html') }}
+                       {% if entity.file is not empty %}
+                            <br><a href="{{ invoice_scan_file_path ~ entity.id ~ '/' ~ entity.file }}" target="_blank">{% trans %}Scan document{% endtrans %}</a>
+                        {% endif %}
                 </td>
                 <td class="">
                     {% if access.canEdit %}
