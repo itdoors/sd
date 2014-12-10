@@ -1,4 +1,11 @@
 {% trans_default_domain 'ListsMpkBundle' %}
+<script>
+    $(document).ready(function(){
+        $('#mpkListTpl').on('hidden.bs.modal', function () {
+            document.location.reload();
+        });
+    });
+</script>        
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
     <h4 class="modal-title">{% trans %}Mpk list{% endtrans %}</h4>
@@ -20,9 +27,7 @@
         <div style="display: none" id="mpkTpl"></div>
     {% endif %}
     <div  id="listMPK" data-url="{{ path('lists_mpk_list', { departmentId:departmentId}) }}">
-        {{ render(controller('ListsMpkBundle:Mpk:list', {
-            'departmentId': departmentId
-        })) }}
+        {{ render(controller('ListsMpkBundle:Mpk:list', { 'departmentId': departmentId })) }}
     </div>
 </div>
 <div class="modal-footer">

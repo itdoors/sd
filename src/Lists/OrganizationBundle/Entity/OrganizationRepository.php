@@ -469,6 +469,25 @@ class OrganizationRepository extends EntityRepository
      *
      * @return mixed[]
      */
+    public function getSearchSingQuery($q)
+    {
+        $sql = $this->createQueryBuilder('o')
+            ->innerJoin('o.lookup', 'sign')
+            ->where('lower(o.name) LIKE :q')
+            ->andWhere('sign.lukey = :lukey')
+            ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%')
+            ->setParameter(':lukey', 'organization_sign_own')
+            ->orderBy('o.name');
+
+        return $sql->getQuery()->getResult();
+    }
+    /**
+     * Searches organization by $q
+     *
+     * @param string $q
+     *
+     * @return mixed[]
+     */
     public function getSearchContactsQuery ($q)
     {
         $sql = $this->createQueryBuilder('o')

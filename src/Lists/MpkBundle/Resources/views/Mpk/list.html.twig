@@ -11,9 +11,9 @@
         });
         $('.mpk-organization').editable({
             url: '{{ path('lists_mpk_save') }}',
-            source: '{{ path('sd_common_ajax_organization') }}',
+            source: '{{ path('sd_common_ajax_organization_sing') }}',
             select2: {
-                minimumInputLength: 2
+                minimumInputLength: 0
             }
         });
         $('.mpk-active').editable({
@@ -32,7 +32,7 @@
                 autoclose: true,
                 format: "dd-mm-yyyy",
                 language: "ru",
-                startView: 'month',
+                startView: 2,
                 weekStart: 1
             }
         });
