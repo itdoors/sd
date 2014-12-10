@@ -53,6 +53,8 @@ class DopDogovorController extends BaseController
      */
     public function elementAction($id)
     {
+        $service = $this->get('lists_dogovor.service');
+        $access = $service->checkAccess($this->getUser());
         /** @var DopDogovorRepository $ddr */
         $ddr = $this->get('lists_dogovor.dopdogovor.repository');
 
@@ -65,6 +67,7 @@ class DopDogovorController extends BaseController
             'item' => $item,
             'baseTemplate' => $this->baseTemplate,
             'baseRoutePrefix' => $this->baseRoutePrefix,
+            'access' => $access
         ));
     }
 }
