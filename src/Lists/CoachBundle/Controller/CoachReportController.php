@@ -224,7 +224,7 @@ class CoachReportController extends BaseController
         $directory = $this->container->getParameter('project.web.dir');
         $directory .= $reportsFilePath;
         if (!is_dir($directory)) {
-            mkdir($directory, 0777);
+            mkdir($directory, 0777, true);
         }
         $ext = explode('.', $_FILES['file']['name']);
         $filename = $name . '.' . $ext[1];
