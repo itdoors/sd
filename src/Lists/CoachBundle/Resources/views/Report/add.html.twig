@@ -1,6 +1,7 @@
 {% extends "::base.html.twig" %}
 {% trans_default_domain 'ListsCoachBundle' %}
 {% block title %}{% trans %}Add{% endtrans %} {% endblock %}
+{% form_theme form 'ITDoorsCommonBundle:Form:fields.html.twig' %}
 {% block page_title %}
     <h3 class="page-title">
         {% trans %}Reports{% endtrans %} <small>{% trans %}new{% endtrans %}</small>
@@ -14,7 +15,7 @@
             <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
         </li>
         <li>
-            <a href="{{ path('list_article_blog') }}" title="{% trans %}Reports{% endtrans %}">{% trans %}Reports{% endtrans %}</a>
+            <a href="{{ path('lists_coach_index') }}" title="{% trans %}Reports{% endtrans %}">{% trans %}Reports{% endtrans %}</a>
         </li>
         <li>
             <a href="" title="{% trans %}New{% endtrans %}">{% trans %}New{% endtrans %}</a>
@@ -53,16 +54,13 @@
         </div>
         <div class="portlet-body form">
             <script>
+            var cityId;
                 $(document).ready(function() {
                     SD.select2('#' + '{{ form.vars.name }}' + '_author', {
-                    });
-                    SD.select2('#' + '{{ form.vars.name }}' + '_action_department', {
                     });
                     SD.select2('#' + '{{ form.vars.name }}' + '_action_type', {
                     });
                     SD.select2('#' + '{{ form.vars.name }}' + '_action_topic', {
-                    });
-                    SD.select2('#' + '{{ form.vars.name }}' + '_city', {
                     });
                     SD.select2('#' + '{{ form.vars.name }}' + '_action_individuals', {
                     });
@@ -70,7 +68,8 @@
                     $('#' + '{{ form.vars.name }}' + '_action_individuals').prop( "disabled", true );
                     
                     $('#' + '{{ form.vars.name }}' + '_city').on("change", function(event){
-                        var cityId = $(this).val();
+                        cityId = $(this).val();
+                        console.log(cityId);
                         if (!cityId) {
                      	   $('#' + '{{ form.vars.name }}' + '_action_department').prop( "disabled", true );
                      	   $('#' + '{{ form.vars.name }}' + '_action_individuals').prop( "disabled", true );
@@ -196,7 +195,7 @@
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}City{% endtrans %}</label>
                     <div class="col-md-9">
-                        {{ form_widget(form.city, {'attr' : {'class' : 'form-control', 'placeholder': "City"| trans}}) }}
+                        {{ form_widget(form.city, {'attr' : { 'placeholder': "City"| trans}}) }}
                         {% if form.city.vars.errors|length %}{{ form_errors(form.city) }}{% endif %}
                     </div>
                 </div>
@@ -223,7 +222,7 @@
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Place{% endtrans %}</label>
                     <div class="col-md-9">
-                        {{ form_widget(form.action.department, {'attr' : {'class' : 'form-control', 'placeholder': "Place" | trans}}) }}
+                        {{ form_widget(form.action.department, {'attr' : {'placeholder': "Place" | trans}}) }}
                         {% if form.action.department.vars.errors|length %}{{ form_errors(form.action.department) }}{% endif %}
                     </div>
                 </div>
@@ -239,15 +238,6 @@
             </div>
             <div class="form-body">
                 <div class="form-group">
-                    <label class="required control-label col-md-3">{% trans %}Report Description{% endtrans %}</label>
-                    <div class="col-md-9">
-                        {{ form_widget(form.text, {'attr' : {'id' : 'select2','class' : 'form-control textear-edit', 'placeholder': "Report Description"| trans}}) }}
-                        {% if form.text.vars.errors|length %}{{ form_errors(form.text) }}{% endif %}
-                    </div>
-                </div>
-            </div>
-            <div class="form-body">
-                <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Action Description{% endtrans %}</label>
                     <div class="col-md-9">
                         {{ form_widget(form.action.text, {'attr' : {'id' : 'select2','class' : 'form-control textear-edit', 'placeholder': "Action Description"| trans}}) }}
@@ -255,7 +245,15 @@
                     </div>
                 </div>
             </div>
-
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Report Description{% endtrans %}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.text, {'attr' : {'id' : 'select2','class' : 'form-control textear-edit', 'placeholder': "Report Description"| trans}}) }}
+                        {% if form.text.vars.errors|length %}{{ form_errors(form.text) }}{% endif %}
+                    </div>
+                </div>
+            </div>
             <div class="form-actions fluid">
                 <div class="row">
                     <div class="col-md-12">

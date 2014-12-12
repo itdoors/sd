@@ -30,10 +30,10 @@ class ActionFormType extends AbstractType
     {
         $router = $this->container->get('router');
         $builder
-            ->add('department', 'text', array(
+            ->add('department', 'itdoors_select2', array(
                 'mapped' => false,
                 'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field control-label col-md-3',
+                    'class' => 'form-control itdoors-select2 can-be-reseted submit-field',
                     'data-url' => $router->generate('sd_common_ajax_departments_by_city_id'),
                     'data-url-by-id' => $router->generate('sd_common_ajax_department_by_id'),
                     'data-params' => json_encode(array(

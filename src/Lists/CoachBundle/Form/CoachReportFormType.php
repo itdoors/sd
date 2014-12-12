@@ -31,9 +31,10 @@ class CoachReportFormType extends AbstractType
         $router = $this->container->get('router');
         $builder
             ->add('action', new ActionFormType($this->container))
-            ->add('author', 'text', array(
+            ->add('author', 'itdoors_select2', array(
                 'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field control-label col-md-3',
+                    'class' => 'form-control itdoors-select2 can-be-reseted submit-field',
+                    'class_outer' => 'col-md-4',
                     'data-url' => $router->generate('sd_common_ajax_user_fio'),
                     'data-url-by-id' => $router->generate('sd_common_ajax_user_by_id'),
                     'data-params' => json_encode(array(
@@ -47,21 +48,21 @@ class CoachReportFormType extends AbstractType
                 'format' => 'dd.MM.yyyy'
         ))
             ->add('title', 'text', array())
-            ->add('city', 'text', array(
-                'mapped' => false,
+            ->add('city', 'itdoors_select2', array(
                 'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field control-label col-md-3',
-                    'data-url' => $router->generate('sd_common_ajax_city'),
+                    'class' => 'form-control itdoors-select2 can-be-reseted submit-field',
+                    'class_outer' => 'col-md-4',
+                    'data-url'  => $router->generate('sd_common_ajax_city'),
                     'data-url-by-id' => $router->generate('sd_common_ajax_department_by_id'),
                     'data-params' => json_encode(array(
-                        'minimumInputLength' => 0,
-                        'allowClear' => true
+                                    'minimumInputLength' => 0,
+                                    'allowClear' => true,
                     ))
                 )
         ))
             ->add('text', 'textarea', array(
                 'required' => false
-            ));
+        ));
     }
 
     /**

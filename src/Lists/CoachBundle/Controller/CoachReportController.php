@@ -114,32 +114,36 @@ class CoachReportController extends BaseController
      */
     public function listAction()
     {
-        $namespase = $this->filterNamespace;
-        $filters = $this->getFilters($namespase);
-        if (empty($filters)) {
-            /** @var EntityManager $em */
-            $em = $this->getDoctrine()->getManager();
-            $status = $em->getRepository('ListsLookupBundle:Lookup')
-                ->findOneBy(array('lukey' => 'worked'));
-            $filters['status'] = $status->getId();
-            $this->setFilters($namespase, $filters);
-        }
-        $users = $this->get('sd_user.repository')->getAllForUserQuery($filters);
-        $entities = $users['entity'];
-        $count = $users['count'];
+//         $namespase = $this->filterNamespace;
+//         $filters = $this->getFilters($namespase);
+//         if (empty($filters)) {
+//             /** @var EntityManager $em */
+//             $em = $this->getDoctrine()->getManager();
+//             $status = $em->getRepository('ListsLookupBundle:Lookup')
+//                 ->findOneBy(array('lukey' => 'worked'));
+//             $filters['status'] = $status->getId();
+//             $this->setFilters($namespase, $filters);
+//         }
+//         $users = $this->get('sd_user.repository')->getAllForUserQuery($filters);
+//         $entities = $users['entity'];
+//         $count = $users['count'];
 
-        $page = $this->getPaginator($namespase);
-        if (!$page) {
-            $page = 1;
-        }
+//         $page = $this->getPaginator($namespase);
+//         if (!$page) {
+//             $page = 1;
+//         }
 
-        $paginator = $this->container->get($this->paginator);
-        $entities->setHint($this->paginator . '.count', $count);
-        $pagination = $paginator->paginate($entities, $page, 10);
+//         $paginator = $this->container->get($this->paginator);
+//         $entities->setHint($this->paginator . '.count', $count);
+//         $pagination = $paginator->paginate($entities, $page, 10);
+
+        $em = $this->getDoctrine()->getManager();
+        $reports = $em->getRepository('ListsCoachBundle:CoachReport')->findAll();
 
         return $this->render('ListsCoachBundle:Report:list.html.twig', array(
-                'namespase' => $namespase,
-                'items' => $pagination
+//                 'namespase' => $namespase,
+//                 'items' => $pagination,
+                'items' => $reports
         ));
     }
 
@@ -174,7 +178,7 @@ class CoachReportController extends BaseController
                 $user = $this->getUser();
                 $coachReport = $form->getData();
                 $action = $coachReport->getAction();
-                $formData = $request->request->get($form->getName());
+                $formData = $request->request->get($form->getName());var_dump($coachReport);die();
 
                 $depRepository = $em->getRepository('ListsDepartmentBundle:Departments');
 
@@ -206,7 +210,67 @@ class CoachReportController extends BaseController
      */
     public function editAction($id)
     {
-        return $this->render('ListsCoachBundle:Report:edit.html.twig', array());
+        $em = $this->getDoctrine()->getManager();
+        $report = $em->getRepository('ListsCoachBundle:CoachReport')->find($id);
+
+        if (!$report) {
+            throw $this->createNotFoundException(
+                'Unable to find CoachReport entity.'
+            );
+        }
+        if ($report->getAuthor() != $this->getUser()) {
+            throw new AccessDeniedException(
+                'You have no permission to edit this report!'
+            );
+        }
+
+        $form = $this->createForm('coachReportForm', $report);
+        $request = $this->getRequest();
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            try {
+                $coachReport = $form->getData();
+                $formData = $request->request->get($form->getName());
+
+                $depRepository = $em->getRepository('ListsDepartmentBundle:Departments');
+
+                $action->setDepartment($depRepository->find($formData['action']['department']));
+
+                $em->persist($coachReport);
+                $em->flush();
+            } catch (\Exception $e) {
+                $em->close();
+                throw $e;
+            }
+
+            return $this->redirect($this->generateUrl('lists_coach_index'));
+        }
+
+//         $form->get('city')->setData($report->getAction()->getDepartments()->)
+
+        return $this->render('ListsCoachBundle:Report:edit.html.twig', array(
+                        'report' => $report,
+                        'form' => $form->createView()
+        ));
+    }
+
+    /**
+     * Execute delete action
+     *
+     * @param int $id
+     *
+     * @return string
+     */
+    public function deleteAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $report = $em->getRepository('ListsCoachBundle:CoachReport')->find($id);
+
+        $em->remove($report);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('lists_coach_index'));
     }
 
     /**

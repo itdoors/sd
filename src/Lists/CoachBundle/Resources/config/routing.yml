@@ -1,5 +1,5 @@
 lists_coach_index:
-    path:     /training/index
+    path:     /training
     defaults: { _controller: ListsCoachBundle:CoachReport:index }
     
 lists_coach_report_showtabs:
@@ -19,12 +19,16 @@ lists_coach_report_add:
     defaults: { _controller: ListsCoachBundle:CoachReport:add }
 
 lists_coach_report_show:
-    path:     /training/reports/{id}
+    path:     /training/reports/show/{id}
     defaults: { _controller: ListsCoachBundle:CoachReport:show }
 
 lists_coach_report_edit:
     path:     /training/reports/edit/{id}
     defaults: { _controller: ListsCoachBundle:CoachReport:edit }
+    
+lists_coach_report_delete:
+    path:     /training/reports/delete/{id}
+    defaults: { _controller: ListsCoachBundle:CoachReport:delete }
     
 lists_coach_ajax_action_topics:
     path:     /training/action_topics
