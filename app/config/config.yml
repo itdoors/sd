@@ -26,6 +26,7 @@ parameters:
     upload.file.path: "%project.dir%/web/uploads/files/"
     userprofiles.file.path: "/uploads/userprofiles/"
     blogfiles.file.path: "/uploads/blogimages/"
+    reports.file.path: "/uploads/reports/"
     email.from: "noreply@griffin.ua"
     name.from: "ImpelNET"
     listener.history.table: %listener.history.tables%

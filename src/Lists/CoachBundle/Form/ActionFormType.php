@@ -7,9 +7,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Class CoachReportFormType
+ * Class ActionFormType
  */
-class CoachReportFormType extends AbstractType
+class ActionFormType extends AbstractType
 {
 
     protected $container;
@@ -30,34 +30,57 @@ class CoachReportFormType extends AbstractType
     {
         $router = $this->container->get('router');
         $builder
-            ->add('action', new ActionFormType($this->container))
-            ->add('author', 'text', array(
-                'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field control-label col-md-3',
-                    'data-url' => $router->generate('sd_common_ajax_user_fio'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_id'),
-                    'data-params' => json_encode(array(
-                                    'minimumInputLength' => 0,
-                                    'allowClear' => true
-                    ))
-                )
-            ))
-            ->add('created', 'date', array(
-                'widget' => 'single_text',
-                'format' => 'dd.MM.yyyy'
-        ))
-            ->add('title', 'text', array())
-            ->add('city', 'text', array(
+            ->add('department', 'text', array(
                 'mapped' => false,
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field control-label col-md-3',
-                    'data-url' => $router->generate('sd_common_ajax_city'),
+                    'data-url' => $router->generate('sd_common_ajax_departments_by_city_id'),
                     'data-url-by-id' => $router->generate('sd_common_ajax_department_by_id'),
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 0,
                         'allowClear' => true
                     ))
                 )
+        ))
+            ->add('individuals', 'text', array(
+                'mapped' => false,
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field control-label col-md-3',
+                    'data-url' => $router->generate('sd_common_ajax_departments_by_city_id'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_department_by_id'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 0,
+                        'allowClear' => true
+                    ))
+                ),
+                'required' => false
+        ))
+            ->add('startedAt', 'date', array(
+                'widget' => 'single_text',
+                'format' => 'dd.MM.yyyy'
+        ))
+            ->add('type', 'entity', array(
+                'class' => 'Lists\CoachBundle\Entity\ActionType',
+                'property' => 'title',
+                'empty_value' => '',
+                'multiple' => false,
+                'attr' => array(
+                     'data-params' => json_encode(array(
+                        'minimumInputLength' => 0,
+                        'allowClear' => true
+                    )))
+        ))
+            ->add('topic', 'entity', array(
+                'class' => 'Lists\CoachBundle\Entity\ActionTopic',
+                'property' => 'title',
+                'empty_value' => '',
+                'multiple' => false,
+                'required' => false,
+                'attr' => array(
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 0,
+                        'allowClear' => true
+                    )))
         ))
             ->add('text', 'textarea', array(
                 'required' => false
@@ -70,7 +93,7 @@ class CoachReportFormType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Lists\CoachBundle\Entity\CoachReport',
+            'data_class' => 'Lists\CoachBundle\Entity\Action',
             'validation_groups' => array(
                 'new'
             ),
@@ -83,6 +106,6 @@ class CoachReportFormType extends AbstractType
      */
     public function getName()
     {
-        return 'coachReportForm';
+        return 'actionForm';
     }
 }

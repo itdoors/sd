@@ -6323,4 +6323,24 @@ class AjaxController extends BaseFilterController
 
     }
 
+    /**
+     * @return Response
+     */
+    public function getIndividualsByCityIdAjaxAction()
+    {
+        $cityId = $this->get('request')->query->get('cityId');
+        $searchText = $this->get('request')->query->get('query');
+    
+        $result = [];
+        $individuals = $this
+        ->getDoctrine()
+        ->getRepository('ListsIndividualBundle:Individual')
+        ->getIndividualsByCityIdQuery($searchText, $cityId);
+    
+        foreach ($individuals as $individual) {
+            $result[] = $this->serializeObject($individual);
+        }
+    
+        return new Response(json_encode($result));
+    }
 }

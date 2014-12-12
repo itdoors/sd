@@ -6,9 +6,6 @@ Lists\CoachBundle\Entity\Action:
             type: integer
             generator: { strategy: IDENTITY }
     fields:
-        title:
-            type: string
-            length: 255
         text:
             type: text
             nullable: true

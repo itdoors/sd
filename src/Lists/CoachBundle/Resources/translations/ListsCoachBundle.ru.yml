@@ -1,9 +1,15 @@
 Dashboard: Рабочий стол
 Training: Обучение
 Reports: Отчёты
+Settings: Настройки
+Coaches: Тренеры
+Add coach: Добавить тренера
 report list: список отчётов
 Add: Добавить
 Cancel: Отмена
+Edit: Изменить
+Save: Сохранить
+Delete: Удалить
 new: новый
 New: Новый
 Autor: Автор
@@ -11,9 +17,10 @@ Report date: Дата отчёта
 Title: Тема
 Members: Участники
 Place: Место проведения
-Description: Описание
 Action type: Тип мероприятия
 Report title: Тема отчёта
 Action date: Дата мероприятия
 City: Город
 Action topic: Тема мероприятия
+Report Description: Комментарии к отчёту
+Action Description: Описание мероприятия

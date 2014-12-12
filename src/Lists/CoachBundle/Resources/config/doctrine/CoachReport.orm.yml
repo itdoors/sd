@@ -27,3 +27,4 @@ Lists\CoachBundle\Entity\CoachReport:
             joinColumn:
                 name: action_id
                 referencedColumnName: id
+            cascade: ["persist", "merge"]

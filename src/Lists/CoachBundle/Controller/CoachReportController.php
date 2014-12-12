@@ -2,14 +2,21 @@
 
 namespace Lists\CoachBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use ITDoors\AjaxBundle\Controller\BaseFilterController as BaseController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * CoachReportController
  */
-class CoachReportController extends Controller
+class CoachReportController extends BaseController
 {
+    protected $filterNamespace = 'stuffFilterForm';
+    /** @var InvoiceService $service */
+    protected $service = 'lists_coach.coach.service';
+    /** @var KnpPaginatorBundle $paginator */
+    protected $paginator = 'knp_paginator';
+
     /**
      * Execute showtabs action
      *
@@ -17,13 +24,87 @@ class CoachReportController extends Controller
      */
     public function indexAction()
     {
-        $user = $this->getUser();
+        /** @var UserRepository $user */
+        $user = $this->get('sd_user.repository');
+        $id = $this->getUser()->getId();
 
-        if ($user->hasRole('ROLE_COACHADMIN')) {
-            return $this->render('ListsCoachBundle:Report:adminIndex.html.twig', array());
-        } else {
-            return $this->render('ListsCoachBundle:Report:coachIndex.html.twig', array());
+        /** @var User $item */
+        $item = $user->find($id);
+        if (!$item) {
+            return $this->redirect($this->generateUrl('sd_user_stuff'));
         }
+        /** @var Session $session */
+        $session = $this->get('session');
+        $session->set('userid', $id);
+
+        $isCoachAdmin = $this->getUser()->hasRole('ROLE_COACHADMIN');
+
+        /** @var UserService $service */
+        $service = $this->container->get($this->service);
+
+        $namespace = $this->filterNamespace . $id;
+
+        $tab = $this->getTab($namespace);
+        if (!$tab) {
+            $tab = 'reports';
+            $this->setTab($namespace, $tab);
+        }
+
+        $options['coachAdmin'] = true;
+        $tabs = $service->getTabs($options);
+
+        return $this->render('ListsCoachBundle:Report:index.html.twig', array(
+                        'tabs' => $tabs,
+                        'tab' => $tab,
+                        'item' => $item,
+                        'namespace' => $namespace
+        ));
+    }
+
+    /**
+     * Execute showtabs action
+     *
+     * @return string
+     */
+    public function showtabsAction()
+    {
+        /** @var Session $session */
+        $session = $this->get('session');
+        $userId = $session->get('userid', false);
+
+        if (!$userId) {
+            return $this->redirect($this->generateUrl('lists_coach_report_add'));
+        }
+        /** @var UserRepository $user */
+        $user = $this->get('sd_user.repository');
+
+        /** @var User $item */
+        $item = $user->getStuffById($userId);
+
+        $namespace = $this->filterNamespace . $userId;
+
+        $tab = $this->getTab($namespace);
+
+        $service = $this->container->get($this->service);
+        $options['coachAdmin'] = true;
+        $tabs = $service->getTabs($options);
+        $tabData = $tabs[$tab];
+
+        $isAdmin = $this->getUser()->hasRole('ROLE_HRADMIN');
+
+        /** @var EntityManager $em */
+        $em = $this->getDoctrine()->getManager();
+
+        /** @var Usercontactinfo $usercontactinfo */
+        $usercontactinfo = $em->getRepository('SDUserBundle:Usercontactinfo')->findBy(array('user' => $userId));
+
+        return $this->render('ListsCoachBundle:Report:showTab' . $tab . '.html.twig', array(
+                        'item' => $item,
+                        'isAdmin' => $isAdmin,
+                        'tabData' => $tabData,
+                        'namespase' => $namespace,
+                        'usercontactinfo' => $usercontactinfo,
+        ));
     }
 
     /**
@@ -33,8 +114,32 @@ class CoachReportController extends Controller
      */
     public function listAction()
     {
+        $namespase = $this->filterNamespace;
+        $filters = $this->getFilters($namespase);
+        if (empty($filters)) {
+            /** @var EntityManager $em */
+            $em = $this->getDoctrine()->getManager();
+            $status = $em->getRepository('ListsLookupBundle:Lookup')
+                ->findOneBy(array('lukey' => 'worked'));
+            $filters['status'] = $status->getId();
+            $this->setFilters($namespase, $filters);
+        }
+        $users = $this->get('sd_user.repository')->getAllForUserQuery($filters);
+        $entities = $users['entity'];
+        $count = $users['count'];
+
+        $page = $this->getPaginator($namespase);
+        if (!$page) {
+            $page = 1;
+        }
+
+        $paginator = $this->container->get($this->paginator);
+        $entities->setHint($this->paginator . '.count', $count);
+        $pagination = $paginator->paginate($entities, $page, 10);
+
         return $this->render('ListsCoachBundle:Report:list.html.twig', array(
-                        'items' => []
+                'namespase' => $namespase,
+                'items' => $pagination
         ));
     }
 
@@ -53,14 +158,40 @@ class CoachReportController extends Controller
     /**
      * Execute add action
      *
+     * @param Request $request
+     * 
      * @return string
      */
     public function addAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        
+
         $form = $this->createForm('coachReportForm');
         $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            try {
+                $user = $this->getUser();
+                $coachReport = $form->getData();
+                $action = $coachReport->getAction();
+                $formData = $request->request->get($form->getName());
+
+                $depRepository = $em->getRepository('ListsDepartmentBundle:Departments');
+
+                $coachReport->setAuthor($user);
+                $action->setExecutor($user);
+                $action->setDepartment($depRepository->find($formData['action']['department']));
+
+                $em->persist($coachReport);
+                $em->flush();
+            } catch (\Exception $e) {
+                $em->close();
+                throw $e;
+            }
+
+            return $this->redirect($this->generateUrl('lists_coach_index'));
+        }
+
         return $this->render('ListsCoachBundle:Report:add.html.twig', array(
                         'form' => $form->createView()
         ));
@@ -76,5 +207,43 @@ class CoachReportController extends Controller
     public function editAction($id)
     {
         return $this->render('ListsCoachBundle:Report:edit.html.twig', array());
+    }
+
+    /**
+     * Saves uploaded image
+     *
+     * @param Request $request
+     *
+     * @return string path to image
+     */
+    public function uploadAction(Request $request)
+    {
+        $name = $this->randomString();
+        $reportsFilePath = $this->container->getParameter('reports.file.path');
+        $ext = explode('.', $_FILES['file']['name']);
+        $directory = $this->container->getParameter('project.web.dir');
+        $directory .= $reportsFilePath;
+        if (!is_dir($directory)) {
+            mkdir($directory, 0777);
+        }
+        $ext = explode('.', $_FILES['file']['name']);
+        $filename = $name . '.' . $ext[1];
+        $destination = $directory . $filename;
+        $location = $_FILES["file"]["tmp_name"];
+        move_uploaded_file($location, $destination);
+        $directory = $reportsFilePath;
+        $destination = $directory . $filename;
+
+        return new Response($destination);
+    }
+
+    /**
+     * Random string
+     *
+     * @return string
+     */
+    private function randomString()
+    {
+        return md5(rand(100, 200));
     }
 }

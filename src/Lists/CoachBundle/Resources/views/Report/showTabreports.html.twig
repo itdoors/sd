@@ -1,0 +1,11 @@
+{% trans_default_domain 'ListsCoachBundle' %}
+    {{ ajax_filter_render('stuffFilterForm', namespase, {
+        'datatable_ajax': 'ITDoorsAjax.updateList'
+    }) }}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tab-content ajax-tab-holder" id="datatable_ajax" data-url="{{ url('lists_coach_report_list') }}">
+                {{ render(controller('ListsCoachBundle:CoachReport:list')) }}
+            </div>
+        </div>
+    </div>
