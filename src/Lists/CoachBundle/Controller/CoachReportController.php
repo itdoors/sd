@@ -178,7 +178,7 @@ class CoachReportController extends BaseController
                 $user = $this->getUser();
                 $coachReport = $form->getData();
                 $action = $coachReport->getAction();
-                $formData = $request->request->get($form->getName());var_dump($coachReport);die();
+                $formData = $request->request->get($form->getName());//var_dump($coachReport);die();
 
                 $depRepository = $em->getRepository('ListsDepartmentBundle:Departments');
 
@@ -224,18 +224,14 @@ class CoachReportController extends BaseController
             );
         }
 
-        $form = $this->createForm('coachReportForm', $report);
+        $form = $this->createForm('coachReportEditForm', $report);
         $request = $this->getRequest();
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             try {
                 $coachReport = $form->getData();
-                $formData = $request->request->get($form->getName());
-
-                $depRepository = $em->getRepository('ListsDepartmentBundle:Departments');
-
-                $action->setDepartment($depRepository->find($formData['action']['department']));
+                $formData = $request->request->get($form->getName());//var_dump($coachReport);die();
 
                 $em->persist($coachReport);
                 $em->flush();

@@ -19,6 +19,9 @@
         <li>
             <a href="" title="{% trans %}Edit{% endtrans %}">{% trans %}Edit{% endtrans %}</a>
         </li>
+        <li>
+            <a href="" title="{{ report.title }}">{{ report.title }}</a>
+        </li>
     </ul>
 {% endblock %}
 
@@ -167,7 +170,7 @@
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Members{% endtrans %}</label>
                     <div class="col-md-9">
-                        {{ form_widget(form.action.individuals, {'attr' : {'class' : 'form-control', 'placeholder': "Members" | trans}}) }}
+                        {{ form_widget(form.action.individuals, {'attr' : {'class' : 'form-control', 'disabled' : 'disabled', 'placeholder': "Members" | trans}}) }}
                         {% if form.action.individuals.vars.errors|length %}{{ form_errors(form.action.individuals) }}{% endif %}
                     </div>
                 </div>

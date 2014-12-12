@@ -32,6 +32,7 @@ class CoachReportFormType extends AbstractType
         $builder
             ->add('action', new ActionFormType($this->container))
             ->add('author', 'itdoors_select2', array(
+                'data_class' => 'SD\UserBundle\Entity\User',
                 'attr' => array(
                     'class' => 'form-control itdoors-select2 can-be-reseted submit-field',
                     'class_outer' => 'col-md-4',
@@ -49,6 +50,7 @@ class CoachReportFormType extends AbstractType
         ))
             ->add('title', 'text', array())
             ->add('city', 'itdoors_select2', array(
+                'mapped' => false,
                 'attr' => array(
                     'class' => 'form-control itdoors-select2 can-be-reseted submit-field',
                     'class_outer' => 'col-md-4',
