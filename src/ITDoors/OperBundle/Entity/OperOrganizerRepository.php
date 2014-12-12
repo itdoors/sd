@@ -98,6 +98,37 @@ class OperOrganizerRepository extends EntityRepository
                 $sql = $sql->andWhere('d.id IN (:department)')
                     ->setParameter(':department', $departments);
             }
+            if (isset($filters['companyStructure']) && $filters['companyStructure']) {
+                $companyStructureFilter = explode(',', $filters['companyStructure']);
+
+                $sql = $sql
+                    ->leftJoin('organizer.user', 'u')
+                    ->leftJoin('u.stuff', 's')
+                    ->leftJoin('s.companystructure', 'c')
+                    ->andWhere(
+                        "c.id in (:companyStructure) or c.id in
+                                (
+                                    SELECT
+                                        cc.id
+                                    FROM
+                                        ListsCompanystructureBundle:Companystructure cp
+                                    LEFT JOIN
+                                        ListsCompanystructureBundle:Companystructure cc
+                                    WHERE
+                                        cp.root = cc.root
+                                    AND
+                                        cp.lft < cc.lft
+                                    AND
+                                        cp.rgt > cc.rgt
+                                    AND
+                                        cp in (:companyStructure)
+                                )"
+                    );
+                $sql->setParameter(':companyStructure', $companyStructureFilter);
+
+            }
+
+
 
         }
 
@@ -216,6 +247,36 @@ class OperOrganizerRepository extends EntityRepository
                 $sql = $sql->andWhere('d.id IN (:department)')
                     ->setParameter(':department', $departments);
             }
+            if (isset($filters['companyStructure']) && $filters['companyStructure']) {
+                $companyStructureFilter = explode(',', $filters['companyStructure']);
+
+                $sql = $sql
+                    ->leftJoin('organizer.user', 'u')
+                    ->leftJoin('u.stuff', 's')
+                    ->leftJoin('s.companystructure', 'c')
+                    ->andWhere(
+                    "c.id in (:companyStructure) or c.id in
+                                (
+                                    SELECT
+                                        cc.id
+                                    FROM
+                                        ListsCompanystructureBundle:Companystructure cp
+                                    LEFT JOIN
+                                        ListsCompanystructureBundle:Companystructure cc
+                                    WHERE
+                                        cp.root = cc.root
+                                    AND
+                                        cp.lft < cc.lft
+                                    AND
+                                        cp.rgt > cc.rgt
+                                    AND
+                                        cp in (:companyStructure)
+                                )"
+                );
+                $sql->setParameter(':companyStructure', $companyStructureFilter);
+
+            }
+
             if (isset($filters['daterange']) && $filters['daterange']) {
                 if ($filters['daterange']['start'] || $filters['daterange']['end']) {
                     $start = $filters['daterange']['start'];

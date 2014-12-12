@@ -561,6 +561,35 @@ class AjaxController extends BaseFilterController
         return new Response(json_encode($result));
     }
 
+
+    /**
+     * Returns json position list
+     *
+     * @return string
+     */
+    public function positionAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $repository = $this->getDoctrine()
+            ->getRepository('SDUserBundle:Position');
+
+        $objects = $repository->getSearchQuery($searchText);
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $result[] =  array(
+                'id' => $object->getId(),
+                'value' => $object->getId(),
+                'name' => $object->getName(),
+                'text' => $object->getName()
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+
     /**
      * Returns json organization type list
      *
@@ -1822,7 +1851,15 @@ class AjaxController extends BaseFilterController
             ->getRepository('ListsLookupBundle:Lookup:Stuff')
             ->find((int) $value);
         }
+        if ($name == 'userPosition') {
+            $user = $this->getDoctrine()
+                ->getRepository('SDUserBundle:User')
+                ->find($pk);
 
+            $value = $this->getDoctrine()
+                ->getRepository('SDUserBundle:Position')
+                ->find((int) $value);
+        }
         $user->$methodSet($value);
 
         $validator = $this->get('validator');

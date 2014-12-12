@@ -195,6 +195,15 @@ class OperStatisticController extends Controller
             ->getRepository('ITDoorsOperBundle:OperOrganizer');
 
         $operManagers = $this->opermanagerList();
+
+
+        $userRepo = $this->getDoctrine()
+            ->getRepository('SDUserBundle:User');
+
+        $operManagers = $userRepo->getUsersForOperStatisticByFilter($filters);
+
+        var_dump($filters);
+
         $graph = array();
         $counter = 0;
 
@@ -204,12 +213,19 @@ class OperStatisticController extends Controller
         $filtersOnce['type'] = 'once';
 
         foreach ($operManagers as $operManager) {
-            if (isset($filters['user']) && $filters['user']) {
+            $operManager = array('id' =>  $operManager->getId(), 'fullName' => $operManager->getFullName());
+/*            if (isset($filters['user']) && $filters['user']) {
                 $users = explode(',', $filters['user']);
                 if (!in_array($operManager['id'], $users)) {
                     continue;
                 }
             }
+
+            if (count($filteredUsersCompanyStructure)) {
+                if (!in_array($operManager['id'], $users)) {
+                    continue;
+                }
+            }*/
 
             $visits = $statisticRepo->getCoworkerStatistic($operManager, $filters);
             $visitsOnce = $statisticRepo->getCoworkerStatistic($operManager, $filtersOnce);

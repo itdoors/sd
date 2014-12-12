@@ -72,4 +72,15 @@ SD\UserBundle\Entity\User:
         handlingUsers:
             targetEntity: Lists\HandlingBundle\Entity\HandlingUser
             mappedBy: user
+    manyToOne:
+        userPosition:
+            targetEntity: SD\UserBundle\Entity\Position
+            mappedBy: null
+            inversedBy: null
+            inversedBy: null
+            nullable: true
+            joinColumns:
+                position_id:
+                    referencedColumnName: id
+            orphanRemoval: false
     lifecycleCallbacks: {  }

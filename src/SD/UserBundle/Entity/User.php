@@ -686,4 +686,32 @@ class User extends BaseUser
     {
         return $this->groups;
     }
+    /**
+     * @var \SD\UserBundle\Entity\Position
+     */
+    private $userPosition;
+
+
+    /**
+     * Set userPosition
+     *
+     * @param \SD\UserBundle\Entity\Position $userPosition
+     * @return User
+     */
+    public function setUserPosition(\SD\UserBundle\Entity\Position $userPosition = null)
+    {
+        $this->userPosition = $userPosition;
+
+        return $this;
+    }
+
+    /**
+     * Get userPosition
+     *
+     * @return \SD\UserBundle\Entity\Position 
+     */
+    public function getUserPosition()
+    {
+        return $this->userPosition;
+    }
 }

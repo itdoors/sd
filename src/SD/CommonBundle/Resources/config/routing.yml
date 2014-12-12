@@ -373,3 +373,7 @@ sd_common_ajax_department:
 sd_common_ajax_department_by_ids:
     pattern:  /ajax/department_by_ids
     defaults: { _controller: SDCommonBundle:Ajax:getDepartmentsByIdsAjax }
+
+sd_common_ajax_user_position_table:
+    pattern:  /ajax/user/position/table
+    defaults: { _controller: SDCommonBundle:Ajax:position }
