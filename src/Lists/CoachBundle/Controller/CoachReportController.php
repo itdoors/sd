@@ -12,9 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 class CoachReportController extends BaseController
 {
     protected $filterNamespace = 'coachReportFilterForm';
-    /** @var InvoiceService $service */
     protected $service = 'lists_coach.coach.service';
-    /** @var KnpPaginatorBundle $paginator */
     protected $paginator = 'knp_paginator';
 
     /**
@@ -24,24 +22,13 @@ class CoachReportController extends BaseController
      */
     public function indexAction()
     {
-        /** @var UserRepository $user */
-        $user = $this->get('sd_user.repository');
-        $id = $this->getUser()->getId();
+        $user = $this->getUser();
+        $id = $user->getId();
 
-        /** @var User $item */
-        $item = $user->find($id);
-        if (!$item) {
-            return $this->redirect($this->generateUrl('sd_user_stuff'));
-        }
-        /** @var Session $session */
         $session = $this->get('session');
         $session->set('userid', $id);
 
-        $isCoachAdmin = $this->getUser()->hasRole('ROLE_COACHADMIN');
-
-        /** @var UserService $service */
         $service = $this->container->get($this->service);
-
         $namespace = $this->filterNamespace . $id;
 
         $tab = $this->getTab($namespace);
@@ -49,14 +36,11 @@ class CoachReportController extends BaseController
             $tab = 'reports';
             $this->setTab($namespace, $tab);
         }
-
-        $options['coachAdmin'] = true;
-        $tabs = $service->getTabs($options);
+        $options['coachAdmin'] = $user->hasRole('ROLE_COACHADMIN');
 
         return $this->render('ListsCoachBundle:Report:index.html.twig', array(
-                        'tabs' => $tabs,
+                        'tabs' => $service->getTabs($options),
                         'tab' => $tab,
-                        'item' => $item,
                         'namespace' => $namespace
         ));
     }
@@ -68,42 +52,20 @@ class CoachReportController extends BaseController
      */
     public function showtabsAction()
     {
-        /** @var Session $session */
+        $user = $this->getUser();
         $session = $this->get('session');
         $userId = $session->get('userid', false);
-
-        if (!$userId) {
-            return $this->redirect($this->generateUrl('lists_coach_report_add'));
-        }
-        /** @var UserRepository $user */
-        $user = $this->get('sd_user.repository');
-
-        /** @var User $item */
-        $item = $user->getStuffById($userId);
-
         $namespace = $this->filterNamespace . $userId;
-
-        $tab = $this->getTab($namespace);
-
         $service = $this->container->get($this->service);
-        $options['coachAdmin'] = true;
+
+        $options['coachAdmin'] = $user->hasRole('ROLE_COACHADMIN');
         $tabs = $service->getTabs($options);
+        $tab = $this->getTab($namespace);
         $tabData = $tabs[$tab];
 
-        $isAdmin = $this->getUser()->hasRole('ROLE_HRADMIN');
-
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
-
-        /** @var Usercontactinfo $usercontactinfo */
-        $usercontactinfo = $em->getRepository('SDUserBundle:Usercontactinfo')->findBy(array('user' => $userId));
-
         return $this->render('ListsCoachBundle:Report:showTab' . $tab . '.html.twig', array(
-                        'item' => $item,
-                        'isAdmin' => $isAdmin,
                         'tabData' => $tabData,
                         'namespase' => $namespace,
-                        'usercontactinfo' => $usercontactinfo,
         ));
     }
 
