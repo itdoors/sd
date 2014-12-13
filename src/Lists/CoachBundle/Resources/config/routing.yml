@@ -34,9 +34,25 @@ lists_coach_ajax_action_topics:
     path:     /training/action_topics
     defaults: { _controller: ListsCoachBundle:Ajax:actionTopics }
     
+lists_coach_ajax_action_topic_edit:
+    path:     /training/action_topic_edit
+    defaults: { _controller: ListsCoachBundle:Ajax:editTopic }
+    
+lists_coach_ajax_action_topic_delete:
+    path:     /training/action_topic_delete
+    defaults: { _controller: ListsCoachBundle:Ajax:deleteTopic }
+    
 lists_coach_ajax_action_types:
     path:     /training/action_types
     defaults: { _controller: ListsCoachBundle:Ajax:actionTypes }
+    
+lists_coach_ajax_action_type_edit:
+    path:     /training/action_type_edit
+    defaults: { _controller: ListsCoachBundle:Ajax:editType }
+    
+lists_coach_ajax_action_type_delete:
+    path:     /training/action_type_delete
+    defaults: { _controller: ListsCoachBundle:Ajax:deleteType }
     
 lists_coach_ajax_set_coach:
     path:     /training/set_coach
