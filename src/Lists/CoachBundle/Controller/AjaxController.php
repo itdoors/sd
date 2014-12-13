@@ -56,4 +56,38 @@ class AjaxController extends BaseController
 
         return new JsonResponse($result);
     }
+
+    /**
+     * Sets coach status to user
+     * 
+     * @param Request $request
+     * 
+     * @return JsonResponse
+     */
+    public function setCoachStatusAction(Request $request)
+    {
+        $username = $request->get('pk');
+        $status = ($request->get('value') == 1);
+
+        /** @var \FOS\UserBundle\Model\UserManager $um */
+        $um = $this->get('fos_user.user_manager');
+
+        /** @var \FOS\UserBundle\Model\GroupManager $gm */
+        $gm = $this->get('fos_user.group_manager');
+
+        $user = $um->findUserByUsername($username);
+        $group = $gm->findGroupByName('COACH');
+
+        if ($status && !$user->hasRole('ROLE_COACH')) {
+            $user->addGroup($group);
+            $um->updateUser($user);
+        } elseif (!$status && $user->hasRole('ROLE_COACH')) {
+            $user->removeGroup($group);
+            $um->updateUser($user);
+        }
+
+        $response = ['success' => $status ? 1 : 0];
+
+        return new JsonResponse($response);
+    }
 }

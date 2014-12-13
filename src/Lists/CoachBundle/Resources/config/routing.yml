@@ -37,3 +37,7 @@ lists_coach_ajax_action_topics:
 lists_coach_ajax_action_types:
     path:     /training/action_types
     defaults: { _controller: ListsCoachBundle:Ajax:actionTypes }
+    
+lists_coach_ajax_set_coach:
+    path:     /training/set_coach
+    defaults: { _controller: ListsCoachBundle:Ajax:setCoachStatus }

@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CoachReportController extends BaseController
 {
-    protected $filterNamespace = 'stuffFilterForm';
+    protected $filterNamespace = 'coachReportFilterForm';
     /** @var InvoiceService $service */
     protected $service = 'lists_coach.coach.service';
     /** @var KnpPaginatorBundle $paginator */
@@ -156,7 +156,12 @@ class CoachReportController extends BaseController
      */
     public function showAction($id)
     {
-        return $this->render('ListsCoachBundle:Report:show.html.twig', array());
+        $em = $this->getDoctrine()->getManager();
+        $report = $em->getRepository('ListsCoachBundle:CoachReport')->find($id);
+
+        return $this->render('ListsCoachBundle:Report:show.html.twig', array(
+                'report' => $report
+        ));
     }
 
     /**
@@ -178,7 +183,7 @@ class CoachReportController extends BaseController
                 $user = $this->getUser();
                 $coachReport = $form->getData();
                 $action = $coachReport->getAction();
-                $formData = $request->request->get($form->getName());//var_dump($coachReport);die();
+                $formData = $request->request->get($form->getName());
 
                 $depRepository = $em->getRepository('ListsDepartmentBundle:Departments');
 
@@ -231,7 +236,7 @@ class CoachReportController extends BaseController
         if ($form->isValid()) {
             try {
                 $coachReport = $form->getData();
-                $formData = $request->request->get($form->getName());//var_dump($coachReport);die();
+                $formData = $request->request->get($form->getName());
 
                 $em->persist($coachReport);
                 $em->flush();
@@ -242,8 +247,6 @@ class CoachReportController extends BaseController
 
             return $this->redirect($this->generateUrl('lists_coach_index'));
         }
-
-//         $form->get('city')->setData($report->getAction()->getDepartments()->)
 
         return $this->render('ListsCoachBundle:Report:edit.html.twig', array(
                         'report' => $report,

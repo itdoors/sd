@@ -1,4 +1,17 @@
 {% trans_default_domain 'SDUserBundle' %}
+{% if is_granted('ROLE_COACHADMIN') %}
+<script>
+    $(document).ready(function(){
+    	$('#is_coach').editable({
+            url: '{{ path('lists_coach_ajax_set_coach') }}',
+            source: [
+                     {value: 1, text: '{% trans from "ListsCoachBundle" %}is_coach{% endtrans %}'},
+                     {value: 0, text: '{% trans from "ListsCoachBundle" %}not_coach{% endtrans %}'}
+                 ]
+        });
+    });
+</script>
+{% endif %}
 {% if isAdmin %}
 <script>
     $(document).ready(function(){
@@ -513,6 +526,25 @@
                                                     <td>{{ contact.value }}</td>
                                                 </tr>
                                             {% endfor %}
+                                            
+                                            {% if is_granted('ROLE_COACHADMIN') %}
+                                            <tr>  
+                                                <td class="hidden-xs">
+                                                    {% trans from "ListsCoachBundle" %}Coach{% endtrans %}? 
+                                                </td>
+                                                <td>
+                                                    <a href="#" 
+                                                            id="is_coach" 
+                                                            class="status-edit" 
+                                                            data-type="select" 
+                                                            data-pk="{{ item.username }}"
+                                                            data-value="{{ coachStatus }}" 
+                                                            data-placement="right" 
+                                                            data-original-title="{% trans from "ListsCoachBundle" %}Add to coaches{% endtrans %}">
+                                                     </a>
+                                                </td>
+                                            </tr>
+                                            {% endif %}
                                         </tbody>
                                     </table>
                                 </div>

@@ -3,17 +3,26 @@
 namespace Lists\CoachBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
- * CoachTaskController
+ * CoachController
  */
-class CoachTaskController extends Controller
+class CoachController extends Controller
 {
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function indexAction()
+    public function coachListAction()
     {
-        return $this->render('ListsCoachBundle:Default:index.html.twig', array());
+        /** @var \FOS\UserBundle\Model\GroupManager $gm */
+        $gm = $this->get('fos_user.group_manager');
+
+        $group = $gm->findGroupByName('COACH');
+        $users = $group->getUsers();
+
+        return $this->render('ListsCoachBundle:Coach:list.html.twig', array(
+                        'items' => $users
+        ));
     }
 }

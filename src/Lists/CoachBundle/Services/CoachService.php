@@ -90,4 +90,20 @@ class CoachService
 
         return $actionTypes;
     }
+
+    /**
+     * Checks for being coach
+     * 
+     * @param int $userId
+     *
+     * @return bool
+     */
+    public function isCoach($userId)
+    {
+        $user = $this
+            ->container->get('sd_user.repository')
+            ->find($userId);
+
+        return $user->hasRole('ROLE_COACH');
+    }
 }

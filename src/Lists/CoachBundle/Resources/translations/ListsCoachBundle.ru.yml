@@ -3,6 +3,12 @@ Training: Обучение
 Reports: Отчёты
 Settings: Настройки
 Coaches: Тренеры
+Coach: Тренер
+Add to coaches: Назначить тренером
+Regions: Регионы
+is_coach: Да
+not_coach: Нет
+Coach list: Список активных
 Add coach: Добавить тренера
 report list: список отчётов
 Add: Добавить
@@ -12,6 +18,8 @@ Save: Сохранить
 Delete: Удалить
 new: новый
 New: Новый
+Show: Просмотр
+show: просмотр
 Actions: Действия
 Autor: Автор
 Report date: Дата отчёта

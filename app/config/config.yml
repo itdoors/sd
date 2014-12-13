@@ -93,6 +93,12 @@ twig:
         sip_port_ws: %sip.port.ws%
         call_url: "http://%call.ip%:%call.port%/%call.directory%/"
         call_extension: "%call.extension%"
+        
+        cron_timeout: %cron_timeout%
+        idle_after: %idle_after%
+        modal_timeout: %modal_timeout%
+        polling_interval: %polling_interval%
+
 # Assetic Configuration
 assetic:
     debug:          %kernel.debug%
