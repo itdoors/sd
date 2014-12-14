@@ -57,3 +57,11 @@ lists_coach_ajax_action_type_delete:
 lists_coach_ajax_set_coach:
     path:     /training/set_coach
     defaults: { _controller: ListsCoachBundle:Ajax:setCoachStatus }
+    
+lists_coach_ajax_coach_regions:
+    path:     /training/coach_regions
+    defaults: { _controller: ListsCoachBundle:Ajax:coachRegions }
+    
+lists_coach_ajax_coach_save_regions:
+    path:     /training/coach_save_regions
+    defaults: { _controller: ListsCoachBundle:Ajax:coachSaveRegions }

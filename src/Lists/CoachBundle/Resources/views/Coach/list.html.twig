@@ -11,17 +11,25 @@
                 </tr>
             </thead>
             <tbody role="alert" aria-live="polite" aria-relevant="all">
-                {% for key,item in items %}
-                <tr class="{{ cycle(['odd', 'even'], item.id) }}">
+                {% for key,item in userData %}
+                <tr class="{{ cycle(['odd', 'even'], item['user'].id) }}">
                     <td>{{key+1}}</td>
-                    <td>{{item.id}}</td>
+                    <td>{{item['user'].id}}</td>
                     <td>
-                        <a href="{{ path('lists_coach_report_show',{'id':item.id}) }}">{{item}}</a>
+                        <a href="{{ path('sd_user_show',{'id':item['user'].id}) }}">{{item['user']}}</a>
                     </td>
-                    <td>regions</td>
+                    <td>
+                        <a href="#" class="regions"
+                                    data-type="select2" 
+                                    data-pk="{{ item['user'].id }}"
+                                    data-value="{{ item['regions']['values'] }}" 
+                                    data-original-title="{% trans %}Regions{% endtrans %}">
+                                    {{ item['regions']['text'] }}
+                        </a>
+                    </td>
                     <td>
                         <a href="javascript:;" title="{% trans %}Delete{% endtrans %}">
-                            <i class="icon-trash" value="{{ item.username }}"></i>
+                            <i class="icon-trash" value="{{ item['user'].username }}"></i>
                         </a>
                     </td>
                 </tr>
@@ -50,6 +58,32 @@
                         	SD.unblockUI($('#coach_table'));
                         }
                     });
+                });
+            });
+            $.fn.editable.defaults.mode = 'inline';
+            $.each($('.regions'), function(){
+                $(this).editable({
+                    url: '{{ path('lists_coach_ajax_coach_save_regions') }}',
+                    source: '{{ path('sd_common_ajax_region') }}',
+                    emptytext: '{% trans %}Add region{% endtrans %}',
+                    allowClear: true,
+                    select2: {
+                        minimumInputLength: 0,
+                        width: 250,
+                        allowClear: true,
+                        multiple: true,
+                        initSelection: function(element, callback) {
+                            return $.ajax({
+                                type: "GET",
+                                url: '{{ path('sd_common_ajax_region_by_id') }}',
+                                dataType: 'json',
+                                data: { id: element.val()},
+                                success: function(data){
+                                	callback(data);
+                                }
+                            })
+                      }
+                   }
                 });
             });
         });

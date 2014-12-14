@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Lists\CoachBundle\Entity\ActionTopic;
 use Lists\CoachBundle\Entity\ActionType;
+use Lists\CoachBundle\Entity\CoachRegion;
 
 /**
  * AjaxController
@@ -38,6 +39,8 @@ class AjaxController extends BaseController
 
     /**
      * Adds/edits topic
+     * 
+     * @param Request $request
      *
      * @return JsonResponse
      */
@@ -46,11 +49,10 @@ class AjaxController extends BaseController
         $id = $request->get('id');
         $title = $request->get('title');
         $em = $this->getDoctrine()->getManager();
-        $actionTopic = null;
 
+        $actionTopic = null;
         if ($id) {
-            $actionTopic = $this
-                ->getDoctrine()
+            $actionTopic = $em
                 ->getRepository('ListsCoachBundle:ActionTopic')
                 ->find($id);
         } else {
@@ -71,6 +73,8 @@ class AjaxController extends BaseController
 
     /**
      * Delete topic
+     * 
+     * @param Request $request
      *
      * @return JsonResponse
      */
@@ -79,8 +83,7 @@ class AjaxController extends BaseController
         $id = $request->get('id');
         $em = $this->getDoctrine()->getManager();
 
-        $actionTopic = $this
-            ->getDoctrine()
+        $actionTopic = $em
             ->getRepository('ListsCoachBundle:ActionTopic')
             ->find($id);
 
@@ -115,6 +118,8 @@ class AjaxController extends BaseController
 
     /**
      * Adds/edits type
+     * 
+     * @param Request $request
      *
      * @return JsonResponse
      */
@@ -126,8 +131,7 @@ class AjaxController extends BaseController
         $actionType = null;
 
         if ($id) {
-            $actionType = $this
-                ->getDoctrine()
+            $actionType = $em
                 ->getRepository('ListsCoachBundle:ActionType')
                 ->find($id);
         } else {
@@ -149,6 +153,8 @@ class AjaxController extends BaseController
     /**
      * Delete type
      *
+     * @param Request $request
+     *
      * @return JsonResponse
      */
     public function deleteTypeAction(Request $request)
@@ -156,8 +162,7 @@ class AjaxController extends BaseController
         $id = $request->get('id');
         $em = $this->getDoctrine()->getManager();
 
-        $actionType = $this
-            ->getDoctrine()
+        $actionType = $em
             ->getRepository('ListsCoachBundle:ActionType')
             ->find($id);
 
@@ -199,5 +204,42 @@ class AjaxController extends BaseController
         $response = ['success' => $status ? 1 : 0];
 
         return new JsonResponse($response);
+    }
+
+    /**
+     * Returns json regions list for coach
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function coachSaveRegionsAction(Request $request)
+    {
+        $userId = $request->get('pk');
+        $values = $request->get('value');
+        $em = $this->getDoctrine()->getManager();
+
+        $regions = $em
+            ->getRepository('ListsRegionBundle:Region')
+            ->findBy(array('id' => $values));
+
+        $user = $em
+            ->getRepository('SDUserBundle:User')
+            ->find($userId);
+
+        $coachRegion = $em
+            ->getRepository('ListsCoachBundle:CoachRegion')
+            ->findOneBy(array('user' => $user));
+
+        if (!$coachRegion) {
+            $coachRegion = new CoachRegion();
+            $coachRegion->setUser($user);
+        }
+
+        $coachRegion->setRegions(new \Doctrine\Common\Collections\ArrayCollection($regions));
+        $em->persist($coachRegion);
+        $em->flush();
+
+        return new JsonResponse();
     }
 }

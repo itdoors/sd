@@ -21,8 +21,43 @@ class CoachController extends Controller
         $group = $gm->findGroupByName('COACH');
         $users = $group->getUsers();
 
+        $userData = [];
+        foreach ($users as $user) {
+            $coachRegion = $this->getDoctrine()
+                ->getRepository('ListsCoachBundle:CoachRegion')
+                ->findOneBy(array('user' => $user));
+
+            if ($coachRegion) {
+                $regionList = $coachRegion->getRegions();
+            } else {
+                $regionList = [];
+            }
+
+            $result = [];
+            $result['values'] = '';
+            $result['text'] = '';
+
+            foreach ($regionList as $region) {
+                if ($result['values'] == '') {
+                    $result['values'] .= $region->getId();
+                } else {
+                    $result['values'] .= ',' . $region->getId();
+                }
+                if ($result['text'] == '') {
+                    $result['text'] .= $region->getName();
+                } else {
+                    $result['text'] .= ', ' . $region->getName();
+                }
+            }
+
+            $userData[] = [
+                'user' => $user,
+                'regions' => $result
+            ];
+        }
+
         return $this->render('ListsCoachBundle:Coach:list.html.twig', array(
-                        'items' => $users
+                        'userData' => $userData
         ));
     }
 }
