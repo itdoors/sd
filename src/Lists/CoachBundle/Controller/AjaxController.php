@@ -199,6 +199,15 @@ class AjaxController extends BaseController
         } elseif (!$status && $user->hasRole('ROLE_COACH')) {
             $user->removeGroup($group);
             $um->updateUser($user);
+
+            $em = $this->getDoctrine()->getManager();
+            $coachRegion = $em
+                ->getRepository('ListsCoachBundle:CoachRegion')
+                ->findOneBy(array('user' => $user));
+            if ($coachRegion) {
+                $em->remove($coachRegion);
+                $em->flush();
+            }
         }
 
         $response = ['success' => $status ? 1 : 0];

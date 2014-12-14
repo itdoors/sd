@@ -17,6 +17,7 @@ Lists\CoachBundle\Entity\CoachRegion:
                   region_id:
                     referencedColumnName: id
                     unique: true
+            orphanremoval: true
     oneToOne:
         user:
             targetEntity: SD\UserBundle\Entity\User
