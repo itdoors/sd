@@ -237,8 +237,12 @@ class AjaxController extends BaseController
         }
 
         $coachRegion->setRegions(new \Doctrine\Common\Collections\ArrayCollection($regions));
-        $em->persist($coachRegion);
-        $em->flush();
+        try {
+            $em->persist($coachRegion);
+            $em->flush();
+        } catch (\Exception $e) {
+            //Some error message...
+        }
 
         return new JsonResponse();
     }
