@@ -39,7 +39,6 @@ class CoachReport
      */
     private $author;
 
-
     /**
      * Get id
      *

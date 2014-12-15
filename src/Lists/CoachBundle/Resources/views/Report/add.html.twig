@@ -54,7 +54,7 @@
         </div>
         <div class="portlet-body form">
             <script>
-            var cityId;
+                var cityId;
                 $(document).ready(function() {
                     SD.select2('#' + '{{ form.vars.name }}' + '_author', {
                     });
@@ -66,10 +66,8 @@
                     });
                     $('#' + '{{ form.vars.name }}' + '_action_department').prop( "disabled", true );
                     $('#' + '{{ form.vars.name }}' + '_action_individuals').prop( "disabled", true );
-                    
                     $('#' + '{{ form.vars.name }}' + '_city').on("change", function(event){
                         cityId = $(this).val();
-                        console.log(cityId);
                         if (!cityId) {
                      	   $('#' + '{{ form.vars.name }}' + '_action_department').prop( "disabled", true );
                      	   $('#' + '{{ form.vars.name }}' + '_action_individuals').prop( "disabled", true );

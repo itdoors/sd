@@ -127,14 +127,14 @@ class CoachReportController extends BaseController
         $em = $this->getDoctrine()->getManager();
 
         $form = $this->createForm('coachReportForm');
+        $formData = $request->request->get($form->getName());
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isValid() && isset($formData['action']['department'])) {
             try {
                 $user = $this->getUser();
                 $coachReport = $form->getData();
                 $action = $coachReport->getAction();
-                $formData = $request->request->get($form->getName());
 
                 $depRepository = $em->getRepository('ListsDepartmentBundle:Departments');
 
