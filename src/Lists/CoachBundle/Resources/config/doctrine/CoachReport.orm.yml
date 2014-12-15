@@ -1,6 +1,7 @@
 Lists\CoachBundle\Entity\CoachReport:
     type: entity
     table: coach_report
+    repositoryClass: Lists\CoachBundle\Entity\CoachReportRepository
     id:
         id:
             type: integer
