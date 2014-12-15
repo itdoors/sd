@@ -367,7 +367,24 @@
 
         })
 
-        $('#viewer_select').select2();
+        $('#viewer_select').select2({
+            minimumInputLength: 0,
+            ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+                url: "{{ path('sd_task_list_stuff') }}",
+                dataType: 'json',
+                data: function(term, page) {
+                    return {
+                        query: term,
+                        q: term
+                    };
+                },
+                results: function(data, page) {
+                    return {
+                        results: data
+                    };
+                }
+            }
+        });
         {% if access.canEditDescription %}
 
         $('#wyswyg').summernote({
@@ -446,9 +463,11 @@
                             {{ taskUserRole.task.title }}
                         </a>
                         <script>
-                            $('#title').editable({
-                                url: '{{ path('sd_task_editable') }}'
-                            });
+                            $(document).ready(function() {
+                                $('#title').editable({
+                                    url: '{{ path('sd_task_editable') }}'
+                                });
+                            })
                         </script>
                     {% else %}
                         {{ taskUserRole.task.title }}
@@ -522,19 +541,21 @@
                         }) }}
                     </a>
                         <script>
-                            $('#endDate').editable({
-                                clear: '{% trans from 'ITDoorsControllingBundle' %}clear{% endtrans %}<i class="icon-remove fa fa-times" style="font-size:12px"></i>',
-                                type: 'date',
-                                url: '{{ path('sd_task_editable') }}',
-                                datetimepicker: {
-                                    autoclose: true,
-                                    format: "dd-mm-yyyy HH:ii",
-                                    language: "ru",
-                                    startView: 'month',
-                                    weekStart: 1,
-                                    minView: 1
-                                }
-                            });
+                            $(document).ready(function() {
+                                $('#endDate').editable({
+                                    clear: '{% trans from 'ITDoorsControllingBundle' %}clear{% endtrans %}<i class="icon-remove fa fa-times" style="font-size:12px"></i>',
+                                    type: 'date',
+                                    url: '{{ path('sd_task_editable') }}',
+                                    datetimepicker: {
+                                        autoclose: true,
+                                        format: "dd-mm-yyyy HH:ii",
+                                        language: "ru",
+                                        startView: 'month',
+                                        weekStart: 1,
+                                        minView: 1
+                                    }
+                                });
+                            })
                         </script>
                     {% else %}
                         {{ include ('SDTaskBundle:Task:taskEndDate.html.twig', {
@@ -735,15 +756,17 @@
                         <br><br>
                     <div id="add_viewer_holder" style="display: none;">
                         <div class="form-group">
-                            <div class="col-md-8">
-                                <select id="viewer_select" data-placeholder="{% trans %}Choose coworker{% endtrans %}">
-                                    <option selected></option>
+                            <div class="col-md-6">
+                                <div id="viewer_select" style="width: 100%" {#data-placeholder="{% trans %}Choose coworker{% endtrans %}"#}>
+                                    {#<option selected></option>#}
+{#
                                     {% for user in usersCanBeViewed %}
                                         <option value="{{ user.id }}">{{ user }}</option>
                                     {% endfor %}
-                                </select>
+#}
+                                </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <button class="btn btn-circle btn-sm btn-default" id="add_viewer_submit">{% trans %}Add{% endtrans %}</button>
                                 <button class="btn btn-circle btn-sm btn-default" id="cancel_add_viewer">{% trans %}Cancel{% endtrans %}</button>
                             </div>

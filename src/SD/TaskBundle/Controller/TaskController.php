@@ -283,6 +283,7 @@ class TaskController extends Controller
                 'task' => $taskUserRole->getTask()
             )
         );
+
         $accesses = array();
         foreach ($tasksUserRole as $taskUserRoleFromTask) {
             $role = $taskUserRoleFromTask->getRole();
@@ -329,9 +330,9 @@ class TaskController extends Controller
 
         $comment = $this->getLastTaskComment($taskUserRole->getTask()->getId());
 
-        $user = $this->getUser();
+        //$user = $this->getUser();
 
-        $stuff = $em->getRepository('SDUserBundle:Stuff')
+/*        $stuff = $em->getRepository('SDUserBundle:Stuff')
             ->findBy(array(
                 'user' => $user
             ));
@@ -339,8 +340,8 @@ class TaskController extends Controller
             $usersCanBeViewed = $em->getRepository('SDUserBundle:User')->getAllStuff();
         } else {
             $usersCanBeViewed = array($user);
-        }
-
+        }*/
+        //$usersCanBeViewed = array($user);
 
         $access = new ComparatorTaskAccess($accesses);
 
@@ -350,7 +351,7 @@ class TaskController extends Controller
             'userId' => $userId,
             'comment' => $comment,
             'access' => $access,
-            'usersCanBeViewed' => $usersCanBeViewed
+            //'usersCanBeViewed' => $usersCanBeViewed
         ));
 
         return $info;
@@ -1205,13 +1206,11 @@ class TaskController extends Controller
         $em->refresh($taskUserRoleViewer);
 
         $this->sendEmail(array($taskUserRoleViewer), 'new');
-
         //add comment
         $taskService = $this->get('task.service');
         $translator = $this->get('translator');
         $commentValue = $translator->trans('Added viewer', array(), 'SDTaskBundle').': '.$userViewer;
         $taskService->insertCommentToTask($taskUserRole->getId(), $commentValue);
-
 
         $return['success'] = 1;
 
@@ -1249,5 +1248,38 @@ class TaskController extends Controller
         $return['success'] = 1;
 
         return new Response(json_encode($return));
+    }
+
+    public function getAllStuffAjaxAction(Request $request) {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $user = $this->getUser();
+
+        $stuff = $em->getRepository('SDUserBundle:Stuff')
+            ->findBy(array(
+                'user' => $user
+            ));
+        if ($stuff) {
+            $usersCanBeViewed = $em->getRepository('SDUserBundle:User')->getAllStuff();
+        } else {
+            $usersCanBeViewed = array($user);
+        }
+
+        $result = array();
+
+        foreach ($usersCanBeViewed as $object) {
+            $id = $object->getId();
+            $string = (string) $object;
+
+            $result[] = array(
+                'id' => $id,
+                'value' => $id,
+                'name' => $string,
+                'text' => $string
+            );
+        }
+
+        return new Response(json_encode($result));
     }
 }
