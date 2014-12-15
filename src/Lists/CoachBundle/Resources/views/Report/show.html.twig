@@ -3,7 +3,7 @@
 {% block title %}{% trans %}Show{% endtrans %} {% endblock %}
 {% block page_title %}
     <h3 class="page-title">
-        {% trans %}Reports{% endtrans %} <small>{% trans %}show{% endtrans %}</small>
+        {% trans %}Report{% endtrans %} <small>{% trans %}show{% endtrans %}</small>
     </h3>
 {% endblock %}
 
@@ -21,3 +21,56 @@
         </li>
     </ul>
 {% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12 news-page blog-page">
+        <div class="row">
+            <div class="col-md-12 blog-tag-data" style="overflow: auto">
+                <h3>{{report.title}}</h3>
+                <div class="row">
+                    <div class="col-md-6 blog-tag-data-inner">
+                        <ul class="list-inline sale-num" style="color: #0d638f">
+                            <li>
+                                <i class="fa fa-calendar"></i>
+                                {{ report.created == '' ? '' : report.created | date('d-m-Y')}}
+                            </li>
+                            <li>
+                                <i class="fa fa-user"></i>
+                                {{report.author}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <ul style="width:50%" class="list-group">
+					<li class="list-group-item">
+						{% trans %}Action type{% endtrans %} <span class="badge badge-default">
+						{{report.action.type.title}} </span>
+					</li>
+					<li class="list-group-item">
+						{% trans %}Action topic{% endtrans %} <span class="badge badge-success">
+						{{report.action.topic.title}} </span>
+					</li>
+					<li class="list-group-item">
+						{% trans %}Region{% endtrans %} <span class="badge badge-warning">
+						{{report.action.department.city.region}} </span>
+					</li>
+					<li class="list-group-item">
+						{% trans %}City{% endtrans %} <span class="badge badge-warning">
+						{{report.action.department.city}} </span>
+					</li>
+					<li class="list-group-item">
+						{% trans %}Place{% endtrans %} <span class="badge badge-warning">
+						{{report.action.department.name}} </span>
+					</li>
+					<li class="list-group-item">
+						{% trans %}Members{% endtrans %} <span class="badge badge-info">
+						??? </span>
+					</li>
+				</ul>
+                <div class="news-item-page" style="overflow: auto">{{ report.text | raw('html')}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

@@ -175,15 +175,15 @@
                     </div>
                 </div>
             </div>
-            <div class="form-body">
-                <div class="form-group">
-                    <label class="required control-label col-md-3">{% trans %}Action Description{% endtrans %}</label>
-                    <div class="col-md-9">
-                        {{ form_widget(form.action.text, {'attr' : {'id' : 'select2','class' : 'form-control textear-edit', 'placeholder': "Action Description"| trans}}) }}
-                        {% if form.action.text.vars.errors|length %}{{ form_errors(form.action.text) }}{% endif %}
-                    </div>
-                </div>
-            </div>
+{#             <div class="form-body">#}
+{#                 <div class="form-group">#}
+{#                     <label class="required control-label col-md-3">{% trans %}Action Description{% endtrans %}</label>#}
+{#                     <div class="col-md-9">#}
+{#                         {{ form_widget(form.action.text, {'attr' : {'id' : 'select2','class' : 'form-control textear-edit', 'placeholder': "Action Description"| trans}}) }}#}
+{#                         {% if form.action.text.vars.errors|length %}{{ form_errors(form.action.text) }}{% endif %}#}
+{#                     </div>#}
+{#                 </div>#}
+{#             </div>#}
             <div class="form-body">
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Report Description{% endtrans %}</label>

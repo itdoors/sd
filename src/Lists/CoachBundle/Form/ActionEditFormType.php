@@ -69,10 +69,10 @@ class ActionEditFormType extends AbstractType
                         'minimumInputLength' => 0,
                         'allowClear' => true
                     )))
-        ))
-            ->add('text', 'textarea', array(
-                'required' => false
-            ));
+        ));
+//             ->add('text', 'textarea', array(
+//                 'required' => false
+//             ));
     }
 
     /**
