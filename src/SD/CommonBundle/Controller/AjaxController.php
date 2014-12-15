@@ -6296,7 +6296,12 @@ class AjaxController extends BaseFilterController
                 ->getDepartmentsForCityQuery($searchText, $cityId);
 
         foreach ($departments as $department) {
-            $result[] = $this->serializeObject($department);
+            $result[] = array(
+                'id' => $department->getId(),
+                'value' => $department->getId(),
+                'name' => $department->getOrganization()->getName() . ', ' . $department->getName(),
+                'text' => $department->getOrganization()->getName() . ', ' . $department->getName()
+            );
         }
 
         return new Response(json_encode($result));

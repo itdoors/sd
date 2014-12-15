@@ -35,16 +35,16 @@
                     <td>{{item.getAuthor()}}</td>
                     <td>{{ item.created | date('d-m-Y')}}</td>
                     {% if is_granted('ROLE_COACH') %}
-                        {% if item.getAuthor() == app.getUser() %}
-                            <td>
+                        <td>
+                            {% if item.getAuthor() == app.getUser() %}
                                 <a href="{{ path('lists_coach_report_edit',{'id':item.id}) }}" title="{% trans %}Edit{% endtrans %}">
                                     <i class="icon-pencil"></i>
                                 </a>
                                 <a href="{{ path('lists_coach_report_delete',{'id':item.id}) }}" title="{% trans %}Delete{% endtrans %}">
                                     <i class="icon-trash"></i>
                                 </a>
-                            </td>
-                        {% endif %}
+                            {% endif %}
+                        </td>
                     {% endif %}
                 </tr>
                 {% endfor %}
