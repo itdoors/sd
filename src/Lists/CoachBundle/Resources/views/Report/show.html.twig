@@ -49,7 +49,7 @@
 					</li>
 					<li class="list-group-item">
 						{% trans %}Action topic{% endtrans %} <span class="badge badge-success">
-						{{report.action.topic.title}} </span>
+						{{report.action.topic is defined ? '' : report.action.topic.title}} </span>
 					</li>
 					<li class="list-group-item">
 						{% trans %}Region{% endtrans %} <span class="badge badge-warning">
