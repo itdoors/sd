@@ -90,7 +90,7 @@ class CoachReportController extends BaseController
 
         $paginator = $this->container->get($this->paginator);
         $entities->setHint($this->paginator . '.count', $count);
-        $pagination = $paginator->paginate($entities, $page, 1);
+        $pagination = $paginator->paginate($entities, $page, 10);
 
         return $this->render('ListsCoachBundle:Report:list.html.twig', array(
                 'namespase' => $namespase,
