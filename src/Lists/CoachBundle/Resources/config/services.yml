@@ -3,6 +3,7 @@ parameters:
     lists_coach.coach.service.class: Lists\CoachBundle\Services\CoachService
     lists_coach.form.report.class: Lists\CoachBundle\Form\CoachReportFormType
     lists_coach.form.report.edit.class: Lists\CoachBundle\Form\CoachReportEditFormType
+    lists_coach.form.report.filter.class: Lists\CoachBundle\Form\ReportFilterFormType
 
 services:
     lists_coach.action.service:
@@ -21,3 +22,8 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: coachReportEditForm }
+    lists_coach.form.report.filter:
+        class: %lists_coach.form.report.filter.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: reportFilterForm }
