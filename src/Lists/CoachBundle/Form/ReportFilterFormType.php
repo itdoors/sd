@@ -36,99 +36,96 @@ class ReportFilterFormType extends AbstractType
         $router = $this->container->get('router');
 
         $builder
-//             ->add('firstName', 'text', array(
-//                 'attr' => array(
-//                     'class' => 'itdoors-select2 can-be-reseted submit-field',
-//                     'data-url' => $router->generate('sd_common_ajax_user_fio'),
-//                     'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
-//                     'data-params' => json_encode(array(
-//                         'minimumInputLength' => 2,
-//                         'allowClear' => true,
-//                         'width' => '200px',
-//                         'multiple' => 'multiple'
-//                     )),
-//                     'placeholder' => 'Enter fio',
-//                 )
-//             ))
-//             ->add('mobilephone', 'text', array(
-//                 'attr' => array(
-//                     'class' => 'itdoors-select2 can-be-reseted submit-field',
-//                     'data-url' => $router->generate('sd_common_ajax_contact_phone'),
-//                     'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
-//                     'data-params' => json_encode(array(
-//                         'minimumInputLength' => 2,
-//                         'allowClear' => true,
-//                         'width' => '200px',
-//                         'multiple' => 'multiple'
-//                     )),
-//                     'placeholder' => 'Enter phone',
-//                 )
-//             ))
-//             ->add('email', 'text', array(
-//                 'attr' => array(
-//                     'class' => 'itdoors-select2 can-be-reseted submit-field',
-//                     'data-url' => $router->generate('sd_common_ajax_user_email'),
-//                     'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
-//                     'data-params' => json_encode(array(
-//                         'minimumInputLength' => 2,
-//                         'allowClear' => true,
-//                         'width' => '200px',
-//                         'multiple' => 'multiple'
-//                     )),
-//                     'placeholder' => 'Enter email',
-//                 )
-//             ))
-//             ->add('position', 'text', array(
-//                 'attr' => array(
-//                     'class' => 'itdoors-select2 can-be-reseted submit-field',
-//                     'data-url' => $router->generate('sd_common_ajax_user_position'),
-//                     'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
-//                     'data-params' => json_encode(array(
-//                         'minimumInputLength' => 2,
-//                         'allowClear' => true,
-//                         'width' => '200px',
-//                         'multiple' => 'multiple'
-//                     )),
-//                     'placeholder' => 'Enter position',
-//                 )
-//             ))
-//             ->add('company', 'text', array(
-//                 'attr' => array(
-//                     'class' => 'itdoors-select2 can-be-reseted submit-field',
-//                     'data-url' => $router->generate('sd_common_ajax_contact_company'),
-//                     'data-url-by-id' => $router->generate('sd_common_ajax_contact_company_by_ids'),
-//                     'data-params' => json_encode(array(
-//                         'minimumInputLength' => 0,
-//                         'allowClear' => true,
-//                         'width' => '200px',
-//                         'multiple' => 'multiple'
-//                     )),
-//                     'placeholder' => 'Enter subdivision',
-//                 )
-//             ))
-//             ->add('isActive', 'choice', array(
-//                 'attr' => array(
-//                     'class' => 'form-control select2 input-middle',
-//                     'placeholder' => 'Status'
-//                 ),
-//                 'choices' => array(
-//                     'active' => $translator->trans("Active", array(), 'SDUserBundle.ru'),
-//                     'blocked' => $translator->trans("Blocked", array(), 'SDUserBundle.ru'),
-//                 ),
-//                 'empty_value' => $translator->trans("All", array(), 'SDUserBundle.ru')
-//             ))
-//             ->add('status', 'choice', array(
-//                 'attr' => array(
-//                     'class' => 'form-control select2 input-middle',
-//                     'placeholder' => 'Status'
-//                 ),
-//                 'choices' => array(
-//                     67 => $translator->trans("Fired", array(), 'SDUserBundle.ru'),
-//                     68 => $translator->trans("Worked", array(), 'SDUserBundle.ru'),
-//                     69 => $translator->trans("Decree", array(), 'SDUserBundle.ru'),
-//                 ),
-//                 'empty_value' => $translator->trans("All", array(), 'SDUserBundle.ru')
-//             ))
+            ->add('author', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_user_fio'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 0,
+                        'allowClear' => true,
+                        'width' => '200px',
+                        'multiple' => 'multiple'
+                    )),
+                    'disabled' => true,
+                    'placeholder' => $translator->trans("Autor", array(), 'ListsCoachBundle.ru'),
+                )
+            ))
+            ->add('type', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_contact_phone'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 2,
+                        'allowClear' => true,
+                        'width' => '200px',
+                        'multiple' => 'multiple'
+                    )),
+                    'disabled' => true,
+                    'placeholder' => $translator->trans("Action type", array(), 'ListsCoachBundle.ru'),
+                )
+            ))
+            ->add('topic', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_contact_phone'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
+                    'data-params' => json_encode(array(
+                                    'minimumInputLength' => 2,
+                                    'allowClear' => true,
+                                    'width' => '200px',
+                                    'multiple' => 'multiple'
+                    )),
+                    'disabled' => true,
+                    'placeholder' => $translator->trans("Action topic", array(), 'ListsCoachBundle.ru'),
+                )
+            ))
+            ->add('city', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_contact_phone'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
+                    'data-params' => json_encode(array(
+                                    'minimumInputLength' => 2,
+                                    'allowClear' => true,
+                                    'width' => '200px',
+                                    'multiple' => 'multiple'
+                    )),
+                    'disabled' => true,
+                    'placeholder' => $translator->trans("City", array(), 'ListsCoachBundle.ru'),
+                )
+            ))
+            ->add('department', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_contact_phone'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
+                    'data-params' => json_encode(array(
+                                    'minimumInputLength' => 2,
+                                    'allowClear' => true,
+                                    'width' => '200px',
+                                    'multiple' => 'multiple'
+                    )),
+                    'disabled' => true,
+                    'placeholder' => $translator->trans("Place", array(), 'ListsCoachBundle.ru'),
+                )
+            ))
+            ->add('members', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_contact_phone'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
+                    'data-params' => json_encode(array(
+                                    'minimumInputLength' => 2,
+                                    'allowClear' => true,
+                                    'width' => '200px',
+                                    'multiple' => 'multiple'
+                    )),
+                    'disabled' => true,
+                    'placeholder' => $translator->trans("Members", array(), 'ListsCoachBundle.ru'),
+                )
+            ))
             ->add('submit', 'submit')
             ->add('reset', 'submit');
     }
