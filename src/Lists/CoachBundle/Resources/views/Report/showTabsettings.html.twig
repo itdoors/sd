@@ -131,6 +131,9 @@
                         success: function(response) {
                         	oTable.fnDeleteRow(nRow);
                         	SD.unblockUI($('#sample_editable_1'));
+                        },
+                        error: function(response) {
+                        	SD.unblockUI($('#sample_editable_1'));
                         }
                     });
                 });
@@ -151,6 +154,9 @@
                         },
                         success: function(response) {
                         	oTable2.fnDeleteRow(nRow);
+                        	SD.unblockUI($('#sample_editable_2'));
+                        },
+                        error: function(response) {
                         	SD.unblockUI($('#sample_editable_2'));
                         }
                     });
