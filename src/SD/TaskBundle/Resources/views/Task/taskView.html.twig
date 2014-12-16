@@ -28,6 +28,12 @@
                     } else {
 
                     }
+                },
+                beforeSend: function() {
+                    SD.blockUI($('#task_holder'));
+                },
+                complete: function() {
+                    SD.unblockUI($('#task_holder'));
                 }
             })
         })
@@ -79,6 +85,12 @@
                     } else {
                         //$('#copy_etalon_finished').show('blind', {}, 500);
                     }
+                },
+                beforeSend: function() {
+                    SD.blockUI($('#task_holder'));
+                },
+                complete: function() {
+                    SD.unblockUI($('#task_holder'));
                 }
 
             })
@@ -109,6 +121,12 @@
                     } else {
 
                     }
+                },
+                beforeSend: function() {
+                    SD.blockUI($('#task_holder'));
+                },
+                complete: function() {
+                    SD.unblockUI($('#task_holder'));
                 }
 
             })
@@ -143,6 +161,12 @@
                                 alert('error');
                             }
                         }
+                    },
+                    beforeSend: function() {
+                        SD.blockUI($('#task_holder'));
+                    },
+                    complete: function() {
+                        SD.unblockUI($('#task_holder'));
                     }
 
                 })
@@ -173,6 +197,12 @@
                         //insertComment()
                         updateTask();
                     }
+                },
+                beforeSend: function() {
+                    SD.blockUI($('#task_holder'));
+                },
+                complete: function() {
+                    SD.unblockUI($('#task_holder'));
                 }
 
             })
@@ -204,6 +234,12 @@
                         updateTask();
                         //$('#copy_etalon_finished').show('blind', {}, 500);
                     }
+                },
+                beforeSend: function() {
+                    SD.blockUI($('#task_holder'));
+                },
+                complete: function() {
+                    SD.unblockUI($('#task_holder'));
                 }
 
             })
@@ -247,6 +283,12 @@
                     } else {
                         //$('#copy_etalon_finished').show('blind', {}, 500);
                     }
+                },
+                beforeSend: function() {
+                    SD.blockUI($('#task_holder'));
+                },
+                complete: function() {
+                    SD.unblockUI($('#task_holder'));
                 }
             })
         })
@@ -310,6 +352,12 @@
                     } else {
                         //$('#copy_etalon_finished').show('blind', {}, 500);
                     }
+                },
+                beforeSend: function() {
+                    SD.blockUI($('#task_holder'));
+                },
+                complete: function() {
+                    SD.unblockUI($('#task_holder'));
                 }
 
             })
