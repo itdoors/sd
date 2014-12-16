@@ -180,11 +180,14 @@ class UserController extends BaseController
         /** @var Usercontactinfo $usercontactinfo */
         $usercontactinfo = $em->getRepository('SDUserBundle:Usercontactinfo')->findBy(array('user' => $userId));
 
+        $coachStatus = $this->get('lists_coach.coach.service')->isCoach($userId);
 
         return $this->render('SDUserBundle:User:showTab' . $tab . '.html.twig', array(
+                'userId' => $userId,
                 'item' => $item,
                 'isAdmin' => $isAdmin,
                 'usercontactinfo' => $usercontactinfo,
+                'coachStatus' => $coachStatus
         ));
     }
 

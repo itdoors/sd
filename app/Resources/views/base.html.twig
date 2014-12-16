@@ -318,9 +318,9 @@
                             
                     // start the idle timer plugin
                     $.idleTimeout('#idle-timeout-dialog', '.modal-content button:last', {
-                        idleAfter: 300, // 5 min
-                        timeout: 30000, //30 seconds to timeout
-                        pollingInterval: 300, // 10 min
+                        idleAfter: {{ idle_after }},
+                        timeout: {{ modal_timeout }},
+                        pollingInterval: {{ polling_interval }},
                         keepAliveURL: '{{ path('sd_user_keep_alive') }}',
                         serverResponseEquals: 'OK',
                         failedRequests: 100,

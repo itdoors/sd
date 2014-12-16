@@ -325,4 +325,26 @@ class DepartmentsRepository extends EntityRepository
 
         return $sql->getQuery()->getResult();
     }
+
+    /**
+     * getDepartmentsForCityQuery
+     *
+     * @param string $q
+     *
+     * @return array
+     */
+    public function getDepartmentsForCityQuery($searchText, $cityId)
+    {
+        $sql = $this->createQueryBuilder('d')
+        ->innerJoin('d.city', 'c')
+        ->where('lower(d.name) LIKE :q')
+        ->orWhere('lower(d.address) LIKE :q')
+    
+        ->andWhere('c.id = :cityId')
+    
+        ->setParameter(':cityId', $cityId)
+        ->setParameter(':q', '%' . mb_strtolower($searchText, 'UTF-8') . '%');
+    
+        return $sql->getQuery()->getResult();
+    }
 }

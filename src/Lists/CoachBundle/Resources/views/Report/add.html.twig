@@ -1,0 +1,287 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ListsCoachBundle' %}
+{% block title %}{% trans %}Add{% endtrans %} {% endblock %}
+{% form_theme form 'ITDoorsCommonBundle:Form:fields.html.twig' %}
+{% block page_title %}
+    <h3 class="page-title">
+        {% trans %}Reports{% endtrans %} <small>{% trans %}new{% endtrans %}</small>
+    </h3>
+{% endblock %}
+
+{% block page_breadcrumbs %}
+    <ul class="page-breadcrumb breadcrumb">
+        <li>
+            <i class="fa fa-home"></i>
+            <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+        </li>
+        <li>
+            <a href="{{ path('lists_coach_index') }}" title="{% trans %}Reports{% endtrans %}">{% trans %}Reports{% endtrans %}</a>
+        </li>
+        <li>
+            <a href="" title="{% trans %}New{% endtrans %}">{% trans %}New{% endtrans %}</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/jstree/dist/themes/default/style.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/css/datepicker.css')}} " />
+
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jstree/dist/jstree.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/summernote.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-summernote/lang/summernote-ru-RU.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.js') }}"></script>
+
+{% endblock %}
+
+{% block body %}
+    <div class="portlet box blue">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-gift"></i>{% trans %}Add{% endtrans %}
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <script>
+                var cityId;
+                $(document).ready(function() {
+                    SD.select2('#' + '{{ form.vars.name }}' + '_author', {
+                    });
+                    SD.select2('#' + '{{ form.vars.name }}' + '_action_type', {
+                    });
+                    SD.select2('#' + '{{ form.vars.name }}' + '_action_topic', {
+                    });
+                    $('#' + '{{ form.vars.name }}' + '_action_department').prop( "disabled", true );
+                    $('#' + '{{ form.vars.name }}' + '_action_individuals').prop( "disabled", true );
+                    $('#' + '{{ form.vars.name }}' + '_city').on("change", function(event){
+                        cityId = $(this).val();
+                        if (!cityId) {
+                     	   $('#' + '{{ form.vars.name }}' + '_action_department').prop( "disabled", true );
+                     	   $('#' + '{{ form.vars.name }}' + '_action_individuals').prop( "disabled", true );
+                     	} else {
+                     	   $('#' + '{{ form.vars.name }}' + '_action_department').prop( "disabled", false );
+                     	   $('#' + '{{ form.vars.name }}' + '_action_individuals').prop( "disabled", false );
+                         };
+                         
+                    	$('#' + '{{ form.vars.name }}' + '_action_department').select2({
+                        	ajax: {
+                        		url: "{{ path('sd_common_ajax_departments_by_city_id') }}",
+                                dataType: 'json',
+                        		data: function (term, page) {
+                                    return {
+                                    	cityId: cityId,
+                                        query: term,
+                                        q: term
+                                    };
+                        		},
+                        		results: function (data, page) {
+                                    return {
+                                        results: data
+                                    };
+                                }
+                        	}
+                        });
+                    	$('#' + '{{ form.vars.name }}' + '_action_individuals').select2({
+                        	multiple: true,
+                        	ajax: {
+                        		url: "{{ path('sd_common_ajax_individuals_by_city_id') }}",
+                                dataType: 'json',
+                        		data: function (term, page) {
+                                    return {
+                                    	cityId: cityId,
+                                        query: term,
+                                        q: term
+                                    };
+                        		},
+                        		results: function (data, page) {
+                                    return {
+                                        results: data
+                                    };
+                                }
+                        	}
+                        });
+                    });
+                    $('.itdoors-date-picker').datepicker({
+                        rtl: Metronic.isRTL(),
+                        autoclose: true,
+                        format: "dd.mm.yyyy",
+                        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+                        language: 'ru',
+                        startView: 'decade',
+                        weekStart: 1
+                    });
+                    $('.itdoors-date-picker').datepicker( "setDate", new Date());
+                    $('.textear-edit').summernote({
+                        lang: 'ru-RU',
+                        'disableDragAndDrop': true,
+                        'disableLinkTarget': true,
+                        'onblur': function() {
+                            /** Костыль для страховки */
+                            $('.textear-edit').text($('.textear-edit').code());
+                        }
+                    });
+                    $('.textear-edit').summernote({
+                        'onImageUpload': function(files, editor, welEditable) {
+                            sendFile(files[0],editor,welEditable);
+                        }
+                    });
+                    function sendFile(file,editor,welEditable) {
+                        data = new FormData();
+                        data.append("file", file);
+                        $.ajax({
+                            data: data,
+                            type: "POST",
+                            url: "{{ path('lists_coach_report_upload') }}",
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            success: function(url) {
+                                    editor.insertImage(welEditable, url);
+                            }
+                        });
+                    }
+                });
+            </script>
+            {% form_theme form 'ITDoorsCommonBundle:Form:form_errors.html.twig' %}
+            {% if form.vars.valid %}
+            {% else %}
+                <div class="alert alert-danger">
+                    <button class="close" data-close="alert"></button>
+                    {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                    {{ form_errors(form) }}
+                </div>
+            {% endif %}
+
+            {{ form_start(form, {
+                    'action' : path('lists_coach_report_add'),
+                    'attr' : {
+                        'method' : 'POST',
+                        'class' : 'form-horizontal form-row-seperated',
+                    }
+            }) }}
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Autor{% endtrans %}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.author, {'attr' : {'class' : 'form-control', 'disabled':'disabled', 'placeholder': app.user | trans}}) }}
+                        {% if form.author.vars.errors|length %}{{ form_errors(form.author) }}{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Report title{% endtrans %}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.title, {'attr' : {'class' : 'form-control', 'placeholder': "Report title"| trans}}) }}
+                        {% if form.title.vars.errors|length %}{{ form_errors(form.title) }}{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Report date{% endtrans %}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.created, {'attr' : {'id' : 'datepic','class' : 'form-control itdoors-date-picker'}}) }}
+                        {% if form.created.vars.errors|length %}{{ form_errors(form.created) }}{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Action date{% endtrans %}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.action.startedAt, {'attr' : {'id' : 'datepic','class' : 'form-control itdoors-date-picker'}}) }}
+                        {% if form.action.startedAt.vars.errors|length %}{{ form_errors(form.action.startedAt) }}{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}City{% endtrans %}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.city, {'attr' : { 'placeholder': "City"| trans}}) }}
+                        {% if form.city.vars.errors|length %}{{ form_errors(form.city) }}{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Action type{% endtrans %}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.action.type, {'attr' : {'class' : 'form-control', 'placeholder': "Action type"| trans}}) }}
+                        {% if form.action.type.vars.errors|length %}{{ form_errors(form.action.type) }}{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Action topic{% endtrans %}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.action.topic, {'attr' : {'class' : 'form-control', 'placeholder': "Action topic"| trans}}) }}
+                        {% if form.action.topic.vars.errors|length %}{{ form_errors(form.action.topic) }}{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Place{% endtrans %}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.action.department, {'attr' : {'placeholder': "Place" | trans}}) }}
+                        {% if form.action.department.vars.errors|length %}{{ form_errors(form.action.department) }}{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Members{% endtrans %}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.action.individuals, {'attr' : {'placeholder': "Members" | trans}}) }}
+                        {% if form.action.individuals.vars.errors|length %}{{ form_errors(form.action.individuals) }}{% endif %}
+                    </div>
+                </div>
+            </div>
+{#             <div class="form-body">#}
+{#                 <div class="form-group">#}
+{#                     <label class="required control-label col-md-3">{% trans %}Action Description{% endtrans %}</label>#}
+{#                     <div class="col-md-9">#}
+{#                         {{ form_widget(form.action.text, {'attr' : {'id' : 'select2','class' : 'form-control textear-edit', 'placeholder': "Action Description"| trans}}) }}#}
+{#                         {% if form.action.text.vars.errors|length %}{{ form_errors(form.action.text) }}{% endif %}#}
+{#                     </div>#}
+{#                 </div>#}
+{#             </div>#}
+            <div class="form-body">
+                <div class="form-group">
+                    <label class="required control-label col-md-3">{% trans %}Report Description{% endtrans %}</label>
+                    <div class="col-md-9">
+                        {{ form_widget(form.text, {'attr' : {'id' : 'select2','class' : 'form-control textear-edit', 'placeholder': "Report Description"| trans}}) }}
+                        {% if form.text.vars.errors|length %}{{ form_errors(form.text) }}{% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-actions fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-offset-3 col-md-9">
+                            <button type="submit" class="btn green"><i class="fa fa-pencil"></i>{% trans %}Add{% endtrans %}</button>
+                            <a class="btn btn-cl green" href="{{ path('lists_coach_index') }}" title="{% trans %}Cancel{% endtrans %}">
+                                {% trans %}Cancel{% endtrans %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock body %}

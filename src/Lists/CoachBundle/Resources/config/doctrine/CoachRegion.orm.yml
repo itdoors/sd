@@ -1,0 +1,26 @@
+Lists\CoachBundle\Entity\CoachRegion:
+    type: entity
+    table: coach_region
+    id:
+        id:
+            type: integer
+            generator: { strategy: IDENTITY }
+    manyToMany:
+        regions:
+            targetEntity: Lists\RegionBundle\Entity\Region
+            joinTable:
+                name: coaches_regions
+                joinColumns:
+                  coach_id:
+                    referencedColumnName: id
+                inverseJoinColumns:
+                  region_id:
+                    referencedColumnName: id
+                    unique: true
+            orphanremoval: true
+    oneToOne:
+        user:
+            targetEntity: SD\UserBundle\Entity\User
+            joinColumn:
+                name: user_id
+                referencedColumnName: id

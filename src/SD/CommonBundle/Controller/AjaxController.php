@@ -6334,16 +6334,55 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($result));
     }
+
     /**
-     * departmentAction
-     * 
      * @return Response
      */
-    public function departmentAction()
+    public function getDepartmentByIdAjaxAction()
     {
+        $id = $this->get('request')->query->get('id');
+
+        $object = $this->getDoctrine()
+        ->getRepository('ListsDepartmentBundle:Departments')->find($id);
+
+        $result = $this->serializeObject($object);
+
+        return new Response(json_encode($result));
+    }
+    
+    /**
+     * @return Response
+     */
+    public function getDepartmentsByCityIdAjaxAction()
+    {
+        $cityId = $this->get('request')->query->get('cityId');
         $searchText = $this->get('request')->query->get('query');
 
-        /** @var \Lists\OrganizationBundle\Entity\OrganizationRepository $organizationsRepository */
+        $result = [];
+        $departments = $this
+                ->getDoctrine()
+                ->getRepository('ListsDepartmentBundle:Departments')
+                ->getDepartmentsForCityQuery($searchText, $cityId);
+
+        foreach ($departments as $department) {
+            $result[] = array(
+                'id' => $department->getId(),
+                'value' => $department->getId(),
+                'name' => $department->getOrganization()->getName() . ', ' . $department->getName(),
+                'text' => $department->getOrganization()->getName() . ', ' . $department->getName()
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+
+    /**
+     * @return Response
+     */
+    public function departmentAction() {
+
+        $searchText = $this->get('request')->query->get('query');
+
         $departmentRepository = $this->getDoctrine()
             ->getRepository('ListsDepartmentBundle:Departments');
 
@@ -6357,5 +6396,48 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($result));
 
+    }
+
+    /**
+     * @return Response
+     */
+    public function getIndividualsByCityIdAjaxAction()
+    {
+        $cityId = $this->get('request')->query->get('cityId');
+        $searchText = $this->get('request')->query->get('query');
+
+        $result = [];
+        $city = $this
+            ->getDoctrine()
+            ->getRepository('ListsCityBundle:City')
+            ->find($cityId);
+
+        $regionId = $city->getRegion()->getId();
+
+        $indIds = $this
+            ->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople')
+            ->getIndividualsByRegionIdQuery($searchText, $regionId);
+        
+        $i = [];
+        foreach ($indIds as $ind) {
+            $i[] = $ind['1'];
+        }
+
+        $individuals = $this
+            ->getDoctrine()
+            ->getRepository('ListsIndividualBundle:Individual')
+            ->findBy(array('id' => $i));
+
+        foreach ($individuals as $individual) {
+            $result[] = array(
+                'id' => $individual->getId(),
+                'value' => $individual->getId(),
+                'name' => $individual->__toString(),
+                'text' => $individual->__toString()
+            );
+        }
+
+        return new Response(json_encode($result));
     }
 }

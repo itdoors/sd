@@ -27,6 +27,7 @@ parameters:
     userprofiles.file.path: "/uploads/userprofiles/"
     invoice.scan.file.path: "/uploads/invoice/scan/"
     blogfiles.file.path: "/uploads/blogimages/"
+    reports.file.path: "/uploads/coach/reports/"
     email.from: "noreply@griffin.ua"
     name.from: "ImpelNET"
     listener.history.table: %listener.history.tables%
@@ -94,6 +95,12 @@ twig:
         sip_port_ws: %sip.port.ws%
         call_url: "http://%call.ip%:%call.port%/%call.directory%/"
         call_extension: "%call.extension%"
+        
+        cron_timeout: %cron_timeout%
+        idle_after: %idle_after%
+        modal_timeout: %modal_timeout%
+        polling_interval: %polling_interval%
+
 # Assetic Configuration
 assetic:
     debug:          %kernel.debug%
