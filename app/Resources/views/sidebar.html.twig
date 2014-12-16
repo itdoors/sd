@@ -836,6 +836,16 @@
                         </a>
                     </li>
                     {% endif %}
+                    {% if is_granted('ROLE_COACH') or is_granted('ROLE_COACHADMIN') %}
+                    <li{% if
+                             path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_coach_index')
+                        %} class="active"{% endif %}>
+                        <a href="{{ path('lists_coach_index') }}" title="{% trans %}Training{% endtrans %}">
+                            <i class="icon-pencil"></i>
+                            {% trans %}Training{% endtrans %}
+                        </a>
+                    </li>
+                    {% endif %}
                 </ul>
             </li>
            

@@ -1,0 +1,29 @@
+parameters:
+    lists_coach.action.service.class: Lists\CoachBundle\Services\ActionService
+    lists_coach.coach.service.class: Lists\CoachBundle\Services\CoachService
+    lists_coach.form.report.class: Lists\CoachBundle\Form\CoachReportFormType
+    lists_coach.form.report.edit.class: Lists\CoachBundle\Form\CoachReportEditFormType
+    lists_coach.form.report.filter.class: Lists\CoachBundle\Form\ReportFilterFormType
+
+services:
+    lists_coach.action.service:
+        class: %lists_coach.action.service.class%
+        arguments: [@service_container]
+    lists_coach.coach.service:
+        class: %lists_coach.coach.service.class%
+        arguments: [@service_container]
+    lists_coach.form.report:
+        class: %lists_coach.form.report.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: coachReportForm }
+    lists_coach.form.report.edit:
+        class: %lists_coach.form.report.edit.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: coachReportEditForm }
+    lists_coach.form.report.filter:
+        class: %lists_coach.form.report.filter.class%
+        arguments: [@service_container]
+        tags:
+            - { name: form.type, alias: reportFilterForm }

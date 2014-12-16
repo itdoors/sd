@@ -1,0 +1,15 @@
+Lists\CoachBundle\Entity\ActionType:
+    type: entity
+    table: coach_action_type
+    id:
+        id:
+            type: integer
+            generator: { strategy: IDENTITY }
+    fields:
+        title:
+            type: string
+            length: 255
+    oneToMany:
+        actions:
+            targetEntity: Lists\CoachBundle\Entity\Action
+            mappedBy: type

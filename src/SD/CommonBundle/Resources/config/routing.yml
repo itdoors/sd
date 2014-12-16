@@ -377,3 +377,15 @@ sd_common_ajax_department_by_ids:
 sd_common_ajax_user_position_table:
     pattern:  /ajax/user/position/table
     defaults: { _controller: SDCommonBundle:Ajax:position }
+    
+sd_common_ajax_department_by_id:
+    pattern:  /ajax/department_by_id
+    defaults: { _controller: SDCommonBundle:Ajax:getDepartmentByIdAjax }
+    
+sd_common_ajax_departments_by_city_id:
+    pattern:  /ajax/departments_by_city_id
+    defaults: { _controller: SDCommonBundle:Ajax:getDepartmentsByCityIdAjax }
+    
+sd_common_ajax_individuals_by_city_id:
+    pattern:  /ajax/individuals_by_city_id
+    defaults: { _controller: SDCommonBundle:Ajax:getIndividualsByCityIdAjax }

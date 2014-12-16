@@ -50,7 +50,7 @@ class CloseInactiveSessionsCommand extends ContainerAwareCommand
             $lastActivity = $lastActivityTimestamp['max'];
             $currentTime = new \DateTime("now");
             $currentTime = $currentTime->getTimestamp();
-            $timeout = 6;//minutes
+            $timeout = $this->getContainer()->getParameter('cron_timeout');
 
             if (($currentTime - $lastActivity) > $timeout * 60) {
                 foreach ($userLoginRecords as $userLoginRecord) {

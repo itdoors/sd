@@ -1,0 +1,67 @@
+lists_coach_index:
+    path:     /training/
+    defaults: { _controller: ListsCoachBundle:CoachReport:index }
+    
+lists_coach_report_showtabs:
+    path:     /training/show/tabs
+    defaults: { _controller: ListsCoachBundle:CoachReport:showtabs }
+
+lists_coach_report_list:
+    path:     /training/reports
+    defaults: { _controller: ListsCoachBundle:CoachReport:list }
+    
+lists_coach_report_upload:
+    path:     /training/upload
+    defaults: { _controller: ListsCoachBundle:CoachReport:upload }
+
+lists_coach_report_add:
+    path:     /training/coach/reports/add
+    defaults: { _controller: ListsCoachBundle:CoachReport:add }
+
+lists_coach_report_show:
+    path:     /training/reports/show/{id}
+    defaults: { _controller: ListsCoachBundle:CoachReport:show }
+
+lists_coach_report_edit:
+    path:     /training/coach/reports/edit/{id}
+    defaults: { _controller: ListsCoachBundle:CoachReport:edit }
+    
+lists_coach_report_delete:
+    path:     /training/coach/reports/delete/{id}
+    defaults: { _controller: ListsCoachBundle:CoachReport:delete }
+    
+lists_coach_ajax_action_topics:
+    path:     /training/action_topics
+    defaults: { _controller: ListsCoachBundle:Ajax:actionTopics }
+    
+lists_coach_ajax_action_topic_edit:
+    path:     /training/action_topic_edit
+    defaults: { _controller: ListsCoachBundle:Ajax:editTopic }
+    
+lists_coach_ajax_action_topic_delete:
+    path:     /training/action_topic_delete
+    defaults: { _controller: ListsCoachBundle:Ajax:deleteTopic }
+    
+lists_coach_ajax_action_types:
+    path:     /training/action_types
+    defaults: { _controller: ListsCoachBundle:Ajax:actionTypes }
+    
+lists_coach_ajax_action_type_edit:
+    path:     /training/action_type_edit
+    defaults: { _controller: ListsCoachBundle:Ajax:editType }
+    
+lists_coach_ajax_action_type_delete:
+    path:     /training/action_type_delete
+    defaults: { _controller: ListsCoachBundle:Ajax:deleteType }
+    
+lists_coach_ajax_set_coach:
+    path:     /training/set_coach
+    defaults: { _controller: ListsCoachBundle:Ajax:setCoachStatus }
+    
+lists_coach_ajax_coach_regions:
+    path:     /training/coach_regions
+    defaults: { _controller: ListsCoachBundle:Ajax:coachRegions }
+    
+lists_coach_ajax_coach_save_regions:
+    path:     /training/coach_save_regions
+    defaults: { _controller: ListsCoachBundle:Ajax:coachSaveRegions }
