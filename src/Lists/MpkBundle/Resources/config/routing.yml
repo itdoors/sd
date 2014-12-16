@@ -13,3 +13,13 @@ lists_mpk_list:
 lists_mpk_save:
     pattern:  /department/mpk/save
     defaults: { _controller: ListsMpkBundle:Mpk:save }
+    
+# ajaxController
+lists_mpk_ajax_search:
+    pattern:  /lists/mpk/ajax/search
+    defaults: { _controller: ListsMpkBundle:Ajax:searchMpk }
+    methods:   [GET]
+lists_mpk_ajax_mpk_by_ids:
+    pattern:  /lists/mpk/ajax/by_ids
+    defaults: { _controller: ListsMpkBundle:Ajax:mpkByIds }
+    methods:   [GET]

@@ -106,11 +106,7 @@
                     <div class="col-md-12">
                         <!-- BEGIN PAGE TITLE & BREADCRUMB-->
                         {% block page_title %}
-                        <h3 class="page-title">
-                            {% trans %}Default
-                            <small>default template</small>
-                            {% endtrans %}
-                        </h3>
+                            <h3 class="page-title"> {% trans %}Default <small>default template</small>{% endtrans %}</h3>
                         {% endblock %}
                         <div class="page-bar">
                             {% block page_breadcrumbs %}
@@ -147,7 +143,8 @@
                         </div>
                     </div>
                 </div>
-                {% endblock %} {% block body %}{% endblock %}
+                {% endblock %}
+                {% block body %}{% endblock %}
             </div>
         </div>
         <!-- END PAGE -->
@@ -302,8 +299,6 @@
                 //Index.initIntro();
                 //Tasks.initDashboardWidget();
             });
-    </script>
-    <script>
         var UIIdleTimeout = function () {
 
             return {

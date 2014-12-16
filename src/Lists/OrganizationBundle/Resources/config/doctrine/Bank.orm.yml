@@ -1,0 +1,23 @@
+Lists\OrganizationBundle\Entity\Bank:
+    type: entity
+    table: Bank
+    repositoryClass: Lists\OrganizationBundle\Entity\BankRepository
+    id:
+        id:
+            id: true
+            type: bigint
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            length: 255
+            nullable: false
+            options:
+                comment: Название банка
+        mfo:
+            type: string
+            length: 255
+            nullable: false
+            options:
+                comment: МФО банка

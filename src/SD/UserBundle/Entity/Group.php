@@ -29,10 +29,14 @@ class Group extends BaseGroup
     private $users;
 
     /**
-     * Constructor
+     * __construct
+     * 
+     * @param string $name
+     * @param array  $roles
      */
-    public function __construct()
+    public function __construct($name, $roles = array())
     {
+        parent::__construct($name, $roles);
         $this->users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 

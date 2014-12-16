@@ -194,7 +194,7 @@ class CronController extends ManagerCron
      * 
      * @return mixed
      */
-    private function addFlash($type, $message)
+    protected function addFlash($type, $message)
     {
         if ('' == $message || null === $message) {
             return;

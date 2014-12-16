@@ -62,3 +62,29 @@ lists_dogovor_made_index:
 lists_dogovor_made_list:
     pattern:  /lists/dogovor/made/list
     defaults: { _controller: ListsDogovorBundle:DogovorMade:list }
+
+# ajaxController
+lists_dogovor_ajax_search:
+    pattern:  /lists/dogovor/ajax/search
+    defaults: { _controller: ListsDogovorBundle:Ajax:dogovorSearch }
+    methods:   [GET, POST]
+
+lists_dogovor_ajax_search_dependent:
+    pattern:  /lists/dogovor/ajax/search/dependent
+    defaults: { _controller: ListsDogovorBundle:Ajax:dogovorSearchDependent }
+    methods:   [GET, POST]
+
+lists_dogovor_ajax_get_field:
+    pattern:  /lists/dogovor/ajax/get/field/
+    defaults: { _controller: ListsDogovorBundle:Ajax:dogovorGetField }
+    methods:   [GET]
+
+lists_dogovor_ajax_by_id:
+    pattern:  /lists/dogovor/ajax/by_id
+    defaults: { _controller: ListsDogovorBundle:Ajax:dogovorById }
+    methods:   [GET, POST]
+    
+lists_dogovor_ajax_by_ids:
+    pattern:  /lists/dogovor/ajax/by_ids
+    defaults: { _controller: ListsDogovorBundle:Ajax:dogovorByIds }
+    methods:   [GET, POST]

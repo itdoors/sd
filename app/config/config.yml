@@ -246,3 +246,6 @@ doctrine_migrations:
     name: Application Migrations
 
 gregwar_image: ~
+genemu_form:
+    date: ~
+    select2: ~

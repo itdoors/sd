@@ -1,0 +1,18 @@
+Lists\OrganizationBundle\Entity\OrganizationCurrentAccountType:
+    type: entity
+    table: organization_current_account_type
+    repositoryClass: Lists\OrganizationBundle\Entity\OrganizationCurrentAccountTypeRepository
+    id:
+        id:
+            id: true
+            type: bigint
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            length: 255
+            nullable: false
+            unique: true
+            options:
+                comment: Название типа расчетного счета
