@@ -57,5 +57,5 @@ security:
         - { path: ^/dashboard/blog/add, role: ROLE_ARTICLEADMIN }
         - { path: ^/dashboard/blog/edit, role: ROLE_ARTICLEADMIN }
         - { path: ^/user/timeOnline, role: ROLE_SUPERVISOR }
-        - { path: ^/training/coach, roles: 'ROLE_COACH, ROLE_COACHADMIN' }
+        - { path: ^/training, roles: 'ROLE_COACH, ROLE_COACHADMIN' }
         
