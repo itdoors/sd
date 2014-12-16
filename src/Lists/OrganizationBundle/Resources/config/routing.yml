@@ -308,3 +308,67 @@ lists_organization_service_cover_list:
 
 lists_organization_show_empty:
     pattern:  /lists/organization/show/
+    
+# ajaxController
+lists_organization_ajax_search:
+    pattern:  /lists/organization/ajax/search
+    defaults: { _controller: ListsOrganizationBundle:Ajax:organizationSearch }
+    methods:   [GET, POST]
+
+lists_organization_ajax_organization_search_signs:
+    pattern:  /lists/organization/ajax/organization/search/signs
+    defaults: { _controller: ListsOrganizationBundle:Ajax:organizationSearchSing }
+    methods:   [GET, POST]
+
+lists_organization_ajax_organization_by_id:
+    pattern:  /lists/organization/ajax/organization_by_id
+    defaults: { _controller: ListsOrganizationBundle:Ajax:organizationById }
+    methods:   [GET, POST]
+    
+lists_organization_ajax_organization_by_ids:
+    pattern:  /lists/organization/ajax/organization_by_ids
+    defaults: { _controller: ListsOrganizationBundle:Ajax:organizationByIds }
+    methods:   [GET, POST]
+
+lists_organization_ajax_organizationsigns_search:
+    pattern:  /lists/organization/ajax/organizationsigns/search
+    defaults: { _controller: ListsOrganizationBundle:Ajax:organizationsignsSearch }
+    methods:   [GET, POST]
+
+lists_organization_ajax_save_organization:
+    pattern:  /lists/organization/ajax/save/organization
+    defaults: { _controller: ListsOrganizationBundle:Ajax:ajaxSaveOrganization }
+
+lists_organization_ajax_organization_for_creation:
+    pattern:  /lists/organization/ajax/organization/for/creation
+    defaults: { _controller: ListsOrganizationBundle:Ajax:organizationForCreation }
+
+lists_organization_ajax_search_current_account_dependent:
+    pattern:  /lists/organization/ajax/search/current_account/dependent
+    defaults: { _controller: ListsOrganizationBundle:Ajax:organizationCurrentAccountSearchDependent }
+    methods:   [GET]
+
+lists_organization_ajax_current_account_by_id:
+    pattern:  /lists/organization/ajax/current_account/by_id
+    defaults: { _controller: ListsOrganizationBundle:Ajax:organizationCurrentAccountById }
+    methods:   [GET]
+
+lists_organization_ajax_bank_by_id:
+    pattern:  /lists/organization/ajax/bank/by_id
+    defaults: { _controller: ListsOrganizationBundle:Ajax:bankById }
+    methods:   [GET]
+
+lists_organization_ajax_bank_by_one:
+    pattern:  /lists/organization/ajax/bank/by_one
+    defaults: { _controller: ListsOrganizationBundle:Ajax:bankByOne }
+    methods:   [GET]
+
+lists_organization_ajax_bank_searh_dependent_field:
+    pattern:  /lists/organization/ajax/bank/search/dependent/field
+    defaults: { _controller: ListsOrganizationBundle:Ajax:bankSearchFieldDependent }
+    methods:   [GET]
+
+lists_organization_ajax_bank_get_field:
+    pattern:  /lists/organization/ajax/bank/get/field
+    defaults: { _controller: ListsOrganizationBundle:Ajax:bankGetField }
+    methods:   [GET]

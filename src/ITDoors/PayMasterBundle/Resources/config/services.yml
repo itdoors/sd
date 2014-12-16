@@ -1,0 +1,15 @@
+parameters:
+    it_doors_pay_master.service.class: ITDoors\PayMasterBundle\Services\PayMasterService
+    it_doors_pay_master.new.form.class: ITDoors\PayMasterBundle\Form\PayMasterNewForm
+
+services:
+    it_doors_pay_master.service:
+        class: %it_doors_pay_master.service.class%
+
+    it_doors_pay_master.newForm:
+        class: %it_doors_pay_master.new.form.class%
+        arguments: 
+            entityManager: "@doctrine.orm.entity_manager"
+            router: "@router"
+        tags:
+            - { name: form.type, alias: payMasterNewForm }

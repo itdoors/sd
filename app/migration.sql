@@ -1237,3 +1237,54 @@ ALTER TABLE fos_user ADD position_id BIGINT DEFAULT NULL;
 ALTER TABLE fos_user ADD CONSTRAINT FK_957A6479DD842E46 FOREIGN KEY (position_id) REFERENCES position (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 CREATE INDEX IDX_957A6479DD842E46 ON fos_user (position_id);
 -- prod +++++++
+
+CREATE TABLE organization_current_account_type (id BIGSERIAL NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id));
+CREATE UNIQUE INDEX UNIQ_43025E485E237E06 ON organization_current_account_type (name);
+COMMENT ON COLUMN organization_current_account_type.name IS 'Название типа расчетного счета';
+CREATE TABLE organization_current_account (id BIGSERIAL NOT NULL, type_id BIGINT DEFAULT NULL, organization_id BIGINT DEFAULT NULL, bank_id BIGINT DEFAULT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_85A323F4C54C8C93 ON organization_current_account (type_id);
+CREATE INDEX IDX_85A323F432C8A3DE ON organization_current_account (organization_id);
+CREATE INDEX IDX_85A323F411C8FB41 ON organization_current_account (bank_id);
+COMMENT ON COLUMN organization_current_account.name IS 'Р/С';
+CREATE TABLE Bank (id BIGSERIAL NOT NULL, name VARCHAR(255) NOT NULL, mfo VARCHAR(255) NOT NULL, PRIMARY KEY(id));
+COMMENT ON COLUMN Bank.name IS 'Название банка';
+COMMENT ON COLUMN Bank.mfo IS 'МФО банка';
+CREATE TABLE pay_master (id BIGSERIAL NOT NULL, payer_id BIGINT DEFAULT NULL, customer_id BIGINT DEFAULT NULL, contractor_id BIGINT DEFAULT NULL, dogovor_id BIGINT DEFAULT NULL, create_datetime TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, invoice_date DATE NOT NULL, expected_date DATE NOT NULL, payment_date DATE NOT NULL, invoice_amount DOUBLE PRECISION NOT NULL, vat BOOLEAN DEFAULT 'false' NOT NULL, description TEXT DEFAULT NULL, scan VARCHAR(255) NOT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_A4926999C17AD9A9 ON pay_master (payer_id);
+CREATE INDEX IDX_A49269999395C3F3 ON pay_master (customer_id);
+CREATE INDEX IDX_A4926999B0265DC7 ON pay_master (contractor_id);
+CREATE INDEX IDX_A492699981A36DD2 ON pay_master (dogovor_id);
+COMMENT ON COLUMN pay_master.create_datetime IS 'Дата создания счета (создается автоматически)';
+COMMENT ON COLUMN pay_master.invoice_date IS 'Дата счета';
+COMMENT ON COLUMN pay_master.expected_date IS 'Ожидаемая дата оплаты';
+COMMENT ON COLUMN pay_master.payment_date IS 'Дата оплаты';
+COMMENT ON COLUMN pay_master.invoice_amount IS 'Сумма счета';
+COMMENT ON COLUMN pay_master.vat IS 'Сумма счета с НДС (да||нет)';
+COMMENT ON COLUMN pay_master.scan IS 'Скан счета (имя файла) (/uploaded/paymaster/{id})';
+ALTER TABLE organization_current_account ADD CONSTRAINT FK_85A323F4C54C8C93 FOREIGN KEY (type_id) REFERENCES organization_current_account_type (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE organization_current_account ADD CONSTRAINT FK_85A323F432C8A3DE FOREIGN KEY (organization_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE organization_current_account ADD CONSTRAINT FK_85A323F411C8FB41 FOREIGN KEY (bank_id) REFERENCES Bank (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE pay_master ADD CONSTRAINT FK_A4926999C17AD9A9 FOREIGN KEY (payer_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE pay_master ADD CONSTRAINT FK_A49269999395C3F3 FOREIGN KEY (customer_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE pay_master ADD CONSTRAINT FK_A4926999B0265DC7 FOREIGN KEY (contractor_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE pay_master ADD CONSTRAINT FK_A492699981A36DD2 FOREIGN KEY (dogovor_id) REFERENCES dogovor (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE pay_master_mpk ADD CONSTRAINT FK_12F888553EBD646D FOREIGN KEY (pay_master_id) REFERENCES pay_master (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE pay_master ADD creator_id INT DEFAULT NULL;
+ALTER TABLE pay_master ADD CONSTRAINT FK_A492699961220EA6 FOREIGN KEY (creator_id) REFERENCES fos_user (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_A492699961220EA6 ON pay_master (creator_id)
+ALTER TABLE pay_master ADD current_account_id BIGINT DEFAULT NULL;
+ALTER TABLE pay_master ADD CONSTRAINT FK_A492699944D096C8 FOREIGN KEY (current_account_id) REFERENCES organization_current_account (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE INDEX IDX_A492699944D096C8 ON pay_master (current_account_id);
+INSERT INTO "public".organization_current_account_type ("name") VALUES ('Главный');
+INSERT INTO "public".organization_current_account_type ("name") VALUES ('Дополнительный');
+CREATE TABLE pay_master_mpk (pay_master_id BIGINT NOT NULL, mpk_id BIGINT NOT NULL, PRIMARY KEY(pay_master_id, mpk_id));
+CREATE INDEX IDX_12F888553EBD646D ON pay_master_mpk (pay_master_id);
+CREATE INDEX IDX_12F88855895D31C8 ON pay_master_mpk (mpk_id);
+ALTER TABLE pay_master ALTER payment_date DROP NOT NULL;
+ALTER TABLE pay_master_mpk ADD CONSTRAINT FK_12F888553EBD646D FOREIGN KEY (pay_master_id) REFERENCES pay_master (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+ALTER TABLE pay_master_mpk ADD CONSTRAINT FK_12F88855895D31C8 FOREIGN KEY (mpk_id) REFERENCES mpk (id) NOT DEFERRABLE INITIALLY IMMEDIATE
+ALTER TABLE pay_master ADD is_rejected BOOLEAN DEFAULT NULL;
+COMMENT ON COLUMN pay_master.is_rejected IS 'Статус счета (NULL (новый)|0 (принят)|1 (отклонен))'
+ALTER TABLE pay_master ADD reason TEXT DEFAULT NULL
+
+-- prod -------

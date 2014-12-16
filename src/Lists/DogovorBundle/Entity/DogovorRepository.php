@@ -494,4 +494,24 @@ class DogovorRepository extends EntityRepository
 
         return $query;
     }
+    /**
+     * Searches organization by $q
+     *
+     * @param string  $q
+     * @param integer $organizationId
+     *
+     * @return mixed[]
+     */
+    public function getSearchQuery($q, $organizationId = null)
+    {
+        $sql = $this->createQueryBuilder('d')
+            ->where('lower(d.number) LIKE :q')
+            ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%');
+        if ($organizationId) {
+            $sql->andWhere('d.customer = :organizationId')
+                ->setParameter(':organizationId', $organizationId);
+        }
+
+        return $sql->getQuery()->getResult();
+    }
 }
