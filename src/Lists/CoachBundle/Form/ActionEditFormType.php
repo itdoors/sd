@@ -33,9 +33,9 @@ class ActionEditFormType extends AbstractType
             ->add('individuals', 'text', array(
                 'mapped' => false,
                 'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field control-label col-md-3',
-                    'data-url' => $router->generate('sd_common_ajax_departments_by_city_id'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_department_by_id'),
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('sd_common_ajax_individuals_by_city_id'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_oper_department_individual'),
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 0,
                         'allowClear' => true

@@ -42,7 +42,7 @@
                         </ul>
                     </div>
                 </div>
-                <ul style="width:50%" class="list-group">
+                <ul class="list-group">
 					<li class="list-group-item">
 						{% trans %}Action type{% endtrans %} <span class="badge badge-default">
 						{{report.action.type.title}} </span>
@@ -61,11 +61,17 @@
 					</li>
 					<li class="list-group-item">
 						{% trans %}Place{% endtrans %} <span class="badge badge-warning">
-						{{report.action.department.name}} </span>
+						{{report.action.department.organization.name}}, {{ report.action.department.name }}</span>
 					</li>
 					<li class="list-group-item">
-						{% trans %}Members{% endtrans %} <span class="badge badge-info">
-						??? </span>
+                        <div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">{% trans %}Members{% endtrans %}</h3>
+							</div>
+							<div class="panel-body">
+							     <p>{{ report.action.individuals | join(', ') }}</p>
+							</div>
+						</div>
 					</li>
 				</ul>
                 <div class="news-item-page" style="overflow: auto">{{ report.text | raw('html')}}</div>

@@ -302,4 +302,18 @@ class Action
     {
         return $this->individuals;
     }
+
+    /**
+     * Set individuals
+     *
+     * @param \Doctrine\Common\Collections\Collection $individuals
+     * 
+     * @return Action
+     */
+    public function setIndividuals(\Doctrine\Common\Collections\Collection $individuals)
+    {
+        $this->individuals = $individuals;
+
+        return $this;
+    }
 }

@@ -6335,17 +6335,39 @@ class AjaxController extends BaseFilterController
     {
         $cityId = $this->get('request')->query->get('cityId');
         $searchText = $this->get('request')->query->get('query');
-    
+
         $result = [];
-        $individuals = $this
-        ->getDoctrine()
-        ->getRepository('ListsIndividualBundle:Individual')
-        ->getIndividualsByCityIdQuery($searchText, $cityId);
-    
-        foreach ($individuals as $individual) {
-            $result[] = $this->serializeObject($individual);
+        $city = $this
+            ->getDoctrine()
+            ->getRepository('ListsCityBundle:City')
+            ->find($cityId);
+
+        $regionId = $city->getRegion()->getId();
+
+        $indIds = $this
+            ->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:DepartmentPeople')
+            ->getIndividualsByRegionIdQuery($searchText, $regionId);
+        
+        $i = [];
+        foreach ($indIds as $ind) {
+            $i[] = $ind['1'];
         }
-    
+// var_dump($i);die();
+        $individuals = $this
+            ->getDoctrine()
+            ->getRepository('ListsIndividualBundle:Individual')
+            ->findBy(array('id' => $i));
+
+        foreach ($individuals as $individual) {
+            $result[] = array(
+                'id' => $individual->getId(),
+                'value' => $individual->getId(),
+                'name' => $individual->__toString(),
+                'text' => $individual->__toString()
+            );
+        }
+
         return new Response(json_encode($result));
     }
 }

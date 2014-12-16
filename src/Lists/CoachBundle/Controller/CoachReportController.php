@@ -130,17 +130,25 @@ class CoachReportController extends BaseController
         $formData = $request->request->get($form->getName());
         $form->handleRequest($request);
 
-        if ($form->isValid() && isset($formData['action']['department'])) {
+        if ($form->isValid() && isset($formData['action']['department'])
+                             && isset($formData['action']['individuals'])) {
             try {
                 $user = $this->getUser();
                 $coachReport = $form->getData();
                 $action = $coachReport->getAction();
+                $indIds = explode(',', $formData['action']['individuals']);
 
                 $depRepository = $em->getRepository('ListsDepartmentBundle:Departments');
+                $indRepository = $em->getRepository('ListsIndividualBundle:Individual');
 
                 $coachReport->setAuthor($user);
                 $action->setExecutor($user);
                 $action->setDepartment($depRepository->find($formData['action']['department']));
+                $action->setIndividuals(
+                    new \Doctrine\Common\Collections\ArrayCollection(
+                        $indRepository->findBy(array('id' => $indIds))
+                    )
+                );
 
                 $em->persist($coachReport);
                 $em->flush();
@@ -183,11 +191,22 @@ class CoachReportController extends BaseController
         $form = $this->createForm('coachReportEditForm', $report);
         $request = $this->getRequest();
         $form->handleRequest($request);
+        $formData = $request->request->get($form->getName());
 
-        if ($form->isValid()) {
+        if ($form->isValid() && isset($formData['action']['individuals'])) {
             try {
                 $coachReport = $form->getData();
-                $formData = $request->request->get($form->getName());
+                $action = $coachReport->getAction();
+                $indIds = explode(',', $formData['action']['individuals']);
+
+                $depRepository = $em->getRepository('ListsDepartmentBundle:Departments');
+                $indRepository = $em->getRepository('ListsIndividualBundle:Individual');
+
+                $action->setIndividuals(
+                    new \Doctrine\Common\Collections\ArrayCollection(
+                        $indRepository->findBy(array('id' => $indIds))
+                    )
+                );
 
                 $em->persist($coachReport);
                 $em->flush();
@@ -201,7 +220,7 @@ class CoachReportController extends BaseController
 
         return $this->render('ListsCoachBundle:Report:edit.html.twig', array(
                         'report' => $report,
-                        'form' => $form->createView()
+                        'form' => $form->createView(),
         ));
     }
 

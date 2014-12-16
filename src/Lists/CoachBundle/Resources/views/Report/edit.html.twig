@@ -61,7 +61,37 @@
                     });
                     SD.select2('#' + '{{ form.vars.name }}' + '_action_topic', {
                     });
-                    SD.select2('#' + '{{ form.vars.name }}' + '_action_individuals', {
+                    $('#' + '{{ form.vars.name }}' + '_action_individuals').select2({
+                    	multiple: true,
+                    	ajax: {
+                    		url: "{{ path('sd_common_ajax_individuals_by_city_id') }}",
+                            dataType: 'json',
+                    		data: function (term, page) {
+                                return {
+                                	cityId: {{ report.action.department.city.id }},
+                                    query: term,
+                                    q: term
+                                };
+                    		},
+                    		results: function (data, page) {
+                                return {
+                                    results: data
+                                };
+                            }
+                    	},
+//                     	initSelection: function (element, callback) {
+//                            var id = {{ indIds | join(',') }};
+//                             if (id !== "") {
+//                                $.ajax("{{ path('sd_common_ajax_oper_department_individual') }}", {
+//                                     data: {
+//                                         id: id
+//                                     },
+//                                     dataType: "json"
+//                                 }).done(function (data) {
+//                                         callback(data)
+//                                     });
+//                             }
+//                         }
                     });
                     $('.itdoors-date-picker').datepicker({
                         rtl: Metronic.isRTL(),
@@ -170,7 +200,7 @@
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Members{% endtrans %}</label>
                     <div class="col-md-9">
-                        {{ form_widget(form.action.individuals, {'attr' : {'class' : 'form-control', 'disabled' : 'disabled', 'placeholder': "Members" | trans}}) }}
+                        {{ form_widget(form.action.individuals, {'attr' : {'class' : 'form-control', 'placeholder': "Members" | trans}}) }}
                         {% if form.action.individuals.vars.errors|length %}{{ form_errors(form.action.individuals) }}{% endif %}
                     </div>
                 </div>

@@ -26,6 +26,7 @@ Lists\CoachBundle\Entity\Action:
                 inverseJoinColumns:
                     individual_id:
                         referencedColumnName: id
+            orphanremoval: true
     manyToOne:
         executor:
             targetEntity: SD\UserBundle\Entity\User

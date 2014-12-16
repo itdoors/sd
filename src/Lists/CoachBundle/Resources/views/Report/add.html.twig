@@ -62,8 +62,6 @@
                     });
                     SD.select2('#' + '{{ form.vars.name }}' + '_action_topic', {
                     });
-                    SD.select2('#' + '{{ form.vars.name }}' + '_action_individuals', {
-                    });
                     $('#' + '{{ form.vars.name }}' + '_action_department').prop( "disabled", true );
                     $('#' + '{{ form.vars.name }}' + '_action_individuals').prop( "disabled", true );
                     $('#' + '{{ form.vars.name }}' + '_city').on("change", function(event){
@@ -73,11 +71,31 @@
                      	   $('#' + '{{ form.vars.name }}' + '_action_individuals').prop( "disabled", true );
                      	} else {
                      	   $('#' + '{{ form.vars.name }}' + '_action_department').prop( "disabled", false );
+                     	   $('#' + '{{ form.vars.name }}' + '_action_individuals').prop( "disabled", false );
                          };
                          
                     	$('#' + '{{ form.vars.name }}' + '_action_department').select2({
                         	ajax: {
                         		url: "{{ path('sd_common_ajax_departments_by_city_id') }}",
+                                dataType: 'json',
+                        		data: function (term, page) {
+                                    return {
+                                    	cityId: cityId,
+                                        query: term,
+                                        q: term
+                                    };
+                        		},
+                        		results: function (data, page) {
+                                    return {
+                                        results: data
+                                    };
+                                }
+                        	}
+                        });
+                    	$('#' + '{{ form.vars.name }}' + '_action_individuals').select2({
+                        	multiple: true,
+                        	ajax: {
+                        		url: "{{ path('sd_common_ajax_individuals_by_city_id') }}",
                                 dataType: 'json',
                         		data: function (term, page) {
                                     return {
@@ -228,7 +246,7 @@
                 <div class="form-group">
                     <label class="required control-label col-md-3">{% trans %}Members{% endtrans %}</label>
                     <div class="col-md-9">
-                        {{ form_widget(form.action.individuals, {'attr' : {'class' : 'form-control', 'placeholder': "Members" | trans}}) }}
+                        {{ form_widget(form.action.individuals, {'attr' : {'placeholder': "Members" | trans}}) }}
                         {% if form.action.individuals.vars.errors|length %}{{ form_errors(form.action.individuals) }}{% endif %}
                     </div>
                 </div>

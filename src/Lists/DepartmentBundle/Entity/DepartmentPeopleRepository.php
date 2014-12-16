@@ -254,4 +254,30 @@ class DepartmentPeopleRepository extends EntityRepository
 
         return $sql->getResult();
     }
+
+    /**
+     * getIndividualsByRegionIdQuery
+     *
+     * @param string $searchText
+     * @param int    $cityId
+     *
+     * @return array
+     */
+    public function getIndividualsByRegionIdQuery($searchText, $regionId)
+    {
+        $sql = $this->createQueryBuilder('dp')
+            ->select('IDENTITY(dp.individual)')
+            ->join('dp.individual', 'i')
+            ->join('dp.department', 'd')
+            ->leftJoin('d.city', 'c')
+            ->join('c.region', 'r')
+            ->where('lower(dp.name) LIKE :q')
+
+            ->andWhere('r.id = :regionId')
+
+            ->setParameter(':regionId', $regionId)
+            ->setParameter(':q', '%' . mb_strtolower($searchText, 'UTF-8') . '%');
+
+        return $sql->getQuery()->getResult();
+    }
 }
