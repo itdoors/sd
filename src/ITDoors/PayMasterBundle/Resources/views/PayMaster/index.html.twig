@@ -1,0 +1,74 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ITDoorsPayMasterBundle' %}
+{% block title %}{% trans %}List of accounts{% endtrans %} {% endblock %}
+{% block page_title %}
+<h3 class="page-title">
+        {% trans %}Accounts{% endtrans %} <small>{% trans %}List of accounts{% endtrans %}</small>
+</h3>
+{% endblock %}
+
+{% block page_breadcrumbs %}
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+         <i class="fa fa-home"></i>
+         <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+    </li>
+    <li>
+        <a href="" title="{% trans %}Accounts{% endtrans %}">{% trans %}Accounts{% endtrans %}</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="tabbable tabbable-custom boxless">
+            <ul class="nav nav-tabs" id="ajax_tabs">
+                <li class="active"><a href="#tab_0" data-block="tab_content" data-toggle="tab">{% trans %}New{% endtrans %}</a></li>
+                <li><a href="#tab_1" data-toggle="tab">{% trans %}Urgent{% endtrans %}</a></li>
+                <li><a href="#tab_2" data-toggle="tab">{% trans %}On payment{% endtrans %}</a></li>
+                <li><a href="#tab_3" data-toggle="tab">{% trans %}Sponsored{% endtrans %}</a></li>
+                <li><a href="#tab_4" data-toggle="tab">{% trans %}Rejected{% endtrans %}</a></li>
+            </ul>
+            <div class="tab-content" id="tab_content">
+                <div class="tab-pane active" id="tab_0">
+                    {% if access.canAdd   %}    
+                        <a class="btn btn-circle green" href="{{ path('it_doors_pay_master_new') }}">{% trans %}Add new account{% endtrans %}</a>
+                    {% endif %}
+                    <div class="tab-content" id="table_tab_new" data-url="{{ url('it_doors_pay_master_tab', {tab: 'new'}) }}">
+                        {{ render(controller('ITDoorsPayMasterBundle:PayMaster:tab', {tab: 'new'})) }}
+                   </div>
+                </div>
+                <div class="tab-pane" id="tab_1">
+                    <div class="tab-content" id="table_tab_urgent" data-url="{{ url('it_doors_pay_master_tab', {tab: 'urgent'}) }}">
+                        {{ render(controller('ITDoorsPayMasterBundle:PayMaster:tab', {tab: 'urgent'})) }}
+                   </div>
+                </div>
+                <div class="tab-pane" id="tab_2">
+                    <div class="tab-content" id="table_tab_payment" data-url="{{ url('it_doors_pay_master_tab', {tab: 'payment'}) }}">
+                         {{ render(controller('ITDoorsPayMasterBundle:PayMaster:tab', {tab: 'payment'})) }}
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab_3">
+                    <div class="tab-content" id="table_tab_sponsored" data-url="{{ url('it_doors_pay_master_tab', {tab: 'sponsored'}) }}">
+                        {{ render(controller('ITDoorsPayMasterBundle:PayMaster:tab', {tab: 'sponsored'})) }}
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab_4">
+                    <div class="tab-content" id="table_tab_rejected" data-url="{{ url('it_doors_pay_master_tab', {tab: 'rejected'}) }}">
+                        {{ render(controller('ITDoorsPayMasterBundle:PayMaster:tab', {tab: 'rejected'})) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}

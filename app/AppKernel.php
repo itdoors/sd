@@ -60,6 +60,7 @@ class AppKernel extends Kernel
             new Main\ErrorBundle\MainErrorBundle(),
             new Main\FilterBundle\MainFilterBundle(),
             new ITDoors\GeoBundle\ITDoorsGeoBundle(),
+            new ITDoors\PayMasterBundle\ITDoorsPayMasterBundle(),
             new Lists\CoachBundle\ListsCoachBundle()
         );
 

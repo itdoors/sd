@@ -1,7 +1,11 @@
+it_doors_pay_master:
+    resource: "@ITDoorsPayMasterBundle/Resources/config/routing.yml"
+    prefix:   /
+
 lists_coach:
     resource: "@ListsCoachBundle/Resources/config/routing.yml"
     prefix:   /
-    
+
 it_doors_geo:
     resource: "@ITDoorsGeoBundle/Resources/config/routing.yml"
     prefix:   /

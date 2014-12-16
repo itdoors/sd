@@ -1,0 +1,210 @@
+{% extends "::base.html.twig" %}
+{% trans_default_domain 'ITDoorsPayMasterBundle' %}
+{% form_theme form 'ITDoorsCommonBundle:Form:fields.html.twig' %}
+{% block title %}{% trans %}Add account{% endtrans %} {% endblock %}
+{% block page_title %}
+<h3 class="page-title">
+        {% trans %}Account{% endtrans %} <small>{% trans %}Adding new account{% endtrans %}</small>
+</h3>
+{% endblock %}
+
+{% block page_breadcrumbs %}
+<ul class="page-breadcrumb breadcrumb">
+    <li>
+         <i class="fa fa-home"></i>
+         <a href="{{ path('sd_dashboard_homepage') }}" title="{% trans %}Dashboard{% endtrans %}">{% trans %}Dashboard{% endtrans %}</a>
+    </li>
+    <li>
+        <a href="{{ path('it_doors_pay_master_index') }}" title="{% trans %}Accounts{% endtrans %}">{% trans %}Accounts{% endtrans %}</a>
+    </li>
+    <li>
+        <a href="" title="{% trans %}Adding new account{% endtrans %}">{% trans %}Adding new account{% endtrans %}</a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block css_page_level_plugin %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/css/datepicker.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/jquery-file-upload/css/style.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/jquery-file-upload/css/jquery.fileupload.css')}}"/>
+{% endblock %}
+
+{% block js_page_level_plugins %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-datepicker/js/locales/bootstrap-datepicker.ru.js')}} "></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-file-upload/js/vendor/jquery.ui.widget.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-file-upload/js/jquery.iframe-transport.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/jquery-file-upload/js/jquery.fileupload.js')}}"></script>
+    <script src="{{ asset('metronic/assets/global/plugins/zoom/jquery.zoom.min.js')}}" type="text/javascript"></script>
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        {% if form.vars.valid == false %}
+            <div class="alert alert-danger">
+                <button class="close" data-close="alert"></button>
+                {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                {{ form_errors(form) }}
+            </div>
+        {% endif %}
+        <div class="portlet-body form">
+            {{ form_start(form, {
+                    'action' : path('it_doors_pay_master_new'),
+                    'attr' : {
+                    'method' : 'POST',
+                }
+            }) }}
+            <h3 class="form-section">{% trans %}Adding new account{% endtrans%}</h3>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <div class="form-group col-md-12{% if form.scan.vars.errors|length %} has-error{% endif %}">
+                            <span class="btn btn-success fileinput-button" style="width:100%">
+                                <i class="glyphicon glyphicon-plus"></i>
+                                <span>{% trans %}Upload new document{% endtrans %}</span>
+                            {{ form_widget(form.scan, {'attr' : {'class' : 'form-control', 'placeholder': "Select scan"} }) }}
+                            </span>
+                            <div id="aimgPrev" style="width: 100%;height:100%;display:none;"></div>
+                            <script>
+                                $(document).ready(function(){
+                               
+                                    $(function () {
+                                        $('#payMasterNewForm_scan').fileupload({
+                                            replaceFileInput: false,
+                                            dataType: 'json',
+                                            fail: function (e, data) {},
+                                            done: function (e, data) {},
+                                            add: function (e, data) {
+                                                var 
+                                                    f = data.files[0], // Первый выбранный файл
+                                                    reader = new FileReader;
+                                                reader.readAsDataURL(f);
+                                                reader.onload = function(e) { // Как только картинка загрузится
+
+                                                  if (f.type == 'application/pdf') {
+                                                      $('#aimgPrev').show().html('<object data="'+e.target.result+'" type="application/pdf" width="100%" height="500px"></object>');
+                                                  } else if (f.type == 'image/jpeg') {
+                                                      $('#aimgPrev').show()
+                                                              .html('<img id="imfsdf" src="'+e.target.result+'" style="width: 100%">');
+                                                      $("#aimgPrev").zoom({
+                                                            url: e.target.result,
+                                                            magnify: 1
+                                                      });
+                                                  } else {
+                                                      alert('{% trans %}This file is not a valid PDF or JPEG{% endtrans %}');
+                                                  }
+                                                };
+                                            }
+                                            }).prop('disabled', !$.support.fileInput)
+                                            .parent().addClass($.support.fileInput ? undefined : 'disabled');
+                                    });
+                                });
+                            </script>
+                            
+                            {{ form_errors(form.scan) }}
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <div class="row">
+                            
+                            <div class="form-group col-md-6{% if form.invoiceDate.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.invoiceDate, 'Date invoice', {'attr': {'class': 'control-label'} }) }}
+                                {{ form_widget(form.invoiceDate, {'attr' : {'class' : 'form-control', 'placeholder': "Date invoice"} }) }}
+                                {{ form_errors(form.invoiceDate) }}
+                            </div>
+
+                            <div class="form-group col-md-6{% if form.expectedDate.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.expectedDate, 'Date expected', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.expectedDate, {'attr' : {'class' : 'form-control', 'placeholder': "Date expected"} }) }}
+                                {{ form_errors(form.expectedDate) }}
+                            </div>
+                            <div class="form-group  col-md-12{% if form.payer.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.payer, 'Payer'|trans, {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.payer, {'attr': {'class': 'form-control', 'required':'required' } }) }}
+                                {{ form_errors(form.payer) }}
+                            </div>
+                            <div class="form-group  col-md-12{% if form.customer.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.customer, 'Customer'|trans, {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.customer, {'attr': {'class': 'form-control' } }) }}
+                                {{ form_errors(form.customer) }}
+                            </div>
+                            <div class="form-group  col-md-4{% if form.contractor.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.contractor, 'Contractor'|trans, {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.contractor, {'attr': {'class': 'form-control', 'placeholder': 'Enter contractor'|trans(), } }) }}
+                                {{ form_errors(form.contractor) }}
+                            </div>
+                            <div class="form-group  col-md-4{% if form.dogovor.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.dogovor, 'Dogovor'|trans, {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.dogovor, {'attr': {'class': 'form-control' } }) }}
+                                {{ form_errors(form.dogovor) }}
+                            </div>
+                            <div class="form-group  col-md-2">
+                                {{ form_label(form.delay, 'Delay'|trans, {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.delay, {'attr': {'class': 'form-control' } }) }}
+                                {{ form_errors(form.delay) }}
+                            </div>
+                            <div class="form-group  col-md-2">
+                                {{ form_label(form.dogovorFile, 'File', {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.dogovorFile, {'attr': {'class': 'form-control' } }) }}
+                                {{ form_errors(form.dogovorFile) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group  col-md-4{% if form.currentAccount.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.currentAccount, 'Current account'|trans, {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.currentAccount, {'attr': {'class': 'form-control', 'placeholder': 'Enter current account'|trans(), } }) }}
+                                {{ form_errors(form.currentAccount) }}
+                            </div>
+                            <div class="form-group  col-md-4{% if form.mfo.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.mfo, 'MFO'|trans, {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.mfo, {'attr': {'class': 'form-control', 'placeholder': 'Enter mfo'|trans(), } }) }}
+                                {{ form_errors(form.mfo) }}
+                            </div>
+                            <div class="form-group  col-md-4{% if form.bank.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.bank, 'Bank'|trans, {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.bank, {'attr': {'class': 'form-control', 'placeholder': 'Enter bank'|trans(), } }) }}
+                                {{ form_errors(form.bank) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group  col-md-12{% if form.mpks.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.mpks, 'MPK'|trans, {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.mpks, {'attr': {'class': 'form-control', 'placeholder': 'Enter mpk'|trans(), } }) }}
+                                {{ form_errors(form.mpks) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group  col-md-6{% if form.invoiceAmount.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.invoiceAmount, 'Invoice amount'|trans, {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.invoiceAmount, {'attr': {'class': 'form-control', 'placeholder': 'Enter invoice amount'|trans(), } }) }}
+                                {{ form_errors(form.invoiceAmount) }}
+                            </div>
+                            <div class="form-group  col-md-6{% if form.vat.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.vat, 'VAT'|trans, {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.vat, {'attr': {'class': 'form-control', 'placeholder': 'Enter vat'|trans(), } }) }}
+                                {{ form_errors(form.vat) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group  col-md-12{% if form.description.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.description, 'Description'|trans, {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Enter description'|trans(), } }) }}
+                                {{ form_errors(form.description) }}
+                            </div>
+                        </div>
+                    
+                        <div class="form-actions">
+                            {{ form_widget(form.create, { 'label': 'Save', 'attr': {'class': 'btn blue'} } ) }}
+                        </div>
+                    {{ form_end(form) }}
+            
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
