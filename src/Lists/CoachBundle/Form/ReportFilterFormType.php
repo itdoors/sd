@@ -39,7 +39,7 @@ class ReportFilterFormType extends AbstractType
             ->add('author', 'text', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url' => $router->generate('sd_common_ajax_user_fio'),
+                    'data-url' => $router->generate('lists_coach_ajax_coach_list'),
                     'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 0,
@@ -47,7 +47,7 @@ class ReportFilterFormType extends AbstractType
                         'width' => '200px',
                         'multiple' => 'multiple'
                     )),
-                    'disabled' => true,
+//                     'disabled' => true,
                     'placeholder' => $translator->trans("Autor", array(), 'ListsCoachBundle.ru'),
                 )
             ))

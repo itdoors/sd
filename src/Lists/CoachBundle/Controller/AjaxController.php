@@ -255,4 +255,40 @@ class AjaxController extends BaseController
 
         return new JsonResponse();
     }
+
+    /**
+     * Returns json list of coaches, authored any report
+     * 
+     * @return JsonResponse
+     */
+    public function coachListAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $coachReportRepository = $this->getDoctrine()
+            ->getRepository('ListsCoachBundle:CoachReport');
+        $userRepository = $this->getDoctrine()
+            ->getRepository('SDUserBundle:User');
+
+        $coachIds = $coachReportRepository->getAuthors($searchText);
+
+        $i = [];
+        foreach ($coachIds as $coachId) {
+            $i[] = $coachId['1'];
+        }
+
+        $coaches = $userRepository->findBy(array('id' => $i));
+
+        $result = [];
+        foreach ($coaches as $coach) {
+            $result[] = array(
+                'id' => $coach->getId(),
+                'value' => $coach->getId(),
+                'name' => $coach->__toString(),
+                'text' => $coach->__toString()
+            );
+        }
+
+        return new JsonResponse($result);
+    }
 }

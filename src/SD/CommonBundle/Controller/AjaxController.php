@@ -6395,7 +6395,6 @@ class AjaxController extends BaseFilterController
         }
 
         return new Response(json_encode($result));
-
     }
 
     /**
@@ -6418,7 +6417,7 @@ class AjaxController extends BaseFilterController
             ->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeople')
             ->getIndividualsByRegionIdQuery($searchText, $regionId);
-        
+
         $i = [];
         foreach ($indIds as $ind) {
             $i[] = $ind['1'];

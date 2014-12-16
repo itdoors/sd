@@ -77,9 +77,10 @@ class CoachReportController extends BaseController
     public function listAction()
     {
         $namespase = $this->filterNamespace;
+        $filters = $this->getFilters($namespase);
         $em = $this->getDoctrine()->getManager();
 
-        $reports = $em->getRepository('ListsCoachBundle:CoachReport')->getAll();
+        $reports = $em->getRepository('ListsCoachBundle:CoachReport')->getAll($filters);
         $entities = $reports['entity'];
         $count = $reports['count'];
 

@@ -58,6 +58,10 @@ lists_coach_ajax_set_coach:
     path:     /training/set_coach
     defaults: { _controller: ListsCoachBundle:Ajax:setCoachStatus }
     
+lists_coach_ajax_coach_list:
+    path:     /training/coach_list
+    defaults: { _controller: ListsCoachBundle:Ajax:coachList }
+    
 lists_coach_ajax_coach_regions:
     path:     /training/coach_regions
     defaults: { _controller: ListsCoachBundle:Ajax:coachRegions }

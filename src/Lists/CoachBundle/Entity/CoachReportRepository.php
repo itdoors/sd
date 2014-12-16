@@ -25,8 +25,8 @@ class CoachReportRepository extends EntityRepository
 
         $sqlCount->select('COUNT(c.id) as reportscount');
 
-//         $this->processFilters($sql, $filters);
-//         $this->processFilters($sqlCount, $filters);
+        $this->processFilters($sql, $filters);
+        $this->processFilters($sqlCount, $filters);
 
         $sql->orderBy('c.created', 'DESC');
 
@@ -36,6 +36,22 @@ class CoachReportRepository extends EntityRepository
         );
 
         return $query;
+    }
+
+    /**
+     * getAuthors
+     *
+     * @param string $searchText
+     *
+     * @return mixed[]
+     */
+    public function getAuthors($searchText)
+    {
+        $authors = $this->_em->createQuery(
+            'SELECT DISTINCT IDENTITY(r.author) FROM Lists\CoachBundle\Entity\CoachReport r'
+        )->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        return $authors;
     }
 
     /**
@@ -52,28 +68,29 @@ class CoachReportRepository extends EntityRepository
                     continue;
                 }
                 switch ($key) {
-                    case 'company':
-                        $valueArr = explode(',', $value);
+                    case 'author':
+                        $valueArr = explode(',', $value);var_dump($valueArr);die();
                         $sql->andWhere(
-                            "c.id in (:company) or c.id in
-                                (
-                                    SELECT
-                                        cc.id
-                                    FROM
-                                        ListsCompanystructureBundle:Companystructure cp
-                                    LEFT JOIN
-                                        ListsCompanystructureBundle:Companystructure cc
-                                    WHERE
-                                        cp.root = cc.root
-                                    AND
-                                        cp.lft < cc.lft
-                                    AND
-                                        cp.rgt > cc.rgt
-                                    AND
-                                        cp in (:company)
+                            "c.author in (:authors)
+//                             c.id in (:company) or c.id in
+//                                 (
+//                                     SELECT
+//                                         cc.id
+//                                     FROM
+//                                         ListsCompanystructureBundle:Companystructure cp
+//                                     LEFT JOIN
+//                                         ListsCompanystructureBundle:Companystructure cc
+//                                     WHERE
+//                                         cp.root = cc.root
+//                                     AND
+//                                         cp.lft < cc.lft
+//                                     AND
+//                                         cp.rgt > cc.rgt
+//                                     AND
+//                                         cp in (:company)
                                 )"
                         );
-                        $sql->setParameter(':company', $valueArr);
+                        $sql->setParameter(':authors', $valueArr);
                         break;
                     case 'isActive':
                         $sql->andWhere("u.locked = :active");
