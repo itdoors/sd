@@ -1,0 +1,41 @@
+ITDoors\PayMasterBundle\Entity\PayMaster:
+    properties:
+        scan:
+            - File:
+                maxSize: 1M
+                mimeTypes: [image/jpeg, application/pdf]
+                mimeTypesMessage: "This file is not a valid PDF or JPEG"
+                groups: [new]
+            - NotBlank:
+                groups: [new]
+        invoiceDate:
+            - Date:
+                groups: [new]
+            - NotBlank:
+                groups: [new]
+        expectedDate:
+            - Date:
+                groups: [new]
+            - NotBlank:
+                groups: [new]
+        payer:
+            - NotBlank:
+                groups: [new]
+        customer:
+            - NotBlank:
+                groups: [new]
+        contractor:
+            - NotBlank:
+                groups: [new]
+        dogovor:
+            - NotBlank:
+                groups: [new]
+        currentAccount:
+            - NotBlank:
+                groups: [new]
+        invoiceAmount:
+            - NotBlank:
+                groups: [new]
+        description:
+            - NotBlank:
+                groups: [new]

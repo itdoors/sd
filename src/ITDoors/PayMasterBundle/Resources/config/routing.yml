@@ -1,0 +1,22 @@
+it_doors_pay_master_index:
+    path:     /itdoors/paymaster/index
+    defaults: { _controller: ITDoorsPayMasterBundle:PayMaster:index }
+
+it_doors_pay_master_new:
+    path:     /itdoors/paymaster/new
+    defaults: { _controller: ITDoorsPayMasterBundle:PayMaster:new }
+
+it_doors_pay_master_tab:
+    path:     /itdoors/paymaster/tab/{tab}
+    defaults: { _controller: ITDoorsPayMasterBundle:PayMaster:tab }
+    requirements:
+        tab:  new|urgent|payment|sponsored|rejected
+    
+# ajaxController
+it_doors_pay_master_ajax_search_mpk_new:
+    path:     /itdoors/paymaster/ajax/search/mpk/new
+    defaults: { _controller: ITDoorsPayMasterBundle:Ajax:searchMpkNew }
+    
+it_doors_pay_master_ajax_mpk_by_ids:
+    path:     /itdoors/paymaster/ajax/mpk_by_ids
+    defaults: { _controller: ITDoorsPayMasterBundle:Ajax:mpkByIds }
