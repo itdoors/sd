@@ -5,6 +5,7 @@ namespace Lists\CoachBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query;
+use Alpha\A;
 
 /**
  * CoachReportRepository
@@ -39,6 +40,29 @@ class CoachReportRepository extends EntityRepository
     }
 
     /**
+     * getOrganizations
+     *
+     * @param string $searchText
+     *
+     * @return mixed[]
+     */
+    public function getOrganizations($searchText)
+    {
+        $organizations = $this->createQueryBuilder('c')
+            ->select('DISTINCT IDENTITY(d.organization)')
+            ->from('Lists\CoachBundle\Entity\CoachReport', 'r')
+            ->join('r.action', 'a')
+            ->join('a.department', 'd')
+            ->join('d.organization', 'o')
+            ->where('lower(o.name) LIKE :q')
+            ->setParameter(':q', '%' . $searchText . '%')
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        return $organizations;
+    }
+
+    /**
      * getAuthors
      *
      * @param string $searchText
@@ -47,11 +71,39 @@ class CoachReportRepository extends EntityRepository
      */
     public function getAuthors($searchText)
     {
-        $authors = $this->_em->createQuery(
-            'SELECT DISTINCT IDENTITY(r.author) FROM Lists\CoachBundle\Entity\CoachReport r'
-        )->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $authors = $this->createQueryBuilder('c')
+            ->select('DISTINCT IDENTITY(r.author)')
+            ->from('Lists\CoachBundle\Entity\CoachReport', 'r')
+            ->join('r.author', 'a')
+            ->where('lower(a.firstName) LIKE :q OR lower(a.lastName) LIKE :q')
+            ->setParameter(':q', '%' . $searchText . '%')
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         return $authors;
+    }
+
+    /**
+     * getCities
+     *
+     * @param string $searchText
+     *
+     * @return mixed[]
+     */
+    public function getCities($searchText)
+    {
+        $organizations = $this->createQueryBuilder('c')
+            ->select('DISTINCT IDENTITY(d.organization)')
+            ->from('Lists\CoachBundle\Entity\CoachReport', 'r')
+            ->join('r.action', 'a')
+            ->join('a.department', 'd')
+            ->join('d.city', 'cc')
+            ->where('lower(cc.name) LIKE :q')
+            ->setParameter(':q', '%' . $searchText . '%')
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        return $organizations;
     }
 
     /**
@@ -61,7 +113,7 @@ class CoachReportRepository extends EntityRepository
     * @param mixed[]      $filters
     */
     private function processFilters(QueryBuilder $sql, $filters)
-    {
+    {var_dump($filters);//die();
         if (sizeof($filters)) {
             foreach ($filters as $key => $value) {
                 if (!$value) {
@@ -69,45 +121,36 @@ class CoachReportRepository extends EntityRepository
                 }
                 switch ($key) {
                     case 'author':
-                        $valueArr = explode(',', $value);var_dump($valueArr);die();
-                        $sql->andWhere(
-                            "c.author in (:authors)
-//                             c.id in (:company) or c.id in
-//                                 (
-//                                     SELECT
-//                                         cc.id
-//                                     FROM
-//                                         ListsCompanystructureBundle:Companystructure cp
-//                                     LEFT JOIN
-//                                         ListsCompanystructureBundle:Companystructure cc
-//                                     WHERE
-//                                         cp.root = cc.root
-//                                     AND
-//                                         cp.lft < cc.lft
-//                                     AND
-//                                         cp.rgt > cc.rgt
-//                                     AND
-//                                         cp in (:company)
-                                )"
-                        );
+                        $valueArr = explode(',', $value);
+                        $sql->andWhere("c.author in (:authors)");
                         $sql->setParameter(':authors', $valueArr);
                         break;
-                    case 'isActive':
-                        $sql->andWhere("u.locked = :active");
-                        $sql->setParameter(':active', ($value == 'active' ? 0 : 1));
+                    case 'type':
+                        $valueArr = explode(',', $value);
+                        $sql->join('c.action', 'a');
+                        $sql->andWhere("a.type in (:types)");
+                        $sql->setParameter(':types', $valueArr);
                         break;
-                    case 'status':
-                        if ($value == 68) {
-                            $sql->andWhere("st.id is NULL or st.id = :status");
-                        } else {
-                            $sql->andWhere("st.id = :status");
-                        }
-                        $sql->setParameter(':status', $value);
+                    case 'topic':
+                        $valueArr = explode(',', $value);
+                        $sql->join('c.action', 'aa');
+                        $sql->andWhere("aa.topic in (:topics)");
+                        $sql->setParameter(':topics', $valueArr);
                         break;
-                    default:
-                        $sql->andWhere("u.id IN (:userIds)");
-                        $ids = explode(',', $value);
-                        $sql->setParameter(':userIds', $ids);
+                    case 'organization':
+                        $valueArr = explode(',', $value);
+                        $sql->join('c.action', 'aaa');
+                        $sql->join('aaa.department', 'd');
+                        $sql->andWhere("d.organization in (:organizations)");
+                        $sql->setParameter(':organizations', $valueArr);
+                        break;
+                    case 'city':
+                        $valueArr = explode(',', $value);
+                        $sql->join('c.action', 'aaaa');
+                        $sql->join('aaaa.department', 'dd');
+                        $sql->andWhere("dd.city in (:cities)");
+                        $sql->setParameter(':cities', $valueArr);
+                        break;
                 }
             }
         }

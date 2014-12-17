@@ -9,3 +9,22 @@
             </div>
         </div>
     </div>
+    
+    <script>
+        $(document).ready(function(){
+        	$('.itdoors-date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                autoclose: true,
+                clearBtn: true,
+                format: "dd.mm.yyyy",
+                pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+                language: 'ru',
+                startView: 'decade',
+                weekStart: 1
+            });
+        	$('.itdoors-date-picker').css('width', 200);
+        	$('#reportFilterForm_reset').click(function() {
+        		$('.itdoors-date-picker').val(null);
+        	});
+        });
+    </script>

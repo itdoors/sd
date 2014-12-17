@@ -30,7 +30,38 @@ class AjaxController extends BaseController
         foreach ($actionTopics as $actionTopic) {
             $result[] = [
                 'id' => $actionTopic->getId(),
-                'title' => $actionTopic->getTitle()
+                'value' => $actionTopic->getId(),
+                'title' => $actionTopic->getTitle(),
+                'text' => $actionTopic->getTitle()
+            ];
+        }
+
+        return new JsonResponse($result);
+    }
+
+    /**
+     * Returns action topics by ids
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function actionTopicsByIdsAction(Request $request)
+    {
+        $ids = explode(',', $request->query->get('id'));
+
+        $actionTopics = $this
+            ->getDoctrine()
+            ->getRepository('ListsCoachBundle:ActionTopic')
+            ->findBy(array('id' => $ids));
+
+        $result = [];
+        foreach ($actionTopics as $actionTopic) {
+            $result[] = [
+                            'id' => $actionTopic->getId(),
+                            'value' => $actionTopic->getId(),
+                            'title' => $actionTopic->getTitle(),
+                            'text' => $actionTopic->getTitle()
             ];
         }
 
@@ -109,7 +140,38 @@ class AjaxController extends BaseController
         foreach ($actionTypes as $actionType) {
             $result[] = [
                 'id' => $actionType->getId(),
-                'title' => $actionType->getTitle()
+                'value' => $actionType->getId(),
+                'title' => $actionType->getTitle(),
+                'text' => $actionType->getTitle()
+            ];
+        }
+
+        return new JsonResponse($result);
+    }
+
+    /**
+     * Returns action types by ids
+     * 
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function actionTypesByIdsAction(Request $request)
+    {
+        $ids = explode(',', $request->query->get('id'));
+
+        $actionTypes = $this
+            ->getDoctrine()
+            ->getRepository('ListsCoachBundle:ActionType')
+            ->findBy(array('id' => $ids));
+
+        $result = [];
+        foreach ($actionTypes as $actionType) {
+            $result[] = [
+                'id' => $actionType->getId(),
+                'value' => $actionType->getId(),
+                'title' => $actionType->getTitle(),
+                'text' => $actionType->getTitle()
             ];
         }
 
@@ -257,7 +319,7 @@ class AjaxController extends BaseController
     }
 
     /**
-     * Returns json list of coaches, authored any report
+     * Returns json list of users, authored at least one report
      * 
      * @return JsonResponse
      */
@@ -286,6 +348,78 @@ class AjaxController extends BaseController
                 'value' => $coach->getId(),
                 'name' => $coach->__toString(),
                 'text' => $coach->__toString()
+            );
+        }
+
+        return new JsonResponse($result);
+    }
+
+    /**
+     * Returns json list of organizations
+     *
+     * @return JsonResponse
+     */
+    public function organizationListAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $coachReportRepository = $this->getDoctrine()
+            ->getRepository('ListsCoachBundle:CoachReport');
+        $organizationRepository = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Organization');
+
+        $organizationIds = $coachReportRepository->getOrganizations($searchText);
+
+        $i = [];
+        foreach ($organizationIds as $organizationId) {
+            $i[] = $organizationId['1'];
+        }
+
+        $organizations = $organizationRepository->findBy(array('id' => $i));
+
+        $result = [];
+        foreach ($organizations as $organization) {
+            $result[] = array(
+                            'id' => $organization->getId(),
+                            'value' => $organization->getId(),
+                            'name' => $organization->getName(),
+                            'text' => $organization->getName()
+            );
+        }
+
+        return new JsonResponse($result);
+    }
+
+    /**
+     * Returns json list of cities
+     *
+     * @return JsonResponse
+     */
+    public function cityListAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $coachReportRepository = $this->getDoctrine()
+            ->getRepository('ListsCoachBundle:CoachReport');
+        $cityRepository = $this->getDoctrine()
+            ->getRepository('ListsCityBundle:City');
+
+        $cityIds = $coachReportRepository->getCities($searchText);
+
+        $i = [];
+        foreach ($cityIds as $cityId) {
+            $i[] = $cityId['1'];
+        }
+
+        $cities = $cityRepository->findBy(array('id' => $i));
+
+        $result = [];
+        foreach ($cities as $city) {
+            $result[] = array(
+                            'id' => $city->getId(),
+                            'value' => $city->getId(),
+                            'name' => $city->getName(),
+                            'text' => $city->getName()
             );
         }
 

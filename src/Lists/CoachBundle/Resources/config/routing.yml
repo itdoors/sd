@@ -3,8 +3,8 @@ lists_coach_index:
     defaults: { _controller: ListsCoachBundle:CoachReport:index }
     
 lists_coach_report_showtabs:
-    path:     /training/show/tabs
-    defaults: { _controller: ListsCoachBundle:CoachReport:showtabs }
+    path:     /training/show/tabs/{tab}
+    defaults: { _controller: ListsCoachBundle:CoachReport:showtabs, tab: reports }
 
 lists_coach_report_list:
     path:     /training/reports
@@ -34,6 +34,10 @@ lists_coach_ajax_action_topics:
     path:     /training/action_topics
     defaults: { _controller: ListsCoachBundle:Ajax:actionTopics }
     
+lists_coach_ajax_action_topics_by_ids:
+    path:     /training/action_topic_by_id
+    defaults: { _controller: ListsCoachBundle:Ajax:actionTopicsByIds }
+    
 lists_coach_ajax_action_topic_edit:
     path:     /training/action_topic_edit
     defaults: { _controller: ListsCoachBundle:Ajax:editTopic }
@@ -45,6 +49,10 @@ lists_coach_ajax_action_topic_delete:
 lists_coach_ajax_action_types:
     path:     /training/action_types
     defaults: { _controller: ListsCoachBundle:Ajax:actionTypes }
+    
+lists_coach_ajax_action_types_by_ids:
+    path:     /training/action_type_by_id
+    defaults: { _controller: ListsCoachBundle:Ajax:actionTypesByIds }
     
 lists_coach_ajax_action_type_edit:
     path:     /training/action_type_edit
@@ -69,3 +77,11 @@ lists_coach_ajax_coach_regions:
 lists_coach_ajax_coach_save_regions:
     path:     /training/coach_save_regions
     defaults: { _controller: ListsCoachBundle:Ajax:coachSaveRegions }
+    
+lists_coach_ajax_organization_list:
+    path:     /training/organization_list
+    defaults: { _controller: ListsCoachBundle:Ajax:organizationList }
+    
+lists_coach_ajax_city_list:
+    path:     /training/city_list
+    defaults: { _controller: ListsCoachBundle:Ajax:cityList }
