@@ -696,6 +696,7 @@ class User extends BaseUser
      * Set userPosition
      *
      * @param \SD\UserBundle\Entity\Position $userPosition
+     *
      * @return User
      */
     public function setUserPosition(\SD\UserBundle\Entity\Position $userPosition = null)

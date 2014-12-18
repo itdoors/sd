@@ -76,6 +76,8 @@
                                         $('#payMasterNewForm_scan').fileupload({
                                             replaceFileInput: false,
                                             dataType: 'json',
+                                            maxFileSize: 100000,
+                                            acceptFileTypes: /(\.|\/)(pdf|jpeg)$/i,
                                             fail: function (e, data) {},
                                             done: function (e, data) {},
                                             add: function (e, data) {

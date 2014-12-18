@@ -34,12 +34,13 @@ class Position
      * Set name
      *
      * @param string $name
+     *
      * @return Position
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 

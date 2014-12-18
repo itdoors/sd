@@ -71,8 +71,10 @@ class HandlingMessageFormType extends AbstractType
                 'mapped' => false
             ))
             ->add('filename')
-            ->add('file', 'file', array(
-                'required' => false
+            ->add('files', 'file', array(
+                'required' => false,
+                'multiple' => true,
+                'mapped' => false
             ))
             ->add('handling_id', 'hidden')
             ->add('mindate', 'hidden', array(
