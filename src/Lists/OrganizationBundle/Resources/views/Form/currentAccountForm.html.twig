@@ -1,0 +1,73 @@
+{% form_theme form 'ITDoorsCommonBundle:Form:fields.html.twig' %}
+{% trans_default_domain 'ListsOrganizationBundle' %}
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">{% trans %}New bank{% endtrans %}</h4>
+        </div>
+        <div class="modal-body">
+            <div class="row ">
+                
+                {% if form.vars.valid is sameas(false) %}
+                    <div class="form-group col-md-12">
+                        <div class="alert alert-danger">
+                            <button class="close" data-close="alert"></button>
+                            {% trans from 'messages' %}You have some form errors. Please check below.{% endtrans %}
+                            {{ form_errors(form) }}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {{ form_start(form, {
+                    'action' : path('it_doors_ajax_form'),
+                    'attr' : {
+                    'method' : 'POST',
+                    'class' : 'itdoors-ajax-form',
+                    'novalidate': 'novalidate'
+                }
+                }) }}
+                <div class="form-body">
+                    <div class="col-md-12">
+                        <div class="form-group{% if form.organization.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.organization, 'Organization', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.organization, {'attr' : {'class' : 'form-control', 'placeholder': "Enter organization"} }) }}
+                            {{ form_errors(form.organization) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group{% if form.name.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.name, 'Current account', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.name, {'attr' : {'class' : 'form-control', 'placeholder': "Enter current account"} }) }}
+                            {{ form_errors(form.name) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group{% if form.typeAccount.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.typeAccount, 'Type account', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.typeAccount, {'attr' : {'class' : 'form-control', 'placeholder': "Select type account"} }) }}
+                            {{ form_errors(form.typeAccount) }}
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group{% if form.bank.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.bank, 'Bank', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.bank, {'attr' : {'class' : 'form-control', 'placeholder': "Enter name or mfo"} }) }}
+                            {{ form_errors(form.bank) }}
+                        </div>
+                    </div>
+                        
+                    <div class="col-md-12">
+                        <div class="form-actions">
+                            {{ form_widget(form.submit, { 'label': 'Save'|trans({}, 'messages'), 'attr': {'class': 'btn blue'} } ) }}
+                            {{ form_widget(form.cancel, { 'label': 'Cancel'|trans({}, 'messages'), 'attr': {'class': 'btn default itdoors-form-cancel-btn', 'data-dismiss' : 'modal'} } ) }}
+                        </div>
+
+                        <input type="hidden" name="params" class="params-hidden" value="{{ params }}">
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>

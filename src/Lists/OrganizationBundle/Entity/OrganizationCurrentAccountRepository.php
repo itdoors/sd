@@ -44,6 +44,7 @@ class OrganizationCurrentAccountRepository extends EntityRepository
         $sql = $this->createQueryBuilder('a')
             ->select('b.mfo')
             ->addSelect('b.name')
+            ->addSelect('b.id')
             ->innerJoin('a.bank', 'b')
             ->where('a.organization = :organizationId')
             ->setParameter(':organizationId', $organizationId)

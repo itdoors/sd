@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
 class BankRepository extends EntityRepository
 {
     /**
-     * Searches organization by $q
+     * Searches bank by $q
      *
      * @param string  $q
      * @param string  $field
@@ -22,10 +22,33 @@ class BankRepository extends EntityRepository
      */
     public function getSearchQuery($q, $field)
     {
-        $sql = $this->createQueryBuilder('b')
-            ->where('lower(:field) LIKE :q')
+        $sql = $this->createQueryBuilder('b');
+
+        $sql->where( $sql->expr()->like('lower(:field)', ':q'))
             ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%')
             ->setParameter(':field', $field);
+
+        return $sql->getQuery()->getResult();
+    }
+    /**
+     * Searches bank by $q
+     *
+     * @param string  $q
+     *
+     * @return mixed[]
+     */
+    public function getSearchNameAndMfoQuery($q)
+    {
+        $sql = $this->createQueryBuilder('b');
+
+        $sql->where(
+            $sql->expr()->orX(
+                $sql->expr()->like('lower(b.name)', ':q'),
+                $sql->expr()->like('lower(b.mfo)', ':q')
+            )
+        )
+        ->setParameter(':q', '%' . mb_strtolower($q, 'UTF-8') . '%')
+        ->groupBy('b.id');
 
         return $sql->getQuery()->getResult();
     }

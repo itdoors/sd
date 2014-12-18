@@ -6,6 +6,8 @@ use Symfony\Component\DependencyInjection\Container;
 use Lists\OrganizationBundle\Entity\Organization;
 use SD\UserBundle\Entity\User;
 use Lists\OrganizationBundle\Classes\OrganizationAccessFactory;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * OrganizationService class
@@ -64,5 +66,47 @@ class OrganizationService
         }
 
         return OrganizationAccessFactory::createAccess($role);
+    }
+    /**
+     * Add form defaults depending on defaults)
+     *
+     * @param Form    $form
+     * @param mixed[] $defaults
+      * 
+      * @return Form $form
+     */
+    public function currentAccountFormDefaults(Form $form, $defaults)
+    {
+        /** @var EntityManager $em */
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        $organizationId = (int) $defaults['organizationId'];
+        $dorganization = $em->getRepository('ListsOrganizationBundle:Organization')->find($organizationId);
+
+        $form
+            ->add('organizationId', 'hidden', array(
+                'mapped' => false
+            ))
+            ->add('organization', 'entity', array(
+                'class'=>'Lists\OrganizationBundle\Entity\Organization',
+                'empty_value' => '',
+                'required' => true,
+                'disabled' => true,
+                'data' => $dorganization
+            ));
+    }
+    /**
+     * Save form
+     *
+     * @param Form    $form
+     * @param Request $request
+     * @param mixed[] $params
+     */
+    public function saveCurrentAccountForm(Form $form, Request $request, $params)
+    {
+        $currentAccount = $form->getData();
+        /** @var EntityManager $em */
+        $em = $this->container->get('doctrine.orm.entity_manager');
+        $em->persist($currentAccount);
+        $em->flush();
     }
 }

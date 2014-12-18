@@ -491,6 +491,7 @@ class OrganizationController extends BaseController
             ->getBanks($id);
 
         return $this->render('ListsOrganizationBundle:Organization:Tab/bankList.html.twig', array(
+            'organizationId' => $id,
             'banks' => $banks
         ));
     }

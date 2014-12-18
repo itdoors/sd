@@ -1,30 +1,31 @@
 {% trans_default_domain 'ListsOrganizationBundle' %}
 
-<a class="btn green" id="department-add-btn" href="#" data-toggle="modal">
+<div class="btn-group margin-bottom-20">
+<a class="btn green" id="currentAccount-add-btn" href="#" data-toggle="modal">
     <i class="fa fa-plus"></i>
     {% trans %}Add bank{% endtrans %}
 </a>
     {{ ajax_form_render_btn({
-       'selector' : '#bank-add-btn',
-       'formType' : 'bankForm',
+       'selector' : '#currentAccount-add-btn',
+       'formType' : 'currentAccountForm',
        'successFunctions' : {
            'bank_list' : 'ITDoorsAjax.updateList'
        },
        'serviceDefault' : {
            'alias' : 'lists_organization.service',
-           'method' : 'addBankFormDefaults'
+           'method' : 'currentAccountFormDefaults'
        },
        'serviceSave' : {
            'alias' : 'lists_organization.service',
-           'method' : 'saveBankForm'
+           'method' : 'saveCurrentAccountForm'
        },
        'defaults' : {
            'organizationId' : organization.id
        },
-       'target' : '#form_modal_bank',
-       'html' : 'ListsOrganizationBundle:Form:bankForm.html.twig'
+       'target' : '#form_modal_currentAccount',
+       'html' : 'ListsOrganizationBundle:Form:currentAccountForm.html.twig'
    }) }}
-<div id="form_modal_bank" class="modal" role="basic" aria-hidden="true">
+<div id="form_modal_currentAccount" class="modal" role="basic" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -37,3 +38,5 @@
         </div>
     </div>
 </div>
+</div>
+
