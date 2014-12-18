@@ -109,12 +109,6 @@ class PayMasterController extends Controller
                 $payMaster = $form->getData();
                 $payMaster->setCreator($user);
 
-                $mpkIds = explode(',', $formData['mpks']);
-                foreach ($mpkIds as $id) {
-                    $mpk = $em->getRepository('ListsMpkBundle:Mpk')->find($id);
-                    $payMaster->addMpk($mpk);
-                }
-
                 $em->persist($payMaster);
                 $em->flush();
 

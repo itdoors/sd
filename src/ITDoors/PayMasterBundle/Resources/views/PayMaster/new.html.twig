@@ -127,10 +127,10 @@
                                 {{ form_widget(form.payer, {'attr': {'class': 'form-control', 'required':'required' } }) }}
                                 {{ form_errors(form.payer) }}
                             </div>
-                            <div class="form-group  col-md-12{% if form.customer.vars.errors|length %} has-error{% endif %}">
-                                {{ form_label(form.customer, 'Customer'|trans, {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(form.customer, {'attr': {'class': 'form-control' } }) }}
-                                {{ form_errors(form.customer) }}
+                            <div class="form-group  col-md-12{% if form.customers.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.customers, 'Customer'|trans, {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.customers) }}
+                                {{ form_errors(form.customers) }}
                             </div>
                             <div class="form-group  col-md-4{% if form.contractor.vars.errors|length %} has-error{% endif %}">
                                 {{ form_label(form.contractor, 'Contractor'|trans, {'attr': {'class': 'control-label'}}) }}
@@ -173,7 +173,7 @@
                         <div class="row">
                             <div class="form-group  col-md-12{% if form.mpks.vars.errors|length %} has-error{% endif %}">
                                 {{ form_label(form.mpks, 'MPK'|trans, {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(form.mpks, {'attr': {'class': 'form-control', 'placeholder': 'Enter mpk'|trans(), } }) }}
+                                {{ form_widget(form.mpks, {'attr': {'placeholder': 'Enter mpk'|trans(), } }) }}
                                 {{ form_errors(form.mpks) }}
                             </div>
                         </div>
@@ -185,7 +185,7 @@
                             </div>
                             <div class="form-group  col-md-6{% if form.vat.vars.errors|length %} has-error{% endif %}">
                                 {{ form_label(form.vat, 'VAT'|trans, {'attr': {'class': 'control-label'}}) }}
-                                {{ form_widget(form.vat, {'attr': {'class': 'form-control', 'placeholder': 'Enter vat'|trans(), } }) }}
+                                {{ form_widget(form.vat) }}
                                 {{ form_errors(form.vat) }}
                             </div>
                         </div>

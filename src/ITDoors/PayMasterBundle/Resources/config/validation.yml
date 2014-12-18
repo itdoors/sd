@@ -21,9 +21,8 @@ ITDoors\PayMasterBundle\Entity\PayMaster:
         payer:
             - NotBlank:
                 groups: [new]
-        customer:
-            - NotBlank:
-                groups: [new]
+        customers:
+            - NotBlank: ~
         contractor:
             - NotBlank:
                 groups: [new]

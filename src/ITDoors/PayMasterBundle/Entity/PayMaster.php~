@@ -4,6 +4,7 @@ namespace ITDoors\PayMasterBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Lists\OrganizationBundle\Entity\OrganizationCurrentAccount;
 
 /**
  * PayMaster
@@ -60,12 +61,6 @@ class PayMaster
      * @var \Lists\OrganizationBundle\Entity\Organization
      */
     private $payer;
-
-    /**
-     * @var \Lists\OrganizationBundle\Entity\Organization
-     */
-    private $customer;
-
     /**
      * @var \Lists\OrganizationBundle\Entity\Organization
      */
@@ -290,28 +285,7 @@ class PayMaster
     {
         return $this->payer;
     }
-    /**
-     * Set customer
-     *
-     * @param \Lists\OrganizationBundle\Entity\Organization $customer
-     *
-     * @return PayMaster
-     */
-    public function setCustomer (\Lists\OrganizationBundle\Entity\Organization $customer = null)
-    {
-        $this->customer = $customer;
 
-        return $this;
-    }
-    /**
-     * Get customer
-     *
-     * @return \Lists\OrganizationBundle\Entity\Organization 
-     */
-    public function getCustomer ()
-    {
-        return $this->customer;
-    }
     /**
      * Set contractor
      *
@@ -473,71 +447,72 @@ class PayMaster
     {
         return $this->creator;
     }
+
     /**
-     * @var \Lists\OrganizationBundle\Entity\OrganizationCurrentAccount
+     * @var OrganizationCurrentAccount
      */
     private $currentAccount;
 
     /**
      * Set currentAccount
      *
-     * @param \Lists\OrganizationBundle\Entity\OrganizationCurrentAccount $currentAccount
+     * @param OrganizationCurrentAccount $currentAccount
+     *
      * @return PayMaster
      */
-    public function setCurrentAccount(\Lists\OrganizationBundle\Entity\OrganizationCurrentAccount $currentAccount = null)
+    public function setCurrentAccount (OrganizationCurrentAccount $currentAccount = null)
     {
         $this->currentAccount = $currentAccount;
-    
+
         return $this;
     }
-
     /**
      * Get currentAccount
      *
-     * @return \Lists\OrganizationBundle\Entity\OrganizationCurrentAccount 
+     * @return OrganizationCurrentAccount 
      */
-    public function getCurrentAccount()
+    public function getCurrentAccount ()
     {
         return $this->currentAccount;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $mpks;
 
-
     /**
      * Add mpks
      *
      * @param \Lists\MpkBundle\Entity\Mpk $mpks
+     *
      * @return PayMaster
      */
-    public function addMpk(\Lists\MpkBundle\Entity\Mpk $mpks)
+    public function addMpk (\Lists\MpkBundle\Entity\Mpk $mpks)
     {
         $this->mpks[] = $mpks;
-    
+
         return $this;
     }
-
     /**
      * Remove mpks
      *
      * @param \Lists\MpkBundle\Entity\Mpk $mpks
      */
-    public function removeMpk(\Lists\MpkBundle\Entity\Mpk $mpks)
+    public function removeMpk (\Lists\MpkBundle\Entity\Mpk $mpks)
     {
         $this->mpks->removeElement($mpks);
     }
-
     /**
      * Get mpks
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getMpks()
+    public function getMpks ()
     {
         return $this->mpks;
     }
+
     /**
      * @var boolean
      */
@@ -547,22 +522,50 @@ class PayMaster
      * Set isRejected
      *
      * @param boolean $isRejected
+     *
      * @return PayMaster
      */
-    public function setIsRejected($isRejected)
+    public function setIsRejected ($isRejected)
     {
         $this->isRejected = $isRejected;
-    
+
         return $this;
     }
-
     /**
      * Get isRejected
      *
      * @return boolean 
      */
-    public function getIsRejected()
+    public function getIsRejected ()
     {
         return $this->isRejected;
+    }
+
+    /**
+     * @var string
+     */
+    private $reason;
+
+    /**
+     * Set reason
+     *
+     * @param string $reason
+     *
+     * @return PayMaster
+     */
+    public function setReason ($reason)
+    {
+        $this->reason = $reason;
+
+        return $this;
+    }
+    /**
+     * Get reason
+     *
+     * @return string 
+     */
+    public function getReason ()
+    {
+        return $this->reason;
     }
 }

@@ -1321,4 +1321,12 @@ ALTER TABLE coach_region ADD CONSTRAINT FK_D4CDBAC3A76ED395 FOREIGN KEY (user_id
 ALTER TABLE coaches_regions ADD CONSTRAINT FK_758AAA3F3C105691 FOREIGN KEY (coach_id) REFERENCES coach_region (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE coaches_regions ADD CONSTRAINT FK_758AAA3F98260155 FOREIGN KEY (region_id) REFERENCES Region (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 -- prod ++++++++
+ALTER TABLE pay_master DROP customer_id;
+ALTER TABLE pay_master DROP CONSTRAINT fk_a49269999395c3f3;
+DROP INDEX idx_a49269999395c3f3;
+CREATE TABLE pay_master_customer (pay_master_id BIGINT NOT NULL, customer_id BIGINT NOT NULL, PRIMARY KEY(pay_master_id, customer_id));
+CREATE INDEX IDX_FCB1B0713EBD646D ON pay_master_customer (pay_master_id);
+CREATE INDEX IDX_FCB1B0719395C3F3 ON pay_master_customer (customer_id);
 
+
+-- prod ------
