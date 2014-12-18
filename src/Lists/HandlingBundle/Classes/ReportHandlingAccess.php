@@ -14,4 +14,11 @@ class ReportHandlingAccess extends BasicHandlingAccess
     {
         return true;
     }
+    /**
+     * @return bool
+     */
+    public function canSee ()
+    {
+        return true;
+    }
 }
