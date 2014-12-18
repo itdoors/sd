@@ -1334,4 +1334,27 @@ INSERT INTO "public".handling_message_file (handling_message_id, createdate, fil
         AND handling_message.filepath is not null
     );
 -- prod ++++++
+ALTER TABLE dogovor ADD delay_type_id BIGINT DEFAULT NULL;
+ALTER TABLE dogovor ADD delay INT DEFAULT 0 NOT NULL;
+ALTER TABLE dogovor ADD delayComment INT DEFAULT NULL;
+COMMENT ON COLUMN dogovor.delay IS 'Отстрочка (количество дней)';
+COMMENT ON COLUMN dogovor.delayComment IS 'Комментарий к отстрочке';
+COMMENT ON COLUMN dogovor.subject IS 'Тема договора';
+COMMENT ON COLUMN dogovor.maturity IS 'Отстрочка (старое поле)';
+ALTER TABLE handling_message ALTER createdate SET NOT NULL;
+COMMENT ON COLUMN handling_message.handling_id IS 'ID проекта';
+COMMENT ON COLUMN handling_message.user_id IS 'ID пользователя (который создал)';
+COMMENT ON COLUMN handling_message.createdatetime IS 'Дата создания (создается автоматически)';
+COMMENT ON COLUMN handling_message.description IS 'Описание';
+COMMENT ON COLUMN handling_message.createdate IS 'Дата создания (указывается пользователем)';
+COMMENT ON COLUMN handling_message.filepath IS 'Это старое поле (нужно будет удалить после пересохранения звонков)';
+COMMENT ON COLUMN handling_message.filename IS 'Название документа';
+ALTER TABLE handling_message_file ADD CONSTRAINT FK_6A91B1E8B924C345 FOREIGN KEY (handling_message_id) REFERENCES handling_message (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE TABLE delay_type (id BIGSERIAL NOT NULL, name VARCHAR(255) NOT NULL, short_name VARCHAR(255) NOT NULL, PRIMARY KEY(id));                           
+COMMENT ON COLUMN delay_type.name IS 'Тип дня отстрочки';                                                                                                 
+COMMENT ON COLUMN delay_type.short_name IS 'Сокращеное название';
+INSERT INTO "public".delay_type ("name", short_name) VALUES ('Банковские', 'Б');
+INSERT INTO "public".delay_type ("name", short_name) VALUES ('Календарные', 'К');
+
+-- prod ++++++
 

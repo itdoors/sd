@@ -1212,4 +1212,88 @@ class Dogovor
     {
         return $this->deletedAt;
     }
+    /**
+     * @var integer
+     */
+    private $delay;
+
+    /**
+     * @var integer
+     */
+    private $delayComment;
+
+    /**
+     * @var \Lists\DogovorBundle\Entity\DelayType
+     */
+    private $delayType;
+
+
+    /**
+     * Set delay
+     *
+     * @param integer $delay
+     * @return Dogovor
+     */
+    public function setDelay($delay)
+    {
+        $this->delay = $delay;
+    
+        return $this;
+    }
+
+    /**
+     * Get delay
+     *
+     * @return integer 
+     */
+    public function getDelay()
+    {
+        return $this->delay;
+    }
+
+    /**
+     * Set delayComment
+     *
+     * @param integer $delayComment
+     * @return Dogovor
+     */
+    public function setDelayComment($delayComment)
+    {
+        $this->delayComment = $delayComment;
+    
+        return $this;
+    }
+
+    /**
+     * Get delayComment
+     *
+     * @return integer 
+     */
+    public function getDelayComment()
+    {
+        return $this->delayComment;
+    }
+
+    /**
+     * Set delayType
+     *
+     * @param \Lists\DogovorBundle\Entity\DelayType $delayType
+     * @return Dogovor
+     */
+    public function setDelayType(\Lists\DogovorBundle\Entity\DelayType $delayType = null)
+    {
+        $this->delayType = $delayType;
+    
+        return $this;
+    }
+
+    /**
+     * Get delayType
+     *
+     * @return \Lists\DogovorBundle\Entity\DelayType 
+     */
+    public function getDelayType()
+    {
+        return $this->delayType;
+    }
 }
