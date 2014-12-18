@@ -2333,21 +2333,25 @@ class AjaxController extends BaseFilterController
 
         $data->setCreatedatetime(new \DateTime());
 
-        $user = $this->getUser();
-
         if (!$data->getUser()) {
             $data->setUser($user);
         }
 
         $data->setHandling($handling);
 
-        $file = $form['file']->getData();
-
-        if ($file) {
-            $data->upload();
-        }
+        $files = $form['files']->getData();
 
         $em = $this->getDoctrine()->getManager();
+        if ($files) {
+            foreach ($files as $file) {
+                $handlingMessageFile = new \Lists\HandlingBundle\Entity\HandlingMessageFile();
+                $handlingMessageFile->setHandlingMessage($data);
+                $handlingMessageFile->setFileTemp($file);
+                $handlingMessageFile->upload();
+                $em->persist($handlingMessageFile);
+            }
+        }
+
         $em->persist($data);
         $em->flush();
         $em->refresh($data);

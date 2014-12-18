@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class HandlingMessage
 {
+
     const ADDITIONAL_TYPE_FUTURE_MESSAGE = 'fm';
 
     /**
@@ -67,11 +68,10 @@ class HandlingMessage
      *
      * @return integer
      */
-    public function getId()
+    public function getId ()
     {
         return $this->id;
     }
-
     /**
      * Set createdatetime
      *
@@ -79,23 +79,21 @@ class HandlingMessage
      *
      * @return HandlingMessage
      */
-    public function setCreatedatetime($createdatetime)
+    public function setCreatedatetime ($createdatetime)
     {
         $this->createdatetime = $createdatetime;
 
         return $this;
     }
-
     /**
      * Get createdatetime
      *
      * @return \DateTime
      */
-    public function getCreatedatetime()
+    public function getCreatedatetime ()
     {
         return $this->createdatetime;
     }
-
     /**
      * Set description
      *
@@ -103,23 +101,21 @@ class HandlingMessage
      *
      * @return HandlingMessage
      */
-    public function setDescription($description)
+    public function setDescription ($description)
     {
         $this->description = $description;
 
         return $this;
     }
-
     /**
      * Get description
      *
      * @return string
      */
-    public function getDescription()
+    public function getDescription ()
     {
         return $this->description;
     }
-
     /**
      * Set createdate
      *
@@ -127,23 +123,21 @@ class HandlingMessage
      *
      * @return HandlingMessage
      */
-    public function setCreatedate($createdate)
+    public function setCreatedate ($createdate)
     {
         $this->createdate = $createdate;
 
         return $this;
     }
-
     /**
      * Get createdate
      *
      * @return \DateTime
      */
-    public function getCreatedate()
+    public function getCreatedate ()
     {
         return $this->createdate;
     }
-
     /**
      * Set filepath
      *
@@ -151,23 +145,21 @@ class HandlingMessage
      *
      * @return HandlingMessage
      */
-    public function setFilepath($filepath)
+    public function setFilepath ($filepath)
     {
         $this->filepath = $filepath;
 
         return $this;
     }
-
     /**
      * Get filepath
      *
      * @return string
      */
-    public function getFilepath()
+    public function getFilepath ()
     {
         return $this->filepath;
     }
-
     /**
      * Set filename
      *
@@ -175,23 +167,21 @@ class HandlingMessage
      *
      * @return HandlingMessage
      */
-    public function setFilename($filename)
+    public function setFilename ($filename)
     {
         $this->filename = $filename;
 
         return $this;
     }
-
     /**
      * Get filename
      *
      * @return string
      */
-    public function getFilename()
+    public function getFilename ()
     {
         return $this->filename;
     }
-
     /**
      * Set handling_id
      *
@@ -199,26 +189,24 @@ class HandlingMessage
      *
      * @return HandlingMessage
      */
-    public function setHandlingId($handlingId)
+    public function setHandlingId ($handlingId)
     {
         // @codingStandardsIgnoreStart
         $this->handling_id = $handlingId;
         // @codingStandardsIgnoreEnd
         return $this;
     }
-
     /**
      * Get handling_id
      *
      * @return integer
      */
-    public function getHandlingId()
+    public function getHandlingId ()
     {
         // @codingStandardsIgnoreStart
         return $this->handling_id;
         // @codingStandardsIgnoreEnd
     }
-
     /**
      * Set handling
      *
@@ -226,7 +214,7 @@ class HandlingMessage
      *
      * @return HandlingMessage
      */
-    public function setHandling(\Lists\HandlingBundle\Entity\Handling $handling = null)
+    public function setHandling (\Lists\HandlingBundle\Entity\Handling $handling = null)
     {
         $this->handling = $handling;
 
@@ -236,17 +224,15 @@ class HandlingMessage
 
         return $this;
     }
-
     /**
      * Get handling
      *
      * @return \Lists\HandlingBundle\Entity\Handling
      */
-    public function getHandling()
+    public function getHandling ()
     {
         return $this->handling;
     }
-
     /**
      * Set type
      *
@@ -254,23 +240,21 @@ class HandlingMessage
      *
      * @return HandlingMessage
      */
-    public function setType(\Lists\HandlingBundle\Entity\HandlingMessageType $type = null)
+    public function setType (\Lists\HandlingBundle\Entity\HandlingMessageType $type = null)
     {
         $this->type = $type;
 
         return $this;
     }
-
     /**
      * Get type
      *
      * @return \Lists\HandlingBundle\Entity\HandlingMessageType
      */
-    public function getType()
+    public function getType ()
     {
         return $this->type;
     }
-
     /**
      * Set user
      *
@@ -278,62 +262,52 @@ class HandlingMessage
      *
      * @return HandlingMessage
      */
-    public function setUser(\SD\UserBundle\Entity\User $user = null)
+    public function setUser (\SD\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
 
         return $this;
     }
-
     /**
      * Get user
      *
      * @return \SD\UserBundle\Entity\User
      */
-    public function getUser()
+    public function getUser ()
     {
         return $this->user;
     }
-
     /**
      * @ORM\PrePersist
      */
-    public function doOnPrePersist()
+    public function doOnPrePersist ()
     {
         // Add your code here
     }
-
     /**
      * @return null|string
      */
-    public function getAbsolutePath()
+    public function getAbsolutePath ()
     {
-        return null === $this->filepath
-            ? null
-            : $this->getUploadRootDir() . '/' . $this->filepath;
+        return null === $this->filepath ? null : $this->getUploadRootDir() . '/' . $this->filepath;
     }
-
     /**
      * @return null|string
      */
-    public function getWebPath()
+    public function getWebPath ()
     {
-        return null === $this->filepath
-            ? null
-            : $this->getUploadDir() . '/' . $this->filepath;
+        return null === $this->filepath ? null : $this->getUploadDir() . '/' . $this->filepath;
     }
-
     /**
      * @return null|string
      */
-    protected function getUploadRootDir()
+    protected function getUploadRootDir ()
     {
         // the absolute directory path where uploaded
         // documents should be saved
         return __DIR__ . '/../../../../web/' . $this->getUploadDir();
     }
-
-    protected function getUploadDir()
+    protected function getUploadDir ()
     {
         // get rid of the __DIR__ so it doesn't screw up
         // when displaying uploaded doc/image in the view.
@@ -347,25 +321,23 @@ class HandlingMessage
      *
      * @param UploadedFile $file
      */
-    public function setFile(UploadedFile $file = null)
+    public function setFile (UploadedFile $file = null)
     {
         $this->file = $file;
     }
-
     /**
      * Get file.
      *
      * @return UploadedFile
      */
-    public function getFile()
+    public function getFile ()
     {
         return $this->file;
     }
-
     /**
      * upload
      */
-    public function upload()
+    public function upload ()
     {
         // the file property can be empty if the field is not required
         if (null === $this->getFile()) {
@@ -374,7 +346,6 @@ class HandlingMessage
 
         // use the original file name here but you should
         // sanitize it at least to avoid any security issues
-
         // move takes the target directory and then the
         // target filename to move to
 
@@ -387,8 +358,7 @@ class HandlingMessage
         $uploadDir = $this->getUploadRootDir() . DIRECTORY_SEPARATOR . $this->getHandlingId();
 
         $this->getFile()->move(
-            $uploadDir,
-            $filepath
+            $uploadDir, $filepath
         );
 
         // set the path property to the filename where you've saved the file
@@ -410,19 +380,18 @@ class HandlingMessage
      *
      * @return HandlingMessage
      */
-    public function setAdditionalType($additionalType)
+    public function setAdditionalType ($additionalType)
     {
         $this->additionalType = $additionalType;
 
         return $this;
     }
-
     /**
      * Get additionalType
      *
      * @return string
      */
-    public function getAdditionalType()
+    public function getAdditionalType ()
     {
         return $this->additionalType;
     }
@@ -439,29 +408,27 @@ class HandlingMessage
      *
      * @return HandlingMessage
      */
-    public function setIsBusinessTrip($isBusinessTrip)
+    public function setIsBusinessTrip ($isBusinessTrip)
     {
         $this->isBusinessTrip = $isBusinessTrip;
 
         return $this;
     }
-
     /**
      * Get isBusinessTrip
      *
      * @return boolean
      */
-    public function getIsBusinessTrip()
+    public function getIsBusinessTrip ()
     {
         return $this->isBusinessTrip;
     }
-
     /**
      * Is future message
      *
      * @return bool
      */
-    public function isFutureMessage()
+    public function isFutureMessage ()
     {
         return $this->getAdditionalType() == self::ADDITIONAL_TYPE_FUTURE_MESSAGE;
     }
@@ -478,19 +445,18 @@ class HandlingMessage
      *
      * @return HandlingMessage
      */
-    public function setContact(\Lists\ContactBundle\Entity\ModelContact $contact = null)
+    public function setContact (\Lists\ContactBundle\Entity\ModelContact $contact = null)
     {
         $this->contact = $contact;
 
         return $this;
     }
-
     /**
      * Get contact
      *
      * @return \Lists\ContactBundle\Entity\ModelContact
      */
-    public function getContact()
+    public function getContact ()
     {
         return $this->contact;
     }
@@ -507,20 +473,19 @@ class HandlingMessage
      *
      * @return HandlingMessage
      */
-    public function setContactId($contactId)
+    public function setContactId ($contactId)
     {
         // @codingStandardsIgnoreStart
         $this->contact_id = $contactId;
         // @codingStandardsIgnoreEnd
         return $this;
     }
-
     /**
      * Get contact_id
      *
      * @return integer
      */
-    public function getContactId()
+    public function getContactId ()
     {
         // @codingStandardsIgnoreStart
         return $this->contact_id;
@@ -539,20 +504,19 @@ class HandlingMessage
      *
      * @return HandlingMessage
      */
-    public function setUserId($userId)
+    public function setUserId ($userId)
     {
         // @codingStandardsIgnoreStart
         $this->user_id = $userId;
         // @codingStandardsIgnoreEnd
         return $this;
     }
-
     /**
      * Get user_id
      *
      * @return integer
      */
-    public function getUserId()
+    public function getUserId ()
     {
         // @codingStandardsIgnoreStart
         return $this->user_id;
@@ -571,23 +535,66 @@ class HandlingMessage
      *
      * @return HandlingMessage
      */
-    public function setTypeId($typeId)
+    public function setTypeId ($typeId)
     {
         // @codingStandardsIgnoreStart
         $this->type_id = $typeId;
         // @codingStandardsIgnoreEnd
         return $this;
     }
-
     /**
      * Get type_id
      *
      * @return integer
      */
-    public function getTypeId()
+    public function getTypeId ()
     {
         // @codingStandardsIgnoreStart
         return $this->type_id;
         // @codingStandardsIgnoreEnd
+    }
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $files;
+
+    /**
+     * Constructor
+     */
+    public function __construct ()
+    {
+        $this->files = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    /**
+     * Add files
+     *
+     * @param \Lists\HandlingBundle\Entity\HandlingMessageFile $files
+     * 
+     * @return HandlingMessage
+     */
+    public function addFile (\Lists\HandlingBundle\Entity\HandlingMessageFile $files)
+    {
+        $this->files[] = $files;
+
+        return $this;
+    }
+    /**
+     * Remove files
+     *
+     * @param \Lists\HandlingBundle\Entity\HandlingMessageFile $files
+     */
+    public function removeFile (\Lists\HandlingBundle\Entity\HandlingMessageFile $files)
+    {
+        $this->files->removeElement($files);
+    }
+    /**
+     * Get files
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFiles ()
+    {
+        return $this->files;
     }
 }

@@ -1321,4 +1321,17 @@ ALTER TABLE coach_region ADD CONSTRAINT FK_D4CDBAC3A76ED395 FOREIGN KEY (user_id
 ALTER TABLE coaches_regions ADD CONSTRAINT FK_758AAA3F3C105691 FOREIGN KEY (coach_id) REFERENCES coach_region (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE coaches_regions ADD CONSTRAINT FK_758AAA3F98260155 FOREIGN KEY (region_id) REFERENCES Region (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 -- prod ++++++++
+CREATE TABLE handling_message_file (id BIGSERIAL NOT NULL, handling_message_id BIGINT DEFAULT NULL, createdate TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, file VARCHAR(128) DEFAULT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_6A91B1E8B924C345 ON handling_message_file (handling_message_id);
+COMMENT ON COLUMN handling_message_file.createdate IS 'Дата создания';
+COMMENT ON COLUMN handling_message_file.file IS 'Название файла';
+-- prod ++++++++
+INSERT INTO "public".handling_message_file (handling_message_id, createdate, file)
+    (SELECT handling_message.id, handling_message.createdatetime, handling_message.filepath
+        FROM "public".handling_message
+        LEFT JOIN handling_message_file as hmf on handling_message.id = hmf.handling_message_id
+        WHERE  hmf."file" is null
+        AND handling_message.filepath is not null
+    );
+-- prod -------
 
