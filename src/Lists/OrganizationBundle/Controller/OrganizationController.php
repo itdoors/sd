@@ -487,9 +487,10 @@ class OrganizationController extends BaseController
         if (!$organization) {
             throw new Exception('Organization not found', 404);
         }
-        $banks = $organization->getBanks();
+        $banks = $em->getRepository('ListsOrganizationBundle:OrganizationCurrentAccount')
+            ->getBanks($id);
 
-        return $this->render('ListsOrganizationBundle:Organization:bankList.html.twig', array(
+        return $this->render('ListsOrganizationBundle:Organization:Tab/bankList.html.twig', array(
             'banks' => $banks
         ));
     }

@@ -1,0 +1,39 @@
+{% trans_default_domain 'ListsOrganizationBundle' %}
+
+<a class="btn green" id="department-add-btn" href="#" data-toggle="modal">
+    <i class="fa fa-plus"></i>
+    {% trans %}Add bank{% endtrans %}
+</a>
+    {{ ajax_form_render_btn({
+       'selector' : '#bank-add-btn',
+       'formType' : 'bankForm',
+       'successFunctions' : {
+           'bank_list' : 'ITDoorsAjax.updateList'
+       },
+       'serviceDefault' : {
+           'alias' : 'lists_organization.service',
+           'method' : 'addBankFormDefaults'
+       },
+       'serviceSave' : {
+           'alias' : 'lists_organization.service',
+           'method' : 'saveBankForm'
+       },
+       'defaults' : {
+           'organizationId' : organization.id
+       },
+       'target' : '#form_modal_bank',
+       'html' : 'ListsOrganizationBundle:Form:bankForm.html.twig'
+   }) }}
+<div id="form_modal_bank" class="modal" role="basic" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">{% trans %}New bank{% endtrans %}</h4>
+            </div>
+            <div class="modal-body">
+                <div data-text="{% trans %}Loading data. Please wait{% endtrans %}"></div>
+            </div>
+        </div>
+    </div>
+</div>
