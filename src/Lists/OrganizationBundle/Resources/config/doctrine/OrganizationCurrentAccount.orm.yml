@@ -24,7 +24,7 @@ Lists\OrganizationBundle\Entity\OrganizationCurrentAccount:
                 referencedColumnName: id
         organization:
             targetEntity: Organization
-            inversedBy: null
+            inversedBy: currentAccounts
             joinColumn:
                 name: organization_id
                 referencedColumnName: id

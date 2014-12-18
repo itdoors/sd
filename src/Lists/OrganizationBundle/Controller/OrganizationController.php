@@ -474,6 +474,26 @@ class OrganizationController extends BaseController
         ));
     }
     /**
+     * Renders bank List
+     * 
+     * @param integer $id Organization.id
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function bankListAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $organization = $em->getRepository('ListsOrganizationBundle:Organization')->find($id);
+        if (!$organization) {
+            throw new Exception('Organization not found', 404);
+        }
+        $banks = $organization->getBanks();
+
+        return $this->render('ListsOrganizationBundle:Organization:bankList.html.twig', array(
+            'banks' => $banks
+        ));
+    }
+    /**
      * Renders departments list
      * 
      * @param integer $id Organization.id

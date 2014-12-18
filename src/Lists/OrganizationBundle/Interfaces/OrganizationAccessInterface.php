@@ -50,5 +50,9 @@ interface OrganizationAccessInterface
     /**
      * @return bool
      */
+    public function canAddBank();
+    /**
+     * @return bool
+     */
     public function filterFormName();
 }

@@ -295,6 +295,12 @@ lists_organization_departments_list:
     requirements:
         id:  \d+
 
+lists_organization_bank_list:
+    pattern:  /lists/organization/bank/list/{id}
+    defaults: { _controller: ListsOrganizationBundle:Organization:bankList }
+    requirements:
+        id:  \d+
+
 lists_organization_export_excel:
     pattern:  /lists/organization/export/excel/{type}
     defaults: { _controller: ListsOrganizationBundle:Organization:exportExcel, type: '' }
