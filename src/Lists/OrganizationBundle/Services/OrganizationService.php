@@ -84,7 +84,8 @@ class OrganizationService
 
         $form
             ->add('organizationId', 'hidden', array(
-                'mapped' => false
+                'mapped' => false,
+                'data' => $organizationId
             ))
             ->add('organization', 'entity', array(
                 'class'=>'Lists\OrganizationBundle\Entity\Organization',

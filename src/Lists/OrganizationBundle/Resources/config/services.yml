@@ -59,6 +59,7 @@ services:
         class: %lists_organization.form.current_account.class%
         arguments: 
             router: "@router"
+            entityManager: "@doctrine.orm.entity_manager"
         tags:
             - { name: form.type, alias: currentAccountForm }
 

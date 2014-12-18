@@ -6,9 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Routing\Router;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Class CurrentAccountForm
@@ -16,15 +16,18 @@ use Symfony\Component\Form\FormEvents;
 class CurrentAccountForm extends AbstractType
 {
     protected $router;
+    protected $em;
 
     /**
      * __construct
      *
      * @param Router $router
+     * @param EntityManager $em
      */
-    public function __construct(Router $router)
+    public function __construct(Router $router, EntityManager $em)
     {
         $this->router = $router;
+        $this->em = $em;
     }
     /**
      * @param FormBuilderInterface $builder
@@ -48,7 +51,8 @@ class CurrentAccountForm extends AbstractType
                 'disabled' => true
             ))
             ->add('bank', 'hidden_entity', array(
-                'entity'=>'Lists\OrganizationBundle\Entity\Bank'
+                'entity'=>'Lists\OrganizationBundle\Entity\Bank',
+                'required' => true
             ))
             ->add('bankSearch', 'itdoors_select2', array(
                 'mapped' =>false,
@@ -66,13 +70,14 @@ class CurrentAccountForm extends AbstractType
         $builder->addEventListener(
             FormEvents::POST_SUBMIT,
             function (FormEvent $event) {
-                $payMaster = $event->getData();
                 $form = $event->getForm();
+                $data = $event->getData();
                 $bankId = $form->get('bankSearch')->getData();
-                if (is_numeric($bankId)) {
-//                    $bank = 
-//                    $form->get('delay')->addError(new FormError($translator->trans('Postponement is incorrect', array(), 'ITDoorsPayMasterBundle')));
-                }
+                $bank = $this->em->getRepository('ListsOrganizationBundle:Bank')->find($bankId);
+                $organizationId = $form->get('organizationId')->getData();
+                $organization = $this->em->getRepository('ListsOrganizationBundle:Organization')->find($organizationId);
+                $data->setBank($bank);
+                $data->setOrganization($organization);
             }
         );
         
