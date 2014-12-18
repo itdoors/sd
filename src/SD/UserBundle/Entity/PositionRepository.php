@@ -29,5 +29,4 @@ class PositionRepository extends EntityRepository
 
         return $sql->getResult();
     }
-
 }

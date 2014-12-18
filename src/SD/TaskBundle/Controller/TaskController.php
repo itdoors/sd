@@ -1250,6 +1250,13 @@ class TaskController extends Controller
         return new Response(json_encode($return));
     }
 
+    /**
+     * getAllStuffAjaxAction
+     * 
+     * @param Request $request
+     *
+     * @return Response
+     */
     public function getAllStuffAjaxAction(Request $request) {
 
         $em = $this->getDoctrine()->getManager();

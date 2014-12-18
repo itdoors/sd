@@ -127,6 +127,7 @@ class EmailService
 
             $result = $last[0]['maxId'];
         }
+
         return $result;
     }
 

@@ -6353,7 +6353,7 @@ class AjaxController extends BaseFilterController
 
         return new Response(json_encode($result));
     }
-    
+
     /**
      * @return Response
      */
@@ -6383,7 +6383,8 @@ class AjaxController extends BaseFilterController
     /**
      * @return Response
      */
-    public function departmentAction() {
+    public function departmentAction()
+    {
 
         $searchText = $this->get('request')->query->get('query');
 
@@ -6422,7 +6423,7 @@ class AjaxController extends BaseFilterController
             ->getDoctrine()
             ->getRepository('ListsDepartmentBundle:DepartmentPeople')
             ->getIndividualsByRegionIdQuery($searchText, $regionId);
-        
+
         $i = [];
         foreach ($indIds as $ind) {
             $i[] = $ind['1'];

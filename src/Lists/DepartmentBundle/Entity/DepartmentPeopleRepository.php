@@ -258,8 +258,8 @@ class DepartmentPeopleRepository extends EntityRepository
     /**
      * getIndividualsByRegionIdQuery
      *
-     * @param string $searchText
-     * @param int    $cityId
+     * @param string  $searchText
+     * @param integer $regionId
      *
      * @return array
      */
