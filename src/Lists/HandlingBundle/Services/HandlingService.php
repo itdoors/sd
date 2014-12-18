@@ -54,6 +54,9 @@ class HandlingService
         if ($user->hasRole('ROLE_SALESADMIN')) {
             $role[] = 'sales_admin';
         }
+        if ($user->hasRole('ROLE_REPORT')) {
+            $role[] = 'report';
+        }
         if ($user->hasRole('ROLE_SALES')) {
             $role[] = 'sales';
         }
