@@ -66,21 +66,16 @@ class CurrentAccountForm extends AbstractType
         $builder->addEventListener(
             FormEvents::POST_SUBMIT,
             function (FormEvent $event) {
-                /** @var OrganizationCurrentAccount $data */
-                $data = $event->getData();
-
+                $payMaster = $event->getData();
                 $form = $event->getForm();
-
-
-                if ($data->getStartdatetime() >= $data->getStopdatetime() && $data->getStartdatetime()) {
-                    $msgString = "Start date can't be greater then stop date";
-
-                    $msg = $translator->trans($msgString, array(), 'ListsDogovorBundle');
-
-                    $form->addError(new FormError($msg));
+                $bankId = $form->get('bankSearch')->getData();
+                if (is_numeric($bankId)) {
+//                    $bank = 
+//                    $form->get('delay')->addError(new FormError($translator->trans('Postponement is incorrect', array(), 'ITDoorsPayMasterBundle')));
                 }
             }
         );
+        
     }
 
     /**
