@@ -382,7 +382,8 @@ class UserRepository extends EntityRepository
      * 
      * @return array
      */
-    public function getUsersForOperStatisticByFilter($filters = null) {
+    public function getUsersForOperStatisticByFilter($filters = null)
+    {
 
         $sql = $this->createQueryBuilder('u')
             ->select('u')
@@ -400,24 +401,24 @@ class UserRepository extends EntityRepository
                 $companyStructureFilter = explode(',', $filters['companyStructure']);
 
                 $sql = $sql->andWhere(
-                        "c.id in (:companyStructure) or c.id in
-                            (
-                                SELECT
-                                    cc.id
-                                FROM
-                                    ListsCompanystructureBundle:Companystructure cp
-                                LEFT JOIN
-                                    ListsCompanystructureBundle:Companystructure cc
-                                WHERE
-                                    cp.root = cc.root
-                                AND
-                                    cp.lft < cc.lft
-                                AND
-                                    cp.rgt > cc.rgt
-                                AND
-                                    cp in (:companyStructure)
-                            )"
-                    );
+                    "c.id in (:companyStructure) or c.id in
+                    (
+                        SELECT
+                            cc.id
+                        FROM
+                            ListsCompanystructureBundle:Companystructure cp
+                        LEFT JOIN
+                            ListsCompanystructureBundle:Companystructure cc
+                        WHERE
+                            cp.root = cc.root
+                        AND
+                            cp.lft < cc.lft
+                        AND
+                            cp.rgt > cc.rgt
+                        AND
+                            cp in (:companyStructure)
+                    )"
+                );
                 $sql->setParameter(':companyStructure', $companyStructureFilter);
 
             }

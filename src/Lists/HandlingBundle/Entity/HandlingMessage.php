@@ -343,12 +343,6 @@ class HandlingMessage
         if (null === $this->getFile()) {
             return;
         }
-
-        // use the original file name here but you should
-        // sanitize it at least to avoid any security issues
-        // move takes the target directory and then the
-        // target filename to move to
-
         $fileExtension = $this->getFile()->getClientOriginalExtension();
 
         $newFileName = md5(microtime());
@@ -357,11 +351,8 @@ class HandlingMessage
 
         $uploadDir = $this->getUploadRootDir() . DIRECTORY_SEPARATOR . $this->getHandlingId();
 
-        $this->getFile()->move(
-            $uploadDir, $filepath
-        );
+        $this->getFile()->move($uploadDir, $filepath);
 
-        // set the path property to the filename where you've saved the file
         $this->filepath = $filepath;
 
         // clean up the file property as you won't need it anymore
