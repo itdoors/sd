@@ -3,9 +3,9 @@
 namespace Lists\HandlingBundle\Classes;
 
 /**
- * SalesAdminHandlingAccess class
+ * ReportHandlingAccess class
  */
-class SalesAdminHandlingAccess extends BasicHandlingAccess
+class ReportHandlingAccess extends BasicHandlingAccess
 {
     /**
      * @return bool
