@@ -6,6 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Routing\Router;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 
 /**
  * Class CurrentAccountForm
@@ -44,9 +47,13 @@ class CurrentAccountForm extends AbstractType
                 'required' => true,
                 'disabled' => true
             ))
-            ->add('bank', 'itdoors_select2', array(
+            ->add('bank', 'hidden_entity', array(
+                'entity'=>'Lists\OrganizationBundle\Entity\Bank'
+            ))
+            ->add('bankSearch', 'itdoors_select2', array(
+                'mapped' =>false,
                 'attr' => array(
-                    'class' => 'form-control itdoors-select2 can-be-reseted submit-field',
+                    'class' => 'form-control can-be-reseted submit-field',
                     'data-url' => $this->router->generate('lists_organization_ajax_bank_searh_name_and_mfo'),
                     'data-url-by-id' => $this->router->generate('lists_organization_ajax_bank_name_and_mfo_by_id'),
                     'data-params' => json_encode(array(
@@ -56,6 +63,24 @@ class CurrentAccountForm extends AbstractType
                 )
             ))
             ->add('cancel', 'submit');
+        $builder->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) {
+                /** @var OrganizationCurrentAccount $data */
+                $data = $event->getData();
+
+                $form = $event->getForm();
+
+
+                if ($data->getStartdatetime() >= $data->getStopdatetime() && $data->getStartdatetime()) {
+                    $msgString = "Start date can't be greater then stop date";
+
+                    $msg = $translator->trans($msgString, array(), 'ListsDogovorBundle');
+
+                    $form->addError(new FormError($msg));
+                }
+            }
+        );
     }
 
     /**

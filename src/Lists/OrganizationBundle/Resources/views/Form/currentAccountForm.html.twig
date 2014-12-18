@@ -50,10 +50,10 @@
                         </div>
                     </div>
                     <div class="col-md-12">
-                        <div class="form-group{% if form.bank.vars.errors|length %} has-error{% endif %}">
-                            {{ form_label(form.bank, 'Bank', {'attr': {'class': 'control-label'}}) }}
-                            {{ form_widget(form.bank, {'attr' : {'class' : 'form-control', 'placeholder': "Enter name or mfo"} }) }}
-                            {{ form_errors(form.bank) }}
+                        <div class="form-group{% if form.bankSearch.vars.errors|length %} has-error{% endif %}">
+                            {{ form_label(form.bankSearch, 'Bank', {'attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(form.bankSearch, {'attr' : {'class' : 'form-control', 'placeholder': "Enter name or mfo"} }) }}
+                            {{ form_errors(form.bankSearch) }}
                         </div>
                     </div>
                         
