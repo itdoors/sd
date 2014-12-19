@@ -234,3 +234,6 @@ Enter name: Введите название
 Enter mfo: Введите МФО
 Banks: Банки
 Enter current account: Введите расчетный счет
+Bank: Банк
+Type account: Тип счета
+Enter name or mfo: Введите название или МФО
