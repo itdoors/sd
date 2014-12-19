@@ -21,7 +21,7 @@ class CurrentAccountForm extends AbstractType
     /**
      * __construct
      *
-     * @param Router $router
+     * @param Router        $router
      * @param EntityManager $em
      */
     public function __construct(Router $router, EntityManager $em)
@@ -80,7 +80,6 @@ class CurrentAccountForm extends AbstractType
                 $data->setOrganization($organization);
             }
         );
-        
     }
 
     /**

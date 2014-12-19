@@ -1149,12 +1149,13 @@ class Organization
      * Add departments
      *
      * @param \Lists\DepartmentBundle\Entity\Departments $departments
+     *
      * @return Organization
      */
     public function addDepartment(\Lists\DepartmentBundle\Entity\Departments $departments)
     {
         $this->departments[] = $departments;
-    
+
         return $this;
     }
 
@@ -1172,12 +1173,13 @@ class Organization
      * Add currentAccounts
      *
      * @param \Lists\OrganizationBundle\Entity\OrganizationCurrentAccount $currentAccounts
+     *
      * @return Organization
      */
     public function addCurrentAccount(\Lists\OrganizationBundle\Entity\OrganizationCurrentAccount $currentAccounts)
     {
         $this->currentAccounts[] = $currentAccounts;
-    
+
         return $this;
     }
 
