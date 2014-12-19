@@ -88,3 +88,8 @@ lists_dogovor_ajax_by_ids:
     pattern:  /lists/dogovor/ajax/by_ids
     defaults: { _controller: ListsDogovorBundle:Ajax:dogovorByIds }
     methods:   [GET, POST]
+    
+lists_dogovor_ajax_delay_type:
+    pattern:  /lists/dogovor/ajax/delay_type
+    defaults: { _controller: ListsDogovorBundle:Ajax:delayType }
+    methods:   [GET, POST]

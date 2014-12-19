@@ -4072,7 +4072,11 @@ class AjaxController extends BaseFilterController
         $object = $this->getDoctrine()
             ->getRepository('ListsDogovorBundle:Dogovor')
             ->find($pk);
-
+        if ($name == 'delayType') {
+            $value = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:DelayType')
+            ->find((int) $value);
+        }
         if (!$value) {
             $methodGet = 'get' . ucfirst($name);
             $type = gettype($object->$methodGet());
