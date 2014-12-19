@@ -202,8 +202,6 @@ class OperStatisticController extends Controller
 
         $operManagers = $userRepo->getUsersForOperStatisticByFilter($filters);
 
-        var_dump($filters);
-
         $graph = array();
         $counter = 0;
 
