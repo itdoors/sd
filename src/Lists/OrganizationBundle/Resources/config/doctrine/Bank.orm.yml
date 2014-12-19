@@ -21,3 +21,7 @@ Lists\OrganizationBundle\Entity\Bank:
             nullable: false
             options:
                 comment: МФО банка
+    oneToMany:
+        currentAccounts:
+            targetEntity: OrganizationCurrentAccount
+            mappedBy: bank

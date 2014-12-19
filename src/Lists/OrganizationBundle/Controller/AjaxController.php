@@ -173,6 +173,65 @@ class AjaxController extends BaseController
      * 
      * @return string
      */
+    public function bankNameAndMfoByIdAction(Request $request)
+    {
+        $id = $$request->query->get('id');
+
+        $object = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Bank')
+            ->find($id);
+
+        $result = array();
+
+        if ($object) {
+            $text = $object->getMfo(). ' |'. $object->getName();
+            $id = $object->getId();
+            $result =  array(
+                'id' => $id,
+                'value' => $id,
+                'name' => $text,
+                'text' => $text
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json ownership list depending search query
+     *
+     * @param Request $request
+     * 
+     * @return string
+     */
+    public function bankSearchAction(Request $request)
+    {
+        $searchText = $request->query->get('query');
+
+        $objects = $this->getDoctrine()
+            ->getRepository('ListsOrganizationBundle:Bank')
+            ->getSearchNameAndMfoQuery($searchText);
+
+        $result = array();
+        foreach ($objects as $object) {
+            $text = $object->getMfo(). ' |'. $object->getName();
+            $id = $object->getId();
+            $result[] =  array(
+                'id' => $id,
+                'value' => $id,
+                'name' => $text,
+                'text' => $text
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json ownership list depending search query
+     *
+     * @param Request $request
+     * 
+     * @return string
+     */
     public function bankByOneAction(Request $request)
     {
         $field = $request->query->get('field');

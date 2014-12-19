@@ -73,6 +73,13 @@ class DogovorAdminOrganizationAccess extends BasicOrganizationAccess
     /**
      * @return bool
      */
+    public function canAddBank ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
     public function filterFormName ()
     {
         return 'organizationSalesAdminFilterForm';
