@@ -39,12 +39,13 @@ class DelayType
      * Set name
      *
      * @param string $name
+     *
      * @return DelayType
      */
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
@@ -62,12 +63,13 @@ class DelayType
      * Set shortName
      *
      * @param string $shortName
+     *
      * @return DelayType
      */
     public function setShortName($shortName)
     {
         $this->shortName = $shortName;
-    
+
         return $this;
     }
 

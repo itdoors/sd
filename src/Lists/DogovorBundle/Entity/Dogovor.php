@@ -1226,12 +1226,13 @@ class Dogovor
      * Set delayComment
      *
      * @param integer $delayComment
+     *
      * @return Dogovor
      */
     public function setDelayComment($delayComment)
     {
         $this->delayComment = $delayComment;
-    
+
         return $this;
     }
 
@@ -1249,12 +1250,13 @@ class Dogovor
      * Set delayType
      *
      * @param \Lists\DogovorBundle\Entity\DelayType $delayType
+     *
      * @return Dogovor
      */
     public function setDelayType(\Lists\DogovorBundle\Entity\DelayType $delayType = null)
     {
         $this->delayType = $delayType;
-    
+
         return $this;
     }
 
