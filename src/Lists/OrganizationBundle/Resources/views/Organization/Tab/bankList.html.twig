@@ -10,6 +10,7 @@
                 "columns": [
                     { "orderable": true },
                     { "orderable": true },
+                    { "orderable": true },
                     { "orderable": true }
                 ],
                 "lengthMenu": [
@@ -51,8 +52,9 @@
     <thead>
         <tr>
             <th>{% trans %}ID{% endtrans %} </th>
-            <th>{% trans %}MFO{% endtrans %} </th>
-            <th>{% trans %}Bank{% endtrans %} </th>
+            <th>{% trans from 'ListsOrganizationBundle' %}MFO{% endtrans %} </th>
+            <th>{% trans from 'ListsOrganizationBundle' %}Bank{% endtrans %} </th>
+            <th>{% trans from 'ListsOrganizationBundle' %}Current account{% endtrans %} </th>
         </tr>
     </thead>
     <tbody>
@@ -61,6 +63,7 @@
                 <td>{{ item.id }}</td>
                 <td>{{ item.mfo|e }}</td>
                 <td>{{ item.name|e }}</td>
+                <td>{{ item.currentAccount|e }}</td>
             </tr>
         {% endfor %}
     </tbody>

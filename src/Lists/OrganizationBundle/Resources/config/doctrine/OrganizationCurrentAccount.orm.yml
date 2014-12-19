@@ -30,7 +30,10 @@ Lists\OrganizationBundle\Entity\OrganizationCurrentAccount:
                 referencedColumnName: id
         bank:
             targetEntity: Bank
-            inversedBy: null
+            inversedBy: currentAccounts
             joinColumn:
                 name: bank_id
                 referencedColumnName: id
+    uniqueConstraints:
+        unique_organization_current_account_idx:
+          columns: [ name, organization_id, bank_id ]

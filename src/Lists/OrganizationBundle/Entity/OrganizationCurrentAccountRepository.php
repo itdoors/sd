@@ -32,24 +32,4 @@ class OrganizationCurrentAccountRepository extends EntityRepository
 
         return $sql->getQuery()->getResult();
     }
-    /**
-     * Searches organization by $q
-     *
-     * @param integer $organizationId
-     *
-     * @return mixed[]
-     */
-    public function getBanks($organizationId)
-    {
-        $sql = $this->createQueryBuilder('a')
-            ->select('b.mfo')
-            ->addSelect('b.name')
-            ->addSelect('b.id')
-            ->innerJoin('a.bank', 'b')
-            ->where('a.organization = :organizationId')
-            ->setParameter(':organizationId', $organizationId)
-            ->groupBy('b.id');
-
-        return $sql->getQuery()->getResult();
-    }
 }

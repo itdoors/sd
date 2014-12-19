@@ -1364,4 +1364,5 @@ UPDATE dogovor SET delay_comment = maturity;
 UPDATE dogovor SET payment_deferment = ( SELECT invoice.delay_days FROM  invoice WHERE invoice.dogovor_id = dogovor.id LIMIT 1) WHERE payment_deferment is NULL;
 UPDATE dogovor SET delay_type_id = (SELECT case when invoice.delay_days_type = 'Б' then 1  when invoice.delay_days_type = 'К' then 2 end FROM  invoice WHERE invoice.dogovor_id = dogovor.id and invoice.delay_days_type is not NULL LIMIT 1);
 ALTER TABLE dogovor DROP delay;
+CREATE UNIQUE INDEX unique_organization_current_account_idx ON organization_current_account (name, organization_id, bank_id);
 -- prod ++++++
