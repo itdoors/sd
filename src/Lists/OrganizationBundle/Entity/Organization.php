@@ -1139,4 +1139,67 @@ class Organization
     {
         return $this->departments;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $currentAccounts;
+
+
+    /**
+     * Add departments
+     *
+     * @param \Lists\DepartmentBundle\Entity\Departments $departments
+     *
+     * @return Organization
+     */
+    public function addDepartment(\Lists\DepartmentBundle\Entity\Departments $departments)
+    {
+        $this->departments[] = $departments;
+
+        return $this;
+    }
+
+    /**
+     * Remove departments
+     *
+     * @param \Lists\DepartmentBundle\Entity\Departments $departments
+     */
+    public function removeDepartment(\Lists\DepartmentBundle\Entity\Departments $departments)
+    {
+        $this->departments->removeElement($departments);
+    }
+
+    /**
+     * Add currentAccounts
+     *
+     * @param \Lists\OrganizationBundle\Entity\OrganizationCurrentAccount $currentAccounts
+     *
+     * @return Organization
+     */
+    public function addCurrentAccount(\Lists\OrganizationBundle\Entity\OrganizationCurrentAccount $currentAccounts)
+    {
+        $this->currentAccounts[] = $currentAccounts;
+
+        return $this;
+    }
+
+    /**
+     * Remove currentAccounts
+     *
+     * @param \Lists\OrganizationBundle\Entity\OrganizationCurrentAccount $currentAccounts
+     */
+    public function removeCurrentAccount(\Lists\OrganizationBundle\Entity\OrganizationCurrentAccount $currentAccounts)
+    {
+        $this->currentAccounts->removeElement($currentAccounts);
+    }
+
+    /**
+     * Get currentAccounts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCurrentAccounts()
+    {
+        return $this->currentAccounts;
+    }
 }

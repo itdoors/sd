@@ -82,6 +82,13 @@ class BasicOrganizationAccess implements OrganizationAccessInterface
     /**
      * @return bool
      */
+    public function canAddBank ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
     public function filterFormName ()
     {
         return 'organizationSalesFilterForm';

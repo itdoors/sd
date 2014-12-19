@@ -87,4 +87,48 @@ class Bank
     {
         return $this->getName();
     }
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $currentAccounts;
+
+    /**
+     * Constructor
+     */
+    public function __construct ()
+    {
+        $this->currentAccounts = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    /**
+     * Add currentAccounts
+     *
+     * @param \Lists\OrganizationBundle\Entity\OrganizationCurrentAccount $currentAccounts
+     * 
+     * @return Bank
+     */
+    public function addCurrentAccount (\Lists\OrganizationBundle\Entity\OrganizationCurrentAccount $currentAccounts)
+    {
+        $this->currentAccounts[] = $currentAccounts;
+
+        return $this;
+    }
+    /**
+     * Remove currentAccounts
+     *
+     * @param \Lists\OrganizationBundle\Entity\OrganizationCurrentAccount $currentAccounts
+     */
+    public function removeCurrentAccount (\Lists\OrganizationBundle\Entity\OrganizationCurrentAccount $currentAccounts)
+    {
+        $this->currentAccounts->removeElement($currentAccounts);
+    }
+    /**
+     * Get currentAccounts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCurrentAccounts ()
+    {
+        return $this->currentAccounts;
+    }
 }

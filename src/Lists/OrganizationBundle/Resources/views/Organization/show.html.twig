@@ -56,6 +56,7 @@
                         <li><a href="#tab_7" data-toggle="tab">{% trans %}Documents{% endtrans %}</a></li>
                         <li><a href="#tab_8" data-toggle="tab">{% trans %}COEA{% endtrans %}</a></li>
                         <li><a href="#tab_9" data-toggle="tab">{% trans %}Departmens{% endtrans %}</a></li>
+                        <li><a href="#tab_10" data-toggle="tab">{% trans %}Banks{% endtrans %}</a></li>
                 </ul>
                 <div class="tab-content">
                     {# tab_0 #}
@@ -127,6 +128,8 @@
                     <div class="tab-pane" id="tab_9">
                         {{ render(controller('ListsOrganizationBundle:Organization:departments', { id:organization.id })) }}
                     </div>
+                    {# tab_10 #}
+                    <div class="tab-pane" id="tab_10">{{  include('ListsOrganizationBundle:Organization:Tab/bank.html.twig') }}</div>
                     <!--tabpane-->
                 </div>
                 <!--tab-content-->

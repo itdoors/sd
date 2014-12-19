@@ -375,79 +375,62 @@ class UserRepository extends EntityRepository
 
         return $qb->getQuery()->getResult();
     }
+    /**
+     * getUsersForOperStatisticByFilter
+     * 
+     * @param string $filters
+     * 
+     * @return array
+     */
+    public function getUsersForOperStatisticByFilter($filters = null)
+    {
 
-    public function getUsersForOperStatisticByFilter($filters = null) {
+        $sql = $this->createQueryBuilder('u')
+            ->select('u')
+            ->leftJoin('u.stuff', 's')
+            ->leftJoin('s.companystructure', 'c')
+            ->innerJoin('u.groups', 'g')
+            ->where('g.roles LIKE :roles')
+            ->setParameter(':roles', '%ROLE_OPER%')
+            ->leftJoin('s.status', 'st')
+            ->andWhere("st.id is NULL or st.lukey = :status")
+            ->setParameter(':status', 'worked');
 
-            $sql = $this->createQueryBuilder('u')
-                ->select('u')
-                ->leftJoin('u.stuff', 's')
-                ->leftJoin('s.companystructure', 'c')
-                ->innerJoin('u.groups', 'g')
-                ->where('g.roles LIKE :roles')
-                ->setParameter(':roles', '%ROLE_OPER%')
-                ->leftJoin('s.status', 'st')
-                ->andWhere("st.id is NULL or st.lukey = :status")
-                ->setParameter(':status', 'worked');
+        if ($filters) {
+            if (isset($filters['companyStructure']) && $filters['companyStructure']) {
+                $companyStructureFilter = explode(',', $filters['companyStructure']);
 
-            if ($filters) {
-                if (isset($filters['companyStructure']) && $filters['companyStructure']) {
-                    $companyStructureFilter = explode(',', $filters['companyStructure']);
-
-                    $sql = $sql->andWhere(
-                            "c.id in (:companyStructure) or c.id in
-                                (
-                                    SELECT
-                                        cc.id
-                                    FROM
-                                        ListsCompanystructureBundle:Companystructure cp
-                                    LEFT JOIN
-                                        ListsCompanystructureBundle:Companystructure cc
-                                    WHERE
-                                        cp.root = cc.root
-                                    AND
-                                        cp.lft < cc.lft
-                                    AND
-                                        cp.rgt > cc.rgt
-                                    AND
-                                        cp in (:companyStructure)
-                                )"
-                        );
-                    $sql->setParameter(':companyStructure', $companyStructureFilter);
-
-                }
-                if (isset($filters['user']) && $filters['user']) {
-                    $usersFilter = explode(',', $filters['user']);
-                    $sql = $sql
-                        ->andWhere("u.id IN (:users)")
-                        ->setParameter(':users', $usersFilter);
-
-
-                }
+                $sql = $sql->andWhere(
+                    "c.id in (:companyStructure) or c.id in
+                    (
+                        SELECT
+                            cc.id
+                        FROM
+                            ListsCompanystructureBundle:Companystructure cp
+                        LEFT JOIN
+                            ListsCompanystructureBundle:Companystructure cc
+                        WHERE
+                            cp.root = cc.root
+                        AND
+                            cp.lft < cc.lft
+                        AND
+                            cp.rgt > cc.rgt
+                        AND
+                            cp in (:companyStructure)
+                    )"
+                );
+                $sql->setParameter(':companyStructure', $companyStructureFilter);
 
             }
+            if (isset($filters['user']) && $filters['user']) {
+                $usersFilter = explode(',', $filters['user']);
+                $sql = $sql
+                    ->andWhere("u.id IN (:users)")
+                    ->setParameter(':users', $usersFilter);
+            }
+        }
+        $result = $sql->getQuery()->getResult();
 
-
-            $result = $sql->getQuery()->getResult();
-
-            return $result;
-
-
-                //role_oper filter here
-
-
-
-
-
-
-/*                ->leftJoin('s.companystructure', 'c')
-                ->leftJoin('s.status', 'st')
-                ->where('s.companystructureId = :companystructureId')
-                ->andWhere('c.stuffId is NULL or c.stuffId != s.id')
-                ->andWhere("st.id is NULL or st.lukey = :status")
-                ->setParameter(':companystructureId', $companystructureId)
-                ->setParameter(':status', 'worked')
-                ->orderBy('u.lastName')
-                ->getQuery()->getResult();*/
-
+        return $result;
     }
 }

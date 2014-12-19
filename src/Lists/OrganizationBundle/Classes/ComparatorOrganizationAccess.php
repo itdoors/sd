@@ -150,6 +150,19 @@ class ComparatorOrganizationAccess extends BasicOrganizationAccess
     /**
      * @return bool
      */
+    public function canAddBank ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canAddBank()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
     public function filterFormName ()
     {
         foreach ($this->accesses as $access) {
