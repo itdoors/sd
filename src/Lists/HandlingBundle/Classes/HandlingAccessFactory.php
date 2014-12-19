@@ -24,6 +24,8 @@ class HandlingAccessFactory
                 $access[] = new ManagerHandlingAccess();
             } elseif ($role == 'manager') {
                 $access[] = new ManagerAccess();
+            } elseif ($role == 'report') {
+                $access[] = new ReportHandlingAccess();
             } else {
                 $access[] = new BasicHandlingAccess();
             }

@@ -44,6 +44,32 @@ class AjaxController extends Controller
     }
     /**
      * Returns json ownership list depending search query
+     * 
+     * @return string
+     */
+    public function delayTypeAction()
+    {
+        $objects = $this->getDoctrine()
+            ->getRepository('ListsDogovorBundle:DelayType')
+            ->findAll();
+
+        $result = array();
+
+        foreach ($objects as $object) {
+            $text = $object->getShortName();
+            $id = $object->getId();
+            $result[] =  array(
+                'id' => $id,
+                'value' => $id,
+                'name' => $text,
+                'text' => $text
+            );
+        }
+
+        return new Response(json_encode($result));
+    }
+    /**
+     * Returns json ownership list depending search query
      *
      * @param Request $request
      * 

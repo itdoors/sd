@@ -2344,6 +2344,7 @@ class InvoiceRepository extends EntityRepository
                     ->addSelect('d.stopdatetime')
                     ->addSelect('d.prolongation')
                     ->addSelect('d.paymentDeferment')
+                    ->addSelect('dT.name as delayType')
                     ->addSelect('d.prolongationDate')
                     ->addSelect('d.isActive')
                     ->addSelect('d.subject')
@@ -2359,6 +2360,7 @@ class InvoiceRepository extends EntityRepository
                     ->leftJoin('d.customer', 'customer')
                     ->leftJoin('d.performer', 'performer')
                     ->leftJoin('d.dogovorType', 'type')
+                    ->leftJoin('d.delayType', 'dT')
                     ->where('i.id = :invoiceid')
                     ->setParameter(':invoiceid', (int) $invoiceid);
                 $entitie = $entitie->getQuery()

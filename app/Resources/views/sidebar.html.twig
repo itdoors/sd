@@ -300,13 +300,13 @@
                             <a href="&#123;&#35;{{ path('lists_sales_admin_calendar_index') }}&#35;&#125;" title="{% trans %}Calendar{% endtrans %}">
                             <i class="fa fa-calendar"></i>
                             {% trans %}Calendar{% endtrans %}</a>
-                    </li>#}
+                    </li>
                     <li >
                         <a href="/report/salesadmin/" title="{% trans %}Reports{% endtrans %}">
                             <i class="fa fa-bar-chart-o"></i>
                             {% trans %}Reports{% endtrans %}
                         </a>
-                    </li>				
+                    </li>#}				
                     <li >
                         <a href="{{ path('lists_sales_admin_team_index') }}" title="{% trans %}Teams{% endtrans %}">
                             <i class="fa fa-group"></i>
@@ -315,6 +315,8 @@
                     </li>
                 </ul>
             </li>
+            {% endif %}
+            {% if is_granted('ROLE_SALESADMIN') or is_granted('ROLE_REPORT') %}
             <li{% if 
                    
                     path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_advanced_range')
@@ -335,6 +337,7 @@
                     <span class="arrow "></span>
                 </a>
                 <ul class="sub-menu">
+                    {% if is_granted('ROLE_SALESADMIN') or is_granted('ROLE_REPORT') %}
                     <li{% if 
                         path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_advanced_range')
                         or
@@ -345,6 +348,8 @@
                             {% trans %}Activity{% endtrans %}
                         </a>
                     </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_SALESADMIN') %}
                     <li{% if 
                             path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params')) == path('lists_handling_report_simple')
                         %} class="active"{% endif %}>
@@ -377,6 +382,7 @@
                             {% trans %}All manager activity{% endtrans %}
                         </a>
                     </li>
+                    {% endif %}
                 </ul>
             </li>
         {% endif %}

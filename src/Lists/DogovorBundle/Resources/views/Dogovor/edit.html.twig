@@ -55,6 +55,15 @@
                 width: 250
             }
         });
+        $('#delayType').editable({
+            url: '{{ path('sd_common_ajax_dogovor_save') }}',
+            source: '{{ path('lists_dogovor_ajax_delay_type') }}',
+            select2: {
+                placeholder: '{% trans %}Select delay type{% endtrans %}',
+                minimumInputLength: 0,
+                width: 250
+            }
+        });
 
         $('#dogovorTypeId').editable({
             url: '{{ path('sd_common_ajax_dogovor_save') }}',
@@ -101,7 +110,7 @@
             source: {{  dogovor.isActiveChoices|json_encode|raw }}
         });
 
-        $('#prolongation').editable({
+        $('#prolongation, #paymentDeferment, #delayComment').editable({
             url: '{{ path('sd_common_ajax_dogovor_save') }}',
             source: {{  dogovor.prolongationChoices|json_encode|raw }}
         });
@@ -367,8 +376,34 @@
                 </a>
                 {% endif %}
             </td>
-            <td></td>
-            <td></td>
+            <td>{% trans %}Delay{% endtrans %}</td>
+            <td>
+                {% if access.canEdit %}
+                <a href="#" id="paymentDeferment"  data-type="text" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.paymentDeferment }}" data-placement="right" data-original-title="{% trans %}Enter delay{% endtrans %}">
+                {% endif %}
+                    {{ dogovor.paymentDeferment }}
+                {% if access.canEdit %}
+                </a>
+                {% endif %}
+                (
+                {% if access.canEdit %}
+                 <a href="#" id="delayType"  data-type="select2" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.delayTypeName }}" data-placement="right" data-original-title="{% trans %}Select delay type{% endtrans %}">
+                {% endif %}
+                    {{ dogovor.delayTypeName }}
+                {% if access.canEdit %}
+                </a>
+                {% endif %}
+                )
+                (
+                {% if access.canEdit %}
+                 <a href="#" id="delayComment"  data-type="text" data-pk="{{ dogovor.id }}" data-value="{{ dogovor.delayComment }}" data-placement="right" data-original-title="{% trans %}Enter delay comment{% endtrans %}">
+                {% endif %}
+                    {{ dogovor.delayComment }}
+                {% if access.canEdit %}
+                </a>
+                {% endif %}
+                )
+            </td>
         </tr>
         </tbody>
     </table>
