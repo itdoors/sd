@@ -1215,41 +1215,12 @@ class Dogovor
     /**
      * @var integer
      */
-    private $delay;
-
-    /**
-     * @var integer
-     */
     private $delayComment;
 
     /**
      * @var \Lists\DogovorBundle\Entity\DelayType
      */
     private $delayType;
-
-
-    /**
-     * Set delay
-     *
-     * @param integer $delay
-     * @return Dogovor
-     */
-    public function setDelay($delay)
-    {
-        $this->delay = $delay;
-    
-        return $this;
-    }
-
-    /**
-     * Get delay
-     *
-     * @return integer 
-     */
-    public function getDelay()
-    {
-        return $this->delay;
-    }
 
     /**
      * Set delayComment

@@ -81,17 +81,11 @@ Lists\DogovorBundle\Entity\Dogovor:
             nullable: true
             options:
                 comment: Отстрочка (старое поле)
-        delay:
-            type: integer
-            nullable: false
-            length: 255
-            fixed: false
-            options:
-                default: 0
-                comment: Отстрочка (количество дней)
         delayComment:
-            type: integer
+            type: string
+            length: 255
             nullable: true
+            column: delay_comment
             options:
                 comment: Комментарий к отстрочке
         completionNotice:
@@ -106,7 +100,7 @@ Lists\DogovorBundle\Entity\Dogovor:
             nullable: true
             column: payment_deferment
             options:
-                comment: ?
+                comment: Отстрочка (количество дней)
         prolongationTerm:
             type: string
             length: 255

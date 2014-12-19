@@ -80,4 +80,13 @@ class DelayType
     {
         return $this->shortName;
     }
+    /**
+     * __toString
+     * 
+     * @return string
+     */
+    public function __toString ()
+    {
+        return $this->getShortName();
+    }
 }
