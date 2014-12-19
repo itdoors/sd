@@ -69,6 +69,29 @@
                             {{ form_widget(form.scan, {'attr' : {'class' : 'form-control', 'placeholder': "Select scan"} }) }}
                             </span>
                             <div id="aimgPrev" style="width: 100%;height:100%;display:none;"></div>
+                            <style type="text/css"> 
+                                .transform-90 { 
+                                -moz-transform: rotate(90deg); /*Firefox */ 
+                                -webkit-transform: rotate(90deg); /* Safari Chrome */ 
+                                -o-transform: rotate(90deg); /* Opera */ 
+                                -ms-transform: rotate(90deg); /* IE9 */ 
+                                transform: rotate(90deg); /* CSS3 */ 
+                                }
+                                .transform-180 { 
+                                -moz-transform: rotate(180deg); /*Firefox */ 
+                                -webkit-transform: rotate(180deg); /* Safari Chrome */ 
+                                -o-transform: rotate(180deg); /* Opera */ 
+                                -ms-transform: rotate(180deg); /* IE9 */ 
+                                transform: rotate(180deg); /* CSS3 */ 
+                                }
+                                .transform-270 { 
+                                -moz-transform: rotate(270deg); /*Firefox */ 
+                                -webkit-transform: rotate(270deg); /* Safari Chrome */ 
+                                -o-transform: rotate(270deg); /* Opera */ 
+                                -ms-transform: rotate(270deg); /* IE9 */ 
+                                transform: rotate(270deg); /* CSS3 */ 
+                                }
+                            </style>
                             <script>
                                 $(document).ready(function(){
                                
@@ -76,8 +99,6 @@
                                         $('#payMasterNewForm_scan').fileupload({
                                             replaceFileInput: false,
                                             dataType: 'json',
-                                            maxFileSize: 100000,
-                                            acceptFileTypes: /(\.|\/)(pdf|jpeg)$/i,
                                             fail: function (e, data) {},
                                             done: function (e, data) {},
                                             add: function (e, data) {
@@ -86,15 +107,36 @@
                                                     reader = new FileReader;
                                                 reader.readAsDataURL(f);
                                                 reader.onload = function(e) { // Как только картинка загрузится
-
+                                                    $('#turn-img').remove();
                                                   if (f.type == 'application/pdf') {
-                                                      $('#aimgPrev').show().html('<object data="'+e.target.result+'" type="application/pdf" width="100%" height="500px"></object>');
+                                                      $('#aimgPrev').show().html('<object data="'+e.target.result+'" type="'+f.type+'" width="100%" height="500px"></object>');
+                                                  } else if ( f.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || f.type == 'application/msword') {
+                                                       $('#aimgPrev').show().html('<a href="'+e.target.result+'" traget="_blank">{% trans %}File added{% endtrans %}</a>');
                                                   } else if (f.type == 'image/jpeg') {
+                                                      
+                                                      var $a = '<a id="turn-img" class="btn btn-success" style="width:100%;" href="#">{% trans %}Turn{% endtrans %}</a>';
+                                                      var $img = '<img id="imgPrev" src="'+e.target.result+'" style="width: 100%">';
+                                                      $('#aimgPrev').after($a);
                                                       $('#aimgPrev').show()
-                                                              .html('<img id="imfsdf" src="'+e.target.result+'" style="width: 100%">');
+                                                              .html($img);
                                                       $("#aimgPrev").zoom({
                                                             url: e.target.result,
                                                             magnify: 1
+                                                      });
+                                                      $('#turn-img').die('click');
+                                                      $('#turn-img').live('click',function(){
+                                                          if ($('#aimgPrev img').hasClass('transform-90')){
+                                                              $('#aimgPrev img').toggleClass('transform-90');
+                                                              $('#aimgPrev img').toggleClass('transform-180');
+                                                          } else if  ($('#aimgPrev img').hasClass('transform-180')){
+                                                              $('#aimgPrev img').toggleClass('transform-180');
+                                                              $('#aimgPrev img').toggleClass('transform-270');
+                                                          } else if  ($('#aimgPrev img').hasClass('transform-270')){
+                                                              $('#aimgPrev img').toggleClass('transform-270');
+                                                          } else {
+                                                              $('#aimgPrev img').toggleClass('transform-90');
+                                                          }
+                                                          return false;
                                                       });
                                                   } else {
                                                       alert('{% trans %}This file is not a valid PDF or JPEG{% endtrans %}');
@@ -134,12 +176,17 @@
                                 {{ form_widget(form.customers) }}
                                 {{ form_errors(form.customers) }}
                             </div>
-                            <div class="form-group  col-md-4{% if form.contractor.vars.errors|length %} has-error{% endif %}">
+                            <div class="form-group  col-md-8{% if form.contractor.vars.errors|length %} has-error{% endif %}">
                                 {{ form_label(form.contractor, 'Contractor'|trans, {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(form.contractor, {'attr': {'class': 'form-control', 'placeholder': 'Enter contractor'|trans(), } }) }}
                                 {{ form_errors(form.contractor) }}
                             </div>
-                            <div class="form-group  col-md-4{% if form.dogovor.vars.errors|length %} has-error{% endif %}">
+                            <div class="form-group  col-md-4{% if form.contractorEdrpou.vars.errors|length %} has-error{% endif %}">
+                                {{ form_label(form.contractorEdrpou, 'EDRPOU'|trans, {'attr': {'class': 'control-label'}}) }}
+                                {{ form_widget(form.contractorEdrpou, {'attr': {'class': 'form-control', 'placeholder': 'Enter contractor EDRPOU'|trans(), } }) }}
+                                {{ form_errors(form.contractorEdrpou) }}
+                            </div>
+                            <div class="form-group  col-md-6{% if form.dogovor.vars.errors|length %} has-error{% endif %}">
                                 {{ form_label(form.dogovor, 'Dogovor'|trans, {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(form.dogovor, {'attr': {'class': 'form-control' } }) }}
                                 {{ form_errors(form.dogovor) }}
@@ -149,7 +196,7 @@
                                 {{ form_widget(form.delay, {'attr': {'class': 'form-control' } }) }}
                                 {{ form_errors(form.delay) }}
                             </div>
-                            <div class="form-group  col-md-2">
+                            <div class="form-group  col-md-4">
                                 {{ form_label(form.dogovorFile, 'File', {'attr': {'class': 'control-label'}}) }}
                                 {{ form_widget(form.dogovorFile, {'attr': {'class': 'form-control' } }) }}
                                 {{ form_errors(form.dogovorFile) }}

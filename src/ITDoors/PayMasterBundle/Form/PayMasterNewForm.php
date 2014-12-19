@@ -96,6 +96,10 @@ class PayMasterNewForm extends AbstractType
                     'placeholder' => 'Enter payer'
                 )
             ))
+            ->add('contractorEdrpou', 'text', array(
+                'required' => true,
+                'mapped' => false
+            ))
             ->add('dogovor', 'itdoors_select2_dependent', array(
                 'entity' => 'ListsDogovorBundle:Dogovor',
                 'required' => true,
@@ -204,8 +208,11 @@ class PayMasterNewForm extends AbstractType
             function (FormEvent $event) use ($translator) {
                 $payMaster = $event->getData();
                 $form = $event->getForm();
-                if ($form->get('delay')->getData() != $payMaster->getDogovor()->getMaturity()) {
+                if ($form->get('delay')->getData() != $payMaster->getDogovor()->getPaymentDeferment()) {
                     $form->get('delay')->addError(new FormError($translator->trans('Postponement is incorrect', array(), 'ITDoorsPayMasterBundle')));
+                }
+                if ($form->get('contractorEdrpou')->getData() != $payMaster->getContractor()) {
+                    $form->get('contractorEdrpou')->addError(new FormError($translator->trans('Edrpou set not true', array(), 'ITDoorsPayMasterBundle')));
                 }
             }
         );
