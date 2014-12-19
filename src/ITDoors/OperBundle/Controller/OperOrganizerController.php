@@ -30,7 +30,10 @@ class OperOrganizerController extends Controller
 
         $departments = $this->getDepartmentsForOrganizer($date, $user);
 
-        $supervisor = $user->hasRole('ROLE_SUPERVISOR');
+        $supervisor = false;
+        if ($user->hasRole('ROLE_SUPERVISOR') || $user->hasRole('ROLE_ORGANIZER_SUPERVISOR')) {
+            $supervisor = true;
+        }
 
         $usersOper = array();
         if ($supervisor) {
