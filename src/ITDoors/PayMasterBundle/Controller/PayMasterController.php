@@ -89,7 +89,7 @@ class PayMasterController extends Controller
             $name = explode('isNew_', $formData['currentAccount']);
             $organization = $em->getRepository('ListsOrganizationBundle:Organization')->find($formData['contractor']);
             $type = $em->getRepository('ListsOrganizationBundle:OrganizationCurrentAccountType')->find(2);
-            $bank = $em->getRepository('ListsOrganizationBundle:Bank')->find($formData['mfo']);
+            $bank = $em->getRepository('ListsOrganizationBundle:Bank')->find($formData['bank']);
             $currentAccount = new \Lists\OrganizationBundle\Entity\OrganizationCurrentAccount();
             $currentAccount->setBank($bank);
             $currentAccount->setName($name[1]);
@@ -108,12 +108,6 @@ class PayMasterController extends Controller
                 $user = $this->getUser();
                 $payMaster = $form->getData();
                 $payMaster->setCreator($user);
-
-                $mpkIds = explode(',', $formData['mpks']);
-                foreach ($mpkIds as $id) {
-                    $mpk = $em->getRepository('ListsMpkBundle:Mpk')->find($id);
-                    $payMaster->addMpk($mpk);
-                }
 
                 $em->persist($payMaster);
                 $em->flush();

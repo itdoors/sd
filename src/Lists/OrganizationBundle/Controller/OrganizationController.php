@@ -180,6 +180,17 @@ class OrganizationController extends BaseController
                 ->getRepository('ListsLookupBundle:Lookup')->find($val);
                 $organization->$methodSet($lookups);
             }
+        } elseif ($name == 'lookup') {
+            $methodSet = 'set' . ucfirst($name);
+            if ($value) {
+                $lookup = $this->getDoctrine()
+                ->getRepository('ListsLookupBundle:Lookup')->find($value);
+                if ($lookup) {
+                    $organization->$methodSet($lookup);
+                }
+            } else {
+                $organization->$methodSet(null);
+            }
         } else {
 
             if (!$value) {
@@ -471,6 +482,28 @@ class OrganizationController extends BaseController
         return $this->render('ListsOrganizationBundle:Organization:departments.html.twig', array(
             'organizationId' => $id,
             'isAddDepartment' => $isAddDepartment
+        ));
+    }
+    /**
+     * Renders bank List
+     * 
+     * @param integer $id Organization.id
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function bankListAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $organization = $em->getRepository('ListsOrganizationBundle:Organization')->find($id);
+        if (!$organization) {
+            throw new Exception('Organization not found', 404);
+        }
+        $banks = $em->getRepository('ListsOrganizationBundle:Bank')
+            ->getBanks($id);
+
+        return $this->render('ListsOrganizationBundle:Organization:Tab/bankList.html.twig', array(
+            'organizationId' => $id,
+            'banks' => $banks
         ));
     }
     /**

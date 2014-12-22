@@ -1321,4 +1321,57 @@ ALTER TABLE coach_region ADD CONSTRAINT FK_D4CDBAC3A76ED395 FOREIGN KEY (user_id
 ALTER TABLE coaches_regions ADD CONSTRAINT FK_758AAA3F3C105691 FOREIGN KEY (coach_id) REFERENCES coach_region (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 ALTER TABLE coaches_regions ADD CONSTRAINT FK_758AAA3F98260155 FOREIGN KEY (region_id) REFERENCES Region (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 -- prod ++++++++
+CREATE TABLE handling_message_file (id BIGSERIAL NOT NULL, handling_message_id BIGINT DEFAULT NULL, createdate TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, file VARCHAR(128) DEFAULT NULL, PRIMARY KEY(id));
+CREATE INDEX IDX_6A91B1E8B924C345 ON handling_message_file (handling_message_id);
+COMMENT ON COLUMN handling_message_file.createdate IS 'Дата создания';
+COMMENT ON COLUMN handling_message_file.file IS 'Название файла';
+-- prod ++++++++
+INSERT INTO "public".handling_message_file (handling_message_id, createdate, file)
+    (SELECT handling_message.id, handling_message.createdatetime, handling_message.filepath
+        FROM "public".handling_message
+        LEFT JOIN handling_message_file as hmf on handling_message.id = hmf.handling_message_id
+        WHERE  hmf."file" is null
+        AND handling_message.filepath is not null
+    );
+-- prod ++++++
+ALTER TABLE dogovor ADD delay_type_id BIGINT DEFAULT NULL;
+ALTER TABLE dogovor ADD delay INT DEFAULT 0 NOT NULL;
+ALTER TABLE dogovor ADD delayComment INT DEFAULT NULL;
+COMMENT ON COLUMN dogovor.delay IS 'Отстрочка (количество дней)';
+COMMENT ON COLUMN dogovor.delayComment IS 'Комментарий к отстрочке';
+COMMENT ON COLUMN dogovor.subject IS 'Тема договора';
+COMMENT ON COLUMN dogovor.maturity IS 'Отстрочка (старое поле)';
+ALTER TABLE handling_message ALTER createdate SET NOT NULL;
+COMMENT ON COLUMN handling_message.handling_id IS 'ID проекта';
+COMMENT ON COLUMN handling_message.user_id IS 'ID пользователя (который создал)';
+COMMENT ON COLUMN handling_message.createdatetime IS 'Дата создания (создается автоматически)';
+COMMENT ON COLUMN handling_message.description IS 'Описание';
+COMMENT ON COLUMN handling_message.createdate IS 'Дата создания (указывается пользователем)';
+COMMENT ON COLUMN handling_message.filepath IS 'Это старое поле (нужно будет удалить после пересохранения звонков)';
+COMMENT ON COLUMN handling_message.filename IS 'Название документа';
+ALTER TABLE handling_message_file ADD CONSTRAINT FK_6A91B1E8B924C345 FOREIGN KEY (handling_message_id) REFERENCES handling_message (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
+CREATE TABLE delay_type (id BIGSERIAL NOT NULL, name VARCHAR(255) NOT NULL, short_name VARCHAR(255) NOT NULL, PRIMARY KEY(id));                           
+COMMENT ON COLUMN delay_type.name IS 'Тип дня отстрочки';                                                                                                 
+COMMENT ON COLUMN delay_type.short_name IS 'Сокращеное название';
+INSERT INTO "public".delay_type ("name", short_name) VALUES ('Банковские', 'Б');
+INSERT INTO "public".delay_type ("name", short_name) VALUES ('Календарные', 'К');
+ALTER TABLE dogovor ALTER delay SET  DEFAULT NULL;
+ALTER TABLE dogovor ALTER delay DROP NOT NULL;
+ALTER TABLE dogovor ADD delay_comment VARCHAR(255) DEFAULT NULL;
+ALTER TABLE dogovor DROP delaycomment;
 
+UPDATE dogovor SET delay_comment = maturity;
+UPDATE dogovor SET payment_deferment = ( SELECT invoice.delay_days FROM  invoice WHERE invoice.dogovor_id = dogovor.id LIMIT 1) WHERE payment_deferment is NULL;
+UPDATE dogovor SET delay_type_id = (SELECT case when invoice.delay_days_type = 'Б' then 1  when invoice.delay_days_type = 'К' then 2 end FROM  invoice WHERE invoice.dogovor_id = dogovor.id and invoice.delay_days_type is not NULL LIMIT 1);
+ALTER TABLE dogovor DROP delay;
+CREATE UNIQUE INDEX unique_organization_current_account_idx ON organization_current_account (name, organization_id, bank_id);
+-- prod ++++++
+ALTER TABLE pay_master DROP customer_id;
+ALTER TABLE pay_master DROP CONSTRAINT fk_a49269999395c3f3;
+DROP INDEX idx_a49269999395c3f3;
+CREATE TABLE pay_master_customer (pay_master_id BIGINT NOT NULL, customer_id BIGINT NOT NULL, PRIMARY KEY(pay_master_id, customer_id));
+CREATE INDEX IDX_FCB1B0713EBD646D ON pay_master_customer (pay_master_id);
+CREATE INDEX IDX_FCB1B0719395C3F3 ON pay_master_customer (customer_id);
+
+
+-- prod ++++

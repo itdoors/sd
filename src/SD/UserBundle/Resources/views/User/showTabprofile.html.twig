@@ -259,6 +259,20 @@
                                                 </td>
                                             </tr>
                                             {% endif %}
+                                            <tr>
+                                                <td class="hidden-xs">
+                                                    {% trans %}Position{% endtrans %}
+                                                </td>
+                                                <td>
+                                                    {% if isAdmin %}
+                                                        <a href="#" id="userPosition" data-type="select" {#data-value="{{ item.locked }}"#} data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Choose position{% endtrans %}" data-original-title="{% trans %}Choose position{% endtrans %}">
+                                                            {{ item.userPositionName }}
+                                                        </a>
+                                                    {% else %}
+                                                        {{ item.userPositionName }}
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
                                             {% if isAdmin %}
                                             <tr>                                                                                                
                                                 <td class="hidden-xs">
@@ -315,20 +329,6 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td class="hidden-xs">
-                                                    {% trans %}Position{% endtrans %}
-                                                </td>
-                                                <td>
-                                                    {% if isAdmin %}
-                                                        <a href="#" id="userPosition" data-type="select" {#data-value="{{ item.locked }}"#} data-pk="{{ item.id }}" data-placement="right" data-placeholder="{% trans %}Choose position{% endtrans %}" data-original-title="{% trans %}Choose position{% endtrans %}">
-                                                            {{ item.userPositionName }}
-                                                        </a>
-                                                    {% else %}
-                                                        {{ item.userPositionName }}
-                                                    {% endif %}
-                                                </td>
-                                            </tr>
-                                            <tr>  
                                                 <td class="hidden-xs">
                                                     {% trans %}Blocked{% endtrans %} 
                                                 </td>

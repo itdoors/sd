@@ -11,5 +11,6 @@ services:
         arguments: 
             entityManager: "@doctrine.orm.entity_manager"
             router: "@router"
+            translator: "@translator"
         tags:
             - { name: form.type, alias: payMasterNewForm }

@@ -4,17 +4,16 @@ parameters:
     lists_organization.sales.admin.filter.form.class: Lists\OrganizationBundle\Form\OrganizationSalesAdminFilterFormType
     lists_organization.form.sales.class: Lists\OrganizationBundle\Form\OrganizationSalesFormType
     lists_organization.form.contractor.class: Lists\OrganizationBundle\Form\OrganizationContractorFilterFormType
-#lists_organization.form.dogovoradmin.class: Lists\OrganizationBundle\Form\OrganizationDogovorAdminFormType
     lists_organization.form.user.class: Lists\OrganizationBundle\Form\OrganizationUserFormType
     lists_organization.service.cover.form.class: Lists\OrganizationBundle\Form\OrganizationServiceCoverType
     lists_organization.form.user.sales.admin.class: Lists\OrganizationBundle\Form\OrganizationUserSalesAdminFormType
     lists_organization.form.user.filter.class: Lists\OrganizationBundle\Form\OrganizationUserFilterFormType
     lists_organization.form.child.class: Lists\OrganizationBundle\Form\OrganizationChildForm
     lists_organization.form.kved.class: Lists\OrganizationBundle\Form\KvedFormType
+    lists_organization.form.current_account.class: Lists\OrganizationBundle\Form\CurrentAccountForm
     
-
     lists_organization.edrpou.validator.class: Lists\OrganizationBundle\Validator\UniqueEdrpouValidator
-
+    
     lists_organization.repository.class: Lists\OrganizationBundle\Entity\OrganizationRepository
     lists_organization.repository.entity: Lists\OrganizationBundle\Entity\Organization
 
@@ -55,6 +54,14 @@ services:
         arguments: [@service_container]
         tags:
             - { name: form.type, alias: organizationContractorFilterFormType }
+
+    lists_organization.form.currentAccountForm:
+        class: %lists_organization.form.current_account.class%
+        arguments: 
+            router: "@router"
+            entityManager: "@doctrine.orm.entity_manager"
+        tags:
+            - { name: form.type, alias: currentAccountForm }
 
 #lists_organization.form.organizationDogovorAdminForm:
 #    class: %lists_organization.form.dogovoradmin.class%

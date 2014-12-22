@@ -30,7 +30,10 @@ class OperOrganizerController extends Controller
 
         $departments = $this->getDepartmentsForOrganizer($date, $user);
 
-        $supervisor = $user->hasRole('ROLE_SUPERVISOR');
+        $supervisor = false;
+        if ($user->hasRole('ROLE_SUPERVISOR') || $user->hasRole('ROLE_ORGANIZER_SUPERVISOR')) {
+            $supervisor = true;
+        }
 
         $usersOper = array();
         if ($supervisor) {
@@ -388,7 +391,9 @@ class OperOrganizerController extends Controller
 
         array_walk($usersOper, function ($userOper, $key) use (&$return) {
             if ($userOper->getStuff()) {
-                $return[] = array('id' =>  $userOper->getId(), 'fullName' => $userOper->getFullName());
+                if ($userOper->getStuff()->getStatus()->getLukey() == 'worked') {
+                    $return[] = array('id' =>  $userOper->getId(), 'fullName' => $userOper->getFullName());
+                }
             }
         });
 

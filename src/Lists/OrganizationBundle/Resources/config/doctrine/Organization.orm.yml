@@ -185,6 +185,9 @@ Lists\OrganizationBundle\Entity\Organization:
         departments:
             targetEntity: Lists\DepartmentBundle\Entity\Departments
             mappedBy: organization
+        currentAccounts:
+            targetEntity: OrganizationCurrentAccount
+            mappedBy: organization
     manyToMany:
         organizationsigns:
             targetEntity: Lists\LookupBundle\Entity\Lookup

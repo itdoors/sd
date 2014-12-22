@@ -65,11 +65,6 @@ class PayMaster
     /**
      * @var \Lists\OrganizationBundle\Entity\Organization
      */
-    private $customer;
-
-    /**
-     * @var \Lists\OrganizationBundle\Entity\Organization
-     */
     private $contractor;
 
     /**
@@ -290,28 +285,6 @@ class PayMaster
     public function getPayer ()
     {
         return $this->payer;
-    }
-    /**
-     * Set customer
-     *
-     * @param \Lists\OrganizationBundle\Entity\Organization $customer
-     *
-     * @return PayMaster
-     */
-    public function setCustomer (\Lists\OrganizationBundle\Entity\Organization $customer = null)
-    {
-        $this->customer = $customer;
-
-        return $this;
-    }
-    /**
-     * Get customer
-     *
-     * @return \Lists\OrganizationBundle\Entity\Organization 
-     */
-    public function getCustomer ()
-    {
-        return $this->customer;
     }
     /**
      * Set contractor
@@ -594,5 +567,42 @@ class PayMaster
     public function getReason ()
     {
         return $this->reason;
+    }
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $customers;
+
+    /**
+     * Add customers
+     *
+     * @param \Lists\OrganizationBundle\Entity\Organization $customers
+     *
+     * @return PayMaster
+     */
+    public function addCustomer (\Lists\OrganizationBundle\Entity\Organization $customers)
+    {
+        $this->customers[] = $customers;
+
+        return $this;
+    }
+    /**
+     * Remove customers
+     *
+     * @param \Lists\OrganizationBundle\Entity\Organization $customers
+     */
+    public function removeCustomer (\Lists\OrganizationBundle\Entity\Organization $customers)
+    {
+        $this->customers->removeElement($customers);
+    }
+    /**
+     * Get customers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCustomers ()
+    {
+        return $this->customers;
     }
 }

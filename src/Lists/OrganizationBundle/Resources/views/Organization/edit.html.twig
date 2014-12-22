@@ -77,6 +77,21 @@
                 multiple: true
             }
         });
+         $('#lookup').editable({
+            url: '{{ path('lists_organization_ajax_save') }}',
+            source: [{% for key, lookup in lookups %}{% if lookup.id == 60 %}
+                {{key > 0 ? '' : '' }}{value:'{{lookup.id}}', text:'{{lookup.name}}'}
+                {% endif%}{% endfor %}
+            ],
+            emptytext: '{% trans %}Enter value{% endtrans %}',
+            select2: {
+                placeholder: '{% trans %}Select view{% endtrans %}',
+                minimumInputLength: 0,
+                width: 250,
+                allowClear: true,
+                multiple: false
+            }
+        });
     });
 
 </script>
@@ -129,6 +144,19 @@
                     {% endif %}
                 </td>
                 <td><span class="text-muted">{% trans %}for example{% endtrans %}: Impel Griffin {% trans %}(limit 50 chars){% endtrans %}</span></td>
+            </tr>
+            <tr>
+                <td>{% trans %}Self organization{% endtrans %}</td>
+                <td>
+                    {% if access.canEditSelf %}
+                    <a href="#" id="lookup" data-type="select2" data-pk="{{ organization.id }}" data-value="{{organization.lookup ? organization.lookup.id : ''}}" data-original-title="{% trans %}Self organization{% endtrans %}">
+                    {% endif %}
+                        {{ organization.lookup }}
+                    {% if access.canEditSelf %}
+                    </a>
+                    {% endif %}
+                </td>
+                <td><span class="text-muted">{% trans %}Select view{% endtrans %}</span></td>
             </tr>
             <tr>
                 <td>{% trans %}View{% endtrans %}</td>

@@ -1,63 +1,9 @@
 {% trans_default_domain 'ListsHandlingBundle' %}
-{#% for item in messages %}
-    <div class="portlet box 
-        {% if (item.createdate | date('U')) <= ("now"|date("U")) and item.isFutureMessage %}
-            red
-        {% elseif (item.createdate | date('U')) <= ("now"|date("U")) %}
-            green
-        {% else %}
-            yellow
-        {% endif %}"
-        id="handling_message_{{ item.id }}">
-        <div class="portlet-title">
-            <div class="caption">
-                {{ item.createdate|date('d.m.Y, H:i') }} {{ item.createdatetime == '' ? '' : '(' ~ item.createdatetime|date('d.m.Y, H:i') ~ ')'}} | {{ item.type }} | {{ item.contact }} | {{ item.user }}
-                {% if item.isBusinessTrip %}
-                    | {% trans %}Business trip{% endtrans %}
-                {% endif %}
-            </div>
-            <div class="tools"><a class="collapse" href="" title="{% trans %}Roll Up{% endtrans %}"></a></div>
-        </div>
-        <div class="portlet-body" >
-            {{ item.description }} <br /><br>
-            {% if usersFromOurSide['message'~item.id] is not empty%}
-                {% trans %}Persons from our side{% endtrans %}: <br>
-                {% for person in usersFromOurSide['message'~item.id] %}
-                    &#9679; {{ person.handlingUser.user.fullName }}<br>
-                {% endfor %}
-            {% endif %}
-            <br>
-            {% if usersFromTheirSide['message'~item.id] is not empty%}
-                {% trans %}Persons from their side{% endtrans %}: <br>
-                {% for person in usersFromTheirSide['message'~item.id] %}
-                    &#9679; {{ person.modelContact.fullName }}<br>
-                {% endfor %}
-            {% endif %}
-            {% if item.filepath %}
-                <div class="panel panel-default">
-                    <div class="panel-heading">{% trans %}Attached Files{% endtrans %}</div>
-                    <div class="panel-body">
-                        <a href="/uploads/handling_message/{{ item.handlingId }}/{{ item.filepath }}" target="_blank">
-                            {% if item.filename %}
-                                {{ item.filename }}
-                            {% else %}
-                                {% trans %}Noname File{% endtrans %}
-                            {% endif %}
-                        </a>
-                    </div>
-                </div>
-            {% endif %}
-            {% if calls[item.id] is defined %}
-                {% trans %}Listen to the conversation{% endtrans %}: <audio src="{{ call_url ~ calls[item.id].fileName ~ '.' ~ call_extension}}" controls></audio>
-            {% endif %}
-        </div>
-    </div>
-{% endfor %#}
 <div class="row">
     <div class="col-md-12">
         <ul class="timeline">
             {% for item in messages %}
-                <li class="timeline-{% if (item.createdate | date('U')) <= ("now"|date("U")) and item.isFutureMessage %}blue{% elseif (item.createdate | date('U')) <= ("now"|date("U")) %}green{% else %}yellow{% endif %}">
+                <li id="handling_message_{{ item.id }}" class="timeline-{% if (item.createdate | date('U')) <= ("now"|date("U")) and item.isFutureMessage %}blue{% elseif (item.createdate | date('U')) <= ("now"|date("U")) %}green{% else %}yellow{% endif %}">
                     <div class="timeline-time">
                             <span class="date">{{ item.createdate|date('d.m.Y') }}</span>
                             <span class="time">{{ item.createdate|date('H:i') }}</span>
@@ -96,19 +42,21 @@
                                             &#9679; {{ person.modelContact.fullName }}<br>
                                         {% endfor %}
                                     {% endif %}
-                                    {% if item.filepath %}
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">{% trans %}Attached Files{% endtrans %}</div>
-                                            <div class="panel-body">
-                                                <a href="/uploads/handling_message/{{ item.handlingId }}/{{ item.filepath }}" target="_blank">
-                                                    {% if item.filename %}
-                                                        {{ item.filename }}
-                                                    {% else %}
-                                                        {% trans %}Noname File{% endtrans %}
-                                                    {% endif %}
-                                                </a>
+                                    {% if item.files | length > 0 %}
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">{% trans %}Attached Files{% endtrans %}</div>
+                                                <div class="panel-body">
+                                                     {% for key,file in item.files %}
+                                                    <a href="{{  asset(file.getWebPath()) }}" target="_blank">
+                                                        {% if item.filename and key == 0 %}
+                                                            {{ item.filename }}
+                                                        {% else %}
+                                                            {% trans %}Noname File{% endtrans %}
+                                                        {% endif %}
+                                                    </a><br>
+                                                    {% endfor %}
+                                                </div>
                                             </div>
-                                        </div>
                                     {% endif %}
                                     {% if calls[item.id] is defined %}
                                         {% trans %}Listen to the conversation{% endtrans %}: <audio src="{{ call_url ~ calls[item.id].fileName ~ '.' ~ call_extension}}" controls></audio>

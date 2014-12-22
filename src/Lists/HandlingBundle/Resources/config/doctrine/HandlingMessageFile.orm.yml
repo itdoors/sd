@@ -1,0 +1,33 @@
+Lists\HandlingBundle\Entity\HandlingMessageFile:
+    type: entity
+    table: handling_message_file
+    id:
+        id:
+            id: true
+            type: bigint
+            nullable: false
+            generator:
+                strategy: IDENTITY
+    fields:
+        createdate:
+            type: datetime
+            nullable: false
+            options:
+                comment: Дата создания
+        file:
+            type: string
+            length: 128
+            fixed: false
+            nullable: true
+            options:
+                comment: Название файла
+    manyToOne:
+        handlingMessage:
+            targetEntity: HandlingMessage
+            cascade: {  }
+            inversedBy: files
+            joinColumns:
+                handling_message_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: { postRemove: [postRemoveFile]  }

@@ -58,7 +58,7 @@ class OrganizationRepository extends EntityRepository
     public function getOrganizationSignOwnQuery()
     {
         $query = $this->createQueryBuilder('o')
-            ->innerJoin('o.lookup', 'sign')
+            ->innerJoin('o.organizationsigns', 'sign')
             ->where('sign.lukey = :lukey')
             ->setParameter(':lukey', 'organization_sign_own')
             ->orderBy('o.name');

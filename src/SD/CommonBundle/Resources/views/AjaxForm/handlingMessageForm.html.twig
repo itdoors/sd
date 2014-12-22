@@ -166,8 +166,9 @@
                                     {{ form_widget(form.filename, {'attr' : {'class' : 'form-control', 'placeholder': 'Filename'} } ) }}
                                 </div>
                                 <div class="form-group">
-                                    {{ form_label(form.file, 'Select File', {'attr': {'class': 'control-label'}}) }}
-                                    {{ form_widget(form.file ) }}
+                                    {{ form_label(form.files, 'Select File', {'attr': {'class': 'control-label'} }) }}
+                                    {{ form_widget(form.files ) }}
+                                    {{ form_errors(form.files) }}
                                 </div>
                             </div>
                         </div>

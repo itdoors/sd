@@ -329,7 +329,8 @@ class DepartmentsRepository extends EntityRepository
     /**
      * getDepartmentsForCityQuery
      *
-     * @param string $q
+     * @param string  $searchText
+     * @param integer $cityId
      *
      * @return array
      */
@@ -339,12 +340,10 @@ class DepartmentsRepository extends EntityRepository
         ->innerJoin('d.city', 'c')
         ->where('lower(d.name) LIKE :q')
         ->orWhere('lower(d.address) LIKE :q')
-    
         ->andWhere('c.id = :cityId')
-    
         ->setParameter(':cityId', $cityId)
         ->setParameter(':q', '%' . mb_strtolower($searchText, 'UTF-8') . '%');
-    
+
         return $sql->getQuery()->getResult();
     }
 }
