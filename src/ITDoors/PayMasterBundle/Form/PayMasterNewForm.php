@@ -215,7 +215,7 @@ class PayMasterNewForm extends AbstractType
                         )
                     );
                 }
-                if ($form->get('contractorEdrpou')->getData() != $payMaster->getContractor()) {
+                if ($form->get('contractorEdrpou')->getData() != $payMaster->getContractor()->getEdrpou()) {
                     $form->get('contractorEdrpou')->addError(
                         new FormError($translator->trans('Edrpou set not true', array(), 'ITDoorsPayMasterBundle'))
                     );
