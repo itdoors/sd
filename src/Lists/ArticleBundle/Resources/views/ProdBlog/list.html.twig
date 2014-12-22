@@ -34,19 +34,22 @@
                 <td>{{item.viewed | date('d-m-Y H:i')}}</td>
                 {% else %}
                 <td></td>
-                {% endif %} {% if is_granted('ROLE_ARTICLEADMIN') %} {% if item.article.getUser() == app.getUser() %}
-                <td align="center">
-                    <a href="{{ path('list_article_blog_edit',{'id':item.article.id}) }}" title="{% trans %}Edit{% endtrans %}">
-                        <i class="icon-pencil"></i>
-                    </a>
-                    <a href="{{ path('list_article_blog_delete',{'id':item.article.id}) }}" title="{% trans %}Delete{% endtrans %}">
-                        <i class="icon-trash"></i>
-                    </a>
-                    <a href="#" title="{% trans %}Who viewed{% endtrans %}" class="who_viewed" id="{{item.article.id}}">
-                        <i class="icon-user"></i>
-                    </a>
-                </td>
-                {% endif %} {% endif %}
+                {% endif %}
+                {% if is_granted('ROLE_ARTICLEADMIN') %}
+                    <td align="center">
+                        {% if item.article.getUser() == app.getUser() %}
+                            <a href="{{ path('list_article_blog_edit',{'id':item.article.id}) }}" title="{% trans %}Edit{% endtrans %}">
+                                <i class="icon-pencil"></i>
+                            </a>
+                            <a href="{{ path('list_article_blog_delete',{'id':item.article.id}) }}" title="{% trans %}Delete{% endtrans %}">
+                                <i class="icon-trash"></i>
+                            </a>
+                            <a href="#" title="{% trans %}Who viewed{% endtrans %}" class="who_viewed" id="{{item.article.id}}">
+                                <i class="icon-user"></i>
+                            </a>
+                        {% endif %}
+                    </td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>
