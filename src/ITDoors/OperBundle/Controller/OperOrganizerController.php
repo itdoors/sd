@@ -391,7 +391,9 @@ class OperOrganizerController extends Controller
 
         array_walk($usersOper, function ($userOper, $key) use (&$return) {
             if ($userOper->getStuff()) {
-                $return[] = array('id' =>  $userOper->getId(), 'fullName' => $userOper->getFullName());
+                if ($userOper->getStuff()->getStatus()->getLukey() == 'worked') {
+                    $return[] = array('id' =>  $userOper->getId(), 'fullName' => $userOper->getFullName());
+                }
             }
         });
 
