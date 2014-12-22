@@ -38,7 +38,7 @@
                     <td class="">{{ entity.expectedDate is empty ? '' : entity.expectedDate|date("d.m.y") }}</td>
                     <td class="">{{ entity.createDatetime is empty ? '' : entity.createDatetime|date("d.m.y") }}</td>
                     <td class="">{{ entity.invoiceDate is empty ? '' : entity.invoiceDate|date("d.m.y") }}</td>
-                    <td class="">{{ entity.customer }}</td>
+                    <td class="">{{ entity.customers|join(', ')  }}</td>
                     <td class="">{{ entity.contractor }}</td>
                     <td class="">{{ entity.creator.stuff ? entity.creator.stuff.companystructure : '' }}</td>
                     <td class="">{{ entity.mpks|join(', ') }}</td>

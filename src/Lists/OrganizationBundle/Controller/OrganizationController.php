@@ -180,6 +180,17 @@ class OrganizationController extends BaseController
                 ->getRepository('ListsLookupBundle:Lookup')->find($val);
                 $organization->$methodSet($lookups);
             }
+        } else if ($name == 'lookup') {
+            $methodSet = 'set' . ucfirst($name);
+            if ($value) {
+                $lookup = $this->getDoctrine()
+                ->getRepository('ListsLookupBundle:Lookup')->find($value);
+                if ($lookup) {
+                    $organization->$methodSet($lookup);
+                }
+            } else {
+                $organization->$methodSet(null);
+            }
         } else {
 
             if (!$value) {

@@ -3,8 +3,8 @@ ITDoors\PayMasterBundle\Entity\PayMaster:
         scan:
             - File:
                 maxSize: 1M
-                mimeTypes: [image/jpeg, application/pdf]
-                mimeTypesMessage: "This file is not a valid PDF or JPEG"
+                mimeTypes: [image/jpeg, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document]
+                mimeTypesMessage: "This file is not a valid PDF, JPEG, DOC or DOCX"
                 groups: [new]
             - NotBlank:
                 groups: [new]
@@ -21,9 +21,8 @@ ITDoors\PayMasterBundle\Entity\PayMaster:
         payer:
             - NotBlank:
                 groups: [new]
-        customer:
-            - NotBlank:
-                groups: [new]
+        customers:
+            - NotBlank: ~
         contractor:
             - NotBlank:
                 groups: [new]

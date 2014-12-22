@@ -52,6 +52,13 @@ class DogovorAdminOrganizationAccess extends BasicOrganizationAccess
     /**
      * @return bool
      */
+    public function canEditSelf ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
     public function canAddKVED ()
     {
         return true;

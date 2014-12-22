@@ -1366,3 +1366,12 @@ UPDATE dogovor SET delay_type_id = (SELECT case when invoice.delay_days_type = '
 ALTER TABLE dogovor DROP delay;
 CREATE UNIQUE INDEX unique_organization_current_account_idx ON organization_current_account (name, organization_id, bank_id);
 -- prod ++++++
+ALTER TABLE pay_master DROP customer_id;
+ALTER TABLE pay_master DROP CONSTRAINT fk_a49269999395c3f3;
+DROP INDEX idx_a49269999395c3f3;
+CREATE TABLE pay_master_customer (pay_master_id BIGINT NOT NULL, customer_id BIGINT NOT NULL, PRIMARY KEY(pay_master_id, customer_id));
+CREATE INDEX IDX_FCB1B0713EBD646D ON pay_master_customer (pay_master_id);
+CREATE INDEX IDX_FCB1B0719395C3F3 ON pay_master_customer (customer_id);
+
+
+-- prod ------

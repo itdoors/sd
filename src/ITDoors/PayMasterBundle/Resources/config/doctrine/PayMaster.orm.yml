@@ -67,14 +67,6 @@ ITDoors\PayMasterBundle\Entity\PayMaster:
             joinColumn:
                 name: payer_id
                 referencedColumnName: id
-        customer:
-            targetEntity: Lists\OrganizationBundle\Entity\Organization
-            inversedBy: null
-            options:
-                comment: Клиент
-            joinColumn:
-                name: customer_id
-                referencedColumnName: id
         contractor:
             targetEntity: Lists\OrganizationBundle\Entity\Organization
             inversedBy: null
@@ -112,5 +104,17 @@ ITDoors\PayMasterBundle\Entity\PayMaster:
                         referencedColumnName: id
                 inverseJoinColumns:
                     mpk_id:
+                        referencedColumnName: id
+            orphanRemoval: true
+        customers:
+            targetEntity: Lists\OrganizationBundle\Entity\Organization
+            inversedBy: null
+            joinTable:
+                name: pay_master_customer
+                joinColumns:
+                    pay_master_id:
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    customer_id:
                         referencedColumnName: id
             orphanRemoval: true

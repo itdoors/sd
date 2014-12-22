@@ -84,22 +84,6 @@ class PayMasterController extends Controller
 
         $form = $this->createForm('payMasterNewForm');
 
-        $formData = $request->request->get($form->getName());
-        if (strpos($formData['currentAccount'], 'isNew_') !== false) {
-            $name = explode('isNew_', $formData['currentAccount']);
-            $organization = $em->getRepository('ListsOrganizationBundle:Organization')->find($formData['contractor']);
-            $type = $em->getRepository('ListsOrganizationBundle:OrganizationCurrentAccountType')->find(2);
-            $bank = $em->getRepository('ListsOrganizationBundle:Bank')->find($formData['mfo']);
-            $currentAccount = new \Lists\OrganizationBundle\Entity\OrganizationCurrentAccount();
-            $currentAccount->setBank($bank);
-            $currentAccount->setName($name[1]);
-            $currentAccount->setOrganization($organization);
-            $currentAccount->setTypeAccount($type);
-            $em->persist($currentAccount);
-            $em->flush();
-            $formData['currentAccount'] = $currentAccount;
-            $request->request->set($form->getName(), $formData);
-        }
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -108,12 +92,6 @@ class PayMasterController extends Controller
                 $user = $this->getUser();
                 $payMaster = $form->getData();
                 $payMaster->setCreator($user);
-
-                $mpkIds = explode(',', $formData['mpks']);
-                foreach ($mpkIds as $id) {
-                    $mpk = $em->getRepository('ListsMpkBundle:Mpk')->find($id);
-                    $payMaster->addMpk($mpk);
-                }
 
                 $em->persist($payMaster);
                 $em->flush();

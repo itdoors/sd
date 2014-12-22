@@ -7,6 +7,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Routing\Router;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Translation\Translator;
 
 /**
  * PayMasterNewForm
@@ -15,17 +19,20 @@ class PayMasterNewForm extends AbstractType
 {
     protected $em;
     protected $router;
+    protected $translator;
 
     /**
      * __construct
      *
      * @param EntityManager $em
      * @param Router        $router
+     * @param Translator    $translator
      */
-    public function __construct(EntityManager $em, Router $router)
+    public function __construct(EntityManager $em, Router $router, Translator $translator)
     {
         $this->em = $em;
         $this->router = $router;
+        $this->translator = $translator;
     }
 
     /**
@@ -33,8 +40,6 @@ class PayMasterNewForm extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-//        $organization = $this->em->getRepository('ListsOrganizationBundle:Organization');
-
         $builder
             ->add('scan', 'file')
             ->add('invoiceDate', 'itdoors_date_decade', array(
@@ -51,37 +56,36 @@ class PayMasterNewForm extends AbstractType
                 'attr' => array(
                     'required' => true,
                     'aria-required' => 'true',
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'class' => 'can-be-reseted submit-field',
                     'class_outer' => 'col-md-4',
                     'data-url'  => $this->router->generate('lists_organization_ajax_organization_search_signs'),
                     'data-url-by-id' => $this->router->generate('lists_organization_ajax_organization_by_id'),
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 0,
                         'allowClear' => false,
-                        )),
+                    )),
                     'placeholder' => 'Enter payer'
                 )
             ))
-            ->add('customer', 'itdoors_select2_entity', array(
+            ->add('customers', 'entity', array(
                 'class' => 'ListsOrganizationBundle:Organization',
-                'required' => true,
+                'property' => 'name',
+                'empty_value' => '',
+                'multiple' => true,
                 'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'class_outer' => 'col-md-4',
-                    'data-url'  => $this->router->generate('lists_organization_ajax_search'),
-                    'data-url-by-id' => $this->router->generate('lists_organization_ajax_organization_by_id'),
+                    'class' => 'form-control itdoors-select2',
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 2,
-                        'allowClear' => true,
-                        )),
-                    'placeholder' => 'Enter customer'
+                        'allowClear' => true
+                    )),
+                    'placeholder' => 'Enter customer',
                 )
             ))
             ->add('contractor', 'itdoors_select2_entity', array(
                 'class' => 'ListsOrganizationBundle:Organization',
                 'required' => true,
                 'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'class' => 'can-be-reseted submit-field',
                     'class_outer' => 'col-md-4',
                     'data-url'  => $this->router->generate('lists_organization_ajax_search'),
                     'data-url-by-id' => $this->router->generate('lists_organization_ajax_organization_by_id'),
@@ -92,11 +96,15 @@ class PayMasterNewForm extends AbstractType
                     'placeholder' => 'Enter payer'
                 )
             ))
+            ->add('contractorEdrpou', 'text', array(
+                'required' => true,
+                'mapped' => false
+            ))
             ->add('dogovor', 'itdoors_select2_dependent', array(
                 'entity' => 'ListsDogovorBundle:Dogovor',
                 'required' => true,
                 'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'class' => 'can-be-reseted submit-field',
                     'class_outer' => 'col-md-4',
                     'data-dependent' => 'payMasterNewForm_contractor',
                     'data-url'  => $this->router->generate('lists_dogovor_ajax_search_dependent'),
@@ -108,13 +116,8 @@ class PayMasterNewForm extends AbstractType
                     'placeholder' => 'Enter dogovor'
                 )
             ))
-            ->add('delay', 'itdoors_dependent_listener_select2', array(
-                'mapped' => false,
-                'attr' => array(
-                    'data-field' => 'paymentDeferment',
-                    'data-dependent' => 'payMasterNewForm_dogovor',
-                    'data-url'  => $this->router->generate('lists_dogovor_ajax_get_field')
-                )
+            ->add('delay', 'text', array(
+                'mapped' => false
             ))
             ->add('dogovorFile', 'itdoors_dependent_listener_select2', array(
                 'mapped' => false,
@@ -165,29 +168,68 @@ class PayMasterNewForm extends AbstractType
                     'placeholder' => 'Enter name'
                 )
             ))
-            ->add('mpks', 'itdoors_select2_entity', array(
+            ->add('mpks', 'entity', array(
                 'class' => 'ListsMpkBundle:Mpk',
-                'mapped' => false,
-                'required' => true,
+                'property' => 'name',
+                'empty_value' => '',
+                'multiple' => true,
                 'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'class_outer' => 'col-md-4',
-                    'data-url'  => $this->router->generate('lists_mpk_ajax_search'),
-                    'data-url-by-id' => $this->router->generate('lists_mpk_ajax_mpk_by_ids'),
+                    'class' => 'form-control itdoors-select2',
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 2,
-//                        'multiple' => true,
-                        )),
-                    'placeholder' => 'Enter mpk'
+                        'allowClear' => true
+                    )),
+                    'placeholder' => 'Enter mpk',
                 )
             ))
             ->add('invoiceAmount', 'money')
-            ->add('vat', 'checkbox', array(
-                'required' => false
-            ))
+            ->add('vat', 'itdoors_choice', array(
+                'required' => true,
+                'empty_value' => '',
+                'attr' => array(
+                    'class' => 'form-control can-be-reseted',
+                    'data-params' => json_encode(array(
+                        'minimumInputLength' => 0
+                    )),
+                    'placeholder' => 'Select vat',
+                ),
+                'choices' => array(
+                    '1' => 'With vat',
+                    '0' => 'VAT not included'
+                    )
+                ))
             ->add('description', 'textarea');
         $builder
             ->add('create', 'submit');
+
+        $translator = $this->translator;
+        $builder->addEventListener(
+            FormEvents::POST_SUBMIT,
+            function (FormEvent $event) use ($translator) {
+                $payMaster = $event->getData();
+                $form = $event->getForm();
+                if ($form->get('delay')->getData() != $payMaster->getDogovor()->getPaymentDeferment()) {
+                    $form->get('delay')->addError(new FormError($translator->trans('Postponement is incorrect', array(), 'ITDoorsPayMasterBundle')));
+                }
+                if ($form->get('contractorEdrpou')->getData() != $payMaster->getContractor()) {
+                    $form->get('contractorEdrpou')->addError(new FormError($translator->trans('Edrpou set not true', array(), 'ITDoorsPayMasterBundle')));
+                }
+                if (strpos($form->get('currentAccount')->getData(), 'isNew_') !== false) {
+                    $name = explode('isNew_', $form->get('currentAccount')->getData());
+                    $organization = $this->em->getRepository('ListsOrganizationBundle:Organization')->find($form->get('contractor')->getData());
+                    $type = $this->em->getRepository('ListsOrganizationBundle:OrganizationCurrentAccountType')->find(2);
+                    $bank = $this->em->getRepository('ListsOrganizationBundle:Bank')->find($form->get('mfo')->getData());
+                    $currentAccount = new \Lists\OrganizationBundle\Entity\OrganizationCurrentAccount();
+                    $currentAccount->setBank($bank);
+                    $currentAccount->setName($name[1]);
+                    $currentAccount->setOrganization($organization);
+                    $currentAccount->setTypeAccount($type);
+                    $this->em->persist($currentAccount);
+                    $this->em->flush();
+                    $form->get('currentAccount')->setData($currentAccount);
+                }
+            }
+        );
     }
 
     /**
