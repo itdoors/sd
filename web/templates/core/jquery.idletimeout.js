@@ -26,16 +26,16 @@
 				if( $.data(document, 'idleTimer') === 'idle' && !self.countdownOpen){
 					self._stopTimer();
 					self.countdownOpen = true;
-					store.set('countdownOpen', true);
+					localStorage.setItem('countdownOpen', true)
 					self._idle();
 				}
 			});
 			
 			$(window).bind('storage', function() {
-				if (store.get('idleTimerLoggedOut') === true){
+				if (localStorage.getItem('idleTimerLoggedOut') === 'true'){
 					options.onTimeout.call(this.warning);
 				}
-				self.countdownOpen = store.get('countdownOpen');
+				self.countdownOpen = localStorage.getItem('countdownOpen') === 'true';
 				$.data(document,'idleTimer',"active");
 //				console.warn('storage event');
             });
