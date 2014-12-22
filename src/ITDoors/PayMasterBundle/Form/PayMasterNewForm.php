@@ -220,22 +220,6 @@ class PayMasterNewForm extends AbstractType
                         new FormError($translator->trans('Edrpou set not true', array(), 'ITDoorsPayMasterBundle'))
                     );
                 }
-                if (strpos($form->get('currentAccount')->getData(), 'isNew_') !== false) {
-                    $name = explode('isNew_', $form->get('currentAccount')->getData());
-                    $organization = $this->em->getRepository('ListsOrganizationBundle:Organization')
-                        ->find($form->get('contractor')->getData());
-                    $type = $this->em->getRepository('ListsOrganizationBundle:OrganizationCurrentAccountType')->find(2);
-                    $bank = $this->em->getRepository('ListsOrganizationBundle:Bank')
-                        ->find($form->get('mfo')->getData());
-                    $currentAccount = new \Lists\OrganizationBundle\Entity\OrganizationCurrentAccount();
-                    $currentAccount->setBank($bank);
-                    $currentAccount->setName($name[1]);
-                    $currentAccount->setOrganization($organization);
-                    $currentAccount->setTypeAccount($type);
-                    $this->em->persist($currentAccount);
-                    $this->em->flush();
-                    $form->get('currentAccount')->setData($currentAccount);
-                }
             }
         );
     }

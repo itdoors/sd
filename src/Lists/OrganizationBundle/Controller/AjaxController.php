@@ -236,6 +236,10 @@ class AjaxController extends BaseController
     {
         $field = $request->query->get('field');
         $dependent = $request->query->get('dependent');
+        
+        if (strpos($dependent, 'isNew_') !== false) {
+            $dependent = '';
+        }
 
         $object = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:OrganizationCurrentAccount')
