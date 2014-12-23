@@ -46,7 +46,7 @@ class PayMasterController extends Controller
             $page = 1;
         }
         $orders = $baseFilter->getOrdering($nameSpacePayMaster);
-            
+
         $payMasterRepository = $em->getRepository('ITDoorsPayMasterBundle:PayMaster');
         /** @var \Doctrine\ORM\Query */
         $payMasterQuery = $payMasterRepository->forTab($tab, $orders);
@@ -92,12 +92,14 @@ class PayMasterController extends Controller
             $organization = $em->getRepository('ListsOrganizationBundle:Organization')->find($formData['contractor']);
             $type = $em->getRepository('ListsOrganizationBundle:OrganizationCurrentAccountType')->find(2);
             $bank = $em->getRepository('ListsOrganizationBundle:Bank')->find($formData['mfo']);
-            $currentAccountFind = $em->getRepository('ListsOrganizationBundle:OrganizationCurrentAccount')->findOneBy(array(
-                'bank' => $bank,
-                'name' => $name[1],
-                'organization' => $organization,
-                'typeAccount' => $type
-            ));
+            $currentAccountFind = $em->getRepository('ListsOrganizationBundle:OrganizationCurrentAccount')->findOneBy(
+                array(
+                    'bank' => $bank,
+                    'name' => $name[1],
+                    'organization' => $organization,
+                    'typeAccount' => $type
+                )
+            );
             if (!$currentAccountFind) {
                 $currentAccount = new \Lists\OrganizationBundle\Entity\OrganizationCurrentAccount();
                 $currentAccount->setBank($bank);

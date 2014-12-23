@@ -35,9 +35,16 @@ class AjaxController extends Controller
             ->find($pk);
 
         if ($name == 'status') {
-            if ((!$access->canChangeStatus() && $this->getUser() != $object->getCreator() ) || $object->getIsAcceptance() === false || $object->getPaymentDate() !== null ) {
+            if (
+                (!$access->canChangeStatus() && $this->getUser() != $object->getCreator())
+                ||
+                $object->getIsAcceptance() === false
+                ||
+                $object->getPaymentDate() !== null
+            ) {
                 $return['error'] = 403;
                 $return['text'] = 'No access';
+
                 return new Response(json_encode($return));
             }
             if (!$value) {

@@ -66,8 +66,7 @@ class PayMasterAcceptanceForm extends AbstractType
                 $isAcceptance = $form->get('isAcceptance')->getData();
                 $reason = $form->get('reason')->getData();
 
-                
-                if ($isAcceptance === null ) {
+                if ($isAcceptance === null) {
                     $form->get('isAcceptance')->addError(
                         new FormError(
                             $translator->trans('The field can not be empty', array(), 'ITDoorsPayMasterBundle')
@@ -75,7 +74,9 @@ class PayMasterAcceptanceForm extends AbstractType
                     );
                 } elseif ($isAcceptance === 0 && empty($reason)) {
                     $form->get('reason')->addError(
-                        new FormError($translator->trans('The field can not be empty', array(), 'ITDoorsPayMasterBundle'))
+                        new FormError(
+                            $translator->trans('The field can not be empty', array(), 'ITDoorsPayMasterBundle')
+                        )
                     );
                 }
             }

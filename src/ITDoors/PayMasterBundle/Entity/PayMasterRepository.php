@@ -16,8 +16,8 @@ class PayMasterRepository extends EntityRepository
     /**
      * Returns results for interval future invoice
      *
-     * @param string $tab
-     * @param array   $orders
+     * @param string  $tab
+     * @param mixed[] $orders
      * 
      * @return QueryBuilder
      */
