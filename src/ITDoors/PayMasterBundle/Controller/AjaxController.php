@@ -12,22 +12,91 @@ use Symfony\Component\HttpFoundation\Request;
 class AjaxController extends Controller
 {
     /**
-     * Returns json ownership list depending search query
+     * Function to handle the ajax queries from editable elements
+     *
+     * @return mixed[]
+     */
+    public function editableSaveAction()
+    {
+        $return = array('error' => false);
+        $service = $this->get('it_doors_pay_master.service');
+        $access = $service->checkAccess($this->getUser());
+
+        $pk = (int) $this->get('request')->request->get('pk');
+        $name = $this->get('request')->request->get('name');
+        $value = $this->get('request')->request->get('value');
+
+        $methodSet = 'set' . ucfirst($name);
+
+
+        /** @var \ITDoors\PayMasterBundle\Entity\PayMaster $object */
+        $object = $this->getDoctrine()
+            ->getRepository('ITDoorsPayMasterBundle:PayMaster')
+            ->find($pk);
+
+        if ($name == 'status') {
+            if ((!$access->canChangeStatus() && $this->getUser() != $object->getCreator() ) || $object->getIsAcceptance() === false || $object->getPaymentDate() !== null ) {
+                $return['error'] = 403;
+                $return['text'] = 'No access';
+                return new Response(json_encode($return));
+            }
+            if (!$value) {
+                $value = null;
+            } else {
+                $value = $this->getDoctrine()
+                    ->getRepository('ITDoorsPayMasterBundle:PayMasterStatus')
+                    ->find($value);
+            }
+        } elseif ($name == 'expectedDate') {
+            $value = new \DateTime($value);
+        }
+        $object->$methodSet($value);
+
+        $validator = $this->get('validator');
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationList $errors*/
+        $errors = $validator->validate($object, array('edit'));
+
+        if (sizeof($errors)) {
+            $return = $this->getFirstError($errors);
+
+            return new Response($return, 406);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($object);
+
+        $return['value'] = $value;
+        $return['method'] = $methodSet;
+        $return['object'] = $object;
+        try {
+            $em->flush();
+
+            $em->refresh($object);
+        } catch (\ErrorException $e) {
+            $return['error'] = $e->getMessage();
+        }
+
+        return new Response(json_encode($return));
+
+    }
+    /**
+     * Returns json status list search query
      *
      * @param Request $request
      * 
      * @return string
      */
-    public function searchMpkNewAction(Request $request)
+    public function statusListAction(Request $request)
     {
         $searchText = $request->query->get('query');
 
-        /** @var \ITDoors\PayMasterBundle\Entity\PayMasterMPKRepository $objects */
         $objects = $this->getDoctrine()
-            ->getRepository('ITDoorsPayMasterBundle:PayMasterMPK')
+            ->getRepository('ITDoorsPayMasterBundle:PayMasterStatus')
             ->getSearchQuery($searchText);
 
         $result = array();
+
         foreach ($objects as $object) {
             $text = $object->getName();
             $id = $object->getId();
@@ -41,33 +110,29 @@ class AjaxController extends Controller
 
         return new Response(json_encode($result));
     }
-
     /**
-     * dogovorByIdsAction
+     * Returns json ownership list depending search query
+     *
+     * @param integer $id
      * 
-     * @param Request $request
-     * 
-     * @return Response
+     * @return string
      */
-    public function mpkByIdsAction(Request $request)
+    public function removeAction($id)
     {
-        $ids = explode(',', $request->query->get('id'));
-
-        /** @var \ITDoors\PayMasterBundle\Entity\PayMasterMPKRepository $mpkRepository */
-        $mpkRepository = $this->getDoctrine()
-            ->getRepository('ITDoorsPayMasterBundle:PayMasterMPK');
-
-        /** @var PayMasterMPK[] $mpks */
-        $mpks = $mpkRepository
-            ->createQueryBuilder('m')
-            ->where('m.id in (:ids)')
-            ->setParameter(':ids', $ids)
-            ->getQuery()->getResult();
-
+        $em = $this->getDoctrine()->getManager();
+        /** @var \ITDoors\PayMasterBundle\Entity\PayMaster $object */
+        $object = $em
+            ->getRepository('ITDoorsPayMasterBundle:PayMaster')
+            ->find($id);
+        $service = $this->get('it_doors_pay_master.service');
+        $access = $service->checkAccess($this->getUser());
         $result = array();
-
-        foreach ($mpks as $mpk) {
-            $result[] = $this->serializeObject($mpk);
+        if ($access->canRemove() && $object->getIsAcceptance() === null) {
+            $em->remove($object);
+            $em->flush();
+            $result['access'] = true;
+        } else {
+            $result['error'] = 'No Access';
         }
 
         return new Response(json_encode($result));

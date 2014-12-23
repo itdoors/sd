@@ -45,9 +45,11 @@ class PayMasterController extends Controller
         if (!$page) {
             $page = 1;
         }
+        $orders = $baseFilter->getOrdering($nameSpacePayMaster);
+            
         $payMasterRepository = $em->getRepository('ITDoorsPayMasterBundle:PayMaster');
         /** @var \Doctrine\ORM\Query */
-        $payMasterQuery = $payMasterRepository->forTab($tab);
+        $payMasterQuery = $payMasterRepository->forTab($tab, $orders);
         /** @var \Knp\Component\Pager\Paginator $paginator */
         $paginator = $this->get('knp_paginator');
 
@@ -89,15 +91,26 @@ class PayMasterController extends Controller
             $name = explode('isNew_', $formData['currentAccount']);
             $organization = $em->getRepository('ListsOrganizationBundle:Organization')->find($formData['contractor']);
             $type = $em->getRepository('ListsOrganizationBundle:OrganizationCurrentAccountType')->find(2);
-            $bank = $em->getRepository('ListsOrganizationBundle:Bank')->find($formData['bank']);
-            $currentAccount = new \Lists\OrganizationBundle\Entity\OrganizationCurrentAccount();
-            $currentAccount->setBank($bank);
-            $currentAccount->setName($name[1]);
-            $currentAccount->setOrganization($organization);
-            $currentAccount->setTypeAccount($type);
-            $em->persist($currentAccount);
-            $em->flush();
-            $formData['currentAccount'] = $currentAccount;
+            $bank = $em->getRepository('ListsOrganizationBundle:Bank')->find($formData['mfo']);
+            $currentAccountFind = $em->getRepository('ListsOrganizationBundle:OrganizationCurrentAccount')->findOneBy(array(
+                'bank' => $bank,
+                'name' => $name[1],
+                'organization' => $organization,
+                'typeAccount' => $type
+            ));
+            if (!$currentAccountFind) {
+                $currentAccount = new \Lists\OrganizationBundle\Entity\OrganizationCurrentAccount();
+                $currentAccount->setBank($bank);
+                $currentAccount->setName($name[1]);
+                $currentAccount->setOrganization($organization);
+                $currentAccount->setTypeAccount($type);
+                $em->persist($currentAccount);
+                $em->flush();
+                $em->refresh($currentAccount);
+            } else {
+                $currentAccount = $currentAccountFind;
+            }
+            $formData['currentAccount'] = $currentAccount->getId();
             $request->request->set($form->getName(), $formData);
         }
         $form->handleRequest($request);

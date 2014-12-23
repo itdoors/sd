@@ -278,29 +278,43 @@ var SD = (function() {
         $('.' + this.params.ajaxDeleteClass).live('click', function(e) {
             e.preventDefault();
 
-            if (!confirm('Are you sure?'))
+            var parentElement = $(this).parents('tr');
+            var params = $(this).data('params');
+            var question = $(this).data('question');
+            var url = $(this).data('url');
+            
+            if (question === '' || question === undefined) {
+                question = 'Are you sure?';
+            }
+            if (url === '' || url === undefined) {
+                url = selfSD.params.ajaxDeleteUrl;
+            }
+            if (!confirm(question))
             {
                 return;
             }
 
-            var parentElement = $(this).parents('tr');
-            var params = $(this).data('params');
-
             parentElement.css('opacity', '0.5');
 
             $.ajax({
-                url: selfSD.params.ajaxDeleteUrl,
+                url: url,
                 type: 'POST',
+                dataType: "json",
                 data: {
                     params: params
                 },
                 success: function (response)
                 {
-                    parentElement.remove();
+                    if (response.error) {
+                        alert(response.error);
+                        parentElement.css('opacity', '1.0');
+                    } else {
+                        parentElement.remove();
+                    }
                 }
             });
-        })
-    }
+        });
+    };
 
     SD.prototype.blockUI = function (el, centerY) {
         var selfSD = this;

@@ -21,10 +21,14 @@
 
 {% block css_page_level_plugin %}
     {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/select2/select2.css')}} " />
+    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/css/bootstrap-editable.css')}} " />
 {% endblock %}
 
 {% block js_page_level_plugins %}
     {{ parent() }}
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/bootstrap-editable/bootstrap-editable/js/bootstrap-editable.min.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -32,9 +36,11 @@
     <div class="col-md-12">
         <div class="tabbable tabbable-custom boxless">
             <ul class="nav nav-tabs" id="ajax_tabs">
-                <li class="active"><a href="#tab_0" data-block="tab_content" data-toggle="tab">{% trans %}New{% endtrans %}</a></li>
+                <li class="active"><a href="#tab_0" data-block="tab_content" data-toggle="tab">{% if access.canSeeAll %}{% trans %}Received{% endtrans %}{% else %}{% trans %}Unpaid{% endtrans %}{% endif %}</a></li>
+                {% if access.canSeeAll  %}
                 <li><a href="#tab_1" data-toggle="tab">{% trans %}Urgent{% endtrans %}</a></li>
                 <li><a href="#tab_2" data-toggle="tab">{% trans %}On payment{% endtrans %}</a></li>
+                {% endif %}
                 <li><a href="#tab_3" data-toggle="tab">{% trans %}Sponsored{% endtrans %}</a></li>
                 <li><a href="#tab_4" data-toggle="tab">{% trans %}Rejected{% endtrans %}</a></li>
             </ul>
@@ -47,6 +53,7 @@
                         {{ render(controller('ITDoorsPayMasterBundle:PayMaster:tab', {tab: 'new'})) }}
                    </div>
                 </div>
+                {% if access.canSeeAll  %}
                 <div class="tab-pane" id="tab_1">
                     <div class="tab-content" id="table_tab_urgent" data-url="{{ url('it_doors_pay_master_tab', {tab: 'urgent'}) }}">
                         {{ render(controller('ITDoorsPayMasterBundle:PayMaster:tab', {tab: 'urgent'})) }}
@@ -57,6 +64,7 @@
                          {{ render(controller('ITDoorsPayMasterBundle:PayMaster:tab', {tab: 'payment'})) }}
                     </div>
                 </div>
+                {% endif %}
                 <div class="tab-pane" id="tab_3">
                     <div class="tab-content" id="table_tab_sponsored" data-url="{{ url('it_doors_pay_master_tab', {tab: 'sponsored'}) }}">
                         {{ render(controller('ITDoorsPayMasterBundle:PayMaster:tab', {tab: 'sponsored'})) }}

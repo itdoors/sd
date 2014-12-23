@@ -231,7 +231,7 @@ class PayMasterNewForm extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'ITDoors\PayMasterBundle\Entity\PayMaster',
-            'validation_groups' => array('new'),
+            'validation_groups' => array('create'),
             'translation_domain' => 'ITDoorsPayMasterBundle'
         ));
     }

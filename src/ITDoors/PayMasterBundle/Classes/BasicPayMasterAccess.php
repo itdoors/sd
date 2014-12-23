@@ -16,4 +16,39 @@ class BasicPayMasterAccess implements PayMasterAccessInterface
     {
         return false;
     }
+    /**
+     * @return bool
+     */
+    public function canSeeAll ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canRemove ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canChangeStatus ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canChangeIsAcceptance ()
+    {
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canChangeToPay ()
+    {
+        return false;
+    }
 }
