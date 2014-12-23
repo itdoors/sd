@@ -146,11 +146,11 @@
                     {% endif %}
                     
                     <td>
-                        {% if entity.paymentDate is null and entity.isAcceptance != false %}
+                        {% if entity.paymentDate is null and (entity.isAcceptance is null or  entity.isAcceptance) %}
                             <a class="payMasterExpectedDate" href="#" id="expectedDate" data-type="combodate" data-format="DD.MM.YYYY" data-viewformat="DD.MM.YYYY" data-pk="{{ entity.id }}" data-template="DD / MM / YYYY" data-original-title="{% trans %}Enter date of payment{% endtrans %}">
                         {% endif %}
                         {{ entity.expectedDate is empty ? '' : entity.expectedDate|date("d.m.Y") }}
-                        {% if entity.paymentDate is null and entity.isAcceptance != false %}
+                        {% if entity.paymentDate is null and (entity.isAcceptance is null or  entity.isAcceptance) %}
                             </a>
                         {% endif %}
                     </td>
