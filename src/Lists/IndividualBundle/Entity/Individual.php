@@ -48,6 +48,29 @@ class Individual
     private $address;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $actions;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->actions = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Get actions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActions()
+    {
+        return $this->actions;
+    }
+
+    /**
      * Get id
      *
      * @return integer

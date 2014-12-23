@@ -85,3 +85,7 @@ lists_coach_ajax_organization_list:
 lists_coach_ajax_city_list:
     path:     /training/city_list
     defaults: { _controller: ListsCoachBundle:Ajax:cityList }
+    
+lists_coach_ajax_members_list:
+    path:     /training/members_list
+    defaults: { _controller: ListsCoachBundle:Ajax:membersList }

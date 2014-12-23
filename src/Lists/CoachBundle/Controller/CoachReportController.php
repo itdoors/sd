@@ -22,8 +22,7 @@ class CoachReportController extends BaseController
      */
     public function indexAction()
     {
-        return $this->render('ListsCoachBundle:Report:index.html.twig', array(
-        ));
+        return $this->render('ListsCoachBundle:Report:index.html.twig', array());
     }
 
     /**

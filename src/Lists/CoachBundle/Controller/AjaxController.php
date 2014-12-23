@@ -425,4 +425,31 @@ class AjaxController extends BaseController
 
         return new JsonResponse($result);
     }
+
+    /**
+     * Returns json list of members
+     *
+     * @return JsonResponse
+     */
+    public function membersListAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+
+        $indRepository = $this->getDoctrine()
+            ->getRepository('ListsIndividualBundle:Individual');
+
+        $inds = $indRepository->getMembers($searchText);
+
+        $result = [];
+        foreach ($inds as $ind) {
+            $result[] = array(
+                            'id' => $ind->getId(),
+                            'value' => $ind->getId(),
+                            'name' => $ind->__toString(),
+                            'text' => $ind->__toString()
+            );
+        }
+
+        return new JsonResponse($result);
+    }
 }

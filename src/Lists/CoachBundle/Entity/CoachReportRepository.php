@@ -151,6 +151,13 @@ class CoachReportRepository extends EntityRepository
                         $sql->andWhere("dd.city in (:cities)");
                         $sql->setParameter(':cities', $valueArr);
                         break;
+                    case 'members':
+                        $valueArr = explode(',', $value);
+                        $sql->join('c.action', 'aaaaa');
+                        $sql->join('aaaaa.individuals', 'i');
+                        $sql->andWhere("i in (:individuals)");
+                        $sql->setParameter(':individuals', $valueArr);
+                        break;
                 }
             }
         }

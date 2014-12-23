@@ -119,22 +119,22 @@ class ReportFilterFormType extends AbstractType
                                     'width' => '200px',
                                     'multiple' => 'multiple'
                     )),
-                    'disabled' => true,
+//                     'disabled' => true,
                     'placeholder' => 'Place',
                 )
             ))
             ->add('members', 'text', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url' => $router->generate('sd_common_ajax_contact_phone'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
+                    'data-url' => $router->generate('lists_coach_ajax_members_list'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_oper_department_individual_by_id'),
                     'data-params' => json_encode(array(
-                                    'minimumInputLength' => 2,
+                                    'minimumInputLength' => 0,
                                     'allowClear' => true,
                                     'width' => '200px',
                                     'multiple' => 'multiple'
                     )),
-                    'disabled' => true,
+//                     'disabled' => true,
                     'placeholder' => 'Members',
                 )
             ))
