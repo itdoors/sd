@@ -48,8 +48,8 @@ class PayMasterRepository extends EntityRepository
             case 'payment':
                 $sql->andWhere('p.paymentDate is NULL');
                 $sqlCount->andWhere('p.paymentDate is NULL');
-                $sql->andWhere('p.isAcceptance != false');
-                $sqlCount->andWhere('p.isAcceptance = false');
+                $sql->andWhere('p.isAcceptance = true or p.isAcceptance is null');
+                $sqlCount->andWhere('p.isAcceptance = true or p.isAcceptance is null');
                 $sql->andWhere('p.toPay = true');
                 $sqlCount->andWhere('p.toPay = true');
                 break;
