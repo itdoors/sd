@@ -1379,20 +1379,19 @@ COMMENT ON COLUMN dogovor.planned_pf1_percent IS 'Плановый ПФ1, %';
 COMMENT ON COLUMN dogovor.delay_comment IS 'Комментарий к отстрочке';
 -- prod ++++
 ALTER TABLE pay_master_customer ADD CONSTRAINT FK_FCB1B0713EBD646D FOREIGN KEY (pay_master_id) REFERENCES pay_master (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-ALTER TABLE pay_master_customer ADD CONSTRAINT FK_FCB1B0719395C3F3 FOREIGN KEY (customer_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE
+ALTER TABLE pay_master_customer ADD CONSTRAINT FK_FCB1B0719395C3F3 FOREIGN KEY (customer_id) REFERENCES organization (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
 CREATE TABLE pay_master_status (id BIGSERIAL NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id));
 COMMENT ON COLUMN pay_master_status.name IS 'Название статуса платежа';
 INSERT INTO "public".pay_master_status ("name") 
-	VALUES ('Срочно')
+	VALUES ('Срочно');
 INSERT INTO "public".pay_master_status ("name") 
-	VALUES ('По возможности')
+	VALUES ('По возможности');
 ALTER TABLE pay_master ADD status_id BIGINT DEFAULT NULL;
 ALTER TABLE pay_master ADD CONSTRAINT FK_A49269996BF700BD FOREIGN KEY (status_id) REFERENCES pay_master_status (id) NOT DEFERRABLE INITIALLY IMMEDIATE;
-CREATE INDEX IDX_A49269996BF700BD ON pay_master (status_id)
+CREATE INDEX IDX_A49269996BF700BD ON pay_master (status_id);
 ALTER TABLE pay_master ADD is_acceptance BOOLEAN DEFAULT NULL;
 COMMENT ON COLUMN pay_master.is_acceptance IS 'Акцепт (1 - подтвержен, 0 - отклонен)';
-ALTER TABLE pay_master DROP is_rejected
+ALTER TABLE pay_master DROP is_rejected;
 ALTER TABLE pay_master ADD to_pay BOOLEAN DEFAULT NULL;
-COMMENT ON COLUMN pay_master.to_pay IS 'Отметка на оплату'
-
--- prod -----
+COMMENT ON COLUMN pay_master.to_pay IS 'Отметка на оплату';
+-- prod +++++
