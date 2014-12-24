@@ -48,9 +48,8 @@ class CoachReportRepository extends EntityRepository
      */
     public function getOrganizations($searchText)
     {
-        $organizations = $this->createQueryBuilder('c')
+        $organizations = $this->createQueryBuilder('r')
             ->select('DISTINCT IDENTITY(d.organization)')
-            ->from('Lists\CoachBundle\Entity\CoachReport', 'r')
             ->join('r.action', 'a')
             ->join('a.department', 'd')
             ->join('d.organization', 'o')
@@ -71,9 +70,8 @@ class CoachReportRepository extends EntityRepository
      */
     public function getAuthors($searchText)
     {
-        $authors = $this->createQueryBuilder('c')
+        $authors = $this->createQueryBuilder('r')
             ->select('DISTINCT IDENTITY(r.author)')
-            ->from('Lists\CoachBundle\Entity\CoachReport', 'r')
             ->join('r.author', 'a')
             ->where('lower(a.firstName) LIKE :q OR lower(a.lastName) LIKE :q')
             ->setParameter(':q', '%' . $searchText . '%')
@@ -92,9 +90,8 @@ class CoachReportRepository extends EntityRepository
      */
     public function getCities($searchText)
     {
-        $organizations = $this->createQueryBuilder('c')
-            ->select('DISTINCT IDENTITY(d.organization)')
-            ->from('Lists\CoachBundle\Entity\CoachReport', 'r')
+        $organizations = $this->createQueryBuilder('r')
+            ->select('DISTINCT IDENTITY(d.city)')
             ->join('r.action', 'a')
             ->join('a.department', 'd')
             ->join('d.city', 'cc')
@@ -104,6 +101,27 @@ class CoachReportRepository extends EntityRepository
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         return $organizations;
+    }
+
+    /**
+     * getDepartmentsByCityId
+     *
+     * @param string $searchText
+     * @param int    $cityId
+     *
+     * @return mixed[]
+     */
+    public function getDepartmentsByCityId($searchText, $cityId)
+    {
+        $departments = $this->createQueryBuilder('r')
+            ->select('DISTINCT IDENTITY(a.department)')
+            ->join('r.action', 'a')
+            ->join('a.department', 'd', 'WITH', 'd.city = :cityId')
+            ->setParameter(':cityId', $cityId)
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        return $departments;
     }
 
     /**
@@ -133,30 +151,45 @@ class CoachReportRepository extends EntityRepository
                         break;
                     case 'topic':
                         $valueArr = explode(',', $value);
-                        $sql->join('c.action', 'aa');
-                        $sql->andWhere("aa.topic in (:topics)");
+                        $sql->join('c.action', 'a2');
+                        $sql->andWhere("a2.topic in (:topics)");
                         $sql->setParameter(':topics', $valueArr);
                         break;
                     case 'organization':
                         $valueArr = explode(',', $value);
-                        $sql->join('c.action', 'aaa');
-                        $sql->join('aaa.department', 'd');
+                        $sql->join('c.action', 'a3');
+                        $sql->join('a3.department', 'd');
                         $sql->andWhere("d.organization in (:organizations)");
                         $sql->setParameter(':organizations', $valueArr);
                         break;
                     case 'city':
                         $valueArr = explode(',', $value);
-                        $sql->join('c.action', 'aaaa');
-                        $sql->join('aaaa.department', 'dd');
-                        $sql->andWhere("dd.city in (:cities)");
+                        $sql->join('c.action', 'a4');
+                        $sql->join('a4.department', 'd2');
+                        $sql->andWhere("d2.city in (:cities)");
                         $sql->setParameter(':cities', $valueArr);
                         break;
                     case 'members':
                         $valueArr = explode(',', $value);
-                        $sql->join('c.action', 'aaaaa');
-                        $sql->join('aaaaa.individuals', 'i');
+                        $sql->join('c.action', 'a5');
+                        $sql->join('a5.individuals', 'i');
                         $sql->andWhere("i in (:individuals)");
                         $sql->setParameter(':individuals', $valueArr);
+                        break;
+                    case 'department':
+                        $valueArr = explode(',', $value);
+                        $sql->join('c.action', 'a6');
+                        $sql->join('a6.department', 'i');
+                        $sql->andWhere("i in (:departments)");
+                        $sql->setParameter(':departments', $valueArr);
+                        break;
+                    case 'startedAt':
+                        var_dump($value);//die();
+//                         $valueArr = explode(',', $value);
+//                         $sql->join('c.action', 'a6');
+//                         $sql->join('a6.department', 'i');
+//                         $sql->andWhere("i in (:departments)");
+//                         $sql->setParameter(':departments', $valueArr);
                         break;
                 }
             }

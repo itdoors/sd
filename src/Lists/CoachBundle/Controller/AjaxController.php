@@ -452,4 +452,41 @@ class AjaxController extends BaseController
 
         return new JsonResponse($result);
     }
+
+    /**
+     * Returns json list of departments
+     *
+     * @return JsonResponse
+     */
+    public function departmentsByCityIdAction()
+    {
+        $searchText = $this->get('request')->query->get('query');
+        $cityId = intval($this->get('request')->query->get('dependent'));
+
+        $coachReportRepository = $this->getDoctrine()
+            ->getRepository('ListsCoachBundle:CoachReport');
+        $depRepository = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:Departments');
+
+        $depIds = $coachReportRepository->getDepartmentsByCityId($searchText, $cityId);
+
+        $i = [];
+        foreach ($depIds as $depId) {
+            $i[] = $depId['1'];
+        }
+
+        $deps = $depRepository->findBy(array('id' => $i));
+
+        $result = [];
+        foreach ($deps as $dep) {
+            $result[] = array(
+                            'id' => $dep->getId(),
+                            'value' => $dep->getId(),
+                            'name' => $dep->getName(),
+                            'text' => $dep->getName()
+            );
+        }
+
+        return new JsonResponse($result);
+    }
 }

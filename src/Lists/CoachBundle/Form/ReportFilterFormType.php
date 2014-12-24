@@ -95,14 +95,14 @@ class ReportFilterFormType extends AbstractType
             ))
             ->add('city', 'text', array(
                 'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'class' => 'itdoors-select2 can-be-reseted submit-field form-control',
                     'data-url' => $router->generate('lists_coach_ajax_city_list'),
                     'data-url-by-id' => $router->generate('sd_common_ajax_city_by_id'),
                     'data-params' => json_encode(array(
                                     'minimumInputLength' => 0,
                                     'allowClear' => true,
                                     'width' => '200px',
-                                    'multiple' => 'multiple'
+//                                     'multiple' => 'multiple'
                     )),
 //                     'disabled' => true,
                     'placeholder' => 'City',
@@ -110,11 +110,12 @@ class ReportFilterFormType extends AbstractType
             ))
             ->add('department', 'text', array(
                 'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url' => $router->generate('sd_common_ajax_contact_phone'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
+                    'data-dependent' => 'reportFilterForm_city',
+                    'class' => 'itdoors-select2-dependent can-be-reseted submit-field',
+                    'data-url' => $router->generate('lists_coach_ajax_department_list'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_department_by_id'),
                     'data-params' => json_encode(array(
-                                    'minimumInputLength' => 2,
+                                    'minimumInputLength' => 0,
                                     'allowClear' => true,
                                     'width' => '200px',
                                     'multiple' => 'multiple'
