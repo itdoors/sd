@@ -16,11 +16,13 @@ use Symfony\Component\Routing\Router;
  */
 class PayMasterService
 {
+
     /** @var EntityManager $em */
     protected $em;
     protected $context;
     protected $translator;
     protected $router;
+
     /**
      * __construct
      *
@@ -42,7 +44,7 @@ class PayMasterService
      * 
      * @return User
      */
-    public function getUser()
+    public function getUser ()
     {
         return $this->context->getToken()->getUser();
     }
@@ -53,9 +55,9 @@ class PayMasterService
      * 
      * @return mixed[]
      */
-    public function checkAccess(User $user)
+    public function checkAccess (User $user)
     {
-        $role = array();
+        $role = array ();
         if ($user->hasRole('ROLE_PAY_MASTER')) {
             $role[] = 'payMaster';
         }
@@ -72,7 +74,7 @@ class PayMasterService
      * @param Request $request
      * @param mixed[] $params
      */
-    public function savePayMasterAcceptanceForm(Form $form, Request $request, $params)
+    public function savePayMasterAcceptanceForm (Form $form, Request $request, $params)
     {
         $data = $form->getData();
         $isAcceptance = $data['isAcceptance'];
@@ -101,38 +103,36 @@ class PayMasterService
         $tabs['new'] = array (
             'blockupdate' => 'tab-content-block',
             'tab' => 'new',
-            'url' => $this->router->generate('it_doors_pay_master_tab', array('tab' => 'new')),
+            'url' => $this->router->generate('it_doors_pay_master_tab', array ('tab' => 'new')),
             'text' => $this->translator->trans(
-                ($access->canSeeAll() ? 'Received': 'Unpaid'),
-                array(),
-                'ITDoorsPayMasterBundle'
+                ($access->canSeeAll() ? 'Received' : 'Unpaid'), array (), 'ITDoorsPayMasterBundle'
             )
         );
         if ($access->canSeeAll()) {
             $tabs['urgent'] = array (
                 'blockupdate' => 'tab-content-block',
                 'tab' => 'urgent',
-                'url' => $this->router->generate('it_doors_pay_master_tab', array('tab' => 'urgent')),
-                'text' => $this->translator->trans('Urgent', array(), 'ITDoorsPayMasterBundle')
+                'url' => $this->router->generate('it_doors_pay_master_tab', array ('tab' => 'urgent')),
+                'text' => $this->translator->trans('Urgent', array (), 'ITDoorsPayMasterBundle')
             );
             $tabs['payment'] = array (
                 'blockupdate' => 'tab-content-block',
                 'tab' => 'payment',
-                'url' => $this->router->generate('it_doors_pay_master_tab', array('tab' => 'payment')),
-                'text' => $this->translator->trans('On payment', array(), 'ITDoorsPayMasterBundle')
+                'url' => $this->router->generate('it_doors_pay_master_tab', array ('tab' => 'payment')),
+                'text' => $this->translator->trans('On payment', array (), 'ITDoorsPayMasterBundle')
             );
         }
         $tabs['sponsored'] = array (
             'blockupdate' => 'tab-content-block',
             'tab' => 'sponsored',
-            'url' => $this->router->generate('it_doors_pay_master_tab', array('tab' => 'sponsored')),
-            'text' => $this->translator->trans('Sponsored', array(), 'ITDoorsPayMasterBundle')
+            'url' => $this->router->generate('it_doors_pay_master_tab', array ('tab' => 'sponsored')),
+            'text' => $this->translator->trans('Sponsored', array (), 'ITDoorsPayMasterBundle')
         );
         $tabs['rejected'] = array (
             'blockupdate' => 'tab-content-block',
             'tab' => 'rejected',
-            'url' => $this->router->generate('it_doors_pay_master_tab', array('tab' => 'rejected')),
-            'text' => $this->translator->trans('Rejected', array(), 'ITDoorsPayMasterBundle')
+            'url' => $this->router->generate('it_doors_pay_master_tab', array ('tab' => 'rejected')),
+            'text' => $this->translator->trans('Rejected', array (), 'ITDoorsPayMasterBundle')
         );
 
         return $tabs;
