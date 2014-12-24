@@ -103,7 +103,7 @@ class PayMasterService
         $tabs['new'] = array (
             'blockupdate' => 'tab-content-block',
             'tab' => 'new',
-            'url' => $this->router->generate('it_doors_pay_master_tab', array ('tab' => 'new')),
+            'url' => $this->router->generate('it_doors_pay_master_tab'),
             'text' => $this->translator->trans(
                 ($access->canSeeAll() ? 'Received' : 'Unpaid'), array (), 'ITDoorsPayMasterBundle'
             )
@@ -112,26 +112,26 @@ class PayMasterService
             $tabs['urgent'] = array (
                 'blockupdate' => 'tab-content-block',
                 'tab' => 'urgent',
-                'url' => $this->router->generate('it_doors_pay_master_tab', array ('tab' => 'urgent')),
+                'url' => $this->router->generate('it_doors_pay_master_tab'),
                 'text' => $this->translator->trans('Urgent', array (), 'ITDoorsPayMasterBundle')
             );
             $tabs['payment'] = array (
                 'blockupdate' => 'tab-content-block',
                 'tab' => 'payment',
-                'url' => $this->router->generate('it_doors_pay_master_tab', array ('tab' => 'payment')),
+                'url' => $this->router->generate('it_doors_pay_master_tab'),
                 'text' => $this->translator->trans('On payment', array (), 'ITDoorsPayMasterBundle')
             );
         }
         $tabs['sponsored'] = array (
             'blockupdate' => 'tab-content-block',
             'tab' => 'sponsored',
-            'url' => $this->router->generate('it_doors_pay_master_tab', array ('tab' => 'sponsored')),
+            'url' => $this->router->generate('it_doors_pay_master_tab'),
             'text' => $this->translator->trans('Sponsored', array (), 'ITDoorsPayMasterBundle')
         );
         $tabs['rejected'] = array (
             'blockupdate' => 'tab-content-block',
             'tab' => 'rejected',
-            'url' => $this->router->generate('it_doors_pay_master_tab', array ('tab' => 'rejected')),
+            'url' => $this->router->generate('it_doors_pay_master_tab'),
             'text' => $this->translator->trans('Rejected', array (), 'ITDoorsPayMasterBundle')
         );
 

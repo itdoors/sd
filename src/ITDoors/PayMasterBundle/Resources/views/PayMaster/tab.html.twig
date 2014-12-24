@@ -1,8 +1,7 @@
-<div class="tab-content-block" id="table_tab_{{ tab }}" data-url="{{ url('it_doors_pay_master_tab', {tab: tab}) }}">
 {% trans_default_domain 'ITDoorsPayMasterBundle' %}
+
 <script>
-    $(document).ready(function(){
-        {% if tab == 'new' %}
+   $(document).ready(function(){
         $('.payMasterStatus').editable({
             url: '{{ path('it_doors_pay_master_ajax_save_editable') }}',
             source: '{{ path('it_doors_pay_master_ajax_status_list') }}',
@@ -23,10 +22,9 @@
                 allowClear: true
             }
         });
-        {% endif %}
   
         $('.payMasterExpectedDate').editable({
-            url: '{{ path('it_doors_pay_master_ajax_save_editable') }}',
+            url: '{{ path('it_doors_pay_master_ajax_save_editable') }}'
         });
         {% if access.canChangeToPay %}
         $('.payMasterToPay').editable({
@@ -59,7 +57,7 @@
 <div class="navigation" style="overflow: hidden;">
     {{ ajax_paginator_render(
         entities, nameSpacePayMaster, {
-                ('table_tab_'~ tab): 'ITDoorsAjax.updateList'
+                ('table_tab'): 'ITDoorsAjax.updateList'
             }
         )
     }}
@@ -74,7 +72,7 @@
                 <th>
                     {% trans %}Planned date of payment{% endtrans %}
                     {{ ajax_ordering('expectedDate', nameSpacePayMaster, {
-                        ('table_tab_'~ tab): 'ITDoorsAjax.updateList'
+                        ('table_tab'): 'ITDoorsAjax.updateList'
                         }, true) }}
                 </th>
                 <th>{% trans %}Date of receipt{% endtrans %}</th>
@@ -91,7 +89,7 @@
                 <th>
                     {% trans %}Acceptance{% endtrans %}
                     {{ ajax_ordering('isAcceptance', nameSpacePayMaster, {
-                        ('table_tab_'~ tab): 'ITDoorsAjax.updateList'
+                        ('table_tab'): 'ITDoorsAjax.updateList'
                         }, true) }}
                 </th>
                 {% endif %}
@@ -196,5 +194,4 @@
             }
         )
     }}
-</div>
 </div>

@@ -39,12 +39,12 @@ class PayMasterController extends Controller
     /**
      * tabAction
      * 
-     * @param string $tab new|urgent|payment|sponsored|rejected
-     * 
      * @return Response
      */
-    public function tabAction($tab)
+    public function tabAction()
     {
+        $serviceBase = $this->get('it_doors_ajax.base_filter_service');
+        $tab = $serviceBase->getTab('it_doors_pay_master_nameSpace');
         $service = $this->get('it_doors_pay_master.service');
         $access = $service->checkAccess($this->getUser());
         $nameSpacePayMaster = 'it_doors_pay_master_nameSpace'.'_'.$tab;
@@ -65,7 +65,7 @@ class PayMasterController extends Controller
         $entities = $paginator->paginate(
             $payMasterQuery,
             $page,
-            20
+            10
         );
 
         return $this->render('ITDoorsPayMasterBundle:PayMaster:tab.html.twig', array(
