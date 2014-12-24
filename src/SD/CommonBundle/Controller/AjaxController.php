@@ -454,16 +454,15 @@ class AjaxController extends BaseFilterController
      */
     public function cityByIdAction()
     {
-        $ids = explode(',', $this->get('request')->query->get('id'));
+        $id = $this->get('request')->query->get('id');
 
-        $cityList = $this->getDoctrine()
+        $city = $this->getDoctrine()
             ->getRepository('ListsCityBundle:City')
-            ->findBy(array('id'=>$ids));
+            ->find($id);
 
-        $result = array();
-
-        foreach ($cityList as $city) {
-            $result[] = $this->serializeObject($city);
+        $result = [];
+        if ($city) {
+            $result = $this->serializeObject($city);
         }
 
         return new Response(json_encode($result));
@@ -6352,10 +6351,15 @@ class AjaxController extends BaseFilterController
     {
         $id = $this->get('request')->query->get('id');
 
-        $object = $this->getDoctrine()
-        ->getRepository('ListsDepartmentBundle:Departments')->find($id);
+        $department = $this->getDoctrine()
+            ->getRepository('ListsDepartmentBundle:Departments')->find($id);
 
-        $result = $this->serializeObject($object);
+        $result = array(
+                'id' => $department->getId(),
+                'value' => $department->getId(),
+                'name' => $department->getOrganization()->getName() . ', ' . $department->getName(),
+                'text' => $department->getOrganization()->getName() . ', ' . $department->getName()
+            );
 
         return new Response(json_encode($result));
     }
@@ -6406,7 +6410,6 @@ class AjaxController extends BaseFilterController
         }
 
         return new Response(json_encode($result));
-
     }
 
     /**

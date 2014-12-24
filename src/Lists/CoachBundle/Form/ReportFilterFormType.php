@@ -39,7 +39,7 @@ class ReportFilterFormType extends AbstractType
             ->add('author', 'text', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url' => $router->generate('sd_common_ajax_user_fio'),
+                    'data-url' => $router->generate('lists_coach_ajax_coach_list'),
                     'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
                     'data-params' => json_encode(array(
                         'minimumInputLength' => 0,
@@ -47,83 +47,109 @@ class ReportFilterFormType extends AbstractType
                         'width' => '200px',
                         'multiple' => 'multiple'
                     )),
-                    'disabled' => true,
-                    'placeholder' => $translator->trans("Autor", array(), 'ListsCoachBundle.ru'),
+                    'placeholder' => 'Autor',
                 )
             ))
             ->add('type', 'text', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url' => $router->generate('sd_common_ajax_contact_phone'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
+                    'data-url' => $router->generate('lists_coach_ajax_action_types'),
+                    'data-url-by-id' => $router->generate('lists_coach_ajax_action_types_by_ids'),
                     'data-params' => json_encode(array(
-                        'minimumInputLength' => 2,
-                        'allowClear' => true,
-                        'width' => '200px',
-                        'multiple' => 'multiple'
+                                    'minimumInputLength' => 0,
+                                    'allowClear' => true,
+                                    'width' => '200px',
+                                    'multiple' => 'multiple'
                     )),
-                    'disabled' => true,
-                    'placeholder' => $translator->trans("Action type", array(), 'ListsCoachBundle.ru'),
+                    'placeholder' => 'Action type',
                 )
             ))
             ->add('topic', 'text', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url' => $router->generate('sd_common_ajax_contact_phone'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
+                    'data-url' => $router->generate('lists_coach_ajax_action_topics'),
+                    'data-url-by-id' => $router->generate('lists_coach_ajax_action_topics_by_ids'),
                     'data-params' => json_encode(array(
-                                    'minimumInputLength' => 2,
+                                    'minimumInputLength' => 0,
                                     'allowClear' => true,
                                     'width' => '200px',
                                     'multiple' => 'multiple'
                     )),
-                    'disabled' => true,
-                    'placeholder' => $translator->trans("Action topic", array(), 'ListsCoachBundle.ru'),
+                    'placeholder' => 'Action topic',
+                )
+            ))
+            ->add('organization', 'text', array(
+                'attr' => array(
+                    'class' => 'itdoors-select2 can-be-reseted submit-field',
+                    'data-url' => $router->generate('lists_coach_ajax_organization_list'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_organization_by_ids'),
+                    'data-params' => json_encode(array(
+                                    'minimumInputLength' => 0,
+                                    'allowClear' => true,
+                                    'width' => '200px',
+                                    'multiple' => 'multiple'
+                    )),
+//                     'disabled' => true,
+                    'placeholder' => 'Organization',
                 )
             ))
             ->add('city', 'text', array(
                 'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url' => $router->generate('sd_common_ajax_contact_phone'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
+                    'class' => 'itdoors-select2 can-be-reseted submit-field form-control',
+                    'data-url' => $router->generate('lists_coach_ajax_city_list'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_city_by_id'),
                     'data-params' => json_encode(array(
-                                    'minimumInputLength' => 2,
+                                    'minimumInputLength' => 0,
                                     'allowClear' => true,
                                     'width' => '200px',
-                                    'multiple' => 'multiple'
+//                                     'multiple' => 'multiple'
                     )),
-                    'disabled' => true,
-                    'placeholder' => $translator->trans("City", array(), 'ListsCoachBundle.ru'),
+//                     'disabled' => true,
+                    'placeholder' => 'City',
                 )
             ))
             ->add('department', 'text', array(
                 'attr' => array(
-                    'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url' => $router->generate('sd_common_ajax_contact_phone'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
+                    'data-dependent' => 'reportFilterForm_city',
+                    'class' => 'itdoors-select2-dependent can-be-reseted submit-field',
+                    'data-url' => $router->generate('lists_coach_ajax_department_list'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_department_by_id'),
                     'data-params' => json_encode(array(
-                                    'minimumInputLength' => 2,
+                                    'minimumInputLength' => 0,
                                     'allowClear' => true,
                                     'width' => '200px',
                                     'multiple' => 'multiple'
                     )),
-                    'disabled' => true,
-                    'placeholder' => $translator->trans("Place", array(), 'ListsCoachBundle.ru'),
+//                     'disabled' => true,
+                    'placeholder' => 'Place',
                 )
             ))
             ->add('members', 'text', array(
                 'attr' => array(
                     'class' => 'itdoors-select2 can-be-reseted submit-field',
-                    'data-url' => $router->generate('sd_common_ajax_contact_phone'),
-                    'data-url-by-id' => $router->generate('sd_common_ajax_user_by_ids'),
+                    'data-url' => $router->generate('lists_coach_ajax_members_list'),
+                    'data-url-by-id' => $router->generate('sd_common_ajax_oper_department_individual_by_id'),
                     'data-params' => json_encode(array(
-                                    'minimumInputLength' => 2,
+                                    'minimumInputLength' => 0,
                                     'allowClear' => true,
                                     'width' => '200px',
                                     'multiple' => 'multiple'
                     )),
-                    'disabled' => true,
-                    'placeholder' => $translator->trans("Members", array(), 'ListsCoachBundle.ru'),
+//                     'disabled' => true,
+                    'placeholder' => 'Members',
+                )
+            ))
+            ->add('startedAt', 'date', array(
+                'widget' => 'single_text',
+                'format' => 'dd.MM.yyyy',
+                'attr' => array(
+                    'class' => 'form-control can-be-reseted itdoors-date-picker',
+                    'data-params' => json_encode(array(
+                                    'allowClear' => true,
+                                    'width' => '200px',
+                    )),
+//                     'disabled' => true,
+                    'placeholder' => 'Action date',
                 )
             ))
             ->add('submit', 'submit')

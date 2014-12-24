@@ -1,7 +1,4 @@
 {% trans_default_domain 'ListsCoachBundle' %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('metronic/assets/global/plugins/jstree/dist/themes/default/style.min.css')}}" />
-    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('metronic/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js')}}"></script>
     <script>
         var actionTopics;
         var TableEditable = function () {
@@ -176,7 +173,7 @@
                 table2.on('click', '.cancel', function (e) {
                     e.preventDefault();
                     if (nNew2) {
-                        oTable2.fnDeleteRow(nEditing);
+                        oTable2.fnDeleteRow(nEditing2);
                         nEditing2 = null;
                         nNew2 = false;
                     } else {

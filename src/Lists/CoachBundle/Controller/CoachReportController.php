@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CoachReportController extends BaseController
 {
-    protected $filterNamespace = 'coachReportFilterForm';
+    protected $filterNamespace = 'reportFilterForm';
     protected $service = 'lists_coach.coach.service';
     protected $paginator = 'knp_paginator';
 
@@ -22,46 +22,29 @@ class CoachReportController extends BaseController
      */
     public function indexAction()
     {
-        $user = $this->getUser();
-        $id = $user->getId();
-
-        $session = $this->get('session');
-        $session->set('userid', $id);
-
-        $service = $this->container->get($this->service);
-        $namespace = $this->filterNamespace . $id;
-
-        $tab = $this->getTab($namespace);
-        if (!$tab) {
-            $tab = 'reports';
-            $this->setTab($namespace, $tab);
-        }
-        $options['coachAdmin'] = $user->hasRole('ROLE_COACHADMIN');
-
-        return $this->render('ListsCoachBundle:Report:index.html.twig', array(
-                        'tabs' => $service->getTabs($options),
-                        'tab' => $tab,
-                        'namespace' => $namespace
-        ));
+        return $this->render('ListsCoachBundle:Report:index.html.twig', array());
     }
 
     /**
      * Execute showtabs action
+     * 
+     * @param string $tab
      *
      * @return string
      */
-    public function showtabsAction()
+    public function showtabsAction($tab)
     {
         $user = $this->getUser();
-        $session = $this->get('session');
-        $userId = $session->get('userid', false);
-        $namespace = $this->filterNamespace . $userId;
+        $namespace = $this->filterNamespace;
         $service = $this->container->get($this->service);
 
-        $options['coachAdmin'] = $user->hasRole('ROLE_COACHADMIN');
-        $tabs = $service->getTabs($options);
-        $tab = $this->getTab($namespace);
-        $tabData = $tabs[$tab];
+        $tabData = [];
+        if ($tab == 'settings') {
+            $tabData = [
+                'actionTopics' => $service->getActionTopics(),
+                'actionTypes' => $service->getActionTypes()
+            ];
+        }
 
         return $this->render('ListsCoachBundle:Report:showTab' . $tab . '.html.twig', array(
                         'tabData' => $tabData,
@@ -77,9 +60,10 @@ class CoachReportController extends BaseController
     public function listAction()
     {
         $namespase = $this->filterNamespace;
+        $filters = $this->getFilters($namespase);
         $em = $this->getDoctrine()->getManager();
 
-        $reports = $em->getRepository('ListsCoachBundle:CoachReport')->getAll();
+        $reports = $em->getRepository('ListsCoachBundle:CoachReport')->getAll($filters);
         $entities = $reports['entity'];
         $count = $reports['count'];
 
