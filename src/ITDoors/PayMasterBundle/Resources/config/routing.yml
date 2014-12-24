@@ -7,10 +7,8 @@ it_doors_pay_master_new:
     defaults: { _controller: ITDoorsPayMasterBundle:PayMaster:new }
 
 it_doors_pay_master_tab:
-    path:     /itdoors/paymaster/tab/{tab}
+    path:     /itdoors/paymaster/tab
     defaults: { _controller: ITDoorsPayMasterBundle:PayMaster:tab }
-    requirements:
-        tab:  new|urgent|payment|sponsored|rejected
     
 # ajaxController
 it_doors_pay_master_ajax_remove:

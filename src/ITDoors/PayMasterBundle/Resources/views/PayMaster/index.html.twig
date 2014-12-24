@@ -41,8 +41,9 @@
                     {% if access.canAdd   %}    
                         <a class="btn btn-circle green" href="{{ path('it_doors_pay_master_new') }}">{% trans %}Add new account{% endtrans %}</a>
                     {% endif %}
-
-                    {{ render(controller('ITDoorsPayMasterBundle:PayMaster:tab', {tab: tab})) }}
+                    <div class="tab-content-block" id="table_tab" data-url="{{ url('it_doors_pay_master_tab') }}">
+                        {{ render(controller('ITDoorsPayMasterBundle:PayMaster:tab')) }}
+                    </div>
                 </div>
             </div>
         </div>
