@@ -18,12 +18,21 @@ class PayMasterController extends Controller
      */
     public function indexAction()
     {
+        $serviceBase = $this->get('it_doors_ajax.base_filter_service');
         $service = $this->get('it_doors_pay_master.service');
         $access = $service->checkAccess($this->getUser());
         $nameSpacePayMaster = 'it_doors_pay_master_nameSpace';
+        $tabs = $service->getTabs();
+        $tab = $serviceBase->getTab($nameSpacePayMaster);
+        if (!$tab) {
+            $tab = 'new';
+            $serviceBase->setTab($nameSpacePayMaster, $tab);
+        }
 
         return $this->render('ITDoorsPayMasterBundle:PayMaster:index.html.twig', array(
             'access' => $access,
+            'tabs' => $tabs,
+            'tab' => $tab,
             'nameSpacePayMaster' => $nameSpacePayMaster
         ));
     }

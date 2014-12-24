@@ -8,6 +8,9 @@ services:
     it_doors_pay_master.service:
         arguments: 
             entityManager: "@doctrine.orm.entity_manager"
+            context: "@security.context"
+            translator: "@translator"
+            router: "@router"
         class: %it_doors_pay_master.service.class%
 
     it_doors_pay_master.newForm:
