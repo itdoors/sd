@@ -29,12 +29,7 @@ class PayMasterService
      * @param Translator      $translator
      * @param Router          $router
      */
-    public function __construct (
-        EntityManager $em,
-        SecurityContext $context,
-        Translator $translator,
-        Router $router
-    )
+    public function __construct (EntityManager $em, SecurityContext $context, Translator $translator, Router $router)
     {
         /** @var EntityManager $em */
         $this->em = $em;
@@ -42,6 +37,11 @@ class PayMasterService
         $this->translator = $translator;
         $this->router = $router;
     }
+    /**
+     * getUser
+     * 
+     * @return User
+     */
     public function getUser()
     {
         return $this->context->getToken()->getUser();
@@ -96,14 +96,17 @@ class PayMasterService
      */
     public function getTabs ()
     {
-        
         $access = $this->checkAccess($this->getUser());
         $tabs = array ();
         $tabs['new'] = array (
             'blockupdate' => 'tab-content-block',
             'tab' => 'new',
             'url' => $this->router->generate('it_doors_pay_master_tab', array('tab' => 'new')),
-            'text' => $this->translator->trans(($access->canSeeAll() ? 'Received': 'Unpaid'), array(), 'ITDoorsPayMasterBundle')
+            'text' => $this->translator->trans(
+                ($access->canSeeAll() ? 'Received': 'Unpaid'),
+                array(),
+                'ITDoorsPayMasterBundle'
+            )
         );
         if ($access->canSeeAll()) {
             $tabs['urgent'] = array (
