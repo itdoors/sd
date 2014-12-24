@@ -131,7 +131,7 @@ class CoachReportRepository extends EntityRepository
     * @param mixed[]      $filters
     */
     private function processFilters(QueryBuilder $sql, $filters)
-    {var_dump($filters);//die();
+    {
         if (sizeof($filters)) {
             foreach ($filters as $key => $value) {
                 if (!$value) {
@@ -179,17 +179,19 @@ class CoachReportRepository extends EntityRepository
                     case 'department':
                         $valueArr = explode(',', $value);
                         $sql->join('c.action', 'a6');
-                        $sql->join('a6.department', 'i');
-                        $sql->andWhere("i in (:departments)");
+                        $sql->join('a6.department', 'd3');
+                        $sql->andWhere("d3 in (:departments)");
                         $sql->setParameter(':departments', $valueArr);
                         break;
                     case 'startedAt':
-                        var_dump($value);//die();
-//                         $valueArr = explode(',', $value);
-//                         $sql->join('c.action', 'a6');
-//                         $sql->join('a6.department', 'i');
-//                         $sql->andWhere("i in (:departments)");
-//                         $sql->setParameter(':departments', $valueArr);
+                        $point1 = clone $value;
+                        $point2 = clone $value;
+                        $point2->modify('+1 day');
+
+                        $sql->join('c.action', 'a7');
+                        $sql->andWhere("a7.startedAt BETWEEN :point1 AND :point2");
+                        $sql->setParameter(':point1', $point1);
+                        $sql->setParameter(':point2', $point2);
                         break;
                 }
             }

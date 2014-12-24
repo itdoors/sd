@@ -41,24 +41,41 @@ ITDoors\PayMasterBundle\Entity\PayMaster:
             options:
                 comment: Сумма счета с НДС (да||нет)
                 default: 0
-        isRejected:
+        isAcceptance:
             type: boolean
             nullable: true
-            column: is_rejected
+            column: is_acceptance
             options:
-                comment: Статус счета (NULL (новый)|0 (принят)|1 (отклонен))
+                comment: Акцепт (1 - подтвержен, 0 - отклонен)
+        toPay:
+            type: boolean
+            nullable: true
+            column: to_pay
+            options:
+                comment: Отметка на оплату
         description:
             type: text
             nullable: true
         reason:
             type: text
             nullable: true
+            options:
+                comment: Причина отклонения
         scan:
             type: string
             length: 255
             options:
                 comment: Скан счета (имя файла) (/uploaded/paymaster/{id})
     manyToOne:
+        status:
+            targetEntity: PayMasterStatus
+            inversedBy: null
+            nullable: true
+            options:
+                comment: Статус счета
+            joinColumn:
+                name: status_id
+                referencedColumnName: id
         payer:
             targetEntity: Lists\OrganizationBundle\Entity\Organization
             inversedBy: null

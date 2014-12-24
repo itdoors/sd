@@ -30,4 +30,69 @@ class ComparatorPayMasterAccess extends BasicPayMasterAccess
 
         return false;
     }
+    /**
+     * @return bool
+     */
+    public function canSeeAll ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canSeeAll()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canRemove ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canRemove()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canChangeStatus ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canChangeStatus()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canChangeIsAcceptance ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canChangeIsAcceptance()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    /**
+     * @return bool
+     */
+    public function canChangeToPay ()
+    {
+        foreach ($this->accesses as $access) {
+            if ($access->canChangeToPay()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

@@ -14,4 +14,18 @@ class PayMasterAccess extends BasicPayMasterAccess
     {
         return true;
     }
+    /**
+     * @return bool
+     */
+    public function canRemove ()
+    {
+        return true;
+    }
+    /**
+     * @return bool
+     */
+    public function canChangeStatus ()
+    {
+        return true;
+    }
 }

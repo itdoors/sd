@@ -13,10 +13,16 @@ it_doors_pay_master_tab:
         tab:  new|urgent|payment|sponsored|rejected
     
 # ajaxController
-it_doors_pay_master_ajax_search_mpk_new:
-    path:     /itdoors/paymaster/ajax/search/mpk/new
-    defaults: { _controller: ITDoorsPayMasterBundle:Ajax:searchMpkNew }
+it_doors_pay_master_ajax_remove:
+    path:     /itdoors/paymaster/ajax/remove/{id}
+    defaults: { _controller: ITDoorsPayMasterBundle:Ajax:remove }
+    requirements:
+        id:  \d+
+        
+it_doors_pay_master_ajax_save_editable:
+    path:     /itdoors/paymaster/ajax/save/editable
+    defaults: { _controller: ITDoorsPayMasterBundle:Ajax:editableSave }
     
-it_doors_pay_master_ajax_mpk_by_ids:
-    path:     /itdoors/paymaster/ajax/mpk_by_ids
-    defaults: { _controller: ITDoorsPayMasterBundle:Ajax:mpkByIds }
+it_doors_pay_master_ajax_status_list:
+    path:     /itdoors/paymaster/ajax/status/ist
+    defaults: { _controller: ITDoorsPayMasterBundle:Ajax:statusList }

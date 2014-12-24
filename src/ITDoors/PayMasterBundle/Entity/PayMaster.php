@@ -80,6 +80,15 @@ class PayMaster
         $this->setCreateDatetime(new \DateTime());
     }
     /**
+     * __toString
+     * 
+     * @return string
+     */
+    public function __toString ()
+    {
+        return (string) $this->getInvoiceAmount();
+    }
+    /**
      * Get id
      *
      * @return integer 
@@ -514,34 +523,6 @@ class PayMaster
     }
 
     /**
-     * @var boolean
-     */
-    private $isRejected;
-
-    /**
-     * Set isRejected
-     *
-     * @param boolean $isRejected
-     *
-     * @return PayMaster
-     */
-    public function setIsRejected ($isRejected)
-    {
-        $this->isRejected = $isRejected;
-
-        return $this;
-    }
-    /**
-     * Get isRejected
-     *
-     * @return boolean 
-     */
-    public function getIsRejected ()
-    {
-        return $this->isRejected;
-    }
-
-    /**
      * @var string
      */
     private $reason;
@@ -604,5 +585,89 @@ class PayMaster
     public function getCustomers ()
     {
         return $this->customers;
+    }
+
+    /**
+     * @var \ITDoors\PayMasterBundle\Entity\PayMasterStatus
+     */
+    private $status;
+
+    /**
+     * Set status
+     *
+     * @param \ITDoors\PayMasterBundle\Entity\PayMasterStatus $status
+     *
+     * @return PayMaster
+     */
+    public function setStatus (\ITDoors\PayMasterBundle\Entity\PayMasterStatus $status = null)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+    /**
+     * Get status
+     *
+     * @return \ITDoors\PayMasterBundle\Entity\PayMasterStatus 
+     */
+    public function getStatus ()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @var boolean
+     */
+    private $isAcceptance;
+
+    /**
+     * Set isAcceptance
+     *
+     * @param boolean $isAcceptance
+     *
+     * @return PayMaster
+     */
+    public function setIsAcceptance ($isAcceptance)
+    {
+        $this->isAcceptance = $isAcceptance;
+
+        return $this;
+    }
+    /**
+     * Get isAcceptance
+     *
+     * @return boolean 
+     */
+    public function getIsAcceptance ()
+    {
+        return $this->isAcceptance;
+    }
+
+    /**
+     * @var boolean
+     */
+    private $toPay;
+
+    /**
+     * Set toPay
+     *
+     * @param boolean $toPay
+     *
+     * @return PayMaster
+     */
+    public function setToPay ($toPay)
+    {
+        $this->toPay = $toPay;
+
+        return $this;
+    }
+    /**
+     * Get toPay
+     *
+     * @return boolean 
+     */
+    public function getToPay ()
+    {
+        return $this->toPay;
     }
 }

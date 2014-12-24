@@ -41,12 +41,13 @@ Enter invoice amount: Укажите сумму счета
 Enter description: Введите описание
 Upload new document: Загрузить документ
 Planned date of payment: Плановая дата оплаты
+Enter date of payment: Укажите плановую дату оплаты
 Date of receipt: Дата получения
 Date of invoice: Дата счета
 Customer: Клиент
 Provider: Поставщик
 Representation: Представительство
-Sum with VAT: Сумма с НДС
+Sum: Сумма
 Notes: Примечания
 Acceptance: Акцепт
 Adopted: Принят
@@ -62,3 +63,16 @@ Turn: Повернуть
 Enter contractor EDRPOU: Введите ЕДРПОУ подрядчика
 EDRPOU: ЕДРПОУ
 Edrpou set not true: ЕДРПОУ указан не верно
+Unpaid: Неоплаченные
+Received: Полученные
+Action: Действия
+Mark urgent: Пометить срочным
+Enter status: Укажите статус
+To pay: На оплату
+Remove to pay: Снять статус на оплату
+Mark for payment: Пометить на оплату
+Delete: Удалить
+The field can not be empty: Поле не должно быть пустым
+Enter is acceptance: Укажите акцепт
+Enter reason: Укажите причину
+Enter to pay: Отправка на оплату

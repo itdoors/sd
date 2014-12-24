@@ -152,7 +152,7 @@ class AjaxController extends BaseController
      */
     public function bankByIdAction(Request $request)
     {
-        $id = $$request->query->get('id');
+        $id = $request->query->get('id');
 
         $object = $this->getDoctrine()
             ->getRepository('ListsOrganizationBundle:Bank')
@@ -236,21 +236,19 @@ class AjaxController extends BaseController
     {
         $field = $request->query->get('field');
         $dependent = $request->query->get('dependent');
-        
+        $result = array();
         if (strpos($dependent, 'isNew_') !== false) {
             $dependent = '';
-        }
+        } else {
+            $object = $this->getDoctrine()
+                ->getRepository('ListsOrganizationBundle:OrganizationCurrentAccount')
+                ->find($dependent);
+            $bank = $object->getBank();
+            $methodGet = 'get' . ucfirst($field);
 
-        $object = $this->getDoctrine()
-            ->getRepository('ListsOrganizationBundle:OrganizationCurrentAccount')
-            ->find($dependent);
-        $bank = $object->getBank();
-        $methodGet = 'get' . ucfirst($field);
-
-        $result = array();
-
-        if ($bank) {
-            $result = $this->serializeObject($bank, null, $methodGet);
+            if ($bank) {
+                $result = $this->serializeObject($bank, null, $methodGet);
+            }
         }
 
         return new Response(json_encode($result));

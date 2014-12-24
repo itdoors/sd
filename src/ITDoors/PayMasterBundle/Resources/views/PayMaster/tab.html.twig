@@ -1,5 +1,61 @@
+<div class="tab-content-block" id="table_tab_{{ tab }}" data-url="{{ url('it_doors_pay_master_tab', {tab: tab}) }}">
 {% trans_default_domain 'ITDoorsPayMasterBundle' %}
+<script>
+    $(document).ready(function(){
+        {% if tab == 'new' %}
+        $('.payMasterStatus').editable({
+            url: '{{ path('it_doors_pay_master_ajax_save_editable') }}',
+            source: '{{ path('it_doors_pay_master_ajax_status_list') }}',
+            emptytext: '{% trans %}Mark urgent{% endtrans %}',
+            ajaxOptions: {
+                dataType: 'json' //assuming json response
+            }, 
+            success: function(response, newValue) {
+                if(response.error === 403) {
+                    return response.text;
+                } else {
+                    return response.responseText;
+                }
+            },
+            select2: {
+                placeholder: "{% trans %}Mark urgent{% endtrans %}",
+                minimumInputLength: 0,
+                allowClear: true
+            }
+        });
+        {% endif %}
+  
+        $('.payMasterExpectedDate').editable({
+            url: '{{ path('it_doors_pay_master_ajax_save_editable') }}',
+        });
+        {% if access.canChangeToPay %}
+        $('.payMasterToPay').editable({
+            url: '{{ path('it_doors_pay_master_ajax_save_editable') }}',
+            source: [
+                {value: 1, text: '{% trans %}To pay{% endtrans %}' },
+                {value: 0, text: '{% trans %}Remove to pay{% endtrans %}'}
+            ] 
+        });
+        {% endif %}
+    });
+</script>
 
+<div id="form_modal_payMasterAcceptance" class="modal" role="basic" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">{% trans %}Acceptance{% endtrans %}</h4>
+            </div>
+            <div class="modal-body">
+                <div data-text="{% trans %}Loading data. Please wait{% endtrans %}"></div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+                                    
+                        
 <div class="navigation" style="overflow: hidden;">
     {{ ajax_paginator_render(
         entities, nameSpacePayMaster, {
@@ -12,21 +68,38 @@
     <table class="table table-striped table-bordered table-advance table-hover">
         <thead>
             <tr>
-                <th>{% trans %}Planned date of payment{% endtrans %}</th>
+                {% if tab == 'new' or tab == 'payment' %}
+                <th>{% trans %}Action{% endtrans %}</th>
+                {% endif %}
+                <th>
+                    {% trans %}Planned date of payment{% endtrans %}
+                    {{ ajax_ordering('expectedDate', nameSpacePayMaster, {
+                        ('table_tab_'~ tab): 'ITDoorsAjax.updateList'
+                        }, true) }}
+                </th>
                 <th>{% trans %}Date of receipt{% endtrans %}</th>
                 <th>{% trans %}Date of invoice{% endtrans %}</th>
+                <th>{% trans %}Payer{% endtrans %}</th>
                 <th>{% trans %}Customer{% endtrans %}</th>
                 <th>{% trans %}Provider{% endtrans %}</th>
                 <th>{% trans %}Representation{% endtrans %}</th>
                 <th>{% trans %}MPK{% endtrans %}</th>
-                <th>{% trans %}Sum with VAT{% endtrans %}</th>
+                <th>{% trans %}Sum{% endtrans %}</th>
                 <th>{% trans %}Notes{% endtrans %}</th>
-                {% if tab != 'sponsored' and tab != 'rejected' %}
-                <th>{% trans %}Acceptance{% endtrans %}</th>
+                
+                {% if tab != 'sponsored' and tab != 'rejected' and access.canSeeAll %}
+                <th>
+                    {% trans %}Acceptance{% endtrans %}
+                    {{ ajax_ordering('isAcceptance', nameSpacePayMaster, {
+                        ('table_tab_'~ tab): 'ITDoorsAjax.updateList'
+                        }, true) }}
+                </th>
                 {% endif %}
+                
                 {% if tab == 'sponsored' %}
                 <th>{% trans %}Date of payment{% endtrans %}</th>
                 {% endif %}
+                
                 {% if tab == 'rejected' %}
                 <th>{% trans %}Reason{% endtrans %}</th>
                 {% endif %}
@@ -35,27 +108,79 @@
         <tbody>
             {% for entity in entities %}
                 <tr class="{{ cycle(['odd', 'even'], entity.id) }}">
-                    <td class="">{{ entity.expectedDate is empty ? '' : entity.expectedDate|date("d.m.y") }}</td>
-                    <td class="">{{ entity.createDatetime is empty ? '' : entity.createDatetime|date("d.m.y") }}</td>
-                    <td class="">{{ entity.invoiceDate is empty ? '' : entity.invoiceDate|date("d.m.y") }}</td>
-                    <td class="">{{ entity.customers|join(', ')  }}</td>
-                    <td class="">{{ entity.contractor }}</td>
-                    <td class="">{{ entity.creator.stuff ? entity.creator.stuff.companystructure : '' }}</td>
-                    <td class="">{{ entity.mpks|join(', ') }}</td>
-                    <td class="">{{ entity.invoiceAmount }}</td>
-                    <td class="">{{ entity.description }}</td>
-                    {% if tab != 'sponsored' and tab != 'rejected' %}
-                    <td class="">
-                        {% if entity.isRejected == true %}
-                            {% trans %}Rejected{% endtrans %}
-                        {% elseif entity.isRejected is not null %}
-                            {% trans %}Adopted{% endtrans %}
+                    
+                    {% if tab == 'new' or tab == 'payment' %}
+                    <td>
+                        {% if (access.canRemove and entity.isAcceptance is null) or  entity.creator == app.user %}
+                            <a class="ajax-delete fa fa-trash-o"
+                                title="{% trans %}Delete{% endtrans %}"
+                                href="javascript:;"
+                                data-url="{{ path('it_doors_pay_master_ajax_remove', { id:entity.id })}}"
+                                data-params=''
+                            ></a><br><br>
+                        {% endif %}
+                        
+                        
+                        {% if access.canChangeStatus  or  (entity.creator == app.user)%}
+                        <a class="payMasterStatus" href="#" id="status" data-type="select2" data-pk="{{ entity.id }}" data-value="{{ entity.status ? entity.status.id : '' }}" data-original-title="{% trans %}Enter status{% endtrans %}">
+                        {% endif %}
+                            {{ entity.status}}
+                        {% if access.canChangeStatus %}
+                        </a>
+                        {% endif %}
+                        <br><br>
+                        
+                        {% if access.canChangeToPay %}
+                        <a class="payMasterToPay" href="#" id="toPay" data-type="select2" data-pk="{{ entity.id }}" data-value="{{ entity.toPay }}" data-original-title="{% trans %}Enter to pay{% endtrans %}">
+                        {% endif %}
+                            {% if entity.toPay == true %}
+                                {% trans %}To pay{% endtrans %}
+                            {% else %}
+                                {% trans %}Mark for payment{% endtrans %}
+                            {% endif %}
+                        {% if access.canChangeToPay %}
+                        </a>
                         {% endif %}
                     </td>
                     {% endif %}
+                    
+                    <td>
+                        {% if entity.paymentDate is null and (entity.isAcceptance is null or  entity.isAcceptance) %}
+                            <a class="payMasterExpectedDate" href="#" id="expectedDate" data-type="combodate" data-format="DD.MM.YYYY" data-viewformat="DD.MM.YYYY" data-pk="{{ entity.id }}" data-template="DD / MM / YYYY" data-original-title="{% trans %}Enter date of payment{% endtrans %}">
+                        {% endif %}
+                        {{ entity.expectedDate is empty ? '' : entity.expectedDate|date("d.m.Y") }}
+                        {% if entity.paymentDate is null and (entity.isAcceptance is null or  entity.isAcceptance) %}
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td>{{ entity.createDatetime is empty ? '' : entity.createDatetime|date("d.m.y") }}</td>
+                    <td>{{ entity.invoiceDate is empty ? '' : entity.invoiceDate|date("d.m.y") }}</td>
+                    <td>{{ entity.payer  }}</td>
+                    <td>{{ entity.customers|join(', ')  }}</td>
+                    <td>{{ entity.contractor }}</td>
+                    <td>{{ entity.creator.stuff ? entity.creator.stuff.companystructure : '' }}</td>
+                    <td>{{ entity.mpks|join(', ') }}</td>
+                    <td>{{ entity.invoiceAmount }} ({{entity.vat == 1 ? 'With vat'|trans : 'VAT not included'|trans }})</td>
+                    <td>{{ entity.description }}</td>
+                    
+                    {% if tab != 'sponsored' and tab != 'rejected' and access.canSeeAll  %}
+                    <td>
+                        {% if access.canChangeIsAcceptance and entity.isAcceptance is null  %}
+                            {{ include ('ITDoorsPayMasterBundle:Button:acceptance.html.twig')}}
+                        {% else %}
+                            {% if entity.isAcceptance == true %}
+                                {% trans %}Adopted{% endtrans %}
+                            {% elseif entity.isAcceptance is not null %}
+                                {% trans %}Rejected{% endtrans %}
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    {% endif %}
+                    
                     {% if tab == 'sponsored' %}
                     <td>{{ entity.paymentDate is empty ? '' : entity.paymentDate|date("d.m.y") }}</td>
                     {% endif %}
+                    
                     {% if tab == 'rejected' %}
                     <td>{{ entity.reason }}</td>
                     {% endif %}
@@ -71,4 +196,5 @@
             }
         )
     }}
+</div>
 </div>

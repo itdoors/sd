@@ -5,36 +5,36 @@ ITDoors\PayMasterBundle\Entity\PayMaster:
                 maxSize: 1M
                 mimeTypes: [image/jpeg, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document]
                 mimeTypesMessage: "This file is not a valid PDF, JPEG, DOC or DOCX"
-                groups: [new]
+                groups: [create]
             - NotBlank:
-                groups: [new]
+                groups: [create]
         invoiceDate:
             - Date:
-                groups: [new]
+                groups: [create]
             - NotBlank:
-                groups: [new]
+                groups: [create]
         expectedDate:
             - Date:
-                groups: [new]
+                groups: [create]
             - NotBlank:
-                groups: [new]
+                groups: [create]
         payer:
             - NotBlank:
-                groups: [new]
+                groups: [create]
         customers:
             - NotBlank: ~
         contractor:
             - NotBlank:
-                groups: [new]
+                groups: [create]
         dogovor:
             - NotBlank:
-                groups: [new]
+                groups: [create]
         currentAccount:
             - NotBlank:
-                groups: [new]
+                groups: [create]
         invoiceAmount:
             - NotBlank:
-                groups: [new]
+                groups: [create]
         description:
             - NotBlank:
-                groups: [new]
+                groups: [create]

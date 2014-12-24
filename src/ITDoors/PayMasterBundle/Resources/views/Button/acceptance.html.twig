@@ -1,0 +1,26 @@
+<a class="btn green" id="acceptance-add-btn-{{entity.id}}" href="#" data-toggle="modal">
+    {% trans from 'ITDoorsPayMasterBundle' %}Acceptance{% endtrans %}
+</a>
+{{ ajax_form_render_btn({
+   'selector' : '#acceptance-add-btn-'~ entity.id,
+   'formType' : 'payMasterAcceptanceForm',
+   'successFunctions' : {
+       'table_tab_new' : 'ITDoorsAjax.updateList',
+       'table_tab_rejected' : 'ITDoorsAjax.updateList',
+       'table_tab_urgent' : 'ITDoorsAjax.updateList',
+       'table_tab_payment' : 'ITDoorsAjax.updateList',
+   },
+   'serviceDefault' : {
+       'alias' : 'it_doors_pay_master.service',
+       'method' : 'addPayMasterAcceptanceFormDefaults'
+   },
+   'serviceSave' : {
+       'alias' : 'it_doors_pay_master.service',
+       'method' : 'savePayMasterAcceptanceForm'
+   },
+   'defaults' : {
+       'payMasterId' : entity.id
+   },
+   'target' : '#form_modal_payMasterAcceptance',
+   'html' : 'ITDoorsPayMasterBundle:Form:payMasterAcceptanceForm.html.twig'
+}) }}
